@@ -1,0 +1,649 @@
+public enum SendPacketOpcode implements WritableIntValueHolder {
+
+    // General
+    PING((short) 0x18), // VERSION 170
+    AUTH_RESPONSE((short) 0x1D), // VERSION 170
+    CLIENT_START((short) 0x24),
+    SEND_TRIGGER_AUTH_CYCLE_RESPONSE((short) 0x2F), // VERSION 176
+
+    // CLogin::OnPacket
+    LOGIN_STATUS((short) 0x00), // VERSION 170
+    GUEST_LOGIN((short) 0x01), // v166
+    SERVERSTATUS((short) 0x02), // VERSION 170
+    SET_ACCOUNT_RESULT((short) 0x03), // v166
+    EULA((short) 0x04), // v166
+    CHECK_PINCODE_RESULT((short) 0x05), // v166
+    UPDATE_PINCODE_RESULT((short) 0x06), // v166
+    SERVERLIST((short) 0x07), // VERSION 170
+    LAST_SELECTED_WORLD((short) 0x08), // VERSION 170
+    SEND_RECOMMENDED((short) 0x09), // VERSION 170
+    CHANNEL_SELECTED((short) 0x0B), // VERSION 170
+    CHARLIST((short) 0x0C), // VERSION 170
+    SERVER_IP((short) 0x0D), // VERSION 170
+    ACCOUNT_SPECIFIC((short) 0x0E), //VERSION 170
+    JOB_ORDER((short) 0x2D), // VERSION 170
+    CHANGE_PIC_RESULT((short) 0x1F), // VERSION 170
+    CHAR_NAME_RESPONSE((short) 0x10), // VERSION 170
+    ADD_NEW_CHAR_ENTRY((short) 0x11), // VERSION 170
+    DELETE_CHAR_RESPONSE((short) 0x12), // VERSION 170
+    CHANGE_CHANNEL((short) 0x17), // VERSION 170
+    CS_USE((short) 0x13), //12
+    RELOG_RESPONSE((short) 0x17), //16
+    REGISTER_PIC_RESPONSE((short) 0x1C), // v166 (0x1A v143) - GUESS!
+    PART_TIME((short) 0x22), // v166
+    SPECIAL_CREATION((short) 0x20), //1F
+    SECONDPW_ERROR((short) 0x1E), //v166
+    CHANGE_BACKGROUND((short) 0x31), // VERSION 170
+    // Channel
+    INVENTORY_OPERATION((short) 0x3F), // VERSION 170
+    INVENTORY_GROW((short) 0x40), // VERSION 170
+    UPDATE_STATS((short) 0x41), // VERSION 170
+    GIVE_BUFF((short) 0x42), // VERSION 170
+    CANCEL_BUFF((short) 0x43), // VERSION 170
+    FORCED_STAT_SET((short) 0x44), // VERSION 170
+    FORCED_STAT_RESET((short) 0x45), // VERSION 170
+    UPDATE_SKILLS((short) 0x46), // VERSION 170
+    UPDATE_STOLEN_SKILLS((short) 0x47), // VERSION 170
+    SKILL_UNK_1((short) 0x48), // VERSION 170. Corresponds to recvop 0x221.
+    SKILL_UNK_2((short) 0x49), // VERSION 170. Corresponds to recvop 0x222.
+    SKILL_UNK_3((short) 0x4A), // VERSION 170. Corresponds to recvop 0x224.
+    SKILL_UNK_4((short) 0x4B), // VERSION 170. Corresponds to recvop 0x225.
+    SKILL_UNK_5((short) 0x4C), // VERSION 170. Corresponds to recvop 0x226.
+    TARGET_SKILL((short) 0x4E), // VERSION 170
+    SKILL_UNK((short) 0x4F), // VERSION 170
+    FAME_RESPONSE((short) 0x51), // VERSION 170
+    SHOW_STATUS_INFO((short) 0x52), // VERSION 170
+    FULL_CLIENT_DOWNLOAD((short) 0x53), // VERSION 170
+    SHOW_NOTES((short) 0x54), // VERSION 170
+    TROCK_LOCATIONS((short) 0x55), // VERSION 170
+    LIE_DETECTOR((short) 0x56), // VERSION 170
+    BOMB_LIE_DETECTOR((short) 0x57), // VERSION 170
+    REPORT_RESPONSE((short) 0x59), // VERSION 170
+    REPORT_TIME((short) 0x5A), // VERSION 170
+    REPORT_STATUS((short) 0x5B), // VERSION 170
+    UPDATE_MOUNT((short) 0x5D), // VERSION 170
+    SHOW_QUEST_COMPLETION((short) 0x5E), // VERSION 170
+    SEND_TITLE_BOX((short) 0x5F), // VERSION 169
+    USE_SKILL_BOOK((short) 0x60), // VERSION 170
+    SP_RESET((short) 0x61), // VERSION 170
+    AP_RESET((short) 0x62), // VERSION 170
+    DISTRIBUTE_ITEM((short) 0x68), // VERSION 170
+    EXPAND_CHARACTER_SLOTS((short) 0x69), // VERSION 170
+    FINISH_SORT((short) 0x6B), // VERSION 170
+    FINISH_GATHER((short) 0x6C), // VERSION 170
+    EXP_POTION((short) 0x6D),  // VERSION 170
+    REPORT_RESULT((short) 0x6E), // VERSION 170
+    TRADE_LIMIT((short) 0x70), // VERSION 169
+    UPDATE_GENDER((short) 0x71), // VERSION 170
+    BBS_OPERATION((short) 0x72), // VERISON 169
+    CHAR_INFO((short) 0x75), // VERSION 170
+    PARTY_OPERATION((short) 0x76), // VERSION 170
+    MEMBER_SEARCH((short) 0x78), // VERSION 169
+    PARTY_SEARCH((short) 0x79), // VERSION 170
+    BOOK_INFO((short) 0x7D), // VERSION 169
+    CODEX_INFO_RESPONSE((short) 0x7E), // VERSION 169
+    EXPEDITION_OPERATION((short) 0x7F), // VERSION 169
+    BUDDYLIST((short) 0x80), // VERSION 170
+    GUILD_SKILLS((short) 0x83), // VERSION 170. Corresponds to recv 0x19D.
+    GUILD_OPERATION((short) 0x84), // VERSION 170
+    ALLIANCE_OPERATION((short) 0x85), // VERSION 170
+    SPAWN_PORTAL((short) 0x86), // VERSION 170
+    MECH_PORTAL((short) 0x87), // VERSION 170
+    ECHO_MESSAGE((short) 0x88),// VERSION 170
+    SERVERMESSAGE((short) 0x89), // VERSION 170
+    ITEM_OBTAIN((short) 0x8C), // VERSION 170. Structure is int (item ID).
+    PIGMI_REWARD((short) 0x8B), // VERSION 170
+    OWL_OF_MINERVA((short) 0x8D), // VERSION 170
+    OWL_RESULT((short) 0x8E), // VERSION 170
+    ENGAGE_REQUEST((short) 0x91), // VERSION 170
+    ENGAGE_RESULT((short) 0x92), // VERSION 170
+    WEDDING_GIFT((short) 0x93), // VERSION 170
+    WEDDING_MAP_TRANSFER((short) 0x94), // VERSION 170
+    USE_CASH_PET_FOOD((short) 0x95), // VERSION 170
+    ITEM_POUCH((short) 0x96), // VERSION 170. Unhandled.
+    PET_UNK((short) 0x97), // VERSION 170. Unhandled.
+    FUSION_ANVIL((short) 0x98), // VERSION 170. Unhandled.
+    PET_DYE((short) 0x99), // VERSION 179. Unhandled.
+    YELLOW_CHAT((short) 0x9A), // VERSION 170
+    SHOP_DISCOUNT((short) 0x9B), // VERSION 170
+    CATCH_MOB((short) 0x9C), // VERSION 170
+    MAKE_PLAYER_NPC((short) 0x9D), // VERSION 170
+    PLAYER_NPC((short) 0x9E), // VERSION 170
+    DISABLE_NPC((short) 0xA0), // VERSION 170
+    SET_CARD((short) 0xA1), // VERSION 170
+    SET_COVER((short) 0xA2), // VERSION 170
+    CARD_SET((short) 0xA3), // VERSION 169
+    BOOK_STATS((short) 0xA4), // VERSION 169
+    UPDATE_CODEX((short) 0xA5), // VERSION 169
+    CARD_DROPS((short) 0xA6), // VERSION 169
+    FAMILIAR_INFO((short) 0xA7), // VERSION 169
+    CHANGE_HOUR((short) 0xA8), // VERSION 170
+    RESET_MINIMAP((short) 0xA9), // VERSION 170
+    CONSULT_UPDATE((short) 0xAA), // VERSION 169
+    CLASS_UPDATE((short) 0xAB), // VERSION 169
+    WEB_BOARD_UPDATE((short) 0xAC), // VERSION 169
+    SESSION_VALUE((short) 0xAD), // VERSION 170
+    PARTY_VALUE((short) 0xAE), // VERSION 169
+    MAPLE_TV_MSG((short) 0xAF), // VERSION 169
+    MAP_VALUE((short) 0xB0), // VERSION 169
+    EXP_BONUS((short) 0xB1), // VERSION 169
+    POTION_BONUS((short) 0xB2), // VERSION 169
+    SEND_PEDIGREE((short) 0xB3), // VERSION 169
+    OPEN_FAMILY((short) 0xB4), // VERSION 169
+    FAMILY_MESSAGE((short) 0xB5), // VERSION 169
+    FAMILY_INVITE((short) 0xB6), // VERSION 169
+    FAMILY_JUNIOR((short) 0xB7), // VERSION 169
+    SENIOR_MESSAGE((short) 0xB8), // VERSION 169
+    FAMILY((short) 0xB9), // VERSION 169
+    REP_INCREASE((short) 0xBA), // VERSION 169
+    EVOLVING_ACTION((short) 0x98),
+    FAMILY_LOGGEDIN((short) 0xBB), // VERSION 169
+    FAMILY_BUFF((short) 0xBC), // VERSION 169
+    FAMILY_USE_REQUEST((short) 0xBD), // VERSION 169
+    LEVEL_UPDATE((short) 0xBE), // VERSION 169
+    MARRIAGE_UPDATE((short) 0xBF), // VERSION 169
+    JOB_UPDATE((short) 0xC0), // VERSION 170
+    PENDANT_EXPANSION((short) 0xC1), // VERSION 170
+    POPUP2((short) 0xC2), // VERSION 170
+    CANCEL_NAME_CHANGE((short) 0xC3), // VERSION 170
+    CANCEL_WORLD_TRANSFER((short) 0x9F), // VERSION 170
+    CLOSE_HIRED_MERCHANT((short) 0xC4), // VERSION 170
+    GM_POLICE((short) 0xC5), // VERSION 170
+    TREASURE_BOX((short) 0xC6), // VERSION 170
+    NEW_YEAR_CARD((short) 0xC7), // VERSION 170
+    BLESSING_BOX((short) 0xC8), // VERSION 170
+    CREW_BOX((short) 0xCA), // VERSION 170. I don't know if the name is right.
+    RANDOM_Morph((short) 0xCB), // VERSION 170
+    CANCEL_NAME_CHANGE_2((short) 0xCC), // VERSION 170
+    FOLLOW_REQUEST((short) 0xCE), // VERSION 170
+    TOP_MSG((short) 0xD0), // VERSION 170
+    MID_MSG((short) 0xD2), // VERSION 170
+    CLEAR_MID_MSG((short) 0xD3), // VERSION 170
+    SPECIAL_MSG((short) 0xD4), //  VERSION 170 - guess
+    // NEW_TOP_MSG? 0xD5
+    // New message here, 0xD6
+    MAPLE_ADMIN_MSG((short) 0xD7), // VERSION 170
+    CAKE_VS_PIE_MSG((short) 0xB4), //AF
+    GM_STORY_BOARD((short) 0xD8), // VERSION 170
+    INVENTORY_FULL((short) 0xD9), // VERSION 170
+    UPDATE_JAGUAR((short) 0xDA), // VERSION 170
+    // ZERO_STATS
+    YOUR_INFORMATION((short) 0xDC), // VERSION 170
+    FIND_FRIEND((short) 0xDD), // VERSION 170
+    VISITOR((short) 0xDE), // VERSION 170
+    PINKBEAN_CHOCO((short) 0xDF), // VERSION 170
+    PAM_SONG((short) 0xE0), // VERSION 170
+    AUTO_CC_MSG((short) 0xE1), // VERSION 170
+    DISALLOW_DELIVERY_QUEST((short) 0xE3), // VERSION 170
+    ULTIMATE_EXPLORER((short) 0xE3), // VERSION 170
+    SPECIAL_STAT((short) 0xE5), // VERSION 170
+    UPDATE_IMP_TIME((short) 0xE6), // VERSION 169
+    ITEM_POT((short) 0xE7), // VERSION 169
+    MULUNG_MESSAGE((short) 0xEA), // VERSION 169
+    GIVE_CHARACTER_SKILL((short) 0xEB), // VERSION 169
+    MULUNG_DOJO_RANKING((short) 0xCF), //C8
+    UPDATE_INNER_ABILITY((short) 0xF3), // VERSION 169
+    EQUIP_STOLEN_SKILL((short) 0xD5), //CE
+    REPLACE_SKILLS((short) 0xF5), // VERSION 169
+    INNER_ABILITY_MSG((short) 0xF6), // VERSION 169
+    ENABLE_INNER_ABILITY((short) 0xF9), // VERSION 169
+    DISABLE_INNER_ABILITY((short) 0xFA), // VERSION 169
+    UPDATE_HONOUR((short) 0xFB), // VERSION 169
+    AZWAN_UNKNOWN((short) 0x101), // VERSION 169 //probably circulator shit?
+    AZWAN_RESULT((short) 0xFD), // VERSION 169
+    AZWAN_KILLED((short) 0xFE), // VERSION 169
+    CIRCULATOR_ON_LEVEL((short) 0xFF), // VERSION 169
+    SILENT_CRUSADE_MSG((short) 0x102), // VERSION 169
+    SILENT_CRUSADE_SHOP((short) 0x103), // VERSION 169
+    CASSANDRAS_COLLECTION((short) 0x110), // VERSION 169
+    MAPLE_POINT((short) 0x111), // VERSION 170. This is called for when there is an update in MaplePoints as well.
+    BLACK_CUBE_RESULT((short) 0x11A), // VERSION 170.
+    MEMORIAL_CUBE_RESULT((short) 0x11B), // VERSION 170
+    MEMORIAL_CUBE_MODIFIED((short) 0x11C), // VERSION 170
+    GUILD_CONTENT_RESULT((short) 0x124), // VERSION 170
+    GUILD_SEARCH_RESULT((short) 0x125), // VERSION 170
+    AVATAR_MEGA_RESULT((short) 0x130), // VERSION 169
+    AVATAR_MEGA((short) 0x131), // VERSION 169
+    AVATAR_MEGA_REMOVE((short) 0x132), // VERSION 169
+    SET_OBJECT_STATE((short) 0xEF), //E8
+    POPUP((short) 0xF0), //E9
+    MINIMAP_ARROW((short) 0xF4), //ED
+    UNLOCK_CHARGE_SKILL((short) 0xFA), //F2
+    LOCK_CHARGE_SKILL((short) 0xFB), //F3
+    CANDY_RANKING((short) 0xFF), //F8
+    ATTENDANCE((short) 0x10A), //102
+    MESSENGER_OPEN((short) 0x10B), //103
+    EVENT_LIST((short) 0x133), // VERSION 170
+    EVENT_CROWN((short) 0x137), // VERSION 170
+    MAGIC_WHEEL((short) 0x123), //109
+    REWARD((short) 0x191), // VERSION 169
+    SKILL_MACRO((short) 0x19A), // VERSION 170
+
+    // CStage:: OnPacket
+    WARP_TO_MAP((short) 0x19B), // VERSION 170
+    WARP_TO_FARM((short) 0x19C), // VERSION 170
+    WARP_TO_STARPLANET((short) 0x19D), // VERSION 170
+    WARP_TO_CS((short) 0x19E), // VERSION 170
+
+    // CMapLoadable::OnPacket
+    REMOVE_BG_LAYER((short) 0x12E), //111
+    SET_MAP_OBJECT_VISIBLE((short) 0x12F), //112
+    // There are 6 news ones under CMapLoadable
+
+    RESET_SCREEN((short) 0x12C), //12E?
+    MAP_BLOCKED((short) 0x12D), //12F?
+    SERVER_BLOCKED((short) 0x130), //etc
+    PARTY_BLOCKED((short) 0x131), //etc
+    SHOW_EQUIP_EFFECT((short) 0x132), //etc
+    MULTICHAT((short) 0x134), //118 <-- need to test this on v145 to confirm up to map effect.
+    WHISPER((short) 0x1A5), // VERSION 170
+    SPOUSE_CHAT((short) 0x139), //11B
+    //ELITE_STATE((short) 0x1A3), // unk
+    BOSS_ENV((short) 0x1A8), //VERSION 170
+    MOVE_ENV((short) 0x1A9), //VERSION 170
+    UPDATE_ENV((short) 0x1AA), // VERSION 170
+    // 0x1AB
+    // 0x1AC
+    MAP_EFFECT((short) 0x1AD), // VERSION 170
+    // 0x1AE
+    // 0x1AF
+    GM_EFFECT((short) 0x1B0), // VERSION 170
+    OX_QUIZ((short) 0x1B1), // VERSION 170
+    GMEVENT_INSTRUCTIONS((short) 0x1B0), // VERSION 170
+    CLOCK((short) 0x1B1), // VERSION 170
+    BOAT_MOVE((short) 0x1B2), // VERSION 170
+    BOAT_STATE((short) 0x1B3), /// VERSION 170
+    STOP_CLOCK((short) 0x1B4), // VERSION 170
+    // 0x1B5
+    ARIANT_SCOREBOARD((short) 0x1B6),// VERSION 170
+    CASH_SONG((short) 0x1B7), // VERSION 170
+
+    PYRAMID_UPDATE((short) 0x14E), //131
+    PYRAMID_RESULT((short) 0x14F), //132
+    QUICK_SLOT((short) 0x1BD), // VERSION 170
+    MOVE_PLATFORM((short) 0x153), //135
+    PYRAMID_KILL_COUNT((short) 0x154), //137,
+    PVP_INFO((short) 0x1C8), // VERSION 170
+    DIRECTION_STATUS((short) 0x1C9), // VERSION 170
+    GAIN_FORCE((short) 0x1CA), // VERSION 170
+    INTRUSION((short) 0x162),
+    DIFFERENT_IP((short) 0x164),
+    ACHIEVEMENT_RATIO((short) 0x159), //13B
+    QUICK_MOVE((short) 0xFFF), //13C
+    ENCHANT_EQUIP((short) 0x15C), //VERSION 170
+    SPAWN_OBTACLE_ATOM((short) 0x1CE), // VERSION 170
+    SPAWN_PLAYER((short) 0x1EB), // VERSION 170
+    REMOVE_PLAYER_FROM_MAP((short) 0x1EC), // VERSION 170
+    CHATTEXT((short) 0x1ED), // VERSION 170
+    CHALKBOARD((short) 0x1EF), // VERSION 170.
+    UPDATE_CHAR_BOX((short) 0x1F0), // VERSION 170
+    SHOW_CONSUME_EFFECT((short) 0x1F1), // VERSION 170
+    SHOW_SCROLL_EFFECT((short) 0x1F2), // VERSION 170
+    SOUL_ENCHANT_EFFECT((short) 0x1F4), // VERSION 170. Unhandled. It is one byte.
+    SOUL_SHARD_EFFECT((short) 0x1F5), // VERSION 170. Unhandled. Two bytes
+    SHOW_MAGNIFYING_EFFECT((short) 0x1F6), // VERSION 170
+    SHOW_POTENTIAL_RESET((short) 0x1F7), // VERSION 170
+    SHOW_LUCKY_EFFECT((short) 0x1F8),//Version 170
+    SHOW_MEMORIAL_EFFECT((short) 0x1F9),//Version 170
+    SHOW_BONUS_POTENTIAL_RESET((short) 0x1FA),//Version 170
+    SHOW_ITEM_ADDITIONAL_SLOT_EXTENDED_EFFECT((short) 0x1FB),//Version 170
+    SHOW_FIREWORKS_EFFECT((short) 0x1FC), // VERSION 170
+    SHOW_ITEM_OPTION_EFECT((short) 0x1FD), //Version 170
+    SHOW_RED_CUBE_EFFECT((short) 0x1FE), //Version 170
+    SHOW_NEBULITE_EFFECT((short) 0x1FF), // VERSION 170
+    BURNING_CHARACTER((short) 0x179), // VERSION 170
+    SHOW_FUSION_EFFECT((short) 0x200), // VERSION 170
+    PVP_ATTACK((short) 0x202), // VERSION 169
+    PVP_MIST((short) 0x203), // VERSION 169
+    PVP_COOL((short) 0x205), // VERSION 169
+    TESLA_TRIANGLE((short) 0x206), // VERSION 169
+    FOLLOW_EFFECT((short) 0x208), // VERSION 169
+    SHOW_PQ_REWARD((short) 0x209), // VERSION 169
+    CRAFT_EFFECT((short) 0x20A), // VERSION 169
+    CRAFT_COMPLETE((short) 0x20B), // VERSION 169
+    HARVESTED((short) 0x20D), // VERSION 169
+    PLAYER_DAMAGED((short) 0x165),
+    NETT_PYRAMID((short) 0x166),
+    SET_PHASE((short) 0x167),
+    PAMS_SONG((short) 0x168),
+    INNER_ABILITY_RESET_MSG((short) 0x175), //+2
+    INGAME_CUBE_RESULT((short) 0x221), // VERSION 170
+    SPAWN_PET((short) 0x22D), // VERSION 170
+    REMOVE_PET((short) 0x22F), // VERSION 170
+    MOVE_PET((short) 0x230), // VERSION 170
+    PET_CHAT((short) 0x231), // VERSION 170
+    PET_ACTION((short) 0x232), //VERSION 170
+    PET_NAMECHANGE((short) 0x233), // VERSION 170
+    PET_EXCEPTION_LIST((short) 0x234), // VERSION 170
+    PET_COLOR((short) 0x235), // VERSION 170
+    PET_SIZE((short) 0x236), // VERSION 170
+    PET_COMMAND((short) 0x237), // VERSION 170
+    DRAGON_SPAWN((short) 0x238), // VERSION 170
+    DRAGON_MOVE((short) 0x239), // VERSION 170
+    DRAGON_REMOVE((short) 0x23A), // VERSION 170
+    ANDROID_SPAWN((short) 0x23B), // VERSION 170
+    ANDROID_MOVE((short) 0x23C), // VERSION 170
+    ANDROID_EMOTION((short) 0x23D), // VERSION 170
+    ANDROID_UPDATE((short) 0x23E), // VERSION 170
+    ANDROID_DEACTIVATED((short) 0x23F), // VERSION 170
+    SPAWN_HAKU((short) 0x240),// VERSION 170
+    HAKU_MOVE((short) 0x241),// VERSION 170
+    UPDATE_HAKU((short) 0x242),// VERSION 170
+    HAKU_CHANGE_EFFECT((short) 0x243),// VERSION 170
+    HAKU_CHANGE((short) 0x244),// VERSION 170
+    DESTROY_HAKU((short) 0x245),//VERSION 170
+    SPAWN_FAMILIAR((short) 0x246), // VERSION 170
+    MOVE_FAMILIAR((short) 0x247), // VERSION 170
+    TOUCH_FAMILIAR((short) 0x248), // VERSION 170
+    ATTACK_FAMILIAR((short) 0x249), // VERSION 170
+    RENAME_FAMILIAR((short) 0x24A), // VERSION 170
+    SPAWN_FAMILIAR_2((short) 0x24B), // VERSION 170
+    UPDATE_FAMILIAR((short) 0x24C), //VERSION 170
+    MOVE_PLAYER((short) 0x256), // VERSION 170
+    CLOSE_RANGE_ATTACK((short) 0x257), // VERSION 170
+    RANGED_ATTACK((short) 0x258), // VERSION 170
+    MAGIC_ATTACK((short) 0x259), // VERSION 170
+    ENERGY_ATTACK((short) 0x25A), // VERSION 170
+    SKILL_EFFECT((short) 0x25B), // VERSION 170
+    MOVE_ATTACK((short) 0x25C), // VERSION 170
+    CANCEL_SKILL_EFFECT((short) 0x25D), // VERSION 170
+    DAMAGE_PLAYER((short) 0x25E), // VERSION 170
+    FACIAL_EXPRESSION((short) 0x25F), // VERSION 170
+    SHOW_EFFECT((short) 0x261), // VERSION 170
+    SHOW_TITLE((short) 0x263), // VERSION 169
+    ANGELIC_CHANGE((short) 0x264), // VERSION 169
+    WHEEL_OF_DESTINY((short) 0x267), // VERSION 170. Unhandled
+    SHOW_CHAIR((short) 0x268), // VERSION 170
+    UPDATE_CHAR_LOOK((short) 0x269), // VERSION 170
+    SHOW_FOREIGN_EFFECT((short) 0x26A), // VERSION 170
+    GIVE_FOREIGN_BUFF((short) 0x26B), // VERSION 169
+    CANCEL_FOREIGN_BUFF((short) 0x26C), // VERSION 169
+    UPDATE_PARTYMEMBER_HP((short) 0x26D), // VERSION 169
+    LOAD_GUILD_NAME((short) 0x26E), // VERSION 169
+    LOAD_GUILD_ICON((short) 0x26F), // VERSION 169
+    LOAD_TEAM((short) 0x270), // VERSION 169
+    ZERO_TAG_STATE((short) 0x27B), //VERSION 170
+    SHOW_HARVEST((short) 0x2BC), //1AE
+    PVP_HP((short) 0x1D7), //1B0
+    CANCEL_CHAIR((short) 0x217), //VERSION 170
+    ZERO_TAG((short) 0x279), //VERSION 170
+    RUNE_STONE_ACTION((short) 0x27E), // VERSION 170
+    KINESIS_PSYCHIC_ENERGY_SHIELD_EFFECT((short) 0x27F), // VERSION 170
+    DIRECTION_FACIAL_EXPRESSION((short) 0x284), // VERSION 169
+    MOVE_SCREEN((short) 0x1E5), //1BE
+    SHOW_SPECIAL_EFFECT((short) 0x286), // VERSION 170
+    CURRENT_MAP_WARP((short) 0x287), // VERSION 170
+    MESOBAG_SUCCESS((short) 0x289), // VERSION 170
+    MESOBAG_FAILURE((short) 0x28A), // VERSION 170
+    R_MESOBAG_SUCCESS((short) 0x28B), // VERSION 170
+    R_MESOBAG_FAILURE((short) 0x28C), // VERSION 170
+    MAP_FADE((short) 0x28D), // VERSION 170
+    MAP_FADE_FORCE((short) 0x28E), // VERSION 170
+    UPDATE_QUEST_INFO((short) 0x28F), // VERSION 170
+    HP_DECREASE((short) 0x290), // VERSION 170
+    // ???
+    PLAYER_HINT((short) 0x292), // VERSION 170
+    PLAY_EVENT_SOUND((short) 0x293), // VERSION 170
+    PLAY_MINIGAME_SOUND((short) 0x294), // VERSION 170
+    MAKER_SKILL((short) 0x295), // VERSION 170
+    // 0x297 - OnOpenClassCompetitionPage
+    OPEN_UI((short) 0x299), // VERSION 169
+    OPEN_UI_OPTION((short) 0x29A), // VERSION 169
+    INTRO_LOCK((short) 0x29C), // VERSION 170
+    INTRO_ENABLE_UI((short) 0x29D), // previously known as INTRO_ENABLE_UI
+    // INTRO_DISABLE_UI((short) 0x29E), // VERSION 170. 1 for disable, 0 for enable
+    SUMMON_HINT((short) 0x29E), // VERSION 170
+    SUMMON_HINT_MSG((short) 0x2A0), // VERSION 170
+    ARAN_COMBO((short) 0x2A4), // VERSION 169
+    ARAN_COMBO_RECHARGE((short) 0x2A5), // VERSION 169
+    RANDOM_EMOTION((short) 0x205), //1DB
+    RADIO_SCHEDULE((short) 0x2A8), // VERSION 169
+    OPEN_SKILL_GUIDE((short) 0x2A9), // VERSION 169
+    GAME_MSG((short) 0x2AA), // VERSION 169
+    GAME_MESSAGE((short) 0x2AB), // VERSION 169
+    // 0x2AC gives a popup messagebox 'NPCID: 2036754798'... wtf is this lol
+    BUFF_ZONE_EFFECT((short) 0x2AD), // VERSION 169
+    GO_CASHSHOP_SN((short) 0x2AE), // VERSION 169
+    DAMAGE_METER((short) 0x20E), //1E4
+    TIME_BOMB_ATTACK((short) 0x2AF), // VERSION 169
+    FOLLOW_MOVE((short) 0x2B1), // VERSION 170
+    FOLLOW_MSG((short) 0x2B3), // VERSION 169
+    AP_SP_EVENT((short) 0x2B4), // VERSION 169
+    QUEST_GUIDE_NPC((short) 0x2B5), // VERSION 169
+    REGISTER_FAMILIAR((short) 0x2BC), // VERSION 169
+    FAMILIAR_MESSAGE((short) 0x2BD), // VERSION 169
+    CREATE_ULTIMATE((short) 0x2BF), // VERSION 169
+    HARVEST_MESSAGE((short) 0x2C0), // VERSION 169
+    SHOW_MAP_NAME((short) 0x2C1), // VERSION 169 - guess
+    OPEN_BAG((short) 0x2C2), // VERSION 169 - guess
+    DRAGON_BLINK((short) 0x2C3), // VERSION 169 - guess
+    PVP_ICEGAGE((short) 0x2C4), // VERSION 169 - guess
+    DIRECTION_INFO((short) 0x2C5), // VERSION 170
+    REISSUE_MEDAL((short) 0x2C6), // VERSION 170
+    DEATH_COUNT((short) 0x2CC), // VERSION 170
+    SET_DEAD((short) 0x2DC), // VERSION 170
+    OPEN_UI_ONDEAD((short) 0x2DD), // VERSION 170
+    PLAY_MOVIE((short) 0x224), //1FD
+    CAKE_VS_PIE((short) 0x225), //1FE OnRewardMobListResult
+    PHANTOM_CARD((short) 0x2CB), // VERSION 169
+    LUMINOUS_COMBO((short) 0x2CE), // VERSION 169
+    MOVE_SCREEN_X((short) 0x199), //199
+    MOVE_SCREEN_DOWN((short) 0x19A), //19A
+    CAKE_PIE_INSTRUMENTS((short) 0x19B), //
+    COOLDOWN((short) 0x346), // VERSION 170
+    SPAWN_SUMMON((short) 0x348), // VERSION 170
+    REMOVE_SUMMON((short) 0x349), // VERSION 170
+    MOVE_SUMMON((short) 0x34A), // VERSION 170
+    SUMMON_ATTACK((short) 0x34B), // VERSION 170
+    PVP_SUMMON((short) 0x34C), // VERSION 170
+    SUMMON_SKILL((short) 0x34D), // VERSION 170
+    SUMMON_SKILL_2((short) 0x34E), // VERSION 170
+    SUMMON_DELAY((short) 0x34F), // VERSION 170
+    DAMAGE_SUMMON((short) 0x350), // VERSION 170
+    SPAWN_MONSTER((short) 0x357), // VERSION 170
+    KILL_MONSTER((short) 0x358), // VERSION 170
+    SPAWN_MONSTER_CONTROL((short) 0x359), // VERSION 170
+    MOVE_MONSTER((short) 0x35D), // VERSION 170
+    MOVE_MONSTER_RESPONSE((short) 0x35E), // VERSION 170
+    APPLY_MONSTER_STATUS((short) 0x35F), // VERSION 170
+    CANCEL_MONSTER_STATUS((short) 0x360), // VERSION 170
+    DAMAGE_MONSTER((short) 0x363), // VERSION 170
+    
+    SKILL_EFFECT_MOB((short) 0x365), // VERSION 170 - OnSpecialEffectBySkill?
+    TELE_MONSTER((short) 0xFFF),  // TODO
+    MONSTER_SKILL((short) 0xFFF),  // TODO
+    MONSTER_CRC_CHANGE((short) 0x367), // VERSION 170, according to IDA. Not tested
+    SHOW_MONSTER_HP((short) 0x368), // VERSION 170
+    SHOW_MAGNET((short) 0x287), //24D TODO
+    CATCH_MONSTER((short) 0x368), // VERSION 169
+    ITEM_EFFECT_MOB((short) 0x36A), // VERSION 169 
+    REMOVE_TALK_MONSTER((short) 0x1BA), // TODO
+    TALK_MONSTER((short) 0x36B), // VERSION 169 TODO
+    // 0x36C = CMob::OnIncMobChargeCount
+    MONSTER_PROPERTIES((short) 0x36D), // VERSION 169
+    MOB_ATTACK_DELAY((short) 0x36F), //VERSION 170
+    CYGNUS_ATTACK((short) 0x376), // VERSION 169 - guess
+    MONSTER_RESIST((short) 0x377), // VERSION 169
+    MOB_TO_MOB_DAMAGE((short) 0x391), // VERSION 169
+    AZWAN_MOB_TO_MOB_DAMAGE((short) 0x391), // VERSION 169?
+    AZWAN_SPAWN_MONSTER((short) 0x22C), //1CA /0x22b?
+    AZWAN_KILL_MONSTER((short) 0x22D), //1CB
+    AZWAN_SPAWN_MONSTER_CONTROL((short) 0xFFF), //1CC
+    SPAWN_NPC((short) 0x398), // VERSION 170
+    REMOVE_NPC((short) 0x399), // VERSION 170
+    SPAWN_NPC_REQUEST_CONTROLLER((short) 0x39B), // VERSION 170
+    NPC_ACTION((short) 0x39C), // VERSION 170
+    NPC_TOGGLE_VISIBLE((short) 0x39D), // VERSION 169 - guess
+    INITIAL_QUIZ((short) 0x39E), // VERSION 169
+    NPC_UPDATE_LIMITED_INFO((short) 0x39F), // VERSION 169
+    NPC_SET_SPECIAL_ACTION((short) 0x2A5), //271
+    NPC_SCRIPTABLE((short) 0x3AB), // VERSION 170
+    RED_LEAF_HIGH((short) 0x2A7), //273  -- is this 3AC? 
+    SPAWN_HIRED_MERCHANT((short) 0x3AD), // VERSION 170
+    DESTROY_HIRED_MERCHANT((short) 0x3AE), // VERSION 170
+    UPDATE_HIRED_MERCHANT((short) 0x3AF), // VERSION 170
+    DROP_ITEM_FROM_MAPOBJECT((short) 0x3B0), // VERSION 170
+    REMOVE_ITEM_FROM_MAP((short) 0x3B2), // VERSION 170
+    SPAWN_KITE_ERROR((short) 0x3B3), // VERSION 170
+    SPAWN_KITE((short) 0x3B4), // VERSION 170
+    DESTROY_KITE((short) 0x3B5), // VERSION 170
+    SPAWN_MIST((short) 0x3B6), // VERSION 170
+    // 0x3B7
+    REMOVE_MIST((short) 0x3B8), // VERSION 170
+    // 0x3B8
+    SPAWN_DOOR((short) 0x3B9), // VERSION 170
+    REMOVE_DOOR((short) 0x3BA), // VERSION 170
+    MECH_DOOR_SPAWN((short) 0x3BB), // VERSION 170
+    MECH_DOOR_REMOVE((short) 0x3BC), // VERSION 170
+    REACTOR_HIT((short) 0x3C0), // VERSION 170
+    REACTOR_MOVE((short) 0x3C1), //VERSION 170
+    REACTOR_SPAWN((short) 0x3C2), //VERSION 170
+    REACTOR_DESTROY((short) 0x3C6), // VERSION 170
+    // 0x3C7
+    // 0x3C8
+    SPAWN_EXTRACTOR((short) 0x3C9), // VERSION 170
+    REMOVE_EXTRACTOR((short) 0x3CA), // VERSION 170
+    // 0x3CB
+    ROLL_SNOWBALL((short) 0x3CC), // VERSION 170
+    HIT_SNOWBALL((short) 0x3CD), // VERSION 170
+    SNOWBALL_MESSAGE((short) 0x3CE), // VERSION 170
+
+    LEFT_KNOCK_BACK((short) 0x2C4), //D1
+    HIT_COCONUT((short) 0x2C5), //D2
+    COCONUT_SCORE((short) 0x2C6), //D3
+    MOVE_HEALER((short) 0x2C7), //D4
+    PULLEY_STATE((short) 0x2C8), //294
+    MONSTER_CARNIVAL_START((short) 0x2C9), //295
+    MONSTER_CARNIVAL_OBTAINED_CP((short) 0x2CA), //296
+    MONSTER_CARNIVAL_STATS((short) 0x2CB), ////297
+    MONSTER_CARNIVAL_SUMMON((short) 0x2CD), //299
+    MONSTER_CARNIVAL_MESSAGE((short) 0x2CE), //29A
+    MONSTER_CARNIVAL_DIED((short) 0x2CF), //29B
+    MONSTER_CARNIVAL_LEAVE((short) 0x2D0), //29C
+    MONSTER_CARNIVAL_RESULT((short) 0x2D1), //29D
+    MONSTER_CARNIVAL_RANKING((short) 0x2D2), //29E
+    ARIANT_SCORE_UPDATE((short) 0x300),
+    SHEEP_RANCH_INFO((short) 0x301),
+    SHEEP_RANCH_CLOTHES((short) 0xFFF), //0x302
+    WITCH_TOWER((short) 0xFFF), //0x303
+    EXPEDITION_CHALLENGE((short) 0xFFF), //0x304
+    
+    RUNE_STONE_CLEAR_AND_ALL_REGISTER((short)0x441),
+    RUNE_STONE_DISAPPEAR((short)0x442),
+    RUNE_STONE_APPEAR((short)0x443),
+    
+    ZAKUM_SHRINE((short) 0x3E1), // VERSION 170
+    CHAOS_ZAKUM_SHRINE((short) 0x3E2), // VERSION 170
+    PVP_TYPE((short) 0x307),
+    PVP_TRANSFORM((short) 0x308),
+    PVP_DETAILS((short) 0x309),
+    PVP_ENABLED((short) 0x30A),
+    PVP_SCORE((short) 0x30B),
+    PVP_RESULT((short) 0x30C),
+    PVP_TEAM((short) 0x30D),
+    PVP_SCOREBOARD((short) 0x30E),
+    PVP_POINTS((short) 0x310),
+    PVP_KILLED((short) 0x311),
+    PVP_MODE((short) 0x312),
+    PVP_ICEKNIGHT((short) 0x313), //
+    HORNTAIL_SHRINE((short) 0x46E), // VERSION 170
+    CAPTURE_FLAGS((short) 0x2E2),
+    CAPTURE_POSITION((short) 0x2E3),
+    CAPTURE_RESET((short) 0x2E4),
+    PINK_ZAKUM_SHRINE((short) 0x4AF), // VERSION 170
+    
+    // 0x49E - A message at the center: You have been targetted, you will be revived
+    NPC_TALK((short) 0x4B0), // VERSION 170
+    OPEN_NPC_SHOP((short) 0x4B1), // VERSION 170
+    CONFIRM_SHOP_TRANSACTION((short) 0x4B2), // VERSION 170
+    OPEN_STORAGE((short) 0x4CB), // VERSION 170
+    MERCH_ITEM_MSG((short) 0x4CC), // VERSION 170
+    MERCH_ITEM_STORE((short) 0x4CD), // VERSION 170
+    RPS_GAME((short) 0x94CE),
+    MESSENGER((short) 0x4D1), // VERSION 170
+    PLAYER_INTERACTION((short) 0x4D2), // VERSION 170 - confirmed :D  <3
+    VICIOUS_HAMMER((short) 0x2F4),
+    LOGOUT_GIFT((short) 0x2FB),
+    TOURNAMENT((short) 0x236),
+    TOURNAMENT_MATCH_TABLE((short) 0x237),
+    TOURNAMENT_SET_PRIZE((short) 0x238),
+    TOURNAMENT_UEW((short) 0x239),
+    TOURNAMENT_CHARACTERS((short) 0x23A),
+    SEALED_BOX((short) 0x23C),
+    WEDDING_PROGRESS((short) 0x236),
+    WEDDING_CEREMONY_END((short) 0x237),
+    PACKAGE_OPERATION((short) 0x353), //v143
+    CS_CHARGE_CASH((short) 0x2CA),
+    CS_EXP_PURCHASE((short) 0x23B),
+    GIFT_RESULT((short) 0x23C),
+    CHANGE_NAME_CHECK((short) 0x23D),
+    CHANGE_NAME_RESPONSE((short) 0x23E),
+    CS_UPDATE((short) 0x35B), //355
+    CS_OPERATION((short) 0x35C), //356
+    CS_MESO_UPDATE((short) 0x35F), //359
+    //0x314 int itemid int sn
+    CASH_SHOP((short) 0x4FE), // VERSION 170
+    CASH_SHOP_UPDATE((short) 0x4FF), // VERSION 170
+    GACHAPON_STAMPS((short) 0x253),
+    FREE_CASH_ITEM((short) 0x254),
+    CS_SURPRISE((short) 0x255),
+    XMAS_SURPRISE((short) 0x256),
+    ONE_A_DAY((short) 0x258),
+    NX_SPEND_GIFT((short) 0x25A),
+    RECEIVE_GIFT((short) 0x25A), //new v145
+    KEYMAP((short) 0x532), // VERSION 170
+    PET_AUTO_HP((short) 0x533), // VERSION 170
+    PET_AUTO_MP((short) 0x534), // VERSION 170
+    PET_AUTO_CURE((short) 0x535), // VERSION 170
+    START_TV((short) 0x536), // VERSION 170
+    REMOVE_TV((short) 0x537), // VERSION 170
+    ENABLE_TV((short) 0x538), // VERSION 170
+    GM_ERROR((short) 0x26D),
+    ALIEN_SOCKET_CREATOR((short) 0x5BE), // VERSION 170
+    GOLDEN_HAMMER((short) 0x279),
+    BATTLE_RECORD_DAMAGE_INFO((short) 0xFFF),
+    CALCULATE_REQUEST_RESULT((short) 0xFFF),
+    BOOSTER_PACK((short) 0xFFF),
+    BOOSTER_FAMILIAR((short) 0xFFF),
+    BLOCK_PORTAL((short) 0xFFF),
+    NPC_CONFIRM((short) 0xFFF),
+    LOGIN_AUTH((short) 0xFFF),
+    PET_FLAG_CHANGE((short) 0xFFF),
+    BUFF_BAR((short) 0xFFF),
+    GAME_POLL_REPLY((short) 0xFFF),
+    GAME_POLL_QUESTION((short) 0xFFF),
+    ENGLISH_QUIZ((short) 0xFFF),
+    FISHING_BOARD_UPDATE((short) 0xFFF),
+    BOAT_EFFECT((short) 0xFFF),
+    FISHING_CAUGHT((short) 0xFFF),
+    SIDEKICK_OPERATION((short) 0xFFF),
+    FARM_PACKET1((short) 0x35C),
+    FARM_ITEM_PURCHASED((short) 0x35D),
+    FARM_ITEM_GAIN((short) 0x358),
+    HARVEST_WARU((short) 0x35A),
+    FARM_MONSTER_GAIN((short) 0x35B),
+    FARM_INFO((short) 0x368),
+    FARM_MONSTER_INFO((short) 0x369),
+    FARM_QUEST_DATA((short) 0x36A),
+    FARM_QUEST_INFO((short) 0x36B),
+    FARM_MESSAGE((short) 0x36C), //36C
+    UPDATE_MONSTER((short) 0x36D),
+    AESTHETIC_POINT((short) 0x36E),
+    UPDATE_WARU((short) 0x36F),
+    FARM_EXP((short) 0x374),
+    FARM_PACKET4((short) 0x375),
+    QUEST_ALERT((short) 0x377),
+    FARM_PACKET8((short) 0x378),
+    FARM_FRIENDS_BUDDY_REQUEST((short) 0x37B),
+    FARM_FRIENDS((short) 0x37C),
+    FARM_USER_INFO((short) 0x388),
+    FARM_AVATAR((short) 0x38A),
+    FRIEND_INFO((short) 0x38D),
+    FARM_RANKING((short) 0x38F), //+69
+    SPAWN_FARM_MONSTER1((short) 0x393),
+    SPAWN_FARM_MONSTER2((short) 0x394),
+    RENAME_MONSTER((short) 0x395),
+    STRENGTHEN_UI((short) 0x402), //39D
+    //Unplaced:
+    REDIRECTOR_COMMAND((short) 0x1337),
+    SHOW_DAMAGE_SKIN((short) 0xDA);//:v
