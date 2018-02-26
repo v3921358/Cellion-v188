@@ -24,15 +24,15 @@ public class NPCTalkHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter oPlayer = c.getPlayer();
-        final MapleNPC oNpc = oPlayer.getMap().getNPCByOid(iPacket.DecodeInteger());
+        MapleCharacter pPlayer = c.getPlayer();
+        final MapleNPC pNpc = pPlayer.getMap().getNPCByOid(iPacket.DecodeInteger());
         
-        if (oPlayer == null || oPlayer.getMap() == null || oNpc == null || oPlayer.hasBlockedInventory()) {
+        if (pPlayer == null || pPlayer.getMap() == null || pNpc == null || pPlayer.hasBlockedInventory()) {
             return;
         }
         
-        if (oPlayer.isIntern()) { // Useful debug!
-            oPlayer.dropMessage(5, "[NPC Debug] Script ID : " + oNpc.getId());
+        if (pPlayer.isIntern()) { // Useful debug!
+            pPlayer.dropMessage(5, "[NPC Debug] Script ID : " + pNpc.getId());
         }
         
         if (NPCScriptManager.getInstance().getCM(c) != null) { // Meme auto dispose when clicking an NPC.
@@ -42,19 +42,19 @@ public class NPCTalkHandler implements ProcessPacket<MapleClient> {
         }
 
         ReentrantLock safetyLock = new ReentrantLock(); // Lock to avoid running the script twice and receiving a runtime error.
-        if (NPCScriptManager.getInstance().hasScript(c, oNpc.getId(), null)) { // NPC Script > Before Shops
+        if (NPCScriptManager.getInstance().hasScript(c, pNpc.getId(), null)) { // NPC Script > Before Shops
             safetyLock.lock();
             try {
-                NPCScriptManager.getInstance().start(c, oNpc.getId(), null);
+                NPCScriptManager.getInstance().start(c, pNpc.getId(), null);
                 Thread.currentThread().sleep(15);
             } catch (InterruptedException ex) {
                 System.err.println("[Debug] Interrupted Exception at NPC Script Runtime.");
             } finally {
                 safetyLock.unlock();
             }
-        } else if (oNpc.hasShop()) {
-            oPlayer.setConversation(MapleCharacter.MapleCharacterConversationType.NPC_Or_Quest);
-            oNpc.sendShop(c);
+        } else if (pNpc.hasShop()) {
+            pPlayer.setConversation(MapleCharacter.MapleCharacterConversationType.NPC_Or_Quest);
+            pNpc.sendShop(c);
         }
     }
 }

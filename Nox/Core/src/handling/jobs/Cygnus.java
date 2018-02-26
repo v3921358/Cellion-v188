@@ -43,8 +43,8 @@ public class Cygnus {
 
     public static class ThunderBreakerHandler {
 
-        public static void handleLightningBuff(MapleCharacter oPlayer) {
-            if (oPlayer == null && !GameConstants.isThunderBreakerCygnus(oPlayer.getJob()) && !oPlayer.hasSkill(ThunderBreaker.LIGHTNING_ELEMENTAL)) {
+        public static void handleLightningBuff(MapleCharacter pPlayer) {
+            if (pPlayer == null && !GameConstants.isThunderBreakerCygnus(pPlayer.getJob()) && !pPlayer.hasSkill(ThunderBreaker.LIGHTNING_ELEMENTAL)) {
                 return;
             }
             
@@ -52,19 +52,19 @@ public class Cygnus {
             double nChargeProp = 0.10;
             
             // Determining Maximum Amount of Lightning Buffs
-            if (oPlayer.hasSkill(ThunderBreaker.ELECTRIFIED)) {
+            if (pPlayer.hasSkill(ThunderBreaker.ELECTRIFIED)) {
                 nMaxCount++; // 2 Total Charges
                 nChargeProp += 0.20; // 30% Total
             }
-            if (oPlayer.hasSkill(ThunderBreaker.LIGHTNING_BOOST)) {
+            if (pPlayer.hasSkill(ThunderBreaker.LIGHTNING_BOOST)) {
                 nMaxCount++; // 3 Total Charges
                 nChargeProp += 0.20; // 50% Total
             }
-            if (oPlayer.hasSkill(ThunderBreaker.LIGHTNING_LORD)) {
+            if (pPlayer.hasSkill(ThunderBreaker.LIGHTNING_LORD)) {
                 nMaxCount++; // 4 Total Charges
                 nChargeProp += 0.30; // 80% Total
             }
-            if (oPlayer.hasSkill(ThunderBreaker.THUNDER_GOD)) {
+            if (pPlayer.hasSkill(ThunderBreaker.THUNDER_GOD)) {
                 nMaxCount++; // 5 Total Charges
                 nChargeProp += 0.20; // 100% Total
             }
@@ -73,22 +73,22 @@ public class Cygnus {
             if (new Random().nextDouble() <= nChargeProp) {
               
                 // Update Lightning Buff Count
-                if (oPlayer.getComboStack() < nMaxCount) {
-                    oPlayer.setComboStack(oPlayer.getComboStack() + 1);
+                if (pPlayer.getComboStack() < nMaxCount) {
+                    pPlayer.setComboStack(pPlayer.getComboStack() + 1);
                 } else {
-                    oPlayer.setComboStack(nMaxCount);
+                    pPlayer.setComboStack(nMaxCount);
                 }
             }
             
-            final MapleStatEffect buffEffects = SkillFactory.getSkill(ThunderBreaker.LIGHTNING_ELEMENTAL).getEffect(oPlayer.getTotalSkillLevel(ThunderBreaker.LIGHTNING_ELEMENTAL));
+            final MapleStatEffect buffEffects = SkillFactory.getSkill(ThunderBreaker.LIGHTNING_ELEMENTAL).getEffect(pPlayer.getTotalSkillLevel(ThunderBreaker.LIGHTNING_ELEMENTAL));
 
-            buffEffects.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, oPlayer.getComboStack()); // TODO: Get charges stacking properly.
+            buffEffects.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pPlayer.getComboStack()); // TODO: Get charges stacking properly.
             buffEffects.statups.put(CharacterTemporaryStat.StrikerHyperElectric, 1); // Hack fix to allow the use of Gale/Typhoon.
 
-            final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(oPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
+            final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
             final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, buffEffects.info.get(MapleStatInfo.time));
-            oPlayer.registerEffect(buffEffects, System.currentTimeMillis(), buffSchedule, buffEffects.statups, false, buffEffects.info.get(MapleStatInfo.time), oPlayer.getId());
-            oPlayer.getClient().write(BuffPacket.giveBuff(oPlayer, ThunderBreaker.LIGHTNING_ELEMENTAL, buffEffects.info.get(MapleStatInfo.time), buffEffects.statups, buffEffects));
+            pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), buffSchedule, buffEffects.statups, false, buffEffects.info.get(MapleStatInfo.time), pPlayer.getId());
+            pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, ThunderBreaker.LIGHTNING_ELEMENTAL, buffEffects.info.get(MapleStatInfo.time), buffEffects.statups, buffEffects));
         }
     }
 

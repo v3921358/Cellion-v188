@@ -243,8 +243,8 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     
     public boolean canPartyFightMagnus() {
         for (MaplePartyCharacter z : getParty().getMembers()) {
-            MapleCharacter oPlayer = getMap().getCharacterById(z.getId());
-            if (!oPlayer.canFightMagnus()) {
+            MapleCharacter pPlayer = getMap().getCharacterById(z.getId());
+            if (!pPlayer.canFightMagnus()) {
                 return false;
             }
         }

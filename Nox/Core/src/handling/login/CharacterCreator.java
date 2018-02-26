@@ -46,7 +46,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         String name = iPacket.DecodeString();
         iPacket.DecodeInteger(); // 0
         iPacket.DecodeInteger(); // -1
-        LoginInformationProvider.JobType oJob = LoginInformationProvider.JobType.getByType(iPacket.DecodeInteger());
+        LoginInformationProvider.JobType pJob = LoginInformationProvider.JobType.getByType(iPacket.DecodeInteger());
         short subcategory = iPacket.DecodeShort();
         byte nGender = iPacket.DecodeByte();
         byte nSkin = iPacket.DecodeByte();
@@ -58,23 +58,23 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         int[] correctEars = {5010116, 5010117, 5010118};
         int[] wrongTails = {1102661, 1102662, 1102663};
         int[] correctTails = {5010119, 5010120, 5010121};
-        boolean bNoSkin = oJob == LoginInformationProvider.JobType.Demon || oJob == LoginInformationProvider.JobType.Mercedes || oJob == LoginInformationProvider.JobType.Jett || oJob == LoginInformationProvider.JobType.PinkBean;
+        boolean bNoSkin = pJob == LoginInformationProvider.JobType.Demon || pJob == LoginInformationProvider.JobType.Mercedes || pJob == LoginInformationProvider.JobType.Jett || pJob == LoginInformationProvider.JobType.PinkBean;
         int[][] nGuideBookCollection = new int[][]{{4161001, 0}, {4161047, 1}, {4161048, 2000}, {4161052, 2001}, {4161054, 3}, {4161079, 2002}};
         int nGuideBook = 0;
         int nIndex = 0;
-        MapleCharacter oNewCharacter = MapleCharacter.getDefault(c, oJob);
+        MapleCharacter oNewCharacter = MapleCharacter.getDefault(c, pJob);
         int nCharacterPos = c.loadCharacters(c.getWorld()).size();
         final MapleItemInformationProvider oItemProvider = MapleItemInformationProvider.getInstance();
-        final MapleInventory oEquip = oNewCharacter.getInventory(MapleInventoryType.EQUIPPED);
-        Item oItem;
+        final MapleInventory pEquip = oNewCharacter.getInventory(MapleInventoryType.EQUIPPED);
+        Item pItem;
         
-        if (oJob == null) {
+        if (pJob == null) {
             c.write(CLogin.addNewCharEntry(null, 10));
             return;
         }
         
         for (JobConstants.LoginJob j : JobConstants.LoginJob.values()) {
-            if (j.getJobType() == oJob.getType()) {
+            if (j.getJobType() == pJob.getType()) {
                 if (j.getFlag() != JobConstants.LoginJob.JobFlag.ENABLED.getFlag()) {
                     c.write(CLogin.addNewCharEntry(null, 10));
                     return;
@@ -82,31 +82,31 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
             }
         }
 
-        if (oJob.hasHairColor()) {
+        if (pJob.hasHairColor()) {
             nHairColour = iPacket.DecodeInteger();
         }
-        if (oJob.hasSkinColor()) {
+        if (pJob.hasSkinColor()) {
             iPacket.DecodeInteger();
         }
-        if (oJob.hasFaceMark()) {
+        if (pJob.hasFaceMark()) {
             nFaceMark = iPacket.DecodeInteger();
         }
-        if (oJob.hasEars()) {
+        if (pJob.hasEars()) {
             nEars = iPacket.DecodeInteger();
         }
-        if (oJob.hasTail()) {
+        if (pJob.hasTail()) {
             nTail = iPacket.DecodeInteger();
         }
-        if (oJob.hasHat()) {
+        if (pJob.hasHat()) {
             nHat = iPacket.DecodeInteger();
         }
         
         nTop = iPacket.DecodeInteger();
         
-        if (oJob.hasBottom()) {
+        if (pJob.hasBottom()) {
             nBottom = iPacket.DecodeInteger();
         }
-        if (oJob.hasCape()) {
+        if (pJob.hasCape()) {
             nCape = iPacket.DecodeInteger();
         }
         
@@ -118,11 +118,11 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         }
 
         int[] nItems = new int[]{nFace, nHair, nHairColour, bNoSkin ? -1 : nSkin, nFaceMark, nEars, nTail, nHat, nTop, nBottom, nCape, nShoes, nWeapon, nShield};
-        if (oJob != LoginInformationProvider.JobType.BeastTamer) {
+        if (pJob != LoginInformationProvider.JobType.BeastTamer) {
             for (int i : nItems) {
                 if (i > -1) {
-                    if (!LoginInformationProvider.getInstance().isEligibleItem(nGender, nIndex, oJob.getType(), i)) {
-                        LogHelper.PACKET_EDIT_HACK.get().info(String.format("[CharacterCreator] Account [ID = %d, name = %s] has tried to create a character with ineligible items. Job [%s %d], ItemID: %d", c.getAccID(), c.getAccountName(), oJob.toString(), oJob.getJobId(), i));
+                    if (!LoginInformationProvider.getInstance().isEligibleItem(nGender, nIndex, pJob.getType(), i)) {
+                        LogHelper.PACKET_EDIT_HACK.get().info(String.format("[CharacterCreator] Account [ID = %d, name = %s] has tried to create a character with ineligible items. Job [%s %d], ItemID: %d", c.getAccID(), c.getAccountName(), pJob.toString(), pJob.getJobId(), i));
                         c.close();
                         return;
                     }
@@ -148,7 +148,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         if (nHairColour < 0) {
             nHairColour = 0;
         }
-        if (oJob != LoginInformationProvider.JobType.Mihile) {
+        if (pJob != LoginInformationProvider.JobType.Mihile) {
             nHair += nHairColour;
         }
         if (nFaceMark < 0) {
@@ -187,7 +187,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         oNewCharacter.setEars(nEars);
         oNewCharacter.setTail(nTail);
         
-        switch (oJob) {
+        switch (pJob) {
             case AngelicBuster:
                 oNewCharacter.setJob((short) 6500);
                 oNewCharacter.setLevel((short) 10);
@@ -246,17 +246,17 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         int[][] equips = new int[][]{{nHat, -1}, {nTop, -5}, {nBottom, -6}, {nCape, -9}, {nShoes, -7}, {nWeapon, -11}, {nShield, -10}};
         for (int[] i : equips) {
             if (i[0] > 0) {
-                oItem = oItemProvider.getEquipById(i[0]);
-                oItem.setPosition((byte) i[1]);
-                oItem.setGMLog("Character Creation");
-                oEquip.addFromDB(oItem);
+                pItem = oItemProvider.getEquipById(i[0]);
+                pItem.setPosition((byte) i[1]);
+                pItem.setGMLog("Character Creation");
+                pEquip.addFromDB(pItem);
             }
         }
-        if (oJob == LoginInformationProvider.JobType.AngelicBuster || oJob == LoginInformationProvider.JobType.Kaiser) {
-            oItem = oItemProvider.getEquipById(oJob == LoginInformationProvider.JobType.Kaiser ? 1352500 : 1352601);
-            oItem.setPosition((byte) -10);
-            oItem.setGMLog("Nova Shield");
-            oEquip.addFromDB(oItem);
+        if (pJob == LoginInformationProvider.JobType.AngelicBuster || pJob == LoginInformationProvider.JobType.Kaiser) {
+            pItem = oItemProvider.getEquipById(pJob == LoginInformationProvider.JobType.Kaiser ? 1352500 : 1352601);
+            pItem.setPosition((byte) -10);
+            pItem.setGMLog("Nova Shield");
+            pEquip.addFromDB(pItem);
         }
         
         // Additional skills that are not added by default.
@@ -292,23 +292,23 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
              */
         };
         
-        if (skills[oJob.getType()].length > 0) {
+        if (skills[pJob.getType()].length > 0) {
             final Map<Skill, SkillEntry> mSkill = new HashMap<>();
-            Skill oSkill;
-            if (oJob != LoginInformationProvider.JobType.Zero) { // Not for Zero
-                for (int i : skills[oJob.getType()]) {
-                    oSkill = SkillFactory.getSkill(i);
-                    int maxLevel = oSkill.getMaxLevel();
+            Skill pSkill;
+            if (pJob != LoginInformationProvider.JobType.Zero) { // Not for Zero
+                for (int i : skills[pJob.getType()]) {
+                    pSkill = SkillFactory.getSkill(i);
+                    int maxLevel = pSkill.getMaxLevel();
                     if (maxLevel < 1) {
-                        maxLevel = oSkill.getMasterLevel();
+                        maxLevel = pSkill.getMasterLevel();
                     }
-                    mSkill.put(oSkill, new SkillEntry((byte) 1, (byte) maxLevel, -1));
+                    mSkill.put(pSkill, new SkillEntry((byte) 1, (byte) maxLevel, -1));
                 }
             }
-            if (oJob == LoginInformationProvider.JobType.Aran) {
+            if (pJob == LoginInformationProvider.JobType.Aran) {
                 mSkill.put(SkillFactory.getSkill(Aran.COMBAT_STEP), new SkillEntry((byte) 1, (byte) 1, -1)); // Aran Flash Jump
             }
-            if (oJob == LoginInformationProvider.JobType.Zero) {
+            if (pJob == LoginInformationProvider.JobType.Zero) {
                 // Shared Zero Skills - All except Resolton Time, which we'll handle in MapleCharacter levelUp().
                 //ss.put(SkillFactory.getSkill(Zero.TEMPLE_RECALL), new SkillEntry((byte) 1, (byte) 1, -1)); //not until zero temple is fixed up.
                 mSkill.put(SkillFactory.getSkill(Zero.DUAL_COMBAT), new SkillEntry((byte) 1, (byte) 1, -1));
@@ -321,29 +321,29 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
                 mSkill.put(SkillFactory.getSkill(Zero.HEAVY_SWORD_MASTERY), new SkillEntry((byte) 8, (byte) 10, -1));
                 mSkill.put(SkillFactory.getSkill(Zero.LONG_SWORD_MASTERY), new SkillEntry((byte) 8, (byte) 10, -1));
             }
-            if (oJob == LoginInformationProvider.JobType.BeastTamer) {
+            if (pJob == LoginInformationProvider.JobType.BeastTamer) {
                 mSkill.put(SkillFactory.getSkill(110001511), new SkillEntry((byte) 0, (byte) 30, -1));
                 mSkill.put(SkillFactory.getSkill(110001512), new SkillEntry((byte) 0, (byte) 5, -1));
                 mSkill.put(SkillFactory.getSkill(110000513), new SkillEntry((byte) 0, (byte) 30, -1));
                 mSkill.put(SkillFactory.getSkill(110000515), new SkillEntry((byte) 0, (byte) 10, -1));
             }
-            if (oJob == LoginInformationProvider.JobType.Resistance) { // Mechanic (Hack Fix)
+            if (pJob == LoginInformationProvider.JobType.Resistance) { // Mechanic (Hack Fix)
                 mSkill.put(SkillFactory.getSkill(35120000), new SkillEntry((byte) 1, (byte) 10, -1));
             }
-            if (oJob == LoginInformationProvider.JobType.Demon) { // Demon Blood Pact
+            if (pJob == LoginInformationProvider.JobType.Demon) { // Demon Blood Pact
                 mSkill.put(SkillFactory.getSkill(30010242), new SkillEntry((byte) 1, (byte) 1, -1));
             }
-            if (oJob == LoginInformationProvider.JobType.Xenon) { // Modal Shift
+            if (pJob == LoginInformationProvider.JobType.Xenon) { // Modal Shift
                 mSkill.put(SkillFactory.getSkill(Xenon.MODAL_SHIFT), new SkillEntry((byte) 1, (byte) 1, -1));
             }
-            if (oJob == LoginInformationProvider.JobType.Kaiser) { // Kaiser Attack & Defense Modes
+            if (pJob == LoginInformationProvider.JobType.Kaiser) { // Kaiser Attack & Defense Modes
                 mSkill.put(SkillFactory.getSkill(Kaiser.ATTACKER_MODE), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Kaiser.DEFENDER_MODE), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Kaiser.DRAGON_LINK), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Kaiser.VERTICAL_GRAPPLE), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Kaiser.TRANSFIGURATION), new SkillEntry((byte) 1, (byte) 1, -1));
             }
-            if (oJob == LoginInformationProvider.JobType.Shade) { 
+            if (pJob == LoginInformationProvider.JobType.Shade) { 
                 mSkill.put(SkillFactory.getSkill(Shade.FOX_TROT), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Shade.SPIRIT_BOND_1), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Shade.CLOSE_CALL), new SkillEntry((byte) 1, (byte) 1, -1));
@@ -369,7 +369,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
 
         // Balance changes and custom tutorial preparation.
         if (ServerConstants.UNIVERSAL_START) {
-            switch (oJob) {
+            switch (pJob) {
                 case DualBlade:
                     oNewCharacter.setJob((short) 430);
                     oNewCharacter.setLevel((short) 9);
@@ -451,7 +451,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         }
 
         // Save Character
-        MapleCharacter.saveNewCharToDB(oNewCharacter, oJob, subcategory);
+        MapleCharacter.saveNewCharToDB(oNewCharacter, pJob, subcategory);
         c.write(CLogin.addNewCharEntry(oNewCharacter, 0));
         c.createdChar(oNewCharacter.getId());
         oNewCharacter.newCharRewards();

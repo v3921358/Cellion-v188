@@ -135,16 +135,16 @@ public class CField {
     /**
      * Handles Final Attack.
      */
-    public static Packet finalAttackRequest(MapleCharacter oPlayer, int nSkill, int nFinalSkill, int nDelay, int nMob, int nRequestTime) {
-        return finalAttackRequest(oPlayer, nSkill, nFinalSkill, nDelay, nMob, nRequestTime, false, null);
+    public static Packet finalAttackRequest(MapleCharacter pPlayer, int nSkill, int nFinalSkill, int nDelay, int nMob, int nRequestTime) {
+        return finalAttackRequest(pPlayer, nSkill, nFinalSkill, nDelay, nMob, nRequestTime, false, null);
     }
 
-    public static Packet finalAttackRequest(MapleCharacter oPlayer, int nSkill, int nFinalSkill, int nDelay, int nMob, int nRequestTime, boolean bLeft, Point pBase) {
+    public static Packet finalAttackRequest(MapleCharacter pPlayer, int nSkill, int nFinalSkill, int nDelay, int nMob, int nRequestTime, boolean bLeft, Point pBase) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeInteger(nSkill); // nSkillId
         oPacket.EncodeInteger(nFinalSkill); // nFinalSkillId
-        oPacket.EncodeInteger(oPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11).getItemId()); // nWeaponId
+        oPacket.EncodeInteger(pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11).getItemId()); // nWeaponId
         oPacket.EncodeInteger(nDelay); // nDelay
         oPacket.EncodeInteger(nMob); // nMobId
         oPacket.EncodeInteger(nRequestTime); // nReqTime

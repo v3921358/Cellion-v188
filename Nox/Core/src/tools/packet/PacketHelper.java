@@ -656,9 +656,9 @@ public class PacketHelper {
         
         // Checks if player has a listed cash weapon equip and fetchs the ID for the integer being written below.
      // Hack fix but neccessary for now as for some reason attempting to fetch the ID normally results in null. -MazenMapleCharacter oPlayer = (MapleCharacter) chr;
-        MapleCharacter oPlayer = (MapleCharacter) chr;
+        MapleCharacter pPlayer = (MapleCharacter) chr;
         for (int i = 0; i < GameConstants.aCashWeapons.length; i++) {
-            if (oPlayer.hasEquipped(GameConstants.aCashWeapons[i])) {
+            if (pPlayer.hasEquipped(GameConstants.aCashWeapons[i])) {
                 cWeapon = GameConstants.aCashWeapons[i];
                 break;
             }

@@ -21,8 +21,8 @@ public class Kinesis {
 
     public static class KinesisHandler {
 
-        public static void handlePsychicPoint(MapleCharacter oPlayer, int nSkill) {
-            MapleStatEffect oEffect = SkillFactory.getSkill(nSkill).getEffect(oPlayer.getTotalSkillLevel(nSkill));
+        public static void handlePsychicPoint(MapleCharacter pPlayer, int nSkill) {
+            MapleStatEffect oEffect = SkillFactory.getSkill(nSkill).getEffect(pPlayer.getTotalSkillLevel(nSkill));
             int nPointConsume = oEffect.info.get(MapleStatInfo.ppCon);
             int nPointRecover = oEffect.info.get(MapleStatInfo.ppRecovery);
             
@@ -65,16 +65,16 @@ public class Kinesis {
                     break;
             }
             
-            int nPsychicPoint = oPlayer.getAdditionalStack() + nPointRecover - nPointConsume;
+            int nPsychicPoint = pPlayer.getAdditionalStack() + nPointRecover - nPointConsume;
             if (nPsychicPoint > 35) { // Max PP
                 nPsychicPoint = 35;
             }
             
-            oPlayer.setAdditionalStack(nPsychicPoint);
+            pPlayer.setAdditionalStack(nPsychicPoint);
             oEffect.statups.put(CharacterTemporaryStat.KinesisPsychicPoint, nPsychicPoint);
-            oPlayer.registerEffect(oEffect, System.currentTimeMillis(), null, oEffect.statups, false, oEffect.info.get(MapleStatInfo.time), oPlayer.getId());
-            oPlayer.getClient().write(BuffPacket.giveBuff(oPlayer, 0, oEffect.info.get(MapleStatInfo.time), oEffect.statups, oEffect));
-            oPlayer.yellowMessage("nConsume = " + nPointConsume + " / nPointRecover = " + nPointRecover);
+            pPlayer.registerEffect(oEffect, System.currentTimeMillis(), null, oEffect.statups, false, oEffect.info.get(MapleStatInfo.time), pPlayer.getId());
+            pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, 0, oEffect.info.get(MapleStatInfo.time), oEffect.statups, oEffect));
+            pPlayer.yellowMessage("nConsume = " + nPointConsume + " / nPointRecover = " + nPointRecover);
         }
         
     }

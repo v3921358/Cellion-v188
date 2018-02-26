@@ -166,13 +166,13 @@ public class JobPacket {
 
     public static class ShadePacket {
         
-        public static Packet FoxSpirit(MapleCharacter oPlayer, AttackMonster oMonster) {
+        public static Packet FoxSpirit(MapleCharacter pPlayer, AttackMonster oMonster) {
             OutPacket oPacket = new OutPacket(80);
             
             oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
             
             oPacket.Encode(0); // bByMob
-            oPacket.EncodeInteger(oPlayer.getId()); // nCharId
+            oPacket.EncodeInteger(pPlayer.getId()); // nCharId
             oPacket.EncodeInteger(13); // nAtomType // 17 = Orbital Flame
             oPacket.Encode(1); // bToMob
             oPacket.EncodeInteger(1); // Unkown
@@ -180,7 +180,7 @@ public class JobPacket {
             
             int nAtomId = Shade.FOX_SPIRITS_ATOM;
             int nAtomCount = 2;
-            if (oPlayer.hasSkill(Shade.FOX_SPIRIT_MASTERY)) {
+            if (pPlayer.hasSkill(Shade.FOX_SPIRIT_MASTERY)) {
                 nAtomId = Shade.FOX_SPIRITS_ATOM_2;
                 nAtomCount = 3;
             }
