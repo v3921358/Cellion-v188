@@ -28,6 +28,7 @@ import server.maps.objects.MapleCharacter;
 import server.maps.objects.MaplePet;
 import server.maps.objects.MonsterFamiliar;
 import server.quest.MapleQuest;
+import server.skills.VMatrixRecord;
 import tools.Pair;
 
 public class CharacterTransfer {
@@ -62,6 +63,8 @@ public class CharacterTransfer {
     public final Map<Integer, SkillEntry> Skills = new LinkedHashMap<>(); // Skillid instead of Skill.java, as it's huge. Cant be transporting Skill.java and MapleStatEffect.java
     public final Map<Integer, CardData> cardsInfo = new LinkedHashMap<>();
     public MapleMarriage marriage;
+    public List<VMatrixRecord> aVMatrixRecord = new ArrayList<>();
+    
     /*Start of Custom Feature*/
  /*All custom shit declare here*/
     public int reborns, apstorage, str, dex, int_, luk, remainingAp;
@@ -248,7 +251,7 @@ public class CharacterTransfer {
         this.isZeroBeta = chr.isZeroBetaState();
         this.isAngelicDressup = chr.isAngelicDressupState();
         this.isBurning = chr.isBurning();
-        
+        this.aVMatrixRecord = chr.aVMatrixRecord;
         /*Boss Timed Variables*/
         this.magnusTime = chr.getLastMagnusTime();
         TranferTime = System.currentTimeMillis();
