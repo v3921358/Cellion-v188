@@ -1,0 +1,53 @@
+//v158 
+    public static byte[] getCharInfo(MapleCharacter chr) {
+        final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+        mplew.writeShort(SendOpcode.SET_FIELD.getValue());
+
+        mplew.writeShort(2);
+        mplew.writeLong(1);
+        mplew.writeLong(2);        
+        mplew.writeLong(chr.getClient().getChannel() - 1);
+        mplew.write(0);
+        mplew.writeInt(1);
+        mplew.write(0);
+        mplew.writeShort(1);
+        mplew.write(0);
+        for (int i = 0; i < 3; i++) {
+            mplew.writeInt(Randomizer.nextInt());
+        }
+        addCharacterInfo(mplew, chr);
+        mplew.write(new byte[6]);
+        mplew.writeLong(getTime(System.currentTimeMillis()));
+        mplew.writeInt(0x64);
+        mplew.writeShort(0);
+        mplew.writeInt(1);
+        mplew.writeShort(0);
+        mplew.write(0);     
+        return mplew.getPacket();
+    }
+	
+	//v145
+    public static byte[] getCharInfo(MapleCharacter chr) {
+        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+
+        mplew.writeShort(SendPacketOpcode.WARP_TO_MAP.getValue());
+        mplew.writeShort(2);
+        mplew.writeLong(1L);
+        mplew.writeLong(2L);
+        mplew.writeLong(chr.getClient().getChannel() - 1);
+        mplew.write(0);
+        mplew.write(1);
+        mplew.writeInt(0);
+        mplew.write(1);
+        mplew.writeShort(0);
+        chr.CRand().connectData(mplew);
+        PacketHelper.addCharacterInfo(mplew, chr);
+        //PacketHelper.addLuckyLogoutInfo(mplew, false, null, null, null);
+        mplew.writeZeroBytes(5); //lucky logout + another int
+        mplew.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
+        mplew.writeInt(100);
+        mplew.writeShort(0);
+        mplew.write(1);
+
+        return mplew.getPacket();
+    }

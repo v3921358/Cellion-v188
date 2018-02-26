@@ -1,0 +1,55 @@
+package handling.game;
+
+import client.MapleClient;
+import client.inventory.Item;
+import client.inventory.MapleInventoryType;
+import constants.ItemConstants;
+import server.MapleInventoryManipulator;
+import server.MapleItemInformationProvider;
+import server.maps.FieldLimitType;
+import server.maps.objects.MapleCharacter;
+import net.InPacket;
+import tools.packet.CWvsContext;
+import netty.ProcessPacket;
+
+/**
+ *
+ * @author
+ */
+public class UseReturnScrollHandler implements ProcessPacket<MapleClient> {
+
+    @Override
+    public boolean ValidateState(MapleClient c) {
+        return true;
+    }
+
+    @Override
+    public void Process(MapleClient c, InPacket iPacket) {
+        MapleCharacter chr = c.getPlayer();
+
+        if (!chr.isAlive() || chr.getMapId() == 749040100 || chr.hasBlockedInventory() || chr.isInBlockedMap() || chr.inPVP()) {
+            c.write(CWvsContext.enableActions());
+            return;
+        }
+        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        final byte slot = (byte) iPacket.DecodeShort();
+        final int itemId = iPacket.DecodeInteger();
+        final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
+
+        if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId) {
+            c.write(CWvsContext.enableActions());
+            return;
+        }
+        if ((itemId == ItemConstants.RETURN_SCROLL_NEAREST_TOWN && !FieldLimitType.UnableToUsePortalScroll.check(chr.getMap()))
+                || !FieldLimitType.UnableToUseSpecificPortalScroll.check(chr.getMap())) {
+            if (MapleItemInformationProvider.getInstance().getItemEffect(toUse.getItemId()).applyReturnScroll(chr)) {
+                MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
+            } else {
+                c.write(CWvsContext.enableActions());
+            }
+        } else {
+            c.write(CWvsContext.enableActions());
+        }
+    }
+
+}

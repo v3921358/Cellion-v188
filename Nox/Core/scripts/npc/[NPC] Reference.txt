@@ -1,0 +1,22 @@
+9201095 - Custom Tutorial NPC (Primary)
+9270082 - Custom Tutorial NPC (Starter Pack Handler)
+
+9201082 - Equip Seller NPC
+9001001 - Universal NPC
+9100018 - Donator Point NPC
+9100019 - Vote Point NPC
+9010017 - Cash Drop NPC
+
+9330027 - Tinker NPC
+9330072 - Tinker NPC
+
+
+9040011 - Bulletin Board
+9072100 - Secondary Weapon Seller
+2470035 - Swallow (Points to Universal NPC)
+9040008 - Guild Rank Board
+
+2500000 - Boss Warper (Skylark Rita)
+2083004 - Horntail Pre-Boss Arena NPC
+2041024 - Papulatus Pre-Boss Arena NPC
+2159355 - Magnus Pre-Boss Arena NPC

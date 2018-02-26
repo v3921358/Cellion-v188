@@ -1,0 +1,7 @@
+/Nox/.idea/
+/Nox/Network/target/
+/Nox/Provider/target/
+/Nox/Core/target/
+/Nox/Core/wz/
+/Nox/Core/logs/
+*.iml

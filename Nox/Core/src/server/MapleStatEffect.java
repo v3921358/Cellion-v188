@@ -1,0 +1,2839 @@
+package server;
+
+import client.*;
+import client.MapleTrait.MapleTraitType;
+import client.inventory.Item;
+import client.inventory.MapleInventory;
+import client.inventory.MapleInventoryType;
+import constants.GameConstants;
+import constants.ServerConstants;
+import constants.SkillConstants;
+import constants.skills.*;
+import handling.world.MaplePartyCharacter;
+import org.apache.log4j.Priority;
+import provider.MapleData;
+import provider.MapleDataTool;
+import provider.wz.MapleDataType;
+import server.MapleCarnivalFactory.MCSkill;
+import server.Timer.BuffTimer;
+import server.buffs.manager.BuffEffectFetcher;
+import server.life.MapleLifeFactory;
+import server.life.MapleMonster;
+import server.life.MapleMonsterStats;
+import server.life.MobSkill;
+import server.maps.MapleMap;
+import server.maps.MapleMapObject;
+import server.maps.MapleMapObjectType;
+import server.maps.SummonMovementType;
+import server.maps.objects.*;
+import service.ChannelServer;
+import tools.CaltechEval;
+import tools.LogHelper;
+import tools.Pair;
+import tools.Triple;
+import tools.packet.BuffPacket;
+import tools.packet.CField;
+import tools.packet.CField.EffectPacket;
+import tools.packet.CField.EffectPacket.UserEffectCodes;
+import tools.packet.CWvsContext;
+import tools.packet.JobPacket;
+import tools.packet.JobPacket.PhantomPacket;
+
+import java.awt.*;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.concurrent.ScheduledFuture;
+import tools.packet.CField.SummonPacket;
+
+public class MapleStatEffect implements Serializable {
+
+    private static final long serialVersionUID = 9179541993413738569L;
+    public Map<MapleStatInfo, Integer> info;
+    private Map<MapleTraitType, Integer> traits;
+    private boolean overTime, skill, partyBuff = true;
+    public EnumMap<CharacterTemporaryStat, Integer> statups;
+    private ArrayList<Pair<Integer, Integer>> availableMap;
+    public EnumMap<MonsterStatus, Integer> monsterStatus;
+    private Point lt, rb;
+    private byte level;
+    private List<Pair<Integer, Integer>> randomMorph;
+    private List<MapleDisease> cureDebuffs;
+    private List<Integer> petsCanConsume, familiars, randomPickup;
+    private List<Triple<Integer, Integer, Integer>> rewardItem;
+    private byte fieldExpType, expR, familiarTarget, recipeUseCount, recipeValidDay, reqSkillLevel, slotCount, slotPerLine, effectedOnAlly, effectedOnEnemy, type, preventslip, immortal, bs;
+    private short ignoreMob, mesoR, thaw, fatigueChange, lifeId, imhp, immp, inflation, useLevel, indiePdd, indieMdd, incPVPdamage, mobSkill, mobSkillLevel;
+    private double hpR, mpR;
+    private int sourceid, recipe, moveTo, moneyCon, morphId = 0, expinc, exp, consumeOnPickup, charColor, interval, rewardMeso, totalprob, cosmetic;
+    private int weapon = 0;
+    private int expBuff, itemup, mesoup, cashup, berserk, illusion, booster, berserk2, cp, nuffSkill, combo;
+
+    public static MapleStatEffect loadSkillEffectFromData(final MapleData source, final int skillid, final boolean overtime, final int level, final String variables) {
+        return loadFromData(source, skillid, true, overtime, level, variables);
+    }
+
+    public static MapleStatEffect loadItemEffectFromData(final MapleData source, final int itemid) {
+        return loadFromData(source, itemid, false, false, 1, null);
+    }
+
+    private static MapleStatEffect loadFromData(final MapleData source, final int sourceid, final boolean skill, final boolean overTime, final int level, final String variables) {
+        final MapleStatEffect effect = new MapleStatEffect();
+        effect.sourceid = sourceid;
+        effect.skill = skill;
+        effect.level = (byte) level;
+        if (source == null) {
+            return effect;
+        }
+
+        effect.info = new EnumMap<>(MapleStatInfo.class);
+        for (final MapleStatInfo i : MapleStatInfo.values()) {
+            final String propertyName = i.name();
+            int value = parseEval(propertyName, source, i.getDefault(), variables, level, i.isSpecial());
+
+            effect.info.put(i, value);
+        }
+
+        effect.hpR = parseEval("hpR", source, 0, variables, level) / 100.0;
+        effect.mpR = parseEval("mpR", source, 0, variables, level) / 100.0;
+        effect.ignoreMob = (short) parseEval("ignoreMobpdpR", source, 0, variables, level);
+        effect.thaw = (short) parseEval("thaw", source, 0, variables, level);
+        effect.interval = parseEval("interval", source, 0, variables, level);
+        effect.expinc = parseEval("expinc", source, 0, variables, level);
+        effect.exp = parseEval("exp", source, 0, variables, level);
+        effect.morphId = parseEval("morph", source, 0, variables, level);
+        effect.cp = parseEval("cp", source, 0, variables, level);
+        effect.cosmetic = parseEval("cosmetic", source, 0, variables, level);
+        effect.slotCount = (byte) parseEval("slotCount", source, 0, variables, level); // for extended inventory, bags
+        effect.slotPerLine = (byte) parseEval("slotPerLine", source, 0, variables, level); // for extended inventory, bags
+        effect.preventslip = (byte) parseEval("preventslip", source, 0, variables, level);
+        effect.useLevel = (short) parseEval("useLevel", source, 0, variables, level);
+        effect.nuffSkill = parseEval("nuffSkill", source, 0, variables, level);
+        effect.familiarTarget = (byte) (parseEval("familiarPassiveSkillTarget", source, 0, variables, level) + 1);
+        effect.immortal = (byte) parseEval("immortal", source, 0, variables, level);
+        effect.type = (byte) parseEval("type", source, 0, variables, level);
+        effect.bs = (byte) parseEval("bs", source, 0, variables, level);
+        effect.indiePdd = (short) parseEval("indiePdd", source, 0, variables, level);
+        effect.indieMdd = (short) parseEval("indieMdd", source, 0, variables, level);
+        effect.expBuff = parseEval("expBuff", source, 0, variables, level);
+        effect.cashup = parseEval("cashBuff", source, 0, variables, level);
+        effect.itemup = parseEval("itemupbyitem", source, 0, variables, level);
+        effect.mesoup = parseEval("mesoupbyitem", source, 0, variables, level);
+        effect.berserk = parseEval("berserk", source, 0, variables, level);
+        effect.berserk2 = parseEval("berserk2", source, 0, variables, level);
+        effect.booster = parseEval("booster", source, 0, variables, level);
+        effect.lifeId = (short) parseEval("lifeId", source, 0, variables, level);
+        effect.inflation = (short) parseEval("inflation", source, 0, variables, level);
+        effect.imhp = (short) parseEval("imhp", source, 0, variables, level);
+        effect.immp = (short) parseEval("immp", source, 0, variables, level);
+        effect.illusion = parseEval("illusion", source, 0, variables, level);
+        effect.fieldExpType = (byte) parseEval("fieldExpType", source, -1, variables, level); // default = -1, 0 = COMBO_PARADE1, 1 = COMBO_PARADE2, 2 = COMBO_PARADE3
+        effect.consumeOnPickup = parseEval("consumeOnPickup", source, 0, variables, level);
+        if (effect.consumeOnPickup == 1) {
+            if (parseEval("party", source, 0, variables, level) > 0) {
+                effect.consumeOnPickup = 2;
+            }
+        }
+        effect.recipe = parseEval("recipe", source, 0, variables, level);
+        effect.recipeUseCount = (byte) parseEval("recipeUseCount", source, 0, variables, level);
+        effect.recipeValidDay = (byte) parseEval("recipeValidDay", source, 0, variables, level);
+        effect.reqSkillLevel = (byte) parseEval("reqSkillLevel", source, 0, variables, level);
+        effect.effectedOnAlly = (byte) parseEval("effectedOnAlly", source, 0, variables, level);
+        effect.effectedOnEnemy = (byte) parseEval("effectedOnEnemy", source, 0, variables, level);
+        effect.incPVPdamage = (short) parseEval("incPVPDamage", source, 0, variables, level);
+        effect.moneyCon = parseEval("moneyCon", source, 0, variables, level);
+        effect.moveTo = parseEval("moveTo", source, -1, variables, level);
+
+        effect.charColor = 0;
+        String cColor = MapleDataTool.getString("charColor", source, null);
+        if (cColor != null) {
+            effect.charColor |= Integer.parseInt("0x" + cColor.substring(0, 2));
+            effect.charColor |= Integer.parseInt("0x" + cColor.substring(2, 4) + "00");
+            effect.charColor |= Integer.parseInt("0x" + cColor.substring(4, 6) + "0000");
+            effect.charColor |= Integer.parseInt("0x" + cColor.substring(6, 8) + "000000");
+        }
+        effect.traits = new EnumMap<>(MapleTraitType.class);
+        for (MapleTraitType t : MapleTraitType.values()) {
+            int expz = parseEval(t.name() + "EXP", source, 0, variables, level);
+            if (expz != 0) {
+                effect.traits.put(t, expz);
+            }
+        }
+        List<MapleDisease> cure = new ArrayList<>(5);
+        if (parseEval("poison", source, 0, variables, level) > 0) {
+            cure.add(MapleDisease.POISON);
+        }
+        if (parseEval("seal", source, 0, variables, level) > 0) {
+            cure.add(MapleDisease.SEAL);
+        }
+        if (parseEval("darkness", source, 0, variables, level) > 0) {
+            cure.add(MapleDisease.DARKNESS);
+        }
+        if (parseEval("weakness", source, 0, variables, level) > 0) {
+            cure.add(MapleDisease.WEAKEN);
+        }
+        if (parseEval("curse", source, 0, variables, level) > 0) {
+            cure.add(MapleDisease.CURSE);
+        }
+        effect.cureDebuffs = cure;
+        effect.petsCanConsume = new ArrayList<>();
+        for (int i = 0; true; i++) {
+            final int dd = parseEval(String.valueOf(i), source, 0, variables, level);
+            if (dd > 0) {
+                effect.petsCanConsume.add(dd);
+            } else {
+                break;
+            }
+        }
+        final MapleData mdd = source.getChildByPath("0");
+        if (mdd != null && mdd.getChildren().size() > 0) {
+            effect.mobSkill = (short) parseEval("mobSkill", mdd, 0, variables, level);
+            effect.mobSkillLevel = (short) parseEval("level", mdd, 0, variables, level);
+        } else {
+            effect.mobSkill = 0;
+            effect.mobSkillLevel = 0;
+        }
+        final MapleData pd = source.getChildByPath("randomPickup");
+        if (pd != null) {
+            effect.randomPickup = new ArrayList<>();
+            for (MapleData p : pd) {
+                effect.randomPickup.add(MapleDataTool.getInt(p));
+            }
+        }
+        final MapleData ltd = source.getChildByPath("lt");
+        if (ltd != null) {
+            effect.lt = (Point) ltd.getData();
+            effect.rb = (Point) source.getChildByPath("rb").getData();
+        }
+        final MapleData ltc = source.getChildByPath("con");
+        if (ltc != null) {
+            effect.availableMap = new ArrayList<>();
+            for (MapleData ltb : ltc) {
+                effect.availableMap.add(new Pair<>(MapleDataTool.getInt("sMap", ltb, 0), MapleDataTool.getInt("eMap", ltb, 999999999)));
+            }
+        }
+        final MapleData ltb = source.getChildByPath("familiar");
+        if (ltb != null) {
+            effect.fatigueChange = (short) (parseEval("incFatigue", ltb, 0, variables, level) - parseEval("decFatigue", ltb, 0, variables, level));
+            effect.familiarTarget = (byte) parseEval("target", ltb, 0, variables, level);
+            final MapleData lta = ltb.getChildByPath("targetList");
+            if (lta != null) {
+                effect.familiars = new ArrayList<>();
+                for (MapleData ltz : lta) {
+                    effect.familiars.add(MapleDataTool.getInt(ltz, 0));
+                }
+            }
+        } else {
+            effect.fatigueChange = 0;
+        }
+        int totalprob = 0;
+        final MapleData lta = source.getChildByPath("reward");
+        if (lta != null) {
+            effect.rewardMeso = parseEval("meso", lta, 0, variables, level);
+            final MapleData ltz = lta.getChildByPath("case");
+            if (ltz != null) {
+                effect.rewardItem = new ArrayList<>();
+                for (MapleData lty : ltz) {
+                    effect.rewardItem.add(new Triple<>(MapleDataTool.getInt("id", lty, 0), MapleDataTool.getInt("count", lty, 0), MapleDataTool.getInt("prop", lty, 0))); // todo: period (in minutes)
+                    totalprob += MapleDataTool.getInt("prob", lty, 0);
+                }
+            }
+        } else {
+            effect.rewardMeso = 0;
+        }
+        effect.totalprob = totalprob;
+        // start of server calculated stuffs
+        if (effect.skill) {
+            final int priceUnit = effect.info.get(MapleStatInfo.priceUnit); // Guild skills
+            if (priceUnit > 0) {
+                final int price = effect.info.get(MapleStatInfo.price);
+                final int extendPrice = effect.info.get(MapleStatInfo.extendPrice);
+                effect.info.put(MapleStatInfo.price, price * priceUnit);
+                effect.info.put(MapleStatInfo.extendPrice, extendPrice * priceUnit);
+            }
+            switch (sourceid) {
+                case 1100002:
+                case 1200002:
+                case 1300002:
+                case 3100001:
+                case 3200001:
+                case 11101002:
+                case 51100002:
+                case 13101002:
+                case 2111007:
+                case 2211007:
+                case 2311007:
+                case 32111010:
+                case 22161005:
+                case 12111007:
+                case 33100009:
+                case 22150004:
+                case 22181004: //All Final Attack
+                case 1120013:
+                case 3120008:
+                case 23100006:
+                case 23120012:
+                    effect.info.put(MapleStatInfo.mobCount, 6);
+                    break;
+                case 35121005:
+                case 35111004:
+                case 35121013:
+                case 35121054: //reactive armor mech
+                    effect.info.put(MapleStatInfo.attackCount, 6);
+                    effect.info.put(MapleStatInfo.bulletCount, 6);
+                    break;
+                case 24121000:
+                    effect.info.put(MapleStatInfo.attackCount, 6);
+                    break;
+                case 24100003: // TODO: for now, or could it be card stack? (1 count)
+                case 24120002:
+                    effect.info.put(MapleStatInfo.attackCount, 15);
+                    break;
+            }
+            if (GameConstants.isNoDelaySkill(sourceid)) {
+                effect.info.put(MapleStatInfo.mobCount, 6);
+            }
+        }
+        if (!effect.skill && effect.info.get(MapleStatInfo.time) > -1) {
+            effect.overTime = true;
+        } else {
+            effect.info.put(MapleStatInfo.time, (effect.info.get(MapleStatInfo.time) * 1000)); // items have their times stored in ms, of course
+            effect.info.put(MapleStatInfo.subTime, (effect.info.get(MapleStatInfo.subTime) * 1000));
+            effect.overTime = overTime || effect.morphId != 0 || effect.isFinalAttack() || effect.isAngel() || effect.getSummonMovementType() != null;
+        }
+        effect.monsterStatus = new EnumMap<>(MonsterStatus.class);
+        effect.statups = new EnumMap<>(CharacterTemporaryStat.class);
+        if (effect.skill) {
+            boolean handle = BuffEffectFetcher.getEffectInfo(effect, sourceid);
+            if (!handle && effect.overTime) {
+                //NOTE: overTime is true if the skill is a buff that works over a period of time.
+                //Most actual buffs that are fetched with this method are of that type.
+                int jobId = sourceid / 10000;
+                String jobName;
+                try {
+                    jobName = MapleJob.getById(jobId).name();
+                } catch (Exception ex) {
+                    jobName = "SEARCH FAILED, NEW/ UNDEFINED JOB FOUND";
+                }
+                LogHelper.GENERAL_EXCEPTION.get().log(Priority.DEBUG, "Exception in loading the buff effects of skill (name - id): "
+                        + SkillFactory.getSkillName(sourceid) + " - " + sourceid
+                        + "\n The skill was not handled in any of the job Buff handling classes. Please handle it if it's a buff."
+                        + "\n The skill belongs to jobid: " + jobId
+                        + "\n Attempted jobname fetch: " + jobName
+                );
+            }
+        }
+        if (effect.isPoison()) {
+            effect.monsterStatus.put(MonsterStatus.POISON, 1);
+        }
+        return effect;
+    }
+
+    public static int parseEval(String path, MapleData source, int def, String variables, int level) {
+        return parseEval(path, source, def, variables, level, false);
+    }
+
+    private static int parseEval(String path, MapleData source, int def, String variables, int level, boolean specialData) {
+        if (variables == null && !specialData) {
+            return MapleDataTool.getIntConvert(path, source, def);
+        } else {
+            final MapleData data = source.getChildByPath(path);
+            if (data == null) {
+                return def;
+            }
+            if (data.getType() != MapleDataType.STRING) {
+                return MapleDataTool.getIntConvert(path, source, def);
+            }
+            String stringData = MapleDataTool.getString(data);
+            stringData = stringData.toLowerCase();
+            if (stringData.startsWith("log")) {
+                stringData = stringData.substring(0, 3)
+                        + stringData.substring(stringData.lastIndexOf("("), stringData.indexOf(")") + 1)
+                        + "/log(" + stringData.substring(3, 5) + ")";
+            }
+            if (stringData.endsWith("u") || stringData.endsWith("y")) {
+                stringData = stringData.substring(0, stringData.length() - 1) + "x";
+            }
+            stringData = stringData.replace(variables, String.valueOf(level));
+            if (stringData.substring(0, 1).equals("-")) { //-30+3*x
+                if (stringData.substring(1, 2).equals("u") || stringData.substring(1, 2).equals("d")) { //-u(x/2)
+                    //The n indicates that there is a negative infront of the equation
+                    stringData = "n(" + stringData.substring(1, stringData.length()) + ")"; //n(u(x/2))
+                } else {
+                    stringData = "n" + stringData.substring(1, stringData.length()); //n30+3*x
+                }
+
+            } else if (stringData.substring(0, 1).equals("=")) { //lol nexon and their mistakes
+                stringData = stringData.substring(1, stringData.length());
+            }
+            stringData = stringData.replace("%", ""); // bug in Skill.wz 8001348 >> <string name="x" value="5+10*(x-1)%"/> 
+            return (int) (new CaltechEval(stringData).evaluate());
+        }
+    }
+
+    /**
+     * @param applyto
+     * @param obj
+     */
+    public final void applyPassive(final MapleCharacter applyto, final MapleMapObject obj) {
+        if (makeChanceResult() && !GameConstants.isDemonSlayer(applyto.getJob())) { // demon can't heal mp
+            switch (sourceid) { // MP eater
+                case 2100000:
+                case 2200000:
+                case 2300000:
+                    if (obj == null || obj.getType() != MapleMapObjectType.MONSTER) {
+                        return;
+                    }
+                    final MapleMonster mob = (MapleMonster) obj; // x is absorb percentage
+                    if (!mob.getStats().isBoss()) {
+                        final long absorbMp = Math.min((int) (mob.getMobMaxMp() * (getX() / 100.0)), mob.getMp());
+                        if (absorbMp > 0) {
+                            mob.setMp(mob.getMp() - absorbMp);
+                            applyto.getStat().setMp((int) (applyto.getStat().getMp() + absorbMp), applyto);
+                            applyto.getClient().write(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level));
+                            applyto.getMap().broadcastMessage(applyto, EffectPacket.showBuffeffect(applyto.getId(), sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level), false);
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
+    public final boolean applyTo(MapleCharacter chr) {
+        return applyTo(chr, chr, true, null, info.get(MapleStatInfo.time));
+    }
+
+    public final boolean applyTo(MapleCharacter chr, Point pos) {
+        return applyTo(chr, chr, true, pos, info.get(MapleStatInfo.time));
+    }
+
+    public final boolean applyTo(final MapleCharacter applyfrom, final MapleCharacter applyto, final boolean primary, final Point pos, int newDuration) {
+        if (isHeal() && (applyfrom.getMapId() == 749040100 || applyto.getMapId() == 749040100)) {
+            applyfrom.getClient().write(CWvsContext.enableActions());
+            return false; //z
+        } else if ((isSoaring_Mount() && applyfrom.getBuffedValue(CharacterTemporaryStat.RideVehicle) == null) || (isSoaring_Normal() && !applyfrom.getMap().getSharedMapResources().needSkillForFly)) {
+            applyfrom.getClient().write(CWvsContext.enableActions());
+            return false;
+        } else if (sourceid == 4341006 && applyfrom.getBuffedValue(CharacterTemporaryStat.ShadowPartner) == null) {
+            applyfrom.getClient().write(CWvsContext.enableActions());
+            return false;
+        } else if (isShadow() && applyfrom.getJob() / 100 % 10 != 4) { //pirate/shadow = dc
+            applyfrom.getClient().write(CWvsContext.enableActions());
+            return false;
+        } else if (sourceid == 33101004 && applyfrom.getMap().getSharedMapResources().town) {
+            applyfrom.dropMessage(5, "You may not use this skill in towns.");
+            applyfrom.getClient().write(CWvsContext.enableActions());
+            return false;
+        }
+        int hpchange = calcHPChange(applyfrom, primary);
+        int mpchange = calcMPChange(applyfrom, primary);
+        int powerchange = calcPowerChange(applyfrom);
+
+        final PlayerStats stat = applyto.getStat();
+        if (primary) {
+            if (info.get(MapleStatInfo.itemConNo) != 0 && !applyto.inPVP()) {
+                if (!applyto.haveItem(info.get(MapleStatInfo.itemCon), info.get(MapleStatInfo.itemConNo), false, true)) {
+                    applyto.getClient().write(CWvsContext.enableActions());
+                    return false;
+                }
+                MapleInventoryManipulator.removeById(applyto.getClient(), GameConstants.getInventoryType(info.get(MapleStatInfo.itemCon)), info.get(MapleStatInfo.itemCon), info.get(MapleStatInfo.itemConNo), false, true);
+            }
+        } else if (!primary && isResurrection()) {
+            hpchange = stat.getMaxHp();
+            applyto.setStance(0); //TODO fix death bug, player doesnt spawn on other screen
+        }
+        if (isDispel() && makeChanceResult()) {
+            applyto.dispelDebuffs();
+        } else if (isHeroWill()) {
+            applyto.dispelDebuffs();
+        } else if (cureDebuffs.size() > 0) {
+            for (final MapleDisease debuff : cureDebuffs) {
+                applyfrom.dispelDebuff(debuff);
+            }
+        } else if (isMPRecovery()) {
+            final int toDecreaseHP = ((stat.getMaxHp() / 100) * 10);
+            if (stat.getHp() > toDecreaseHP) {
+                hpchange += -toDecreaseHP; // -10% of max HP
+                mpchange += ((toDecreaseHP / 100) * getY());
+            } else {
+                hpchange = stat.getHp() == 1 ? 0 : stat.getHp() - 1;
+            }
+        }
+        final Map<MapleStat, Long> hpmpupdate = new EnumMap<>(MapleStat.class);
+        if (hpchange != 0) {
+            if (hpchange < 0 && (-hpchange) > stat.getHp() && !applyto.hasDisease(MapleDisease.ZOMBIFY)) {
+                applyto.getClient().write(CWvsContext.enableActions());
+                return false;
+            }
+            stat.setHp(stat.getHp() + hpchange, applyto);
+        }
+        if (mpchange != 0) {
+            if (mpchange < 0 && (-mpchange) > stat.getMp()) {
+                applyto.getClient().write(CWvsContext.enableActions());
+                return false;
+            }
+            //short converting needs math.min cuz of overflow
+            if ((mpchange < 0 && GameConstants.isDemonSlayer(applyto.getJob())) || !GameConstants.isDemonSlayer(applyto.getJob())) { // heal
+                stat.setMp(stat.getMp() + mpchange, applyto);
+            }
+            hpmpupdate.put(MapleStat.MP, Long.valueOf(stat.getMp()));
+        }
+        hpmpupdate.put(MapleStat.HP, Long.valueOf(stat.getHp()));
+
+        applyto.getClient().write(CWvsContext.updatePlayerStats(hpmpupdate, true, applyto));
+        if (powerchange != 0) {
+            if (applyto.getXenonSurplus() - powerchange < 0) {
+                return false;
+            }
+            applyto.gainXenonSurplus((short) -powerchange);
+        }
+        if (expinc != 0) {
+            applyto.gainExp(expinc, true, true, false);
+            applyto.getClient().write(EffectPacket.showForeignEffect(UserEffectCodes.ExpItemConsumed));
+        } else if (sourceid / 10000 == 238) {
+            final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+            final int mobid = ii.getCardMobId(sourceid);
+            if (mobid > 0) {
+                final boolean done = applyto.getMonsterBook().monsterCaught(applyto.getClient(), mobid, MapleLifeFactory.getMonsterStats(mobid).getName());
+                applyto.getClient().write(CWvsContext.getCard(done ? sourceid : 0, 1));
+            }
+        } else if (isReturnScroll()) {
+            applyReturnScroll(applyto);
+        } else if (useLevel > 0 && !skill) {
+            applyto.setExtractor(new MapleExtractor(applyto, sourceid, useLevel * 50, 1440)); //no clue about time left
+            applyto.getMap().spawnExtractor(applyto.getExtractor());
+        } else if (isMistEruption()) {
+            int i = info.get(MapleStatInfo.y);
+            for (MapleMist m : applyto.getMap().getAllMists()) {
+                if (m.getOwnerId() == applyto.getId() && m.getSourceSkill().getId() == 2111003) {
+                    if (m.getSchedule() != null) {
+                        m.getSchedule().cancel(false);
+                        m.setSchedule(null);
+                    }
+                    if (m.getPoisonSchedule() != null) {
+                        m.getPoisonSchedule().cancel(false);
+                        m.setPoisonSchedule(null);
+                    }
+                    applyto.getMap().broadcastMessage(CField.removeMist(m.getObjectId(), true));
+                    applyto.getMap().removeMapObject(m);
+
+                    i--;
+                    if (i <= 0) {
+                        break;
+                    }
+                }
+            }
+        } else if (cosmetic > 0) {
+            if (cosmetic >= 30000) {
+                applyto.setHair(cosmetic);
+                applyto.updateSingleStat(MapleStat.HAIR, cosmetic);
+            } else if (cosmetic >= 20000) {
+                applyto.setFace(cosmetic);
+                applyto.updateSingleStat(MapleStat.FACE, cosmetic);
+            } else if (cosmetic < 100) {
+                applyto.setSkinColor((byte) cosmetic);
+                applyto.updateSingleStat(MapleStat.SKIN, cosmetic);
+            }
+            applyto.equipChanged();
+        } else if (recipe > 0) {
+            if (applyto.getSkillLevel(recipe) > 0 || applyto.getProfessionLevel((recipe / 10000) * 10000) < reqSkillLevel) {
+                return false;
+            }
+            applyto.changeSingleSkillLevel(SkillFactory.getCraft(recipe), Integer.MAX_VALUE, recipeUseCount, recipeValidDay > 0 ? (System.currentTimeMillis() + recipeValidDay * 24L * 60 * 60 * 1000) : -1L);
+        } else if (isSpiritClaw()) {
+            MapleInventory use = applyto.getInventory(MapleInventoryType.USE);
+            boolean itemz = false;
+            for (int i = 0; i < use.getSlotLimit(); i++) { // impose order...
+                Item item = use.getItem((byte) i);
+                if (item != null) {
+                    if (GameConstants.isRechargable(item.getItemId()) && item.getQuantity() >= 100) {
+                        MapleInventoryManipulator.removeFromSlot(applyto.getClient(), MapleInventoryType.USE, (short) i, (short) 100, false, true);
+                        itemz = true;
+                        break;
+                    }
+                }
+            }
+            if (!itemz) {
+                return false;
+            }
+        } else if (isSpiritBlast()) {
+            MapleInventory use = applyto.getInventory(MapleInventoryType.USE);
+            boolean itemz = false;
+            for (int i = 0; i < use.getSlotLimit(); i++) { // impose order...
+                Item item = use.getItem((byte) i);
+                if (item != null) {
+                    if (GameConstants.isBullet(item.getItemId()) && item.getQuantity() >= 100) {
+                        MapleInventoryManipulator.removeFromSlot(applyto.getClient(), MapleInventoryType.USE, (short) i, (short) 100, false, true);
+                        itemz = true;
+                        break;
+                    }
+                }
+            }
+            if (!itemz) {
+                return false;
+            }
+        } else if (cp != 0 && applyto.getCarnivalParty() != null) {
+            applyto.getCarnivalParty().addCP(applyto, cp);
+            applyto.CPUpdate(false, applyto.getAvailableCP(), applyto.getTotalCP(), 0);
+
+            for (MapleCharacter chr : applyto.getMap().getCharacters()) {
+                chr.CPUpdate(true, applyto.getCarnivalParty().getAvailableCP(), applyto.getCarnivalParty().getTotalCP(), applyto.getCarnivalParty().getTeam());
+            }
+        } else if (nuffSkill != 0 && applyto.getParty() != null) {
+            final MCSkill skil = MapleCarnivalFactory.getInstance().getSkill(nuffSkill);
+            if (skil != null) {
+                final MapleDisease dis = skil.getDisease();
+                for (MapleCharacter chr : applyto.getMap().getCharacters()) {
+                    if (applyto.getParty() == null || chr.getParty() == null || (chr.getParty().getId() != applyto.getParty().getId())) {
+                        if (skil.targetsAll || Randomizer.nextBoolean()) {
+                            if (dis == null) {
+                                chr.dispel();
+                            } else if (skil.getSkill() == null) {
+                                MobSkill ms = new MobSkill(dis.getDisease(), 1);
+                                ms.setDuration(30000);
+                                ms.setX(1);
+                                chr.giveDebuff(dis, ms);
+                            } else {
+                                chr.giveDebuff(dis, skil.getSkill());
+                            }
+                            if (!skil.targetsAll) {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        } else if ((effectedOnEnemy > 0 || effectedOnAlly > 0) && primary && applyto.inPVP()) {
+            final int eventType = Integer.parseInt(applyto.getEventInstance().getProperty("type"));
+            if (eventType > 0 || effectedOnEnemy > 0) {
+                for (MapleCharacter chr : applyto.getMap().getCharacters()) {
+                    if (chr.getId() != applyto.getId() && (effectedOnAlly > 0 ? (chr.getTeam() == applyto.getTeam()) : (chr.getTeam() != applyto.getTeam() || eventType == 0))) {
+                        applyTo(applyto, chr, false, pos, newDuration);
+                    }
+                }
+            }
+        } else if (mobSkill > 0 && mobSkillLevel > 0 && primary && applyto.inPVP()) {
+            if (effectedOnEnemy > 0) {
+                final int eventType = Integer.parseInt(applyto.getEventInstance().getProperty("type"));
+                for (MapleCharacter chr : applyto.getMap().getCharacters()) {
+                    if (chr.getId() != applyto.getId() && (chr.getTeam() != applyto.getTeam() || eventType == 0)) {
+                        chr.disease(mobSkill, mobSkillLevel);
+                    }
+                }
+            } else if (sourceid == 2910000 || sourceid == 2910001) { //red flag
+                applyto.getClient().write(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.BuffItemEffect, applyto.getLevel(), level));
+                applyto.getMap().broadcastMessage(applyto, EffectPacket.showBuffeffect(applyto.getId(), sourceid, UserEffectCodes.BuffItemEffect, applyto.getLevel(), level), false);
+
+                applyto.getClient().write(EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Effect", applyto.getDirection() == 1, -1, 0, 0));
+                applyto.getMap().broadcastMessage(applyto, EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Effect", applyto.getDirection() == 1, applyto.getId(), 0, 0), false);
+                if (applyto.getTeam() == (sourceid - 2910000)) { //restore duh flag
+                    if (sourceid == 2910000) {
+                        applyto.getEventInstance().broadcastPlayerMsg(-7, "The Red Team's flag has been restored.");
+                    } else {
+                        applyto.getEventInstance().broadcastPlayerMsg(-7, "The Blue Team's flag has been restored.");
+                    }
+                    applyto.getMap().spawnAutoDrop(sourceid, applyto.getMap().getSharedMapResources().mcarnival.Guardian.get(sourceid - 2910000).pos);
+                } else {
+                    applyto.disease(mobSkill, mobSkillLevel);
+                    if (sourceid == 2910000) {
+                        applyto.getEventInstance().setProperty("redflag", String.valueOf(applyto.getId()));
+                        applyto.getEventInstance().broadcastPlayerMsg(-7, "The Red Team's flag has been captured!");
+                        applyto.getClient().write(EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Tail/Red", applyto.getDirection() == 1, -1, 600000, 0));
+                        applyto.getMap().broadcastMessage(applyto, EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Tail/Red", applyto.getDirection() == 1, applyto.getId(), 600000, 0), false);
+                    } else {
+                        applyto.getEventInstance().setProperty("blueflag", String.valueOf(applyto.getId()));
+                        applyto.getEventInstance().broadcastPlayerMsg(-7, "The Blue Team's flag has been captured!");
+                        applyto.getClient().write(EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Tail/Blue", applyto.getDirection() == 1, -1, 600000, 0));
+                        applyto.getMap().broadcastMessage(applyto, EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Tail/Blue", applyto.getDirection() == 1, applyto.getId(), 600000, 0), false);
+                    }
+                }
+            } else {
+                applyto.disease(mobSkill, mobSkillLevel);
+            }
+        } else if (randomPickup != null && randomPickup.size() > 0) {
+            MapleItemInformationProvider.getInstance().getItemEffect(randomPickup.get(Randomizer.nextInt(randomPickup.size()))).applyTo(applyto);
+        } else if (GameConstants.isReturnHQSkill(sourceid)) { // a beginner skill that returns the player to where it started, the HQ
+            applyto.changeMap(info.get(MapleStatInfo.x), 0);
+        } else if (this.fieldExpType != -1) {
+            // Calculate the base bonus
+            int baseBonusPercentage = 0;
+            switch (fieldExpType) {
+                case 0:
+                default:
+                    baseBonusPercentage = 500;
+                    break;
+                case 1:
+                    baseBonusPercentage = 700;
+                    break;
+                case 2:
+                    baseBonusPercentage = 1000;
+                    break;
+            }
+
+            // Aran combo skill bonus
+            final Skill comboKillBlessingSkill
+                    = SkillFactory.getSkill(SkillConstants.getLinkSkillByJob(SkillConstants.COMBO_KILL_BLESSING, SkillConstants.L_COMBO_KILL_BLESSING, applyto.getJob()));
+            final int comboKillLevel = applyto.getSkillLevel(comboKillBlessingSkill);
+            if (comboKillLevel > 0) {
+                baseBonusPercentage *= comboKillBlessingSkill.getEffect(comboKillLevel).getX() / 100f;
+            }
+
+            final MapleMonsterStats lowestLevelMonster = applyto.getMap().getLowestLevelMonster();
+            if (lowestLevelMonster != null) {
+                double expRate_Server = applyto.getClient().getChannelServer().getExpRate(applyto.getWorld());
+                final long totalEXPGained = (long) (((long) (expRate_Server * lowestLevelMonster.getExp())) * (baseBonusPercentage * 0.01f));
+
+                if (totalEXPGained > 0) { // another safety check
+                    applyto.gainExp(totalEXPGained, true, true, true);
+                    applyto.getClient().write(CField.EffectPacket.showForeignEffect(-1, UserEffectCodes.FieldItemConsumed, (int) totalEXPGained));
+                }
+            }
+        }
+
+        for (Entry<MapleTraitType, Integer> t : traits.entrySet()) {
+            applyto.getTrait(t.getKey()).addExp(t.getValue(), applyto);
+        }
+        final SummonMovementType summonMovementType = getSummonMovementType();
+        if (summonMovementType != null && (sourceid != 32111006 || (applyfrom.getBuffedValue(CharacterTemporaryStat.REAPER) != null))) {
+            int summId = sourceid;
+            if (ServerConstants.DEVELOPER_DEBUG_MODE) {
+                System.out.println("Summon: " + summId);
+            }
+            if (sourceid == 3111002) {
+                final Skill elite = SkillFactory.getSkill(3120012);
+                if (applyfrom.getTotalSkillLevel(elite) > 0) {
+                    return elite.getEffect(applyfrom.getTotalSkillLevel(elite)).applyTo(applyfrom, applyto, primary, pos, newDuration);
+                }
+            } else if (sourceid == 3211002) {
+                final Skill elite = SkillFactory.getSkill(3220012);
+                if (applyfrom.getTotalSkillLevel(elite) > 0) {
+                    return elite.getEffect(applyfrom.getTotalSkillLevel(elite)).applyTo(applyfrom, applyto, primary, pos, newDuration);
+                }
+            }
+            final MapleSummon tosummon = new MapleSummon(
+                    applyfrom,
+                    summId,
+                    getLevel(),
+                    new Point(pos == null ? applyfrom.getTruePosition() : pos),
+                    summonMovementType,
+                    newDuration
+            );
+            if (!tosummon.isPuppet()) {
+                applyfrom.getCheatTracker().resetSummonAttack();
+            }
+            applyfrom.cancelEffect(this, true, -1, statups);
+            applyfrom.getMap().spawnSummon(tosummon);
+            applyfrom.addSummon(tosummon);
+            tosummon.addHP(info.get(MapleStatInfo.x).shortValue());
+            if (isBeholder()) {
+                tosummon.addHP((short) 1);
+            } else if (sourceid == 4341006) {
+                applyfrom.cancelEffectFromTemporaryStat(CharacterTemporaryStat.ShadowPartner);
+            } else if (sourceid == 32111006) {
+                return true; //no buff
+            } else if (sourceid == 35111002) {
+                for (MapleSummon s : applyfrom.getSummonsReadLock()) {
+                    if ((sourceid == 14121054) ? (s.getSkill() == 14121054) || (s.getSkill() == 14121055) || (s.getSkill() == 14121056) : (s.getSkill() == sourceid)) {
+                        applyfrom.getMap().broadcastMessage(SummonPacket.removeSummon(s, true));
+                        applyfrom.getMap().removeMapObject(s);
+                        applyfrom.removeVisibleMapObject(s);
+                        if (applyfrom.getSummons().get(s.getSkill()) != null) {
+                            applyfrom.getSummons().remove(s.getSkill());
+                        }
+                    }
+                }
+
+                if (sourceid == 14121054) {
+                    final MapleSummon illusion = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                    final MapleSummon illusion2 = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                    illusion.setPosition(pos);
+                    illusion2.setPosition(pos);
+                    applyfrom.getMap().spawnSummon(illusion);
+                    applyfrom.getMap().spawnSummon(illusion2);
+                    applyfrom.getSummons().put(14121055, illusion);
+                    applyfrom.getSummons().put(14121056, illusion2);
+                }
+
+                if (sourceid == NightWalker.SHADOW_BAT) {
+                    final MapleSummon bat = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                    bat.setPosition(pos);
+                    applyfrom.getMap().spawnSummon(bat);
+                    applyfrom.getSummons().put(NightWalker.SHADOW_BAT, bat);
+                }
+
+                List<Integer> count = new ArrayList<>();
+                final List<MapleSummon> ss = applyfrom.getSummonsReadLock();
+                try {
+                    for (MapleSummon s : ss) {
+                        if (s.getSkill() == sourceid) {
+                            count.add(s.getObjectId());
+                        }
+                    }
+                } finally {
+                    applyfrom.unlockSummonsReadLock();
+                }
+                if (count.size() != 3) {
+                    return true; //no buff until 3
+                }
+                applyfrom.addCooldown(sourceid, System.currentTimeMillis(), getCooldown(applyfrom));
+                applyfrom.getMap().broadcastMessage(CField.teslaTriangle(applyfrom.getId(), count.get(0), count.get(1), count.get(2)));
+            } else if (sourceid == 35121003) {
+                applyfrom.getClient().write(CWvsContext.enableActions()); //doubt we need this at all
+            }
+        } else if (isMechDoor()) {
+            int newId = 0;
+            boolean applyBuff = false;
+            if (applyto.getMechDoors().size() >= 2) {
+                final MechDoor remove = applyto.getMechDoors().remove(0);
+                newId = remove.getId();
+                applyto.getMap().broadcastMessage(CField.removeMechDoor(remove, true));
+                applyto.getMap().removeMapObject(remove);
+            } else {
+                for (MechDoor d : applyto.getMechDoors()) {
+                    if (d.getId() == newId) {
+                        applyBuff = true;
+                        newId = 1;
+                        break;
+                    }
+                }
+            }
+            final MechDoor door = new MechDoor(applyto, new Point(pos == null ? applyto.getTruePosition() : pos), newId);
+            applyto.getMap().spawnMechDoor(door);
+            applyto.addMechDoor(door);
+            applyto.getClient().write(CWvsContext.mechPortal(door.getTruePosition()));
+            if (!applyBuff) {
+                return true; //do not apply buff until 2 doors spawned
+            }
+        }
+        if (primary && availableMap != null) {
+            for (Pair<Integer, Integer> e : availableMap) {
+                if (applyto.getMapId() < e.left || applyto.getMapId() > e.right) {
+                    applyto.getClient().write(CWvsContext.enableActions());
+                    return true;
+                }
+            }
+        }
+        if (overTime && !isEnergyCharged()) {
+            applyBuffEffect(applyfrom, applyto, primary, newDuration);
+        }
+        if (skill) {
+            removeMonsterBuff(applyfrom);
+        }
+        if (primary) {
+            if ((overTime || isHeal()) && !isEnergyCharged()) {
+                applyBuff(applyfrom, newDuration);
+            }
+            if (isMonsterBuff()) {
+                applyMonsterBuff(applyfrom);
+            }
+        }
+        if (isMagicDoor()) { // Magic Door
+            MapleDoor door = new MapleDoor(applyto, new Point(pos == null ? applyto.getTruePosition() : pos), sourceid); // Current Map door
+            if (door.getTownPortal() != null) {
+
+                applyto.getMap().spawnDoor(door);
+                applyto.addDoor(door);
+
+                MapleDoor townDoor = new MapleDoor(door); // Town door
+                applyto.addDoor(townDoor);
+                door.getTown().spawnDoor(townDoor);
+
+                if (applyto.getParty() != null) { // update town doors
+                    applyto.silentPartyUpdate();
+                }
+            } else {
+                applyto.dropMessage(5, "You may not spawn a door because all doors in the town are taken.");
+            }
+        } else if (isMist()) {
+            final Rectangle bounds = calculateBoundingBox(pos != null ? pos : applyfrom.getPosition(), applyfrom.isFacingLeft());
+            final MapleMist mist = new MapleMist(bounds, applyfrom, this);
+            applyfrom.getMap().spawnMist(mist, getDuration(), false);
+
+        } else if (isTimeLeap()) { // Time Leap
+            for (MapleCoolDownValueHolder i : applyto.getCooldowns()) {
+                if (i.skillId != 5121010) {
+                    applyto.removeCooldown(i.skillId);
+                    applyto.getClient().write(CField.skillCooldown(i.skillId, 0));
+                }
+            }
+        }
+        if (applyto.getJob() == 132) {
+            if (applyto.getBuffedValue(CharacterTemporaryStat.IgnoreTargetDEF) != 1);
+            { //Sacrifice is the only skill Dark Knights have that give Ignore Def hacky but works
+                applyto.cancelTemporaryStats(CharacterTemporaryStat.Beholder);
+                applyto.addCooldown(1321013, System.currentTimeMillis(), getCooldown(applyfrom));
+                applyto.removeCooldown(1321013);
+            }
+        }
+        if (fatigueChange != 0 && applyto.getSummonedFamiliar() != null && (familiars == null || familiars.contains(applyto.getSummonedFamiliar().getFamiliar()))) {
+            applyto.getSummonedFamiliar().addFatigue(applyto, fatigueChange);
+        }
+        if (rewardMeso != 0) {
+            applyto.gainMeso(rewardMeso, false);
+        }
+        if (rewardItem != null && totalprob > 0) {
+            for (Triple<Integer, Integer, Integer> reward : rewardItem) {
+                if (MapleInventoryManipulator.checkSpace(applyto.getClient(), reward.left, reward.mid, "") && reward.right > 0 && Randomizer.nextInt(totalprob) < reward.right) { // Total prob
+                    if (GameConstants.getInventoryType(reward.left) == MapleInventoryType.EQUIP) {
+                        final Item item = MapleItemInformationProvider.getInstance().getEquipById(reward.left);
+                        item.setGMLog("Reward item (effect): " + sourceid + " on " + LocalDateTime.now());
+                        MapleInventoryManipulator.addbyItem(applyto.getClient(), item);
+                    } else {
+                        MapleInventoryManipulator.addById(applyto.getClient(), reward.left, reward.mid.shortValue(), "Reward item (effect): " + sourceid + " on " + LocalDateTime.now());
+                    }
+                }
+            }
+        }
+        if (familiarTarget == 2 && applyfrom.getParty() != null && primary) { //to party
+            for (MaplePartyCharacter mpc : applyfrom.getParty().getMembers()) {
+                if (mpc.getId() != applyfrom.getId() && mpc.getChannel() == applyfrom.getClient().getChannel() && mpc.getMapid() == applyfrom.getMapId() && mpc.isOnline()) {
+                    MapleCharacter mc = applyfrom.getMap().getCharacterById(mpc.getId());
+                    if (mc != null) {
+                        applyTo(applyfrom, mc, false, null, newDuration);
+                    }
+                }
+            }
+        } else if (familiarTarget == 3 && primary) {
+            for (MapleCharacter mc : applyfrom.getMap().getCharacters()) {
+                if (mc.getId() != applyfrom.getId()) {
+                    applyTo(applyfrom, mc, false, null, newDuration);
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public final boolean applyReturnScroll(final MapleCharacter applyto) {
+        if (moveTo != -1) {
+
+            if (applyto.getMap().getReturnMap().getId() != applyto.getMapId()
+                    || sourceid == 2031010 || sourceid == 2030021 || sourceid == 20021110 || sourceid == 2030028 || sourceid == 20031203) {
+                MapleMap target;
+                if (moveTo == 999999999) {
+                    target = applyto.getMap().getReturnMap();
+                } else if (sourceid == 2030028 && moveTo == 103020000) {
+                    target = ChannelServer.getInstance(applyto.getClient().getChannel()).getMapFactory().getMap(moveTo);
+                } else if (sourceid == 20031203 && moveTo == 150000000) {
+                    target = ChannelServer.getInstance(applyto.getClient().getChannel()).getMapFactory().getMap(moveTo);
+                } else {
+                    target = ChannelServer.getInstance(applyto.getClient().getChannel()).getMapFactory().getMap(moveTo);
+                    if (target.getId() / 10000000 != 60 && applyto.getMapId() / 10000000 != 61) {
+                        if (target.getId() / 10000000 != 21 && applyto.getMapId() / 10000000 != 20) {
+                            if (target.getId() / 10000000 != applyto.getMapId() / 10000000) {
+                                applyto.dropMessage(5, "You can not teleport there as it is on a different continent.");
+                                return false;
+                            }
+                        }
+                    }
+                }
+                applyto.changeMap(target, target.getPortal(0));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isSoulStone() {
+        return skill && sourceid == Phantom.FINAL_FEINT;
+    }
+
+    private void applyBuff(final MapleCharacter applyfrom, int newDuration) {
+        if (isSoulStone() && sourceid != 24111002) {
+            if (applyfrom.getParty() != null) {
+                int membrs = 0;
+                for (MapleCharacter chr : applyfrom.getMap().getCharacters()) {
+                    if (chr.getParty() != null && chr.getParty().getId() == applyfrom.getParty().getId() && chr.isAlive()) {
+                        membrs++;
+                    }
+                }
+                List<MapleCharacter> awarded = new ArrayList<>();
+                while (awarded.size() < Math.min(membrs, info.get(MapleStatInfo.y))) {
+                    for (MapleCharacter chr : applyfrom.getMap().getCharacters()) {
+                        if (chr != null && chr.isAlive() && chr.getParty() != null && chr.getParty().getId() == applyfrom.getParty().getId() && !awarded.contains(chr) && Randomizer.nextInt(info.get(MapleStatInfo.y)) == 0) {
+                            awarded.add(chr);
+                        }
+                    }
+                }
+                for (MapleCharacter chr : awarded) {
+                    applyTo(applyfrom, chr, false, null, newDuration);
+                    chr.getClient().write(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level));
+                    chr.getMap().broadcastMessage(chr, EffectPacket.showBuffeffect(chr.getId(), sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level), false);
+                }
+            }
+        } else if (isPartyBuff() && (applyfrom.getParty() != null || isGmBuff() || applyfrom.inPVP())) {
+            final Rectangle bounds = calculateBoundingBox(applyfrom.getTruePosition(), applyfrom.isFacingLeft());
+            final List<MapleMapObject> affecteds = applyfrom.getMap().getMapObjectsInRect(bounds, Arrays.asList(MapleMapObjectType.PLAYER));
+
+            for (final MapleMapObject affectedmo : affecteds) {
+                final MapleCharacter affected = (MapleCharacter) affectedmo;
+
+                if (affected.getId() != applyfrom.getId() && (isGmBuff() || (applyfrom.inPVP() && affected.getTeam() == applyfrom.getTeam() && Integer.parseInt(applyfrom.getEventInstance().getProperty("type")) != 0) || (applyfrom.getParty() != null && affected.getParty() != null && applyfrom.getParty().getId() == affected.getParty().getId()))) {
+                    if ((isResurrection() && !affected.isAlive()) || (!isResurrection() && affected.isAlive())) {
+                        applyTo(applyfrom, affected, false, null, newDuration);
+                        affected.getClient().write(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level));
+                        affected.getMap().broadcastMessage(affected, EffectPacket.showBuffeffect(affected.getId(), sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level), false);
+                    }
+                    if (isTimeLeap()) {
+                        for (MapleCoolDownValueHolder i : affected.getCooldowns()) {
+                            if (i.skillId != 5121010) {
+                                affected.removeCooldown(i.skillId);
+                                affected.getClient().write(CField.skillCooldown(i.skillId, 0));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void removeMonsterBuff(final MapleCharacter applyfrom) {
+        List<MonsterStatus> cancel = new ArrayList<>();
+        switch (sourceid) {
+            case 1111007:
+            case 51111005: //Mihile's magic crash
+            case 1211009:
+            case 1311007:
+                cancel.add(MonsterStatus.WEAPON_DEFENSE_UP);
+                cancel.add(MonsterStatus.MAGIC_DEFENSE_UP);
+                cancel.add(MonsterStatus.WEAPON_ATTACK_UP);
+                cancel.add(MonsterStatus.MAGIC_ATTACK_UP);
+                break;
+            default:
+                return;
+        }
+        final Rectangle bounds = calculateBoundingBox(applyfrom.getTruePosition(), applyfrom.isFacingLeft());
+        final List<MapleMapObject> affected = applyfrom.getMap().getMapObjectsInRect(bounds, Arrays.asList(MapleMapObjectType.MONSTER));
+        int i = 0;
+
+        for (final MapleMapObject mo : affected) {
+            if (makeChanceResult()) {
+                for (MonsterStatus stat : cancel) {
+                    ((MapleMonster) mo).cancelStatus(stat);
+                }
+            }
+            i++;
+            if (i >= info.get(MapleStatInfo.mobCount)) {
+                break;
+            }
+        }
+    }
+
+    public final void applyMonsterBuff(final MapleCharacter applyfrom) {
+        final Rectangle bounds = calculateBoundingBox(applyfrom.getTruePosition(), applyfrom.isFacingLeft());
+        final boolean pvp = applyfrom.inPVP();
+        final MapleMapObjectType objType = pvp ? MapleMapObjectType.PLAYER : MapleMapObjectType.MONSTER;
+        final List<MapleMapObject> affected = sourceid == 35111005 ? applyfrom.getMap().getMapObjectsInRange(applyfrom.getTruePosition(), Double.POSITIVE_INFINITY, Arrays.asList(objType)) : applyfrom.getMap().getMapObjectsInRect(bounds, Arrays.asList(objType));
+        int i = 0;
+
+        for (final MapleMapObject mo : affected) {
+            if (makeChanceResult()) {
+                for (Map.Entry<MonsterStatus, Integer> stat : getMonsterStati().entrySet()) {
+                    if (pvp) {
+                        MapleCharacter chr = (MapleCharacter) mo;
+                        MapleDisease d = MonsterStatus.getLinkedDisease(stat.getKey());
+                        if (d != null) {
+                            MobSkill ms = new MobSkill(d.getDisease(), 1);
+                            ms.setDuration(getDuration());
+                            ms.setX(stat.getValue());
+                            chr.giveDebuff(d, ms);
+                        }
+                    } else {
+                        MapleMonster mons = (MapleMonster) mo;
+                        if (sourceid == 35111005 && mons.getStats().isBoss()) {
+                            break;
+                        }
+                        mons.applyStatus(applyfrom, new MonsterStatusEffect(stat.getKey(), stat.getValue(), sourceid, null, false), isPoison(), isSubTime(sourceid) ? getSubTime() : getDuration(), true, this);
+                    }
+                }
+                if (pvp && skill) {
+                    MapleCharacter chr = (MapleCharacter) mo;
+                    handleExtraPVP(applyfrom, chr);
+                }
+            }
+            i++;
+            if (i >= info.get(MapleStatInfo.mobCount) && sourceid != 35111005) {
+                break;
+            }
+        }
+    }
+
+    public final boolean isSubTime(final int source) {
+        switch (source) {
+            case 1201006: // threaten
+            case 23111008: // spirits
+            case 23111009:
+            case 23111010:
+            case 31101003:
+            case 31121003:
+            case 31121005:
+                //case 1301013:
+                return true;
+        }
+        return false;
+    }
+
+    public final void handleExtraPVP(MapleCharacter applyfrom, MapleCharacter chr) {
+        if (sourceid == 2311005 || sourceid == 5121005 || sourceid == 1201006 || (GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 104)) { //doom, threaten, snatch
+            final long starttime = System.currentTimeMillis();
+
+            final int localsourceid = sourceid == 5121005 ? 90002000 : sourceid;
+            final Map<CharacterTemporaryStat, Integer> localstatups = new EnumMap<>(CharacterTemporaryStat.class);
+            switch (sourceid) {
+                case 2311005:
+                    localstatups.put(CharacterTemporaryStat.Morph, 7);
+                    break;
+                case 1201006:
+                    //localstatups.put(CharacterTemporaryStat.THREATEN_PVP, (int) level);
+                    break;
+                case 5121005:
+                    //localstatups.put(CharacterTemporaryStat.SNATCH, 1);
+                    break;
+                default:
+                    localstatups.put(CharacterTemporaryStat.Morph, info.get(MapleStatInfo.x));
+                    break;
+            }
+            for (Map.Entry<CharacterTemporaryStat, Integer> stat : statups.entrySet()) {
+                chr.setBuffedValue(stat.getKey(), stat.getValue());
+            }
+            chr.getClient().write(BuffPacket.giveBuff(chr, localsourceid, getDuration(), localstatups, this));
+            chr.registerEffect(this, starttime, BuffTimer.getInstance().schedule(new CancelEffectAction(chr, this, starttime, localstatups), isSubTime(sourceid) ? getSubTime() : getDuration()), localstatups, false, getDuration(), applyfrom.getId());
+        }
+    }
+
+    public final Rectangle calculateBoundingBox(final Point posFrom, final boolean facingLeft) {
+        return calculateBoundingBox(posFrom, facingLeft, lt, rb, info.get(MapleStatInfo.range));
+    }
+
+    public final Rectangle calculateBoundingBox(final Point posFrom, final boolean facingLeft, int addedRange) {
+        return calculateBoundingBox(posFrom, facingLeft, lt, rb, info.get(MapleStatInfo.range) + addedRange);
+    }
+
+    public static Rectangle calculateBoundingBox(final Point posFrom, final boolean facingLeft, final Point lt, final Point rb, final int range) {
+        if (lt == null || rb == null) {
+            return new Rectangle((facingLeft ? (-200 - range) : 0) + posFrom.x, (-100 - range) + posFrom.y, 200 + range, 100 + range);
+        }
+        Point mylt;
+        Point myrb;
+        if (facingLeft) {
+            mylt = new Point(lt.x + posFrom.x - range, lt.y + posFrom.y);
+            myrb = new Point(rb.x + posFrom.x, rb.y + posFrom.y);
+        } else {
+            myrb = new Point(lt.x * -1 + posFrom.x + range, rb.y + posFrom.y);
+            mylt = new Point(rb.x * -1 + posFrom.x, lt.y + posFrom.y);
+        }
+        return new Rectangle(mylt.x, mylt.y, myrb.x - mylt.x, myrb.y - mylt.y);
+    }
+
+    public final double getMaxDistanceSq() { //lt = infront of you, rb = behind you; not gonna distanceSq the two points since this is in relative to player position which is (0,0) and not both directions, just one
+        final int maxX = Math.max(Math.abs(lt == null ? 0 : lt.x), Math.abs(rb == null ? 0 : rb.x));
+        final int maxY = Math.max(Math.abs(lt == null ? 0 : lt.y), Math.abs(rb == null ? 0 : rb.y));
+        return (maxX * maxX) + (maxY * maxY);
+    }
+
+    public final void setDuration(int d) {
+        this.info.put(MapleStatInfo.time, d);
+    }
+
+    public final void silentApplyBuff(MapleCharacter chr, long starttime, int localDuration, Map<CharacterTemporaryStat, Integer> statup, int cid) {
+        chr.registerEffect(this, starttime, BuffTimer.getInstance().schedule(new CancelEffectAction(chr, this, starttime, statup),
+                ((starttime + localDuration) - System.currentTimeMillis())), statup, true, localDuration, cid);
+        final SummonMovementType summonMovementType = getSummonMovementType();
+        if (summonMovementType != null) {
+            final MapleSummon tosummon = new MapleSummon(chr, this, chr.getTruePosition(), summonMovementType, localDuration);
+            if (!tosummon.isPuppet()) {
+                chr.getCheatTracker().resetSummonAttack();
+                chr.getMap().spawnSummon(tosummon);
+                chr.addSummon(tosummon);
+                tosummon.addHP(info.get(MapleStatInfo.x).shortValue());
+                if (isBeholder()) {
+                    tosummon.addHP((short) 1);
+                }
+            }
+        }
+    }
+
+    public final void applyComboAttack(MapleCharacter applyto, short combo) {
+        long starttime = System.currentTimeMillis();
+        EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
+        stat.put(CharacterTemporaryStat.ComboCounter, (int) combo);
+        applyto.getClient().write(BuffPacket.giveBuff(applyto, this.sourceid, 99999, stat, this));
+        applyto.registerEffect(this, starttime, null, applyto.getId());
+    }
+
+    public final void applyKaiserCombo(MapleCharacter applyto, short combo) {
+        long starttime = System.currentTimeMillis();
+        EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
+        stat.put(CharacterTemporaryStat.SmashStack, (int) combo);
+        applyto.registerEffect(this, starttime, null, stat, false, info.get(MapleStatInfo.time), applyto.getId());
+        applyto.getClient().write(BuffPacket.giveBuff(applyto, 0, 99999, stat, this));
+    }
+
+    public final void applyXenonCombo(MapleCharacter applyto, int combo) {
+        long starttime = System.currentTimeMillis();
+        EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
+        stat.put(CharacterTemporaryStat.SurplusSupply, combo);
+        applyto.registerEffect(this, starttime, null, stat, false, info.get(MapleStatInfo.time), applyto.getId());
+        applyto.getClient().write(BuffPacket.giveBuff(applyto, 0, 99999, stat, this));
+    }
+
+    public final void applyComboBuff(MapleCharacter applyto, short combo) {
+        long starttime = System.currentTimeMillis();
+        EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
+        stat.put(CharacterTemporaryStat.ComboAbilityBuff, (int) combo);
+        applyto.getClient().write(BuffPacket.giveBuff(applyto, this.sourceid, 99999, stat, this));
+        applyto.registerEffect(this, starttime, null, applyto.getId());
+    }
+
+    public final void applyBlackBlessingBuff(MapleCharacter applyto, int combo) {
+        long starttime = System.currentTimeMillis();
+        EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
+        stat.put(CharacterTemporaryStat.BlessOfDarkness, combo);
+        applyto.registerEffect(this, starttime, null, stat, false, info.get(MapleStatInfo.time), applyto.getId());
+        applyto.getClient().write(BuffPacket.giveBuff(applyto, this.sourceid, 99999, stat, this));
+    }
+
+    public final void applyLunarTideBuff(MapleCharacter applyto) {
+        final long starttime = System.currentTimeMillis();
+        EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
+        double hpx = applyto.getStat().getMaxHp() / applyto.getStat().getHp();
+        double mpx = applyto.getStat().getMaxMp() / applyto.getStat().getMp();
+        stat.put(CharacterTemporaryStat.LifeTidal, hpx >= mpx ? 2 : 1); //for now
+        applyto.registerEffect(this, starttime, null, stat, false, info.get(MapleStatInfo.time), applyto.getId());
+        applyto.getClient().write(BuffPacket.giveBuff(applyto, this.sourceid, 99999999, stat, this));
+    }
+
+    public final void applyEnergyBuff(final MapleCharacter applyto, int buffid, int targets) {
+        final EnumMap<CharacterTemporaryStat, Integer> stat = new EnumMap<>(CharacterTemporaryStat.class);
+        stat.put(CharacterTemporaryStat.EnergyCharged, 1000);
+        applyto.registerEffect(this, System.currentTimeMillis(), null, stat, false, -1, applyto.getId());
+        applyto.getClient().write(BuffPacket.giveEnergyCharged(applyto, 1000, buffid, -1));
+    }
+    
+    
+    /*
+    *   Expire Buffs
+    *   @purpose Force specified buffstats to expire after a certain time.
+    **/
+    public void setBuffExpireRate(MapleCharacter oPlayer, long nDuration, EnumMap<CharacterTemporaryStat, Integer> selectStats) {
+        Map<CharacterTemporaryStat, Integer> temporaryStats = selectStats;
+        final long nStartTime = System.currentTimeMillis();
+        final CancelEffectAction cancelAction = new CancelEffectAction(oPlayer, this, nStartTime, temporaryStats);
+        final ScheduledFuture<?> schedule = BuffTimer.getInstance().schedule(cancelAction, nDuration);
+        oPlayer.registerEffect(this, nStartTime, schedule, temporaryStats, false,(int) nDuration, oPlayer.getId());
+    }
+
+    public void applyBuffEffect(final MapleCharacter applyfrom, final MapleCharacter applyto, final boolean primary, final int newDuration) {
+        int localDuration = newDuration;
+        if (primary) {
+            localDuration = Math.max(newDuration, alchemistModifyVal(applyfrom, localDuration, false));
+        }
+        Map<CharacterTemporaryStat, Integer> localstatups = statups;
+        int maskedDuration = 0;
+
+        handleExtraEffect(applyfrom, applyto, localstatups, localDuration);
+
+        if (isMonsterRiding()) {
+            localDuration = 2100000000;
+            localstatups.put(CharacterTemporaryStat.RideVehicle, 0);
+            int mountid = parseMountInfo(applyto, this.sourceid);
+            int mountid2 = parseMountInfo_Pure(applyto, this.sourceid);
+            if ((mountid != 0) && (mountid2 != 0)) {
+                localstatups.remove(CharacterTemporaryStat.RideVehicle);
+                localstatups.put(CharacterTemporaryStat.RideVehicle, mountid);
+                applyto.cancelEffectFromTemporaryStat(CharacterTemporaryStat.PowerGuard);
+                applyto.cancelEffectFromTemporaryStat(CharacterTemporaryStat.ManaReflection);
+            } else {
+                LogHelper.GENERAL_EXCEPTION.get().info("No mount data was found for MonsterRiding skill with skillid: " + this.sourceid);
+                return;
+            }
+        }
+
+        /*if (applyfrom.getSkillLevel(4221013) > 0) { // Shadower Instinct
+            localstatups = new EnumMap<>(CharacterTemporaryStat.class);
+            localstatups.put(CharacterTemporaryStat.PAD, info.get(MapleStatInfo.x) + (info.get(MapleStatInfo.kp) * applyfrom.currentBattleshipHP()));
+            applyfrom.setBattleshipHP(0);
+            applyfrom.refreshBattleshipHP();
+        }*/
+
+        if (localstatups.size() > 0 && !applyto.isHidden()) {
+            applyto.getMap().broadcastMessage(applyto, EffectPacket.showBuffeffect(applyto.getId(), sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level), false);
+        }
+        if (!isMonsterRiding() && !isMechDoor() && getSummonMovementType() == null) {
+            applyto.cancelEffect(this, true, -1, localstatups);
+        }
+        final long starttime = System.currentTimeMillis();
+        final CancelEffectAction cancelAction = new CancelEffectAction(applyto, this, starttime, localstatups);
+        final ScheduledFuture<?> schedule = BuffTimer.getInstance().schedule(cancelAction, maskedDuration > 0 ? maskedDuration : localDuration);
+        applyto.registerEffect(this, starttime, schedule, localstatups, false, localDuration, applyfrom.getId());
+
+        if (localstatups.size() > 0) {//I rather write AFTER applying the damn thing. tyvm.
+            applyto.getClient().write(BuffPacket.giveBuff(applyto, (skill ? sourceid : -sourceid), localDuration, localstatups, this));
+        }
+    }
+
+    private void handleExtraEffect(final MapleCharacter applyfrom, final MapleCharacter applyto, Map<CharacterTemporaryStat, Integer> effects, int localDuration) {
+        switch (sourceid) {
+            case 2022963: // Ryden's Poison
+                effects.put(CharacterTemporaryStat.IndieSpeed, info.get(MapleStatInfo.indieSpeed));
+                break;
+            case Mechanic.EXTREME_MECH:
+            case Mechanic.HUMANOID_MECH:
+            case Mechanic.TANK_MECH:
+                if (applyfrom.getStatForBuff(CharacterTemporaryStat.Mechanic) != null) {
+                    applyfrom.cancelEffectFromTemporaryStat(CharacterTemporaryStat.Mechanic);
+                }
+                break;
+            case 21101003: // Body Pressure
+            case Aran.BODY_PRESSURE:
+                effects.put(CharacterTemporaryStat.BodyPressure, info.get(MapleStatInfo.x));
+                break;
+            case 21100005: // Combo Drain
+            case 32101004: // Combo Drain
+            case Fighter.COMBO_ATTACK:
+            case Aran.DRAIN:
+                effects.put(CharacterTemporaryStat.ComboDrain, info.get(MapleStatInfo.x));
+                break;
+            case DawnWarrior.FALLING_MOON:
+                effects.put(CharacterTemporaryStat.ComboDrain, info.get(MapleStatInfo.x));
+                break;
+            case 32111012:
+            case 32121017:
+            case 32121018:
+            case 32101009:
+            case 32001016: //Battle Mage Auras
+                if (applyto.isHidden()) {
+                    break;
+                }
+                /*  if (sourceid == BattleMage.DARK_AURA || sourceid == BattleMage.DARK_AURA_BOSS_RUSH) { 
+                    effects.put(CharacterTemporaryStat.DamR, info.get(MapleStatInfo.indieDamR));
+                }*/
+                final EnumMap<CharacterTemporaryStat, Integer> stat = new EnumMap<>(CharacterTemporaryStat.class);
+                stat.put(CharacterTemporaryStat.BMageAura, (int) getLevel());
+                applyto.getMap().broadcastMessage(applyto, BuffPacket.giveForeignBuff(applyto.getId(), stat, this), false);
+                break;
+            case Kaiser.DEFENDER_MODE:
+            case Kaiser.ATTACKER_MODE:
+                if (applyfrom.getStatForBuff(CharacterTemporaryStat.ReshuffleSwitch) == null) {
+                    break;
+                }
+                applyfrom.cancelEffectFromTemporaryStat(CharacterTemporaryStat.ReshuffleSwitch);
+                break;
+            case Kaiser.TEMPEST_BLADES:
+            case Kaiser.ADVANCED_TEMPEST_BLADES:
+                if (applyfrom.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11) == null) {
+                    break;
+                } else {
+                    this.statups.put(CharacterTemporaryStat.StopForceAtomInfo, applyfrom.getSkillLevel(sourceid));
+                    this.weapon = applyfrom.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11).getItemId();
+                    int index = (sourceid == 61101002) ? 1 : 2;
+                    int effectCount = (sourceid == 61101002) ? 3 : 5;
+                    applyto.setStopForceAtoms(index, effectCount, this.weapon);
+                    break;
+                }
+            case Kanna.HAKU_REBORN:
+                if (applyto.getHaku() != null) {
+                    applyto.getHaku().sendStats();
+                    applyto.getMap().broadcastMessage(applyto, CField.transformHaku(applyto.getId(), applyto.getHaku().getStats()), true);
+                }
+                break;
+            case Xenon.EMERGENCY_RESUPPLY: ///xenon emergency by @Mally
+            {
+                applyto.gainXenonSurplus((short) 10);
+                applyfrom.getClient().write(CWvsContext.enableActions());
+                break;
+            }
+            case Luminous.CHANGE_LIGHTDARK_MODE:
+            case Luminous.EQUALIZE: {
+                applyto.changeLuminousMode();
+                break;
+            }
+            case CannonBlaster.BARREL_ROULETTE: {
+                final int zz = Randomizer.nextInt(4) + 1;
+                applyto.getMap().broadcastMessage(applyto, CField.EffectPacket.showDiceEffect(applyto.getId(), sourceid, zz, -1, level), false);
+                applyto.getClient().write(CField.EffectPacket.showOwnDiceEffect(sourceid, zz, -1, level));
+                break;
+            }
+            case Mihile.RALLY:
+                effects.put(CharacterTemporaryStat.PAD, info.get(MapleStatInfo.indiePad));
+                effects.put(CharacterTemporaryStat.MAD, info.get(MapleStatInfo.indieMad));
+                applyto.getMap().broadcastMessage(applyto, BuffPacket.giveForeignBuff(applyto.getId(), effects, this), false);
+                break;
+            case Mihile.SOUL_LINK:
+                if (applyfrom.getStatForBuff(CharacterTemporaryStat.MichaelSoulLink) == null) {
+                    break;
+                }
+                applyfrom.cancelEffectFromTemporaryStat(CharacterTemporaryStat.MichaelSoulLink);
+                break;
+            case Mechanic.ROLL_OF_THE_DICE:
+            case Marauder.ROLL_OF_THE_DICE:
+            case CannonBlaster.LUCK_OF_THE_DIE:
+            case Outlaw.ROLL_OF_THE_DICE: {
+                final int diceRoll = Randomizer.nextInt(6) + 1;
+                applyto.getMap().broadcastMessage(applyto, EffectPacket.showDiceEffect(applyto.getId(), sourceid, diceRoll, -1, level), false);
+                applyto.getClient().write(EffectPacket.showOwnDiceEffect(sourceid, diceRoll, -1, level));
+
+                if (diceRoll <= 1) {
+                    return;
+                } // No buff if the player rolled a one on both dice.
+
+                applyto.dropMessage(-6, "[Lucky Die] You tried your luck on the die!");
+                statups = new EnumMap<>(CharacterTemporaryStat.class);
+                statups.put(CharacterTemporaryStat.Dice, diceRoll);
+                applyto.getClient().write(BuffPacket.giveDice(diceRoll, sourceid, localDuration, statups));
+                break;
+            }
+            case Buccaneer.DOUBLE_DOWN:
+            case Corsair.DOUBLE_DOWN:
+            case CannonMaster.DOUBLE_DOWN:
+            case Mechanic.DOUBLE_DOWN: {//dice
+                final int diceRoll = Randomizer.nextInt(6) + 1;
+                final int diceRoll2 = makeChanceResult() ? (Randomizer.nextInt(6) + 1) : 0;
+                applyto.getMap().broadcastMessage(applyto, EffectPacket.showDiceEffect(applyto.getId(), sourceid, diceRoll, diceRoll2 > 0 ? -1 : 0, level), false);
+                applyto.getClient().write(EffectPacket.showOwnDiceEffect(sourceid, diceRoll, diceRoll2 > 0 ? -1 : 0, level));
+
+                if (diceRoll <= 1 && diceRoll2 <= 1) {
+                    return;
+                } // No buff if the player rolled a one on both dice.
+
+                final int buffid = diceRoll == diceRoll2 ? (diceRoll * 100) : (diceRoll <= 1 ? diceRoll2 : (diceRoll2 <= 1 ? diceRoll : (diceRoll * 10 + diceRoll2)));
+                if (buffid >= 100) { //just because of animation lol
+                    applyto.dropMessage(-6, "[Double Lucky Dice] You have rolled a Double Down! (" + (buffid / 100) + ")");
+                } else if (buffid >= 10) {
+                    applyto.dropMessage(-6, "[Double Lucky Dice] You have rolled two dice. (" + (buffid / 10) + " and " + (buffid % 10) + ")");
+                }
+                statups = new EnumMap<>(CharacterTemporaryStat.class);
+                statups.put(CharacterTemporaryStat.Dice, buffid);
+                applyto.getClient().write(BuffPacket.giveDice(diceRoll, sourceid, localDuration, statups));
+                return;
+            }
+            case Phantom.JUDGMENT_DRAW:
+            case Phantom.JUDGMENT_DRAW_1:
+                int zz = Randomizer.nextInt(this.sourceid == 20031209 ? 2 : 5) + 1;
+                int skillid = 24100003;
+                if (applyto.getSkillLevel(24120002) > 0) {
+                    skillid = 24120002;
+                }
+                applyto.setCardStack((byte) 0);
+                applyto.resetRunningStack();
+                applyto.addRunningStack(skillid == 24100003 ? 5 : 10);
+                applyto.getMap().broadcastMessage(applyto, PhantomPacket.gainCardStack(applyto.getId(), applyto.getRunningStack(), skillid == 24120002 ? 2 : 1, skillid, 0, skillid == 24100003 ? 5 : 10), true);
+                applyto.getMap().broadcastMessage(applyto, CField.EffectPacket.showDiceEffect(applyto.getId(), this.sourceid, zz, -1, this.level), false);
+                applyto.getClient().write(CField.EffectPacket.showOwnDiceEffect(this.sourceid, zz, -1, this.level));
+                effects = new EnumMap(CharacterTemporaryStat.class);
+                effects.put(CharacterTemporaryStat.Judgement, zz);
+                if (zz == 5) {
+                    applyfrom.getClient().write(CWvsContext.enableActions());
+                }
+                break;
+            case Whiteknight.LIGHTNING_CHARGE:
+                if (applyto.getBuffedValue(CharacterTemporaryStat.WeaponCharge) != null && applyto.getBuffSource(CharacterTemporaryStat.WeaponCharge) != sourceid) {
+                    effects.put(CharacterTemporaryStat.AssistCharge, 1);
+                } else if (!applyto.isHidden()) {
+                    effects.put(CharacterTemporaryStat.WeaponCharge, 1);
+                }
+            case Bishop.ADVANCED_BLESSING: //Advanced Bless
+                applyto.cancelEffectFromTemporaryStat(CharacterTemporaryStat.Bless);
+                break;
+            case Magician.MAGIC_GUARD:
+            case Luminous.STANDARD_MAGIC_GUARD:
+            case Evan.MAGIC_GUARD:
+                applyto.cancelEffectFromTemporaryStat(CharacterTemporaryStat.MagicGuard);
+                this.setDuration(Integer.MAX_VALUE);
+                break;
+            case Kaiser.FINAL_FORM: // 3job kaiser By Mixtamal6 
+            case Kaiser.FINAL_FORM_1: // 4job kaiser
+            case Kaiser.FINAL_TRANCE: // hyper kaiser
+                applyto.resetKaiserCombo();
+                break;
+            case Hero.ENRAGE: // Enrage
+                applyto.handleOrbconsume(10);
+                break;
+            case DemonAvenger.OVERLOAD_RELEASE: {
+                applyto.setExceed((short) 0);
+                applyto.addHP((int) ((applyto.getStat().getCurrentMaxHp() * (level / 100.0D)) * (getX() / 100.0D)));
+                applyfrom.getClient().write(CWvsContext.enableActions());
+                applyto.getClient().write(JobPacket.AvengerPacket.cancelExceed()); //Set Exceed to 0
+                break;
+            }
+            case Darkknight.SACRIFICE: { //Sacrifice
+                info.put(MapleStatInfo.time, 40000);
+                effects.put(CharacterTemporaryStat.IgnoreTargetDEF, info.get(MapleStatInfo.ignoreMobpdpR));
+                effects.put(CharacterTemporaryStat.BdR, info.get(MapleStatInfo.indieBDR));
+                applyto.addHP((int) ((applyto.getStat().getCurrentMaxHp() * (level / 100.0D)) * (getX() / 100.0D)));
+                applyfrom.getClient().write(CWvsContext.enableActions());
+                break;
+            }
+        }
+    }
+
+    public static int parseMountInfo(final MapleCharacter player, final int skillid) {
+        switch (skillid) {
+            case 80001000:
+            case 1004: // Monster riding
+            case 11004: // Monster riding
+            case 10001004:
+            case 20001004:
+            case 20011004:
+            case 20021004:
+                if (player.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -118) != null && player.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -119) != null) {
+                    return player.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -118).getItemId();
+                }
+                return parseMountInfo_Pure(player, skillid);
+            default:
+                return GameConstants.getMountItem(skillid, player);
+        }
+    }
+
+    public static int parseMountInfo_Pure(final MapleCharacter player, final int skillid) {
+        switch (skillid) {
+            case 80001000:
+            case 1004: // Monster riding
+            case 11004: // Monster riding
+            case 10001004:
+            case 20001004:
+            case 20011004:
+            case 20021004:
+                if (player.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -18) != null && player.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -19) != null) {
+                    return player.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -18).getItemId();
+                }
+                return 0;
+            default:
+                return GameConstants.getMountItem(skillid, player);
+        }
+    }
+
+    private int calcHPChange(final MapleCharacter applyfrom, final boolean primary) {
+        int hpchange = 0;
+        if (info.get(MapleStatInfo.hp) != 0) {
+            if (!skill) {
+                if (primary) {
+                    hpchange += alchemistModifyVal(applyfrom, info.get(MapleStatInfo.hp), true);
+                } else {
+                    hpchange += info.get(MapleStatInfo.hp);
+                }
+                if (applyfrom.hasDisease(MapleDisease.ZOMBIFY)) {
+                    hpchange /= 2;
+                }
+            } else { // assumption: this is heal
+                hpchange += makeHealHP(info.get(MapleStatInfo.hp) / 100.0, applyfrom.getStat().getTotalMagic(), 3, 5);
+                if (applyfrom.hasDisease(MapleDisease.ZOMBIFY)) {
+                    hpchange = -hpchange;
+                }
+            }
+        }
+        if (hpR != 0) {
+            hpchange += (int) (applyfrom.getStat().getCurrentMaxHp() * hpR) / (applyfrom.hasDisease(MapleDisease.ZOMBIFY) ? 2 : 1);
+        }
+        // actually receivers probably never get any hp when it's not heal but whatever
+        if (primary) {
+            if (info.get(MapleStatInfo.hpCon) != 0) {
+                hpchange -= info.get(MapleStatInfo.hpCon);
+            }
+        }
+        switch (this.sourceid) {
+            case 4211001: // Chakra
+                final PlayerStats stat = applyfrom.getStat();
+                int v42 = getY() + 100;
+                int v38 = Randomizer.rand(1, 100) + 100;
+                hpchange = (int) ((v38 * stat.getLuk() * 0.033 + stat.getDex()) * v42 * 0.002);
+                hpchange += makeHealHP(getY() / 100.0, applyfrom.getStat().getTotalLuk(), 2.3, 3.5);
+                break;
+        }
+        return hpchange;
+    }
+
+    private static int makeHealHP(double rate, double stat, double lowerfactor, double upperfactor) {
+        return (int) ((Math.random() * ((int) (stat * upperfactor * rate) - (int) (stat * lowerfactor * rate) + 1)) + (int) (stat * lowerfactor * rate));
+    }
+
+    private int calcMPChange(final MapleCharacter applyfrom, final boolean primary) {
+        int mpchange = 0;
+        if (info.get(MapleStatInfo.mp) != 0) {
+            if (primary) {
+                mpchange += alchemistModifyVal(applyfrom, info.get(MapleStatInfo.mp), false); // recovery up doesn't apply for mp
+            } else {
+                mpchange += info.get(MapleStatInfo.mp);
+            }
+        }
+        if (mpR != 0) {
+            mpchange += (int) (applyfrom.getStat().getCurrentMaxMp(applyfrom.getJob()) * mpR);
+        }
+        if (GameConstants.isDemonSlayer(applyfrom.getJob())) {
+            mpchange = 0;
+        }
+        if (primary) {
+            if (info.get(MapleStatInfo.mpCon) != 0 && !GameConstants.isDemonSlayer(applyfrom.getJob())) {
+                boolean free = false;
+                if (applyfrom.getJob() == 411 || applyfrom.getJob() == 412) {
+                    final Skill expert = SkillFactory.getSkill(4110012);
+                    if (applyfrom.getTotalSkillLevel(expert) > 0) {
+                        final MapleStatEffect eff = expert.getEffect(applyfrom.getTotalSkillLevel(expert));
+                        if (eff.makeChanceResult()) {
+                            free = true;
+                        }
+                    }
+                }
+                if (applyfrom.getBuffedValue(CharacterTemporaryStat.Infinity) != null) {
+                    mpchange = 0;
+                } else if (!free) { // MP hack fix? kinda.
+                    double mpcalc = (info.get(MapleStatInfo.mpCon) - (info.get(MapleStatInfo.mpCon) * applyfrom.getStat().mpconReduce / 100)) * (applyfrom.getStat().mpconPercent / 100.0);
+                    double finalMPCalc = mpcalc * 0.65; //for now just as a balance, so some skills cost a bit more, but the 2x ones are almost correct.
+                    mpchange -= finalMPCalc;
+                    //mpchange -= (info.get(MapleStatInfo.mpCon) - (info.get(MapleStatInfo.mpCon) * applyfrom.getStat().mpconReduce / 100)) * (applyfrom.getStat().mpconPercent / 100.0);
+                }
+            } else if (info.get(MapleStatInfo.forceCon) != 0) {
+                if (applyfrom.getBuffedValue(CharacterTemporaryStat.InfinityForce) != null) {
+                    mpchange = 0;
+                } else {
+                    mpchange -= info.get(MapleStatInfo.forceCon);
+                }
+            }
+        }
+        return mpchange;
+    }
+
+    public final int alchemistModifyVal(final MapleCharacter chr, final int val, final boolean withX) {
+        if (!skill) { // RecoveryUP only used for hp items and skills
+            return (val * (100 + (withX ? chr.getStat().RecoveryUP : chr.getStat().BuffUP)) / 100);
+        }
+        return (val * (100 + (withX ? chr.getStat().RecoveryUP : (chr.getStat().BuffUP_Skill + (getSummonMovementType() == null ? 0 : chr.getStat().BuffUP_Summon)))) / 100);
+    }
+
+    public final int calcPowerChange(final MapleCharacter applyfrom) {
+        int powerchange = 0;
+        if (info.get(MapleStatInfo.powerCon) != 0 && GameConstants.isXenon(applyfrom.getJob())) {
+            if (applyfrom.getBuffedValue(CharacterTemporaryStat.AmaranthGenerator) != null) {
+                powerchange = 0;
+            } else {
+                powerchange = info.get(MapleStatInfo.powerCon);
+            }
+        }
+        return powerchange;
+    }
+
+    public final void setSourceId(final int newid) {
+        sourceid = newid;
+    }
+
+    public final boolean isGmBuff() {
+        switch (sourceid) {
+            case 10001075: //Empress Prayer
+            case 9001000: // GM dispel
+            case 9001001: // GM haste
+            case 9001002: // GM Holy Symbol
+            case 9001003: // GM Bless
+            case 9001005: // GM resurrection
+            case 9001008: // GM Hyper body
+
+            case 9101000:
+            case 9101001:
+            case 9101002:
+            case 9101003:
+            case 9101005:
+            case 9101008:
+                return true;
+            default:
+                return GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1005;
+        }
+    }
+
+    public final boolean isInflation() {
+        return inflation > 0;
+    }
+
+    public final int getInflation() {
+        return inflation;
+    }
+
+    public final boolean isEnergyCharged() {
+        return skill && (sourceid == 5100015 || sourceid == 15100004);
+    }
+
+    public boolean isMonsterBuff() {
+        switch (sourceid) {
+            case 1211013: // Threaten
+            case 1201006: // threaten
+            case 2101003: // fp slow
+            case 2201003: // il slow
+            case 5011002:
+            case 12101001: // cygnus slow
+            case 2211004: // il seal
+            case 2111004: // fp seal
+            case 12111002: // cygnus seal
+            case 2311005: // doom
+            case 4111003: // shadow web
+            case 14111001: // cygnus web
+            case 4121004: // Ninja ambush
+            case 4221004: // Ninja ambush
+            case 22151001:
+            case 22121000:
+            case 22161002:
+            case 4321002:
+            case 4341003:
+            case 90001002:
+            case 90001003:
+            case 90001004:
+            case 90001005:
+            case 90001006:
+            case 1111007:
+            case 51111005: //Mihile's magic crash
+            case 1211009:
+            case 1311007:
+            case 35111005:
+            case 32120000:
+            case 32120001:
+                return skill;
+        }
+        return false;
+    }
+
+    public final void setPartyBuff(boolean pb) {
+        this.partyBuff = pb;
+    }
+
+    private boolean isPartyBuff() {
+        switch (sourceid) {
+            case Hero.MAPLE_WARRIOR:
+            case Paladin.MAPLE_WARRIOR:
+            case Darkknight.MAPLE_WARRIOR:
+            case Aran.MAPLE_WARRIOR:
+            case BattleMage.MAPLE_WARRIOR:
+            case Bishop.MAPLE_WARRIOR:
+            case BladeMaster.MAPLE_WARRIOR:
+            case Bowmaster.MAPLE_WARRIOR:
+            case Buccaneer.MAPLE_WARRIOR:
+            case CannonMaster.MAPLE_WARRIOR:
+            case Corsair.MAPLE_WARRIOR:
+            case DemonAvenger.MAPLE_WARRIOR:
+            case DemonSlayer.MAPLE_WARRIOR:
+            case Evan.MAPLE_WARRIOR:
+            case FPArchmage.MAPLE_WARRIOR:
+            case Jett.MAPLE_WARRIOR:
+            case Kanna.DAWNS_WARRIOR_MAPLE_WARRIOR:
+            case Luminous.MAPLE_WARRIOR:
+            case Marksman.MAPLE_WARRIOR:
+            case Mechanic.MAPLE_WARRIOR:
+            case Mercedes.MAPLE_WARRIOR:
+            case Nightlord.MAPLE_WARRIOR:
+            case Phantom.MAPLE_WARRIOR:
+            case Shade.MAPLE_WARRIOR:
+            case Shadower.MAPLE_WARRIOR:
+            case WildHunter.MAPLE_WARRIOR:
+            case Xenon.MAPLE_WARRIOR:
+            case DawnWarrior.CALL_OF_CYGNUS:
+            case BlazeWizard.CALL_OF_CYGNUS:
+            case WindArcher.CALL_OF_CYGNUS:
+            case NightWalker.CALL_OF_CYGNUS:
+            case ThunderBreaker.CALL_OF_CYGNUS:
+            case Mihile.CALL_OF_CYGNUS:
+            case Aran.MAHA_BLESSING:
+            case BattleMage.HASTY_AURA:
+            case BattleMage.DRAINING_AURA:
+            case BattleMage.BLUE_AURA:
+            case BattleMage.DARK_AURA:
+            case BattleMage.WEAKENING_AURA:
+            case Spearman.IRON_WILL:
+            case Spearman.HYPER_BODY:
+            case FPWizard.MEDITATION:
+            case ILWizard.MEDITATION:
+            case Luminous.PHOTIC_MEDITATION:
+            case Cleric.HEAL:
+            case Cleric.BLESS:
+            case Priest.DISPEL:
+            case Priest.HOLY_SYMBOL:
+            case Bishop.RESURRECTION:
+            case Bishop.HOLY_MAGIC_SHELL_EXTRA_GUARD:
+            case Bowmaster.SHARP_EYES:
+            case Marksman.SHARP_EYES:
+            case WindArcher.SHARP_EYES:
+            case WildHunter.SHARP_EYES:
+            case Beginner.DECENT_ADVANCED_BLESSING:
+            case Beginner.DECENT_COMBAT_ORDERS:
+            case Beginner.DECENT_HASTE:
+            case Beginner.DECENT_HYPER_BODY:
+            case Beginner.DECENT_MYSTIC_DOOR:
+            case Beginner.DECENT_SHARP_EYES:
+            case Beginner.DECENT_SPEED_INFUSION:
+            case Citizen.DECENT_ADVANCED_BLESSING:
+            case Citizen.DECENT_COMBAT_ORDERS:
+            case Citizen.DECENT_HASTE:
+            case Citizen.DECENT_HYPER_BODY:
+            case Citizen.DECENT_MYSTIC_DOOR:
+            case Citizen.DECENT_SHARP_EYES:
+            case Citizen.DECENT_SPEED_INFUSION:
+            case EvanNoob.DECENT_ADVANCED_BLESSING:
+            case EvanNoob.DECENT_COMBAT_ORDERS:
+            case EvanNoob.DECENT_HASTE:
+            case EvanNoob.DECENT_HYPER_BODY:
+            case EvanNoob.DECENT_MYSTIC_DOOR:
+            case EvanNoob.DECENT_SHARP_EYES:
+            case EvanNoob.DECENT_SPEED_INFUSION:
+            case Kinesis.DECENT_ADVANCED_BLESSING:
+            case Kinesis.DECENT_COMBAT_ORDERS:
+            case Kinesis.DECENT_HASTE:
+            case Kinesis.DECENT_HYPER_BODY:
+            case Kinesis.DECENT_MYSTIC_DOOR:
+            case Kinesis.DECENT_SHARP_EYES:
+            case Kinesis.DECENT_SPEED_INFUSION:
+            case Legend.DECENT_ADVANCED_BLESSING:
+            case Legend.DECENT_COMBAT_ORDERS:
+            case Legend.DECENT_HASTE:
+            case Legend.DECENT_HYPER_BODY:
+            case Legend.DECENT_MYSTIC_DOOR:
+            case Legend.DECENT_SHARP_EYES:
+            case Legend.DECENT_SPEED_INFUSION:
+            case Luminous.DECENT_ADVANCED_BLESSING:
+            case Luminous.DECENT_COMBAT_ORDERS:
+            case Luminous.DECENT_HASTE:
+            case Luminous.DECENT_HYPER_BODY:
+            case Luminous.DECENT_MYSTIC_DOOR:
+            case Luminous.DECENT_SHARP_EYES:
+            case Luminous.DECENT_SPEED_INFUSION:
+            case NamelessWarden.DECENT_ADVANCED_BLESSING:
+            case NamelessWarden.DECENT_COMBAT_ORDERS:
+            case NamelessWarden.DECENT_HASTE:
+            case NamelessWarden.DECENT_HYPER_BODY:
+            case NamelessWarden.DECENT_MYSTIC_DOOR:
+            case NamelessWarden.DECENT_SHARP_EYES:
+            case NamelessWarden.DECENT_SPEED_INFUSION:
+            case Noblesse.DECENT_ADVANCED_BLESSING:
+            case Noblesse.DECENT_COMBAT_ORDERS:
+            case Noblesse.DECENT_HASTE:
+            case Noblesse.DECENT_HYPER_BODY:
+            case Noblesse.DECENT_MYSTIC_DOOR:
+            case Noblesse.DECENT_SHARP_EYES:
+            case Noblesse.DECENT_SPEED_INFUSION:
+            case Phantom.DECENT_ADVANCED_BLESSING:
+            case Phantom.DECENT_COMBAT_ORDERS:
+            case Phantom.DECENT_HASTE:
+            case Phantom.DECENT_HYPER_BODY:
+            case Phantom.DECENT_MYSTIC_DOOR:
+            case Phantom.DECENT_SHARP_EYES:
+            case Phantom.DECENT_SPEED_INFUSION:
+            case Pinkbean.DECENT_ADVANCED_BLESSING:
+            case Pinkbean.DECENT_COMBAT_ORDERS:
+            case Pinkbean.DECENT_HASTE:
+            case Pinkbean.DECENT_HYPER_BODY:
+            case Pinkbean.DECENT_MYSTIC_DOOR:
+            case Pinkbean.DECENT_SHARP_EYES:
+            case Pinkbean.DECENT_SPEED_INFUSION:
+            case Shade.DECENT_ADVANCED_BLESSING:
+            case Shade.DECENT_COMBAT_ORDERS:
+            case Shade.DECENT_HASTE:
+            case Shade.DECENT_HYPER_BODY:
+            case Shade.DECENT_MYSTIC_DOOR:
+            case Shade.DECENT_SHARP_EYES:
+            case Shade.DECENT_SPEED_INFUSION:
+            case Zero.DECENT_ADVANCED_BLESSING:
+            case Zero.DECENT_COMBAT_ORDERS:
+            case Zero.DECENT_HASTE:
+            case Zero.DECENT_HYPER_BODY:
+            case Zero.DECENT_MYSTIC_DOOR:
+            case Zero.DECENT_SHARP_EYES:
+            case Zero.DECENT_SPEED_INFUSION:
+            case Thief.HASTE:
+            case NightWalker.HASTE:
+            case ChiefBandit.MESO_MASTERY://MesoUp
+            case BladeMaster.THORNS:
+            case Buccaneer.TIME_LEAP:
+            case Aran.HEROS_WILL:
+            case BattleMage.HEROS_WILL:
+            case Bishop.HEROS_WILL:
+            case Bowmaster.HEROS_WILL:
+            case Buccaneer.HEROS_WILL:
+            case CannonMaster.HEROS_WILL:
+            case Corsair.HEROS_WILL:
+            case Darkknight.HEROS_WILL:
+            case Evan.HEROS_WILL:
+            case FPArchmage.HEROS_WILL:
+            case Hero.HEROS_WILL:
+            case ILArchmage.HEROS_WILL:
+            case Kanna.BLOSSOMING_DAWN_HEROS_WILL:
+            case Luminous.HEROS_WILL:
+            case Marksman.HEROS_WILL:
+            case Mechanic.HEROS_WILL:
+            case Mercedes.HEROS_WILL:
+            case Nightlord.HEROS_WILL:
+            case Paladin.HEROS_WILL:
+            case Phantom.HEROS_WILL:
+            case Shade.HEROS_WILL:
+            case Shadower.HEROS_WILL:
+            case WildHunter.HEROS_WILL:
+            case Xenon.HEROS_WILL:
+            case CannonBlaster.MONKEY_FURY:
+            case Evan.MAGIC_RESISTANCE:
+            case ThunderBreaker.SPEED_INFUSION:
+            case Buccaneer.SPEED_INFUSION:
+            case Darkknight.HYPER_BODY_PERSIST:
+            case Darkknight.HYPER_BODY_SPIRIT:
+            case Darkknight.HYPER_BODY_VITALITY:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public final boolean isArcane() {
+        return skill && (sourceid == 2320011 || sourceid == 2220010 || sourceid == 2120010);
+    }
+
+    public final boolean isHayatoStance() {
+        return skill && (sourceid == 41001001 || sourceid == 41110008);
+    }
+
+    public final boolean isHeal() {
+        return skill && (sourceid == 2301002 || sourceid == 9101000 || sourceid == 9001000);
+    }
+
+    public final boolean isResurrection() {
+        return skill && (sourceid == 9001005 || sourceid == 9101005 || sourceid == 2321006);
+    }
+
+    public final boolean isTimeLeap() {
+        return skill && sourceid == 5121010;
+    }
+
+    public final int getHp() {
+        return info.get(MapleStatInfo.hp);
+    }
+
+    public final int getMp() {
+        return info.get(MapleStatInfo.mp);
+    }
+
+    public final int getDOTStack() {
+        return info.get(MapleStatInfo.dotSuperpos);
+    }
+
+    public final double getHpR() {
+        return hpR;
+    }
+
+    public final double getMpR() {
+        return mpR;
+    }
+
+    public final int getMastery() {
+        return info.get(MapleStatInfo.mastery);
+    }
+
+    public final int getWatk() {
+        return info.get(MapleStatInfo.pad);
+    }
+
+    public final int getMatk() {
+        return info.get(MapleStatInfo.mad);
+    }
+
+    public final int getWdef() {
+        return info.get(MapleStatInfo.pdd);
+    }
+
+    public final int getMdef() {
+        return info.get(MapleStatInfo.mdd);
+    }
+
+    public final int getAcc() {
+        return info.get(MapleStatInfo.acc);
+    }
+
+    public final int getAccR() {
+        return info.get(MapleStatInfo.ar);
+    }
+
+    public final int getAvoid() {
+        return info.get(MapleStatInfo.eva);
+    }
+
+    public final int getSpeed() {
+        return info.get(MapleStatInfo.speed);
+    }
+
+    public final int getJump() {
+        return info.get(MapleStatInfo.jump);
+    }
+
+    public final int gettargetPlus() {
+        return info.get(MapleStatInfo.targetPlus);
+    }
+
+    public final int getSpeedMax() {
+        return info.get(MapleStatInfo.speedMax);
+    }
+
+    public final int getPassiveSpeed() {
+        return info.get(MapleStatInfo.psdSpeed);
+    }
+
+    public final int getPassiveJump() {
+        return info.get(MapleStatInfo.psdJump);
+    }
+
+    public final int getDuration() {
+        return info.get(MapleStatInfo.time);
+    }
+
+    public final int getSubTime() {
+        return info.get(MapleStatInfo.subTime);
+    }
+
+    public final boolean isOverTime() {
+        return overTime;
+    }
+
+    public final Map<CharacterTemporaryStat, Integer> getStatups() {
+        return statups;
+    }
+
+    public final boolean sameSource(final MapleStatEffect effect) {
+        boolean sameSrc = this.sourceid == effect.sourceid;
+        switch (this.sourceid) { // All these are passive skills, will have to cast the normal ones.
+            case 32120000: // Advanced Dark Aura
+                sameSrc = effect.sourceid == 32001003;
+                break;
+            case 32110000: // Advanced Blue Aura
+                sameSrc = effect.sourceid == 32111012;
+                break;
+            case 32120001: // Advanced Yellow Aura
+                sameSrc = effect.sourceid == 32101003;
+                break;
+            case 35120000: // Extreme Mech
+                sameSrc = effect.sourceid == 35001002;
+                break;
+            case 41110008:
+                sameSrc = effect.sourceid == 41001001;
+                break;
+        }
+        return effect != null && sameSrc && this.skill == effect.skill;
+    }
+
+    public final int getCr() {
+        return info.get(MapleStatInfo.cr);
+    }
+
+    public final int getT() {
+        return info.get(MapleStatInfo.t);
+    }
+
+    public final int getU() {
+        return info.get(MapleStatInfo.u);
+    }
+
+    public final int getV() {
+        return info.get(MapleStatInfo.v);
+    }
+
+    public final int getW() {
+        return info.get(MapleStatInfo.w);
+    }
+
+    public final int getPPRecovery() {
+        return info.get(MapleStatInfo.ppRecovery);
+    }
+
+    public final int getPPCon() {
+        return info.get(MapleStatInfo.ppCon);
+    }
+
+    public final int getX() {
+        return info.get(MapleStatInfo.x);
+    }
+
+    public final int getY() {
+        return info.get(MapleStatInfo.y);
+    }
+
+    public final int getZ() {
+        return info.get(MapleStatInfo.z);
+    }
+
+    public final int getS() {
+        return info.get(MapleStatInfo.s);
+    }
+
+    public final int getDamage() {
+        return info.get(MapleStatInfo.damage);
+    }
+
+    public final int getPVPDamage() {
+        return info.get(MapleStatInfo.PVPdamage);
+    }
+
+    public final int getAttackCount() {
+        return info.get(MapleStatInfo.attackCount);
+    }
+
+    public final int getBulletCount() {
+        return info.get(MapleStatInfo.bulletCount);
+    }
+
+    public final int getBulletConsume() {
+        return info.get(MapleStatInfo.bulletConsume);
+    }
+
+    public final int getOnActive() {
+        return info.get(MapleStatInfo.onActive);
+    }
+
+    public final int getMobCount() {
+        return info.get(MapleStatInfo.mobCount);
+    }
+
+    public final int getMoneyCon() {
+        return moneyCon;
+    }
+
+    public final int getCooltimeReduceR() {
+        return info.get(MapleStatInfo.coolTimeR);
+    }
+
+    public final int getMesoAcquisition() {
+        return info.get(MapleStatInfo.mesoR);
+    }
+
+    public final int getCooldown(final MapleCharacter chra) {
+        if (chra.getStat().coolTimeR > 0) {
+            return Math.max(0, ((info.get(MapleStatInfo.cooltime) * (100 - (chra.getStat().coolTimeR / 100))) - chra.getStat().reduceCooltime));
+        }
+        return Math.max(0, (info.get(MapleStatInfo.cooltime) - chra.getStat().reduceCooltime));
+    }
+
+    public final Map<MonsterStatus, Integer> getMonsterStati() {
+        return monsterStatus;
+    }
+
+    public final int getBerserk() {
+        return berserk;
+    }
+
+    public final boolean isHide() {
+        return skill && (sourceid == 9001004 || sourceid == 9101004);
+    }
+
+    public final boolean isDragonBlood() {
+        return skill && sourceid == 1311008;
+    }
+
+    public final boolean isRecovery() {
+        return skill && (sourceid == 1001 || sourceid == 10001001 || sourceid == 20001001 || sourceid == 20011001 || sourceid == 20021001 || sourceid == 11001 || sourceid == 35121005);
+    }
+
+    public final boolean isBerserk() {
+        return skill && sourceid == 1320006;
+    }
+
+    public final boolean isBeholder() {
+        return skill && sourceid == 1321007 || sourceid == 1301013 || sourceid == 1311013;
+    }
+
+    public final boolean isMPRecovery() {
+        return skill && sourceid == 5101005;
+    }
+
+    public final boolean isInfinity() {
+        return skill && (sourceid == 2121004 || sourceid == 2221004 || sourceid == 2321004);
+    }
+
+    public final boolean isMonsterRiding() {
+        return skill && (isMonsterRidingSkill(sourceid));
+    }
+
+    public final static boolean isMonsterRidingSkill(int Skillid) {
+        return (isMonsterRidingBySkill(Skillid) || GameConstants.getMountItem(Skillid, null) != 0);
+    }
+
+    public final static boolean isMonsterRidingBySkill(int skillid) {
+        return (skillid == 1004
+                || skillid == 10001004
+                || skillid == 20001004
+                || skillid == 20011004
+                || skillid == 30001004
+                || (skillid >= 80001000 && skillid <= 80001033)
+                || skillid == 80001037
+                || skillid == 80001038
+                || skillid == 80001039
+                || skillid == 80001044
+                || (skillid >= 80001082 && skillid <= 80001090)
+                || skillid == 30011159
+                || skillid == 30011109 || skillid == 33001001 || skillid == 35001002 || skillid == 35111003);
+    }
+
+    public final boolean isMagicDoor() {
+        return skill && (sourceid == Priest.MYSTIC_DOOR || sourceid % 10000 == 8001);
+    }
+
+    public final boolean isMesoGuard() {
+        return skill && sourceid == 4211005;
+    }
+
+    public final boolean isMechDoor() {
+        return skill && sourceid == Mechanic.OPEN_PORTAL_GX9;
+    }
+
+    /*public final boolean isComboRecharge() {
+        return skill && sourceid == Aran.COMBO_RECHARGE;
+    }
+
+    public final boolean isDragonBlink() {
+        return skill && sourceid == Evan.DRAGON_BLINK;
+    }*/
+    public final boolean isCharge() {
+        switch (sourceid) {
+            case 1211003:
+            case 1211008:
+            case 11111007:
+            case 51111003: // Mihile's Radiant Charge
+            case 12101005:
+            case 15101006:
+            case 21111005:
+                return skill;
+        }
+        return false;
+    }
+
+    public final boolean isPoison() {
+        return info.get(MapleStatInfo.dot) > 0 && info.get(MapleStatInfo.dotTime) > 0;
+    }
+
+    public boolean isMist() {
+        return skill && (sourceid == 2111003 || sourceid == 4221006 || sourceid == 12111005 || sourceid == 14111006 || sourceid == 22161003 || sourceid == 32121006 || sourceid == 1076 || sourceid == 11076 || sourceid == 2311011 || sourceid == 4121015 || sourceid == 42111004 || sourceid == 42121005); // poison mist, smokescreen and flame gear, recovery aura
+    }
+
+    private boolean isSpiritClaw() {
+        return skill && sourceid == 4111009 || sourceid == 14111007 || sourceid == 5201008;
+    }
+
+    private boolean isSpiritBlast() {
+        return skill && sourceid == 5201008;
+    }
+
+    private boolean isDispel() {
+        return skill && (sourceid == 2311001 || sourceid == 9001000 || sourceid == 9101000);
+    }
+
+    private boolean isHeroWill() {
+        switch (sourceid) {
+            case 1121011:
+            case 1221012:
+            case 1321010:
+            case 2121008:
+            case 2221008:
+            case 2321009:
+            case 3121009:
+            case 3221008:
+            case 4121009:
+            case 4221008:
+            case 5121008:
+            case 5221010:
+            case 21121008:
+            case 22171004:
+            case 4341008:
+            case 32121008:
+            case 33121008:
+            case 35121008:
+            case 5321008:
+            case 23121008:
+            case 24121009:
+            case 5721002:
+                return skill;
+        }
+        return false;
+    }
+
+    public final boolean isAranCombo() {
+        return sourceid == 21000000;
+    }
+
+    public final boolean isCombo() {
+        switch (sourceid) {
+            case 1111002:
+            case 11111001: // Combo
+            case 1101013:
+                return skill;
+        }
+        return false;
+    }
+
+    public final boolean isDivineBody() {
+        return skill && GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1010;
+    }
+
+    public final boolean isDivineShield() {
+        switch (sourceid) {
+            case 1220013:
+                return skill;
+        }
+        return false;
+    }
+
+    public final boolean isBerserkFury() {
+        return skill && GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1011;
+    }
+
+    public final byte getLevel() {
+        return level;
+    }
+
+    public final SummonMovementType getSummonMovementType() {
+        if (!skill) {
+            return null;
+        }
+        switch (sourceid) {
+            case 3211002: // puppet sniper
+            case 3111002: // puppet ranger
+            case 3221014: // Arrow Illusion
+            case 33111003:
+            case 13111024: // Emerald Flower
+            case 13111004: // puppet cygnus
+            case 5211001: // octopus - pirate
+            case 5220002: // advanced octopus - pirate
+            case 4341006:
+            case 35111002:
+            case 35111005:
+            case 35111011:
+            case 35121009:
+            case 35121010:
+            case 35121011:
+            case 4111007: //dark flare
+            case 4211007: //dark flare
+            case 14111010: //dark flare
+            case 33101008:
+            case 35121003:
+            case 3120012:
+            case 3220012:
+            case 5321003:
+            case 5321004:
+            case 5320011:
+            case 5211014:
+            case 5711001: // turret
+            case 42100010:
+            case 61111002: //Stone Dragon
+            //    case 3121013:
+            case 36121002:
+            case 36121013:
+            case 36121014:
+            case 42111003:
+                return SummonMovementType.STATIONARY;
+            case 14111024: // Dark Servant
+            case 14121054: // Shadow Illusion
+            case 14121055:
+            case 14121056:
+                return SummonMovementType.SHADOW_SERVANT;
+            case 3211005: // golden eagle
+            case 3111005: // golden hawk
+            case 3101007:
+            case 3201007:
+            case 33111005:
+            case 3221005: // frostprey
+            case 3121006: // phoenix
+            case 23111008:
+            case 23111009:
+            case 23111010:
+                return SummonMovementType.CIRCLE_FOLLOW;
+            case 5211002: // bird - pirate
+                return SummonMovementType.CIRCLE_STATIONARY;
+            case 32111006: //reaper
+            case 5211011:
+            case 5211015:
+            case 5211016:
+                return SummonMovementType.WALK_STATIONARY;
+            case 1321007: // beholder
+            case 1301013: // Evil Eye
+            case 1311013: // Evil Eye of Domination
+            case 2121005: // elquines
+            case 2221005: // ifrit
+            case 2321003: // bahamut
+            case 12111004: // Ifrit
+            case 11001004: // soul
+            case 12001004: // flame
+            case 13001004: // storm
+            case 14001005: // darkness
+            case 15001004: // lightning
+            case 35111001:
+            case 35111010://satelite 2
+            case 35111009: // satellite 1
+            case 42101021: // Foxfire
+            case 42121021: // Foxfire
+                return SummonMovementType.FOLLOW;
+        }
+        if (isAngel()) {
+            return SummonMovementType.FOLLOW;
+        }
+        return null;
+    }
+
+    public void addHpR(double hpR) {
+        this.hpR += hpR;
+    }
+
+    public void setHpR(double hpR) {
+        this.hpR = hpR;
+    }
+
+    public void addMpR(double mpR) {
+        this.mpR += mpR;
+    }
+
+    public void setMpR(double mpR) {
+        this.mpR = mpR;
+    }
+
+    public final boolean isAngel() {
+        return GameConstants.isAngel(sourceid);
+    }
+
+    public final boolean isSkill() {
+        return skill;
+    }
+
+    public final int getSourceId() {
+        return sourceid;
+    }
+
+    public final boolean isIceKnight() {
+        return skill && GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1105;
+    }
+
+    public final boolean isSoaring() {
+        return isSoaring_Normal() || isSoaring_Mount();
+    }
+
+    public final boolean isSoaring_Normal() {
+        return skill && GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1026;
+    }
+
+    public final boolean isSoaring_Mount() {
+        return skill && ((GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1142) || sourceid == 80001089 || sourceid == 112111000);
+    }
+
+    public final boolean isFinalAttack() {
+        switch (sourceid) {
+            case 13101002:
+            case 11101002:
+            case 51100002:
+                return skill;
+        }
+        return false;
+    }
+
+    public final boolean isMistEruption() {
+        switch (sourceid) {
+            case 2121003:
+                return skill;
+        }
+        return false;
+    }
+
+    public final boolean isShadow() {
+        switch (sourceid) {
+            case 4111002: // shadowpartner
+            case 14111000: // cygnus
+            case 4211008:
+            case NightWalker.DARK_SERVANT:
+            case 4331002:// Mirror Image
+                return skill;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @return true if the effect should happen based on it's probablity, false otherwise
+     */
+    public final boolean makeChanceResult() {
+        return info.get(MapleStatInfo.prop) >= 100 || Randomizer.nextInt(100) < info.get(MapleStatInfo.prop);
+    }
+
+    public final int getProb() {
+        return info.get(MapleStatInfo.prop);
+    }
+
+    public final short getIgnoreMob() {
+        return ignoreMob;
+    }
+
+    public final int getEnhancedHP() {
+        return info.get(MapleStatInfo.emhp);
+    }
+
+    public final int getEnhancedMP() {
+        return info.get(MapleStatInfo.emmp);
+    }
+
+    public final int getEnhancedWatk() {
+        return info.get(MapleStatInfo.epad);
+    }
+
+    public final int getEnhancedWdef() {
+        return info.get(MapleStatInfo.pdd);
+    }
+
+    public final int getEnhancedMatk() {
+        return info.get(MapleStatInfo.emad);
+    }
+
+    public final int getEnhancedMdef() {
+        return info.get(MapleStatInfo.emdd);
+    }
+
+    public final int getDOT() {
+        return info.get(MapleStatInfo.dot);
+    }
+
+    public final int getDOTTime() {
+        return info.get(MapleStatInfo.dotTime);
+    }
+
+    public final int getCriticalMax() {
+        return info.get(MapleStatInfo.criticaldamageMax);
+    }
+
+    public final int getCriticalMin() {
+        return info.get(MapleStatInfo.criticaldamageMin);
+    }
+
+    public final int getASRRate() {
+        return info.get(MapleStatInfo.asrR);
+    }
+
+    public final int getTERRate() {
+        return info.get(MapleStatInfo.terR);
+    }
+
+    public final int getDAMRate() {
+        return info.get(MapleStatInfo.damR);
+    }
+
+    public final int getHpToDamage() {
+        return info.get(MapleStatInfo.mhp2damX);
+    }
+
+    public final int getMpToDamage() {
+        return info.get(MapleStatInfo.mmp2damX);
+    }
+
+    public final int getLevelToDamage() {
+        return info.get(MapleStatInfo.lv2damX);
+    }
+
+    public final int getLevelToWatk() {
+        return info.get(MapleStatInfo.lv2pdX);
+    }
+
+    public final int getLevelToMatk() {
+        return info.get(MapleStatInfo.lv2mdX);
+    }
+
+    public final int getEXPLossRate() {
+        return info.get(MapleStatInfo.expLossReduceR);
+    }
+
+    public final int getBuffTimeRate() {
+        return info.get(MapleStatInfo.bufftimeR);
+    }
+
+    public final int getSuddenDeathR() {
+        return info.get(MapleStatInfo.suddenDeathR);
+    }
+
+    public final int getPercentAcc() {
+        return info.get(MapleStatInfo.accR);
+    }
+
+    public final int getPercentAvoid() {
+        return info.get(MapleStatInfo.evaR);
+    }
+
+    public final int getSummonTimeInc() {
+        return info.get(MapleStatInfo.summonTimeR);
+    }
+
+    public final int getMPConsumeEff() {
+        return info.get(MapleStatInfo.mpConEff);
+    }
+
+    public final short getMesoRate() {
+        return mesoR;
+    }
+
+    public final int getEXP() {
+        return exp;
+    }
+
+    public final int getAttackX() {
+        return info.get(MapleStatInfo.padX);
+    }
+
+    public final int getMagicX() {
+        return info.get(MapleStatInfo.madX);
+    }
+
+    public final int getPercentHP() {
+        return info.get(MapleStatInfo.mhpR);
+    }
+
+    public final int getPercentMP() {
+        return info.get(MapleStatInfo.mmpR);
+    }
+
+    public final int getConsume() {
+        return consumeOnPickup;
+    }
+
+    public final int getSelfDestruction() {
+        return info.get(MapleStatInfo.selfDestruction);
+    }
+
+    public final int getCharColor() {
+        return charColor;
+    }
+
+    public final List<Integer> getPetsCanConsume() {
+        return petsCanConsume;
+    }
+
+    public final boolean isReturnScroll() {
+        return skill && (sourceid == 80001040 || sourceid == 20021110 || sourceid == 20031203);
+    }
+
+    public final boolean isMechChange() {
+        switch (sourceid) {
+
+            case 35121054:
+            case 35111004: //siege
+            case 35001001: //flame
+            case 35101009:
+            case 35121013:
+            case 35121005:
+            case 35100008:
+                return skill;
+        }
+        return false;
+    }
+
+    public final boolean isAnimalMode() {
+        return skill && (sourceid == 110001501 || sourceid == 110001502 || sourceid == 110001503 || sourceid == 110001504);
+    }
+
+    public final int getRange() {
+        return info.get(MapleStatInfo.range);
+    }
+
+    public final int getER() {
+        return info.get(MapleStatInfo.er);
+    }
+
+    public final int getPrice() {
+        return info.get(MapleStatInfo.price);
+    }
+
+    public final int getExtendPrice() {
+        return info.get(MapleStatInfo.extendPrice);
+    }
+
+    public final int getPeriod() {
+        return info.get(MapleStatInfo.period);
+    }
+
+    public final int getReqGuildLevel() {
+        return info.get(MapleStatInfo.reqGuildLevel);
+    }
+
+    public final byte getEXPRate() {
+        return expR;
+    }
+
+    public final short getLifeID() {
+        return lifeId;
+    }
+
+    public final short getUseLevel() {
+        return useLevel;
+    }
+
+    /**
+     * For extended inventory, bags
+     *
+     * @return
+     */
+    public final byte getSlotCount() {
+        return slotCount;
+    }
+
+    /**
+     * For extended inventory, bags
+     *
+     * @return
+     */
+    public final byte getSlotPerLine() {
+        return slotPerLine;
+    }
+
+    public final int getStr() {
+        return info.get(MapleStatInfo.str);
+    }
+
+    public final int getStrX() {
+        return info.get(MapleStatInfo.strX);
+    }
+
+    public final int getStrFX() {
+        return info.get(MapleStatInfo.strFX);
+    }
+
+    public final int getDex() {
+        return info.get(MapleStatInfo.dex);
+    }
+
+    public final int getDexX() {
+        return info.get(MapleStatInfo.dexX);
+    }
+
+    public final int getDexFX() {
+        return info.get(MapleStatInfo.dexFX);
+    }
+
+    public final int getInt() {
+        return info.get(MapleStatInfo.int_);
+    }
+
+    public final int getIntX() {
+        return info.get(MapleStatInfo.intX);
+    }
+
+    public final int getIntFX() {
+        return info.get(MapleStatInfo.intFX);
+    }
+
+    public final int getLuk() {
+        return info.get(MapleStatInfo.luk);
+    }
+
+    public final int getLukX() {
+        return info.get(MapleStatInfo.lukX);
+    }
+
+    public final int getLukFX() {
+        return info.get(MapleStatInfo.lukFX);
+    }
+
+    public final int getMaxHpX() {
+        return info.get(MapleStatInfo.mhpX);
+    }
+
+    public final int getMaxMpX() {
+        return info.get(MapleStatInfo.mmpX);
+    }
+
+    public final int getMaxDemonFury() {
+        return info.get(MapleStatInfo.MDF);
+    }
+
+    public final int getAccX() {
+        return info.get(MapleStatInfo.accX);
+    }
+
+    public final int getMPConReduce() {
+        return info.get(MapleStatInfo.mpConReduce);
+    }
+
+    public final int getIndieMHp() {
+        return info.get(MapleStatInfo.indieMhp);
+    }
+
+    public final int getIndieMMp() {
+        return info.get(MapleStatInfo.indieMmp);
+    }
+
+    public final int getIndieAllStat() {
+        return info.get(MapleStatInfo.indieAllStat);
+    }
+
+    public final byte getType() {
+        return type;
+    }
+
+    public int getBossDamage() {
+        return info.get(MapleStatInfo.bdR);
+    }
+
+    public int getInterval() {
+        return interval;
+    }
+
+    public ArrayList<Pair<Integer, Integer>> getAvailableMaps() {
+        return availableMap;
+    }
+
+    public int getPDDX() {
+        return info.get(MapleStatInfo.pddX);
+    }
+
+    public int getMDDX() {
+        return info.get(MapleStatInfo.mddX);
+    }
+
+    public int getPDDRate() {
+        return info.get(MapleStatInfo.pddR);
+    }
+
+    public int getMDDRate() {
+        return info.get(MapleStatInfo.mddR);
+    }
+
+    public int getMaxHpPerLevel() {
+        return info.get(MapleStatInfo.lv2mhp);
+    }
+
+    public int getMaxMpPerLevel() {
+        return info.get(MapleStatInfo.lv2mmp);
+    }
+
+    public Map<MapleStatInfo, Integer> getAllStatInfo() {
+        return Collections.unmodifiableMap(info);
+    }
+
+    public int getWeapon() {
+        return weapon;
+    }
+
+    public void moveTo(int moveTo) {
+        this.moveTo = moveTo;
+    }
+
+    public static class CancelEffectAction implements Runnable {
+
+        private final MapleStatEffect effect;
+        private final WeakReference<MapleCharacter> target;
+        private final long startTime;
+        private final Map<CharacterTemporaryStat, Integer> statup;
+
+        public CancelEffectAction(final MapleCharacter target, final MapleStatEffect effect, final long startTime, final Map<CharacterTemporaryStat, Integer> statup) {
+            this.effect = effect;
+            this.target = new WeakReference<>(target);
+            this.startTime = startTime;
+            this.statup = statup;
+        }
+
+        @Override
+        public void run() {
+            final MapleCharacter realTarget = target.get();
+            if (realTarget != null) {
+                realTarget.cancelEffect(effect, false, startTime, statup);
+            }
+        }
+    }
+
+    public final boolean isUnstealable() {
+        for (CharacterTemporaryStat b : statups.keySet()) {
+            if (b == CharacterTemporaryStat.BasicStatUp) {
+                return true;
+            }
+        }
+        return sourceid == 4221013;
+    }
+
+}

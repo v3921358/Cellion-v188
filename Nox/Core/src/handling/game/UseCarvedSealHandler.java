@@ -1,0 +1,74 @@
+package handling.game;
+
+import client.MapleClient;
+import client.inventory.Equip;
+import client.inventory.Item;
+import client.inventory.MapleInventoryType;
+import client.inventory.ModifyInventory;
+import client.inventory.ModifyInventoryOperation;
+import java.util.ArrayList;
+import java.util.List;
+import net.InPacket;
+import server.MapleInventoryManipulator;
+import server.MapleItemInformationProvider;
+import server.Randomizer;
+import server.potentials.ItemPotentialProvider;
+import tools.packet.CField;
+import tools.packet.CWvsContext;
+import netty.ProcessPacket;
+
+/**
+ *
+ * @author
+ */
+public class UseCarvedSealHandler implements ProcessPacket<MapleClient> {
+
+    @Override
+    public boolean ValidateState(MapleClient c) {
+        return true;
+    }
+
+    @Override
+    public void Process(MapleClient c, InPacket iPacket) {
+        //iPacket: [90 64 C8 14] [04 00] [0F 00]
+        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        final Item toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(iPacket.DecodeShort());
+        final Equip itemEq = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(iPacket.DecodeShort());
+
+        final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+
+        if (toUse == null || itemEq == null
+                || toUse.getItemId() / 100 != 20495
+                || !ii.getEquipStats(toUse.getItemId()).containsKey("success")) {
+            c.write(CWvsContext.enableActions());
+            return;
+        }
+
+        boolean used = false;
+
+        final int successRate = ii.getEquipStats(toUse.getItemId()).get("success");
+        if (Randomizer.nextInt(100) <= successRate) {
+            final boolean success = ItemPotentialProvider.useAwakeningStamp(itemEq);
+
+            if (success) {
+                used = true;
+
+                List<ModifyInventory> modifications = new ArrayList<>();
+                modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, itemEq));
+                c.write(CWvsContext.inventoryOperation(true, modifications));
+
+                c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), true, toUse.getItemId()));
+            }
+        } else {
+            used = true;
+            c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), false, toUse.getItemId()));
+        }
+
+        if (used) {
+            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, toUse.getPosition(), (short) 1, false);
+        }
+
+        c.write(CWvsContext.enableActions());
+    }
+
+}

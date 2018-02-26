@@ -1,0 +1,51 @@
+package handling.game;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import client.MapleClient;
+import server.maps.objects.MapleCharacter;
+import net.InPacket;
+import server.maps.MapleMapObjectType;
+import tools.packet.CField;
+import netty.ProcessPacket;
+
+public final class CraftEffect implements ProcessPacket<MapleClient> {
+
+    @Override
+    public boolean ValidateState(MapleClient c) {
+        return true;
+    }
+
+    private static final Map<String, Integer> craftingEffects = new HashMap<>();
+
+    static {
+        craftingEffects.put("Effect/BasicEff.img/professions/herbalism", 92000000);
+        craftingEffects.put("Effect/BasicEff.img/professions/mining", 92010000);
+        craftingEffects.put("Effect/BasicEff.img/professions/herbalismExtract", 92000000);
+        craftingEffects.put("Effect/BasicEff.img/professions/miningExtract", 92010000);
+
+        craftingEffects.put("Effect/BasicEff.img/professions/equip_product", 92020000);
+        craftingEffects.put("Effect/BasicEff.img/professions/acc_product", 92030000);
+        craftingEffects.put("Effect/BasicEff.img/professions/alchemy", 92040000);
+    }
+
+    @Override
+    public void Process(MapleClient c, InPacket iPacket) {
+        final MapleCharacter chr = c.getPlayer();
+        if (chr.getMapId() != 910001000 && chr.getMap().getAllMapObjectSize(MapleMapObjectType.EXTRACTOR) <= 0) {
+            return; //ardent mill
+        }
+        final String effect = iPacket.DecodeString();
+        final Integer profession = craftingEffects.get(effect);
+        if (profession != null && (c.getPlayer().getProfessionLevel(profession) > 0 || (profession == 92040000 && chr.getMap().getAllMapObjectSize(MapleMapObjectType.EXTRACTOR) > 0))) {
+            int time = iPacket.DecodeInteger();
+            if (time > 6000 || time < 3000) {
+                time = 4000;
+            }
+            c.write(CField.EffectPacket.showWZUOLEffect(effect, chr.getDirection() == 1, -1, time, effect.endsWith("Extract") ? 1 : 0));
+            chr.getMap().broadcastMessage(chr, CField.EffectPacket.showWZUOLEffect(effect, chr.getDirection() == 1, chr.getId(), time, effect.endsWith("Extract") ? 1 : 0), false);
+        }
+    }
+
+}

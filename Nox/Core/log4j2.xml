@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Properties>
+    <Property name="logPath">logs</Property>
+    <Property name="NpcExPath">${logPath}/$${date:dd-MM-yyyy}/npcs/$${ctx:SCRIPT}.log</Property>
+    <Property name="MapExPath">${logPath}/$${date:dd-MM-yyyy}/maps/$${ctx:SCRIPT}.log</Property>
+    <Property name="PortalExPath">${logPath}/$${date:dd-MM-yyyy}/portals/$${ctx:SCRIPT}.log</Property>
+    <Property name="QuestExPath">${logPath}/$${date:dd-MM-yyyy}/quests/$${ctx:SCRIPT}.log</Property>
+    <Property name="ReactorExPath">${logPath}/$${date:dd-MM-yyyy}/reactors/$${ctx:SCRIPT}.log</Property>
+    <Property name="PacketEditExPath">${logPath}/$${date:dd-MM-yyyy}/packetedit/$${ctx:SCRIPT}.log</Property>
+    <Property name="PacketHandlerExPath">${logPath}/$${date:dd-MM-yyyy}/handlers/$${ctx:HANDLER}.log</Property>
+  </Properties>
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss} [ %-5level] - %msg%n"/>
+    </Console>
+    <RollingRandomAccessFile name="ConsoleLog" fileName="${logPath}/console.log" filePattern="${logPath}/%d{dd-MM-yyyy}/console-%i.log">
+      <PatternLayout>
+        <Pattern>%d{HH:mm:ss} [ %-5level] - %msg%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        <OnStartupTriggeringPolicy />
+        <TimeBasedTriggeringPolicy />
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+    </RollingRandomAccessFile>
+    <RollingRandomAccessFile name="SessionsLog" fileName="${logPath}/sessions.log" filePattern="${logPath}/%d{dd-MM-yyyy}/sessions-%i.log">
+      <PatternLayout>
+        <Pattern>%d{HH:mm:ss} - %msg%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        <OnStartupTriggeringPolicy />
+        <TimeBasedTriggeringPolicy />
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+    </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="SqlLog" fileName="${logPath}/SqlLog.log" filePattern="${logPath}/%d{dd-MM-yyyy}/sessions-%i.log">
+      <PatternLayout>
+        <Pattern>%d{HH:mm:ss} - %msg%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        <OnStartupTriggeringPolicy />
+        <TimeBasedTriggeringPolicy />
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+    </RollingRandomAccessFile>
+    <RollingRandomAccessFile name="GMCallLog" fileName="${logPath}/gm.log" filePattern="${logPath}/%d{dd-MM-yyyy}/gm-%i.log">
+      <PatternLayout>
+        <Pattern>%d{HH:mm:ss} - %msg%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        <OnStartupTriggeringPolicy />
+        <TimeBasedTriggeringPolicy />
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+    </RollingRandomAccessFile>
+    <RollingRandomAccessFile name="BugReportLog" fileName="${logPath}/bugs.log" filePattern="${logPath}/%d{dd-MM-yyyy}/bugs-%i.log">
+      <PatternLayout>
+        <Pattern>%d{HH:mm:ss} - %msg%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        <OnStartupTriggeringPolicy />
+        <TimeBasedTriggeringPolicy />
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+    </RollingRandomAccessFile>
+    <RollingRandomAccessFile name="CommandLog" fileName="${logPath}/commands.log" filePattern="${logPath}/%d{dd-MM-yyyy}/commands-%i.log">
+      <PatternLayout>
+        <Pattern>%d{HH:mm:ss} - %msg%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        <OnStartupTriggeringPolicy />
+        <TimeBasedTriggeringPolicy />
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+    </RollingRandomAccessFile>
+    <RollingRandomAccessFile name="UncodedLog" fileName="${logPath}/uncoded.log" filePattern="${logPath}/%d{dd-MM-yyyy}/uncoded-%i.log">
+      <PatternLayout>
+        <Pattern>%d{HH:mm:ss} - %msg%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        <OnStartupTriggeringPolicy />
+        <TimeBasedTriggeringPolicy />
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+    </RollingRandomAccessFile>
+    <RollingRandomAccessFile name="GachaponLog" fileName="${logPath}/gachapon.log" filePattern="${logPath}/%d{dd-MM-yyyy}/gachapon-%i.log">
+      <PatternLayout>
+        <Pattern>%d{HH:mm:ss} - %msg%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        <OnStartupTriggeringPolicy />
+        <TimeBasedTriggeringPolicy />
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+    </RollingRandomAccessFile>
+	<RollingRandomAccessFile name="ExceptionLog" fileName="${logPath}/exceptions.log" filePattern="${logPath}/%d{dd-MM-yyyy}/exceptions-%i.log">
+      <PatternLayout>
+        <Pattern>%d{HH:mm:ss} - %msg%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        <OnStartupTriggeringPolicy />
+        <TimeBasedTriggeringPolicy />
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+    </RollingRandomAccessFile>
+    <Routing name="NpcExLog">
+      <Routes pattern="$${ctx:SCRIPT}">
+        <Route>
+          <RollingRandomAccessFile name="Rolling-$${ctx:SCRIPT}" fileName="${NpcExPath}" filePattern="${logPath}/%d{dd-MM-yyyy}/npcs/$${ctx:SCRIPT}-%i.log">
+            <PatternLayout>
+              <Pattern>%d{HH:mm:ss} - $${ctx:SCRIPT} %msg%n%ex{full}</Pattern>
+            </PatternLayout>
+            <Policies>
+              <OnStartupTriggeringPolicy />
+              <TimeBasedTriggeringPolicy />
+              <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+          </RollingRandomAccessFile>
+        </Route>
+      </Routes>  
+    </Routing>
+    <Routing name="MapExLog">
+      <Routes pattern="$${ctx:SCRIPT}">
+        <Route>
+          <RollingRandomAccessFile name="Rolling-$${ctx:SCRIPT}" fileName="${MapExPath}" filePattern="${logPath}/%d{dd-MM-yyyy}/maps/$${ctx:SCRIPT}-%i.log">
+            <PatternLayout>
+              <Pattern>%d{HH:mm:ss} - $${ctx:SCRIPT} %msg%n%ex{full}</Pattern>
+            </PatternLayout>
+            <Policies>
+              <OnStartupTriggeringPolicy />
+              <TimeBasedTriggeringPolicy />
+              <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+          </RollingRandomAccessFile>
+        </Route>
+      </Routes>  
+    </Routing>
+    <Routing name="PortalExLog">
+      <Routes pattern="$${ctx:SCRIPT}">
+        <Route>
+          <RollingRandomAccessFile name="Rolling-$${ctx:SCRIPT}" fileName="${PortalExPath}" filePattern="${logPath}/%d{dd-MM-yyyy}/portals/$${ctx:SCRIPT}-%i.log">
+            <PatternLayout>
+              <Pattern>%d{HH:mm:ss} - $${ctx:SCRIPT} %msg%n%ex{full}</Pattern>
+            </PatternLayout>
+            <Policies>
+              <OnStartupTriggeringPolicy />
+              <TimeBasedTriggeringPolicy />
+              <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+          </RollingRandomAccessFile>
+        </Route>
+      </Routes>  
+    </Routing>
+    <Routing name="QuestExLog">
+      <Routes pattern="$${ctx:SCRIPT}">
+        <Route>
+          <RollingRandomAccessFile name="Rolling-$${ctx:SCRIPT}" fileName="${QuestExPath}" filePattern="${logPath}/%d{dd-MM-yyyy}/quests/$${ctx:SCRIPT}-%i.log">
+            <PatternLayout>
+              <Pattern>%d{HH:mm:ss} - $${ctx:SCRIPT} %msg%n%ex{full}</Pattern>
+            </PatternLayout>
+            <Policies>
+              <OnStartupTriggeringPolicy />
+              <TimeBasedTriggeringPolicy />
+              <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+          </RollingRandomAccessFile>
+        </Route>
+      </Routes>  
+    </Routing>
+    <Routing name="ReactorExLog">
+      <Routes pattern="$${ctx:SCRIPT}">
+        <Route>
+          <RollingRandomAccessFile name="Rolling-$${ctx:SCRIPT}" fileName="${ReactorExPath}" filePattern="${logPath}/%d{dd-MM-yyyy}/reactors/$${ctx:SCRIPT}-%i.log">
+            <PatternLayout>
+              <Pattern>%d{HH:mm:ss} - $${ctx:SCRIPT} %msg%n%ex{full}</Pattern>
+            </PatternLayout>
+            <Policies>
+              <OnStartupTriggeringPolicy />
+              <TimeBasedTriggeringPolicy />
+              <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+          </RollingRandomAccessFile>
+        </Route>
+      </Routes>  
+    </Routing>
+    <Routing name="AntiHackExLog">
+      <Routes pattern="$${ctx:SCRIPT}">
+        <Route>
+          <RollingRandomAccessFile name="Rolling-$${ctx:SCRIPT}" fileName="${PacketEditExPath}" filePattern="${logPath}/%d{dd-MM-yyyy}/packetedit/$${ctx:SCRIPT}-%i.log">
+            <PatternLayout>
+              <Pattern>%d{HH:mm:ss} - $${ctx:SCRIPT} %msg%n%ex{full}</Pattern>
+            </PatternLayout>
+            <Policies>
+              <OnStartupTriggeringPolicy />
+              <TimeBasedTriggeringPolicy />
+              <SizeBasedTriggeringPolicy size="3 MB" />
+            </Policies>
+          </RollingRandomAccessFile>
+        </Route>
+      </Routes>  
+    </Routing>
+    <Routing name="PacketHandlerExLog">
+      <Routes pattern="$${ctx:HANDLER}">
+        <Route>
+          <RollingRandomAccessFile name="Rolling-$${ctx:HANDLER}" fileName="${PacketHandlerExPath}" filePattern="${logPath}/%d{dd-MM-yyyy}/handlers/$${ctx:HANDLER}-%i.log">
+            <PatternLayout>
+              <Pattern>%d{HH:mm:ss} - $${ctx:HANDLER} %msg%n%ex{full}</Pattern>
+            </PatternLayout>
+            <Policies>
+              <OnStartupTriggeringPolicy />
+              <TimeBasedTriggeringPolicy />
+              <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+          </RollingRandomAccessFile>
+        </Route>
+      </Routes>  
+    </Routing>
+  </Appenders>
+  <Loggers>
+    <Root level="trace">
+      <AppenderRef ref="Console"/>
+    </Root>
+    <Logger name="general" level="info"/>
+    <Logger name="general.console" level="info">
+        <AppenderRef ref="ConsoleLog"/>
+    </Logger>
+    <Logger name="general.sql" level="info">
+        <AppenderRef ref="SqlLog"/>
+    </Logger>    
+    <Logger name="general.sessions" level="info">
+        <AppenderRef ref="SessionsLog"/>
+    </Logger>
+	<Logger name="general.exception" level="info">
+		<AppenderRef ref="ExceptionLog"/>
+	</Logger>
+    <Logger name="errors.uncoded" level="info" additivity="false">
+        <AppenderRef ref="UncodedLog"/>
+    </Logger>
+    <Logger name="staff.gmcall" level="info" additivity="false">
+        <AppenderRef ref="GMCallLog"/>
+    </Logger>
+    <Logger name="players.gachapon" level="info" additivity="false">
+        <AppenderRef ref="GachaponLog" />
+    </Logger>
+    <Logger name="staff.bugreport" level="info">
+        <AppenderRef ref="BugReportLog"/>
+    </Logger>
+    <Logger name="staff.commands" level="info" additivity="false">
+        <AppenderRef ref="CommandLog"/>
+    </Logger>
+    <Logger name="errors.npc" level="info">
+      <AppenderRef ref="NpcExLog" />
+    </Logger>
+    <Logger name="errors.map" level="info">
+      <AppenderRef ref="MapExLog" />
+    </Logger>
+    <Logger name="errors.quest" level="info">
+      <AppenderRef ref="QuestExLog" />
+    </Logger>
+    <Logger name="errors.portal" level="info">
+      <AppenderRef ref="PortalExLog" />
+    </Logger>
+    <Logger name="errors.reactor" level="info">
+      <AppenderRef ref="ReactorExLog" />
+    </Logger>
+    <Logger name="antihack.packetedit" level="warn">
+      <AppenderRef ref="AntiHackExLog" />
+    </Logger>
+    <Logger name="antihack.throttle" level="warn">
+      <AppenderRef ref="AntiHackExLog" />
+    </Logger>
+    <Logger name="errors.packethandler" level="info" additivity="false">
+      <AppenderRef ref="PacketHandlerExLog" />
+    </Logger>
+        <Logger name="errors.invocable" level="info" additivity="false">
+      <AppenderRef ref="ExceptionLog" />
+    </Logger>
+  </Loggers>
+</Configuration>
