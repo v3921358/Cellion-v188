@@ -117,6 +117,7 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserMagicAttack.getValue()] = new MagicAttack();
         handlers[RecvPacketOpcode.UserSkillUseRequest.getValue()] = new SpecialAttackMove();
         handlers[RecvPacketOpcode.UserBodyAttack.getValue()] = new PassiveEnergyCloseRangeAttack();
+        handlers[RecvPacketOpcode.UserFinalAttackRequest.getValue()] = new FinalAttackHandler();
         //Monsterbook handlers
         handlers[RecvPacketOpcode.GET_BOOK_INFO.getValue()] = new MonsterBookInfoRequest();
         handlers[RecvPacketOpcode.MONSTER_BOOK_DROPS.getValue()] = new MonsterBookDropsRequest();

@@ -18,9 +18,17 @@ import constants.InventoryConstants;
 import constants.MapConstants;
 import constants.ServerConstants;
 import constants.skills.Aran;
+import constants.skills.Bowmaster;
+import constants.skills.Crossbowman;
+import constants.skills.Fighter;
+import constants.skills.Hero;
+import constants.skills.Hunter;
 import constants.skills.NightWalker;
-import constants.skills.Xenon;
-import constants.skills.Kinesis;
+import constants.skills.Mercedes;
+import constants.skills.Mihile;
+import constants.skills.Page;
+import constants.skills.Spearman;
+import constants.skills.WildHunter;
 import constants.skills.Zero;
 import database.DatabaseConnection;
 import database.DatabaseException;
@@ -63,7 +71,6 @@ import tools.packet.JobPacket.AvengerPacket;
 import tools.packet.JobPacket.LuminousPacket;
 import tools.packet.JobPacket.PhantomPacket;
 import tools.packet.JobPacket.XenonPacket;
-import tools.packet.JobPacket.KinesisPacket;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -82,7 +89,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import scripting.NPCConversationManager;
 import server.skills.VMatrixRecord;
 
 public class MapleCharacter extends AnimatedMapleMapObject implements Serializable, MapleCharacterLook {
@@ -7002,6 +7008,60 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         }
         return false;
 
+    }
+
+    public int getFinalAttackSkill() {
+        int nSkill = 0;
+        if (GameConstants.isAran(job)) {
+            if (hasSkill(Aran.ADVANCED_FINAL_ATTACK)) {
+                nSkill = Aran.ADVANCED_FINAL_ATTACK;
+            } else if (hasSkill(Aran.FINAL_ATTACK)) {
+                nSkill = Aran.FINAL_ATTACK;
+            }
+        } else if (GameConstants.isMihile(job)) {
+            if (hasSkill(Mihile.ADVANCED_FINAL_ATTACK)) {
+                nSkill = Mihile.ADVANCED_FINAL_ATTACK;
+            } else if (hasSkill(Mihile.FINAL_ATTACK)) {
+                nSkill = Mihile.FINAL_ATTACK;
+            }
+        } else if (GameConstants.isWildHunter(job)) {
+            if (hasSkill(WildHunter.ADVANCED_FINAL_ATTACK)) {
+                nSkill = WildHunter.ADVANCED_FINAL_ATTACK;
+            } else if (hasSkill(WildHunter.FINAL_ATTACK)) {
+                nSkill = WildHunter.FINAL_ATTACK;
+            }
+        } else if (GameConstants.isMercedes(job)) {
+            if (hasSkill(Mercedes.ADVANCED_FINAL_ATTACK)) {
+                nSkill = Mercedes.ADVANCED_FINAL_ATTACK;
+            } else if (hasSkill(Mercedes.FINAL_ATTACK_DUAL_BOWGUNS)) {
+                nSkill = Mercedes.FINAL_ATTACK_DUAL_BOWGUNS;
+            }
+        } else if (GameConstants.isWarriorHero(job)) {
+            if (hasSkill(Hero.ADVANCED_FINAL_ATTACK)) {
+                nSkill = Hero.ADVANCED_FINAL_ATTACK;
+            } else if (hasSkill(Fighter.FINAL_ATTACK)) {
+                nSkill = Fighter.FINAL_ATTACK;
+            }
+        } else if (GameConstants.isWarriorPaladin(job)) {
+            if (hasSkill(Page.FINAL_ATTACK)) {
+                nSkill = Page.FINAL_ATTACK;
+            }
+        } else if (GameConstants.isWarriorDarkKnight(job)) {
+            if (hasSkill(Spearman.FINAL_ATTACK)) {
+                nSkill = Spearman.FINAL_ATTACK;
+            }
+        } else if (GameConstants.isArcherBowmaster(job)) {
+            if (hasSkill(Bowmaster.ADVANCED_FINAL_ATTACK)) {
+                nSkill = Bowmaster.ADVANCED_FINAL_ATTACK;
+            } else if (hasSkill(Hunter.FINAL_ATTACK_BOW)) {
+                nSkill = Hunter.FINAL_ATTACK_BOW;
+            }
+        } else if (GameConstants.isArcherMarksman(job)) {
+            if (hasSkill(Crossbowman.FINAL_ATTACK_CROSSBOW)) {
+                nSkill = Crossbowman.FINAL_ATTACK_CROSSBOW;
+            }
+        }
+        return nSkill;
     }
 
     public static enum FameStatus {

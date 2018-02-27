@@ -1847,6 +1847,10 @@ public class BuffPacket {
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.ZeroAuraSpd)) {//ZeroAuraSpd
             oPacket.Encode(0);
         }
+        
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.CriticalGrowing)) {//CriticalGrowing
+            oPacket.EncodeInteger(0);
+        }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.ArmorPiercing)) {//ArmorPiercing
             oPacket.EncodeInteger(0);

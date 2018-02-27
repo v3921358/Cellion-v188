@@ -31,6 +31,7 @@ import java.util.List;
 import service.RecvPacketOpcode;
 import tools.packet.CField;
 import tools.packet.JobPacket;
+import tools.packet.MobPacket;
 
 public class DamageParse {
 
@@ -244,6 +245,31 @@ public class DamageParse {
 
                 if (pPlayer.getBuffedValue(CharacterTemporaryStat.PickPocket) != null) {
                     handlePickPocket(pPlayer, monster, oned);
+                }
+                
+                /*
+                 *  Final Attack Handling
+                 *  @author Mazen
+                 * 
+                 *  @purpose Handle Final Attack system without the need for the packet. 
+                 */
+                if (pPlayer.hasSkill(pPlayer.getFinalAttackSkill())) {
+                    // TODO: Handle nPropChance and nDamage based on skill level.
+                    int nPropChance = 30;
+                    long nFinalAttackDamage = (long) (totDamageToOneMonster * 0.2);
+                    for (AttackMonster pAttack : attack.allDamage) {
+                        if (Randomizer.nextInt(100) < nPropChance) {
+                            //pPlayer.getClient().write(CField.finalAttackRequest(pPlayer, attack.skill, pPlayer.getFinalAttackSkill(), 0, monster.getId(), (int) System.currentTimeMillis()));
+                            new java.util.Timer().schedule(new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    monster.damage(pPlayer, nFinalAttackDamage, true, pPlayer.getFinalAttackSkill());
+                                    pPlayer.getClient().write(MobPacket.showMonsterHP(monster.getObjectId(), monster.getHPPercent()));
+                                    cancel();
+                                }
+                            }, 500); // 0.5 Second Delay
+                        }
+                    }
                 }
 
                 // Additional Skill Monster Status Handling

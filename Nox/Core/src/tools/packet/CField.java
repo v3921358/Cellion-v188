@@ -141,6 +141,7 @@ public class CField {
 
     public static Packet finalAttackRequest(MapleCharacter pPlayer, int nSkill, int nFinalSkill, int nDelay, int nMob, int nRequestTime, boolean bLeft, Point pBase) {
         OutPacket oPacket = new OutPacket(80);
+        oPacket.EncodeShort(SendPacketOpcode.UserFinalAttackRequest.getValue());
 
         oPacket.EncodeInteger(nSkill); // nSkillId
         oPacket.EncodeInteger(nFinalSkill); // nFinalSkillId
