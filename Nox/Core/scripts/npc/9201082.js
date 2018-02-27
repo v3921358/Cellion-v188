@@ -1,192 +1,279 @@
 /*
+ *Rexion Crafting NPC
+ *@author Arcas
+ */
 
-REXION - Equipment Shop 
-@Author: Mazen
+//Setup for the store
+//Tyrant
+var tyrantType = [1072743, 1102481, 1132174, 1082543];
+var tyrantBoots = [1072743, 1072744, 1072745, 1072746, 1072747]; //70 coins
+var tyrantCapes = [1102481, 1102482, 1102483, 1102484, 1102485]; //70 coins
+var tyrantBelts = [1132174, 1132175, 1132176, 1132177, 1132178]; //100 coins
+var tyrantGloves = [1082543, 1082544, 1082545, 1082546, 1082547]; //500 coins
+//Pearl
+var pearlEqp = [1003864, 1052613, 1102563, 1012377, 1132229, 1122253];
+var pearlWep = [1302278, 1212067, 1222062, 1232061, 1242066, 1252065, 1312156, 1322206, 1332228, 1472030, 1362093, 1372180, 1382212, 1402200, 1412138, 1422143, 1432170, 1442226, 1452208, 1462196, 1472217, 1482171, 1492182, 1522097, 1532101, 1542069, 1552069];
+//Onyx
+var onyxRing = [1113034];
+var onyxEqp = [1003863, 1052612, 1102562, 1012376, 1132228, 1122252];
+var onyxWep = [1302277, 1212066, 1222061, 1232060, 1242065, 1252064, 1312155, 1322205, 1332227, 1352825, 1362092, 1372179, 1382211, 1402199, 1412137, 1422142, 1432169, 1442225, 1452207, 1462195, 1472216, 1472216, 1492181, 1522096, 1532100, 1542070, 1552070];
+//Fafnir
+var fafnirEqp = [1042254, 1062165, 1003797, 1042255, 1062166, 1003798, 1042256, 1062167, 1003799, 1042257, 1062168, 1003800, 1042258, 1062169, 10038001];
+var fafnirWeapons = [1212063, 1222058, 1232057, 1242060, 1242061, 1252015, 1262016, 1302275, 1312153, 1322203, 133225, 1342082, 1362090, 1372177, 1382208, 1402196, 141215, 422140, 1432167, 1442223, 1452205, 1462193, 1472214, 1482168, 1492179, 1522094, 1532098, 1542063, 1552063, 1582016];
 
-*/
-var status = 0;
+var craftOptions = ["Lv. 30 Pearl Equipment and Accessories", "Lv. 30 Pearl Weapon", "Lv. 100 Onyx Equipment and Accessories", "Lv. 100 Onyx Weapon", "Lv. 100 Onyx Ring", "Lv. 150 Fafnir Equipment", "Lv. 150 Fafnir Weapon", "Lv. 150 Tyrant Equipment"];
 
-
-//Setup the data you would like your shop to contain below 
-var itemOptions = ["Lv. 120 Timeless Gear", 
-					"Lv. 150 Fafnir Gear",
-					"Lv. 160 Sweetwater Gear\r\n",
-					"Lv. 120 Timeless Weapons", 
-					"Lv. 150 Fafnir Weapons",
-					"Lv. 160 Sweetwater Weapons"];
-					
-var leafId = 4001126;
-var extraCostId_1 = 4001126; // Golden Maple Leaf
-var extraCostId_2 = 4001126;  // Maple Leaf Gold
-					
-var leafCost = [1000, 1500, 5000, 2500, 3000, 10000];  //Format for leafCost [caps, tops, bottoms, gloves, boots, longcoats, cloaks, weapons] 
-var extraCost_1 = [1000, 1000, 1000, 1000, 1000, 1000];
-var extraCost_2 = [1000, 1000, 1000, 1000, 1000, 1000];
-
-var lv120_Gear = [1003976];
-var lv150_Gear = [1003976];
-var lv160_Gear = [1003976];
-
-var lv120_Weapon = [1003976];
-var lv150_Weapon = [1003976];
-var lv160_Weapon = [1003976];
-
-var itemCategory; 
-var shopText;
-
+var textBox = "";
+var j = 0;
 
 function start() {
 	ml = 4001126;
-    cm.sendNext("Welcome to the #dREXION#k Equip.\r\nHere you can find all the rarest Maple Items.\r\n\r\n#rYou'll need Maple Leaves that you collect around REXION!");
-	status = -1;   
+    cm.sendNext("Welcome to the #dREXION#k Blacksmith Service.\r\nHere you can craft all the rarest sets for your adventure!\r\n\r\n#rYou'll need various currencies that you can collect around the Maple World to start crafting.");
+	status = -1;
 }
 
-function action(mode, type, selection) {
+
 	
-   if (mode == -1) {
-        cm.dispose();
-    } else {
-        if (mode == 0) {
-            cm.sendNext("Thank you for stopping by!");
+
+
+function action(mode, type, selection){
+	if (mode == 1) {
+		status++;
+	} else {
+		if (status == 0){
+			cm.sendNextS("Enjoy your adventure.", 5);
             cm.dispose();
-            return;
-        }
-   
-   if (mode == 1)
-            status++;
-        else
-            status--;
-   
-   //First NPC message to user, lists types and leafCost. User chooses category
-   if(status == 0){
-	   introText = "Welcome to the #dREXION#k Equipment Forge!\r\n"
-				+ "What would you like to forge?#r";
-	   for(var i = 0; i < itemOptions.length; i++){
-		introText += "\r\n#L" + i + "#" + itemOptions[i] + "#l";  
-	   }
-	   cm.sendSimple(introText);
-	  
-	//Lists the available items in each category, user chooses which item to recieve
-   } else if(status == 1) { 
-	   itemCategory = selection;  //save user-chosen category for status #2
-	   
-			if (selection == 0) {
-                shopText = "If you're interested in forging #d" + itemOptions[itemCategory] + "#k, you're going to need #r" + leafCost[itemCategory] + " Maple Leaves#k and #r" + extraCost_1[itemCategory] + " Golden Maple Leaves#k to cover the cost of materials. What would you like to forge?";  
-                for (var j = 0; j < lv120_Gear.length; j++)
-                  shopText += "\r\n#L" + j + "#" + "#v" + lv120_Gear[j] + "# - #t" + lv120_Gear[j] + "# #l";
-                    cm.sendSimple(shopText);
-            } else if (selection == 1) { 
-                shopText = "If you're interested in forging #d" + itemOptions[itemCategory] + "#k, you're going to need #r" + leafCost[itemCategory] + " Maple Leaves#k and #r" + extraCost_1[itemCategory] + " Golden Maple Leaves#k to cover the cost of materials. What would you like to forge?";
-                for (var j = 0; j < lv150_Gear.length; j++)
-                  shopText += "\r\n#L" + j + "#" + "#v" + lv150_Gear[j] + "# - #t" + lv150_Gear[j] + "# #l";
-                    cm.sendSimple(shopText);
-            } else if (selection == 2) {
-                shopText = "If you're interested in forging #d" + itemOptions[itemCategory] + "#k, you're going to need #r" + leafCost[itemCategory] + " Maple Leaves#k and #r" + extraCost_1[itemCategory] + " Golden Maple Leaves#k and #r" + extraCost_2[itemCategory] + " Maple Leaf Gold#k to cover the cost of materials. What would you like to forge?";
-                for (var j = 0; j < lv160_Gear.length; j++)
-                  shopText += "\r\n#L" + j + "#" + "#v" + lv160_Gear[j] + "# - #t" + lv160_Gear[j] + "# #l";
-                    cm.sendSimple(shopText);
-            } else if (selection == 3) {
-                shopText = "If you're interested in forging #d" + itemOptions[itemCategory] + "#k, you're going to need #r" + leafCost[itemCategory] + " Maple Leaves#k and #r" + extraCost_1[itemCategory] + " Golden Maple Leaves#k to cover the cost of materials. What would you like to forge?";
-                for (var j = 0; j < lv120_Weapon.length; j++)
-                  shopText += "\r\n#L" + j + "#" + "#v" + lv120_Weapon[j] + "# - #t" + lv120_Weapon[j] + "# #l";
-                    cm.sendSimple(shopText);
-            } else if (selection == 4) {
-                shopText = "If you're interested in forging #d" + itemOptions[itemCategory] + "#k, you're going to need #r" + leafCost[itemCategory] + " Maple Leaves#k and #r" + extraCost_1[itemCategory] + " Golden Maple Leaves#k to cover the cost of materials. What would you like to forge?"; 
-                for (var j = 0; j < lv150_Weapon.length; j++)
-                  shopText += "\r\n#L" + j + "#" + "#v" + lv150_Weapon[j] + "# - #t" + lv150_Weapon[j] + "# #l";
-                    cm.sendSimple(shopText);
-            } else if (selection == 5) {
-                shopText = "If you're interested in forging #d" + itemOptions[itemCategory] + "#k, you're going to need #r" + leafCost[itemCategory] + " Maple Leaves#k, #r" + extraCost_1[itemCategory] + " Golden Maple Leaves#k and #r" + extraCost_2[itemCategory] + " Maple Leaf Gold#k to cover the cost of materials. What would you like to forge?"; 
-                for (var j = 0; j < lv160_Weapon.length; j++)
-                  shopText += "\r\n#L" + j + "#" + "#v" + lv160_Weapon[j] + "# - #t" + lv160_Weapon[j] + "# #l";
-                    cm.sendSimple(shopText);
-			} 
-	   
-	   
-   } else if(status == 2) {
-			
-			if (itemCategory == 0){
-				if (cm.haveItem(leafId, leafCost[itemCategory])){
-                    cm.gainItem(leafId, -(leafCost[itemCategory]));
-                    cm.gainItem(lv120_Gear[selection], 1);
-                    cm.sendOk("Thank you for your purchase.\r\nEnjoy your new #i" + lv120_Gear[selection] + "# !");
-                } else {
-                    cm.sendYesNo("Sorry, you do not have enough #bmesos#k or #bmaple leaves#k! Would you like to forge another item?");
-                }
-            } else if (itemCategory == 1) {
-                if (cm.haveItem(ml, leafCost[1]) && (cm.getMeso() >= mesoPrices[1])){
-                    cm.gainItem(ml, -(leafCost[1]));
-					cm.gainMeso(-(mesoPrices[1]));
-                    cm.gainItem(pearlWep[selection], 1);
-                    cm.sendOk("Thank you for your purchase.\r\nEnjoy your new #i"+pearlWep[selection]+"# !");
-                } else {
-                    cm.sendOk("Sorry, you do not have enough #bmesos#k or #bmaple leaves#k!");
-                }
-            } else if (itemCategory == 2){
-                if (cm.haveItem(ml, leafCost[2]) && (cm.getMeso() >= mesoPrices[2])){
-                    cm.getPlayer().gainItem(ml, -(leafCost[2]));
-					cm.gainMeso(-(mesoPrices[2]));
-                    cm.gainItem(pearlPend[selection], 1);
-                    cm.sendOk("Thank you for your purchase.\r\nEnjoy your new #i"+pearlPend[selection]+"# !");
-                } else {
-                    cm.sendOk("Sorry, you do not have enough #bmesos#k or #bmaple leaves#k!");
-                }
-            } else if (itemCategory == 3) {
-                if (cm.haveItem(ml, leafCost[3]) && (cm.getMeso() >= mesoPrices[3]) && cm.haveItem(pearlEqp[selection], 1)){
-                    cm.gainItem(ml, -(leafCost[3]));
-					cm.gainMeso(-(mesoPrices[3]));
-                    cm.gainItem(onyxEqp[selection], 1);
-					cm.gainItem(pearlEqp[selection], -1);
-                    cm.sendOk("Thank you for your purchase.r\nEnjoy your new #i"+onyxEqp[selection]+"# !");
-                } else {
-                    cm.sendOk("Sorry, you do not have enough #bmesos#k or #bmaple leaves#k!\r\nRemember that the #rPearl Maple#k version of the item is required.");
-                }
-            } else if (itemCategory == 4) {
-                if (cm.haveItem(ml, leafCost[4]) && (cm.getMeso() >= mesoPrices[4]) && cm.haveItem(pearlWep[selection], 1)){
-                    cm.gainItem(ml, -(leafCost[4]));
-					cm.gainMeso(-(mesoPrices[4]));
-                    cm.gainItem(onyxWep[selection], 1);
-					cm.gainItem(pearlWep[selection], -1);
-                    cm.sendOk("Thank you for your purchase.\r\nEnjoy your new #i"+onyxWep[selection]+"# !");
-                } else {
-                    cm.sendOk("Sorry, you do not have enough #bmesos#k or #bmaple leaves#k!\r\nRemember that the #rPearl Maple#k version of the item is required.");
-                }
-            } else if (itemCategory == 5) {
-                if (cm.haveItem(ml, leafCost[5]) && (cm.getMeso() >= mesoPrices[5]) && cm.haveItem(pearlPend[selection], 1)){
-                    cm.gainItem(ml, -(leafCost[5]));
-					cm.gainMeso(-(mesoPrices[5]));
-                    cm.gainItem(onyxPend[selection], 1);
-					cm.gainItem(pearlPend[selection], -1);
-                    cm.sendOk("Thank you for your purchase.\r\nEnjoy your new #i"+onyxPend[selection]+"# !");
-                } else {
-                    cm.sendOk("Sorry, you do not have enough #bmesos#k or #bmaple leaves#k!\r\nRemember that the #rPearl Maple#k version of the item is required.");
-                }
-			} else if (itemCategory == 6) {
-                if (cm.haveItem(ml, leafCost[6]) && (cm.getMeso() >= mesoPrices[6])){
-                    cm.gainItem(ml, -(leafCost[6]));
-					cm.gainMeso(-(mesoPrices[6]));
-                    cm.gainItem(onyxRing[selection], 1);
-                    cm.sendOk("Thank you for your purchase.\r\nEnjoy your new #i"+onyxRing[selection]+"# !");
-                } else {
-                    cm.sendOk("Sorry, you do not have enough #bmesos#k or #bmaple leaves#k!");
-                }
-            } else if (itemCategory == 7) {
-                if (dp >= leafCost[7]){
-                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - leafCost[7]);
-                    cm.gainItem(weapons[selection], 1);
-                    cm.sendOk("Thank you for supporting #dREXION#k.\r\nEnjoy your new #i"+weapons[selection]+"# !");
-                } else {
-                    cm.sendOk ("Sorry, you do not have enough donor points!");
-                }
-            } 
-			
-            cm.dispose();
-			
-        } else if (status == 3) {
-			cm.dispose();
-			cm.openNpc(9201082);
 		}
-		
+        status -= 1;
 	}
-	 
+	//First NPC message to user, lists types and prices. User chooses category
+	if (status == 0){
+		textBox = "Welcome to the #dREXION#k Blacksmith Service!\r\n"
+				+ "Exchange #bMesos#k or #bNX#k and #bCurrencies#k for powerful items!\r\n"
+				+ "What would you like to forge today?\r\n#r";
+	   for (j = 0; j < craftOptions.length; j++ )
+		textBox += "\r\n#L" + j + "#" + craftOptions[j] + "#l";
+	   cm.sendSimple(textBox);
+	//Message that appears when the user chooses an option. List all the items in the category. User chooses the item
+	} else if (status == 1){
+		switch(selection){
+			//Pearl Equipment
+			case 0:
+				textBox = "Pearl Equipment cost #b1000#k #i4001126##t4001126# and #b2,000,000 mesos#k.\r\nWhat would you like to craft?\r\n";
+				for (j = 0; j < pearlEqp.length; j++)
+					textBox += "\r\n#L" + j + "#" +  "#v" + pearlEqp[j] + "##t" + pearlEqp[j] + "##l";
+				cm.sendSimple(textBox);
+				break;
+			//Pearl Weapon
+			case 1:
+				textBox = "Pearl Weapon cost #b1000#k #i4001126##t4001126# and #b2,000,000 mesos#k.\r\nWhat would you like to craft?\r\n";
+				for (j = 0; j < pearlWep.length; j++)
+					textBox += "\r\n#L" + (100 + j) + "#" +  "#v" + pearlWep[j] + "##t" + pearlWep[j] + "##l";
+				cm.sendSimple(textBox);
+				break;
+			//Onyx Equipment
+			case 2:
+				textBox = "Onyx Equipment cost #b2500#k #i4001126##t4001126# and #b10,000,000 mesos#k.\r\nWhat would you like to craft?\r\n";
+				for (j = 0; j < onyxEqp.length; j++)
+					textBox += "\r\n#L" + (200 + j) + "#" +  "#v" + onyxEqp[j] + "##t" + onyxEqp[j] + "##l";
+				cm.sendSimple(textBox);
+				break;
+			//Onyx Weapon
+			case 3:
+				textBox = "Onyx Weapon cost #b2500#k #i4001126##t4001126# and #b10,000,000 mesos#k.\r\nWhat would you like to craft?\r\n";
+				for (j = 0; j < onyxWep.length; j++)
+					textBox += "\r\n#L" + (300 + j) + "#" +  "#v" + onyxWep[j] + "##t" + onyxWep[j] + "##l";
+				cm.sendSimple(textBox);
+				break;
+			//Onyx Ring
+			case 4:
+				textBox = "Onyx Ring cost #10,000#k #i4001126##t4001126# and #b15,000,000 mesos#k.\r\nWould you like to craft it?\r\n";
+				for (j = 0; j < onyxRing.length; j++)
+					textBox += "\r\n#L" + (400 + j) + "#" +  "#v" + onyxRing[j] + "##t" + onyxRing[j] + "##l";
+				cm.sendSimple(textBox);
+				break;
+			//Fafnir Equipment
+			case 5: 
+				textBox = "Fafnir Equipment cost #b10#k #i4310064##t4310064#, #b10#k #i4310065##t4310065# and #b4#k #i4430000##t4430000##k.\r\nWhat would you like to craft?\r\n";
+				for (j = 0; j < fafnirEqp.length; j++)
+					textBox += "\r\n#L" + (500 + j) + "#" +  "#v" + fafnirEqp[j] + "##t" + fafnirEqp[j] + "##l";
+				cm.sendSimple(textBox);
+				break;
+			//Fafnir Weapon
+			case 6:
+				textBox = "Fafnir Weapon cost #b20#k #i4310064##t4310064#, #b20#k #i4310065##t4310065# and #b6#k #i4430000##t4430000##k.\r\nWhat would you like to craft?\r\n";
+				for (j = 0; j < fafnirWeapons.length; j++){
+					if (fafnirWeapons[j] != 1242060 && fafnirWeapons[j] != 1242061){
+						textBox += "\r\n#L" + j + "#" +  "#v" + fafnirWeapons[j] + "##t" + fafnirWeapons[j] + "##l";
+					} else if (fafnirWeapons[j] == 1242060) {
+						textBox += "\r\n#L" + j + "#" +  "#v" + fafnirWeapons[j] + "##t" + fafnirWeapons[j] + "(Thief)##l";
+					} else {
+						textBox += "\r\n#L" + j + "#" +  "#v" + fafnirWeapons[j] + "##t" + fafnirWeapons[j] + "#(Pirate)#l";
+					}
+				}
+				cm.sendSimple(textBox);
+				break;
+			//Tyrant Equipment
+			case 7:
+				textBox = "Please choose what type of Tyrant you would like to craft.\r\n";
+				textBox += "\r\n#L" + (700 + 0) + "#" +  "#v" + tyrantType[0] + "##bShoes#k#l";
+				textBox += "\r\n#L" + (700 + 1) + "#" +  "#v" + tyrantType[1] + "##bCape#k#l";
+				textBox += "\r\n#L" + (700 + 2) + "#" +  "#v" + tyrantType[2] + "##bBelt#k#l";
+				textBox += "\r\n#L" + (700 + 3) + "#" +  "#v" + tyrantType[3] + "##bGloves#k#l";
+				cm.sendSimple(textBox);
+				break;
+		}
+	} else if (status == 2){
+		//Pearl Equipment & Weapon
+		if (selection >= 0 && selection < 200){
+			if (cm.haveItem(4001126, 1000) && (cm.getMeso() >= 2000000)){
+				cm.gainItem(4001126, -1000);
+				cm.gainMeso(-2000000);
+				if (selection < 100)
+					cm.gainItem(pearlEqp[selection], 1);
+				else
+					cm.gainItem(pearlWep[selection - 100], 1);
+				cm.sendOk("Thank you for your purchase.\r\nEnjoy your new #i"+pearlEqp[selection]+"# !");
+				cm.dispose();
+			} else {
+				cm.sendOk("Sorry, you do not have enough #bmesos#k or #i4001126##t4001126#k!");
+				cm.dispose();
+			}
+		//Onyx Equipment & Weapon
+		} else if (selection < 400){
+			if (cm.haveItem(4001126, 2500) && (cm.getMeso() >= 10000000)){
+				if (selection < 300){
+					if (cm.haveItem(pearlEqp[selection-200], 1)) {
+						cm.gainItem(4001126, -2500);
+						cm.gainMeso(-10000000);
+						cm.gainItem(pearlEqp[selection-200], -1);
+						cm.gainItem(onyxEqp[selection-200], 1);
+						cm.sendOk("Thank you for your purchase.r\nEnjoy your new #i"+onyxEqp[selection-200]+"# !");
+						cm.dispose();
+					} else {
+						cm.sendOk("Sorry, you don't have the Maple Pearl version of your item.");
+						cm.dispose();
+					}
+				} else {
+					if (cm.haveItem(pearlWep[selection-300], 1)){
+						cm.gainItem(4001126, -2500);
+						cm.gainMeso(-10000000);
+						cm.gainItem(pearlWep[selection-300], -1);
+						cm.gainItem(onyxWep[selection-300], 1);
+						cm.sendOk("Thank you for your purchase.r\nEnjoy your new #i"+onyxWep[selection-300]+"# !");
+						cm.dispose();
+					} else {
+						cm.sendOk("Sorry, you don't have the Maple Pearl version of your item.");
+						cm.dispose();
+					}
+				}
+			} else {
+				cm.sendOk("Sorry, you do not have enough #bmesos#k or #i4001126##t4001126#k!");
+				cm.dispose();
+			}
+		//Onyx Ring
+		} else if (selection < 500){
+			if (cm.haveItem(4001126, 10000) && (cm.getMeso() >= 15000000)){
+				cm.gainItem(4001126, -10000);
+				cm.gainMeso(-15000000);
+				cm.gainItem(onyxRing[selection-400], 1);
+				cm.dispose();
+			} else {
+				cm.sendOk("Sorry, you do not have enough #bmesos#k or #i4001126##t4001126#k!");
+				cm.dispose();
+			}
+		//Fafnir Equipment
+		} else if (selection < 600){
+			if (cm.haveItem(4310064, 10) && cm.haveItem(4310065, 10) && cm.haveItem(4430000, 4)){
+				cm.gainItem(4310064, -10);
+				cm.gainItem(4310065, -10);
+				cm.gainItem(4430000, -4);
+				cm.gainItem(fafnirEqp[selection-500], 1);
+				cm.dispose();
+			} else {
+				cm.sendOk("Remember, you need #b10#i4310064##t4310064##k,#b10#i4310065##t431006#k and #b4#i4430000##t4430000##k to craft a Fafnir equipment!");
+				cm.dispose();
+			}
+		//Fafnir Weapon
+		} else if (selection < 700){
+			if (cm.haveItem(4310064, 20) && cm.haveItem(4310065, 20) && cm.haveItem(4430000, 6)){
+				cm.gainItem(4310064, -20);
+				cm.gainItem(4310065, -20);
+				cm.gainItem(4430000, -6);
+				cm.gainItem(fafnirWeapons[selection-600], 1);
+				cm.dispose();
+			} else {
+				cm.sendOk("Remember, you need #b20#i4310064##t4310064##k,#b20#i4310065##t431006#k and #b6#i4430000##t4430000##k to craft a Fafnir weapon!");
+				cm.dispose();
+			}
+		//Tyrant Equipment
+		} else if (selection < 800){
+			switch(selection){
+				//Boot
+				case 700:
+					textBox = "Tyrant Shoes cost #b70#k #i4310058##t4310058# and #b2#k #i4001619##t4001619##k.\r\nWhat would you like to craft?\r\n";
+					for (j = 0; j < tyrantBoots.length; j++)
+						textBox += "\r\n#L" + j + "#" +  "#v" + tyrantBoots[j] + "##t" + tyrantBoots[j] + "##l";
+					cm.sendSimple(textBox);
+					break;
+				//Cape
+				case 701:
+					textBox = "Tyrant Cape cost #b70#k #i4310058##t4310058# and #b2#k #i4001619##t4001619##k.\r\nWhat would you like to craft?\r\n";
+					for (j = 0; j < tyrantCapes.length; j++)
+						textBox += "\r\n#L" + (10 + j) + "#" +  "#v" + tyrantCapes[j] + "##t" + tyrantCapes[j] + "##l";
+					cm.sendSimple(textBox);
+					break;
+				//Belt
+				case 702:
+					textBox = "Tyrant Belt cost #b70#k #i4310058##t4310058# and #b2#k #i4001619##t4001619##k.\r\nWhat would you like to craft?\r\n";
+					for (j = 0; j < tyrantBoots.length; j++)
+						textBox += "\r\n#L" + (20 + j) + "#" +  "#v" + tyrantBelts[j] + "##t" + tyrantBelts[j] + "##l";
+					cm.sendSimple(textBox);
+					break;
+				//Gloves
+				case 703:
+					textBox = "Tyrant Gloves cost #b500#k #i4310058##t4310058# and #b10#k #i4001619##t4001619##k.\r\nWhat would you like to craft?\r\n";
+					for (j = 0; j < tyrantGloves.length; j++)
+						textBox += "\r\n#L" + (30 + j) + "#" +  "#v" + tyrantGloves[j] + "##t" + tyrantGloves[j] + "##l";
+					cm.sendSimple(textBox);
+					break;
+			}
+		}
+	} else if (status == 3){
+		if (selection < 20){
+			if (cm.haveItem(4310058, 70) && cm.haveItem(4001619, 2)){
+				cm.gainItem(4310058, -70);
+				cm.gainItem(4001619, -2);
+				if (selection < 10)
+					cm.gainItem(tyrantBoots[selection], 1);
+				else
+					cm.gainItem(tyrantCapes[selection - 10], 1);
+				cm.dispose();
+			} else {
+				cm.sendOk("Remember, you need #b70#i4310058##t4310058##k and #b2#i4001619##t4001619##k!");
+				cm.dispose();
+			}
+		} else if (selection < 30){
+			if (cm.haveItem(4310058, 100) && cm.haveItem(4001619, 3)){
+				cm.gainItem(4310058, -100);
+				cm.gainItem(4001619, -3);
+				cm.gainItem(tyrantBelts[selection], 1);
+				cm.dispose();
+			} else {
+				cm.sendOk("Remember, you need #b100#i4310058##t4310058##k and #b3#i4001619##t4001619##k!");
+				cm.dispose();
+			}
+		} else if (selection < 30){
+			if (cm.haveItem(4310058, 500) && cm.haveItem(4001619, 10)){
+				cm.gainItem(4310058, -500);
+				cm.gainItem(4001619, -10);
+				cm.gainItem(tyrantGloves[selection], 1);
+				cm.dispose();
+				
+			} else {
+				cm.sendOk("Remember, you need #b500#i4310058##t4310058##k and #b10#i4001619##t4001619##k!");
+				cm.dispose();
+			}
+		}
+	}
 }
