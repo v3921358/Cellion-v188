@@ -158,8 +158,32 @@ public class MiracleCubePacket {
         oPacket.Encode(upgrade);
         oPacket.EncodeInteger(cubeid);//(5062009); // CubeID
         oPacket.EncodeInteger(eqSlotId);
-        // PacketHelper.addItemPosition(oPacket, equip, false, false);
         PacketHelper.addItemInfo(oPacket, equip);
+        PacketHelper.addItemPosition(oPacket, equip, false, false);
+
+        return oPacket.ToPacket();
+    }
+    
+    /**
+     * http://pastebin.com/TnZcWB01
+     *
+     * @param charid
+     * @param upgrade
+     * @param eqSlotId
+     * @param cubeid
+     * @param equip
+     * @return
+     */
+    public static Packet onBonusCubeResult(int charid, boolean upgrade, int eqSlotId, int cubeid, Equip equip) {
+        OutPacket oPacket = new OutPacket(80);
+
+        oPacket.EncodeShort(SendPacketOpcode.UserItemBonusCubeResult.getValue());
+        oPacket.EncodeInteger(charid);
+        oPacket.Encode(upgrade);
+        oPacket.EncodeInteger(cubeid);//(5062009); // CubeID
+        oPacket.EncodeInteger(eqSlotId);
+        PacketHelper.addItemInfo(oPacket, equip);
+        PacketHelper.addItemPosition(oPacket, equip, false, false);
 
         return oPacket.ToPacket();
     }

@@ -4066,6 +4066,15 @@ public class CField {
 
     public static class SummonPacket {
 
+        public static Packet jaguarActive(boolean active) {
+            OutPacket oPacket = new OutPacket(80);
+            oPacket.EncodeShort(SendPacketOpcode.JaguarActive.getValue());
+            
+            oPacket.Encode(active);
+
+            return oPacket.ToPacket();
+        }
+        
         /**
          * This packet spawns the summons onto the world
          *

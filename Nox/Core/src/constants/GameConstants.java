@@ -912,10 +912,10 @@ public class GameConstants {
             //case 3121013:
             //case Ranger.ARROW_BLASTER:
             //    return 3120019;
-            case 24120043: // Tempest - Reinforce
+            /*case 24120043: // Tempest - Reinforce
             case 24120044: // Tempest - Cooldown Cutter
             case 24120045: // Tempest - Extra Target
-                return 24121005; // Tempest
+                return 24121005; // Tempest*/
             case 14120048: // Dark Omen - Reinforce
             case 14120047: // Dark Omen - Spread
             case 14120046: // Dark Omen - Cooldown Cutter
@@ -1663,7 +1663,7 @@ public class GameConstants {
         switch (id) { // Assume it's faster(2)
             case 3121004: // Storm of Arrow
             case 24121000:
-            case 24121005:
+            //case 24121005:
             case 23121000:
             case 33121009:
             case 13111002: // Storm of Arrow
@@ -4673,6 +4673,8 @@ public class GameConstants {
 
     public static boolean isMismatchingBulletSkill(final int nSkillId) { // Just anti-cheat exceptions.
         switch (nSkillId) {
+            case Xenon.BEAM_DANCE:
+            case Phantom.TEMPEST:
             case ILArchmage.CHAIN_LIGHTNING:
             case Paladin.ADVANCED_CHARGE:
             case Evan.WIND_FLASH:

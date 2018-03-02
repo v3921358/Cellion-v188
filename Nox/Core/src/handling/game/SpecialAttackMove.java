@@ -50,16 +50,16 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
         pPlayer.updateTick(iPacket.DecodeInteger());
         int nSkill = iPacket.DecodeInteger();
         
-        if (pPlayer.isDeveloper()) {
-            switch (nSkill) {
-                case 14110030:
-                case 25111209:
-                    // Don't drop message.
-                    break;
-                default:
+        switch (nSkill) {
+            case 14110030:
+            case 25111209:
+                // These skills consistantly spam packets, they do not need to be handled here.
+                return;
+            default:
+                if (pPlayer.isDeveloper()) {
                     pPlayer.dropMessage(5, "[SpecialAttackMove Debug] Skill ID : " + nSkill);
-                    break;
-            }
+                }
+                break;
         }
         
         if (GameConstants.isDisabledSkill(nSkill)) { // Just for broken skills that we want disabled.
@@ -69,10 +69,47 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
         }
 
         
-        
         // Special Case Toggle Skills
      // These toggles are technically buffs, but do not get handled by the buff manager. -Mazen
         switch (nSkill) {
+            
+            case WildHunter.SOUL_ARROW_CROSSBOW: {
+                c.write(CField.SummonPacket.jaguarActive(true));
+                break;
+            }
+            
+            case WildHunter.JAGUAR_RIDER:{
+                /*final MapleStatEffect pEffect = SkillFactory.getSkill(WildHunter.JAGUAR_RIDER).getEffect(pPlayer.getTotalSkillLevel(WildHunter.JAGUAR_RIDER));
+                MapleSummon pSummon = new MapleSummon(pPlayer, pEffect, pPlayer.getPosition(), SummonMovementType.SUMMON_JAGUAR, 2100000000);
+                pSummon.setPosition(pPlayer.getPosition());
+                pPlayer.getMap().spawnSummon(pSummon);
+                pEffect.applyTo(pPlayer, pPlayer.getPosition());*/
+                c.write(CField.SummonPacket.jaguarActive(true));
+                break;
+            }
+            
+            case Xenon.PINPOINT_SALVO:{
+                if (!GameConstants.isXenon(pPlayer.getJob())) {
+                    return;
+                }
+                final MapleStatEffect buffEffects = SkillFactory.getSkill(Xenon.PINPOINT_SALVO).getEffect(pPlayer.getTotalSkillLevel(Xenon.PINPOINT_SALVO));
+                buffEffects.statups.put(CharacterTemporaryStat.HollowPointBullet, buffEffects.info.get(MapleStatInfo.x));
+                pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), null, buffEffects.statups, false, 2100000000, pPlayer.getId());
+                pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, Xenon.PINPOINT_SALVO, 2100000000, buffEffects.statups, buffEffects));
+                break;
+            }
+            
+            case Xenon.AEGIS_SYSTEM:
+            case Xenon.AEGIS_SYSTEM_1 :{
+                if (!GameConstants.isXenon(pPlayer.getJob())) {
+                    return;
+                }
+                final MapleStatEffect buffEffects = SkillFactory.getSkill(Xenon.AEGIS_SYSTEM).getEffect(pPlayer.getTotalSkillLevel(Xenon.AEGIS_SYSTEM));
+                buffEffects.statups.put(CharacterTemporaryStat.XenonAegisSystem, buffEffects.info.get(MapleStatInfo.x));
+                pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), null, buffEffects.statups, false, 2100000000, pPlayer.getId());
+                pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, Xenon.AEGIS_SYSTEM, 2100000000, buffEffects.statups, buffEffects));
+                break;
+            }
             
             case Aran.BODY_PRESSURE:{
                 if (!GameConstants.isAran(pPlayer.getJob())) {
@@ -234,8 +271,8 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
             c.write(CWvsContext.enableActions());
             return;
         }
-        if (effect.getCooldown(pPlayer) > 0) {
-            if (pPlayer.skillisCooling(nSkill) && nSkill != 24121005) {
+        if (effect.getCooldown(pPlayer) > 0 && nSkill != 24121005) {
+            if (pPlayer.skillisCooling(nSkill)) {
                 c.write(CWvsContext.enableActions());
                 return;
             }
@@ -266,6 +303,11 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 handleAdrenalineRush(pPlayer);
                 break;
             }
+            case Xenon.EMERGENCY_RESUPPLY: {
+                pPlayer.gainXenonSurplus((short) 10);
+                c.getPlayer().dropMessage(6, "You have recharged your surplus power supplies.");
+                break;
+            }
             case 1121001:
             case 1221001:
             case 1321001:
@@ -288,7 +330,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 pPlayer.getMap().broadcastMessage(pPlayer, CField.EffectPacket.showBuffeffect(pPlayer.getId(), nSkill, UserEffectCodes.SkillUse, pPlayer.getLevel(), skillLevel, iPacket.DecodeByte()), pPlayer.getTruePosition());
                 break;
 
-            case 33001011: {
+            /*case 33001011: {
                 Point mpos = iPacket.DecodePosition();
                 MapleSummon summon = new MapleSummon(pPlayer, effect, mpos, SummonMovementType.SUMMON_JAGUAR, effect.getDuration());
                 summon.setPosition(mpos);
@@ -296,7 +338,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 MapleStatEffect buffeffect = SkillFactory.getSkill(33001007).getEffect(skillLevel);
                 buffeffect.applyTo(pPlayer, null);
                 break;
-            }
+            }*/
 
             /*case NightWalker.SHADOW_BAT:
             case NightWalker.SHADOW_BAT_1:
