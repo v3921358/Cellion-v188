@@ -70,6 +70,10 @@ public class CLogin {
         oPacket.EncodeShort(SendPacketOpcode.NMCOResult.getValue());
         oPacket.Encode(useAuthServer ? 0 : 1);
 
+        if (ServerConstants.FORCE_HOTFIX) {
+            CLogin.ApplyHotFix(); // Fixes Nexon client issue where this packet sometimes isn't requested.
+        }
+        
         return oPacket.ToPacket();
     }
 

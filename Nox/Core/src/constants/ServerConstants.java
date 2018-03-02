@@ -64,7 +64,11 @@ public class ServerConstants {
     public static final String SERVER_NAME = "REXION"; //Shorter reference of just the server name.
     public static final String MAPLE_PATCH = "2";
     public static final int MAPLE_LOCALE = 8;
-
+    
+    /*Apply Hotfix*/
+ /*In MapleStory GMS v.179 - v.183 the request for the ApplyHotFix packet does not always gets sent, good job Nexon.*/
+    public static final boolean FORCE_HOTFIX = true; //Forces the server to send the Apply Hotfix packet regardless.
+    
     /*General Configuration*/
     public static final String SOURCE_REVISION = "0.9";
     public static final boolean OLD_MAPS = false; //example: it will use old maple event's henesys instead of current one

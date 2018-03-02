@@ -195,7 +195,7 @@ function action(mode, type, selection) {
 					cm.dispose();
 					break;
 				case 108:
-					if(cm.getPlayer().getLevel() >= 250 && cm.isQuestFinished(1460)) {
+					if(cm.getPlayer().getLevel() >= 250 && !cm.isQuestFinished(1460)) {
 						cm.sendOk("Congratulations on your #rfifth job#k advancement!\r\nYou now have access to the powerful #dV: Matrix#k!");
 						
 						cm.gainItem(2435902, 250);
