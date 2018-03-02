@@ -763,6 +763,13 @@ public class MapleStatEffect implements Serializable {
                     applyfrom.getSummons().put(NightWalker.SHADOW_BAT, bat);
                 }
 
+                if (sourceid == WildHunter.JAGUAR_RIDER) {
+                    final MapleSummon pJaguar = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                    pJaguar.setPosition(pos);
+                    applyfrom.getMap().spawnSummon(pJaguar);
+                    applyfrom.getSummons().put(WildHunter.JAGUAR_RIDER, pJaguar);
+                }
+                
                 List<Integer> count = new ArrayList<>();
                 final List<MapleSummon> ss = applyfrom.getSummonsReadLock();
                 try {

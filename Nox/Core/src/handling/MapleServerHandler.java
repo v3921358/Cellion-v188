@@ -211,6 +211,7 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserEquipmentEnchantWithSingleUIRequest.getValue()] = new EnchantmentHandler();
         handlers[RecvPacketOpcode.UserUpgradeAssistItemUseRequest.getValue()] = new UseScrollsHandler();
         handlers[RecvPacketOpcode.UserItemOptionUpgradeItemUseRequest.getValue()] = new UsePotentialScrollHandler();
+        handlers[RecvPacketOpcode.UserAdditionalOptUpgradeItemUseRequest.getValue()] = new UseBonusPotentialScrollHandler();
         handlers[RecvPacketOpcode.UserUpgradeItemUseRequest.getValue()] = new UseScrollsHandler();
         handlers[RecvPacketOpcode.UserTamingMobFoodItemUseRequest.getValue()] = new UseMountFoodHandler();
         handlers[RecvPacketOpcode.UserMobSummonItemUseRequest.getValue()] = new UseSummonBagHandler();

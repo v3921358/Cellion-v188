@@ -73,7 +73,7 @@ public class DamageParse {
                 }
             } else if (attack.mobCount > effect.getMobCount() && !GameConstants.isMismatchingBulletSkill(attack.skill)) { //&& attack.skill != Paladin.ADVANCED_CHARGE && attack.skill != 22110025) {
                 pPlayer.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
-                pPlayer.yellowMessage("[Warning] Mismatching bullet count.");
+                pPlayer.yellowMessage("[Warning] Mismatching bullet count for skill ID " + attack.skill + ".");
                 return;
             }
         }
@@ -411,10 +411,19 @@ public class DamageParse {
                     if ((GameConstants.isPhantom(pPlayer.getJob())) && (attack.skill != 24120002) && (attack.skill != 24100003)) {
                         pPlayer.handleCardStack();
                         for (AttackMonster at : attack.allDamage) {
-                            if (Randomizer.nextInt(100) < 60) { 
+                            if (Randomizer.nextInt(100) < 20) { 
                                 pPlayer.getMap().broadcastMessage(JobPacket.PhantomPacket.ThrowCarte(pPlayer.getId(), at.getObjectId()));
                             }
                         }
+                    }
+                    if (GameConstants.isXenon(pPlayer.getJob())) {
+                        //for (AttackMonster at : attack.allDamage) {
+                            if (pPlayer.hasBuff(CharacterTemporaryStat.HollowPointBullet)) {
+                                if (Randomizer.nextInt(100) < 30) { 
+                                    pPlayer.getMap().broadcastMessage(JobPacket.XenonPacket.EazisSystem(pPlayer.getId(), 0));
+                                }
+                            }
+                        //}
                     }
                     if (GameConstants.isKaiser(pPlayer.getJob())) {
                         pPlayer.handleKaiserCombo();

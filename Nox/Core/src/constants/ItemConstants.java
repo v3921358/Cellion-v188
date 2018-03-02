@@ -12,7 +12,8 @@ public class ItemConstants {
     public static final int CRUSADER_CODEX = 1172000;
 
     // Use
-    public static final int COMBO_PARADE1 = 2023484,
+    public static final int 
+            COMBO_PARADE1 = 2023484,
             COMBO_PARADE2 = 2023494,
             COMBO_PARADE3 = 2023495,
             RETURN_SCROLL_NEAREST_TOWN = 2030000,
@@ -99,10 +100,13 @@ public class ItemConstants {
             MEISTER_CUBE_UNTRADEABLE = 2711006,
             MAPLE_SAINT_WEAPON_CUBE = 2711007,
             UNK_CUBE = 2711008,
-            OCCULT_CUBE_UNTRADEABLE3 = 2711009;
-
+            OCCULT_CUBE_UNTRADEABLE3 = 2711009,
+            //
+            SPECIAL_BONUS_POTENTIAL_SCROLL = 2048306;
     // Cash
-    public static final int MIRACLE_CUBE = 5062000,
+    public static final int 
+            BONUS_POTENTIAL_CUBE = 5062500,
+            MIRACLE_CUBE = 5062000,
             SUPER_MIRACLE_CUBE = 5062002,
             RED_CUBE = 5062009,
             BLACK_CUBE = 5062010,
@@ -185,6 +189,8 @@ public class ItemConstants {
 
     public static boolean isPotentialScroll(int scrollId) {
         switch (scrollId) {
+            case SPECIAL_BONUS_POTENTIAL_SCROLL:
+                
             case ADVANCED_POTENTIAL_SCROLL:
             case POTENTIAL_SCROLL:
             case SPECIAL_POTENTIAL_SCROLL:

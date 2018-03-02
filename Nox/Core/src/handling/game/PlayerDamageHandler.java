@@ -12,6 +12,7 @@ import client.SkillFactory;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
+import constants.skills.Xenon;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.Randomizer;
@@ -87,10 +88,13 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
         MapleMonster attacker = null;
 
         if (GameConstants.isXenon(chr.getJob())) { // Making sure EazisSystem still works when a GM is hiding
-            if (chr.getSkillLevel(36110004) > 0) {
-                chr.getMap().broadcastMessage(JobPacket.XenonPacket.EazisSystem(chr.getId(), oid));
+            if (chr.hasBuff(CharacterTemporaryStat.XenonAegisSystem)) {
+                if (Randomizer.nextInt(100) < (chr.getTotalSkillLevel(Xenon.AEGIS_SYSTEM) * 10)) { 
+                    chr.getMap().broadcastMessage(JobPacket.XenonPacket.EazisSystem(chr.getId(), oid));
+                }
             }
         }
+        
         if (GameConstants.isLuminous(chr.getJob())) {
             chr.applyLifeTidal();
         }

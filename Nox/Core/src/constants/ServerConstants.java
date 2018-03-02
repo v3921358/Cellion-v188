@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * MapleStory Server Emulator
  * GMS Version 1.80.2
  * 
- * Lead Developer
+ * Project Lead Developer
  * @author Mazen Massoud
  *
  * Credits to all previous Nox Developers.
@@ -97,8 +97,9 @@ public class ServerConstants {
     //Scripts TODO: Amoria,CWKPQ,BossBalrog_EASY,BossBalrog_NORMAL,ZakumPQ,ProtectTylus,GuildQuest,Ravana_EASY,Ravna_MED,Ravana_HARD (untested or not working)
 
     /*Miscellaneous Configuration*/
-    public static final float CASH_DROP_RATE = 30; //out of 100
+    public static final boolean CONTROLLED_POTENTIAL_RESULTS = true; // Uses our customizable potential tables instead, this is configured to be GMS-like.
     public static final float MIRACLE_CUBE_RATE = 1; //cube tier up rateng range
+    public static final float CASH_DROP_RATE = 30; //out of 100
     public static final boolean BUFFED_BOSSES = true; //Buffs the damage resistance on certain bosses to make them more challenging.
     public static final boolean BUFFED_HP_GAIN = true; //Players gain increased HP per level.
     public static final boolean AUTO_NX_CONVERT = true; //Convert NXCredit to MaplePoints upon EnterCS.

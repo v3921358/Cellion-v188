@@ -696,7 +696,7 @@ public class JobPacket {
     }
 
     public static class XenonPacket {
-
+        
         public static Packet giveXenonSupply(short amount) {
             OutPacket oPacket = new OutPacket(80);
 

@@ -62,8 +62,8 @@ public class XenonBuff extends AbstractBuffClass {
                 eff.statups.put(CharacterTemporaryStat.CriticalBuff, eff.info.get(MapleStatInfo.x));
                 break;
             case Xenon.EFFICIENCY_STREAMLINE: // Efficiency Streamline
-                eff.statups.put(CharacterTemporaryStat.IndieMMPR, eff.info.get(MapleStatInfo.indieMmpR));
-                eff.statups.put(CharacterTemporaryStat.IndieMHPR, eff.info.get(MapleStatInfo.indieMhpR));
+                eff.statups.put(CharacterTemporaryStat.IncMaxHP, eff.info.get(MapleStatInfo.indieMhpR));
+                eff.statups.put(CharacterTemporaryStat.IncMaxMP, eff.info.get(MapleStatInfo.indieMmpR));
                 break;
             case Xenon.XENON_BOOSTER: // Xenon Booster
                 eff.statups.put(CharacterTemporaryStat.Booster, eff.info.get(MapleStatInfo.x));
