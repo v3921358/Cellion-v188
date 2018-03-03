@@ -118,7 +118,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                     nFragmentID = ItemConstants.RED_CUBE_FRAGMENT;
                     ItemPotentialTierType lastTierBeforeCube = pEquip.getPotentialTier();
                     boolean bHidePotentialAfterReset = false;
-                    
+
                     // Check Tier
                     if (lastTierBeforeCube.getValue() > pMaxTier.getValue()) {
                         LogHelper.PACKET_EDIT_HACK.get().info(
@@ -134,13 +134,13 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
 
                     final float nMiracleRate = ServerConstants.MIRACLE_CUBE_RATE;
                     final boolean bRenewedPotential = ItemPotentialProvider.resetPotential(pEquip, nTierUpRate, nTierDownRate, pMaxTier, bHidePotentialAfterReset, nMiracleRate);
-                    
+
                     if (bRenewedPotential) {
                         bUsed = true; // flag as used to be removed.
                         if (nFragmentID != 0) {
                             MapleInventoryManipulator.addById(c, nFragmentID, (short) 1, "Cube on " + LocalDateTime.now());
                         }
-                        
+
                         // Update Inventory Equipment 
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, pItem));
@@ -155,7 +155,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
 
                     pPlayer.getMap().broadcastMessage(CField.showPotentialReset(pPlayer.getId(), bRenewedPotential, pItem.getItemId()));
                     c.write(CField.enchantResult(bRenewedPotential ? 0 : 0));
-                    
+
                     if (pPlayer.isDeveloper()) {
                         pPlayer.yellowMessage("[Potential] First Line ID : " + pEquip.getPotential1());
                         pPlayer.yellowMessage("[Potential] Second Line ID :" + pEquip.getPotential2());
@@ -164,7 +164,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 }
                 break;
             }
-            case ItemConstants.BONUS_POTENTIAL_CUBE:{
+            case ItemConstants.BONUS_POTENTIAL_CUBE: {
                 //c.getPlayer().sortInventory((byte) 1); // Sort equipment inventory to avoid the cube not finding the item.
                 final Item pItem = pPlayer.getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInteger());
                 final Equip pEquip = (Equip) pItem;
@@ -193,13 +193,13 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
 
                     final float nMiracleRate = ServerConstants.MIRACLE_CUBE_RATE;
                     final boolean bRenewedPotential = ItemPotentialProvider.resetBonusPotential(pEquip, nTierUpRate, nTierDownRate, pMaxTier, bHidePotentialAfterReset, nMiracleRate);
-                    
+
                     if (bRenewedPotential) {
                         bUsed = true; // Flag the item as used.
                         if (nFragmentID != 0) {
                             MapleInventoryManipulator.addById(c, nFragmentID, (short) 1, "Cube on " + LocalDateTime.now());
                         }
-                        
+
                         // Update Inventory Equipment 
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, pItem));
@@ -214,7 +214,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
 
                     pPlayer.getMap().broadcastMessage(CField.showPotentialReset(pPlayer.getId(), bRenewedPotential, pItem.getItemId()));
                     c.write(CField.enchantResult(bRenewedPotential ? 0 : 0));
-                    
+
                     if (pPlayer.isDeveloper()) {
                         pPlayer.yellowMessage("[Bonus Potential] First Line ID : " + pEquip.getBonusPotential1());
                         pPlayer.yellowMessage("[Bonus Potential] Second Line ID : " + pEquip.getBonusPotential2());
@@ -223,7 +223,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 }
                 break;
             }
-            
+
             case 5080000:  // kites
             case 5080001:
             case 5080002:
@@ -663,7 +663,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             //case ItemConstants.RED_CUBE:    
             case ItemConstants.SUPER_MIRACLE_CUBE: {
                 //c.getPlayer().sortInventory((byte) 1); // Sort equipment inventory to avoid the cube not finding the item.
-                
+
                 final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInteger());
                 final Equip equip = (Equip) item;
 
@@ -1826,7 +1826,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             case 5501001:
             case 5501002: { //expiry mount
                 final Skill skil = SkillFactory.getSkill(iPacket.DecodeInteger());
-                if (skil == null || skil.getId() / 10000 != 8000 || c.getPlayer().getSkillLevel(skil) <= 0 || !skil.isTimeLimited() || GameConstants.getMountItem(skil.getId(), c.getPlayer()) <= 0) {
+                if (skil == null || skil.getId() / 10000 != 8000 || c.getPlayer().getSkillLevel(skil) <= 0 || !skil.isTimeLimited()) {
                     break;
                 }
                 final long toAdd = (itemId == 5501001 ? 30 : 60) * 24 * 60 * 60 * 1000L;

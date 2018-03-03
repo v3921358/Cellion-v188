@@ -650,12 +650,11 @@ public class PacketHelper {
             oPacket.EncodeInteger(entry.getValue());
         }
         oPacket.Encode(255);
-        
-        
+
         Integer cWeapon = 0; //Integer cWeapon = equip.get(-111);
-        
+
         // Checks if player has a listed cash weapon equip and fetchs the ID for the integer being written below.
-     // Hack fix but neccessary for now as for some reason attempting to fetch the ID normally results in null. -MazenMapleCharacter oPlayer = (MapleCharacter) chr;
+        // Hack fix but neccessary for now as for some reason attempting to fetch the ID normally results in null. -MazenMapleCharacter oPlayer = (MapleCharacter) chr;
         MapleCharacter pPlayer = (MapleCharacter) chr;
         for (int i = 0; i < GameConstants.aCashWeapons.length; i++) {
             if (pPlayer.hasEquipped(GameConstants.aCashWeapons[i])) {
@@ -663,7 +662,7 @@ public class PacketHelper {
                 break;
             }
         }
-        
+
         oPacket.EncodeInteger(cWeapon != null ? cWeapon : 0);
         Integer Weapon = equip.get(-11);
         oPacket.EncodeInteger(Weapon != null ? Weapon : 0);

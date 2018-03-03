@@ -44,7 +44,7 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<MapleClient
         short nSlot = iPacket.DecodeShort();
         short nDestination = iPacket.DecodeShort();
         pPlayer.yellowMessage("Slot: " + nSlot + " / nDestination: " + nDestination);
-        
+
         Item pScroll = pPlayer.getInventory(MapleInventoryType.USE).getItem(nSlot);
         Equip pEquip = (Equip) pPlayer.getInventory(MapleInventoryType.EQUIP).getItem(nDestination);
         ItemPotentialTierType pTier = pEquip.getPotentialBonusTier();
@@ -56,21 +56,21 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<MapleClient
         Equip.ScrollResult pResult;
         boolean bCompleted = true;
         List<ModifyInventory> aModifications = new ArrayList<>();
-        
+
         //boolean bPotential = ItemPotentialProvider.useBonusPotentialScroll(pEquip, pTier);
         pEquip.setBonusPotential1(generateBonusPotential(pEquip, pTier));
         pEquip.setBonusPotential2(generateBonusPotential(pEquip, pTier));
         pEquip.setBonusPotential3(generateBonusPotential(pEquip, pTier));
-        
+
         //if (bPotential) {
-            pResult = Equip.ScrollResult.SUCCESS;
-            pPlayer.dropMessage(5, "Here 3");
-            aModifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, pEquip));
-            pPlayer.dropMessage(5, "Here 4");
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, pScroll.getPosition(), (short) 1, false);
-            c.write(CField.enchantResult(pResult == Equip.ScrollResult.SUCCESS ? 1 : pResult == Equip.ScrollResult.CURSE ? 2 : 0));
-            pPlayer.getMap().broadcastMessage(pPlayer, CField.getScrollEffect(c.getPlayer().getId(), pResult, false, pEquip.getItemId(), pScroll.getItemId()), true);
-            c.write(CWvsContext.inventoryOperation(true, aModifications));
+        pResult = Equip.ScrollResult.SUCCESS;
+        pPlayer.dropMessage(5, "Here 3");
+        aModifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, pEquip));
+        pPlayer.dropMessage(5, "Here 4");
+        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, pScroll.getPosition(), (short) 1, false);
+        c.write(CField.enchantResult(pResult == Equip.ScrollResult.SUCCESS ? 1 : pResult == Equip.ScrollResult.CURSE ? 2 : 0));
+        pPlayer.getMap().broadcastMessage(pPlayer, CField.getScrollEffect(c.getPlayer().getId(), pResult, false, pEquip.getItemId(), pScroll.getItemId()), true);
+        c.write(CWvsContext.inventoryOperation(true, aModifications));
         //}
     }
 }

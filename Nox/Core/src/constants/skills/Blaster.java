@@ -1,62 +1,81 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package constants.skills;
 
-/**
- *
- * @author thijs
- */
 public class Blaster {
 
-    //1st job
-    public static final int MAGNUM_PUNCH = 37001000;
-    public static final int REVOLVING_CANNON = 37001001;
-    public static final int BUNKER_BUSTER_EXPLOSION = 37001002;
-    public static final int DOUBLE_JUMP = 37001003;
     public static final int BLAST_SHIELD = 37000006;
+    public static final int BUNKER_BUSTER_EXPLOSION_1 = 37001002;
+    public static final int BUNKER_BUSTER_EXPLOSION_2 = 37000013;
+    public static final int BUNKER_BUSTER_EXPLOSION_3 = 37000011;
+    public static final int BUNKER_BUSTER_EXPLOSION_4 = 37000012;
+    public static final int BUNKER_BUSTER_EXPLOSION_5 = 37000008;
+    public static final int DETONATE = 37001004;
+    public static final int DETONATE_1 = 37000005;
+    public static final int DOUBLE_JUMP_5 = 37001003;
+    public static final int MAGNUM_PUNCH = 37001000;
+    public static final int RELOAD = 37000010;
+    public static final int REVOLVING_CANNON = 37001001;
+    public static final int REVOLVING_CANNON_1 = 37000009;
     public static final int REVOLVING_CANNON_MASTERY = 37000007;
-    //2nd job
-    public static final int DOUBLE_BLAST = 37101000;
-    public static final int BOBBING = 37101001;
     public static final int ARM_CANNON_BOOST = 37101003;
     public static final int ARM_CANNON_MASTERY = 37100004;
-    public static final int PHYSICAL_TRAINING = 37100005;
+    public static final int BOBBING = 37101001;
+    public static final int BOBBING_1 = 37100002;
+    public static final int BUNKER_BUSTER_EXPLOSION_7 = 37100009;
     public static final int CHARGE_MASTERY = 37100006;
+    public static final int DOUBLE_BLAST_1 = 37101000;
+    public static final int PHYSICAL_TRAINING_80_8 = 37100005;
+    public static final int REVOLVING_CANNON_2 = 37100008;
     public static final int REVOLVING_CANNON_PLUS = 37100007;
-    //3rd job
-    public static final int HAMMER_SMASH = 37111000;
-    public static final int WEAVING = 37111003;
-    public static final int ROCKET_RUSH = 37111005;
-    public static final int MAGNUM_LAUNCH = 37110006;
-    public static final int REVOLVING_CANNON_PLUS_2 = 37110007;
-    public static final int SHIELD_TRAINING = 37110008;
+    public static final int BUNKER_BUSTER_EXPLOSION = 37110010;
     public static final int COMBO_TRAINING = 37110009;
-    //4th job
-    public static final int SHOTGUN_PUNCH = 37121000;
-    public static final int MUZZLE_FLASH = 37120002;
-    public static final int BALLISTIC_HURRICANE = 37121003;
-    public static final int REVOLVING_BLAST = 37121004;
-    public static final int VITALITY_SHIELD = 37121005;
-    public static final int MAPLE_WARRIOR = 37121006;
-    public static final int HEROS_WILL = 37121007;
-    public static final int REVOLVING_CANNON_PLUS_3 = 37120008;
-    public static final int SHIELD_TRAINING_2 = 37120009;
-    public static final int GAUNTLET_EXPERT = 37120010;
+    public static final int HAMMER_SMASH = 37111000;
+    public static final int HAMMER_SMASH_1 = 37110001;
+    public static final int HAMMER_SMASH_2 = 37110002;
+    public static final int MAGNUM_LAUNCH = 37110006;
+    public static final int REVOLVING_CANNON_PLUS_II = 37110007;
+    public static final int ROCKET_RUSH = 37111005;
+    public static final int ROCKET_RUSH_1 = 37110011;
+    public static final int SHIELD_TRAINING = 37110008;
+    public static final int WEAVING = 37111003;
+    public static final int WEAVING_1 = 37110004;
     public static final int ADVANCED_CHARGE_MASTERY = 37120011;
-    public static final int COMBO_TRAINING_2 = 37120012;
-    //hyper skills
     public static final int AFTERSHOCK_PUNCH = 37120045;
+    public static final int BALLISTIC_HURRICANE = 37121003;
+    public static final int BALLISTIC_HURRICANE_1 = 37120024;
+    public static final int BALLISTIC_HURRICANE_2 = 37120022;
+    public static final int BLAST_SHIELD_RECOVERY = 37120049;
+    public static final int BUNKER_BUSTER_EXPLOSION_6 = 37120013;
+    public static final int BUNKER_EXPLOSION_GUARD_BONUS = 37120048;
+    public static final int CANNON_OVERDRIVE = 37121054;
+    public static final int COMBO_TRAINING_II = 37120012;
+    public static final int FOR_LIBERTY_2 = 37121053;
+    public static final int GAUNTLET_EXPERT = 37120010;
+    public static final int HEROS_WILL_30_3 = 37121007;
+    public static final int HYPER_MAGNUM_PUNCH = 37121052;
+    public static final int HYPER_MAGNUM_PUNCH_1 = 37120057;
+    public static final int HYPER_MAGNUM_PUNCH_2 = 37120056;
+    public static final int HYPER_MAGNUM_PUNCH_3 = 37120055;
+    public static final int HYPER_MAGNUM_PUNCH_4 = 37120059;
+    public static final int HYPER_MAGNUM_PUNCH_5 = 37120058;
     public static final int IMPROVED_BUNKER_EXPLOSION = 37120046;
     public static final int IMPROVED_BUNKER_SHOCKWAVE = 37120047;
-    public static final int BUNKER_EXPLOSION_GUARD_BONUS = 37120048;
-    public static final int BLAST_SHIELD_RECOVERY_HYPER = 37120049;
-    public static final int SPEEDY_VITALITY_SHIELD = 37120050;
+    public static final int MAPLE_WARRIOR_40_4 = 37121006;
+    public static final int MUZZLE_FLASH = 37120002;
+    public static final int PIERCING_PUNCH = 37120044;
+    public static final int POWER_PUNCH = 37120043;
+    public static final int REVOLVING_BLAST = 37121004;
+    public static final int REVOLVING_BLAST_1 = 37120023;
+    public static final int REVOLVING_BLAST_2 = 37120019;
+    public static final int REVOLVING_BLAST_3 = 37120018;
+    public static final int REVOLVING_BLAST_4 = 37120017;
+    public static final int REVOLVING_BLAST_5 = 37120016;
+    public static final int REVOLVING_BLAST_6 = 37120015;
+    public static final int REVOLVING_BLAST_7 = 37120014;
+    public static final int REVOLVING_CANNON_PLUS_III = 37120008;
+    public static final int SHIELD_TRAINING_II = 37120009;
+    public static final int SHOTGUN_PUNCH = 37121000;
+    public static final int SHOTGUN_PUNCH_1 = 37120001;
     public static final int SPEEDY_BALLISTIC_HURRICANE = 37120051;
-    public static final int CANNON_OVERDRIVE = 37121054;
-    public static final int HYPER_MAGNUM_PUNCH = 37121052;
-    public static final int FOR_LIBERTY = 37121053;
-
+    public static final int SPEEDY_VITALITY_SHIELD = 37120050;
+    public static final int VITALITY_SHIELD = 37121005;
 }

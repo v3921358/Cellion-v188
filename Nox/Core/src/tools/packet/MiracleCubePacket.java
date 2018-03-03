@@ -163,7 +163,7 @@ public class MiracleCubePacket {
 
         return oPacket.ToPacket();
     }
-    
+
     /**
      * http://pastebin.com/TnZcWB01
      *

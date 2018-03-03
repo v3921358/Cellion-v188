@@ -1,34 +1,52 @@
 package constants.skills;
 
 public class Buccaneer {
-    //4th job pirate Buccaneer path
 
-    public static final int OCTOPUNCH = 5121007;
-    public static final int DRAGON_STRIKE = 5121001;
-    public static final int NAUTILUS_STRIKE = 5121013;
     public static final int BUCCANEER_BLAST = 5121016;
-    public static final int DOUBLE_BLAST = 5121017;
-    public static final int CROSSBONES = 5121015;
-    public static final int TIME_LEAP = 5121010;
-    public static final int SPEED_INFUSION = 5121009;
-    public static final int MAPLE_WARRIOR = 5121000;
-    public static final int HEROS_WILL = 5121008;
-    public static final int DOUBLE_DOWN = 5120012;
-    public static final int ULTRA_CHARGE = 5120018;
-    public static final int PIRATES_REVENGE = 5120011;
-    public static final int TYPHOON_CRUSH = 5120014;
-
-    //hyper skills
     public static final int BUCCANEER_BLAST_EXTRA_STRIKE = 5120051;
     public static final int BUCCANEER_BLAST_REINFORCE = 5120049;
     public static final int BUCCANEER_BLAST_SPREAD = 5120050;
+    public static final int CROSSBONES = 5121015;
+    public static final int DEMOLITION = 5121004;
+    public static final int DOUBLE_BLAST = 5121017;
+    public static final int DOUBLE_DOWN_1 = 5120012;
+    public static final int DOUBLE_DOWN_ADDITION = 5120044;
+    public static final int DOUBLE_DOWN_ENHANCE = 5120045;
+    public static final int DOUBLE_DOWN_SAVING_GRACE = 5120043;
+    public static final int DRAGON_STRIKE = 5121001;
+    public static final int DRAGON_STRIKE_1 = 5121019;
+    public static final int ENERGY_ORB = 5121002;
+    public static final int EPIC_ADVENTURE_7 = 5121053;
+    public static final int HEROS_WILL_20_2 = 5121008;
+    public static final int HYPER_ACCURACY_60_6 = 5120035;
+    public static final int HYPER_CRITICAL_60_6 = 5120034;
+    public static final int HYPER_DEFENSE_30_3 = 5120039;
+    public static final int HYPER_DEXTERITY_60_6 = 5120031;
+    public static final int HYPER_FURY_60_6 = 5120038;
+    public static final int HYPER_HEALTH_60_6 = 5120036;
+    public static final int HYPER_INTELLIGENCE_60_6 = 5120032;
+    public static final int HYPER_JUMP_60_6 = 5120042;
+    public static final int HYPER_LUCK_60_6 = 5120033;
+    public static final int HYPER_MAGIC_DEFENSE_60_6 = 5120040;
+    public static final int HYPER_MANA_60_6 = 5120037;
+    public static final int HYPER_SPEED_60_6 = 5120041;
+    public static final int HYPER_STRENGTH_60_6 = 5120030;
+    public static final int MAPLE_WARRIOR_30_3 = 5121000;
+    public static final int NAUTILUS_STRIKE_1 = 5120021;
+    public static final int NAUTILUS_STRIKE_2 = 5121013;
+    public static final int OCTOPUNCH = 5121007;
+    public static final int OCTOPUNCH_1 = 5121020;
+    public static final int OCTOPUNCH_BOSS_RUSH = 5120047;
     public static final int OCTOPUNCH_EXTRA_STRIKE = 5120048;
     public static final int OCTOPUNCH_REINFORCE = 5120046;
-    public static final int OCTOPUNCH_BOSS_RUSH = 5120047;
-    public static final int DOUBLE_DOWN_ENHANCE = 5120045;
-    public static final int DOUBLE_DOWN_ADDITION = 5120044;
-    public static final int DOUBLE_DOWN_SAVING_GRACE = 5120043;
-    public static final int POWER_UNITY = 5121052;
+    public static final int PIRATES_REVENGE = 5120011;
+    public static final int POWER_UNITY = 5121055;
+    public static final int POWER_UNITY_1 = 5121052;
+    public static final int SNATCH = 5121005;
+    public static final int SPEED_INFUSION_1 = 5121009;
     public static final int STIMULATING_CONVERSATION = 5121054;
-    public static final int EPIC_ADVENTURE = 5121053;
+    public static final int SUPER_TRANSFORMATION_1 = 5121003;
+    public static final int TIME_LEAP = 5121010;
+    public static final int TYPHOON_CRUSH = 5120014;
+    public static final int ULTRA_CHARGE = 5120018;
 }

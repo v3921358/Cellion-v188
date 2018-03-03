@@ -117,10 +117,10 @@ public class CommandProcessor {
         } else if (c.getPlayer().isIntern()) {
             sAccessRank = "Intern";
         }
-        
+
         final StringBuilder sMessage = new StringBuilder("#dRexion Administrative Command List\r\n"
-                                                    + "Access Level (#b" + sAccessRank + "#k)\r\n\r\n#r");
-        
+                + "Access Level (#b" + sAccessRank + "#k)\r\n\r\n#r");
+
         for (int i = 2; i <= c.getPlayer().getGMLevel(); i++) {
             if (commandList.containsKey(i)) {
                 for (String sCommand : commandList.get(i)) {
@@ -128,7 +128,7 @@ public class CommandProcessor {
                 }
             }
         }
-        
+
         c.write(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage.toString(), NPCChatByType.NPC_Cancellable));
     }
 

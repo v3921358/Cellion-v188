@@ -14,7 +14,7 @@ public class InventoryConstants {
     public static boolean isAmmo(int nItemId) {
         return (isThrowingStar(nItemId) || isBullet(nItemId) || isArrowForBow(nItemId) || isArrowForCrossBow(nItemId));
     }
-    
+
     public static boolean isRechargeable(int itemid) {
         return (isThrowingStar(itemid)) || (isBullet(itemid));
     }

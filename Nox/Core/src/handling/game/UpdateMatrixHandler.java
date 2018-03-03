@@ -389,7 +389,7 @@ public final class UpdateMatrixHandler implements ProcessPacket<MapleClient> {
         //aChange.clear();
         c.write(CWvsContext.updateSkills(mChange, false));
         mChange.clear();
-        
+
         //usCharacterDataModFlag |= DBChar.SkillRecord.Get() | DBChar.WildHunterInfo.Get();
     }
 }

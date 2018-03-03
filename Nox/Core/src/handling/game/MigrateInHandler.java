@@ -266,14 +266,14 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         if (ServerConstants.BUFFED_SYSTEM && ServerConstants.BLOODLESS_EVENT && (player.getClient().getChannel() >= ServerConstants.START_RANGE && player.getClient().getChannel() <= ServerConstants.END_RANGE)) {
             player.dropMessage(-1, "You have entered a Bloodless Channel (Hard Mode)!");
         }
-        
+
         // Developer Skill Cooldown Toggle
         if (ServerConstants.DEV_DEFAULT_CD && player.isDeveloper()) {
             player.toggleCooldown();
             player.yellowMessage("[Debug] Skill cooldowns are toggled off by default due to your developer account status.");
             player.dropMessage(6, "[Reminder] You can type !togglecooldown to enable skill cooldowns.");
         }
-        
+
         // Game Master Quality of Life Features
         if (player.isGM()) {
             c.getPlayer().dropMessage(5, "[" + ServerConstants.SERVER_NAME + " Stealth] Your character is currently hidden.");

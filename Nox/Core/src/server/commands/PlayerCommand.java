@@ -99,7 +99,7 @@ public class PlayerCommand {
             return 1;
         }
     }
-    
+
     public static class Dispose extends CommandExecute {
 
         @Override
@@ -351,10 +351,10 @@ public class PlayerCommand {
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
                 nSize += ChannelServer.getInstance(i).getPlayerStorage().getAllCharacters().size();
             }
-            
+
             String sMessage = "#d" + ServerConstants.SERVER_NAME + " MapleStory Server#k\r\n"
-                            + "There are currently #e#r" + nSize + "#k#n user(s) online.\r\n\r\n#r";
-            
+                    + "There are currently #e#r" + nSize + "#k#n user(s) online.\r\n\r\n#r";
+
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
                 sMessage += ChannelServer.getInstance(i).getPlayerStorage().formatOnlinePlayers(true);
             }
@@ -493,7 +493,7 @@ public class PlayerCommand {
             }
         }
     }
-    
+
     public static class Home extends CommandExecute {
 
         @Override
@@ -637,7 +637,6 @@ public class PlayerCommand {
             return 1;
         }
     }*/
-
     public static class Support extends CommandExecute {
 
         @Override

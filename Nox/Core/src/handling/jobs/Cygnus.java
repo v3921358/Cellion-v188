@@ -47,10 +47,10 @@ public class Cygnus {
             if (pPlayer == null && !GameConstants.isThunderBreakerCygnus(pPlayer.getJob()) && !pPlayer.hasSkill(ThunderBreaker.LIGHTNING_ELEMENTAL)) {
                 return;
             }
-            
+
             int nMaxCount = 1;
             double nChargeProp = 0.10;
-            
+
             // Determining Maximum Amount of Lightning Buffs
             if (pPlayer.hasSkill(ThunderBreaker.ELECTRIFIED)) {
                 nMaxCount++; // 2 Total Charges
@@ -68,10 +68,10 @@ public class Cygnus {
                 nMaxCount++; // 5 Total Charges
                 nChargeProp += 0.20; // 100% Total
             }
-            
+
             // Handle Chance to Gain Lightning Buff
             if (new Random().nextDouble() <= nChargeProp) {
-              
+
                 // Update Lightning Buff Count
                 if (pPlayer.getComboStack() < nMaxCount) {
                     pPlayer.setComboStack(pPlayer.getComboStack() + 1);
@@ -79,7 +79,7 @@ public class Cygnus {
                     pPlayer.setComboStack(nMaxCount);
                 }
             }
-            
+
             final MapleStatEffect buffEffects = SkillFactory.getSkill(ThunderBreaker.LIGHTNING_ELEMENTAL).getEffect(pPlayer.getTotalSkillLevel(ThunderBreaker.LIGHTNING_ELEMENTAL));
 
             buffEffects.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pPlayer.getComboStack()); // TODO: Get charges stacking properly.

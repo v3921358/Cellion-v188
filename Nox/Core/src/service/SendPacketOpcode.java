@@ -1088,7 +1088,7 @@ public enum SendPacketOpcode {
     EndBattleRecord(1562),// Version 180
     SocketCreateResult(1565),// Version 180
     ViciousHammerResult(1567),// Version 180
-    
+
     GOLDEN_HAMMER(1431),
     ZERO_SCROLL_START(1447),
     ZERO_WEAPON_UI(1448),
@@ -1147,14 +1147,13 @@ public enum SendPacketOpcode {
     //0x314 int itemid int sn
     CASH_SHOP(1412), // VERSION 176
     CASH_SHOP_UPDATE(1413), // VERSION 176*/
-    
     CS_UPDATE(1406), //355
     CS_OPERATION(1407), //356
     CS_MESO_UPDATE(1408), //359
     //0x314 int itemid int sn
     CASH_SHOP(1431), // VERSION 176
     CASH_SHOP_UPDATE(1432), // VERSION 176
-    
+
     GACHAPON_STAMPS(595),
     FREE_CASH_ITEM(596),
     CS_SURPRISE(597),

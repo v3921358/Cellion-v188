@@ -40,7 +40,7 @@ public final class AranComboHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         final MapleCharacter chr = c.getPlayer();
         //PlayerHandler.aranCombo(c, chr, 1);
-        
+
         AranHandler.handleComboAbility(chr, 1);
     }
 }

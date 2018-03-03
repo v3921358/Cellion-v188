@@ -1,5 +1,6 @@
 package client;
 
+import client.MapleSpecialStats.MapleHyperStats;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,7 +21,7 @@ import client.inventory.ModifyInventory;
 import constants.EventConstants;
 import constants.GameConstants;
 import constants.InventoryConstants;
-import constants.skills.AdditionalSkills;
+import constants.skills.Global;
 import constants.skills.Aran;
 import constants.skills.Evan;
 import constants.skills.BattleMage;
@@ -31,7 +32,6 @@ import constants.skills.Mihile;
 import constants.skills.NightWalker;
 import constants.skills.Warrior;
 import constants.skills.Xenon;
-import constants.skills._HyperStatSkills;
 import handling.world.World;
 import handling.world.MapleGuild;
 import handling.world.MapleGuildSkill;
@@ -946,7 +946,7 @@ public class PlayerStats implements Serializable {
         }
 
         // Elven blessing
-        bx = SkillFactory.getSkill(AdditionalSkills.ELVEN_BLESSING);
+        bx = SkillFactory.getSkill(Global.ELVEN_BLESSING);
         bof = chra.getSkillLevel(bx);
         if (bof > 0) {
             this.expMod_ElveBlessing += bx.getEffect(bof).getX() / 100f;
@@ -1728,7 +1728,7 @@ public class PlayerStats implements Serializable {
                     passive_sharpeye_min_percent += eff.getCriticalMin();
                 }
 
-                bx = SkillFactory.getSkill(Evan.MAGIC_LINK); // High Life
+                bx = SkillFactory.getSkill(Global.MAGIC_LINK); // High Life
                 bof = chra.getTotalSkillLevel(bx);
                 if (bof > 0) {
                     eff = bx.getEffect(bof);
@@ -2560,7 +2560,7 @@ public class PlayerStats implements Serializable {
     }
 
     private void handleHyperStatPassive(MapleCharacter chra) {
-        for (int hyperSkill : _HyperStatSkills.ALL_HYPER_STATS) {
+        for (int hyperSkill : MapleSpecialStats.ALL_HYPER_STATS) {
             Skill skill = SkillFactory.getSkill(hyperSkill);
             int currentSkillLevel = chra.getSkillLevel(skill);
 

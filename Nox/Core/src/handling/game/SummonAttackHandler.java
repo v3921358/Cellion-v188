@@ -76,20 +76,20 @@ public class SummonAttackHandler implements ProcessPacket<MapleClient> {
         short nAttackCount = (short) (tbyte & 0xF);
 
         iPacket.DecodeByte(); // 0
-        
+
         // ptUserPos
         iPacket.DecodeShort(); // 0x81 / 129
         iPacket.DecodeShort(); // 0x8E / 142
-        
+
         // ptSummoned
         iPacket.DecodeShort();
         iPacket.DecodeShort();
-        
+
         iPacket.DecodeInteger(); // 0x94 / 148
         iPacket.DecodeShort(); // 0x8E / 142
         iPacket.DecodeInteger(); // -1
         iPacket.DecodeInteger(); // 0
-        
+
         iPacket.DecodeInteger();
 
         if (sse != null && nMobCount > sse.mobCount) {

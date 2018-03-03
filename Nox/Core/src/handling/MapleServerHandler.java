@@ -240,10 +240,10 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.ReleasePsychicArea.getValue()] = new KinesisDamageHandler();
         //Environment handlers
         handlers[RecvPacketOpcode.UpdateClientEnvironment.getValue()] = new ClientEnvironmentHandler();
-        
+
         //V Matrix
         handlers[RecvPacketOpcode.UserUpdateMatrix.getValue()] = new UpdateMatrixHandler();
-        
+
         //Field change handlers
         //Anticheat handlers
         handlers[RecvPacketOpcode.BUY_CS_ITEM.getValue()] = new CashShopPurchase();
@@ -341,7 +341,7 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
 
         int packetId = iPacket.DecodeShort();
         ProcessPacket handler = handlers[packetId];
-        
+
         String head = "Unknown";
         if (ServerConstants.DEVELOPER_DEBUG_MODE) {
             head = "Unknown";
@@ -350,7 +350,7 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
                     head = packet.name();
                 }
             }
-            
+
             switch (head) {
                 case "AliveAck":
                 case "UserQuestRequest":

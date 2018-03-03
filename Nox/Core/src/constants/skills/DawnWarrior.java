@@ -1,60 +1,99 @@
 package constants.skills;
 
 public class DawnWarrior {
-    //1st job
 
-    public static final int TRIPLE_SLASH = 11001020;
-    public static final int SOUL_ELEMENT = 11001022;
+    public static final int GUARDIAN_ARMOR_1 = 11000006;
     public static final int HAND_OF_LIGHT = 11000021;
+    public static final int HAND_OF_LIGHT_1 = 11001021;
+    public static final int HP_BOOST_3 = 11000005;
     public static final int INNER_VOICE = 11000023;
-
-    //2nd job
-    public static final int FLICKER = 11101120;
+    public static final int IRON_BODY_1 = 11001001;
+    public static final int POWER_STRIKE = 11001002;
+    public static final int SLASH_BLAST = 11001003;
+    public static final int SOUL = 11001004;
+    public static final int SOUL_ELEMENT = 11001022;
+    public static final int TRIPLE_SLASH = 11001020;
     public static final int BLUSTER = 11101220;
-    public static final int TRACE_CUT = 11101121;
-    public static final int SHADOW_TACKLE = 11101221;
-    public static final int FALLING_MOON = 11101022;
+    public static final int BRANDISH_1 = 11101008;
     public static final int DIVINE_HAND = 11100023;
-    public static final int SWORD_MASTERY = 11100025;
-    public static final int SOUL_SPEED = 11101024;
+    public static final int DIVINE_HAND_1 = 11101023;
+    public static final int FALLING_MOON = 11101022;
+    public static final int FINAL_ATTACK_3 = 11101002;
+    public static final int FLICKER = 11101120;
     public static final int INNER_HARMONY = 11100026;
-
-    //3rd job
-    public static final int LIGHT_MERGER = 11111220;
-    public static final int MOON_SHADOW = 11111120;
-    public static final int SUN_CROSS = 11111221;
-    public static final int MOON_CROSS = 11111121;
-    public static final int RISING_SUN = 11111022;
-    public static final int TRUE_SIGHT = 11111023;
-    public static final int SOUL_OF_THE_GUARDIAN = 11110024;
-    public static final int WILL_OF_STEEL = 11110025;
+    public static final int PHYSICAL_TRAINING = 11100007;
+    public static final int POWER_REFLECTION_1 = 11101006;
+    public static final int RAGE_1 = 11101003;
+    public static final int SHADOW_TACKLE = 11101221;
+    public static final int SOUL_BLADE_1 = 11101004;
+    public static final int SOUL_RUSH = 11101005;
+    public static final int SOUL_SPEED = 11101024;
+    public static final int SWORD_BOOSTER = 11101001;
+    public static final int SWORD_MASTERY = 11100000;
+    public static final int SWORD_MASTERY_1 = 11100025;
+    public static final int TRACE_CUT = 11101121;
+    public static final int ADVANCED_COMBO_1 = 11110005;
+    public static final int COMA_1 = 11111003;
+    public static final int COMBO_ATTACK_2 = 11111001;
     public static final int INNER_VOICE_1 = 11110026;
-
-    //4th job
-    public static final int CALL_OF_CYGNUS = 11121000;
-    public static final int MOON_DANCER = 11121101;
-    public static final int SPEEDING_SUNSET = 11121201;
-    public static final int SOLAR_PIERCE = 11121203;
+    public static final int INTREPID_SLASH_1 = 11111004;
+    public static final int LIGHT_MERGER = 11111220;
+    public static final int MAGIC_CRASH_7 = 11111008;
+    public static final int MOON_CROSS = 11111121;
+    public static final int MOON_SHADOW = 11111120;
+    public static final int PANIC_1 = 11111002;
+    public static final int RADIANT_CHARGE_2 = 11111007;
+    public static final int RISING_SUN = 11111022;
+    public static final int SELF_RECOVERY_3 = 11110000;
+    public static final int SOUL_DRIVER_1 = 11111006;
+    public static final int SOUL_OF_THE_GUARDIAN = 11110024;
+    public static final int SOUL_OF_THE_GUARDIAN_1 = 11111024;
+    public static final int SUN_CROSS = 11111221;
+    public static final int TRUE_SIGHT = 11111023;
+    public static final int WILL_OF_STEEL = 11110025;
+    public static final int CALL_OF_CYGNUS_3 = 11121000;
+    public static final int CAREENING_DANCE_BOSS_RUSH = 11120051;
+    public static final int CAREENING_DANCE_GUARDBREAK = 11120050;
+    public static final int CAREENING_DANCE_REINFORCE = 11120049;
     public static final int CRESCENT_DIVIDE = 11121103;
-    public static final int IMPALING_RAYS = 11121004;
-    public static final int EQUINOX_CYCLE = 11121005;
-    //public static final int EQUINOX_SLASH = ; nowhere to be found in wz files?
-    public static final int SOUL_PLEDGE = 11120006;
-    public static final int STUDENT_OF_THE_BLADE = 11120007;
-    public static final int UNPREDICTABLE = 11120008;
-    public static final int MASTER_OF_THE_SWORD = 11120009;
-
-    //hyper skills
-    public static final int TRUE_SIGHT_PERSIST = 11120043;
-    public static final int TRUE_SIGHT_ENHANCE = 11120044;
-    public static final int TRUE_SIGHT_GUARDBREAK = 11120045;
+    public static final int DIVIDE_AND_PIERCE_EXTRA_STRIKE = 11120048;
     public static final int DIVIDE_AND_PIERCE_REINFORCE = 11120046;
     public static final int DIVIDE_AND_PIERCE_SPREAD = 11120047;
-    public static final int DIVIDE_AND_PIERCE_EXTRA_STRIKE = 11120048;
-    public static final int CAREENING_DANCE_REINFORCE = 11120049;
-    public static final int CAREENING_DANCE_GUARDBREAK = 11120050;
-    public static final int CAREENING_DANCE_BOSS_RUSH = 11120051;
-    public static final int STYX_CROSSING = 11121052;
-    public static final int GLORY_OF_THE_GUARDIANS = 11121053;
+    public static final int EQUINOX_CYCLE = 11121005;
+    public static final int EQUINOX_CYCLE_1 = 11121012;
+    public static final int EQUINOX_CYCLE_2 = 11121011;
+    public static final int EQUINOX_SLASH = 11121014;
+    public static final int GLORY_OF_THE_GUARDIANS_2 = 11121053;
+    public static final int HYPER_ACCURACY_50_5 = 11120035;
+    public static final int HYPER_CRITICAL_50_5 = 11120034;
+    public static final int HYPER_DEFENSE_20_2 = 11120039;
+    public static final int HYPER_DEXTERITY_50_5 = 11120031;
+    public static final int HYPER_FURY_50_5 = 11120038;
+    public static final int HYPER_HEALTH_50_5 = 11120036;
+    public static final int HYPER_INTELLIGENCE_50_5 = 11120032;
+    public static final int HYPER_JUMP_50_5 = 11120042;
+    public static final int HYPER_LUCK_50_5 = 11120033;
+    public static final int HYPER_MAGIC_DEFENSE_50_5 = 11120040;
+    public static final int HYPER_MANA_50_5 = 11120037;
+    public static final int HYPER_SPEED_50_5 = 11120041;
+    public static final int HYPER_STRENGTH_50_5 = 11120030;
+    public static final int IMPALING_RAYS = 11121004;
+    public static final int IMPALING_RAYS_1 = 11121013;
+    public static final int MASTER_OF_THE_SWORD = 11120009;
+    public static final int MASTER_OF_THE_SWORD_1 = 11120010;
+    public static final int MOON_DANCER = 11121102;
+    public static final int MOON_DANCER_1 = 11121101;
+    public static final int SOLAR_PIERCE = 11121203;
     public static final int SOUL_FORGE = 11121054;
+    public static final int SOUL_PLEDGE = 11120006;
+    public static final int SOUL_PLEDGE_1 = 11121006;
+    public static final int SPEEDING_SUNSET = 11121201;
+    public static final int SPEEDING_SUNSET_1 = 11121202;
+    public static final int STUDENT_OF_THE_BLADE = 11120007;
+    public static final int STYX_CROSSING = 11121052;
+    public static final int STYX_CROSSING_1 = 11121055;
+    public static final int TRUE_SIGHT_ENHANCE = 11120044;
+    public static final int TRUE_SIGHT_GUARDBREAK = 11120045;
+    public static final int TRUE_SIGHT_PERSIST = 11120043;
+    public static final int UNPREDICTABLE = 11120008;
 }

@@ -165,19 +165,19 @@ public class JobPacket {
     }
 
     public static class ShadePacket {
-        
+
         public static Packet FoxSpirit(MapleCharacter pPlayer, AttackMonster oMonster) {
             OutPacket oPacket = new OutPacket(80);
-            
+
             oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
-            
+
             oPacket.Encode(0); // bByMob
             oPacket.EncodeInteger(pPlayer.getId()); // nCharId
             oPacket.EncodeInteger(13); // nAtomType // 17 = Orbital Flame
             oPacket.Encode(1); // bToMob
             oPacket.EncodeInteger(1); // Unkown
             oPacket.EncodeInteger(oMonster.getObjectId()); // nObjectId
-            
+
             int nAtomId = Shade.FOX_SPIRITS_ATOM;
             int nAtomCount = 2;
             if (pPlayer.hasSkill(Shade.FOX_SPIRIT_MASTERY)) {
@@ -185,7 +185,7 @@ public class JobPacket {
                 nAtomCount = 3;
             }
             oPacket.EncodeInteger(nAtomId); // nAtomId
-            
+
             for (int i = 0; i < nAtomCount; i++) { // nAttackCount
                 oPacket.Encode(1);
                 oPacket.EncodeInteger(i + 2); //dwKey
@@ -198,13 +198,13 @@ public class JobPacket {
                 oPacket.EncodeInteger(Randomizer.nextInt()); // nCharPositionY
                 oPacket.EncodeInteger(0); // dwCreateTime
             }
-            
+
             oPacket.Encode(0); // Unkown
             oPacket.Fill(0, 69); // For no d/c memes.
-            
+
             return oPacket.ToPacket();
         }
-        
+
         /*public static Packet FoxSpirit2(int cid, int skillid, int ga, int oid, int gu) {
             OutPacket oPacket = new OutPacket(80);
             oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
@@ -234,12 +234,12 @@ public class JobPacket {
             return oPacket.ToPacket();
         }*/
     }
-    
+
     public static class NightWalkerPacket {
-        
+
         public static Packet ShadowBats(int nCharId, int nObjectId) {
             OutPacket oPacket = new OutPacket(80);
-            
+
             oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
             oPacket.Encode(0);
             oPacket.EncodeInteger(nCharId);
@@ -247,7 +247,7 @@ public class JobPacket {
             oPacket.Encode(1);
             oPacket.EncodeInteger(nObjectId);
             oPacket.EncodeInteger(14000028); // nAtomId
-            
+
             for (int i = 0; i < 3; i++) {
                 oPacket.Encode(1);
                 oPacket.EncodeInteger(i + 2);
@@ -260,14 +260,14 @@ public class JobPacket {
                 oPacket.EncodeInteger(Randomizer.nextInt());
                 oPacket.EncodeInteger(0);
             }
-            
+
             oPacket.Encode(0);
             oPacket.Fill(0, 69); // For no d/c memes.
-            
+
             return oPacket.ToPacket();
         }
     }
-    
+
     public static class AngelicBusterPacket {
 
         public static Packet Starshooter(int cid, int skillid, int ga, int oid, int gu) {
@@ -299,7 +299,7 @@ public class JobPacket {
             return oPacket.ToPacket();
         }
     }
-    
+
     public static class KaiserPacket {
 
         public static Packet sendKaiserSkillShortcut(int[] skills) {
@@ -328,7 +328,7 @@ public class JobPacket {
 
         public static Packet ThrowCarte(int nCharId, int nObjectId) {
             OutPacket oPacket = new OutPacket(80);
-            
+
             oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
             oPacket.Encode(0);
             oPacket.EncodeInteger(nCharId);
@@ -336,7 +336,7 @@ public class JobPacket {
             oPacket.Encode(1);
             oPacket.EncodeInteger(nObjectId);
             oPacket.EncodeInteger(24120002); // nAtomId
-            
+
             for (int i = 0; i < 3; i++) {
                 oPacket.Encode(1);
                 oPacket.EncodeInteger(i + 2);
@@ -349,13 +349,13 @@ public class JobPacket {
                 oPacket.EncodeInteger(Randomizer.nextInt());
                 oPacket.EncodeInteger(0);
             }
-            
+
             oPacket.Encode(0);
             oPacket.Fill(0, 69); // For no d/c memes.
-            
+
             return oPacket.ToPacket();
         }
-        
+
         public static Packet addStolenSkill(int jobNum, int index, int skill, int level) {
             OutPacket oPacket = new OutPacket(80);
 
@@ -667,7 +667,7 @@ public class JobPacket {
 
             return oPacket.ToPacket();
         }
-        
+
         public static Packet givePsychicPoint(int skillid, int point) {
             OutPacket oPacket = new OutPacket(80);
             oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
@@ -696,7 +696,7 @@ public class JobPacket {
     }
 
     public static class XenonPacket {
-        
+
         public static Packet giveXenonSupply(short amount) {
             OutPacket oPacket = new OutPacket(80);
 

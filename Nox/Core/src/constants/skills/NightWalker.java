@@ -1,67 +1,103 @@
 package constants.skills;
 
 public class NightWalker {
-    //1st job
 
-    public static final int LUCKY_SEVEN = 14001004;
-    public static final int DARK_SIGHT = 14001023; //14001003;
-    public static final int HASTE = 14001007;
-    public static final int HASTE_1 = 14001022;
+    public static final int DARKNESS = 14001005;
     public static final int DARK_ELEMENTAL = 14001021;
-    public static final int SHADOW_DODGE = 14001024;
-    public static final int SHADOW_JUMP = 14001026;
-
-    //2nd job
-    public static final int CRITICAL_THROW = 14100024;
-    public static final int PHYSICAL_TRAINING = 14100010;
-    public static final int TRIPLE_THROW = 14101020;
-    public static final int THROWING_BOOSTER = 14101022;
-    public static final int THROWING_MASTERY = 14100023;
-    public static final int ADAPTIVE_DARKNESS = 14100026;
-    public static final int BAT_AFFINITY = 14100027;
-
-    //3rd job
-    public static final int QUAD_STAR = 14111005;
-    public static final int SHADOW_SPARK = 14111022;
-    public static final int SHADOW_SPARK_EXPLOSION = 14111023;
-    public static final int DARK_SERVANT = 14111024;
-    public static final int SPIRIT_PROJECTION = 14111025;
-    public static final int ENVELOPING_DARKNESS = 14110009;
-    public static final int ALCHEMIC_ADRENALINE = 14110027;
-    public static final int ADAPTIVE_DARKNESS_2 = 14110028;
-    public static final int BAT_AFFINITY_2 = 14110029;
-    public static final int DARKNESS_ASCENDING = 14110030;
-
-    //4th job
-    public static final int CALL_OF_CYGNUS = 14121000;
-    public static final int QUINTUPLE_STAR = 14121001;
-    public static final int DARK_OMEN = 14121003;
-    public static final int SHADOW_STITCH = 14121004;
-    public static final int THROWING_EXPERT = 14120005;
-    public static final int DARK_BLESSING = 14120006;
-    public static final int ADAPTIVE_DARKNESS_3 = 14120007;
-    public static final int BAT_AFFINITY_3 = 14120008;
-    public static final int VITALITY_SIPHON = 14120009;
-    public static final int SHADOW_SLIP = 14120010;
-
-    //hyper skills
-    public static final int QUINTUPLE_STAR_REINFORCE = 14120043;
-    public static final int QUINTUPLE_STAR_BOSS_RUSH = 14120044;
-    public static final int QUINTUPLE_STAR_CRITICAL_CHANCE = 14120045;
-    public static final int DARK_OMEN_COOLDOWN_CUTTER = 14120046;
-    public static final int DARK_OMEN_SPREAD = 14120047;
-    public static final int DARK_OMEN_REINFORCE = 14120048;
-    public static final int VITALITY_SIPHON_EXTRA_POINT = 14120049;
-    public static final int VITALITY_SIPHON_STEEL_SKIN = 14120050;
-    public static final int VITALITY_SIPHON_PREPARATION = 14120051;
-    public static final int SHADOW_ILLUSION = 14121054;
-    public static final int DOMINION = 14121052;
-    public static final int GLORY_OF_THE_GUARDIANS = 14121053;
-
-    //bat skills
-    public static final int SHADOW_BAT = 14000027;
+    public static final int DARK_SIGHT = 14001023;
+    public static final int DARK_SIGHT_1 = 14001003;
+    public static final int DISORDER = 14001002;
+    public static final int HASTE_1 = 14001022;
+    public static final int HASTE_2 = 14001007;
+    public static final int KEEN_EYES = 14000001;
+    public static final int LUCKY_SEVEN_1 = 14001020;
+    public static final int LUCKY_SEVEN_2 = 14001004;
+    public static final int MAGIC_THEFT = 14000006;
+    public static final int NIMBLE_BODY = 14000000;
+    public static final int NIMBLE_BODY_1 = 14000025;
+    public static final int SHADOW_BAT = 14000028;
+    public static final int SHADOW_BAT_1 = 14000027;
     public static final int SHADOW_BAT_2 = 14000029;
     public static final int SHADOW_BAT_3 = 14001027;
-    public static final int SHADOW_BAT_ATOM = 14000028; // Shadow Bat ForceCreateAtom ID
-    
+    public static final int SHADOW_DODGE = 14001024;
+    public static final int SHADOW_JUMP = 14001026;
+    public static final int ADAPTIVE_DARKNESS = 14100026;
+    public static final int BAT_AFFINITY = 14100027;
+    public static final int CLAW_BOOSTER = 14101002;
+    public static final int CLAW_MASTERY_1 = 14100000;
+    public static final int CRITICAL_THROW_1 = 14100001;
+    public static final int CRITICAL_THROW_2 = 14100024;
+    public static final int FLASH_JUMP_1 = 14101004;
+    public static final int GUST_CHARM = 14101009;
+    public static final int HASTE = 14101003;
+    public static final int PHYSICAL_TRAINING_200_20_2 = 14100010;
+    public static final int PHYSICAL_TRAINING_300_30_3 = 14100025;
+    public static final int SHURIKEN_BURST = 14101008;
+    public static final int THROWING_BOOSTER = 14101022;
+    public static final int THROWING_MASTERY = 14100023;
+    public static final int TRIPLE_THROW_1 = 14101021;
+    public static final int TRIPLE_THROW_2 = 14101020;
+    public static final int VAMPIRE = 14101006;
+    public static final int VANISH = 14100005;
+    public static final int ADAPTIVE_DARKNESS_II = 14110028;
+    public static final int ALCHEMIC_ADRENALINE = 14110027;
+    public static final int ALCHEMIC_ADRENALINE_1 = 14110011;
+    public static final int ALCHEMIST = 14110003;
+    public static final int AVENGER = 14111002;
+    public static final int BAT_AFFINITY_II = 14110029;
+    public static final int DARKNESS_ASCENDING = 14110030;
+    public static final int DARK_FLARE_1 = 14111010;
+    public static final int DARK_SERVANT = 14111024;
+    public static final int ENVELOPING_DARKNESS = 14110026;
+    public static final int ENVELOPING_DARKNESS_1 = 14110009;
+    public static final int POISON_BOMB = 14111006;
+    public static final int QUAD_STAR_1 = 14111005;
+    public static final int QUAD_STAR_2 = 14111020;
+    public static final int QUAD_STAR_3 = 14111021;
+    public static final int SHADE_SPLITTER = 14111008;
+    public static final int SHADOW_PARTNER_1 = 14111000;
+    public static final int SHADOW_SPARK = 14111022;
+    public static final int SHADOW_SPARK_1 = 14111023;
+    public static final int SHADOW_STARS = 14111007;
+    public static final int SHADOW_WEB = 14111001;
+    public static final int SPIRIT_PROJECTION = 14111025;
+    public static final int VENOM_1 = 14110004;
+    public static final int ADAPTIVE_DARKNESS_III = 14120007;
+    public static final int BAT_AFFINITY_III = 14120008;
+    public static final int CALL_OF_CYGNUS_2 = 14121000;
+    public static final int DARK_BLESSING = 14120006;
+    public static final int DARK_OMEN = 14121003;
+    public static final int DARK_OMEN_COOLDOWN_CUTTER = 14120046;
+    public static final int DARK_OMEN_REINFORCE = 14120048;
+    public static final int DARK_OMEN_SPREAD = 14120047;
+    public static final int DOMINION = 14121052;
+    public static final int GLORY_OF_THE_GUARDIANS_1 = 14121053;
+    public static final int HYPER_ACCURACY_10 = 14120035;
+    public static final int HYPER_CRITICAL_10 = 14120034;
+    public static final int HYPER_DEFENSE_8 = 14120039;
+    public static final int HYPER_DEXTERITY_10_1 = 14120031;
+    public static final int HYPER_FURY_10 = 14120038;
+    public static final int HYPER_HEALTH_10 = 14120036;
+    public static final int HYPER_INTELLIGENCE_10_1 = 14120032;
+    public static final int HYPER_JUMP_10 = 14120042;
+    public static final int HYPER_LUCK_10_1 = 14120033;
+    public static final int HYPER_MAGIC_DEFENSE_10 = 14120040;
+    public static final int HYPER_MANA_10 = 14120037;
+    public static final int HYPER_SPEED_10 = 14120041;
+    public static final int HYPER_STRENGTH_10_1 = 14120030;
+    public static final int QUINTUPLE_STAR = 14121001;
+    public static final int QUINTUPLE_STAR_1 = 14121002;
+    public static final int QUINTUPLE_STAR_BOSS_RUSH = 14120044;
+    public static final int QUINTUPLE_STAR_CRITICAL_CHANCE = 14120045;
+    public static final int QUINTUPLE_STAR_REINFORCE = 14120043;
+    public static final int SHADOW_ILLUSION = 14121054;
+    public static final int SHADOW_ILLUSION_1 = 14121055;
+    public static final int SHADOW_ILLUSION_2 = 14121056;
+    public static final int SHADOW_SLIP = 14120010;
+    public static final int SHADOW_STITCH = 14121004;
+    public static final int THROWING_EXPERT = 14120005;
+    public static final int VITALITY_SIPHON = 14120009;
+    public static final int VITALITY_SIPHON_EXTRA_POINT = 14120049;
+    public static final int VITALITY_SIPHON_PREPARATION = 14120051;
+    public static final int VITALITY_SIPHON_STEEL_SKIN = 14120050;
 }

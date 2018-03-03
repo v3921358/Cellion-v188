@@ -120,8 +120,8 @@ public class MapleClient extends CClientSocket {
     @Override
     public void write(Packet oPacket) {
         if (ServerConstants.DEVELOPER_DEBUG_MODE) {
-            if(SendPacketOpcode.eOp != null) {
-                switch(SendPacketOpcode.eOp) {
+            if (SendPacketOpcode.eOp != null) {
+                switch (SendPacketOpcode.eOp) {
                     case MobCtrlAck:
                     case StatChanged:
                     case NpcMove:

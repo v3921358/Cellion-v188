@@ -46,17 +46,16 @@ public final class CloseRangeAttack {
 
         //AttackInfo attack = DamageParse.parseCloseRangeAttack(iPacket, chr, passiveAttack);
         AttackInfo attack = DamageParse.OnAttack(RecvPacketOpcode.UserMeleeAttack, iPacket, chr);
-        
+
         /*if (passiveAttack) {
             attack = DamageParse.OnAttack(RecvPacketOpcode.UserBodyAttack, iPacket, chr);
         } else {
             attack = DamageParse.OnAttack(RecvPacketOpcode.UserMeleeAttack, iPacket, chr);
         }*/
-        
         if (chr.isDeveloper()) {
             c.getPlayer().dropMessage(5, "[Debug] CloseRangeAttack: Skill ID (" + attack.skill + ")");
         }
-        
+
         final boolean mirror = (chr.hasBuff(CharacterTemporaryStat.ShadowPartner) || chr.hasBuff(CharacterTemporaryStat.ShadowServant));
         double maxdamage = chr.getStat().getCurrentMaxBaseDamage();
         Item shield = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -10);
@@ -71,7 +70,7 @@ public final class CloseRangeAttack {
                 c.write(CWvsContext.enableActions());
                 return;
             }
-            
+
             if (GameConstants.isDemonAvenger(c.getPlayer().getJob())) {
 
                 // 1% of Maximum HP as Skill Cost.
@@ -91,7 +90,7 @@ public final class CloseRangeAttack {
             }
 
             switch (attack.skill) {
-                case Zero.RISING_SLASH:
+                case Zero.RISING_SLASH_2:
                 case Zero.FLASH_CUT:
                 case Zero.SPIN_DRIVER:
                 case Zero.GIGA_CRASH:
@@ -180,7 +179,7 @@ public final class CloseRangeAttack {
         DamageParse.applyAttack(attack, skill, c.getPlayer(), attackCount, maxdamage, effect, mirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
         int bulletCount = 1;
         switch (attack.skill) {
-            case Page.FLAME_CHARGE:
+            case Page.FLAME_CHARGE_1:
                 bulletCount = effect.getAttackCount();
                 DamageParse.applyAttack(attack, skill, chr, skillLevel, maxdamage, effect, AttackType.NON_RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
                 break;

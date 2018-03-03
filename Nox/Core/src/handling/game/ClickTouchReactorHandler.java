@@ -28,7 +28,7 @@ public class ClickTouchReactorHandler implements ProcessPacket<MapleClient> {
         if (c.getPlayer().isIntern()) {
             c.getPlayer().dropMessage(5, "[Debug] Reactor ID : " + oid);
         }
-        
+
         if (!touched || reactor == null || !reactor.isAlive() || reactor.getTouch() == 0) {
             return;
         }

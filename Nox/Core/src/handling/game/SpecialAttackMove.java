@@ -49,7 +49,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
         MapleCharacter pPlayer = c.getPlayer();
         pPlayer.updateTick(iPacket.DecodeInteger());
         int nSkill = iPacket.DecodeInteger();
-        
+
         switch (nSkill) {
             case 14110030:
             case 25111209:
@@ -61,24 +61,23 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 }
                 break;
         }
-        
+
         if (GameConstants.isDisabledSkill(nSkill)) { // Just for broken skills that we want disabled.
             //pPlayer.dropMessage(5, "Sorry, this skill is currently disabled.");
             //c.write(CWvsContext.enableActions());
             //return;
         }
 
-        
         // Special Case Toggle Skills
-     // These toggles are technically buffs, but do not get handled by the buff manager. -Mazen
+        // These toggles are technically buffs, but do not get handled by the buff manager. -Mazen
         switch (nSkill) {
-            
+
             case WildHunter.SOUL_ARROW_CROSSBOW: {
                 c.write(CField.SummonPacket.jaguarActive(true));
                 break;
             }
-            
-            case WildHunter.JAGUAR_RIDER:{
+
+            case WildHunter.JAGUAR_RIDER: {
                 /*final MapleStatEffect pEffect = SkillFactory.getSkill(WildHunter.JAGUAR_RIDER).getEffect(pPlayer.getTotalSkillLevel(WildHunter.JAGUAR_RIDER));
                 MapleSummon pSummon = new MapleSummon(pPlayer, pEffect, pPlayer.getPosition(), SummonMovementType.SUMMON_JAGUAR, 2100000000);
                 pSummon.setPosition(pPlayer.getPosition());
@@ -87,8 +86,8 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 c.write(CField.SummonPacket.jaguarActive(true));
                 break;
             }
-            
-            case Xenon.PINPOINT_SALVO:{
+
+            case Xenon.PINPOINT_SALVO: {
                 if (!GameConstants.isXenon(pPlayer.getJob())) {
                     return;
                 }
@@ -98,9 +97,9 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, Xenon.PINPOINT_SALVO, 2100000000, buffEffects.statups, buffEffects));
                 break;
             }
-            
+
             case Xenon.AEGIS_SYSTEM:
-            case Xenon.AEGIS_SYSTEM_1 :{
+            case Xenon.AEGIS_SYSTEM_1: {
                 if (!GameConstants.isXenon(pPlayer.getJob())) {
                     return;
                 }
@@ -110,8 +109,8 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, Xenon.AEGIS_SYSTEM, 2100000000, buffEffects.statups, buffEffects));
                 break;
             }
-            
-            case Aran.BODY_PRESSURE:{
+
+            case Aran.BODY_PRESSURE: {
                 if (!GameConstants.isAran(pPlayer.getJob())) {
                     return;
                 }
@@ -121,11 +120,11 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, Aran.BODY_PRESSURE, 2100000000, buffEffects.statups, buffEffects));
                 break;
             }
-            
+
             case BattleMage.CONDEMNATION:
             case BattleMage.GRIM_CONTRACT:
-            case BattleMage.GRIM_CONTRACT_2:
-            case BattleMage.GRIM_CONTRACT_3: {
+            case BattleMage.GRIM_CONTRACT_II:
+            case BattleMage.GRIM_CONTRACT_III: {
                 if (!GameConstants.isBattleMage(pPlayer.getJob())) {
                     return;
                 }
@@ -135,7 +134,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, BattleMage.CONDEMNATION, 2100000000, buffEffects.statups, buffEffects));
                 break;
             }
-            
+
             case NightWalker.SHADOW_BAT:
             case NightWalker.SHADOW_BAT_2:
             case NightWalker.SHADOW_BAT_3: {
@@ -152,8 +151,8 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 }
                 break;
             }
-            
-            case Shade.FOX_SPIRITS:{
+
+            case Shade.FOX_SPIRITS: {
                 if (!GameConstants.isShade(pPlayer.getJob())) {
                     return;
                 }
@@ -163,24 +162,24 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, Shade.FOX_SPIRITS, 2100000000, buffEffects.statups, buffEffects));
                 break;
             }
-            
-            case WindArcher.TRIFLING_WIND_1:
-            case WindArcher.TRIFLING_WIND_2:
-            case WindArcher.TRIFLING_WIND_3:{
+
+            case WindArcher.TRIFLING_WIND_I:
+            case WindArcher.TRIFLING_WIND_II:
+            case WindArcher.TRIFLING_WIND_III: {
                 if (!GameConstants.isWindArcherCygnus(pPlayer.getJob())) {
                     return;
                 }
-                final MapleStatEffect buffEffects = SkillFactory.getSkill(WindArcher.TRIFLING_WIND_1).getEffect(pPlayer.getTotalSkillLevel(WindArcher.TRIFLING_WIND_1));
+                final MapleStatEffect buffEffects = SkillFactory.getSkill(WindArcher.TRIFLING_WIND_I).getEffect(pPlayer.getTotalSkillLevel(WindArcher.TRIFLING_WIND_I));
                 buffEffects.statups.put(CharacterTemporaryStat.TriflingWhimOnOff, buffEffects.info.get(MapleStatInfo.x));
                 pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), null, buffEffects.statups, false, 2100000000, pPlayer.getId());
-                pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, WindArcher.TRIFLING_WIND_1, 2100000000, buffEffects.statups, buffEffects));
+                pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, WindArcher.TRIFLING_WIND_III, 2100000000, buffEffects.statups, buffEffects));
                 break;
             }
         }
 
         // Kinesis Psychic Points handling.
         if (GameConstants.isKinesis(pPlayer.getJob())) {
-           handling.jobs.Kinesis.KinesisHandler.handlePsychicPoint(pPlayer, nSkill);
+            handling.jobs.Kinesis.KinesisHandler.handlePsychicPoint(pPlayer, nSkill);
         }
 
         if (nSkill >= 91000000 && nSkill < 100000000) {
@@ -340,7 +339,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 break;
             }*/
 
-            /*case NightWalker.SHADOW_BAT:
+ /*case NightWalker.SHADOW_BAT:
             case NightWalker.SHADOW_BAT_1:
             case NightWalker.SHADOW_BAT_2:
             case NightWalker.SHADOW_BAT_3: { 
@@ -352,19 +351,18 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 buffeffect.applyTo(chr, null);
                 break;
             }*/
-            
             case NightWalker.DARK_OMEN: {
                 for (int i = 0; i <= 5; i++) {
                     pPlayer.getMap().broadcastMessage(JobPacket.NightWalkerPacket.ShadowBats(pPlayer.getId(), pPlayer.getObjectId()));
                 }
                 break;
             }
-            
+
             case 4221054:
                 pPlayer.getMap().broadcastMessage(CField.OnOffFlipTheCoin(false));
                 pPlayer.dualBrid = 0;
                 break;
-            case Citizen.CAPTURE:
+            case Citizen.CAPTURE_4:
                 nMob = iPacket.DecodeInteger();
                 pMob = pPlayer.getMap().getMonsterByOid(nMob);
                 if (pMob != null) {
@@ -380,12 +378,12 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                     }
                 }
                 break;
-            case Citizen.CALL_OF_THE_HUNTER:
+            case Citizen.CALL_OF_THE_HUNTER_4:
                 pPlayer.dropMessage(5, "No monsters can be summoned. Capture a monster first.");
                 break;
             case DemonAvenger.NETHER_SHIELD:
             case Xenon.PINPOINT_SALVO:
-            case FPArchmage.MEGIDDO_FLAME: {
+            case FirePoisonArchMage.MEGIDDO_FLAME: {
                 List<Integer> moblist = new ArrayList<>();
                 byte count = iPacket.DecodeByte();
                 for (byte i = 1; i <= count; i++) {
@@ -398,7 +396,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                     case Xenon.PINPOINT_SALVO:
                         c.write(JobPacket.XenonPacket.PinPointRocket(pPlayer.getId(), moblist));
                         break;
-                    case FPArchmage.MEGIDDO_FLAME:
+                    case FirePoisonArchMage.MEGIDDO_FLAME:
                         c.write(JobPacket.XenonPacket.MegidoFlameRe(pPlayer.getId(), moblist.get(0)));
                         break;
                     default:
@@ -505,18 +503,17 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 if ((iPacket.Available() == 5L) || (iPacket.Available() == 7L)) {
                     pos = iPacket.DecodePosition();
                 }
-                int mountid = MapleStatEffect.parseMountInfo(c.getPlayer(), skill.getId());
 
                 if ((effect.isMagicDoor() && !FieldLimitType.UnableToUseMysticDoor.check(pPlayer.getMap())) // check magic door
                         // check mount req
-                        || (mountid != 0 && (mountid != GameConstants.getMountItem(skill.getId(), c.getPlayer())) && (!c.getPlayer().isIntern()) && (c.getPlayer().getBuffedValue(CharacterTemporaryStat.RideVehicle) == null) && (c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -122) == null) && (!GameConstants.isMountItemAvailable(mountid, c.getPlayer().getJob())))) {
+                        || ((!c.getPlayer().isIntern()) && (c.getPlayer().getBuffedValue(CharacterTemporaryStat.RideVehicle) == null) && (c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -122) == null))) {
                     c.write(CWvsContext.enableActions());
                     return;
                 }
                 effect.applyTo(c.getPlayer(), pos);
             }
         }
-        
+
         // Zero Cooldown Reduction Handling
         if (GameConstants.isZero(pPlayer.getJob())) {
             switch (nSkill) {
@@ -524,7 +521,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 case Zero.FLASH_ASSAULT:
                 case Zero.ROLLING_CROSS:
                 case Zero.WIND_CUTTER: {
-                    pPlayer.removeCooldown(Zero.RISING_SLASH);
+                    pPlayer.removeCooldown(Zero.RISING_SLASH_2);
                     pPlayer.removeCooldown(Zero.AIR_RAID);
                     pPlayer.removeCooldown(Zero.AIR_RIOT);
                     pPlayer.removeCooldown(Zero.FLASH_CUT);
@@ -539,7 +536,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                     pPlayer.removeCooldown(Zero.ADVANCED_EARTH_BREAK);
                     break;
                 }
-                case Zero.RISING_SLASH:
+                case Zero.RISING_SLASH_2:
                 case Zero.FLASH_CUT:
                 case Zero.SPIN_DRIVER:
                 case Zero.GIGA_CRASH: {

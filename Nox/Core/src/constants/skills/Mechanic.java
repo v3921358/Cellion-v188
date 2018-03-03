@@ -1,62 +1,90 @@
 package constants.skills;
 
 public class Mechanic {
-    //1st job
 
-    public static final int HUMANOID_MECH = 35001002;
+    public static final int FLAME_LAUNCHER = 35001001;
+    public static final int FORTUNES_FAVOR_4 = 35000005;
     public static final int GATLING_GUN = 35001004;
+    public static final int GODDESS_GUARD_1000_100_10 = 35000223;
+    public static final int GODDESS_GUARD_4000_400_40_4 = 35001224;
+    public static final int HUMANOID_MECH = 35001002;
     public static final int ME07_DRILLHANDS = 35001003;
     public static final int ROCKET_BOOSTER = 35001006;
-
-    //2nd job
+    public static final int ATOMIC_HAMMER = 35101003;
+    public static final int ENHANCED_FLAME_LAUNCHER = 35101009;
+    public static final int ENHANCED_GATLING_GUN = 35101010;
     public static final int HEAVY_GATLING_GUN = 35101001;
-    public static final int HOMING_BEACON = 35101002;
+    public static final int HEAVY_WEAPON_MASTERY = 35100008;
+    public static final int HOMING_BEACON_1 = 35101002;
     public static final int MECHANIC_MASTERY = 35100000;
     public static final int MECHANIC_RAGE = 35101006;
     public static final int OPEN_PORTAL_GX9 = 35101005;
     public static final int PERFECT_ARMOR = 35101007;
+    public static final int PHYSICAL_TRAINING_30_3 = 35100011;
     public static final int ROBO_LAUNCHER_RM7 = 35101012;
-    public static final int PHYSICAL_TRAINING = 35100011;
-
-    //3rd job
-    public static final int TANK_MECH = 35111003;
-    public static final int HEAVY_SALVO = 35111006;
+    public static final int ROCKET_BOOSTER_1 = 35101004;
+    public static final int ACCELERATION_BOT_EX7 = 35111005;
+    public static final int ADVANCED_HOMING_BEACON = 35110017;
     public static final int AP_SALVO = 35111007;
-    public static final int SUPPORT_UNIT_HEX = 35111008;
+    public static final int BATTLE_PROGRAM = 35110019;
+    public static final int HEALING_ROBOT_HLX = 35111011;
+    public static final int HEAVY_SALVO = 35111006;
+    public static final int MECHANIZED_DEFENSE_SYSTEM = 35110018;
+    public static final int MECH_SIEGE_MODE = 35111004;
+    public static final int METAL_FIST_MASTERY = 35110014;
+    public static final int OVERCLOCK = 35110016;
+    public static final int OVERCLOCK_1 = 35111016;
     public static final int PUNCH_LAUNCHER = 35111015;
     public static final int ROCK_N_SHOCK = 35111002;
-    public static final int ADVANCED_HOMING_BEACON = 35110017;
-    public static final int MECHANIZED_DEFENSE_SYSTEM = 35110018;
-    public static final int BATTLE_PROGRAM = 35110019;
     public static final int ROLL_OF_THE_DICE = 35111013;
-    public static final int OVERCLOCK = 35111016;
-
-    //4th job
-    public static final int HEAVY_SALVO_PLUS = 35121015;
-    public static final int AP_SALVO_PLUS = 35121016;
-    public static final int EXTREME_MECH = 35120000;
-    public static final int GIANT_ROBOT_SG88 = 35121003;
+    public static final int SATELLITE = 35111010;
+    public static final int SATELLITE_1 = 35111009;
+    public static final int SATELLITE_2 = 35111001;
+    public static final int SUPPORT_UNIT_HEX = 35111008;
+    public static final int TANK_MECH = 35111003;
+    public static final int AMPLIFIER_ROBOT_AF11 = 35121010;
+    public static final int AP_SALVO_PLUS = 35121019;
+    public static final int AP_SALVO_PLUS_1 = 35121016;
+    public static final int AP_SALVO_PLUS_EXTRA_STRIKE = 35120051;
+    public static final int BOTS_N_TOTS = 35121011;
+    public static final int BOTS_N_TOTS_1 = 35121009;
+    public static final int DISTORTION_BOMB = 35121052;
+    public static final int DOUBLE_DOWN_3 = 35120014;
     public static final int ENHANCED_SUPPORT_UNIT = 35120002;
-    public static final int BOTS_N_TOTS = 35121009;
-    public static final int BOTS_N_TOTS_1 = 35121011;
-    public static final int ROBOT_MASTERY = 35120001;
-    public static final int MAPLE_WARRIOR = 35121007;
-    public static final int HEROS_WILL = 35121008;
+    public static final int EXTREME_MECH = 35120000;
+    public static final int FOR_LIBERTY_3 = 35121053;
+    public static final int FULL_SPREAD = 35121055;
+    public static final int GIANT_ROBOT_SG88_ = 35121003;
+    public static final int HEAVY_SALVO_PLUS = 35121015;
+    public static final int HEAVY_SALVO_PLUS_SPREAD = 35120050;
+    public static final int HEROS_WILL_600_60_6 = 35121008;
     public static final int HOMING_BEACON_RESEARCH = 35120017;
-    public static final int DOUBLE_DOWN = 35120014;
+    public static final int HYPER_ACCURACY_1000_100_10_1 = 35120035;
+    public static final int HYPER_CRITICAL_1000_100_10_1 = 35120034;
+    public static final int HYPER_DEFENSE_600_60_6 = 35120039;
+    public static final int HYPER_DEXTERITY_2000_200_20_2 = 35120031;
+    public static final int HYPER_FURY_1000_100_10_1 = 35120038;
+    public static final int HYPER_HEALTH_1000_100_10_1 = 35120036;
+    public static final int HYPER_INTELLIGENCE_2000_200_20_2 = 35120032;
+    public static final int HYPER_JUMP_1000_100_10_1 = 35120042;
+    public static final int HYPER_LUCK_1000_100_10_1 = 35120033;
+    public static final int HYPER_MAGIC_DEFENSE_1000_100_10_1 = 35120040;
+    public static final int HYPER_MANA_1000_100_10_1 = 35120037;
+    public static final int HYPER_SPEED_1000_100_10_1 = 35120041;
+    public static final int HYPER_STRENGTH_2000_200_20_2 = 35120030;
+    public static final int LASER_BLAST = 35121012;
+    public static final int MAPLE_WARRIOR_600_60_6 = 35121007;
     public static final int MECH_ALLOY_RESEARCH = 35120018;
-
-    //hyper skills
-    public static final int ROCK_N_SHOCK_REINFORCE = 35120043;
-    public static final int ROCK_N_SHOCK_PERSIST = 35120044;
+    public static final int MECH_HOVERING = 35121054;
+    public static final int MECH_MISSILE_TANK = 35121005;
+    public static final int MECH_SIEGE_MODE_1 = 35121013;
+    public static final int ROBOT_MASTERY = 35120001;
     public static final int ROCK_N_SHOCK_COOLDOWN_CUTTER = 35120045;
-    public static final int SUPPORT_UNIT_HEX_REINFORCE = 35120046;
+    public static final int ROCK_N_SHOCK_PERSIST = 35120044;
+    public static final int ROCK_N_SHOCK_REINFORCE = 35120043;
+    public static final int SALVO_REINFORCE = 35120049;
+    public static final int SATELLITE_SAFETY = 35121006;
     public static final int SUPPORT_UNIT_HEX_PARTY_REINFORCE = 35120047;
     public static final int SUPPORT_UNIT_HEX_PERSIST = 35120048;
-    public static final int SALVO_REINFORCE = 35120049;
-    public static final int HEAVY_SALVO_PLUS_SPREAD = 35120050;
-    public static final int AP_SALVO_PLUS_EXTRA_STRIKE = 35120051;
-    public static final int FULL_SPREAD = 35121055;
-    public static final int DISTORTION_BOMB = 35121052;
-    public static final int FOR_LIBERTY = 35121053;
+    public static final int SUPPORT_UNIT_HEX_REINFORCE = 35120046;
 }

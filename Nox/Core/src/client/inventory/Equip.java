@@ -456,7 +456,7 @@ public class Equip extends Item {
         if (nRequiredLevel > 250) {
             nRequiredLevel = 200;
         }
-        
+
         return (byte) nRequiredLevel;
     }
 
@@ -852,27 +852,27 @@ public class Equip extends Item {
     public void setEnchantFail(int enchantFail) {
         this.enchantFail = (byte) enchantFail;
     }
-    
+
     public short getArcane() {
         return this.nArcane;
     }
-    
+
     public void setArcane(int nArcane) {
         this.nArcane = (short) nArcane;
     }
-    
+
     public short getArcaneMaxLevel() {
         return this.nArcaneMaxLevel;
     }
-    
+
     public void setArcaneMaxLevel(int nMaxLevel) {
         this.nArcaneMaxLevel = (short) nMaxLevel;
     }
-    
+
     public int getArcaneExp() {
         return this.nArcaneExp;
     }
-    
+
     public void setArcaneExp(int nExp) {
         this.nArcaneExp = (int) nExp;
     }

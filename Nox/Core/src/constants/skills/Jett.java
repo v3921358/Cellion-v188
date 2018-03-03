@@ -1,59 +1,92 @@
 package constants.skills;
 
 public class Jett {
-    //1st job
 
-    public static final int STARLINE_ONE = 5081020;
-    public static final int BLASTER_BARRAGE = 5081002;
-    public static final int SPACE_WALK = 5081003;
-    public static final int VORTEX_JUMP = 5081021;
-    public static final int SEASONED_HUNTER = 5080022;
-    public static final int GALACTIC_MIGHT = 5081023;
-
-    //2nd job
+    public static final int BOUNTY_CHASER = 5701013;
+    public static final int COSMIC_SHIELD = 5700011;
+    public static final int DARK_CLARITY_1 = 5701006;
+    public static final int GUN_BOOSTER = 5701005;
+    public static final int GUN_MASTERY_1 = 5700012;
+    public static final int GUN_MASTERY_2 = 5700000;
+    public static final int PERSEVERANCE = 5700005;
+    public static final int PHYSICAL_TRAINING_7 = 5700003;
     public static final int STARLINE_TWO = 5701010;
     public static final int STELLAR_IMPACT = 5701001;
-    public static final int VORTEX_CROSS = 5701011;
-    public static final int BOUNTY_CHASER = 5701013;
+    public static final int TRIPLE_FIRE_2 = 5700004;
+    public static final int UNK_124 = 5701012;
+    public static final int UNK_126 = 5701007;
     public static final int VOLT_BARRAGE = 5700010;
-    public static final int GUN_MASTERY = 5700000;
-    public static final int COSMIC_SHIELD = 5700011;
-
-    //3rd job
-    public static final int STARLINE_THREE = 5711020;
-    public static final int FALLING_STARS = 5711021;
-    public static final int TURRET_DEPLOYMENT = 5711001;
-    public static final int COSMIC_UPHEAVAL = 5711022;
-    public static final int SLIPSTREAM_SUIT = 5711024;
-    public static final int SPACIAL_SHIFT = 5710020;
+    public static final int VORTEX_CROSS = 5701011;
     public static final int BLASTER_OVERDRIVE = 5710022;
     public static final int CLAIRVOYANT = 5710021;
-
-    //4th job
-    public static final int STARLINE_FOUR = 5721062;
-    public static final int STARFORCE_SALVO = 5721001;
+    public static final int COSMIC_UPHEAVAL = 5711022;
+    public static final int CUTTING_EDGE = 5710005;
+    public static final int DRONE_BLAST = 5711006;
+    public static final int FALLING_STARS = 5711021;
+    public static final int GAMMA_MISSILE = 5711002;
+    public static final int HIGH_LIFE = 5710004;
+    public static final int ROLL_OF_THE_DICE_3 = 5711011;
+    public static final int SLIPSTREAM_SUIT = 5711024;
+    public static final int SOLAR_ARRAY = 5711000;
+    public static final int SPACIAL_SHIFT = 5710020;
+    public static final int STARLINE_THREE = 5711020;
+    public static final int TURRET_DEPLOYMENT = 5711001;
     public static final int BACKUP_BEATDOWN = 5721061;
-    public static final int PLANET_BUSTER = 5721064;
-    public static final int STARFALL = 5721004;
-    public static final int MAPLE_WARRIOR = 5721000;
-    public static final int HEROS_WILL = 5721002;
-    public static final int HIGH_GRAVITY = 5721066;
-    public static final int STRIKEFORCE_SHOWDOWN = 5721065;
-    public static final int GIGA_BLASTER = 5720060;
-    public static final int INVINCIBILITY = 5720061;
-
-    //hyper skills        
+    public static final int BACKUP_BEATDOWN_EXTRA_STRIKE = 5720045;
     public static final int BACKUP_BEATDOWN_REINFORCE = 5720043;
     public static final int BACKUP_BEATDOWN_SPREAD = 5720044;
-    public static final int BACKUP_BEATDOWN_EXTRA_STRIKE = 5720045;
-    public static final int PLANET_BUSTER_CRITICAL_CHANCE = 5720046;
-    public static final int PLANET_BUSTER_GUARDBREAK = 5720047;
-    public static final int PLANET_BUSTER_EXTRA_STRIKE = 5720048;
-    public static final int STARFORCE_SALVO_REINFORCE = 5720049;
-    public static final int STARFORCE_SALVO_RANGE = 5720050;
-    public static final int STARFORCE_SALVO_BOSS_RUSH = 5720051;
-    public static final int SINGULARITY_SHOCK = 5721052;
-    public static final int EPIC_ADVENTURE = 5721053;
     public static final int BIONIC_MAXIMIZER = 5721054;
-
+    public static final int BRAIN_SCRAMBLER_1 = 5721006;
+    public static final int COLLATERAL_DAMAGE = 5720008;
+    public static final int COUNTERATTACK_1 = 5720012;
+    public static final int DOUBLE_DOWN_2 = 5720005;
+    public static final int EPIC_ADVENTURE_20_2 = 5721053;
+    public static final int GIGA_BLASTER = 5720060;
+    public static final int HEROS_WILL_300_30_3 = 5721010;
+    public static final int HEROS_WILL_400_40_4 = 5721002;
+    public static final int HIGH_GRAVITY = 5721066;
+    public static final int HYPER_ACCURACY_400_40_4 = 5720035;
+    public static final int HYPER_CRITICAL_400_40_4 = 5720034;
+    public static final int HYPER_DEFENSE_90_9 = 5720039;
+    public static final int HYPER_DEXTERITY_300_30_3 = 5720031;
+    public static final int HYPER_FURY_400_40_4 = 5720038;
+    public static final int HYPER_HEALTH_400_40_4 = 5720036;
+    public static final int HYPER_INTELLIGENCE_300_30_3 = 5720032;
+    public static final int HYPER_JUMP_400_40_4 = 5720042;
+    public static final int HYPER_LUCK_400_40_4 = 5720033;
+    public static final int HYPER_MAGIC_DEFENSE_400_40_4 = 5720040;
+    public static final int HYPER_MANA_400_40_4 = 5720037;
+    public static final int HYPER_SPEED_400_40_4 = 5720041;
+    public static final int HYPER_STRENGTH_300_30_3 = 5720030;
+    public static final int INVINCIBILITY_30_3 = 5720061;
+    public static final int MAPLE_WARRIOR_400_40_4 = 5721000;
+    public static final int MAXIMUM_FIREPOWER = 5720011;
+    public static final int MIGHTY_METEOR = 5721003;
+    public static final int PLANET_BUSTER = 5721064;
+    public static final int PLANET_BUSTER_CRITICAL_CHANCE = 5720046;
+    public static final int PLANET_BUSTER_EXTRA_STRIKE = 5720048;
+    public static final int PLANET_BUSTER_GUARDBREAK = 5720047;
+    public static final int RELENTLESS = 5721009;
+    public static final int SINGULARITY_SHOCK = 5721052;
+    public static final int STARFALL = 5721004;
+    public static final int STARFORCE_SALVO = 5721001;
+    public static final int STARFORCE_SALVO_BOSS_RUSH = 5720051;
+    public static final int STARFORCE_SALVO_RANGE = 5720050;
+    public static final int STARFORCE_SALVO_REINFORCE = 5720049;
+    public static final int STARLINE_FOUR = 5721062;
+    public static final int STRIKEFORCE_SHOWDOWN = 5721065;
+    public static final int SUBORBITAL_BOMBARDIER = 5721007;
+    public static final int BLASTER_BARRAGE = 5081002;
+    public static final int GALACTIC_MIGHT = 5081023;
+    public static final int QUICK_MOTION_1 = 5080000;
+    public static final int SEASONED_HUNTER = 5080022;
+    public static final int SHADOW_HEART_1 = 5080004;
+    public static final int SPACE_WALK = 5081003;
+    public static final int TORNADO_UPPERCUT = 5081001;
+    public static final int TUTORIAL_SKILL = 5081012;
+    public static final int TUTORIAL_SKILL_1 = 5081011;
+    public static final int TUTORIAL_SKILL_2 = 5081010;
+    public static final int UNK_92 = 5081005;
+    public static final int VORTEX_JUMP = 5081021;
+    public static final int _STARLINE_ONE = 5081020;
 }

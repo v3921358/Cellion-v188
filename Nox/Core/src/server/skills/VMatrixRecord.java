@@ -16,7 +16,7 @@ import tools.packet.PacketHelper;
 public class VMatrixRecord {
 
     public int nState, nCoreID, nSkillID, nSkillID2, nSkillID3, nSLV = 1, nMasterLev, nExp;
-    public long ftExpirationDate = PacketHelper.getTime(-1); 
+    public long ftExpirationDate = PacketHelper.getTime(-1);
     public static int Disassembled = 0, Inactive = 1, Active = 2; // nState
     public static int Enable = 0, Disable = 1, Enhance = 3, DisassembleSingle = 4, DisassembleMultiple = 5, CraftNode = 6, CraftNodestone = 8; // MatrixUpdate Type
 

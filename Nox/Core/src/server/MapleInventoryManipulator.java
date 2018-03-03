@@ -671,7 +671,7 @@ public class MapleInventoryManipulator {
 
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         final Map<String, Integer> stats = ii.getEquipStats(source.getItemId());
-        
+
         if (stats == null
                 || !ii.canEquip(stats, source.getItemId(), chr.getLevel(), chr.getJob(), chr.getFame(), statst.getTotalStr(), statst.getTotalDex(), statst.getTotalLuk(), statst.getTotalInt(), c.getPlayer().getStat().levelBonus, source.getReqLevel())) {
 
@@ -682,7 +682,7 @@ public class MapleInventoryManipulator {
         final EquipSlotType type = ii.getSlotType(source.getItemId());
         final boolean isCashItem = ii.isCash(source.getItemId());
         //final int equipSlotCheckResult = type.checkEquipmentSlotNumber(isCashItem, dst, source.getItemId(), chr); // Check for equipment slot
-        
+
         /*if (!GameConstants.requiresEquipHotfix(source.getItemId())) {
             final int equipSlotCheckResult = type.checkEquipmentSlotNumber(isCashItem, dst, source.getItemId(), chr); // Check for equipment slot
             if (equipSlotCheckResult != 1) {
@@ -699,7 +699,6 @@ public class MapleInventoryManipulator {
                 return;
             }
         }*/
-
         List<ModifyInventory> mod = new ArrayList<>();
 
         short flag = source.getFlag();

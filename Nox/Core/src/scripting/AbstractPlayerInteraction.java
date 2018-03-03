@@ -987,7 +987,7 @@ public abstract class AbstractPlayerInteraction {
     public int getPlayerCount(final int mapid) {
         return c.getChannelServer().getMapFactory().getMap(mapid).getCharactersSize();
     }
-    
+
     /*  
     *   spawnMonsterInMap
     *   @author Mazen

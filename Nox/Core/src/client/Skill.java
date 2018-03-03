@@ -36,7 +36,6 @@ public class Skill implements Comparator<Skill> {
 
     public static Skill loadFromData(final int id, final MapleData data, final MapleData delayData) {
         Skill ret = new Skill(id);
-        boolean isBuff;
         final int skillType = MapleDataTool.getInt("skillType", data, -1);
         final String elem = MapleDataTool.getString("elemAttr", data, null);
         if (elem != null) {
@@ -70,14 +69,10 @@ public class Skill implements Comparator<Skill> {
         }
         final MapleData effect = data.getChildByPath("effect");
         switch (skillType) {
-            case 2:
-                isBuff = true;
-                break;
             case 3:
                 //final attack
                 ret.animation = new ArrayList<>();
                 ret.animation.add(0);
-                isBuff = effect != null;
                 break;
             default:
                 MapleData action_ = data.getChildByPath("action");
@@ -90,7 +85,6 @@ public class Skill implements Comparator<Skill> {
                         action = true;
                     }
                 }
-                isBuff = effect != null && hit == null && ball == null;
                 if (action_ != null) {
                     String d;
                     if (action) { //prepare
@@ -99,7 +93,6 @@ public class Skill implements Comparator<Skill> {
                         d = MapleDataTool.getString("0", action_, null);
                     }
                     if (d != null) {
-                        isBuff |= d.equals("alert2");
                         final MapleData dd = delayData.getChildByPath(d);
                         if (dd != null) {
                             for (MapleData del : dd) {
@@ -126,272 +119,6 @@ public class Skill implements Comparator<Skill> {
                         }
                     }
                 }
-                switch (id) {
-                    case Beginner.OZS_FLAME_GEAR:
-                    case FPMage.EXPLOSION:
-                    case FPMage.POISON_MIST:
-                    case Cleric.HEAL:
-                    case Bishop.BIG_BANG:
-                        isBuff = false;
-                        break;
-                    case 93:
-                    case 1004:
-                    case 4121054:
-                    case 1026:
-                    case 1111002:
-                    case 65111100:
-                    case 1111007:
-                    case 1211009:
-                    case 4341054:
-                    case 1220013:
-                    case 5321054:
-                    case 1311007:
-                    case 1320009:
-                    case 2120010:
-                    case 2121009:
-                    case 4341052:
-                    case 31201002:
-                    case 31001001:
-                    case 2220010:
-                    case 2221009:
-                    case 2311006:
-                    case 2320011:
-                    case 2321010:
-                    case 3120006:
-                    case 3121002:
-                    case 3220005:
-                    case 3221002:
-                    case 4111001:
-                    case 4111009:
-                    case 4211003:
-                    case 4221013:
-                    case 4321000:
-                    case 4331003:
-                    case 4341002:
-                    case 5110001:
-                    case 5111005:
-                    case 5111007:
-                    case 5120011:
-                    case 5120012:
-                    case 5121003:
-                    case 5121009:
-                    case 5121015:
-                    case 5211001:
-                    case 5211002:
-                    case 5211006:
-                    case 5211007:
-                    case 5211009:
-                    case 5220002:
-                    case 5220011:
-                    case 5220012:
-                    case 5311004:
-                    case 5311005:
-                    case 5320007:
-                    case 5321003:
-                    case 5321004:
-                    case 5701005:
-                    case 5711001:
-                    case 5711011:
-                    case 5720005:
-                    case 5721002:
-                    case 9001004:
-                    case 9101004:
-                    case 10000093:
-                    case 10001004:
-                    case 10001026:
-                    case 13111005:
-                    case 14111007:
-                    case 15100004:
-                    case 15101006:
-                    case 15111002:
-                    case 15111005:
-                    case 15111006:
-                    case 15111011:
-                    case 20000093:
-                    case 20001004:
-                    case 20001026:
-                    case 20010093:
-                    case 20011004:
-                    case 20011026:
-                    case 20020093:
-                    case 20021026:
-                    case 20031209:
-                    case 20031210:
-                    case 21000000:
-                    case 21101003:
-                    case 22121001:
-                    case 22131001:
-                    case 22131002:
-                    case 22141002:
-                    case 22151002:
-                    case 22151003:
-                    case 22161002:
-                    case 22161004:
-                    case 22171000:
-                    case 22171004:
-                    case 22181000:
-                    case 22181003:
-                    case 22181004:
-                    case 24101005:
-                    case 24111002:
-                    case 24121008:
-                    case 24121009:
-                    case 27101202:
-                    case 27110007:
-                    case 30000093:
-                    case 30001026:
-                    case 30010093:
-                    case 30011026:
-                    case 31121005:
-                    case 32001003:
-                    case 32101003:
-                    case 32110000:
-                    case 32110007:
-                    case 32110008:
-                    case 32110009:
-                    case 32111005:
-                    case 32111006:
-                    case 32111012:
-                    case 32120000:
-                    case 32120001:
-                    case 32121003:
-                    case 33101006:
-                    case 33111003:
-                    case 35001001:
-                    case constants.skills.Mechanic.HUMANOID_MECH:
-                    case constants.skills.Mechanic.TANK_MECH:
-                    case 35101005:
-                    case 35101007:
-                    case 35101009:
-                    case 35111001:
-                    case 35111002:
-                    case 35111004:
-                    case 35111005:
-                    case 35111009:
-                    case 35111010:
-                    case 35111011:
-                    case 35111013:
-                    case 35120000:
-                    case 35120014:
-                    case 35121003:
-                    case 35121005:
-                    case 35121006:
-                    case 35121009:
-                    case 35121010:
-                    case 35121013:
-                    case 36111006:
-                    case 41001001:
-                    case 41121003:
-                    case 42100010:
-                    case 42101002:
-                    case 42101004:
-                    case 42111006:
-                    case 42121008:
-                    case 50001214:
-                    case 51101003:
-                    case 51111003:
-                    case 51111004:
-                    case 51121004:
-                    case 51121005:
-                    case 60001216:
-                    case 61100005:
-                    case 60001217:
-                    case 61101002:
-                    case 61111008://Kaiser mode
-                    case 61120007:
-                    case 61120008://Kaiser mode
-                    case 61121053://Kaiser Hyper Mode
-                    case 61121054://Kaiser's Majesty
-                    case 61120011:
-                    case 80001000:
-                    case 80001089:
-                    case 31211003:
-                    case 31221004:
-                    case 32121054:
-                    case 2121054:
-                    case 11101021:
-                    case 13111024:
-                    case 2321054:
-                    case 11101022: //polling moon
-                    case 11111022:
-                    case 36121054:
-                    case 31011001:
-                    case 31211004:
-                    case 32121006:
-                    case 3101004:
-                    case 3201004:
-                    case 5001005:
-                    case 5220014://dice2 cosair
-                    case 15001003:
-                    case 5111010:
-                    case 80001079:
-                    case 80001080:
-                    case 80001081:
-                    case 33001001://jaguar rider
-                    case 1101013:
-                    case 36121003:
-                    case 33111006:
-                    case 35111016:
-                    case 33111007:
-                    case 61111004:
-                    case 24121054:
-                    case 80001155:
-                    case 31221054:
-                    case 5721054:
-                    case 5721052:
-                    //    case 27121005:
-                    case 27100003: // ë¸”ë ˆìŠ¤ ì˜¤ë¸Œ ë‹¤í�¬ë‹ˆìŠ¤
-                    //       case 27101202: // ë³´ì�´ë“œ í”„ë ˆì…”
-                    case 27111004: // ì•ˆí‹° ë§¤ì§�ì‰˜
-                    case 27111005: // ë�¼ì�´íŠ¸ì‰�ë�„ìš° ê°€ë“œ
-                    case 27111006: // í�¬í‹± ë©”ë””í…Œì�´ì…˜
-                    //      case 27110007: // ë�¼ì�´í”„ íƒ€ì�´ë‹¬
-                    case 27121006: // ë‹¤í�¬ë‹ˆìŠ¤ ì†Œì„œë¦¬
-                    case 27111202: // ë…¹ìŠ¤í”¼ì–´
-                    case 27121202: // ì•„í�¬ì¹¼ë¦½ìŠ¤
-                    case 27101100: // ì‹¤í”¼ë“œ ëžœì„œ
-                    case 27111100: // ìŠ¤íŽ™íŠ¸ëŸ´ ë�¼ì�´íŠ¸
-                    case 27121100: // ë�¼ì�´íŠ¸ ë¦¬í”Œë ‰ì…˜
-                    case 27111303: // ë�°ìŠ¤ ì‚¬ì�´ë“œ
-                    case 27121303: // ì•±ì†”ë£¨íŠ¸ í‚¬
-                    case 27121054: // ë©”ëª¨ë�¼ì�´ì¦ˆ
-                    case 42101020:
-                    case 42101021:
-                    case 42101022:
-                    case 42101023:
-                    case 36121013:
-                    case 36121014:
-                    case 36121002:
-                    //       case 15001022:
-                    //   case 1301013:
-                    case 1321015:
-                    case 20041239:
-                    case 112111000:
-                    case 1211014://parashock guard
-                    case 100001263:
-                    case 100001264:
-                    case AdditionalSkills.LIBERATE_THE_SWIFT_RUNE:
-                    case AdditionalSkills.LIBERATE_THE_RECOVERY_RUNE:
-                    case AdditionalSkills.LIBERATE_THE_COLLAPSING_RUNE:
-                    case AdditionalSkills.LIBERATE_THE_COLLAPSING_RUNE2:
-                    case AdditionalSkills.LIBERATE_THE_DESTRUCTIVE_RUNE:
-                    case AdditionalSkills.LIBERATE_THE_DESTRUCTIVE_RUNE2:
-                    case AdditionalSkills.RUNE_POWER:
-                    case AdditionalSkills.RUNE_POWER2:
-
-                    case AdditionalSkills.LIBERATE_THE_RUNE_OF_THUNDER:
-                    case AdditionalSkills.LIBERATE_THE_RUNE_OF_MIGHT:
-                    case AdditionalSkills.LIBERATE_THE_RUNE_OF_DARKNESS:
-                    case AdditionalSkills.LIBERATE_THE_RUNE_OF_RICHES:
-                    case AdditionalSkills.LIBERATE_THE_RUNE_OF_THUNDER2:
-                    case AdditionalSkills.LIBERATE_THE_RUNE_OF_MIGHT2:
-                    case AdditionalSkills.LIBERATE_THE_RUNE_OF_MIGHT3:
-                    case AdditionalSkills.LIBERATE_THE_RUNE_OF_THUNDER3:
-                        isBuff = true;
-                }
-                if (GameConstants.isAngel(id)/* || GameConstants.isSummon(id)*/) {
-                    isBuff = false;
-                }
                 break;
         }
         ret.chargeskill = data.getChildByPath("keydown") != null;
@@ -405,11 +132,11 @@ public class Skill implements Comparator<Skill> {
             ret.trueMax = ret.maxLevel + (ret.combatOrders ? 2 : 0);
 
             for (int i = 1; i <= ret.trueMax; i++) {
-                ret.effects.add(MapleStatEffect.loadSkillEffectFromData(commonDir, id, isBuff, i, "x")); // omg
+                ret.effects.add(MapleStatEffect.loadSkillEffectFromData(commonDir, id, i, "x")); // omg
             }
         } else {
             for (final MapleData leve : levelDir) {
-                ret.effects.add(MapleStatEffect.loadSkillEffectFromData(leve, id, isBuff, Byte.parseByte(leve.getName()), null));
+                ret.effects.add(MapleStatEffect.loadSkillEffectFromData(leve, id, Byte.parseByte(leve.getName()), null));
             }
             ret.maxLevel = ret.effects.size();
             ret.trueMax = ret.effects.size();
@@ -419,7 +146,7 @@ public class Skill implements Comparator<Skill> {
         if (level2 != null) {
             ret.pvpEffects = new ArrayList<>();
             for (int i = 1; i <= ret.trueMax; i++) {
-                ret.pvpEffects.add(MapleStatEffect.loadSkillEffectFromData(level2, id, isBuff, i, "x"));
+                ret.pvpEffects.add(MapleStatEffect.loadSkillEffectFromData(level2, id, i, "x"));
             }
         }
         final MapleData reqDataRoot = data.getChildByPath("req");
@@ -638,12 +365,13 @@ public class Skill implements Comparator<Skill> {
         int jobid = id / 10000;
         boolean beginner = isBeginnerSkill();
 
-        if (beginner || hasAdditionalSkills() || (jobid / 100 == MapleJob.HERO.getId() || jobid == 11000)) {
+        if (beginner || (jobid / 100 == MapleJob.HERO.getId() || jobid == 11000)) {
             return false;
         }
         int jobCode = getJobCode(jobid);
         if (GameConstants.isEvan(jobid)) {
-            if (id == Evan.HEROS_WILL || jobCode != 9 && jobCode != 10 && id != Evan.MAGIC_GUARD && id != Evan.MAGIC_BOOSTER && id != Evan.CRITICAL_MAGIC) {
+            if (id == Evan.HEROS_WILL_80_8 || id == Evan.HEROS_WILL_90_9 || jobCode != 9 && jobCode != 10 
+                    && id != Evan.MAGIC_RESISTANCE && id != Evan.MAGIC_BOOSTER_4 && id != Evan.CRITICAL_MAGIC) {
                 return false;
             }
         } else if (!hasNoMasterLevel3()) {
@@ -656,10 +384,10 @@ public class Skill implements Comparator<Skill> {
 
     public boolean hasNoMasterLevel() {
         boolean isMasterySkill;
-        if (id > Corsair.DOUBLE_DOWN) {
+        if (id > Corsair.DOUBLE_DOWN_4) {
             if (id > Mercedes.ROLLING_MOONSAULT) {
                 if (id > WildHunter.WILD_INSTINCT) {
-                    if (id == Mechanic.DOUBLE_DOWN) {
+                    if (id == Mechanic.DOUBLE_DOWN_3) {
                         return true;
                     }
                     isMasterySkill = id == Mihile.COMBAT_MASTERY;
@@ -667,7 +395,7 @@ public class Skill implements Comparator<Skill> {
                     if (id == WildHunter.WILD_INSTINCT || id == Mercedes.STAGGERING_STRIKES) {
                         return true;
                     }
-                    isMasterySkill = id == Mercedes.HEROS_WILL;
+                    isMasterySkill = id == Mercedes.HEROS_WILL_500_50_5;
                 }
             } else {
                 if (id == Mercedes.ROLLING_MOONSAULT) {
@@ -677,7 +405,7 @@ public class Skill implements Comparator<Skill> {
 
                     isMasterySkill = id == Evan.ONYX_WILL;
                 } else {
-                    if (id == Aran.SUDDEN_STRIKE || id == CannonMaster.DOUBLE_DOWN || id - CannonMaster.DOUBLE_DOWN == 997) {
+                    if (id == Aran.SUDDEN_STRIKE_2 || id == CannonMaster.DOUBLE_DOWN || id - CannonMaster.DOUBLE_DOWN == 997) {
                         return true;
                     }
                     isMasterySkill = id - CannonMaster.DOUBLE_DOWN == 999;
@@ -685,7 +413,7 @@ public class Skill implements Comparator<Skill> {
             }
             return isMasterySkill;
         }
-        if (id == Corsair.DOUBLE_DOWN) {
+        if (id == Corsair.DOUBLE_DOWN_4) {
             return true;
         }
 
@@ -693,32 +421,32 @@ public class Skill implements Comparator<Skill> {
             if (id == Hermit.EXPERT_THROWING_STAR_HANDLING) {
                 return true;
             }
-            if (id > ILArchmage.BUFF_MASTERY) {
-                if (id == Bishop.BUFF_MASTERY) {
+            if (id > IceLightningArchMage.BUFF_MASTERY_2) {
+                if (id == Bishop.BUFF_MASTERY_4) {
                     return true;
                 }
-                isMasterySkill = id == Sniper.MARKSMANSHIP;
+                isMasterySkill = id == Sniper.MARKSMANSHIP_1;
             } else {
-                if (id == ILArchmage.BUFF_MASTERY || id == Hero.COMBAT_MASTERY || id == Darkknight.REVENGE_OF_THE_EVIL_EYE) {
+                if (id == IceLightningArchMage.BUFF_MASTERY_2 || id == Hero.COMBAT_MASTERY_1 || id == DarkKnight.REVENGE_OF_THE_EVIL_EYE) {
                     return true;
                 }
-                isMasterySkill = id == FPArchmage.BUFF_MASTERY;
+                isMasterySkill = id == FirePoisonArchMage.BUFF_MASTERY;
             }
             return isMasterySkill;
         }
 
-        if (id <= BladeMaster.TOXIC_VENOM) {
-            if (id == BladeMaster.TOXIC_VENOM || id == ChiefBandit.MESO_MASTERY) {
+        if (id <= DualBlade.TOXIC_VENOM) {
+            if (id == DualBlade.TOXIC_VENOM || id == ChiefBandit.MESO_MASTERY_1) {
                 return true;
             }
-            isMasterySkill = id == BladeMaster.SHARPNESS;
+            isMasterySkill = id == DualBlade.SHARPNESS;
             return isMasterySkill;
         }
-        if (id < Buccaneer.DOUBLE_DOWN) {
+        if (id < Buccaneer.DOUBLE_DOWN_1) {
             return false;
         }
-        if (id > Buccaneer.DOUBLE_DOWN) {
-            isMasterySkill = id == Corsair.PIRATES_REVENGE;
+        if (id > Buccaneer.DOUBLE_DOWN_1) {
+            isMasterySkill = id == Corsair.PIRATES_REVENGE_3;
             if (!isMasterySkill) {
                 return false;
             }
@@ -748,29 +476,19 @@ public class Skill implements Comparator<Skill> {
             if (id == Zero.ADVANCED_THROWING_WEAPON) {
                 return true;
             }
-            if (id > BladeLord.MIRROR_IMAGE) {
-                if (id == BladeMaster.BLADE_FURY || id - BladeMaster.BLADE_FURY == 3) {
+            if (id > DualBlade.MIRROR_IMAGE) {
+                if (id == DualBlade.BLADE_FURY || id - DualBlade.BLADE_FURY == 3) {
                     return true;
                 }
-                isMasterySkill = id - BladeMaster.BLADE_FURY == 96659097;
+                isMasterySkill = id - DualBlade.BLADE_FURY == 96659097;
             } else {
-                if (id == BladeLord.MIRROR_IMAGE || id == BladeAcolyte.SLASH_STORM || id == BladeSpecialist.FLYING_ASSAULTER) {
+                if (id == DualBlade.MIRROR_IMAGE || id == DualBlade.SLASH_STORM || id == DualBlade.FLYING_ASSAULTER) {
                     return true;
                 }
-                isMasterySkill = id == BladeLord.SHADOW_MELD;
+                isMasterySkill = id == DualBlade.SHADOW_MELD;
             }
         }
         return isMasterySkill;
-    }
-
-    public boolean hasAdditionalSkills() {
-        boolean result;
-        if (id >= 0) {
-            result = id / 10000 == MapleJob.ADDITIONAL_SKILLS7.getId();
-        } else {
-            result = false;
-        }
-        return result;
     }
 
     public Element getElement() {
@@ -848,7 +566,7 @@ public class Skill implements Comparator<Skill> {
      */
     public static boolean isAdvancedBulletCount(int skillId) {
         // If the skill is Quad Star or Cannon Barrage
-        if (skillId == Nightlord.QUAD_STAR || skillId == CannonMaster.CANNON_BARRAGE) {
+        if (skillId == NightLord.QUAD_STAR || skillId == CannonMaster.CANNON_BARRAGE) {
             return true;
         }
         return false;
@@ -864,7 +582,7 @@ public class Skill implements Comparator<Skill> {
             case Hayato.SHINSOKU:
             case 32111003: // Dark Shock
             case Shade.SPIRIT_CLAW: // Spirit Claw
-            case DemonSlayer.CARRION_BREATH:
+            case DemonSlayer.CARRION_BREATH_1:
             case DemonSlayer.DEMON_IMPACT:
             case Evan.DARK_FOG:
             case 22140023:
@@ -1147,8 +865,8 @@ public class Skill implements Comparator<Skill> {
             case BlazeWizard.BLAZING_EXTINCTION:
             case Cannoneer.BARREL_BOMB:
             case Brawler.ENERGY_VORTEX:
-            case ILArchmage.FROZEN_ORB:
-            case Brawler.TORNADO_UPPERCUT:
+            case IceLightningArchMage.FROZEN_ORB:
+            case Brawler.TORNADO_UPPERCUT_2:
                 isRushBombSkill = true;
                 break;
             default:
@@ -1387,7 +1105,7 @@ public class Skill implements Comparator<Skill> {
     public int getSkillTamingMob() {
         return skillTamingMob;
     }
-    
+
     public static final boolean IsEvanForceSkill(int nSkillID) { // is_evan_force_skill
         if (nSkillID > 22141012) {
             if (nSkillID <= 400021012) {
@@ -1409,11 +1127,11 @@ public class Skill implements Comparator<Skill> {
         }
         return false;
     }
-    
+
     public static final boolean isKeydownSkillRectMoveXY(int nSkillID) { // is_keydown_skill_rect_move_xy
         return nSkillID == 13111020 || nSkillID == 112111016;
     }
-    
+
     public static final boolean IsUnknown5thJobFunc(int nSkillID) {
         if (nSkillID <= 400041018) {
             if (nSkillID < 400041016) {

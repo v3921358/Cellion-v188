@@ -64,12 +64,12 @@ public class CharacterTransfer {
     public final Map<Integer, CardData> cardsInfo = new LinkedHashMap<>();
     public MapleMarriage marriage;
     public List<VMatrixRecord> aVMatrixRecord = new ArrayList<>();
-    
+
     /*Start of Custom Feature*/
  /*All custom shit declare here*/
     public int reborns, apstorage, str, dex, int_, luk, remainingAp;
     public boolean bigBrother;
-    
+
     /*Boss Timed Variables*/
     public long magnusTime;
 

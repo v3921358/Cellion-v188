@@ -77,6 +77,5 @@ public class AttackInfo {
          */
         return skil.getEffect(skillLevel);
     }
-    
-    
+
 }
