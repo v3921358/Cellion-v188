@@ -71,6 +71,7 @@ public class BlazeWizardEffect extends AbstractEffect {
             case BlazeWizard.HIGH_WISDOM_3:
                 break;
             case BlazeWizard.IGNITION:
+                pEffect.statups.put(CharacterTemporaryStat.WizardIgnite, 1);
                 break;
             case BlazeWizard.IGNITION_1:
                 break;
@@ -87,6 +88,7 @@ public class BlazeWizardEffect extends AbstractEffect {
             case BlazeWizard.TELEPORT_2:
                 break;
             case BlazeWizard.WORD_OF_FIRE:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case BlazeWizard.BRILLIANT_ENLIGHTENMENT:
                 break;
@@ -135,8 +137,11 @@ public class BlazeWizardEffect extends AbstractEffect {
             case BlazeWizard.BLAZING_EXTINCTION_SPREAD:
                 break;
             case BlazeWizard.BURNING_CONDUIT:
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
                 break;
             case BlazeWizard.CALL_OF_CYGNUS_5:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case BlazeWizard.CATACLYSM:
                 break;
@@ -151,16 +156,20 @@ public class BlazeWizardEffect extends AbstractEffect {
             case BlazeWizard.FINAL_ORBITAL_FLAME_1:
                 break;
             case BlazeWizard.FIRES_OF_CREATION:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
+                // TODO: Summon
                 break;
             case BlazeWizard.FIRES_OF_CREATION_1:
                 break;
             case BlazeWizard.FIRES_OF_CREATION_2:
                 break;
             case BlazeWizard.FLAME_BARRIER:
+                pEffect.statups.put(CharacterTemporaryStat.FireBarrier, pEffect.info.get(MapleStatInfo.x));
                 break;
             case BlazeWizard.FLAME_BARRIER_1:
                 break;
             case BlazeWizard.GLORY_OF_THE_GUARDIANS_4:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case BlazeWizard.HYPER_ACCURACY_10_1:
                 break;

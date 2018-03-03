@@ -29,6 +29,7 @@ public class FirePoisonArchMageEffect extends AbstractEffect {
             case FirePoisonArchMage.BUFF_MASTERY_1:
                 break;
             case FirePoisonArchMage.EPIC_ADVENTURE_3:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case FirePoisonArchMage.FERVENT_DRAIN:
                 break;
@@ -63,12 +64,19 @@ public class FirePoisonArchMageEffect extends AbstractEffect {
             case FirePoisonArchMage.HYPER_STRENGTH_5:
                 break;
             case FirePoisonArchMage.IFRIT:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case FirePoisonArchMage.INFERNO_AURA:
                 break;
             case FirePoisonArchMage.INFINITY:
+                pEffect.setHpR(pEffect.info.get(MapleStatInfo.y) / 100.0);
+                pEffect.setMpR(pEffect.info.get(MapleStatInfo.y) / 100.0);
+                pEffect.statups.put(CharacterTemporaryStat.Infinity, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, (int) pEffect.info.get(MapleStatInfo.prop));
                 break;
             case FirePoisonArchMage.MAPLE_WARRIOR_5:
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
                 break;
             case FirePoisonArchMage.MEGIDDO_FLAME:
                 break;
@@ -87,6 +95,8 @@ public class FirePoisonArchMageEffect extends AbstractEffect {
             case FirePoisonArchMage.MIST_ERUPTION_REINFORCE:
                 break;
             case FirePoisonArchMage.PARALYZE:
+                pEffect.monsterStatus.put(MonsterStatus.FREEZE, 1);
+                pEffect.info.put(MapleStatInfo.time, pEffect.info.get(MapleStatInfo.time) * 2);
                 break;
             case FirePoisonArchMage.PARALYZE_CRIPPLE:
                 break;

@@ -23,6 +23,8 @@ public class FighterEffect extends AbstractEffect {
             case Fighter.BRANDISH:
                 break;
             case Fighter.COMBO_ATTACK:
+                pEffect.statups.put(CharacterTemporaryStat.ComboCounter, 0);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Fighter.COMBO_FURY:
                 break;
@@ -37,10 +39,14 @@ public class FighterEffect extends AbstractEffect {
             case Fighter.POWER_REFLECTION:
                 break;
             case Fighter.RAGE:
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.PowerGuard, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Fighter.SLIPSTREAM:
                 break;
             case Fighter.WEAPON_BOOSTER:
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x) * 2);
                 break;
             case Fighter.WEAPON_MASTERY_3:
                 break;

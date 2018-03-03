@@ -39,10 +39,16 @@ public class HeroEffect extends AbstractEffect {
             case Hero.COMBAT_MASTERY_1:
                 break;
             case Hero.CRY_VALHALLA:
+                pEffect.statups.clear();
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
                 break;
             case Hero.ENRAGE:
+                pEffect.statups.put(CharacterTemporaryStat.Enrage, pEffect.info.get(MapleStatInfo.x) * 100 + pEffect.info.get(MapleStatInfo.mobCount));
                 break;
             case Hero.EPIC_ADVENTURE_4:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Hero.HEROS_WILL_9:
                 break;
@@ -75,6 +81,7 @@ public class HeroEffect extends AbstractEffect {
             case Hero.MAGIC_CRASH_2:
                 break;
             case Hero.MAPLE_WARRIOR_10:
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Hero.MONSTER_MAGNET_1:
                 break;

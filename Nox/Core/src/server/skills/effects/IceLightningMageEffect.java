@@ -23,8 +23,10 @@ public class IceLightningMageEffect extends AbstractEffect {
             case IceLightningMage.ARCANE_OVERDRIVE:
                 break;
             case IceLightningMage.ELEMENTAL_ADAPTATION_ICE_LIGHTNING:
+                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, pEffect.info.get(MapleStatInfo.x));
                 break;
             case IceLightningMage.ELEMENTAL_DECREASE:
+                pEffect.statups.put(CharacterTemporaryStat.ElementalReset, pEffect.info.get(MapleStatInfo.x));
                 break;
             case IceLightningMage.ELEMENT_AMPLIFICATION:
                 break;
@@ -33,6 +35,8 @@ public class IceLightningMageEffect extends AbstractEffect {
             case IceLightningMage.ICE_DEMON:
                 break;
             case IceLightningMage.ICE_STRIKE:
+                pEffect.monsterStatus.put(MonsterStatus.FREEZE, 1);
+                pEffect.info.put(MapleStatInfo.time, pEffect.info.get(MapleStatInfo.time) * 2);
                 break;
             case IceLightningMage.SEAL:
                 break;
@@ -43,6 +47,10 @@ public class IceLightningMageEffect extends AbstractEffect {
             case IceLightningMage.STORM_MAGIC:
                 break;
             case IceLightningMage.TELEPORT_MASTERY:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
+                pEffect.statups.put(CharacterTemporaryStat.TeleportMasteryOn, pEffect.info.get(MapleStatInfo.x));
+                pEffect.info.put(MapleStatInfo.mpCon, pEffect.info.get(MapleStatInfo.y));
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case IceLightningMage.THUNDERSTORM:
                 break;

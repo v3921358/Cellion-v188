@@ -27,10 +27,12 @@ public class GunslingerEffect extends AbstractEffect {
             case Gunslinger.GRENADE:
                 break;
             case Gunslinger.GUN_BOOSTER_1:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x) * 2);
                 break;
             case Gunslinger.GUN_MASTERY:
                 break;
             case Gunslinger.INFINITY_BLAST:
+                pEffect.statups.put(CharacterTemporaryStat.NoBulletConsume, pEffect.info.get(MapleStatInfo.bulletConsume));
                 break;
             case Gunslinger.PHYSICAL_TRAINING_3:
                 break;

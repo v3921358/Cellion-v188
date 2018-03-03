@@ -25,6 +25,8 @@ public class AngelicBusterEffect extends AbstractEffect {
             case AngelicBuster.FEATHER_HOP:
                 break;
             case AngelicBuster.MELODY_CROSS:
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
+                pEffect.statups.put(CharacterTemporaryStat.EMHP, pEffect.info.get(MapleStatInfo.mhpX));
                 break;
             case AngelicBuster.STAR_BUBBLE:
                 break;
@@ -41,6 +43,7 @@ public class AngelicBusterEffect extends AbstractEffect {
             case AngelicBuster.PINK_PUMMEL:
                 break;
             case AngelicBuster.POWER_TRANSFER:
+                pEffect.statups.put(CharacterTemporaryStat.DamAbsorbShield, pEffect.info.get(MapleStatInfo.y));
                 break;
             case AngelicBuster.SOUL_SHOOTER_MASTERY:
                 break;
@@ -53,6 +56,7 @@ public class AngelicBusterEffect extends AbstractEffect {
             case AngelicBuster.HEAVENLY_CRASH:
                 break;
             case AngelicBuster.IRON_BLOSSOM:
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.prop));
                 break;
             case AngelicBuster.LOVE_ME_HEART:
                 break;
@@ -105,6 +109,7 @@ public class AngelicBusterEffect extends AbstractEffect {
             case AngelicBuster.NOVA_TEMPERANCE_1:
                 break;
             case AngelicBuster.NOVA_WARRIOR:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case AngelicBuster.PIERCING_SOUL_SEEKER:
                 break;
@@ -125,6 +130,7 @@ public class AngelicBusterEffect extends AbstractEffect {
             case AngelicBuster.SOUL_SHOOTER_EXPERT:
                 break;
             case AngelicBuster.STAR_GAZER:
+                pEffect.statups.put(CharacterTemporaryStat.SoulGazeCriDamR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case AngelicBuster.SUPREME_SUPERNOVA:
                 break;

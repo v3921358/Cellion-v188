@@ -33,6 +33,8 @@ public class SniperEffect extends AbstractEffect {
             case Sniper.EXPLOSIVE_BOLT:
                 break;
             case Sniper.FREEZER:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Sniper.HOOKSHOT_1:
                 break;
@@ -41,10 +43,14 @@ public class SniperEffect extends AbstractEffect {
             case Sniper.MORTAL_BLOW:
                 break;
             case Sniper.PAIN_KILLER:
+                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, pEffect.info.get(MapleStatInfo.asrR));
+                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, pEffect.info.get(MapleStatInfo.terR));
                 break;
             case Sniper.PUPPET_2:
                 break;
             case Sniper.RECKLESS_HUNT_CROSSBOW:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.padX));
                 break;
             case Sniper.SNAPFREEZE_SHOT:
                 break;

@@ -31,6 +31,7 @@ public class MercedesEffect extends AbstractEffect {
             case Mercedes.SWIFT_DUAL_SHOT:
                 break;
             case Mercedes.DUAL_BOWGUNS_BOOST:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Mercedes.DUAL_BOWGUNS_MASTERY:
                 break;
@@ -47,12 +48,17 @@ public class MercedesEffect extends AbstractEffect {
             case Mercedes.RISING_RUSH_1:
                 break;
             case Mercedes.SPIRIT_SURGE:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.damage));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Mercedes.SPIRIT_SURGE_1:
                 break;
             case Mercedes.AERIAL_BARRAGE:
                 break;
             case Mercedes.ELEMENTAL_KNIGHTS:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
+                pEffect.info.put(MapleStatInfo.time, 210000);
                 break;
             case Mercedes.ELEMENTAL_KNIGHTS_1:
                 break;
@@ -61,26 +67,36 @@ public class MercedesEffect extends AbstractEffect {
             case Mercedes.GUST_DIVE:
                 break;
             case Mercedes.IGNIS_ROAR:
+                pEffect.statups.put(CharacterTemporaryStat.IgnisRore, 1);
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
                 break;
             case Mercedes.LEAP_TORNADO:
                 break;
             case Mercedes.STUNNING_STRIKES_1:
                 break;
             case Mercedes.UNICORN_SPIKE:
+                pEffect.monsterStatus.put(MonsterStatus.IMPRINT, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Mercedes.WATER_SHIELD:
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.terR));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.terR));
+                pEffect.statups.put(CharacterTemporaryStat.DamAbsorbShield, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Mercedes.ADVANCED_FINAL_ATTACK:
                 break;
             case Mercedes.ANCIENT_WARDING:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, (int) pEffect.info.get(MapleStatInfo.damR));
+                pEffect.statups.put(CharacterTemporaryStat.EMHP, (int) pEffect.info.get(MapleStatInfo.emhp));
                 break;
             case Mercedes.DEFENSE_BREAK:
                 break;
             case Mercedes.DUAL_BOWGUNS_EXPERT:
                 break;
             case Mercedes.ELVISH_BLESSING:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
                 break;
             case Mercedes.HEROIC_MEMORIES_1:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Mercedes.HEROS_WILL_500_50_5:
                 break;
@@ -121,10 +137,12 @@ public class MercedesEffect extends AbstractEffect {
             case Mercedes.LIGHTNING_EDGE:
                 break;
             case Mercedes.MAPLE_WARRIOR_500_50_5:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Mercedes.ROLLING_MOONSAULT:
                 break;
             case Mercedes.SPIKES_ROYALE_1:
+                pEffect.monsterStatus.put(MonsterStatus.PDD, -pEffect.info.get(MapleStatInfo.x));
                 break;
             case Mercedes.SPIKES_ROYALE_ARMORBREAK:
                 break;
@@ -195,6 +213,7 @@ public class MercedesEffect extends AbstractEffect {
             case Mercedes.DECENT_SPEED_INFUSION_4:
                 break;
             case Mercedes.ELVEN_BLESSING_1:
+                pEffect.moveTo(pEffect.info.get(MapleStatInfo.x));
                 break;
             case Mercedes.ELVEN_GRACE:
                 break;

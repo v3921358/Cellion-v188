@@ -27,6 +27,7 @@ public class AssassinEffect extends AbstractEffect {
             case Assassin.ASSASSINS_MARK_2:
                 break;
             case Assassin.CLAW_BOOSTER_1:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Assassin.CLAW_MASTERY:
                 break;

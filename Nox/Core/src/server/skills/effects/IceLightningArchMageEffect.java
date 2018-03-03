@@ -21,12 +21,18 @@ public class IceLightningArchMageEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case IceLightningArchMage.ABSOLUTE_ZERO_AURA:
+                pEffect.statups.put(CharacterTemporaryStat.IceAura, 1);
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.v));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.v));
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case IceLightningArchMage.ARCANE_AIM_1:
                 break;
             case IceLightningArchMage.BIG_BANG_1:
                 break;
             case IceLightningArchMage.BLIZZARD:
+                pEffect.monsterStatus.put(MonsterStatus.FREEZE, 1);
+                pEffect.info.put(MapleStatInfo.time, pEffect.info.get(MapleStatInfo.time) * 2);
                 break;
             case IceLightningArchMage.BLIZZARD_1:
                 break;
@@ -35,6 +41,7 @@ public class IceLightningArchMageEffect extends AbstractEffect {
             case IceLightningArchMage.BUFF_MASTERY_3:
                 break;
             case IceLightningArchMage.CHAIN_LIGHTNING:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case IceLightningArchMage.CHAIN_LIGHTNING_EXTRA_STRIKE:
                 break;
@@ -43,10 +50,16 @@ public class IceLightningArchMageEffect extends AbstractEffect {
             case IceLightningArchMage.CHAIN_LIGHTNING_SPREAD:
                 break;
             case IceLightningArchMage.ELQUINES:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
+                pEffect.monsterStatus.put(MonsterStatus.FREEZE, 1);
                 break;
             case IceLightningArchMage.EPIC_ADVENTURE_5:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case IceLightningArchMage.FREEZING_BREATH:
+                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, pEffect.info.get(MapleStatInfo.x));
+                pEffect.monsterStatus.put(MonsterStatus.FREEZE, 1);
+                pEffect.monsterStatus.put(MonsterStatus.MAGIC_ATTACK_UP, -pEffect.info.get(MapleStatInfo.y));
                 break;
             case IceLightningArchMage.FROST_CLUTCH:
                 break;
@@ -89,10 +102,15 @@ public class IceLightningArchMageEffect extends AbstractEffect {
             case IceLightningArchMage.HYPER_STRENGTH_500_50_5:
                 break;
             case IceLightningArchMage.INFINITY_1:
+                pEffect.setHpR(pEffect.info.get(MapleStatInfo.y) / 100.0);
+                pEffect.setMpR(pEffect.info.get(MapleStatInfo.y) / 100.0);
+                pEffect.statups.put(CharacterTemporaryStat.Infinity, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, (int) pEffect.info.get(MapleStatInfo.prop));
                 break;
             case IceLightningArchMage.LIGHTNING_ORB:
                 break;
             case IceLightningArchMage.MAPLE_WARRIOR_10_1:
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
                 break;
             case IceLightningArchMage.TELEPORT_MASTERY_RANGE_1:
                 break;

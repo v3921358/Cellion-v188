@@ -43,10 +43,14 @@ public class RangerEffect extends AbstractEffect {
             case Ranger.MORTAL_BLOW_2:
                 break;
             case Ranger.PHOENIX:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Ranger.PUPPET_1:
                 break;
             case Ranger.RECKLESS_HUNT_BOW:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.padX));
                 break;
             case Ranger.STRAFE_1:
                 break;

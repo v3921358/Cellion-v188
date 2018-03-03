@@ -23,8 +23,10 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.DARKNESS:
                 break;
             case NightWalker.DARK_ELEMENTAL:
+                pEffect.statups.put(CharacterTemporaryStat.ElementDarkness, pEffect.info.get(MapleStatInfo.x));
                 break;
             case NightWalker.DARK_SIGHT:
+                pEffect.statups.put(CharacterTemporaryStat.DarkSight, pEffect.info.get(MapleStatInfo.x));
                 break;
             case NightWalker.DARK_SIGHT_1:
                 break;
@@ -47,6 +49,7 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.NIMBLE_BODY_1:
                 break;
             case NightWalker.SHADOW_BAT:
+                pEffect.statups.put(CharacterTemporaryStat.NightWalkerBat, 1);
                 break;
             case NightWalker.SHADOW_BAT_1:
                 break;
@@ -75,6 +78,9 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.GUST_CHARM:
                 break;
             case NightWalker.HASTE:
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
+                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(MapleStatInfo.jump));
+                pEffect.statups.put(CharacterTemporaryStat.EVAR, pEffect.info.get(MapleStatInfo.er));
                 break;
             case NightWalker.PHYSICAL_TRAINING_200_20_2:
                 break;
@@ -83,6 +89,7 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.SHURIKEN_BURST:
                 break;
             case NightWalker.THROWING_BOOSTER:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case NightWalker.THROWING_MASTERY:
                 break;
@@ -107,10 +114,12 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.BAT_AFFINITY_II:
                 break;
             case NightWalker.DARKNESS_ASCENDING:
+                pEffect.statups.put(CharacterTemporaryStat.DarknessAscension, pEffect.info.get(MapleStatInfo.x));
                 break;
             case NightWalker.DARK_FLARE_1:
                 break;
             case NightWalker.DARK_SERVANT:
+                pEffect.statups.put(CharacterTemporaryStat.ShadowServant, pEffect.info.get(MapleStatInfo.x));
                 break;
             case NightWalker.ENVELOPING_DARKNESS:
                 break;
@@ -137,6 +146,7 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.SHADOW_WEB:
                 break;
             case NightWalker.SPIRIT_PROJECTION:
+                pEffect.statups.put(CharacterTemporaryStat.NoBulletConsume, 0);
                 break;
             case NightWalker.VENOM_1:
                 break;
@@ -157,8 +167,12 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.DARK_OMEN_SPREAD:
                 break;
             case NightWalker.DOMINION:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStance, pEffect.info.get(MapleStatInfo.indieStance));
+                pEffect.statups.put(CharacterTemporaryStat.IndieCr, pEffect.info.get(MapleStatInfo.indieCr));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case NightWalker.GLORY_OF_THE_GUARDIANS_1:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case NightWalker.HYPER_ACCURACY_10:
                 break;
@@ -197,6 +211,7 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.QUINTUPLE_STAR_REINFORCE:
                 break;
             case NightWalker.SHADOW_ILLUSION:
+                pEffect.statups.put(CharacterTemporaryStat.ShadowIllusion, pEffect.info.get(MapleStatInfo.x));
                 break;
             case NightWalker.SHADOW_ILLUSION_1:
                 break;

@@ -151,8 +151,17 @@ public class KaiserEffect extends AbstractEffect {
             case Kaiser.RAGE_OF_PHARAOH_50_5:
                 break;
             case Kaiser.REALIGN_ATTACKER_MODE:
+                pEffect.statups.put(CharacterTemporaryStat.BdR, pEffect.info.get(MapleStatInfo.bdR));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(MapleStatInfo.cr));
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.padX));
+                pEffect.statups.put(CharacterTemporaryStat.ReshuffleSwitch, 0);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Kaiser.REALIGN_DEFENDER_MODE:
+                pEffect.statups.put(CharacterTemporaryStat.PDD, pEffect.info.get(MapleStatInfo.pddX));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, pEffect.info.get(MapleStatInfo.mhpR));
+                pEffect.statups.put(CharacterTemporaryStat.ReshuffleSwitch, 0);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Kaiser.ROLLS_2:
                 break;
@@ -391,6 +400,7 @@ public class KaiserEffect extends AbstractEffect {
             case Kaiser.ATTACKER_MODE_I:
                 break;
             case Kaiser.BLAZE_ON:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Kaiser.DEFENDER_MODE_I:
                 break;
@@ -411,10 +421,13 @@ public class KaiserEffect extends AbstractEffect {
             case Kaiser.ATTACKER_MODE_II:
                 break;
             case Kaiser.CATALYZE:
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Kaiser.CATALYZE_1:
                 break;
             case Kaiser.CURSEBITE:
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, -(pEffect.info.get(MapleStatInfo.asrR)));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, -(pEffect.info.get(MapleStatInfo.terR)));
                 break;
             case Kaiser.CURSEBITE_1:
                 break;
@@ -431,6 +444,7 @@ public class KaiserEffect extends AbstractEffect {
             case Kaiser.IMPACT_WAVE:
                 break;
             case Kaiser.PIERCING_BLAZE:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Kaiser.PRESSURE_CHAIN:
                 break;
@@ -439,6 +453,8 @@ public class KaiserEffect extends AbstractEffect {
             case Kaiser.SELF_RECOVERY_1:
                 break;
             case Kaiser.STONE_DRAGON:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Kaiser.STONE_DRAGON_1:
                 break;
@@ -483,8 +499,16 @@ public class KaiserEffect extends AbstractEffect {
             case Kaiser.EXPERT_SWORD_MASTERY_1:
                 break;
             case Kaiser.FINAL_FORM:
+                pEffect.statups.put(CharacterTemporaryStat.Morph, pEffect.info.get(MapleStatInfo.morph));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(MapleStatInfo.cr));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePMdR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.prop));
                 break;
             case Kaiser.FINAL_TRANCE:
+                pEffect.statups.put(CharacterTemporaryStat.Morph, pEffect.info.get(MapleStatInfo.morph));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(MapleStatInfo.cr));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePMdR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.prop));
                 break;
             case Kaiser.GIGAS_WAVE:
                 break;
@@ -497,6 +521,8 @@ public class KaiserEffect extends AbstractEffect {
             case Kaiser.GIGAS_WAVE_REINFORCE:
                 break;
             case Kaiser.GRAND_ARMOR:
+                pEffect.statups.put(CharacterTemporaryStat.DamageReduce, pEffect.info.get(MapleStatInfo.w));
+                pEffect.statups.put(CharacterTemporaryStat.DamageReduce, pEffect.info.get(MapleStatInfo.v));
                 break;
             case Kaiser.HYPER_ACCURACY_7:
                 break;
@@ -537,12 +563,15 @@ public class KaiserEffect extends AbstractEffect {
             case Kaiser.INFERNO_BREATH_REINFORCE:
                 break;
             case Kaiser.KAISERS_MAJESTY:
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
                 break;
             case Kaiser.NOVA_TEMPERANCE:
                 break;
             case Kaiser.NOVA_TEMPERANCE_2:
                 break;
             case Kaiser.NOVA_WARRIOR_1:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Kaiser.UNBREAKABLE_WILL:
                 break;

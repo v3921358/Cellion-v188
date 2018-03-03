@@ -21,6 +21,7 @@ public class CorsairEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Corsair.AHOY_MATEYS:
+                pEffect.info.put(MapleStatInfo.time, 120000);
                 break;
             case Corsair.AIR_STRIKE_1:
                 break;
@@ -49,6 +50,7 @@ public class CorsairEffect extends AbstractEffect {
             case Corsair.BULLSEYE_1:
                 break;
             case Corsair.DOUBLE_DOWN_4:
+                pEffect.statups.put(CharacterTemporaryStat.Dice, 0);
                 break;
             case Corsair.DOUBLE_DOWN_ADDITION_1:
                 break;
@@ -61,6 +63,7 @@ public class CorsairEffect extends AbstractEffect {
             case Corsair.ELEMENTAL_BOOST_1:
                 break;
             case Corsair.EPIC_ADVENTURE_8:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Corsair.HEROS_WILL_50_5:
                 break;
@@ -93,16 +96,23 @@ public class CorsairEffect extends AbstractEffect {
             case Corsair.HYPNOTIZE_1:
                 break;
             case Corsair.JOLLY_ROGER:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePADR, pEffect.info.get(MapleStatInfo.indiePad));//or x?
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Corsair.MAJESTIC_PRESENCE:
                 break;
             case Corsair.MAPLE_WARRIOR_60_6:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Corsair.NAUTILUS_STRIKE_3:
                 break;
             case Corsair.PARROTARGETTING:
                 break;
             case Corsair.PIRATES_REVENGE_3:
+                pEffect.info.put(MapleStatInfo.cooltime, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, (int) pEffect.info.get(MapleStatInfo.damR));
                 break;
             case Corsair.QUICKDRAW:
                 break;
@@ -117,6 +127,9 @@ public class CorsairEffect extends AbstractEffect {
             case Corsair.UGLY_BOMB:
                 break;
             case Corsair.WHALERS_POTION:
+                pEffect.statups.put(CharacterTemporaryStat.MaxHP, pEffect.info.get(MapleStatInfo.x)); //Max HP: +40%                  
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.y));//Status Ailment and Elemental Resistance: +15%
+                pEffect.statups.put(CharacterTemporaryStat.Invincible, pEffect.info.get(MapleStatInfo.w)); //Damage Intake: -15%  
                 break;
             case Corsair.WRATH_OF_THE_OCTOPI_1:
                 break;

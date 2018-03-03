@@ -41,6 +41,8 @@ public class OutlawEffect extends AbstractEffect {
             case Outlaw.BURST_FIRE:
                 break;
             case Outlaw.CROSS_CUT_BLAST:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Outlaw.CROSS_CUT_BLAST_1:
                 break;
@@ -55,12 +57,14 @@ public class OutlawEffect extends AbstractEffect {
             case Outlaw.ICE_SPLITTER:
                 break;
             case Outlaw.OCTOCANNON:
+                pEffect.statups.put(CharacterTemporaryStat.PUPPET, 1);
                 break;
             case Outlaw.OCTOPUS:
                 break;
             case Outlaw.OUTLAWS_CODE:
                 break;
             case Outlaw.ROLL_OF_THE_DICE_2:
+                pEffect.statups.put(CharacterTemporaryStat.Dice, 0);
                 break;
 
         }

@@ -31,6 +31,7 @@ public class FirePoisonWizardEffect extends AbstractEffect {
             case FirePoisonWizard.IGNITE_1:
                 break;
             case FirePoisonWizard.MAGIC_BOOSTER_2:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case FirePoisonWizard.MEDITATION_1:
                 break;

@@ -33,12 +33,17 @@ public class PaladinEffect extends AbstractEffect {
             case Paladin.BLAST_REINFORCE:
                 break;
             case Paladin.DIVINE_CHARGE:
+                pEffect.statups.put(CharacterTemporaryStat.WeaponCharge, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.z));
                 break;
             case Paladin.DIVINE_SHIELD_2:
                 break;
             case Paladin.ELEMENTAL_FORCE:
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.ElementalReset, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Paladin.EPIC_ADVENTURE_1:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Paladin.GUARDIAN:
                 break;
@@ -85,6 +90,7 @@ public class PaladinEffect extends AbstractEffect {
             case Paladin.MAGIC_CRASH:
                 break;
             case Paladin.MAPLE_WARRIOR_4:
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Paladin.MONSTER_MAGNET:
                 break;
@@ -95,6 +101,7 @@ public class PaladinEffect extends AbstractEffect {
             case Paladin.RUSH:
                 break;
             case Paladin.SACROSANCTITY:
+                pEffect.statups.put(CharacterTemporaryStat.NotDamaged, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Paladin.SMITE_SHIELD:
                 break;

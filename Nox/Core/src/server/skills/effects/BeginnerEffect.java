@@ -31,8 +31,16 @@ public class BeginnerEffect extends AbstractEffect {
             case Beginner.ARCHANGELIC_BLESSING_10_1:
                 break;
             case Beginner.ARCHANGEL_40_4:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, 5);
+                pEffect.statups.put(CharacterTemporaryStat.IndieMAD, 5);
+                pEffect.statups.put(CharacterTemporaryStat.Speed, 1);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Beginner.ARCHANGEL_50_5:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, 5);
+                pEffect.statups.put(CharacterTemporaryStat.IndieMAD, 5);
+                pEffect.statups.put(CharacterTemporaryStat.Speed, 1);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Beginner.BALROGS_HELLFIRE_1:
                 break;
@@ -61,18 +69,29 @@ public class BeginnerEffect extends AbstractEffect {
             case Beginner.DARK_ANGELIC_BLESSING_5:
                 break;
             case Beginner.DARK_ANGEL_7:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, 10);
+                pEffect.statups.put(CharacterTemporaryStat.IndieMAD, 10);
+                pEffect.statups.put(CharacterTemporaryStat.Speed, 1);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Beginner.DECENT_ADVANCED_BLESSING_70_7:
+                pEffect.statups.put(CharacterTemporaryStat.AdvancedBless, 1);
                 break;
             case Beginner.DECENT_COMBAT_ORDERS_70_7:
+                pEffect.statups.put(CharacterTemporaryStat.CombatOrders, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Beginner.DECENT_HYPER_BODY_70_7:
+                pEffect.statups.put(CharacterTemporaryStat.IndieMHP, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMMP, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Beginner.DECENT_MYSTIC_DOOR_70_7:
+                pEffect.statups.put(CharacterTemporaryStat.SoulArrow, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Beginner.DECENT_SHARP_EYES_70_7:
+                pEffect.statups.put(CharacterTemporaryStat.SharpEyes, (pEffect.info.get(MapleStatInfo.x) << 8) + pEffect.info.get(MapleStatInfo.y) + pEffect.info.get(MapleStatInfo.criticaldamageMax));
                 break;
             case Beginner.DECENT_SPEED_INFUSION_70_7:
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Beginner.DRAGON_2:
                 break;
@@ -81,6 +100,7 @@ public class BeginnerEffect extends AbstractEffect {
             case Beginner.DRAGON_RIDERS_ENERGY_BREATH_1:
                 break;
             case Beginner.ECHO_OF_HERO_2:
+                pEffect.statups.put(CharacterTemporaryStat.MaxLevelBuff, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Beginner.ECKHARTS_DARKNESS:
                 break;
@@ -123,6 +143,7 @@ public class BeginnerEffect extends AbstractEffect {
             case Beginner.HELICOPTER_5:
                 break;
             case Beginner.HIDDEN_POTENTIAL_EXPLORER:
+                pEffect.statups.put(CharacterTemporaryStat.NoDebuff, 1);
                 break;
             case Beginner.HIGHWAY_PATROL_CAR_2:
                 break;
@@ -133,14 +154,19 @@ public class BeginnerEffect extends AbstractEffect {
             case Beginner.HOTAIR_BALLOON_2:
                 break;
             case Beginner.ICE_CHOP_5:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Beginner.ICE_CURSE_5:
+                pEffect.monsterStatus.put(MonsterStatus.FREEZE, 1);
+                pEffect.info.put(MapleStatInfo.time, pEffect.info.get(MapleStatInfo.time) * 2);
                 break;
             case Beginner.ICE_DOUBLE_JUMP_7:
                 break;
             case Beginner.ICE_KNIGHT_6:
                 break;
             case Beginner.ICE_SMASH_6:
+                pEffect.monsterStatus.put(MonsterStatus.FREEZE, 1);
+                pEffect.info.put(MapleStatInfo.time, pEffect.info.get(MapleStatInfo.time) * 2);
                 break;
             case Beginner.ICE_TEMPEST_5:
                 break;
@@ -209,6 +235,7 @@ public class BeginnerEffect extends AbstractEffect {
             case Beginner.NIGHTMARE_7:
                 break;
             case Beginner.NIMBLE_FEET_1:
+                pEffect.statups.put(CharacterTemporaryStat.Speed, 10 + (pEffect.getLevel() - 1) * 5);
                 break;
             case Beginner.NIMBUS_CLOUD_7:
                 break;
@@ -249,6 +276,7 @@ public class BeginnerEffect extends AbstractEffect {
             case Beginner.RAGE_OF_PHARAOH_10:
                 break;
             case Beginner.RECOVERY_1:
+                pEffect.statups.put(CharacterTemporaryStat.Regen, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Beginner.RED_DRACO_3:
                 break;
@@ -279,6 +307,8 @@ public class BeginnerEffect extends AbstractEffect {
             case Beginner.SOARING_10_1:
                 break;
             case Beginner.SOARING_MOUNT_1:
+                pEffect.statups.put(CharacterTemporaryStat.Flying, 1);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Beginner.SPACESHIP_20_2:
                 break;
@@ -299,6 +329,7 @@ public class BeginnerEffect extends AbstractEffect {
             case Beginner.STUMPS_WEAKNESS_10:
                 break;
             case Beginner.SUPER_TRANSFORMATION:
+                pEffect.statups.put(CharacterTemporaryStat.Morph, pEffect.info.get(MapleStatInfo.morph));
                 break;
             case Beginner.TEST_4:
                 break;
@@ -671,6 +702,10 @@ public class BeginnerEffect extends AbstractEffect {
             case Beginner.WHITE_ANGELIC_BLESSING_5:
                 break;
             case Beginner.WHITE_ANGEL_7:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, 12);
+                pEffect.statups.put(CharacterTemporaryStat.IndieMAD, 12);
+                pEffect.statups.put(CharacterTemporaryStat.Speed, 1);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Beginner.WILL_OF_THE_ALLIANCE_5:
                 break;

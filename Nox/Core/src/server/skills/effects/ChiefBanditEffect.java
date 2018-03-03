@@ -27,6 +27,7 @@ public class ChiefBanditEffect extends AbstractEffect {
             case ChiefBandit.CHAKRA:
                 break;
             case ChiefBandit.DARK_FLARE:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
                 break;
             case ChiefBandit.ENVELOPING_DARKNESS_3:
                 break;
@@ -43,10 +44,14 @@ public class ChiefBanditEffect extends AbstractEffect {
             case ChiefBandit.MIDNIGHT_CARNIVAL:
                 break;
             case ChiefBandit.PHASE_DASH:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case ChiefBandit.PICK_POCKET:
+                pEffect.statups.put(CharacterTemporaryStat.PickPocket, pEffect.info.get(MapleStatInfo.x));
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case ChiefBandit.SHADOW_PARTNER:
+                pEffect.statups.put(CharacterTemporaryStat.ShadowPartner, pEffect.info.get(MapleStatInfo.x));
                 break;
             case ChiefBandit.SHIELD_MASTERY_2:
                 break;

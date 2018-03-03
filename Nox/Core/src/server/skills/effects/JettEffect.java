@@ -21,6 +21,10 @@ public class JettEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Jett.BOUNTY_CHASER:
+                pEffect.statups.put(CharacterTemporaryStat.DEX, pEffect.info.get(MapleStatInfo.dexX));
+                pEffect.statups.put(CharacterTemporaryStat.STR, pEffect.info.get(MapleStatInfo.strX));
+                pEffect.statups.put(CharacterTemporaryStat.IndieCr, pEffect.info.get(MapleStatInfo.indieCr));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Jett.COSMIC_SHIELD:
                 break;
@@ -69,6 +73,9 @@ public class JettEffect extends AbstractEffect {
             case Jett.ROLL_OF_THE_DICE_3:
                 break;
             case Jett.SLIPSTREAM_SUIT:
+                pEffect.statups.put(CharacterTemporaryStat.DEXR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.EVAR, pEffect.info.get(MapleStatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.ACCR, pEffect.info.get(MapleStatInfo.y));
                 break;
             case Jett.SOLAR_ARRAY:
                 break;
@@ -77,6 +84,8 @@ public class JettEffect extends AbstractEffect {
             case Jett.STARLINE_THREE:
                 break;
             case Jett.TURRET_DEPLOYMENT:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Jett.BACKUP_BEATDOWN:
                 break;
@@ -87,6 +96,10 @@ public class JettEffect extends AbstractEffect {
             case Jett.BACKUP_BEATDOWN_SPREAD:
                 break;
             case Jett.BIONIC_MAXIMIZER:
+                pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.v));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.w));
+                pEffect.statups.put(CharacterTemporaryStat.DamageReduce, pEffect.info.get(MapleStatInfo.y));
                 break;
             case Jett.BRAIN_SCRAMBLER_1:
                 break;
@@ -97,6 +110,7 @@ public class JettEffect extends AbstractEffect {
             case Jett.DOUBLE_DOWN_2:
                 break;
             case Jett.EPIC_ADVENTURE_20_2:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Jett.GIGA_BLASTER:
                 break;
@@ -105,6 +119,9 @@ public class JettEffect extends AbstractEffect {
             case Jett.HEROS_WILL_400_40_4:
                 break;
             case Jett.HIGH_GRAVITY:
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.prop));
+                pEffect.statups.put(CharacterTemporaryStat.IndieAllStat, pEffect.info.get(MapleStatInfo.indieAllStat));
+                pEffect.statups.put(CharacterTemporaryStat.IndieCr, pEffect.info.get(MapleStatInfo.indieCr));
                 break;
             case Jett.HYPER_ACCURACY_400_40_4:
                 break;
@@ -135,6 +152,7 @@ public class JettEffect extends AbstractEffect {
             case Jett.INVINCIBILITY_30_3:
                 break;
             case Jett.MAPLE_WARRIOR_400_40_4:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Jett.MAXIMUM_FIREPOWER:
                 break;
@@ -151,6 +169,7 @@ public class JettEffect extends AbstractEffect {
             case Jett.RELENTLESS:
                 break;
             case Jett.SINGULARITY_SHOCK:
+                pEffect.statups.put(CharacterTemporaryStat.IncMaxDamage, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Jett.STARFALL:
                 break;
@@ -171,6 +190,7 @@ public class JettEffect extends AbstractEffect {
             case Jett.BLASTER_BARRAGE:
                 break;
             case Jett.GALACTIC_MIGHT:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Jett.QUICK_MOTION_1:
                 break;

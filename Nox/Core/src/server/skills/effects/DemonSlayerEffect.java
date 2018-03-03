@@ -21,6 +21,7 @@ public class DemonSlayerEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case DemonSlayer.BATTLE_PACT_1:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DemonSlayer.DEMON_LASH:
                 break;
@@ -41,6 +42,7 @@ public class DemonSlayerEffect extends AbstractEffect {
             case DemonSlayer.BARBED_LASH:
                 break;
             case DemonSlayer.CHAOS_LOCK:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case DemonSlayer.DARK_THRUST:
                 break;
@@ -51,10 +53,15 @@ public class DemonSlayerEffect extends AbstractEffect {
             case DemonSlayer.SOUL_EATER:
                 break;
             case DemonSlayer.VENGEANCE:
+                pEffect.statups.put(CharacterTemporaryStat.PowerGuard, pEffect.info.get(MapleStatInfo.y));
                 break;
             case DemonSlayer.WEAPON_MASTERY_1:
                 break;
             case DemonSlayer.BLACKHEARTED_STRENGTH:
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMADR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBDR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DemonSlayer.BLACKHEARTED_STRENGTH_1:
                 break;
@@ -81,12 +88,17 @@ public class DemonSlayerEffect extends AbstractEffect {
             case DemonSlayer.BINDING_DARKNESS:
                 break;
             case DemonSlayer.BLUE_BLOOD:
+                pEffect.statups.put(CharacterTemporaryStat.ShadowPartner, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DemonSlayer.BOUNDLESS_RAGE:
+                pEffect.statups.put(CharacterTemporaryStat.InfinityForce, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DemonSlayer.CERBERUS_CHOMP:
                 break;
             case DemonSlayer.DARK_METAMORPHOSIS:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.damR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, pEffect.info.get(MapleStatInfo.indieMhpR));
+                pEffect.statups.put(CharacterTemporaryStat.PowerGuard, pEffect.info.get(MapleStatInfo.damage));
                 break;
             case DemonSlayer.DARK_METAMORPHOSIS_ENHANCE:
                 break;
@@ -95,8 +107,15 @@ public class DemonSlayerEffect extends AbstractEffect {
             case DemonSlayer.DARK_METAMORPHOSIS_REINFORCE:
                 break;
             case DemonSlayer.DEMONIC_FORTITUDE_1:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case DemonSlayer.DEMON_CRY:
+                pEffect.monsterStatus.put(MonsterStatus.SHOWDOWN, pEffect.info.get(MapleStatInfo.w));
+                pEffect.monsterStatus.put(MonsterStatus.MDD, pEffect.info.get(MapleStatInfo.x));
+                pEffect.monsterStatus.put(MonsterStatus.PDD, pEffect.info.get(MapleStatInfo.x));
+                pEffect.monsterStatus.put(MonsterStatus.MATK, pEffect.info.get(MapleStatInfo.x));
+                pEffect.monsterStatus.put(MonsterStatus.WATK, pEffect.info.get(MapleStatInfo.x));
+                pEffect.monsterStatus.put(MonsterStatus.ACC, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DemonSlayer.DEMON_IMPACT:
                 break;
@@ -147,6 +166,7 @@ public class DemonSlayerEffect extends AbstractEffect {
             case DemonSlayer.LEECH_AURA:
                 break;
             case DemonSlayer.MAPLE_WARRIOR_900_90_9:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DemonSlayer.OBSIDIAN_SKIN:
                 break;

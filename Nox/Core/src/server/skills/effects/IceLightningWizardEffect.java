@@ -21,6 +21,10 @@ public class IceLightningWizardEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case IceLightningWizard.CHILLING_STEP:
+                pEffect.monsterStatus.put(MonsterStatus.FREEZE, 1);
+                pEffect.statups.put(CharacterTemporaryStat.TeleportMasteryOn, pEffect.info.get(MapleStatInfo.x));
+                pEffect.info.put(MapleStatInfo.mpCon, pEffect.info.get(MapleStatInfo.y));
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case IceLightningWizard.COLD_BEAM:
                 break;
@@ -31,8 +35,10 @@ public class IceLightningWizardEffect extends AbstractEffect {
             case IceLightningWizard.HIGH_WISDOM_7:
                 break;
             case IceLightningWizard.MAGIC_BOOSTER_5:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case IceLightningWizard.MEDITATION_2:
+                pEffect.statups.put(CharacterTemporaryStat.MAD, pEffect.info.get(MapleStatInfo.x));
                 break;
             case IceLightningWizard.MP_EATER_2:
                 break;

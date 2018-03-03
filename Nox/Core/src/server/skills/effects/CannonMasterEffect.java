@@ -21,8 +21,10 @@ public class CannonMasterEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case CannonMaster.ANCHORS_AWEIGH:
+                pEffect.statups.put(CharacterTemporaryStat.PUPPET, 1);
                 break;
             case CannonMaster.BUCKSHOT:
+                pEffect.statups.put(CharacterTemporaryStat.AttackCountX, pEffect.info.get(MapleStatInfo.x));
                 break;
             case CannonMaster.CANNON_BARRAGE:
                 break;
@@ -43,8 +45,10 @@ public class CannonMasterEffect extends AbstractEffect {
             case CannonMaster.CANNON_OVERLOAD:
                 break;
             case CannonMaster.DOUBLE_DOWN:
+                pEffect.statups.put(CharacterTemporaryStat.Dice, 0);
                 break;
             case CannonMaster.EPIC_ADVENTURE_2:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case CannonMaster.HEROS_WILL_7:
                 break;
@@ -75,10 +79,12 @@ public class CannonMasterEffect extends AbstractEffect {
             case CannonMaster.HYPER_STRENGTH_2:
                 break;
             case CannonMaster.MAPLE_WARRIOR_8:
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
                 break;
             case CannonMaster.MEGA_MONKEY_MAGIC:
                 break;
             case CannonMaster.MONKEY_MILITIA:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
                 break;
             case CannonMaster.MONKEY_MILITIA_1:
                 break;
@@ -91,6 +97,7 @@ public class CannonMasterEffect extends AbstractEffect {
             case CannonMaster.NAUTILUS_STRIKE:
                 break;
             case CannonMaster.PIRATES_SPIRIT:
+                pEffect.statups.put(CharacterTemporaryStat.Stance, (int) pEffect.info.get(MapleStatInfo.prop));
                 break;
             case CannonMaster.ROLLING_RAINBOW:
                 break;

@@ -21,16 +21,19 @@ public class NightLordEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case NightLord.BLEED_DART:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
                 break;
             case NightLord.CLAW_EXPERT:
                 break;
             case NightLord.DARK_HARMONY:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
                 break;
             case NightLord.DARK_HARMONY_1:
                 break;
             case NightLord.DEATH_STAR:
                 break;
             case NightLord.EPIC_ADVENTURE:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case NightLord.EXPERT_THROWING_STAR_HANDLING_1:
                 break;
@@ -71,6 +74,7 @@ public class NightLordEffect extends AbstractEffect {
             case NightLord.HYPER_STRENGTH_3000_300_30_3:
                 break;
             case NightLord.MAPLE_WARRIOR_1:
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
                 break;
             case NightLord.NIGHT_LORDS_MARK:
                 break;

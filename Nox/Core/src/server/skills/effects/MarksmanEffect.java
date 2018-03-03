@@ -25,12 +25,16 @@ public class MarksmanEffect extends AbstractEffect {
             case Marksman.BOLT_SURPLUS:
                 break;
             case Marksman.BULLSEYE_SHOT:
+                pEffect.statups.put(CharacterTemporaryStat.IgnoreMobpdpR, pEffect.info.get(MapleStatInfo.ignoreMobpdpR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.BullsEye, 1);
                 break;
             case Marksman.CROSSBOW_EXPERT_1:
                 break;
             case Marksman.ELITE_PUPPET_1:
                 break;
             case Marksman.EPIC_ADVENTURE_6:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Marksman.HEROS_WILL_10_1:
                 break;
@@ -63,10 +67,13 @@ public class MarksmanEffect extends AbstractEffect {
             case Marksman.HYPER_STRENGTH_100_10_1:
                 break;
             case Marksman.ILLUSION_STEP:
+                pEffect.statups.put(CharacterTemporaryStat.Blind, pEffect.info.get(MapleStatInfo.x));
+                pEffect.monsterStatus.put(MonsterStatus.ACC, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Marksman.LAST_MAN_STANDING:
                 break;
             case Marksman.MAPLE_WARRIOR_20_2:
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Marksman.MARKSMANSHIP_2:
                 break;
@@ -81,6 +88,8 @@ public class MarksmanEffect extends AbstractEffect {
             case Marksman.PIERCING_ARROW_SPREAD:
                 break;
             case Marksman.SHARP_EYES:
+                pEffect.statups.put(CharacterTemporaryStat.SharpEyes, pEffect.info.get(MapleStatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalGrowing, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Marksman.SHARP_EYES_CRITICAL_CHANCE_1:
                 break;

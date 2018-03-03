@@ -41,6 +41,7 @@ public class PageEffect extends AbstractEffect {
             case Page.THREATEN_1:
                 break;
             case Page.WEAPON_BOOSTER_2:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x) * 2);
                 break;
             case Page.WEAPON_MASTERY_2:
                 break;

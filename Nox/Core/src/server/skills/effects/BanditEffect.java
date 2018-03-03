@@ -21,12 +21,14 @@ public class BanditEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Bandit.CHANNEL_KARMA:
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.pad));
                 break;
             case Bandit.CHANNEL_KARMA_1:
                 break;
             case Bandit.CRITICAL_GROWTH:
                 break;
             case Bandit.DAGGER_BOOSTER:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Bandit.DAGGER_MASTERY:
                 break;
@@ -35,6 +37,7 @@ public class BanditEffect extends AbstractEffect {
             case Bandit.HASTE_3:
                 break;
             case Bandit.MESOGUARD:
+                pEffect.statups.put(CharacterTemporaryStat.MesoGuard, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Bandit.PHYSICAL_TRAINING_9:
                 break;
@@ -47,6 +50,7 @@ public class BanditEffect extends AbstractEffect {
             case Bandit.SHIELD_MASTERY_1:
                 break;
             case Bandit.STEAL:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
 
         }

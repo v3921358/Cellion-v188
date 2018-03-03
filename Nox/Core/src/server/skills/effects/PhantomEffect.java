@@ -27,10 +27,13 @@ public class PhantomEffect extends AbstractEffect {
             case Phantom.IMPECCABLE_MEMORY_I:
                 break;
             case Phantom.PHANTOM_SWIFTNESS:
+                pEffect.monsterStatus.put(MonsterStatus.WATK, pEffect.info.get(MapleStatInfo.x));
+                pEffect.monsterStatus.put(MonsterStatus.PDD, pEffect.info.get(MapleStatInfo.y));
                 break;
             case Phantom.CALLING_CARD:
                 break;
             case Phantom.CANE_BOOSTER:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Phantom.CANE_MASTERY:
                 break;
@@ -43,18 +46,44 @@ public class PhantomEffect extends AbstractEffect {
             case Phantom.MILLE_CARTES:
                 break;
             case Phantom.BAD_LUCK_WARD:
+                pEffect.statups.put(CharacterTemporaryStat.MaxHP, pEffect.info.get(MapleStatInfo.indieMhpR));//indieMhpR/x
+                pEffect.statups.put(CharacterTemporaryStat.IndieMMPR, pEffect.info.get(MapleStatInfo.indieMmpR));//indieMmpR/x
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.y));
                 break;
             case Phantom.BLASON:
                 break;
             case Phantom.CLAIR_DE_LUNE:
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, 10);
                 break;
             case Phantom.FINAL_FEINT:
+                pEffect.statups.put(CharacterTemporaryStat.ReviveOnce, 1);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                break;
+            case Phantom.FINAL_JUDGMENT_DRAW:
+                pEffect.info.put(MapleStatInfo.time, 30000);
+                pEffect.statups.put(CharacterTemporaryStat.DamAbsorbShield, pEffect.info.get(MapleStatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(MapleStatInfo.v));
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.x));//x
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.y));//y
                 break;
             case Phantom.IMPECCABLE_MEMORY_III:
                 break;
+            case Phantom.MAPLE_WARRIOR:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                break;
             case Phantom.MIST_MASK:
                 break;
+            case Phantom.PENOMBRE:
+                pEffect.info.put(MapleStatInfo.damage, pEffect.info.get(MapleStatInfo.v));
+                pEffect.info.put(MapleStatInfo.attackCount, pEffect.info.get(MapleStatInfo.w));
+                pEffect.info.put(MapleStatInfo.mobCount, pEffect.info.get(MapleStatInfo.x));
+                break;
             case Phantom.PIERCING_VISION:
+                break;
+            case Phantom.PRIERE_DARIA:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.damR));
+                pEffect.statups.put(CharacterTemporaryStat.IgnoreMobpdpR, pEffect.info.get(MapleStatInfo.ignoreMobpdpR));
                 break;
             case Phantom.RAPIER_WIT:
                 break;
@@ -121,6 +150,7 @@ public class PhantomEffect extends AbstractEffect {
             case Phantom.FREEZING_AXE_30_3:
                 break;
             case Phantom.GHOSTWALK:
+                pEffect.statups.put(CharacterTemporaryStat.DarkSight, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Phantom.GIANT_POTION_700_70_7:
                 break;
@@ -133,6 +163,9 @@ public class PhantomEffect extends AbstractEffect {
             case Phantom.GODDESS_GUARD_9:
                 break;
             case Phantom.HEROS_ECHO_7:
+                break;
+            case Phantom.HEROIC_MEMORIES:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Phantom.HIDDEN_POTENTIAL_HERO_9:
                 break;
@@ -149,6 +182,7 @@ public class PhantomEffect extends AbstractEffect {
             case Phantom.ICE_TEMPEST_50_5:
                 break;
             case Phantom.INFILTRATE_5:
+                pEffect.statups.put(CharacterTemporaryStat.Invisible, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Phantom.INVINCIBILITY_20_2:
                 break;
@@ -223,8 +257,12 @@ public class PhantomEffect extends AbstractEffect {
             case Phantom.TEST_6:
                 break;
             case Phantom.TO_THE_SKIES:
+                pEffect.moveTo(pEffect.info.get(MapleStatInfo.x));
                 break;
             case Phantom.TRANSFORMED_ROBOT_5:
+                break;
+            case Phantom.VOL_DAME:
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Phantom.WHITE_ANGELIC_BLESSING_50_5:
                 break;

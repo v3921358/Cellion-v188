@@ -35,12 +35,16 @@ public class DemonAvengerEffect extends AbstractEffect {
             case DemonAvenger.LIFE_SAP:
                 break;
             case DemonAvenger.OVERLOAD_RELEASE:
+                pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, pEffect.info.get(MapleStatInfo.indieMhpR));
+                pEffect.statups.put(CharacterTemporaryStat.ExceedOverload, 1);
                 break;
             case DemonAvenger.ABYSSAL_CONNECTION:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
                 break;
             case DemonAvenger.ABYSSAL_CONNECTION_1:
                 break;
             case DemonAvenger.BATTLE_PACT:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DemonAvenger.BAT_SWARM:
                 break;
@@ -63,6 +67,8 @@ public class DemonAvengerEffect extends AbstractEffect {
             case DemonAvenger.ADVANCED_LIFE_SAP:
                 break;
             case DemonAvenger.DIABOLIC_RECOVERY:
+                pEffect.statups.put(CharacterTemporaryStat.DiabolikRecovery, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.MaxHP, pEffect.info.get(MapleStatInfo.indieMhpR));
                 break;
             case DemonAvenger.EXCEED_LUNAR_SLASH:
                 break;
@@ -83,6 +89,8 @@ public class DemonAvengerEffect extends AbstractEffect {
             case DemonAvenger.VITALITY_VEIL:
                 break;
             case DemonAvenger.WARD_EVIL:
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.asrR));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.terR));
                 break;
             case DemonAvenger.ADVANCED_DESPERADO_MASTERY:
                 break;
@@ -91,8 +99,10 @@ public class DemonAvengerEffect extends AbstractEffect {
             case DemonAvenger.DEFENSE_EXPERTISE:
                 break;
             case DemonAvenger.DEMONIC_FORTITUDE:
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case DemonAvenger.EXCEED_EXECUTION:
+                pEffect.statups.put(CharacterTemporaryStat.Exceed, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DemonAvenger.EXCEED_EXECUTION_1:
                 break;
@@ -109,6 +119,7 @@ public class DemonAvengerEffect extends AbstractEffect {
             case DemonAvenger.EXCEED_REINFORCE:
                 break;
             case DemonAvenger.FORBIDDEN_CONTRACT:
+                pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, pEffect.info.get(MapleStatInfo.indieMhpR));
                 break;
             case DemonAvenger.HYPER_ACCURACY_40_4:
                 break;
@@ -139,6 +150,7 @@ public class DemonAvengerEffect extends AbstractEffect {
             case DemonAvenger.INFERNAL_EXCEED:
                 break;
             case DemonAvenger.MAPLE_WARRIOR_2:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DemonAvenger.NETHER_SHIELD:
                 break;
@@ -155,6 +167,9 @@ public class DemonAvengerEffect extends AbstractEffect {
             case DemonAvenger.NETHER_SLICE:
                 break;
             case DemonAvenger.OVERWHELMING_POWER:
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, 2);
+                pEffect.statups.put(CharacterTemporaryStat.Booster, 2);
                 break;
             case DemonAvenger.OVERWHELMING_POWER_1:
                 break;

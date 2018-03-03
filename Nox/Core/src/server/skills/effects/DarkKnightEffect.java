@@ -29,10 +29,15 @@ public class DarkKnightEffect extends AbstractEffect {
             case DarkKnight.DARK_IMPALE:
                 break;
             case DarkKnight.DARK_THIRST:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.Regen, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DarkKnight.EPIC_ADVENTURE_10_1:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case DarkKnight.EVIL_EYE_1:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
+                pEffect.statups.put(CharacterTemporaryStat.Beholder, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DarkKnight.EVIL_EYE_AURA_REINFORCE:
                 break;
@@ -91,6 +96,7 @@ public class DarkKnightEffect extends AbstractEffect {
             case DarkKnight.MAGIC_CRASH_5:
                 break;
             case DarkKnight.MAPLE_WARRIOR_100_10_1:
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DarkKnight.MONSTER_MAGNET_2:
                 break;
@@ -105,6 +111,8 @@ public class DarkKnightEffect extends AbstractEffect {
             case DarkKnight.RUSH_4:
                 break;
             case DarkKnight.SACRIFICE_1:
+                pEffect.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pEffect.info.get(MapleStatInfo.ignoreMobpdpR));
+                pEffect.statups.put(CharacterTemporaryStat.BdR, pEffect.info.get(MapleStatInfo.indieBDR));
                 break;
 
         }

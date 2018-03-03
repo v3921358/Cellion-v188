@@ -35,12 +35,14 @@ public class CrusaderEffect extends AbstractEffect {
             case Crusader.MAGIC_CRASH_6:
                 break;
             case Crusader.PANIC:
+                pEffect.monsterStatus.put(MonsterStatus.DARKNESS, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Crusader.RUSH_5:
                 break;
             case Crusader.SELF_RECOVERY_4:
                 break;
             case Crusader.SHOUT:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Crusader.SHOUT_1:
                 break;

@@ -21,16 +21,20 @@ public class AranEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Aran.BODY_PRESSURE:
+                pEffect.statups.put(CharacterTemporaryStat.BodyPressure, pEffect.info.get(MapleStatInfo.x));
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Aran.COMBAT_STEP:
                 break;
             case Aran.COMBO_ABILITY:
+                pEffect.statups.put(CharacterTemporaryStat.ComboAbilityBuff, 100);
                 break;
             case Aran.DOUBLE_SWING:
                 break;
             case Aran.GUARDIAN_ARMOR:
                 break;
             case Aran.POLEARM_BOOSTER:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Aran.SMASH_SWING:
                 break;
@@ -53,6 +57,8 @@ public class AranEffect extends AbstractEffect {
             case Aran.COMMAND_MASTERY_I:
                 break;
             case Aran.DRAIN:
+                pEffect.statups.put(CharacterTemporaryStat.AranDrain, pEffect.info.get(MapleStatInfo.x));
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Aran.FINAL_ATTACK_1:
                 break;
@@ -71,6 +77,7 @@ public class AranEffect extends AbstractEffect {
             case Aran.POLEARM_MASTERY:
                 break;
             case Aran.ROLLING_SPIN:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Aran.ROLLING_SPIN_3:
                 break;
@@ -131,8 +138,13 @@ public class AranEffect extends AbstractEffect {
             case Aran.JUDGMENT_DRAW_3:
                 break;
             case Aran.MAHA_BLESSING:
+                pEffect.statups.put(CharacterTemporaryStat.MAD, pEffect.info.get(MapleStatInfo.indieMad));
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.indiePad));
                 break;
             case Aran.MIGHT:
+                pEffect.statups.put(CharacterTemporaryStat.KnockBack, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(MapleStatInfo.epad));
+                pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(MapleStatInfo.epdd));
                 break;
             case Aran.MIGHT_1:
                 break;
@@ -141,6 +153,8 @@ public class AranEffect extends AbstractEffect {
             case Aran.ROLLING_SPIN_2:
                 break;
             case Aran.SNOW_CHARGE:
+                pEffect.statups.put(CharacterTemporaryStat.WeaponCharge, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.z));
                 break;
             case Aran.ADRENALINE_BURST:
                 break;
@@ -215,6 +229,7 @@ public class AranEffect extends AbstractEffect {
             case Aran.HEAVY_SWING:
                 break;
             case Aran.HEROIC_MEMORIES_3:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Aran.HEROS_WILL_70_7:
                 break;
@@ -253,6 +268,7 @@ public class AranEffect extends AbstractEffect {
             case Aran.MAHAS_DOMAIN_1:
                 break;
             case Aran.MAPLE_WARRIOR_70_7:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Aran.MERCILESS_HUNT:
                 break;
@@ -481,6 +497,7 @@ public class AranEffect extends AbstractEffect {
             case Aran.RAGE_OF_PHARAOH_40_4:
                 break;
             case Aran.RECOVERY_3:
+                pEffect.statups.put(CharacterTemporaryStat.Regen, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Aran.RED_DRACO_5:
                 break;

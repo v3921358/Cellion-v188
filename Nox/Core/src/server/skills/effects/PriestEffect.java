@@ -25,6 +25,8 @@ public class PriestEffect extends AbstractEffect {
             case Priest.DISPEL:
                 break;
             case Priest.DIVINE_PROTECTION:
+                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, 1);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Priest.DOOM:
                 break;
@@ -33,16 +35,25 @@ public class PriestEffect extends AbstractEffect {
             case Priest.HOLY_FOUNTAIN:
                 break;
             case Priest.HOLY_MAGIC_SHELL:
+                pEffect.statups.put(CharacterTemporaryStat.HolyMagicShell, pEffect.info.get(MapleStatInfo.x));
+                pEffect.info.put(MapleStatInfo.cooltime, pEffect.info.get(MapleStatInfo.y));
+                pEffect.setHpR(pEffect.info.get(MapleStatInfo.z) / 100.0);
                 break;
             case Priest.HOLY_SYMBOL_1:
+                pEffect.statups.put(CharacterTemporaryStat.HolySymbol, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Priest.MAGIC_BOOSTER_1:
                 break;
             case Priest.MYSTIC_DOOR:
                 break;
             case Priest.SHINING_RAY:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Priest.TELEPORT_MASTERY_2:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
+                pEffect.statups.put(CharacterTemporaryStat.TeleportMasteryOn, pEffect.info.get(MapleStatInfo.x));
+                pEffect.info.put(MapleStatInfo.mpCon, pEffect.info.get(MapleStatInfo.y));
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
 
         }

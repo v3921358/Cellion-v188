@@ -25,6 +25,7 @@ public class WarriorEffect extends AbstractEffect {
             case Warrior.HP_BOOST_4:
                 break;
             case Warrior.IRON_BODY:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePDD, pEffect.info.get(MapleStatInfo.indiePdd));
                 break;
             case Warrior.IRON_BODY_2:
                 break;

@@ -2,6 +2,33 @@ package constants.skills;
 
 public class Phantom {
 
+    // TODO: Sort these alphabetically, the script missed Phantom fourth job and hypers
+    public static final int MILLE_AIGUILLES = 24121000;
+    public static final int IMPECCABLE_MEMORY_4 = 24121001;
+    public static final int CARTE_NOIR = 24120002;
+    public static final int PENOMBRE = 24121003;
+    public static final int PRIERE_DARIA = 24121004;
+    public static final int TEMPEST = 24121005;
+    public static final int CANE_EXPERT = 24120006;
+    public static final int VOL_DAME = 24121007;
+    public static final int MAPLE_WARRIOR = 24121008;
+    public static final int HEROS_WILL = 24121009;
+    
+    public static final int TEMPEST_REINFORCE = 24120043;
+    public static final int TEMPEST_COOLDOWN_CUTTER = 24120044;
+    public static final int TEMPEST_EXTRA_TARGET = 24120045;
+    public static final int MILLE_AIGUILLES_REINFORCE = 24120046;
+    public static final int MILLE_AIGUILLES_EXTRA_TARGET = 24120047;
+    public static final int MILLE_AIGUILLES_GUARDBREAK = 24120048;
+    public static final int BAD_LUCK_WARD_IMMUNITY_ENHANCE = 24120049;
+    public static final int BAD_LUCK_WARD_HYPER_HEALTH = 24120050;
+    public static final int BAD_LUCK_WARD_HYPER_MANA = 24120051;
+    public static final int CARTE_ROSE_FINALE = 24121052;
+    public static final int ROSE_CARTE_FINALE = 24120055;
+    public static final int HEROIC_MEMORIES = 24121053;
+    public static final int FINAL_JUDGMENT_DRAW = 24121054;
+    
+    
     public static final int DOUBLE_ENTENDRE = 24001000;
     public static final int FEATHER_FOOT = 24000003;
     public static final int IMPECCABLE_MEMORY_I = 24001001;

@@ -113,6 +113,7 @@ public class NoblesseEffect extends AbstractEffect {
             case Noblesse.EMPRESSS_BLESSING_10_1:
                 break;
             case Noblesse.EMPRESSS_PRAYER:
+                pEffect.statups.put(CharacterTemporaryStat.MaxLevelBuff, (int) pEffect.info.get(MapleStatInfo.x));
                 break;
             case Noblesse.EMPRESSS_SHOUT:
                 break;
@@ -223,6 +224,7 @@ public class NoblesseEffect extends AbstractEffect {
             case Noblesse.NIGHTMARE_5:
                 break;
             case Noblesse.NIMBLE_FEET:
+                pEffect.statups.put(CharacterTemporaryStat.Speed, 10 + (pEffect.getLevel() - 1) * 5);
                 break;
             case Noblesse.NIMBUS_CLOUD_4:
                 break;
@@ -259,6 +261,7 @@ public class NoblesseEffect extends AbstractEffect {
             case Noblesse.RAGE_OF_PHARAOH_7:
                 break;
             case Noblesse.RECOVERY:
+                pEffect.statups.put(CharacterTemporaryStat.Regen, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Noblesse.RED_DRACO_4:
                 break;

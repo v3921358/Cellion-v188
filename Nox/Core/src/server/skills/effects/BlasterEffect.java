@@ -49,6 +49,7 @@ public class BlasterEffect extends AbstractEffect {
             case Blaster.REVOLVING_CANNON_MASTERY:
                 break;
             case Blaster.ARM_CANNON_BOOST:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Blaster.ARM_CANNON_MASTERY:
                 break;
@@ -135,6 +136,7 @@ public class BlasterEffect extends AbstractEffect {
             case Blaster.IMPROVED_BUNKER_SHOCKWAVE:
                 break;
             case Blaster.MAPLE_WARRIOR_40_4:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Blaster.MUZZLE_FLASH:
                 break;

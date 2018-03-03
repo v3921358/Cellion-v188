@@ -21,6 +21,7 @@ public class CrossbowmanEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Crossbowman.CROSSBOW_BOOSTER_2:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Crossbowman.CROSSBOW_MASTERY:
                 break;
@@ -39,6 +40,9 @@ public class CrossbowmanEffect extends AbstractEffect {
             case Crossbowman.RANGEFINDER:
                 break;
             case Crossbowman.SOUL_ARROW_CROSSBOW_1:
+                pEffect.statups.put(CharacterTemporaryStat.SoulArrow, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(MapleStatInfo.epad));
+                pEffect.statups.put(CharacterTemporaryStat.NoBulletConsume, 1);
                 break;
 
         }

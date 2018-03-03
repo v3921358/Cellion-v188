@@ -25,8 +25,11 @@ public class FirePoisonMageEffect extends AbstractEffect {
             case FirePoisonMage.BURNING_MAGIC:
                 break;
             case FirePoisonMage.ELEMENTAL_ADAPTATION_FIRE_POISON:
+                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, 1);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case FirePoisonMage.ELEMENTAL_DECREASE_2:
+                pEffect.statups.put(CharacterTemporaryStat.ElementalReset, pEffect.info.get(MapleStatInfo.x));
                 break;
             case FirePoisonMage.ELEMENT_AMPLIFICATION_2:
                 break;
@@ -43,6 +46,10 @@ public class FirePoisonMageEffect extends AbstractEffect {
             case FirePoisonMage.SPELL_BOOSTER_2:
                 break;
             case FirePoisonMage.TELEPORT_MASTERY_3:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
+                pEffect.statups.put(CharacterTemporaryStat.TeleportMasteryOn, pEffect.info.get(MapleStatInfo.x));
+                pEffect.info.put(MapleStatInfo.mpCon, pEffect.info.get(MapleStatInfo.y));
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case FirePoisonMage.VIRAL_SLIME:
                 break;

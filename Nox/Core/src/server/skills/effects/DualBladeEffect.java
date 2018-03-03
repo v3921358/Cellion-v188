@@ -21,10 +21,13 @@ public class DualBladeEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case DualBlade.KATARA_BOOSTER:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DualBlade.KATARA_MASTERY:
                 break;
             case DualBlade.SELF_HASTE:
+                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(MapleStatInfo.jump));
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
                 break;
             case DualBlade.TORNADO_SPIN:
                 break;
@@ -33,6 +36,7 @@ public class DualBladeEffect extends AbstractEffect {
             case DualBlade.TRIPLE_STAB:
                 break;
             case DualBlade.CHANNEL_KARMA_2:
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.pad));
                 break;
             case DualBlade.CHANNEL_KARMA_3:
                 break;
@@ -51,6 +55,7 @@ public class DualBladeEffect extends AbstractEffect {
             case DualBlade.SLASH_STORM:
                 break;
             case DualBlade.FLASHBANG:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case DualBlade.FLYING_ASSAULTER_1:
                 break;
@@ -63,6 +68,7 @@ public class DualBladeEffect extends AbstractEffect {
             case DualBlade.VENOM:
                 break;
             case DualBlade.ADVANCED_DARK_SIGHT_1:
+                pEffect.statups.put(CharacterTemporaryStat.DarkSight, (int) pEffect.getLevel());
                 break;
             case DualBlade.BLADE_ASCENSION:
                 break;
@@ -77,6 +83,7 @@ public class DualBladeEffect extends AbstractEffect {
             case DualBlade.LIFE_DRAIN:
                 break;
             case DualBlade.MIRROR_IMAGE:
+                pEffect.statups.put(CharacterTemporaryStat.ShadowPartner, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DualBlade.OWL_SPIRIT:
                 break;
@@ -85,8 +92,11 @@ public class DualBladeEffect extends AbstractEffect {
             case DualBlade.UPPER_STAB:
                 break;
             case DualBlade.ASURAS_ANGER:
+                pEffect.statups.put(CharacterTemporaryStat.Asura, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DualBlade.BLADE_CLONE:
+                pEffect.statups.put(CharacterTemporaryStat.StackBuff, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case DualBlade.BLADE_FURY:
                 break;
@@ -105,8 +115,12 @@ public class DualBladeEffect extends AbstractEffect {
             case DualBlade.CHAINS_OF_HELL_1:
                 break;
             case DualBlade.EPIC_ADVENTURE_9:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case DualBlade.FINAL_CUT:
+                pEffect.statups.put(CharacterTemporaryStat.FinalCut, pEffect.info.get(MapleStatInfo.w));
+                pEffect.addHpR(-pEffect.info.get(MapleStatInfo.x) / 100.0);
+                pEffect.info.put(MapleStatInfo.time, 60 * 1000);
                 break;
             case DualBlade.HEROS_WILL_100_10_1:
                 break;
@@ -139,8 +153,10 @@ public class DualBladeEffect extends AbstractEffect {
             case DualBlade.KATARA_EXPERT:
                 break;
             case DualBlade.MAPLE_WARRIOR_200_20_2:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DualBlade.MIRRORED_TARGET:
+                pEffect.statups.put(CharacterTemporaryStat.PUPPET, 1);
                 break;
             case DualBlade.MONSTER_BOMB:
                 break;
@@ -163,6 +179,8 @@ public class DualBladeEffect extends AbstractEffect {
             case DualBlade.SUDDEN_RAID_REINFORCE:
                 break;
             case DualBlade.THORNS:
+                pEffect.statups.put(CharacterTemporaryStat.Stance, (int) pEffect.info.get(MapleStatInfo.prop));
+                pEffect.statups.put(CharacterTemporaryStat.EPAD, (int) pEffect.info.get(MapleStatInfo.epad));
                 break;
             case DualBlade.THORNS_1:
                 break;

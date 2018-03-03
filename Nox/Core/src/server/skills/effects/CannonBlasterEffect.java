@@ -31,6 +31,7 @@ public class CannonBlasterEffect extends AbstractEffect {
             case CannonBlaster.COUNTER_CRUSH:
                 break;
             case CannonBlaster.LUCK_OF_THE_DIE:
+                pEffect.statups.put(CharacterTemporaryStat.Dice, 0);
                 break;
             case CannonBlaster.MONKEY_FURY:
                 break;
@@ -39,6 +40,7 @@ public class CannonBlasterEffect extends AbstractEffect {
             case CannonBlaster.MONKEY_MADNESS:
                 break;
             case CannonBlaster.MONKEY_WAVE:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case CannonBlaster.MONKEY_WAVE_1:
                 break;

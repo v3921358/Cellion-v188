@@ -21,8 +21,10 @@ public class ClericEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Cleric.BLESS:
+                pEffect.statups.put(CharacterTemporaryStat.Bless, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Cleric.BLESSED_ENSEMBLE:
+                pEffect.statups.put(CharacterTemporaryStat.BlessEnsenble, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Cleric.HEAL:
                 break;
@@ -31,10 +33,12 @@ public class ClericEffect extends AbstractEffect {
             case Cleric.HOLY_ARROW:
                 break;
             case Cleric.INVINCIBLE:
+                pEffect.statups.put(CharacterTemporaryStat.Invincible, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Cleric.INVINCIBLE_1:
                 break;
             case Cleric.MAGIC_BOOSTER:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Cleric.MP_EATER:
                 break;

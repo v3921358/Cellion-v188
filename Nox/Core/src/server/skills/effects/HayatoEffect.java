@@ -29,6 +29,11 @@ public class HayatoEffect extends AbstractEffect {
             case Hayato.BATTOUJUTSU_LEAP:
                 break;
             case Hayato.BATTOUJUTSU_STANCE:
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(MapleStatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.Battoujutsu, 1);
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.actionSpeed));
+                pEffect.statups.put(CharacterTemporaryStat.HayatoStance, pEffect.info.get(MapleStatInfo.prop));
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Hayato.BLADE_FLASH:
                 break;
@@ -53,8 +58,14 @@ public class HayatoEffect extends AbstractEffect {
             case Hayato.JIN_SANRENZAN:
                 break;
             case Hayato.KATANA_BOOSTER:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Hayato.MILITARY_MIGHT:
+                pEffect.statups.put(CharacterTemporaryStat.EMHP, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.EMMP, pEffect.info.get(MapleStatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(MapleStatInfo.padX));
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
+                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(MapleStatInfo.jump));
                 break;
             case Hayato.RISING_SLASH:
                 break;
@@ -85,6 +96,7 @@ public class HayatoEffect extends AbstractEffect {
             case Hayato.TORNADO_BLADE_4:
                 break;
             case Hayato.WARRIORS_HEART:
+                pEffect.statups.put(CharacterTemporaryStat.Regen, pEffect.info.get(MapleStatInfo.damage));
                 break;
             case Hayato.WHIRLWIND_CUT_3:
                 break;
@@ -93,6 +105,7 @@ public class HayatoEffect extends AbstractEffect {
             case Hayato.AKATSUKI_BLOSSOMS:
                 break;
             case Hayato.AKATSUKI_HERO:
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Hayato.BLOODLETTER:
                 break;
@@ -143,10 +156,13 @@ public class HayatoEffect extends AbstractEffect {
             case Hayato.HYPER_STRENGTH_100_10:
                 break;
             case Hayato.IRON_SKIN:
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.asrR));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.terR));
                 break;
             case Hayato.JINSOKU:
                 break;
             case Hayato.PRINCESSS_VOW:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Hayato.RAI_BLADE_FLASH:
                 break;

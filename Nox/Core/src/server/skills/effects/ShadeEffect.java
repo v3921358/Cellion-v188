@@ -39,6 +39,8 @@ public class ShadeEffect extends AbstractEffect {
             case Shade.BLADE_IMP_FORWARD_SLASH:
                 break;
             case Shade.FOX_SPIRITS:
+                pEffect.statups.put(CharacterTemporaryStat.ChangeFoxMan, 1);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Shade.FOX_SPIRIT_MASTERY:
                 break;
@@ -111,6 +113,7 @@ public class ShadeEffect extends AbstractEffect {
             case Shade.FIRE_FOX_SPIRIT_MASTERY_1:
                 break;
             case Shade.HEROIC_MEMORIES_2:
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Shade.HEROS_WILL_4:
                 break;
@@ -143,12 +146,17 @@ public class ShadeEffect extends AbstractEffect {
             case Shade.HYPER_STRENGTH_800_80_8:
                 break;
             case Shade.MAPLE_WARRIOR_7:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Shade.SOUL_SPLITTER:
                 break;
             case Shade.SPIRIT_BOND_4:
                 break;
             case Shade.SPIRIT_BOND_MAX:
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
+                pEffect.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Shade.SPIRIT_BOND_MAX_1:
                 break;
@@ -165,6 +173,7 @@ public class ShadeEffect extends AbstractEffect {
             case Shade.SPIRIT_INCARNATION_1:
                 break;
             case Shade.SPIRIT_WARD:
+                pEffect.statups.put(CharacterTemporaryStat.SpiritGuard, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Shade.ARCHANGELIC_BLESSING_60_6:
                 break;

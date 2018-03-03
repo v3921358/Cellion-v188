@@ -27,6 +27,7 @@ public class MarauderEffect extends AbstractEffect {
             case Marauder.BRAWLING_MASTERY:
                 break;
             case Marauder.ENERGY_BURST:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Marauder.ENERGY_CHARGE:
                 break;
@@ -37,6 +38,7 @@ public class MarauderEffect extends AbstractEffect {
             case Marauder.PRECISION_STRIKES:
                 break;
             case Marauder.ROLL_OF_THE_DICE_5:
+                pEffect.statups.put(CharacterTemporaryStat.Dice, 0);
                 break;
             case Marauder.SHOCKWAVE:
                 break;

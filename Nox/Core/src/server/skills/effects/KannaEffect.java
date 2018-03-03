@@ -29,6 +29,7 @@ public class KannaEffect extends AbstractEffect {
             case Kanna.HAKU:
                 break;
             case Kanna.HAKUS_GIFT:
+                pEffect.statups.put(CharacterTemporaryStat.Regen, pEffect.info.get(MapleStatInfo.hp));
                 break;
             case Kanna.SHIKIGAMI_HAUNTING_2:
                 break;
@@ -37,12 +38,15 @@ public class KannaEffect extends AbstractEffect {
             case Kanna.SHIKIGAMI_HAUNTING_4:
                 break;
             case Kanna.BREATH_OF_THE_UNSEEN:
+                pEffect.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.prop));
                 break;
             case Kanna.BURNING_SHIKIGAMI_HAUNTING:
                 break;
             case Kanna.BURNING_SHIKIGAMI_HAUNTING_1:
                 break;
             case Kanna.FOXFIRE:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
                 break;
             case Kanna.HAKUS_BLESSING:
                 break;
@@ -53,6 +57,7 @@ public class KannaEffect extends AbstractEffect {
             case Kanna.NIMBUS_CURSE:
                 break;
             case Kanna.RADIANT_PEACOCK:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Kanna.ROCK_YAKSHA:
                 break;
@@ -73,6 +78,8 @@ public class KannaEffect extends AbstractEffect {
             case Kanna.HAKU_REBORN_4:
                 break;
             case Kanna.KISHIN_SHOUKAN:
+                pEffect.info.put(MapleStatInfo.time, 60000);
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
                 break;
             case Kanna.LIFEBLOOD_RITUAL:
                 break;
@@ -103,6 +110,7 @@ public class KannaEffect extends AbstractEffect {
             case Kanna.BREATH_OF_THE_UNSEEN_3:
                 break;
             case Kanna.DAWNS_WARRIOR_MAPLE_WARRIOR:
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Kanna.DEMONS_FURY_1:
                 break;
@@ -161,6 +169,7 @@ public class KannaEffect extends AbstractEffect {
             case Kanna.OROCHI_2:
                 break;
             case Kanna.PRINCESSS_VOW_1:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Kanna.SHADOWBOUND_HAKU:
                 break;

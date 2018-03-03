@@ -21,8 +21,10 @@ public class HunterEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Hunter.ARROW_BOMB:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Hunter.BOW_BOOSTER_2:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Hunter.BOW_MASTERY_2:
                 break;
@@ -41,6 +43,8 @@ public class HunterEffect extends AbstractEffect {
             case Hunter.SILVER_HAWK:
                 break;
             case Hunter.SOUL_ARROW_BOW:
+                pEffect.statups.put(CharacterTemporaryStat.SoulArrow, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(MapleStatInfo.epad));
                 break;
 
         }

@@ -27,6 +27,7 @@ public class HermitEffect extends AbstractEffect {
             case Hermit.AVENGER_1:
                 break;
             case Hermit.DARK_FLARE_2:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
                 break;
             case Hermit.ENVELOPING_DARKNESS_2:
                 break;
@@ -41,10 +42,13 @@ public class HermitEffect extends AbstractEffect {
             case Hermit.SHADOW_MESO:
                 break;
             case Hermit.SHADOW_PARTNER_2:
+                pEffect.statups.put(CharacterTemporaryStat.ShadowPartner, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Hermit.SHADOW_STARS_1:
+                pEffect.statups.put(CharacterTemporaryStat.NoBulletConsume, 0);
                 break;
             case Hermit.SHADOW_WEB_1:
+                pEffect.monsterStatus.put(MonsterStatus.SHADOW_WEB, 1);
                 break;
             case Hermit.TRIPLE_THROW_3:
                 break;

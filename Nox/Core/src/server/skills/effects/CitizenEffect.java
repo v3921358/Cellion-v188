@@ -139,6 +139,8 @@ public class CitizenEffect extends AbstractEffect {
             case Citizen.ICE_TEMPEST_6:
                 break;
             case Citizen.INFILTRATE_4:
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
+                pEffect.statups.put(CharacterTemporaryStat.Sneak, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Citizen.INVINCIBILITY_10_1:
                 break;

@@ -33,6 +33,7 @@ public class ShadowerEffect extends AbstractEffect {
             case Shadower.ASSASSINATE_REINFORCE:
                 break;
             case Shadower.BOOMERANG_STAB:
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Shadower.BOOMERANG_STAB_EXTRA_STRIKE:
                 break;
@@ -43,8 +44,11 @@ public class ShadowerEffect extends AbstractEffect {
             case Shadower.DAGGER_EXPERT:
                 break;
             case Shadower.EPIC_ADVENTURE_10:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Shadower.FLIP_OF_THE_COIN:
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Shadower.HEROS_WILL_700_70_7:
                 break;
@@ -75,6 +79,7 @@ public class ShadowerEffect extends AbstractEffect {
             case Shadower.HYPER_STRENGTH_700_70_7:
                 break;
             case Shadower.MAPLE_WARRIOR_700_70_7:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Shadower.MESO_EXPLOSION_ENHANCE:
                 break;

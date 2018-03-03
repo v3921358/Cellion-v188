@@ -27,6 +27,7 @@ public class BrawlerEffect extends AbstractEffect {
             case Brawler.CRITICAL_PUNCH_1:
                 break;
             case Brawler.DARK_CLARITY_2:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
                 break;
             case Brawler.DARK_CLARITY_3:
                 break;
@@ -39,6 +40,7 @@ public class BrawlerEffect extends AbstractEffect {
             case Brawler.HP_BOOST_5:
                 break;
             case Brawler.KNUCKLE_BOOSTER_3:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Brawler.KNUCKLE_MASTERY_1:
                 break;

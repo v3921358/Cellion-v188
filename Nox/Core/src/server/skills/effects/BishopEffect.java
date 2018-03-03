@@ -21,6 +21,7 @@ public class BishopEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Bishop.ADVANCED_BLESSING:
+                pEffect.statups.put(CharacterTemporaryStat.AdvancedBless, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Bishop.ADVANCED_BLESSING_BOSS_RUSH:
                 break;
@@ -33,6 +34,7 @@ public class BishopEffect extends AbstractEffect {
             case Bishop.ARCANE_AIM_2:
                 break;
             case Bishop.BAHAMUT:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
                 break;
             case Bishop.BIG_BANG_2:
                 break;
@@ -43,6 +45,7 @@ public class BishopEffect extends AbstractEffect {
             case Bishop.BUFF_MASTERY_5:
                 break;
             case Bishop.EPIC_ADVENTURE_30_3:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Bishop.GENESIS:
                 break;
@@ -91,14 +94,23 @@ public class BishopEffect extends AbstractEffect {
             case Bishop.HYPER_STRENGTH_1000_100_10:
                 break;
             case Bishop.INFINITY_2:
+                pEffect.setHpR(pEffect.info.get(MapleStatInfo.y) / 100.0);
+                pEffect.setMpR(pEffect.info.get(MapleStatInfo.y) / 100.0);
+                pEffect.statups.put(CharacterTemporaryStat.Infinity, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, (int) pEffect.info.get(MapleStatInfo.prop));
                 break;
             case Bishop.MANA_REFLECTION:
                 break;
             case Bishop.MAPLE_WARRIOR_1000_100_10:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Bishop.RESURRECTION_2:
                 break;
             case Bishop.RIGHTEOUSLY_INDIGNANT:
+                pEffect.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pEffect.info.get(MapleStatInfo.ignoreMobpdpR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
+                pEffect.statups.put(CharacterTemporaryStat.MAD, pEffect.info.get(MapleStatInfo.indieMad));
+                // pEffect.statups.put(CharacterTemporaryStat.VengeanceOfAngel, 1);
                 break;
 
         }

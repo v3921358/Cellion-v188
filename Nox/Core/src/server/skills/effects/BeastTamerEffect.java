@@ -143,6 +143,7 @@ public class BeastTamerEffect extends AbstractEffect {
             case BeastTamer.DEEP_BREATH:
                 break;
             case BeastTamer.DEFENSE_IGNORANCE:
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
                 break;
             case BeastTamer.DUMB_LUCK:
                 break;

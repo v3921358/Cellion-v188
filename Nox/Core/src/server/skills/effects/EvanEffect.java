@@ -39,6 +39,8 @@ public class EvanEffect extends AbstractEffect {
             case Evan.MAGIC_BOOSTER_6:
                 break;
             case Evan.MAGIC_GUARD_3:
+                pEffect.statups.put(CharacterTemporaryStat.MagicGuard, pEffect.info.get(MapleStatInfo.x));
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Evan.MANA_BURST_II:
                 break;
@@ -67,6 +69,7 @@ public class EvanEffect extends AbstractEffect {
             case Evan.SPELL_MASTERY_4:
                 break;
             case Evan.ELEMENTAL_DECREASE_1:
+                pEffect.statups.put(CharacterTemporaryStat.ElementalReset, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Evan.MAGIC_FLARE_:
                 break;
@@ -91,6 +94,7 @@ public class EvanEffect extends AbstractEffect {
             case Evan.MAGIC_AMPLIFICATION_1:
                 break;
             case Evan.MAGIC_BOOSTER_4:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Evan.MAGIC_DEBRIS:
                 break;
@@ -121,6 +125,7 @@ public class EvanEffect extends AbstractEffect {
             case Evan.MAGIC_AMPLIFICATION:
                 break;
             case Evan.MAGIC_RESISTANCE:
+                pEffect.statups.put(CharacterTemporaryStat.MagicResistance, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Evan.DRAGON_FURY_2:
                 break;
@@ -175,6 +180,7 @@ public class EvanEffect extends AbstractEffect {
             case Evan.FRENZIED_SOUL:
                 break;
             case Evan.HEROIC_MEMORIES_4:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Evan.HEROIC_MEMORIES_5:
                 break;
@@ -231,8 +237,10 @@ public class EvanEffect extends AbstractEffect {
             case Evan.MANA_BURST_IV_1:
                 break;
             case Evan.MAPLE_WARRIOR_100_10:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Evan.MAPLE_WARRIOR_90_9:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Evan.ONYX_WILL_1:
                 break;
@@ -249,6 +257,7 @@ public class EvanEffect extends AbstractEffect {
             case Evan.SPEEDY_DRAGON_FLASH:
                 break;
             case Evan.SUMMON_ONYX_DRAGON:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
                 break;
             case Evan.SUMMON_ONYX_DRAGON_1:
                 break;
@@ -261,10 +270,14 @@ public class EvanEffect extends AbstractEffect {
             case Evan.BLAZE:
                 break;
             case Evan.BLESSING_OF_THE_ONYX:
+                pEffect.statups.put(CharacterTemporaryStat.EMAD, pEffect.info.get(MapleStatInfo.emad));
+                pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(MapleStatInfo.epdd));
                 break;
             case Evan.DARK_FOG:
                 break;
             case Evan.ONYX_WILL:
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.damage));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.prop));
                 break;
             case Evan.SOUL_STONE:
                 break;
@@ -437,6 +450,7 @@ public class EvanEffect extends AbstractEffect {
             case Evan.NIGHTMARE_100_10_1:
                 break;
             case Evan.NIMBLE_FEET_3:
+                pEffect.statups.put(CharacterTemporaryStat.Speed, 10 + (pEffect.getLevel() - 1) * 5);
                 break;
             case Evan.NIMBUS_CLOUD_60_6:
                 break;
