@@ -178,10 +178,10 @@ public class JobPacket {
             oPacket.EncodeInteger(1); // Unkown
             oPacket.EncodeInteger(oMonster.getObjectId()); // nObjectId
 
-            int nAtomId = Shade.FOX_SPIRITS_ATOM;
+            int nAtomId = Shade.FOX_SPIRITS;
             int nAtomCount = 2;
             if (pPlayer.hasSkill(Shade.FOX_SPIRIT_MASTERY)) {
-                nAtomId = Shade.FOX_SPIRITS_ATOM_2;
+                nAtomId = Shade.FOX_SPIRIT_MASTERY;
                 nAtomCount = 3;
             }
             oPacket.EncodeInteger(nAtomId); // nAtomId
