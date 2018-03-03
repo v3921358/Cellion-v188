@@ -548,7 +548,7 @@ public class ItemPotentialProvider {
             42012, // MAG ATT +14
         }; 
         
-        int aNonWeaponLegendaryBonusPotential[] = { // Done
+        int aNonWeaponLegendaryBonusPotential[] = {
             42043, // 7% LUK
             42044, // 7% INT
             42041, // 7% STR  
@@ -618,6 +618,10 @@ public class ItemPotentialProvider {
             30004, // Luk +14
             30081, // ALL STAT +8
             32011, // Att +13 
+            30094, // LUK PER 10 Levels +1 
+            32093, // INT PER 10 Levels +1 
+            32091, // STR PER 10 Levels +1 
+            32092, // DEX PER 10 Levels +1 
         };
 
         int aCustomEpicBonusPotential[] = {
@@ -643,7 +647,6 @@ public class ItemPotentialProvider {
             20004, // Luk +10
             20081, // ALL STAT +8
             22011, // Att +11 
-
         };
 
         int aCustomRareBonusPotential[] = {
@@ -709,7 +712,7 @@ public class ItemPotentialProvider {
                 aPossiblePotential.add(nValue); // Adds Custom Potential Values (Rare)
             }
         } else {
-            for (int nValue : aCustomBonusPotential) { // Adds Accessory Potential Values (Legendary)
+            for (int nValue : aCustomBonusPotential) { // Adds extra random stats here just incase.
                 aPossiblePotential.add(nValue);
             }
         }

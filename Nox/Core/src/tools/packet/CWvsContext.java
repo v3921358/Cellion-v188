@@ -4145,6 +4145,15 @@ public class CWvsContext {
     public static Packet enchantmentSystem(Enchant enchant) {
         OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.EquipmentEnchantDisplay.getValue());
+        
+        switch (enchant.getAction()) {
+            case STARFORCE: 
+                oPacket.Encode(0);
+                break;
+            default:
+                break;
+        }
+        
         oPacket.Encode(enchant.getAction().getAction());
         switch (enchant.getAction()) {
             case SCROLLLIST:

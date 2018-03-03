@@ -75,7 +75,7 @@ public class AranBuff extends AbstractBuffClass {
                 break;
             case Aran.HEROIC_MEMORIES: // Heroic Memories
                 eff.statups.put(CharacterTemporaryStat.DamR, eff.info.get(MapleStatInfo.indieDamR));
-                eff.statups.put(CharacterTemporaryStat.IndieMaxDamageOverR, eff.info.get(MapleStatInfo.indieMaxDamageOver));
+                //eff.statups.put(CharacterTemporaryStat.IndieMaxDamageOverR, eff.info.get(MapleStatInfo.indieMaxDamageOver));
                 //eff.statups.put(CharacterTemporaryStat.IndieMaxDamageOver, eff.info.get(MapleStatInfo.indieMaxDamageOver));
                 break;
         }

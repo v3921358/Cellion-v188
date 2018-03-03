@@ -175,7 +175,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                     int nFragmentID = 0;
                     ItemPotentialTierType pMaxTier = ItemPotentialTierType.Legendary;
                     nFragmentID = ItemConstants.BONUS_POTENTIAL_CUBE_FRAGMENT;
-                    ItemPotentialTierType lastTierBeforeCube = pEquip.getPotentialTier();
+                    ItemPotentialTierType lastTierBeforeCube = pEquip.getPotentialBonusTier();
                     boolean bHidePotentialAfterReset = false;
 
                     // Check Tier
@@ -206,7 +206,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                         c.write(CWvsContext.inventoryOperation(true, modifications));
 
                         if (!bHidePotentialAfterReset) {
-                            c.write(MiracleCubePacket.onBonusCubeResult(pPlayer.getId(), lastTierBeforeCube != pEquip.getPotentialTier(), pEquip.getPosition(), toUse.getItemId(), pEquip));
+                            c.write(MiracleCubePacket.onBonusCubeResult(pPlayer.getId(), lastTierBeforeCube != pEquip.getPotentialBonusTier(), pEquip.getPosition(), toUse.getItemId(), pEquip));
                         }
                     } else {
                         pPlayer.dropMessage(5, "This item's Bonus Potential cannot be reset.");
