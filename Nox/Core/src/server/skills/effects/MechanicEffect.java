@@ -37,6 +37,7 @@ public class MechanicEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(MapleStatInfo.epad));
                 pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(MapleStatInfo.epdd));
                 pEffect.statups.put(CharacterTemporaryStat.Mechanic, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932016);
                 pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Mechanic.ME07_DRILLHANDS:
@@ -121,6 +122,7 @@ public class MechanicEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(MapleStatInfo.epad));
                 pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(MapleStatInfo.epdd));
                 pEffect.statups.put(CharacterTemporaryStat.Mechanic, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932016);
                 pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Mechanic.AMPLIFIER_ROBOT_AF11:
@@ -150,6 +152,7 @@ public class MechanicEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(MapleStatInfo.epad));
                 pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(MapleStatInfo.epdd));
                 pEffect.statups.put(CharacterTemporaryStat.Mechanic, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932016);
                 pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case Mechanic.FOR_LIBERTY_3:

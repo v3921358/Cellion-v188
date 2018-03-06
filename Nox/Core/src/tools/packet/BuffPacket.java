@@ -168,23 +168,32 @@ public class BuffPacket {
 
     public static Packet giveBuff(MapleCharacter chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect, int diceRange, int diceId, int lightGauge, int darkGauge) {
         OutPacket oPacket = new OutPacket(80);
+
+        boolean bEndecode4Byte = false, bMovementAffecting = false;
+        for (Map.Entry<CharacterTemporaryStat, Integer> stat : statups.entrySet()) {
+            if (CharacterTemporaryStat.isEnDecode4Byte(stat.getKey())) {
+                bEndecode4Byte = true;
+            }
+            if (CharacterTemporaryStat.isMovementAffectingStat(stat.getKey())) {
+                bMovementAffecting = true;
+            }
+        }
+
         oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
 
         BuffPacket.clearFakeBuffstats(statups);
 
         PacketHelper.writeBuffMask(oPacket, statups);
 
-        encodeForLocal(oPacket, chr, buffid, bufflength, statups, effect, diceRange, diceId, lightGauge, darkGauge);
+        encodeForLocal(oPacket, chr, buffid, bufflength, statups, effect, diceRange, diceId, lightGauge, darkGauge, bEndecode4Byte);
 
         oPacket.EncodeShort(0);// tDelay
         oPacket.Encode(0);//unsure, seems unimportant
         oPacket.Encode(0);//bJustBuffCheck
         oPacket.Encode(0);//bFirstSet
 
-        for (Map.Entry<CharacterTemporaryStat, Integer> stat : statups.entrySet()) {
-            if (CharacterTemporaryStat.isMovementAffectingStat(stat.getKey())) {
-                oPacket.Encode(0);
-            }
+        if (bMovementAffecting) {
+            oPacket.Encode(0);
         }
 
         //todo: if (newFireBomb) write(0);
@@ -212,13 +221,15 @@ public class BuffPacket {
      * @param effect - The status changes that occur with the buff
      * @return The encoded buff packet.
      */
-    private static void encodeForLocal(OutPacket oPacket, MapleCharacter chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> mTemporaryStats, MapleStatEffect effect, int diceRange, int diceId, int lightGauge, int darkGauge) {
+    private static void encodeForLocal(OutPacket oPacket, MapleCharacter chr, int buffid, int bufflength,
+            Map<CharacterTemporaryStat, Integer> mTemporaryStats, MapleStatEffect effect, int diceRange,
+            int diceId, int lightGauge, int darkGauge, boolean bEndecode4Byte) {
 
         mTemporaryStats = SortCTS(mTemporaryStats);
         for (Map.Entry<CharacterTemporaryStat, Integer> stat : mTemporaryStats.entrySet()) {
             if (stat.getKey().getFlag() <= CharacterTemporaryStat.Stigma.getFlag()
                     && stat.getKey().getFlag() >= CharacterTemporaryStat.PAD.getFlag()) {
-                if (CharacterTemporaryStat.isEnDecode4Byte(stat.getKey())) {
+                if (bEndecode4Byte) {
                     oPacket.EncodeInteger(stat.getValue());
                 } else {
                     oPacket.EncodeShort(stat.getValue());
@@ -523,7 +534,7 @@ public class BuffPacket {
         }
 
         encodeTwoStateTemporaryStat(oPacket, chr, buffid, bufflength, mTemporaryStats, effect);
-        encodeIndieTempStat(oPacket, buffid, bufflength, mTemporaryStats, effect);
+        encodeIndieTempStat(oPacket, buffid, bufflength, mTemporaryStats);
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.UsingScouter)) {
             oPacket.EncodeInteger(0);
@@ -534,22 +545,20 @@ public class BuffPacket {
      * Encodes IndieTemp status changes. IndieTempStats are defined by Buffstats in the 16th int. (or simply usually the last int)
      *
      */
-    private static void encodeIndieTempStat(OutPacket oPacket, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect) {
-        int pos = 0;//KMS calls it pos, but it mainly just indicates an indie stat is present.
-        Random rand = new Random();
-        int nKey = rand.nextInt(Integer.MAX_VALUE);
-        for (Map.Entry<CharacterTemporaryStat, Integer> stat : statups.entrySet()) {
-            if (stat.getKey().isIndie()) {
-                pos++;
-                oPacket.EncodeInteger(pos);
+    private static void encodeIndieTempStat(OutPacket oPacket, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups) {
+        int tTime = (int) System.currentTimeMillis();
+        for (Map.Entry<CharacterTemporaryStat, Integer> effect : statups.entrySet()) {
+            if (effect.getKey().isIndie()) {
+                oPacket.EncodeInteger(1);
                 oPacket.EncodeInteger(buffid);//reason = skillid
-                oPacket.EncodeInteger(stat.getValue());//v7
-                oPacket.EncodeInteger(nKey);//nKey
-                oPacket.EncodeInteger((int) System.currentTimeMillis());//v8
-                oPacket.EncodeInteger(bufflength + 1);//tTerm
+                oPacket.EncodeInteger(effect.getValue());//v7
+                oPacket.EncodeInteger(tTime);//nKey
+                oPacket.EncodeInteger(tTime + 1);//v8
+                oPacket.EncodeInteger(0);
+                oPacket.EncodeInteger(0);
             }
         }
-        int v10 = pos;
+        int v10 = 0;
         oPacket.EncodeInteger(0);
         if (v10 > 0) {
             for (int j = 0; j < v10; j++) {
@@ -589,7 +598,7 @@ public class BuffPacket {
         }
         if (statups.containsKey(CharacterTemporaryStat.RideVehicle)) {
             System.out.println("RIDEVEHICLE:: " + statups.get(CharacterTemporaryStat.RideVehicle));
-            oPacket.EncodeInteger(buffid);//Value(MountID)
+            oPacket.EncodeInteger(statups.get(CharacterTemporaryStat.RideVehicle));//Value(MountID)
             oPacket.EncodeInteger(buffid);//Reason(SkillID)
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
@@ -640,29 +649,29 @@ public class BuffPacket {
     private static void encodeRemoteTwoStateTemporaryStat(OutPacket oPacket, MapleCharacter chr) {
         int nullValueTCur = Randomizer.nextInt();
         if (chr.getBuffSource(CharacterTemporaryStat.EnergyCharged) != -1 && chr.getBuffedValue(CharacterTemporaryStat.EnergyCharged) != null) {
-            oPacket.EncodeInteger(0);//Value
-            oPacket.EncodeInteger(0);//Reason
-            //EncodeTime(tLastUpdated)
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(nullValueTCur);//tCur
-        } else {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.EnergyCharged));//Value
             oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.EnergyCharged));//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(chr.getBuffDuration(CharacterTemporaryStat.EnergyCharged));//tCur
-        }
-
-        if (chr.getBuffSource(CharacterTemporaryStat.DashSpeed) != -1 && chr.getBuffedValue(CharacterTemporaryStat.DashSpeed) != null) {
+        } else {
             oPacket.EncodeInteger(0);//Value
             oPacket.EncodeInteger(0);//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
-            oPacket.EncodeShort(0);//usExpireTerm
-        } else {
+        }
+
+        if (chr.getBuffSource(CharacterTemporaryStat.DashSpeed) != -1 && chr.getBuffedValue(CharacterTemporaryStat.DashSpeed) != null) {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.DashSpeed));//Value
             oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.DashSpeed));//Reason
+            //EncodeTime(tLastUpdated)
+            oPacket.Encode(1);
+            oPacket.EncodeInteger(nullValueTCur);//tCur
+            oPacket.EncodeShort(0);//usExpireTerm
+        } else {
+            oPacket.EncodeInteger(0);//Value
+            oPacket.EncodeInteger(0);//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
@@ -670,15 +679,15 @@ public class BuffPacket {
         }
 
         if (chr.getBuffSource(CharacterTemporaryStat.DashJump) != -1 && chr.getBuffedValue(CharacterTemporaryStat.DashJump) != null) {
-            oPacket.EncodeInteger(0);//Value
-            oPacket.EncodeInteger(0);//Reason
+            oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.DashJump));//Value
+            oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.DashJump));//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
             oPacket.EncodeShort(0);//usExpireTerm
         } else {
-            oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.DashJump));//Value
-            oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.DashJump));//Reason
+            oPacket.EncodeInteger(0);//Value
+            oPacket.EncodeInteger(0);//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
@@ -700,15 +709,6 @@ public class BuffPacket {
         }
 
         if (chr.getBuffSource(CharacterTemporaryStat.PartyBooster) != -1 && chr.getBuffedValue(CharacterTemporaryStat.PartyBooster) != null) {
-            oPacket.EncodeInteger(0);//Value
-            oPacket.EncodeInteger(0);//Reason
-            //EncodeTime(tLastUpdated)
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(nullValueTCur);//tCur
-            oPacket.Encode(0);
-            oPacket.Encode(HexTool.getByteArrayFromHexString("86 39 95 7D"));
-            oPacket.EncodeShort(0);//usExpireTerm
-        } else {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.PartyBooster));//Value
             oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.PartyBooster));//Reason
             //EncodeTime(tLastUpdated)
@@ -717,17 +717,18 @@ public class BuffPacket {
             oPacket.Encode(0);
             oPacket.EncodeInteger(0);//tCur
             oPacket.EncodeShort(0);//usExpireTerm
-        }
-
-        if (chr.getBuffSource(CharacterTemporaryStat.GuidedBullet) != -1 && chr.getBuffedValue(CharacterTemporaryStat.GuidedBullet) != null) {
+        } else {
             oPacket.EncodeInteger(0);//Value
             oPacket.EncodeInteger(0);//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
-        } else {
+            oPacket.Encode(0);
+            oPacket.Encode(HexTool.getByteArrayFromHexString("86 39 95 7D"));
+            oPacket.EncodeShort(0);//usExpireTerm
+        }
+
+        if (chr.getBuffSource(CharacterTemporaryStat.GuidedBullet) != -1 && chr.getBuffedValue(CharacterTemporaryStat.GuidedBullet) != null) {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.GuidedBullet));//Value
             oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.GuidedBullet));//Reason
             //EncodeTime(tLastUpdated)
@@ -735,37 +736,45 @@ public class BuffPacket {
             oPacket.EncodeInteger(nullValueTCur);//tCur
             oPacket.EncodeInteger(0);//dwMobID
             oPacket.EncodeInteger(chr.getId());//dwUserID (Note: This isn't in v90, but since it's in KMS it's likely in your version. it's new)
-        }
-
-        if (chr.getBuffSource(CharacterTemporaryStat.Undead) != -1 && chr.getBuffedValue(CharacterTemporaryStat.Undead) != null) {
+        } else {
             oPacket.EncodeInteger(0);//Value
             oPacket.EncodeInteger(0);//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
-            oPacket.EncodeShort(0);
-        } else {
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0);
+        }
+
+        if (chr.getBuffSource(CharacterTemporaryStat.Undead) != -1 && chr.getBuffedValue(CharacterTemporaryStat.Undead) != null) {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.Undead));//Value
             oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.Undead));//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
             oPacket.EncodeShort(0);//usExpireTerm
-        }
-        if (chr.getBuffSource(CharacterTemporaryStat.RideVehicleExpire) != -1 && chr.getBuffedValue(CharacterTemporaryStat.RideVehicleExpire) != null) {
+        } else {
             oPacket.EncodeInteger(0);//Value
             oPacket.EncodeInteger(0);//Reason
-            //EncodeTime(tLastUpdated)	
+            //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
             oPacket.EncodeShort(0);
-        } else {
+        }
+        if (chr.getBuffSource(CharacterTemporaryStat.RideVehicleExpire) != -1 && chr.getBuffedValue(CharacterTemporaryStat.RideVehicleExpire) != null) {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.RideVehicleExpire));//Value
             oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.RideVehicleExpire));//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
             oPacket.EncodeShort(0);//usExpireTerm
+        } else {
+            oPacket.EncodeInteger(0);//Value
+            oPacket.EncodeInteger(0);//Reason
+            //EncodeTime(tLastUpdated)	
+            oPacket.Encode(1);
+            oPacket.EncodeInteger(nullValueTCur);//tCur
+            oPacket.EncodeShort(0);
         }
     }
 
@@ -839,7 +848,8 @@ public class BuffPacket {
             }
         }
 
-        oPacket.Fill(0, 2);
+        oPacket.Encode(3);
+        oPacket.Encode(1);
         oPacket.EncodeLong(0L);
         oPacket.EncodeLong(0L);
         oPacket.EncodeLong(0L);
@@ -902,7 +912,7 @@ public class BuffPacket {
                 oPacket.Encode(statup.getValue().byteValue());
             } else if (statup.getKey() == CharacterTemporaryStat.BMageAura || statup.getKey() == CharacterTemporaryStat.ShadowPartner || statup.getKey() == CharacterTemporaryStat.ShadowServant || statup.getKey() == CharacterTemporaryStat.Mechanic) {
                 oPacket.EncodeShort(statup.getValue().shortValue());
-                oPacket.EncodeInteger(effect.isSkill() ? effect.getSourceId() : -effect.getSourceId());
+                oPacket.EncodeInteger(effect.getSourceId());
             } else if (statup.getKey() == CharacterTemporaryStat.ItemCritical) {
                 oPacket.EncodeInteger(statup.getValue());
                 oPacket.EncodeInteger(effect.getCharColor());

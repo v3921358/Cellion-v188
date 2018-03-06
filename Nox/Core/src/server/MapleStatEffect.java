@@ -54,7 +54,7 @@ public class MapleStatEffect implements Serializable {
     private static final long serialVersionUID = 9179541993413738569L;
     public Map<MapleStatInfo, Integer> info;
     private Map<MapleTraitType, Integer> traits;
-    private boolean overTime, skill, partyBuff = true;
+    private boolean overTime, partyBuff = true;
     public EnumMap<CharacterTemporaryStat, Integer> statups;
     private ArrayList<Pair<Integer, Integer>> availableMap;
     public EnumMap<MonsterStatus, Integer> monsterStatus;
@@ -72,17 +72,16 @@ public class MapleStatEffect implements Serializable {
     private int expBuff, itemup, mesoup, cashup, berserk, illusion, booster, berserk2, cp, nuffSkill, combo;
 
     public static MapleStatEffect loadSkillEffectFromData(final MapleData source, final int skillid, final int level, final String variables) {
-        return loadFromData(source, skillid, true, level, variables);
+        return loadFromData(source, skillid, level, variables);
     }
 
     public static MapleStatEffect loadItemEffectFromData(final MapleData source, final int itemid) {
-        return loadFromData(source, itemid, false, 1, null);
+        return loadFromData(source, itemid, 1, null);
     }
 
-    private static MapleStatEffect loadFromData(final MapleData source, final int sourceid, final boolean skill, final int level, final String variables) {
+    private static MapleStatEffect loadFromData(final MapleData source, final int sourceid, final int level, final String variables) {
         final MapleStatEffect effect = new MapleStatEffect();
         effect.sourceid = sourceid;
-        effect.skill = skill;
         effect.level = (byte) level;
         if (source == null) {
             return effect;
@@ -244,87 +243,75 @@ public class MapleStatEffect implements Serializable {
             effect.rewardMeso = 0;
         }
         effect.totalprob = totalprob;
+
         // start of server calculated stuffs
-        if (effect.skill) {
-            final int priceUnit = effect.info.get(MapleStatInfo.priceUnit); // Guild skills
-            if (priceUnit > 0) {
-                final int price = effect.info.get(MapleStatInfo.price);
-                final int extendPrice = effect.info.get(MapleStatInfo.extendPrice);
-                effect.info.put(MapleStatInfo.price, price * priceUnit);
-                effect.info.put(MapleStatInfo.extendPrice, extendPrice * priceUnit);
-            }
-            switch (sourceid) {
-                case 1100002:
-                case 1200002:
-                case 1300002:
-                case 3100001:
-                case 3200001:
-                case 11101002:
-                case 51100002:
-                case 13101002:
-                case 2111007:
-                case 2211007:
-                case 2311007:
-                case 32111010:
-                case 22161005:
-                case 12111007:
-                case 33100009:
-                case 22150004:
-                case 22181004: //All Final Attack
-                case 1120013:
-                case 3120008:
-                case 23100006:
-                case 23120012:
-                    effect.info.put(MapleStatInfo.mobCount, 6);
-                    break;
-                case 35121005:
-                case 35111004:
-                case 35121013:
-                case 35121054: //reactive armor mech
-                    effect.info.put(MapleStatInfo.attackCount, 6);
-                    effect.info.put(MapleStatInfo.bulletCount, 6);
-                    break;
-                case 24121000:
-                    effect.info.put(MapleStatInfo.attackCount, 6);
-                    break;
-                case 24100003: // TODO: for now, or could it be card stack? (1 count)
-                case 24120002:
-                    effect.info.put(MapleStatInfo.attackCount, 15);
-                    break;
-            }
-            if (GameConstants.isNoDelaySkill(sourceid)) {
+        final int priceUnit = effect.info.get(MapleStatInfo.priceUnit); // Guild skills
+        if (priceUnit > 0) {
+            final int price = effect.info.get(MapleStatInfo.price);
+            final int extendPrice = effect.info.get(MapleStatInfo.extendPrice);
+            effect.info.put(MapleStatInfo.price, price * priceUnit);
+            effect.info.put(MapleStatInfo.extendPrice, extendPrice * priceUnit);
+        }
+        switch (sourceid) {
+            case 1100002:
+            case 1200002:
+            case 1300002:
+            case 3100001:
+            case 3200001:
+            case 11101002:
+            case 51100002:
+            case 13101002:
+            case 2111007:
+            case 2211007:
+            case 2311007:
+            case 32111010:
+            case 22161005:
+            case 12111007:
+            case 33100009:
+            case 22150004:
+            case 22181004: //All Final Attack
+            case 1120013:
+            case 3120008:
+            case 23100006:
+            case 23120012:
                 effect.info.put(MapleStatInfo.mobCount, 6);
-            }
+                break;
+            case 35121005:
+            case 35111004:
+            case 35121013:
+            case 35121054: //reactive armor mech
+                effect.info.put(MapleStatInfo.attackCount, 6);
+                effect.info.put(MapleStatInfo.bulletCount, 6);
+                break;
+            case 24121000:
+                effect.info.put(MapleStatInfo.attackCount, 6);
+                break;
+            case 24100003: // TODO: for now, or could it be card stack? (1 count)
+            case 24120002:
+                effect.info.put(MapleStatInfo.attackCount, 15);
+                break;
         }
-        if (!effect.skill && effect.info.get(MapleStatInfo.time) > -1) {
-            effect.overTime = true;
-        } else {
-            effect.info.put(MapleStatInfo.time, (effect.info.get(MapleStatInfo.time) * 1000)); // items have their times stored in ms, of course
-            effect.info.put(MapleStatInfo.subTime, (effect.info.get(MapleStatInfo.subTime) * 1000));
-            effect.overTime = effect.morphId != 0 || effect.isFinalAttack() || effect.isAngel() || effect.getSummonMovementType() != null;
+
+        if (GameConstants.isNoDelaySkill(sourceid)) {
+            effect.info.put(MapleStatInfo.mobCount, 6);
         }
+
+        effect.info.put(MapleStatInfo.time, (effect.info.get(MapleStatInfo.time) * 1000)); // items have their times stored in ms, of course
+        effect.info.put(MapleStatInfo.subTime, (effect.info.get(MapleStatInfo.subTime) * 1000));
+        effect.overTime = effect.info.get(MapleStatInfo.time) > -1;
         effect.monsterStatus = new EnumMap<>(MonsterStatus.class);
         effect.statups = new EnumMap<>(CharacterTemporaryStat.class);
-        if (effect.skill) {
-            boolean handle = EffectManager.SetEffect(effect, sourceid);
-            if (!handle && effect.overTime) {
-                //NOTE: overTime is true if the skill is a buff that works over a period of time.
-                //Most actual buffs that are fetched with this method are of that type.
-                int jobId = sourceid / 10000;
-                String jobName;
-                try {
-                    jobName = MapleJob.getById(jobId).name();
-                } catch (Exception ex) {
-                    jobName = "SEARCH FAILED, NEW/ UNDEFINED JOB FOUND";
-                }
-                LogHelper.GENERAL_EXCEPTION.get().log(Priority.DEBUG, "Exception in loading the buff effects of skill (name - id): "
-                        + SkillFactory.getSkillName(sourceid) + " - " + sourceid
-                        + "\n The skill was not handled in any of the job Buff handling classes. Please handle it if it's a buff."
-                        + "\n The skill belongs to jobid: " + jobId
-                        + "\n Attempted jobname fetch: " + jobName
-                );
-            }
+
+        //Fetch effect handler
+        boolean bHasEffect = EffectManager.SetEffect(effect, sourceid);
+        if (!bHasEffect && effect.info.get(MapleStatInfo.time) > -1) {
+            LogHelper.GENERAL_EXCEPTION.get().log(Priority.DEBUG, "Skill :" + sourceid + " has an over-time property but no effects.");
         }
+
+        if (effect.info.get(MapleStatInfo.time) > -1) {
+            effect.overTime = true;
+        }
+
         if (effect.isPoison()) {
             effect.monsterStatus.put(MonsterStatus.POISON, 1);
         }
@@ -427,6 +414,13 @@ public class MapleStatEffect implements Serializable {
             applyfrom.getClient().write(CWvsContext.enableActions());
             return false;
         }
+
+        if (statups.containsKey(CharacterTemporaryStat.RideVehicle)) {
+            if (applyto.getBuffedValue(CharacterTemporaryStat.RideVehicle) != null) {
+                return false;
+            }
+        }
+
         int hpchange = calcHPChange(applyfrom, primary);
         int mpchange = calcMPChange(applyfrom, primary);
         int powerchange = calcPowerChange(applyfrom);
@@ -501,7 +495,7 @@ public class MapleStatEffect implements Serializable {
             }
         } else if (isReturnScroll()) {
             applyReturnScroll(applyto);
-        } else if (useLevel > 0 && !skill) {
+        } else if (useLevel > 0) {
             applyto.setExtractor(new MapleExtractor(applyto, sourceid, useLevel * 50, 1440)); //no clue about time left
             applyto.getMap().spawnExtractor(applyto.getExtractor());
         } else if (isMistEruption()) {
@@ -822,12 +816,13 @@ public class MapleStatEffect implements Serializable {
                 }
             }
         }
+
         if (overTime && !isEnergyCharged()) {
             applyBuffEffect(applyfrom, applyto, primary, newDuration);
         }
-        if (skill) {
-            removeMonsterBuff(applyfrom);
-        }
+
+        removeMonsterBuff(applyfrom);
+
         if (primary) {
             if ((overTime || isHeal()) && !isEnergyCharged()) {
                 applyBuff(applyfrom, newDuration);
@@ -944,7 +939,7 @@ public class MapleStatEffect implements Serializable {
     }
 
     private boolean isSoulStone() {
-        return skill && sourceid == Phantom.FINAL_FEINT;
+        return sourceid == Phantom.FINAL_FEINT;
     }
 
     private void applyBuff(final MapleCharacter applyfrom, int newDuration) {
@@ -1055,7 +1050,7 @@ public class MapleStatEffect implements Serializable {
                         mons.applyStatus(applyfrom, new MonsterStatusEffect(stat.getKey(), stat.getValue(), sourceid, null, false), isPoison(), isSubTime(sourceid) ? getSubTime() : getDuration(), true, this);
                     }
                 }
-                if (pvp && skill) {
+                if (pvp) {
                     MapleCharacter chr = (MapleCharacter) mo;
                     handleExtraPVP(applyfrom, chr);
                 }
@@ -1241,12 +1236,6 @@ public class MapleStatEffect implements Serializable {
 
         handleExtraEffect(applyfrom, applyto, localstatups, localDuration);
 
-        /*if (applyfrom.getSkillLevel(4221013) > 0) { // Shadower Instinct
-            localstatups = new EnumMap<>(CharacterTemporaryStat.class);
-            localstatups.put(CharacterTemporaryStat.PAD, info.get(MapleStatInfo.x) + (info.get(MapleStatInfo.kp) * applyfrom.currentBattleshipHP()));
-            applyfrom.setBattleshipHP(0);
-            applyfrom.refreshBattleshipHP();
-        }*/
         if (localstatups.size() > 0 && !applyto.isHidden()) {
             applyto.getMap().broadcastMessage(applyto, EffectPacket.showBuffeffect(applyto.getId(), sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level), false);
         }
@@ -1259,7 +1248,7 @@ public class MapleStatEffect implements Serializable {
         applyto.registerEffect(this, starttime, schedule, localstatups, false, localDuration, applyfrom.getId());
 
         if (localstatups.size() > 0) {//I rather write AFTER applying the damn thing. tyvm.
-            applyto.getClient().write(BuffPacket.giveBuff(applyto, (skill ? sourceid : -sourceid), localDuration, localstatups, this));
+            applyto.getClient().write(BuffPacket.giveBuff(applyto, sourceid, localDuration, localstatups, this));
         }
     }
 
@@ -1267,13 +1256,6 @@ public class MapleStatEffect implements Serializable {
         switch (sourceid) {
             case 2022963: // Ryden's Poison
                 effects.put(CharacterTemporaryStat.IndieSpeed, info.get(MapleStatInfo.indieSpeed));
-                break;
-            case Mechanic.EXTREME_MECH:
-            case Mechanic.HUMANOID_MECH:
-            case Mechanic.TANK_MECH:
-                if (applyfrom.getStatForBuff(CharacterTemporaryStat.Mechanic) != null) {
-                    applyfrom.cancelEffectFromTemporaryStat(CharacterTemporaryStat.Mechanic);
-                }
                 break;
             case 21101003: // Body Pressure
             case Aran.BODY_PRESSURE:
@@ -1465,20 +1447,13 @@ public class MapleStatEffect implements Serializable {
     private int calcHPChange(final MapleCharacter applyfrom, final boolean primary) {
         int hpchange = 0;
         if (info.get(MapleStatInfo.hp) != 0) {
-            if (!skill) {
-                if (primary) {
-                    hpchange += alchemistModifyVal(applyfrom, info.get(MapleStatInfo.hp), true);
-                } else {
-                    hpchange += info.get(MapleStatInfo.hp);
-                }
-                if (applyfrom.hasDisease(MapleDisease.ZOMBIFY)) {
-                    hpchange /= 2;
-                }
-            } else { // assumption: this is heal
-                hpchange += makeHealHP(info.get(MapleStatInfo.hp) / 100.0, applyfrom.getStat().getTotalMagic(), 3, 5);
-                if (applyfrom.hasDisease(MapleDisease.ZOMBIFY)) {
-                    hpchange = -hpchange;
-                }
+            if (primary) {
+                hpchange += alchemistModifyVal(applyfrom, info.get(MapleStatInfo.hp), true);
+            } else {
+                hpchange += info.get(MapleStatInfo.hp);
+            }
+            if (applyfrom.hasDisease(MapleDisease.ZOMBIFY)) {
+                hpchange /= 2;
             }
         }
         if (hpR != 0) {
@@ -1553,9 +1528,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final int alchemistModifyVal(final MapleCharacter chr, final int val, final boolean withX) {
-        if (!skill) { // RecoveryUP only used for hp items and skills
-            return (val * (100 + (withX ? chr.getStat().RecoveryUP : chr.getStat().BuffUP)) / 100);
-        }
         return (val * (100 + (withX ? chr.getStat().RecoveryUP : (chr.getStat().BuffUP_Skill + (getSummonMovementType() == null ? 0 : chr.getStat().BuffUP_Summon)))) / 100);
     }
 
@@ -1606,7 +1578,7 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final boolean isEnergyCharged() {
-        return skill && (sourceid == 5100015 || sourceid == 15100004);
+        return (sourceid == 5100015 || sourceid == 15100004);
     }
 
     public boolean isMonsterBuff() {
@@ -1642,7 +1614,7 @@ public class MapleStatEffect implements Serializable {
             case 35111005:
             case 32120000:
             case 32120001:
-                return skill;
+                return true;
         }
         return false;
     }
@@ -1783,23 +1755,23 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final boolean isArcane() {
-        return skill && (sourceid == 2320011 || sourceid == 2220010 || sourceid == 2120010);
+        return (sourceid == 2320011 || sourceid == 2220010 || sourceid == 2120010);
     }
 
     public final boolean isHayatoStance() {
-        return skill && (sourceid == 41001001 || sourceid == 41110008);
+        return (sourceid == 41001001 || sourceid == 41110008);
     }
 
     public final boolean isHeal() {
-        return skill && (sourceid == 2301002 || sourceid == 9101000 || sourceid == 9001000);
+        return (sourceid == 2301002 || sourceid == 9101000 || sourceid == 9001000);
     }
 
     public final boolean isResurrection() {
-        return skill && (sourceid == 9001005 || sourceid == 9101005 || sourceid == 2321006);
+        return (sourceid == 9001005 || sourceid == 9101005 || sourceid == 2321006);
     }
 
     public final boolean isTimeLeap() {
-        return skill && sourceid == 5121010;
+        return sourceid == 5121010;
     }
 
     public final int getHp() {
@@ -1913,7 +1885,7 @@ public class MapleStatEffect implements Serializable {
                 sameSrc = effect.sourceid == 41001001;
                 break;
         }
-        return effect != null && sameSrc && this.skill == effect.skill;
+        return effect != null && sameSrc;
     }
 
     public final int getCr() {
@@ -2016,43 +1988,43 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final boolean isHide() {
-        return skill && (sourceid == 9001004 || sourceid == 9101004);
+        return (sourceid == 9001004 || sourceid == 9101004);
     }
 
     public final boolean isDragonBlood() {
-        return skill && sourceid == 1311008;
+        return sourceid == 1311008;
     }
 
     public final boolean isRecovery() {
-        return skill && (sourceid == 1001 || sourceid == 10001001 || sourceid == 20001001 || sourceid == 20011001 || sourceid == 20021001 || sourceid == 11001 || sourceid == 35121005);
+        return (sourceid == 1001 || sourceid == 10001001 || sourceid == 20001001 || sourceid == 20011001 || sourceid == 20021001 || sourceid == 11001 || sourceid == 35121005);
     }
 
     public final boolean isBerserk() {
-        return skill && sourceid == 1320006;
+        return sourceid == 1320006;
     }
 
     public final boolean isBeholder() {
-        return skill && sourceid == 1321007 || sourceid == 1301013 || sourceid == 1311013;
+        return sourceid == 1321007 || sourceid == 1301013 || sourceid == 1311013;
     }
 
     public final boolean isMPRecovery() {
-        return skill && sourceid == 5101005;
+        return sourceid == 5101005;
     }
 
     public final boolean isInfinity() {
-        return skill && (sourceid == 2121004 || sourceid == 2221004 || sourceid == 2321004);
+        return (sourceid == 2121004 || sourceid == 2221004 || sourceid == 2321004);
     }
 
     public final boolean isMagicDoor() {
-        return skill && (sourceid == Priest.MYSTIC_DOOR || sourceid % 10000 == 8001);
+        return (sourceid == Priest.MYSTIC_DOOR || sourceid % 10000 == 8001);
     }
 
     public final boolean isMesoGuard() {
-        return skill && sourceid == 4211005;
+        return sourceid == 4211005;
     }
 
     public final boolean isMechDoor() {
-        return skill && sourceid == Mechanic.OPEN_PORTAL_GX9;
+        return sourceid == Mechanic.OPEN_PORTAL_GX9;
     }
 
     /*public final boolean isComboRecharge() {
@@ -2071,7 +2043,7 @@ public class MapleStatEffect implements Serializable {
             case 12101005:
             case 15101006:
             case 21111005:
-                return skill;
+                return true;
         }
         return false;
     }
@@ -2081,19 +2053,19 @@ public class MapleStatEffect implements Serializable {
     }
 
     public boolean isMist() {
-        return skill && (sourceid == 2111003 || sourceid == 4221006 || sourceid == 12111005 || sourceid == 14111006 || sourceid == 22161003 || sourceid == 32121006 || sourceid == 1076 || sourceid == 11076 || sourceid == 2311011 || sourceid == 4121015 || sourceid == 42111004 || sourceid == 42121005); // poison mist, smokescreen and flame gear, recovery aura
+        return (sourceid == 2111003 || sourceid == 4221006 || sourceid == 12111005 || sourceid == 14111006 || sourceid == 22161003 || sourceid == 32121006 || sourceid == 1076 || sourceid == 11076 || sourceid == 2311011 || sourceid == 4121015 || sourceid == 42111004 || sourceid == 42121005); // poison mist, smokescreen and flame gear, recovery aura
     }
 
     private boolean isSpiritClaw() {
-        return skill && sourceid == 4111009 || sourceid == 14111007 || sourceid == 5201008;
+        return sourceid == 4111009 || sourceid == 14111007 || sourceid == 5201008;
     }
 
     private boolean isSpiritBlast() {
-        return skill && sourceid == 5201008;
+        return sourceid == 5201008;
     }
 
     private boolean isDispel() {
-        return skill && (sourceid == 2311001 || sourceid == 9001000 || sourceid == 9101000);
+        return (sourceid == 2311001 || sourceid == 9001000 || sourceid == 9101000);
     }
 
     private boolean isHeroWill() {
@@ -2120,7 +2092,7 @@ public class MapleStatEffect implements Serializable {
             case 23121008:
             case 24121009:
             case 5721002:
-                return skill;
+                return true;
         }
         return false;
     }
@@ -2134,25 +2106,25 @@ public class MapleStatEffect implements Serializable {
             case 1111002:
             case 11111001: // Combo
             case 1101013:
-                return skill;
+                return true;
         }
         return false;
     }
 
     public final boolean isDivineBody() {
-        return skill && GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1010;
+        return GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1010;
     }
 
     public final boolean isDivineShield() {
         switch (sourceid) {
             case 1220013:
-                return skill;
+                return true;
         }
         return false;
     }
 
     public final boolean isBerserkFury() {
-        return skill && GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1011;
+        return GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1011;
     }
 
     public final byte getLevel() {
@@ -2160,9 +2132,6 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final SummonMovementType getSummonMovementType() {
-        if (!skill) {
-            return null;
-        }
         switch (sourceid) {
             case 3211002: // puppet sniper
             case 3111002: // puppet ranger
@@ -2267,16 +2236,12 @@ public class MapleStatEffect implements Serializable {
         return GameConstants.isAngel(sourceid);
     }
 
-    public final boolean isSkill() {
-        return skill;
-    }
-
     public final int getSourceId() {
         return sourceid;
     }
 
     public final boolean isIceKnight() {
-        return skill && GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1105;
+        return GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1105;
     }
 
     public final boolean isSoaring() {
@@ -2284,11 +2249,11 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final boolean isSoaring_Normal() {
-        return skill && GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1026;
+        return GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1026;
     }
 
     public final boolean isSoaring_Mount() {
-        return skill && ((GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1142) || sourceid == 80001089 || sourceid == 112111000);
+        return ((GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 1142) || sourceid == 80001089 || sourceid == 112111000);
     }
 
     public final boolean isFinalAttack() {
@@ -2296,7 +2261,7 @@ public class MapleStatEffect implements Serializable {
             case 13101002:
             case 11101002:
             case 51100002:
-                return skill;
+                return true;
         }
         return false;
     }
@@ -2304,7 +2269,7 @@ public class MapleStatEffect implements Serializable {
     public final boolean isMistEruption() {
         switch (sourceid) {
             case 2121003:
-                return skill;
+                return true;
         }
         return false;
     }
@@ -2316,7 +2281,7 @@ public class MapleStatEffect implements Serializable {
             case 4211008:
             case NightWalker.DARK_SERVANT:
             case 4331002:// Mirror Image
-                return skill;
+                return true;
         }
         return false;
     }
@@ -2478,7 +2443,7 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final boolean isReturnScroll() {
-        return skill && (sourceid == 80001040 || sourceid == 20021110 || sourceid == 20031203);
+        return (sourceid == 80001040 || sourceid == 20021110 || sourceid == 20031203);
     }
 
     public final boolean isMechChange() {
@@ -2491,13 +2456,13 @@ public class MapleStatEffect implements Serializable {
             case 35121013:
             case 35121005:
             case 35100008:
-                return skill;
+                return true;
         }
         return false;
     }
 
     public final boolean isAnimalMode() {
-        return skill && (sourceid == 110001501 || sourceid == 110001502 || sourceid == 110001503 || sourceid == 110001504);
+        return (sourceid == 110001501 || sourceid == 110001502 || sourceid == 110001503 || sourceid == 110001504);
     }
 
     public final int getRange() {

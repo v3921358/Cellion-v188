@@ -916,7 +916,7 @@ public class PlayerStats implements Serializable {
 
         psdSkills.clear();
         for (Skill sk : chra.getSkills().keySet()) {
-            if (sk.getPsd() == 1) {
+            if (sk != null && sk.getPsd() == 1) {
                 Triple<Integer, String, Integer> psdSkill = new Triple<>(0, "", 0);
                 psdSkill.left = sk.getPsdSkill();
                 psdSkill.mid = sk.getPsdDamR(); //This only handles damage increases; some skills have effects other than that, so TODO

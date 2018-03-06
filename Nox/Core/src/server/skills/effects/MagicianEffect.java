@@ -33,6 +33,7 @@ public class MagicianEffect extends AbstractEffect {
             case Magician.MAGIC_CLAW_1:
                 break;
             case Magician.MAGIC_GUARD_2:
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 pEffect.statups.put(CharacterTemporaryStat.MagicGuard, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Magician.MP_BOOST:

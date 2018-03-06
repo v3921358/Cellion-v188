@@ -2309,7 +2309,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         if (mbsvh == null || mbsvh.effect == null) {
             return false;
         }
-        return mbsvh.effect.isSkill() && mbsvh.effect.getSourceId() == skill.getId();
+        return mbsvh.effect.getSourceId() == skill.getId();
     }
 
     public int getBuffSource(CharacterTemporaryStat stat) {
@@ -2319,7 +2319,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
 
     public int getTrueBuffSource(CharacterTemporaryStat stat) {
         final CharacterTemporaryStatValueHolder mbsvh = effects.get(stat);
-        return mbsvh == null ? -1 : (mbsvh.effect.isSkill() ? mbsvh.effect.getSourceId() : -mbsvh.effect.getSourceId());
+        return mbsvh == null ? -1 : mbsvh.effect.getSourceId();
     }
 
     public int getItemQuantity(int itemid, boolean checkEquipped) {
@@ -2383,20 +2383,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             getMount().startSchedule();
         }
 
-        int clonez = 0;
-        if (clonez > 0) {
-            int cloneSize = Math.max(getNumClones(), getCloneSize());
-            if (clonez > cloneSize) { //how many clones to summon
-                for (int i = 0; i < clonez - cloneSize; i++) { //1-1=0
-                    cloneLook();
-                }
-            }
-        }
-
         for (Entry<CharacterTemporaryStat, Integer> statup : statups.entrySet()) {
-            if (statup.getKey() == CharacterTemporaryStat.IllusionStep) {
-                clonez = statup.getValue();
-            }
             int value = statup.getValue();
             if (statup.getKey() == CharacterTemporaryStat.RideVehicle) {
                 removeFamiliar();
@@ -2413,14 +2400,15 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     }
 
     public List<CharacterTemporaryStat> getTemporaryStats(final MapleStatEffect effect, final long startTime) {
-        final List<CharacterTemporaryStat> bstats = new ArrayList<>();
+        List<CharacterTemporaryStat> liStats = new ArrayList<>();
 
-        effects.entrySet().stream()
-                .filter(stat_Effect -> stat_Effect.getValue().effect.sameSource(effect)
-                && (startTime == -1 || startTime == stat_Effect.getValue().startTime))
-                .forEach(stat_Effect -> bstats.add(stat_Effect.getKey()));
+        for (Map.Entry<CharacterTemporaryStat, CharacterTemporaryStatValueHolder> pEffect : effects.entrySet()) {
+            if (!pEffect.getKey().isIndie()) {
+                liStats.add(pEffect.getKey());
+            }
+        }
 
-        return bstats;
+        return liStats;
     }
 
     private boolean deregisterTemporaryStats(List<CharacterTemporaryStat> stats) {
@@ -2498,6 +2486,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         if (effect == null) {
             return;
         }
+
         List<CharacterTemporaryStat> buffstats;
         if (!overwrite) {
             buffstats = getTemporaryStats(effect, startTime);
@@ -2505,6 +2494,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             buffstats = new ArrayList<>(statups.keySet());
         }
         if (buffstats.size() <= 0) {
+            System.out.println("\n\n\nRIPRIPRIP\n\n\n");
             return;
         }
         if (effect.isInfinity() && getBuffedValue(CharacterTemporaryStat.Infinity) != null) { //before
@@ -2540,7 +2530,6 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             }
         } else if (effect.statups.containsKey(CharacterTemporaryStat.RideVehicle)) {
             getMount().cancelSchedule();
-            cancelEffectFromTemporaryStat(CharacterTemporaryStat.Mechanic);
         } else if (effect.isAranCombo()) {
             combo = 0;
         }
@@ -2615,29 +2604,33 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     }
 
     private void cancelPlayerBuffs(List<CharacterTemporaryStat> buffstats, boolean overwrite) {
-        boolean write = client != null && client.getChannelServer() != null && client.getChannelServer().getPlayerStorage().getCharacterById(getId()) != null;
-        if (overwrite) {
-            List<CharacterTemporaryStat> z = new ArrayList<>();
-            for (CharacterTemporaryStat s : buffstats) {
-                if (s.isIndie()) {
-                    z.add(s);
+        try {
+            boolean write = client != null && client.getChannelServer() != null && client.getChannelServer().getPlayerStorage().getCharacterById(getId()) != null;
+            if (overwrite) {
+                List<CharacterTemporaryStat> z = new ArrayList<>();
+                for (CharacterTemporaryStat s : buffstats) {
+                    if (s.isIndie()) {
+                        z.add(s);
+                    }
                 }
+                if (z.size() > 0) {
+                    buffstats = z;
+                } else {
+                    return; //don't write anything
+                }
+            } else if (write) {
+                stats.recalcLocalStats(this);
             }
-            if (z.size() > 0) {
-                buffstats = z;
-            } else {
-                return; //don't write anything
-            }
-        } else if (write) {
-            stats.recalcLocalStats(this);
+            client.write(BuffPacket.cancelBuff(buffstats));
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        client.write(BuffPacket.cancelBuff(buffstats));
     }
 
     public void dispel() {
         if (!isHidden()) {
             effects.values().stream()
-                    .filter(mbsvh -> mbsvh.effect.isSkill() && mbsvh.schedule != null
+                    .filter(mbsvh -> mbsvh.schedule != null
                     && !mbsvh.effect.statups.containsKey(CharacterTemporaryStat.Morph)
                     && !mbsvh.effect.isGmBuff()
                     && !mbsvh.effect.statups.containsKey(CharacterTemporaryStat.RideVehicle)
@@ -2650,7 +2643,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
 
     public void dispelSkill(int skillid) {
         final Optional<CharacterTemporaryStatValueHolder> firstDispelledSkill = effects.values().stream()
-                .filter(mbsvh -> mbsvh.effect.isSkill() && mbsvh.effect.getSourceId() == skillid)
+                .filter(mbsvh -> mbsvh.effect.getSourceId() == skillid)
                 .findFirst();
 
         if (firstDispelledSkill.isPresent()) {
