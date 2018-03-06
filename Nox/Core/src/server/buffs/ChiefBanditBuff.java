@@ -35,8 +35,9 @@ public class ChiefBanditBuff extends AbstractBuffClass {
     public void handleEffect(MapleStatEffect eff, int skill) {
         switch (skill) {
             case ChiefBandit.PICK_POCKET: //Pick Pocket
+                //eff.statups.put(CharacterTemporaryStat.PickPocket, eff.info.get(MapleStatInfo.x));
+                eff.statups.put(CharacterTemporaryStat.MesoUp, eff.info.get(MapleStatInfo.x));
                 eff.info.put(MapleStatInfo.time, 2100000000);
-                eff.statups.put(CharacterTemporaryStat.PickPocket, eff.info.get(MapleStatInfo.x));
                 break;
             case ChiefBandit.SHADOW_PARTNER: //Shadow Partner
                 eff.statups.put(CharacterTemporaryStat.ShadowPartner, eff.info.get(MapleStatInfo.x));

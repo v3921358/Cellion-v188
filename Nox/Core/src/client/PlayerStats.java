@@ -3657,7 +3657,7 @@ public class PlayerStats implements Serializable {
         final int playerjob = chra.getJob();
 
         shouldHealHP = 10 + recoverHP; // Reset
-        shouldHealMP = GameConstants.isDemonSlayer(chra.getJob()) ? 0 : (3 + recoverMP + (localint_ / 10)); // i think
+        shouldHealMP = /*GameConstants.isDemonSlayer(chra.getJob()) ? 0 : */(3 + recoverMP + (localint_ / 10)); // i think
         mpRecoverTime = 0;
         hpRecoverTime = 0;
         if (playerjob == 111 || playerjob == 112) {

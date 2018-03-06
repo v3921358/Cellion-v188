@@ -9,6 +9,8 @@ import constants.GameConstants;
 import constants.ItemConstants;
 import constants.ServerConstants;
 import constants.skills.*;
+import handling.jobs.Cygnus;
+import handling.jobs.Cygnus.NightWalkerHandler;
 import handling.jobs.Cygnus.ThunderBreakerHandler;
 import handling.jobs.Hero.AranHandler;
 import handling.jobs.Kinesis.KinesisHandler;
@@ -73,8 +75,10 @@ public class DamageParse {
                 }
             } else if (attack.mobCount > effect.getMobCount() && !GameConstants.isMismatchingBulletSkill(attack.skill)) { //&& attack.skill != Paladin.ADVANCED_CHARGE && attack.skill != 22110025) {
                 pPlayer.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
-                pPlayer.yellowMessage("[Warning] Mismatching bullet count for skill ID " + attack.skill + ".");
-                return;
+                if (pPlayer.isIntern()) {
+                    pPlayer.yellowMessage("[Warning] Mismatching bullet count for skill ID " + attack.skill + ".");
+                }
+                //return;
             }
         }
 
@@ -386,8 +390,8 @@ public class DamageParse {
                     if (GameConstants.isShade(pPlayer.getJob())) {
                         if (pPlayer.hasBuff(CharacterTemporaryStat.ChangeFoxMan)) {
                             for (AttackMonster at : attack.allDamage) {
-                                int nPercent = 70;
-                                if (Randomizer.nextInt(100) < nPercent) { 
+                                int nPercent = 35;
+                                if (Randomizer.nextInt(100) < nPercent && attack.skill != 25100010 && attack.skill != 25100010) { 
                                     pPlayer.getMap().broadcastMessage(JobPacket.ShadePacket.FoxSpirit(pPlayer, at));
                                 }
                             }
@@ -439,6 +443,10 @@ public class DamageParse {
                                     pPlayer.getMap().broadcastMessage(JobPacket.NightWalkerPacket.ShadowBats(pPlayer.getId(), at.getObjectId()));
                                 }
                             }
+                        }
+                        
+                        if (attack.skill == NightWalker.DOMINION) {
+                            //NightWalkerHandler.handleDominionBuff(pPlayer);
                         }
 
                         //player.handleShadowBat(monster.getObjectId(), attack.skill); // Shadow Bat Spawn Handler
@@ -624,7 +632,7 @@ public class DamageParse {
         if (pPlayer.getJob() == 422) {
             int critical = pPlayer.acaneAim;
             if (attack.skill > 0) {
-                map.broadcastMessage(CField.CriticalGrowing(critical));
+                //map.broadcastMessage(CField.CriticalGrowing(critical));
             }
             if (pPlayer.acaneAim <= 23) {
                 pPlayer.acaneAim++;

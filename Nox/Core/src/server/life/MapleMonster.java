@@ -194,7 +194,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                 case 8240099: // Lotus
                 case 8930000: // Chaos Vellum
                     from.dropMessage(-1, "Developer Instant Kill");
-                    damage = 1000000000;
+                    damage = 2100000000;
                     break;
             }
         }
@@ -388,6 +388,51 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         listener = null;
     }
 
+    /*
+     *  Monster NX Drop System
+     *  @author Mazen Massoud
+     *
+     *  @purpose Provide the player will NX upon killing a monster, 
+     *  with the value varrying based on multiple factors.
+     */
+    public void monsterNxGainResult(MapleCharacter pPlayer, boolean bKiller) {
+        
+        long nMobHp = getMobMaxHp();
+        short nMobLv = stats.getLevel();
+
+        if (getMobMaxHp() > 175000000) { // Caps the the HP at this value for the calculation.
+            nMobHp = 175000000;
+        }
+
+        int nMinRange = (int) (nMobHp * 0.00000105) + (nMobLv / 3) + 1; // NX Gain Formula
+        int nMaxRange = (int) Math.round(nMinRange * 1.25); // Amount NX Gain can go up to.
+        int nResultNx = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1))); // Formula to produce a value between the specified range.
+
+        int nGainChance = 60; // Base NX Drop Chance %
+
+        // Paragon Level Bonus
+        if (ServerConstants.PARAGON_SYSTEM) {
+            if (pPlayer.getReborns() >= 5) { // Paragon Level 5+
+                nGainChance += 20;
+                nResultNx *= 1.20; // +10% Increased NX Gain
+            }
+        }
+        
+        // (Buffed) Bloodless Channel Bonus
+        if ((ServerConstants.BUFFED_SYSTEM) && (ServerConstants.BUFFED_NX_GAIN) && (pPlayer.getClient().getChannel() >= ServerConstants.START_RANGE) && (pPlayer.getClient().getChannel() <= ServerConstants.END_RANGE)) {
+            nGainChance += 20;
+            nResultNx *= 2;
+        }
+        
+        if (!bKiller) { // Leechers Gain
+            nResultNx *= 0.4; // Cap at 40%
+        }
+        
+        if (Randomizer.nextInt(100) < nGainChance) {
+            pPlayer.modifyCSPoints(2, nResultNx, true);
+        }
+    }
+    
     /**
      * Gives experience to a player after a monster has been killed. This also handles the additional EXP acquired through other variables
      * such as item buff, map, party bonus, etc
@@ -410,26 +455,10 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             byte Class_Bonus_EXP_PERCENT, byte Premium_Bonus_EXP_PERCENT, int burningFieldBonusEXPRate,
             int lastskillID) {
 
-        //Buffed Channel NX Gain
-        if ((ServerConstants.BUFFED_SYSTEM) && (ServerConstants.BUFFED_NX_GAIN) && (attacker.getClient().getChannel() >= ServerConstants.START_RANGE) && (attacker.getClient().getChannel() <= ServerConstants.END_RANGE)) {
-            int baseLevelFormula = (int) (stats.getLevel() * 2); //Base Calculation in NX Gain Formula based on Monster Level.
-            if (stats.getLevel() <= 50) { //Decrease the reward for killing monsters under specified level.
-                baseLevelFormula /= 2;
-            }
-            int minRange = (int) baseLevelFormula + Math.round((getMobMaxHp() / 120000)); //NX Gain Formula
-            int maxRange = (int) Math.round(minRange * 1.25); //Amount NX Gain can go up to.
-            int nx = (int) (minRange + (Math.random() * ((maxRange - minRange) + 1))); //Formula to produce a value between the specified range.
-
-            // Paragon Level Bonus
-            if (ServerConstants.PARAGON_SYSTEM) {
-                if (attacker.getReborns() >= 5) { // Paragon Level 5+
-                    nx *= 1.10; // +10% Increased NX Gain
-                }
-            }
-
-            attacker.modifyCSPoints(2, nx, true);
+        if (ServerConstants.MONSTER_CASH_DROP) {
+            monsterNxGainResult(attacker, isKiller);
         }
-
+        
         if (highestDamage) {
             if (eventInstance != null) {
                 eventInstance.monsterKilled(attacker, this);

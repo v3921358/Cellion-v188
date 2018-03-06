@@ -19,16 +19,17 @@ var onyxEqp = [1003863, 1052612, 1102562, 1012376, 1132228, 1122252];
 var onyxWep = [1302277, 1212066, 1222061, 1232060, 1242065, 1252064, 1312155, 1322205, 1332227, 1352825, 1362092, 1372179, 1382211, 1402199, 1412137, 1422142, 1432169, 1442225, 1452207, 1462195, 1472216, 1472216, 1492181, 1522096, 1532100, 1542070, 1552070];
 //Fafnir
 var fafnirEqp = [1042254, 1062165, 1003797, 1042255, 1062166, 1003798, 1042256, 1062167, 1003799, 1042257, 1062168, 1003800, 1042258, 1062169, 1003801];
-var fafnirWeapons = [1212063, 1222058, 1232057, 1242060, 1242061, 1252015, 1262016, 1302275, 1312153, 1322203, 133225, 1342082, 1362090, 1372177, 1382208, 1402196, 1412135, 1422140, 1432167, 1442223, 1452205, 1462193, 1472214, 1482168, 1492179, 1522094, 1532098, 1542063, 1552063, 1582016];
+var fafnirWeapons = [1212063, 1222058, 1232057, 1242060, 1242061, 1252015, 1262016, 1302275, 1312153, 1322203, 1332225, 1342082, 1362090, 1372177, 1382208, 1402196, 1412135, 1422140, 1432167, 1442223, 1452205, 1462193, 1472214, 1482168, 1492179, 1522094, 1532098, 1542063, 1552063, 1582016];
+//Misc
+var miscEqp = [1190302, 1113185];
 
-var craftOptions = ["Lv. 30 Pearl Equipment and Accessories", "Lv. 30 Pearl Weapon", "Lv. 100 Onyx Equipment and Accessories", "Lv. 100 Onyx Weapon", "Lv. 100 Onyx Ring", "Lv. 150 Fafnir Equipment", "Lv. 150 Fafnir Weapon", "Lv. 150 Tyrant Equipment"];
+var craftOptions = ["Lv. 30 Pearl Equipment and Accessories", "Lv. 30 Pearl Weapon", "Lv. 100 Onyx Equipment and Accessories", "Lv. 100 Onyx Weapon", "Lv. 100 Onyx Ring", "Lv. 150 Fafnir Equipment", "Lv. 150 Fafnir Weapon", "Lv. 150 Tyrant Equipment\r\n", "Miscellanious Items"];
 
 var textBox = "";
 var j = 0;
 
 function start() {
-	ml = 4001126;
-    cm.sendNext("Welcome to the #dREXION#k Blacksmith Service.\r\nHere you can craft all the rarest sets for your adventure!\r\n\r\n#rYou'll need various currencies that you can collect around the Maple World to start crafting.");
+    cm.sendNext("Welcome to the #dREXION#k Blacksmith Workshop!\r\n#tWhere you can craft all of the strongest gear.");
 	status = -1;
 }
 
@@ -50,7 +51,7 @@ function action(mode, type, selection){
 	if (status == 0){
 		textBox = "Welcome to the #dREXION#k Blacksmith Service!\r\n"
 				+ "Exchange #bMesos#k or #bNX#k and #bCurrencies#k for powerful items!\r\n"
-				+ "What would you like to forge today?\r\n#r";
+				+ "What would you like to forge today?#r";
 	   for (j = 0; j < craftOptions.length; j++ )
 		textBox += "\r\n#L" + j + "#" + craftOptions[j] + "#l";
 	   cm.sendSimple(textBox);
@@ -104,11 +105,11 @@ function action(mode, type, selection){
 				textBox = "Fafnir Weapon cost #b20#k #i4310064##t4310064#, #b20#k #i4310065##t4310065# and #b6#k #i4430000##t4430000##k.\r\nWhat would you like to craft?\r\n";
 				for (j = 0; j < fafnirWeapons.length; j++){
 					if (fafnirWeapons[j] != 1242060 && fafnirWeapons[j] != 1242061){
-						textBox += "\r\n#L" + j + "#" +  "#v" + fafnirWeapons[j] + "##t" + fafnirWeapons[j] + "##l";
+						textBox += "\r\n#L" + (600 + j) + "#" +  "#v" + fafnirWeapons[j] + "##t" + fafnirWeapons[j] + "##l";
 					} else if (fafnirWeapons[j] == 1242060) {
-						textBox += "\r\n#L" + j + "#" +  "#v" + fafnirWeapons[j] + "##t" + fafnirWeapons[j] + "(Thief)##l";
+						textBox += "\r\n#L" + (600 + j) + "#" +  "#v" + fafnirWeapons[j] + "##t" + fafnirWeapons[j] + "(Thief)##l";
 					} else {
-						textBox += "\r\n#L" + j + "#" +  "#v" + fafnirWeapons[j] + "##t" + fafnirWeapons[j] + "#(Pirate)#l";
+						textBox += "\r\n#L" + (600 + j) + "#" +  "#v" + fafnirWeapons[j] + "##t" + fafnirWeapons[j] + "#(Pirate)#l";
 					}
 				}
 				cm.sendSimple(textBox);
@@ -120,6 +121,17 @@ function action(mode, type, selection){
 				textBox += "\r\n#L" + (700 + 1) + "#" +  "#v" + tyrantType[1] + "##bCape#k#l";
 				textBox += "\r\n#L" + (700 + 2) + "#" +  "#v" + tyrantType[2] + "##bBelt#k#l";
 				textBox += "\r\n#L" + (700 + 3) + "#" +  "#v" + tyrantType[3] + "##bGloves#k#l";
+				cm.sendSimple(textBox);
+				break;
+			//Misc items 
+			case 8: 
+				textBox = "Please choose what Item you would like to craft.\r\n";
+				//Crystal Emblem
+				textBox += "\r\nCost :#b10#i4430000##t4430000##k.";
+				textBox += "\r\n#L" + (800 + 0) + "#" +  "#v" + miscEqp[0] + "##b#k#l";
+				//Blackgate Ring
+				textBox += "\r\nCost :#b10,000#i4001126##t4001126##k #b2#i4001619##t4001619##k."; 
+				textBox += "\r\n#L" + (800 + 1) + "#" +  "#v" + miscEqp[1] + "##b#k#l";
 				cm.sendSimple(textBox);
 				break;
 		}
@@ -136,7 +148,7 @@ function action(mode, type, selection){
 				cm.sendOk("Thank you for your purchase.\r\nEnjoy your new #i"+pearlEqp[selection]+"# !");
 				cm.dispose();
 			} else {
-				cm.sendOk("Sorry, you do not have enough #bmesos#k or #i4001126##t4001126#k!");
+				cm.sendOk("Sorry, you do not have enough #bmesos#k or #i4001126##t4001126##k!");
 				cm.dispose();
 			}
 		//Onyx Equipment & Weapon
@@ -168,7 +180,7 @@ function action(mode, type, selection){
 					}
 				}
 			} else {
-				cm.sendOk("Sorry, you do not have enough #bmesos#k or #i4001126##t4001126#k!");
+				cm.sendOk("Sorry, you do not have enough #bmesos#k or #i4001126##t4001126##k!");
 				cm.dispose();
 			}
 		//Onyx Ring
@@ -179,7 +191,7 @@ function action(mode, type, selection){
 				cm.gainItem(onyxRing[selection-400], 1);
 				cm.dispose();
 			} else {
-				cm.sendOk("Sorry, you do not have enough #bmesos#k or #i4001126##t4001126#k!");
+				cm.sendOk("Sorry, you do not have enough #bmesos#k or #i4001126##t4001126##k!");
 				cm.dispose();
 			}
 		//Fafnir Equipment
@@ -191,7 +203,7 @@ function action(mode, type, selection){
 				cm.gainItem(fafnirEqp[selection-500], 1);
 				cm.dispose();
 			} else {
-				cm.sendOk("Remember, you need #b10#i4310064##t4310064##k,#b10#i4310065##t431006#k and #b4#i4430000##t4430000##k to craft a Fafnir equipment!");
+				cm.sendOk("Remember, you need #b10#i4310064##t4310064##k,#b10#i4310065##t4310065##k and #b4#i4430000##t4430000##k to craft a Fafnir equipment!");
 				cm.dispose();
 			}
 		//Fafnir Weapon
@@ -203,7 +215,7 @@ function action(mode, type, selection){
 				cm.gainItem(fafnirWeapons[selection-600], 1);
 				cm.dispose();
 			} else {
-				cm.sendOk("Remember, you need #b20#i4310064##t4310064##k,#b20#i4310065##t431006#k and #b6#i4430000##t4430000##k to craft a Fafnir weapon!");
+				cm.sendOk("Remember, you need #b20#i4310064##t4310064##k,#b20#i4310065##t4310065##k and #b6#i4430000##t4430000##k to craft a Fafnir weapon!");
 				cm.dispose();
 			}
 		//Tyrant Equipment
@@ -236,6 +248,32 @@ function action(mode, type, selection){
 					for (j = 0; j < tyrantGloves.length; j++)
 						textBox += "\r\n#L" + (30 + j) + "#" +  "#v" + tyrantGloves[j] + "##t" + tyrantGloves[j] + "##l";
 					cm.sendSimple(textBox);
+					break;
+			}
+		} else if (selection < 900) {
+			switch(selection){
+				//Crystal Maple Emblem
+				case 800:
+					if (cm.haveItem(4430000, 10)){
+						cm.gainItem(4430000, -10);
+						cm.gainItem(miscEqp[0], 1);
+						cm.dispose();
+					} else {
+						cm.sendOk("Sorry, you do not have enough #i4430000##t4430000##k!");
+						cm.dispose();
+					}
+					break;
+				//Blackgate Ring
+				case 801:
+					if (cm.haveItem(4001126, 10000) && cm.haveItem(4001619, 2)){
+						cm.gainItem(4001126, -10000);
+						cm.gainItem(4001619, -2);
+						cm.gainItem(miscEqp[1], 1);
+						cm.dispose();
+					} else {
+						cm.sendOk("Sorry, you do not have enough #i4001619##t4001619# or #i4001126##t4001126##k!");
+						cm.dispose();
+					}
 					break;
 			}
 		}

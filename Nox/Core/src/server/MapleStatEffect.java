@@ -1592,10 +1592,15 @@ public class MapleStatEffect implements Serializable {
                     //mpchange -= (info.get(MapleStatInfo.mpCon) - (info.get(MapleStatInfo.mpCon) * applyfrom.getStat().mpconReduce / 100)) * (applyfrom.getStat().mpconPercent / 100.0);
                 }
             } else if (info.get(MapleStatInfo.forceCon) != 0) {
-                if (applyfrom.getBuffedValue(CharacterTemporaryStat.InfinityForce) != null) {
+                if (applyfrom.hasBuff(CharacterTemporaryStat.InfinityForce)) {
                     mpchange = 0;
                 } else {
-                    mpchange -= info.get(MapleStatInfo.forceCon);
+                    int nFuryCost = info.get(MapleStatInfo.forceCon);
+                    if (applyfrom.hasSkill(DemonSlayer.BLUE_BLOOD)) {
+                        mpchange -= (nFuryCost * 0.8);
+                    } else {
+                        mpchange = -nFuryCost;
+                    }
                 }
             }
         }

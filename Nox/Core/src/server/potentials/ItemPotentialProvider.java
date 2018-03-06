@@ -456,7 +456,7 @@ public class ItemPotentialProvider {
      * @purpose Generate a bonus Potential Line based on fully customizable Potential tables
      * based upon the Item Potential Tier and 
      */
-    public static int generateBonusPotential(Equip pEquip, ItemPotentialTierType pTier) {
+    public static int generateBonusPotential(Equip pEquip/*, ItemPotentialTierType pTier*/) {
         ArrayList<Integer> aPossiblePotential = new ArrayList<Integer>();
         final EquipSlotType pSlot = MapleItemInformationProvider.getInstance().getSlotType(pEquip.getItemId());
         final int nReqLevel = MapleItemInformationProvider.getInstance().getReqLevel(pEquip.getItemId());
@@ -678,7 +678,7 @@ public class ItemPotentialProvider {
             32056, // 7% DEF
         };
         
-        if (pTier == ItemPotentialTierType.Legendary && nReqLevel >= 70) { // Only defined Legendary Lv. 70+ Potential Lines
+        //if (pTier == ItemPotentialTierType.Legendary && nReqLevel >= 70) { // Only defined Legendary Lv. 70+ Potential Lines
             if (pSlot == EquipSlotType.Si_Emblem) {
                 for (int nValue : aEmblemLegendaryBonusPotential) { // Adds Emblem Potential Values (Legendary)
                     aPossiblePotential.add(nValue);
@@ -699,7 +699,7 @@ public class ItemPotentialProvider {
                     aPossiblePotential.add(nValue);
                 }
             }
-        } else if (pTier == ItemPotentialTierType.Unique) {
+        /*} else if (pTier == ItemPotentialTierType.Unique) {
             for (int nValue : aCustomUniqueBonusPotential) {
                 aPossiblePotential.add(nValue); // Adds Custom Potential Values (Unique)
             }
@@ -715,7 +715,7 @@ public class ItemPotentialProvider {
             for (int nValue : aCustomBonusPotential) { // Adds extra random stats here just incase.
                 aPossiblePotential.add(nValue);
             }
-        }
+        }*/
         
         Random pRandomPotential = new Random();
         int nIndex = pRandomPotential.nextInt(aPossiblePotential.size());
@@ -877,12 +877,14 @@ public class ItemPotentialProvider {
             for (int nValue : aMainLegendaryPotential) {
                 aPossiblePotential.add(nValue); // Adds General Potential Values (Legendary)
             }
-            if (isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) || pSlot == EquipSlotType.Si_Emblem || InventoryConstants.isSecondaryWeapon(pEquip.getItemId())) {
+            if (isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) || pSlot == EquipSlotType.Si_Emblem 
+                    || InventoryConstants.isSecondaryWeapon(pEquip.getItemId())) {
                 for (int nValue : aWeaponEmblemLegendaryPotential) { // Adds Emblem Potential Values (Legendary)
                     aPossiblePotential.add(nValue);
                 }
             }
-            if (isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) || InventoryConstants.isSecondaryWeapon(pEquip.getItemId())) {
+            if (isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) || InventoryConstants.isSecondaryWeapon(pEquip.getItemId()) 
+                    || InventoryConstants.isSpecialShield(pEquip.getItemId())) {
                 for (int nValue : aWeaponLegendaryPotential) { // Adds Weapon Potential Values (Legendary)
                     aPossiblePotential.add(nValue);
                 }
@@ -1024,7 +1026,7 @@ public class ItemPotentialProvider {
      * Resets the bonus potential of an equipment with miracle cube.
      */
     public static boolean resetBonusPotential(Equip pEquip, int rateToRaiseTier, int rateToDecreaseTier, ItemPotentialTierType maxTier, boolean hidePotential, float miracleRate) {
-        if (pEquip.getPotentialTier().isHiddenType()) {
+        if (pEquip.getPotentialBonusTier().isHiddenType()) {
             return false;
         }
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -1032,16 +1034,19 @@ public class ItemPotentialProvider {
         if (reqLevel < 10) {
             return false;
         }
-        ItemPotentialTierType pCurrentTier = pEquip.getPotentialBonusTier();
-
+        //ItemPotentialTierType pCurrentTier = pEquip.getPotentialBonusTier();
+        
         if (pEquip.getBonusPotential1() != 0) {
-            pEquip.setBonusPotential1(generateBonusPotential(pEquip, pCurrentTier));
+            pEquip.setBonusPotential1(generateBonusPotential(pEquip));
+            //pEquip.setBonusPotential1(generateBonusPotential(pEquip, pCurrentTier));
         }
         if (pEquip.getBonusPotential2() != 0) {
-            pEquip.setBonusPotential2(generateBonusPotential(pEquip, pCurrentTier));
+            pEquip.setBonusPotential2(generateBonusPotential(pEquip));
+            //pEquip.setBonusPotential2(generateBonusPotential(pEquip, pCurrentTier));
         }
         if (pEquip.getBonusPotential3() != 0) {
-            pEquip.setBonusPotential3(generateBonusPotential(pEquip, pCurrentTier));
+            pEquip.setBonusPotential3(generateBonusPotential(pEquip));
+            //pEquip.setBonusPotential3(generateBonusPotential(pEquip, pCurrentTier));
         }
         return true;
     }
@@ -1055,11 +1060,13 @@ public class ItemPotentialProvider {
             return false;
         }
         boolean is3LinePotential = true;
-
-        pEquip.setBonusPotential1(generateBonusPotential(pEquip, pTier));
-        pEquip.setBonusPotential2(generateBonusPotential(pEquip, pTier));
+        pEquip.setBonusPotential1(generateBonusPotential(pEquip));
+        pEquip.setBonusPotential2(generateBonusPotential(pEquip));
+        //pEquip.setBonusPotential1(generateBonusPotential(pEquip, pTier));
+        //pEquip.setBonusPotential2(generateBonusPotential(pEquip, pTier));
         if (is3LinePotential) {
-            pEquip.setBonusPotential3(generateBonusPotential(pEquip, pTier));
+            pEquip.setBonusPotential3(generateBonusPotential(pEquip));
+            //pEquip.setBonusPotential3(generateBonusPotential(pEquip, pTier));
         } else {
             pEquip.setBonusPotential3(0);
         }

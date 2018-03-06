@@ -20,6 +20,7 @@ import client.CharacterTemporaryStat;
 import client.MapleClient;
 import client.MapleCoolDownValueHolder;
 import client.MapleDiseaseValueHolder;
+import client.MapleStat;
 import client.MonsterStatusEffect;
 import client.buddy.Buddy;
 import client.buddy.BuddyFlags;
@@ -31,6 +32,7 @@ import client.inventory.MapleInventoryType;
 import client.inventory.PetDataFactory;
 import constants.WorldConstants.WorldOption;
 import constants.skills.BattleMage;
+import constants.skills.DemonSlayer;
 import constants.skills.Mihile;
 import database.DatabaseConnection;
 import handling.game.PlayerStorage;
@@ -334,6 +336,7 @@ public class World {
                     break;
                 case EXPEL:
                 case LEAVE:
+                    System.out.println("hey");
                     party.removeMember(target);
                     break;
                 case DISBAND:
@@ -1901,125 +1904,130 @@ public class World {
     /**
      * Handles the cooldown for this character, as executed periodically by the World server
      *
-     * @param chr
-     * @param numTimes
-     * @param hurt
-     * @param now
+     * @param pPlayer
+     * @param nNumTimes
+     * @param bHurt
+     * @param tNow
      */
-    public static void handleCooldowns(final MapleCharacter chr, final int numTimes, final boolean hurt, final long now) { //is putting it here a good idea? expensive?
-        if (chr.getCooldownSize() > 0) {
+    public static void handleCooldowns(final MapleCharacter pPlayer, final int nNumTimes, final boolean bHurt, final long tNow) { //is putting it here a good idea? expensive?
+        if (pPlayer.getCooldownSize() > 0) {
             List<Pair<Integer, Integer>> cooldowns = new ArrayList<>();
 
-            for (MapleCoolDownValueHolder m : chr.getCooldowns()) {
-                if (m.startTime + m.length < now) {
+            for (MapleCoolDownValueHolder m : pPlayer.getCooldowns()) {
+                if (m.startTime + m.length < tNow) {
                     final int skil = m.skillId;
-                    chr.removeCooldown(skil);
+                    pPlayer.removeCooldown(skil);
 
                     cooldowns.add(new Pair<>(skil, 0));
                 }
             }
             if (!cooldowns.isEmpty()) {
-                chr.getClient().write(CField.skillCooldown(cooldowns));
+                pPlayer.getClient().write(CField.skillCooldown(cooldowns));
             }
         }
-        if (chr.isAlive()) {
-            if (chr.getJob() == 131 || chr.getJob() == 132) {
-                if (chr.canBlood(now)) {
-                    chr.doDragonBlood();
+        if (pPlayer.isAlive()) {
+            if (pPlayer.getJob() == 131 || pPlayer.getJob() == 132) {
+                if (pPlayer.canBlood(tNow)) {
+                    pPlayer.doDragonBlood();
                 }
-            } else if (GameConstants.isDemonAvenger(chr.getJob())) {
-                if (chr.exceedTimeout(now)) { // Demon Avenger Overload timeout
-                    chr.setExceed((short) 0);
+            } else if (GameConstants.isDemonAvenger(pPlayer.getJob())) {
+                if (pPlayer.exceedTimeout(tNow)) { // Demon Avenger Overload timeout
+                    pPlayer.setExceed((short) 0);
                 }
-            } else if (GameConstants.isNightWalkerCygnus(chr.getJob())) {
-                if (chr.darkElementalTimeout(now)) { // Mark of Darkness timeout
-                    chr.setDarkElementalCombo(0);
+            } else if (GameConstants.isNightWalkerCygnus(pPlayer.getJob())) {
+                if (pPlayer.darkElementalTimeout(tNow)) { // Mark of Darkness timeout
+                    pPlayer.setDarkElementalCombo(0);
+                }
+            } else if (GameConstants.isDemonSlayer(pPlayer.getJob())) { 
+                if (pPlayer.hasSkill(DemonSlayer.MAX_FURY)) {
+                    pPlayer.getStat().setMp(pPlayer.getStat().getMp() + 10, pPlayer);
+                    pPlayer.updateSingleStat(MapleStat.MP, pPlayer.getStat().getMp());
                 }
             }
-            if (chr.canRecover(now)) {
-                chr.doRecovery();
+            if (pPlayer.canRecover(tNow)) {
+                pPlayer.doRecovery();
             }
-            if (chr.canHPRecover(now)) {
-                chr.addHP((int) chr.getStat().getHealHP());
+            if (pPlayer.canHPRecover(tNow)) {
+                pPlayer.addHP((int) pPlayer.getStat().getHealHP());
             }
-            if (chr.canMPRecover(now)) {
-                chr.addMP((int) chr.getStat().getHealMP());
+            if (pPlayer.canMPRecover(tNow)) {
+                pPlayer.addMP((int) pPlayer.getStat().getHealMP());
             }
-            if (chr.canFairy(now)) {
-                chr.doFairy();
+            if (pPlayer.canFairy(tNow)) {
+                pPlayer.doFairy();
             }
-            if (chr.canFish(now)) {
-                chr.doFish(now);
+            if (pPlayer.canFish(tNow)) {
+                pPlayer.doFish(tNow);
             }
-            if (chr.canDOT(now)) {
-                chr.doDOT();
+            if (pPlayer.canDOT(tNow)) {
+                pPlayer.doDOT();
             }
 
             // Handle MP Cost per Second here -Mazen
             // Battle Mage Auras
-            if (chr.getBuffedValue(CharacterTemporaryStat.BMageAura) != null) {
-                if (chr.getBuffSource(CharacterTemporaryStat.Speed) == BattleMage.HASTY_AURA) {
-                    chr.addMP(-8);
+            if (pPlayer.getBuffedValue(CharacterTemporaryStat.BMageAura) != null) {
+                if (pPlayer.getBuffSource(CharacterTemporaryStat.Speed) == BattleMage.HASTY_AURA) {
+                    pPlayer.addMP(-8);
                 }
-                if (chr.getBuffSource(CharacterTemporaryStat.ComboDrain) == BattleMage.DRAINING_AURA) {
-                    chr.addMP(-28);
+                if (pPlayer.getBuffSource(CharacterTemporaryStat.ComboDrain) == BattleMage.DRAINING_AURA) {
+                    pPlayer.addMP(-28);
                 }
-                if (chr.getBuffSource(CharacterTemporaryStat.AsrR) == BattleMage.BLUE_AURA) {
-                    chr.addMP(-12);
+                if (pPlayer.getBuffSource(CharacterTemporaryStat.AsrR) == BattleMage.BLUE_AURA) {
+                    pPlayer.addMP(-12);
                 }
-                if (chr.getBuffSource(CharacterTemporaryStat.DamR) == BattleMage.DARK_AURA) {
-                    chr.addMP(-16);
+                if (pPlayer.getBuffSource(CharacterTemporaryStat.DamR) == BattleMage.DARK_AURA) {
+                    pPlayer.addMP(-16);
                 }
-                if (chr.getBuffSource(CharacterTemporaryStat.BMageAura) == BattleMage.WEAKENING_AURA) {
-                    chr.addMP(-26);
+                if (pPlayer.getBuffSource(CharacterTemporaryStat.BMageAura) == BattleMage.WEAKENING_AURA) {
+                    pPlayer.addMP(-26);
                 }
             }
 
             // Mihile
-            if (chr.getBuffSource(CharacterTemporaryStat.MichaelSoulLink) == Mihile.SOUL_LINK) {
-                chr.addMP(-12);
+            if (pPlayer.getBuffSource(CharacterTemporaryStat.MichaelSoulLink) == Mihile.SOUL_LINK) {
+                pPlayer.addMP(-12);
             }
         }
 
-        if (chr.getDiseaseSize() > 0) {
-            for (MapleDiseaseValueHolder m : chr.getAllDiseases()) {
-                if (m != null && m.startTime + m.length < now) {
-                    chr.dispelDebuff(m.disease);
+        if (pPlayer.getDiseaseSize() > 0) {
+            for (MapleDiseaseValueHolder m : pPlayer.getAllDiseases()) {
+                if (m != null && m.startTime + m.length < tNow) {
+                    pPlayer.dispelDebuff(m.disease);
                 }
             }
         }
-        if (numTimes % 7 == 0 && chr.getMount() != null && chr.getMount().canTire(now)) {
-            chr.getMount().increaseFatigue();
+        if (nNumTimes % 7 == 0 && pPlayer.getMount() != null && pPlayer.getMount().canTire(tNow)) {
+            pPlayer.getMount().increaseFatigue();
         }
-        if (numTimes % 13 == 0) { //we're parsing through the characters anyway (:
-            chr.doFamiliarSchedule(now);
-            for (MaplePet pet : chr.getSummonedPets()) {
+        if (nNumTimes % 13 == 0) { //we're parsing through the characters anyway (:
+            pPlayer.doFamiliarSchedule(tNow);
+            for (MaplePet pet : pPlayer.getSummonedPets()) {
                 if (pet.getItem().getItemId() == 5000054 && pet.getSecondsLeft() > 0) {
                     pet.setSecondsLeft(pet.getSecondsLeft() - 1);
                     if (pet.getSecondsLeft() <= 0) {
-                        chr.unequipPet(pet, true, true);
+                        pPlayer.unequipPet(pet, true, true);
                         return;
                     }
                 }
                 int newFullness = pet.getFullness() - PetDataFactory.getHunger(pet.getItem().getItemId());
                 if (newFullness <= 5) {
                     pet.setFullness(15);
-                    chr.unequipPet(pet, true, true);
+                    pPlayer.unequipPet(pet, true, true);
                 } else {
                     pet.setFullness(newFullness);
                     //chr.forceUpdateItem(pet);
-                    chr.getClient().write(PetPacket.updatePet(pet, chr.getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+                    pPlayer.getClient().write(PetPacket.updatePet(pet, pPlayer.getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
                 }
             }
         }
-        if (hurt && chr.isAlive()) {
-            if (chr.getInventory(MapleInventoryType.EQUIPPED).findById(chr.getMap().getSharedMapResources().protectItem) == null) {
-                int hpDec = chr.getMap().getSharedMapResources().decHP;
+        if (bHurt && pPlayer.isAlive()) {
+            if (pPlayer.getInventory(MapleInventoryType.EQUIPPED).findById(pPlayer.getMap().getSharedMapResources().protectItem) == null) {
+                int hpDec = pPlayer.getMap().getSharedMapResources().decHP;
 
-                if (chr.getMapId() == 749040100 && chr.getInventory(MapleInventoryType.CASH).findById(5451000) == null) { //minidungeon
-                    chr.addHP(-hpDec);
-                } else if (chr.getMapId() != 749040100) {
-                    chr.addHP(-(hpDec - (chr.getBuffedValue(CharacterTemporaryStat.Thaw) == null ? 0 : chr.getBuffedValue(CharacterTemporaryStat.Thaw))));
+                if (pPlayer.getMapId() == 749040100 && pPlayer.getInventory(MapleInventoryType.CASH).findById(5451000) == null) { //minidungeon
+                    pPlayer.addHP(-hpDec);
+                } else if (pPlayer.getMapId() != 749040100) {
+                    pPlayer.addHP(-(hpDec - (pPlayer.getBuffedValue(CharacterTemporaryStat.Thaw) == null ? 0 : pPlayer.getBuffedValue(CharacterTemporaryStat.Thaw))));
                 }
             }
         }

@@ -28,6 +28,7 @@ import client.inventory.ItemFlag;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
+import constants.InventoryConstants;
 import tools.SearchGenerator;
 import database.DatabaseConnection;
 import handling.world.HiredMerchantHandler;
@@ -1805,6 +1806,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public boolean isCash(final int itemId) {
         return MapleItemInformationProvider.getInstance().isCash(itemId);
+    }
+    
+    public boolean isEtc(final int itemId) {
+        return InventoryConstants.isEtc(itemId);
     }
 
     public int getTotalStat(final int itemId) {

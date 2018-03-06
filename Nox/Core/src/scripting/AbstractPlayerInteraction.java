@@ -996,7 +996,15 @@ public abstract class AbstractPlayerInteraction {
     *   @param (Map ID, Mob ID, X-Coordinate, Y-Coordinate).
     **/
     public void spawnMonsterInMap(final int nMapId, final int nMobId, int posX, int posY) {
-        c.getChannelServer().getMapFactory().getMap(nMapId).spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(nMobId), new Point(posX, posY));
+        MapleMonster pMob = MapleLifeFactory.getMonster(nMobId);
+        c.getChannelServer().getMapFactory().getMap(nMapId).spawnMonsterOnGroundBelow(pMob, new Point(posX, posY));
+    }
+    
+    public void spawnModifiedMonsterInMap(final int nMapId, final int nMobId, int posX, int posY, long nNewHp) {
+        MapleMonster pMob = MapleLifeFactory.getMonster(nMobId);
+        pMob.setHp(nNewHp);
+        pMob.getStats().setHp(nNewHp);
+        c.getChannelServer().getMapFactory().getMap(nMapId).spawnMonsterOnGroundBelow(pMob, new Point(posX, posY));
     }
 
     public final void dojo_getUp() {

@@ -402,16 +402,18 @@ public final class MapleMap {
                     continue;
                 }
                 if (de.itemId == 0) {
-                    int calcNxAmount = (int) ((Randomizer.nextInt(cashz) + cashz + cashModifier) * (chr.getStat().cashBuff / 100.0) * chr.getCashMod());
-
+                    
+                    // Handling NX Gain in MapleMonster instead.
+                    
+                    /*int calcNxAmount = (int) ((Randomizer.nextInt(cashz) + cashz + cashModifier) * (chr.getStat().cashBuff / 100.0) * chr.getCashMod());
                     // Paragon Level Bonus
                     if (ServerConstants.PARAGON_SYSTEM) {
                         if (chr.getReborns() >= 5) { // Paragon Level 5+
                             calcNxAmount *= 1.10; // +10% Increased NX Gain 
                         }
                     }
-
-                    chr.modifyCSPoints(2, calcNxAmount, true); // Global NX Drop
+                    chr.modifyCSPoints(2, calcNxAmount, true); // Global NX Drop*/
+                    
                 } else if (!gDropsDisabled) {
                     if (droptype == 3) {
                         pos.x = (mobpos + (d % 2 == 0 ? (40 * (d + 1) / 2) : -(40 * (d / 2))));

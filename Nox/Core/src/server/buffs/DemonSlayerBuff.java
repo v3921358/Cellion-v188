@@ -74,7 +74,7 @@ public class DemonSlayerBuff extends AbstractBuffClass {
                 eff.statups.put(CharacterTemporaryStat.PowerGuard, eff.info.get(MapleStatInfo.y));
                 break;
             case DemonSlayer.BOUNDLESS_RAGE:
-                eff.statups.put(CharacterTemporaryStat.InfinityForce, eff.info.get(MapleStatInfo.x));
+                eff.statups.put(CharacterTemporaryStat.InfinityForce, 1);
                 break;
             case DemonSlayer.BLACKHEARTED_STRENGTH:
                 eff.statups.put(CharacterTemporaryStat.AsrR, eff.info.get(MapleStatInfo.y));

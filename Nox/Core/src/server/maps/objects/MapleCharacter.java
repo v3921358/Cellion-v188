@@ -5084,6 +5084,14 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             } else {
                 // if it is not an extended SP job, we would want to give only during advancement...
             }
+            
+            if(GameConstants.isDualBlade(job)) {
+                if (level < 100) {
+                    gainSP(5, GameConstants.getSkillBook(job, 0));
+                } else if (level == 100) {
+                    gainSP(255, GameConstants.getSkillBook(job, 0));
+                }
+            }
         }
 
         // Hyper SP
@@ -5137,10 +5145,11 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             givePinnacleGear();
         }
         
-        // Hyper Skill Max
-        if (level == 200) {
+        // Hyper Skill Distribution
+        hyperSkillRequest();
+        /*if (level == 200) {
             giveHyperSkills();
-        }
+        }*/
 
         statup.put(MapleStat.AVAILABLEAP, (long) remainingAp);
         statup.put(MapleStat.AVAILABLESP, (long) remainingSp[GameConstants.getSkillBook(job, level)]);
@@ -5176,6 +5185,29 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         checkCustomReward(level);
     }
 
+    /*
+     *  Hyper Skill Distribution Hander
+     *  @author Mazen
+     *  @author Arca
+     *
+     *  @purpose Gives the player hyper skills if they have reached the required levels for each skill.
+     */
+    public void hyperSkillRequest() {
+        
+        HashMap<Skill, SkillEntry> skillMap = new HashMap<>();
+        for (Skill selectSkill : SkillFactory.getAllSkills()) {
+            if (GameConstants.isApplicableSkill(selectSkill.getId()) && selectSkill.canBeLearnedBy(getJob()) && !selectSkill.isInvisible()) {
+                
+                boolean bReqLevel = level >= GameConstants.getHyperSkillRequiredLevel(selectSkill.getId()) && GameConstants.getHyperSkillRequiredLevel(selectSkill.getId()) != 0;
+        
+                if (selectSkill.isHyper() && bReqLevel) {
+                    skillMap.put(selectSkill, new SkillEntry((byte) selectSkill.getMaxLevel(), (byte) selectSkill.getMaxLevel(), SkillFactory.getDefaultSExpiry(selectSkill)));
+                }
+            }
+        }
+        changeSkillsLevel(skillMap);
+    }
+    
     public void giveHyperSkills() {
         HashMap<Skill, SkillEntry> skillMap = new HashMap<>();
         for (Skill selectSkill : SkillFactory.getAllSkills()) {
@@ -5186,6 +5218,64 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             }
         }
         changeSkillsLevel(skillMap);
+    }
+    
+    /*
+     *  Mastery Book Handling
+     *  @author Mazen Massoud
+     * 
+     *  @purpose Provide a list of all skills currently available for the use of a Mastery Book to increase Skill Master Level.
+     *  @param bLv30Book - If true, provides the skills available for the Lv. 30 Mastery Books. Otherwise defaults to the Lv. 20 Mastery Books.
+     **/
+    public List<Integer> masteryBookRequest(boolean bLv30Book) {
+        final List<Integer> nSkill = new ArrayList<>();
+        for (Skill selectSkill : SkillFactory.getAllSkills()) {
+            if (GameConstants.isApplicableSkill(selectSkill.getId()) && selectSkill.canBeLearnedBy(getJob()) && !selectSkill.isInvisible()) {
+                
+                if (bLv30Book) {
+                    boolean bMasteryBookResult = (getSkillLevel(selectSkill) < 30) 
+                            && (getSkillLevel(selectSkill) >= 15) 
+                            && (selectSkill.getMasterLevel() < 30) 
+                            && ((selectSkill.getMasterLevel() < selectSkill.getTrueMax()))
+                            && ((selectSkill.getMasterLevel() + 10 <= selectSkill.getTrueMax()))
+                            && ((selectSkill.getMasterLevel() > 0));
+                    
+                    if (bMasteryBookResult) {
+                        nSkill.add(selectSkill.getId());
+                    }
+                } else {
+                    boolean bMasteryBookResult = (getSkillLevel(selectSkill) < 20) 
+                            && (getSkillLevel(selectSkill) >= 10)
+                            && (selectSkill.getMasterLevel() < 20) 
+                            && ((selectSkill.getMasterLevel() < selectSkill.getTrueMax()))
+                            && ((selectSkill.getMasterLevel() + 10 <= selectSkill.getTrueMax()))
+                            && ((selectSkill.getMasterLevel() > 0));
+                    
+                    if (bMasteryBookResult) {
+                        nSkill.add(selectSkill.getId());
+                    }
+                }
+            }
+        }
+        return nSkill;
+    }
+    
+    /*
+     *  Mastery Book Handling: Skill Mastery Level
+     *  @purpose Change the player's skill mastery level and display an effect.
+     **/
+    public void setSkillMasterLevel(int nSkill, int nMasterLevel) {
+        Skill pSkill = SkillFactory.getSkill(nSkill);
+        if (pSkill == null) {
+            return;
+        }
+        write(CWvsContext.useSkillBook(this, nSkill, nMasterLevel, true, true));
+        changeSingleSkillLevel(pSkill, getSkillLevel(pSkill), (byte) (int) nMasterLevel);
+        pSkill.setMasterLevel(nMasterLevel);
+        
+        if (isDeveloper()) {
+            dropMessage(5, "[Mastery Book Debug] Current Master Level (" + pSkill.getMasterLevel() + ") / Maximum Level (" + pSkill.getTrueMax() + ")");
+        }
     }
     
     public void JobAdvanceSp(int i) {
@@ -6310,8 +6400,10 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
          * if (summonedFamiliar != null) {
          * client.write(CField.removeFamiliar(this.getId())); }
          */
-        XenonSupplyTask.cancel(true);
-        XenonSupplyTask = null;
+        if (GameConstants.isXenon(job)) {
+            XenonSupplyTask.cancel(true);
+            XenonSupplyTask = null;
+        }
     }
 
     @Override

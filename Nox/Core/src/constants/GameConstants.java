@@ -64,7 +64,7 @@ public class GameConstants {
     }
     
     // Cash Weapon Item IDs, used for addCharLook packet. Hack fix for now. -Mazen
-    public static final int aCashWeapons[] = {1702395, 1702399, 1702457, 1702467, 1702436, 1702480, 1702565, 1702613, 1702586, 1702624, 1702653, 1702224, 1702235, 1702374, 1702409, 1702556, 1702585, 1702526, 1702710};
+    public static final int aCashWeapons[] = {1702696, 1702716, 1702709, 1702701, 1702475, 1702469, 1702375, 1702687, 1702680, 1702682, 1702649, 1702651, 1702645, 1702643, 1702632, 1702634, 1702395, 1702399, 1702457, 1702467, 1702436, 1702480, 1702565, 1702613, 1702586, 1702624, 1702653, 1702224, 1702235, 1702374, 1702409, 1702556, 1702585, 1702526, 1702710};
     
     /*public static boolean requiresEquipHotfix (int nItem) {
         switch (nItem) {
@@ -912,10 +912,10 @@ public class GameConstants {
             //case 3121013:
             //case Ranger.ARROW_BLASTER:
             //    return 3120019;
-            /*case 24120043: // Tempest - Reinforce
+            case 24120043: // Tempest - Reinforce
             case 24120044: // Tempest - Cooldown Cutter
             case 24120045: // Tempest - Extra Target
-                return 24121005; // Tempest*/
+                return 24121005; // Tempest
             case 14120048: // Dark Omen - Reinforce
             case 14120047: // Dark Omen - Spread
             case 14120046: // Dark Omen - Cooldown Cutter
@@ -4673,8 +4673,21 @@ public class GameConstants {
 
     public static boolean isMismatchingBulletSkill(final int nSkillId) { // Just anti-cheat exceptions.
         switch (nSkillId) {
+            case 21120025: // Aran Skill
+            case Aran.AERO_SWING_1:
+            case ILArchmage.FROZEN_ORB:
+            case BladeMaster.BLADE_FURY:
+            case BladeLord.BLOODY_STORM:
+            case WindArcher.SPIRALING_VORTEX:
+            case Bowmaster.ARROW_STREAM:
+            case Buccaneer.BUCCANEER_BLAST:
+            case DawnWarrior.SOLAR_PIERCE:
+            case Shadower.BOOMERANG_STAB:
             case Xenon.BEAM_DANCE:
+            case ThunderBreaker.THUNDERBOLT:
             case Phantom.TEMPEST:
+            case Phantom.MILLE_AIGUILLES:
+            case Phantom.MILLE_AIGUILLES_EXTRA_TARGET:
             case ILArchmage.CHAIN_LIGHTNING:
             case Paladin.ADVANCED_CHARGE:
             case Evan.WIND_FLASH:
@@ -5588,5 +5601,1581 @@ public class GameConstants {
 
     public static boolean IsSpiritOfElluel(int nSkillID) {
         return nSkillID >= 400031007 && nSkillID <= 400031009;
+    }
+    
+    
+    /*
+     *  Hyper Skill Required Level Provider
+     *  @purpose Return the required level for a specific hyper skill.
+     */
+    public static int getHyperSkillRequiredLevel(int nSkillID) {
+        switch(nSkillID) {
+        //Hero 112
+            //Advanced Combo Attack - Reinforce
+            case 1120043:
+                    return 183;
+            //Advanced Combo Attack - Opportunity
+            case 1120044:
+                    return 162;
+            //Advanced Combo Attack - Boss Rush
+            case 1120045:
+                    return 143;
+            //Advanced Final Attack - Reinforce
+            case 1120046:
+                    return 168;
+            //Advanced Final Attack - Ferocity
+            case 1120047:
+                    return 189;
+            //Advanced Final Attack - Opportunity
+            case 1120048:
+                    return 149;
+            //Raging Blow - Reinforce
+            case 1120049:
+                    return 195;
+            //Raging Blow - Spread
+            case 1120050:
+                    return 177;
+            //Raging Blow - Extra Strike
+            case 1120051:
+                    return 155;
+
+            //Rising Rage
+            case 1121052:
+                    return 170;
+            //Epic Adventure
+            case 1121053:
+                    return 200;
+            //Cry Valhalla
+            case 1121054:
+                    return 150;
+
+    //Paladin 122
+            //Threaten - Persist
+            case 1220043:
+                    return 183;
+            //Threaten - Opportunity
+            case 1220044:
+                    return 162;
+            //Threaten - Enhance
+            case 1220045:
+                    return 143;
+            //Blast - Reinforce
+            case 1220046:
+                    return 168;
+            //Blast - Critical Chance
+            case 1220047:
+                    return 189;
+            //Blast - Extra Strike
+            case 1220048:
+                    return 149;
+            //Heaven's Hammer - Reinforce
+            case 1220049:
+                    return 195;
+            //Heaven's Hammer - Extra Strike
+            case 1220050:
+                    return 177;
+            //Heaven's Hammer - Cooldown Cutter
+            case 1220051:
+                    return 155;
+
+            //Smite Shield
+            case 1221052:
+                    return 170;
+            //Epic Adventure
+            case 1221053:
+                    return 200;
+            //Sacrosanctity
+            case 1221054:
+                    return 150;
+
+    //Dark Knight 132
+            //Evil Eye - Reinforce
+            case 1320043:
+                    return 183;
+            //Evil Eye - Hex Reinforce
+            case 1320044:
+                    return 162;
+            //Evil Eye - Aura Reinforce
+            case 1320045:
+                    return 143;
+            //Final Pact - Damage
+            case 1320046:
+                    return 168;
+            //Final Pact - Reduce Target
+            case 1320047:
+                    return 189;
+            //Final Pact - Critical Chance
+            case 1320048:
+                    return 149;
+            //Gungnir's Descent - Reinforce
+            case 1320049:
+                    return 195;
+            //Gungnir's Descent - Guardbreak
+            case 1320050:
+                    return 177;
+            //Gungnir's Descent - Boss Rush
+            case 1320051:
+                    return 155;
+
+            //Nightshade Explosion
+            case 1321052:
+                    return 170;
+            //Epic Adventure
+            case 1321053:
+                    return 200;
+            //Dark Thrist
+            case 1321054:
+                    return 150;
+
+    //Arch Mage(Fire,Poison) 212
+            //Advanced Poison Mist - Reinforce
+            case 2120043:
+                    return 183;
+            //Advanced Poison Mist - Aftermath
+            case 2120044:
+                    return 162;
+            //Advanced Poison Mist - Cripple
+            case 2120045:
+                    return 143;
+            //Paralyze - Reinforce
+            case 2120046:
+                    return 168;
+            //Paralyze - Cripple
+            case 2120047:
+                    return 189;
+            //Paralyze - Extra Strike
+            case 2120048:
+                    return 149;
+            //Mist Eruption - Reinforce
+            case 2120049:
+                    return 195;
+            //Mist Eruption - Guardbreak
+            case 2120050:
+                    return 177;
+            //Mist Eruption - Cooldown Cutter
+            case 2120051:
+                    return 155;
+
+            //Megiddo Flame
+            case 2121052:
+                    return 170;
+            //Epic Adventure
+            case 2121053:
+                    return 200;
+            //Inferno Aura
+            case 2121054:
+                    return 150;
+
+    //Arch Mage(Ice,Lightning) 222
+            //Teleport Mastery - Reinforce
+            case 2220043:
+                    return 183;
+            //Teleport Mastery - Spread
+            case 2220044:
+                    return 162;
+            //Teleport Mastery - Range
+            case 2220045:
+                    return 183;
+            //Chain Lightning - Reinforce
+            case 2220046:
+                    return 168;
+            //Chain Lightning - Spread
+            case 2220047:
+                    return 189;
+            //Chain Lightning - Critical Chance
+            case 2220048:
+                    return 149;
+            //Frozen Orb - Reinforce
+            case 2220049:
+                    return 195;
+            //Frozen Orb - Spread
+            case 2220050:
+                    return 177;
+            //Frozen Orb - Critical Chance
+            case 2220051:
+                    return 155;
+
+            //Lightning Orb
+            case 2221052:
+                    return 170;
+            //Epic Adventure
+            case 2221053:
+                    return 200;
+            //Absolute Zero Aura
+            case 2221054:
+                    return 150;
+
+    //Bishop 232
+            //Holy Magic Shell - Extra Guard
+            case 2320043:
+                    return 183;
+            //Holy Magic Shell - Persist
+            case 2320044:
+                    return 162;
+            //Holy Magic Shell - Cooldown Cutter
+            case 2320045:
+                    return 143;
+            //Holy Symbol - Experience
+            case 2320046:
+                    return 168;
+            //Holy Symbol - Persist
+            case 2320047:
+                    return 189;
+            //Holy Symbol - Item Drop
+            case 2320048:
+                    return 149;
+            //Advanced Blessing - Ferocity
+            case 2320049:
+                    return 195;
+            //Advanced Blessing - Boss Rush
+            case 2320050:
+                    return 177;
+            //Advanced Blessing - Extra Point
+            case 2320051:
+                    return 155;
+
+            //Heaven's Door
+            case 2321052:
+                    return 170;
+            //Epic Adventure
+            case 2321053:
+                    return 200;
+            //Righteous Indignant
+            case 2321054:
+                    return 150;
+
+    //Bowmaster 312
+            //Sharp Eyes - Persist
+            case 3120043:
+                    return 183;
+            //Sharp Eyes - Guardbreak
+            case 3120044:
+                    return 162;
+            //Sharp Eyes - Critical Chance
+            case 3120045:
+                    return 143;
+            //Arrow Stream - Reinforce
+            case 3120046:
+                    return 168;
+            //Arrow Stream - Spread
+            case 3120047:
+                    return 189;
+            //Arrow Stream - Extra Strike
+            case 3120048:
+                    return 149;
+            //Hurricane - Reinforce
+            case 3120049:
+                    return 155;
+            //Hurricane - Boss Rush
+            case 3120050:
+                    return 177;
+            //Hurricane - Split Attack
+            case 3120051:
+                    return 195;
+
+            //Gritty Gust
+            case 3121052:
+                    return 170;
+            //Epic Adventure
+            case 3121053:
+                    return 200;
+            //Concentration
+            case 3121054:
+                    return 150;
+
+    //Marksman 322
+            //Sharp Eyes - Persist
+            case 3220043:
+                    return 183;
+            //Sharp Eyes - Guardbreak
+            case 3220044:
+                    return 162;
+            //Sharp Eyes - Critical Chance
+            case 3220045:
+                    return 143;
+            //Piercing Arrow - Reinforce
+            case 3220046:
+                    return 168;
+            //Piercing Arrow - Spread
+            case 3220047:
+                    return 189;
+            //Piercing Arrow - Extra Strike
+            case 3220048:
+                    return 149;
+            //Snipe - Reinforce
+            case 3220049:
+                    return 195;
+            //Snipe - Boss Rush
+            case 3220050:
+                    return 195;
+            //Snipe - Cooldown Cutter
+            case 3220051:
+                    return 143;
+
+            //High Speed Shot
+            case 3221052:
+                    return 170;
+            //Epic Adventure
+            case 3221053:
+                    return 200;
+            //Bullseye Shot
+            case 3221054:
+                    return 150;
+
+    //Night Lord 412
+            //Showdown - Reinforce
+            case 4120043:
+                    return 183;
+            //Showdown - Spread
+            case 4120044:
+                    return 162;
+            //Showdown - Enhance
+            case 4120045:
+                    return 143;
+            //Frailty Curse - Enhance
+            case 4120046:
+                    return 168;
+            //Frailty Curse - Slow
+            case 4120047:
+                    return 189;
+            //Frailty Curse - Boss Rush
+            case 4120048:
+                    return 149;
+            //Quad Star - Reinforce
+            case 4120049:
+                    return 195;
+            //Quad Star - Boss Rush
+            case 4120050:
+                    return 177;
+            //Quad Star - Extra Strike
+            case 4120051:
+                    return 155;
+
+            //Death Star
+            case 4121052:
+                    return 170;
+            //Epic Adventure
+            case 4121053:
+                    return 200;
+            //Bleed Dart
+            case 4121054:
+                    return 150;
+
+    //Shadower 422
+            //Meso Explosion - Reinforce
+            case 4220043:
+                    return 183;
+            //Meso Explosion - Guardbreak
+            case 4220044:
+                    return 162;
+            //Meso Explosion - Enhance
+            case 4220045:
+                    return 143;
+            //Boomerang Stab - Reinforce
+            case 4220046:
+                    return 168;
+            //Boomerang Stab - Spread
+            case 4220047:
+                    return 189;
+            //Boomerang Stab - Extra Strike
+            case 4220048:
+                    return 149;
+            //Assassinate - Reinforce
+            case 4220049:
+                    return 155;
+            //Assassinate - Boss Rush
+            case 4220050:
+                    return 177;
+            //Assassinate - Guardbreak
+            case 4220051:
+                    return 195;
+
+            //Shadow Veil
+            case 4221052:
+                    return 170;
+            //Epic Adventure
+            case 4221053:
+                    return 200;
+            //Flip of the Coin
+            case 4221054:
+                    return 150;
+
+    //Blade Specialist 432
+            //Bloody Storm - Reinforce
+            case 434043:
+                    return 143;
+            //Bloody Storm - Spread
+            case 4340044:
+                    return 162;
+            //Bloody Storm - Extra Strike
+            case 4340045:
+                    return 183;
+            //Phantom Blow - Reinforce
+            case 4340046:
+                    return 148;
+            //Phantom Blow - Guardbreak
+            case 4340047:
+                    return 168;
+            //Phantom Blow - Extra Strike
+            case 4340048:
+                    return 189;
+            //Blade Fury - Reinforce
+            case 4340055:
+                    return 155;
+            //Blade Fury - Guardbreak
+            case 4340056:
+                    return 177;
+            //Blade Fury - Spread
+            case 4340057:
+                    return 195;
+
+            //Asura's Anger
+            case 4341052:
+                    return 170;
+            //Epic Adventure
+            case 4341053:
+                    return 200;
+            //Blade Clone
+            case 4341054:
+                    return 150;
+
+    //Buccaneer 512
+            //Double Down - Saving Grace
+            case 5120043:
+                    return 183;
+            //Double Down - Addition
+            case 5120044:
+                    return 162;
+            //Double Down - Enhance
+            case 5120045:
+                    return 143;
+            //Octopunch - Reinforce
+            case 5120046:
+                    return 168;
+            //Octopunch - Boss Rush
+            case 5120047:
+                    return 189;
+            //Octopunch - Extra Strike
+            case 5120048:
+                    return 149;
+            //Buccaneer Blast - Reinforce
+            case 5120049:
+                    return 195;
+            //Buccaneer Blast - Spread
+            case 5120050:
+                    return 177;
+            //Buccaneer Blast - Extra Strike
+            case 5120051:
+                    return 155;
+
+            //Power Unity
+            case 5121052:
+                    return 170;
+            //Epic Adventure
+            case 5121053:
+                    return 200;
+            //Stimulating Conversation
+            case 5121054:
+                    return 150;
+
+    //Corsair 522
+            //Double Down - Saving Grace
+            case 5220043:
+                    return 183;
+            //Double Down - Addition
+            case 5220044:
+                    return 162;
+            //Double Down - Enhance
+            case 5220045:
+                    return 143;
+            //Brain Scrambler - Reinforce
+            case 5220046:
+                    return 168;
+            //Brain Scrambler - Extra Strike
+            case 5220047:
+                    return 189;
+            //Brain Scrambler - Boss Rush
+            case 5220048:
+                    return 149;
+            //Rapid Fire - Reinforce
+            case 5220049:
+                    return 195;
+            //Rapid Fire - Add Range
+            case 5220050:
+                    return 177;
+            //Rapid Fire - Boss Rush
+            case 5220051:
+                    return 155;
+
+            //Ugly bomb
+            case 5221052:
+                    return 170;
+            //Epic Adventure
+            case 5221053:
+                    return 200;
+            //Whaler's Potion
+            case 5221054:
+                    return 150;
+
+    //Cannon Master 532
+            //Monkey Militia - Splitter
+            case 5320043:
+                    return 183;
+            //Monkey Militia - Persist
+            case 5320044:
+                    return 162;
+            //Monkey Militia - Enhance
+            case 5320045:
+                    return 143;
+            //Cannon Bazooka - Reinforce
+            case 5320046:
+                    return 149;
+            //Cannon Bazooka - Spread
+            case 5320047:
+                    return 168;
+            //Cannon Bazooka - Extra Strike
+            case 5320048:
+                    return 189;
+            //Cannon Barrage - Reinforce
+            case 5320049:
+                    return 155;
+            //Cannon Barrage - Critical Chance
+            case 5320050:
+                    return 177;
+            //Cannon Barrage - Extra Strike
+            case 5320051:
+                    return 195;
+
+            //Rolling Rainbow
+            case 5321052:
+                    return 170;
+            //Epic Adventure
+            case 5321053:
+                    return 200;
+            //Buckshot
+            case 5321054:
+                    return 150;
+
+    //Jett 572
+            //Backup Beatdown - Reinforce
+            case 5720043:
+                    return 183;
+            //Backup Beatdown - Spread
+            case 5720044:
+                    return 162;
+            //Backup Beatdown - Extra Strike
+            case 5720045:
+                    return 143;
+            //Planet Buster - Critical Chance
+            case 5720046:
+                    return 168;
+            //Planet Buster - Guardbreak
+            case 5720047:
+                    return 189;
+            //Planet Buster - Extra Strike
+            case 5720048:
+                    return 149;
+            //Starforce Salvo - Reinforce
+            case 5720049:
+                    return 195;
+            //Starforce Salvo - Range
+            case 5720050:
+                    return 177;
+            //Starforce Salvo - Boss Rush
+            case 5720051:
+                    return 155;
+
+            //Singularity Shock
+            case 5721052:
+                    return 170;
+            //Epic Adventure
+            case 5721053:
+                    return 200;
+            //Bionic Maximizer
+            case 5721054:
+                    return 150;
+
+    //Dawn Warrior 1112
+            //True Sight - Persist
+            case 11120043:
+                    return 143;
+            //True Sight - Enhance
+            case 11120044:
+                    return 162;
+            //True Sight - Guardbreak
+            case 11120045:
+                    return 183;
+            //Divide and Pierce - Reinforce
+            case 11120046:
+                    return 149;
+            //Divide and Pierce - Spread
+            case 11120047:
+                    return 1628;
+            //Divide and Pierce - Extra Strike
+            case 11120048:
+                    return 189;
+            //Careening Dance - Reinforce
+            case 11120049:
+                    return 155;
+            //Careening Dance - Guardbreak
+            case 11120050:
+                    return 177;
+            //Careening Dance - Boss Rush
+            case 11120051:
+                    return 195;
+
+            //Styx Crossing
+            case 11121052:
+                    return 170;
+            //Glory of the Guardians
+            case 11121053:
+                    return 200;
+            //Soul Forge
+            case 11121054:
+                    return 150;
+
+    //Blaze Wizard 1212
+            //Orbital Flame - Range
+            case 12120043:
+                    return 143;
+            //Orbital Flame - Guardbreak
+            case 12120044:
+                    return 162;
+            //Orbital Flame - Split Attack
+            case 12120045:
+                    return 183;
+            //Blazing Extinction - Add Attack
+            case 12120046:
+                    return 149;
+            //Blazing Extinction - Reinforce
+            case 12120047:
+                    return 168;
+            //Blazing Extinction - Spread
+            case 12120048:
+                    return 189;
+            //Ignition - Max Ignition
+            case 12120049:
+                    return 155;
+            //Ignition - Reinforce
+            case 12120050:
+                    return 177;
+            //Ignition - Max Explosion
+            case 12120051:
+                    return 195;
+
+            //Cataclysm
+            case 12121052:
+                    return 170;
+            //Glory of the Guardians
+            case 12121053:
+                    return 200;
+            //Dragon Blaze
+            case 12121054:
+                    return 150;
+
+    //Wind Archer 1312
+            //Trifling Wind - Reinforce
+            case 13120043:
+                    return 143;
+            //Trifling Wind - Enhance
+            case 13120044:
+                    return 162;
+            //Trifling Wind - Double Chance
+            case 13120045:
+                    return 183;
+            //Spiraling Vortex - Reinforce
+            case 13120046:
+                    return 149;
+            //Spiraling Vortex - Spread
+            case 13120047:
+                    return 168;
+            //Spiraling Vortex - Extra Strike
+            case 13120048:
+                    return 189;
+            //Song of Heaven - Reinforce
+            case 13120049:
+                    return 155;
+            //Song of Heaven - Guardbreak
+            case 13120050:
+                    return 177;
+            //Song of Heaven - Boss Rush
+            case 13120051:
+                    return 195;
+
+            //Monsoon
+            case 13121052:
+                    return 170;
+            //Glory of the Guardians
+            case 13121053:
+                    return 200;
+            //Storm Bringer
+            case 13121054:
+                    return 150;
+
+    //Night Watcher 1412
+            //Quintuple Star - Reinforce
+            case 14120043:
+                    return 143;
+            //Quintuple Star - Boss Rush
+            case 14120044:
+                    return 162;
+            //Quintuple Star - Critical Chance
+            case 14120045:
+                    return 183;
+            //Dark Omen - Cooldown Cutter
+            case 14120046:
+                    return 149;
+            //Dark Omen - Spread
+            case 14120047:
+                    return 168;
+            //Dark Omen - Reinforce
+            case 14120048:
+                    return 189;
+            //Vitality Siphon - Extra Point
+            case 14120049:
+                    return 155;
+            //Vitality Siphon - Steel Skin
+            case 14120050:
+                    return 177;
+            //Vitality Siphon - Preparation
+            case 14120051:
+                    return 195;
+
+            //Dominion
+            case 14121052:
+                    return 170;
+            //Glory of the Guardians
+            case 14121053:
+                    return 200;
+            //Shadow Illusion
+            case 14121054:
+                    return 150;
+
+    //Thunder Breaker 1512
+            //Gale - Reinforce
+            case 15120043:
+                    return 143;
+            //Gale - Spread
+            case 15120044:
+                    return 162;
+            //Gale - Extra Strike
+            case 15120045:
+                    return 183;
+            //Thunderbolt - Reinforce
+            case 15120046:
+                    return 149;
+            //Thunderbolt - Spread
+            case 15120047:
+                    return 168;
+            //Thunderbolt - Extra Strike
+            case 15120048:
+                    return 189;
+            //Annihilate - Reinforce
+            case 15120049:
+                    return 155;
+            //Annihilate - Guardbreak
+            case 15120050:
+                    return 177;
+            //Annihilate - Boss Rush
+            case 15120051:
+                    return 195;
+
+            //Deep Rising
+            case 15121052:
+                    return 170;
+            //Glory of the Guardians
+            case 15121053:
+                    return 200;
+            //Primal Bolt
+            case 15121054:
+                    return 150;
+
+    //Aran 2112
+            //Heavy Swing
+            case 21120059:
+                    return 143;
+            //Frenzied Swing
+            case 21120060:
+                    return 162;
+            //Rebounding Swing
+            case 21120061:
+                    return 183;
+            //Storming Terror
+            case 21120062:
+                    return 149;
+            //Merciless Hunt
+            case 21120063:
+                    return 168;
+            //Surging Adrenaline
+            case 21120064:
+                    return 189;
+            //Beyond-er Blade
+            case 21120065:
+                    return 155;
+            //Beyond Blade Barrage
+            case 21120066:
+                    return 177;
+            //Piercing Beyond Blade
+            case 21120067:
+                    return 195;
+
+            //Maha's Domain
+            case 21121057:
+                    return 170;
+            //Heroic Memories
+            case 21121053:
+                    return 200;
+            //Adrenaline Burst
+            case 21121058:
+                    return 150;
+
+    //Evan 2217
+            //Speedy Dragon Flash
+            case 22170084:
+                    return 143;
+            //Howling Wind
+            case 22170085:
+                    return 162;
+            //Rolling Thunder
+            case 22170086:
+                    return 183;
+            //Speedy Dragon Dive
+            case 22170087:
+                    return 149;
+            //Thunder Overload
+            case 22170088:
+                    return 168;
+            //Earth-shattering Dive
+            case 22170089:
+                    return 189;
+            //Speedy Dragon Breath
+            case 22170090:
+                    return 155;
+            //Lungs of Stone
+            case 22170091:
+                    return 177;
+            //Wind Breath - Opportunity
+            case 22170092:
+                    return 195;
+
+            //Dragon Master
+            case 22171080:
+                    return 170;
+            //Heroic Memories
+            case 22171082:
+                    return 200;
+            //Summon Onyx Dragon
+            case 22171081:
+                    return 150;
+
+    //Mercedes 2312
+            //Ishtar's Ring - Reinforce
+            case 23120043:
+                    return 143;
+            //Ishtar's Ring - Guardbreak
+            case 23120044:
+                    return 162;
+            //Ishtar's Ring - Boss Rush
+            case 23120045:
+                    return 183;
+            //Water Shield - Reinforce
+            case 23120046:
+                    return 149;
+            //Water Shield - True Immunity 1
+            case 23120047:
+                    return 168;
+            //Water Shield - True Immunity 2
+            case 23120048:
+                    return 189;
+            //Spikes Royale - Reinforce
+            case 23120049:
+                    return 155;
+            //Spikes Royale - Armorbreak
+            case 23120050:
+                    return 177;
+            //Spikes Royale - Temper Link
+            case 23120051:
+                    return 195;
+
+            //Wrath of Enlil
+            case 23121052:
+                    return 170;
+            //Heroic Memories
+            case 23121053:
+                    return 200;
+            //Elvish Blessing
+            case 23121054:
+                    return 150;
+
+    //Phantom 2412
+            //Tempest - Reinforce
+            case 24120043:
+                    return 183;
+            //Tempest - Cooldown Cutter
+            case 24120044:
+                    return 143;
+            //Tempest - Extra Target
+            case 24120045:
+                    return 162;
+            //Mille Aiguilles - Reinforce
+            case 24120046:
+                    return 189;
+            //Mille Aiguilles - Extra Target
+            case 24120047:
+                    return 149;
+            //Mille Aiguilles - Guardbreak
+            case 24120048:
+                    return 168;
+            //Bad Luck Ward - Immunity Enhance
+            case 24120049:
+                    return 155;
+            //Bad Luck Ward - Hyper Health
+            case 24120050:
+                    return 177;
+            //Bad Luck Ward - Hyper Mana
+            case 24120051:
+                    return 195;
+
+            //Carte Rose Finale
+            case 24121052:
+                    return 170;
+            //Heroic Memories
+            case 24121053:
+                    return 200;
+            //Impeccable Memory H
+            case 24121054:
+                    return 150;
+
+    //Shade 2512
+            //Spirit Claw - Reinforce
+            case 25120146:
+                    return 183;
+            //Spirit Claw - Boss Rush
+            case 25120147:
+                    return 143;
+            //Spirit Claw - Extra Strike
+            case 25120148:
+                    return 162;
+            //Bomb Punch - Reinforce
+            case 25120149:
+                    return 189;
+            //Bomb Punch - Spread
+            case 25120150:
+                    return 149;
+            //Bomb Punch - Critical Chance
+            case 25120151:
+                    return 168;
+            //Fire Fox Spirits - Reinforce
+            case 25120152:
+                    return 155;
+            //Fire Fox Spirits - Repeated Attack bonus
+            case 25120153:
+                    return 177;
+            //Fire Fox Spirits - Summon Chance
+            case 25120154:
+                    return 195;
+
+            //Spirit Incarnation
+            case 25121030:
+                    return 170;
+            //Heroic Memories
+            case 25121032:
+                    return 200;
+            //Spirit Bond Max
+            case 25121031:
+                    return 150;
+
+    //Luminous 2712
+            //Reflection - Range
+            case 27120043:
+                    return 183;
+            //Reflection - Spread
+            case 27120044:
+                    return 162;
+            //Reflection - Range up
+            case 27120045:
+                    return 143;
+            //Apocalypse - Reinforce
+            case 27120046:
+                    return 189;
+            //Apocalypse - Recharge
+            case 27120047:
+                    return 149;
+            //Apocalypse - Extra Target
+            case 27120048:
+                    return 168;
+            //Ender - Reinforce
+            case 27120049:
+                    return 195;
+            //Ender - Extra Target
+            case 27120050:
+                    return 177;
+            //Ender - Range Up
+            case 27120051:
+                    return 155;
+
+            //Armageddon
+            case 27121052:
+                    return 170;
+            //Heroic Memories
+            case 27121053:
+                    return 200;
+            //Equalize
+            case 27121054:
+                    return 150;
+
+    //Demon Slayer 3112
+            //Demon Lash - Fury
+            case 31120043:
+                    return 143;
+            //Demon Lash - Reinforce
+            case 31120044:
+                    return 149;
+            //Demon Lash - Reinforce Duration
+            case 31120045:
+                    return 183;
+            //Dark Metamorphosis - Enhance
+            case 31120046:
+                    return 168;
+            //Dark Metamorphosis - Reinforce
+            case 31120047:
+                    return 189;
+            //Dark Metamorphosis - Reduce Fury
+            case 31120048:
+                    return 149;
+            //Demon Impact - Reinforce
+            case 31120049:
+                    return 195;
+            //Demon Impact - Extra Strike
+            case 31120050:
+                    return 177;
+            //Demon Impact - Reduce Fury
+            case 31120051:
+                    return 155;
+
+            //Cerberus Chomp
+            case 31121052:
+                    return 170;
+            //Demonic Fortitude
+            case 31121053:
+                    return 200;
+            //Blue Blood
+            case 31121054:
+                    return 150;
+
+    //Demon Avenger 3122
+            //Exceed - Reinforce
+            case 31220043:
+                    return 143;
+            //Exceed - Reduce Overload
+            case 31220044:
+                    return 162;
+            //Exceed - Opportunity
+            case 31220045:
+                    return 183;
+            //Ward Evil - Harden
+            case 31220046:
+                    return 149;
+            //Ward Evil - Immunity Enhance 1
+            case 31220047:
+                    return 168;
+            //Ward Evil - Immunity Enhance 2
+            case 31220048:
+                    return 189;
+            //Nether Shield - Reinforce
+            case 31220049:
+                    return 155;
+            //Nether Shield - Spread
+            case 31220050:
+                    return 177;
+            //Nether Shield - Range
+            case 31220051:
+                    return 195;
+
+            //Thousand Swords
+            case 31221052:
+                    return 170;
+            //Demonic Fortitude
+            case 31221053:
+                    return 200;
+            //Forbidden Contract
+            case 31221054:
+                    return 150;
+
+    //Battle Mage 3212
+            //Dark Genesis - Cooldown Cutter
+            case 32120057:
+                    return 143;
+            //Dark Genesis - Reinforce
+            case 32120058:
+                    return 162;
+            //Dark Genesis - Additional Reinforce
+            case 32120059:
+                    return 183;
+            //Dark Aura - Boss Rush
+            case 32120060:
+                    return 149;
+            //Weakening  Aura - Elemental Decrease
+            case 32120061:
+                    return 168;
+            //Blue Aura - Dispel Magic
+            case 32120062:
+                    return 189;
+            //Party Shield - Cooldown Cutter
+            case 32120063:
+                    return 155;
+            //Party Shield - Persist
+            case 32120064:
+                    return 177;
+            //Party Shield - Enhance
+            case 32120065:
+                    return 195;
+
+            //Sweeping Staff
+            case 32121052:
+                    return 170;
+            //For Liberty
+            case 32121053:
+                    return 200;
+            //Master of Death
+            case 32121056:
+                    return 150;
+
+    //Wild Hunter 3312
+            //Feline Berserk - Reinforce
+            case 33120043:
+                    return 143;
+            //Feline Berserk - Vitality
+            case 33120044:
+                    return 162;
+            //Feline Berserk - Rapid Attack
+            case 33120045:
+                    return 183;
+            //Summon Jaguar - Enhance
+            case 33120046:
+                    return 149;
+            //Summon Jaguar - Reinforce
+            case 33120047:
+                    return 168;
+            //Summon Jaguar - Cooldown Cutter
+            case 33120048:
+                    return 189;
+            //Wild Arrow Blast - Reinforce
+            case 33120049:
+                    return 155;
+            //Wild Arrow Blast - Guardbreak
+            case 33120050:
+                    return 177;
+            //Wild Arrow Blast - Boss Rush
+            case 33120051:
+                    return 195;
+
+            //Exploding Arrow
+            case 33121052:
+                    return 170;
+            //For Liberty
+            case 33121053:
+                    return 200;
+            //Silent Rampage
+            case 33121056:
+                    return 150;
+
+    //Mechanic 3512
+            //Rock 'n Shock - Reinforce
+            case 35120043:
+                    return 143;
+            //Rock 'n Shock - Persist
+            case 35120044:
+                    return 162;
+            //Rock 'n Shock - Cooldown Cutter
+            case 35120045:
+                    return 183;
+            //Support Unit: H-EX - Reinforce
+            case 35120046:
+                    return 149;
+            //Support Unit: H-EX - Party Reinforce
+            case 35120047:
+                    return 168;
+            //Support Unit: H-EX - Persist
+            case 35120048:
+                    return 189;
+            //Salvo - Reinforce
+            case 35120049:
+                    return 155;
+            //Heavy Salvo Plus - Spread
+            case 35120050:
+                    return 177;
+            //AP Salvo Plus - Extra Strike
+            case 35120051:
+                    return 195;
+
+            //Distortion Bomb
+            case 35121052:
+                    return 170;
+            //For Liberty
+            case 35121053:
+                    return 200;
+            //Full Spread
+            case 35121055:
+                    return 150;
+
+    //Xenon 3612
+            //Beam Dance - Blur
+            case 36120043:
+                    return 143;
+            //Beam Dance - Reinforce
+            case 36120044:
+                    return 162;
+            //Beam Dance - Spread
+            case 36120045:
+                    return 183;
+            //Mecha Purge - Reinforce
+            case 36120046:
+                    return 149;
+            //Mecha Purge - Guardbreak
+            case 36120047:
+                    return 168;
+            //Mecha Purge - Spread
+            case 36120048:
+                    return 189;
+            //Hypogram Field - Speed
+            case 36120049:
+                    return 155;
+            //Hypogram Field - Reinforce
+            case 36120050:
+                    return 177;
+            //Hypogram Field - Persist
+            case 36120051:
+                    return 195;
+
+            //Entangling Lash
+            case 36121053:
+                    return 170;
+            //Orbital Cataclysm
+            case 36121052:
+                    return 200;
+            //Amaranth Generator
+            case 36121054:
+                    return 150;
+
+    //Blaster 3712
+            //Power Punch
+            case 37120043:
+                    return 162;
+            //Piercing Punch
+            case 37120044:
+                    return 183;
+            //Aftershock Punch
+            case 37120045:
+                    return 143;
+            //Improved Bunker Explosion
+            case 37120046:
+                    return 149;
+            //Improved Bunker Shockwave
+            case 37120047:
+                    return 168;
+            //Bunker Explosion Guard Bonus
+            case 37120048:
+                    return 189;
+            //Blast Shield Recovery
+            case 37120049:
+                    return 155;
+            //Speedy Vitality Shield
+            case 37120050:
+                    return 177;
+            //Speedy Ballistic Hurricane
+            case 37120051:
+                    return 195;
+
+            //Hyper Magnum Punch
+            case 37121052:
+                    return 170;
+            //For Liberty
+            case 37121053:
+                    return 200;
+            //Cannon Overdrive
+            case 37121054:
+                    return 150;
+
+    //Hayato 4112
+            //Shinsoku - Reinforce
+            case 41120043:
+                    return 183;
+            //Shinsoku - Extra Strike
+            case 41120044:
+                    return 143;
+            //Shinsoku - Boss Rush
+            case 41120045:
+                    return 162;
+            //Sudden Strike - Reinforce
+            case 41120046:
+                    return 189;
+            //Sudden Strike - Spread
+            case 41120047:
+                    return 168;
+            //Sudden Strike - Extra Strike
+            case 41120048:
+                    return 149;
+            //Hitokiri Strike - Spread
+            case 41120049:
+                    return 195;
+            //Hitokiri Strike - Extra Strike
+            case 41120050:
+                    return 155;
+            //Hitokiri Strike - Cooldown Cutter
+            case 41120051:
+                    return 177;
+
+            //Falcon's Honor
+            case 41121052:
+                    return 170;
+            //Princess's Vow
+            case 41121053:
+                    return 200;
+            //God of Blades
+            case 41121054:
+                    return 150;
+
+    //Kanna 4212
+            //Vanquisher's Charm - Reinforce
+            case 42120043:
+                    return 183;
+            //Vanquisher's Charm - Spread
+            case 42120044:
+                    return 162;
+            //Vanquisher's Charm - Extra Strike
+            case 42120045:
+                    return 143;
+            //Falling Sakura - Reinforce
+            case 42120046:
+                    return 168;
+            //Falling Sakura - Spread
+            case 42120047:
+                    return 189;
+            //Falling Sakura - Vitality
+            case 42120048:
+                    return 149;
+            //Bellflower Barrier - Persist
+            case 42120049:
+                    return 195;
+            //Bellflower Barrier - Cooldown Cutter
+            case 42120050:
+                    return 177;
+            //Bellflower Barrier - Boss Rush
+            case 42120051:
+                    return 155;
+
+            //Veritable Pandemonium
+            case 42121052:
+                    return 170;
+            //Princess's Vow
+            case 42121053:
+                    return 200;
+            //Blackhearted Curse
+            case 42121054:
+                    return 150;
+
+    //Mihile 5112
+            //Enduring Spirit - Persist
+            case 51120043:
+                    return 183;
+            //Enduring Spirit - Steel Skin
+            case 51120044:
+                    return 162;
+            //Enduring Spirit - Preparation
+            case 51120045:
+                    return 143;
+            //Radiant Cross - Reinforce
+            case 51120056:
+                    return 149;
+            //Radiant Cross - Spread
+            case 51120057:
+                    return 168;
+            //Radiant Cross - Extra Strike
+            case 51120058:
+                    return 189;
+            //Four-Point Assault - Reinforce
+            case 51120049:
+                    return 195;
+            //Four-Point Assault - Spread
+            case 51120050:
+                    return 177;
+            //Four-Point Assault - Extra Strike
+            case 51120051:
+                    return 155;
+
+            //Charging Light
+            case 51121052:
+                    return 170;
+            //Queen of Tomorrow
+            case 51121053:
+                    return 200;
+            //Sacred Cube
+            case 51121054:
+                    return 150;
+
+    //Kaiser 6112
+            //Gigas Wave - Reinforce
+            case 61120043:
+                    return 143;
+            //Gigas Wave - Burden
+            case 61120044:
+                    return 162;
+            //Gigas Wave - Bonus Attack
+            case 61120045:
+                    return 183;
+            //Inferno Breath - Reinforce
+            case 61120046:
+                    return 149;
+            //Inferno Breath - Burn
+            case 61120047:
+                    return 168;
+            //Inferno Breath - Blaze
+            case 61120048:
+                    return 189;
+            //Wing Beat - Reinforce
+            case 61120049:
+                    return 155;
+            //Wing Beat - Pummel
+            case 61120050:
+                    return 177;
+            //Wing Beat - Extra Attack
+            case 61120051:
+                    return 195;
+
+            //Ancestral Prominence
+            case 61121052:
+                    return 170;
+            //Final Trance
+            case 61121053:
+                    return 200;
+            //Kaiser's Majesty
+            case 61121054:
+                    return 150;
+
+    //Angelic Buster 6512
+            //Soul Seeker - Reinforce
+            case 65120043:
+                    return 143;
+            //Soul Seeker - Make Up
+            case 65120044:
+                    return 162;
+            //Piercing Soul Seeker
+            case 65120045:
+                    return 183;
+            //Finale Ribbon - Reinforce
+            case 65120046:
+                    return 149;
+            //Finale Ribbon - Enhance
+            case 65120047:
+                    return 168;
+            //Finale Ribbon - Cooldown Cutter
+            case 65120048:
+                    return 189;
+            //Trinity - Reinforce
+            case 65120049:
+                    return 155;
+            //Piercing Trinity
+            case 65120050:
+                    return 177;
+            //Trinity - Extra Strike
+            case 65120051:
+                    return 195;
+
+            //Supreme Supernova
+            case 65121052:
+                    return 170;
+            //Final Contract
+            case 65121053:
+                    return 200;
+            //Pretty Exaltation
+            case 65121054:
+                    return 150;
+
+    //Kinesis 14212
+            //Psychic Grab - Boss Point
+            case 142120043:
+                    return 143;
+            //Psychic Grab - Reinforce
+            case 142120044:
+                    return 162;
+            //Psychic Grab - Steel Skin
+            case 142120045:
+                    return 183;
+            //Mind Tremor - Overwhelm
+            case 142120046:
+                    return 149;
+            //Mind Tremor - Reinforce
+            case 142120047:
+                    return 168;
+            //Mind Tremor - Persist
+            case 142120048:
+                    return 189;
+            //Mind Break - Reinforce
+            case 142120049:
+                    return 155;
+            //Mind Break - Cooldown Cutter
+            case 142120050:
+                    return 177;
+            //Mind Break - Enhance
+            case 142120051:
+                    return 195;
+
+            //Mental Tempest
+            case 142121030:
+                    return 170;
+            //Mental Shock
+            case 142121031:
+                    return 200;
+            //Mental Overdrive
+            case 142121032:
+                    return 150;
+
+    //Beast Tamer 11212
+            //Furious Strike - Reinforce
+            case 112120043:
+                    return 168;
+            //Furious Strike - Critical Chance
+            case 112120044:
+                    return 189;
+            //Furious Strike - Boss Rush
+            case 112120045:
+                    return 149;
+            //Three-Point Pounce - Reinforce
+            case 112120046:
+                    return 195;
+            //Three-Point Pounce - Spread
+            case 112120047:
+                    return 177;
+            //Three-Point Pounce - Extra Strike
+            case 112120048:
+                    return 155;
+            //Formation Attack - Reinforce
+            case 112120049:
+                    return 189;
+            //Formation Attack - Spread
+            case 112120050:
+                    return 149;
+            //Formation Attack - Guardbreak
+            case 112120051:
+                    return 168;
+            //Friend Launcher - Reinforce
+            case 112120052:
+                    return 183;
+            //Friend Launcher - Spread
+            case 112120053:
+                    return 162;
+            //Friend Launcher - Range
+            case 112120054:
+                    return 143;
+
+            //Group Bear Blaster
+            case 112121030:
+                    return 170;
+            //Team Roar
+            case 112121032:
+                    return 150;
+        }
+        return 0;
     }
 }

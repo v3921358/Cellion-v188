@@ -19,8 +19,8 @@ var bossMaps = Array(211070000, 262000000, 105100100, 240050000, 240040700, 1051
 
 // Map Warper Definitions
 var townMapCost = 10000; // Price in Mesos
-var monsterMapCost = 5000; // Price in NX
-var bossMapCost = 300000; // Price in NX
+var monsterMapCost = 4000; // Price in NX
+var bossMapCost = 125000; // Price in NX
 
 var monsterMapReqLevel = 60;
 var bossMapReqLevel = 120;
@@ -30,12 +30,12 @@ var lockedText2 = "";
 
 // Exchange System Definitions
 var exchangeItemMeso = 4001619; // Golden Maple Leaf
-var purchaseCostMeso = 2000000000; // Mesos Needed to Buy
-var sellCostMeso = 1800000000; // Mesos Gained when Sold
+var purchaseCostMeso = 1000000000; // Mesos Needed to Buy
+var sellCostMeso = 850000000; // Mesos Gained when Sold
 
 var exchangeItemNX = 4430000; // Maple Leaf Gold
-var purchaseCostNX = 5000000; // NX Needed to Buy
-var sellCostNX = 4800000; // NX Gained when Sold
+var purchaseCostNX = 1000000; // NX Needed to Buy
+var sellCostNX = 850000; // NX Gained when Sold
 
 function start() {
 	status = -1;
@@ -68,7 +68,7 @@ function action(mode, type, selection) {
 						+ "#L102#Exchange Mesos and Maple Points (NX)#l\r\n"
 						+ "#L103#Access the REXION Vote Rewards#l\r\n"
 						+ "#L104#Access the REXION Donor Rewards#l\r\n"
-						+ "#L105#Select a Cash Item to Drop#l\r\n"
+						+ "#L105#Drop CASH and ETC Items#l\r\n"
 						+ "#L108#Obtain Fifth Job & V: Matrix\r\n"
 						+ "#L106#View Paragon Statistics#l\r\n\r\n"
 						+ "#d#L107#View Frequently Asked Questions#l\r\n"
@@ -97,10 +97,10 @@ function action(mode, type, selection) {
 					break;
 				case 102:
 					cm.sendNextPrev("What would you like to exchange?\r\n"
-						+ "#d#L300#2,000,000,000 Mesos - Buy a Golden Maple Leaf#l\r\n"
-						+ "#r#L301#1,800,000,000 Mesos - Sell a Golden Maple Leaf#l\r\n\r\n"
-						+ "#d#L302#5,000,000 NX - Buy Maple Leaf Gold#l\r\n"
-						+ "#r#L303#4,800,000 NX - Sell Maple Leaf Gold#l");
+						+ "#d#L300#1,000,000,000 Mesos - Buy a Golden Maple Leaf#l\r\n"
+						+ "#r#L301#850,000,000 Mesos - Sell a Golden Maple Leaf#l\r\n\r\n"
+						+ "#d#L302#1,000,000 NX - Buy Maple Leaf Gold#l\r\n"
+						+ "#r#L303#850,000 NX - Sell Maple Leaf Gold#l");
 					break;
 				case 103:
 					cm.dispose();
@@ -156,9 +156,9 @@ function action(mode, type, selection) {
 							paragonProfile += "\r\n\t#r+10% Increased Meso Gain (Unlocked at Paragon IV)#k";
 						}
 						if (cm.getPlayer().getReborns() >= 5) {
-							paragonProfile += "\r\n\t#d+10% Increased NX Gain#k";
+							paragonProfile += "\r\n\t#d+20% Increased NX Chance & Gain#k";
 						} else {
-							paragonProfile += "\r\n\t#r+10% Increased NX Gain (Unlocked at Paragon V)#k";
+							paragonProfile += "\r\n\t#r+20% Increased NX Chance & Gain (Unlocked at Paragon V)#k";
 						}
 						if (cm.getPlayer().getReborns() >= 6) {
 							paragonProfile += "\r\n\t#d+1% Damage Leeched as HP#k";
@@ -195,7 +195,7 @@ function action(mode, type, selection) {
 					cm.dispose();
 					break;
 				case 108:
-					if(cm.getPlayer().getLevel() >= 250 && !cm.isQuestFinished(1460)) {
+					if(cm.getPlayer().getLevel() >= 250 && !cm.isQuestFinished(1460) && cm.getPlayer().getReborns() > 0) {
 						cm.sendOk("Congratulations on your #rfifth job#k advancement!\r\nYou now have access to the powerful #dV: Matrix#k!");
 						
 						cm.gainItem(2435902, 250);
@@ -223,7 +223,7 @@ function action(mode, type, selection) {
 						
 						cm.dispose();
 					} else {
-						cm.sendOk("Sorry, you need to be atleast level #r250#k to access the #dV: Matrix#k.");
+						cm.sendOk("Sorry, you need to be atleast #rlevel 250#k and #rParagon Rank I#k to access the #dV: Matrix#k.");
 						cm.dispose();
 					}
 			}
@@ -284,7 +284,7 @@ function action(mode, type, selection) {
 				// Exchange System
 				case 300:
 					if (cm.getMeso() >= purchaseCostMeso) {
-						cm.sendYesNo("Are you sure you want to exchange #r2,000,000,000 Mesos#k for a #dGolden Maple Leaf#k?");
+						cm.sendYesNo("Are you sure you want to exchange #r1,000,000,000 Mesos#k for a #dGolden Maple Leaf#k?");
 					} else {
 						cm.sendOk("Sorry, you do not have enough #rMesos#k.");
 					}
@@ -292,7 +292,7 @@ function action(mode, type, selection) {
 					break;
 				case 301:
 					if (cm.haveItem(exchangeItemMeso)) {
-						cm.sendYesNo("Are you sure you want to exchange a #rGolden Maple Leaf#k for #d1,800,000,000 Mesos#k?");
+						cm.sendYesNo("Are you sure you want to exchange a #rGolden Maple Leaf#k for #d850,000,000 Mesos#k?");
 					} else {
 						cm.sendOk("Sorry, you do not have any #rGolden Maple Leaves#k.");
 					}
@@ -300,7 +300,7 @@ function action(mode, type, selection) {
 					break;
 				case 302:
 					if (cm.getPlayer().getCSPoints(2) >= purchaseCostNX) {
-						cm.sendYesNo("Are you sure you want to exchange #r5,000,000 Maple Points (NX)#k for #dMaple Leaf Gold#k?");
+						cm.sendYesNo("Are you sure you want to exchange #r1,000,000 Maple Points (NX)#k for #dMaple Leaf Gold#k?");
 					} else {
 						cm.sendOk("Sorry, you do not have enough #rMaple Points (NX)#k.");
 					}
@@ -308,7 +308,7 @@ function action(mode, type, selection) {
 					break;
 				case 303:
 					if (cm.haveItem(exchangeItemNX)) {
-						cm.sendYesNo("Are you sure you want to exchange #rMaple Leaf Gold#k for #d4,800,000 Maple Points (NX)#k?");
+						cm.sendYesNo("Are you sure you want to exchange #rMaple Leaf Gold#k for #d850,000 Maple Points (NX)#k?");
 					} else {
 						cm.sendOk("Sorry, you do not have any #rMaple Leaf Gold#k.");
 					}

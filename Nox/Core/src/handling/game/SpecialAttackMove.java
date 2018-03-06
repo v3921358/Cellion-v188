@@ -30,9 +30,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import server.MapleStatInfo;
+import server.Timer;
 import server.Timer.MapTimer;
 import server.maps.SummonMovementType;
 import server.maps.objects.MapleSummon;
@@ -54,7 +56,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
             case 14110030:
             case 25111209:
                 // These skills consistantly spam packets, they do not need to be handled here.
-                return;
+                break;
             default:
                 if (pPlayer.isDeveloper()) {
                     pPlayer.dropMessage(5, "[SpecialAttackMove Debug] Skill ID : " + nSkill);
@@ -68,23 +70,18 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
             //return;
         }
 
-        
         // Special Case Toggle Skills
      // These toggles are technically buffs, but do not get handled by the buff manager. -Mazen
         switch (nSkill) {
             
-            case WildHunter.SOUL_ARROW_CROSSBOW: {
-                c.write(CField.SummonPacket.jaguarActive(true));
-                break;
-            }
-            
-            case WildHunter.JAGUAR_RIDER:{
-                /*final MapleStatEffect pEffect = SkillFactory.getSkill(WildHunter.JAGUAR_RIDER).getEffect(pPlayer.getTotalSkillLevel(WildHunter.JAGUAR_RIDER));
-                MapleSummon pSummon = new MapleSummon(pPlayer, pEffect, pPlayer.getPosition(), SummonMovementType.SUMMON_JAGUAR, 2100000000);
-                pSummon.setPosition(pPlayer.getPosition());
-                pPlayer.getMap().spawnSummon(pSummon);
-                pEffect.applyTo(pPlayer, pPlayer.getPosition());*/
-                c.write(CField.SummonPacket.jaguarActive(true));
+            case 14110030:{
+                if (!GameConstants.isNightWalkerCygnus(pPlayer.getJob())) {
+                    return;
+                }
+                final MapleStatEffect buffEffects = SkillFactory.getSkill(14110030).getEffect(pPlayer.getTotalSkillLevel(14110030));
+                buffEffects.statups.put(CharacterTemporaryStat.DarknessAscension, 1);
+                pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), null, buffEffects.statups, false, 2100000000, pPlayer.getId());
+                pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, 14110030, 2100000000, buffEffects.statups, buffEffects));
                 break;
             }
             
@@ -283,14 +280,30 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
         int nMob;
         MapleMonster pMob;
         switch (nSkill) {
+            
+            case WildHunter.SOUL_ARROW_CROSSBOW: {
+                c.write(CField.SummonPacket.jaguarActive(true));
+                break;
+            }
+            
+            case WildHunter.JAGUAR_RIDER:{
+                /*final MapleStatEffect pEffect = SkillFactory.getSkill(WildHunter.JAGUAR_RIDER).getEffect(pPlayer.getTotalSkillLevel(WildHunter.JAGUAR_RIDER));
+                MapleSummon pSummon = new MapleSummon(pPlayer, pEffect, pPlayer.getPosition(), SummonMovementType.SUMMON_JAGUAR, 2100000000);
+                pSummon.setPosition(pPlayer.getPosition());
+                pPlayer.getMap().spawnSummon(pSummon);
+                pEffect.applyTo(pPlayer, pPlayer.getPosition());*/
+                c.write(CField.SummonPacket.jaguarActive(true));
+                break;
+            }
+            
             case SuperGM.RESURRECTION: {
-                for (MapleCharacter oCharacter : pPlayer.getMap().getCharacters()) {
-                    if (oCharacter != null) {
-                        oCharacter.getStat().setHp(oCharacter.getStat().getMaxHp(), oCharacter);
-                        oCharacter.updateSingleStat(MapleStat.HP, oCharacter.getStat().getMaxHp());
-                        oCharacter.getStat().setMp(oCharacter.getStat().getMaxMp(), oCharacter);
-                        oCharacter.updateSingleStat(MapleStat.MP, oCharacter.getStat().getMaxMp());
-                        oCharacter.dispelDebuffs();
+                for (MapleCharacter pCharacter : pPlayer.getMap().getCharacters()) {
+                    if (pCharacter != null) {
+                        pCharacter.getStat().setHp(pCharacter.getStat().getMaxHp(), pCharacter);
+                        pCharacter.updateSingleStat(MapleStat.HP, pCharacter.getStat().getMaxHp());
+                        pCharacter.getStat().setMp(pCharacter.getStat().getMaxMp(), pCharacter);
+                        pCharacter.updateSingleStat(MapleStat.MP, pCharacter.getStat().getMaxMp());
+                        pCharacter.dispelDebuffs();
                     }
                 }
                 c.getPlayer().dropMessage(6, "You have resurrected all players in the current map.");

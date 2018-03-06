@@ -51,7 +51,7 @@ public class ServerConstants {
     
     /*Server Save Intervals*/
  /*The server will automatically save all character data every n minutes.*/
-    public static int SAVE_INTERVAL = 15;
+    public static int SAVE_INTERVAL = 15; //TODO: THIS, but maybe a bad idea?
 
     /*Master Password Configuration*/
     public static final boolean ENABLE_MASTER = false; //Leave disabled to avoid potential security leaks, feature works though.
@@ -93,7 +93,7 @@ public class ServerConstants {
     public static final byte[] NEXON_CHAT_IP = new byte[]{(byte) 8, (byte) 31, (byte) 99, (byte) 133};
     public static final int CHARACTER_LIMIT = 16;
     public static final String SERVER_MESSAGE = "";
-    public static final int CHANNEL_COUNT = 10;
+    public static final int CHANNEL_COUNT = 15;
     public static final boolean ENABLE_PIC = true;
     public static final long MAX_MESOS = Long.MAX_VALUE;
     public static boolean FEVER_TIME = false;
@@ -101,9 +101,9 @@ public class ServerConstants {
     //Scripts TODO: Amoria,CWKPQ,BossBalrog_EASY,BossBalrog_NORMAL,ZakumPQ,ProtectTylus,GuildQuest,Ravana_EASY,Ravna_MED,Ravana_HARD (untested or not working)
 
     /*Miscellaneous Configuration*/
+    public static final boolean MONSTER_CASH_DROP = true;
     public static final boolean CONTROLLED_POTENTIAL_RESULTS = true; // Uses our customizable potential tables instead, this is configured to be GMS-like.
     public static final float MIRACLE_CUBE_RATE = 1; //cube tier up rateng range
-    public static final float CASH_DROP_RATE = 30; //out of 100
     public static final boolean BUFFED_BOSSES = true; //Buffs the damage resistance on certain bosses to make them more challenging.
     public static final boolean BUFFED_HP_GAIN = true; //Players gain increased HP per level.
     public static final boolean AUTO_NX_CONVERT = true; //Convert NXCredit to MaplePoints upon EnterCS.
@@ -122,8 +122,8 @@ public class ServerConstants {
     /*Buffed Channel System*/
     public static final boolean BUFFED_SYSTEM = true; //Enables the buffed channel system.
     public static final boolean BUFFED_NX_GAIN = true; //Enables the buffed NX gain formula in buffed channels.
-    public static final int START_RANGE = 6; //Buffed channel that the buffs the mobs and nx gain. (Starting range)
-    public static final int END_RANGE = 10; //Buffed channel that the buffs the mobs and nx gain. (Ending range)
+    public static final int START_RANGE = 8; //Buffed channel that the buffs the mobs and nx gain. (Starting range)
+    public static final int END_RANGE = 15; //Buffed channel that the buffs the mobs and nx gain. (Ending range)
     public static final int BUFFED_EXP_PERCENTAGE = 70; //Percentage of bonus exp received in buffed channels.(ie. 50 = 50% bonus exp)
     public static final double DAMAGE_DEALT_PERCENTAGE = 10; //Percentage of damage applied to monsters in buffed channels. (ie. 30 = 30% damage)
     public static final double DAMAGE_TAKEN_MULTIPLIER = 3; //Multiplier of damage applied to players in buffed channels. (ie. 200 = 200% damage)

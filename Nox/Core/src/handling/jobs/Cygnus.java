@@ -8,6 +8,7 @@ import client.MapleClient;
 import client.SkillFactory;
 import constants.GameConstants;
 import constants.skills.Aran;
+import constants.skills.NightWalker;
 import constants.skills.ThunderBreaker;
 import java.util.Random;
 import java.util.concurrent.ScheduledFuture;
@@ -39,6 +40,22 @@ public class Cygnus {
 
     public static class NightWalkerHandler {
 
+        public static void handleDominionBuff(MapleCharacter pPlayer) {
+            if (!GameConstants.isNightWalkerCygnus(pPlayer.getJob())) {
+                return;
+            }
+            final MapleStatEffect buffEffects = SkillFactory.getSkill(NightWalker.DOMINION).getEffect(pPlayer.getTotalSkillLevel(NightWalker.DOMINION));
+
+            buffEffects.statups.put(CharacterTemporaryStat.DamR, 20);
+            //buffEffects.statups.put(CharacterTemporaryStat.CriticalBuff, 100);
+            //buffEffects.statups.put(CharacterTemporaryStat.Stance, 100);
+
+            final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
+            final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, 30000);
+            pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), buffSchedule, buffEffects.statups, false, 30000, pPlayer.getId());
+            pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, 0, 30000, buffEffects.statups, buffEffects));
+        }
+        
     }
 
     public static class ThunderBreakerHandler {

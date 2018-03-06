@@ -58,6 +58,11 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
 
         if (toUse != null && toUse.getQuantity() >= 1 && toUse.getItemId() == itemId && !chr.hasBlockedInventory() && !chr.inPVP()) {
             switch (toUse.getItemId()) {
+                case 2431789:
+                case 2431790: {
+                    NPCScriptManager.getInstance().start(c, 2080008, null);
+                    break;
+                }
                 case 2430007: { // Blank Compass
                     final MapleInventory inventory = chr.getInventory(MapleInventoryType.SETUP);
                     MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);

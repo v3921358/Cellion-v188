@@ -159,7 +159,7 @@ public class MiracleCubePacket {
         oPacket.EncodeInteger(cubeid);//(5062009); // CubeID
         oPacket.EncodeInteger(eqSlotId);
         PacketHelper.addItemInfo(oPacket, equip);
-        PacketHelper.addItemPosition(oPacket, equip, false, false);
+        //PacketHelper.addItemPosition(oPacket, equip, false, false);
 
         return oPacket.ToPacket();
     }
@@ -183,7 +183,7 @@ public class MiracleCubePacket {
         oPacket.EncodeInteger(cubeid);//(5062009); // CubeID
         oPacket.EncodeInteger(eqSlotId);
         PacketHelper.addItemInfo(oPacket, equip);
-        PacketHelper.addItemPosition(oPacket, equip, false, false);
+        //PacketHelper.addItemPosition(oPacket, equip, false, false);
 
         return oPacket.ToPacket();
     }

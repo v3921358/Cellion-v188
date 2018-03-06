@@ -3332,7 +3332,8 @@ public class GMCommand {
                 c.getPlayer().dropMessage(5, "!gaincash <player> <amount>");
                 return 0;
             }
-            victim.modifyCSPoints(1, Integer.parseInt(splitted[2]), true);
+            victim.modifyCSPoints(2, Integer.parseInt(splitted[2]), true);
+            //victim.modifyCSPoints(1, Integer.parseInt(splitted[2]), true);
             return 1;
         }
     }

@@ -782,7 +782,11 @@ public class Skill implements Comparator<Skill> {
     }
 
     public int getMasterLevel() {
-        return masterLevel;
+        return this.masterLevel;
+    }
+    
+    public void setMasterLevel(int nMasterLevel) {
+        this.masterLevel = nMasterLevel;
     }
 
     public int getDelay() {
