@@ -1685,9 +1685,6 @@ public class PacketHelper {
 
     public static <E extends TemporaryStat> void writeBuffMask(OutPacket oPacket, Map<E, Integer> statups) {
         int[] mask = new int[GameConstants.CFlagSize];
-        /* if (!statups.containsKey(CharacterTemporaryStat.RideVehicle)) {
-            mask = new int[12];
-        }*/
         for (TemporaryStat statup : statups.keySet()) {
             mask[(statup.getPosition() - 1)] |= statup.getValue();
         }

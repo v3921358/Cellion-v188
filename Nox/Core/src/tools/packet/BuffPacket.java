@@ -169,8 +169,10 @@ public class BuffPacket {
     public static Packet giveBuff(MapleCharacter chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect, int diceRange, int diceId, int lightGauge, int darkGauge) {
         OutPacket oPacket = new OutPacket(80);
 
+        BuffPacket.clearFakeBuffstats(statups);
         boolean bEndecode4Byte = false, bMovementAffecting = false;
         for (Map.Entry<CharacterTemporaryStat, Integer> stat : statups.entrySet()) {
+            System.out.println(stat.getKey().name());
             if (CharacterTemporaryStat.isEnDecode4Byte(stat.getKey())) {
                 bEndecode4Byte = true;
             }
@@ -180,8 +182,6 @@ public class BuffPacket {
         }
 
         oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
-
-        BuffPacket.clearFakeBuffstats(statups);
 
         PacketHelper.writeBuffMask(oPacket, statups);
 

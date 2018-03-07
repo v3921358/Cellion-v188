@@ -727,7 +727,7 @@ public class MapleStatEffect implements Serializable {
                 applyfrom.cancelEffectFromTemporaryStat(CharacterTemporaryStat.ShadowPartner);
             } else if (sourceid == 32111006) {
                 return true; //no buff
-            } else if (sourceid == 35111002) {
+            } else if (sourceid == Mechanic.ROCK_N_SHOCK) {
                 for (MapleSummon s : applyfrom.getSummonsReadLock()) {
                     if ((sourceid == 14121054) ? (s.getSkill() == 14121054) || (s.getSkill() == 14121055) || (s.getSkill() == 14121056) : (s.getSkill() == sourceid)) {
                         applyfrom.getMap().broadcastMessage(SummonPacket.removeSummon(s, true));
@@ -737,31 +737,6 @@ public class MapleStatEffect implements Serializable {
                             applyfrom.getSummons().remove(s.getSkill());
                         }
                     }
-                }
-
-                if (sourceid == 14121054) {
-                    final MapleSummon illusion = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
-                    final MapleSummon illusion2 = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
-                    illusion.setPosition(pos);
-                    illusion2.setPosition(pos);
-                    applyfrom.getMap().spawnSummon(illusion);
-                    applyfrom.getMap().spawnSummon(illusion2);
-                    applyfrom.getSummons().put(14121055, illusion);
-                    applyfrom.getSummons().put(14121056, illusion2);
-                }
-
-                if (sourceid == NightWalker.SHADOW_BAT) {
-                    final MapleSummon bat = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
-                    bat.setPosition(pos);
-                    applyfrom.getMap().spawnSummon(bat);
-                    applyfrom.getSummons().put(NightWalker.SHADOW_BAT, bat);
-                }
-
-                if (sourceid == WildHunter.JAGUAR_RIDER) {
-                    final MapleSummon pJaguar = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
-                    pJaguar.setPosition(pos);
-                    applyfrom.getMap().spawnSummon(pJaguar);
-                    applyfrom.getSummons().put(WildHunter.JAGUAR_RIDER, pJaguar);
                 }
 
                 List<Integer> count = new ArrayList<>();
@@ -780,8 +755,25 @@ public class MapleStatEffect implements Serializable {
                 }
                 applyfrom.addCooldown(sourceid, System.currentTimeMillis(), getCooldown(applyfrom));
                 applyfrom.getMap().broadcastMessage(CField.teslaTriangle(applyfrom.getId(), count.get(0), count.get(1), count.get(2)));
-            } else if (sourceid == 35121003) {
-                applyfrom.getClient().write(CWvsContext.enableActions()); //doubt we need this at all
+            } else if (sourceid == NightWalker.SHADOW_ILLUSION) {
+                final MapleSummon illusion = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                final MapleSummon illusion2 = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                illusion.setPosition(pos);
+                illusion2.setPosition(pos);
+                applyfrom.getMap().spawnSummon(illusion);
+                applyfrom.getMap().spawnSummon(illusion2);
+                applyfrom.getSummons().put(14121055, illusion);
+                applyfrom.getSummons().put(14121056, illusion2);
+            } else if (sourceid == NightWalker.SHADOW_BAT) {
+                final MapleSummon bat = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                bat.setPosition(pos);
+                applyfrom.getMap().spawnSummon(bat);
+                applyfrom.getSummons().put(NightWalker.SHADOW_BAT, bat);
+            } else if (sourceid == WildHunter.SUMMON_JAGUAR) {
+                final MapleSummon pJaguar = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                pJaguar.setPosition(pos);
+                applyfrom.getMap().spawnSummon(pJaguar);
+                applyfrom.getSummons().put(WildHunter.SUMMON_JAGUAR, pJaguar);
             }
         } else if (isMechDoor()) {
             int newId = 0;
@@ -2208,6 +2200,17 @@ public class MapleStatEffect implements Serializable {
             case 35111009: // satellite 1
             case 42101021: // Foxfire
             case 42121021: // Foxfire
+            case WildHunter.SUMMON_JAGUAR:
+            case WildHunter.SUMMON_JAGUAR_1:
+            case WildHunter.SUMMON_JAGUAR_2:
+            case WildHunter.SUMMON_JAGUAR_3:
+            case WildHunter.SUMMON_JAGUAR_4:
+            case WildHunter.SUMMON_JAGUAR_5:
+            case WildHunter.SUMMON_JAGUAR_6:
+            case WildHunter.SUMMON_JAGUAR_7:
+            case WildHunter.SUMMON_JAGUAR_8:
+            case WildHunter.SUMMON_JAGUAR_9:
+            case WildHunter.SUMMON_JAGUAR_10:
                 return SummonMovementType.FOLLOW;
         }
         if (isAngel()) {
