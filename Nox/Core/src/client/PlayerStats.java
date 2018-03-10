@@ -24,6 +24,7 @@ import constants.skills.AdditionalSkills;
 import constants.skills.Aran;
 import constants.skills.Evan;
 import constants.skills.BattleMage;
+import constants.skills.DemonAvenger;
 import constants.skills.Kaiser;
 import constants.skills.Luminous;
 import constants.skills.Magician;
@@ -1239,6 +1240,21 @@ public class PlayerStats implements Serializable {
                 if (bof > 0) {
                     eff = bx.getEffect(bof);
                     localmaxmp_ += eff.getMaxDemonFury(); //yes
+                }
+                break;
+            case 3120:
+            case 3121:
+            case 3122:
+                bx = SkillFactory.getSkill(DemonAvenger.MAPLE_WARRIOR);
+                bof = chra.getTotalSkillLevel(bx);
+                if (bof > 0) {
+                    percent_hp += (int) bof / 2;
+                }
+                bx = SkillFactory.getSkill(DemonAvenger.RAGE_WITHIN);
+                bof = chra.getTotalSkillLevel(bx);
+                if (bof > 0) {
+                    localmaxhp_ += 100 + (bof * 100);
+                    def += bof * 100;
                 }
                 break;
             case 3002:

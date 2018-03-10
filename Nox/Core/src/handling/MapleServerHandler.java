@@ -1,5 +1,6 @@
 package handling;
 
+import handling.game.BossMatchmakingHandler;
 import client.MapleClient;
 import constants.ServerConstants;
 import crypto.CAESCipher;
@@ -185,6 +186,8 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.PartyInvitableSet.getValue()] = new AllowPartyInviteHandler();
         handlers[RecvPacketOpcode.MiniRoom.getValue()] = new PlayerInteractionHandler();
         handlers[RecvPacketOpcode.GetRewardRequest.getValue()] = new OnUserRewardClaimRequest();
+        handlers[RecvPacketOpcode.BeginEventRanking.getValue()] = new BossMatchmakingHandler();
+        //handlers[672] = new BossMatchmakingHandler(); //TODO: Handle this, for Ursus + Cygnus?
         // Buddy List handlers
         handlers[RecvPacketOpcode.FriendRequest.getValue()] = new BuddylistModifyHandler();
         // Reactor handlers
@@ -352,7 +355,8 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
             }
             
             switch (head) {
-                case "AliveAck":
+                case "PrivateServerPacket":
+                case "AliveAck": 
                 case "UserQuestRequest":
                 case "UserMove":
                 case "NpcMove":

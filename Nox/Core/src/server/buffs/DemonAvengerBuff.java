@@ -59,7 +59,7 @@ public class DemonAvengerBuff extends AbstractBuffClass {
                 break;
             case DemonAvenger.DIABOLIC_RECOVERY:
                 eff.statups.put(CharacterTemporaryStat.DiabolikRecovery, eff.info.get(MapleStatInfo.x));
-                eff.statups.put(CharacterTemporaryStat.MaxHP, eff.info.get(MapleStatInfo.indieMhpR));
+                eff.statups.put(CharacterTemporaryStat.IndieMHPR, eff.info.get(MapleStatInfo.indieMhpR));
                 break;
             case DemonAvenger.OVERWHELMING_POWER:
                 eff.statups.put(CharacterTemporaryStat.IndieDamR, eff.info.get(MapleStatInfo.indieDamR));
@@ -73,8 +73,9 @@ public class DemonAvengerBuff extends AbstractBuffClass {
                 eff.statups.put(CharacterTemporaryStat.IndieMHPR, eff.info.get(MapleStatInfo.indieMhpR));
                 break;
             case DemonAvenger.OVERLOAD_RELEASE: // Overload Release
-                eff.statups.put(CharacterTemporaryStat.IndieMHPR, eff.info.get(MapleStatInfo.indieMhpR));
+                eff.statups.put(CharacterTemporaryStat.IndieMHPR, eff.info.get(MapleStatInfo.x));
                 eff.statups.put(CharacterTemporaryStat.ExceedOverload, 1);
+                eff.info.put(MapleStatInfo.time, 60000);
                 break;
         }
     }

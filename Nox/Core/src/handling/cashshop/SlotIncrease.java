@@ -18,10 +18,25 @@ import tools.packet.CSPacket;
 /**
  *
  * @author Novak
+ * @author Mazen Massoud
  */
 public class SlotIncrease {
 
-    public static void inventory(InPacket iPacket, MapleClient c, MapleCharacter chr) {
+    public static void inventory(InPacket iPacket, MapleClient c, MapleCharacter pPlayer) {
+        iPacket.Skip(7);
+        byte nType = (byte) iPacket.Decode();
+        System.out.println(nType);
+        if (pPlayer.getCSPoints(2) >= 6000 && pPlayer.getInventory(getInventoryType(nType)).getSlotLimit() < 89) {
+            pPlayer.modifyCSPoints(2, -6000, false);
+            pPlayer.expandInventory(nType, 8);
+            pPlayer.dropMessage(1, "Your " + getInventoryType(nType) + " inventory slots have been increased successfully. ");
+            pPlayer.saveToDB(false, false);
+        } else {
+            c.write(CSPacket.sendCSFail(0xA4));
+        }
+    }
+    
+    /*public static void inventory(InPacket iPacket, MapleClient c, MapleCharacter chr) {
         iPacket.Skip(1);
         int itemPrice = iPacket.DecodeInteger();
         boolean cameFromCoupon = iPacket.DecodeByte() > 0;
@@ -47,24 +62,40 @@ public class SlotIncrease {
                 c.write(CSPacket.sendCSFail(0xA4));
             }
         }
-    }
+    }*/
 
-    public static void storage(InPacket iPacket, MapleClient c, MapleCharacter chr) {
+    public static void storage(InPacket iPacket, MapleClient c, MapleCharacter pPlayer) {
         iPacket.Skip(1);
         int itemPrice = iPacket.DecodeInteger();
         int coupon = iPacket.DecodeByte() > 0 ? 2 : 1;
-        if (chr.getCSPoints(itemPrice) >= 4000 * coupon && chr.getStorage().getSlots() < (49 - (4 * coupon))) {
-            chr.modifyCSPoints(itemPrice, -4000 * coupon, false);
-            chr.getStorage().increaseSlots((byte) (4 * coupon));
-            chr.getStorage().saveToDB();
-            chr.dropMessage(1, "Storage slots increased to: " + chr.getStorage().getSlots());
-            c.write(CField.getCharInfo(chr));
+        if (pPlayer.getCSPoints(itemPrice) >= 4000 * coupon && pPlayer.getStorage().getSlots() < (49 - (4 * coupon))) {
+            pPlayer.modifyCSPoints(itemPrice, -4000 * coupon, false);
+            pPlayer.getStorage().increaseSlots((byte) (4 * coupon));
+            pPlayer.getStorage().saveToDB();
+            pPlayer.dropMessage(1, "Your storage slots have been increased successfully.");
+            //c.write(CField.getCharInfo(chr));
         } else {
             c.write(CSPacket.sendCSFail(0xA4));
         }
     }
+    
+    public static void charSlots(InPacket iPacket, MapleClient c, MapleCharacter pPlayer) {
+        int nSlots = MapleCharacterCreationUtil.getCharacterSlots(c.getAccID(), pPlayer.getWorld());
+        
+        if (nSlots == 0 || c.getPlayer().getCSPoints(2) < 6900 || nSlots >= GameConstants.characterSlotMax) {
+            c.write(CSPacket.sendCSFail(0));
+            return;
+        }
 
-    public static void charSlots(InPacket iPacket, MapleClient c, MapleCharacter chr) {
+        if (MapleCharacterCreationUtil.gainCharacterSlot(c.getAccID(), pPlayer.getWorld(), nSlots)) {
+            c.getPlayer().modifyCSPoints(2, -6900, false);
+            pPlayer.dropMessage(1, "Your character slots have been increased successfully.");
+        } else {
+            c.write(CSPacket.sendCSFail(0));
+        }
+    }
+
+    /*public static void charSlots(InPacket iPacket, MapleClient c, MapleCharacter chr) {
         iPacket.Skip(1);
         final int itemPrice = iPacket.DecodeInteger();
         CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInteger());
@@ -77,7 +108,7 @@ public class SlotIncrease {
                 || slots >= GameConstants.characterSlotMax
                 || iteminfo.getId() != 5430000) {
             c.write(CSPacket.sendCSFail(0));
-            playerCashShopInfo(c);
+            //playerCashShopInfo(c);
             return;
         }
 
@@ -87,9 +118,29 @@ public class SlotIncrease {
         } else {
             c.write(CSPacket.sendCSFail(0));
         }
-    }
+    }*/
 
-    public static void pendantSlots(InPacket iPacket, MapleClient c, MapleCharacter chr) {
+    public static void pendantSlots(InPacket iPacket, MapleClient c, MapleCharacter pPlayer) {
+       
+        MapleQuestStatus pPendantStatus = c.getPlayer().getQuestNoAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT));
+        
+        if (pPlayer.getCSPoints(2) < 30000) {
+            c.write(CSPacket.sendCSFail(0));
+            return;
+        }
+        
+        if (pPendantStatus != null && pPendantStatus.getCustomData() != null && Long.parseLong(pPendantStatus.getCustomData()) >= System.currentTimeMillis()) {
+            pPlayer.dropMessage(1, "You already have access to an additional pendant slot.");
+            c.write(CSPacket.sendCSFail(0));
+        } else {
+            pPlayer.getQuestNAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT)).setCustomData(String.valueOf(System.currentTimeMillis() + ((long) 7 * 24 * 60 * 60000)));
+            pPlayer.modifyCSPoints(1, -30000, false);
+            pPlayer.dropMessage(1, "You have unlocked access to an additional pendant slot.");
+            pPlayer.saveToDB(false, false);
+        }
+    }
+    
+    /*public static void pendantSlots(InPacket iPacket, MapleClient c, MapleCharacter chr) {
         iPacket.DecodeByte(); //Action is short?
         iPacket.DecodeInteger(); //always 1 - No Idea
         int sn = iPacket.DecodeInteger();
@@ -107,16 +158,20 @@ public class SlotIncrease {
             c.getPlayer().modifyCSPoints(1, -iteminfo.getPrice(), false);
             chr.dropMessage(1, "Additional pendant slot gained.");
         }
-    }
-
+    }*/
+    
     private static MapleInventoryType getInventoryType(final int id) {
         switch (id) {
+            case 1:
             case 50200093:
                 return MapleInventoryType.EQUIP;
+            case 2:
             case 50200094:
                 return MapleInventoryType.USE;
+            case 3:
             case 50200197:
                 return MapleInventoryType.SETUP;
+            case 4:
             case 50200095:
                 return MapleInventoryType.ETC;
             default:

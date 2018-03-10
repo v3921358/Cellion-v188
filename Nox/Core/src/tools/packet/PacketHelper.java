@@ -28,6 +28,7 @@ import tools.Triple;
 
 import java.util.*;
 import java.util.Map.Entry;
+import net.Packet;
 import server.skills.VMatrixRecord;
 
 public class PacketHelper {
@@ -37,6 +38,14 @@ public class PacketHelper {
     public static final long ZERO_TIME = 94354848000000000L;
     public static final long PERMANENT = 150841440000000000L;
 
+    public static Packet sendEmptyPacket() {
+        OutPacket oPacket = new OutPacket(80);
+
+        oPacket.EncodeShort(0xFFFF);
+
+        return oPacket.ToPacket();
+    }
+    
     public static long getKoreanTimestamp(long realTimestamp) {
         return getTime(realTimestamp);
     }

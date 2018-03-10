@@ -372,7 +372,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
             switch (pJob) {
                 case DualBlade:
                     oNewCharacter.setJob((short) 430);
-                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.setLevel((short) 10);
                     oNewCharacter.getStat().maxmp = 300;
                     oNewCharacter.getStat().mp = 300;
                     oNewCharacter.setRemainingAp(40);
@@ -380,21 +380,21 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
                     break;
                 case Cannoneer:
                     oNewCharacter.setJob((short) 501);
-                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.setLevel((short) 10);
                     oNewCharacter.getStat().maxmp = 230;
                     oNewCharacter.getStat().mp = 230;
                     oNewCharacter.setRemainingAp(40);
                     break;
                 case Jett:
                     oNewCharacter.setJob((short) 508);
-                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.setLevel((short) 10);
                     oNewCharacter.getStat().maxmp = 200;
                     oNewCharacter.getStat().mp = 200;
                     oNewCharacter.setRemainingAp(40);
                     break;
                 case AngelicBuster:
                     oNewCharacter.setJob((short) 6500);
-                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.setLevel((short) 10);
                     oNewCharacter.getStat().dex = 68;
                     oNewCharacter.getStat().maxhp = 1000;
                     oNewCharacter.getStat().hp = 1000;
@@ -411,7 +411,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
                     oNewCharacter.setRemainingSp(5, 1); //beta
                     break;
                 case Kinesis:
-                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.setLevel((short) 10);
                     oNewCharacter.getStat().str = 4;
                     oNewCharacter.getStat().int_ = 52;
                     oNewCharacter.getStat().maxhp = 374;
@@ -422,7 +422,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
                     break;
                 case Luminous:
                     oNewCharacter.setJob((short) 2700);
-                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.setLevel((short) 10);
                     oNewCharacter.getStat().str = 4;
                     oNewCharacter.getStat().int_ = 57;
                     oNewCharacter.getStat().maxhp = 500;
@@ -432,7 +432,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
                     oNewCharacter.setRemainingSp(5);
                     break;
                 case BeastTamer:
-                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.setLevel((short) 10);
                     oNewCharacter.getStat().maxhp = 567;
                     oNewCharacter.getStat().hp = 551;
                     oNewCharacter.getStat().maxmp = 270;
@@ -441,7 +441,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
                     oNewCharacter.setRemainingSp(5, 0);
                     break;
                 default:
-                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.setLevel((short) 10);
                     oNewCharacter.setRemainingAp(40);
                     oNewCharacter.setRemainingSp(5, 0);
                     oNewCharacter.getStat().maxmp = 350;

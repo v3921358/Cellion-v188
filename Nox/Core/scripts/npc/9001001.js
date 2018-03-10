@@ -44,6 +44,23 @@ function start() {
 
 function action(mode, type, selection) {
 
+	if (!cm.isQuestFinished(34330)) { // Auto complete boss pre-quests.
+		cm.forceCompleteQuest(2241);
+		cm.forceCompleteQuest(33565);
+		cm.forceCompleteQuest(31833);
+		cm.forceCompleteQuest(30007);
+		cm.forceCompleteQuest(3157);
+		cm.forceCompleteQuest(7313);
+		cm.forceCompleteQuest(31179);
+		cm.forceCompleteQuest(3521);
+		cm.forceCompleteQuest(31152);
+		cm.forceCompleteQuest(33294);
+		cm.forceCompleteQuest(34015);
+		cm.forceCompleteQuest(17523);
+		cm.forceCompleteQuest(58955);
+		cm.forceCompleteQuest(34330);
+	}
+
 	if (mode == -1) {
 		cm.dispose();
 	} else {
@@ -195,37 +212,40 @@ function action(mode, type, selection) {
 					cm.dispose();
 					break;
 				case 108:
-					if(cm.getPlayer().getLevel() >= 250 && !cm.isQuestFinished(1460) && cm.getPlayer().getReborns() > 0) {
-						cm.sendOk("Congratulations on your #rfifth job#k advancement!\r\nYou now have access to the powerful #dV: Matrix#k!");
-						
-						cm.gainItem(2435902, 250);
-						
-						cm.forceCompleteQuest(1460);
-						cm.forceCompleteQuest(1461);
-						cm.forceCompleteQuest(1462);
-						cm.forceCompleteQuest(1463);
-						cm.forceCompleteQuest(1464);
-						cm.forceCompleteQuest(1465);
-						cm.forceCompleteQuest(1466);
-						cm.forceCompleteQuest(1467);
-						cm.forceCompleteQuest(1468);
-						cm.forceCompleteQuest(1469);
-						cm.forceCompleteQuest(1470);
-						cm.forceCompleteQuest(1471);
-						cm.forceCompleteQuest(1472);
-						cm.forceCompleteQuest(1473);
-						cm.forceCompleteQuest(1474);
-						cm.forceCompleteQuest(1475);
-						cm.forceCompleteQuest(1476);
-						cm.forceCompleteQuest(1477);
-						cm.forceCompleteQuest(1478);
-						cm.forceCompleteQuest(1479);
-						
-						cm.dispose();
-					} else {
-						cm.sendOk("Sorry, you need to be atleast #rlevel 250#k and #rParagon Rank I#k to access the #dV: Matrix#k.");
-						cm.dispose();
-					}
+					if (cm.getPlayer().getLevel() < 250 && cm.getPlayer().getReborns() > 0) {
+                        cm.sendOk("Sorry, you need to be at least #rlevel 250#k and #rParagon Rank I#k to access the #dV: Matrix#k.");
+                        cm.dispose();
+                    } else if (cm.isQuestFinished(1460)) {
+                        cm.sendOk("You have already finished the #dV: Matrix#k quest.");
+                        cm.dispose();
+                    } else {
+                        cm.sendOk("Congratulations on your #rfifth job#k advancement!\r\nYou now have access to the powerful #dV: Matrix#k!");
+
+                        cm.gainItem(2435902, 250);
+
+                        cm.forceCompleteQuest(1460);
+                        cm.forceCompleteQuest(1461);
+                        cm.forceCompleteQuest(1462);
+                        cm.forceCompleteQuest(1463);
+                        cm.forceCompleteQuest(1464);
+                        cm.forceCompleteQuest(1465);
+                        cm.forceCompleteQuest(1466);
+                        cm.forceCompleteQuest(1467);
+                        cm.forceCompleteQuest(1468);
+                        cm.forceCompleteQuest(1469);
+                        cm.forceCompleteQuest(1470);
+                        cm.forceCompleteQuest(1471);
+                        cm.forceCompleteQuest(1472);
+                        cm.forceCompleteQuest(1473);
+                        cm.forceCompleteQuest(1474);
+                        cm.forceCompleteQuest(1475);
+                        cm.forceCompleteQuest(1476);
+                        cm.forceCompleteQuest(1477);
+                        cm.forceCompleteQuest(1478);
+                        cm.forceCompleteQuest(1479);
+
+                        cm.dispose();
+                    }
 			}
 			
 		} else if(status == 2) {

@@ -74,7 +74,7 @@ enum QuestRes
         if (chr == null) {
             return;
         }
-
+        
         // Detailed Quest Action Debug
         if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) {
             String debugAction = "";

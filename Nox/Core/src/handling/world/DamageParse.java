@@ -12,6 +12,7 @@ import constants.skills.*;
 import handling.jobs.Cygnus;
 import handling.jobs.Cygnus.NightWalkerHandler;
 import handling.jobs.Cygnus.ThunderBreakerHandler;
+import handling.jobs.Explorer.HeroHandler;
 import handling.jobs.Hero.AranHandler;
 import handling.jobs.Kinesis.KinesisHandler;
 import net.InPacket;
@@ -215,6 +216,15 @@ public class DamageParse {
                     if (pPlayer.getReborns() >= 6) { // Paragon Level 7+
                         pPlayer.addMP((int) (totDamageToOneMonster * 0.01)); // +1% Mana Leech
                     }
+                }
+                
+                /*
+                 *  Damage Correction Handler
+                 *  @purpose 
+                 */
+                if(ServerConstants.DAMAGE_CORRECTION) {
+                    int nDamageChange = (int) GameConstants.damageCorrectRequest(pPlayer, attack.skill, totDamageToOneMonster);
+                    totDamageToOneMonster += nDamageChange;
                 }
 
                 // Apply attack to the monster hit.
@@ -432,9 +442,6 @@ public class DamageParse {
                     if (GameConstants.isKaiser(pPlayer.getJob())) {
                         pPlayer.handleKaiserCombo();
                     }
-                    if (pPlayer.getStatForBuff(CharacterTemporaryStat.ComboCounter) != null) { // Combo Attack
-                        pPlayer.handleComboAttack();
-                    }
                     if (GameConstants.isNightWalkerCygnus(pPlayer.getJob())) {
 
                         if (pPlayer.hasBuff(CharacterTemporaryStat.NightWalkerBat)) {
@@ -623,9 +630,17 @@ public class DamageParse {
             Skill skill = SkillFactory.getSkill(Aran.DRAIN);
             pPlayer.addHP(Math.min(totDamage / 5, (totDamage * skill.getEffect(pPlayer.getSkillLevel(skill)).getX()) / 100));
         }
-        if (pPlayer.getSkillLevel(Darkknight.DARK_THIRST) > 0) { // Hack fix for now.
+        if (pPlayer.hasSkill(Darkknight.DARK_THIRST)) { // Hack fix for now.
             Skill skill = SkillFactory.getSkill(Darkknight.DARK_THIRST);
             pPlayer.addHP(Math.min(totDamage / 5, (totDamage * skill.getEffect(pPlayer.getSkillLevel(skill)).getX()) / 100));
+        }
+        if (pPlayer.hasSkill(DemonAvenger.LIFE_SAP)) {
+            Skill skill = SkillFactory.getSkill((DemonAvenger.LIFE_SAP));
+            int nLifeGain = Math.min(totDamage / 2, (totDamage * skill.getEffect(pPlayer.getSkillLevel(skill)).getX()) / 100);
+            if (pPlayer.hasSkill(DemonAvenger.ADVANCED_LIFE_SAP)) {
+                nLifeGain *= 2;
+            }
+            pPlayer.addHP(nLifeGain);
         }
 
         // Prime Critical
@@ -928,7 +943,7 @@ public class DamageParse {
 
                     totDamageToOneMonster += eachd;
                 }
-
+                
                 totDamage += totDamageToOneMonster;
 
                 if ((GameConstants.getAttackDelay(attack.skill, theSkill) >= 100) && (!GameConstants.isNoDelaySkill(attack.skill)) && !GameConstants.isMismatchingBulletSkill(attack.skill) && (!monster.getStats().isBoss()) && (oPlayer.getTruePosition().distanceSq(monster.getTruePosition()) > GameConstants.getAttackRange(effect, oPlayer.getStat().defRange))) {

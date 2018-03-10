@@ -34,7 +34,7 @@ public class MapleCharacterCreationUtil {
         if (gm) {
             return true;
         }
-        if (name.length() < 3 || !namePattern.matcher(name).matches()) {
+        if ((name.length() < 3 && !gm) || !namePattern.matcher(name).matches()) {
             return false;
         }
         return true;

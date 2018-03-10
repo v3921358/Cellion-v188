@@ -25,7 +25,10 @@ public class BlasterBuff extends AbstractBuffClass {
     public BlasterBuff() {
         skills = new int[]{
             Blaster.ARM_CANNON_BOOST,
-            Blaster.MAPLE_WARRIOR};
+            Blaster.MAPLE_WARRIOR,
+            Blaster.FOR_LIBERTY,
+            Blaster.CANNON_OVERDRIVE
+        };
     }
 
     @Override
@@ -41,6 +44,12 @@ public class BlasterBuff extends AbstractBuffClass {
                 break;
             case Blaster.MAPLE_WARRIOR:
                 eff.statups.put(CharacterTemporaryStat.IndieStatR, eff.info.get(MapleStatInfo.x));
+                break;
+            case Blaster.FOR_LIBERTY:
+                eff.statups.put(CharacterTemporaryStat.DamR, 10);
+                break;
+            case Blaster.CANNON_OVERDRIVE:
+                eff.statups.put(CharacterTemporaryStat.RWMaximizeCannon, 0);
                 break;
         }
     }

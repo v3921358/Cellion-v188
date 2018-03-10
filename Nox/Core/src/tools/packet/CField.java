@@ -2390,6 +2390,10 @@ public class CField {
         oPacket.EncodeInteger(npc);
         oPacket.EncodeInteger(0);
 
+        if (c.isIntern()) {
+            c.dropMessage(5, "[Quest Debug] Updating Quest ID : " + quest);
+        }
+        
         return oPacket.ToPacket();
     }
 
@@ -4737,9 +4741,9 @@ public class CField {
             AswanSiegeAttack((byte) 0x2E), // some map arrows it seems
             BlindEffect((byte) 0x2F),
             BossShieldCount((byte) 0x30),
-            ResetOnStateForOnOffSkill((byte) 0x31), // Angelic Burster recharge.
+            ResetOnStateForOnOffSkill((byte) 0x33), // Angelic Burster Recharge (0x33) Version 180
             JewelCraft((byte) 0x32),
-            ConsumeEffect((byte) 0x33),
+            ConsumeEffect((byte) 0x33), // don't know what the id for this is, since 0x33 is Angelic Buster recharge
             PetBuff((byte) 0x34), // some esclamation mark if 0 is sent
             LotteryUIResult((byte) 0x35),
             LeftMonsterNumber((byte) 0x36),

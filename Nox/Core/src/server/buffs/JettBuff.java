@@ -45,18 +45,18 @@ public class JettBuff extends AbstractBuffClass {
             case Jett.BOUNTY_CHASER:
                 eff.statups.put(CharacterTemporaryStat.DEX, eff.info.get(MapleStatInfo.dexX));
                 eff.statups.put(CharacterTemporaryStat.STR, eff.info.get(MapleStatInfo.strX));
-                eff.statups.put(CharacterTemporaryStat.IndieCr, eff.info.get(MapleStatInfo.indieCr));
+                eff.statups.put(CharacterTemporaryStat.CriticalBuff, eff.info.get(MapleStatInfo.indieCr));
                 eff.statups.put(CharacterTemporaryStat.IndieDamR, eff.info.get(MapleStatInfo.indieDamR));
                 break;
             case Jett.HIGH_GRAVITY:
                 eff.statups.put(CharacterTemporaryStat.Stance, eff.info.get(MapleStatInfo.prop));
                 eff.statups.put(CharacterTemporaryStat.IndieAllStat, eff.info.get(MapleStatInfo.indieAllStat));
-                eff.statups.put(CharacterTemporaryStat.IndieCr, eff.info.get(MapleStatInfo.indieCr));
+                eff.statups.put(CharacterTemporaryStat.CriticalBuff, eff.info.get(MapleStatInfo.indieCr));
                 break;
             case Jett.SLIPSTREAM_SUIT:
-                eff.statups.put(CharacterTemporaryStat.DEXR, eff.info.get(MapleStatInfo.x));
+                eff.statups.put(CharacterTemporaryStat.DEX, eff.info.get(MapleStatInfo.x) * 10);
                 eff.statups.put(CharacterTemporaryStat.EVAR, eff.info.get(MapleStatInfo.y));
-                eff.statups.put(CharacterTemporaryStat.ACCR, eff.info.get(MapleStatInfo.y));
+                //eff.statups.put(CharacterTemporaryStat.ACCR, eff.info.get(MapleStatInfo.y));
                 break;
             case Jett.GALACTIC_MIGHT:
                 eff.statups.put(CharacterTemporaryStat.Booster, eff.info.get(MapleStatInfo.x));
@@ -79,7 +79,7 @@ public class JettBuff extends AbstractBuffClass {
                 eff.statups.put(CharacterTemporaryStat.DamageReduce, eff.info.get(MapleStatInfo.y));
                 break;
             case Jett.SINGULARITY_SHOCK:
-                eff.statups.put(CharacterTemporaryStat.IncMaxDamage, eff.info.get(MapleStatInfo.x));
+                //eff.statups.put(CharacterTemporaryStat.IncMaxDamage, eff.info.get(MapleStatInfo.x));
                 break;
         }
     }

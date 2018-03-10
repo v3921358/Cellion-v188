@@ -122,6 +122,7 @@ public class MapleClient extends CClientSocket {
         if (ServerConstants.DEVELOPER_DEBUG_MODE) {
             if(SendPacketOpcode.eOp != null) {
                 switch(SendPacketOpcode.eOp) {
+                    case PrivateServerPacket:
                     case MobCtrlAck:
                     case StatChanged:
                     case NpcMove:

@@ -460,10 +460,11 @@ public class JobPacket {
 
         public static Packet showRechargeEffect() {
             OutPacket oPacket = new OutPacket(80);
-
+            
             oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.Encode(UserEffectCodes.ResetOnStateForOnOffSkill.getEffectId());
-
+            oPacket.Encode(0x33/*UserEffectCodes.ResetOnStateForOnOffSkill.getEffectId()*/);
+            oPacket.Encode(1);
+            
             return oPacket.ToPacket();
         }
 
@@ -693,6 +694,36 @@ public class JobPacket {
 
             return oPacket.ToPacket();
         }*/
+    }
+    
+    public static class BlasterPacket {
+        
+        public static Packet setCylinderState(short nAmmo, int nGauge) {
+            OutPacket oPacket = new OutPacket(80);
+
+            oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
+            PacketHelper.writeSingleMask(oPacket, CharacterTemporaryStat.RWCylinder);
+
+            oPacket.Encode(1);
+            oPacket.EncodeShort(nAmmo); // nAmount
+            oPacket.EncodeInteger(nGauge); // nGauge
+            oPacket.EncodeInteger(-1); // tDuration
+            oPacket.Fill(0, 14);
+
+            oPacket.Fill(0, 69); //for no dc
+
+            return oPacket.ToPacket();
+        }
+        
+        public static Packet onRWMultiChargeCancelRequest(byte nUnkown, int nSkillID) {
+            OutPacket oPacket = new OutPacket(80);
+
+            oPacket.EncodeShort(SendPacketOpcode.SkillUseResult.getValue());
+            oPacket.Encode(nUnkown);
+            oPacket.EncodeInteger(nSkillID);
+
+            return oPacket.ToPacket();
+        }
     }
 
     public static class XenonPacket {

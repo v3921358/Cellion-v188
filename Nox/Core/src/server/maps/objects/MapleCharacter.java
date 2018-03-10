@@ -4573,6 +4573,10 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         return gmLevel >= level;
     }
 
+    public final void expandInventoryRequest(MapleInventoryType nType, int nAmount) {
+        
+    }
+    
     public final MapleInventory getInventory(MapleInventoryType type) {
         return inventory[type.ordinal()];
     }
@@ -5494,6 +5498,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else if (GameConstants.isAranJob(job)) {
             switch (getLevel()) {
                 case 10:
+                case 11:
                     changeJob((short) 2100);
                     JobAdvanceSp(1);
                     break;
@@ -5618,6 +5623,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else if (GameConstants.isEvan(job)) {
             switch (getLevel()) {
                 case 10:
+                case 11:
                     changeJob((short) 2210);
                     JobAdvanceSp(1);
                     break;
@@ -5637,6 +5643,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else if (GameConstants.isMihile(job)) {
             switch (getLevel()) {
                 case 10:
+                case 11:
                     changeJob((short) 5100);
                     JobAdvanceSp(1);
                     break;
@@ -5656,6 +5663,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else if (GameConstants.isMercedes(job)) {
             switch (getLevel()) {
                 case 10:
+                case 11:
                     changeJob((short) 2300);
                     JobAdvanceSp(1);
                     break;
@@ -5675,6 +5683,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else if (GameConstants.isHayato(job)) {
             switch (getLevel()) {
                 case 10:
+                case 11:
                     changeJob((short) 4100);
                     JobAdvanceSp(1);
                     break;
@@ -5694,6 +5703,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else if (GameConstants.isKanna(job)) {
             switch (getLevel()) {
                 case 10:
+                case 11:
                     changeJob((short) 4200);
                     JobAdvanceSp(1);
                     break;
@@ -5713,6 +5723,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else if (GameConstants.isAngelicBuster(job)) {
             switch (getLevel()) {
                 case 10:
+                case 11:
                     //changeJob((short) 6500);
                     JobAdvanceSp(1);
                     break;
@@ -5732,6 +5743,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else if (GameConstants.isLuminous(job)) {
             switch (getLevel()) {
                 case 10:
+                case 11:
                     changeJob((short) 2700);
                     JobAdvanceSp(1);
                     break;
@@ -5751,6 +5763,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else if (GameConstants.isKaiser(job)) {
             switch (getLevel()) {
                 case 10:
+                case 11:
                     changeJob((short) 6100);
                     JobAdvanceSp(1);
                     break;
@@ -5770,6 +5783,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else if (GameConstants.isXenon(job)) {
             switch (getLevel()) {
                 case 10:
+                case 11:
                     changeJob((short) 3600);
                     JobAdvanceSp(1);
                     break;
@@ -5789,6 +5803,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else if (GameConstants.isDualBlade(job)) {
             switch (getLevel()) {
                 case 10:
+                case 11:
                     //changeJob((short) 400);
                     JobAdvanceSp(1);
                     break;
@@ -5816,6 +5831,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else if (GameConstants.isShade(job)) {
             switch (getLevel()) {
                 case 10:
+                case 11:
                     changeJob((short) 2500);
                     JobAdvanceSp(1);
                     changeSingleSkillLevel(SkillFactory.getSkill(25001002),(byte) 1, (byte) 25); // Flash Fist
@@ -5837,6 +5853,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else if (GameConstants.isKinesis(job)) {
             switch (getLevel()) {
                 case 10:
+                case 11:
                     changeJob((short) 14200);
                     JobAdvanceSp(1);
                     break;
@@ -5856,6 +5873,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else if (GameConstants.isPhantom(job)) {
             switch (getLevel()) {
                 case 10:
+                case 11:
                     changeJob((short) 2400);
                     JobAdvanceSp(1);
                     break;
@@ -5869,6 +5887,26 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                     break;
                 case 100:
                     changeJob((short) 2412);
+                    JobAdvanceSp(4);
+                    break;
+            }
+        } else if (GameConstants.isJett(job)) {
+            switch (getLevel()) {
+                case 10:
+                case 11:
+                    changeJob((short) 508);
+                    JobAdvanceSp(1);
+                    break;
+                case 30:
+                    changeJob((short) 570);
+                    JobAdvanceSp(2);
+                    break;
+                case 60:
+                    changeJob((short) 571);
+                    JobAdvanceSp(3);
+                    break;
+                case 100:
+                    changeJob((short) 572);
                     JobAdvanceSp(4);
                     break;
             }
@@ -10996,7 +11034,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
      * @method Uses the kaiserCombo variable (again) to apply the combo buff to the player.
      */
     public void handleComboAttack() {
-        int comboChance = Randomizer.rand(1, 3); // 1 in 3 Chance (33%)
+        int comboChance = Randomizer.rand(1, 10); // 1 in 3 Chance (33%)
         if (comboChance == 1) {
             if (kaiserCombo < 6) { // Max Combo Count is 5.
                 kaiserCombo += 1;

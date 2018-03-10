@@ -18,6 +18,8 @@ import constants.GameConstants;
 import constants.ServerConstants;
 import handling.cashshop.CashShopOperation;
 import handling.farm.FarmOperation;
+import handling.jobs.Resistance;
+import handling.jobs.Resistance.BlasterHandler;
 import handling.world.CharacterIdChannelPair;
 import handling.world.CharacterTransfer;
 import handling.world.MapleMessenger;
@@ -245,6 +247,8 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
             c.write(AvengerPacket.giveAvengerHpBuff(player.getStat().getHp()));
         } else if (GameConstants.isLuminous(player.getJob())) {
             player.applyLifeTidal();
+        } else if (GameConstants.isBlaster(player.getJob())) {
+            BlasterHandler.enterCylinderState(player);
         }
 
         // Quickslots
@@ -270,7 +274,7 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         // Developer Skill Cooldown Toggle
         if (ServerConstants.DEV_DEFAULT_CD && player.isDeveloper()) {
             player.toggleCooldown();
-            player.yellowMessage("[Debug] Skill cooldowns are toggled off by default due to your developer account status.");
+            player.yellowMessage("[Debug] Skill cooldowns are toggled off by default due to developer status.");
             player.dropMessage(6, "[Reminder] You can type !togglecooldown to enable skill cooldowns.");
         }
         

@@ -4,7 +4,10 @@ import client.*;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.skills.*;
+import handling.jobs.Explorer;
+import handling.jobs.Explorer.HeroHandler;
 import static handling.jobs.Hero.AranHandler.handleAdrenalineRush;
+import handling.jobs.Resistance.BlasterHandler;
 import net.InPacket;
 import netty.ProcessPacket;
 import server.MapleInventoryManipulator;
@@ -38,6 +41,7 @@ import server.Timer;
 import server.Timer.MapTimer;
 import server.maps.SummonMovementType;
 import server.maps.objects.MapleSummon;
+import tools.packet.JobPacket.BlasterPacket;
 
 public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
 
@@ -74,6 +78,11 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
      // These toggles are technically buffs, but do not get handled by the buff manager. -Mazen
         switch (nSkill) {
             
+            case 37000010: {
+                BlasterHandler.handleCylinderReload(pPlayer);
+                break;
+            }
+            
             case 14110030:{
                 if (!GameConstants.isNightWalkerCygnus(pPlayer.getJob())) {
                     return;
@@ -82,6 +91,18 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 buffEffects.statups.put(CharacterTemporaryStat.DarknessAscension, 1);
                 pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), null, buffEffects.statups, false, 2100000000, pPlayer.getId());
                 pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, 14110030, 2100000000, buffEffects.statups, buffEffects));
+                break;
+            }
+            
+            case Fighter.COMBO_ATTACK:{
+                if (!GameConstants.isWarriorHero(pPlayer.getJob())) {
+                    return;
+                }
+                final MapleStatEffect buffEffects = SkillFactory.getSkill(Fighter.COMBO_ATTACK).getEffect(pPlayer.getTotalSkillLevel(Fighter.COMBO_ATTACK));
+                buffEffects.statups.put(CharacterTemporaryStat.ComboCounter, 0);
+                pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), null, buffEffects.statups, false, 2100000000, pPlayer.getId());
+                pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, Fighter.COMBO_ATTACK, 2100000000, buffEffects.statups, buffEffects));
+                HeroHandler.setComboAttack(pPlayer, 0);
                 break;
             }
             

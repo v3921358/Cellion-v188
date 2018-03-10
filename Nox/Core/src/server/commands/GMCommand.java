@@ -81,7 +81,8 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter oUser = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            int nChannel = World.Find.findChannel(splitted[1]);
+            MapleCharacter oUser = ChannelServer.getInstance(nChannel).getPlayerStorage().getCharacterByName(splitted[1]);
             int nOnline = 0;
             
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {

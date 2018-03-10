@@ -107,6 +107,7 @@ public final class CashShopPurchase implements ProcessPacket<MapleClient> {
                 FarmItemPurchase.gems(iPacket, c, chr);
                 break;
             default:
+                System.out.println("[Cash Shop Debug] New Operation Found (" + actionType + ")");
                 LogHelper.GENERAL_EXCEPTION.get().info("[CashShopPurchase] Unknow action type: " + actionType);
                 c.write(CSPacket.sendCSFail(0));
                 break;

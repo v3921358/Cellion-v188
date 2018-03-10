@@ -28,7 +28,9 @@ function action(mode, type, selection){
 		text = "What are you interested in purchasing?\r\n#r"
 			 + "#r#i5062009##L5062009#1,200 NX - Red Cube#l\r\n"
 			 + "#g#i5062500##L5062500#2,400 NX - Bonus Potential Cube#l\r\n"
-			 + "#d#i2048306##L2048306#3,600 NX - Bonus Potential Scroll#l\r\n"
+			 + "#d#i2048306##L2048306#3,600 NX - Bonus Potential Scroll#l\r\n\r\n"
+			 
+			 + "#d#i5040004##L5040004#250,000 NX - Hyper Teleport Rock (3 Days)#l\r\n"
 		;
 		cm.sendSimple(text);
 	} else if (status == 1) {
@@ -46,6 +48,12 @@ function action(mode, type, selection){
 			case 2048306:
 				nCost = 3600 * nQuantity;
 				break;
+			case 2048306:
+				nCost = 3600 * nQuantity;
+				break;
+			case 5040004:
+				nCost = 250000 * nQuantity;
+				break;
 		}
 		if (nQuantity > 0 && nQuantity <= 1000) {
 			cm.sendYesNo("So, you would like to purchase #d" + nQuantity + "#k for #r" + nCost + "#k NX?");
@@ -54,14 +62,27 @@ function action(mode, type, selection){
 			cm.dispose();
 		}
 	} else if (status == 3) {
-		if (cm.getPlayer().getCSPoints(2) >= nCost) {
-			cm.getPlayer().modifyCSPoints(2, -nCost, true);
-			cm.gainItem(nChoice, nQuantity);
-			cm.sendOk("You have successfully purchased #b" + nQuantity + "#k #i" + nChoice + "# .");
-			cm.dispose();
+		if (nChoice == 5040004) {
+			if (cm.getPlayer().getCSPoints(2) >= nCost) {
+				cm.getPlayer().modifyCSPoints(2, -nCost, true);
+				cm.gainItemPeriod(nChoice, nQuantity, 72, true); //item id, amount, time, is hours?
+				cm.sendOk("You have successfully purchased #b" + nQuantity + "#k #i" + nChoice + "# .");
+				cm.dispose();
+			} else {
+				cm.sendOk("Sorry, looks like you don't have enough #rNX#k to make that purchase.");
+				cm.dispose();
+			}
+
 		} else {
-			cm.sendOk("Sorry, looks like you don't have enough #rNX#k to make that purchase.");
-			cm.dispose();
+			if (cm.getPlayer().getCSPoints(2) >= nCost) {
+				cm.getPlayer().modifyCSPoints(2, -nCost, true);
+				cm.gainItem(nChoice, nQuantity);
+				cm.sendOk("You have successfully purchased #b" + nQuantity + "#k #i" + nChoice + "# .");
+				cm.dispose();
+			} else {
+				cm.sendOk("Sorry, looks like you don't have enough #rNX#k to make that purchase.");
+				cm.dispose();
+			}
 		}
 	}
 }

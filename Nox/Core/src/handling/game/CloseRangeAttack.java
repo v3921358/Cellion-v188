@@ -8,11 +8,14 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.skills.Aran;
+import constants.skills.Blaster;
 import constants.skills.DemonAvenger;
 import constants.skills.DemonSlayer;
 import constants.skills.NightWalker;
 import constants.skills.Page;
 import constants.skills.Zero;
+import handling.jobs.Explorer;
+import handling.jobs.Resistance;
 import handling.world.AttackInfo;
 import handling.world.AttackType;
 import handling.world.DamageParse;
@@ -102,6 +105,33 @@ public final class CloseRangeAttack {
                     case DemonSlayer.CERBERUS_CHOMP: 
                         pPlayer.setMp(pPlayer.getStat().getMp() + 50);
                         break;
+                }
+            } else if (GameConstants.isWarriorHero(pPlayer.getJob())) {
+                if (pPlayer.getStatForBuff(CharacterTemporaryStat.ComboCounter) != null) { // Combo Attack
+                    pPlayer.dropMessage(5, "Combo :" + pPlayer.getComboStack());
+                    Explorer.HeroHandler.handleComboAttack(pPlayer);
+                    Explorer.HeroHandler.handleComboOrbs(pPlayer, attack.skill);
+                    //pPlayer.handleComboAttack();
+                } else {
+                    pPlayer.setComboStack(0);
+                }
+            } else if (GameConstants.isBlaster(pPlayer.getJob())) {
+                switch (attack.skill) {
+                    case 37000011:
+                    case 37000012:
+                    case 37000013:
+                    case Blaster.BUNKER_BUSTER_EXPLOSION:
+                        Resistance.BlasterHandler.handleOverheat(pPlayer);
+                        break;
+                    case 37001004:
+                    case Blaster.REVOLVING_CANNON_PLUS:
+                    case Blaster.REVOLVING_CANNON_PLUS_2:
+                    case Blaster.REVOLVING_CANNON_PLUS_3: 
+                        Resistance.BlasterHandler.handleAmmoCost(pPlayer);
+                        Resistance.BlasterHandler.handleGaugeIncrease(pPlayer);
+                        c.write(JobPacket.BlasterPacket.onRWMultiChargeCancelRequest((byte) 1, attack.skill));
+                        break;
+                    
                 }
             }
 

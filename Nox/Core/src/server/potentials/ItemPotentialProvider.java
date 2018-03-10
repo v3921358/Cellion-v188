@@ -919,6 +919,10 @@ public class ItemPotentialProvider {
                     aPossiblePotential.add(nValue);
                 }
             }
+        } else if (pTier == ItemPotentialTierType.Legendary) { // Use Unique Table for Legendary under level 70.
+            for (int nValue : aCustomUniquePotential) {
+                aPossiblePotential.add(nValue); // Adds Custom Potential Values (Unique)
+            }
         } else if (pTier == ItemPotentialTierType.Unique) {
             for (int nValue : aCustomUniquePotential) {
                 aPossiblePotential.add(nValue); // Adds Custom Potential Values (Unique)
@@ -1116,18 +1120,29 @@ public class ItemPotentialProvider {
             is3LinePotential = equip.getPotential3() != 0;
         }
 
-        ItemPotentialOption potential_line1 = decideStats(equip, tierType, reqLevel);
-        ItemPotentialOption potential_line2 = decideStats(equip, tierType, reqLevel);
-        ItemPotentialOption potential_line3 = is3LinePotential ? decideStats(equip, tierType, reqLevel) : null;
-
-        equip.setPotential1(potential_line1.getOptionId());
-        equip.setPotential2(potential_line2.getOptionId());
-        if (potential_line3 != null) {
-            equip.setPotential3(potential_line3.getOptionId());
+        if (ServerConstants.CONTROLLED_POTENTIAL_RESULTS) {
+            equip.setPotential1(generatePotential(equip,tierType));
+            equip.setPotential2(generatePotential(equip,tierType));
+            if (is3LinePotential) {
+                equip.setPotential3(generatePotential(equip,tierType));
+            } else {
+                equip.setPotential3(0);
+            }
+            equip.setPotentialTier(tierType);
         } else {
-            equip.setPotential3(0);
+            ItemPotentialOption potential_line1 = decideStats(equip, tierType, reqLevel);
+            ItemPotentialOption potential_line2 = decideStats(equip, tierType, reqLevel);
+            ItemPotentialOption potential_line3 = is3LinePotential ? decideStats(equip, tierType, reqLevel) : null;
+
+            equip.setPotential1(potential_line1.getOptionId());
+            equip.setPotential2(potential_line2.getOptionId());
+            if (potential_line3 != null) {
+                equip.setPotential3(potential_line3.getOptionId());
+            } else {
+                equip.setPotential3(0);
+            }
+            equip.setPotentialTier(tierType);
         }
-        equip.setPotentialTier(tierType);
         return true;
     }
 

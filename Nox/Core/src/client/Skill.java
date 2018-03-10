@@ -904,7 +904,7 @@ public class Skill implements Comparator<Skill> {
      * @return whether or not the skill is a keydown skill
      */
     public static final boolean isKeydownSkill(int nSkillID) { // is_keydown_skill
-        if (nSkillID > 31211001) {
+        if (nSkillID > 31211000) { // if (nSkillID > 31211001) {
             if (nSkillID > 80011362) {
                 if (nSkillID > 112111016) {
                     if (nSkillID > 400011028) {

@@ -112,6 +112,7 @@ public class ServerConstants {
     public static final boolean STRICT_PET_LOOT = true; //Only picks up USE and ETC item types.
     public static final boolean MODIFY_SPAWN_RATE = true; //Enables spawn rate multiplier.
     public static final float SPAWN_RATE_MULTIPLIER = 1.25F; //Multipy the spawn rate globally by this variable.
+    public static final boolean DAMAGE_CORRECTION = true; //Enables damage modifications for some skills, used to correct or change damage lines.
 
     /*Tutorial Configuration*/
  /*NPCs used for the tutorial (9201095, 9270087, 9270082, 9270086)*/

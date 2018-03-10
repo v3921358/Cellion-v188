@@ -1143,6 +1143,10 @@ public class BuffPacket {
             encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DiabolikRecovery), buffid, bufflength, endecode4Byte);
         }
         
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ExceedOverload)) {
+            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ExceedOverload), buffid, bufflength, endecode4Byte);
+        }
+                
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.BuckShot)) {
             encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BuckShot), buffid, bufflength, endecode4Byte);
         }
@@ -1914,8 +1918,8 @@ public class BuffPacket {
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.RWCylinder)) { //RWCylinder
-            oPacket.Encode(0);//bRWCylinder
-            oPacket.EncodeShort(0);//cRWCylinder
+            oPacket.Encode(chr.getComboStack());//bRWCylinder - Ammo
+            oPacket.EncodeShort(chr.getAdditionalStack());//cRWCylinder - Gauge
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.RWMagnumBlow)) { //RWMagnumBlow
