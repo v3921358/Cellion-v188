@@ -30,7 +30,7 @@ public final class UltimateCharacterCreator implements ProcessPacket<MapleClient
     public void Process(MapleClient c, InPacket iPacket) {
         if (!c.getPlayer().isGM()
                 && (!c.isLoggedIn() || c.getPlayer() == null || c.getPlayer().getLevel() < 120 || c.getPlayer().getMapId() != 130000000
-                || c.getPlayer().getQuestStatus(20734) != MapleQuestState.NotStarted || c.getPlayer().getQuestStatus(20616) != MapleQuestState.Completed || !GameConstants.isKOC(c.getPlayer().getJob()) || !MapleCharacterCreationUtil.canMakeCharacter(c.getWorld(), c.getAccID()))) {
+                || c.getPlayer().getQuestStatus(20734) != MapleQuestState.NotStarted || c.getPlayer().getQuestStatus(20616) != MapleQuestState.Completed || !GameConstants.isCygnusKnight(c.getPlayer().getJob()) || !MapleCharacterCreationUtil.canMakeCharacter(c.getWorld(), c.getAccID()))) {
             c.write(CField.createUltimate(2));
             //Character slots are full. Please purchase another slot from the Cash Shop.
             return;

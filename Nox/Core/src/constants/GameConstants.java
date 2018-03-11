@@ -188,7 +188,260 @@ public class GameConstants {
     public static final int[] unusedNpcs = {9201142, 9201254, 9201030, 9010037, 9010038, 9010039, 9010040, 9300010, 9070004, 9070006, 9000017, 2041017, 9270075, 9000069, 9201029, 9130024, 9330072, 9133080, 9201152, 9330189};
     //Unused npcs will be removed from map once you enter it.
 
-    public static void LoadEXP() {
+    public static void LoadEXP() { // Version 180
+        exp[1] = 15;
+        exp[2] = 34;
+        exp[3] = 57;
+        exp[4] = 92;
+        exp[5] = 135;
+        exp[6] = 372;
+        exp[7] = 560;
+        exp[8] = 840;
+        exp[9] = 1242;
+        exp[10] = 1242;
+        exp[11] = 1242;
+        exp[12] = 1242;
+        exp[13] = 1242;
+        exp[14] = 1242;
+        exp[15] = 1490;
+        exp[16] = 1788;
+        exp[17] = 2145;
+        exp[18] = 2574;
+        exp[19] = 3088;
+        exp[20] = 3705;
+        exp[21] = 4446;
+        exp[22] = 5335;
+        exp[23] = 6402;
+        exp[24] = 7682;
+        exp[25] = 9218;
+        exp[26] = 11061;
+        exp[27] = 13273;
+        exp[28] = 15927;
+        exp[29] = 19112;
+        exp[30] = 19112;
+        exp[31] = 19112;
+        exp[32] = 19112;
+        exp[33] = 19112;
+        exp[34] = 19112;
+        exp[35] = 22934;
+        exp[36] = 27520;
+        exp[37] = 33024;
+        exp[38] = 39628;
+        exp[39] = 47553;
+        exp[40] = 51357;
+        exp[41] = 55465;
+        exp[42] = 59902;
+        exp[43] = 64694;
+        exp[44] = 69869;
+        exp[45] = 75458;
+        exp[46] = 81494;
+        exp[47] = 88013;
+        exp[48] = 95054;
+        exp[49] = 102658;
+        exp[50] = 110870;
+        exp[51] = 119739;
+        exp[52] = 129318;
+        exp[53] = 139663;
+        exp[54] = 150836;
+        exp[55] = 162902;
+        exp[56] = 175934;
+        exp[57] = 190008;
+        exp[58] = 205208;
+        exp[59] = 221624;
+        exp[60] = 221624;
+        exp[61] = 221624;
+        exp[62] = 221624;
+        exp[63] = 221624;
+        exp[64] = 221624;
+        exp[65] = 238245;
+        exp[66] = 256113;
+        exp[67] = 275321;
+        exp[68] = 295970;
+        exp[69] = 318167;
+        exp[70] = 342029;
+        exp[71] = 367681;
+        exp[72] = 395257;
+        exp[73] = 424901;
+        exp[74] = 456768;
+        exp[75] = 488741;
+        exp[76] = 522952;
+        exp[77] = 559558;
+        exp[78] = 598727;
+        exp[79] = 640637;
+        exp[80] = 685481;
+        exp[81] = 733464;
+        exp[82] = 784806;
+        exp[83] = 839742;
+        exp[84] = 898523;
+        exp[85] = 961419;
+        exp[86] = 1028718;
+        exp[87] = 1100728;
+        exp[88] = 1177778;
+        exp[89] = 1260222;
+        exp[90] = 1342136;
+        exp[91] = 1429374;
+        exp[92] = 1522283;
+        exp[93] = 1621231;
+        exp[94] = 1726611;
+        exp[95] = 1838840;
+        exp[96] = 1958364;
+        exp[97] = 2085657;
+        exp[98] = 2221224;
+        exp[99] = 2365603;
+        exp[100] = 2365603;
+        exp[101] = 2365603;
+        exp[102] = 2365603;
+        exp[103] = 2365603;
+        exp[104] = 2365603;
+        exp[105] = 2519367;
+        exp[106] = 2683125;
+        exp[107] = 2857528;
+        exp[108] = 3043267;
+        exp[109] = 3241079;
+        exp[110] = 3451749;
+        exp[111] = 3676112;
+        exp[112] = 3915059;
+        exp[113] = 4169537;
+        exp[114] = 4440556;
+        exp[115] = 4729192;
+        exp[116] = 5036589;
+        exp[117] = 5363967;
+        exp[118] = 5712624;
+        exp[119] = 6083944;
+        exp[120] = 6479400;
+        exp[121] = 6900561;
+        exp[122] = 7349097;
+        exp[123] = 7826788;
+        exp[124] = 8335529;
+        exp[125] = 8877338;
+        exp[126] = 9454364;
+        exp[127] = 10068897;
+        exp[128] = 10723375;
+        exp[129] = 11420394;
+        exp[130] = 12162719;
+        exp[131] = 12953295;
+        exp[132] = 13795259;
+        exp[133] = 14691950;
+        exp[134] = 15646926;
+        exp[135] = 16663976;
+        exp[136] = 17747134;
+        exp[137] = 18900697;
+        exp[138] = 20129242;
+        exp[139] = 21437642;
+        exp[140] = 22777494;
+        exp[141] = 24201087;
+        exp[142] = 25713654;
+        exp[143] = 27320757;
+        exp[144] = 29028304;
+        exp[145] = 30842573;
+        exp[146] = 32770233;
+        exp[147] = 34818372;
+        exp[148] = 36994520;
+        exp[149] = 39306677;
+        exp[150] = 41763344;
+        exp[151] = 44373553;
+        exp[152] = 47146900;
+        exp[153] = 50093581;
+        exp[154] = 53224429;
+        exp[155] = 56550955;
+        exp[156] = 60085389;
+        exp[157] = 63840725;
+        exp[158] = 67830770;
+        exp[159] = 72070193;
+        exp[160] = 76574580;
+        exp[161] = 76574580;
+        exp[162] = 86445521;
+        exp[163] = 91848366;
+        exp[164] = 97588888;
+        exp[165] = 103688193;
+        exp[166] = 110168705;
+        exp[167] = 117054249;
+        exp[168] = 124370139;
+        exp[169] = 132143272;
+        exp[170] = 140402226;
+        exp[171] = 149177365;
+        exp[172] = 158500950;
+        exp[173] = 168407259;
+        exp[174] = 178932712;
+        exp[175] = 190116006;
+        exp[176] = 201998256;
+        exp[177] = 214623147;
+        exp[178] = 228037093;
+        exp[179] = 242289411;
+        exp[180] = 256826775;
+        exp[181] = 272236381;
+        exp[182] = 288570563;
+        exp[183] = 305884796;
+        exp[184] = 324237883;
+        exp[185] = 343692155;
+        exp[186] = 364313684;
+        exp[187] = 386172505;
+        exp[188] = 409342855;
+        exp[189] = 433903426;
+        exp[190] = 459937631;
+        exp[191] = 487533888;
+        exp[192] = 516785921;
+        exp[193] = 547793076;
+        exp[194] = 580660660;
+        exp[195] = 615500299;
+        exp[196] = 652430316;
+        exp[197] = 691576134;
+        exp[198] = 733070702;
+        exp[199] = 777054944;
+        exp[200] = 2207026470L;
+        exp[201] = 2648431764L;
+        exp[202] = 3178118116L;
+        exp[203] = 3813741739L;
+        exp[204] = 4576490086L;
+        exp[205] = 5491788103L;
+        exp[206] = 6590145723L;
+        exp[207] = 7908174867L;
+        exp[208] = 9489809840L;
+        exp[209] = 11387771808L;
+        exp[210] = 24142076232L;
+        exp[211] = 25590600805L;
+        exp[212] = 27126036853L;
+        exp[213] = 28753599064L;
+        exp[214] = 30478815007L;
+        exp[215] = 32307543907L;
+        exp[216] = 34245996541L;
+        exp[217] = 36300756333L;
+        exp[218] = 38478801712L;
+        exp[219] = 40787529814L;
+        exp[220] = 84838062013L;
+        exp[221] = 88231584493L;
+        exp[222] = 91760847872L;
+        exp[223] = 95431281786L;
+        exp[224] = 99248533057L;
+        exp[225] = 103218474379L;
+        exp[226] = 107347213354L;
+        exp[227] = 111641101888L;
+        exp[228] = 116106745963L;
+        exp[229] = 120751015801L;
+        exp[230] = 246332072234L;
+        exp[231] = 251258713678L;
+        exp[232] = 256283887951L;
+        exp[233] = 261409565710L;
+        exp[234] = 266637757024L;
+        exp[235] = 271970512164L;
+        exp[236] = 277409922407L;
+        exp[237] = 282958120855L;
+        exp[238] = 288617283272L;
+        exp[239] = 294389628937L;
+        exp[240] = 594667050452L;
+        exp[241] = 600613720956L;
+        exp[242] = 606619858165L;
+        exp[243] = 612686056746L;
+        exp[244] = 618812917313L;
+        exp[245] = 625001046486L;
+        exp[246] = 631251056950L;
+        exp[247] = 637563567519L;
+        exp[248] = 643939203194L;
+        exp[249] = 650378595225L;
+        exp[250] = ServerConstants.PARAGON_SYSTEM ? 1 : 0; // Non-zero required for experience gain toward paragon levels.
+    }
+    
+    /*public static void LoadEXP() { // Version 176
         exp[1] = 15;
         exp[2] = 34;
         exp[3] = 57;
@@ -289,7 +542,7 @@ public class GameConstants {
         }
 
         exp[250] = 0;
-    }
+    }*/
 
     public static long getExpNeededForLevel(final int level) {
         if (level < 1 || level >= exp.length) {
@@ -477,8 +730,23 @@ public class GameConstants {
         return 0;
     }
 
-    public static boolean isKOC(final int job) {
+    public static boolean isExplorer(final int job) {
+        return job >= 0 && job < 1000;
+    }
+    
+    public static boolean isCygnusKnight(final int job) {
         return job >= 1000 && job < 2000;
+    }
+    public static boolean isResistance(final int job) {
+        return job / 1000 == 3;
+    }
+    
+    public static boolean isLegend(final int job) { // Refers to "Legend"/"Hero" classes.
+        return job >= 2100 && job <= 2800;
+    }
+    
+    public static boolean isAran(final int job) {
+        return job >= 2000 && job <= 2113 && job != 2001 && job != 2002 && job != 2003;
     }
 
     public static boolean isEvan(final int job) {
@@ -540,18 +808,6 @@ public class GameConstants {
 
     public static boolean isDemonAvenger(final int job) {
         return job == 3001 || job == 3101 || (job >= 3120 && job <= 3123 && job != 3100);
-    }
-
-    public static boolean isAran(final int job) {
-        return job >= 2000 && job <= 2113 && job != 2001 && job != 2002 && job != 2003;
-    }
-
-    public static boolean isResist(final int job) {
-        return job / 1000 == 3;
-    }
-
-    public static boolean isAdventurer(final int job) {
-        return job >= 0 && job < 1000;
     }
 
     public static boolean isCannoneer(final int job) {
@@ -828,7 +1084,7 @@ public class GameConstants {
     public static int getLinkSkillByJob(final int job) {
         if (isCannoneer(job)) { //Pirate Blessing
             return 80000000;
-        } else if (isKOC(job)) { //Cygnus Blessing
+        } else if (isCygnusKnight(job)) { //Cygnus Blessing
             return 80000070;
         } else if (isMercedes(job)) { //Elven Blessing
             return 80001040;
@@ -1439,10 +1695,6 @@ public class GameConstants {
 
     public static boolean isArrowForBow(final int itemId) {
         return itemId >= 2060000 && itemId < 2061000;
-    }
-
-    public static boolean isResistance(final int job) {
-        return job / 1000 == 3;
     }
 
     public static MapleInventoryType getInventoryType(final int itemId) {
@@ -4323,11 +4575,11 @@ public class GameConstants {
                 case 1902000:
                 case 1902001:
                 case 1902002:
-                    return isAdventurer(jobid);
+                    return isExplorer(jobid);
                 case 1902005:
                 case 1902006:
                 case 1902007:
-                    return isKOC(jobid);
+                    return isCygnusKnight(jobid);
                 case 1902015:
                 case 1902016:
                 case 1902017:
@@ -4339,7 +4591,7 @@ public class GameConstants {
                     return isEvan(jobid);
             }
 
-            if (isResist(jobid)) {
+            if (isResistance(jobid)) {
                 return false; //none lolol
             }
         }

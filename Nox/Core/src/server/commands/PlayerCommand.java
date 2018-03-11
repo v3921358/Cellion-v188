@@ -105,10 +105,6 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT)).setCustomData(String.valueOf(System.currentTimeMillis() + ((long) 7 * 24 * 60 * 60000)));
-            c.getPlayer().modifyCSPoints(2, -6000, true);
-            c.getPlayer().dropMessage(1, "Additional pendant slot gained.");
-            
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
             c.write(CWvsContext.enableActions());

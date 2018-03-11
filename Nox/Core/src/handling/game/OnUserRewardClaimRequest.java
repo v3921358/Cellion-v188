@@ -93,7 +93,7 @@ public final class OnUserRewardClaimRequest implements ProcessPacket<MapleClient
                     }
                     break;
                 case 5:
-                    int maxlevel = GameConstants.isKOC(c.getPlayer().getJob()) ? 120 : 200;
+                    int maxlevel = GameConstants.isCygnusKnight(c.getPlayer().getJob()) ? 120 : 200;
                     if (c.getPlayer().getLevel() < maxlevel) {
                         c.getPlayer().gainExp(exp, true, true, true);
                         c.getPlayer().deleteReward(id);

@@ -25,7 +25,7 @@ public class PhantomViewSkillHandler implements ProcessPacket<MapleClient> {
         int jobid = c.getChannelServer().getPlayerStorage().getCharacterById(victim).getJob();
         List<Integer> list = SkillFactory.getSkillsByJob(jobid);
 
-        if (!c.getChannelServer().getPlayerStorage().getCharacterById(victim).getSkills().isEmpty() && GameConstants.isAdventurer(jobid)) {
+        if (!c.getChannelServer().getPlayerStorage().getCharacterById(victim).getSkills().isEmpty() && GameConstants.isExplorer(jobid)) {
             c.write(CField.viewSkills(c.getChannelServer().getPlayerStorage().getCharacterById(victim)));
         } else {
             c.getPlayer().dropMessage(6, "You cannot take skills off non-adventurer's");

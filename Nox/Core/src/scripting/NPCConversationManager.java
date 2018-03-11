@@ -2937,9 +2937,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         if (skillForJob == 2001) {
             return GameConstants.isEvan(job); //special exception for beginner -.-
         } else if (skillForJob == 0) {
-            return GameConstants.isAdventurer(job); //special exception for beginner
+            return GameConstants.isExplorer(job); //special exception for beginner
         } else if (skillForJob == 1000) {
-            return GameConstants.isKOC(job); //special exception for beginner
+            return GameConstants.isCygnusKnight(job); //special exception for beginner
         } else if (skillForJob == 2000) {
             return GameConstants.isAran(job); //special exception for beginner
         } else if (skillForJob == 3000) {
@@ -2994,9 +2994,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             return false;
         } else if (GameConstants.isDemonSlayer(skillForJob) && !GameConstants.isDemonSlayer(job)) {
             return false;
-        } else if (GameConstants.isAdventurer(skillForJob) && !GameConstants.isAdventurer(job)) {
+        } else if (GameConstants.isExplorer(skillForJob) && !GameConstants.isExplorer(job)) {
             return false;
-        } else if (GameConstants.isKOC(skillForJob) && !GameConstants.isKOC(job)) {
+        } else if (GameConstants.isCygnusKnight(skillForJob) && !GameConstants.isCygnusKnight(job)) {
             return false;
         } else if (GameConstants.isAran(skillForJob) && !GameConstants.isAran(job)) {
             return false;

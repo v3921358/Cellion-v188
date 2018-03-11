@@ -1826,7 +1826,7 @@ public class PlayerStats implements Serializable {
             eff = bx.getEffect(bof);
             bossdam_r += eff.getBossDamage();
         }
-        if (GameConstants.isAdventurer(chra.getJob())) {
+        if (GameConstants.isExplorer(chra.getJob())) {
             bx = SkillFactory.getSkill(74);
             bof = chra.getSkillLevel(bx);
             if (bof > 0) {
@@ -2566,7 +2566,7 @@ public class PlayerStats implements Serializable {
                 break;
             }
         }
-        if (GameConstants.isResist(chra.getJob())) {
+        if (GameConstants.isResistance(chra.getJob())) {
             bx = SkillFactory.getSkill(30000002);
             bof = chra.getTotalSkillLevel(bx);
             if (bof > 0) {
@@ -3292,7 +3292,7 @@ public class PlayerStats implements Serializable {
                 crit_rate += critSkill.getEffect(critlevel).getProb();
                 this.passive_sharpeye_min_percent += critSkill.getEffect(critlevel).getCriticalMin();
             }
-        } else if (GameConstants.isResist(player.getJob())) {
+        } else if (GameConstants.isResistance(player.getJob())) {
             critSkill = SkillFactory.getSkill(30000022);
             critlevel = player.getTotalSkillLevel(critSkill);
             if (critlevel > 0) {
@@ -3497,7 +3497,7 @@ public class PlayerStats implements Serializable {
         boolean acc = true;
         switch (weaponType) {
             case BOW:
-                skil = GameConstants.isKOC(player.getJob()) ? 13100000 : 3100000;
+                skil = GameConstants.isCygnusKnight(player.getJob()) ? 13100000 : 3100000;
                 break;
             case CLAW:
                 skil = 4100000;
@@ -3513,17 +3513,17 @@ public class PlayerStats implements Serializable {
                 skil = player.getJob() >= 430 && player.getJob() <= 434 ? 4300000 : 4200000;
                 break;
             case CROSSBOW:
-                skil = GameConstants.isResist(player.getJob()) ? 33100000 : 3200000;
+                skil = GameConstants.isResistance(player.getJob()) ? 33100000 : 3200000;
                 break;
             case AXE1H:
             case BLUNT1H:
-                skil = GameConstants.isResist(player.getJob()) ? 31100004 : (GameConstants.isKOC(player.getJob()) ? 11100000 : (player.getJob() > 112 ? 1200000 : 1100000)); //hero/pally
+                skil = GameConstants.isResistance(player.getJob()) ? 31100004 : (GameConstants.isCygnusKnight(player.getJob()) ? 11100000 : (player.getJob() > 112 ? 1200000 : 1100000)); //hero/pally
                 break;
             case AXE2H:
             case SWORD1H:
             case SWORD2H:
             case BLUNT2H:
-                skil = GameConstants.isKOC(player.getJob()) ? 11100000 : (player.getJob() > 112 ? 1200000 : 1100000); //hero/pally
+                skil = GameConstants.isCygnusKnight(player.getJob()) ? 11100000 : (player.getJob() > 112 ? 1200000 : 1100000); //hero/pally
                 break;
             case POLE_ARM:
                 skil = GameConstants.isAran(player.getJob()) ? 21100000 : 1300000;
@@ -3532,10 +3532,10 @@ public class PlayerStats implements Serializable {
                 skil = 1300000;
                 break;
             case KNUCKLE:
-                skil = GameConstants.isKOC(player.getJob()) ? 15100001 : 5100001;
+                skil = GameConstants.isCygnusKnight(player.getJob()) ? 15100001 : 5100001;
                 break;
             case GUN:
-                skil = GameConstants.isResist(player.getJob()) ? 35100000 : (GameConstants.isJett(player.getJob()) ? 5700000 : 5200000);
+                skil = GameConstants.isResistance(player.getJob()) ? 35100000 : (GameConstants.isJett(player.getJob()) ? 5700000 : 5200000);
                 break;
             case DUAL_BOW:
                 skil = 23100005;
@@ -3543,7 +3543,7 @@ public class PlayerStats implements Serializable {
             case WAND:
             case STAFF:
                 acc = false;
-                skil = GameConstants.isResist(player.getJob()) ? 32100006 : (player.getJob() <= 212 ? 2100006 : (player.getJob() <= 222 ? 2200006 : (player.getJob() <= 232 ? 2300006 : (player.getJob() <= 2000 ? 12100007 : 22120002))));
+                skil = GameConstants.isResistance(player.getJob()) ? 32100006 : (player.getJob() <= 212 ? 2100006 : (player.getJob() <= 222 ? 2200006 : (player.getJob() <= 232 ? 2300006 : (player.getJob() <= 2000 ? 12100007 : 22120002))));
                 break;
             default:
                 passive_mastery = 0;

@@ -2324,7 +2324,7 @@ public final class MapleMap {
         if (smr.timeLimit > 0 && getForcedReturnMap() != null) {
             chr.startMapTimeLimitTask(smr.timeLimit, getForcedReturnMap());
         }
-        if (chr.getBuffedValue(CharacterTemporaryStat.RideVehicle) != null && !GameConstants.isResist(chr.getJob())) {
+        if (chr.getBuffedValue(CharacterTemporaryStat.RideVehicle) != null && !GameConstants.isResistance(chr.getJob())) {
             if (FieldLimitType.UnableToUseTamingMob.check(smr.fieldLimit)) {
                 chr.cancelEffectFromTemporaryStat(CharacterTemporaryStat.RideVehicle);
             }

@@ -212,7 +212,7 @@ function action(mode, type, selection) {
 					cm.dispose();
 					break;
 				case 108:
-					if (cm.getPlayer().getLevel() < 250 && cm.getPlayer().getReborns() > 0) {
+					if (cm.getPlayer().getLevel() < 250 && cm.getPlayer().getReborns() < 1) {
                         cm.sendOk("Sorry, you need to be at least #rlevel 250#k and #rParagon Rank I#k to access the #dV: Matrix#k.");
                         cm.dispose();
                     } else if (cm.isQuestFinished(1460)) {
