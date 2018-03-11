@@ -134,7 +134,7 @@ public class PlayerMovement implements ProcessPacket<MapleClient> {
                         chr.getMap().removeMapObject(item);
                     }
                     try {
-                        System.out.println("[Debug] Pet Loot Size: " + items.size());
+                        //System.out.println("[Debug] Pet Loot Size: " + items.size());
                     } finally {
                         petSafety.unlock();
                     }

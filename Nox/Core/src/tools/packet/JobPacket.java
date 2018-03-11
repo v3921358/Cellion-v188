@@ -21,6 +21,7 @@ import tools.packet.CField.EffectPacket.UserEffectCodes;
 /**
  *
  * @author Itzik
+ * @author Mazen Massoud
  */
 public class JobPacket {
 
@@ -233,6 +234,29 @@ public class JobPacket {
 
             return oPacket.ToPacket();
         }*/
+    }
+    
+    public static class BeastTamerPacket {
+        
+        public static Packet AnimalMode(int nSkillID) {
+            OutPacket oPacket = new OutPacket(80);
+            
+            oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
+            PacketHelper.writeSingleMask(oPacket, CharacterTemporaryStat.AnimalChange);
+            
+            oPacket.EncodeShort(nSkillID - 110001500); // nMode
+            oPacket.EncodeInteger(nSkillID); // nSkillID
+            oPacket.EncodeInteger(-419268850); // Unkown
+            oPacket.EncodeLong(0);
+            oPacket.EncodeInteger(0);
+            oPacket.Encode(0);
+            oPacket.Encode(1);
+            oPacket.EncodeInteger(0);
+            
+            oPacket.Fill(0, 69); // For no d/c memes.
+            
+            return oPacket.ToPacket();
+        }
     }
     
     public static class NightWalkerPacket {
@@ -697,23 +721,6 @@ public class JobPacket {
     }
     
     public static class BlasterPacket {
-        
-        public static Packet setCylinderState(short nAmmo, int nGauge) {
-            OutPacket oPacket = new OutPacket(80);
-
-            oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
-            PacketHelper.writeSingleMask(oPacket, CharacterTemporaryStat.RWCylinder);
-
-            oPacket.Encode(1);
-            oPacket.EncodeShort(nAmmo); // nAmount
-            oPacket.EncodeInteger(nGauge); // nGauge
-            oPacket.EncodeInteger(-1); // tDuration
-            oPacket.Fill(0, 14);
-
-            oPacket.Fill(0, 69); //for no dc
-
-            return oPacket.ToPacket();
-        }
         
         public static Packet onRWMultiChargeCancelRequest(byte nUnkown, int nSkillID) {
             OutPacket oPacket = new OutPacket(80);

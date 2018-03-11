@@ -1926,7 +1926,7 @@ public class BuffPacket {
             oPacket.EncodeShort(0);//bRWMagnumBlow
             oPacket.Encode((byte) effect.getX());//xRWMagnumBlow
         }
-
+        
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.EnergyCharged)) {
             oPacket.EncodeInteger(buffid);
         } else {
@@ -1943,8 +1943,8 @@ public class BuffPacket {
 
         encodeTwoStateTemporaryStat(oPacket, chr, buffid, bufflength, mTemporaryStats, effect);
 
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HayatoStance)) { //BladeStance -THINK ITS THE HAYATO ONE, IDK DO
-            oPacket.EncodeInteger(0);
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BladeStance)) { //BladeStance -THINK ITS THE HAYATO ONE, IDK DO
+            oPacket.EncodeInteger(chr.getComboStack());
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.DarkSight)) { //DarkSight

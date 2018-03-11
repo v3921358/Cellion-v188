@@ -105,6 +105,20 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
+            /*c.getPlayer().changeSingleSkillLevel(SkillFactory.getSkill(110001510), (byte) 1, (byte) 1);
+            c.getPlayer().changeSingleSkillLevel(SkillFactory.getSkill(110001501), (byte) 1, (byte) 1);
+            c.getPlayer().changeSingleSkillLevel(SkillFactory.getSkill(110001502), (byte) 1, (byte) 1);
+            c.getPlayer().changeSingleSkillLevel(SkillFactory.getSkill(110001503), (byte) 1, (byte) 1);
+            c.getPlayer().changeSingleSkillLevel(SkillFactory.getSkill(110001504), (byte) 1, (byte) 1);
+            HashMap<Skill, SkillEntry> sa = new HashMap<>();
+            for (Skill skil : SkillFactory.getAllSkills()) {
+                if (GameConstants.isApplicableSkill(skil.getId()) && skil.canBeLearnedBy(c.getPlayer().getJob()) && !skil.isInvisible()) { //no db/additionals/resistance skills
+                    sa.put(skil, new SkillEntry((byte) skil.getMaxLevel(), (byte) skil.getMaxLevel(), SkillFactory.getDefaultSExpiry(skil)));
+                }
+            }
+            c.getPlayer().changeSkillsLevel(sa);
+            c.getPlayer().dropMessage(6, "Beast Tamer modes have been added successfully.");*/
+                
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
             c.write(CWvsContext.enableActions());

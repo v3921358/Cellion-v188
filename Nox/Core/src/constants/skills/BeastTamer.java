@@ -12,6 +12,12 @@ public class BeastTamer {
     public static final int MAPLE_GUARDIAN = 110001511;
     public static final int BEASTLY_RESOLVE = 110001512;
 
+    // Modes
+    public static final int BEAR_MODE = 110001501;
+    public static final int SNOW_LEOPARD_MODE = 110001502;
+    public static final int HAWK_MODE = 110001503;
+    public static final int CAT_MODE = 110001504;
+    
     //Bear skills
     public static final int PAW_SWIPE = 112000000;
     public static final int PAW_SWIPE_2 = 112000001;

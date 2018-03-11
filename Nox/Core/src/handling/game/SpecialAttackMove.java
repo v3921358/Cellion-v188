@@ -41,6 +41,7 @@ import server.Timer;
 import server.Timer.MapTimer;
 import server.maps.SummonMovementType;
 import server.maps.objects.MapleSummon;
+import tools.packet.JobPacket.BeastTamerPacket;
 import tools.packet.JobPacket.BlasterPacket;
 
 public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
@@ -80,6 +81,14 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
             
             case 37000010: {
                 BlasterHandler.handleCylinderReload(pPlayer);
+                break;
+            }
+            
+            case BeastTamer.BEAR_MODE:
+            case BeastTamer.SNOW_LEOPARD_MODE:
+            case BeastTamer.HAWK_MODE:
+            case BeastTamer.CAT_MODE: {
+                pPlayer.getClient().write(BeastTamerPacket.AnimalMode(nSkill));
                 break;
             }
             
@@ -486,19 +495,18 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 c.write(CWvsContext.enableActions());
                 break;
             }
-            case 110001500:
+            /*case 110001500:
             case 110001501:
             case 110001502:
             case 110001503:
             case 110001504: {
                 //Change animal mode
-                iPacket.Skip(3);
+                //iPacket.Skip(3);
                 final EnumMap<CharacterTemporaryStat, Integer> stat = new EnumMap<>(CharacterTemporaryStat.class);
-                stat.put(CharacterTemporaryStat.AnimalChange, 1);
-                c.write(BuffPacket.giveBuff(pPlayer, 36121054, skillLevel, stat, effect));
+                stat.put(CharacterTemporaryStat.AnimalChange, 0);
+                c.write(BuffPacket.giveBuff(pPlayer, nSkill, skillLevel, stat, effect));
                 break;
-
-            }
+            }*/
             case 4341003:
                 pPlayer.setKeyDownSkillTime(0);
                 pPlayer.getMap().broadcastMessage(pPlayer, CField.skillCancel(pPlayer, nSkill), false);

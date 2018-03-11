@@ -20,7 +20,7 @@ import tools.packet.JobPacket.BlasterPacket;
 /**
  * Resistance Class Handlers
  *
- * @author Mazen
+ * @author Mazen Massoud
  */
 public class Resistance {
 
@@ -29,44 +29,34 @@ public class Resistance {
         public static void enterCylinderState(MapleCharacter pPlayer) {
             short nAmmo = (short) getMaxAmmo(pPlayer);
             int nGauge = 0;
-            pPlayer.setComboStack(nAmmo);
-            pPlayer.setAdditionalStack(nGauge);
-            updateCylinderRequest(pPlayer);
+            updateCylinderRequest(pPlayer, nAmmo, nGauge);
         }
 
         public static void handleCylinderReload(MapleCharacter pPlayer) {
             short nAmmo = (short) getMaxAmmo(pPlayer);
             int nGauge = pPlayer.getAdditionalStack();
-            
-            pPlayer.setComboStack(nAmmo);
-            pPlayer.setAdditionalStack(nGauge);
-            updateCylinderRequest(pPlayer);
-            //pPlayer.getClient().write(BlasterPacket.setCylinderState(nAmmo, nGauge));
+            updateCylinderRequest(pPlayer, nAmmo, nGauge);
         }
 
         public static void handleAmmoCost(MapleCharacter pPlayer) {
             short nAmmo = (short) (pPlayer.getComboStack() - 1);
             int nGauge = pPlayer.getAdditionalStack();
-            
-            pPlayer.setComboStack(nAmmo);
-            pPlayer.setAdditionalStack(nGauge);
-            updateCylinderRequest(pPlayer);
+            updateCylinderRequest(pPlayer, nAmmo, nGauge);
         }
 
         public static void handleGaugeIncrease(MapleCharacter pPlayer) {
             short nAmmo = (short) (pPlayer.getComboStack());
             int nGauge = pPlayer.getAdditionalStack() + 1;
-            
             if (nGauge > getMaxAmmo(pPlayer)) {
                 nGauge = getMaxAmmo(pPlayer);
             }
-            
-            pPlayer.setComboStack(nAmmo);
-            pPlayer.setAdditionalStack(nGauge);
-            updateCylinderRequest(pPlayer);
+            updateCylinderRequest(pPlayer, nAmmo, nGauge);
         }
 
-        public static void updateCylinderRequest(MapleCharacter pPlayer) {
+        public static void updateCylinderRequest(MapleCharacter pPlayer, int nAmmo, int nGauge) {
+            pPlayer.setComboStack(nAmmo);
+            pPlayer.setAdditionalStack(nGauge);
+            
             final MapleStatEffect buffEffects = SkillFactory.getSkill(Blaster.REVOLVING_CANNON).getEffect(pPlayer.getTotalSkillLevel(Blaster.REVOLVING_CANNON));
             buffEffects.statups.put(CharacterTemporaryStat.RWCylinder, 1);
             pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), null, buffEffects.statups, false, 2100000000, pPlayer.getId());
@@ -84,8 +74,7 @@ public class Resistance {
             pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), buffSchedule, buffEffects.statups, false, nDuration, pPlayer.getId());
             pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, Blaster.BUNKER_BUSTER_EXPLOSION, nDuration, buffEffects.statups, buffEffects));
             
-            pPlayer.setAdditionalStack(0);
-            updateCylinderRequest(pPlayer);
+            updateCylinderRequest(pPlayer, pPlayer.getComboStack(), 0);
         }
         
         public static int getMaxAmmo(MapleCharacter pPlayer) {

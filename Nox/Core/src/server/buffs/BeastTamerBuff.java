@@ -40,8 +40,7 @@ public class BeastTamerBuff extends AbstractBuffClass {
     public void handleEffect(MapleStatEffect eff, int skill) {
         switch (skill) {
             case BeastTamer.FLY:
-                eff.info.put(MapleStatInfo.time, 40000);
-                eff.statups.put(CharacterTemporaryStat.Flying, 1);
+                eff.statups.put(CharacterTemporaryStat.NewFlying, 1);
                 break;
             case BeastTamer.DEFENSE_IGNORANCE:
                 eff.statups.put(CharacterTemporaryStat.IndieBooster, eff.info.get(MapleStatInfo.indieBooster));
