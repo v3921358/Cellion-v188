@@ -4,21 +4,23 @@
 package handling.jobs;
 
 import client.CharacterTemporaryStat;
-import client.MapleClient;
 import client.SkillFactory;
 import constants.GameConstants;
 import constants.skills.Aran;
-import handling.world.AttackInfo;
+import constants.skills.Phantom;
 import static java.lang.Integer.max;
+import static java.lang.Integer.min;
+import java.util.Random;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
 import server.Timer;
-import server.life.MobAttackInfo;
 import server.maps.objects.MapleCharacter;
 import tools.packet.BuffPacket;
 import tools.packet.CField;
+import tools.packet.JobPacket.LuminousPacket;
+import tools.packet.JobPacket.PhantomPacket;
 
 /**
  * Hero Class Handlers
@@ -62,7 +64,7 @@ public class Hero {
             
             // Set combo down to 500 for when adrenaline rush is completed.
             pPlayer.setLastCombo(System.currentTimeMillis() + nDuration);
-            pPlayer.setComboStack(500);
+            pPlayer.setPrimaryStack(500);
             pPlayer.getClient().write(CField.updateCombo(500));
         }
         
@@ -71,7 +73,7 @@ public class Hero {
                 return;
             }
             
-            short nCombo = (short) pPlayer.getComboStack();
+            short nCombo = (short) pPlayer.getPrimaryStack();
             long nCurrentTime = System.currentTimeMillis();
 
             if ((nCombo > 0) && (nCurrentTime - pPlayer.getLastComboTime() > 5000L)) {
@@ -85,7 +87,7 @@ public class Hero {
             nIncreaseCount = ThreadLocalRandom.current().nextInt(3, 6); // TODO: Increase based off skill attack count.
             nCombo = (short) Math.min(30000, nCombo + nIncreaseCount);
             pPlayer.setLastCombo(nCurrentTime);
-            pPlayer.setComboStack(nCombo);
+            pPlayer.setPrimaryStack(nCombo);
 
             // Write the combo update packet.
             pPlayer.getClient().write(CField.updateCombo(nCombo));
@@ -111,4 +113,118 @@ public class Hero {
 
     }
 
+    public static class LuminousHandler {
+        
+        public static void handleLuminousGauge(MapleCharacter pPlayer, int nSkillID) {
+            int nLightGauge = pPlayer.getLarknessRequest(false, false);
+            int nDarkGauge = pPlayer.getLarknessRequest(false, true);
+            int nLightFeathers = pPlayer.getLarknessRequest(true, false);
+            int nDarkFeathers = pPlayer.getLarknessRequest(true, true);
+            
+            if(GameConstants.isLightSkills(nSkillID)) {
+                nLightGauge += 100;
+                if (nLightGauge >= 10000) {
+                    nLightGauge = 10000;
+                    pPlayer.setLuminousState(20040216);
+                }
+                nLightFeathers += 1;
+                if (nLightFeathers >= 5) {
+                    nLightFeathers = 5;
+                }
+            } else if (GameConstants.isDarkSkills(nSkillID)) {
+                nDarkGauge += 100;
+                if (nDarkGauge >= 10000) {
+                    nDarkGauge = 10000;
+                    pPlayer.setLuminousState(20040216);
+                }
+                nDarkFeathers += 1;
+                if (nDarkFeathers >= 5) {
+                    nDarkFeathers = 5;
+                }
+            }
+            
+            if (nLightGauge >= 10000) {
+                nLightGauge = 10000;
+                nDarkGauge = 0;
+                pPlayer.setLuminousState(20040216);
+            } else if (nDarkGauge >= 10000) {
+                nDarkGauge = 10000;
+                nLightGauge = 0;
+                pPlayer.setLuminousState(20040216);
+            }
+            
+            pPlayer.setLarknessResult(nLightGauge, false, false);
+            pPlayer.setLarknessResult(nDarkGauge, false, true);
+            pPlayer.setLarknessResult(nLightFeathers, true, false);
+            pPlayer.setLarknessResult(nDarkFeathers, true, true);
+            pPlayer.write(LuminousPacket.updateLuminousGauge(nDarkGauge, nLightGauge, nDarkGauge, nLightGauge));
+            pPlayer.write(LuminousPacket.setLarknessResult(pPlayer.getLuminousState(), nLightGauge, nDarkGauge, 2100000000));
+            
+            if (pPlayer.isDeveloper()) {
+                pPlayer.dropMessage(5, "[Luminous Debug] Light: " + pPlayer.getLarknessRequest(false, false) + " / Dark: " + pPlayer.getLarknessRequest(false, true));
+                pPlayer.dropMessage(5, "[Luminous Debug] Light Feathers: " + pPlayer.getLarknessRequest(true, false) + " / Dark Feather: " + pPlayer.getLarknessRequest(true, true));
+            }
+        }
+    }
+    
+    public static class PhantomHandler {
+        
+        public static void handleDeck(MapleCharacter pPlayer) {
+            int nCardCount = pPlayer.getPrimaryStack();
+            if (nCardCount < 40) {
+                nCardCount++;
+            }
+            updateDeckRequest(pPlayer, nCardCount);
+        }
+        
+        public static void updateDeckRequest(MapleCharacter pPlayer, int nCardCount) {
+            pPlayer.setPrimaryStack(nCardCount);
+            pPlayer.getMap().broadcastMessage(PhantomPacket.updateCardStack(nCardCount));
+        }
+        
+        public static void judgementDrawRequest(MapleCharacter pPlayer, int nSkillID) {
+            Random pRandom = new Random();
+            int nMinimumCard;
+            int nMaximumCard;
+            
+            if (nSkillID == Phantom.JUDGMENT_DRAW_1) {
+                nMinimumCard = 1;
+                nMaximumCard = 4;
+            } else {
+                nMinimumCard = 1;
+                nMaximumCard = 2;
+            }
+            int nDrawnCard = pRandom.nextInt((nMaximumCard - nMinimumCard) + 1) + nMinimumCard;
+            
+            final MapleStatEffect pEffect = SkillFactory.getSkill(nSkillID).getEffect(pPlayer.getTotalSkillLevel(nSkillID));
+
+            switch (nDrawnCard) {
+                case 1: // Destin Card
+                    pPlayer.dropMessage(-1, "Destin Card Drawn");
+                    pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, 10);
+                    break;
+                case 2: // Malheur Card
+                    pPlayer.dropMessage(-1, "Malheur Card Drawn");
+                    pEffect.statups.put(CharacterTemporaryStat.DropRate, 10);
+                    break;
+                case 3: // Endurance Card
+                    pPlayer.dropMessage(-1, "Endurance Card Drawn");
+                    pEffect.statups.put(CharacterTemporaryStat.AsrR, 20);
+                    pEffect.statups.put(CharacterTemporaryStat.TerR, 20);
+                    break;
+                case 4: // Drain Card
+                    pPlayer.dropMessage(-1, "Drain Card Drawn");
+                    pEffect.statups.put(CharacterTemporaryStat.IndieDrainHP, 1);
+                    break;
+            }
+            
+            final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
+            final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, pEffect.info.get(MapleStatInfo.time));
+            pPlayer.registerEffect(pEffect, System.currentTimeMillis(), buffSchedule, pEffect.statups, false, pEffect.info.get(MapleStatInfo.time), pPlayer.getId());
+            pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, nSkillID, pEffect.info.get(MapleStatInfo.time), pEffect.statups, pEffect));
+            
+            updateDeckRequest(pPlayer, 0); // Reset the deck back to zero.
+        }
+    }
+    
 }

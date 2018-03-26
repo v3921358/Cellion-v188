@@ -4,6 +4,11 @@ public class Hayato {
     //might've messed a few skills of this class up, since i can't find all skills from this version
     //1st job
 
+    public static final int QUICK_DRAW = 40011288;
+    public static final int MASTER_OF_BLADES = 40010000;
+    public static final int SHIMADA_HEART = 40010067;
+    public static final int SUMMER_RAIN = 40011289;
+    
     public static final int SANRENZAN = 41001000;
     public static final int BLADE_FLASH = 41001009;
     public static final int SURGING_BLADE = 41001002;

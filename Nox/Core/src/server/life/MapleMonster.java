@@ -8,6 +8,10 @@ import client.inventory.MapleInventoryType;
 import constants.EventConstants;
 import constants.GameConstants;
 import constants.ServerConstants;
+import handling.jobs.Explorer;
+import handling.jobs.Explorer.ShadowerHandler;
+import handling.jobs.Sengoku;
+import handling.jobs.Sengoku.HayatoHandler;
 import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
 import net.Packet;
@@ -1658,12 +1662,19 @@ public class MapleMonster extends AbstractLoadedMapleLife {
 
         @Override
         public void killedMob(MapleMap map, int baseExp, boolean mostDamage, int lastSkill, int killerCharId) {
-            MapleCharacter chr = map.getCharacterById(chrid);
-            if (chr != null && chr.isAlive()) {
+            MapleCharacter pPlayer = map.getCharacterById(chrid);
+            if (pPlayer != null && pPlayer.isAlive()) {
                 // Burning field bonus
                 final int burningFieldBonusEXP = getMap().getBurningFieldBonusEXP();
 
-                giveExpToCharacter(chr, true, baseExp, 0, mostDamage, 1, (byte) 0, 0, (byte) 0, (byte) 0, burningFieldBonusEXP, lastSkill);
+                giveExpToCharacter(pPlayer, true, baseExp, 0, mostDamage, 1, (byte) 0, 0, (byte) 0, (byte) 0, burningFieldBonusEXP, lastSkill);
+                
+                if (GameConstants.isHayato(pPlayer.getJob())) {
+                    HayatoHandler.handleBladeStance(pPlayer);
+                }
+                if (GameConstants.isThiefShadower(pPlayer.getJob())) {
+                    ShadowerHandler.handleBodyCount(pPlayer);
+                }
             }
         }
 

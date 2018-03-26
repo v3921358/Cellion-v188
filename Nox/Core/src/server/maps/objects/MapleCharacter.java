@@ -21,18 +21,21 @@ import constants.skills.Aran;
 import constants.skills.Bowmaster;
 import constants.skills.Crossbowman;
 import constants.skills.Fighter;
+import constants.skills.Hayato;
 import constants.skills.Hero;
 import constants.skills.Hunter;
 import constants.skills.NightWalker;
 import constants.skills.Mercedes;
 import constants.skills.Mihile;
 import constants.skills.Page;
+import constants.skills.Phantom;
 import constants.skills.Spearman;
 import constants.skills.WildHunter;
 import constants.skills.Zero;
 import database.DatabaseConnection;
 import database.DatabaseException;
 import handling.game.AndroidEmotionChanger;
+import handling.jobs.Explorer.ShadowerHandler;
 import handling.login.LoginInformationProvider.JobType;
 import handling.world.*;
 import net.OutPacket;
@@ -210,6 +213,47 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     private int pendingGuildId = 0;
     
     /*
+     *  Luminous Gauge & Feather Handling
+     *  Larkness System
+     */
+    private int lightGauge, darkGauge, lightFeathers, darkFeathers;
+    
+    public int getLarknessRequest(boolean bFeathers, boolean bDark) {
+        
+        if (!bFeathers) { // Get Gauge
+            if(!bDark) {
+                return this.lightGauge;
+            } else {
+                return this.darkGauge;
+            }
+        } else { // Get Feathers
+            if(!bDark) {
+                return this.lightFeathers;
+            } else {
+                return this.darkFeathers;
+            }
+        }
+    }
+    
+    public void setLarknessResult(int nAmount, boolean bFeathers, boolean bDark) {
+        
+        if (!bFeathers) { // Set Gauge
+            if(!bDark) {
+                this.lightGauge = nAmount;
+            } else {
+                this.darkGauge = nAmount;
+            }
+        } else { // Set Feathers
+            if(!bDark) {
+                this.lightFeathers = nAmount;
+            } else {
+                this.darkFeathers = nAmount;
+            }
+        }
+    }
+    
+    
+    /*
      *  V: Matrix
      */
     public List<VMatrixRecord> aVMatrixRecord = new ArrayList<>();
@@ -218,17 +262,33 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
      *  Staff Variables
      */
     
-    private boolean disableStaffChat; // Disables special coloured chat for staff members.
+    private boolean bDisableStaffChat; // Disables special coloured chat for staff members.
+    private boolean bGodMode;
     
     public boolean usingStaffChat() {
-        if (disableStaffChat) {
+        if (bDisableStaffChat) {
             return false;
         }
         return true;
     }
     
     public void toggleStaffChat(boolean bDisable) {
-        disableStaffChat = bDisable;
+        bDisableStaffChat = bDisable;
+    }
+    
+    public boolean hasGodMode() {
+        if (bGodMode) {
+            return true;
+        }
+        return false;
+    }
+    
+    public void toggleGodMode(boolean bEnabled) {
+        if (bEnabled) {
+            bGodMode = true;
+        } else {
+            bGodMode = false;
+        }
     }
     
     /*
@@ -241,7 +301,14 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     }
     
     public void setLastMagnusTime() {
-        nMagnusTime = System.currentTimeMillis();
+        if (getParty() == null) { // Sets latest Magnus entry time for player.
+            nMagnusTime = System.currentTimeMillis();
+        } else { // If player is in a party, sets the entry time for all players in the party.
+            for (MaplePartyCharacter z : getParty().getMembers()) {
+                MapleCharacter pPlayer = getMap().getCharacterById(z.getId());
+                pPlayer.nMagnusTime = System.currentTimeMillis(); 
+            }
+        }
     }
     
     public boolean canFightMagnus() {
@@ -264,22 +331,22 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     /*
      *   Job Handler Variables
      */
-    private int nComboStack; // General variable to store a combo count.
+    private int nPrimaryStack; // General variable to store a combo count.
     private int nAdditionalStack; // Secondary variable to store other stack counts.
     private long nLastTimeReference; // General time reference that can be used for timers.
     private long nAdditionalLastTimeReference; // Secondary time reference that can be used for timers.
     private boolean bSwingStudies; // Check if Aran's Swing Studies is active.
 
-    public int getComboStack() {
-        return nComboStack;
+    public int getPrimaryStack() {
+        return nPrimaryStack;
     }
 
     public int getAdditionalStack() {
         return nAdditionalStack;
     }
 
-    public void setComboStack(int nAmount) {
-        nComboStack = nAmount;
+    public void setPrimaryStack(int nAmount) {
+        nPrimaryStack = nAmount;
     }
 
     public void setAdditionalStack(int nAmount) {
@@ -310,7 +377,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             if (nAdditionalLastTimeReference + nDuration < System.currentTimeMillis()) {
                 dispelBuff(Aran.ADRENALINE_RUSH);
 
-                nComboStack = 500; // Sets Aran Combo back to 500 after completing Adrenaline Rush.
+                nPrimaryStack = 500; // Sets Aran Combo back to 500 after completing Adrenaline Rush.
                 setCombo(combo);
                 write(CField.updateCombo(combo));
                 return true;
@@ -1620,6 +1687,63 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         }
     }
 
+    /**
+     *  Save Inventory and Equips of a Character
+     *  @author Mazen Massoud
+     *  @purpose To save the item information of a character in order to prevent duplication and rollback.
+     */
+    public void saveItemData() {
+        if (isClone()) {
+            return;
+        }
+        Connection con = DatabaseConnection.getConnection();
+
+        PreparedStatement ps = null;
+        PreparedStatement pse = null;
+        ResultSet rs = null;
+        try {
+            deleteWhereCharacterId(con, "DELETE FROM inventoryslot WHERE characterid = ?");
+            ps = con.prepareStatement("INSERT INTO inventoryslot (characterid, `equip`, `use`, `setup`, `etc`, `cash`) VALUES (?, ?, ?, ?, ?, ?)");
+            ps.setInt(1, id);
+            ps.setByte(2, getInventory(MapleInventoryType.EQUIP).getSlotLimit());
+            ps.setByte(3, getInventory(MapleInventoryType.USE).getSlotLimit());
+            ps.setByte(4, getInventory(MapleInventoryType.SETUP).getSlotLimit());
+            ps.setByte(5, getInventory(MapleInventoryType.ETC).getSlotLimit());
+            ps.setByte(6, getInventory(MapleInventoryType.CASH).getSlotLimit());
+            ps.execute();
+            ps.close();
+
+            saveInventory(con);
+        } catch (SQLException | DatabaseException e) {
+            LogHelper.SQL.get().info("Could not save character information:\n{}", e);
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                LogHelper.SQL.get().info("Rolling back because character information could not be saved:\n{}", e);
+            }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (pse != null) {
+                    pse.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+                con.setAutoCommit(true);
+                con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+            } catch (SQLException e) {
+                LogHelper.SQL.get().info("Could not close the connection thread:\n{}", e);
+            }
+        }
+        
+        if (isDeveloper()) {
+            dropMessage(5, "[SQL Debug] Item Data has been saved successfully.");
+        }
+    }
+    
     public void saveToDB(boolean dc, boolean fromcs) {
         if (isClone()) {
             return;
@@ -3767,6 +3891,16 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 }
             }
         }
+        
+        if (GameConstants.isPhantom(job)) {
+            if (level >= 30 && (!hasSkill(Phantom.JUDGMENT_DRAW) || !hasSkill(Phantom.JUDGMENT_DRAW_AUTOMANUAL))) { // Judgment Draw (Carte Blanche) 
+                changeSkillLevel(SkillFactory.getSkill(Phantom.JUDGMENT_DRAW), (byte) 1, (byte) 1);
+                changeSkillLevel(SkillFactory.getSkill(Phantom.JUDGMENT_DRAW_AUTOMANUAL), (byte) 1, (byte) 1);
+            }
+            if (level >= 100 && !hasSkill(Phantom.JUDGMENT_DRAW_1)) { // Judgment Draw (Carte Noire)
+                changeSkillLevel(SkillFactory.getSkill(Phantom.JUDGMENT_DRAW_1), (byte) 1, (byte) 1);
+            }
+        }
     }
 
     public void baseSkills() {
@@ -5096,6 +5230,10 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                     gainSP(255, GameConstants.getSkillBook(job, 0));
                 }
             }
+            
+            if(GameConstants.isBeastTamer(job)) {
+                gainSP(3);
+            }
         }
 
         // Hyper SP
@@ -5126,6 +5264,12 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         // Handle Resolution Time (Skill Level Up)
         if (GameConstants.isZero(job)) {
             switch (level) {
+                case 101:
+                    //for (int i = 40000; i <= 40055; i++) {
+                        MapleQuestStatus pZeroTutorial = getQuestNoAdd(MapleQuest.getInstance(40054));
+                        pZeroTutorial.setCompletionTime(System.currentTimeMillis());
+                        pZeroTutorial.getQuest().complete(this, 0);
+                    //}
                 case 120:
                     changeSkillLevel(SkillFactory.getSkill(Zero.RESOLUTION_TIME), (byte) 1, (byte) 5);
                     break;
@@ -5144,11 +5288,6 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             }
         }
 
-        // Pinnacle Gear for Level 100, just for Alpha phase.
-        if (level == 100) {
-            givePinnacleGear();
-        }
-        
         // Hyper Skill Distribution
         hyperSkillRequest();
         /*if (level == 200) {
@@ -5687,6 +5826,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 case 11:
                     changeJob((short) 4100);
                     JobAdvanceSp(1);
+                    changeSingleSkillLevel(SkillFactory.getSkill(Hayato.BATTOUJUTSU_STANCE),(byte) 1, (byte) 20); 
                     break;
                 case 30:
                     changeJob((short) 4110);
@@ -5694,6 +5834,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                     break;
                 case 60:
                     changeJob((short) 4111);
+                    changeSingleSkillLevel(SkillFactory.getSkill(Hayato.BATTOUJUTSU_SOUL),(byte) 1, (byte) 20); 
                     JobAdvanceSp(3);
                     break;
                 case 100:
@@ -5914,99 +6055,6 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         }
     }
 
-    public void givePinnacleGear() {
-        // Pinnacle Set
-        gainItem(1003740, 1);
-        gainItem(1052569, 1);
-        gainItem(1072768, 1);
-        gainItem(1082498, 1);
-        gainItem(1102506, 1);
-        gainItem(1112794, 1);
-        gainItem(1122220, 1);
-        gainItem(1132209, 1);
-        gainItem(1152119, 1);
-
-        // Weapons
-        if (GameConstants.isDualBlade(job)) {
-            gainItem(1342008, 1); // Meteor Katara
-        }
-        if (GameConstants.isLuminous(job)) {
-            gainItem(1212055, 1); // Pinnacle Shining Rod
-        }
-        if (GameConstants.isAngelicBuster(job)) {
-            gainItem(1222050, 1); // Pinnacle Soul Shooter
-        }
-        if (GameConstants.isDemonAvenger(job)) {
-            gainItem(1232050, 1); // Pinnacle Grim Seeker
-        }
-        if (GameConstants.isXenon(job)) {
-            gainItem(1242049, 1); // Pinnacle Hefty Head
-        }
-        if (GameConstants.isBeastTamer(job)) {
-            gainItem(1252061, 1); // Pinnacle Kitty Soul Scepter
-        }
-        if (GameConstants.isWarriorPaladin(job) || GameConstants.isWarriorHero(job) || GameConstants.isMihile(job) || GameConstants.isDawnWarriorCygnus(job)) {
-            gainItem(1302258, 1); // Pinnacle Gladius
-        }
-        if (GameConstants.isDualBlade(job) || GameConstants.isThiefShadower(job)) {
-            gainItem(1332216, 1); // Pinnacle Kanzir
-        }
-        if (GameConstants.isPhantom(job)) {
-            gainItem(1362083, 1); // Pinnacle Arc-en-ciel
-        }
-        if (GameConstants.isEvan(job) || GameConstants.isMagicianIceLightning(job) || GameConstants.isMagicianFirePoison(job) || GameConstants.isMagicianBishop(job) || GameConstants.isBlazeWizardCygnus(job)) {
-            gainItem(1372170, 1); // Pinnacle Twin Angels
-        }
-        if (GameConstants.isBattleMage(job) || GameConstants.isMagicianIceLightning(job) || GameConstants.isMagicianFirePoison(job) || GameConstants.isMagicianBishop(job) || GameConstants.isBlazeWizardCygnus(job)) {
-            gainItem(1382202, 1); // Pinnacle Pain Killer
-        }
-        if (GameConstants.isWarriorPaladin(job) || GameConstants.isWarriorHero(job) || GameConstants.isKaiser(job) || GameConstants.isDawnWarriorCygnus(job)) {
-            gainItem(1402187, 1); // Pinnacle Claymore
-        }
-        if (GameConstants.isAran(job) || GameConstants.isWarriorDarkKnight(job)) {
-            gainItem(1442211, 1); // Pinnacle Halfmoon
-        }
-        if (GameConstants.isWindArcherCygnus(job) || GameConstants.isArcherBowmaster(job)) {
-            gainItem(1452198, 1); // Pinnacle Ash Lord
-        }
-        if (GameConstants.isShade(job) || GameConstants.isPirateBuccaneer(job) || GameConstants.isThunderBreakerCygnus(job)) {
-            gainItem(1482161, 1); // Pinnacle Bloody Claw
-        }
-        if (GameConstants.isJett(job) || GameConstants.isPirateCorsair(job)) {
-            gainItem(1492172, 1); // Pinnacle Queen's Finger
-        }
-        if (GameConstants.isMercedes(job)) {
-            gainItem(1522087, 1); // Pinnacle Argents
-        }
-        if (GameConstants.isCannoneer(job)) {
-            gainItem(1532091, 1); // Pinnacle Crash
-        }
-        if (GameConstants.isHayato(job)) {
-            gainItem(1542065, 1); // Pinnacle Katana 
-        }
-        if (GameConstants.isKanna(job)) {
-            gainItem(1552065, 1); // Pinnacle Fan 
-        }
-        if (GameConstants.isWarriorHero(job) || GameConstants.isDemonSlayer(job)) {
-            gainItem(1312145, 1); // Pinnacle Counter
-        }
-        if (GameConstants.isWarriorHero(job)) {
-            gainItem(1412128, 1); // Pinnacle Butterfly
-        }
-        if (GameConstants.isWarriorPaladin(job)) {
-            gainItem(1422131, 1); // Big Pinnacle Maul
-        }
-        if (GameConstants.isWarriorDarkKnight(job)) {
-            gainItem(1432160, 1); // Pinnacle Omni Pierce
-        }
-        if (GameConstants.isArcherMarksman(job) || GameConstants.isWildHunter(job)) {
-            gainItem(1462186, 1); // Pinnacle Lock
-        }
-        if (GameConstants.isNightWalkerCygnus(job) || GameConstants.isThiefNightLord(job)) {
-            gainItem(1472207, 1); // Pinnacle Black Event 
-        }
-    }
-    
     /*
      *  Inventory Sort/Consolidate Items
      *  @author Mazen
@@ -9380,11 +9428,15 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     }
 
     public Pair<Double, Boolean> modifyDamageTaken(double damage, MapleMapObject attacke) {
+        if (hasGodMode()) {
+            damage = 0; // Godmode
+        }
+        
         Pair<Double, Boolean> ret = new Pair<>(damage, false);
         if (damage <= 0) {
             return ret;
         }
-
+        
         // Paragon Level Bonus
         if (ServerConstants.PARAGON_SYSTEM) {
             if (getReborns() >= 1) { // Paragon Level 1+
@@ -9799,6 +9851,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 }
                 break;
         }
+        
         /*
         if (getBuffedValue(CharacterTemporaryStat.OWL_SPIRIT) != null) {
             if (currentBattleshipHP() > 0) {
@@ -9811,7 +9864,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
          */
         if (!isIntern()) {
             //cancelEffectFromTemporaryStat(CharacterTemporaryStat.WIND_WALK);
-            cancelEffectFromTemporaryStat(CharacterTemporaryStat.Speed);
+            //cancelEffectFromTemporaryStat(CharacterTemporaryStat.Speed);
             final MapleStatEffect ds = getStatForBuff(CharacterTemporaryStat.DarkSight);
             if (ds != null) {
                 if (ds.getSourceId() != 4330001 || !ds.makeChanceResult()) {
@@ -10557,365 +10610,630 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     }
 
     public void userRewardRequest(int nLevel) {
-		
-        if (GameConstants.isExplorer(job)) {
-                    switch (nLevel) {
-                        case 30:
-                        if (GameConstants.isWarriorHero(job))
-                                addReward(1, 1352200, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isWarriorPaladin(job))
-                                addReward(1, 1352210, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isWarriorDarkKnight(job))
-                                addReward(1, 1352220, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isMagicianIceLightning(job))
-                                addReward(1, 1352230, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isMagicianFirePoison(job))
-                                addReward(1, 1352240, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isMagicianBishop(job))
-                                addReward(1, 1352250, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isArcherBowmaster(job))
-                                addReward(1, 1352260, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isArcherMarksman(job))
-                                addReward(1, 1352270, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isThiefShadower(job))
-                                addReward(1, 1352280, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isThiefNightLord(job))
-                                addReward(1, 1352290, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isPirateBuccaneer(job))
-                                addReward(1, 1352900, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isPirateCorsair(job))
-                                addReward(1, 1352910, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isCannoneer(job))
-                                addReward(1, 1352920, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");					
-                        break;
-                    case 60:
-                        addReward(1, 1190300, 0, 0, 0, "You have been rewarded with a Silver Maple Leaf Emblem for reaching Lv. " + level + "!");
-                        if (GameConstants.isWarriorHero(job))
-                                addReward(1, 1352201, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isWarriorPaladin(job))
-                                addReward(1, 1352211, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isWarriorDarkKnight(job))
-                                addReward(1, 1352221, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isMagicianIceLightning(job))
-                                addReward(1, 1352231, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isMagicianFirePoison(job))
-                                addReward(1, 1352241, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isMagicianBishop(job))
-                                addReward(1, 1352251, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isArcherBowmaster(job))
-                                addReward(1, 1352261, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isArcherMarksman(job))
-                                addReward(1, 1352271, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isThiefShadower(job))
-                                addReward(1, 1352281, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isThiefNightLord(job))
-                                addReward(1, 1352291, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isPirateBuccaneer(job))
-                                addReward(1, 1352901, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isPirateCorsair(job))
-                                addReward(1, 1352911, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                        else if (GameConstants.isCannoneer(job))
-                                addReward(1, 1352921, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");					
-                        break;
-                case 100:
+	if (GameConstants.isExplorer(job)) {
+            switch(nLevel) {
+                case 15:
+                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    break;
+                case 30:
+                    addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    if (GameConstants.isWarriorHero(job))
+                        addReward(1, 1352200, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isWarriorPaladin(job))
+                        addReward(1, 1352210, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isWarriorDarkKnight(job))
+                        addReward(1, 1352220, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isMagicianIceLightning(job))
+                        addReward(1, 1352230, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isMagicianFirePoison(job))
+                        addReward(1, 1352240, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isMagicianBishop(job))
+                        addReward(1, 1352250, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isArcherBowmaster(job))
+                        addReward(1, 1352260, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isArcherMarksman(job))
+                        addReward(1, 1352270, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isThiefShadower(job))
+                        addReward(1, 1352280, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isThiefNightLord(job))
+                        addReward(1, 1352290, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isPirateBuccaneer(job))
+                        addReward(1, 1352900, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isPirateCorsair(job))
+                        addReward(1, 1352910, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isCannoneer(job))
+                        addReward(1, 1352920, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");					
+                    break;
+                case 60:
+                    addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    addReward(1, 1190300, 0, 0, 0, "You have been rewarded with a Silver Maple Leaf Emblem for reaching Lv. " + level + "!");
+                    if (GameConstants.isWarriorHero(job))
+                        addReward(1, 1352201, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isWarriorPaladin(job))
+                        addReward(1, 1352211, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isWarriorDarkKnight(job))
+                        addReward(1, 1352221, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isMagicianIceLightning(job))
+                        addReward(1, 1352231, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isMagicianFirePoison(job))
+                        addReward(1, 1352241, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isMagicianBishop(job))
+                        addReward(1, 1352251, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isArcherBowmaster(job))
+                        addReward(1, 1352261, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isArcherMarksman(job))
+                        addReward(1, 1352271, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isThiefShadower(job))
+                        addReward(1, 1352281, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isThiefNightLord(job))
+                        addReward(1, 1352291, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isPirateBuccaneer(job))
+                        addReward(1, 1352901, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isPirateCorsair(job))
+                        addReward(1, 1352911, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    else if (GameConstants.isCannoneer(job))
+                        addReward(1, 1352921, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");					
+                    break;
+                case 100: 
+                    givePinnacleGear();
+                    addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1190301, 0, 0, 0, "You have been rewarded with a Gold Maple Leaf Emblem for reaching Lv. " + level + "!");
                     if (GameConstants.isWarriorHero(job))
-                            addReward(1, 1352201, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352201, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isWarriorPaladin(job))
-                            addReward(1, 1352211, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352211, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isWarriorDarkKnight(job))
-                            addReward(1, 1352221, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352221, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isMagicianIceLightning(job))
-                            addReward(1, 1352231, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352231, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isMagicianFirePoison(job))
-                            addReward(1, 1352241, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352241, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isMagicianBishop(job))
-                            addReward(1, 1352251, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352251, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isArcherBowmaster(job))
-                            addReward(1, 1352261, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352261, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isArcherMarksman(job))
-                            addReward(1, 1352271, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352271, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isThiefShadower(job))
-                            addReward(1, 1352281, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352281, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isThiefNightLord(job))
-                            addReward(1, 1352291, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352291, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isPirateBuccaneer(job))
-                            addReward(1, 1352901, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352901, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isPirateCorsair(job))
-                            addReward(1, 1352911, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352911, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isCannoneer(job))
-                            addReward(1, 1352921, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");					
+                        addReward(1, 1352921, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");					
+                    break;
+                case 150:
+                    addReward(1, 1142750, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                case 200:
+                    addReward(1, 1142751, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                }
+	} else if (GameConstants.isCygnusKnight(job)) {
+            switch (nLevel) {
+                case 15:
+                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    break;
+                case 30:
+                    addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    if (!GameConstants.isMihile(job))
+                            addReward(1, 1352970, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");					
+                    break;
+                case 60:
+                    addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    if (!GameConstants.isMihile(job))
+                        addReward(1, 1352971, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");					
+                        addReward(1, 1190800, 0, 0, 0, "You have been rewarded with a Silver Cygnus Emblem for reaching Lv. " + level + "!");
+                    break;
+                case 100: 
+                    givePinnacleGear();
+                    addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    if (!GameConstants.isMihile(job))
+                            addReward(1, 1352972, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");					
+                    addReward(1, 1190801, 0, 0, 0, "You have been rewarded with a Gold Cygnus Emblem for reaching Lv. " + level + "!");
+                    break;
+                case 150:
+                    addReward(1, 1142750, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                case 200:
+                    addReward(1, 1142751, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     break;
             }
-        } else if (GameConstants.isCygnusKnight(job)) {
+	}  else if (GameConstants.isDemon(job)) {
             switch (nLevel) {
+                case 15:
+                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    break;
                 case 30:
-                        if (!GameConstants.isMihile(job))
-                                addReward(1, 1352970, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");					
-                        break;
+                    addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                 case 60:
-                        if (!GameConstants.isMihile(job))
-                                addReward(1, 1352971, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");					
-                        addReward(1, 1190800, 0, 0, 0, "You have been rewarded with a Silver Cygnus Emblem for reaching Lv. " + level + "!");
-                        break;
-                case 100:
-                        if (!GameConstants.isMihile(job))
-                                addReward(1, 1352972, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");					
-                        addReward(1, 1190801, 0, 0, 0, "You have been rewarded with a Gold Cygnus Emblem for reaching Lv. " + level + "!");
-                        break;
-            }
-        }  else if (GameConstants.isDemon(job)) {
-            switch (nLevel) {
-                case 60:
+                    addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1190700, 0, 0, 0, "You have been rewarded with a Silver Demon Emblem for reaching Lv. " + level + "!");
                     break;
-                case 100:
+                case 100: 
+                    givePinnacleGear();
+                    addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1190701, 0, 0, 0, "You have been rewarded with a Gold Demon Emblem for reaching Lv. " + level + "!");
                     break;
+                case 150:
+                    addReward(1, 1142750, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                case 200:
+                    addReward(1, 1142751, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
             }
-        } else if (GameConstants.isXenon(job)) {
+	} else if (GameConstants.isXenon(job)) {
             switch (nLevel) {
                 case 15:
                     addReward(1, 1353000, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1353001, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     break;
                 case 60:
+                    addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1353002, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1190200, 0, 0, 0, "You have been rewarded with a Silver Hybrid Heart for reaching Lv. " + level + "!");
                     break;
                 case 100:
+                    givePinnacleGear();
+                    addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1353003, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1190201, 0, 0, 0, "You have been rewarded with a Gold Hybrid Heart for reaching Lv. " + level + "!");
                     break;
+                case 150:
+                    addReward(1, 1142750, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                case 200:
+                    addReward(1, 1142751, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
             }
-        } else if (GameConstants.isResistance(job)) {
+	} else if (GameConstants.isResistance(job)) {
             switch (nLevel) {
-                case 15:
+                case 15: 
+                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     if (GameConstants.isMechanic(job))
-                            addReward(1, 1352700, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352700, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isBattleMage(job))
-                            addReward(1, 1352950, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352950, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isWildHunter(job))
-                            addReward(1, 1352960, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352960, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isBlaster(job))
-                            addReward(1, 1353400, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1353400, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 30:
+                    addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     if (GameConstants.isMechanic(job))
-                            addReward(1, 1352701, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352701, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isBattleMage(job))
-                            addReward(1, 1352951, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352951, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isWildHunter(job))
-                            addReward(1, 1352961, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352961, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isBlaster(job))
-                            addReward(1, 1353401, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1353401, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 60:
+                    addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1190600, 0, 0, 0, "You have been rewarded with a Silver Resistance Emblem for reaching Lv. " + level + "!");
                     if (GameConstants.isMechanic(job))
-                            addReward(1, 1352702, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352702, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isBattleMage(job))
-                            addReward(1, 1352952, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352952, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isWildHunter(job))
-                            addReward(1, 1352962, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352962, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isBlaster(job))
-                            addReward(1, 1353402, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1353402, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
-                case 100:
+                case 100: 
+                    givePinnacleGear();
+                    addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1190601, 0, 0, 0, "You have been rewarded with a Gold Resistance Emblem for reaching Lv. " + level + "!");
                     if (GameConstants.isMechanic(job))
-                            addReward(1, 1352703, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352703, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isBattleMage(job))
-                            addReward(1, 1352953, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352953, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isWildHunter(job))
-                            addReward(1, 1352963, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352963, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isBlaster(job))
-                            addReward(1, 1353403, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1353403, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    break;
+                case 150:
+                    addReward(1, 1142750, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                case 200:
+                    addReward(1, 1142751, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     break;
             }
-        } else if (GameConstants.isLegend(job)) {
+	} else if (GameConstants.isLegend(job)) { 
             switch (nLevel) {
                 case 15:
+                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     if (GameConstants.isAran(job))
-                            addReward(1, 1352930, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352930, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isEvan(job))
-                            addReward(1, 1352940, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352940, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isMercedes(job))
-                            addReward(1, 1352000, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352000, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isPhantom(job))
-                            addReward(1, 1352100, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352100, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isShade(job))
-                            addReward(1, 1353100, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1353100, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isLuminous(job))
-                            addReward(1, 1352400, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352400, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 30:
+                    addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     if (GameConstants.isAran(job))
-                            addReward(1, 1352931, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352931, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isEvan(job))
-                            addReward(1, 1352941, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352941, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isMercedes(job))
-                            addReward(1, 1352001, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352001, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isPhantom(job))
-                            addReward(1, 1352101, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352101, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isShade(job))
-                            addReward(1, 1353101, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1353101, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     else if (GameConstants.isLuminous(job))
-                            addReward(1, 1352401, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352401, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 60:
-                    addReward(1, 1190512, 0, 0, 0, "You have been rewarded with a Silver Heroes Emblem for reaching Lv. " + level + "!");
-                    if (GameConstants.isAran(job))
-                            addReward(1, 1352932, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    else if (GameConstants.isEvan(job))
-                            addReward(1, 1352942, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    else if (GameConstants.isMercedes(job))
-                            addReward(1, 1352002, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    else if (GameConstants.isPhantom(job))
-                            addReward(1, 1352102, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    else if (GameConstants.isShade(job))
-                            addReward(1, 1353102, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    else if (GameConstants.isLuminous(job))
-                            addReward(1, 1352402, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    if (GameConstants.isAran(job)) {
+                        addReward(1, 1190512, 0, 0, 0, "You have been rewarded with a Silver Heroes Emblem for reaching Lv. " + level + "!");
+                        addReward(1, 1352932, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    } else if (GameConstants.isEvan(job)) {
+                        addReward(1, 1190518, 0, 0, 0, "You have been rewarded with a Silver Heroes Emblem for reaching Lv. " + level + "!");
+                        addReward(1, 1352942, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    } else if (GameConstants.isMercedes(job)) {
+                        addReward(1, 1190510, 0, 0, 0, "You have been rewarded with a Silver Heroes Emblem for reaching Lv. " + level + "!");
+                        addReward(1, 1352002, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    } else if (GameConstants.isPhantom(job)) {
+                        addReward(1, 1190514, 0, 0, 0, "You have been rewarded with a Silver Heroes Emblem for reaching Lv. " + level + "!");
+                        addReward(1, 1352102, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    } else if (GameConstants.isShade(job)) {
+                        addReward(1, 1190520, 0, 0, 0, "You have been rewarded with a Silver Heroes Emblem for reaching Lv. " + level + "!");
+                        addReward(1, 1353102, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    } else if (GameConstants.isLuminous(job)) {
+                        addReward(1, 1190516, 0, 0, 0, "You have been rewarded with a Silver Heroes Emblem for reaching Lv. " + level + "!");
+                        addReward(1, 1352402, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    }
                     break;
-                case 100:
-                    addReward(1, 1190513, 0, 0, 0, "You have been rewarded with a Gold Heroes Emblem for reaching Lv. " + level + "!");
-                    if (GameConstants.isAran(job))
-                            addReward(1, 1352933, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    else if (GameConstants.isEvan(job))
-                            addReward(1, 1352943, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    else if (GameConstants.isMercedes(job))
-                            addReward(1, 1352003, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    else if (GameConstants.isPhantom(job))
-                            addReward(1, 1352103, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    else if (GameConstants.isShade(job))
-                            addReward(1, 1353103, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    else if (GameConstants.isLuminous(job))
-                            addReward(1, 1352403, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                case 100: 
+                    givePinnacleGear();
+                    addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    if (GameConstants.isAran(job)) {
+                        addReward(1, 1190513, 0, 0, 0, "You have been rewarded with a Silver Heroes Emblem for reaching Lv. " + level + "!");
+                        addReward(1, 1352933, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    } else if (GameConstants.isEvan(job)) {
+                        addReward(1, 1190519, 0, 0, 0, "You have been rewarded with a Silver Heroes Emblem for reaching Lv. " + level + "!");
+                        addReward(1, 1352943, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    } else if (GameConstants.isMercedes(job)) {
+                        addReward(1, 1190511, 0, 0, 0, "You have been rewarded with a Silver Heroes Emblem for reaching Lv. " + level + "!");
+                        addReward(1, 1352003, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    } else if (GameConstants.isPhantom(job)) {
+                        addReward(1, 1190515, 0, 0, 0, "You have been rewarded with a Silver Heroes Emblem for reaching Lv. " + level + "!");
+                        addReward(1, 1352103, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    } else if (GameConstants.isShade(job)) {
+                        addReward(1, 1190521, 0, 0, 0, "You have been rewarded with a Silver Heroes Emblem for reaching Lv. " + level + "!");
+                        addReward(1, 1353103, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    } else if (GameConstants.isLuminous(job)) {
+                        addReward(1, 1190517, 0, 0, 0, "You have been rewarded with a Silver Heroes Emblem for reaching Lv. " + level + "!");
+                        addReward(1, 1352403, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    }
                     break;
-                }
-        } else if (GameConstants.isJett(job)) {
+                case 150:
+                    addReward(1, 1142750, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                case 200:
+                    addReward(1, 1142751, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+		}
+	} else if (GameConstants.isJett(job)) {
             switch (nLevel) {
                 case 15:
+                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1352820, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 30:
+                    addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1352821, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 60:
+                    addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1352822, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1191106, 0, 0, 0, "You have been rewarded with a Silver Astro Emblem for reaching Lv. " + level + "!");
                     break;
-                case 100:
+                case 100: 
+                    givePinnacleGear();
+                    addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1352823, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1191107, 0, 0, 0, "You have been rewarded with a Gold Astro Emblem for reaching Lv. " + level + "!");
+                    break;
+                case 150:
+                    addReward(1, 1142750, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                 case 200:
+                    addReward(1, 1142751, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     break;
             }
         } else if (GameConstants.isKaiser(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(1, 1352500, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
-                    addReward(1, 1352501, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     break;
                 case 60:
-                    addReward(1, 1352502, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1190000, 0, 0, 0, "You have been rewarded with a Lesser Dragon Emblem for reaching Lv. " + level + "!");
                     break;
-                case 100:
-                    addReward(1, 1352503, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                case 100: 
+                    givePinnacleGear();
+                    addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1190001, 0, 0, 0, "You have been rewarded with a Dragon Emblem for reaching Lv. " + level + "!");
                     break;
+                case 150:
+                    addReward(1, 1142750, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                case 200:
+                    addReward(1, 1142751, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
             }
-        } else if (GameConstants.isAngelicBuster(job)) {
+	} else if (GameConstants.isAngelicBuster(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(1, 1352600, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
-                    addReward(1, 1352601, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     break;
                 case 60:
-                    addReward(1, 1352602, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1190100, 0, 0, 0, "You have been rewarded with a Lesser Angel Emblem for reaching Lv. " + level + "!");
                     break;
-                case 100:
-                    addReward(1, 1352603, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                case 100: 
+                    givePinnacleGear();
+                    addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1190101, 0, 0, 0, "You have been rewarded with an Angel Emblem for reaching Lv. " + level + "!");
                     break;
+                case 150:
+                    addReward(1, 1142750, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                case 200:
+                    addReward(1, 1142751, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
             }
-        } else if (GameConstants.isHayato(job)) {
+	} else if (GameConstants.isHayato(job)) {
             switch (nLevel) {
                 case 15:
+                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1352800, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 30:
+                    addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1352801, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 60:
+                    addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1352802, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1191100, 0, 0, 0, "You have been rewarded with a Silver Crescent Emblem for reaching Lv. " + level + "!");
                     break;
-                case 100:
+                case 100: 
+                    givePinnacleGear();
+                    addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1352803, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1191101, 0, 0, 0, "You have been rewarded with a Gold Crescent Emblem for reaching Lv. " + level + "!");
                     break;
+                case 150:
+                    addReward(1, 1142750, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                case 200:
+                    addReward(1, 1142751, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
             }
-        } else if (GameConstants.isKanna(job)) {
-                switch (nLevel) {
-                    case 60:
-                        addReward(1, 1191102, 0, 0, 0, "You have been rewarded with a Silver Blossom Emblem for reaching Lv. " + level + "!");
-                        break;
-                    case 100:
-                        addReward(1, 1191103, 0, 0, 0, "You have been rewarded with a Gold Blossom Emblem for reaching Lv. " + level + "!");
-                        break;
-                }
-        } else if (GameConstants.isBeastTamer(job)) {
+	} else if (GameConstants.isKanna(job)) {
             switch (nLevel) {
                 case 15:
+                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    break;
+                case 30:
+                    addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                case 60:
+                    addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    addReward(1, 1191102, 0, 0, 0, "You have been rewarded with a Silver Blossom Emblem for reaching Lv. " + level + "!");
+                    break;
+                case 100: 
+                    givePinnacleGear();
+                    addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    addReward(1, 1191103, 0, 0, 0, "You have been rewarded with a Gold Blossom Emblem for reaching Lv. " + level + "!");
+                    break;
+                case 150:
+                    addReward(1, 1142750, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                case 200:
+                    addReward(1, 1142751, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+            }
+	} else if (GameConstants.isBeastTamer(job)) {
+            switch (nLevel) {
+                case 15:
+                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1352810, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 30:
+                    addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1352811, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 60:
+                    addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1352812, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1191108, 0, 0, 0, "You have been rewarded with a Silver Forest Emblem for reaching Lv. " + level + "!");
                     break;
-                case 100:
+                case 100: 
+                    givePinnacleGear();
+                    addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1352813, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1191109, 0, 0, 0, "You have been rewarded with a Gold Forest Emblem for reaching Lv. " + level + "!");
                     break;
+                case 150:
+                    addReward(1, 1142750, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                case 200:
+                    addReward(1, 1142751, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
             }
-        } else if (GameConstants.isKinesis(job)) {
+	} else if (GameConstants.isKinesis(job)) {
             switch (nLevel) {
                 case 15:
+                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1353200, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 30:
+                    addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1353201, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 60:
+                    addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1353202, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1191000, 0, 0, 0, "You have been rewarded with a Silver Kinesis Emblem for reaching Lv. " + level + "!");
                     break;
-                case 100:
+                case 100: 
+                    givePinnacleGear();
+                    addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1353203, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1191001, 0, 0, 0, "You have been rewarded with a Gold Kinesis Emblem for reaching Lv. " + level + "!");
                     break;
-            }
-        } else if (GameConstants.isZero(job)) {
-            switch (nLevel) {
-                case 105:
-                    addReward(1, 1190530, 0, 0, 0, "You have been rewarded with an Eternal Time Emblem for reaching Lv. " + level + "!");
+                case 150:
+                    addReward(1, 1142750, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                case 200:
+                    addReward(1, 1142751, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     break;
             }
-        }
-        updateReward();
+	} else if (GameConstants.isZero(job)) {
+            switch (nLevel) {
+                case 105:
+                    givePinnacleGear();
+                    addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 1190530, 0, 0, 0, "You have been rewarded with an Eternal Time Emblem for reaching Lv. " + level + "!");
+                    break;
+                case 150:
+                    addReward(1, 1142750, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+                case 200:
+                    addReward(1, 1142751, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
+                    break;
+            }
+	}
+	updateReward();
     }      
+
+      
+    
+    public void givePinnacleGear() {
+	// Pinnacle Set
+	addReward(1, 1003740, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!");
+	addReward(1, 1052569, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!");
+	addReward(1, 1072768, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!");
+	addReward(1, 1082498, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!");
+	addReward(1, 1102506, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!");
+	addReward(1, 1112794, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!");
+	addReward(1, 1122220, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!");
+	addReward(1, 1132209, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!");
+	addReward(1, 1152119, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!");
+
+	// Weapons
+	if (GameConstants.isDualBlade(job)) {
+            addReward(1, 1342008, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Meteor Katara
+	}
+	if (GameConstants.isLuminous(job)) {
+            addReward(1, 1212055, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Shining Rod
+        }
+        if (GameConstants.isAngelicBuster(job)) {
+        addReward(1, 1222050, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Soul Shooter
+	}
+	if (GameConstants.isDemonAvenger(job)) {
+            addReward(1, 1232050, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Grim Seeker
+	}
+	if (GameConstants.isXenon(job)) {
+            addReward(1, 1242049, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Hefty Head
+	}
+	if (GameConstants.isBeastTamer(job)) {
+            addReward(1, 1252061, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Kitty Soul Scepter
+	}
+	if (GameConstants.isWarriorPaladin(job) || GameConstants.isWarriorHero(job) || GameConstants.isMihile(job) || GameConstants.isDawnWarriorCygnus(job)) {
+            addReward(1, 1302258, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Gladius
+	}
+	if (GameConstants.isDualBlade(job) || GameConstants.isThiefShadower(job)) {
+            addReward(1, 1332216, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Kanzir
+	}
+	if (GameConstants.isPhantom(job)) {
+            addReward(1, 1362083, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Arc-en-ciel
+	}
+	if (GameConstants.isEvan(job) || GameConstants.isMagicianIceLightning(job) || GameConstants.isMagicianFirePoison(job) || GameConstants.isMagicianBishop(job) || GameConstants.isBlazeWizardCygnus(job)) {
+            addReward(1, 1372170, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Twin Angels
+	}
+	if (GameConstants.isBattleMage(job) || GameConstants.isMagicianIceLightning(job) || GameConstants.isMagicianFirePoison(job) || GameConstants.isMagicianBishop(job) || GameConstants.isBlazeWizardCygnus(job)) {
+            addReward(1, 1382202, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Pain Killer
+	}
+	if (GameConstants.isWarriorPaladin(job) || GameConstants.isWarriorHero(job) || GameConstants.isKaiser(job) || GameConstants.isDawnWarriorCygnus(job)) {
+            addReward(1, 1402187, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Claymore
+	}
+	if (GameConstants.isAran(job) || GameConstants.isWarriorDarkKnight(job)) {
+            addReward(1, 1442211, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Halfmoon
+	}
+	if (GameConstants.isWindArcherCygnus(job) || GameConstants.isArcherBowmaster(job)) {
+            addReward(1, 1452198, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Ash Lord
+	}
+	if (GameConstants.isShade(job) || GameConstants.isPirateBuccaneer(job) || GameConstants.isThunderBreakerCygnus(job)) {
+            addReward(1, 1482161, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Bloody Claw
+	}
+	if (GameConstants.isJett(job) || GameConstants.isPirateCorsair(job)) {
+            addReward(1, 1492172, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Queen's Finger
+	}
+	if (GameConstants.isMercedes(job)) {
+            addReward(1, 1522087, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Argents
+	}
+	if (GameConstants.isCannoneer(job)) {
+            addReward(1, 1532091, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Crash
+	}
+	if (GameConstants.isHayato(job)) {
+            addReward(1, 1542065, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Katana 
+	}
+	if (GameConstants.isKanna(job)) {
+            addReward(1, 1552065, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Fan 
+	}
+	if (GameConstants.isWarriorHero(job) || GameConstants.isDemonSlayer(job)) {
+            addReward(1, 1312145, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Counter
+	}
+	if (GameConstants.isWarriorHero(job)) {
+            addReward(1, 1412128, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Butterfly
+	}
+	if (GameConstants.isWarriorPaladin(job)) {
+            addReward(1, 1422131, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Big Pinnacle Maul
+	}
+	if (GameConstants.isWarriorDarkKnight(job)) {
+            addReward(1, 1432160, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Omni Pierce
+	}
+	if (GameConstants.isArcherMarksman(job) || GameConstants.isWildHunter(job)) {
+            addReward(1, 1462186, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Lock
+	}
+	if (GameConstants.isNightWalkerCygnus(job) || GameConstants.isThiefNightLord(job)) {
+            addReward(1, 1472207, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Black Event 
+	}
+        if (GameConstants.isBlaster(job)) {
+            addReward(1, 1582007, 0, 0, 0, "You have been rewarded with a new set for reaching Lv.100!"); // Pinnacle Black Event 
+        }
+    }
     
     public void checkCustomReward(int level) {
         List<Integer> rewards = new LinkedList<>();
@@ -10950,7 +11268,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 mesoReward = 10000;
                 break;
             case 100:
-                addReward(4, 0, 0, 50000000, 0, "Here is a special reward for the experts! Alpha only tho.");//just for beta
+                addReward(4, 0, 0, 10000000, 0, "Here is a special reward for the experts! Alpha only tho.");//just for beta
                 rewards.add(2450000);
                 rewards.add(2022918);
                 rewards.add(1122195);
@@ -11408,7 +11726,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     }
 
     public void handleKaiserCombo() {
-        if (kaiserCombo < 1000) {
+        if (kaiserCombo < 7000) {
             kaiserCombo += 3;
         }
         SkillFactory.getSkill(61111008).getEffect(1).applyKaiserCombo(this, kaiserCombo);

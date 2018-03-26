@@ -61,7 +61,7 @@ public class PhantomBuff extends AbstractBuffClass {
                 eff.statups.put(CharacterTemporaryStat.IndieStatR, eff.info.get(MapleStatInfo.x));
                 break;
             case Phantom.PRIERE_DARIA:
-                eff.statups.put(CharacterTemporaryStat.DamR, eff.info.get(MapleStatInfo.damR));
+                eff.statups.put(CharacterTemporaryStat.IndieDamR, (int) eff.getLevel() + 1);
                 eff.statups.put(CharacterTemporaryStat.IgnoreMobpdpR, eff.info.get(MapleStatInfo.ignoreMobpdpR));
                 break;
             case Phantom.FINAL_JUDGMENT_DRAW:

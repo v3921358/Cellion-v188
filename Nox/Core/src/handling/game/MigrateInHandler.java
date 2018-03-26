@@ -18,6 +18,8 @@ import constants.GameConstants;
 import constants.ServerConstants;
 import handling.cashshop.CashShopOperation;
 import handling.farm.FarmOperation;
+import handling.jobs.Hero;
+import handling.jobs.Hero.PhantomHandler;
 import handling.jobs.Resistance;
 import handling.jobs.Resistance.BlasterHandler;
 import handling.world.CharacterIdChannelPair;
@@ -58,26 +60,26 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         iPacket.DecodeInteger();
-        final int playerid = iPacket.DecodeInteger();
+        final int nPlayerID = iPacket.DecodeInteger();
         iPacket.Skip(18); // 00 00 00 00 00 00 45 9A 4E C8 00 00 00 00 C0 17 00 00 00 00 00 00 00 00 00 00
-        final long loginAuthCookie = iPacket.DecodeLong();
+        final long nLoginAuthCookie = iPacket.DecodeLong();
 
-        boolean fromTransfer = false;
-        MapleCharacter player;
+        boolean bFromTransfer = false;
+        MapleCharacter pPlayer;
 
-        CharacterTransfer CashShopTransition = CashShopServer.getPlayerStorage().getPendingCharacter(playerid);
+        CharacterTransfer CashShopTransition = CashShopServer.getPlayerStorage().getPendingCharacter(nPlayerID);
         if (CashShopTransition != null) {
             //c.write(BuffPacket.cancelBuff());
             CashShopOperation.EnterCS(CashShopTransition, c);
             return;
         }
-        CharacterTransfer farmtransfer = FarmServer.getPlayerStorage().getPendingCharacter(playerid);
+        CharacterTransfer farmtransfer = FarmServer.getPlayerStorage().getPendingCharacter(nPlayerID);
         if (farmtransfer != null) {
             FarmOperation.EnterFarm(farmtransfer, c);
             return;
         }
         for (ChannelServer cserv : ChannelServer.getAllInstances()) {
-            CashShopTransition = cserv.getPlayerStorage().getPendingCharacter(playerid);
+            CashShopTransition = cserv.getPlayerStorage().getPendingCharacter(nPlayerID);
             if (CashShopTransition != null) {
                 c.setChannel(cserv.getChannel());
                 break;
@@ -85,25 +87,25 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         }
 
         if (CashShopTransition == null) { // Player isn't in storage, probably isn't CC
-            LoginAuthorization ip = LoginServer.getLoginAuth(playerid);
+            LoginAuthorization ip = LoginServer.getLoginAuth(nPlayerID);
             String s = c.getSessionIPAddress();
             if (ip == null || !s.substring(s.indexOf('/') + 1, s.length()).equals(ip.getIPAddress())) {
                 if (ip != null) {
-                    LoginServer.putLoginAuth(playerid, ip.getIPAddress(), ip.getTempIP(), ip.getChannel(), 0);
+                    LoginServer.putLoginAuth(nPlayerID, ip.getIPAddress(), ip.getTempIP(), ip.getChannel(), 0);
                 }
                 c.close();
                 return;
             }
             c.setTempIP(ip.getIPAddress());
             c.setChannel(ip.getChannel());
-            player = MapleCharacter.loadCharFromDB(playerid, c, true);
+            pPlayer = MapleCharacter.loadCharFromDB(nPlayerID, c, true);
         } else {
-            fromTransfer = true;
-            player = MapleCharacter.reconstructCharacter(CashShopTransition, c, true);
+            bFromTransfer = true;
+            pPlayer = MapleCharacter.reconstructCharacter(CashShopTransition, c, true);
         }
         final ChannelServer channelServer = c.getChannelServer();
-        c.setPlayer(player);
-        c.setAccID(player.getAccountID());
+        c.setPlayer(pPlayer);
+        c.setAccID(pPlayer.getAccountID());
 
         if (!c.CheckIPAddress()) { // Remote hack
             c.close();
@@ -127,24 +129,24 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         }
 
         c.updateLoginState(MapleClient.MapleClientLoginState.LOGIN_LOGGEDIN, c.getSessionIPAddress());
-        channelServer.addPlayer(player);
+        channelServer.addPlayer(pPlayer);
 
         // Writes the wrap to map packet first.
         // otherwise certain packets specific to the map will not work if it is being sent late.
-        c.write(CField.getWarpToMap(player, null, 0, true));
+        c.write(CField.getWarpToMap(pPlayer, null, 0, true));
 
         // Add the player to the map.
-        player.getMap().addPlayer(player);
+        pPlayer.getMap().addPlayer(pPlayer);
 
         // Others. The orders of how these are placed should be based on its priority
         // Such as clones, pets which may not really affect the player if should an exception occur should be placed last.
         // Or stuff that may not possibility cause exception could be placed on top with higher priority too
         try {
-            World.WorldBuddy.loggedOn(player.getName(), player.getId(), c.getChannel(), player.getBuddylist().getBuddyIds());
+            World.WorldBuddy.loggedOn(pPlayer.getName(), pPlayer.getId(), c.getChannel(), pPlayer.getBuddylist().getBuddyIds());
 
-            final MapleParty party = player.getParty();
+            final MapleParty party = pPlayer.getParty();
             if (party != null) {
-                World.Party.updateParty(party.getId(), PartyOperation.LOG_ONOFF, new MaplePartyCharacter(player));
+                World.Party.updateParty(party.getId(), PartyOperation.LOG_ONOFF, new MaplePartyCharacter(pPlayer));
 
                 if (party.getExpeditionId() > 0) {
                     final MapleExpedition me = World.Party.getExped(party.getExpeditionId());
@@ -153,26 +155,26 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
                     }
                 }
             }
-            final CharacterIdChannelPair[] onlineBuddies = World.Find.multiBuddyFind(player.getId(), player.getBuddylist().getBuddyIds());
+            final CharacterIdChannelPair[] onlineBuddies = World.Find.multiBuddyFind(pPlayer.getId(), pPlayer.getBuddylist().getBuddyIds());
             for (CharacterIdChannelPair onlineBuddy : onlineBuddies) {
-                player.getBuddylist().get(onlineBuddy.getCharacterId()).setChannel(onlineBuddy.getChannel());
+                pPlayer.getBuddylist().get(onlineBuddy.getCharacterId()).setChannel(onlineBuddy.getChannel());
             }
             Buddy buddy = new Buddy(BuddyResult.LOAD_FRIENDS);
-            buddy.setEntries(new ArrayList<>(player.getBuddylist().getBuddies()));
+            buddy.setEntries(new ArrayList<>(pPlayer.getBuddylist().getBuddies()));
             c.write(CWvsContext.buddylistMessage(buddy));
             c.write(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_MESSENGER_MODE)));
             // Start of Messenger
-            final MapleMessenger messenger = player.getMessenger();
+            final MapleMessenger messenger = pPlayer.getMessenger();
             if (messenger != null) {
                 World.Messenger.silentJoinMessenger(messenger.getId(), new MapleMessengerCharacter(c.getPlayer()));
                 World.Messenger.updateMessenger(messenger.getId(), c.getPlayer().getName(), c.getChannel());
             }
 
             // Start of Guild and alliance
-            if (player.getGuildId() > 0) {
-                World.Guild.setGuildMemberOnline(player.getMGC(), true, c.getChannel());
-                c.write(GuildPacket.loadGuild_Done(player));
-                final MapleGuild gs = World.Guild.getGuild(player.getGuildId());
+            if (pPlayer.getGuildId() > 0) {
+                World.Guild.setGuildMemberOnline(pPlayer.getMGC(), true, c.getChannel());
+                c.write(GuildPacket.loadGuild_Done(pPlayer));
+                final MapleGuild gs = World.Guild.getGuild(pPlayer.getGuildId());
                 if (gs != null) {
                     final List<Packet> packetList = World.Alliance.getAllianceInfo(gs.getAllianceId(), true);
                     if (packetList != null) {
@@ -183,109 +185,114 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
                         }
                     }
                 } else { //guild not found, change guild id
-                    player.setGuildId(0);
-                    player.setGuildRank((byte) 5);
-                    player.setAllianceRank((byte) 5);
-                    player.saveGuildStatus();
+                    pPlayer.setGuildId(0);
+                    pPlayer.setGuildRank((byte) 5);
+                    pPlayer.setAllianceRank((byte) 5);
+                    pPlayer.saveGuildStatus();
                 }
             }
-            if (player.getFamilyId() > 0) {
-                World.Family.setFamilyMemberOnline(player.getMFC(), true, c.getChannel());
+            if (pPlayer.getFamilyId() > 0) {
+                World.Family.setFamilyMemberOnline(pPlayer.getMFC(), true, c.getChannel());
             }
             //c.write(FamilyPacket.getFamilyData());
             //c.write(FamilyPacket.getFamilyInfo(player));
 
             // Buffs
-            player.giveCoolDowns(PlayerBuffStorage.getCooldownsFromStorage(player.getId()));
-            player.silentGiveBuffs(PlayerBuffStorage.getBuffsFromStorage(player.getId()));
-            player.giveSilentDebuff(PlayerBuffStorage.getDiseaseFromStorage(player.getId()));
+            pPlayer.giveCoolDowns(PlayerBuffStorage.getCooldownsFromStorage(pPlayer.getId()));
+            pPlayer.silentGiveBuffs(PlayerBuffStorage.getBuffsFromStorage(pPlayer.getId()));
+            pPlayer.giveSilentDebuff(PlayerBuffStorage.getDiseaseFromStorage(pPlayer.getId()));
         } catch (Exception e) {
             LogHelper.GENERAL_EXCEPTION.get().info("There was an exception with loading a player:\n{}", e);
         }
 
         // Keymaps
-        player.sendMacros();
-        c.write(CField.getKeymap(player.getKeyLayout(), player.getJob()));
+        pPlayer.sendMacros();
+        c.write(CField.getKeymap(pPlayer.getKeyLayout(), pPlayer.getJob()));
 
         // Server message
-        player.getClient().write(CWvsContext.broadcastMsg(channelServer.getServerMessage()));
+        pPlayer.getClient().write(CWvsContext.broadcastMsg(channelServer.getServerMessage()));
 
         // Skills
-        player.baseSkills(); //fix people who've lost skills.
-        player.updateHyperSPAmount();
+        pPlayer.baseSkills(); //fix people who've lost skills.
+        pPlayer.updateHyperSPAmount();
         c.write(CWvsContext.updateSkills(c.getPlayer().getSkills(), false));//skill to 0 "fix"
         //c.write(JobPacket.addStolenSkill());
 
         // Pendant expansion
-        MapleQuestStatus quest_pendant = player.getQuestNoAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT));
+        MapleQuestStatus quest_pendant = pPlayer.getQuestNoAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT));
         c.write(CWvsContext.pendantExpansionAvailable(
                 quest_pendant != null && quest_pendant.getCustomData() != null && Long.parseLong(quest_pendant.getCustomData()) > System.currentTimeMillis()));
 
         // Zero items, equipments
-        if (!GameConstants.isZero(player.getJob())) { //tell all players 2 login so u can remove this from ther
-            Equip a = (Equip) player.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11);
+        if (!GameConstants.isZero(pPlayer.getJob())) { //tell all players 2 login so u can remove this from ther
+            Equip a = (Equip) pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11);
             if (a != null) {
                 if (GameConstants.getWeaponType(a.getItemId()) == MapleWeaponType.LAZULI) {
-                    player.getInventory(MapleInventoryType.EQUIPPED).removeItem((short) -11);
+                    pPlayer.getInventory(MapleInventoryType.EQUIPPED).removeItem((short) -11);
                 }
             }
-            Equip b = (Equip) player.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -10);
+            Equip b = (Equip) pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -10);
             if (b != null) {
                 if (GameConstants.getWeaponType(b.getItemId()) == MapleWeaponType.LAPIS) {
-                    player.getInventory(MapleInventoryType.EQUIPPED).removeItem((short) -10);
+                    pPlayer.getInventory(MapleInventoryType.EQUIPPED).removeItem((short) -10);
                 }
             }
         }
-        player.expirationTask(true, CashShopTransition == null);
+        pPlayer.expirationTask(true, CashShopTransition == null);
 
         // Job specific stuff.
-        if (player.getJob() == 132) { // DARKKNIGHT
-            player.checkBerserk();
-        } else if (GameConstants.isXenon(player.getJob())) {
-            player.startXenonSupply();
-        } else if (GameConstants.isDemonAvenger(player.getJob())) {
-            c.write(AvengerPacket.giveAvengerHpBuff(player.getStat().getHp()));
-        } else if (GameConstants.isLuminous(player.getJob())) {
-            player.applyLifeTidal();
-        } else if (GameConstants.isBlaster(player.getJob())) {
-            BlasterHandler.enterCylinderState(player);
+        if (pPlayer.getJob() == 132) { // DARKKNIGHT
+            pPlayer.checkBerserk();
+        } else if (GameConstants.isXenon(pPlayer.getJob())) {
+            pPlayer.startXenonSupply();
+        } else if (GameConstants.isDemonAvenger(pPlayer.getJob())) {
+            c.write(AvengerPacket.giveAvengerHpBuff(pPlayer.getStat().getHp()));
+        } else if (GameConstants.isLuminous(pPlayer.getJob())) {
+            pPlayer.applyLifeTidal();
+        } else if (GameConstants.isBlaster(pPlayer.getJob())) {
+            BlasterHandler.enterCylinderState(pPlayer);
+        } else if (GameConstants.isPhantom(pPlayer.getJob())) {
+            PhantomHandler.updateDeckRequest(pPlayer, 0);
         }
 
         // Quickslots
-        MapleQuestStatus quest_quickSlot = player.getQuestNoAdd(MapleQuest.getInstance(GameConstants.QUICK_SLOT));
+        MapleQuestStatus quest_quickSlot = pPlayer.getQuestNoAdd(MapleQuest.getInstance(GameConstants.QUICK_SLOT));
         c.write(CField.quickSlot(quest_quickSlot != null && quest_quickSlot.getCustomData() != null ? quest_quickSlot.getCustomData() : null));
 
         // Pets
-        player.updatePetAuto();
-        player.spawnSavedPets();
-        player.sendImp();
+        pPlayer.updatePetAuto();
+        pPlayer.spawnSavedPets();
+        pPlayer.sendImp();
 
         // Etc
-        player.showNote();
-        player.updateReward();
-        player.updatePartyMemberHP();
-        player.startFairySchedule(false);
+        pPlayer.showNote();
+        pPlayer.updateReward();
+        pPlayer.updatePartyMemberHP();
+        pPlayer.startFairySchedule(false);
 
         // Bloodless Channel Notification
-        if (ServerConstants.BUFFED_SYSTEM && ServerConstants.BLOODLESS_EVENT && (player.getClient().getChannel() >= ServerConstants.START_RANGE && player.getClient().getChannel() <= ServerConstants.END_RANGE)) {
-            player.dropMessage(-1, "You have entered a Bloodless Channel (Hard Mode)!");
+        if (ServerConstants.BUFFED_SYSTEM && ServerConstants.BLOODLESS_EVENT && (pPlayer.getClient().getChannel() >= ServerConstants.START_RANGE && pPlayer.getClient().getChannel() <= ServerConstants.END_RANGE)) {
+            pPlayer.dropMessage(-1, "You have entered a Bloodless Channel (Hard Mode)!");
         }
         
         // Developer Skill Cooldown Toggle
-        if (ServerConstants.DEV_DEFAULT_CD && player.isDeveloper()) {
-            player.toggleCooldown();
-            player.yellowMessage("[Debug] Skill cooldowns are toggled off by default due to developer status.");
-            player.dropMessage(6, "[Reminder] You can type !togglecooldown to enable skill cooldowns.");
+        if (ServerConstants.DEV_DEFAULT_CD && pPlayer.isDeveloper()) {
+            pPlayer.toggleCooldown();
+            pPlayer.yellowMessage("[Debug] Skill cooldowns are toggled off by default due to developer status.");
+            pPlayer.dropMessage(6, "[Reminder] You can type !togglecooldown to enable skill cooldowns.");
         }
         
         // Game Master Quality of Life Features
-        if (player.isGM()) {
-            c.getPlayer().dropMessage(5, "[" + ServerConstants.SERVER_NAME + " Stealth] Your character is currently hidden.");
+        if (pPlayer.isGM()) {
+            pPlayer.gainMeso(2100000000, true);
+            pPlayer.toggleGodMode(true);
+            pPlayer.dropMessage(6, "[Reminder] God mode has been enabled by default.");
+            pPlayer.dropMessage(5, "[" + ServerConstants.SERVER_NAME + " Stealth] Your character is currently hidden.");
             SkillFactory.getSkill(9101004).getEffect(1).applyTo(c.getPlayer());
         }
 
-        if (player.getStat().equippedSummon > 0) {
-            SkillFactory.getSkill(player.getStat().equippedSummon + (GameConstants.getBeginnerJob(player.getJob()) * 1000)).getEffect(1).applyTo(player);
+        if (pPlayer.getStat().equippedSummon > 0) {
+            SkillFactory.getSkill(pPlayer.getStat().equippedSummon + (GameConstants.getBeginnerJob(pPlayer.getJob()) * 1000)).getEffect(1).applyTo(pPlayer);
         }
 
         if (c.getPlayer().getLevel() < 11 && ServerConstants.RED_EVENT_10) {
@@ -295,7 +302,7 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         }
         c.write(CWvsContext.updateCrowns(new int[]{-1, -1, -1, -1, -1}));
 
-        c.write(CWvsContext.getFamiliarInfo(player));
+        c.write(CWvsContext.getFamiliarInfo(pPlayer));
         c.write(CWvsContext.shopDiscount(ServerConstants.SHOP_DISCOUNT));
     }
 }

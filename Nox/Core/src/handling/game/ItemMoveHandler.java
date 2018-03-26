@@ -40,5 +40,7 @@ public class ItemMoveHandler implements ProcessPacket<MapleClient> {
         } else {
             MapleInventoryManipulator.move(c, type, src, dst);
         }
+        
+        c.getPlayer().saveItemData(); // Duplication and rollback prevention.
     }
 }

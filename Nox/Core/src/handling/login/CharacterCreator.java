@@ -9,6 +9,7 @@ import constants.JobConstants;
 import constants.ServerConstants;
 import constants.skills.Aran;
 import constants.skills.DanceMoves;
+import constants.skills.Hayato;
 import constants.skills.Kaiser;
 import constants.skills.Shade;
 import constants.skills.Xenon;
@@ -279,9 +280,9 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
             {100000279, 100000282, 100001263, 100001264, 100001265, 100001266, 10000168}, //Zero (Removed 100001262 - Temple Recall, don't want it used yet)
             {20051284, 20050285, 20050286}, // Shade
             {228, 80001151}, //Jett - core aura doesn't work?
-            {}, //Hayato
+            {Hayato.QUICK_DRAW, Hayato.SUMMER_RAIN, Hayato.MASTER_OF_BLADES, Hayato.SHIMADA_HEART}, //Hayato
             {40020000, 40020001, 40020002, 40020109}, //Kanna
-            {80001152, 110001251}, //Beast Tamer
+            {80001152, 110001251, 110001510, 110001501, 110001502, 110001503, 110001504}, //Beast Tamer
             {80001152}, //Pink Bean
             {} //Kinesis
             /* Not sure which of these we need to add
@@ -326,6 +327,11 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
                 mSkill.put(SkillFactory.getSkill(110001512), new SkillEntry((byte) 0, (byte) 5, -1));
                 mSkill.put(SkillFactory.getSkill(110000513), new SkillEntry((byte) 0, (byte) 30, -1));
                 mSkill.put(SkillFactory.getSkill(110000515), new SkillEntry((byte) 0, (byte) 10, -1));
+                mSkill.put(SkillFactory.getSkill(110001510), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(110001501), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(110001502), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(110001503), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(110001504), new SkillEntry((byte) 1, (byte) 1, -1));
             }
             if (pJob == LoginInformationProvider.JobType.Resistance) { // Mechanic (Hack Fix)
                 mSkill.put(SkillFactory.getSkill(35120000), new SkillEntry((byte) 1, (byte) 10, -1));
@@ -348,6 +354,12 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
                 mSkill.put(SkillFactory.getSkill(Shade.SPIRIT_BOND_1), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Shade.CLOSE_CALL), new SkillEntry((byte) 1, (byte) 1, -1));
             }
+            if (pJob == LoginInformationProvider.JobType.Hayato) { 
+                mSkill.put(SkillFactory.getSkill(Hayato.QUICK_DRAW), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(Hayato.SUMMER_RAIN), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(Hayato.MASTER_OF_BLADES), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(Hayato.SHIMADA_HEART), new SkillEntry((byte) 1, (byte) 1, -1));
+            }
             
             mSkill.put(SkillFactory.getSkill(80001436), new SkillEntry((byte) 1, (byte) 1, -1));// Actions Skill (Allows Dancing)
             for (DanceMoves moves : DanceMoves.values()) {
@@ -355,6 +367,16 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
             }
             oNewCharacter.changeSkillLevelSkip(mSkill, false);
         }
+        
+        /*if (GameConstants.isBeastTamer(oNewCharacter.getJob())) {
+            HashMap<Skill, SkillEntry> sa = new HashMap<>();
+            for (Skill skil : SkillFactory.getAllSkills()) {
+                if (GameConstants.isApplicableSkill(skil.getId()) && skil.canBeLearnedBy(c.getPlayer().getJob()) && !skil.isInvisible()) { //no db/additionals/resistance skills
+                    sa.put(skil, new SkillEntry((byte) skil.getMaxLevel(), (byte) skil.getMaxLevel(), SkillFactory.getDefaultSExpiry(skil)));
+                }
+            }
+            oNewCharacter.changeSkillsLevel(sa);
+        }*/
         
         for (int[] i : nGuideBookCollection) {
             if (oNewCharacter.getJob() == i[1]) {

@@ -209,6 +209,7 @@ public class EnchantmentHandler implements ProcessPacket<MapleClient> {
                     break;
             }
         }
+        //chr.fakeRelog2();
         c.write(CWvsContext.enchantmentSystem(enchant));
     }
 

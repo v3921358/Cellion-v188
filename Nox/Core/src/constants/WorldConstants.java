@@ -13,7 +13,11 @@ public class WorldConstants {
      * @Warning: World will be duplicated if it's the same as the gm server
      */
     public static enum WorldOption {
-
+        
+        Reboot2(46, ServerConstants.EXP_RATE, ServerConstants.MESO_RATE, ServerConstants.DROP_RATE, 1, (byte) 2, false, false, 19),
+        
+        Arcane(50, 1, 1, 1, 1, (byte) 2, false, false, 19),
+        Aurora(44, 1, 1, 1, 1, (byte) 2, false, false, 19),
         Reboot(44, 1, 1, 1, 1, (byte) 0, false, false, 19),
         Red(43, 10, 2, 2, 1, (byte) 0, false, false, 19),
         Aether(42, 10, 2, 2, 1, (byte) 0, false, false, 19),
@@ -26,6 +30,7 @@ public class WorldConstants {
         Legends(35, 1, 1, 1, 1, (byte) 0, false, false, 19),
         Titan(34, 1, 1, 1, 1, (byte) 0, false, false, 19), //Translation: Titan
         Chaos2(33, 1, 1, 1, 1, (byte) 0, false, false, 19), //Translation: Chaos
+        Luna(30, 1, 1, 1, 1, (byte) 5, false, false, 20),
         Androa(23, 1, 1, 1, 1, (byte) 0, false, false, 19),
         Cosmo(22, 1, 1, 1, 1, (byte) 0, false, false, 19),
         Aster(21, 1, 1, 1, 1, (byte) 0, false, false, 19),
@@ -49,7 +54,7 @@ public class WorldConstants {
         Windia(3, 1, 1, 1, 1, (byte) 0, false, false, 20),
         Broa(2, 100, 1000, 3, 1, (byte) 1, false, false, 20, "Fun 100x rates! RBS!"),
         Bera(1, 1, 1, 1, 1, (byte) 1, false, false, 20, "Low, GMS like rates!"),
-        Scania(0, ServerConstants.EXP_RATE, ServerConstants.MESO_RATE, ServerConstants.DROP_RATE, 1, (byte) 5, true, true, 20, "Default world!");
+        Scania(0, ServerConstants.EXP_RATE, ServerConstants.MESO_RATE, ServerConstants.DROP_RATE, 1, (byte) 2, true, true, 20, "Default world!");
         private final float exp, meso, drop, miraclecube;
         private final int world, channels;
         private final byte flag;

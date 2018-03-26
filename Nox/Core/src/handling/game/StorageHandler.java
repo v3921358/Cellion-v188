@@ -91,7 +91,7 @@ public class StorageHandler implements ProcessPacket<MapleClient> {
                     }
                     if ((item.getItemId() == itemId) && ((item.getQuantity() >= quantity) || (GameConstants.isThrowingStar(itemId)) || (GameConstants.isBullet(itemId)))) {
                         if (ii.isDropRestricted(item.getItemId())) {
-                            if (ItemFlag.KARMA_EQ.check(flag)) {
+                            /*if (ItemFlag.KARMA_EQ.check(flag)) {
                                 item.setFlag((short) (flag - ItemFlag.KARMA_EQ.getValue()));
                             } else if (ItemFlag.KARMA_USE.check(flag)) {
                                 item.setFlag((short) (flag - ItemFlag.KARMA_USE.getValue()));
@@ -102,7 +102,7 @@ public class StorageHandler implements ProcessPacket<MapleClient> {
                             } else {
                                 c.write(CWvsContext.enableActions());
                                 return;
-                            }
+                            }*/
                         }
                         if ((GameConstants.isThrowingStar(itemId)) || (GameConstants.isBullet(itemId))) {
                             quantity = item.getQuantity();

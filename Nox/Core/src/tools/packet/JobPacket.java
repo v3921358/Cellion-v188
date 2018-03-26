@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import client.CharacterTemporaryStat;
+import constants.skills.Hayato;
+import constants.skills.Phantom;
 import constants.skills.Shade;
+import constants.skills.Shadower;
 import handling.world.AttackMonster;
 import service.SendPacketOpcode;
 import net.OutPacket;
@@ -165,6 +168,54 @@ public class JobPacket {
         }
     }
 
+    public static class HayatoPacket {
+        
+        public static Packet SwordEnergy(int nAmount) {
+            OutPacket oPacket = new OutPacket(80);
+            
+            oPacket.EncodeShort(SendPacketOpcode.ModHayatoCombo.getValue());
+            
+            oPacket.EncodeInteger(nAmount); 
+            
+            return oPacket.ToPacket();
+        }
+        
+        /*public static Packet QuickDraw(int nStance) {
+            OutPacket oPacket = new OutPacket(80);
+            
+            oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
+            PacketHelper.writeSingleMask(oPacket, CharacterTemporaryStat.HayatoStance);
+            
+            oPacket.EncodeInteger(nStance); // nStance
+            
+            oPacket.Fill(0, 28); // For no d/c memes.
+            
+            return oPacket.ToPacket();
+        }*/
+    }
+    
+    public static class ShadowerPacket {
+        
+        public static Packet toggleFlipTheCoin(boolean bEnabled) {
+            OutPacket oPacket = new OutPacket(80);
+            oPacket.EncodeShort(SendPacketOpcode.UserFlipTheCoinEnabled.getValue());
+            oPacket.Encode(bEnabled ? 1 : 0);
+
+            return oPacket.ToPacket();
+        }
+        
+        public static Packet setKillingPoint(int nAmount) {
+            OutPacket oPacket = new OutPacket(80);
+            
+            oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
+            PacketHelper.writeSingleMask(oPacket, CharacterTemporaryStat.KillingPoint);
+            
+            oPacket.Encode(nAmount); // Doesn't work.
+            
+            return oPacket.ToPacket();
+        }
+    }
+    
     public static class ShadePacket {
         
         public static Packet FoxSpirit(MapleCharacter pPlayer, AttackMonster oMonster) {
@@ -350,16 +401,16 @@ public class JobPacket {
 
     public static class PhantomPacket {
 
-        public static Packet ThrowCarte(int nCharId, int nObjectId) {
+        public static Packet ThrowCarte(MapleCharacter pPlayer, int nObjectId) {
             OutPacket oPacket = new OutPacket(80);
             
             oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
             oPacket.Encode(0);
-            oPacket.EncodeInteger(nCharId);
+            oPacket.EncodeInteger(pPlayer.getId());
             oPacket.EncodeInteger(1); // nAtomType
             oPacket.Encode(1);
             oPacket.EncodeInteger(nObjectId);
-            oPacket.EncodeInteger(24120002); // nAtomId
+            oPacket.EncodeInteger(pPlayer.hasSkill(Phantom.CARTE_NOIR) ? Phantom.CARTE_NOIR : Phantom.CARTE_BLANCHE); // nAtomId
             
             for (int i = 0; i < 3; i++) {
                 oPacket.Encode(1);
@@ -632,6 +683,33 @@ public class JobPacket {
 
     public static class LuminousPacket {
 
+        public static Packet setLarknessResult(int nSkillID, int nLightGauge, int nDarkGauge, int tDuration) {
+            OutPacket oPacket = new OutPacket(80);
+            oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
+            PacketHelper.writeSingleMask(oPacket, CharacterTemporaryStat.Larkness);
+
+            oPacket.EncodeShort(1);
+            oPacket.EncodeInteger(nSkillID); // 20040217
+            oPacket.EncodeInteger(tDuration);
+            oPacket.Fill(0, 5);
+            oPacket.EncodeInteger(nSkillID); // 20040217
+            oPacket.EncodeInteger(483195070);
+            oPacket.Fill(0, 8);
+            oPacket.EncodeInteger(Math.max(nLightGauge, -1)); //light gauge
+            oPacket.EncodeInteger(Math.max(nDarkGauge, -1)); //dark gauge
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0); // Was 2
+            oPacket.EncodeInteger(283183599);
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0);// New v143
+            oPacket.EncodeInteger(0);
+            oPacket.Encode(0);
+            
+            oPacket.Fill(0, 69); // Anti-DC Memes
+
+            return oPacket.ToPacket();
+        }
+        
         public static Packet updateLuminousGauge(int darktotal, int lighttotal, int darktype, int lighttype) {
             OutPacket oPacket = new OutPacket(80);
 
@@ -640,7 +718,7 @@ public class JobPacket {
             oPacket.EncodeInteger(lighttotal);
             oPacket.EncodeInteger(darktype);
             oPacket.EncodeInteger(lighttype);
-            oPacket.EncodeInteger(281874974);//1210382225
+            oPacket.EncodeInteger(0);//1210382225 //281874974
 
             oPacket.Fill(0, 69); //for no dc
 
@@ -648,11 +726,12 @@ public class JobPacket {
         }
 
         public static Packet giveLuminousState(int skill, int light, int dark, int duration) {
-            final EnumMap<CharacterTemporaryStat, Integer> stat = new EnumMap<>(CharacterTemporaryStat.class);
+            /*final EnumMap<CharacterTemporaryStat, Integer> stat = new EnumMap<>(CharacterTemporaryStat.class);
             stat.put(CharacterTemporaryStat.Larkness, 1);
             int newLightGauge = Math.max(light, -1);
             int newDarkGauge = Math.max(dark, -1);
-            return BuffPacket.giveBuff(null, skill, duration, stat, null, 0, 0, newLightGauge, newDarkGauge);
+            return BuffPacket.giveBuff(null, skill, duration, stat, null, 0, 0, newLightGauge, newDarkGauge);*/
+            return setLarknessResult(skill, light, dark, duration);
         }
 
         public static Packet giveLifeTidal(boolean isHpBetter, int value) {

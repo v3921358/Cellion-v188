@@ -10,6 +10,7 @@ import constants.GameConstants;
 import constants.InventoryConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
+import constants.skills.Fighter;
 import database.DatabaseConnection;
 import handling.world.CheaterData;
 import handling.world.World;
@@ -52,9 +53,11 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.concurrent.ScheduledFuture;
 import server.messages.QuestStatusMessage;
 
 import static tools.StringUtil.getOptionalIntArg;
+import tools.packet.BuffPacket;
 
 /**
  *
@@ -67,6 +70,46 @@ public class GMCommand {
         return PlayerGMRank.GM;
     }
 
+    public static class Morph extends CommandExecute {
+        
+        @Override
+        public int execute(MapleClient c, String[] splitted) {
+            MapleCharacter pPlayer = c.getPlayer();
+            int nMorphID = Integer.valueOf(splitted[1]);
+            
+            if (nMorphID == 0) {
+                pPlayer.cancelMorphs();
+                c.getPlayer().dropMessage(6, "You have been demorphed.");
+            } else {
+                final EnumMap<CharacterTemporaryStat, Integer> stat = new EnumMap<>(CharacterTemporaryStat.class);
+                stat.put(CharacterTemporaryStat.Morph, nMorphID);
+                c.write(BuffPacket.giveBuff(pPlayer, 0, 1, stat, null));
+                c.getPlayer().dropMessage(6, "You have morphed into " + nMorphID + ".");
+            }
+            return 1;
+        }
+    }
+    
+    public static class Mount extends CommandExecute {
+        
+        @Override
+        public int execute(MapleClient c, String[] splitted) {
+            MapleCharacter pPlayer = c.getPlayer();
+            int nMountID = Integer.valueOf(splitted[1]);
+            
+            if (nMountID == 0) {
+                pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.RideVehicle);
+                c.getPlayer().dropMessage(6, "You have been unmounted.");
+            } else {
+                final EnumMap<CharacterTemporaryStat, Integer> stat = new EnumMap<>(CharacterTemporaryStat.class);
+                stat.put(CharacterTemporaryStat.RideVehicle, nMountID);
+                c.write(BuffPacket.giveBuff(pPlayer, 0, 1, stat, null));
+                c.getPlayer().dropMessage(6, "You have mounted " + nMountID + ".");
+            }
+            return 1;
+        }
+    }
+    
     public static class SetPlayer extends CommandExecute {
 
         @Override
@@ -77,19 +120,43 @@ public class GMCommand {
         }
     }
     
+    
+    public static class GodMode extends CommandExecute {
+
+        @Override
+        public int execute(MapleClient c, String[] splitted) {
+            MapleCharacter oPlayer = c.getPlayer();
+            
+            if (oPlayer.hasGodMode()) {
+                oPlayer.toggleGodMode(false);
+                oPlayer.dropMessage(5, "God mode has been disabled.");
+            } else {
+                oPlayer.toggleGodMode(true);
+                oPlayer.dropMessage(5, "God mode is now enabled.");
+            }
+            return 0;
+        }
+    }
+    
     public static class Dox extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            int nChannel = World.Find.findChannel(splitted[1]);
-            MapleCharacter oUser = ChannelServer.getInstance(nChannel).getPlayerStorage().getCharacterByName(splitted[1]);
+            MapleCharacter oUser = null;
             int nOnline = 0;
             
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
-                nOnline += ChannelServer.getInstance(i).getPlayerStorage().getAllCharacters().size();
+                oUser = ChannelServer.getInstance(i).getPlayerStorage().getCharacterByName(splitted[1]);
+                if (oUser != null) {
+                    break;
+                }
             }
             if (oUser == null) {
                 c.getPlayer().dropMessage(5, "Sorry, the specified user can't be found.");
+            }
+            
+            for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
+                nOnline += ChannelServer.getInstance(i).getPlayerStorage().getAllCharacters().size();
             }
             if (oUser.getClient().getAccountName().equals("Mazen") && c.getAccountName() != "Mazen") {
                 c.write(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, "Enjoy your ban!", NPCChatByType.NPC_Cancellable));

@@ -24,6 +24,7 @@ public class ShadowerBuff extends AbstractBuffClass {
             Shadower.BOOMERANG_STAB,
             Shadower.EPIC_ADVENTURE,
             Shadower.FLIP_OF_THE_COIN,
+            Shadower.SHADOWER_INSTINCT,
         };
     }
 
@@ -46,8 +47,12 @@ public class ShadowerBuff extends AbstractBuffClass {
                 //eff.statups.put(CharacterTemporaryStat.IndieMaxDamageOver, eff.info.get(MapleStatInfo.indieMaxDamageOver));
                 break;
             case Shadower.FLIP_OF_THE_COIN:
-                eff.statups.put(CharacterTemporaryStat.IndieDamR, eff.info.get(MapleStatInfo.indieDamR));
-                eff.statups.put(CharacterTemporaryStat.CriticalBuff, eff.info.get(MapleStatInfo.x));
+                //eff.statups.put(CharacterTemporaryStat.IndieDamR, eff.info.get(MapleStatInfo.indieDamR));
+                //eff.statups.put(CharacterTemporaryStat.CriticalBuff, eff.info.get(MapleStatInfo.x));
+                break;
+            case Shadower.SHADOWER_INSTINCT:
+                //eff.statups.put(CharacterTemporaryStat.IgnoreMobpdpR, (int) eff.getLevel());
+                //eff.statups.put(CharacterTemporaryStat.PAD, eff.info.get(MapleStatInfo.x));
                 break;
         }
     }

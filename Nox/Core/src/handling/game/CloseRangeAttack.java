@@ -11,11 +11,14 @@ import constants.skills.Aran;
 import constants.skills.Blaster;
 import constants.skills.DemonAvenger;
 import constants.skills.DemonSlayer;
+import constants.skills.Hayato;
 import constants.skills.NightWalker;
 import constants.skills.Page;
 import constants.skills.Zero;
 import handling.jobs.Explorer;
 import handling.jobs.Resistance;
+import handling.jobs.Sengoku;
+import handling.jobs.Sengoku.HayatoHandler;
 import handling.world.AttackInfo;
 import handling.world.AttackType;
 import handling.world.DamageParse;
@@ -59,7 +62,8 @@ public final class CloseRangeAttack {
         }*/
         
         if (pPlayer.isDeveloper()) {
-            c.getPlayer().dropMessage(5, "[Debug] CloseRangeAttack: Skill ID (" + attack.skill + ")");
+            c.getPlayer().dropMessage(5, "[CloseRangeAttack Debug] Skill ID : " + attack.skill);
+            
         }
         
         final boolean mirror = (pPlayer.hasBuff(CharacterTemporaryStat.ShadowPartner) || pPlayer.hasBuff(CharacterTemporaryStat.ShadowServant));
@@ -108,12 +112,10 @@ public final class CloseRangeAttack {
                 }
             } else if (GameConstants.isWarriorHero(pPlayer.getJob())) {
                 if (pPlayer.getStatForBuff(CharacterTemporaryStat.ComboCounter) != null) { // Combo Attack
-                    pPlayer.dropMessage(5, "Combo :" + pPlayer.getComboStack());
                     Explorer.HeroHandler.handleComboAttack(pPlayer);
                     Explorer.HeroHandler.handleComboOrbs(pPlayer, attack.skill);
-                    //pPlayer.handleComboAttack();
                 } else {
-                    pPlayer.setComboStack(0);
+                    pPlayer.setPrimaryStack(0);
                 }
             } else if (GameConstants.isBlaster(pPlayer.getJob())) {
                 switch (attack.skill) {
@@ -131,8 +133,13 @@ public final class CloseRangeAttack {
                         Resistance.BlasterHandler.handleGaugeIncrease(pPlayer);
                         c.write(JobPacket.BlasterPacket.onRWMultiChargeCancelRequest((byte) 1, attack.skill));
                         break;
-                    
                 }
+            } else if (GameConstants.isHayato(pPlayer.getJob()) && attack.skill == Hayato.SUMMER_RAIN) {
+                if (attack.skill == Hayato.SUMMER_RAIN) {
+                    HayatoHandler.updateBladeStanceRequest(pPlayer, 0);
+                }
+            } else if (GameConstants.isPhantom(pPlayer.getJob())) {
+                
             }
 
             switch (attack.skill) {

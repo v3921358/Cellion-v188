@@ -13,7 +13,9 @@ import handling.jobs.Cygnus;
 import handling.jobs.Cygnus.NightWalkerHandler;
 import handling.jobs.Cygnus.ThunderBreakerHandler;
 import handling.jobs.Explorer.HeroHandler;
+import handling.jobs.Explorer.ShadowerHandler;
 import handling.jobs.Hero.AranHandler;
+import handling.jobs.Hero.PhantomHandler;
 import handling.jobs.Kinesis.KinesisHandler;
 import net.InPacket;
 import server.MapleStatEffect;
@@ -34,6 +36,7 @@ import java.util.List;
 import service.RecvPacketOpcode;
 import tools.packet.CField;
 import tools.packet.JobPacket;
+import tools.packet.JobPacket.ShadowerPacket;
 import tools.packet.MobPacket;
 
 public class DamageParse {
@@ -423,11 +426,13 @@ public class DamageParse {
                         pPlayer.handleForceGain(monster.getObjectId(), attack.skill);
                     }
                     if ((GameConstants.isPhantom(pPlayer.getJob())) && (attack.skill != 24120002) && (attack.skill != 24100003)) {
-                        pPlayer.handleCardStack();
-                        for (AttackMonster at : attack.allDamage) {
-                            if (Randomizer.nextInt(100) < 20) { 
-                                pPlayer.getMap().broadcastMessage(JobPacket.PhantomPacket.ThrowCarte(pPlayer.getId(), at.getObjectId()));
-                            }
+                        if(pPlayer.hasSkill(Phantom.CARTE_BLANCHE)) {
+                            //for (AttackMonster at : attack.allDamage) {
+                                if (Randomizer.nextInt(100) < 20) { 
+                                    pPlayer.getMap().broadcastMessage(JobPacket.PhantomPacket.ThrowCarte(pPlayer, 0/*at.getObjectId()*/));
+                                    PhantomHandler.handleDeck(pPlayer);
+                                }
+                            //}
                         }
                     }
                     if (GameConstants.isXenon(pPlayer.getJob())) {
@@ -440,7 +445,9 @@ public class DamageParse {
                         //}
                     }
                     if (GameConstants.isKaiser(pPlayer.getJob())) {
-                        pPlayer.handleKaiserCombo();
+                        for (int i = 0; i < attack.mobCount; i++) {
+                            pPlayer.handleKaiserCombo();
+                        }
                     }
                     if (GameConstants.isNightWalkerCygnus(pPlayer.getJob())) {
 
@@ -456,21 +463,8 @@ public class DamageParse {
                             //NightWalkerHandler.handleDominionBuff(pPlayer);
                         }
 
-                        //player.handleShadowBat(monster.getObjectId(), attack.skill); // Shadow Bat Spawn Handler
                         pPlayer.handleDarkElemental(); // Dark Elemental Stack Count Handler
-
-                        // Damage Increase Handler for Active Shadow Bats
-                        if (pPlayer.getBatCount() > 0) {
-                            int attackChance = Randomizer.rand(1, 5); // 1 in 5 Chance (20%)
-                            if (attackChance == 1) {
-                                totDamageToOneMonster += (totDamageToOneMonster * 1.5) * pPlayer.getBatCount(); // 150% Increased Damage per Bat
-                                pPlayer.addHP((int) (totDamageToOneMonster * 0.1));
-                                pPlayer.dropMessage(-1, "Damage Boost (Shadow Bat)");
-                            }
-                        }
-
-                        // Damage Increase Handler for Dark Elemental Mark Stacks
-                        for (int i = pPlayer.getDarkElementalCombo(); i > 0; i--) {
+                        for (int i = pPlayer.getDarkElementalCombo(); i > 0; i--) { // Damage Increase Handler for Dark Elemental Mark Stacks
                             totDamageToOneMonster += (totDamageToOneMonster * 0.8); // 80% Increase Damage per Stack
                         }
                     }
@@ -596,7 +590,7 @@ public class DamageParse {
                 }
                 if (GameConstants.isLuminous(pPlayer.getJob())) {
                     //MagicAttack.handleLuminousState(player, attack); // Causes issue where damage is only dealt to one monster.
-                    pPlayer.handleLuminous(attack.skill);
+                    //pPlayer.handleLuminous(attack.skill);
                 }
 
                 // AntiCheat
@@ -1091,8 +1085,7 @@ public class DamageParse {
             player.setLastCombo(cTime);
             player.setCombo(combo);
 
-            player.getClient().write(
-                    CWvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, combo, mob.get().getObjectId())));
+            player.getClient().write(CWvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, combo, mob.get().getObjectId())));
         }
     }
 
@@ -1409,29 +1402,29 @@ public class DamageParse {
         return attack;
     }
 
-    public static final void modifyCriticalAttack(AttackInfo attack, MapleCharacter chr, int type, MapleStatEffect effect) {
-        int CriticalRate;
-        boolean shadow;
+    public static final void modifyCriticalAttack(AttackInfo pAttack, MapleCharacter pPlayer, int nType, MapleStatEffect pEffect) {
+        int nCriticalRate;
+        boolean bShadow;
         List damages;
-        boolean isCritical = false;
+        boolean bCritical = false;
         List damage;
-        if ((attack.skill != 4211006) && (attack.skill != 3211003) && (attack.skill != 4111004)) {
-            CriticalRate = chr.getStat().passive_sharpeye_rate() + (effect == null ? 0 : effect.getCr());
-            boolean bMirror = chr.hasBuff(CharacterTemporaryStat.ShadowPartner) || chr.hasBuff(CharacterTemporaryStat.ShadowServant); 
-            shadow = bMirror && ((type == 1) || (type == 2));
+        if ((pAttack.skill != 4211006) && (pAttack.skill != 3211003) && (pAttack.skill != 4111004)) {
+            nCriticalRate = pPlayer.getStat().passive_sharpeye_rate() + (pEffect == null ? 0 : pEffect.getCr());
+            boolean bMirror = pPlayer.hasBuff(CharacterTemporaryStat.ShadowPartner) || pPlayer.hasBuff(CharacterTemporaryStat.ShadowServant); 
+            bShadow = bMirror && ((nType == 1) || (nType == 2));
             damages = new ArrayList<>();
             damage = new ArrayList<>();
 
-            for (AttackMonster p : attack.allDamage) {
+            for (AttackMonster p : pAttack.allDamage) {
                 if (p.getAttacks() != null) {
                     int hit = 0;
-                    int mid_att = shadow ? p.getAttacks().size() / 2 : p.getAttacks().size();
+                    int mid_att = bShadow ? p.getAttacks().size() / 2 : p.getAttacks().size();
 
-                    int toCrit = (attack.skill == 4221001) || (attack.skill == 3221007) || (attack.skill == 23121003) || (attack.skill == 4341005) || (attack.skill == 4331006) || (attack.skill == 21120005) ? mid_att : 0;
+                    int toCrit = (pAttack.skill == 4221001) || (pAttack.skill == 3221007) || (pAttack.skill == 23121003) || (pAttack.skill == 4341005) || (pAttack.skill == 4331006) || (pAttack.skill == 21120005) ? mid_att : 0;
                     if (toCrit == 0) {
                         for (Pair eachd : p.getAttacks()) {
                             if ((!(Boolean) eachd.right) && hit < mid_att) {
-                                if (((Long) eachd.left > 999999) || (Randomizer.nextInt(100) < CriticalRate)) {
+                                if (((Long) eachd.left > 999999) || (Randomizer.nextInt(100) < nCriticalRate)) {
                                     toCrit++;
                                 }
                                 damage.add(eachd.left);
@@ -1451,9 +1444,9 @@ public class DamageParse {
                         hit = 0;
                         for (Pair<Long, Boolean> eachd : p.getAttacks()) {
                             if (!eachd.right) {
-                                if (attack.skill == 4221001) {
+                                if (pAttack.skill == 4221001) {
                                     eachd.right = Boolean.valueOf(hit == 3);
-                                } else if ((attack.skill == 3221007) || (attack.skill == 23121003) || (attack.skill == 21120005) || (attack.skill == 4341005) || (attack.skill == 4331006) || (((Long) eachd.left).longValue() > 999999)) {
+                                } else if ((pAttack.skill == 3221007) || (pAttack.skill == 23121003) || (pAttack.skill == 21120005) || (pAttack.skill == 4341005) || (pAttack.skill == 4331006) || (((Long) eachd.left).longValue() > 999999)) {
                                     eachd.right = Boolean.valueOf(true);
                                 } else if (hit >= mid_att) {
                                     eachd.right = p.getAttacks().get(hit - mid_att).right;
@@ -1461,7 +1454,7 @@ public class DamageParse {
                                     eachd.right = Boolean.valueOf(damages.contains(eachd.left));
                                 }
                                 if (eachd.right) {
-                                    isCritical = true;
+                                    bCritical = true;
                                 }
                             }
                             hit++;
@@ -1469,12 +1462,21 @@ public class DamageParse {
                         damages.clear();
                     }
                 }
-                if (isCritical) {
-                    if (chr.getJob() == 422 && chr.dualBrid == 0 && chr.acaneAim < 5) {
+                if (GameConstants.isThiefShadower(pPlayer.getJob())) {
+                    if (Randomizer.nextInt(100) < 50) { // TODO: Handle on critical strike correctly instead.
+                        pPlayer.getMap().broadcastMessage(ShadowerPacket.toggleFlipTheCoin(true));
+                    }
+                }
+                
+                if (bCritical) {
+                    if (GameConstants.isThiefShadower(pPlayer.getJob())) {
+                        pPlayer.getMap().broadcastMessage(ShadowerPacket.toggleFlipTheCoin(true));
+                    }
+                    /*if (chr.getJob() == 422 && chr.dualBrid == 0 && chr.acaneAim < 5) {
                         chr.getMap().broadcastMessage(CField.OnOffFlipTheCoin(true));
                         chr.acaneAim++;
                         chr.dualBrid = 1;
-                    }
+                    }*/
                 }
             }
         }

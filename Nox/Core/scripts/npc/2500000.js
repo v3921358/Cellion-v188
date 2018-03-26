@@ -43,10 +43,16 @@ function action(mode, type, selection) {
 				sendString += "#L1003##rPortal to Lotus, in Black Heaven (Lv. 190 Required)#d\r\n"
 			}
 			
-			if (cm.getPlayer().getLevel() >= 200) {
-				sendString += "#L4#Portal to Root Abyss, at the Colossal Root (Lv. 200+)#l\r\n";
+			if (cm.getPlayer().getLevel() >= 195) {
+				sendString += "#L4#Portal to Mori Ranmaru, in the Dead Mine (Lv. 195+)#l\r\n";
 			} else {
-				sendString += "#L1004##rPortal to Root Abyss, at the Colossal Root (Lv. 200 Required)#l#d\r\n"
+				sendString += "#L1004##rPortal to Mori Ranmaru, in the Dead Mine (Lv. 195 Required)#l#d\r\n"
+			}
+			
+			if (cm.getPlayer().getLevel() >= 200) {
+				sendString += "#L5#Portal to Root Abyss, at the Colossal Root (Lv. 200+)#l\r\n";
+			} else {
+				sendString += "#L1005##rPortal to Root Abyss, at the Colossal Root (Lv. 200 Required)#l#d\r\n"
 			}
 			
 			cm.sendNextPrevS(sendString + "\r\n", 2);
@@ -72,7 +78,11 @@ function action(mode, type, selection) {
 					cm.warp(350060000, 0);
 					cm.dispose();
 					break;
-				case 4: // Root Abyss
+				case 4: // Mori Ranmaru
+					cm.warp(807300200, 0);
+					cm.dispose();
+					break;
+				case 5: // Root Abyss
 					cm.warp(105200000, 0);
 					cm.dispose();
 					break;

@@ -59,7 +59,7 @@ public class MercedesBuff extends AbstractBuffClass {
                 eff.statups.put(CharacterTemporaryStat.IndiePAD, eff.info.get(MapleStatInfo.indiePad));
                 break;
             case Mercedes.ANCIENT_WARDING:
-                eff.statups.put(CharacterTemporaryStat.DamR, (int) eff.info.get(MapleStatInfo.damR));
+                eff.statups.put(CharacterTemporaryStat.IndieDamR, eff.info.get(MapleStatInfo.x));
                 eff.statups.put(CharacterTemporaryStat.EMHP, (int) eff.info.get(MapleStatInfo.emhp));
                 break;
             case Mercedes.WATER_SHIELD:

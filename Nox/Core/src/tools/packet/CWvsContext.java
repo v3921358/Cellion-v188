@@ -2968,7 +2968,6 @@ public class CWvsContext {
                     oPacket.EncodeInteger(target.getId());
                     oPacket.Encode(op == PartyOperation.DISBAND ? 0 : 1);
                     if (op == PartyOperation.DISBAND) {
-                        oPacket.EncodeInteger(target.getId());
                         break;
                     }
                     oPacket.Encode(op == PartyOperation.EXPEL ? 1 : 0);
@@ -2977,12 +2976,10 @@ public class CWvsContext {
                     break;
                 case JOIN:
                     oPacket.Encode(PartyOperations.joinParty);
-                    oPacket.EncodeInteger(0);
-                    oPacket.EncodeInteger(0);
-                    oPacket.EncodeString("");
-                    /*oPacket.EncodeInteger(party.getId());
+                    oPacket.EncodeInteger(party.getId());
                     oPacket.EncodeString(target.getName());
-                    oPacket.EncodeInteger(target.getId());*/
+                    oPacket.Encode(0);
+                    oPacket.EncodeInteger(0);
                     addPartyStatus(forChannel, party, oPacket, false);
                     break;
                 case SILENT_UPDATE:
@@ -2996,7 +2993,11 @@ public class CWvsContext {
                     oPacket.Encode(PartyOperations.leaderChange);
                     oPacket.EncodeInteger(target.getId());
                     oPacket.Encode(op == PartyOperation.CHANGE_LEADER_DC ? 1 : 0);
+                    break;
             }
+            
+            oPacket.Fill(0, 19);
+            
             return oPacket.ToPacket();
         }
 
@@ -4146,12 +4147,10 @@ public class CWvsContext {
         OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.EquipmentEnchantDisplay.getValue());
         
-        switch (enchant.getAction()) {
-            case STARFORCE: 
-                oPacket.Encode(0);
-                break;
-            default:
-                break;
+        //final List<EquipSpecialStat> eqSpecialStats = EquipHelper.calculateEquipSpecialStatsForEncoding(enchant.getOldEquip());
+        
+        if (enchant.getAction() == enchant.getAction().STARFORCE) {
+            oPacket.Encode(0);
         }
         
         oPacket.Encode(enchant.getAction().getAction());
@@ -4176,6 +4175,7 @@ public class CWvsContext {
                 oPacket.Encode(enchant.isFeverTime()); //TSingleton<CWvsContext>::ms_pInstance.m_Data[2621].m_str if it != 0 (Fever Time)
                 break;
             case STARFORCE:
+                //oPacket.Encode(0);
                 oPacket.Encode(enchant.canDowngrade()); //m_bDowngradable
                 oPacket.EncodeLong(enchant.getCost()); //m_nMeso
                 oPacket.EncodeInteger(enchant.getPerMille());//nPermille
@@ -4216,6 +4216,9 @@ public class CWvsContext {
             default:
                 break;
         }
+        
+        oPacket.Fill(0, 19);
+        
         return oPacket.ToPacket();
     }
 

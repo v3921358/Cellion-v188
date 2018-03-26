@@ -4,10 +4,9 @@ import client.*;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.skills.*;
-import handling.jobs.Explorer;
-import handling.jobs.Explorer.HeroHandler;
-import static handling.jobs.Hero.AranHandler.handleAdrenalineRush;
-import handling.jobs.Resistance.BlasterHandler;
+import handling.jobs.Explorer.*;
+import handling.jobs.Hero.*;
+import handling.jobs.Resistance.*;
 import net.InPacket;
 import netty.ProcessPacket;
 import server.MapleInventoryManipulator;
@@ -43,6 +42,7 @@ import server.maps.SummonMovementType;
 import server.maps.objects.MapleSummon;
 import tools.packet.JobPacket.BeastTamerPacket;
 import tools.packet.JobPacket.BlasterPacket;
+import tools.packet.JobPacket.HayatoPacket;
 
 public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
 
@@ -58,6 +58,10 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
         int nSkill = iPacket.DecodeInteger();
         
         switch (nSkill) {
+            case Mechanic.OPEN_PORTAL_GX9:
+                c.write(CWvsContext.enableActions());
+                // These skills are currently broken, so we can return here for now.
+                return;
             case 14110030:
             case 25111209:
                 // These skills consistantly spam packets, they do not need to be handled here.
@@ -69,12 +73,6 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 break;
         }
         
-        if (GameConstants.isDisabledSkill(nSkill)) { // Just for broken skills that we want disabled.
-            //pPlayer.dropMessage(5, "Sorry, this skill is currently disabled.");
-            //c.write(CWvsContext.enableActions());
-            //return;
-        }
-
         // Special Case Toggle Skills
      // These toggles are technically buffs, but do not get handled by the buff manager. -Mazen
         switch (nSkill) {
@@ -84,15 +82,34 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 break;
             }
             
+            case 33001011:
+            case WildHunter.SUMMON_JAGUAR: {
+                final EnumMap<CharacterTemporaryStat, Integer> pJaguarStat = new EnumMap<>(CharacterTemporaryStat.class);
+                pJaguarStat.put(CharacterTemporaryStat.RideVehicle, 1932015);
+                pJaguarStat.put(CharacterTemporaryStat.JaguarSummoned, 0);
+                pJaguarStat.put(CharacterTemporaryStat.JaguarCount, 1);
+                c.write(BuffPacket.giveBuff(pPlayer, WildHunter.JAGUAR_RIDER, 1, pJaguarStat, null));
+                c.write(CField.SummonPacket.jaguarActive(true));
+                break;
+                
+                /*MapleStatEffect pJaguarEffect = SkillFactory.getSkill(nSkill).getEffect(pPlayer.getSkillLevel(WildHunter.SUMMON_JAGUAR));
+                Point pJaguarPos = pPlayer.getTruePosition();
+                MapleSummon pJaguar = new MapleSummon(pPlayer, pJaguarEffect, pJaguarPos, SummonMovementType.SUMMON_JAGUAR, 60000);
+
+                pJaguar.setPosition(pJaguarPos);
+                pPlayer.getMap().spawnSummon(pJaguar);
+                pJaguarEffect.applyTo(pPlayer, null);*/
+            }
+            
             case BeastTamer.BEAR_MODE:
             case BeastTamer.SNOW_LEOPARD_MODE:
             case BeastTamer.HAWK_MODE:
             case BeastTamer.CAT_MODE: {
-                pPlayer.getClient().write(BeastTamerPacket.AnimalMode(nSkill));
+                c.write(BeastTamerPacket.AnimalMode(nSkill));
                 break;
             }
             
-            case 14110030:{
+            case 14110030: {
                 if (!GameConstants.isNightWalkerCygnus(pPlayer.getJob())) {
                     return;
                 }
@@ -292,36 +309,47 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
             }
         }
         skillLevel = pPlayer.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(nSkill));
-        MapleStatEffect effect = pPlayer.inPVP() ? skill.getPVPEffect(skillLevel) : skill.getEffect(skillLevel);
-        if ((effect.isMPRecovery()) && (pPlayer.getStat().getHp() < pPlayer.getStat().getMaxHp() / 100 * 10)) {
+        MapleStatEffect pEffect = pPlayer.inPVP() ? skill.getPVPEffect(skillLevel) : skill.getEffect(skillLevel);
+        if ((pEffect.isMPRecovery()) && (pPlayer.getStat().getHp() < pPlayer.getStat().getMaxHp() / 100 * 10)) {
             c.getPlayer().dropMessage(5, "You do not have the HP to use this skill.");
             c.write(CWvsContext.enableActions());
             return;
         }
-        if (effect.getCooldown(pPlayer) > 0 && nSkill != 24121005) {
+        if (pEffect.getCooldown(pPlayer) > 0 && nSkill != 24121005) {
             if (pPlayer.skillisCooling(nSkill)) {
                 c.write(CWvsContext.enableActions());
                 return;
             }
             if ((nSkill != 5221006) && (nSkill != 35111002)) {
-                pPlayer.addCooldown(nSkill, System.currentTimeMillis(), effect.getCooldown(pPlayer));
+                pPlayer.addCooldown(nSkill, System.currentTimeMillis(), pEffect.getCooldown(pPlayer));
             }
         }
         int nMob;
         MapleMonster pMob;
         switch (nSkill) {
             
-            case WildHunter.SOUL_ARROW_CROSSBOW: {
-                c.write(CField.SummonPacket.jaguarActive(true));
+            case Kaiser.FINAL_FORM:
+            case Kaiser.FINAL_FORM_1:
+            case Kaiser.FINAL_TRANCE:{
+                final EnumMap<CharacterTemporaryStat, Integer> pMorph = new EnumMap<>(CharacterTemporaryStat.class);
+                pMorph.put(CharacterTemporaryStat.Morph, nSkill == Kaiser.FINAL_FORM ? 1200 : 1201);
+                final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, null, System.currentTimeMillis(), pMorph);
+                final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, 60000);
+                pPlayer.registerEffect(null, System.currentTimeMillis(), buffSchedule, pMorph, false, 60000, pPlayer.getId());
+                pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, nSkill == Kaiser.FINAL_TRANCE ? Kaiser.FINAL_TRANCE : Kaiser.FINAL_FORM, 60000, pMorph, null));
+                
+                //final EnumMap<CharacterTemporaryStat, Integer> pMorph = new EnumMap<>(CharacterTemporaryStat.class);
+                //pMorph.put(CharacterTemporaryStat.Morph, nSkill == Kaiser.FINAL_FORM ? 1200 : 1201);
+                //c.write(BuffPacket.giveBuff(pPlayer, nSkill, 60000, pMorph, null));
                 break;
             }
             
-            case WildHunter.JAGUAR_RIDER:{
-                /*final MapleStatEffect pEffect = SkillFactory.getSkill(WildHunter.JAGUAR_RIDER).getEffect(pPlayer.getTotalSkillLevel(WildHunter.JAGUAR_RIDER));
-                MapleSummon pSummon = new MapleSummon(pPlayer, pEffect, pPlayer.getPosition(), SummonMovementType.SUMMON_JAGUAR, 2100000000);
-                pSummon.setPosition(pPlayer.getPosition());
-                pPlayer.getMap().spawnSummon(pSummon);
-                pEffect.applyTo(pPlayer, pPlayer.getPosition());*/
+            case WildHunter.JAGUAR_RIDER: {
+                final EnumMap<CharacterTemporaryStat, Integer> pJaguarStat = new EnumMap<>(CharacterTemporaryStat.class);
+                pJaguarStat.put(CharacterTemporaryStat.RideVehicle, 1932015);
+                pJaguarStat.put(CharacterTemporaryStat.JaguarSummoned, 0);
+                pJaguarStat.put(CharacterTemporaryStat.JaguarCount, 1);
+                c.write(BuffPacket.giveBuff(pPlayer, WildHunter.JAGUAR_RIDER, 1, pJaguarStat, null));
                 c.write(CField.SummonPacket.jaguarActive(true));
                 break;
             }
@@ -339,16 +367,49 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 c.getPlayer().dropMessage(6, "You have resurrected all players in the current map.");
                 break;
             }
+            
+            case BeastTamer.MEOW_REVIVE: {
+                for (MapleCharacter pCharacter : pPlayer.getMap().getCharacters()) {
+                    if (pCharacter != null && pCharacter.getParty() == pPlayer.getParty()) {
+                        pCharacter.getStat().setHp(pCharacter.getStat().getMaxHp(), pCharacter);
+                        pCharacter.updateSingleStat(MapleStat.HP, pCharacter.getStat().getMaxHp());
+                        pCharacter.getStat().setMp(pCharacter.getStat().getMaxMp(), pCharacter);
+                        pCharacter.updateSingleStat(MapleStat.MP, pCharacter.getStat().getMaxMp());
+                        pCharacter.dispelDebuffs();
+                    }
+                }
+                break;
+            }
+            
+            case BeastTamer.MEOW_HEAL: {
+                for (MapleCharacter pCharacter : pPlayer.getMap().getCharacters()) {
+                    if (pCharacter != null) {
+                        int nHpRecovery = (int) (pCharacter.getStat().getMaxHp() * 0.2);
+                        int nFinalHp = pCharacter.getStat().getHp() + nHpRecovery;
+                        
+                        pCharacter.getStat().setHp(nFinalHp, pCharacter);
+                        pCharacter.updateSingleStat(MapleStat.HP, nFinalHp);
+                        pCharacter.dispelDebuffs();
+                    }
+                }
+                break;
+            }
+            
             case Aran.ADRENALINE_BURST: {
                 pPlayer.setLastCombo(System.currentTimeMillis());
-                pPlayer.setComboStack((short) 1000);
+                pPlayer.setPrimaryStack((short) 1000);
                 pPlayer.getClient().write(CField.updateCombo(1000));
-                handleAdrenalineRush(pPlayer);
+                AranHandler.handleAdrenalineRush(pPlayer);
                 break;
             }
             case Xenon.EMERGENCY_RESUPPLY: {
                 pPlayer.gainXenonSurplus((short) 10);
                 c.getPlayer().dropMessage(6, "You have recharged your surplus power supplies.");
+                break;
+            }
+            case Phantom.JUDGMENT_DRAW: // For Carte Blanche
+            case Phantom.JUDGMENT_DRAW_1: { // For Carte Noire
+                PhantomHandler.judgementDrawRequest(pPlayer, nSkill);
                 break;
             }
             case 1121001:
@@ -367,7 +428,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                         continue;
                     }
                     pMob.switchController(pPlayer, pMob.isControllerHasAggro());
-                    pMob.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.STUN, 1, nSkill, null, false), false, effect.getDuration(), true, effect);
+                    pMob.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.STUN, 1, nSkill, null, false), false, pEffect.getDuration(), true, pEffect);
                 }
 
                 pPlayer.getMap().broadcastMessage(pPlayer, CField.EffectPacket.showBuffeffect(pPlayer.getId(), nSkill, UserEffectCodes.SkillUse, pPlayer.getLevel(), skillLevel, iPacket.DecodeByte()), pPlayer.getTruePosition());
@@ -402,11 +463,15 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 }
                 break;
             }
-            
-            case 4221054:
-                pPlayer.getMap().broadcastMessage(CField.OnOffFlipTheCoin(false));
+            case Shadower.SHADOWER_INSTINCT: {
+                ShadowerHandler.handleShadowerInstinct(pPlayer);
+                break;
+            }
+            case Shadower.FLIP_OF_THE_COIN: {
+                ShadowerHandler.handleFlipTheCoin(pPlayer);
                 pPlayer.dualBrid = 0;
                 break;
+            }
             case Citizen.CAPTURE:
                 nMob = iPacket.DecodeInteger();
                 pMob = pPlayer.getMap().getMonsterByOid(nMob);
@@ -549,13 +614,13 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 }
                 int mountid = MapleStatEffect.parseMountInfo(c.getPlayer(), skill.getId());
 
-                if ((effect.isMagicDoor() && !FieldLimitType.UnableToUseMysticDoor.check(pPlayer.getMap())) // check magic door
+                if ((pEffect.isMagicDoor() && !FieldLimitType.UnableToUseMysticDoor.check(pPlayer.getMap())) // check magic door
                         // check mount req
                         || (mountid != 0 && (mountid != GameConstants.getMountItem(skill.getId(), c.getPlayer())) && (!c.getPlayer().isIntern()) && (c.getPlayer().getBuffedValue(CharacterTemporaryStat.RideVehicle) == null) && (c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -122) == null) && (!GameConstants.isMountItemAvailable(mountid, c.getPlayer().getJob())))) {
                     c.write(CWvsContext.enableActions());
                     return;
                 }
-                effect.applyTo(c.getPlayer(), pos);
+                pEffect.applyTo(c.getPlayer(), pos);
             }
         }
         
@@ -605,7 +670,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
         }
 
         if (GameConstants.isAngelicBuster(pPlayer.getJob())) {
-            int Recharge = effect.getOnActive();
+            int Recharge = pEffect.getOnActive();
             if (Recharge > -1) {
                 if (Randomizer.isSuccess(Recharge)) {
                     c.write(JobPacket.AngelicPacket.unlockSkill());

@@ -16,6 +16,10 @@ import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.stream.Collectors;
 import service.SendPacketOpcode;
 import provider.data.HexTool;
 import net.OutPacket;
@@ -164,1504 +168,84 @@ public class BuffPacket {
 
     public static Packet giveBuff(MapleCharacter chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect, int diceRange, int diceId, int lightGauge, int darkGauge) {
         OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
 
         BuffPacket.clearFakeBuffstats(statups);
+        boolean bEndecode4Byte = false, bMovementAffecting = false;
+        for (Map.Entry<CharacterTemporaryStat, Integer> stat : statups.entrySet()) {
+            System.out.println(stat.getKey().name());
+            if (CharacterTemporaryStat.isEnDecode4Byte(stat.getKey())) {
+                bEndecode4Byte = true;
+            }
+            if (CharacterTemporaryStat.isMovementAffectingStat(stat.getKey())) {
+                bMovementAffecting = true;
+            }
+        }
+
+        oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
 
         PacketHelper.writeBuffMask(oPacket, statups);
 
-        encodeForLocal(oPacket, chr, buffid, bufflength, statups, effect, diceRange, diceId, lightGauge, darkGauge);
+        encodeForLocal(oPacket, chr, buffid, bufflength, statups, effect, diceRange, diceId, lightGauge, darkGauge, bEndecode4Byte);
 
         oPacket.EncodeShort(0);// tDelay
         oPacket.Encode(0);//unsure, seems unimportant
         oPacket.Encode(0);//bJustBuffCheck
         oPacket.Encode(0);//bFirstSet
 
-        for (Map.Entry<CharacterTemporaryStat, Integer> stat : statups.entrySet()) {
-            if (CharacterTemporaryStat.isMovementAffectingStat(stat.getKey())) {
-                oPacket.Encode(0);
-            }
+        if (bMovementAffecting) {
+            oPacket.Encode(0);
         }
 
         //todo: if (newFireBomb) write(0);
         return oPacket.ToPacket();
     }
 
-    /**
-     * Encodes buff Flag's effect, including it's value, source buffId and duration.
-     *
-     * @param buffid - The skillId of the buff.
-     * @param bufflength - The duration of the buff.
-     * @param value - the value of the status change.
-     * @return The encoded buff packet.
-     */
-    private static void encodeSkillValue(OutPacket oPacket, int value, int buffid, int bufflength, boolean endecode4byte) {
-        if (endecode4byte) {
-            oPacket.EncodeInteger(value);
-        } else {
-            oPacket.EncodeShort(value);
-        }
-        oPacket.EncodeInteger(buffid);
-        oPacket.EncodeInteger(bufflength > 2000000000 ? 0 : bufflength);
+    public static <K, V extends Comparable<? super V>> Map<K, V> SortCTS(Map<K, V> map) {
+        return map.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(/*Collections.reverseOrder()*/))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
     }
 
     /**
      * Encodes buffstats and status effects to send to the client in order for it to display the buff effect.
      *
-     * @param buffid - The skillId of the buff
-     * @param bufflength - The duration of the buff
+     * @param nBuffID - The skillId of the buff
+     * @param tDuration - The duration of the buff
      * @param mTemporaryStats - The Buffstats and effects that have to be applied
-     * @param effect - The status changes that occur with the buff
+     * @param pEffect - The status changes that occur with the buff
      * @return The encoded buff packet.
      */
-    private static void encodeForLocal(OutPacket oPacket, MapleCharacter chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> mTemporaryStats, MapleStatEffect effect, int diceRange, int diceId, int lightGauge, int darkGauge) {
-        boolean endecode4Byte = false;
+    private static void encodeForLocal(OutPacket oPacket, MapleCharacter pPlayer, int nBuffID, int tDuration,
+            Map<CharacterTemporaryStat, Integer> mTemporaryStats, MapleStatEffect pEffect, int diceRange,
+            int diceId, int lightGauge, int darkGauge, boolean bEndecode4Byte) {
+
+        mTemporaryStats = SortCTS(mTemporaryStats);
         for (Map.Entry<CharacterTemporaryStat, Integer> stat : mTemporaryStats.entrySet()) {
-            if (CharacterTemporaryStat.isEnDecode4Byte(stat.getKey())) {
-                endecode4Byte = true;
-            }
-            if (ServerConstants.DEVELOPER_DEBUG_MODE) {
-                CharacterTemporaryStatValueHolder appliedValue = chr.getAppliedTemporaryStat(stat.getKey());
-                if (appliedValue == null) {
-                    LogHelper.GENERAL_EXCEPTION.get().error("[WARNING] EncodeForLocal Buffid: " + buffid + ". Flag "
-                            + stat.getKey().name() + " was applied, but was NOT registered to the character!");
-                } else if (appliedValue.value == 0) {
-                    LogHelper.GENERAL_EXCEPTION.get().error("[WARNING] EncodeForLocal Buffid: " + buffid + ". Flag "
-                            + stat.getKey().name() + " was applied, and sent with value:"
-                            + stat.getValue() + ". The value to the Character was set as 0 though. "
-                            + "Note that if both values are identical, the applied buffstat might be wrong for this skil!");
-                } else if (bufflength == 0) {
-                    LogHelper.GENERAL_EXCEPTION.get().error("[WARNING] EncodeForLocal Buffid: " + buffid
-                            + ". Duration was set to 0! (ignore if it's supposed to have no duration)");
+            if (stat.getKey().getFlag() <= CharacterTemporaryStat.Stigma.getFlag()
+                    && stat.getKey().getFlag() >= CharacterTemporaryStat.PAD.getFlag()) {
+                if (bEndecode4Byte) {
+                    oPacket.EncodeInteger(stat.getValue());
+                } else {
+                    oPacket.EncodeShort(stat.getValue());
                 }
+                oPacket.EncodeInteger(nBuffID);
+                oPacket.EncodeInteger(tDuration > 2000000000 ? 0 : tDuration);
             }
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.STR)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.STR), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.INT)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.INT), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DEX)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DEX), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.LUK)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.LUK), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PAD)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PAD), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PDD)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PDD), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MAD)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MAD), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.EVAR)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.EVAR), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Craft)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Craft), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Speed)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Speed), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Jump)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Jump), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.EMHP)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.EMHP), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.EMMP)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.EMMP), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.EPAD)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.EPAD), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.EMAD)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.EMAD), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.EPDD)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.EPDD), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MagicGuard)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MagicGuard), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DarkSight)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DarkSight), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Booster)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Booster), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PowerGuard)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PowerGuard), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Guard)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Guard), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MaxHP)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MaxHP), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MaxMP)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MaxMP), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Invincible)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Invincible), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SoulArrow)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SoulArrow), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Stun)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Stun), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Shock)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Shock), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Poison)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Poison), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Seal)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Seal), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Darkness)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Darkness), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ComboCounter)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ComboCounter), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.WeaponCharge)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.WeaponCharge), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ElementalCharge)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ElementalCharge), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HolySymbol)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.HolySymbol), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MesoUp)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MesoUp), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ShadowPartner)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ShadowPartner), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PickPocket)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PickPocket), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MesoGuard)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MesoGuard), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Thaw)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Thaw), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Weakness)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Weakness), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.WeaknessMdamage)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.WeaknessMdamage), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Curse)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Curse), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Slow)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Slow), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.TimeBomb)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.TimeBomb), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BuffLimit)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BuffLimit), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Team)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Team), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Disorder)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Disorder), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Thread)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Thread), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Morph)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Morph), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Regen)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Regen), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Ghost)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Ghost), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BasicStatUp)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BasicStatUp), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Stance)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Stance), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SharpEyes)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SharpEyes), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ManaReflection)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ManaReflection), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Attract)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Attract), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Magnet)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Magnet), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MagnetArea)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MagnetArea), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.NoBulletConsume)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.NoBulletConsume), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.StackBuff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.StackBuff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Trinity)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Trinity), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Infinity)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Infinity), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AdvancedBless)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AdvancedBless), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IllusionStep)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IllusionStep), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Blind)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Blind), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Concentration)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Concentration), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BanMap)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BanMap), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MaxLevelBuff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MaxLevelBuff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Barrier)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Barrier), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DojangShield)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DojangShield), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ReverseInput)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ReverseInput), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MesoUpByItem)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MesoUpByItem), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ItemUpByItem)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ItemUpByItem), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RespectPImmune)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.RespectPImmune), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DefenseAtt)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DefenseAtt), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DefenseState)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DefenseState), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DojangBerserk)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DojangBerserk), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DojangInvincible)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DojangInvincible), buffid, bufflength, endecode4Byte);
-        }
-
-        //if (statups.containsKey(CharacterTemporaryStat.SoulMasterFinal)) {
-        //}
-        //if (statups.containsKey(CharacterTemporaryStat.WindBreakerFinal)) {
-        //}
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ElementalReset)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ElementalReset), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HideAttack)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.HideAttack), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.EventRate)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.EventRate), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ComboAbilityBuff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ComboAbilityBuff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ComboDrain)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ComboDrain), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ComboBarrier)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ComboBarrier), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PartyBarrier)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PartyBarrier), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BodyPressure)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BodyPressure), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RepeatEffect)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.RepeatEffect), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ExpBuffRate)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ExpBuffRate), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.StopPortion)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.StopPortion), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.StopMotion)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.StopMotion), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Fear)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Fear), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MagicShield)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MagicShield), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MagicResistance)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MagicResistance), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SoulStone)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SoulStone), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Flying)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Flying), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.NewFlying)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.NewFlying), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.NaviFlying)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.NaviFlying), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Frozen)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.StopMotion), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Frozen2)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Frozen2), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Web)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Web), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Enrage)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Enrage), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.NotDamaged)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.NotDamaged), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.FinalCut)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.FinalCut), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HowlingAttackDamage)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.HowlingAttackDamage), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BeastFormDamageUp)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BeastFormDamageUp), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Dance)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Dance), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Cyclone)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Cyclone), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.OnCapsule)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.OnCapsule), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HowlingCritical)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.HowlingCritical), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HowlingMaxMP)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.HowlingMaxMP), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HowlingDefence)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.HowlingDefence), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HowlingEvasion)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.HowlingEvasion), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Conversion)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Conversion), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Revive)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Revive), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PinkbeanMinibeenMove)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PinkbeanMinibeenMove), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Sneak)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Sneak), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Mechanic)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Mechanic), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DrawBack)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DrawBack), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BeastFormMaxHP)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BeastFormMaxHP), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Dice)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Dice), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BlessingArmor)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BlessingArmor), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BlessingArmorIncPAD)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BlessingArmorIncPAD), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DamR)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DamR), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.TeleportMasteryOn)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.TeleportMasteryOn), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.CombatOrders)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.CombatOrders), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Beholder)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Beholder), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DispelItemOption)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DispelItemOption), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DispelItemOptionByField)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DispelItemOptionByField), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Inflation)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Inflation), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.OnixDivineProtection)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.OnixDivineProtection), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Bless)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Bless), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Explosion)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Explosion), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DarkTornado)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DarkTornado), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IncMaxHP)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IncMaxHP), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IncMaxMP)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IncMaxMP), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PVPDamage)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PVPDamage), buffid, bufflength, endecode4Byte);
-        }
-
-        //if (statups.containsKey(CharacterTemporaryStat.PVPDamageSkill)) {
-        //}
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PvPScoreBonus)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PvPScoreBonus), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PvPInvincible)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PvPInvincible), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PvPRaceEffect)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PvPRaceEffect), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IceKnight)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IceKnight), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HolyMagicShell)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.HolyMagicShell), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.InfinityForce)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.InfinityForce), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AmplifyDamage)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AmplifyDamage), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.KeyDownTimeIgnore)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.KeyDownTimeIgnore), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MasterMagicOn)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MasterMagicOn), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AsrR)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AsrR), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.TerR)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.TerR), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DamAbsorbShield)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DamAbsorbShield), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AsrRByItem)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AsrRByItem), buffid, bufflength, endecode4Byte);
-        }
-        
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.CriticalBuff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.CriticalBuff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ItemCritical)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ItemCritical), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.UsefulAdvancedBless)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.UsefulAdvancedBless), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Lapidification)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Lapidification), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.VampDeath)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.VampDeath), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.VampDeathSummon)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.VampDeathSummon), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.VenomSnake)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.VenomSnake), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.CarnivalAttack)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.CarnivalAttack), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.CarnivalDefence)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.CarnivalDefence), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.CarnivalExp)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.CarnivalExp), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SlowAttack)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SlowAttack), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PyramidEffect)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PyramidEffect), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HollowPointBullet)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.HollowPointBullet), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.KeyDownMoving)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.KeyDownMoving), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.KeyDownAreaMoving)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.KeyDownAreaMoving), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.CygnusElementSkill)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.CygnusElementSkill), buffid, bufflength, endecode4Byte);
-        }
-        
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.StrikerHyperElectric)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.StrikerHyperElectric), buffid, bufflength, endecode4Byte);
-        }
-        
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.StormBringer)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.StormBringer), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IgnoreTargetDEF)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IgnoreTargetDEF), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Invisible)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Invisible), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ReviveOnce)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ReviveOnce), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AntiMagicShell)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AntiMagicShell), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.EnrageCr)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.EnrageCr), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.EnrageCrDamMin)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.EnrageCrDamMin), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BlessOfDarkness)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BlessOfDarkness), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.LifeTidal)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.LifeTidal), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Judgement)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Judgement), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DojangLuckyBonus)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DojangLuckyBonus), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HitCriDamR)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.HitCriDamR), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Larkness)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Larkness), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SmashStack)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SmashStack), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ReshuffleSwitch)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ReshuffleSwitch), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SpecialAction)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SpecialAction), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ArcaneAim)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ArcaneAim), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.StopForceAtomInfo)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.StopForceAtomInfo), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SoulGazeCriDamR)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SoulGazeCriDamR), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SoulRageCount)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SoulRageCount), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PowerTransferGauge)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PowerTransferGauge), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AffinitySlug)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AffinitySlug), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SoulExalt)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SoulExalt), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HiddenPieceOn)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.HiddenPieceOn), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BossShield)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BossShield), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MobZoneState)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MobZoneState), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.GiveMeHeal)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.GiveMeHeal), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.TouchMe)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.TouchMe), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Contagion)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Contagion), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ComboUnlimited)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ComboUnlimited), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IgnorePCounter)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IgnorePCounter), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IgnoreAllCounter)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IgnoreAllCounter), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IgnorePImmune)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IgnorePImmune), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IgnoreAllImmune)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IgnoreAllImmune), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.FinalJudgement)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.FinalJudgement), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.KnightsAura)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.KnightsAura), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IceAura)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IceAura), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.FireAura)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.FireAura), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.VengeanceOfAngel)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.VengeanceOfAngel), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HeavensDoor)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.HeavensDoor), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Preparation)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Preparation), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BullsEye)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BullsEye), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IncEffectHPPotion)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IncEffectHPPotion), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IncEffectMPPotion)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IncEffectMPPotion), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SoulMP)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SoulMP), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.FullSoulMP)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.FullSoulMP), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SoulSkillDamageUp)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SoulSkillDamageUp), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BleedingToxin)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BleedingToxin), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IgnoreMobDamR)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IgnoreMobDamR), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Asura)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Asura), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.FlipTheCoin)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.FlipTheCoin), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.UnityOfPower)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.UnityOfPower), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Stimulate)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Stimulate), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ReturnTeleport)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ReturnTeleport), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.CapDebuff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.CapDebuff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DropRIncrease)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DropRIncrease), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IgnoreMobpdpR)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IgnoreMobpdpR), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BdR)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BdR), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DiabolikRecovery)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DiabolikRecovery), buffid, bufflength, endecode4Byte);
-        }
-        
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ExceedOverload)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ExceedOverload), buffid, bufflength, endecode4Byte);
-        }
-                
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BuckShot)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BuckShot), buffid, bufflength, endecode4Byte);
-        }
-                
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SurplusSupply)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SurplusSupply), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Albatross)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Albatross), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Translucence)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Translucence), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PoseType)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PoseType), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.LightOfSpirit)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.LightOfSpirit), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ElementSoul)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ElementSoul), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.GlimmeringTime)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.GlimmeringTime), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Restoration)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Restoration), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ComboCostInc)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ComboCostInc), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ChargeBuff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ChargeBuff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.TrueSight)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.TrueSight), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.CrossOverChain)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.CrossOverChain), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ChillingStep)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ChillingStep), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Reincarnation)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Reincarnation), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DotBasedBuff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DotBasedBuff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BlessEnsenble)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BlessEnsenble), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.QuiverCatridge)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.QuiverCatridge), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AdvancedQuiver)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AdvancedQuiver), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.UserControlMob)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.UserControlMob), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ImmuneBarrier)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ImmuneBarrier), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ArmorPiercing)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ArmorPiercing), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ZeroAuraStr)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ZeroAuraStr), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ZeroAuraSpd)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ZeroAuraSpd), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.CriticalGrowing)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.CriticalGrowing), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.QuickDraw)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.QuickDraw), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BowMasterConcentration)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BowMasterConcentration), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.TimeFastABuff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.TimeFastABuff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.TimeFastBBuff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.TimeFastBBuff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.GatherDropR)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.GatherDropR), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AimBox2D)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AimBox2D), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.CursorSniping)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.CursorSniping), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IncMonsterBattleCaptureRate)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IncMonsterBattleCaptureRate), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DebuffTolerance)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DebuffTolerance), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DotHealHPPerSecond)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DotHealHPPerSecond), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SpiritGuard)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SpiritGuard), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PreReviveOnce)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PreReviveOnce), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SetBaseDamageByBuff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SetBaseDamageByBuff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.LimitMP)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.LimitMP), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ReflectDamR)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ReflectDamR), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ComboTempest)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ComboTempest), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MHPCutR)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MHPCutR), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MMPCutR)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MMPCutR), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SelfWeakness)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SelfWeakness), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ElementDarkness)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ElementDarkness), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.FlareTrick)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.FlareTrick), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Ember)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Ember), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Dominion)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Dominion), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SiphonVitality)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SiphonVitality), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DarknessAscension)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DarknessAscension), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BossWaitingLinesBuff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BossWaitingLinesBuff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DamageReduce)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DamageReduce), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ShadowServant)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ShadowServant), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ShadowIllusion)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ShadowIllusion), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AddAttackCount)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AddAttackCount), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ComplusionSlant)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ComplusionSlant), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.JaguarSummoned)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.JaguarSummoned), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.JaguarCount)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.JaguarCount), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.SSFShootingAttack)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.SSFShootingAttack), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DevilCry)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DevilCry), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ShieldAttack)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ShieldAttack), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BMageAura)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BMageAura), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DarkLighting)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DarkLighting), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AttackCountX)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AttackCountX), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BMageDeath)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BMageDeath), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BombTime)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BombTime), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.NoDebuff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.NoDebuff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.XenonAegisSystem)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.XenonAegisSystem), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AngelicBursterSoulSeeker)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AngelicBursterSoulSeeker), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HiddenPossession)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.HiddenPossession), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.NightWalkerBat)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.NightWalkerBat), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.NightLordMark)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.NightLordMark), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.WizardIgnite)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.WizardIgnite), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BattlePvP_Helena_Mark)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BattlePvP_Helena_Mark), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BattlePvP_Helena_WindSpirit)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BattlePvP_Helena_WindSpirit), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BattlePvP_LangE_Protection)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BattlePvP_LangE_Protection), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BattlePvP_LeeMalNyun_ScaleUp)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BattlePvP_LeeMalNyun_ScaleUp), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BattlePvP_Revive)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BattlePvP_Revive), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PinkbeanAttackBuff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PinkbeanAttackBuff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RandAreaAttack)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.RandAreaAttack), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BattlePvP_Mike_Shield)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BattlePvP_Mike_Shield), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BattlePvP_Mike_Bugle)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BattlePvP_Mike_Bugle), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PinkbeanRelax)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PinkbeanRelax), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PinkbeanYoYoStack)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.PinkbeanYoYoStack), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.NextAttackEnhance)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.NextAttackEnhance), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AranBeyonderDamAbsorb)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AranBeyonderDamAbsorb), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AranCombotempastOption)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AranCombotempastOption), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.NautilusFinalAttack)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.NautilusFinalAttack), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ViperTimeLeap)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ViperTimeLeap), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RoyalGuardState)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.RoyalGuardState), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RoyalGuardPrepare)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.RoyalGuardPrepare), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MichaelSoulLink)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MichaelSoulLink), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.MichaelStanceLink)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.MichaelStanceLink), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.TriflingWhimOnOff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.TriflingWhimOnOff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AddRangeOnOff)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AddRangeOnOff), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.KinesisPsychicPoint)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.KinesisPsychicPoint), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.KinesisPsychicOver)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.KinesisPsychicOver), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.KinesisPsychicShield)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.KinesisPsychicShield), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.KinesisIncMastery)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.KinesisIncMastery), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.KinesisPsychicEnergeShield)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.KinesisPsychicEnergeShield), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BladeStance)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BladeStance), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DebuffActiveSkillHPCon)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DebuffActiveSkillHPCon), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DebuffIncHP)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.DebuffIncHP), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BowMasterMortalBlow)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.BowMasterMortalBlow), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AngelicBursterSoulResonance)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AngelicBursterSoulResonance), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Fever)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Fever), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IgnisRore)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IgnisRore), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RpSiksin)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.RpSiksin), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.TeleportMasteryRange)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.TeleportMasteryRange), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.FireBarrier)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.FireBarrier), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ChangeFoxMan)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.ChangeFoxMan), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.FixCoolTime)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.FixCoolTime), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.IncMobRateDummy)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.IncMobRateDummy), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AdrenalinBoost)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AdrenalinBoost), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AranSmashSwing)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AranSmashSwing), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AranDrain)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AranDrain), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.AranBoostEndHunt)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.AranBoostEndHunt), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HiddenHyperLinkMaximization)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.HiddenHyperLinkMaximization), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RWCylinder)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.RWCylinder), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RWCombination)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.RWCombination), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RWMagnumBlow)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.RWMagnumBlow), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RWBarrier)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.RWBarrier), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RWBarrierHeal)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.RWBarrierHeal), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RWMaximizeCannon)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.RWMaximizeCannon), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RWOverHeat)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.RWOverHeat), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RWMovingEvar)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.RWMovingEvar), buffid, bufflength, endecode4Byte);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Stigma)) {
-            encodeSkillValue(oPacket, mTemporaryStats.get(CharacterTemporaryStat.Stigma), buffid, bufflength, endecode4Byte);
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.SoulMP)) { //SoulMP
-            oPacket.EncodeInteger(effect.getX());//xSoulMP
+            oPacket.EncodeInteger(pEffect.getX());//xSoulMP
             oPacket.EncodeInteger(0);//rSoulMP
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.FullSoulMP)) { //FullSoulMP
-            oPacket.EncodeInteger(effect.getX());//xFullSoulMP
+            oPacket.EncodeInteger(pEffect.getX());//xFullSoulMP
         }
 
         int ammount = 0;
@@ -1671,11 +255,11 @@ public class BuffPacket {
             oPacket.Encode(0);//Key --> mBuffedForSpecMap
         }
 
-        oPacket.Encode(chr.getBuffedValue(CharacterTemporaryStat.DefenseAtt) == null ? 0
-                : chr.getBuffedValue(CharacterTemporaryStat.DefenseAtt));//nDefenseAtt
-        oPacket.Encode(chr.getBuffedValue(CharacterTemporaryStat.DefenseState) == null ? 0
-                : chr.getBuffedValue(CharacterTemporaryStat.DefenseState));//nDefenseState
-        oPacket.Encode(effect == null ? 0 : effect.getPVPDamage());//nPVPDamage
+        oPacket.Encode(pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseAtt) == null ? 0
+                : pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseAtt));//nDefenseAtt
+        oPacket.Encode(pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseState) == null ? 0
+                : pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseState));//nDefenseState
+        oPacket.Encode(pEffect == null ? 0 : pEffect.getPVPDamage());//nPVPDamage
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.Dice)) {
             //You can loop, or just write the dice stats + zeros. It has to add up to 88 bytes.
@@ -1695,7 +279,7 @@ public class BuffPacket {
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.KillingPoint)) {//KillingPoint
-            oPacket.Encode(0);
+            oPacket.Encode(1);
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.PinkbeanRollingGrade)) {//PinkBeanRollingGrade
@@ -1715,10 +299,10 @@ public class BuffPacket {
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.ElementalCharge)) { //ElementalCharge
-            oPacket.Encode(effect.getLevel());//nElementalCharge
-            oPacket.EncodeShort(effect.getW());//wElementalCharge
-            oPacket.Encode(effect.getU());//uElementalCharge
-            oPacket.Encode(effect.getZ());//zElementalCharge
+            oPacket.Encode(pEffect.getLevel());//nElementalCharge
+            oPacket.EncodeShort(pEffect.getW());//wElementalCharge
+            oPacket.Encode(pEffect.getU());//uElementalCharge
+            oPacket.Encode(pEffect.getZ());//zElementalCharge
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.LifeTidal)) {//LifeTidal
@@ -1732,15 +316,15 @@ public class BuffPacket {
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.Larkness)) { //Larkness
             for (int k = 0; k < 2; k++) {
-                encodeLuminousEquilibriumInfo(oPacket, buffid);
+                encodeLuminousEquilibriumInfo(oPacket, nBuffID);
             }
-            oPacket.EncodeInteger(lightGauge);//dgLarkness (gauge)
-            oPacket.EncodeInteger(darkGauge);//lgLarkness (gauge)
+            oPacket.EncodeInteger(lightGauge);// dgLarkness (Light Gauge)
+            oPacket.EncodeInteger(darkGauge);// lgLarkness (Dark Gauge)
 
-            //here comes GMS writing more bytes than KMS and idk what they write..
-            oPacket.EncodeInteger(1);//1 (according to old packet)
-            oPacket.EncodeInteger(1);//1 (according to old packet)
-            oPacket.EncodeInteger(283183599);//283183599 (according to old packet)
+            // GMS Additional Bytes
+            oPacket.EncodeInteger(1);// 1 (according to old packet)
+            oPacket.EncodeInteger(1);// 1 (according to old packet)
+            oPacket.EncodeInteger(283183599);// 283183599 (according to old packet)
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.IgnoreTargetDEF)) {//IgnoreTargetDef?
@@ -1753,7 +337,7 @@ public class BuffPacket {
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.StopForceAtomInfo)) {
             List<Integer> ss = new ArrayList<>();
             int type = 1;
-            switch (effect.getSourceId()) {
+            switch (pEffect.getSourceId()) {
                 case 61101002:
                     type = 1;
                     break;
@@ -1767,14 +351,14 @@ public class BuffPacket {
                     type = 4;
                     break;
             }
-            int count = effect.getSourceId() == 61101002 ? 3 : 5;
+            int count = pEffect.getSourceId() == 61101002 ? 3 : 5;
             for (int j = 0; j < count; j++) {
                 ss.add(0);
             }
 
             oPacket.EncodeInteger(type);
             oPacket.EncodeInteger(count);
-            oPacket.EncodeInteger(effect.getWeapon());
+            oPacket.EncodeInteger(pEffect.getWeapon());
             oPacket.EncodeInteger(ss.size()); // Size
             for (int i = 0; i < ss.size(); i++) {
                 oPacket.EncodeInteger(ss.get(i));
@@ -1810,7 +394,7 @@ public class BuffPacket {
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.DropRIncrease)) {
-            oPacket.EncodeInteger(effect.getX());//xDropIncrease
+            oPacket.EncodeInteger(pEffect.getX());//xDropIncrease
             oPacket.Encode(0);//bDropIncrease
         }
 
@@ -1819,7 +403,7 @@ public class BuffPacket {
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.Beholder)) { //Beholder
-            oPacket.EncodeInteger(effect.getS());//sBeholder
+            oPacket.EncodeInteger(pEffect.getS());//sBeholder
             oPacket.EncodeInteger(0);//ssBeholder
         }
 
@@ -1833,7 +417,7 @@ public class BuffPacket {
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.ExtremeArchery)) { //ExtremeArchery
             oPacket.EncodeInteger(0);//bExtremeArchery
-            oPacket.EncodeInteger(effect.getX());//xExtremeArchery
+            oPacket.EncodeInteger(pEffect.getX());//xExtremeArchery
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.QuiverCatridge)) {//QuiverCartridge?
@@ -1851,7 +435,7 @@ public class BuffPacket {
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.ZeroAuraSpd)) {//ZeroAuraSpd
             oPacket.Encode(0);
         }
-        
+
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.CriticalGrowing)) {//CriticalGrowing
             oPacket.EncodeInteger(0);
         }
@@ -1889,7 +473,7 @@ public class BuffPacket {
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.BMageAura)) { //BMageAura
-            oPacket.EncodeInteger(effect.getX());//xBMageAura
+            oPacket.EncodeInteger(pEffect.getX());//xBMageAura
             oPacket.Encode(0);//bBMageAura
         }
 
@@ -1903,14 +487,14 @@ public class BuffPacket {
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.RoyalGuardState)) { //RoyalGuardState
             oPacket.EncodeInteger(0);//bRoyalGuardState
-            oPacket.EncodeInteger(effect.getX());//xRoyalGuardState
+            oPacket.EncodeInteger(pEffect.getX());//xRoyalGuardState
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.MichaelSoulLink)) { //MichaelSoulLink
-            oPacket.EncodeInteger(effect.getX());//xMichaelSoulLink
+            oPacket.EncodeInteger(pEffect.getX());//xMichaelSoulLink
             oPacket.Encode(0);//bMichaelSoulLink
             oPacket.EncodeInteger(0);//cMichaelSoulLink
-            oPacket.EncodeInteger(effect.getY());//yMichaelSoulLink
+            oPacket.EncodeInteger(pEffect.getY());//yMichaelSoulLink
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.AdrenalinBoost)) {//AdrenalinBoost
@@ -1918,35 +502,48 @@ public class BuffPacket {
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.RWCylinder)) { //RWCylinder
-            oPacket.Encode(chr.getComboStack());//bRWCylinder - Ammo
-            oPacket.EncodeShort(chr.getAdditionalStack());//cRWCylinder - Gauge
+            oPacket.Encode(pPlayer.getPrimaryStack());//bRWCylinder - Ammo
+            oPacket.EncodeShort(pPlayer.getAdditionalStack());//cRWCylinder - Gauge
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.RWMagnumBlow)) { //RWMagnumBlow
             oPacket.EncodeShort(0);//bRWMagnumBlow
-            oPacket.Encode((byte) effect.getX());//xRWMagnumBlow
+            oPacket.Encode((byte) pEffect.getX());//xRWMagnumBlow
         }
-        
+
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.EnergyCharged)) {
-            oPacket.EncodeInteger(buffid);
+            oPacket.EncodeInteger(nBuffID);
         } else {
             oPacket.EncodeInteger(0);//nViperEnergyCharged
         }
         
-        // TODO: Fix the two state 
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.RideVehicle)) {
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HayatoStance)) { 
             oPacket.EncodeInteger(0);
-            /*oPacket.EncodeInteger(buffid);
-        } else {
-            oPacket.EncodeInteger(0);//nViperEnergyCharged*/
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0);
         }
-
-        encodeTwoStateTemporaryStat(oPacket, chr, buffid, bufflength, mTemporaryStats, effect);
+        
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HayatoStanceBonus)) { 
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0);
+        }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.BladeStance)) { //BladeStance -THINK ITS THE HAYATO ONE, IDK DO
-            oPacket.EncodeInteger(chr.getComboStack());
+            oPacket.Encode(1);
+            oPacket.EncodeInteger(2);
         }
-
+        
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Battoujutsu)) { 
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0);
+        }
+        
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.DarkSight)) { //DarkSight
             oPacket.EncodeInteger(0);
         }
@@ -1959,7 +556,8 @@ public class BuffPacket {
             oPacket.EncodeInteger(0);
         }
 
-        encodeIndieTempStat(oPacket, buffid, bufflength, mTemporaryStats, effect);
+        encodeTwoStateTemporaryStat(oPacket, pPlayer, nBuffID, tDuration, mTemporaryStats, pEffect);
+        encodeIndieTempStat(oPacket, nBuffID, tDuration, mTemporaryStats);
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.UsingScouter)) {
             oPacket.EncodeInteger(0);
@@ -1970,22 +568,20 @@ public class BuffPacket {
      * Encodes IndieTemp status changes. IndieTempStats are defined by Buffstats in the 16th int. (or simply usually the last int)
      *
      */
-    private static void encodeIndieTempStat(OutPacket oPacket, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect) {
-        int pos = 0;//KMS calls it pos, but it mainly just indicates an indie stat is present.
-        Random rand = new Random();
-        int nKey = rand.nextInt(Integer.MAX_VALUE);
-        for (Map.Entry<CharacterTemporaryStat, Integer> stat : statups.entrySet()) {
-            if (stat.getKey().isIndie()) {
-                pos++;
-                oPacket.EncodeInteger(pos);
+    private static void encodeIndieTempStat(OutPacket oPacket, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups) {
+        int tTime = (int) System.currentTimeMillis();
+        for (Map.Entry<CharacterTemporaryStat, Integer> effect : statups.entrySet()) {
+            if (effect.getKey().isIndie()) {
+                oPacket.EncodeInteger(1);
                 oPacket.EncodeInteger(buffid);//reason = skillid
-                oPacket.EncodeInteger(stat.getValue());//v7
-                oPacket.EncodeInteger(nKey);//nKey
-                oPacket.EncodeInteger((int) System.currentTimeMillis());//v8
-                oPacket.EncodeInteger(bufflength + 1);//tTerm
+                oPacket.EncodeInteger(effect.getValue());//v7
+                oPacket.EncodeInteger(tTime);//nKey
+                oPacket.EncodeInteger(tTime + 1);//v8
+                oPacket.EncodeInteger(0);
+                oPacket.EncodeInteger(0);
             }
         }
-        int v10 = pos;
+        int v10 = 0;
         oPacket.EncodeInteger(0);
         if (v10 > 0) {
             for (int j = 0; j < v10; j++) {
@@ -1995,32 +591,6 @@ public class BuffPacket {
         }
     }
 
-    //Dan's encodeIndieTempStat
-    /*private static void encodeIndieTempStat(OutPacket oPacket, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect) {
-        int pos = 0;//KMS calls it pos, but it mainly just indicates an indie stat is present.
-        Random rand = new Random();
-        int nKey = rand.nextInt(Integer.MAX_VALUE);
-        
-        int nCount = 0;
-        for (Map.Entry<CharacterTemporaryStat, Integer> stat : statups.entrySet()) {
-           if (stat.getKey().isIndie()) {
-               nCount++;
-           }
-        }
-        
-        oPacket.EncodeInteger(nCount);
-        for (Map.Entry<CharacterTemporaryStat, Integer> stat : statups.entrySet()) {
-            if (stat.getKey().isIndie()) {
-                oPacket.EncodeInteger(pos++); // nPos
-                oPacket.EncodeInteger(buffid);// nSkillID
-                oPacket.EncodeInteger(stat.getValue());// nValue (I'm asuming getValue is the value for the CTS nOption) think sowe
-                oPacket.EncodeInteger(nKey);
-                oPacket.EncodeInteger((int) System.currentTimeMillis());// tStart
-                oPacket.EncodeInteger(bufflength);// tTerm
-            }
-        }
-        oPacket.EncodeInteger(0); // mValue.Size (Dont encode shit cuz u hardcode 0)
-    }*/
     /**
      * Encodes TwoState status changes. These states are always applied to any character.
      *
@@ -2050,11 +620,15 @@ public class BuffPacket {
             oPacket.EncodeShort(0);//usExpireTerm
         }
         if (statups.containsKey(CharacterTemporaryStat.RideVehicle)) {
+            System.out.println("RIDEVEHICLE:: " + statups.get(CharacterTemporaryStat.RideVehicle));
             oPacket.EncodeInteger(statups.get(CharacterTemporaryStat.RideVehicle));//Value(MountID)
             oPacket.EncodeInteger(buffid);//Reason(SkillID)
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(1);//tCur
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0);
         }
         if (statups.containsKey(CharacterTemporaryStat.PartyBooster)) {
             oPacket.EncodeInteger(statups.get(CharacterTemporaryStat.PartyBooster));//Value
@@ -2100,87 +674,67 @@ public class BuffPacket {
      */
     private static void encodeRemoteTwoStateTemporaryStat(OutPacket oPacket, MapleCharacter chr) {
         int nullValueTCur = Randomizer.nextInt();
-        if (chr.getBuffedValue(CharacterTemporaryStat.EnergyCharged) == null || chr.getBuffSource(CharacterTemporaryStat.EnergyCharged) <= 0) {
-            oPacket.EncodeInteger(0);//Value
-            oPacket.EncodeInteger(0);//Reason
-            //EncodeTime(tLastUpdated)
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(nullValueTCur);//tCur
-        } else {
+        if (chr.getBuffSource(CharacterTemporaryStat.EnergyCharged) != -1 && chr.getBuffedValue(CharacterTemporaryStat.EnergyCharged) != null) {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.EnergyCharged));//Value
             oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.EnergyCharged));//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(chr.getBuffDuration(CharacterTemporaryStat.EnergyCharged));//tCur
-        }
-
-        if (chr.getBuffedValue(CharacterTemporaryStat.DashSpeed) == null || chr.getBuffSource(CharacterTemporaryStat.DashSpeed) <= 0) {
+        } else {
             oPacket.EncodeInteger(0);//Value
             oPacket.EncodeInteger(0);//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
-            oPacket.EncodeShort(0);//usExpireTerm
-        } else {
+        }
+
+        if (chr.getBuffSource(CharacterTemporaryStat.DashSpeed) != -1 && chr.getBuffedValue(CharacterTemporaryStat.DashSpeed) != null) {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.DashSpeed));//Value
             oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.DashSpeed));//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
             oPacket.EncodeShort(0);//usExpireTerm
-        }
-
-        if (chr.getBuffedValue(CharacterTemporaryStat.DashJump) == null || chr.getBuffSource(CharacterTemporaryStat.DashJump) <= 0) {
+        } else {
             oPacket.EncodeInteger(0);//Value
             oPacket.EncodeInteger(0);//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
             oPacket.EncodeShort(0);//usExpireTerm
-        } else {
+        }
+
+        if (chr.getBuffSource(CharacterTemporaryStat.DashJump) != -1 && chr.getBuffedValue(CharacterTemporaryStat.DashJump) != null) {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.DashJump));//Value
             oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.DashJump));//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
             oPacket.EncodeShort(0);//usExpireTerm
-        }
-
-        int monsterRidingCause = chr.getBuffSource(CharacterTemporaryStat.RideVehicle);
-        int mountid = 0;
-        if (monsterRidingCause > 0) {
-            Item c_mount = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -118);
-            Item mount = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -18);
-            if ((GameConstants.getMountItem(monsterRidingCause, chr) == 0) && (c_mount != null) && (chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -119) != null)) {
-                mountid = c_mount.getItemId();
-            } else if ((GameConstants.getMountItem(monsterRidingCause, chr) == 0) && (mount != null) && (chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -19) != null)) {
-                mountid = mount.getItemId();
-            } else {
-                mountid = GameConstants.getMountItem(monsterRidingCause, chr);
-            }
-            oPacket.EncodeInteger(mountid);//Value(MountID)
-            oPacket.EncodeInteger(monsterRidingCause);//Reason(SkillID)
-            //EncodeTime(tLastUpdated)
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(nullValueTCur);//tCur
         } else {
             oPacket.EncodeInteger(0);//Value
             oPacket.EncodeInteger(0);//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
-        }
-
-        if (chr.getBuffedValue(CharacterTemporaryStat.PartyBooster) == null || chr.getBuffSource(CharacterTemporaryStat.PartyBooster) <= 0) {
-            oPacket.EncodeInteger(0);//Value
-            oPacket.EncodeInteger(0);//Reason
-            //EncodeTime(tLastUpdated)
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(nullValueTCur);//tCur
-            oPacket.Encode(0);
-            oPacket.Encode(HexTool.getByteArrayFromHexString("86 39 95 7D"));
             oPacket.EncodeShort(0);//usExpireTerm
+        }
+
+        if (chr.getBuffSource(CharacterTemporaryStat.RideVehicle) != -1 && chr.getBuffedValue(CharacterTemporaryStat.RideVehicle) != null) {
+            oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.RideVehicle));//Value(MountID)
+            oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.RideVehicle));//Reason(SkillID)
+            //EncodeTime(tLastUpdated)
+            oPacket.Encode(1);
+            oPacket.EncodeInteger(nullValueTCur);//tCur
         } else {
+            oPacket.EncodeInteger(0);//Value
+            oPacket.EncodeInteger(0);//Reason
+            //EncodeTime(tLastUpdated)
+            oPacket.Encode(1);
+            oPacket.EncodeInteger(nullValueTCur);//tCur
+        }
+
+        if (chr.getBuffSource(CharacterTemporaryStat.PartyBooster) != -1 && chr.getBuffedValue(CharacterTemporaryStat.PartyBooster) != null) {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.PartyBooster));//Value
             oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.PartyBooster));//Reason
             //EncodeTime(tLastUpdated)
@@ -2189,17 +743,18 @@ public class BuffPacket {
             oPacket.Encode(0);
             oPacket.EncodeInteger(0);//tCur
             oPacket.EncodeShort(0);//usExpireTerm
-        }
-
-        if (chr.getBuffedValue(CharacterTemporaryStat.GuidedBullet) == null || chr.getBuffSource(CharacterTemporaryStat.GuidedBullet) <= 0) {
+        } else {
             oPacket.EncodeInteger(0);//Value
             oPacket.EncodeInteger(0);//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
-        } else {
+            oPacket.Encode(0);
+            oPacket.Encode(HexTool.getByteArrayFromHexString("86 39 95 7D"));
+            oPacket.EncodeShort(0);//usExpireTerm
+        }
+
+        if (chr.getBuffSource(CharacterTemporaryStat.GuidedBullet) != -1 && chr.getBuffedValue(CharacterTemporaryStat.GuidedBullet) != null) {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.GuidedBullet));//Value
             oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.GuidedBullet));//Reason
             //EncodeTime(tLastUpdated)
@@ -2207,37 +762,45 @@ public class BuffPacket {
             oPacket.EncodeInteger(nullValueTCur);//tCur
             oPacket.EncodeInteger(0);//dwMobID
             oPacket.EncodeInteger(chr.getId());//dwUserID (Note: This isn't in v90, but since it's in KMS it's likely in your version. it's new)
-        }
-
-        if (chr.getBuffedValue(CharacterTemporaryStat.Undead) == null || chr.getBuffSource(CharacterTemporaryStat.Undead) <= 0) {
+        } else {
             oPacket.EncodeInteger(0);//Value
             oPacket.EncodeInteger(0);//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
-            oPacket.EncodeShort(0);
-        } else {
+            oPacket.EncodeInteger(0);
+            oPacket.EncodeInteger(0);
+        }
+
+        if (chr.getBuffSource(CharacterTemporaryStat.Undead) != -1 && chr.getBuffedValue(CharacterTemporaryStat.Undead) != null) {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.Undead));//Value
             oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.Undead));//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
             oPacket.EncodeShort(0);//usExpireTerm
-        }
-        if (chr.getBuffedValue(CharacterTemporaryStat.RideVehicleExpire) == null || chr.getBuffSource(CharacterTemporaryStat.RideVehicleExpire) <= 0) {
+        } else {
             oPacket.EncodeInteger(0);//Value
             oPacket.EncodeInteger(0);//Reason
-            //EncodeTime(tLastUpdated)	
+            //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
             oPacket.EncodeShort(0);
-        } else {
+        }
+        if (chr.getBuffSource(CharacterTemporaryStat.RideVehicleExpire) != -1 && chr.getBuffedValue(CharacterTemporaryStat.RideVehicleExpire) != null) {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.RideVehicleExpire));//Value
             oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.RideVehicleExpire));//Reason
             //EncodeTime(tLastUpdated)
             oPacket.Encode(1);
             oPacket.EncodeInteger(nullValueTCur);//tCur
             oPacket.EncodeShort(0);//usExpireTerm
+        } else {
+            oPacket.EncodeInteger(0);//Value
+            oPacket.EncodeInteger(0);//Reason
+            //EncodeTime(tLastUpdated)	
+            oPacket.Encode(1);
+            oPacket.EncodeInteger(nullValueTCur);//tCur
+            oPacket.EncodeShort(0);
         }
     }
 
@@ -2311,7 +874,8 @@ public class BuffPacket {
             }
         }
 
-        oPacket.Fill(0, 2);
+        oPacket.Encode(3);
+        oPacket.Encode(1);
         oPacket.EncodeLong(0L);
         oPacket.EncodeLong(0L);
         oPacket.EncodeLong(0L);
@@ -2374,7 +938,7 @@ public class BuffPacket {
                 oPacket.Encode(statup.getValue().byteValue());
             } else if (statup.getKey() == CharacterTemporaryStat.BMageAura || statup.getKey() == CharacterTemporaryStat.ShadowPartner || statup.getKey() == CharacterTemporaryStat.ShadowServant || statup.getKey() == CharacterTemporaryStat.Mechanic) {
                 oPacket.EncodeShort(statup.getValue().shortValue());
-                oPacket.EncodeInteger(effect.isSkill() ? effect.getSourceId() : -effect.getSourceId());
+                oPacket.EncodeInteger(effect.getSourceId());
             } else if (statup.getKey() == CharacterTemporaryStat.ItemCritical) {
                 oPacket.EncodeInteger(statup.getValue());
                 oPacket.EncodeInteger(effect.getCharColor());

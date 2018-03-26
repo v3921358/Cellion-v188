@@ -27,7 +27,8 @@ public class EvanBuff extends AbstractBuffClass {
             Evan.ELEMENTAL_DECREASE,
             Evan.MAGIC_RESISTANCE,
             Evan.HEROIC_MEMORIES,
-            Evan.SUMMON_ONYX_DRAGON
+            Evan.SUMMON_ONYX_DRAGON,
+            Evan.DRAGON_MASTER
         };
     }
 
@@ -68,6 +69,9 @@ public class EvanBuff extends AbstractBuffClass {
                 break;
             case Evan.SUMMON_ONYX_DRAGON:
                 eff.statups.put(CharacterTemporaryStat.SUMMON, 1);
+                break;
+            case Evan.DRAGON_MASTER:
+                //eff.statups.put(CharacterTemporaryStat.RideVehicle, 1932193);
                 break;
         }
     }

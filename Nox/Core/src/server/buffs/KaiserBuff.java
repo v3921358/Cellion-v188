@@ -59,7 +59,7 @@ public class KaiserBuff extends AbstractBuffClass {
             case Kaiser.FINAL_FORM: // 3job kaiser
             case Kaiser.FINAL_FORM_1: // 4job kaiser
             case Kaiser.FINAL_TRANCE: // hyper kaiser 
-                eff.statups.put(CharacterTemporaryStat.Morph, eff.info.get(MapleStatInfo.morph));
+                //eff.statups.put(CharacterTemporaryStat.Morph, eff.info.get(MapleStatInfo.morph)); // 1200 (3rd) // 1201 (4th)
                 eff.statups.put(CharacterTemporaryStat.CriticalBuff, eff.info.get(MapleStatInfo.cr));
                 eff.statups.put(CharacterTemporaryStat.IndiePMdR, eff.info.get(MapleStatInfo.x));
                 eff.statups.put(CharacterTemporaryStat.Stance, eff.info.get(MapleStatInfo.prop));

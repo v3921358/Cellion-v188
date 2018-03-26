@@ -1427,6 +1427,15 @@ public class PlayerStats implements Serializable {
             case 420: // Bandit
             case 421: // Chief Bandit
             case 422: { // Shadower
+                bx = SkillFactory.getSkill(4210013); // Enveloping Darkness (Shadower)
+                bof = chra.getTotalSkillLevel(bx);
+                if (bof > 0) {
+                    eff = bx.getEffect(bof);
+                    percent_hp += eff.getPercentHP() + 27;
+                    asrR += eff.getASRRate();
+                    terR += eff.getTERRate();
+                }
+                
                 bx = SkillFactory.getSkill(4001005); // Haste
                 bof = chra.getTotalSkillLevel(bx);
                 if (bof > 0) {
@@ -1444,7 +1453,7 @@ public class PlayerStats implements Serializable {
                     }
                 }
                 if (chra.getJob() == 411 || chra.getJob() == 412) {
-                    bx = SkillFactory.getSkill(4110008); // Enveloping Darkness
+                    bx = SkillFactory.getSkill(4110008); // Enveloping Darkness 
                     bof = chra.getTotalSkillLevel(bx);
                     if (bof > 0) {
                         eff = bx.getEffect(bof);

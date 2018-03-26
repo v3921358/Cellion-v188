@@ -90,16 +90,16 @@ public class Cygnus {
             if (new Random().nextDouble() <= nChargeProp) {
               
                 // Update Lightning Buff Count
-                if (pPlayer.getComboStack() < nMaxCount) {
-                    pPlayer.setComboStack(pPlayer.getComboStack() + 1);
+                if (pPlayer.getPrimaryStack() < nMaxCount) {
+                    pPlayer.setPrimaryStack(pPlayer.getPrimaryStack() + 1);
                 } else {
-                    pPlayer.setComboStack(nMaxCount);
+                    pPlayer.setPrimaryStack(nMaxCount);
                 }
             }
             
             final MapleStatEffect buffEffects = SkillFactory.getSkill(ThunderBreaker.LIGHTNING_ELEMENTAL).getEffect(pPlayer.getTotalSkillLevel(ThunderBreaker.LIGHTNING_ELEMENTAL));
 
-            buffEffects.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pPlayer.getComboStack()); // TODO: Get charges stacking properly.
+            buffEffects.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pPlayer.getPrimaryStack()); // TODO: Get charges stacking properly.
             buffEffects.statups.put(CharacterTemporaryStat.StrikerHyperElectric, 1); // Hack fix to allow the use of Gale/Typhoon.
 
             final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);

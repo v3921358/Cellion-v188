@@ -60,7 +60,7 @@ function action(mode, type, selection) {
 		cm.forceCompleteQuest(58955);
 		cm.forceCompleteQuest(34330);
 	}
-
+	
 	if (mode == -1) {
 		cm.dispose();
 	} else {
@@ -210,6 +210,8 @@ function action(mode, type, selection) {
 				case 107:
 					cm.sendOk("Sorry, this section is not available yet.");
 					cm.dispose();
+					
+					cm.forceCompleteQuest(400050);
 					break;
 				case 108:
 					if (cm.getPlayer().getLevel() < 250 && cm.getPlayer().getReborns() < 1) {

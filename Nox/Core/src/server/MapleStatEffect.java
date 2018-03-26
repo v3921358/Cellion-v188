@@ -763,11 +763,11 @@ public class MapleStatEffect implements Serializable {
                     applyfrom.getSummons().put(NightWalker.SHADOW_BAT, bat);
                 }
 
-                if (sourceid == WildHunter.JAGUAR_RIDER) {
+                if (sourceid == WildHunter.SUMMON_JAGUAR) {
                     final MapleSummon pJaguar = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
                     pJaguar.setPosition(pos);
                     applyfrom.getMap().spawnSummon(pJaguar);
-                    applyfrom.getSummons().put(WildHunter.JAGUAR_RIDER, pJaguar);
+                    applyfrom.getSummons().put(WildHunter.SUMMON_JAGUAR, pJaguar);
                 }
                 
                 List<Integer> count = new ArrayList<>();
@@ -1604,6 +1604,10 @@ public class MapleStatEffect implements Serializable {
                 }
             }
         }
+        
+        if(applyfrom.hasGodMode()) {
+            mpchange = 0; // God mode, no mana cost.
+        }
         return mpchange;
     }
 
@@ -2223,7 +2227,7 @@ public class MapleStatEffect implements Serializable {
     }
 
     private boolean isDispel() {
-        return skill && (sourceid == 2311001 || sourceid == 9001000 || sourceid == 9101000);
+        return skill && (sourceid == 2311001 || sourceid == 9001000 || sourceid == 9101000 || sourceid == BeastTamer.MEOW_CURE);
     }
 
     private boolean isHeroWill() {
@@ -2294,6 +2298,9 @@ public class MapleStatEffect implements Serializable {
             return null;
         }
         switch (sourceid) {
+            case 33001007: // Jaguar Summon
+            case 33001011: // Jaguar Summon
+                return SummonMovementType.SUMMON_JAGUAR;
             case 3211002: // puppet sniper
             case 3111002: // puppet ranger
             case 3221014: // Arrow Illusion

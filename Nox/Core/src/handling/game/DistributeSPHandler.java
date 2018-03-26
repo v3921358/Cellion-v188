@@ -54,10 +54,12 @@ public class DistributeSPHandler implements ProcessPacket<MapleClient> {
                     return;
                 }
             } else {
-                int left = Integer.parseInt(ski.left);
-                if (chr.getSkillLevel(SkillFactory.getSkill(left)) < ski.right && !chr.isGM()) {
-                    AutobanManager.getInstance().addPoints(c, 1000, 0, "Trying to learn a skill without the required skill (" + skillid + ")");
-                    return;
+                if (!GameConstants.isBeastTamer(chr.getJob())) {
+                    int left = Integer.parseInt(ski.left);
+                    if (chr.getSkillLevel(SkillFactory.getSkill(left)) < ski.right && !chr.isGM()) {
+                        AutobanManager.getInstance().addPoints(c, 1000, 0, "Trying to learn a skill without the required skill (" + skillid + ")");
+                        return;
+                    }
                 }
             }
         }
@@ -82,6 +84,9 @@ public class DistributeSPHandler implements ProcessPacket<MapleClient> {
             final int skillbook = GameConstants.getSkillBookForSkill(skillid);
             if (!isBeginnerSkill) {
                 chr.setRemainingSp(chr.getRemainingSp(skillbook) - amount, skillbook);
+            }
+            if (GameConstants.isBeastTamer(chr.getJob())) {
+                chr.setRemainingSp(chr.getRemainingSp() - amount);
             }
             chr.updateSingleStat(MapleStat.AVAILABLESP, chr.getRemainingSp(skillbook));
             chr.changeSingleSkillLevel(skill, (byte) (curLevel + amount), chr.getMasterLevel(skill));

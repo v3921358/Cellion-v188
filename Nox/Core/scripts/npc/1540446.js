@@ -34,10 +34,8 @@ function action(mode, type, selection) {
 					if (cm.getPlayerCount(350060279) == 0) {
 						cm.resetMap(350060279);
 						cm.warp(350060279, 0);
-						cm.spawnModifiedMonsterInMap(350060279, 8240099, 115, -16, 15000000000); 
-						cm.spawnModifiedMonsterInMap(350060279, 8240099, 115, -16, 5000000000); 
-						//cm.spawnMonsterInMap(350060279, 8240099, 100, -16); 
-						//cm.spawnMonsterInMap(350060279, 8240099, 506, -16);
+						cm.spawnModifiedMonsterInMap(350060279, 8240099, 115, -16, 6000000000); 
+						cm.spawnModifiedMonsterInMap(350060279, 8240099, 215, -16, 3000000000); 
 						cm.dispose();
 					} else {
 						cm.sendOk("Sorry, looks like another expedition squad is currently fighting Lotus on this channel. You will be able to enter once they are finished or you can attempt the expedition on another channel.");
@@ -52,13 +50,11 @@ function action(mode, type, selection) {
 								cm.dispose();
 							} else {
 								cm.resetMap(350060279);
-								cm.warpParty(350060279); 35000000000000
-								cm.spawnModifiedMonsterInMap(350060279, 8240099, 115, -16, 15000000000); 
-								cm.spawnModifiedMonsterInMap(350060279, 8240099, 115, -16, 5000000000); 
-								//cm.spawnMonsterInMap(350060279, 8240099, 115, -16); 
-								//cm.spawnMonsterInMap(350060279, 8240099, 506, -16);
+								cm.warpParty(350060279); 
+								cm.spawnModifiedMonsterInMap(350060279, 8240099, 115, -16, 6000000000); 
+								cm.spawnModifiedMonsterInMap(350060279, 8240099, 215, -16, 3000000000); 
 								if (cm.getPlayerCount(350060279) >= 3) { // Spawn a third Lotus if 3+ party members.
-									cm.spawnMonsterInMap(350060279, 8240099, 306, -16);
+									cm.spawnModifiedMonsterInMap(350060279, 8240099, 306, -16, 4500000000); 
 								}
 								cm.dispose();
 							}

@@ -136,6 +136,12 @@ function action(mode, type, selection){
 				break;
 		}
 	} else if (status == 2){
+		if (cm.isInventoryFull(cm.getPlayer(), 1)) {
+			cm.sendOk("Looks like you don't have enough inventory space.");
+			cm.dispose();
+			return;
+		}
+		
 		//Pearl Equipment & Weapon
 		if (selection >= 0 && selection < 200){
 			if (cm.haveItem(4001126, 1000) && (cm.getMeso() >= 2000000)){
@@ -295,17 +301,17 @@ function action(mode, type, selection){
 			if (cm.haveItem(4310058, 100) && cm.haveItem(4001619, 3)){
 				cm.gainItem(4310058, -100);
 				cm.gainItem(4001619, -3);
-				cm.gainItem(tyrantBelts[selection], 1);
+				cm.gainItem(tyrantBelts[selection - 20], 1);
 				cm.dispose();
 			} else {
 				cm.sendOk("Remember, you need #b100#i4310058##t4310058##k and #b3#i4001619##t4001619##k!");
 				cm.dispose();
 			}
-		} else if (selection < 30){
+		} else if (selection < 40){
 			if (cm.haveItem(4310058, 500) && cm.haveItem(4001619, 10)){
 				cm.gainItem(4310058, -500);
 				cm.gainItem(4001619, -10);
-				cm.gainItem(tyrantGloves[selection], 1);
+				cm.gainItem(tyrantGloves[selection - 30], 1);
 				cm.dispose();
 				
 			} else {

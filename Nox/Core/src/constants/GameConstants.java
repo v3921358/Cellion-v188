@@ -3664,6 +3664,7 @@ public class GameConstants {
             //Special Case First Job Table
             case 501:
             case 3101:
+            case 11200:
             case 14200:
                 return 0;
             //Second Job Table
@@ -3705,6 +3706,7 @@ public class GameConstants {
             case 5110:
             case 6110:
             case 6510:
+            case 11210:
             case 14210:
                 return 1;
             //Third Job Table
@@ -3745,6 +3747,7 @@ public class GameConstants {
             case 5111:
             case 6111:
             case 6511:
+            case 11211:
             case 14211:
                 return 2;
             //Fourth Job Table
@@ -3785,6 +3788,7 @@ public class GameConstants {
             case 5112:
             case 6112:
             case 6512:
+            case 11212:
             case 14212:
                 return 3;
             //? Job Table
@@ -3822,6 +3826,7 @@ public class GameConstants {
             case 5113:
             case 6113:
             case 6513:
+            case 11213:
             case 14213:
                 return 4;
         }

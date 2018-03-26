@@ -17,6 +17,8 @@ public class HayatoBuff extends AbstractBuffClass {
 
     public HayatoBuff() {
         skills = new int[]{
+            Hayato.QUICK_DRAW,
+            Hayato.SUMMER_RAIN,
             Hayato.MILITARY_MIGHT,
             Hayato.BATTOUJUTSU_SOUL,
             Hayato.BATTOUJUTSU_STANCE, // Battoujutsu Stance
@@ -41,7 +43,18 @@ public class HayatoBuff extends AbstractBuffClass {
     @Override
     public void handleEffect(MapleStatEffect eff, int skill) {
         switch (skill) {
+            case Hayato.QUICK_DRAW:
+                eff.statups.put(CharacterTemporaryStat.BladeStance, 1);
+                //eff.statups.put(CharacterTemporaryStat.HayatoStance, 2);
+                //eff.statups.put(CharacterTemporaryStat.HayatoStanceBonus, 2);
+                eff.info.put(MapleStatInfo.time, 2100000000);
+                break;
+            case Hayato.SUMMER_RAIN:
+                eff.statups.put(CharacterTemporaryStat.IndieDamR, 10);
+                eff.info.put(MapleStatInfo.time, 20000);
+                break;
             case Hayato.BATTOUJUTSU_SOUL:
+                break;
             case Hayato.BATTOUJUTSU_STANCE: // Battoujutsu Stance
                 eff.info.put(MapleStatInfo.time, 2100000000);
                 eff.statups.put(CharacterTemporaryStat.CriticalBuff, eff.info.get(MapleStatInfo.y));

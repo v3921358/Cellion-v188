@@ -167,9 +167,10 @@ public class BossMatchmakingHandler implements ProcessPacket<MapleClient> {
                 pPlayer.dropMessage(5, "Sorry, this boss is currently unavailable.");
                 break;
             case RANMARU: 
+                /*nDestination = 807300100;
+                break;*/
             case RANMARU_HARD: 
-                nDestination = 0;
-                pPlayer.dropMessage(5, "Sorry, this boss is currently unavailable.");
+                nDestination = 807300200;
                 break;
             case PRINCESSNO: 
                 nDestination = 0;

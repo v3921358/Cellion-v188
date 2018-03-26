@@ -45,13 +45,21 @@ public class WildHunterBuff extends AbstractBuffClass {
         switch (skill) {
             case WildHunter.JAGUAR_RIDER:
                 eff.statups.put(CharacterTemporaryStat.RideVehicle, 1932015);
+                eff.statups.put(CharacterTemporaryStat.JaguarSummoned, 0);
+                eff.statups.put(CharacterTemporaryStat.JaguarCount, 1);
                 eff.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case WildHunter.SOUL_ARROW_CROSSBOW:
                 eff.statups.put(CharacterTemporaryStat.SoulArrow, eff.info.get(MapleStatInfo.x));
+                eff.statups.put(CharacterTemporaryStat.PAD, eff.info.get(MapleStatInfo.pad));
+                eff.statups.put(CharacterTemporaryStat.EPAD, eff.info.get(MapleStatInfo.epad));
+                eff.statups.put(CharacterTemporaryStat.NoBulletConsume, 1);
                 break;
+            case 33001011:
             case WildHunter.SUMMON_JAGUAR:
-                eff.statups.put(CharacterTemporaryStat.JaguarSummoned, 3870);
+                //eff.statups.put(CharacterTemporaryStat.JaguarSummoned, 0);
+                //eff.statups.put(CharacterTemporaryStat.JaguarCount, 1);
+                //eff.statups.put(CharacterTemporaryStat.SUMMON, 1);
                 break;
             case WildHunter.CALL_OF_THE_WILD:// Call of the Wild
                 eff.statups.put(CharacterTemporaryStat.HowlingDefence, eff.info.get(MapleStatInfo.x));

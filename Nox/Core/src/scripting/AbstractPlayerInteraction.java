@@ -86,6 +86,14 @@ public abstract class AbstractPlayerInteraction {
         return c.getPlayer();
     }
 
+    public final boolean isInventoryFull(MapleCharacter pPlayer, int nInventoryType) {
+        MapleInventoryType pInventory = MapleInventoryType.getByType((byte) nInventoryType);
+        if (pPlayer.getInventory(pInventory).isFull()) {
+            return true;
+        }
+        return false;
+    }
+    
     public final EventManager getEventManager(final String event) {
         return c.getChannelServer().getEventSM().getEventManager(event);
     }

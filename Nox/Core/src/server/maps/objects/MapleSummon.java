@@ -139,6 +139,8 @@ public class MapleSummon extends AnimatedMapleMapObject {
 
     public final boolean isSummon() {
         switch (skill) {
+            case 33001007: // Jaguar Summon
+            case 33001011: // Jaguar Summon
             case 12111004:
             case 1321007: //beholder
             case 1301013:
