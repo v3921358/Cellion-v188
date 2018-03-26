@@ -26,15 +26,15 @@ public class NPCTalkHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         MapleCharacter pPlayer = c.getPlayer();
         final MapleNPC pNpc = pPlayer.getMap().getNPCByOid(iPacket.DecodeInteger());
-        
+
         if (pPlayer == null || pPlayer.getMap() == null || pNpc == null || pPlayer.hasBlockedInventory()) {
             return;
         }
-        
+
         if (pPlayer.isIntern()) { // Useful debug!
             pPlayer.dropMessage(5, "[NPC Debug] Script ID : " + pNpc.getId());
         }
-        
+
         if (NPCScriptManager.getInstance().getCM(c) != null) { // Meme auto dispose when clicking an NPC.
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);

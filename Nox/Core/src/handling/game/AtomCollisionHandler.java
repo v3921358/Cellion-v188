@@ -79,7 +79,7 @@ public final class AtomCollisionHandler implements ProcessPacket<MapleClient> {
         }
 
         chr.dropMessage(5, "[Debug] Atom ID : " + attack.skill);
-        
+
         int bulletCount = 1;
         switch (attack.skill) {
             case 27101100: // Sylvan Lance

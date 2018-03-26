@@ -776,12 +776,12 @@ public class MapleMapFactory {
                         if (name != null && name.contains("Maple TV")) {//thank god lol.
                             continue;
                         }
-                        
+
                         // Doesn't spawn these select NPCs, essentially hiding them.
                         if (GameConstants.isHiddenNpc(npc.getId())) {
                             continue;
                         }
-                        
+
                         map.spawnNpcOnMapLoad((MapleNPC) myLife);
                         break;
                     }

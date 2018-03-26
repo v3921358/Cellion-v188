@@ -10,6 +10,7 @@ import constants.ServerConstants;
 import constants.skills.Aran;
 import constants.skills.DanceMoves;
 import constants.skills.Hayato;
+import constants.skills.Global;
 import constants.skills.Kaiser;
 import constants.skills.Shade;
 import constants.skills.Xenon;
@@ -68,12 +69,12 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         final MapleItemInformationProvider oItemProvider = MapleItemInformationProvider.getInstance();
         final MapleInventory pEquip = oNewCharacter.getInventory(MapleInventoryType.EQUIPPED);
         Item pItem;
-        
+
         if (pJob == null) {
             c.write(CLogin.addNewCharEntry(null, 10));
             return;
         }
-        
+
         for (JobConstants.LoginJob j : JobConstants.LoginJob.values()) {
             if (j.getJobType() == pJob.getType()) {
                 if (j.getFlag() != JobConstants.LoginJob.JobFlag.ENABLED.getFlag()) {
@@ -101,19 +102,19 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         if (pJob.hasHat()) {
             nHat = iPacket.DecodeInteger();
         }
-        
+
         nTop = iPacket.DecodeInteger();
-        
+
         if (pJob.hasBottom()) {
             nBottom = iPacket.DecodeInteger();
         }
         if (pJob.hasCape()) {
             nCape = iPacket.DecodeInteger();
         }
-        
+
         nShoes = iPacket.DecodeInteger();
         nWeapon = iPacket.DecodeInteger();
-        
+
         if (iPacket.Available() >= 4) {
             nShield = iPacket.DecodeInteger();
         }
@@ -131,11 +132,11 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
                 }
             }
         }
-        
+
         // Make character should come last in this statement, else 'canMakeCharacter' will get spam updated.
         if (!MapleCharacterCreationUtil.canCreateChar(name, c.isGm())
-            || (LoginInformationProvider.getInstance().isForbiddenName(name) && !c.isGm())
-            || (!MapleCharacterCreationUtil.canMakeCharacter(c.getWorld(), c.getAccID()) && !c.isGm())) {
+                || (LoginInformationProvider.getInstance().isForbiddenName(name) && !c.isGm())
+                || (!MapleCharacterCreationUtil.canMakeCharacter(c.getWorld(), c.getAccID()) && !c.isGm())) {
             c.write(CLogin.addNewCharEntry(null, 10));
             return;
         }
@@ -171,7 +172,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         if (nTail < 0) {
             nTail = 0;
         }
-        
+
         oNewCharacter.setWorld((byte) c.getWorld());
         oNewCharacter.setFace(nFace);
         oNewCharacter.setCharListPosition(nCharacterPos);
@@ -187,7 +188,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         oNewCharacter.setFaceMarking(nFaceMark);
         oNewCharacter.setEars(nEars);
         oNewCharacter.setTail(nTail);
-        
+
         switch (pJob) {
             case AngelicBuster:
                 oNewCharacter.setJob((short) 6500);
@@ -239,7 +240,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
             default:
                 break;
         }
-        
+
         /* Reference
          * -1 Hat | -2 Face | -3 Eye acc | -4 Ear acc | -5 Topwear 
          * -6 Bottom | -7 Shoes | -9 Cape | -10 Shield | -11 Weapon
@@ -259,7 +260,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
             pItem.setGMLog("Nova Shield");
             pEquip.addFromDB(pItem);
         }
-        
+
         // Additional skills that are not added by default.
         int[][] skills = new int[][]{
             {80001152}, //Resistance
@@ -285,14 +286,13 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
             {80001152, 110001251, 110001510, 110001501, 110001502, 110001503, 110001504}, //Beast Tamer
             {80001152}, //Pink Bean
             {} //Kinesis
-            /* Not sure which of these we need to add
+        /* Not sure which of these we need to add
              140001289 - Psychic Attack
              140001290 - Return
              140000291 - ESP
              140000292 - Judgment
-             */
-        };
-        
+         */};
+
         if (skills[pJob.getType()].length > 0) {
             final Map<Skill, SkillEntry> mSkill = new HashMap<>();
             Skill pSkill;
@@ -343,13 +343,13 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
                 mSkill.put(SkillFactory.getSkill(Xenon.MODAL_SHIFT), new SkillEntry((byte) 1, (byte) 1, -1));
             }
             if (pJob == LoginInformationProvider.JobType.Kaiser) { // Kaiser Attack & Defense Modes
-                mSkill.put(SkillFactory.getSkill(Kaiser.ATTACKER_MODE), new SkillEntry((byte) 1, (byte) 1, -1));
-                mSkill.put(SkillFactory.getSkill(Kaiser.DEFENDER_MODE), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(Kaiser.ATTACKER_MODE_I), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(Kaiser.DEFENDER_MODE_I), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Kaiser.DRAGON_LINK), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Kaiser.VERTICAL_GRAPPLE), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Kaiser.TRANSFIGURATION), new SkillEntry((byte) 1, (byte) 1, -1));
             }
-            if (pJob == LoginInformationProvider.JobType.Shade) { 
+            if (pJob == LoginInformationProvider.JobType.Shade) {
                 mSkill.put(SkillFactory.getSkill(Shade.FOX_TROT), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Shade.SPIRIT_BOND_1), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Shade.CLOSE_CALL), new SkillEntry((byte) 1, (byte) 1, -1));

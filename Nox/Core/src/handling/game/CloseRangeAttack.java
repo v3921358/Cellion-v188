@@ -68,6 +68,7 @@ public final class CloseRangeAttack {
         
         final boolean mirror = (pPlayer.hasBuff(CharacterTemporaryStat.ShadowPartner) || pPlayer.hasBuff(CharacterTemporaryStat.ShadowServant));
         double maxdamage = pPlayer.getStat().getCurrentMaxBaseDamage();
+
         Item shield = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -10);
         int attackCount = shield != null && (shield.getItemId() / 10000 == 134) ? 2 : 1;
         int skillLevel = 0;
@@ -80,7 +81,7 @@ public final class CloseRangeAttack {
                 c.write(CWvsContext.enableActions());
                 return;
             }
-            
+
             if (GameConstants.isDemonAvenger(c.getPlayer().getJob())) {
 
                 // 1% of Maximum HP as Skill Cost.
@@ -127,8 +128,8 @@ public final class CloseRangeAttack {
                         break;
                     case 37001004:
                     case Blaster.REVOLVING_CANNON_PLUS:
-                    case Blaster.REVOLVING_CANNON_PLUS_2:
-                    case Blaster.REVOLVING_CANNON_PLUS_3: 
+                    case Blaster.REVOLVING_CANNON_PLUS_II:
+                    case Blaster.REVOLVING_CANNON_PLUS_III: 
                         Resistance.BlasterHandler.handleAmmoCost(pPlayer);
                         Resistance.BlasterHandler.handleGaugeIncrease(pPlayer);
                         c.write(JobPacket.BlasterPacket.onRWMultiChargeCancelRequest((byte) 1, attack.skill));
@@ -143,7 +144,7 @@ public final class CloseRangeAttack {
             }
 
             switch (attack.skill) {
-                case Zero.RISING_SLASH:
+                case Zero.RISING_SLASH_2:
                 case Zero.FLASH_CUT:
                 case Zero.SPIN_DRIVER:
                 case Zero.GIGA_CRASH:
@@ -240,7 +241,7 @@ public final class CloseRangeAttack {
         DamageParse.applyAttack(attack, skill, c.getPlayer(), attackCount, maxdamage, effect, mirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
         int bulletCount = 1;
         switch (attack.skill) {
-            case Page.FLAME_CHARGE:
+            case Page.FLAME_CHARGE_1:
                 bulletCount = effect.getAttackCount();
                 DamageParse.applyAttack(attack, skill, pPlayer, skillLevel, maxdamage, effect, AttackType.NON_RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
                 break;

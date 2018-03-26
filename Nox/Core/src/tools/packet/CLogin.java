@@ -604,7 +604,7 @@ public class CLogin {
         oPacket.EncodeInteger(characterId);
         return oPacket.ToPacket();
     }
-    
+
     public static Packet OnMapLogin(String sMapLogin) {
         final OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.MapLogin.getValue());

@@ -25,24 +25,20 @@ public class Kinesis {
             MapleStatEffect oEffect = SkillFactory.getSkill(nSkill).getEffect(pPlayer.getTotalSkillLevel(nSkill));
             int nPointConsume = oEffect.info.get(MapleStatInfo.ppCon);
             int nPointRecover = oEffect.info.get(MapleStatInfo.ppRecovery);
-            
+
             switch (nSkill) {
-                case constants.skills.Kinesis.KINETIC_STEP:
-                    return;
-                case constants.skills.Kinesis.KINETIC_CRASH:
-                case constants.skills.Kinesis.PSYCHIC_FORCE:
                 case constants.skills.Kinesis.KINETIC_PILEDRIVER:
-                case constants.skills.Kinesis.PSYCHIC_BLAST:    
-                case constants.skills.Kinesis.PSYCHIC_DRAIN:  
-                case constants.skills.Kinesis.PSYCHIC_GRAB:  
-                case constants.skills.Kinesis.PSYCHIC_ASSAULT:  
-                case constants.skills.Kinesis.MIND_TREMOR:  
-                case constants.skills.Kinesis.PSYCHIC_CLUTCH:  
-                case constants.skills.Kinesis.MIND_QUAKE: 
-                case constants.skills.Kinesis.MIND_BREAK: 
+                case constants.skills.Kinesis.PSYCHIC_BLAST:
+                case constants.skills.Kinesis.PSYCHIC_DRAIN:
+                case constants.skills.Kinesis.PSYCHIC_GRAB:
+                case constants.skills.Kinesis.PSYCHIC_ASSAULT:
+                case constants.skills.Kinesis.MIND_TREMOR:
+                case constants.skills.Kinesis.PSYCHIC_CLUTCH:
+                case constants.skills.Kinesis.MIND_QUAKE:
+                case constants.skills.Kinesis.MIND_BREAK:
                     nPointRecover = 1;
                     break;
-                case constants.skills.Kinesis.ULTIMATE_BPM:   
+                case constants.skills.Kinesis.ULTIMATE_BPM:
                     nPointConsume = 1;
                     break;
                 case constants.skills.Kinesis.KINETIC_JAUNT:
@@ -51,11 +47,8 @@ public class Kinesis {
                 case constants.skills.Kinesis.ULTIMATE_DEEP_IMPACT:
                     nPointConsume = 5;
                     break;
-                case constants.skills.Kinesis.ULTIMATE_PSYCHIC_SHOT: 
+                case constants.skills.Kinesis.ULTIMATE_PSYCHIC_SHOT:
                     nPointConsume = 5;
-                    break;
-                case constants.skills.Kinesis.ULTIMATE_METAL_PRESS:
-                    nPointConsume = 7;
                     break;
                 case constants.skills.Kinesis.ULTIMATE_TRAINWRECK:
                     nPointConsume = 25;
@@ -64,19 +57,19 @@ public class Kinesis {
                     nPointConsume = 1; // Why not.
                     break;
             }
-            
+
             int nPsychicPoint = pPlayer.getAdditionalStack() + nPointRecover - nPointConsume;
             if (nPsychicPoint > 35) { // Max PP
                 nPsychicPoint = 35;
             }
-            
+
             pPlayer.setAdditionalStack(nPsychicPoint);
             oEffect.statups.put(CharacterTemporaryStat.KinesisPsychicPoint, nPsychicPoint);
             pPlayer.registerEffect(oEffect, System.currentTimeMillis(), null, oEffect.statups, false, oEffect.info.get(MapleStatInfo.time), pPlayer.getId());
             pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, 0, oEffect.info.get(MapleStatInfo.time), oEffect.statups, oEffect));
             pPlayer.yellowMessage("nConsume = " + nPointConsume + " / nPointRecover = " + nPointRecover);
         }
-        
+
     }
 
 }

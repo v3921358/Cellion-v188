@@ -120,20 +120,22 @@ public class GMCommand {
         }
     }
     
-    
     public static class GodMode extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter oPlayer = c.getPlayer();
+            MapleCharacter pPlayer = c.getPlayer();
             
-            if (oPlayer.hasGodMode()) {
-                oPlayer.toggleGodMode(false);
-                oPlayer.dropMessage(5, "God mode has been disabled.");
+            if (pPlayer.hasGodMode()) {
+                pPlayer.toggleGodMode(false);
+                pPlayer.dropMessage(5, "God mode has been disabled.");
             } else {
-                oPlayer.toggleGodMode(true);
-                oPlayer.dropMessage(5, "God mode is now enabled.");
+                pPlayer.toggleGodMode(true);
+                pPlayer.dropMessage(5, "God mode is now enabled.");
             }
+            
+            pPlayer.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAGUAR)).setCustomData(String.valueOf((9304004 - 9303999) * 10));
+            c.write(CWvsContext.updateJaguar(pPlayer));
             return 0;
         }
     }
@@ -144,7 +146,7 @@ public class GMCommand {
         public int execute(MapleClient c, String[] splitted) {
             MapleCharacter oUser = null;
             int nOnline = 0;
-            
+
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
                 oUser = ChannelServer.getInstance(i).getPlayerStorage().getCharacterByName(splitted[1]);
                 if (oUser != null) {
@@ -163,38 +165,31 @@ public class GMCommand {
                 return 0;
             }
             String sMessage = "#dMazen's Super " + ServerConstants.SERVER_NAME + " Dox System#k\t\t\t\t\t\t\t#b(" + nOnline + " ONLINE)#k\r\n"
-                            + "Our technologies have been working to provide you with the following #rsecret#k information about the victim.\r\n\r\n"
-                            
-                            + "Account Username: #r" + oUser.getClient().getAccountName() + "#k\r\n" // Ping (" + oUser.getClient().getLatency() + ")" 
-                            + "IP Address: #r" + oUser.getClient().getSessionIPAddress() + "#k\r\n\r\n"
-                    
-                            + "Character: #r" + oUser.getName() + "#k\r\n"
-                            + "Job: #r" + MapleJob.getName(MapleJob.getById(oUser.getJob())) + " (" + oUser.getJob() + ")#k\r\n\r\n"
-                    
-                            + "Location: #r#m" + oUser.getMap().getId() + "##k\r\n"
-                            + "Map ID: #r" + oUser.getMap().getId() + "#k\r\n"
-                            + "Pos. X: #r" + oUser.getPosition().x + "#k / Pos. Y: #r" + oUser.getPosition().y + "#k\r\n\r\n"
-                    
-                            + "HP: #r" + oUser.getStat().getHp() + "#k / #r" + oUser.getStat().getCurrentMaxHp() + "#k\r\n"
-                            + "MP: #r" + oUser.getStat().getMp() + "#k / #r" + oUser.getStat().getCurrentMaxMp(oUser.getJob()) + "#k\r\n"
-                            + "Strength: #r" + oUser.getStat().getStr() + "#k\r\n" 
-                            + "Dexterity: #r" + oUser.getStat().getDex() + "#k\r\n"
-                            + "Intelligence: #r" + oUser.getStat().getInt() + "#k\r\n" 
-                            + "Luck: #r" + oUser.getStat().getLuk() + "#k\r\n\r\n"
-                    
-                            + "Weapon Attack: #r" + oUser.getStat().getTotalWatk() + "#k / Magic Attack: #r" + oUser.getStat().getTotalMagic() + "#k\r\n"
-                            + "Damager Percent: #r" + oUser.getStat().dam_r + "#k / Avoid Rate: #r" + oUser.getStat().avoidabilityRate + "#k\r\n\r\n"
-                    
-                            + "Experience: #r" + oUser.getExp() + "#k\r\n"
-                            + "Mesos: #r" + oUser.getMeso() + "#k\r\n"
-                            + "Vote Points: #r" + oUser.getVPoints() + "#k / Donor Credits: #r" + oUser.getDPoints() + "#k\r\n"
-                            + "Maple Points: #r" + oUser.getCSPoints(2) + "#k / Currently Trading: #r" + (oUser.getTrade() != null) + "#k\r\n"
-                            ;
+                    + "Our technologies have been working to provide you with the following #rsecret#k information about the victim.\r\n\r\n"
+                    + "Account Username: #r" + oUser.getClient().getAccountName() + "#k\r\n" // Ping (" + oUser.getClient().getLatency() + ")" 
+                    + "IP Address: #r" + oUser.getClient().getSessionIPAddress() + "#k\r\n\r\n"
+                    + "Character: #r" + oUser.getName() + "#k\r\n"
+                    + "Job: #r" + MapleJob.getName(MapleJob.getById(oUser.getJob())) + " (" + oUser.getJob() + ")#k\r\n\r\n"
+                    + "Location: #r#m" + oUser.getMap().getId() + "##k\r\n"
+                    + "Map ID: #r" + oUser.getMap().getId() + "#k\r\n"
+                    + "Pos. X: #r" + oUser.getPosition().x + "#k / Pos. Y: #r" + oUser.getPosition().y + "#k\r\n\r\n"
+                    + "HP: #r" + oUser.getStat().getHp() + "#k / #r" + oUser.getStat().getCurrentMaxHp() + "#k\r\n"
+                    + "MP: #r" + oUser.getStat().getMp() + "#k / #r" + oUser.getStat().getCurrentMaxMp(oUser.getJob()) + "#k\r\n"
+                    + "Strength: #r" + oUser.getStat().getStr() + "#k\r\n"
+                    + "Dexterity: #r" + oUser.getStat().getDex() + "#k\r\n"
+                    + "Intelligence: #r" + oUser.getStat().getInt() + "#k\r\n"
+                    + "Luck: #r" + oUser.getStat().getLuk() + "#k\r\n\r\n"
+                    + "Weapon Attack: #r" + oUser.getStat().getTotalWatk() + "#k / Magic Attack: #r" + oUser.getStat().getTotalMagic() + "#k\r\n"
+                    + "Damager Percent: #r" + oUser.getStat().dam_r + "#k / Avoid Rate: #r" + oUser.getStat().avoidabilityRate + "#k\r\n\r\n"
+                    + "Experience: #r" + oUser.getExp() + "#k\r\n"
+                    + "Mesos: #r" + oUser.getMeso() + "#k\r\n"
+                    + "Vote Points: #r" + oUser.getVPoints() + "#k / Donor Credits: #r" + oUser.getDPoints() + "#k\r\n"
+                    + "Maple Points: #r" + oUser.getCSPoints(2) + "#k / Currently Trading: #r" + (oUser.getTrade() != null) + "#k\r\n";
             c.write(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage, NPCChatByType.NPC_Cancellable));
             return 1;
         }
     }
-    
+
     public static class Reports extends CommandExecute {
 
         @Override
@@ -278,7 +273,7 @@ public class GMCommand {
                 oPlayer = c.getPlayer();
                 nJob = Integer.parseInt(splitted[1]);
             }
-            
+
             if (oPlayer == null) {
                 c.getPlayer().dropMessage(5, "The character name you have entered was not found.");
                 return 0;
@@ -286,7 +281,7 @@ public class GMCommand {
                 c.getPlayer().dropMessage(5, "You have entered an invalid Job ID.");
                 return 0;
             }
-            
+
             oPlayer.changeJob((short) nJob);
             oPlayer.setSubcategory(oPlayer.getSubcategory());
             c.getPlayer().dropMessage(5, "Character (" + oPlayer.getName() + ") has had their job changed to " + MapleJob.getName(MapleJob.getById(nJob)) + ".");
@@ -1157,7 +1152,7 @@ public class GMCommand {
             } else {
                 oPlayer = c.getPlayer();
             }
-            
+
             oPlayer.giveHyperSkills();
             c.getPlayer().dropMessage(6, "The selected character has had all their hyper skills maximized.");
             return 1;
@@ -1174,14 +1169,14 @@ public class GMCommand {
             } else {
                 oPlayer = c.getPlayer();
             }
-            
+
             HashMap<Skill, SkillEntry> skillBook = new HashMap<>();
             for (Skill xSkill : SkillFactory.getAllSkills()) {
                 if (GameConstants.isApplicableSkill(xSkill.getId()) && xSkill.canBeLearnedBy(oPlayer.getJob()) && !xSkill.isInvisible()) { // No additional skills.
                     skillBook.put(xSkill, new SkillEntry((byte) xSkill.getMaxLevel(), (byte) xSkill.getMaxLevel(), SkillFactory.getDefaultSExpiry(xSkill)));
                 }
             }
-            
+
             c.getPlayer().changeSkillsLevel(skillBook);
             c.getPlayer().dropMessage(6, "The selected character has had all their applicable skills maximized.");
             return 1;

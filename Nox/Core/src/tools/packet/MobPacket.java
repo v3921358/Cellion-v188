@@ -197,7 +197,7 @@ public class MobPacket {
 
     public static Packet showBossHP(int monsterId, long currentHp, long maxHp) {
         MapleMonster mob = MapleLifeFactory.getMonster(monsterId);
-        
+
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.BossEnvironment.getValue());
@@ -209,7 +209,7 @@ public class MobPacket {
         oPacket.Encode(mob.getStats().getTagBgColor());
         //oPacket.Encode(6);
         //oPacket.Encode(5);
-        
+
         /*if (currentHp > Integer.MAX_VALUE) {
             oPacket.EncodeInteger((int) (currentHp / maxHp * Integer.MAX_VALUE));
         } else {

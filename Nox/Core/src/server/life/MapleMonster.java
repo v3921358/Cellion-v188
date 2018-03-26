@@ -193,7 +193,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
 
         // Setup to instant kill bosses while testing/debugging.
         if (from.isDeveloper()) {
-            switch (this.getId()) { 
+            switch (this.getId()) {
                 case 8880000: // Magnus
                 case 8240099: // Lotus
                 case 8930000: // Chaos Vellum
@@ -202,12 +202,12 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                     break;
             }
         }
-        
+
         // Lotus Buffed Damage Reduction
         if (this.getId() == 8240099) {
             damage /= 10;
         }
-        
+
         //Buffed Bosses & Monsters
         boolean buffedMob = this.getId() == 8880000 //Magnus
                 || this.getId() == 8880001;

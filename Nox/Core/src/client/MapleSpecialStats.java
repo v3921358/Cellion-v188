@@ -1,6 +1,6 @@
 package client;
 
-import constants.skills._HyperStatSkills;
+import constants.skills.Global;
 import server.maps.objects.MapleCharacter;
 
 /**
@@ -9,6 +9,13 @@ import server.maps.objects.MapleCharacter;
  * @author Lloyd Korn
  */
 public class MapleSpecialStats {
+
+    public static final int[] ALL_HYPER_STATS = {
+        Global.STR, Global.DEX, Global.INT, Global.LUK, Global.HP, Global.MP,
+        Global.DF, Global.SPEED, Global.JUMP, Global.CRITICAL_TRIGGER, Global.CRITICAL_DAMAGE,
+        Global.CRITICAL_DAMAGE_1, Global.IGNORE_DEFENSE, Global.DAMAGE, Global.BOSS_MONSTER_DAMAGE_INCREASE_1,
+        Global.ALL_ELEMENTAL_RESISTANCE, Global.ABNORMAL_STATUS_RESISTANCE, Global.POWER_STANCE_8
+    };
 
     public static enum MapleSpecialStatUpdateType {
         Skill_9200("92000000"),
@@ -43,7 +50,7 @@ public class MapleSpecialStats {
 
         public static int getRemainingHyperStat(MapleCharacter chr) {
             int usedHyperStatAmount = 0;
-            for (int hyperSkill : _HyperStatSkills.ALL_HYPER_STATS) {
+            for (int hyperSkill : ALL_HYPER_STATS) {
                 int hyperSkillLevel = chr.getSkillLevel(hyperSkill);
 
                 int requiredStatForThisLevel = 0;

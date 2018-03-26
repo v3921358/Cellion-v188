@@ -214,6 +214,7 @@ function action(mode, type, selection) {
 					cm.forceCompleteQuest(400050);
 					break;
 				case 108:
+<<<<<<< HEAD
 					if (cm.getPlayer().getLevel() < 250 && cm.getPlayer().getReborns() < 1) {
                         cm.sendOk("Sorry, you need to be at least #rlevel 250#k and #rParagon Rank I#k to access the #dV: Matrix#k.");
                         cm.dispose();
@@ -248,6 +249,42 @@ function action(mode, type, selection) {
 
                         cm.dispose();
                     }
+=======
+					if (cm.getPlayer().getLevel() < 250) {
+						cm.sendOk("Sorry, you need to be atleast level #r250#k to access the #dV: Matrix#k.");
+						cm.dispose();
+					} else if (cm.isQuestFinished(1460)) {
+						cm.sendOk("You have already finished the #dV: Matrix#k quest.");
+						cm.dispose();
+					} else {
+						cm.sendOk("Congratulations on your #rfifth job#k advancement!\r\nYou now have access to the powerful #dV: Matrix#k!");
+						
+						cm.gainItem(2435902, 250);
+						
+						cm.forceCompleteQuest(1460);
+						cm.forceCompleteQuest(1461);
+						cm.forceCompleteQuest(1462);
+						cm.forceCompleteQuest(1463);
+						cm.forceCompleteQuest(1464);
+						cm.forceCompleteQuest(1465);
+						cm.forceCompleteQuest(1466);
+						cm.forceCompleteQuest(1467);
+						cm.forceCompleteQuest(1468);
+						cm.forceCompleteQuest(1469);
+						cm.forceCompleteQuest(1470);
+						cm.forceCompleteQuest(1471);
+						cm.forceCompleteQuest(1472);
+						cm.forceCompleteQuest(1473);
+						cm.forceCompleteQuest(1474);
+						cm.forceCompleteQuest(1475);
+						cm.forceCompleteQuest(1476);
+						cm.forceCompleteQuest(1477);
+						cm.forceCompleteQuest(1478);
+						cm.forceCompleteQuest(1479);
+						
+						cm.dispose();
+					}
+>>>>>>> Effect-Handling-Recode
 			}
 			
 		} else if(status == 2) {

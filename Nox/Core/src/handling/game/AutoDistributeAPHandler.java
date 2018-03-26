@@ -53,10 +53,10 @@ public class AutoDistributeAPHandler implements ProcessPacket<MapleClient> {
                 chr.setHpApUsed((short) (chr.getHpApUsed() + chr.getRemainingAp()));
                 playerst.setMaxHp(maxhp, chr);
                 statupdate.put(MapleStat.MAXHP, (long) maxhp);
-                
+
                 chr.setRemainingAp((short) (chr.getRemainingAp() - (amount)));
                 statupdate.put(MapleStat.AVAILABLEAP, (long) chr.getRemainingAp());
-                
+
                 c.write(CWvsContext.updatePlayerStats(statupdate, true, chr));
             }
         }

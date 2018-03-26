@@ -41,7 +41,7 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
         int operation = iPacket.DecodeByte();
         MapleParty party = c.getPlayer().getParty();
         MaplePartyCharacter partyplayer = new MaplePartyCharacter(c.getPlayer());
-        
+
         switch (operation) {
             case PartyOperations.createParty:
                 boolean isPrivate = iPacket.DecodeByte() != 0;

@@ -52,7 +52,7 @@ public class DamageParse {
             pPlayer.yellowMessage("[AntiCheat] Please remember hacking and the use of 3rd party modifications go against our ToS.");
             return;
         }
-        
+
         if (attack.real && GameConstants.getAttackDelay(attack.skill, theSkill) >= 400) { // Was 100
             pPlayer.getCheatTracker().checkAttack(attack.skill, attack.lastAttackTickCount);
         }
@@ -204,7 +204,7 @@ public class DamageParse {
                     }
                 }
                 totDamage += totDamageToOneMonster;
-                
+
                 // Paragon Level Bonuses
                 if (ServerConstants.PARAGON_SYSTEM) {
                     if (pPlayer.getReborns() >= 2) { // Paragon Level 2+
@@ -263,7 +263,7 @@ public class DamageParse {
                 if (pPlayer.getBuffedValue(CharacterTemporaryStat.PickPocket) != null) {
                     handlePickPocket(pPlayer, monster, oned);
                 }
-                
+
                 /*
                  *  Final Attack Handling
                  *  @author Mazen
@@ -398,7 +398,7 @@ public class DamageParse {
 
                     // Kinesis Psychic Points handling.
                     if (GameConstants.isKinesis(pPlayer.getJob())) {
-                       KinesisHandler.handlePsychicPoint(pPlayer, attack.skill);
+                        KinesisHandler.handlePsychicPoint(pPlayer, attack.skill);
                     }
                     if (GameConstants.isShade(pPlayer.getJob())) {
                         if (pPlayer.hasBuff(CharacterTemporaryStat.ChangeFoxMan)) {
@@ -412,9 +412,9 @@ public class DamageParse {
                     }
                     if (GameConstants.isAran(pPlayer.getJob())) {
                         switch (attack.skill) {
+                            case Aran.SMASH_SWING:
                             case Aran.SMASH_SWING_1:
                             case Aran.SMASH_SWING_2:
-                            case Aran.SMASH_SWING_3:
                                 AranHandler.handleSwingStudies(pPlayer);
                                 break;
                         }
@@ -437,11 +437,11 @@ public class DamageParse {
                     }
                     if (GameConstants.isXenon(pPlayer.getJob())) {
                         //for (AttackMonster at : attack.allDamage) {
-                            if (pPlayer.hasBuff(CharacterTemporaryStat.HollowPointBullet)) {
-                                if (Randomizer.nextInt(100) < 30) { 
-                                    pPlayer.getMap().broadcastMessage(JobPacket.XenonPacket.EazisSystem(pPlayer.getId(), 0));
-                                }
+                        if (pPlayer.hasBuff(CharacterTemporaryStat.HollowPointBullet)) {
+                            if (Randomizer.nextInt(100) < 30) {
+                                pPlayer.getMap().broadcastMessage(JobPacket.XenonPacket.EazisSystem(pPlayer.getId(), 0));
                             }
+                        }
                         //}
                     }
                     if (GameConstants.isKaiser(pPlayer.getJob())) {
@@ -453,7 +453,7 @@ public class DamageParse {
 
                         if (pPlayer.hasBuff(CharacterTemporaryStat.NightWalkerBat)) {
                             for (AttackMonster at : attack.allDamage) {
-                                if (Randomizer.nextInt(100) < 60) { 
+                                if (Randomizer.nextInt(100) < 60) {
                                     pPlayer.getMap().broadcastMessage(JobPacket.NightWalkerPacket.ShadowBats(pPlayer.getId(), at.getObjectId()));
                                 }
                             }
@@ -624,8 +624,8 @@ public class DamageParse {
             Skill skill = SkillFactory.getSkill(Aran.DRAIN);
             pPlayer.addHP(Math.min(totDamage / 5, (totDamage * skill.getEffect(pPlayer.getSkillLevel(skill)).getX()) / 100));
         }
-        if (pPlayer.hasSkill(Darkknight.DARK_THIRST)) { // Hack fix for now.
-            Skill skill = SkillFactory.getSkill(Darkknight.DARK_THIRST);
+        if (pPlayer.hasSkill(DarkKnight.DARK_THIRST)) { // Hack fix for now.
+            Skill skill = SkillFactory.getSkill(DarkKnight.DARK_THIRST);
             pPlayer.addHP(Math.min(totDamage / 5, (totDamage * skill.getEffect(pPlayer.getSkillLevel(skill)).getX()) / 100));
         }
         if (pPlayer.hasSkill(DemonAvenger.LIFE_SAP)) {
@@ -1481,7 +1481,7 @@ public class DamageParse {
             }
         }
     }
-    
+
     public static AttackInfo OnAttack(RecvPacketOpcode eType, InPacket iPacket, MapleCharacter chr) {
         AttackInfo ret = new AttackInfo();
         if (eType == RecvPacketOpcode.UserShootAttack) {
@@ -1498,9 +1498,11 @@ public class DamageParse {
         ret.mobCount = (ret.tbyte >>> 4 & 0xF);
         ret.numberOfHits = ((byte) (ret.tbyte & 0xF));
         ret.skill = iPacket.DecodeInteger();
-        
-        if(ServerConstants.DEVELOPER_DEBUG_MODE) System.err.println("[Damage Operation] Skill (" + ret.skill + ")");
-        
+
+        if (ServerConstants.DEVELOPER_DEBUG_MODE) {
+            System.err.println("[Damage Operation] Skill (" + ret.skill + ")");
+        }
+
         ret.skillLevel = iPacket.DecodeByte();
         boolean bAddAttackProc = false;
         if (eType != RecvPacketOpcode.UserMagicAttack && eType != RecvPacketOpcode.UserBodyAttack) {
@@ -1604,7 +1606,7 @@ public class DamageParse {
             iPacket.DecodeShort();
             iPacket.DecodeShort();
             iPacket.DecodeShort();
-            
+
             if (ret.skill == 2211007) { // hackfix atm
                 iPacket.DecodeInteger();
             }
@@ -1647,7 +1649,9 @@ public class DamageParse {
         } else {
             for (int i = 0; i < ret.mobCount; i++) {
                 int dwMobID = iPacket.DecodeInteger();
-                if(ServerConstants.DEVELOPER_DEBUG_MODE) System.err.println("[Damage Operation] Mob Object (" + dwMobID + ")");
+                if (ServerConstants.DEVELOPER_DEBUG_MODE) {
+                    System.err.println("[Damage Operation] Mob Object (" + dwMobID + ")");
+                }
                 iPacket.DecodeByte(); // nHitAction
                 iPacket.DecodeByte(); // Unknown
                 iPacket.DecodeByte(); // Unknown
@@ -1685,7 +1689,9 @@ public class DamageParse {
                         for (int j = 0; j < ret.numberOfHits; j++) {
                             long nDamage = iPacket.DecodeLong();
                             damageNumbers.add(new Pair(nDamage, false));
-                            if(ServerConstants.DEVELOPER_DEBUG_MODE) System.err.println("[Damage Operation] Damage Line (" + nDamage + ")");
+                            if (ServerConstants.DEVELOPER_DEBUG_MODE) {
+                                System.err.println("[Damage Operation] Damage Line (" + nDamage + ")");
+                            }
                         }
                     }
                 }

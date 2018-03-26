@@ -254,15 +254,6 @@ public enum MapleJob {
     ANGELIC_BUSTER4(6512, 3, JobConstants._5thJobAdvancementLv, true, false, true),
     ANGELIC_BUSTER5(6513, 4, GameConstants.maxLevel, false, false, true),
     ///////////////
-    ADDITIONAL_SKILLS(9000, -2, 0),
-    ADDITIONAL_SKILLS1(9100, -2, 0),
-    ADDITIONAL_SKILLS2(9200, -2, 0),
-    ADDITIONAL_SKILLS3(9201, -2, 0),
-    ADDITIONAL_SKILLS4(9202, -2, 0),
-    ADDITIONAL_SKILLS5(9203, -2, 0),
-    ADDITIONAL_SKILLS6(9204, -2, 0),
-    ADDITIONAL_SKILLS7(9500, -2, 0),
-    ///////////////
     ZERO(10000, -1, JobConstants._1stJobAdvancementLv), // This job is not used, for client reference only, zero starts at 10112
     ZERO1(10100, 0, GameConstants.maxLevel), // This job is not used, for client reference only, zero starts at 10112
     ZERO2(10110, 0, GameConstants.maxLevel), // This job is not used, for client reference only, zero starts at 10112

@@ -254,22 +254,23 @@ public final class UpdateMatrixHandler implements ProcessPacket<MapleClient> {
         Skill pSkill;
         SkillEntry pEntry;
         for (VMatrixRecord pMatrixRecord : c.getPlayer().aVMatrixRecord) {
-            /*
-            pSkillRecord = new SkillRecord();
-            pSkillRecord.nInfo = 0;
-            pSkillRecord.nSkillID = pMatrixRecord.nSkillID;
-            pSkillRecord.nMasterLevel = pMatrixRecord.nMasterLev;
-            pSkillRecord.ftExpiration = pMatrixRecord.ftExpirationDate;
-            aChange.add(pSkillRecord);
-             */
-            pSkill = SkillFactory.getSkill(pMatrixRecord.nSkillID);
-            pEntry = new SkillEntry(0, (byte) pMatrixRecord.nMasterLev, pMatrixRecord.ftExpirationDate);
-            c.getPlayer().changeSingleSkillLevel(pSkill, pEntry.skillevel, pEntry.masterlevel, pEntry.expiration);
-            mChange.put(pSkill, pEntry);
-
-            //c.getPlayer().mSkillRecord.remove(pMatrixRecord.nSkillID);
-            //c.getPlayer().mSkillExpired.remove(pMatrixRecord.nSkillID);
-            //c.getPlayer().mSkillMasterLev.remove(pMatrixRecord.nSkillID);
+            if (pMatrixRecord.nSkillID != 0) {
+                /*
+                pSkillRecord = new SkillRecord();
+                pSkillRecord.nInfo = 0;
+                pSkillRecord.nSkillID = pMatrixRecord.nSkillID;
+                pSkillRecord.nMasterLevel = pMatrixRecord.nMasterLev;
+                pSkillRecord.ftExpiration = pMatrixRecord.ftExpirationDate;
+                aChange.add(pSkillRecord);
+                //c.getPlayer().mSkillRecord.remove(pMatrixRecord.nSkillID);
+                //c.getPlayer().mSkillExpired.remove(pMatrixRecord.nSkillID);
+                //c.getPlayer().mSkillMasterLev.remove(pMatrixRecord.nSkillID);
+                 */
+                pSkill = SkillFactory.getSkill(pMatrixRecord.nSkillID);
+                pEntry = new SkillEntry(0, (byte) pMatrixRecord.nMasterLev, pMatrixRecord.ftExpirationDate);
+                c.getPlayer().changeSingleSkillLevel(pSkill, pEntry.skillevel, pEntry.masterlevel, pEntry.expiration);
+                mChange.put(pSkill, pEntry);
+            }
             if (pMatrixRecord.nSkillID2 != 0) {
                 /*
                 pSkillRecord = new SkillRecord();
@@ -389,7 +390,7 @@ public final class UpdateMatrixHandler implements ProcessPacket<MapleClient> {
         //aChange.clear();
         c.write(CWvsContext.updateSkills(mChange, false));
         mChange.clear();
-        
+
         //usCharacterDataModFlag |= DBChar.SkillRecord.Get() | DBChar.WildHunterInfo.Get();
     }
 }

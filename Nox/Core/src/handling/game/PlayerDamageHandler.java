@@ -89,12 +89,12 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
 
         if (GameConstants.isXenon(chr.getJob())) { // Making sure EazisSystem still works when a GM is hiding
             if (chr.hasBuff(CharacterTemporaryStat.XenonAegisSystem)) {
-                if (Randomizer.nextInt(100) < (chr.getTotalSkillLevel(Xenon.AEGIS_SYSTEM) * 10)) { 
+                if (Randomizer.nextInt(100) < (chr.getTotalSkillLevel(Xenon.AEGIS_SYSTEM) * 10)) {
                     chr.getMap().broadcastMessage(JobPacket.XenonPacket.EazisSystem(chr.getId(), oid));
                 }
             }
         }
-        
+
         if (GameConstants.isLuminous(chr.getJob())) {
             chr.applyLifeTidal();
         }

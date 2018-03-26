@@ -80,19 +80,25 @@ public class InternCommand {
             return 0;
         }
     }
-    
+
     public static class ToggleChatType extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
             MapleCharacter oPlayer = c.getPlayer();
-            
-            if (oPlayer.usingStaffChat()) oPlayer.toggleStaffChat(true);
-            else oPlayer.toggleStaffChat(false);
-            
-            if (oPlayer.usingStaffChat()) oPlayer.dropMessage(5, "You are now using the special chat type.");
-            else oPlayer.dropMessage(5, "You are now using the default chat type.");
-            
+
+            if (oPlayer.usingStaffChat()) {
+                oPlayer.toggleStaffChat(true);
+            } else {
+                oPlayer.toggleStaffChat(false);
+            }
+
+            if (oPlayer.usingStaffChat()) {
+                oPlayer.dropMessage(5, "You are now using the special chat type.");
+            } else {
+                oPlayer.dropMessage(5, "You are now using the default chat type.");
+            }
+
             return 0;
         }
     }
@@ -117,10 +123,10 @@ public class InternCommand {
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
                 nSize += ChannelServer.getInstance(i).getPlayerStorage().getAllCharacters().size();
             }
-            
+
             String sMessage = "#d" + ServerConstants.SERVER_NAME + " MapleStory Server#k\r\n"
-                            + "There are currently #e#r" + nSize + "#k#n user(s) online.\r\n\r\n";
-            
+                    + "There are currently #e#r" + nSize + "#k#n user(s) online.\r\n\r\n";
+
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
                 if (ChannelServer.getInstance(i).getPlayerStorage().getAllCharacters().size() > 0) {
                     sMessage += "#b[Channel " + i + "] Players Connected (#b#e" + ChannelServer.getInstance(i).getPlayerStorage().getAllCharacters().size() + "#n#b)\r\n#k";

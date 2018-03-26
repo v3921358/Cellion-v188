@@ -1,34 +1,55 @@
 package constants.skills;
 
 public class Corsair {
-    //4th job pirate Corsair path
 
-    public static final int RAPID_FIRE = 5221004;
-    public static final int BROADSIDE = 5221022;
-    public static final int BRAIN_SCRAMBLER = 5221016;
-    public static final int PARROTARGETTING = 5221015;
-    public static final int EIGHTLEGS_EASTON = 5221017;
-    public static final int NAUTILUS_STRIKE = 5221013;
-    public static final int MAPLE_WARRIOR = 5221000;
-    public static final int JOLLY_ROGER = 5221018;
-    public static final int HEROS_WILL = 5221010;
-    public static final int PIRATES_REVENGE = 5220012;
-    public static final int DOUBLE_DOWN = 5220014;
     public static final int AHOY_MATEYS = 5220019;
-    public static final int MAJESTIC_PRESENCE = 5220020;
-    public static final int QUICKDRAW = 5221021;
-
-    //hyper skills
-    public static final int DOUBLE_DOWN_ENHANCE = 5220045;
-    public static final int DOUBLE_DOWN_ADDITION = 5220044;
-    public static final int DOUBLE_DOWN_SAVING_GRACE = 5220043;
+    public static final int AIR_STRIKE_1 = 5221003;
+    public static final int BATTLESHIP_2 = 5221006;
+    public static final int BATTLESHIP_CANNON_1 = 5221007;
+    public static final int BATTLESHIP_TORPEDO_1 = 5221008;
+    public static final int BRAIN_SCRAMBLER = 5221016;
     public static final int BRAIN_SCRAMBLER_BOSS_RUSH = 5220048;
-    public static final int BRAIN_SCRAMBLER_REINFORCE = 5220046;
     public static final int BRAIN_SCRAMBLER_EXTRA_STRIKE = 5220047;
-    public static final int RAPID_FIRE_REINFORCE = 5220049;
+    public static final int BRAIN_SCRAMBLER_REINFORCE = 5220046;
+    public static final int BROADSIDE = 5221022;
+    public static final int BROADSIDE_1 = 5220024;
+    public static final int BROADSIDE_2 = 5220023;
+    public static final int BROADSIDE_3 = 5220025;
+    public static final int BULLSEYE_1 = 5220011;
+    public static final int DOUBLE_DOWN_4 = 5220014;
+    public static final int DOUBLE_DOWN_ADDITION_1 = 5220044;
+    public static final int DOUBLE_DOWN_ENHANCE_1 = 5220045;
+    public static final int DOUBLE_DOWN_SAVING_GRACE_1 = 5220043;
+    public static final int EIGHTLEGS_EASTON = 5221017;
+    public static final int ELEMENTAL_BOOST_1 = 5220001;
+    public static final int EPIC_ADVENTURE_8 = 5221053;
+    public static final int HEROS_WILL_50_5 = 5221010;
+    public static final int HYPER_ACCURACY_6000_600_60_6 = 5220035;
+    public static final int HYPER_CRITICAL_6000_600_60_6 = 5220034;
+    public static final int HYPER_DEFENSE_1000_100_10 = 5220039;
+    public static final int HYPER_DEXTERITY_6000_600_60_6 = 5220031;
+    public static final int HYPER_FURY_7000_700_70_7 = 5220038;
+    public static final int HYPER_HEALTH_6000_600_60_6 = 5220036;
+    public static final int HYPER_INTELLIGENCE_6000_600_60_6 = 5220032;
+    public static final int HYPER_JUMP_7000_700_70_7 = 5220042;
+    public static final int HYPER_LUCK_6000_600_60_6 = 5220033;
+    public static final int HYPER_MAGIC_DEFENSE_7000_700_70_7 = 5220040;
+    public static final int HYPER_MANA_6000_600_60_6 = 5220037;
+    public static final int HYPER_SPEED_7000_700_70_7 = 5220041;
+    public static final int HYPER_STRENGTH_6000_600_60_6 = 5220030;
+    public static final int HYPNOTIZE_1 = 5221009;
+    public static final int JOLLY_ROGER = 5221018;
+    public static final int MAJESTIC_PRESENCE = 5220020;
+    public static final int MAPLE_WARRIOR_60_6 = 5221000;
+    public static final int NAUTILUS_STRIKE_3 = 5221013;
+    public static final int PARROTARGETTING = 5221015;
+    public static final int PIRATES_REVENGE_3 = 5220012;
+    public static final int QUICKDRAW = 5221021;
+    public static final int RAPID_FIRE_1 = 5221004;
     public static final int RAPID_FIRE_ADD_RANGE = 5220050;
     public static final int RAPID_FIRE_BOSS_RUSH = 5220051;
-    public static final int WHALERS_POTION = 5221054;
+    public static final int RAPID_FIRE_REINFORCE = 5220049;
     public static final int UGLY_BOMB = 5221052;
-    public static final int EPIC_ADVENTURE = 5221053;
+    public static final int WHALERS_POTION = 5221054;
+    public static final int WRATH_OF_THE_OCTOPI_1 = 5220002;
 }

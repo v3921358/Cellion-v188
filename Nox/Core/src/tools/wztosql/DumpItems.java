@@ -47,7 +47,7 @@ public class DumpItems {
     public DumpItems(boolean update) throws Exception {
 
         string = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/String.wz"));
-        
+
         MapleStringInformationProvider.initialize();
         cashStringData = string.getData("Cash.img");
         consumeStringData = string.getData("Consume.img");
@@ -57,14 +57,14 @@ public class DumpItems {
         petStringData = string.getData("Pet.img");
 
         this.update = update;
-         this.item = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Item.wz"));
+        this.item = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Item.wz"));
         this.character = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Character.wz"));
         if (item == null || string == null || character == null) {
             hadError = true;
         }
     }
 
-     public static void main(String[] args) {
+    public static void main(String[] args) {
         boolean hadError = false;
         boolean update = false;
         long startTime = System.currentTimeMillis();

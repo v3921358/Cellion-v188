@@ -72,18 +72,18 @@ public class NPCShopHandler implements ProcessPacket<MapleClient> {
                 byte nSlot = (byte) iPacket.DecodeShort();
                 int nItem = iPacket.DecodeInteger();
                 short nQuantity = iPacket.DecodeShort();
-                
+
                 if (nItem == 2000005) { // Hack fix for Power Elixer.
                     pPlayer.gainItem(2000005, nQuantity);
                     pPlayer.gainMeso(-(5000 * nQuantity), false);
-                } else if (InventoryConstants.isAmmo(nItem)) { 
+                } else if (InventoryConstants.isAmmo(nItem)) {
                     oShop.buy(c, nSlot, nItem, nQuantity);
                     pPlayer.sortInventory((byte) 2); // Sort players 'USE' inventory for ammo.
                 } else {
                     nSlot++; // If item isn't ammo, increase slot value before continuing.
                     oShop.buy(c, nSlot, nItem, nQuantity);
                 }
-                
+
                 if (pPlayer.isIntern()) {
                     pPlayer.dropMessage(5, "[Shop Debug] Item ID : " + nItem + " (Purchased)");
                 }
@@ -99,7 +99,7 @@ public class NPCShopHandler implements ProcessPacket<MapleClient> {
                 short quantity = iPacket.DecodeShort();
                 shop.sell(c, GameConstants.getInventoryType(itemId), slot, quantity);
                 c.write(CWvsContext.enableActions());
-                
+
                 if (pPlayer.isIntern()) {
                     pPlayer.dropMessage(5, "[Shop Debug] Item ID : " + itemId + " (Sold)");
                 }

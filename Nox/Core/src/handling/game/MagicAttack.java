@@ -38,7 +38,7 @@ public final class MagicAttack implements ProcessPacket<MapleClient> {
         if (pPlayer == null || pPlayer.hasBlockedInventory() || pPlayer.getMap() == null) {
             return;
         }
-        
+
         //AttackInfo attack = DamageParse.parseDmgMa(iPacket, chr);
         AttackInfo attack = DamageParse.OnAttack(RecvPacketOpcode.UserMagicAttack, iPacket, pPlayer);
         
@@ -115,7 +115,7 @@ public final class MagicAttack implements ProcessPacket<MapleClient> {
                 }
             }
         }
-        
+
         // Kinesis Psychic Points handling.
         if (GameConstants.isKinesis(pPlayer.getJob())) {
            KinesisHandler.handlePsychicPoint(pPlayer, attack.skill);

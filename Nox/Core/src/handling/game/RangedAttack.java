@@ -45,18 +45,18 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
         if (pPlayer == null || pPlayer.hasBlockedInventory() || pPlayer.getMap() == null) {
             return;
         }
-        
+
         //AttackInfo attack = DamageParse.parseRangedAttack(iPacket, chr);
         AttackInfo attack = DamageParse.OnAttack(RecvPacketOpcode.UserShootAttack, iPacket, pPlayer);
         if (attack == null) {
             c.write(CWvsContext.enableActions());
             return;
         }
-        
+
         if (pPlayer.isDeveloper()) {
             pPlayer.dropMessage(5, "[RangedAttack Debug] Skill ID : " + attack.skill);
         }
-        
+
         int bulletCount = 1;
         int skillLevel = 0;
         MapleStatEffect effect = null;
@@ -74,7 +74,7 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
                 || GameConstants.isBeastTamer(pPlayer.getJob())
                 || GameConstants.isLuminous(pPlayer.getJob())
                 || attack.skill == Outlaw.BLACKBOOT_BILL;
-        
+
         if (attack.skill != 0 && attack.skill != 1 && attack.skill != 17) {
             skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
             if ((skill == null) || ((GameConstants.isAngel(attack.skill)) && (pPlayer.getStat().equippedSummon % 10000 != attack.skill % 10000))) {
@@ -377,7 +377,7 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
         } else {
             pPlayer.getMap().broadcastGMMessage(pPlayer, CField.rangedAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), attack.attackFlag), false);
         }
-        
+
         DamageParse.applyAttack(attack, skill, pPlayer, bulletCount, basedamage, effect, bMirror ? AttackType.RANGED_WITH_ShadowPartner : AttackType.RANGED);
         attack.cleanupMemory(); // Clean up memory references.
     }

@@ -257,7 +257,7 @@ public class MovementParse {
                     byte moveAction = iPacket.DecodeByte();
                     short tElapse = iPacket.DecodeShort();
                     byte bForcedStop = iPacket.DecodeByte();
-                    
+
                     MovementTypeG movement = new MovementTypeG();
                     movement.setCommand(command);
                     movement.setOffset(new Point(xOffset, 0));

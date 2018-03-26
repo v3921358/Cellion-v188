@@ -44,7 +44,7 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<MapleClient
         short nSlot = iPacket.DecodeShort();
         short nDestination = iPacket.DecodeShort();
         pPlayer.yellowMessage("Slot: " + nSlot + " / nDestination: " + nDestination);
-        
+
         Item pScroll = pPlayer.getInventory(MapleInventoryType.USE).getItem(nSlot);
         Equip pEquip = (Equip) pPlayer.getInventory(MapleInventoryType.EQUIP).getItem(nDestination);
         ItemPotentialTierType pTier = pEquip.getPotentialBonusTier();
@@ -56,7 +56,7 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<MapleClient
         Equip.ScrollResult pResult;
         boolean bCompleted = true;
         List<ModifyInventory> aModifications = new ArrayList<>();
-        
+
         //boolean bPotential = ItemPotentialProvider.useBonusPotentialScroll(pEquip, pTier);
         pEquip.setBonusPotential1(generateBonusPotential(pEquip));
         pEquip.setBonusPotential2(generateBonusPotential(pEquip));

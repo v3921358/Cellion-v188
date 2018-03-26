@@ -67,11 +67,11 @@ public class World {
         World.Messenger.getMessenger(0);
         World.Party.getParty(0);
     }
-    
+
     /*Server Automated Save Handling*/
     private static long nLastSaveTime;
     private static long nSaveInterval = ServerConstants.SAVE_INTERVAL * 1000 * 60; // Converts minutes to milliseconds.
-    
+
     public static void saveAllCharacters() {
         for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
             for (ChannelServer cServer : ChannelServer.getAllInstances()) {
@@ -85,13 +85,14 @@ public class World {
         }
         nLastSaveTime = System.currentTimeMillis();
     }
-    
+
     public static boolean saveInterval() {
         if (System.currentTimeMillis() > nLastSaveTime + nSaveInterval) {
             return true;
         }
         return false;
     }
+
     /*End of Automated Save Handling*/
 
     public static String getStatus() {
@@ -1838,9 +1839,9 @@ public class World {
 
     public static void handleMap(final MapleMap map, final int numTimes, final int size, final long currentTime) {
         if (saveInterval()) {
-        //    saveAllCharacters();
+            //    saveAllCharacters();
         }
-        
+
         //TODO: test the achievement reset
         if (getHour() == 0 && getMinute() >= 0 && getMinute() <= 1) { //not sure if put it here
             Connection con = DatabaseConnection.getConnection();

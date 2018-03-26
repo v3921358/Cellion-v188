@@ -274,14 +274,14 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         if (ServerConstants.BUFFED_SYSTEM && ServerConstants.BLOODLESS_EVENT && (pPlayer.getClient().getChannel() >= ServerConstants.START_RANGE && pPlayer.getClient().getChannel() <= ServerConstants.END_RANGE)) {
             pPlayer.dropMessage(-1, "You have entered a Bloodless Channel (Hard Mode)!");
         }
-        
+
         // Developer Skill Cooldown Toggle
         if (ServerConstants.DEV_DEFAULT_CD && pPlayer.isDeveloper()) {
             pPlayer.toggleCooldown();
             pPlayer.yellowMessage("[Debug] Skill cooldowns are toggled off by default due to developer status.");
             pPlayer.dropMessage(6, "[Reminder] You can type !togglecooldown to enable skill cooldowns.");
         }
-        
+
         // Game Master Quality of Life Features
         if (pPlayer.isGM()) {
             pPlayer.gainMeso(2100000000, true);

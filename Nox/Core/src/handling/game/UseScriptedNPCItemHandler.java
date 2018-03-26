@@ -1349,19 +1349,9 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
         }
         if (mountid > 0) {
             mountid = PlayerStats.getSkillByJob(mountid, c.getPlayer().getJob());
-            final int fk = GameConstants.getMountItem(mountid, c.getPlayer());
-            if (fk > 0 && mountid < 80001000) { //TODO JUMP
-                for (int i = 80001001; i < 80001999; i++) {
-                    final Skill skill = SkillFactory.getSkill(i);
-                    if (skill != null && GameConstants.getMountItem(skill.getId(), c.getPlayer()) == fk) {
-                        mountid = i;
-                        break;
-                    }
-                }
-            }
             if (c.getPlayer().getSkillLevel(mountid) > 0) {
                 c.getPlayer().dropMessage(5, "You already have this skill.");
-            } else if (SkillFactory.getSkill(mountid) == null || GameConstants.getMountItem(mountid, c.getPlayer()) == 0) {
+            } else if (SkillFactory.getSkill(mountid) == null) {
                 c.getPlayer().dropMessage(5, "The skill could not be gained.");
             } else if (expiration_days > 0) {
                 MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);

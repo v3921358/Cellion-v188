@@ -193,7 +193,7 @@ public class Explorer {
             final MapleStatEffect pEffect = SkillFactory.getSkill(Shadower.FLIP_OF_THE_COIN).getEffect(pPlayer.getTotalSkillLevel(Shadower.FLIP_OF_THE_COIN));
 
             pEffect.statups.put(CharacterTemporaryStat.FlipTheCoin, nAmount);
-            pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, nAmount * pEffect.info.get(MapleStatInfo.x));
+            pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, nAmount * 10);
             pEffect.statups.put(CharacterTemporaryStat.IndieDamR, nAmount * pEffect.info.get(MapleStatInfo.indieDamR));
 
             final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);

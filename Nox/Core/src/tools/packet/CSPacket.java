@@ -251,8 +251,8 @@ public class CSPacket {
                 }
             }
         }
-        */
-        
+         */
+
         oPacket.EncodeShort(0); // aStock: Encode per size
         /*
         oPacket.EncodeShort(ShopInfo.aStock.size());
@@ -260,7 +260,7 @@ public class CSPacket {
             pStock.Encode(oPacket);
         }
          */
-        
+
         oPacket.EncodeShort(0); // aLimitGoods: Encode per size
         /*
         oPacket.EncodeShort(ShopInfo.aLimitGoods.size());
@@ -975,7 +975,7 @@ public class CSPacket {
         oPacket.Encode(false); // bRefundable
         oPacket.Encode(0); // nSourceFlag
         oPacket.Encode(0); // nStoreBank
-        
+
         // CashItemOption
         oPacket.EncodeLong(uniqueid);
         oPacket.EncodeLong(getTime(-2)); //ftExpireDate

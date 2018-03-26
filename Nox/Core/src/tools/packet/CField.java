@@ -21,7 +21,7 @@ import constants.GameConstants;
 import constants.ItemConstants;
 import constants.QuickMove.QuickMoveNPC;
 import constants.ServerConstants;
-import constants.skills.BladeMaster;
+import constants.skills.DualBlade;
 import constants.skills.Blaster;
 import constants.skills.Kinesis;
 import constants.skills.Mechanic;
@@ -600,7 +600,7 @@ public class CField {
         oPacket.EncodeInteger(delay);
         oPacket.EncodeShort(30);
         // oPacket.encodeInteger(0);
-        
+
         return oPacket.ToPacket();
     }
 
@@ -4073,12 +4073,12 @@ public class CField {
         public static Packet jaguarActive(boolean active) {
             OutPacket oPacket = new OutPacket(80);
             oPacket.EncodeShort(SendPacketOpcode.JaguarActive.getValue());
-            
+
             oPacket.Encode(active);
 
             return oPacket.ToPacket();
         }
-        
+
         /**
          * This packet spawns the summons onto the world
          *
@@ -4113,8 +4113,8 @@ public class CField {
             oPacket.EncodeInteger(0);//nLookId
             oPacket.EncodeInteger(0);//nBulletId
             MapleCharacter chr = summon.getOwner();
-            oPacket.Encode((summon.getSkill() == BladeMaster.MIRRORED_TARGET || summon.getSkill() == 14111024 || summon.getSkill() == 14121054 || summon.getSkill() == 14121055 || summon.getSkill() == 14121056) && chr != null ? 1 : 0); // Mirrored Target boolean for character look
-            if ((summon.getSkill() == BladeMaster.MIRRORED_TARGET || summon.getSkill() == 14111024 || summon.getSkill() == 14121054 || summon.getSkill() == 14121055 || summon.getSkill() == 14121056) && chr != null) { // Mirrored Target
+            oPacket.Encode((summon.getSkill() == DualBlade.MIRRORED_TARGET || summon.getSkill() == 14111024 || summon.getSkill() == 14121054 || summon.getSkill() == 14121055 || summon.getSkill() == 14121056) && chr != null ? 1 : 0); // Mirrored Target boolean for character look
+            if ((summon.getSkill() == DualBlade.MIRRORED_TARGET || summon.getSkill() == 14111024 || summon.getSkill() == 14121054 || summon.getSkill() == 14121055 || summon.getSkill() == 14121056) && chr != null) { // Mirrored Target
                 writeCharacterLook(oPacket, chr);
             }
             if (summon.getSkill() == Mechanic.ROCK_N_SHOCK) {// Rock 'n Shock m_nTeslaCoilState

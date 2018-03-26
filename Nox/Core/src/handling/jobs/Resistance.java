@@ -82,10 +82,10 @@ public class Resistance {
             if(pPlayer.hasSkill(Blaster.REVOLVING_CANNON_PLUS)) {
                 nMaxAmmo = 4;
             }
-            if(pPlayer.hasSkill(Blaster.REVOLVING_CANNON_PLUS_2)) {
+            if(pPlayer.hasSkill(Blaster.REVOLVING_CANNON_PLUS_II)) {
                 nMaxAmmo = 5;
             }
-            if(pPlayer.hasSkill(Blaster.REVOLVING_CANNON_PLUS_3)) {
+            if(pPlayer.hasSkill(Blaster.REVOLVING_CANNON_PLUS_III)) {
                 nMaxAmmo = 6;
             }
             return nMaxAmmo;

@@ -39,7 +39,7 @@ import server.Timer.EventTimer;
 import server.Timer.MapTimer;
 import server.Timer.PingTimer;
 import server.Timer.WorldTimer;
-import server.buffs.manager.BuffEffectFetcher;
+import server.skills.effects.manager.EffectManager;
 import server.events.MapleOxQuizFactory;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonsterInformationProvider;
@@ -208,7 +208,7 @@ public class Start {
 
         r = new ServerStartupRunnable(atomicInteger, ()
                 -> {
-            BuffEffectFetcher.loadBuffEffectProviders();
+            EffectManager.loadBuffEffectProviders();
             SkillFactory.load();
             VCore.Load();
         }, "Skill Information");

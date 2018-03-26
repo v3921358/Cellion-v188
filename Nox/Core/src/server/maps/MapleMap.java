@@ -2304,14 +2304,13 @@ public final class MapleMap {
         } else {
             chr.getClient().write(CField.getQuickMoveInfo(false, new LinkedList<>()));
         }
-        
+
         /*for (int npc : GameConstants.unusedNpcs) {
             if (getNPCById(npc) != null && getId() != 910000000) {
                 chr.getClient().write(CField.NPCPacket.toggleNPCShow(getNPCById(npc).getObjectId(), true));
                 //hide unused npcs
             }
         }*/
-        
         if (getNPCById(9073000) != null && getId() == 931050410) {
             chr.getClient().write(CField.NPCPacket.toggleNPCShow(getNPCById(9073000).getObjectId(), true));
         }
@@ -3399,11 +3398,11 @@ public final class MapleMap {
             }
 
             float spawnRate = 1f; // TODO: Find something to do with this, such as kanna 
-            
+
             if (ServerConstants.MODIFY_SPAWN_RATE) {
                 spawnRate *= ServerConstants.SPAWN_RATE_MULTIPLIER;
             }
-            
+
             int numShouldSpawn = (int) (Math.min(smr.maxRegularSpawnAtOnce, Math.max(0, max - spawnedSize)) * spawnRate);
 
             if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) {

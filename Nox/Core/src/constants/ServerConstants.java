@@ -35,7 +35,7 @@ public class ServerConstants {
  /*These values will be overwritten by the configuration.ini file.*/
     public static boolean DEVELOPER_DEBUG_MODE = true;
     public static boolean DEVELOPER_PACKET_DEBUG_MODE = true;
- /*This boolean filters out debug spam, not configured by the INI file.*/
+    /*This boolean filters out debug spam, not configured by the INI file.*/
     public static boolean REDUCED_DEBUG_SPAM = true;
 
     /*Server Maintenance*/
@@ -48,7 +48,7 @@ public class ServerConstants {
     public static float EXP_RATE = 1;
     public static float MESO_RATE = 1;
     public static float DROP_RATE = 1;
-    
+
     /*Server Save Intervals*/
  /*The server will automatically save all character data every n minutes.*/
     public static int SAVE_INTERVAL = 15; //TODO: THIS, but maybe a bad idea?
@@ -153,16 +153,16 @@ public class ServerConstants {
     public static boolean PARAGON_SYSTEM = true; //Enables the skill rank system, levels accessed after Level 250.
     public static int MAX_PARAGON = 11; //Maximum Paragon Level.
     public static long PARAGON_NEEDED_EXP[] = {15000000000000L, // Paragon Level 1 Required Experience
-                                                20000000000000L, // Paragon Level 2 Required Experience
-                                                25000000000000L, // Paragon Level 3 Required Experience
-                                                30000000000000L, // Paragon Level 4 Required Experience
-                                                35000000000000L, // Paragon Level 5 Required Experience
-                                                40000000000000L, // Paragon Level 6 Required Experience
-                                                45000000000000L, // Paragon Level 7 Required Experience
-                                                50000000000000L, // Paragon Level 8 Required Experience
-                                                55000000000000L, // Paragon Level 9 Required Experience
-                                                60000000000000L, // Paragon Level 10 Required Experience
-                                                100000000000000L}; // Paragon Max Level Required Experience
+        20000000000000L, // Paragon Level 2 Required Experience
+        25000000000000L, // Paragon Level 3 Required Experience
+        30000000000000L, // Paragon Level 4 Required Experience
+        35000000000000L, // Paragon Level 5 Required Experience
+        40000000000000L, // Paragon Level 6 Required Experience
+        45000000000000L, // Paragon Level 7 Required Experience
+        50000000000000L, // Paragon Level 8 Required Experience
+        55000000000000L, // Paragon Level 9 Required Experience
+        60000000000000L, // Paragon Level 10 Required Experience
+        100000000000000L}; // Paragon Max Level Required Experience
 
     /*Events*/
     public static boolean BURNING_CHARACTER_EVENT = false;

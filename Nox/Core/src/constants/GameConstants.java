@@ -54,7 +54,7 @@ public class GameConstants {
     // Removes these NPCs from all maps.
     public static boolean isHiddenNpc(int npcId) {
         switch (npcId) {
-            case 1500000: 
+            case 1500000:
             case 1500001:
             case 1500002:
                 return true;
@@ -62,7 +62,7 @@ public class GameConstants {
                 return false;
         }
     }
-    
+
     // Cash Weapon Item IDs, used for addCharLook packet. Hack fix for now. -Mazen
     public static final int aCashWeapons[] = {1702696, 1702716, 1702709, 1702701, 1702475, 1702469, 1702375, 1702687, 1702680, 1702682, 1702649, 1702651, 1702645, 1702643, 1702632, 1702634, 1702395, 1702399, 1702457, 1702467, 1702436, 1702480, 1702565, 1702613, 1702586, 1702624, 1702653, 1702224, 1702235, 1702374, 1702409, 1702556, 1702585, 1702526, 1702710};
     
@@ -74,7 +74,6 @@ public class GameConstants {
                 return false;
         }
     }*/
-    
     // Disabled Skills
     // Skills that we want disabled, mostly just for broken skills that cause disconnects.
     public static boolean isDisabledSkill(int skillid) {
@@ -798,10 +797,10 @@ public class GameConstants {
         return job == 430 || job == 432;
     }
 
-    public static boolean isDemon (final int job) {
+    public static boolean isDemon(final int job) {
         return (isDemonSlayer(job) || isDemonAvenger(job));
     }
-    
+
     public static boolean isDemonSlayer(final int job) {
         return job == 3001 || (job >= 3100 && job <= 3113 && job != 3101);
     }
@@ -1128,8 +1127,8 @@ public class GameConstants {
         //if ( sub_D3B900(a1) )
         //return 1;
         if (sourceSkillId > 131001107) {
-            return sourceSkillId == Pinkbean.BREEZY;
-        } else if (sourceSkillId == Pinkbean.POSIE || sourceSkillId == Nightlord.FRAILTY_CURSE) {
+            return sourceSkillId == PinkBean.BREEZY;
+        } else if (sourceSkillId == PinkBean.POSIE || sourceSkillId == NightLord.FRAILTY_CURSE) {
             return true;
         }
         return sourceSkillId == Mihile.RADIANT_CROSS_SPREAD;
@@ -1360,7 +1359,7 @@ public class GameConstants {
                 return 36111000;
             /*case 36121011:
             case 36121012:
-                return 36121001; // Xenon - Mecha Purge Snipe*/ 
+                return 36121001; // Xenon - Mecha Purge Snipe*/
             case 35100009:
                 return 35100009;
             case 2121055:
@@ -3850,516 +3849,6 @@ public class GameConstants {
         return getSkillBook(skillid / 10000, skillid);
     }
 
-    public static int getLinkedMountItem(int sourceid) {
-        switch (sourceid % 1000) {
-            case 1:
-            case 24:
-            case 25:
-                return 1018;
-            case 2:
-            case 26:
-                return 1019;
-            case 3:
-                return 1025;
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-                return (sourceid % 1000) + 1023;
-            case 9:
-            case 10:
-            case 11:
-                return (sourceid % 1000) + 1024;
-            case 12:
-                return 1042;
-            case 13:
-                return 1044;
-            case 14:
-                return 1049;
-            case 15:
-            case 16:
-            case 17:
-                return (sourceid % 1000) + 1036;
-            case 18:
-            case 19:
-                return (sourceid % 1000) + 1045;
-            case 20:
-                return 1072;
-            case 21:
-                return 1084;
-            case 22:
-                return 1089;
-            case 23:
-                return 1106;
-            case 29:
-                return 1151;
-            case 30:
-            case 50:
-                return 1054;
-            case 31:
-            case 51:
-                return 1069;
-            case 32:
-                return 1138;
-            case 45:
-            case 46:
-            case 47:
-            case 48:
-            case 49:
-                return (sourceid % 1000) + 1009;
-            case 52:
-                return 1070;
-            case 53:
-                return 1071;
-            case 54:
-                return 1096;
-            case 55:
-                return 1101;
-            case 56:
-                return 1102;
-            case 58:
-                return 1118;
-            case 59:
-                return 1121;
-            case 60:
-                return 1122;
-            case 61:
-                return 1129;
-            case 62:
-                return 1139;
-            case 63:
-            case 64:
-            case 65:
-            case 66:
-            case 67:
-            case 68:
-            case 69:
-            case 70:
-            case 71:
-            case 72:
-            case 73:
-            case 74:
-            case 75:
-            case 76:
-            case 77:
-            case 78:
-                return (sourceid % 1000) + 1080;
-            case 85:
-            case 86:
-            case 87:
-                return (sourceid % 1000) + 928;
-            case 88:
-                return 1065;
-            case 27:
-                return 1932049; //airplane
-            case 28:
-                return 1932050; //airplane
-            case 114:
-                return 1932099; //bunny buddy
-            //33 = hot air
-            //37 = bjorn
-            //38 = speedy chariot
-            //57 = law officer
-            //they all have in wz so its ok
-        }
-        return 0;
-    }
-
-    public static int getMountItemEx(final int sourceid) {
-        final int riding = 1932000;
-        switch (sourceid) {
-            case 1204: // ë°°í‹€ì‰½
-                return riding + 0;
-            case 80001163: // ìŠ¤íŽ˜ì�´ìŠ¤ì‰½
-                return riding + 2;
-            case 80001449: // ìŠ¤íŽ˜ì�´ìŠ¤ì‰½2
-                return riding + 225;
-            case 80001450: // ì˜¤í† ë°”ì�´2
-                return riding + 226;
-            case 80001451: // ìŠˆíŠ¸2
-                return riding + 227;
-            case 80001026: // ë¹—ìž�ë£¨ ok
-                return riding + 5;
-            case 80001003: // ëª©ë§ˆ ok
-                return riding + 6;
-            case 80001004: // ì•…ì–´ ok
-                return riding + 7;
-            case 80001005: // ì˜¤í† ë°”ì�´ (ê°ˆìƒ‰) ok
-                return riding + 8;
-            case 80001006: // ì˜¤í† ë°”ì�´ (ë¶„í™�ìƒ‰) ok
-                return riding + 9;
-            case 80001007: // êµ¬ë¦„ ok
-                return riding + 11;
-            case 80001008: // ì§„ì§œ ë°œë¡� ok
-                return riding + 10;
-            case 80001009: // ë ˆì�´ì‹±ì¹´ ok
-                return riding + 13;
-            case 80001010: // í”¼ì‹œë°© í˜¸ëž‘ì�´ ok
-                return riding + 14;
-            case 80001011: // ë¯¸ìŠ¤íŠ¸ ë°œë¡� (ì „ì²´ëª¨ìŠµ) ok
-                return riding + 12;
-            case 80001013: // ì£¼í™©ë²„ì„¯ ok
-                return riding + 23;
-            case 80001014: // ë¶ˆíƒ€ëŠ” ë§� ok
-                return riding + 25;
-            case 80001015: // íƒ€ì¡° ok
-                return riding + 26;
-            case 80001016: // í•‘í�¬ê³° ì—´ê¸°êµ¬ ok
-                return riding + 27;
-            case 80001017: // íŒŒëž‘ ë¡œë´‡ ok
-                return riding + 28;
-            case 80001018: // ì˜¤í† ë°”ì�´ (ë¹¨ê°•ìƒ‰) ok
-                return riding + 34;
-            case 80001019: // íŒŒì›Œë“œ ìŠˆíŠ¸ ok
-                return riding + 35;
-            case 80001020: // ë�¼ì�´ì–¸í‚¹ ok
-                return riding + 41;
-            case 80001021: // ë¸”ë£¨ ìŠ¤ì¿ ë�” ok
-                return riding + 43;
-            case 80001022: // ë£¨ë�Œí‘¸ ê°œì‚�ëŒ€ ok
-                return riding + 44;
-            case 80001023: // ë³µì£¼ë¨¸ë‹ˆ ok
-                return riding + 48;
-            case 80001027: // ë‚˜ë¬´ ë¹„í–‰ê¸° ok
-                return riding + 49;
-            case 80001028: // ë¹¨ê°„ ë¹„í–‰ê¸° ok
-                return riding + 50;
-            case 80001038: // í™©ê¸ˆ ìž¥ì‹� ë°° ok
-                return riding + 53;
-            case 80001030: // ë‹­ ok
-                return riding + 54;
-            case 80001031: // ë¶€ì—‰ì�´ ok
-                return riding + 55;
-            case 80001032: // íŒŒëž‘ ìž�ë�™ì°¨ ok
-                return riding + 56;
-            case 80001033: // ì¹´ë‹ˆë°œ ë�¼ì�´ë”© ok
-                return riding + 57;
-            case 80001044: // ê¼¬ë§ˆí† ê¸° ok
-                return riding + 90;
-            case 80001082: // í™©ì†Œ ok
-                return riding + 93;
-            case 80001083: // ìˆ˜ë ˆê¾¼í† ë�¼ ok
-                return riding + 94;
-            case 80001084: // ì‹œë°œë¬´ì„œìš´í† ë�¼ ok
-                return riding + 95;
-            case 80001090: // ì¶”ìž¥ë©§ë�¼ì§€ ok
-                return riding + 96;
-            case 80001137: // ê²€ì�€ë¶€ì—‰ì�´ ok
-                return riding + 110;
-            case 80001144: // ë¥˜í˜¸ìˆ˜ë ˆê¾¼ ok
-                return riding + 113;
-            case 80001148: // ë¹¨ê°„ë¶•ë¶•ì°¨ ok
-                return riding + 114;
-            case 80001149: // ë©‹ì§„ ë¡œë´‡ ok
-                return riding + 115;
-            case 80001198: // ë“œëž˜ê³ ë‹ˆì¹´ ok
-                return riding + 140;
-            case 80001220: // íŒ¬í…€ ok
-                return riding + 143;
-            case 80001221: // ì•„ë¦¬ì•„ ok
-                return riding + 144;
-            case 80001228: // ìž¬ê·œì–´ ok
-                return riding + 148;
-            case 80001237: // ë¸”ëž™ì™€ì�´ë²ˆ ok
-                return riding + 153;
-            case 80001243: // ì™¸ë°œìž�ì „ê±° ok
-                return riding + 156;
-            case 80001244: // ê²¨ìš¸ì™•êµ­ ok
-                return riding + 157;
-            case 80001246: // ë‹¬ ok
-                return riding + 159;
-            case 80001257: // í•‘í�¬ë¹ˆ ë‘¥ë‘¥ ok
-                return riding + 161;
-            case 80001258: // ë¸”ëž™ë¹ˆ ë‘¥ë‘¥ ok
-                return riding + 162;
-            case 80001261: // ì–´ë–¤ ì�´ìƒ�í•œë…„ ok
-                return riding + 164;
-            case 80001285: // í’�ì„  ë‘¥ë‘¥ ok
-                return riding + 167;
-            case 80001289: // ë�°ë¹„ì¡´ ok
-                return riding + 170;
-            case 80001290: // ì‹ ë¹„ëª©ë§ˆ ok
-                return riding + 171;
-            case 80001292: // ì–´ë¦°ì™•ìž� ok
-                return riding + 173;
-            case 80001302: // ê²€ì�€ ë“œëž˜ê³¤ ok
-                return riding + 178;
-            case 80001304: // ë©§ë�¼ì§€ ok
-                return riding + 179;
-            case 80001305: // ì�€ë¹›ê°ˆê¸° ok
-                return riding + 180;
-            case 80001306: // ë ˆë“œ ë“œë�¼ì½” ok
-                return riding + 181;
-            case 80001307: // í‹°í‹°ì•„ë‚˜ ok
-                return riding + 182;
-            case 80001308: // í‹°í‹°ì˜¤ ok
-                return riding + 183;
-            case 80001309: // ì‹ ì¡° ok
-                return riding + 184;
-            case 80001312: // ë¥˜í˜¸ 1 ok
-                return riding + 187;
-            case 80001313: // ë¥˜í˜¸ 2 ok
-                return riding + 188;
-            case 80001314: // ë¥˜í˜¸ 3 ok
-                return riding + 189;
-            case 80001315: // ë¥˜í˜¸ 4 ok
-                return riding + 190;
-            case 80001316: // ì—�ë°˜ 1 ok
-                return riding + 191;
-            case 80001317: // ì—�ë°˜ 2 ok
-                return riding + 192;
-            case 80001318: // ì—�ë°˜ 3 ok
-                return riding + 193;
-            case 80001319: // í•˜ì�´ì—�ë‚˜ ok
-                return riding + 194;
-            case 80001327: // ë�•ë�• ok
-                return riding + 198;
-            case 80001331: // ë³´ì„� ì„¹ìŠ¤ ok
-                return riding + 199;
-            case 80001336: // í•˜ì–€ë³‘ì•„ë¦¬ ok
-                return riding + 200;
-            case 80001338: // ìž¥ë‚œê°� ok
-                return riding + 201;
-            case 80001333: // ë¹¨ê°„ê·¼ë‘�ìš´ ok
-                return riding + 205;
-            case 80001347: // ì•…ë§ˆë…„ ok
-                return riding + 207;
-            case 80001348: // íž™í•© ok
-                return riding + 208;
-            case 80001353: // ì•…ë§ˆë…„2 ok
-                return riding + 211;
-            case 80001413: // ìŸ�ë°˜ ok
-                return riding + 219;
-            case 80001421: // ë§ˆì°¨ ok
-                return riding + 221;
-            case 80001423: // ë²¨ë£¸ ok
-                return riding + 222;
-            case 80001445: // ë¹›ë‚ ê°œ ok
-                return riding + 242;
-            case 80001447: // ì–´ë‘ ë‚ ê°œ ok
-                return riding + 243;
-            case 80001484: // ë¶€ì¸  ok
-                return riding + 235;
-            case 80001508: // ì–¼ì�Œë§� ok
-                return riding + 244;
-            case 80001345:// í—¤ì¹´í†¤ì£¼ë¨¹
-                return riding + 204;
-            case 80001199:// ë�…ìˆ˜ìœ¼ë¦¬ ëŒ€ì²˜
-                return riding + 256;
-            case 80001490: // ë‚˜ìœ¼ë¦¬ ëŒ€ì²˜
-                return riding + 259;
-            case 80001491: // í—¬ë¦¬ì½¥í„° ëŒ€ì²˜
-                return riding + 258;
-            case 80001505: // ì§€ê°�í–ˆë‹¹   
-                return riding + 251;
-            case 80001492: // ê¿€ê¿€ë‚˜ë¹„     
-                return riding + 249;
-            case 80001503: // íˆ¬ëª…ë°œë¡�
-                return riding + 12;
-            case 80001531: //ì�´ìƒ�í•œë§�
-                return riding + 253;
-            case 80001549: //ë©”ì�´í”Œì°¨?
-                return riding + 254;
-            case 80001550: //íŒ¬ë�”
-                return riding + 255;
-            case 80001355://ë�Œê³ ëž˜    
-                return riding + 212;
-            case 80001411://ì¢€ë¹„íŠ¸ëŸ­
-                return riding + 218;
-            /*case 80001552: //ë�…ìˆ˜ìœ¼ë¦¬
-             case 80001553:    
-             return + 256;
-             case 80001554: //í—¬ë¦¬ì½¥í„°?
-             case 80001555:
-             return + 258;
-             /* case 80001557://ë‚˜ìœ¼ë¦¬
-             case 80001558:    
-             return + 259;*/
-            default:
-                return 0;
-        }
-    }
-
-    public static int checkMountItem(final int sourceid) {
-        if (sourceid == 33001001) {
-            return 1932005; // Just a check only, so doesn't matter
-        }
-        return getMountItemEx(sourceid);
-    }
-
-    public static int getMountItem(int sourceid, MapleCharacter chr) {
-        switch (sourceid) {
-            case 5221006:
-                return 1932000;
-            case 33001001: //temp.
-                if (chr == null) {
-                    return 1932015;
-                }
-                switch (chr.getIntNoRecord(JAGUAR)) {
-                    case 20:
-                        return 1932030;
-                    case 30:
-                        return 1932031;
-                    case 40:
-                        return 1932032;
-                    case 50:
-                        return 1932033;
-                    case 60:
-                        return 1932036;
-                }
-                return 1932015;
-            case 35001002:
-            case 35111003:
-                return 1932016;
-            //case 30011109:
-            //	return 1932085;
-        }
-        if (!isBeginnerJob(sourceid / 10000)) {
-            if (sourceid / 10000 == 8000 && sourceid != 80001000) { //todoo clean up
-                Skill skil = SkillFactory.getSkill(sourceid);
-                if (skil != null && skil.getTamingMob() > 0) {
-                    return skil.getTamingMob();
-                } else {
-                    int link = getLinkedMountItem(sourceid);
-                    if (link > 0) {
-                        if (link < 10000) {
-                            return getMountItem(link, chr);
-                        } else {
-                            return link;
-                        }
-                    }
-                }
-            }
-            return 0;
-        }
-        switch (sourceid % 10000) {
-            case 1013:
-            case 1046:
-                return 1932001;
-            case 1015:
-            case 1048:
-                return 1932002;
-            case 1016:
-            case 1017:
-            case 1027:
-                return 1932007;
-            case 1018:
-                return 1932003;
-            case 1019:
-                return 1932005;
-            case 1025:
-                return 1932006;
-            case 1028:
-                return 1932008;
-            case 1029:
-                return 1932009;
-            case 1030:
-                return 1932011;
-            case 1031:
-                return 1932010;
-            case 1033:
-                return 1932013;
-            case 1034:
-                return 1932014;
-            case 1035:
-                return 1932012;
-            case 1036:
-                return 1932017;
-            case 1037:
-                return 1932018;
-            case 1038:
-                return 1932019;
-            case 1039:
-                return 1932020;
-            case 1040:
-                return 1932021;
-            case 1042:
-                return 1932022;
-            case 1044:
-                return 1932023;
-            //case 1045:
-            //return 1932030; //wth? helicopter? i didnt see one, so we use hog
-            case 1049:
-                return 1932025;
-            case 1050:
-                return 1932004;
-            case 1051:
-                return 1932026;
-            case 1052:
-                return 1932027;
-            case 1053:
-                return 1932028;
-            case 1054:
-                return 1932029;
-            case 1063:
-                return 1932034;
-            case 1064:
-                return 1932035;
-            case 1065:
-                return 1932037;
-            case 1069:
-                return 1932038;
-            case 1070:
-                return 1932039;
-            case 1071:
-                return 1932040;
-            case 1072:
-                return 1932041;
-            case 1084:
-                return 1932043;
-            case 1089:
-                return 1932044;
-            case 1096:
-                return 1932045;
-            case 1101:
-                return 1932046;
-            case 1102:
-                return 1932061;
-            case 1106:
-                return 1932048;
-            case 1118:
-                return 1932060;
-            case 1115:
-                return 1932052;
-            case 1121:
-                return 1932063;
-            case 1122:
-                return 1932064;
-            case 1123:
-                return 1932065;
-            case 1128:
-                return 1932066;
-            case 1130:
-                return 1932072;
-            case 1136:
-                return 1932078;
-            case 1138:
-                return 1932080;
-            case 1139:
-                return 1932081;
-            //FLYING
-            case 1143:
-            case 1144:
-            case 1145:
-            case 1146:
-            case 1147:
-            case 1148:
-            case 1149:
-            case 1150:
-            case 1151:
-            case 1152:
-            case 1153:
-            case 1154:
-            case 1155:
-            case 1156:
-            case 1157:
-                return 1992000 + (sourceid % 10000) - 1143;
-            default:
-                return 0;
-        }
-    }
-
     public static boolean isKatara(int itemId) {
         return itemId / 10000 == 134;
     }
@@ -4951,9 +4440,9 @@ public class GameConstants {
             case constants.skills.Hero.RAGING_BLOW:
             case 21120025: // Aran Skill
             case Aran.AERO_SWING_1:
-            case ILArchmage.FROZEN_ORB:
-            case BladeMaster.BLADE_FURY:
-            case BladeLord.BLOODY_STORM:
+            case IceLightningArchMage.FROZEN_ORB:
+            case DualBlade.BLADE_FURY:
+            case DualBlade.BLOODY_STORM:
             case WindArcher.SPIRALING_VORTEX:
             case Bowmaster.ARROW_STREAM:
             case Buccaneer.BUCCANEER_BLAST:
@@ -4964,19 +4453,21 @@ public class GameConstants {
             case Phantom.TEMPEST:
             case Phantom.MILLE_AIGUILLES:
             case Phantom.MILLE_AIGUILLES_EXTRA_TARGET:
-            case ILArchmage.CHAIN_LIGHTNING:
+            case IceLightningArchMage.CHAIN_LIGHTNING:
             case Paladin.ADVANCED_CHARGE:
-            case Evan.WIND_FLASH:
+            case Evan.WIND_FLASH_1:
+            case Evan.WIND_FLASH_2:
+            case Evan.WIND_FLASH_3:
             case Evan.THUNDER_DIVE:
-            case Evan.WIND_BREATH: 
+            case Evan.WIND_BREATH:
             case Evan.EARTH_BREATH:
             case Evan.EARTH_DIVE:
-            case Evan.DRAGON_BREATH:
+            case Evan.DRAGON_BREATH_1:
                 return true;
         }
         return false;
     }
-    
+
     public static boolean isMagicChargeSkill(final int skillid) {
         switch (skillid) {
             case 2121001: // Big Bang
@@ -5331,11 +4822,10 @@ public class GameConstants {
             case Beginner.MAPLE_RETURN:
             case Noblesse.IMPERIAL_RECALL:
             case Xenon.PROMESSA_ESCAPE:
-            case Kinesis.RETURN:
+            case Kinesis.RETURN_1:
             case Zero.TEMPLE_RECALL:
             case Phantom.TO_THE_SKIES:
-            case Mercedes.ELVEN_BLESSING:
-            case AngelicBuster.DAY_DREAMER:
+            case Mercedes.ELVEN_BLESSING_1:
                 return true;
         }
         return false;
@@ -5397,292 +4887,292 @@ public class GameConstants {
     public static final int ITEM_TITLE = 124000;
 
     private static int[] dmgskinitem = {2431965,
-                                        2431966,
-                                        2432084,
-                                        2431967,
-                                        2432131,
-                                        2432153,
-                                        2432638,
-                                        2432659,
-                                        2432154,
-                                        2432637,
-                                        2432658,
-                                        2432207,
-                                        2432354,
-                                        2432355,
-                                        2432972,
-                                        2432465,
-                                        2432479,
-                                        2432526,
-                                        2432639,
-                                        2432660,
-                                        2432532,
-                                        2432592,
-                                        2432640,
-                                        2432661,
-                                        2432710,
-                                        2432836,
-                                        2432973,
-                                        2433063,
-                                        2433178,
-                                        2433456,
-                                        2435960,
-                                        2433715,
-                                        2433804,
-                                        5680343,
-                                        2433913,
-                                        2433980,
-                                        2433981,
-                                        2436229,
-                                        2432659,
-                                        2432526,
-                                        2432710,
-                                        2432355,
-                                        2434248,
-                                        2433362,
-                                        2434274,
-                                        2434289,
-                                        2434390,
-                                        2434391,
-                                        5680395,
-                                        2434528,
-                                        2434529,
-                                        2434654,
-                                        2435326,
-                                        2432749,
-                                        2434710,
-                                        2433777,
-                                        2434530,
-                                        2433571,
-                                        2434574,
-                                        2433828,
-                                        2432804,
-                                        2434824,
-                                        2431966,
-                                        2431967,
-                                        2432154,
-                                        2432354,
-                                        2432532,
-                                        2433715,
-                                        2433063,
-                                        2433913,
-                                        2433980,
-                                        2434248,
-                                        2433362,
-                                        2434274,
-                                        2434390,
-                                        5680395,
-                                        2434528,
-                                        2434529,
-                                        2434530,
-                                        2433571,
-                                        2434574,
-                                        2433828,
-                                        2434662,
-                                        2434664,
-                                        2434868,
-                                        2436041,
-                                        2436042,
-                                        2435046,
-                                        2435047,
-                                        2435836,
-                                        2435141,
-                                        2435179,
-                                        2435162,
-                                        2435157,
-                                        2435835,
-                                        2435159,
-                                        2436044,
-                                        2434663,
-                                        2435182,
-                                        2435850,
-                                        2435184,
-                                        2435222,
-                                        2435293,
-                                        2435313,
-                                        2435331,
-                                        2435332,
-                                        2435333,
-                                        2435334,
-                                        2435316,
-                                        2435408,
-                                        2435427,
-                                        2435428,
-                                        2435429,
-                                        2435456, 
-                                        2435493, 
-                                        2435331, 
-                                        2435334, 
-                                        2435959, 
-                                        2435958, 
-                                        2435431, 
-                                        2435430, 
-                                        2435432, 
-                                        2435433, 
-                                        2434601, 
-                                        2435521, 
-                                        2435196, 
-                                        2435523, 
-                                        2435524, 
-                                        2435538, 
-                                        2435832, 
-                                        2435833, 
-                                        2435839, 
-                                        2435840, 
-                                        2435841, 
-                                        2435849, 
-                                        2435972, 
-                                        2436023, 
-                                        2436024, 
-                                        2436026, 
-                                        2436027, 
-                                        2436028, 
-                                        2436029, 
-                                        2436045};
-   
-    private static int[] dmgskinnum = { 0, 
-                                        1, 
-                                        1, 
-                                        2, 
-                                        3, 
-                                        4, 
-                                        4, 
-                                        4, 
-                                        5, 
-                                        5, 
-                                        5, 
-                                        6, 
-                                        7, 
-                                        8, 
-                                        8, 
-                                        9, 
-                                        10, 
-                                        11, 
-                                        11, 
-                                        11, 
-                                        12, 
-                                        13, 
-                                        14, 
-                                        14, 
-                                        15, 
-                                        16, 
-                                        17, 
-                                        18, 
-                                        20, 
-                                        21, 
-                                        22, 
-                                        23, 
-                                        24, 
-                                        25, 
-                                        26, 
-                                        27, 
-                                        28, 
-                                        29, 
-                                        4, 
-                                        11, 
-                                        15, 
-                                        8, 
-                                        34, 
-                                        35, 
-                                        36, 
-                                        37, 
-                                        38, 
-                                        39, 
-                                        40, 
-                                        41, 
-                                        42, 
-                                        48, 
-                                        49, 
-                                        50, 
-                                        51, 
-                                        52, 
-                                        43, 
-                                        44, 
-                                        45, 
-                                        46, 
-                                        47, 
-                                        53, 
-                                        1, 
-                                        2, 
-                                        5, 
-                                        7, 
-                                        12, 
-                                        23, 
-                                        25, 
-                                        26, 
-                                        27, 
-                                        34, 
-                                        35, 
-                                        36, 
-                                        38, 
-                                        40, 
-                                        41, 
-                                        42, 
-                                        43, 
-                                        44, 
-                                        45, 
-                                        46, 
-                                        74, 
-                                        75, 
-                                        76, 
-                                        77, 
-                                        78, 
-                                        79, 
-                                        80, 
-                                        81, 
-                                        82, 
-                                        83, 
-                                        84, 
-                                        85, 
-                                        86, 
-                                        87, 
-                                        88, 
-                                        89, 
-                                        90, 
-                                        91, 
-                                        92, 
-                                        93, 
-                                        94, 
-                                        95, 
-                                        96, 
-                                        97, 
-                                        98, 
-                                        99, 
-                                        100, 
-                                        101, 
-                                        102, 
-                                        103, 
-                                        104, 
-                                        105, 
-                                        106, 
-                                        96, 
-                                        99, 
-                                        109, 
-                                        110, 
-                                        111, 
-                                        112, 
-                                        113, 
-                                        114, 
-                                        115, 
-                                        116, 
-                                        117, 
-                                        118, 
-                                        119, 
-                                        120, 
-                                        121, 
-                                        122, 
-                                        123, 
-                                        124, 
-                                        125, 
-                                        126, 
-                                        127, 
-                                        128, 
-                                        129, 
-                                        130, 
-                                        131, 
-                                        132, 
-                                        133, 
-                                        134};
+        2431966,
+        2432084,
+        2431967,
+        2432131,
+        2432153,
+        2432638,
+        2432659,
+        2432154,
+        2432637,
+        2432658,
+        2432207,
+        2432354,
+        2432355,
+        2432972,
+        2432465,
+        2432479,
+        2432526,
+        2432639,
+        2432660,
+        2432532,
+        2432592,
+        2432640,
+        2432661,
+        2432710,
+        2432836,
+        2432973,
+        2433063,
+        2433178,
+        2433456,
+        2435960,
+        2433715,
+        2433804,
+        5680343,
+        2433913,
+        2433980,
+        2433981,
+        2436229,
+        2432659,
+        2432526,
+        2432710,
+        2432355,
+        2434248,
+        2433362,
+        2434274,
+        2434289,
+        2434390,
+        2434391,
+        5680395,
+        2434528,
+        2434529,
+        2434654,
+        2435326,
+        2432749,
+        2434710,
+        2433777,
+        2434530,
+        2433571,
+        2434574,
+        2433828,
+        2432804,
+        2434824,
+        2431966,
+        2431967,
+        2432154,
+        2432354,
+        2432532,
+        2433715,
+        2433063,
+        2433913,
+        2433980,
+        2434248,
+        2433362,
+        2434274,
+        2434390,
+        5680395,
+        2434528,
+        2434529,
+        2434530,
+        2433571,
+        2434574,
+        2433828,
+        2434662,
+        2434664,
+        2434868,
+        2436041,
+        2436042,
+        2435046,
+        2435047,
+        2435836,
+        2435141,
+        2435179,
+        2435162,
+        2435157,
+        2435835,
+        2435159,
+        2436044,
+        2434663,
+        2435182,
+        2435850,
+        2435184,
+        2435222,
+        2435293,
+        2435313,
+        2435331,
+        2435332,
+        2435333,
+        2435334,
+        2435316,
+        2435408,
+        2435427,
+        2435428,
+        2435429,
+        2435456,
+        2435493,
+        2435331,
+        2435334,
+        2435959,
+        2435958,
+        2435431,
+        2435430,
+        2435432,
+        2435433,
+        2434601,
+        2435521,
+        2435196,
+        2435523,
+        2435524,
+        2435538,
+        2435832,
+        2435833,
+        2435839,
+        2435840,
+        2435841,
+        2435849,
+        2435972,
+        2436023,
+        2436024,
+        2436026,
+        2436027,
+        2436028,
+        2436029,
+        2436045};
+
+    private static int[] dmgskinnum = {0,
+        1,
+        1,
+        2,
+        3,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        6,
+        7,
+        8,
+        8,
+        9,
+        10,
+        11,
+        11,
+        11,
+        12,
+        13,
+        14,
+        14,
+        15,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        4,
+        11,
+        15,
+        8,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        48,
+        49,
+        50,
+        51,
+        52,
+        43,
+        44,
+        45,
+        46,
+        47,
+        53,
+        1,
+        2,
+        5,
+        7,
+        12,
+        23,
+        25,
+        26,
+        27,
+        34,
+        35,
+        36,
+        38,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        96,
+        99,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134};
 
     public static int getDamageSkinNumberByItem(int itemid) {
         for (int i = 0; i < dmgskinitem.length; i++) {
@@ -5849,7 +5339,7 @@ public class GameConstants {
                 || jobId >= 2200 && jobId <= 2219 || jobId >= 3200 && jobId <= 3213
                 || jobId >= 4200 && jobId <= 4213 || jobId >= 14200 && jobId <= 14213;
     }
-    
+
     public static boolean SUB_ADCBA0(int nSkillID) { // TODO: WHAT IS THIS
         if (nSkillID > 131003017) {
             if (nSkillID == 400011005 || nSkillID == 400031007) {

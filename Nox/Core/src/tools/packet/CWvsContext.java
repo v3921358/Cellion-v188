@@ -463,11 +463,6 @@ public class CWvsContext {
 
         oPacket.EncodeShort(update.size());
 
-        /*boolean unk = false;
-        oPacket.EncodeBool(true); // get_update_time
-        oPacket.Encode(0);
-        oPacket.EncodeBool(unk); // masterlevel?
-        oPacket.EncodeShort(update.size());*/
         for (Map.Entry<Skill, SkillEntry> z : update.entrySet()) {
             oPacket.EncodeInteger(z.getKey().getId());
             oPacket.EncodeInteger(z.getValue().skillevel);
@@ -477,7 +472,6 @@ public class CWvsContext {
 
         //oPacket.Encode(/*hyper ? 0x0C : */4); // hyperstat = 7 // original
         oPacket.Encode(hyper ? 0x0C : 4); // hmm?
-        //oPacket.Encode(hyper ? 12 : 4); // maybe?
 
         return oPacket.ToPacket();
     }

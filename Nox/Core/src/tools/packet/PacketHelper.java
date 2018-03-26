@@ -659,12 +659,11 @@ public class PacketHelper {
             oPacket.EncodeInteger(entry.getValue());
         }
         oPacket.Encode(255);
-        
-        
+
         Integer cWeapon = 0; //Integer cWeapon = equip.get(-111);
-        
+
         // Checks if player has a listed cash weapon equip and fetchs the ID for the integer being written below.
-     // Hack fix but neccessary for now as for some reason attempting to fetch the ID normally results in null. -MazenMapleCharacter oPlayer = (MapleCharacter) chr;
+        // Hack fix but neccessary for now as for some reason attempting to fetch the ID normally results in null. -MazenMapleCharacter oPlayer = (MapleCharacter) chr;
         MapleCharacter pPlayer = (MapleCharacter) chr;
         for (int i = 0; i < GameConstants.aCashWeapons.length; i++) {
             if (pPlayer.hasEquipped(GameConstants.aCashWeapons[i])) {
@@ -672,7 +671,7 @@ public class PacketHelper {
                 break;
             }
         }
-        
+
         oPacket.EncodeInteger(cWeapon != null ? cWeapon : 0);
         Integer Weapon = equip.get(-11);
         oPacket.EncodeInteger(Weapon != null ? Weapon : 0);
@@ -1673,12 +1672,7 @@ public class PacketHelper {
     }
 
     public static <E extends TemporaryStat> void writeMask(OutPacket oPacket, Collection<E> statups) {
-        int[] mask;
-        if (statups.contains(CharacterTemporaryStat.RideVehicle)) {
-            mask = new int[GameConstants.CFlagSize + 2];
-        } else {
-            mask = new int[GameConstants.CFlagSize];
-        }
+        int[] mask = new int[GameConstants.CFlagSize];
 
         for (TemporaryStat statup : statups) {
             mask[(statup.getPosition() - 1)] |= statup.getValue();
@@ -1690,9 +1684,6 @@ public class PacketHelper {
 
     public static <E extends TemporaryStat> void writeBuffMask(OutPacket oPacket, Collection<Pair<E, Integer>> statups) {
         int[] mask = new int[GameConstants.CFlagSize];
-        /* if (!statups.containsKey(CharacterTemporaryStat.RideVehicle)) {
-            mask = new int[12];
-        }*/
         for (Pair<E, Integer> statup : statups) {
             mask[(((TemporaryStat) statup.left).getPosition() - 1)] |= ((TemporaryStat) statup.left).getValue();
         }
@@ -1703,9 +1694,6 @@ public class PacketHelper {
 
     public static <E extends TemporaryStat> void writeBuffMask(OutPacket oPacket, Map<E, Integer> statups) {
         int[] mask = new int[GameConstants.CFlagSize];
-        /* if (!statups.containsKey(CharacterTemporaryStat.RideVehicle)) {
-            mask = new int[12];
-        }*/
         for (TemporaryStat statup : statups.keySet()) {
             mask[(statup.getPosition() - 1)] |= statup.getValue();
         }

@@ -222,7 +222,7 @@ public class PlayerStorage {
         }
         return sb.toString();
     }
-    
+
     public final String formatOnlinePlayers(final boolean bNewLine) {
         final StringBuilder sb = new StringBuilder();
 
@@ -242,7 +242,7 @@ public class PlayerStorage {
                     }
                 } else {
                     if (bNewLine) {
-                    sb.append(". \r\n");
+                        sb.append(". \r\n");
                     } else {
                         sb.append(".");
                     }

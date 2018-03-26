@@ -344,7 +344,6 @@ public class ItemPotentialProvider {
         }
         aOptions.clear();
     }*/
-    
     public static boolean IsValidOptionType(int nItemOptionID, int nItemID) {
         final EquipSlotType pBodyPart = MapleItemInformationProvider.getInstance().getSlotType(nItemID);
 
@@ -387,7 +386,7 @@ public class ItemPotentialProvider {
                         return false;
                     }
                 }
-                return true; 
+                return true;
             case 21:
                 if (pBodyPart != EquipSlotType.Cap && pBodyPart != EquipSlotType.Glove && pBodyPart != EquipSlotType.Shoes && pBodyPart != EquipSlotType.Shield_OrDualBlade && pBodyPart != EquipSlotType.Coat
                         && pBodyPart != EquipSlotType.Pants && pBodyPart != EquipSlotType.Cape && pBodyPart.getSlot() != 22) {
@@ -448,19 +447,19 @@ public class ItemPotentialProvider {
                 return true;
         }
     }
-    
+
     /**
      * Cube Bonus Potential Line Generator
+     *
      * @author Mazen
-     * 
-     * @purpose Generate a bonus Potential Line based on fully customizable Potential tables
-     * based upon the Item Potential Tier and 
+     *
+     * @purpose Generate a bonus Potential Line based on fully customizable Potential tables based upon the Item Potential Tier and
      */
     public static int generateBonusPotential(Equip pEquip/*, ItemPotentialTierType pTier*/) {
         ArrayList<Integer> aPossiblePotential = new ArrayList<Integer>();
         final EquipSlotType pSlot = MapleItemInformationProvider.getInstance().getSlotType(pEquip.getItemId());
         final int nReqLevel = MapleItemInformationProvider.getInstance().getReqLevel(pEquip.getItemId());
-        
+
         int aEmblemLegendaryBonusPotential[] = {
             40292, // 40% Ignore Defence
             40291, // 35% Ignore Defence 
@@ -503,7 +502,7 @@ public class ItemPotentialProvider {
             40012, // MAG ATT +18
             42012, // MAG ATT +14
         };
-        
+
         int aWeaponLegendaryBonusPotential[] = {
             42602, // 18% Boss Damage
             32601, // 12% Boss Damage
@@ -587,13 +586,12 @@ public class ItemPotentialProvider {
             42052, // 2% Wep ATT
             42058, // Crit Chance 2%
         };
-        
+
         int aAccessoryLegendaryBonusPotential[] = {
             42650, // 5% Meso Drop Rate
             42656, // 5% Item Drop Rate
         };
-        
-        
+
         int aCustomUniqueBonusPotential[] = {
             32043, // 5% LUK
             32044, // 5% INT
@@ -666,7 +664,7 @@ public class ItemPotentialProvider {
             10081, // ALL STAT +4
             12011, // Att +10
         };
-        
+
         int aCustomBonusPotential[] = {
             32044, // 5% LUK
             32043, // 5% INT
@@ -677,7 +675,6 @@ public class ItemPotentialProvider {
             32046, // 7% MaxMP
             32056, // 7% DEF
         };
-        
         //if (pTier == ItemPotentialTierType.Legendary && nReqLevel >= 70) { // Only defined Legendary Lv. 70+ Potential Lines
             if (pSlot == EquipSlotType.Si_Emblem) {
                 for (int nValue : aEmblemLegendaryBonusPotential) { // Adds Emblem Potential Values (Legendary)
@@ -692,8 +689,8 @@ public class ItemPotentialProvider {
             if (!isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) && !InventoryConstants.isSecondaryWeapon(pEquip.getItemId())) {
                 for (int nValue : aNonWeaponLegendaryBonusPotential) { // Adds Non-Weapon Potential Values (Legendary)
                     aPossiblePotential.add(nValue);
-                }  
-            } 
+                }
+            }
             if (pSlot == EquipSlotType.Accessary_Eye || pSlot == EquipSlotType.Accessary_Face || pSlot == EquipSlotType.Accessary_Pocket) {
                 for (int nValue : aAccessoryLegendaryBonusPotential) { // Adds Accessory Potential Values (Legendary)
                     aPossiblePotential.add(nValue);
@@ -721,19 +718,19 @@ public class ItemPotentialProvider {
         int nIndex = pRandomPotential.nextInt(aPossiblePotential.size());
         return aPossiblePotential.get(nIndex);
     }
-    
+
     /**
      * Cube Potential Line Generator
+     *
      * @author Mazen
-     * 
-     * @purpose Generate a Potential Line based on fully customizable Potential tables
-     * based upon the Item Potential Tier and 
+     *
+     * @purpose Generate a Potential Line based on fully customizable Potential tables based upon the Item Potential Tier and
      */
     public static int generatePotential(Equip pEquip, ItemPotentialTierType pTier) {
         ArrayList<Integer> aPossiblePotential = new ArrayList<Integer>();
         final EquipSlotType pSlot = MapleItemInformationProvider.getInstance().getSlotType(pEquip.getItemId());
         final int nReqLevel = MapleItemInformationProvider.getInstance().getReqLevel(pEquip.getItemId());
-        
+
         int aMainLegendaryPotential[] = {
             42066, // 12% Luck
             42065, // 12% Intelligence
@@ -746,7 +743,7 @@ public class ItemPotentialProvider {
             40086, // 9% All Stat
             30086, // 6% All Stat
         };
-        
+
         int aWeaponEmblemLegendaryPotential[] = {
             40292, // 40% Ignore Defense
             40291, // 35% Ignore Defense
@@ -763,13 +760,13 @@ public class ItemPotentialProvider {
             42096, // +1 Magic Attack Per 10 Levels
             40357, // 10% Chance to Ignore 40% Damage
         };
-        
+
         int aWeaponLegendaryPotential[] = {
             40603, // 40% Boss Damage
             40602, // 35% Boss Damage
             40601, // 30% Boss Damage
-        }; 
-        
+        };
+
         int aNonWeaponLegendaryPotential[] = {
             40045, // 12% HP
             40046, // 12% MP
@@ -782,37 +779,36 @@ public class ItemPotentialProvider {
             30357, // 5% Chance to Ignore 40% Damage    
             40357, // 10% Chance to Ignore 40% Damage   
         };
-        
+
         int aAccessoryLegendaryPotential[] = {
             22056, // +2% Critical Rate
             42052, // +2% Attack
             42071, // +2% Damage
             40656, // +20% Drop Rate
         };
-        
+
         int aHatLegendaryPotential[] = {
             40556, // -1 Second Cooldown Reduction
             40557, // -2 Second Cooldown Reduction
             31002, // Decent Mystic Door
             41006, // Decent Advanced Blessing
         };
-        
+
         int aGloveLegendaryPotential[] = {
             20055, // +8% Critical Rate
             31003, // Decent Sharp Eyes
             41007, // Decent Speed Infusion
         };
-        
+
         int aShoeLegendaryPotential[] = {
             31001, // Decent Haste
             41005, // Decent Combat Orders
         };
-        
+
         int aPantsLegendaryPotential[] = {
             31004, // Decent Hyper Body
         };
-        
-        
+
         int aCustomUniquePotential[] = {
             30086, // 6% ALL STAT
             20086, // 4% ALL STAT
@@ -872,7 +868,7 @@ public class ItemPotentialProvider {
             30357, // 5% Chance to Ignore 40% Damage
             40357, // 10% Chance to Ignore 40% Damage
         };
-        
+
         if (pTier == ItemPotentialTierType.Legendary && nReqLevel >= 70) { // Only defined Legendary Lv. 100+ Potential Lines
             for (int nValue : aMainLegendaryPotential) {
                 aPossiblePotential.add(nValue); // Adds General Potential Values (Legendary)
@@ -892,18 +888,18 @@ public class ItemPotentialProvider {
             if (!isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) && !InventoryConstants.isSecondaryWeapon(pEquip.getItemId())) {
                 for (int nValue : aNonWeaponLegendaryPotential) { // Adds Non-Weapon Potential Values (Legendary)
                     aPossiblePotential.add(nValue);
-                }  
-            } 
+                }
+            }
             if (pSlot == EquipSlotType.Accessary_Eye || pSlot == EquipSlotType.Accessary_Face || pSlot == EquipSlotType.Accessary_Pocket) {
                 for (int nValue : aAccessoryLegendaryPotential) { // Adds Accessory Potential Values (Legendary)
                     aPossiblePotential.add(nValue);
                 }
-            } 
+            }
             if (pSlot == EquipSlotType.Cap) {
                 for (int nValue : aHatLegendaryPotential) { // Adds Hat Potential Values (Legendary)
                     aPossiblePotential.add(nValue);
                 }
-            } 
+            }
             if (pSlot == EquipSlotType.Glove) {
                 for (int nValue : aGloveLegendaryPotential) { // Adds Glove Potential Values (Legendary)
                     aPossiblePotential.add(nValue);
@@ -913,7 +909,7 @@ public class ItemPotentialProvider {
                 for (int nValue : aShoeLegendaryPotential) { // Adds Shoe Potential Values (Legendary)
                     aPossiblePotential.add(nValue);
                 }
-            } 
+            }
             if (pSlot == EquipSlotType.Pants) {
                 for (int nValue : aPantsLegendaryPotential) { // Adds Pants Potential Values (Legendary)
                     aPossiblePotential.add(nValue);
@@ -938,12 +934,12 @@ public class ItemPotentialProvider {
         } else {
             return decideStats(pEquip, pTier, nReqLevel).getOptionId(); // Very Random Potential
         }
-        
+
         Random pRandomPotential = new Random();
         int nIndex = pRandomPotential.nextInt(aPossiblePotential.size());
         return aPossiblePotential.get(nIndex);
     }
-    
+
     /**
      * Resets the potential of an equipment with miracle cube.
      *
@@ -1003,7 +999,7 @@ public class ItemPotentialProvider {
                 equip.setPotential3(decideStats(equip, currenttierType, reqLevel).getOptionId());
             }
         }
-        
+
         //equip.setBonusPotential1(generatePotential(equip, currenttierType));
         //equip.setBonusPotential2(generatePotential(equip, currenttierType));
         //equip.setBonusPotential3(generatePotential(equip, currenttierType));
@@ -1012,7 +1008,6 @@ public class ItemPotentialProvider {
         System.out.println("Potential 1: " + equip.getPotential1());
         System.out.println("Potential 2: " + equip.getPotential2());
         System.out.println("Potential 3: " + equip.getPotential3());*/
-        
         if (hidePotential) {
             ItemPotentialTierType hiddenType = ItemPotentialTierType.getHiddenPotentialTier(currenttierType);
             if (hiddenType != ItemPotentialTierType.None) {
@@ -1054,7 +1049,7 @@ public class ItemPotentialProvider {
         }
         return true;
     }
-    
+
     public static boolean useBonusPotentialScroll(Equip pEquip, ItemPotentialTierType pTier) {
         final int nReqLevel = MapleItemInformationProvider.getInstance().getReqLevel(pEquip.getItemId());
         if (pEquip.getPotentialTier() != ItemPotentialTierType.None) {
@@ -1077,7 +1072,7 @@ public class ItemPotentialProvider {
         pEquip.setPotentialBonusTier(pTier);
         return true;
     }
-    
+
     public static boolean useAwakeningStamp(Equip equip) {
         // Check if equipment is revealed, Rare, Unique, Epic, or Legendary
         // and have the third potential as none.
@@ -1284,7 +1279,7 @@ public class ItemPotentialProvider {
         final EquipSlotType slotType = MapleItemInformationProvider.getInstance().getSlotType(itemid);
 
         System.out.println("[Debug] Cube Potential Option (" + potentialOptionType + ")");
-        
+
         switch (potentialOptionType) {
             case 55:
                 return slotType == EquipSlotType.Shoes;
@@ -1310,7 +1305,7 @@ public class ItemPotentialProvider {
                 System.out.println("[Warning] Found new Potential Option Type (" + potentialOptionType + ")");
                 break;
         }
-        
+
         /*switch (potentialOptionType) {
             case 0: // Any or not stated
                 return !isWeaponRelatedPotentialClass(slotType, itemid);
@@ -1412,7 +1407,6 @@ public class ItemPotentialProvider {
         }
         aOptions.clear();
     }*/
-    
     /**
      * Weapon related potential items which are able to gain boss % or boss ignore stats
      *

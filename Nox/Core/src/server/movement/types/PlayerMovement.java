@@ -101,7 +101,6 @@ public class PlayerMovement implements ProcessPacket<MapleClient> {
             }
 
             // Pet Loot Handling
-            
             ReentrantLock petSafety = new ReentrantLock();
             if (ServerConstants.AUTO_PET_LOOT) {
                 petSafety.lock();
@@ -115,7 +114,7 @@ public class PlayerMovement implements ProcessPacket<MapleClient> {
                     }
                 }
                 if (bHasPet) {
-                    for (MapleMapObject item : items) { 
+                    for (MapleMapObject item : items) {
                         mapLoot = (MapleMapItem) item;
                         if (mapLoot.getMeso() > 0) {
                             chr.gainMeso(mapLoot.getMeso(), true);
@@ -128,7 +127,7 @@ public class PlayerMovement implements ProcessPacket<MapleClient> {
                                 continue;
                             }
                         }*/
-                        
+
                         mapLoot.setPickedUp(true);
                         chr.getMap().broadcastMessage(CField.removeItemFromMap(mapLoot.getObjectId(), 5, chr.getId()), mapLoot.getPosition());
                         chr.getMap().removeMapObject(item);

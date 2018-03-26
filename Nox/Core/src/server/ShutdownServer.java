@@ -56,7 +56,7 @@ public class ShutdownServer implements ShutdownServerMBean {
             }
         }
         System.out.println("All character data has been succesfully saved.");
-        
+
         run(); // Shutdown
     }
 

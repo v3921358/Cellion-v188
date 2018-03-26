@@ -1,7 +1,7 @@
 package server.maps.objects;
 
 import client.MapleClient;
-import constants.skills.AdditionalSkills;
+import constants.skills.Global;
 import java.awt.Point;
 import server.Randomizer;
 import server.maps.AnimatedMapleMapObject;
@@ -21,14 +21,14 @@ import tools.packet.CField;
 public class MapleRuneStone extends AnimatedMapleMapObject {
 
     public static enum MapleRuneStoneType {
-        RuneofSwiftness(0, AdditionalSkills.LIBERATE_THE_SWIFT_RUNE, AdditionalSkills.LIBERATE_THE_RUNE_OF_THUNDER),
-        RuneofRecovery(1, AdditionalSkills.LIBERATE_THE_RECOVERY_RUNE, AdditionalSkills.LIBERATE_THE_RUNE_OF_MIGHT),
-        RuneofDecay(2, AdditionalSkills.LIBERATE_THE_COLLAPSING_RUNE, AdditionalSkills.LIBERATE_THE_RUNE_OF_DARKNESS),
-        RuneofDestruction(3, AdditionalSkills.LIBERATE_THE_COLLAPSING_RUNE2, AdditionalSkills.LIBERATE_THE_RUNE_OF_RICHES),
-        RuneofThunder(4, AdditionalSkills.LIBERATE_THE_DESTRUCTIVE_RUNE, AdditionalSkills.LIBERATE_THE_RUNE_OF_THUNDER2), // TODO: attack buff which strikes monster
-        RuneofMight(5, AdditionalSkills.LIBERATE_THE_DESTRUCTIVE_RUNE2, AdditionalSkills.LIBERATE_THE_RUNE_OF_MIGHT2), // makes character gigantic
-        RuneofDarkness(6, AdditionalSkills.RUNE_POWER, AdditionalSkills.LIBERATE_THE_RUNE_OF_MIGHT3),
-        RuneOfRiches(7, AdditionalSkills.RUNE_POWER2, AdditionalSkills.LIBERATE_THE_RUNE_OF_THUNDER3),;  // if there's anymore, look towards Etc.wz for this.. 
+        RuneofSwiftness(0, Global.LIBERATE_THE_SWIFT_RUNE, Global.LIBERATE_THE_RUNE_OF_THUNDER),
+        RuneofRecovery(1, Global.LIBERATE_THE_RECOVERY_RUNE, Global.LIBERATE_THE_RUNE_OF_MIGHT),
+        RuneofDecay(2, Global.LIBERATE_THE_COLLAPSING_RUNE, Global.LIBERATE_THE_RUNE_OF_DARKNESS),
+        RuneofDestruction(3, Global.LIBERATE_THE_COLLAPSING_RUNE, Global.LIBERATE_THE_RUNE_OF_RICHES),
+        RuneofThunder(4, Global.LIBERATE_THE_DESTRUCTIVE_RUNE, Global.LIBERATE_THE_RUNE_OF_THUNDER_1), // TODO: attack buff which strikes monster
+        RuneofMight(5, Global.LIBERATE_THE_DESTRUCTIVE_RUNE, Global.LIBERATE_THE_RUNE_OF_MIGHT_1), // makes character gigantic
+        RuneofDarkness(6, Global.RUNE_POWER, Global.LIBERATE_THE_RUNE_OF_MIGHT_2),
+        RuneOfRiches(7, Global.RUNE_POWER_1, Global.LIBERATE_THE_RUNE_OF_THUNDER_2),;  // if there's anymore, look towards Etc.wz for this.. 
 
         private final int type;
         private final int primarySkill, secondarySkill;
