@@ -2402,12 +2402,11 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     public List<CharacterTemporaryStat> getTemporaryStats(final MapleStatEffect effect, final long startTime) {
         List<CharacterTemporaryStat> liStats = new ArrayList<>();
 
-        for (Map.Entry<CharacterTemporaryStat, CharacterTemporaryStatValueHolder> pEffect : effects.entrySet()) {
-            if (!pEffect.getKey().isIndie()) {
-                liStats.add(pEffect.getKey());
-            }
-        }
-
+        effects.entrySet().stream()
+                .filter(stat_Effect -> stat_Effect.getValue().effect.sameSource(effect)
+                && (startTime == -1 || startTime == stat_Effect.getValue().startTime))
+                .forEach(stat_Effect -> liStats.add(stat_Effect.getKey()));
+        
         return liStats;
     }
 
