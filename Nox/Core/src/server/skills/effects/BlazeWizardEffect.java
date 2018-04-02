@@ -156,12 +156,14 @@ public class BlazeWizardEffect extends AbstractEffect {
             case BlazeWizard.FINAL_ORBITAL_FLAME_1:
                 break;
             case BlazeWizard.FIRES_OF_CREATION:
-                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, nSourceID);
                 // TODO: Summon
                 break;
             case BlazeWizard.FIRES_OF_CREATION_1:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, nSourceID);
                 break;
             case BlazeWizard.FIRES_OF_CREATION_2:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, nSourceID);
                 break;
             case BlazeWizard.FLAME_BARRIER:
                 pEffect.statups.put(CharacterTemporaryStat.FireBarrier, pEffect.info.get(MapleStatInfo.x));

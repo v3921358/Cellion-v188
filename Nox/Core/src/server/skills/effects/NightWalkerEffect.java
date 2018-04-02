@@ -33,8 +33,14 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.DISORDER:
                 break;
             case NightWalker.HASTE_1:
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
+                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(MapleStatInfo.jump));
+                pEffect.statups.put(CharacterTemporaryStat.EVAR, pEffect.info.get(MapleStatInfo.er));
                 break;
             case NightWalker.HASTE_2:
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
+                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(MapleStatInfo.jump));
+                pEffect.statups.put(CharacterTemporaryStat.EVAR, pEffect.info.get(MapleStatInfo.er));
                 break;
             case NightWalker.KEEN_EYES:
                 break;
@@ -119,7 +125,7 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.DARK_FLARE_1:
                 break;
             case NightWalker.DARK_SERVANT:
-                pEffect.statups.put(CharacterTemporaryStat.ShadowServant, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.ShadowServant, 1);
                 break;
             case NightWalker.ENVELOPING_DARKNESS:
                 break;

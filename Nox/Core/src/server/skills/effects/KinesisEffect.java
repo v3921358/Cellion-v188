@@ -1,9 +1,10 @@
 package server.skills.effects;
 
-import server.skills.effects.manager.AbstractEffect;
 import client.CharacterTemporaryStat;
+import server.skills.effects.manager.AbstractEffect;
 import client.MapleJob;
 import client.MonsterStatus;
+import client.SkillFactory;
 import constants.skills.Kinesis;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
@@ -20,6 +21,13 @@ public class KinesisEffect extends AbstractEffect {
     @Override
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
+            case Kinesis.ESP_BOOSTER:
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.x));
+                break;
+            case Kinesis.MENTAL_SHIELD:
+                pEffect.statups.put(CharacterTemporaryStat.KinesisPsychicShield, 1);
+                pEffect.info.put(MapleStatInfo.time, 210000000);
+                break;
             case Kinesis.ALLIANCE_INSPIRATION_1:
                 break;
             case Kinesis.ARCHANGELIC_BLESSING_600_60_6:
@@ -137,6 +145,8 @@ public class KinesisEffect extends AbstractEffect {
             case Kinesis.MENTAL_STRENGTH:
                 break;
             case Kinesis.PSYCHIC_ARMOR:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePDD, pEffect.info.get(MapleStatInfo.indiePdd));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStance, pEffect.info.get(MapleStatInfo.stanceProp));
                 break;
             case Kinesis.PSYCHIC_BLAST:
                 break;
@@ -147,6 +157,7 @@ public class KinesisEffect extends AbstractEffect {
             case Kinesis.PSYCHIC_DRAIN_1:
                 break;
             case Kinesis.PURE_POWER:
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 break;
             case Kinesis.ULTIMATE_DEEP_IMPACT:
                 break;
@@ -165,10 +176,14 @@ public class KinesisEffect extends AbstractEffect {
             case Kinesis.PSYCHIC_ASSAULT_VORTEX:
                 break;
             case Kinesis.PSYCHIC_BULWARK:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePDD, pEffect.info.get(MapleStatInfo.indiePdd));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStance, pEffect.info.get(MapleStatInfo.stanceProp));
+                pEffect.info.put(MapleStatInfo.time, SkillFactory.getSkill(Kinesis.PSYCHIC_ARMOR).getEffect(1).info.get(MapleStatInfo.time));
                 break;
             case Kinesis.PSYCHIC_GRAB:
                 break;
             case Kinesis.PSYCHIC_REINFORCEMENT:
+                pEffect.statups.put(CharacterTemporaryStat.IndieMADR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Kinesis.PSYCHIC_SMASH:
                 break;
@@ -187,12 +202,17 @@ public class KinesisEffect extends AbstractEffect {
             case Kinesis.MASTERY:
                 break;
             case Kinesis.MENTAL_OVERDRIVE:
+                pEffect.statups.put(CharacterTemporaryStat.KinesisPsychicOver, 1);
                 break;
             case Kinesis.MENTAL_SHOCK:
                 break;
             case Kinesis.MENTAL_TEMPEST:
+                pEffect.statups.put(CharacterTemporaryStat.KinesisPsychicPoint, 30);
+                pEffect.statups.put(CharacterTemporaryStat.KinesisPsychicEnergeShield, 1);
                 break;
             case Kinesis.MENTAL_TEMPEST_1:
+                pEffect.statups.put(CharacterTemporaryStat.KinesisPsychicPoint, 30);
+                pEffect.statups.put(CharacterTemporaryStat.KinesisPsychicEnergeShield, 1);
                 break;
             case Kinesis.MIND_BREAK:
                 break;
@@ -213,6 +233,7 @@ public class KinesisEffect extends AbstractEffect {
             case Kinesis.MIND_TREMOR_REINFORCE:
                 break;
             case Kinesis.PRESIDENTS_ORDERS:
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Kinesis.PSYCHIC_ANNIHILATION_1:
                 break;
@@ -233,6 +254,8 @@ public class KinesisEffect extends AbstractEffect {
             case Kinesis.SUPREME_CONCENTRATION:
                 break;
             case Kinesis.TELEPATH_TACTICS:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMAD, pEffect.info.get(MapleStatInfo.indieMad));
                 break;
             case Kinesis.ULTIMATE_BPM:
                 break;
@@ -245,7 +268,7 @@ public class KinesisEffect extends AbstractEffect {
 
     @Override
     public boolean IsCorrectClass(int nClass) {
-        return nClass == 14000 || nClass == 14210 || nClass == 14211 || nClass == 14212;
+        return nClass == 14000 || nClass == 14200 || nClass == 14210 || nClass == 14211 || nClass == 14212;
     }
 
 }

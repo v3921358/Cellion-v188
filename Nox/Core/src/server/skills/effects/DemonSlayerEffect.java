@@ -97,7 +97,7 @@ public class DemonSlayerEffect extends AbstractEffect {
             case DemonSlayer.CERBERUS_CHOMP:
                 break;
             case DemonSlayer.DARK_METAMORPHOSIS:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.damR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, pEffect.info.get(MapleStatInfo.indieMhpR));
                 pEffect.statups.put(CharacterTemporaryStat.PowerGuard, pEffect.info.get(MapleStatInfo.damage));
                 break;

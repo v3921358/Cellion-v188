@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import client.CharacterTemporaryStat;
 import client.MapleClient;
+import client.MapleStat;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
 import client.PlayerStats;
@@ -13,6 +14,9 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.skills.Xenon;
+import handling.jobs.Kinesis;
+import handling.jobs.Kinesis.KinesisHandler;
+import handling.jobs.Resistance.BlasterHandler;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.Randomizer;
@@ -92,6 +96,21 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
                 if (Randomizer.nextInt(100) < (chr.getTotalSkillLevel(Xenon.AEGIS_SYSTEM) * 10)) {
                     chr.getMap().broadcastMessage(JobPacket.XenonPacket.EazisSystem(chr.getId(), oid));
                 }
+            }
+        }
+        
+        if (GameConstants.isKinesis(chr.getJob())) {
+            if (chr.hasBuff(CharacterTemporaryStat.KinesisPsychicShield)) {
+                chr.cancelEffectFromTemporaryStat(CharacterTemporaryStat.KinesisPsychicShield); // Use Shield
+                KinesisHandler.psychicPointResult(chr, chr.getPrimaryStack() - 1); // Consume PP
+                //damage *= 0.4; // Apply 60% Damage Reduction
+            } else if (chr.getPrimaryStack() > 0) {
+                KinesisHandler.requestMentalShield(chr); // Give Shield
+            }
+        }
+        if (GameConstants.isBlaster(chr.getJob())) {
+            if (chr.hasSkill(constants.skills.Blaster.BLAST_SHIELD)) {
+                BlasterHandler.requestBlastShield(chr); // Give Shield
             }
         }
 
@@ -287,6 +306,18 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
             }
         }
         chr.getMap().broadcastMessage(chr, CField.damagePlayer(chr.getId(), type_, damage, monsteridfrom, direction, skillid, pDMG, pPhysical, pID, pType, pPos, offset, offset_d, fake), false);
+        
+        // Revive Passives
+        if (!chr.isAlive()) {
+            if (chr.hasBuff(CharacterTemporaryStat.ReviveOnce)) {
+                chr.getStat().setHp(chr.getStat().getMaxHp(), chr);
+                chr.updateSingleStat(MapleStat.HP, chr.getStat().getMaxHp());
+                chr.getStat().setMp(chr.getStat().getMaxMp(), chr);
+                chr.updateSingleStat(MapleStat.MP, chr.getStat().getMaxMp());
+                chr.dispelDebuffs();
+                chr.cancelAllBuffs();
+            }
+        }
     }
 
 }

@@ -27,6 +27,7 @@ public class IceLightningWizardEffect extends AbstractEffect {
                 pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case IceLightningWizard.COLD_BEAM:
+                pEffect.monsterStatus.put(MonsterStatus.FREEZE, 1);
                 break;
             case IceLightningWizard.COLD_BEAM_1:
                 break;

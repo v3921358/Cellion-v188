@@ -587,26 +587,26 @@ public enum RecvPacketOpcode {
     ReleasePsychicLock(742),// Version 179 = 742
     CreateKinesisPsychicArea(744),// Version 179 = 744
     DoActivePsychicArea(745),// Version 179 = 745
-    DebuffPsychicArea(725),// Version 177 = 725
-    ReleasePsychicArea(726),// Version 177 = 726
-    PsychicOverRequest(727),// Version 177 = 727
-    DecPsychicPointRequest(747),// Version 177 = 728
-    TouchMeEndRequest(739),// Version 179
-    BiteAttackResponse(740),// Version 179
-    SaveUrusSkill(741),// Version 179
-    GetSavedUrusSkill(742),// Version 179
-    UrusShopRequest(743),// Version 179
-    UrusPartyMemberList(744),// Version 179
-    UserKeyDownStepRequest(745),// Version 179
-    DailyGiftRequest(725),// Version 177
-    SkillCommandLock(726),// Version 177
-    BeastFormWingOnOff(727),// Version 177
-    ResetAirHitCountRequest(728),// Version 177
-    RWActionCancel(729),// Version 177
-    ReleaseRWGrab(730),// Version 177
-    RWClearCurrentAttackRequest(731),// Version 177
-    RWMultiChargeCancelRequest(732),// Version 177
-    FuntionFootholdMan(733),// Version 177
+    DebuffPsychicArea(746),// Version 177 = 725
+    ReleasePsychicArea(747),// Version 177 = 726
+    PsychicOverRequest(748),// Version 177 = 727
+    DecPsychicPointRequest(749),// Version 177 = 728
+    TouchMeEndRequest(750),// Version 179
+    BiteAttackResponse(751),// Version 179
+    SaveUrusSkill(752),// Version 179
+    GetSavedUrusSkill(753),// Version 179
+    UrusShopRequest(754),// Version 179
+    UrusPartyMemberList(755),// Version 179
+    UserKeyDownStepRequest(756),// Version 179
+    DailyGiftRequest(757),// Version 177
+    SkillCommandLock(758),// Version 177
+    BeastFormWingOnOff(759),// Version 177
+    ResetAirHitCountRequest(760),// Version 177
+    RWActionCancel(761),// Version 177
+    ReleaseRWGrab(762),// Version 177
+    RWClearCurrentAttackRequest(763),// Version 177
+    RWMultiChargeCancelRequest(764),// Version 177
+    FuntionFootholdMan(765),// Version 177
     GET_BOOK_INFO(777),// Version 179
     MONSTER_BOOK_DROPS(779),// Version 179
     GachapierrotRequest(781),// Version 179

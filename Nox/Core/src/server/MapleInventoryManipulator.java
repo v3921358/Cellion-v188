@@ -656,6 +656,7 @@ public class MapleInventoryManipulator {
 
     public static void equip(final MapleClient c, final short src, short dst) {
         final MapleCharacter chr = c.getPlayer();
+        if (chr.isDeveloper()) chr.dropMessage(5, "[Equip Debug] Slot Type : " + dst);
         if (chr == null || dst == EquipSlotType.MonsterBook.getSlot()) {
             return;
         }

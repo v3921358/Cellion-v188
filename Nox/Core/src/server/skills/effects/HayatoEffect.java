@@ -125,6 +125,9 @@ public class HayatoEffect extends AbstractEffect {
             case Hayato.FALCON_DIVE_2:
                 break;
             case Hayato.GOD_OF_BLADES:
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Hayato.HITOKIRI_STRIKE:
                 break;

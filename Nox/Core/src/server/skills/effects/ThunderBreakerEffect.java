@@ -62,6 +62,7 @@ public class ThunderBreakerEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case ThunderBreaker.KNUCKLE_BOOSTER_1:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case ThunderBreaker.KNUCKLE_MASTERY_3:
                 break;

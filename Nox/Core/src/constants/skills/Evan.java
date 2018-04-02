@@ -11,6 +11,7 @@ public class Evan {
     public static final int HIGH_WISDOM_5 = 22110015;
     public static final int LIGHTNING_BOLT = 22111000;
     public static final int MAGIC_BOOSTER_6 = 22111020;
+    public static final int MAGIC_GUARD_1 = 22001012;
     public static final int MAGIC_GUARD_3 = 22111001;
     public static final int MANA_BURST_II = 22110010;
     public static final int PARTNERS = 22110016;

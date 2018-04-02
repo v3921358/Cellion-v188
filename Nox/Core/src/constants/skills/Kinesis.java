@@ -12,7 +12,14 @@ public class Kinesis {
         }
         return true;
     }
-
+    
+    public static final int ESP_BOOSTER = 142001003;
+    public static final int KINETIC_CRASH = 142001001;
+    public static final int KINETIC_STEP = 142001004;
+    public static final int KINETIC_STEP_1 = 142001006;
+    public static final int MENTAL_FORTITUDE = 142000005;
+    public static final int MENTAL_SHIELD = 142001007;
+    public static final int PSYCHIC_FORCE = 142001000;
     public static final int ALLIANCE_INSPIRATION_1 = 140000190;
     public static final int ARCHANGELIC_BLESSING_600_60_6 = 140000086;
     public static final int ARCHANGELIC_BLESSING_700_70_7 = 140000091;

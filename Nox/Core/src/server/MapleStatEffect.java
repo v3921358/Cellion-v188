@@ -763,7 +763,7 @@ public class MapleStatEffect implements Serializable {
                     applyfrom.getMap().spawnSummon(pJaguar);
                     applyfrom.getSummons().put(WildHunter.SUMMON_JAGUAR, pJaguar);
                 }
-                
+
                 List<Integer> count = new ArrayList<>();
                 final List<MapleSummon> ss = applyfrom.getSummonsReadLock();
                 try {
@@ -1546,8 +1546,8 @@ public class MapleStatEffect implements Serializable {
                 }
             }
         }
-        
-        if(applyfrom.hasGodMode()) {
+
+        if (applyfrom.hasGodMode()) {
             mpchange = 0; // God mode, no mana cost.
         }
         return mpchange;
@@ -1564,6 +1564,18 @@ public class MapleStatEffect implements Serializable {
                 powerchange = 0;
             } else {
                 powerchange = info.get(MapleStatInfo.powerCon);
+            }
+        }
+        return powerchange;
+    }
+
+    public final int calcPsychicPowerChange(final MapleCharacter applyfrom) {
+        int powerchange = 0;
+        if (GameConstants.isKinesis(applyfrom.getJob())) {
+            if (info.get(MapleStatInfo.ppCon) != 0) {
+                powerchange = info.get(MapleStatInfo.ppCon) * -1;
+            } else if(info.get(MapleStatInfo.ppRecovery) != 0) {
+                powerchange = info.get(MapleStatInfo.ppRecovery);
             }
         }
         return powerchange;

@@ -12,7 +12,7 @@ import netty.ProcessPacket;
 
 /**
  *
- * @author Lloyd Korn
+ * @author Lloyd Korn (LaiLaiNoob/LightPepsi is a faggot)
  */
 public class UpdateHyperStatHandler implements ProcessPacket<MapleClient> {
 

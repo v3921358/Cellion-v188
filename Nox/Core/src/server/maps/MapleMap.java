@@ -3402,6 +3402,12 @@ public final class MapleMap {
             if (ServerConstants.MODIFY_SPAWN_RATE) {
                 spawnRate *= ServerConstants.SPAWN_RATE_MULTIPLIER;
             }
+            
+            if (ServerConstants.CUSTOM_MAP_BUFFED_SPAWN) {
+                if (GameConstants.isCustomMapForBuffedSpawn(getId())) {
+                    spawnRate *= ServerConstants.CUSTOM_MAP_BUFFED_SPAWN_RATE;
+                }
+            }
 
             int numShouldSpawn = (int) (Math.min(smr.maxRegularSpawnAtOnce, Math.max(0, max - spawnedSize)) * spawnRate);
 

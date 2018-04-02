@@ -54,7 +54,8 @@ public class PhantomEffect extends AbstractEffect {
             case Phantom.BLASON:
                 break;
             case Phantom.CLAIR_DE_LUNE:
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, 10);
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, 10);
+                pEffect.statups.put(CharacterTemporaryStat.IndieMAD, 10);
                 break;
             case Phantom.FINAL_FEINT:
                 pEffect.statups.put(CharacterTemporaryStat.ReviveOnce, 1);

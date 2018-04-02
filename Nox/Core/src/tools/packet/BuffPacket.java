@@ -172,7 +172,9 @@ public class BuffPacket {
         BuffPacket.clearFakeBuffstats(statups);
         boolean bEndecode4Byte = false, bMovementAffecting = false;
         for (Map.Entry<CharacterTemporaryStat, Integer> stat : statups.entrySet()) {
-            System.out.println(stat.getKey().name());
+            if (ServerConstants.DEVELOPER_DEBUG_MODE) {
+                System.out.println("[Debug] Applying Temporary Stat (" + stat.getKey().name() + ") Value (" + statups.get(stat.getKey())+ ")");
+            }
             if (CharacterTemporaryStat.isEnDecode4Byte(stat.getKey())) {
                 bEndecode4Byte = true;
             }
@@ -516,15 +518,15 @@ public class BuffPacket {
         } else {
             oPacket.EncodeInteger(0);//nViperEnergyCharged
         }
-        
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HayatoStance)) { 
+
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HayatoStance)) {
             oPacket.EncodeInteger(0);
             oPacket.EncodeInteger(0);
             oPacket.EncodeInteger(0);
             oPacket.EncodeInteger(0);
         }
-        
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HayatoStanceBonus)) { 
+
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HayatoStanceBonus)) {
             oPacket.EncodeInteger(0);
             oPacket.EncodeInteger(0);
             oPacket.EncodeInteger(0);
@@ -536,14 +538,14 @@ public class BuffPacket {
             oPacket.Encode(1);
             oPacket.EncodeInteger(2);
         }
-        
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Battoujutsu)) { 
+
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Battoujutsu)) {
             oPacket.EncodeInteger(0);
             oPacket.EncodeInteger(0);
             oPacket.EncodeInteger(0);
             oPacket.EncodeInteger(0);
         }
-        
+
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.DarkSight)) { //DarkSight
             oPacket.EncodeInteger(0);
         }
@@ -620,13 +622,13 @@ public class BuffPacket {
             oPacket.EncodeShort(0);//usExpireTerm
         }
         if (statups.containsKey(CharacterTemporaryStat.RideVehicle)) {
-            System.out.println("RIDEVEHICLE:: " + statups.get(CharacterTemporaryStat.RideVehicle));
             oPacket.EncodeInteger(statups.get(CharacterTemporaryStat.RideVehicle));//Value(MountID)
             oPacket.EncodeInteger(buffid);//Reason(SkillID)
             //EncodeTime(tLastUpdated)
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(1);//tCur
-            oPacket.EncodeInteger(0);
+            oPacket.Encode(true);
+            oPacket.EncodeInteger((int) System.currentTimeMillis());//tCur
+            
+            // todo: this shouldnt exist which means part of ur encodeforlocal is wrong since without it u err38
             oPacket.EncodeInteger(0);
             oPacket.EncodeInteger(0);
         }
@@ -724,7 +726,7 @@ public class BuffPacket {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.RideVehicle));//Value(MountID)
             oPacket.EncodeInteger(chr.getBuffSource(CharacterTemporaryStat.RideVehicle));//Reason(SkillID)
             //EncodeTime(tLastUpdated)
-            oPacket.Encode(1);
+            oPacket.Encode(true);
             oPacket.EncodeInteger(nullValueTCur);//tCur
         } else {
             oPacket.EncodeInteger(0);//Value
@@ -959,6 +961,20 @@ public class BuffPacket {
         oPacket.EncodeShort(600);
 
         oPacket.Fill(0, 20);
+
+        return oPacket.ToPacket();
+    }
+
+    public static Packet giveForeignBuff(MapleCharacter chr) {
+        OutPacket oPacket = new OutPacket(80);
+
+        oPacket.EncodeShort(SendPacketOpcode.UserTemporaryStatSet.getValue());
+        oPacket.EncodeInteger(chr.getId());
+
+        //PacketHelper.writeBuffMask(oPacket, statups); //
+        BuffPacket.encodeForRemote(oPacket, chr);
+        oPacket.EncodeShort(0); // tDelay
+        oPacket.Encode(0);
 
         return oPacket.ToPacket();
     }

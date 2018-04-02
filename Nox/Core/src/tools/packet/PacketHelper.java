@@ -889,7 +889,7 @@ public class PacketHelper {
                 oPacket.EncodeLong(System.currentTimeMillis()); //according to the kmst idb this is wrong
             }
             if (eqSpecialStats.contains(EquipSpecialStat.ITEM_STATE)) {  //There are multiple item state
-                oPacket.EncodeInteger(equip.getStarFlag());
+                oPacket.EncodeInteger(0x100); // TODO: 0x100 = Can be upgraded still (Yellow Star); 0 = Fully Upgraded (Blue Star)
             }
         }
     }
@@ -1103,25 +1103,25 @@ public class PacketHelper {
         }
 
         if ((mask & 0x20000000) != 0) {
-            //for (int i = 1; i <= 5; i++) { // 5 now, for fifth job
-            //    addStolenSkills(oPacket, chr, i, false); // 52
-            //}
-            // TODO: Revert to ^
             for (int i = 1; i <= 5; i++) {
                 for (int j = 0; j < GameConstants.getNumSteal(i); j++) {
-                    oPacket.EncodeInteger(0);
+                    oPacket.EncodeInteger(chr.aStealMemory[i][j]);
+                    //System.err.println(String.format("[%d][%d] = %d", i, j, chr.aStealMemory[i][j]));
                 }
             }
         }
 
-        if ((mask & 0x10000000) != 0) {//only supposed to be 4 ints here (16bytes), not sure about the extra 52 bytes within the below packet
-            //addChosenSkills(oPacket, chr); //20 bytes, 4x (5 jobs) = 20. 
-            // TODO: Revert to ^
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
+        if ((mask & 0x10000000) != 0) {
+            oPacket.EncodeInteger(chr.mStealSkillInfo.get(24001001));
+            oPacket.EncodeInteger(chr.mStealSkillInfo.get(24101001));
+            oPacket.EncodeInteger(chr.mStealSkillInfo.get(24111001));
+            oPacket.EncodeInteger(chr.mStealSkillInfo.get(24121001));
+            oPacket.EncodeInteger(chr.mStealSkillInfo.get(24121054));
+            //System.err.println(String.format("[24001001] = %d", chr.mStealSkillInfo.get(24001001)));
+            //System.err.println(String.format("[24101001] = %d", chr.mStealSkillInfo.get(24101001)));
+            //System.err.println(String.format("[24111001] = %d", chr.mStealSkillInfo.get(24111001)));
+            //System.err.println(String.format("[24121001] = %d", chr.mStealSkillInfo.get(24121001)));
+            //System.err.println(String.format("[24121054] = %d", chr.mStealSkillInfo.get(24121054)));
         }
         if ((mask & 0x80000000) != 0) {//correct
             addAbilityInfo(oPacket, chr);

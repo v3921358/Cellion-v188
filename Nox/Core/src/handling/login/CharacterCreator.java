@@ -64,10 +64,10 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         int[][] nGuideBookCollection = new int[][]{{4161001, 0}, {4161047, 1}, {4161048, 2000}, {4161052, 2001}, {4161054, 3}, {4161079, 2002}};
         int nGuideBook = 0;
         int nIndex = 0;
-        MapleCharacter oNewCharacter = MapleCharacter.getDefault(c, pJob);
+        MapleCharacter pNewCharacter = MapleCharacter.getDefault(c, pJob);
         int nCharacterPos = c.loadCharacters(c.getWorld()).size();
-        final MapleItemInformationProvider oItemProvider = MapleItemInformationProvider.getInstance();
-        final MapleInventory pEquip = oNewCharacter.getInventory(MapleInventoryType.EQUIPPED);
+        final MapleItemInformationProvider pItemProvider = MapleItemInformationProvider.getInstance();
+        final MapleInventory pEquip = pNewCharacter.getInventory(MapleInventoryType.EQUIPPED);
         Item pItem;
 
         if (pJob == null) {
@@ -173,69 +173,69 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
             nTail = 0;
         }
 
-        oNewCharacter.setWorld((byte) c.getWorld());
-        oNewCharacter.setFace(nFace);
-        oNewCharacter.setCharListPosition(nCharacterPos);
-        oNewCharacter.setHair(nHair);
-        oNewCharacter.setZeroBetaHair(37623);
-        oNewCharacter.setZeroBetaFace(21290);
-        oNewCharacter.setAngelicDressupFace(21173);
-        oNewCharacter.setAngelicDressupHair(37141);
-        oNewCharacter.setAngelicDressupSuit(5010094);
-        oNewCharacter.setGender(nGender);
-        oNewCharacter.setName(name);
-        oNewCharacter.setSkinColor(nSkin);
-        oNewCharacter.setFaceMarking(nFaceMark);
-        oNewCharacter.setEars(nEars);
-        oNewCharacter.setTail(nTail);
+        pNewCharacter.setWorld((byte) c.getWorld());
+        pNewCharacter.setFace(nFace);
+        pNewCharacter.setCharListPosition(nCharacterPos);
+        pNewCharacter.setHair(nHair);
+        pNewCharacter.setZeroBetaHair(37623);
+        pNewCharacter.setZeroBetaFace(21290);
+        pNewCharacter.setAngelicDressupFace(21173);
+        pNewCharacter.setAngelicDressupHair(37141);
+        pNewCharacter.setAngelicDressupSuit(5010094);
+        pNewCharacter.setGender(nGender);
+        pNewCharacter.setName(name);
+        pNewCharacter.setSkinColor(nSkin);
+        pNewCharacter.setFaceMarking(nFaceMark);
+        pNewCharacter.setEars(nEars);
+        pNewCharacter.setTail(nTail);
 
         switch (pJob) {
             case AngelicBuster:
-                oNewCharacter.setJob((short) 6500);
-                oNewCharacter.setLevel((short) 10);
-                oNewCharacter.getStat().dex = 68;
-                oNewCharacter.getStat().maxhp = 1000;
-                oNewCharacter.getStat().hp = 1000;
-                oNewCharacter.setRemainingSp(3);
+                pNewCharacter.setJob((short) 6500);
+                pNewCharacter.setLevel((short) 10);
+                pNewCharacter.getStat().dex = 68;
+                pNewCharacter.getStat().maxhp = 1000;
+                pNewCharacter.getStat().hp = 1000;
+                pNewCharacter.setRemainingSp(3);
                 break;
             case Zero:
-                oNewCharacter.setLevel((short) 100);
-                oNewCharacter.getStat().str = 518;
-                oNewCharacter.getStat().maxhp = 6910;
-                oNewCharacter.getStat().hp = 6910;
-                oNewCharacter.getStat().maxmp = 100;
-                oNewCharacter.getStat().mp = 100;
-                oNewCharacter.setRemainingSp(3, 0); // Alpha
-                oNewCharacter.setRemainingSp(3, 1); // Beta
+                pNewCharacter.setLevel((short) 100);
+                pNewCharacter.getStat().str = 518;
+                pNewCharacter.getStat().maxhp = 6910;
+                pNewCharacter.getStat().hp = 6910;
+                pNewCharacter.getStat().maxmp = 100;
+                pNewCharacter.getStat().mp = 100;
+                pNewCharacter.setRemainingSp(3, 0); // Alpha
+                pNewCharacter.setRemainingSp(3, 1); // Beta
                 break;
             case Kinesis:
-                oNewCharacter.setLevel((short) 10);
-                oNewCharacter.getStat().str = 4;
-                oNewCharacter.getStat().int_ = 52;
-                oNewCharacter.getStat().maxhp = 374;
-                oNewCharacter.getStat().hp = 374;
-                oNewCharacter.getStat().maxmp = 5; // PP
-                oNewCharacter.getStat().mp = 5;
+                pNewCharacter.setLevel((short) 10);
+                pNewCharacter.getStat().str = 4;
+                pNewCharacter.getStat().int_ = 52;
+                pNewCharacter.getStat().maxhp = 374;
+                pNewCharacter.getStat().hp = 374;
+                pNewCharacter.getStat().maxmp = 5; // PP
+                pNewCharacter.getStat().mp = 5;
                 break;
             case Luminous:
-                oNewCharacter.setJob((short) 2700);
-                oNewCharacter.setLevel((short) 10);
-                oNewCharacter.getStat().str = 4;
-                oNewCharacter.getStat().int_ = 57;
-                oNewCharacter.getStat().maxhp = 500;
-                oNewCharacter.getStat().hp = 500;
-                oNewCharacter.getStat().maxmp = 1000;
-                oNewCharacter.getStat().mp = 1000;
-                oNewCharacter.setRemainingSp(3);
+                pNewCharacter.setJob((short) 2700);
+                pNewCharacter.setLevel((short) 10);
+                pNewCharacter.getStat().str = 4;
+                pNewCharacter.getStat().int_ = 57;
+                pNewCharacter.getStat().maxhp = 500;
+                pNewCharacter.getStat().hp = 500;
+                pNewCharacter.getStat().maxmp = 1000;
+                pNewCharacter.getStat().mp = 1000;
+                pNewCharacter.setRemainingSp(3);
                 break;
             case BeastTamer:
-                oNewCharacter.setLevel((short) 10);
-                oNewCharacter.getStat().maxhp = 567;
-                oNewCharacter.getStat().hp = 551;
-                oNewCharacter.getStat().maxmp = 270;
-                oNewCharacter.getStat().mp = 263;
-                oNewCharacter.setRemainingAp(45);
-                oNewCharacter.setRemainingSp(3, 0);
+                pNewCharacter.setLevel((short) 10);
+                pNewCharacter.getStat().maxhp = 567;
+                pNewCharacter.getStat().hp = 551;
+                pNewCharacter.getStat().maxmp = 270;
+                pNewCharacter.getStat().mp = 263;
+                pNewCharacter.setRemainingAp(45);
+                pNewCharacter.setRemainingSp(3, 0);
                 break;
             default:
                 break;
@@ -248,16 +248,28 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         int[][] equips = new int[][]{{nHat, -1}, {nTop, -5}, {nBottom, -6}, {nCape, -9}, {nShoes, -7}, {nWeapon, -11}, {nShield, -10}};
         for (int[] i : equips) {
             if (i[0] > 0) {
-                pItem = oItemProvider.getEquipById(i[0]);
+                pItem = pItemProvider.getEquipById(i[0]);
                 pItem.setPosition((byte) i[1]);
                 pItem.setGMLog("Character Creation");
                 pEquip.addFromDB(pItem);
             }
         }
         if (pJob == LoginInformationProvider.JobType.AngelicBuster || pJob == LoginInformationProvider.JobType.Kaiser) {
-            pItem = oItemProvider.getEquipById(pJob == LoginInformationProvider.JobType.Kaiser ? 1352500 : 1352601);
+            pItem = pItemProvider.getEquipById(pJob == LoginInformationProvider.JobType.Kaiser ? 1352500 : 1352601);
             pItem.setPosition((byte) -10);
             pItem.setGMLog("Nova Shield");
+            pEquip.addFromDB(pItem);
+        }
+        if (pJob == LoginInformationProvider.JobType.AngelicBuster) {
+            pItem = pItemProvider.getEquipById(1352600);
+            pItem.setPosition((byte) -10);
+            pItem.setGMLog("Secondary Weapon");
+            pEquip.addFromDB(pItem);
+        }
+        if (pJob == LoginInformationProvider.JobType.Kinesis) {
+            pItem = pItemProvider.getEquipById(1353200);
+            pItem.setPosition((byte) -10);
+            pItem.setGMLog("Chess Piece");
             pEquip.addFromDB(pItem);
         }
 
@@ -365,7 +377,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
             for (DanceMoves moves : DanceMoves.values()) {
                 mSkill.put(SkillFactory.getSkill(moves.getSkillid()), new SkillEntry((byte) 1, (byte) 1, -1));
             }
-            oNewCharacter.changeSkillLevelSkip(mSkill, false);
+            pNewCharacter.changeSkillLevelSkip(mSkill, false);
         }
         
         /*if (GameConstants.isBeastTamer(oNewCharacter.getJob())) {
@@ -379,103 +391,104 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         }*/
         
         for (int[] i : nGuideBookCollection) {
-            if (oNewCharacter.getJob() == i[1]) {
+            if (pNewCharacter.getJob() == i[1]) {
                 nGuideBook = i[0];
-            } else if (oNewCharacter.getJob() / 1000 == i[1]) {
+            } else if (pNewCharacter.getJob() / 1000 == i[1]) {
                 nGuideBook = i[0];
             }
         }
         if (nGuideBook > 0) {
-            oNewCharacter.getInventory(MapleInventoryType.ETC).addItem(new Item(nGuideBook, (byte) 0, (short) 1, (byte) 0));
+            pNewCharacter.getInventory(MapleInventoryType.ETC).addItem(new Item(nGuideBook, (byte) 0, (short) 1, (byte) 0));
         }
 
         // Balance changes and custom tutorial preparation.
         if (ServerConstants.UNIVERSAL_START) {
             switch (pJob) {
                 case DualBlade:
-                    oNewCharacter.setJob((short) 430);
-                    oNewCharacter.setLevel((short) 10);
-                    oNewCharacter.getStat().maxmp = 300;
-                    oNewCharacter.getStat().mp = 300;
-                    oNewCharacter.setRemainingAp(40);
-                    oNewCharacter.setRemainingSp(35, 0);
+                    pNewCharacter.setJob((short) 430);
+                    pNewCharacter.setLevel((short) 10);
+                    pNewCharacter.getStat().maxmp = 300;
+                    pNewCharacter.getStat().mp = 300;
+                    pNewCharacter.setRemainingAp(40);
+                    pNewCharacter.setRemainingSp(35, 0);
                     break;
                 case Cannoneer:
-                    oNewCharacter.setJob((short) 501);
-                    oNewCharacter.setLevel((short) 10);
-                    oNewCharacter.getStat().maxmp = 230;
-                    oNewCharacter.getStat().mp = 230;
-                    oNewCharacter.setRemainingAp(40);
+                    pNewCharacter.setJob((short) 501);
+                    pNewCharacter.setLevel((short) 10);
+                    pNewCharacter.getStat().maxmp = 230;
+                    pNewCharacter.getStat().mp = 230;
+                    pNewCharacter.setRemainingAp(40);
                     break;
                 case Jett:
-                    oNewCharacter.setJob((short) 508);
-                    oNewCharacter.setLevel((short) 10);
-                    oNewCharacter.getStat().maxmp = 200;
-                    oNewCharacter.getStat().mp = 200;
-                    oNewCharacter.setRemainingAp(40);
+                    pNewCharacter.setJob((short) 508);
+                    pNewCharacter.setLevel((short) 10);
+                    pNewCharacter.getStat().maxmp = 200;
+                    pNewCharacter.getStat().mp = 200;
+                    pNewCharacter.setRemainingAp(40);
                     break;
                 case AngelicBuster:
-                    oNewCharacter.setJob((short) 6500);
-                    oNewCharacter.setLevel((short) 10);
-                    oNewCharacter.getStat().dex = 68;
-                    oNewCharacter.getStat().maxhp = 1000;
-                    oNewCharacter.getStat().hp = 1000;
-                    oNewCharacter.setRemainingSp(5);
+                    pNewCharacter.setJob((short) 6500);
+                    pNewCharacter.setLevel((short) 10);
+                    pNewCharacter.getStat().dex = 68;
+                    pNewCharacter.getStat().maxhp = 1000;
+                    pNewCharacter.getStat().hp = 1000;
+                    pNewCharacter.setRemainingSp(5);
                     break;
                 case Zero:
-                    oNewCharacter.setLevel((short) 100);
-                    oNewCharacter.getStat().str = 518;
-                    oNewCharacter.getStat().maxhp = 6910;
-                    oNewCharacter.getStat().hp = 6910;
-                    oNewCharacter.getStat().maxmp = 100;
-                    oNewCharacter.getStat().mp = 100;
-                    oNewCharacter.setRemainingSp(5, 0); //alpha
-                    oNewCharacter.setRemainingSp(5, 1); //beta
+                    pNewCharacter.setLevel((short) 100);
+                    pNewCharacter.getStat().str = 518;
+                    pNewCharacter.getStat().maxhp = 6910;
+                    pNewCharacter.getStat().hp = 6910;
+                    pNewCharacter.getStat().maxmp = 100;
+                    pNewCharacter.getStat().mp = 100;
+                    pNewCharacter.setRemainingSp(5, 0); //alpha
+                    pNewCharacter.setRemainingSp(5, 1); //beta
                     break;
                 case Kinesis:
-                    oNewCharacter.setLevel((short) 10);
-                    oNewCharacter.getStat().str = 4;
-                    oNewCharacter.getStat().int_ = 52;
-                    oNewCharacter.getStat().maxhp = 374;
-                    oNewCharacter.getStat().hp = 374;
-                    oNewCharacter.getStat().maxmp = 5;
-                    oNewCharacter.getStat().mp = 5;
-                    oNewCharacter.setRemainingSp(5);
+                    pNewCharacter.setJob((short) 14200); 
+                    pNewCharacter.setLevel((short) 10);
+                    pNewCharacter.getStat().str = 4;
+                    pNewCharacter.getStat().int_ = 52;
+                    pNewCharacter.getStat().maxhp = 374;
+                    pNewCharacter.getStat().hp = 374;
+                    pNewCharacter.getStat().maxmp = 5;
+                    pNewCharacter.getStat().mp = 5;
+                    pNewCharacter.setRemainingSp(5);
                     break;
                 case Luminous:
-                    oNewCharacter.setJob((short) 2700);
-                    oNewCharacter.setLevel((short) 10);
-                    oNewCharacter.getStat().str = 4;
-                    oNewCharacter.getStat().int_ = 57;
-                    oNewCharacter.getStat().maxhp = 500;
-                    oNewCharacter.getStat().hp = 500;
-                    oNewCharacter.getStat().maxmp = 1000;
-                    oNewCharacter.getStat().mp = 1000;
-                    oNewCharacter.setRemainingSp(5);
+                    pNewCharacter.setJob((short) 2700);
+                    pNewCharacter.setLevel((short) 10);
+                    pNewCharacter.getStat().str = 4;
+                    pNewCharacter.getStat().int_ = 57;
+                    pNewCharacter.getStat().maxhp = 500;
+                    pNewCharacter.getStat().hp = 500;
+                    pNewCharacter.getStat().maxmp = 1000;
+                    pNewCharacter.getStat().mp = 1000;
+                    pNewCharacter.setRemainingSp(5);
                     break;
                 case BeastTamer:
-                    oNewCharacter.setLevel((short) 10);
-                    oNewCharacter.getStat().maxhp = 567;
-                    oNewCharacter.getStat().hp = 551;
-                    oNewCharacter.getStat().maxmp = 270;
-                    oNewCharacter.getStat().mp = 263;
-                    oNewCharacter.setRemainingAp(45);
-                    oNewCharacter.setRemainingSp(5, 0);
+                    pNewCharacter.setLevel((short) 10);
+                    pNewCharacter.getStat().maxhp = 567;
+                    pNewCharacter.getStat().hp = 551;
+                    pNewCharacter.getStat().maxmp = 270;
+                    pNewCharacter.getStat().mp = 263;
+                    pNewCharacter.setRemainingAp(45);
+                    pNewCharacter.setRemainingSp(5, 0);
                     break;
                 default:
-                    oNewCharacter.setLevel((short) 10);
-                    oNewCharacter.setRemainingAp(40);
-                    oNewCharacter.setRemainingSp(5, 0);
-                    oNewCharacter.getStat().maxmp = 350;
-                    oNewCharacter.getStat().mp = 350;
+                    pNewCharacter.setLevel((short) 10);
+                    pNewCharacter.setRemainingAp(40);
+                    pNewCharacter.setRemainingSp(5, 0);
+                    pNewCharacter.getStat().maxmp = 350;
+                    pNewCharacter.getStat().mp = 350;
                     break;
             }
         }
 
         // Save Character
-        MapleCharacter.saveNewCharToDB(oNewCharacter, pJob, subcategory);
-        c.write(CLogin.addNewCharEntry(oNewCharacter, 0));
-        c.createdChar(oNewCharacter.getId());
-        oNewCharacter.newCharRewards();
+        MapleCharacter.saveNewCharToDB(pNewCharacter, pJob, subcategory);
+        c.write(CLogin.addNewCharEntry(pNewCharacter, 0));
+        c.createdChar(pNewCharacter.getId());
+        pNewCharacter.newCharRewards();
     }
 }

@@ -35,13 +35,17 @@ public enum EnchantmentActions {
     /**
      * @returns the action
      */
-    public byte getAction() {
-        return (byte) action;
+    public EnchantmentActions getAction() {
+        return this;
+    }
+    
+    public int getValue() {
+        return action;
     }
 
     public EnchantmentActions getAction(byte action) {
         for (EnchantmentActions actions : EnchantmentActions.values()) {
-            if (actions.getAction() == action) {
+            if (actions.getAction().action == action) {
                 return actions;
             }
         }

@@ -3368,12 +3368,12 @@ public class CWvsContext {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.GuildResult.getValue());
-            oPacket.Encode(GuildResult.RemoveGuild_Done);
-            //oPacket.Encode(bExpelled ? GuildResult.KickGuild_Unknown : GuildResult.RemoveGuild_Done);
+            //oPacket.Encode(GuildResult.RemoveGuild_Done);
+            oPacket.Encode(bExpelled ? GuildResult.KickGuild_Done : GuildResult.RemoveGuild_Done);
             oPacket.EncodeInteger(mgc.getGuildId());
             oPacket.EncodeInteger(mgc.getId());
             oPacket.EncodeString(mgc.getName());
-
+            
             return oPacket.ToPacket();
         }
 
@@ -4143,11 +4143,7 @@ public class CWvsContext {
         
         //final List<EquipSpecialStat> eqSpecialStats = EquipHelper.calculateEquipSpecialStatsForEncoding(enchant.getOldEquip());
         
-        if (enchant.getAction() == enchant.getAction().STARFORCE) {
-            oPacket.Encode(0);
-        }
-        
-        oPacket.Encode(enchant.getAction().getAction());
+        oPacket.Encode(enchant.getAction().getValue());
         switch (enchant.getAction()) {
             case SCROLLLIST:
                 oPacket.Encode(ServerConstants.FEVER_TIME);
@@ -4172,9 +4168,20 @@ public class CWvsContext {
                 //oPacket.Encode(0);
                 oPacket.Encode(enchant.canDowngrade()); //m_bDowngradable
                 oPacket.EncodeLong(enchant.getCost()); //m_nMeso
-                oPacket.EncodeInteger(enchant.getPerMille());//nPermille
-                oPacket.EncodeInteger(enchant.getDestroyChance());//v2->m_bDestroyable
-                oPacket.Encode(enchant.isChanceTime()); //v2->m_bChanceTime
+                //oPacket.EncodeInteger(enchant.getPerMille());//nPermille
+                //oPacket.EncodeInteger(enchant.getDestroyChance());//v2->m_bDestroyable
+                //oPacket.Encode(enchant.isChanceTime()); //v2->m_bChanceTime
+                oPacket.EncodeInteger(0);
+                oPacket.EncodeInteger(0);
+                oPacket.EncodeInteger(0);
+                oPacket.EncodeInteger(0);
+                oPacket.Encode(false); // bMVPDiscount
+                oPacket.Encode(false); // bPC
+                oPacket.EncodeInteger(0); // nSuccessRate * 10
+                oPacket.EncodeInteger(0); // nDestroyRate: (100 - nSuccessRate) * 10 [Percentage of Fail Rate * 10]
+                oPacket.EncodeInteger(0); // nOriginalSuccessRate * 10 (Special Success Rate: Strikethrough original rate)
+                oPacket.EncodeInteger(0);
+                oPacket.Encode(false); // bChanceTime
                 oPacket.EncodeInteger(enchant.getMask()); //mask
                 for (Entry<EnchantmentStats, Short> star : enchant.getStarForce().entrySet()) {
                     oPacket.EncodeInteger(star.getValue());
@@ -4274,6 +4281,66 @@ public class CWvsContext {
 
         oPacket.EncodeShort(SendPacketOpcode.NodeShardResult.getValue());
         oPacket.EncodeInteger(nAmount);
+        return oPacket.ToPacket();
+    }
+    
+    public static Packet OnResultStealSkillList(int bOnExclRequest, int dwStealTargetCID, int nPhantomStealResult, int nTargetJob, List<Integer> aSkill) {
+        OutPacket oPacket = new OutPacket(80);
+        oPacket.EncodeShort(SendPacketOpcode.ResultStealSkillList.getValue());
+        
+        oPacket.Encode(bOnExclRequest);
+        oPacket.EncodeInteger(dwStealTargetCID);
+        oPacket.EncodeInteger(nPhantomStealResult);
+        if (nPhantomStealResult == 4) {
+            oPacket.EncodeInteger(nTargetJob);
+            oPacket.EncodeInteger(aSkill.size());
+            for (int nSkillID : aSkill) {
+                oPacket.EncodeInteger(nSkillID);
+            }
+        }
+        return oPacket.ToPacket();
+    }
+    
+    public static Packet OnChangeStealMemoryResult(int bOnExclRequest, int nResult, int nSlotID, int nPOS, int nStealSkillID, int nStealSLV, int nStealSMLV) {
+        OutPacket oPacket = new OutPacket(80);
+        oPacket.EncodeShort(SendPacketOpcode.ChangeStealMemoryResult.getValue());
+        
+        oPacket.Encode(bOnExclRequest);
+        oPacket.Encode(nResult);
+        switch (nResult) {
+            case 0: // Steal
+                oPacket.EncodeInteger(nSlotID);
+                oPacket.EncodeInteger(nPOS);
+                oPacket.EncodeInteger(nStealSkillID);
+                oPacket.EncodeInteger(nStealSLV);
+                oPacket.EncodeInteger(nStealSMLV);
+                break;
+            case 1: // NoTarget
+            case 2: // Unknown
+                break;
+            case 3: // Remove
+                oPacket.EncodeInteger(nSlotID);
+                oPacket.EncodeInteger(nPOS);
+                break;
+            case 4: // RemoveSlotAll
+                oPacket.EncodeInteger(nSlotID);
+                break;
+            case 5: // RemoveAll
+                break;
+        }
+        return oPacket.ToPacket();
+    }
+    
+    public static Packet OnResultSetStealSkill(int bOnExclRequest, boolean bSet, int nSlotSkillID, int nStealSkillID) {
+        OutPacket oPacket = new OutPacket(80);
+        oPacket.EncodeShort(SendPacketOpcode.ResultSetStealSkill.getValue());
+
+        oPacket.Encode(bOnExclRequest);
+        oPacket.Encode(bSet);
+        oPacket.EncodeInteger(nSlotSkillID);
+        if(bSet) {
+            oPacket.EncodeInteger(nStealSkillID);
+        }
         return oPacket.ToPacket();
     }
 }

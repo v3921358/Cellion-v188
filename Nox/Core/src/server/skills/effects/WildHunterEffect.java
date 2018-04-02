@@ -41,9 +41,9 @@ public class WildHunterEffect extends AbstractEffect {
             case WildHunter.JAGUAR_MANAGEMENT:
                 break;
             case WildHunter.JAGUAR_RIDER:
-                pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932015);
-                pEffect.statups.put(CharacterTemporaryStat.JaguarSummoned, 0);
+                pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932015); // ps: u dont always use this jag lulz
                 pEffect.statups.put(CharacterTemporaryStat.JaguarCount, 1);
+                pEffect.statups.put(CharacterTemporaryStat.JaguarSummoned, 1);
                 pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case WildHunter.NATURES_BALANCE:
@@ -63,8 +63,9 @@ public class WildHunterEffect extends AbstractEffect {
             case WildHunter.SUMMON_JAGUAR_8:
             case WildHunter.SUMMON_JAGUAR_9:
             case WildHunter.SUMMON_JAGUAR_10:
-                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 3870); //Fake flag for summons
-                pEffect.statups.put(CharacterTemporaryStat.JaguarSummoned, pEffect.info.get(MapleStatInfo.x));
+                //pEffect.statups.put(CharacterTemporaryStat.SUMMON, 3870); //Fake flag for summons
+                /*pEffect.statups.put(CharacterTemporaryStat.JaguarSummoned, pEffect.info.get(MapleStatInfo.x));
+                pEffect.info.put(MapleStatInfo.time, 2100000000);*/
                 break;
             case WildHunter.SWIPE:
                 break;

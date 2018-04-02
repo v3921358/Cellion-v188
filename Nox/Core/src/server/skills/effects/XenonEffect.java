@@ -94,7 +94,7 @@ public class XenonEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.DamAbsorbShield, pEffect.info.get(MapleStatInfo.z));
                 break;
             case Xenon.MANIFEST_PROJECTOR:
-                pEffect.statups.put(CharacterTemporaryStat.ShadowPartner, pEffect.info.get(MapleStatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.ShadowPartner, 1);
                 break;
             case Xenon.MULTILATERAL_IV:
                 pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.w));

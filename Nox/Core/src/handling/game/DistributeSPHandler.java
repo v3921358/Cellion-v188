@@ -37,7 +37,7 @@ public class DistributeSPHandler implements ProcessPacket<MapleClient> {
         final int amount = iPacket.DecodeInteger();
         boolean isBeginnerSkill = false;
         final int remainingSp;
-        if (GameConstants.isBeginnerJob(skillid / 10000) && (skillid % 10000 == 1000 || skillid % 10000 == 1001 || skillid % 10000 == 1002 || skillid % 10000 == 2)) {
+        if (!GameConstants.isBeastTamer(chr.getJob()) && GameConstants.isBeginnerJob(skillid / 10000) && (skillid % 10000 == 1000 || skillid % 10000 == 1001 || skillid % 10000 == 1002 || skillid % 10000 == 2)) {
             final boolean resistance = skillid / 10000 == 3000 || skillid / 10000 == 3001;
             final int snailsLevel = chr.getSkillLevel(SkillFactory.getSkill(((skillid / 10000) * 10000) + 1000));
             final int recoveryLevel = chr.getSkillLevel(SkillFactory.getSkill(((skillid / 10000) * 10000) + 1001));
@@ -46,6 +46,7 @@ public class DistributeSPHandler implements ProcessPacket<MapleClient> {
             isBeginnerSkill = true;
         } else {
             remainingSp = chr.getRemainingSp(GameConstants.getSkillBookForSkill(skillid));
+            if (chr.isDeveloper()) chr.dropMessage(5, "[DistributeSP Debug] Skill Book : " + GameConstants.getSkillBookForSkill(skillid));
         }
         Skill skill = SkillFactory.getSkill(skillid);
         for (Pair<String, Integer> ski : skill.getRequiredSkills()) {
@@ -85,9 +86,9 @@ public class DistributeSPHandler implements ProcessPacket<MapleClient> {
             if (!isBeginnerSkill) {
                 chr.setRemainingSp(chr.getRemainingSp(skillbook) - amount, skillbook);
             }
-            if (GameConstants.isBeastTamer(chr.getJob())) {
-                chr.setRemainingSp(chr.getRemainingSp() - amount);
-            }
+            /*if (GameConstants.isBeastTamer(chr.getJob())) {
+                chr.setRemainingSp(chr.getRemainingSp(skillbook) - amount, skillbook);
+            }*/
             chr.updateSingleStat(MapleStat.AVAILABLESP, chr.getRemainingSp(skillbook));
             chr.changeSingleSkillLevel(skill, (byte) (curLevel + amount), chr.getMasterLevel(skill));
         } else if (!skill.canBeLearnedBy(chr.getJob()) && !chr.isGM()) {

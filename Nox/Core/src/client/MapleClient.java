@@ -126,6 +126,7 @@ public class MapleClient extends CClientSocket {
                     case MobCtrlAck:
                     case StatChanged:
                     case NpcMove:
+                    case MobMove:
                         if (ServerConstants.REDUCED_DEBUG_SPAM) {
                             break;
                         }

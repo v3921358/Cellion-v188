@@ -43,12 +43,12 @@ public class EnchantmentHandler implements ProcessPacket<MapleClient> {
         byte bonus = 0;
         List<EnchantmentScroll> scrolls = new ArrayList<>();
         EnchantmentScroll scroll = null;
-        loadScrolls(scrolls); //hard-coded for now
-        enchant.setScrolls(scrolls);
         switch (enchant.getAction()) {
             case SCROLL_UPGRADE:
                 chr.updateTick(iPacket.DecodeInteger());
                 pos = iPacket.DecodeShort();
+                loadScrolls(scrolls); //hard-coded for now
+                enchant.setScrolls(scrolls);
                 scroll = scrolls.get(iPacket.DecodeInteger());
                 if (scroll == null) {
                     chr.write(CWvsContext.enableActions());
@@ -86,12 +86,21 @@ public class EnchantmentHandler implements ProcessPacket<MapleClient> {
         if (equip == null && enchant.getAction() != EnchantmentActions.TRANSFER_HAMMER_RESULT) {
             equip = (Equip) chr.getInventory(MapleInventoryType.EQUIPPED).getItem(pos);
         }
-        if (equip != null && enchant.getAction() != EnchantmentActions.SCROLLLIST) {
+        if (equip != null) {
             Equip copy = (Equip) equip.copy();
             enchant.setOldEquip(copy);
             Random r = new Random();
             int chance = r.nextInt(99);
+            
             switch (enchant.getAction()) {
+                case SCROLLLIST:
+                    if (equip.getUpgradeSlots() < 1) {
+                        c.write(CWvsContext.enableActions());
+                        return;
+                    }
+                    loadScrolls(scrolls); //hard-coded for now
+                    enchant.setScrolls(scrolls);
+                    break;
                 case SCROLL_RESULT:
                     if (equip.getUpgradeSlots() < 1) {
                         c.write(CWvsContext.enableActions());

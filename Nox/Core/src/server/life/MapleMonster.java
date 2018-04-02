@@ -256,7 +256,13 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         attacker.addDamage(from, rDamage, updateAttackTime);
 
         if (stats.getSelfD() != -1) {
+            
+            if (from.isGM()) from.dropMessage(5, "[Monster Debug] Starting HP : " + hp);
+            
             hp -= rDamage;
+            
+            if (from.isGM()) from.dropMessage(5, "[Monster Debug] Damage Applied : " + rDamage + " / Final HP : " + hp);
+            
             if (hp > 0) {
                 if (hp < stats.getSelfDHp()) { // HP is below the selfd level
                     map.killMonster(this, from, false, false, stats.getSelfD(), lastSkill);

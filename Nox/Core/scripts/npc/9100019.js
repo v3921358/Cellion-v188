@@ -34,10 +34,60 @@ var v26;
 var v27;
 
 var random;
-var stdLootBox = [1322005, //s
-			1302000, //s
-			1302065 //s
+var stdLootBox = [1302021, // Pico
+			1302034, // Pumpkin basket
+			1302080, // Lightbulbs
+			1302063, // Katana
+			1302160, // Stirge
+			1032007, // Emerald earrings
+			1012058, // Treebranch
+			1012070, // popsicle
+			1012071, // popsicle
+			1012072, // popsicle
+			1012073, // popsicle
+			1122001, // Bowtie
+			1442011, // Surfboard
+			1442064, // Red rose
+			1442050, // white rose
+			1452003, // Composite bow
+			1002080, // Bandana
+			1002081, // Bandana
+			1002082, // Bandana
+			1002083, // Bandana
+			1002418, // Newspaper hat
+			1002577, // White pilfer (rare)
+			1002579, // Jester hat (rare)
+			1002541, // Theif hat (rare)
+			1050018, // blue sauna
+			1072427, // Red Sock (rare)
+			1072428, // Green sock (rare)
+			1072429, // BLue sock
+			
+			1302021, // Pico
+			1302034, // Pumpkin basket
+			1302080, // Lightbulbs
+			1302063, // Katana
+			1302160, // Stirge
+			1032007, // Emerald earrings
+			1012058, // Treebranch
+			1012070, // popsicle
+			1012071, // popsicle
+			1012072, // popsicle
+			1012073, // popsicle
+			1122001, // Bowtie
+			1442011, // Surfboard
+			1442064, // Red rose
+			1442050, // white rose
+			1452003, // Composite bow
+			1002080, // Bandana
+			1002081, // Bandana
+			1002082, // Bandana
+			1002083, // Bandana
+			1002418, // Newspaper hat
 			];
+			
+var textMounts = "";
+var aMountID = [80001310, 80001030, 80001311, 80001082, 80001056, 80001010, 80001017, 80001015, 80001290];
 
 function start() {
    v1 = 1;
@@ -65,6 +115,7 @@ function start() {
    cm.sendNextPrevS("Hi #b#h ##k, welcome to the #dREXION#k Vote Exchange!\r\n" 
 			+ "You currently have #d" + cm.getPlayer().getVPoints() + "#k vote point(s).\r\n#r"
 			+ "#L7#2 VP - REXION Standard Loot Box#l\r\n"
+			+ "#L10#10 VP - Standard Mounts#l\r\n"
 			+ "\r\n#L1#2 VP - Change your Hairstyle#l"
 			//+ (v13 == 0 ? (("" + v7 != v9 ? "\r\n#L2#2 VP - Change your Hairstyle (Collection #2)#l" : "") 
 			//+ ("" + v7 != v11 ? "\r\n#L3#2 VP - Change your Hairstyle (Collection #3)#l" : "")) : (("" + v8 != v10 ? "\r\n#L2#2 VP - Change your Hairstyle (Collection #2)#l" : "") 
@@ -135,6 +186,13 @@ function action(mode, type, selection) {
 				case 9: //2x exp 6h
 					cm.sendYesNo("Are you sure you would like to buy a #bDouble Experience Boost (6 Hours)#k?\r\n\r\nYou will have #r" + (cm.getPlayer().getVPoints() - 8) + "#k vote point(s) remaining.");
 					break;
+				case 10: // mounts
+					textMounts = "You currently have #b" + cm.getPlayer().getVPoints() + "#k Vote Points.\r\nWhat would you like to buy for 10 Vote Points?\r\n"; 
+					for (j = 0; j < aMountID.length; j++ ) {
+						textMounts += "#fs14# #L" + j + "##s" + aMountID[j] + "# #q" + aMountID[j] + "##l\r\n"
+					}
+					cm.sendSimple(textMounts);
+					break;
             }
             v1 = 2;
             break;
@@ -189,6 +247,7 @@ function action(mode, type, selection) {
 						random = Math.floor(Math.random() * stdLootBox.length);
 						cm.gainItem(stdLootBox[random], 1);
 						cm.getPlayer().setVPoints(cm.getPlayer().getVPoints() - 2);
+						cm.sendOk("REXION Standard Loot Box Result ( #i" + stdLootBox[random] + "# )\r\n\r\n#fs12##dThank you for voting and showing your support!\r\n#fs10##rRemember that you can vote for Rexion once every day.#k");
 					} else {
 						cm.sendOk("Sorry, you don't have enough vote points.\r\nGuess you need to vote more often #r;)#k.");
 					}
@@ -197,6 +256,7 @@ function action(mode, type, selection) {
 					if (cm.getPlayer().getVPoints() >= 3) {
 						cm.gainItemPeriod(5211122, 1, 2, true); //item id, amount, time, is hours?
 						cm.getPlayer().setVPoints(cm.getPlayer().getVPoints() - 3);
+						cm.sendOk("#fs12##dThank you for voting and showing your support!\r\n#fs10##rRemember that you can vote for Rexion once every day.#k");
 					} else {
 						cm.sendOk("Sorry, you don't have enough vote points.\r\nGuess you need to vote more often #r;)#k.");
 					}
@@ -205,6 +265,16 @@ function action(mode, type, selection) {
 					if (cm.getPlayer().getVPoints() >= 8) {
 						cm.gainItemPeriod(5211122, 1, 6, true);
 						cm.getPlayer().setVPoints(cm.getPlayer().getVPoints() - 8);
+						cm.sendOk("#fs12##dThank you for voting and showing your support!\r\n#fs10##rRemember that you can vote for Rexion once every day.#k");
+					} else {
+						cm.sendOk("Sorry, you don't have enough vote points.\r\nGuess you need to vote more often #r;)#k.");
+					}
+					break;
+				case 10:
+					if (cm.getPlayer().getVPoints() >= 10) {
+						cm.getPlayer().setVPoints(cm.getPlayer().getVPoints() - 10);
+						cm.getPlayer().changeSkillLevel(aMountID[selection], 1, 1);
+						cm.sendOk("#fs12##dThank you for voting and showing your support!\r\n#fs10##rRemember that you can vote for Rexion once every day.#k");
 					} else {
 						cm.sendOk("Sorry, you don't have enough vote points.\r\nGuess you need to vote more often #r;)#k.");
 					}

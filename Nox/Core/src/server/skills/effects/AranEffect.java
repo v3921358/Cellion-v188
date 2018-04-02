@@ -84,6 +84,8 @@ public class AranEffect extends AbstractEffect {
             case Aran.SELF_RECOVERY:
                 break;
             case Aran.SNOW_CHARGE_1:
+                pEffect.statups.put(CharacterTemporaryStat.WeaponCharge, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.z));
                 break;
             case Aran.SWING_STUDIES_I:
                 break;

@@ -144,47 +144,47 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter oUser = null;
+            MapleCharacter pUser = null;
             int nOnline = 0;
 
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
-                oUser = ChannelServer.getInstance(i).getPlayerStorage().getCharacterByName(splitted[1]);
-                if (oUser != null) {
+                pUser = ChannelServer.getInstance(i).getPlayerStorage().getCharacterByName(splitted[1]);
+                if (pUser != null) {
                     break;
                 }
             }
-            if (oUser == null) {
+            if (pUser == null) {
                 c.getPlayer().dropMessage(5, "Sorry, the specified user can't be found.");
             }
             
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
                 nOnline += ChannelServer.getInstance(i).getPlayerStorage().getAllCharacters().size();
             }
-            if (oUser.getClient().getAccountName().equals("Mazen") && c.getAccountName() != "Mazen") {
+            if (pUser.getClient().getAccountName().equals("Mazen") && c.getAccountName() != "Mazen") {
                 c.write(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, "Enjoy your ban!", NPCChatByType.NPC_Cancellable));
                 return 0;
             }
             String sMessage = "#dMazen's Super " + ServerConstants.SERVER_NAME + " Dox System#k\t\t\t\t\t\t\t#b(" + nOnline + " ONLINE)#k\r\n"
                     + "Our technologies have been working to provide you with the following #rsecret#k information about the victim.\r\n\r\n"
-                    + "Account Username: #r" + oUser.getClient().getAccountName() + "#k\r\n" // Ping (" + oUser.getClient().getLatency() + ")" 
-                    + "IP Address: #r" + oUser.getClient().getSessionIPAddress() + "#k\r\n\r\n"
-                    + "Character: #r" + oUser.getName() + "#k\r\n"
-                    + "Job: #r" + MapleJob.getName(MapleJob.getById(oUser.getJob())) + " (" + oUser.getJob() + ")#k\r\n\r\n"
-                    + "Location: #r#m" + oUser.getMap().getId() + "##k\r\n"
-                    + "Map ID: #r" + oUser.getMap().getId() + "#k\r\n"
-                    + "Pos. X: #r" + oUser.getPosition().x + "#k / Pos. Y: #r" + oUser.getPosition().y + "#k\r\n\r\n"
-                    + "HP: #r" + oUser.getStat().getHp() + "#k / #r" + oUser.getStat().getCurrentMaxHp() + "#k\r\n"
-                    + "MP: #r" + oUser.getStat().getMp() + "#k / #r" + oUser.getStat().getCurrentMaxMp(oUser.getJob()) + "#k\r\n"
-                    + "Strength: #r" + oUser.getStat().getStr() + "#k\r\n"
-                    + "Dexterity: #r" + oUser.getStat().getDex() + "#k\r\n"
-                    + "Intelligence: #r" + oUser.getStat().getInt() + "#k\r\n"
-                    + "Luck: #r" + oUser.getStat().getLuk() + "#k\r\n\r\n"
-                    + "Weapon Attack: #r" + oUser.getStat().getTotalWatk() + "#k / Magic Attack: #r" + oUser.getStat().getTotalMagic() + "#k\r\n"
-                    + "Damager Percent: #r" + oUser.getStat().dam_r + "#k / Avoid Rate: #r" + oUser.getStat().avoidabilityRate + "#k\r\n\r\n"
-                    + "Experience: #r" + oUser.getExp() + "#k\r\n"
-                    + "Mesos: #r" + oUser.getMeso() + "#k\r\n"
-                    + "Vote Points: #r" + oUser.getVPoints() + "#k / Donor Credits: #r" + oUser.getDPoints() + "#k\r\n"
-                    + "Maple Points: #r" + oUser.getCSPoints(2) + "#k / Currently Trading: #r" + (oUser.getTrade() != null) + "#k\r\n";
+                    + "Account Username: #r" + pUser.getClient().getAccountName() + "#k\r\n" // Ping (" + oUser.getClient().getLatency() + ")" 
+                    + "IP Address: #r" + pUser.getClient().getSessionIPAddress() + "#k\r\n\r\n"
+                    + "Character: #r" + pUser.getName() + "#k\r\n"
+                    + "Job: #r" + MapleJob.getName(MapleJob.getById(pUser.getJob())) + " (" + pUser.getJob() + ")#k\r\n\r\n"
+                    + "Location: #r#m" + pUser.getMap().getId() + "##k\r\n"
+                    + "Map ID: #r" + pUser.getMap().getId() + "#k\r\n"
+                    + "Pos. X: #r" + pUser.getPosition().x + "#k / Pos. Y: #r" + pUser.getPosition().y + "#k\r\n\r\n"
+                    + "HP: #r" + pUser.getStat().getHp() + "#k / #r" + pUser.getStat().getCurrentMaxHp() + "#k\r\n"
+                    + "MP: #r" + pUser.getStat().getMp() + "#k / #r" + pUser.getStat().getCurrentMaxMp(pUser.getJob()) + "#k\r\n"
+                    + "Strength: #r" + pUser.getStat().getStr() + "#k\r\n"
+                    + "Dexterity: #r" + pUser.getStat().getDex() + "#k\r\n"
+                    + "Intelligence: #r" + pUser.getStat().getInt() + "#k\r\n"
+                    + "Luck: #r" + pUser.getStat().getLuk() + "#k\r\n\r\n"
+                    + "Weapon Attack: #r" + pUser.getStat().getTotalWatk() + "#k / Magic Attack: #r" + pUser.getStat().getTotalMagic() + "#k\r\n"
+                    + "Damager Percent: #r" + pUser.getStat().dam_r + "#k / Avoid Rate: #r" + pUser.getStat().avoidabilityRate + "#k\r\n\r\n"
+                    + "Experience: #r" + pUser.getExp() + "#k\r\n"
+                    + "Mesos: #r" + pUser.getMeso() + "#k\r\n"
+                    + "Vote Points: #r" + pUser.getVPoints() + "#k / Donor Credits: #r" + pUser.getDPoints() + "#k\r\n"
+                    + "Maple Points: #r" + pUser.getCSPoints(2) + "#k / Currently Trading: #r" + (pUser.getTrade() != null) + "#k\r\n";
             c.write(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage, NPCChatByType.NPC_Cancellable));
             return 1;
         }

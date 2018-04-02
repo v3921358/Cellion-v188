@@ -4,6 +4,8 @@
 package handling.jobs;
 
 import client.CharacterTemporaryStat;
+import client.MapleStat;
+import client.Skill;
 import handling.jobs.*;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -89,6 +91,38 @@ public class Resistance {
                 nMaxAmmo = 6;
             }
             return nMaxAmmo;
+        }
+        
+        public static void requestBlastShield(MapleCharacter pPlayer) {
+            Skill pSkill = SkillFactory.getSkill(constants.skills.Blaster.BLAST_SHIELD);
+            MapleStatEffect pEffect = pSkill.getEffect(pPlayer.getTotalSkillLevel(pSkill));
+            
+            pEffect.statups.put(CharacterTemporaryStat.RWBarrier, 1);
+            pPlayer.registerEffect(pEffect, System.currentTimeMillis(), null, pEffect.statups, false, 3000, pPlayer.getId());
+            pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, pSkill.getId(), 3000, pEffect.statups, pEffect));
+        }
+        
+        public static void requestVitalityShield(MapleCharacter pPlayer) {
+            if (!pPlayer.hasBuff(CharacterTemporaryStat.RWBarrier)) {
+                return;
+            }
+            Skill pSkill = SkillFactory.getSkill(constants.skills.Blaster.VITALITY_SHIELD);
+            MapleStatEffect pEffect = pSkill.getEffect(pPlayer.getTotalSkillLevel(pSkill));
+            int nDuration = 15000;
+            
+            pEffect.statups.put(CharacterTemporaryStat.RWBarrierHeal, 1);
+            
+            final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
+            final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, nDuration);
+            
+            pPlayer.registerEffect(pEffect, System.currentTimeMillis(), buffSchedule, pEffect.statups, false, nDuration, pPlayer.getId());
+            pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, pSkill.getId(), nDuration, pEffect.statups, pEffect));
+            
+            int nHpRecovered = pPlayer.getStat().getHp() + (pPlayer.getStat().getMaxHp() / 2);
+            pPlayer.getStat().setHp(nHpRecovered, pPlayer);
+            pPlayer.updateSingleStat(MapleStat.HP, nHpRecovered);
+            
+            pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.RWBarrier); // Consume Blast Shield
         }
     }
 

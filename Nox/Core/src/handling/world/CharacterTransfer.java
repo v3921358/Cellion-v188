@@ -24,6 +24,8 @@ import client.buddy.CharacterNameAndId;
 import client.inventory.MapleImp;
 import client.inventory.MapleMount;
 import client.inventory.ShopRepurchase;
+import constants.GameConstants;
+import java.util.HashMap;
 import server.maps.objects.MapleCharacter;
 import server.maps.objects.MaplePet;
 import server.maps.objects.MonsterFamiliar;
@@ -51,7 +53,9 @@ public class CharacterTransfer {
     public MapleImp[] imps;
     public Map<Integer, Integer> mbook;
     public Map<Byte, Integer> reports = new LinkedHashMap<>();
-    public List<Pair<Integer, Boolean>> stolenSkills;
+    //public List<Pair<Integer, Boolean>> stolenSkills;
+    public int[][] aStealMemory = new int[6][4];
+    public Map<Integer, Integer> mStealSkillInfo = new HashMap<>();
     public Map<Integer, Pair<Byte, Integer>> keymap;
     public Map<Integer, MonsterFamiliar> familiars;
     public List<Integer> finishedAchievements = null, famedcharacters = null, battledaccs = null, extendedSlots = null;
@@ -94,7 +98,15 @@ public class CharacterTransfer {
         this.nxCredit = chr.getCSPoints(1);
         this.ACash = chr.getCSPoints(4);
         this.MaplePoints = chr.getCSPoints(2);
-        this.stolenSkills = chr.getStolenSkills();
+        // this.stolenSkills = chr.getStolenSkills();
+        for(int i = 1; i <= 5; i++) {
+            for(int j = 0; j < GameConstants.getNumSteal(i); j++) {
+                this.aStealMemory[i][j] = chr.aStealMemory[i][j];
+            }
+        }
+        for (Map.Entry<Integer, Integer> mStealSkill : chr.mStealSkillInfo.entrySet()) {
+            this.mStealSkillInfo.put(mStealSkill.getKey(), mStealSkill.getValue());
+        }
         this.vpoints = chr.getVPoints();
         this.name = chr.getName();
         this.fame = chr.getFame();

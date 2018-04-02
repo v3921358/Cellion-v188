@@ -1535,12 +1535,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return getPlayer();
     }
 
-    public void equipSecondaryByID(final int shieldID) {
-        if (shieldID > 0) {
-            c.getPlayer().setShield(shieldID);
-        }
-    }
-
     public static int editEquipById(MapleCharacter chr, int max, int itemid, String stat, int newval) {
         return editEquipById(chr, max, itemid, stat, (short) newval);
     }

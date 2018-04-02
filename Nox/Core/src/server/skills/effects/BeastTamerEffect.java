@@ -345,7 +345,7 @@ public class BeastTamerEffect extends AbstractEffect {
 
     @Override
     public boolean IsCorrectClass(int nClass) {
-        return nClass == 11000 || nClass == 11200 || nClass == 11210 || nClass == 11212;
+        return nClass == 11000 || nClass == 11200 || nClass == 11200 || nClass == 11211 || nClass == 11212;
     }
 
 }

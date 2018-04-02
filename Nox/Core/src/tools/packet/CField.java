@@ -12,6 +12,7 @@ import client.MapleClient;
 import client.MapleKeyLayout;
 import client.MapleQuestStatus;
 import client.Skill;
+import client.SkillFactory;
 import client.SkillMacro;
 import client.inventory.Equip.ScrollResult;
 import client.inventory.Item;
@@ -25,6 +26,7 @@ import constants.skills.DualBlade;
 import constants.skills.Blaster;
 import constants.skills.Kinesis;
 import constants.skills.Mechanic;
+import constants.skills.WildHunter;
 import handling.game.PlayerInteractionHandler;
 import handling.world.World;
 import handling.world.World.Guild;
@@ -60,6 +62,7 @@ import server.shops.MapleShop;
 import server.shops.ShopOperationType;
 import handling.world.AttackMonster;
 import handling.game.PlayerDamageHandler;
+import handling.game.WhisperHandler.WhisperFlag;
 import javax.swing.text.Position;
 import net.Packet;
 import server.MapleStatEffect;
@@ -69,6 +72,7 @@ import server.maps.Map_MaplePlatform;
 import server.maps.objects.MaplePet;
 import tools.Pair;
 import tools.Triple;
+import tools.Utility;
 
 public class CField {
 
@@ -131,7 +135,56 @@ public class CField {
         oPacket.EncodeInteger(0); //dunno, couldnt find the packet in the idb because I was not looking hard enough
         return oPacket.ToPacket();
     }
-
+    
+    public static Packet OnWhisper(int nFlag, String sFind, String sReceiver, String sMsg, int nLocationResult, int dwLocation, int nTargetPosition_X, int nTargetPosition_Y, boolean bFromAdmin, boolean bSuccess) {
+        OutPacket oPacket = new OutPacket(80);
+        oPacket.EncodeShort(SendPacketOpcode.Whisper.getValue());
+        
+        oPacket.Encode(nFlag);
+        switch (nFlag) {
+            case WhisperFlag.ReplyReceive:
+                oPacket.EncodeString(sReceiver);
+                oPacket.Encode(dwLocation);
+                oPacket.Encode(bFromAdmin);
+                oPacket.EncodeString(sMsg);
+                break;
+            case WhisperFlag.BlowWeather:
+                oPacket.EncodeString(sReceiver);
+                oPacket.Encode(bFromAdmin);
+                oPacket.EncodeString(sMsg);
+                break;
+            case WhisperFlag.ReplyResult:
+            case WhisperFlag.AdminResult:
+                oPacket.EncodeString(sFind);
+                oPacket.Encode(bSuccess);
+                break;
+            case WhisperFlag.FindResult:
+            case WhisperFlag.LocationResult:
+                oPacket.EncodeString(sFind);
+                oPacket.Encode(nLocationResult);
+                oPacket.EncodeInteger(dwLocation);
+                if (nLocationResult == WhisperFlag.GameSvr) {
+                    oPacket.EncodeInteger(nTargetPosition_X);
+                    oPacket.EncodeInteger(nTargetPosition_Y);
+                }
+                break;
+            case WhisperFlag.BlockedResult:
+                oPacket.EncodeString(sFind);
+                oPacket.Encode(bSuccess);
+                break;
+        }
+        return oPacket.ToPacket();
+    }
+    
+    public static Packet OnGroupMessage(int nType, String sFrom, String sMsg) {
+        OutPacket oPacket = new OutPacket(80);
+        oPacket.EncodeShort(SendPacketOpcode.GroupMessage.getValue());
+        oPacket.Encode(nType);
+        oPacket.EncodeString(sFrom);
+        oPacket.EncodeString(sMsg);
+        return oPacket.ToPacket();
+    }
+    
     /**
      * Handles Final Attack.
      */
@@ -1019,6 +1072,10 @@ public class CField {
         oPacket.EncodeInteger(1); //m_nFarmLevel
         oPacket.EncodeInteger(0); //m_nNameTagMark
 
+        // Remove certain effects upon entering the map in order to avoid disconnects, for now. 
+        Utility.removeBuffFromMap(chr, CharacterTemporaryStat.ShadowServant);
+        Utility.removeBuffFromMap(chr, CharacterTemporaryStat.ShadowIllusion);
+        
         BuffPacket.encodeForRemote(oPacket, chr);
 
         oPacket.EncodeShort(chr.getJob());
@@ -4075,6 +4132,15 @@ public class CField {
             oPacket.EncodeShort(SendPacketOpcode.JaguarActive.getValue());
 
             oPacket.Encode(active);
+
+            return oPacket.ToPacket();
+        }
+        
+        public static Packet jaguarSkillRequest(int nSkillID) {
+            OutPacket oPacket = new OutPacket(80);
+            oPacket.EncodeShort(SendPacketOpcode.JaguarSkill.getValue());
+
+            oPacket.EncodeInteger(nSkillID);
 
             return oPacket.ToPacket();
         }

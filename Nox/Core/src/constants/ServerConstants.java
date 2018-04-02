@@ -98,7 +98,7 @@ public class ServerConstants {
     public static final long MAX_MESOS = Long.MAX_VALUE;
     public static boolean FEVER_TIME = false;
     public static final String events = "" + "EvolutionLab,PinkZakumEntrance,PVP,CygnusBattle,ScarTarBattle,BossBalrog_EASY,BossBalrog_NORMAL,HorntailBattle,Nibergen,PinkBeanBattle,ZakumBattle,NamelessMagicMonster,Dunas,Dunas2,2095_tokyo,ZakumPQ,LudiPQ,KerningPQ,ProtectTylus,WitchTower_EASY,WitchTower_Med,WitchTower_Hard,Vergamot,ChaosHorntail,ChaosZakum,CoreBlaze,BossQuestEASY,BossQuestMed,BossQuestHARD,BossQuestHELL,BossQuestCHAOS,Ravana_EASY,Ravana_HARD,Ravana_MED,GuildQuest,Aufhaven,Dragonica,Rex,MonsterPark,KentaPQ,ArkariumBattle,AswanOffSeason,HillaBattle,The Dragon Shout,VonLeonBattle,Ghost,OrbisPQ,Romeo,Juliet,Pirate,Amoria,Ellin,CWKPQ,DollHouse,Kenta,Prison,Azwan,HenesysPQ,jett2ndjob,cpq,cpq2,Rex,Trains,Boats,Flight,Visitor,AirPlane,Ghost,PinkBeanBattle,Aswan,AswanOffSeason,Subway,MagnusBattle,MagnusMed,mirrorD_328_2_, DimensionInvasion,lolcastle,MiniDungeon,RanmaruBattle,RanmaruNorm,DarkHillaBattle,RootPierre,RootQueen,RootVellum,RootVonBon,ChaosQueen,ChaosVellum,ChaosPierre,ChaosVonBon,ChaosMagnus,ChaosPinkBeanBattle";
-    //Scripts TODO: Amoria,CWKPQ,BossBalrog_EASY,BossBalrog_NORMAL,ZakumPQ,ProtectTylus,GuildQuest,Ravana_EASY,Ravna_MED,Ravana_HARD (untested or not working)
+    //Scripts TODO: Amoria,CWKPQ,BossBalrog_EASY,BossBalrog_NORMAL,ZakumPQ,ProtectTylus,GuildQuest,Ravana_EASY,Ravna_MED,Ravana_HARD (untested or not working)k
 
     /*Miscellaneous Configuration*/
     public static final boolean MONSTER_CASH_DROP = true;
@@ -110,10 +110,14 @@ public class ServerConstants {
     public static final boolean SHOW_LOADING_MESSAGE = true; //Display message to inform players that data is loading.
     public static final boolean AUTO_PET_LOOT = true; //Enables automatic pet loot whenever a pet is equipped.
     public static final boolean STRICT_PET_LOOT = true; //Only picks up USE and ETC item types.
-    public static final boolean MODIFY_SPAWN_RATE = true; //Enables spawn rate multiplier.
-    public static final float SPAWN_RATE_MULTIPLIER = 1.25F; //Multipy the spawn rate globally by this variable.
     public static final boolean DAMAGE_CORRECTION = true; //Enables damage modifications for some skills, used to correct or change damage lines.
 
+    /*Spawn Rate Configuration*/
+    public static final boolean MODIFY_SPAWN_RATE = true; //Enables spawn rate multiplier.
+    public static final float SPAWN_RATE_MULTIPLIER = 1.30F; //Multipy the spawn rate globally by this variable.
+    public static final boolean CUSTOM_MAP_BUFFED_SPAWN = true; // Enables custom spawn rate increase on some maps to improve player gameplay experience.
+    public static final float CUSTOM_MAP_BUFFED_SPAWN_RATE = 1.45F; //Multiply the custom buffed maps spawn rate by this variable.
+    
     /*Tutorial Configuration*/
  /*NPCs used for the tutorial (9201095, 9270087, 9270082, 9270086)*/
  /*Maps used for the tutorial (552000010, 552000021, 552000022, 552000020)*/
@@ -164,6 +168,9 @@ public class ServerConstants {
         60000000000000L, // Paragon Level 10 Required Experience
         100000000000000L}; // Paragon Max Level Required Experience
 
+    /*Rexion Events*/
+    public static boolean EASTER_EVENT = true; // Enables Easter Egg global drops, and access to the Easter event npc!
+    
     /*Events*/
     public static boolean BURNING_CHARACTER_EVENT = false;
     public static boolean RED_EVENT_10 = false; //Makes cassandra popup when you login at lvl<10 (maple island)

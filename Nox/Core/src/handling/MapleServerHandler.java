@@ -1,5 +1,6 @@
 package handling;
 
+import handling.game.GroupMessageHandler;
 import handling.game.BossMatchmakingHandler;
 import client.MapleClient;
 import constants.ServerConstants;
@@ -112,6 +113,8 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserChat.getValue()] = new GeneralChatHandler();
         handlers[RecvPacketOpcode.Messenger.getValue()] = new MessengerHandler();
         handlers[RecvPacketOpcode.Whisper.getValue()] = new WhisperHandler();
+        handlers[RecvPacketOpcode.GroupMessage.getValue()] = new GroupMessageHandler();
+
         //Combat handlers
         handlers[RecvPacketOpcode.UserMeleeAttack.getValue()] = new NormalCloseRangeAttack();
         handlers[RecvPacketOpcode.UserShootAttack.getValue()] = new RangedAttack();
@@ -241,6 +244,18 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.DoActivePsychicArea.getValue()] = new KinesisAttackHandler();
         handlers[RecvPacketOpcode.DebuffPsychicArea.getValue()] = new KinesisCancelPsychicRequest();
         handlers[RecvPacketOpcode.ReleasePsychicArea.getValue()] = new KinesisDamageHandler();
+        // Phantom
+        handlers[RecvPacketOpcode.UserRequestSetStealSkillSlot.getValue()] = new SetStealSkillSlotHandler();
+        handlers[RecvPacketOpcode.UserRequestStealSkillMemory.getValue()] = new StealSkillMemoryHandler();
+        handlers[RecvPacketOpcode.UserRequestStealSkillList.getValue()] = new StealSkillListHandler();
+        //Kinesis
+        handlers[RecvPacketOpcode.CreateKinesisPsychicArea.getValue()] = new CreateKinesisPsychicAreaHandler();
+        handlers[RecvPacketOpcode.DoActivePsychicArea.getValue()] = new DoActivePsychicAreaHandler();
+        handlers[RecvPacketOpcode.ReleasePsychicArea.getValue()] = new ReleasePsychicAreaHandler();
+        handlers[RecvPacketOpcode.DebuffPsychicArea.getValue()] = new DebuffPsychicAreaHandler();
+        handlers[RecvPacketOpcode.CreatePsychicLock.getValue()] = new CreatePsychicLockHandler();
+        handlers[RecvPacketOpcode.ResetPathPsychicLock.getValue()] = new ResetPathPsychicLockHandler();
+        handlers[RecvPacketOpcode.ReleasePsychicLock.getValue()] = new ReleasePsychicLockHandler();
         //Environment handlers
         handlers[RecvPacketOpcode.UpdateClientEnvironment.getValue()] = new ClientEnvironmentHandler();
 
@@ -346,41 +361,47 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
         ProcessPacket handler = handlers[packetId];
 
         String head = "Unknown";
-        if (ServerConstants.DEVELOPER_DEBUG_MODE) {
-            head = "Unknown";
-            for (RecvPacketOpcode packet : RecvPacketOpcode.values()) {
-                if (packet.getValue() == (int) packetId) {
-                    head = packet.name();
-                }
-            }
-
-            switch (head) {
-                case "PrivateServerPacket":
-                case "AliveAck": 
-                case "UserQuestRequest":
-                case "UserMove":
-                case "NpcMove":
-                case "MobMove":
-                case "UserChangeStatRequest":
-                    if (ServerConstants.REDUCED_DEBUG_SPAM) {
-                        break; // Doesn't display these packets, prevents major console spam.
-                    }
-                default:
-                    System.out.printf("[Recv Operation] %s (%d) : %s%n", head, packetId, buffer.toString());
-                    break;
+        for (RecvPacketOpcode packet : RecvPacketOpcode.values()) {
+            if (packet.getValue() == (int) packetId) {
+                head = packet.name();
             }
         }
 
         try {
             if (handler != null) {
                 if (handler.ValidateState(ClientSocket)) {
+                    switch (head) {
+                        case "PrivateServerPacket":
+                        case "AliveAck":
+                        case "UserQuestRequest":
+                        case "UserMove":
+                        case "NpcMove":
+                        case "MobMove":
+                        case "UserChangeStatRequest":
+                        case "UserActivateDamageSkin":
+                        case "UpdateClientEnvironment":
+                            if (ServerConstants.REDUCED_DEBUG_SPAM) {
+                                break; // Doesn't display these packets, prevents major console spam.
+                            }
+                        default:
+                            System.out.printf("[Recv Operation] %s (%d) : %s%n", head, packetId, buffer.toString());
+                            break;
+                    }
                     handler.Process(ClientSocket, iPacket);
                 } else {
                     LogHelper.PACKET_HANDLER.get().error("Unvalid packet handling state for " + (ClientSocket.getPlayer() == null ? "null" : ClientSocket.getPlayer()) + " (" + ClientSocket.getAccountName() + ") on map " + (ClientSocket.getPlayer() == null ? "null" : ClientSocket.getPlayer().getMapId()) + " with packet " + iPacket.toString());
                 }
             } else {
                 if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
-                    System.out.println("[Unhandled Operation] " + head + " (" + packetId + ") : The respected receive operation is currently unhandled.");
+                    switch (head) {
+                        case "UserActivateDamageSkin":
+                            if (ServerConstants.REDUCED_DEBUG_SPAM) {
+                                break; // Doesn't display these packets, prevents major console spam.
+                            }
+                        default:
+                            System.out.println("[Unhandled Operation] " + head + " (" + packetId + ") : The respected receive operation is currently unhandled.");
+                            break;
+                    }
                 }
             }
         } catch (Throwable t) {

@@ -121,7 +121,7 @@ public class CLogin {
         oPacket.EncodeLong(0); // Session ID
 
         // Pop Up Message
-        if (ServerConstants.SHOW_LOADING_MESSAGE) {
+        if (ServerConstants.SHOW_LOADING_MESSAGE && !client.isGm()) {
             client.write(CWvsContext.broadcastMsg(""));
             client.write(CWvsContext.broadcastMsg(1, "Welcome " + client.getAccountName() + ", "
                     + "\r\n\r\nPlease be patient while the game client is loading data during your character selection."

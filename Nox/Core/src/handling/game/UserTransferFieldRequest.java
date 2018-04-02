@@ -13,6 +13,7 @@ import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
+import tools.packet.CField.SummonPacket;
 
 public final class UserTransferFieldRequest implements ProcessPacket<MapleClient> {
 
@@ -27,6 +28,7 @@ public final class UserTransferFieldRequest implements ProcessPacket<MapleClient
         if (chr == null) {
             return;
         }
+        
         if (chr.getMap() == null) {
             CashShopOperation.LeaveCS(c, c.getPlayer());
         } else {

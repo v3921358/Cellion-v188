@@ -1221,7 +1221,7 @@ public class World {
         }
 
         public static void setGuildAndRank(int cid, int guildid, int rank, int contribution, int alliancerank) {
-            int ch = Find.findChannel(cid);
+            int ch = MapleCharacter.getChannel(cid)/*Find.findChannel(cid)*/;
             if (ch == -1) {
                 // System.out.println("ERROR: cannot find player in given channel");
                 return;

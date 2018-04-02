@@ -167,7 +167,8 @@ public class Enchant {
      * @return the downgradable
      */
     public boolean canDowngrade() {
-        if (!isSuperior()) {
+        if (!isSuperior(oldEquip.getItemId())) {
+        //if (!GameConstants.isSuperiorEquip(oldEquip.getItemId())) {
             if (oldEquip.getEnhance() > 4 && oldEquip.getEnhance() < 10 || oldEquip.getEnhance() > 10 && oldEquip.getEnhance() < 15) {
                 return true;
             }
@@ -287,7 +288,8 @@ public class Enchant {
     public void setRates(Equip equip) {
         int base = 950;
         byte enhance = equip.getEnhance();
-        if (!isSuperior()) {
+        //if (!isSuperior(equip.getItemId())) {
+        if (!GameConstants.isSuperiorEquip(equip.getItemId())) {
             if (enhance < 2) {
                 perMille = base - ((enhance * 5) * 10);
             } else if (enhance > 1 && enhance < 4) {
@@ -367,8 +369,9 @@ public class Enchant {
      *
      * @return isSuperor
      */
-    private boolean isSuperior() {
-        return MapleItemInformationProvider.getInstance().isSuperior(oldEquip.getItemId());
+    private boolean isSuperior(int nItemID) {
+        System.err.println(MapleItemInformationProvider.getInstance().isSuperior(nItemID) ? "Superior" : "Not Superior");
+        return MapleItemInformationProvider.getInstance().isSuperior(nItemID);
     }
 
     /**
@@ -381,7 +384,8 @@ public class Enchant {
     private short attackBoost(EquipStat stat, Equip equip) {
         short baseStat = stat == EquipStat.MATK ? equip.getMatk() : equip.getWatk();
         double range = (double) baseStat / 50;
-        if (isSuperior() && equip.getEnhance() > 4) {
+        //if (isSuperior(equip.getItemId()) && equip.getEnhance() > 4) {
+        if (GameConstants.isSuperiorEquip(equip.getItemId()) && equip.getEnhance() > 4) {
             return (short) (equip.getEnhance() + 4);
         }
         return (short) Math.ceil(range);
@@ -468,7 +472,8 @@ public class Enchant {
      */
     private short statBoost(Equip equip) {
         short stat = (short) ((equip.getEnhance() > 4) ? 3 : 2);
-        if (isSuperior() && equip.getEnhance() < 6) {
+        if (isSuperior(equip.getItemId()) && equip.getEnhance() < 6) {
+        //if (GameConstants.isSuperiorEquip(equip.getItemId()) && equip.getEnhance() < 6) {
             stat = 19;
             for (int i = 0; i < equip.getEnhance(); i++) {
                 stat += i;
@@ -654,7 +659,8 @@ public class Enchant {
     }
 
     private boolean canGainAttack(int itemId) {
-        return InventoryConstants.isWeapon(itemId) || isSuperior();
+        //return InventoryConstants.isWeapon(itemId) || isSuperior(itemId);
+        return InventoryConstants.isWeapon(itemId) || GameConstants.isSuperiorEquip(itemId);
     }
 
     /**
@@ -663,7 +669,8 @@ public class Enchant {
     private long findCost() {
         int star = oldEquip.getEnhance();
         int level = oldEquip.getReqLevel();
-        if (isSuperior()) {
+        if (isSuperior(oldEquip.getItemId())) {
+        //if (GameConstants.isSuperiorEquip(oldEquip.getItemId())) {
             return price[star];
         }
         level = level / 10 > 14 ? 14 : (level / 10);

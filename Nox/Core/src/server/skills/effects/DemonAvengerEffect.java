@@ -69,7 +69,7 @@ public class DemonAvengerEffect extends AbstractEffect {
                 break;
             case DemonAvenger.DIABOLIC_RECOVERY:
                 pEffect.statups.put(CharacterTemporaryStat.DiabolikRecovery, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, pEffect.info.get(MapleStatInfo.indieMhpR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMHP, pEffect.info.get(MapleStatInfo.indieMhpR));
                 break;
             case DemonAvenger.EXCEED_LUNAR_SLASH:
                 break;

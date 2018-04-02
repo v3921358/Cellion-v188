@@ -41,7 +41,7 @@ public class DistributeHyperStatHandler implements ProcessPacket<MapleClient> {
 
             if (remainingHyperStat > 0 && remainingHyperStat >= requiredHyperStat && nextSkillLevel <= skill.getMaxLevel()) {
                 chr.changeSkillLevel(skill, nextSkillLevel, (byte) skill.getMaxLevel());
-
+                chr.changed_skills = true;
                 chr.getStat().recalcLocalStats(chr);
                 return;
             }

@@ -471,9 +471,14 @@ public class MobPacket {
         }
         oPacket.EncodeShort((short) ((ms.getCancelTask() - System.currentTimeMillis()) / 1000));
 
-        oPacket.EncodeLong(0L);
-        oPacket.EncodeShort(0);
-        oPacket.Encode(1);
+        oPacket.EncodeLong(0L); // I assume this is for encodetemporary but lol what a meme
+        oPacket.EncodeShort(0); // tDelay
+        oPacket.Encode(1); // nCalcDamageStatIndex
+        /*
+        if (MobStat.IsMovementAffectingStat(uFlag)) {
+            oPacket.Encode(0);
+        }
+        */
 
         return oPacket.ToPacket();
     }

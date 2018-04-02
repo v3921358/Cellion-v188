@@ -27,6 +27,7 @@ import constants.skills.Evan;
 import constants.skills.BattleMage;
 import constants.skills.DemonAvenger;
 import constants.skills.Kaiser;
+import constants.skills.Kinesis;
 import constants.skills.Luminous;
 import constants.skills.Magician;
 import constants.skills.Mihile;
@@ -1255,6 +1256,17 @@ public class PlayerStats implements Serializable {
                 if (bof > 0) {
                     localmaxhp_ += 100 + (bof * 100);
                     def += bof * 100;
+                }
+                break;
+            case 14000:
+            case 14200:
+            case 14210:
+            case 14211:
+            case 14212:
+                bx = SkillFactory.getSkill(Kinesis.MENTAL_STRENGTH);
+                bof = chra.getTotalSkillLevel(bx);
+                if (bof > 0) {
+                    percent_hp += bof * 4;
                 }
                 break;
             case 3002:

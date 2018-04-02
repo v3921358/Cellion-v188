@@ -4,13 +4,21 @@
 package handling.jobs;
 
 import client.CharacterTemporaryStat;
+import client.MapleClient;
 import client.Skill;
-import handling.jobs.*;
 import client.SkillFactory;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+import net.InPacket;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
+import server.life.MapleMonster;
 import server.maps.objects.MapleCharacter;
 import tools.packet.BuffPacket;
+import tools.packet.JobPacket;
+import constants.GameConstants;
+import tools.packet.JobPacket.KinesisPacket;
 
 /**
  * Kinesis Class Handlers
@@ -22,54 +30,37 @@ public class Kinesis {
     public static class KinesisHandler {
 
         public static void handlePsychicPoint(MapleCharacter pPlayer, int nSkill) {
-            MapleStatEffect oEffect = SkillFactory.getSkill(nSkill).getEffect(pPlayer.getTotalSkillLevel(nSkill));
-            int nPointConsume = oEffect.info.get(MapleStatInfo.ppCon);
-            int nPointRecover = oEffect.info.get(MapleStatInfo.ppRecovery);
+            MapleStatEffect pEffect = SkillFactory.getSkill(nSkill).getEffect(pPlayer.getTotalSkillLevel(nSkill));
 
-            switch (nSkill) {
-                case constants.skills.Kinesis.KINETIC_PILEDRIVER:
-                case constants.skills.Kinesis.PSYCHIC_BLAST:
-                case constants.skills.Kinesis.PSYCHIC_DRAIN:
-                case constants.skills.Kinesis.PSYCHIC_GRAB:
-                case constants.skills.Kinesis.PSYCHIC_ASSAULT:
-                case constants.skills.Kinesis.MIND_TREMOR:
-                case constants.skills.Kinesis.PSYCHIC_CLUTCH:
-                case constants.skills.Kinesis.MIND_QUAKE:
-                case constants.skills.Kinesis.MIND_BREAK:
-                    nPointRecover = 1;
-                    break;
-                case constants.skills.Kinesis.ULTIMATE_BPM:
-                    nPointConsume = 1;
-                    break;
-                case constants.skills.Kinesis.KINETIC_JAUNT:
-                    nPointConsume = 2;
-                    break;
-                case constants.skills.Kinesis.ULTIMATE_DEEP_IMPACT:
-                    nPointConsume = 5;
-                    break;
-                case constants.skills.Kinesis.ULTIMATE_PSYCHIC_SHOT:
-                    nPointConsume = 5;
-                    break;
-                case constants.skills.Kinesis.ULTIMATE_TRAINWRECK:
-                    nPointConsume = 25;
-                    break;
-                default:
-                    nPointConsume = 1; // Why not.
-                    break;
+            int nPsychicPointChange = pEffect.calcPsychicPowerChange(pPlayer);
+            
+            if (pPlayer.hasBuff(CharacterTemporaryStat.KinesisPsychicOver)) {
+                nPsychicPointChange /= 2;
+            }
+            
+            int nPsychicPoint = pPlayer.getPrimaryStack() + nPsychicPointChange;
+            if (nPsychicPoint > 30) { // Max PP
+                nPsychicPoint = 30;
+            }
+            if (nPsychicPoint < 0) {
+                nPsychicPoint = 0;
             }
 
-            int nPsychicPoint = pPlayer.getAdditionalStack() + nPointRecover - nPointConsume;
-            if (nPsychicPoint > 35) { // Max PP
-                nPsychicPoint = 35;
-            }
-
-            pPlayer.setAdditionalStack(nPsychicPoint);
-            oEffect.statups.put(CharacterTemporaryStat.KinesisPsychicPoint, nPsychicPoint);
-            pPlayer.registerEffect(oEffect, System.currentTimeMillis(), null, oEffect.statups, false, oEffect.info.get(MapleStatInfo.time), pPlayer.getId());
-            pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, 0, oEffect.info.get(MapleStatInfo.time), oEffect.statups, oEffect));
-            pPlayer.yellowMessage("nConsume = " + nPointConsume + " / nPointRecover = " + nPointRecover);
+            psychicPointResult(pPlayer, nPsychicPoint);
         }
-
+        
+        public static void psychicPointResult(MapleCharacter pPlayer, int nAmount) {
+            pPlayer.setPrimaryStack(nAmount);
+            pPlayer.write(KinesisPacket.updatePsychicPoint(nAmount));
+        }
+        
+        public static void requestMentalShield(MapleCharacter pPlayer) {
+            Skill pSkill = SkillFactory.getSkill(constants.skills.Kinesis.MENTAL_SHIELD);
+            MapleStatEffect pEffect = pSkill.getEffect(pPlayer.getTotalSkillLevel(pSkill));
+            
+            pEffect.statups.put(CharacterTemporaryStat.KinesisPsychicEnergeShield, 1);
+            pPlayer.registerEffect(pEffect, System.currentTimeMillis(), null, pEffect.statups, false, 2100000000, pPlayer.getId());
+            pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, pSkill.getId(), 2100000000, pEffect.statups, pEffect));
+        }
     }
-
 }

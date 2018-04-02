@@ -300,7 +300,9 @@ public class InternCommand {
             }
             gotomaps.put("gmmap100", 180000100);
             gotomaps.put("gmmap105", 180000105);
-
+            
+            gotomaps.put("guild", 200000301);
+            
             gotomaps.put("happy", 209000000);
             gotomaps.put("happyville", 209000000);
             gotomaps.put("harbor", 104000000);

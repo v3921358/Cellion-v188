@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
+import constants.ServerConstants;
 import database.DatabaseConnection;
 import java.util.Arrays;
 import server.MapleItemInformationProvider;
@@ -86,10 +87,14 @@ public class MapleMonsterInformationProvider {
     }
 
     public void loadCustom() {
-        globaldrops.add(new MonsterGlobalDropEntry(4001126, (int) (5 * 10000), -1, (byte) 0, 1, 3, 0)); //Maple Leaf
+        if (ServerConstants.EASTER_EVENT) {
+            globaldrops.add(new MonsterGlobalDropEntry(4001689, (int) (25 * 10000), -1, (byte) 0, 1, 2, 0)); // Easter Egg
+        }
+        
+        //globaldrops.add(new MonsterGlobalDropEntry(4001126, (int) (5 * 10000), -1, (byte) 0, 1, 3, 0)); //Maple Leaf
         //globaldrops.add(new MonsterGlobalDropEntry(4310050, (int) (1 * 10000), -1, (byte) 0, 1, 1, 0)); //Old Maple Coin
-        globaldrops.add(new MonsterGlobalDropEntry(2290285, (int) (0.5 * 10000), -1, (byte) 0, 1, 1, 0)); //Mystery Mastery Book
-        globaldrops.add(new MonsterGlobalDropEntry(4000524, (int) (5 * 10000), -1, (byte) 0, 1, 1, 0));
+        //globaldrops.add(new MonsterGlobalDropEntry(2290285, (int) (0.5 * 10000), -1, (byte) 0, 1, 1, 0)); //Mystery Mastery Book
+        //globaldrops.add(new MonsterGlobalDropEntry(4000524, (int) (5 * 10000), -1, (byte) 0, 1, 1, 0));
         //MapleMonsterStats mons = MapleLifeFactory.getMonsterStats(f.mob);
     }
 

@@ -845,7 +845,6 @@ public class Global {
     public static final int DRAGON_SOUL_ = 22000000;
     public static final int DRAGON_SPARK_1 = 22000015;
     public static final int ELEMENTAL_WEAKNESS_2 = 22000002;
-    public static final int MAGIC_GUARD_1 = 22001012;
     public static final int MAGIC_LINK = 22000014;
     public static final int MAGIC_MISSILE = 22001001;
     public static final int MANA_BURST_I = 22001010;

@@ -3,7 +3,6 @@
 *	Universal NPC
 *
 *	@author Mazen
-*	@co-author Ergoth
 *
 */
 
@@ -14,16 +13,16 @@ var mapForm = 0;
 
 // Map Warper Selection
 var townMaps = Array(300000000, 680000000, 230000000, 910001000, 260000000, 541000000, 540000000, 211060010, 863100000, 105300000, 310000000, 211000000, 101072000, 101000000, 101050000, 130000000, 820000000, 223000000, 410000000, 141000000, 120040000, 209000000, 682000000, 310070000, 401000000, 100000000, 271010000, 251000000, 744000000, 551000000, 103000000, 222000000, 240000000, 104000000, 220000000, 150000000, 261000000, 807000000, 250000000, 800000000, 600000000, 120000000, 200000000, 800040000, 400000000, 102000000, 914040000, 200100000, 865000000, 801000000, 105000000, 866000000, 693000020, 270000000, 860000000, 273000000, 320000000);
-var monsterMaps = Array(240070300,800020110,610040000,270030000,211060000,240040500,551030100,271000300,211061000,211041100,240010501,330002019,270020000,910170000,390009999,610030010,863000100,910180100,272000100,682010200,541000300,241000200,327090040,102040200,240010700,241000210,241000220,350013601,910028600,706041000,706041005,273050000,231040400,401050000,541020400, 224000015, 273040100);
+var monsterMaps = Array(240070300,800020110,610040000,270030000,211060000, 240040500,551030100,271000300,211061000,211041100,240010501,330002019,270020000,910170000,390009999,610030010,863000100,910180100,272000100,682010200,541000300,241000200,327090040,102040200,240010700,241000210,241000220,270010100,910028600,706041000,706041005,273050000,231040400,401050000,541020400, 224000015, 273040100, 272000300, 860000032, 240093100, 211060830, 106030700, 120040300, 551030000, 105200900);
 var bossMaps = Array(211070000, 262000000, 105100100, 240050000, 240040700, 105100100, 350060300, 271040000, 211041700, 240050400);
 
 // Map Warper Definitions
-var townMapCost = 10000; // Price in Mesos
+var townMapCost = 2000; // Price in Mesos
 var monsterMapCost = 4000; // Price in NX
-var bossMapCost = 125000; // Price in NX
+var bossMapCost = 40000; // Price in NX
 
-var monsterMapReqLevel = 60;
-var bossMapReqLevel = 120;
+var monsterMapReqLevel = 30;
+var bossMapReqLevel = 90;
 
 var lockedText1 = "";
 var lockedText2 = "";
@@ -36,6 +35,9 @@ var sellCostMeso = 850000000; // Mesos Gained when Sold
 var exchangeItemNX = 4430000; // Maple Leaf Gold
 var purchaseCostNX = 1000000; // NX Needed to Buy
 var sellCostNX = 850000; // NX Gained when Sold
+
+var fifthJobText = "";
+var eventText = "";
 
 function start() {
 	status = -1;
@@ -78,15 +80,27 @@ function action(mode, type, selection) {
 		
 		if (status == 0) {
 			
+			if (cm.getPlayer().getLevel() >= 250 && cm.getPlayer().getReborns() >= 1 && !cm.isQuestFinished(1460)) {
+				fifthJobText += "#L99##fs13##dAdvance to Fifth Job & Obtain V:Matrix!#r#fs11##l\r\n\r\n" 
+			}
+			
+			if(cm.getPlayer().isEasterEventActive()) {
+				eventText += "#L9000##fs13##dView Easter Event Information!#r#fs11##l\r\n\r\n" 
+			}
+			
 			cm.sendNextPrevS("Welcome to the #dREXION Quick Access#k Menu!\r\n" 
 						+ "What exactly would you like to do?#r\r\n" 
+						
+						+ fifthJobText
+						+ eventText
+						
 						+ "#L100#Travel Around the Maple World#l\r\n" 
 						+ "#L101#Shop at the General Store#l\r\n"
 						+ "#L102#Exchange Mesos and Maple Points (NX)#l\r\n"
 						+ "#L103#Access the REXION Vote Rewards#l\r\n"
 						+ "#L104#Access the REXION Donor Rewards#l\r\n"
 						+ "#L105#Drop CASH and ETC Items#l\r\n"
-						+ "#L108#Obtain Fifth Job & V: Matrix\r\n"
+						//+ "#L108#Obtain Fifth Job & V: Matrix\r\n"
 						+ "#L106#View Paragon Statistics#l\r\n\r\n"
 						+ "#d#L107#View Frequently Asked Questions#l\r\n"
 						, 2);
@@ -103,14 +117,14 @@ function action(mode, type, selection) {
 					}
 				
 					cm.sendNextPrevS("What type of area do you plan on visiting?\r\n"
-						+ "#b#L200#10,000 Mesos - Towns#l\r\n"
+						+ "#b#L200#2,000 Mesos - Towns#l\r\n"
 						+ "#r#L201#5,000 NX - Monster Zones" + lockedText1 + "#l\r\n"
-						+ "#L202#300,000 NX - Boss Arenas" + lockedText2 + "#l\r\n\r\n"
+						+ "#L202#40,000 NX - Boss Arenas" + lockedText2 + "#l\r\n\r\n"
 						+ "#d#L203#Free - Return to Rexion Hideout", 2);
 					break;
 				case 101:
 					cm.dispose();
-					cm.openShop(9090000); // Mu Mu's Shop
+					cm.openShop(1500028); // Vote Rewards NPC
 					break;
 				case 102:
 					cm.sendNextPrev("What would you like to exchange?\r\n"
@@ -213,8 +227,7 @@ function action(mode, type, selection) {
 					
 					cm.forceCompleteQuest(400050);
 					break;
-				case 108:
-<<<<<<< HEAD
+				case 99:
 					if (cm.getPlayer().getLevel() < 250 && cm.getPlayer().getReborns() < 1) {
                         cm.sendOk("Sorry, you need to be at least #rlevel 250#k and #rParagon Rank I#k to access the #dV: Matrix#k.");
                         cm.dispose();
@@ -249,42 +262,12 @@ function action(mode, type, selection) {
 
                         cm.dispose();
                     }
-=======
-					if (cm.getPlayer().getLevel() < 250) {
-						cm.sendOk("Sorry, you need to be atleast level #r250#k to access the #dV: Matrix#k.");
-						cm.dispose();
-					} else if (cm.isQuestFinished(1460)) {
-						cm.sendOk("You have already finished the #dV: Matrix#k quest.");
-						cm.dispose();
-					} else {
-						cm.sendOk("Congratulations on your #rfifth job#k advancement!\r\nYou now have access to the powerful #dV: Matrix#k!");
-						
-						cm.gainItem(2435902, 250);
-						
-						cm.forceCompleteQuest(1460);
-						cm.forceCompleteQuest(1461);
-						cm.forceCompleteQuest(1462);
-						cm.forceCompleteQuest(1463);
-						cm.forceCompleteQuest(1464);
-						cm.forceCompleteQuest(1465);
-						cm.forceCompleteQuest(1466);
-						cm.forceCompleteQuest(1467);
-						cm.forceCompleteQuest(1468);
-						cm.forceCompleteQuest(1469);
-						cm.forceCompleteQuest(1470);
-						cm.forceCompleteQuest(1471);
-						cm.forceCompleteQuest(1472);
-						cm.forceCompleteQuest(1473);
-						cm.forceCompleteQuest(1474);
-						cm.forceCompleteQuest(1475);
-						cm.forceCompleteQuest(1476);
-						cm.forceCompleteQuest(1477);
-						cm.forceCompleteQuest(1478);
-						cm.forceCompleteQuest(1479);
-						
-						cm.dispose();
-					}
->>>>>>> Effect-Handling-Recode
+					break;
+					
+				case 9000: // Easter Event
+					cm.dispose();
+					cm.openNpc(9000409);
+					break;
 			}
 			
 		} else if(status == 2) {
@@ -336,7 +319,7 @@ function action(mode, type, selection) {
 					}
 					break;
 				case 203:
-					cm.warp(866127000, 0);
+					cm.warp(101071300, 0);
 					cm.dispose();
 					break;
 				

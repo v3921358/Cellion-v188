@@ -11,9 +11,9 @@ var status = 0;
 
 //Setup the data you would like your shop to contain below 
 var itemOptions = ["300 DP - Face Accessories", "300 DP - Eye Accessories", "500 DP - Cosmetic Caps", "500 DP - Cosmetic Tops", "500 DP - Cosmetic Bottoms",
-					"300 DP - Cosmetic Gloves", "300 DP - Cosmetic Boots", "750 DP - Cosmetic Longcoats",
-					"1000 DP - Cosmetic Cloaks", "1000 DP - Cosmetic Weapons", "750 DP - Cosmetic Effect Rings"];
-var prices = [300, 300, 500, 500, 500, 300, 300, 750, 1000, 1000, 500];  //Format for prices [caps, tops, bottoms, gloves, boots, longcoats, cloaks, weapons, rings] 
+					"300 DP - Cosmetic Gloves", "300 DP - Cosmetic Boots", "750 DP - Cosmetic Longcoats", "750 DP - Cosmetic Effect Rings",
+					"1000 DP - Cosmetic Cloaks", "1000 DP - Cosmetic Weapons"];
+var prices = [300, 300, 500, 500, 500, 300, 300, 750, 750, 1000, 1000];  //Format for prices [caps, tops, bottoms, gloves, boots, longcoats, rings, cloaks, weapons] 
 var tops = [1042367, 1042362, 1042363, 1042364, 1042357, 1048002, 1042350, 1042332, 1042319, 1042314, 1042311, 1042276, 1042313, 1042199, 1042200, 1042206, 1042216, 1042217, 1042218, 1042219, 1042232, 1048001, 1042267, 1042251, 1042278, 1042275, 1042279, 1042280, 1042281, 1042282, 1042290, 1042315, 1042349, 1042329, 1042330, 1042338, 1042337, 1042334, 1042336, 1042335, 1042343, 1042312];
 var longcoats = [1053116, 1053127, 1053097, 1053098, 1053093, 1053094, 1053099, 1053082, 1052940, 1052940, 1053035, 1050423, 1050424, 1050428, 1050414, 1050419, 1051435, 1051488, 1052674, 1052675, 1052676, 1052677, 1052684, 1052902, 1052901, 1053049, 1053109, 1053110, 1050153, 1053059, 1050293, 1050291, 1050301, 1050300, 1050305, 1050365, 1050371, 1050359, 1050384, 1050385, 1050417, 1051373, 1052595, 1052587, 1052671, 1052948, 1052923, 1052954, 1052996, 1052211, 1052213, 1053040, 1053061, 1052594, 1053091, 1050422, 1052231, 1052442, 1052586, 1052661, 1051190, 1053033, 1051368, 1051391, 1050417, 1050351];
 var gloves = [1082704, 1082705, 1082702, 1082713, 1082714, 1082558, 1082685, 1082694, 1082689, 1082692, 1082631, 1082620, 1082581, 1082550, 1082592, 1082684, 1082588, 1082519, 1082505, 1082312, 1082634, 1082558, 1082500, 1082548];
@@ -32,6 +32,8 @@ var random;
 var chairList = [3015771, 3015758, 3015757, 3015756, 3015755, 3015754, 3015752, 3015742, 3015738, 3015712, 3015701, 3015670, 3015665, 3015662, 3015661, 3015660, 3015659, 3015654, 3015643, 3015640, 3015636, 3015616, 3015627, 3015598, 3015514, 3015512, 3015511, 3015510, 3015509, 3015508, 3015507, 3015506, 3015505, 3015504, 3015444, 3015157, 3015182, 3015299, 3015111, 3015104, 3010148, 3010092, 3010444, 3010455, 3010541, 3010681, 3012009, 3015014, 3015330, 3015366, 3015372, 3015449, 3015429, 3015438, 3015236, 3015272, 3015541, 3015431, 3012031, 3015331, 3015551, 3015005, 3015034, 3015125, 3015160, 3015293, 3015193, 3015600, 3010416, 3010853, 3010843];
 var dmgSkins = [2431966, 2431967, 2433777, 2433236, 2432154, 2432207, 2432803, 2432836, 2433184, 02433831, 2433900, 2433178, 02433456, 02433776, 02433775, 2433804, 2434289, 2434274, 02434619];
 
+var aMountID = [80001067, 80001198, 80001309, 80001009, 80001005, 80001006, 80001046, 80001785, 80001810, 80001424, 80001506, 80001813, 80001811, 80001019, 80001070, 80001976];
+var nMountPrice = 1500;
 
 var dp;
 var itemCategory; 
@@ -73,19 +75,40 @@ function start() {
     v8 = [31000, 31010, 31020, 31030, 31040, 31050, 31060, 31070, 31080, 31090, 31100, 31110, 31120, 31130, 31140, 31150, 31160, 31170, 31180, 31190, 31200, 31210, 31220, 31230, 31240, 31250, 31260, 31270, 31280, 31290, 31300, 31310, 31320, 31330, 31340, 31350, 31360, 31380, 31400, 31410, 31420, 31430, 31440, 31450, 31460, 31470, 31480, 31490, 31510, 31520, 31530, 31540, 31550, 31560, 31570, 31580, 31590, 31600, 31610, 31620, 31630, 31640, 31650, 31660, 31670, 31680, 31690, 31700, 31710, 31720, 31730, 31740, 31750, 31760, 31770, 31780, 31790, 31800, 31810, 31820, 31830, 31840, 31850, 31860, 31870, 31880, 31890, 31910, 31920, 31930, 31940, 31950, 31960, 31970, 31980, 31990, 32050, 32150, 32310, 32320, 32340, 32350, 32360, 33030, 33160, 33590, 34000, 34010, 34020, 34030, 34040, 34050, 34060, 34070, 34080, 34090, 34100, 34110, 34120, 34130, 34140, 34150, 34160, 34170, 34180, 34190, 34200];
     
 	// Male Hair 1
-	v9 = [33060, 33070, 33080, 33090, 33100, 33110, 33120, 33130, 33140, 33150, 33170, 33180, 33190, 33200, 33210, 33220, 33240, 33250, 33260, 33270, 33280, 33290, 33300, 33310, 33320, 33330, 33340, 33350, 33360, 33370, 33380, 33390, 33400, 33410, 33420, 33430, 33440, 33450, 33460, 33470, 33480, 33500, 33510, 33520, 33530, 33540, 33550, 33580, 33600, 33610, 33620, 33630, 33640, 33660, 33670, 33680, 33690, 33700, 33710, 33720, 33730, 33740, 33750, 33760, 33770, 33780, 33790, 33800, 33810, 33820, 33830, 33930, 33940, 33950, 33960, 33990, 34740, 36000, 36010, 36020, 36030, 36040, 36050, 36060, 36070, 36080, 36090, 36100, 36110, 36130, 36140, 36150, 36160, 36170, 36180, 36190, 36200, 36210, 36220, 36230, 36240, 36250, 36260, 36270, 36280, 36300, 36310, 36320, 36330, 36340, 36350, 36380, 36390, 36400, 36410, 36420, 36430, 36440, 36450, 36460, 36470, 36480, 36490, 36500, 36510, 36520, 36530];
+	v9 = [33060, 33070, 33080, 33090, 33100, 33110, 33120, 33130, 33140, 33150, 33170, 33180, 33190, 33200, 33210, 33220, 33240, 33250, 33260, 33270, 33280, 33290, 33300,
+	33310, 33320, 33330, 33340, 33350, 33360, 33370, 33380, 33390, 33400, 33410, 33420, 33430, 33440, 33450, 33460, 33470, 33480, 33500, 33510, 33520, 33530, 33540, 33550,
+	33580, 33600, 33610, 33620, 33630, 33640, 33660, 33670, 33680, 33690, 33700, 33710, 33720, 33730, 33740, 33750,33760, 33770, 33780, 33790, 33800, 33810, 33820, 33830,
+	33930, 33940, 33950, 33960, 33990, 34740, 36000, 36010, 36020, 36030, 36040, 36050, 36060, 36070, 36080, 36090, 36100, 36110, 36130, 36140, 36150, 36160, 36170, 36180,
+	36190, 36200, 36210, 36220, 36230, 36240, 36250, 36260, 36270, 36280, 36300, 36310, 36320, 36330, 36340, 36350, 36380, 36390, 36400, 36410, 36420, 36430, 36440, 36450,
+	36460, 36470, 36480, 36490, 36500, 36510, 36520, 36530];
     
 	// Female Hair 1
-	v10 = [34210, 34220, 34230, 34240, 34250, 34260, 34270, 34280, 34290, 34300, 34310, 34320, 34330, 34340, 34350, 34360, 34370, 34380, 34390, 34400, 34410, 34420, 34430, 34440, 34450, 34470, 34480, 34490, 34510, 34540, 34560, 34580, 34590, 34600, 34610, 34620, 34630, 34640, 34650, 34660, 34670, 34680, 34690, 34700, 34710, 34720, 34730, 34750, 34760, 34770, 34780, 34790, 34800, 34810, 34820, 34830, 34840, 34850, 34860, 34870, 34880, 34890, 34900, 34910, 34940, 34950, 34960, 34970, 34980, 37000, 37010, 37020, 37030, 37040, 37050, 37060, 37070, 37080, 37090, 37100, 37110, 37120, 37130, 37140, 37150];
+	v10 = [34100, 34120, 34130, 34170, 34210, 34210, 34220, 34230, 34240, 34240, 34250, 34260, 34260, 34270, 34270, 34280, 34280, 34290, 34290, 34300, 34310, 34310, 34320,
+	34320, 34330, 34340, 34340, 34350, 34350, 34360, 34370, 34370, 34380, 34380, 34390, 34400, 34400, 34410, 34410, 34420, 34430, 34430, 34440, 34440, 34450, 34456, 34470,
+	34480, 34490, 34490, 34510, 34510, 34540, 34560, 34580, 34580, 34584, 34590, 34590, 34600, 34600, 34610, 34620, 34620, 34630, 34640, 34640, 34650, 34650, 34660, 34660,
+	34670, 34670, 34680, 34690, 34700, 34710, 34710, 34720, 34730, 34750, 34750, 34760, 34760, 34770, 34770, 34780, 34790, 34790, 34800, 34810, 34820, 34820, 34830, 34830,
+	34840, 34840, 34850, 34850, 34860, 34860, 34870, 34870, 34880, 34890, 34890, 34900, 34900, 34910, 34940, 34940, 34950, 34960, 34970, 34970, 34980, 35000, 35080, 35204, 
+	35550, 36160, 36940, 36980, 36990, 37000, 37000, 37010, 37020, 37020, 37030, 37030, 37040, 37050, 37050, 37060, 37060, 37070, 37070, 37080, 37080, 37090, 37090, 37100, 
+	37100, 37110, 37110, 37120, 37120, 37130, 37140, 37140, 37150, 37150, 37190, 37210, 37220, 37230, 37240, 37250, 37280, 37300, 37310, 37320, 37350, 37370, 37380, 37400,
+	37420, 37440, 37450, 37490, 37510, 37530, 37580, 37620, 37640, 37650, 37680, 37810, 37830, 37850, 37860, 37880, 37900, 37910,37940, 37950, 37960, 38070, 38090, 38100,
+	38110, 38140, 38150, 38240, 38260, 38270, 38290, 38300, 38310];
     
 	// Male Hair 2 
-	v11 = [35220, 35260, 36570, 36580, 36590, 36600, 36610, 36620, 36630, 36640, 36650, 36670, 36680, 36690, 36700, 36710,
-			36720, 36730, 36740, 36750, 36760, 36770, 36780, 36790, 36800, 36810, 36820, 36830, 36840, 36850, 36860, 36880,
-			36900, 36910, 36920, 36930, 36940, 36950, 36980, 36990, 37160, 37170, 39260, 40040, 40050, 40060, 40260, 40280,
-			40290, 40310, 40320, 40330, 40350, 40360, 40370, 40390, 40400, 40410, 40420, 40450, 40490, 40540, 40550, 40560, 40590, 40620, 41920, 42080];
+	v11 = [33550, 33590, 33620, 33710, 33940, 34010, 34130, 34340, 34350, 34370, 34470, 34480, 35000, 35020, 35040, 35060, 35100, 35190, 35210, 35220, 35260, 35300,
+	35340, 35350, 35490, 35550, 35590, 35620, 35630, 35670, 35680, 35690, 35710, 35740, 35790, 35950, 35960, 36000, 36110, 36130, 36140, 36150, 36160, 36180, 36230,
+	36240, 36250, 36280, 36300, 36340, 36570, 36580, 36590, 36600, 36610,36620, 36630, 36640, 36640, 36650, 36670, 36680, 36680, 36690, 36700, 36710, 36720, 36730,
+	36740, 36750, 36760, 36770, 36770, 36780, 36790, 36800, 36800, 36810, 36820, 36830, 36840, 36850, 36860, 36880, 36880, 36900, 36910, 36920, 36930, 36940, 36950,
+	36980, 36990, 37160, 37170, 39260, 40040, 40050, 40060, 40260, 40280, 40290, 40310, 40320, 40330, 40350, 40360, 40370, 40390, 40400, 40410, 40420, 40450, 40490,
+	40540, 40550, 40560, 40590, 40620, 41920, 42080];
 	
 	// Female Hair 2
-	v12 = [31000, 31010, 31020, 31030, 31040, 31050, 31060, 31070, 31080, 31090, 31100, 31110, 31120, 31130, 31140, 31150, 31160, 31170, 31180, 31190, 31200, 31210, 31220, 31230, 31240, 31250, 31260, 31270, 31280, 31290, 31300, 31310, 31320, 31330, 31340, 31350, 31360, 31380, 31400, 31410, 31420, 31430, 31440, 31450, 31460, 31470, 31480, 31490, 31510, 31520, 31530, 31540, 31550, 31560, 31570, 31580, 31590, 31600, 31610, 31620, 31630, 31640, 31650, 31660, 31670, 31680, 31690, 31700, 31710, 31720, 31730, 31740, 31750, 31760, 31770, 31780, 31790, 31800, 31810, 31820, 31830, 31840, 31850, 31860, 31870, 31880, 31890, 31910, 31920, 31930, 31940, 31950, 31960, 31970, 31980, 31990, 32050, 32150, 32310, 32320, 32340, 32350, 32360, 33030, 33160, 33590, 34000, 34010, 34020, 34030, 34040, 34050, 34060, 34070, 34080, 34090, 34100, 34110, 34120, 34130, 34140, 34150, 34160, 34170, 34180, 34190, 34200];
+	v12 = [31000, 31010, 31020, 31030, 31040, 31050, 31060, 31070, 31080, 31090, 31100, 31110, 31120, 31130, 31140, 31150, 31160, 31170,
+	31180, 31190, 31200, 31210, 31220, 31230, 31240, 31250, 31260, 31270, 31280, 31290, 31300, 31310, 31320, 31330, 31340, 31350, 31360,
+	31380, 31400, 31410, 31420, 31430, 31440, 31450, 31460, 31470, 31480, 31490, 31510, 31520, 31530, 31540, 31550, 31560, 31570, 31580,
+	31590, 31600, 31610, 31620, 31630, 31640, 31650, 31660, 31670, 31680, 31690, 31700, 31710, 31720, 31730, 31740, 31750, 31760, 31770,
+	31780, 31790, 31800, 31810, 31820, 31830, 31840, 31850, 31860, 31870, 31880, 31890, 31910, 31920, 31930, 31940, 31950, 31960, 31970,
+	31980, 31990, 32050, 32150, 32310, 32320, 32340, 32350, 32360, 33030, 33160, 33590, 34000, 34010, 34020, 34030, 34040, 34050, 34060,
+	34070, 34080, 34090, 34100, 34110, 34120, 34130, 34140, 34150, 34160, 34170, 34180, 34190, 34200];
     
 	v13 = cm.getPlayerStat("GENDER");
     v18 = 0;
@@ -130,11 +153,15 @@ function action(mode, type, selection) {
     if(status == 0){
 	   introText = "You currently have #b" + dp + "#k Donor Credits.\r\n"
 				+ "What would you like to exchange them for?\r\n#r"
-				+ "#L5003#250 DP - Premium Facial Features#l\r\n"
-				+ "#L5000#500 DP - Premium Hairstyle (Collection #1)#l\r\n"
-				+ "#L5001#550 DP - Premium Hairstyle (Collection #2)#l\r\n\r\n"
-				+ "#L5002#1000 DP - REXION Chair Loot Box#l\r\n"
-				+ "#L5004#1000 DP - REXION Damage Skin Loot Box#l\r\n";
+				+ "\r\n#d#fs13#Character Style#fs11##r\r\n"
+				+ "#L5000#250 DP - Premium Facial Features#l\r\n"
+				+ "#L5001#500 DP - Premium Hairstyle (Collection #1)#l\r\n"
+				+ "#L5002#550 DP - Premium Hairstyle (Collection #2)#l\r\n\r\n"
+				+ "\r\n#d#fs13#Social Cosmetics#fs11##r\r\n"
+				+ "#L5003#200 DP - Damage Skin Loot Box (Random)#l\r\n"
+				+ "#L5004#1000 DP - Premium Chair Loot Box (Random)#l\r\n"
+				+ "#L5005#1500 DP - Premium Mounts#l\r\n\r\n"
+				+ "\r\n#d#fs13#Cosmetic Equipment#fs11##r";
 	   for(var i = 0; i < itemOptions.length; i++){
 		introText += "\r\n#L" + i + "#" + itemOptions[i] + "#l";  
 	   }
@@ -184,40 +211,45 @@ function action(mode, type, selection) {
                     textCoat += "\r\n#L" + j + "#" + "#v" + longcoats[j] + "##l";
                     cm.sendSimple(textCoat);
 			} else if (selection == 8) {
-                textCloaks = "You currently have #b" + dp + "#k Donor Credits.\r\n What would you like to buy for " + prices[6] +" Donor Credits?"; //Cloaks
-                for (var j = 0; j < cloaks.length; j++)
-                    textCloaks += "\r\n#L" + j + "#" + "#v" + cloaks[j] + "##l";
-                    cm.sendSimple(textCloaks);
-            } else if (selection == 9) {
-                textWep = "You currently have #b" + dp + "#k Donor Credits.\r\n What would you like to buy for " + prices[7] +" Donor Credits?";  //Weapons
-                for (var j = 0; j < weapons.length; j++)
-                    textWep += "\r\n#L" + j + "#" + "#v" + weapons[j] + "##l";
-                    cm.sendSimple(textWep);
-            } else if (selection == 10) {
                 textRings = "You currently have #b" + dp + "#k Donor Credits.\r\n What would you like to buy for " + prices[8] +" Donor Credits?";  //Rings
                 for (var j = 0; j < rings.length; j++)
                     textRings += "\r\n#L" + j + "#" + "#v" + rings[j] + "##l";
                     cm.sendSimple(textRings);
+            } else if (selection == 9) {
+                textCloaks = "You currently have #b" + dp + "#k Donor Credits.\r\n What would you like to buy for " + prices[6] +" Donor Credits?"; //Cloaks
+                for (var j = 0; j < cloaks.length; j++)
+                    textCloaks += "\r\n#L" + j + "#" + "#v" + cloaks[j] + "##l";
+                    cm.sendSimple(textCloaks);
+            } else if (selection == 10) {
+                textWep = "You currently have #b" + dp + "#k Donor Credits.\r\n What would you like to buy for " + prices[7] +" Donor Credits?";  //Weapons
+                for (var j = 0; j < weapons.length; j++)
+                    textWep += "\r\n#L" + j + "#" + "#v" + weapons[j] + "##l";
+                    cm.sendSimple(textWep);
             } else if (selection == 5000) {
-				for each(v15 in v13 == 0 ? v9 : v10)
-					if (hairExists(v15))
-						v2.push(v15);
-				sendStyle(v2);
-			} else if (selection == 5001) {
-				for each(v15 in v13 == 0 ? v11 : v12)
-					if (hairExists(v15))
-						v2.push(v15);
-				sendStyle(v2);
-			} else if (selection == 5002) {
-				cm.sendYesNo("Are you ready to try the #bREXION Chair Loot Box#k?\r\n#dA loot box grants a random chair that varies in rarity.#k\r\n\r\nYou will have #r" + (cm.getPlayer().getDPoints() - 1000) + "#k donor point(s) remaining.");
-			} else if (selection == 5004) {
-				cm.sendYesNo("Are you ready to try the #bREXION Damage Skin Loot Box#k?\r\n#dA loot box grants a random damage skin that varies in rarity.#k\r\n\r\nYou will have #r" + (cm.getPlayer().getDPoints() - 1000) + "#k donor point(s) remaining.");
-				
-			} else if (selection == 5003) {
 				for each(v15 in v13 == 0 ? v19 : v20)
                         //if (faceExists(v15))
                             v4.push(v15);
 				sendStyle(v4);
+			} else if (selection == 5001) {
+				for each(v15 in v13 == 0 ? v9 : v10)
+					if (hairExists(v15))
+						v2.push(v15);
+				sendStyle(v2);
+			} else if (selection == 5002) {
+				for each(v15 in v13 == 0 ? v11 : v12)
+					if (hairExists(v15))
+						v2.push(v15);
+				sendStyle(v2);
+			} else if (selection == 5003) {
+				cm.sendYesNo("Are you ready to try the #bREXION Damage Skin Loot Box#k?\r\n#dA loot box grants a random damage skin that varies in rarity.#k\r\n\r\nYou will have #r" + (cm.getPlayer().getDPoints() - 200) + "#k donor point(s) remaining.");
+			} else if (selection == 5004) {
+				cm.sendYesNo("Are you ready to try the #bREXION Chair Loot Box#k?\r\n#dA loot box grants a random chair that varies in rarity.#k\r\n\r\nYou will have #r" + (cm.getPlayer().getDPoints() - 1000) + "#k donor point(s) remaining.");
+			} else if (selection == 5005) {
+				textMounts = "You currently have #b" + dp + "#k Donor Credits.\r\nWhat would you like to buy for " + nMountPrice + " Donor Credits?\r\n"; 
+                for (j = 0; j < aMountID.length; j++ ) {
+					textMounts += "#fs14# #L" + j + "##s" + aMountID[j] + "# #q" + aMountID[j] + "##l\r\n"
+				}
+				cm.sendSimple(textMounts);
 			}
 	   
    } else if(status == 2) {
@@ -247,62 +279,46 @@ function action(mode, type, selection) {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
             } else if (itemCategory == 3) {
-                 if (dp >= prices[1]){
-                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[1]);
+                 if (dp >= prices[3]){
+                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[3]);
                     cm.gainItem(tops[selection], 1);
                     cm.sendOk("Thank you for supporting #dREXION#k.\r\nEnjoy your new #i"+tops[selection]+"# !");
                 } else {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
             } else if (itemCategory == 4){
-                 if (dp >= prices[2]){
-                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[2]);
+                 if (dp >= prices[4]){
+                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[4]);
                     cm.gainItem(bottoms[selection], 1);
                     cm.sendOk("Thank you for supporting #dREXION#k.\r\nEnjoy your new #i"+bottoms[selection]+"# !");
                 } else {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
             } else if (itemCategory == 5) {
-                if (dp >= prices[3]){
-                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[3]);
+                if (dp >= prices[5]){
+                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[5]);
                     cm.gainItem(gloves[selection], 1);
                     cm.sendOk("Thank you for supporting #dREXION#k.\r\nEnjoy your new #i"+gloves[selection]+"# !");
                 } else {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
             } else if (itemCategory == 6) {
-                 if (dp >= prices[4]){
-                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[4]);
+                 if (dp >= prices[6]){
+                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[6]);
                     cm.gainItem(boots[selection], 1);
                     cm.sendOk("Thank you for supporting #dREXION#k.\r\nEnjoy your new #i"+boots[selection]+"# !");
                 } else {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
             } else if (itemCategory == 7) {
-                 if (dp >= prices[5]){
-                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[5]);
+                 if (dp >= prices[7]){
+                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[7]);
                     cm.gainItem(longcoats[selection], 1);
                     cm.sendOk("Thank you for supporting #dREXION#k.\r\nEnjoy your new #i"+longcoats[selection]+"# !");
                 } else {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
 			} else if (itemCategory == 8) {
-                 if (dp >= prices[6]){
-                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[6]);
-                    cm.gainItem(cloaks[selection], 1);
-                    cm.sendOk("Thank you for supporting #dREXION#k.\r\nEnjoy your new #i"+cloaks[selection]+"# !");
-                } else {
-                    cm.sendOk ("Sorry, you do not have enough Donor Credits!");
-                }
-            } else if (itemCategory == 9) {
-                 if (dp >= prices[7]){
-                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[7]);
-                    cm.gainItem(weapons[selection], 1);
-                    cm.sendOk("Thank you for supporting #dREXION#k.\r\nEnjoy your new #i"+weapons[selection]+"# !");
-                } else {
-                    cm.sendOk ("Sorry, you do not have enough Donor Credits!");
-                }
-            } else if (itemCategory == 10) {
                  if (dp >= prices[8]){
                     cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[8]);
                     cm.gainItem(rings[selection], 1);
@@ -310,39 +326,23 @@ function action(mode, type, selection) {
                 } else {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
-            } else if (itemCategory == 5000) { //hair 1
-				v24 = selection;
-				if (cm.getPlayer().getDPoints() >= 500) {
-					cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - 500);
-					cm.setHair(v2[v24]);
-				} else {
-					cm.sendOk ("Sorry, you do not have enough Donor Credits!");
-				}
-			} else if (itemCategory == 5001) {//hair 2
-				v24 = selection;
-				if (cm.getPlayer().getDPoints() >= 550) {
-					cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - 550);
-					cm.setHair(v2[v24]);
-				} else {
-					cm.sendOk ("Sorry, you do not have enough Donor Credits!");
-				}
-			} else if (itemCategory == 5002) { //chair gacha
-				if (cm.getPlayer().getDPoints() >= 1000) {
-					cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - 1000);
-					random = Math.floor(Math.random() * chairList.length);
-					cm.gainItem(chairList[random], 1);
-				} else {
-					cm.sendOk ("Sorry, you do not have enough Donor Credits!");
-				}
-			} else if (itemCategory == 5004) { //damage skin gacha
-				if (cm.getPlayer().getDPoints() >= 1000) {
-					cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - 1000);
-					random = Math.floor(Math.random() * dmgSkins.length);
-					cm.gainItem(dmgSkins[random], 1);
-				} else {
-					cm.sendOk ("Sorry, you do not have enough Donor Credits!");
-				}
-			} else if (itemCategory == 5003) {//face
+            } else if (itemCategory == 9) {
+                 if (dp >= prices[9]){
+                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[9]);
+                    cm.gainItem(cloaks[selection], 1);
+                    cm.sendOk("Thank you for supporting #dREXION#k.\r\nEnjoy your new #i"+cloaks[selection]+"# !");
+                } else {
+                    cm.sendOk ("Sorry, you do not have enough Donor Credits!");
+                }
+            } else if (itemCategory == 10) {
+                 if (dp >= prices[10]){
+                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[10]);
+                    cm.gainItem(weapons[selection], 1);
+                    cm.sendOk("Thank you for supporting #dREXION#k.\r\nEnjoy your new #i"+weapons[selection]+"# !");
+                } else {
+                    cm.sendOk ("Sorry, you do not have enough Donor Credits!");
+                }
+            } else if (itemCategory == 5000) {//face
 				v24 = selection;
 				if (cm.getPlayer().getDPoints() >= 250) {
 					cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - 250);
@@ -350,6 +350,46 @@ function action(mode, type, selection) {
 				} else {
 					cm.sendOk ("Sorry, you do not have enough Donor Credits!");
 				}
+			} else if (itemCategory == 5001) { //hair 1
+				v24 = selection;
+				if (cm.getPlayer().getDPoints() >= 500) {
+					cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - 500);
+					cm.setHair(v2[v24]);
+				} else {
+					cm.sendOk ("Sorry, you do not have enough Donor Credits!");
+				}
+			} else if (itemCategory == 5002) {//hair 2
+				v24 = selection;
+				if (cm.getPlayer().getDPoints() >= 550) {
+					cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - 550);
+					cm.setHair(v2[v24]);
+				} else {
+					cm.sendOk ("Sorry, you do not have enough Donor Credits!");
+				}
+			} else if (itemCategory == 5003) { //damage skin gacha
+				if (cm.getPlayer().getDPoints() >= 1000) {
+					cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - 200);
+					random = Math.floor(Math.random() * dmgSkins.length);
+					cm.gainItem(dmgSkins[random], 1);
+				} else {
+					cm.sendOk ("Sorry, you do not have enough Donor Credits!");
+				}
+			} else if (itemCategory == 5004) { //chair gacha
+				if (cm.getPlayer().getDPoints() >= 1000) {
+					cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - 1000);
+					random = Math.floor(Math.random() * chairList.length);
+					cm.gainItem(chairList[random], 1);
+				} else {
+					cm.sendOk ("Sorry, you do not have enough Donor Credits!");
+				}
+			} else if (itemCategory == 5005) { // Mounts
+				if (dp >= nMountPrice){
+                    cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - nMountPrice);
+					cm.getPlayer().changeSkillLevel(aMountID[selection], 1, 1);
+                    cm.sendOk("Thank you for supporting #dREXION#k.\r\nEnjoy your new mount!");
+                } else {
+                    cm.sendOk ("Sorry, you do not have enough Donor Credits!");
+                }
 			}
             cm.dispose();
         }

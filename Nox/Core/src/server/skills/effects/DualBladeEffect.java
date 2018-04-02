@@ -45,6 +45,7 @@ public class DualBladeEffect extends AbstractEffect {
             case DualBlade.FLASH_JUMP_5:
                 break;
             case DualBlade.KATARA_BOOSTER_1:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case DualBlade.PHYSICAL_TRAINING_20_2:
                 break;

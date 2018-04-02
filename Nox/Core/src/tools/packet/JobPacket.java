@@ -6,20 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import client.CharacterTemporaryStat;
-import constants.skills.Hayato;
+import constants.skills.Assassin;
 import constants.skills.Phantom;
 import constants.skills.Shade;
-import constants.skills.Shadower;
+import handling.jobs.KinesisPsychicLock;
 import handling.world.AttackMonster;
 import service.SendPacketOpcode;
 import net.OutPacket;
 import net.Packet;
-import server.MapleStatInfo;
 import server.Randomizer;
+import server.life.MapleMonster;
 import server.maps.objects.MapleCharacter;
 import server.maps.objects.MapleForceAtom;
 import server.maps.objects.MapleForceAtomTypes;
-import tools.packet.CField.EffectPacket.UserEffectCodes;
 
 /**
  *
@@ -28,7 +27,115 @@ import tools.packet.CField.EffectPacket.UserEffectCodes;
  */
 public class JobPacket {
 
-    public static Packet createForceAtom(MapleForceAtom atom) {
+    public static Packet encodeForceAtom(MapleForceAtom pAtom, MapleCharacter pPlayer, MapleMonster pMob) {
+        OutPacket oPacket = new OutPacket(80);
+
+        oPacket.Encode(pAtom.isByMob());
+        if (pAtom.isByMob()) {
+            oPacket.EncodeInteger(pAtom.getTargetOid());
+        }
+        oPacket.EncodeInteger(pAtom.getCharId());
+        oPacket.Encode(pAtom.getType().getType());
+        if (pAtom.getType() != MapleForceAtomTypes.ZeroForce && pAtom.getType() != MapleForceAtomTypes.EventPoint) {
+            oPacket.Encode(pAtom.isToMob()); //bToMob
+            if (pAtom.isToMob()) {
+                switch (pAtom.getType()) {
+                    case NetherShield:
+                    case SoulSeeker:
+                    case Aegis:
+                    case TriflingWind:
+                    case MarkOfAssassin:
+                    case MesoExplosion:
+                    case Possession:
+                    case NonTarget:
+                    case SSFShooting:
+                    case HomingBeacon:
+                    case MagicWreckage:
+                    case AdvancedMagicWreckage:
+                    case AutoSoulSeeker:
+                    case AfterImage:
+                    case DoTPunisher:
+                    case Unknown: // Unknown
+                    case Unknown_2: // Unknown
+                    case IdleWhim: { // Unknown
+                        oPacket.EncodeInteger(pAtom.getObjects().size());
+                        for (int pObject : pAtom.getObjects()) {
+                            oPacket.EncodeInteger(pObject); //dwTarget oid
+                        }
+                        break;
+                    }
+                    default: {
+                        oPacket.EncodeInteger(pAtom.getObjects().get(0)); //dwFirstMobID
+                        break;
+                    }
+                }
+                oPacket.EncodeInteger(pAtom.getSkillId());
+            }
+        }
+
+        for (int i = 0; i < pAtom.getAttackCount(); i++) {
+            oPacket.Encode(1);
+            oPacket.EncodeInteger(i + 2); //dwKey
+            oPacket.EncodeInteger(1); //nInc
+            oPacket.EncodeInteger(pAtom.getFirstImpact()); //nFirstImpact
+            oPacket.EncodeInteger(pAtom.getSecondImpact()); //nSecondImpact
+            oPacket.EncodeInteger(pAtom.getAngle()); //nAngle
+            oPacket.EncodeInteger(pAtom.getSpawnDelay()); //nStartDelay
+            oPacket.EncodeInteger(pAtom.getPosition().x); //char pos x
+            oPacket.EncodeInteger(pAtom.getPosition().y); //char pos y
+            oPacket.EncodeInteger((int) System.currentTimeMillis()); //dwCreateTime
+            oPacket.EncodeInteger(pAtom.getAttackCount()); //nMaxHitCount
+            oPacket.EncodeInteger(0); //nEffectIdx
+            //oPacket.EncodeInteger(0); // Unknown v188
+        }
+        oPacket.Encode(0); // Ends Loop Above
+
+        if (pAtom.getType() == MapleForceAtomTypes.MarkOfAssassin) {
+            oPacket.EncodeInteger(pMob.getPosition().x); //rcTargetArrive.left
+            oPacket.EncodeInteger(pMob.getPosition().y); //rcTargetArrive.top
+            oPacket.EncodeInteger(pMob.getPosition().x); //rcTargetArrive.right
+            oPacket.EncodeInteger(pMob.getPosition().y); //rcTargetArrive.bottom
+            oPacket.EncodeInteger(2070000); // nBulletID
+        }
+        if (pAtom.getType() == MapleForceAtomTypes.SparkleBurst) {
+            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.left
+            oPacket.EncodeInteger(pMob.getPosition().y); // rcTargetArrive.top
+            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.right
+            oPacket.EncodeInteger(pMob.getPosition().y); // rcTargetArrive.bottom
+            oPacket.EncodeInteger(pMob.getPosition().x); // ptArriveTarget.x
+            oPacket.EncodeInteger(pMob.getPosition().y); // ptArriveTarget.y
+        }
+        if (pAtom.getType() == MapleForceAtomTypes.ShadowBat) {
+            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.left
+            oPacket.EncodeInteger(pMob.getPosition().y); // rcTargetArrive.top
+            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.right
+            oPacket.EncodeInteger(pMob.getPosition().y); // rcTargetArrive.bottom
+        }
+        if (pAtom.getType() == MapleForceAtomTypes.ShadowBatBound) {
+            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.right
+            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.right
+        }
+        if (pAtom.getType() == MapleForceAtomTypes.NonTarget) {
+            oPacket.EncodeInteger(0); // nArriveDirection
+            oPacket.EncodeInteger(pPlayer.getPosition().x - pMob.getPosition().x); // nArriveDistance
+        }
+        if (pAtom.getType() == MapleForceAtomTypes.TypingGame || pAtom.getType() == MapleForceAtomTypes.SpiritStone) {
+            oPacket.EncodeInteger(pMob.getPosition().x); // ptArriveTarget.x
+            oPacket.EncodeInteger(pMob.getPosition().x); // ptArriveTarget.y
+        }
+        if (pAtom.getType() == MapleForceAtomTypes.AfterImage || pAtom.getType() == MapleForceAtomTypes.SparkleBurst || pAtom.getType().getType() == 30
+                || pAtom.getType().getType() == 31 || pAtom.getType().getType() == 32 || pAtom.getType().getType() == 33) {
+            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.left
+            oPacket.EncodeInteger(pMob.getPosition().y); // rcTargetArrive.top
+            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.right
+            oPacket.EncodeInteger(pMob.getPosition().y); // rcTargetArrive.bottom
+            oPacket.EncodeInteger(pAtom.getSpawnDelay()); // tDelay
+        }
+
+        return oPacket.ToPacket();
+    }
+
+    /*public static Packet createForceAtom(MapleForceAtom atom) {
         OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
         oPacket.Encode(atom.isByMob());//bByMob
@@ -37,7 +144,7 @@ public class JobPacket {
         }
         oPacket.EncodeInteger(atom.getType().getType());//nForceAtomType
 
-        if (atom.getType() != MapleForceAtomTypes.ZEROFORCE_LOCAL && atom.getType() != MapleForceAtomTypes.EVENTPOINT_LOCAL) {
+        if (atom.getType() != MapleForceAtomTypes.ZeroForce && atom.getType() != MapleForceAtomTypes.EventPoint) {
             oPacket.Encode(atom.isToMob());//bToMob
             switch (atom.getType()) {
                 case FLYINGSWORD_BOTH:
@@ -104,8 +211,7 @@ public class JobPacket {
         }
         oPacket.Encode(0);
         return oPacket.ToPacket();
-    }
-
+    }*/
     public static Packet explodeMeso(Point pos, int cid, int skill, int size, int obj) {
         OutPacket oPacket = new OutPacket(80);
 
@@ -134,6 +240,44 @@ public class JobPacket {
         }
         oPacket.Encode(0);
         return oPacket.ToPacket();
+    }
+
+    public static class NightLordPacket {
+
+        public static Packet AssassinsMark(MapleCharacter pPlayer, MapleMonster pMob) {
+            OutPacket oPacket = new OutPacket(80);
+
+            oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
+
+            oPacket.Encode(1); // bByMob
+            oPacket.EncodeInteger(pMob.getObjectId());
+
+            oPacket.EncodeInteger(pPlayer.getId());
+            oPacket.EncodeInteger(11); // nAtomType
+
+            oPacket.Encode(1); // bToMob
+            oPacket.EncodeInteger(pMob.getObjectId());
+
+            oPacket.EncodeInteger(Assassin.ASSASSINS_MARK_2); // nSkillID
+
+            for (int i = 0; i < 3; i++) {
+                oPacket.Encode(1);
+                oPacket.EncodeInteger(i + 2);
+                oPacket.EncodeInteger(0);
+                oPacket.EncodeInteger(0x23);
+                oPacket.EncodeInteger(5);
+                oPacket.EncodeInteger(Randomizer.rand(80, 100));
+                oPacket.EncodeInteger(Randomizer.rand(200, 300));
+                oPacket.EncodeLong(0); //v196
+                oPacket.EncodeInteger(Randomizer.nextInt());
+                oPacket.EncodeInteger(0);
+            }
+
+            oPacket.Encode(0);
+            oPacket.Fill(0, 99); // For no d/c memes.
+
+            return oPacket.ToPacket();
+        }
     }
 
     public static class WindArcherPacket {
@@ -169,17 +313,17 @@ public class JobPacket {
     }
 
     public static class HayatoPacket {
-        
+
         public static Packet SwordEnergy(int nAmount) {
             OutPacket oPacket = new OutPacket(80);
-            
+
             oPacket.EncodeShort(SendPacketOpcode.ModHayatoCombo.getValue());
-            
-            oPacket.EncodeInteger(nAmount); 
-            
+
+            oPacket.EncodeInteger(nAmount);
+
             return oPacket.ToPacket();
         }
-        
+
         /*public static Packet QuickDraw(int nStance) {
             OutPacket oPacket = new OutPacket(80);
             
@@ -193,9 +337,9 @@ public class JobPacket {
             return oPacket.ToPacket();
         }*/
     }
-    
+
     public static class ShadowerPacket {
-        
+
         public static Packet toggleFlipTheCoin(boolean bEnabled) {
             OutPacket oPacket = new OutPacket(80);
             oPacket.EncodeShort(SendPacketOpcode.UserFlipTheCoinEnabled.getValue());
@@ -203,19 +347,19 @@ public class JobPacket {
 
             return oPacket.ToPacket();
         }
-        
+
         public static Packet setKillingPoint(int nAmount) {
             OutPacket oPacket = new OutPacket(80);
-            
+
             oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
             PacketHelper.writeSingleMask(oPacket, CharacterTemporaryStat.KillingPoint);
-            
+
             oPacket.Encode(nAmount); // Doesn't work.
-            
+
             return oPacket.ToPacket();
         }
     }
-    
+
     public static class ShadePacket {
 
         public static Packet FoxSpirit(MapleCharacter pPlayer, AttackMonster oMonster) {
@@ -286,15 +430,15 @@ public class JobPacket {
             return oPacket.ToPacket();
         }*/
     }
-    
+
     public static class BeastTamerPacket {
-        
+
         public static Packet AnimalMode(int nSkillID) {
             OutPacket oPacket = new OutPacket(80);
-            
+
             oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
             PacketHelper.writeSingleMask(oPacket, CharacterTemporaryStat.AnimalChange);
-            
+
             oPacket.EncodeShort(nSkillID - 110001500); // nMode
             oPacket.EncodeInteger(nSkillID); // nSkillID
             oPacket.EncodeInteger(-419268850); // Unkown
@@ -303,13 +447,13 @@ public class JobPacket {
             oPacket.Encode(0);
             oPacket.Encode(1);
             oPacket.EncodeInteger(0);
-            
+
             oPacket.Fill(0, 69); // For no d/c memes.
-            
+
             return oPacket.ToPacket();
         }
     }
-    
+
     public static class NightWalkerPacket {
 
         public static Packet ShadowBats(int nCharId, int nObjectId) {
@@ -411,7 +555,7 @@ public class JobPacket {
             oPacket.Encode(1);
             oPacket.EncodeInteger(nObjectId);
             oPacket.EncodeInteger(pPlayer.hasSkill(Phantom.CARTE_NOIR) ? Phantom.CARTE_NOIR : Phantom.CARTE_BLANCHE); // nAtomId
-            
+
             for (int i = 0; i < 3; i++) {
                 oPacket.Encode(1);
                 oPacket.EncodeInteger(i + 2);
@@ -535,11 +679,11 @@ public class JobPacket {
 
         public static Packet showRechargeEffect() {
             OutPacket oPacket = new OutPacket(80);
-            
+
             oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
             oPacket.Encode(0x33/*UserEffectCodes.ResetOnStateForOnOffSkill.getEffectId()*/);
             oPacket.Encode(1);
-            
+
             return oPacket.ToPacket();
         }
 
@@ -704,12 +848,12 @@ public class JobPacket {
             oPacket.EncodeInteger(0);// New v143
             oPacket.EncodeInteger(0);
             oPacket.Encode(0);
-            
+
             oPacket.Fill(0, 69); // Anti-DC Memes
 
             return oPacket.ToPacket();
         }
-        
+
         public static Packet updateLuminousGauge(int darktotal, int lighttotal, int darktype, int lighttype) {
             OutPacket oPacket = new OutPacket(80);
 
@@ -743,6 +887,18 @@ public class JobPacket {
 
     public static class KinesisPacket {
 
+        public static Packet updatePsychicPoint(int nAmount) {
+            OutPacket oPacket = new OutPacket(80);
+            
+            oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
+            PacketHelper.writeSingleMask(oPacket, CharacterTemporaryStat.KinesisPsychicPoint);
+
+            oPacket.EncodeInteger(nAmount);
+            oPacket.Fill(0, 69);
+
+            return oPacket.ToPacket();
+        }
+        
         public static Packet Orbs(int cid, int skillid, int ga, int oid, int gu) {
             OutPacket oPacket = new OutPacket(80);
             oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
@@ -771,36 +927,10 @@ public class JobPacket {
 
             return oPacket.ToPacket();
         }
-
-        public static Packet givePsychicPoint(int skillid, int point) {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
-            PacketHelper.writeSingleMask(oPacket, CharacterTemporaryStat.KinesisPsychicPoint);
-
-            oPacket.EncodeShort(point);
-            oPacket.EncodeInteger(skillid);
-            oPacket.Fill(0, 22);
-
-            return oPacket.ToPacket();
-        }
-
-        /*public static Packet givePsychicPoint(short amount) { 
-            OutPacket oPacket = new OutPacket(80);
-
-            oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
-            PacketHelper.writeSingleMask(oPacket, CharacterTemporaryStat.KinesisPsychicPoint);
-
-            oPacket.EncodeShort(amount);
-            oPacket.EncodeInteger(0); //skill id
-            oPacket.EncodeInteger(-1); //duration
-            oPacket.Fill(0, 18);
-
-            return oPacket.ToPacket();
-        }*/
     }
-    
+
     public static class BlasterPacket {
-        
+
         public static Packet onRWMultiChargeCancelRequest(byte nUnkown, int nSkillID) {
             OutPacket oPacket = new OutPacket(80);
 
@@ -1189,6 +1319,93 @@ public class JobPacket {
             oPacket.EncodeInteger(0);
 
             oPacket.Fill(0, 69); //for no dc
+
+            return oPacket.ToPacket();
+        }
+    }
+
+    public static class Kinesis {
+
+        public static Packet OnCreatePsychicArea(int dwCharacterId, int nAction, int nActionSpeed, int nParentPsychicAreaKey, int nSkillID, short nSLV, int nPsychicAreaKey, int nDurationTime, byte isLeft, short nSekeletonFilePathIdx, short nSkeletonAniIdx, short nSkeletonLoop, Point posStart) {
+            OutPacket oPacket = new OutPacket(80);
+            oPacket.EncodeShort(SendPacketOpcode.UserCreatePsychicArea.getValue());
+
+            oPacket.EncodeInteger(dwCharacterId);
+            oPacket.Encode(1); // bData
+            oPacket.EncodeInteger(nAction);
+            oPacket.EncodeInteger(nActionSpeed);
+            oPacket.EncodeInteger(nParentPsychicAreaKey);
+            oPacket.EncodeInteger(nSkillID);
+            oPacket.EncodeShort(nSLV);
+            oPacket.EncodeInteger(nPsychicAreaKey);
+            oPacket.EncodeInteger(nDurationTime);
+            oPacket.Encode(isLeft);
+            oPacket.EncodeShort(nSekeletonFilePathIdx);
+            oPacket.EncodeShort(nSkeletonAniIdx);
+            oPacket.EncodeShort(nSkeletonLoop);
+            oPacket.EncodeInteger(posStart.x);
+            oPacket.EncodeInteger(posStart.y);
+
+            return oPacket.ToPacket();
+        }
+
+        public static Packet OnDoActivePsychicArea(int nKey, int unk2) {
+            OutPacket oPacket = new OutPacket(80);
+            oPacket.EncodeShort(SendPacketOpcode.DoActivePsychicArea.getValue());
+
+            oPacket.EncodeInteger(nKey);
+            oPacket.EncodeInteger(unk2);
+
+            return oPacket.ToPacket();
+        }
+
+        public static Packet OnReleasePsychicArea(int dwCharacterId, int nPsychicAreaKey) {
+            OutPacket oPacket = new OutPacket(80);
+            oPacket.EncodeShort(SendPacketOpcode.UserReleasePsychicArea.getValue());
+
+            oPacket.EncodeInteger(dwCharacterId);
+            oPacket.EncodeInteger(nPsychicAreaKey);
+
+            return oPacket.ToPacket();
+        }
+
+        public static Packet OnCreatePsychicLock(int dwCharacterId, int nSkillID, short nSLV, int nAction, int nActionSpeed, List<KinesisPsychicLock> PsychicLock) {
+            OutPacket oPacket = new OutPacket(80);
+            oPacket.EncodeShort(SendPacketOpcode.UserCreatePsychicLock.getValue());
+
+            oPacket.EncodeInteger(dwCharacterId);
+            oPacket.Encode(1); // bData
+            oPacket.EncodeInteger(nSkillID);
+            oPacket.EncodeShort(nSLV);
+            oPacket.EncodeInteger(nAction);
+            oPacket.EncodeInteger(nActionSpeed);
+
+            for (KinesisPsychicLock pLock : PsychicLock) {
+                oPacket.Encode(1); // bData2
+                oPacket.Encode(1); // bPsychicLockSuccess
+                oPacket.EncodeInteger(pLock.getLocalPsychicLockKey());
+                oPacket.EncodeInteger(pLock.getLocalPsychicLockKey() * -1);
+                oPacket.EncodeInteger(pLock.getMobID());
+                oPacket.EncodeShort(pLock.getStuffID());
+                oPacket.EncodeInteger((int) pLock.getMobMaxHP());
+                oPacket.EncodeInteger((int) pLock.getMobCurHP());
+                oPacket.Encode(pLock.getRelPosFirst());
+                oPacket.EncodeInteger(pLock.getStart().x);
+                oPacket.EncodeInteger(pLock.getStart().y);
+                oPacket.EncodeInteger(pLock.getRelPosSecond().x);
+                oPacket.EncodeInteger(pLock.getRelPosSecond().y);
+            }
+
+            oPacket.Fill(0, 10);
+            return oPacket.ToPacket();
+        }
+
+        public static Packet OnReleasePsychicLock(int dwCharacterId, int nParentPsychicAreaKey) {
+            OutPacket oPacket = new OutPacket(80);
+            oPacket.EncodeShort(SendPacketOpcode.UserReleasePsychicLock.getValue());
+
+            oPacket.EncodeInteger(dwCharacterId);
+            oPacket.EncodeInteger(nParentPsychicAreaKey);
 
             return oPacket.ToPacket();
         }

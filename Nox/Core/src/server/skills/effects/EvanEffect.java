@@ -37,7 +37,9 @@ public class EvanEffect extends AbstractEffect {
             case Evan.LIGHTNING_BOLT:
                 break;
             case Evan.MAGIC_BOOSTER_6:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
+            case Evan.MAGIC_GUARD_1:
             case Evan.MAGIC_GUARD_3:
                 pEffect.statups.put(CharacterTemporaryStat.MagicGuard, pEffect.info.get(MapleStatInfo.x));
                 pEffect.info.put(MapleStatInfo.time, 2100000000);
@@ -90,6 +92,7 @@ public class EvanEffect extends AbstractEffect {
             case Evan.DRAGON_THRUST_:
                 break;
             case Evan.ELEMENTAL_DECREASE_3:
+                pEffect.statups.put(CharacterTemporaryStat.ElementalReset, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Evan.MAGIC_AMPLIFICATION_1:
                 break;
@@ -146,6 +149,8 @@ public class EvanEffect extends AbstractEffect {
             case Evan.BLAZE_REINFORCE:
                 break;
             case Evan.BLESSING_OF_THE_ONYX_1:
+                pEffect.statups.put(CharacterTemporaryStat.EMAD, pEffect.info.get(MapleStatInfo.emad));
+                pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(MapleStatInfo.epdd));
                 break;
             case Evan.DARK_FOG_1:
                 break;
@@ -161,8 +166,13 @@ public class EvanEffect extends AbstractEffect {
                 break;
             case Evan.DRAGON_MASTER:
                 pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932193);
+                pEffect.statups.put(CharacterTemporaryStat.NotDamaged, 1);
+                //pEffect.statups.put(CharacterTemporaryStat.NewFlying, 1);
                 break;
             case Evan.DRAGON_MASTER_1:
+                pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932193);
+                pEffect.statups.put(CharacterTemporaryStat.NotDamaged, 1);
+                //pEffect.statups.put(CharacterTemporaryStat.NewFlying, 1);
                 break;
             case Evan.EARTHSHATTERING_DIVE:
                 break;
@@ -261,6 +271,7 @@ public class EvanEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
                 break;
             case Evan.SUMMON_ONYX_DRAGON_1:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
                 break;
             case Evan.THUNDER_OVERLOAD:
                 break;
