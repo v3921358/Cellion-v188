@@ -4,10 +4,24 @@
 package tools;
 
 import client.CharacterTemporaryStat;
+import client.MapleQuestStatus;
+import client.inventory.MapleInventoryType;
+import constants.GameConstants;
+import constants.ServerConstants;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import server.maps.objects.MapleCharacter;
+import java.util.concurrent.locks.ReentrantLock;
+import server.MapleInventoryManipulator;
+import server.maps.MapleMapItem;
+import server.maps.MapleMapObject;
+import server.maps.MapleMapObjectType;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import service.ChannelServer;
+import tools.packet.CField;
+import tools.packet.CWvsContext;
 
 /**
  *
@@ -20,9 +34,9 @@ public class Utility {
      * @param dwCharacterID / sCharacterName
      * @return MapleCharacter Object regardless of channel.
      */
-    public static MapleCharacter requestCharacter(int dwCharacterID) {
+    public static User requestCharacter(int dwCharacterID) {
         for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
-            MapleCharacter pPlayer = ChannelServer.getInstance(i).getPlayerStorage().getCharacterById(dwCharacterID);
+            User pPlayer = ChannelServer.getInstance(i).getPlayerStorage().getCharacterById(dwCharacterID);
             if (pPlayer != null) {
                 return pPlayer;
             }
@@ -30,9 +44,9 @@ public class Utility {
         return null;
     }
     
-    public static MapleCharacter requestCharacter(String sCharacterName) {
+    public static User requestCharacter(String sCharacterName) {
         for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
-            MapleCharacter pPlayer = ChannelServer.getInstance(i).getPlayerStorage().getCharacterByName(sCharacterName);
+            User pPlayer = ChannelServer.getInstance(i).getPlayerStorage().getCharacterByName(sCharacterName);
             if (pPlayer != null) {
                 return pPlayer;
             }
@@ -47,7 +61,7 @@ public class Utility {
      */
     public static int requestChannel(int dwCharacterID) {
         for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
-            MapleCharacter pPlayer = ChannelServer.getInstance(i).getPlayerStorage().getCharacterById(dwCharacterID);
+            User pPlayer = ChannelServer.getInstance(i).getPlayerStorage().getCharacterById(dwCharacterID);
             if (pPlayer != null) {
                 return pPlayer.getClient().getChannel();
             }
@@ -57,7 +71,7 @@ public class Utility {
     
     public static int requestChannel(String sCharacterName) {
         for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
-            MapleCharacter pPlayer = ChannelServer.getInstance(i).getPlayerStorage().getCharacterByName(sCharacterName);
+            User pPlayer = ChannelServer.getInstance(i).getPlayerStorage().getCharacterByName(sCharacterName);
             if (pPlayer != null) {
                 return pPlayer.getClient().getChannel();
             }
@@ -80,13 +94,175 @@ public class Utility {
      * @param pPlayer The function checks all users that are on the same map as this character object.
      * @param pStat The temporary stat that will be removed from this map.
      */
-    public static void removeBuffFromMap(MapleCharacter pPlayer, CharacterTemporaryStat pStat) {
-        List<MapleCharacter> pMapCharacters = pPlayer.getMap().getCharacters();
+    public static void removeBuffFromMap(User pPlayer, CharacterTemporaryStat pStat) {
+        List<User> pMapCharacters = pPlayer.getMap().getCharacters();
         
-        for (MapleCharacter pUser : pMapCharacters) {
+        for (User pUser : pMapCharacters) {
             if (pUser.hasBuff(pStat)) {
                 pUser.removeCooldown(pUser.getBuffSource(pStat)); // Refund the cooldown of the player's buff.
                 pUser.cancelEffectFromTemporaryStat(pStat); // Remove the buff from the player.
+            }
+        }
+    }
+    
+    /**
+     * Auto Pet Loot
+     * @param pPlayer Character object of which the pet loot is requested from.
+     */
+    public static void petLootRequest(User pPlayer) {
+        ReentrantLock petSafety = new ReentrantLock();
+        petSafety.lock();
+        final List<MapleMapObject> mItemsInRange = pPlayer.getMap().getMapObjectsInRange(pPlayer.getPosition(), 2500, Arrays.asList(MapleMapObjectType.ITEM));
+        MapleMapItem pMapLoot;
+        boolean bHasPet = false;
+        
+        for (int i = 0; i <= 3; i++) {
+            Pet pet = pPlayer.getPet(i);
+            if (pet != null) {
+                bHasPet = true; // Checks all pet slots to confirm if player has a pet active.
+            }
+        }
+        
+        List<MapleMapObject> mItems = new ArrayList<>();
+        if (mItemsInRange.size() <= 10) {
+            mItems = mItemsInRange;
+        } else {
+            for (int i = 1; i <= 10; i++) {
+                mItems.add(mItemsInRange.get(i));
+            }
+        }
+        
+        if (bHasPet) {
+            for (MapleMapObject item : mItems) {
+                pMapLoot = (MapleMapItem) item;
+                
+                if (pMapLoot.getMeso() > 0) {
+                    pPlayer.gainMeso(pMapLoot.getMeso(), true);
+                    pMapLoot.setPickedUp(true);
+                    pPlayer.getMap().removeMapObject(item);
+                    pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
+                } else {
+                    if (pMapLoot.isPickedUp()) {
+                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        continue;
+                    }
+                    if (pMapLoot.getQuest() > 0 && pPlayer.getQuestStatus(pMapLoot.getQuest()) != MapleQuestStatus.MapleQuestState.Started) {
+                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        continue;
+                    }
+                    if (pMapLoot.getOwner() != pPlayer.getId() && ((!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 0)
+                            || (pMapLoot.isPlayerDrop() && pPlayer.getMap().getSharedMapResources().everlast))) {
+                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        continue;
+                    }
+                    if (!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 1 && pMapLoot.getOwner() != pPlayer.getId() && (pPlayer.getParty() == null || pPlayer.getParty().getMemberById(pMapLoot.getOwner()) == null)) {
+                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        continue;
+                    }
+
+                    /*if (GameConstants.getInventoryType(pMapLoot.getItemId()) == MapleInventoryType.EQUIP
+                            && pMapLoot.getItemId() != 0) {
+                        continue;
+                    }*/
+
+                    if (!pPlayer.haveItem((pMapLoot.getItemId()))) { // Only pick up items the player already has.
+                        continue;
+                    }
+                    
+                    if (pMapLoot.getItem() == null || !MapleInventoryManipulator.addFromDrop(pPlayer.getClient(), pMapLoot.getItem(), true)) {
+                        continue;
+                    }
+                }
+                
+                pMapLoot.setPickedUp(true);
+                pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
+                pPlayer.getMap().removeMapObject(item);
+            }
+            try {
+                if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) System.out.println("[Debug] Pet Loot Size (" + mItems.size() + ")");
+            } finally {
+                petSafety.unlock();
+            }
+        }
+    }
+    
+    /**
+     * Auto Pet Vacuum
+     * @param pPlayer Character object requesting to vacuum all of it's respected item loot on the map.
+     */
+    public static void petVacuumRequest(User pPlayer) {
+        ReentrantLock petSafety = new ReentrantLock();
+        petSafety.lock();
+        final List<MapleMapObject> mAllMapItems = pPlayer.getMap().getAllMapObjects(MapleMapObjectType.ITEM);
+        MapleMapItem pMapLoot;
+        boolean bHasPet = false;
+        
+        for (int i = 0; i <= 3; i++) {
+            Pet pet = pPlayer.getPet(i);
+            if (pet != null) {
+                bHasPet = true; // Checks all pet slots to confirm if player has a pet active.
+            }
+        }
+        
+        List<MapleMapObject> mItems = new ArrayList<>();
+        if (mAllMapItems.size() <= 10) {
+            mItems = mAllMapItems;
+        } else {
+            for (int i = 1; i <= 10; i++) {
+                mItems.add(mAllMapItems.get(i));
+            }
+        }
+        
+        if (bHasPet) {
+            for (MapleMapObject item : mItems) {
+                pMapLoot = (MapleMapItem) item;
+                
+                if (pMapLoot.getMeso() > 0) {
+                    pPlayer.gainMeso(pMapLoot.getMeso(), true);
+                    pMapLoot.setPickedUp(true);
+                    pPlayer.getMap().removeMapObject(item);
+                    pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
+                } else {
+                    if (pMapLoot.isPickedUp()) {
+                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        continue;
+                    }
+                    if (pMapLoot.getQuest() > 0 && pPlayer.getQuestStatus(pMapLoot.getQuest()) != MapleQuestStatus.MapleQuestState.Started) {
+                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        continue;
+                    }
+                    if (pMapLoot.getOwner() != pPlayer.getId() && ((!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 0)
+                            || (pMapLoot.isPlayerDrop() && pPlayer.getMap().getSharedMapResources().everlast))) {
+                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        continue;
+                    }
+                    if (!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 1 && pMapLoot.getOwner() != pPlayer.getId() && (pPlayer.getParty() == null || pPlayer.getParty().getMemberById(pMapLoot.getOwner()) == null)) {
+                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        continue;
+                    }
+
+                    /*if (GameConstants.getInventoryType(pMapLoot.getItemId()) == MapleInventoryType.EQUIP
+                            && pMapLoot.getItemId() != 0) {
+                        continue;
+                    }*/
+
+                    if (!pPlayer.haveItem((pMapLoot.getItemId()))) { // Only pick up items the player already has.
+                        continue;
+                    }
+                    
+                    if (pMapLoot.getItem() == null || !MapleInventoryManipulator.addFromDrop(pPlayer.getClient(), pMapLoot.getItem(), true)) {
+                        continue;
+                    }
+                }
+                
+                pMapLoot.setPickedUp(true);
+                pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
+                pPlayer.getMap().removeMapObject(item);
+            }
+            try {
+                if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) System.out.println("[Debug] Pet Vacume Loot Size (" + mItems.size() + ")");
+            } finally {
+                petSafety.unlock();
             }
         }
     }

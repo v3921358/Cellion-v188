@@ -14,9 +14,9 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.skills.Xenon;
-import handling.jobs.Kinesis;
-import handling.jobs.Kinesis.KinesisHandler;
-import handling.jobs.Resistance.BlasterHandler;
+import client.jobs.Kinesis;
+import client.jobs.Kinesis.KinesisHandler;
+import client.jobs.Resistance.BlasterHandler;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.Randomizer;
@@ -25,7 +25,7 @@ import server.life.MobAttackInfo;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 import net.InPacket;
 import tools.packet.CField;
@@ -68,10 +68,13 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User pPlayer = c.getPlayer();
+        if (pPlayer.hasGodMode()) {
+            return; // Godmode
+        }
 
         iPacket.Skip(4);
-        chr.updateTick(iPacket.DecodeInteger());
+        pPlayer.updateTick(iPacket.DecodeInteger());
         int type = iPacket.DecodeByte();
         PlayerDamageType type_ = PlayerDamageType.getTypeFromInt((byte) type);
         iPacket.Skip(1);
@@ -91,64 +94,64 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
         Point pPos = new Point(0, 0);
         MapleMonster attacker = null;
 
-        if (GameConstants.isXenon(chr.getJob())) { // Making sure EazisSystem still works when a GM is hiding
-            if (chr.hasBuff(CharacterTemporaryStat.XenonAegisSystem)) {
-                if (Randomizer.nextInt(100) < (chr.getTotalSkillLevel(Xenon.AEGIS_SYSTEM) * 10)) {
-                    chr.getMap().broadcastMessage(JobPacket.XenonPacket.EazisSystem(chr.getId(), oid));
+        if (GameConstants.isXenon(pPlayer.getJob())) { // Making sure EazisSystem still works when a GM is hiding
+            if (pPlayer.hasBuff(CharacterTemporaryStat.XenonAegisSystem)) {
+                if (Randomizer.nextInt(100) < (pPlayer.getTotalSkillLevel(Xenon.AEGIS_SYSTEM) * 10)) {
+                    pPlayer.getMap().broadcastMessage(JobPacket.XenonPacket.EazisSystem(pPlayer.getId(), oid));
                 }
             }
         }
         
-        if (GameConstants.isKinesis(chr.getJob())) {
-            if (chr.hasBuff(CharacterTemporaryStat.KinesisPsychicShield)) {
-                chr.cancelEffectFromTemporaryStat(CharacterTemporaryStat.KinesisPsychicShield); // Use Shield
-                KinesisHandler.psychicPointResult(chr, chr.getPrimaryStack() - 1); // Consume PP
+        if (GameConstants.isKinesis(pPlayer.getJob())) {
+            if (pPlayer.hasBuff(CharacterTemporaryStat.KinesisPsychicShield)) {
+                pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.KinesisPsychicShield); // Use Shield
+                KinesisHandler.psychicPointResult(pPlayer, pPlayer.getPrimaryStack() - 1); // Consume PP
                 //damage *= 0.4; // Apply 60% Damage Reduction
-            } else if (chr.getPrimaryStack() > 0) {
-                KinesisHandler.requestMentalShield(chr); // Give Shield
+            } else if (pPlayer.getPrimaryStack() > 0) {
+                KinesisHandler.requestMentalShield(pPlayer); // Give Shield
             }
         }
-        if (GameConstants.isBlaster(chr.getJob())) {
-            if (chr.hasSkill(constants.skills.Blaster.BLAST_SHIELD)) {
-                BlasterHandler.requestBlastShield(chr); // Give Shield
+        if (GameConstants.isBlaster(pPlayer.getJob())) {
+            if (pPlayer.hasSkill(constants.skills.Blaster.BLAST_SHIELD)) {
+                BlasterHandler.requestBlastShield(pPlayer); // Give Shield
             }
         }
 
-        if (GameConstants.isLuminous(chr.getJob())) {
-            chr.applyLifeTidal();
+        if (GameConstants.isLuminous(pPlayer.getJob())) {
+            pPlayer.applyLifeTidal();
         }
-        if (chr.isHidden() || chr.getMap() == null || (chr.isGM() && chr.isInvincible())) {
+        if (pPlayer.isHidden() || pPlayer.getMap() == null || (pPlayer.isGM() && pPlayer.isInvincible())) {
             c.write(CWvsContext.enableActions());
             return;
         }
 
-        PlayerStats stats = chr.getStat();
+        PlayerStats stats = pPlayer.getStat();
         if (type_ != PlayerDamageType.UnkDamage
                 && type_ != PlayerDamageType.MapDamage
                 && type_ != PlayerDamageType.MistDamage) {
             monsteridfrom = iPacket.DecodeInteger();
             oid = iPacket.DecodeInteger();
-            attacker = chr.getMap().getMonsterByOid(oid);
+            attacker = pPlayer.getMap().getMonsterByOid(oid);
             direction = iPacket.DecodeByte();
 
             if ((attacker == null) || (attacker.getId() != monsteridfrom) || (attacker.getLinkCID() > 0) || (attacker.isFake()) || (attacker.getStats().isFriendly())) {
                 return;
             }
-            if (chr.getMapId() == 915000300) {
-                MapleMap to = chr.getClient().getChannelServer().getMapFactory().getMap(915000200);
-                chr.dropMessage(5, "You've been found out! Retreat!");
-                chr.changeMap(to, to.getPortal(1));
+            if (pPlayer.getMapId() == 915000300) {
+                MapleMap to = pPlayer.getClient().getChannelServer().getMapFactory().getMap(915000200);
+                pPlayer.dropMessage(5, "You've been found out! Retreat!");
+                pPlayer.changeMap(to, to.getPortal(1));
                 return;
-            } else if (attacker.getId() == 9300166 && chr.getMapId() == 910025200) {
+            } else if (attacker.getId() == 9300166 && pPlayer.getMapId() == 910025200) {
                 int rocksLost = Randomizer.rand(1, 5);
-                while (chr.itemQuantity(4031469) < rocksLost) {
+                while (pPlayer.itemQuantity(4031469) < rocksLost) {
                     rocksLost--;
                 }
                 if (rocksLost > 0) {
-                    chr.gainItem(4031469, -rocksLost);
+                    pPlayer.gainItem(4031469, -rocksLost);
                     Item toDrop = MapleItemInformationProvider.getInstance().getEquipById(4031469);
                     for (int i = 0; i < rocksLost; i++) {
-                        chr.getMap().spawnItemDrop(c.getPlayer(), c.getPlayer(), toDrop, c.getPlayer().getPosition(), true, true, false);
+                        pPlayer.getMap().spawnItemDrop(c.getPlayer(), c.getPlayer(), toDrop, c.getPlayer().getPosition(), true, true, false);
                     }
                 }
             }
@@ -167,7 +170,7 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
                     }
                     MobSkill skill = MobSkillFactory.getMobSkill(attackInfo.getDiseaseSkill(), attackInfo.getDiseaseLevel());
                     if ((skill != null) && ((damage == -1) || (damage > 0))) {
-                        skill.applyEffect(chr, attacker, false);
+                        skill.applyEffect(pPlayer, attacker, false);
                     }
                     attacker.setMp(attacker.getMp() - attackInfo.getMpCon());
                 }
@@ -179,11 +182,11 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
 
             if (defType == 1) {
                 Skill bx = SkillFactory.getSkill(31110008);
-                int bof = chr.getTotalSkillLevel(bx);
+                int bof = pPlayer.getTotalSkillLevel(bx);
                 if (bof > 0) {
                     MapleStatEffect eff = bx.getEffect(bof);
                     if (Randomizer.nextInt(100) <= eff.getX()) {
-                        chr.handleForceGain(oid, 31110008, eff.getZ());
+                        pPlayer.handleForceGain(oid, 31110008, eff.getZ());
                     }
                 }
             }
@@ -196,22 +199,22 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
             }
         }
         if (damage == -1) {
-            fake = 4020002 + (chr.getJob() / 10 - 40) * 100000;
+            fake = 4020002 + (pPlayer.getJob() / 10 - 40) * 100000;
             if ((fake != 4120002) && (fake != 4220002)) {
                 fake = 4120002;
             }
             if (type_ == PlayerDamageType.BumpDamage
-                    && chr.getJob() == 122
+                    && pPlayer.getJob() == 122
                     && attacker != null
-                    && chr.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -10) != null
-                    && chr.getTotalSkillLevel(1220006) > 0) {
+                    && pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -10) != null
+                    && pPlayer.getTotalSkillLevel(1220006) > 0) {
 
-                MapleStatEffect eff = SkillFactory.getSkill(1220006).getEffect(chr.getTotalSkillLevel(1220006));
-                attacker.applyStatus(chr, new MonsterStatusEffect(MonsterStatus.STUN, 1, 1220006, null, false), false, eff.getDuration(), true, eff);
+                MapleStatEffect eff = SkillFactory.getSkill(1220006).getEffect(pPlayer.getTotalSkillLevel(1220006));
+                attacker.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.STUN, 1, 1220006, null, false), false, eff.getDuration(), true, eff);
                 fake = 1220006;
             }
 
-            if (chr.getTotalSkillLevel(fake) <= 0) {
+            if (pPlayer.getTotalSkillLevel(fake) <= 0) {
                 return;
             }
         } else if ((damage < -1) || (damage > 200000)) {
@@ -224,10 +227,10 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
             c.write(CField.EffectPacket.showForeignEffect(UserEffectCodes.Resist));
             return;
         }*/
-        if (pPhysical && skillid == 1201007 && chr.getTotalSkillLevel(1201007) > 0) {
+        if (pPhysical && skillid == 1201007 && pPlayer.getTotalSkillLevel(1201007) > 0) {
             damage -= pDMG;
             if (damage > 0) {
-                MapleStatEffect eff = SkillFactory.getSkill(1201007).getEffect(chr.getTotalSkillLevel(1201007));
+                MapleStatEffect eff = SkillFactory.getSkill(1201007).getEffect(pPlayer.getTotalSkillLevel(1201007));
                 long enemyDMG = Math.min(damage * (eff.getY() / 100), attacker.getMobMaxHp() / 2L);
                 if (enemyDMG > pDMG) {
                     enemyDMG = pDMG;
@@ -235,46 +238,46 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
                 if (enemyDMG > 1000L) {
                     enemyDMG = 1000L;
                 }
-                attacker.damage(chr, enemyDMG, true, 1201007);
+                attacker.damage(pPlayer, enemyDMG, true, 1201007);
             } else {
                 damage = 1;
             }
         }
-        chr.getCheatTracker().checkTakeDamage(damage);
-        Pair modify = chr.modifyDamageTaken(damage, attacker);
+        pPlayer.getCheatTracker().checkTakeDamage(damage);
+        Pair modify = pPlayer.modifyDamageTaken(damage, attacker);
         damage = ((Double) modify.left).intValue();
 
         if (damage > 0) {
-            chr.getCheatTracker().setAttacksWithoutHit(false);
+            pPlayer.getCheatTracker().setAttacksWithoutHit(false);
 
-            boolean mpAttack = (chr.getBuffedValue(CharacterTemporaryStat.Mechanic) != null) && (chr.getBuffSource(CharacterTemporaryStat.Mechanic) != 35121005);
+            boolean mpAttack = (pPlayer.getBuffedValue(CharacterTemporaryStat.Mechanic) != null) && (pPlayer.getBuffSource(CharacterTemporaryStat.Mechanic) != 35121005);
 
-            if (chr.getBuffedValue(CharacterTemporaryStat.Morph) != null) {
-                chr.cancelMorphs();
+            if (pPlayer.getBuffedValue(CharacterTemporaryStat.Morph) != null) {
+                pPlayer.cancelMorphs();
             }
 
             if (isDeadlyAttack) { // Skills that causes HP and MP to be 1
-                chr.addMPHP(stats.getHp() > 1 ? -(stats.getHp() - 1) : 0, (stats.getMp() > 1) && (!mpAttack) ? -(stats.getMp() - 1) : 0);
+                pPlayer.addMPHP(stats.getHp() > 1 ? -(stats.getHp() - 1) : 0, (stats.getMp() > 1) && (!mpAttack) ? -(stats.getMp() - 1) : 0);
             } else {
                 int decreaseMP = 0;
 
                 // Calculate for magic guard and passive magic guard
-                if (chr.getStat().standardMagicGuard > 0 || chr.getStat().magic_guard_rate > 0) {
-                    int damageLossToMP = (int) (damage * (chr.getStat().standardMagicGuard > 0 ? chr.getStat().standardMagicGuard : chr.getStat().magic_guard_rate));
+                if (pPlayer.getStat().standardMagicGuard > 0 || pPlayer.getStat().magic_guard_rate > 0) {
+                    int damageLossToMP = (int) (damage * (pPlayer.getStat().standardMagicGuard > 0 ? pPlayer.getStat().standardMagicGuard : pPlayer.getStat().magic_guard_rate));
                     if (damageLossToMP > stats.getMp()) {
                         damageLossToMP = stats.getMp();
                     }
                     damage -= damageLossToMP;
                     decreaseMP -= damageLossToMP;
                 } // Calculate for meso guard skill
-                else if (chr.getStat().mesoGuardMeso > 0.0D) {
-                    int mesoloss = (int) (damage * (chr.getStat().mesoGuardMeso / 100.0D));
+                else if (pPlayer.getStat().mesoGuardMeso > 0.0D) {
+                    int mesoloss = (int) (damage * (pPlayer.getStat().mesoGuardMeso / 100.0D));
 
-                    if (chr.getMeso() < mesoloss) {
-                        chr.gainMeso(-chr.getMeso(), false);
-                        chr.cancelTemporaryStats(new CharacterTemporaryStat[]{CharacterTemporaryStat.MesoGuard});
+                    if (pPlayer.getMeso() < mesoloss) {
+                        pPlayer.gainMeso(-pPlayer.getMeso(), false);
+                        pPlayer.cancelTemporaryStats(new CharacterTemporaryStat[]{CharacterTemporaryStat.MesoGuard});
                     } else {
-                        chr.gainMeso(-mesoloss, false);
+                        pPlayer.gainMeso(-mesoloss, false);
                     }
                     damage -= mesoloss;
                 }
@@ -284,14 +287,14 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
                 }
 
                 // A character with infinity can't lose any MP... 
-                if (chr.getBuffedValue(CharacterTemporaryStat.Infinity) != null) {
+                if (pPlayer.getBuffedValue(CharacterTemporaryStat.Infinity) != null) {
                     decreaseMP = 0;
                 }
-                chr.addMPHP(-damage, decreaseMP);
+                pPlayer.addMPHP(-damage, decreaseMP);
             }
-            if (chr.inPVP() && chr.getStat().getHPPercent() <= 20) {
-                chr.getStat();
-                SkillFactory.getSkill(PlayerStats.getSkillByJob(93, chr.getJob())).getEffect(1).applyTo(chr);
+            if (pPlayer.inPVP() && pPlayer.getStat().getHPPercent() <= 20) {
+                pPlayer.getStat();
+                SkillFactory.getSkill(PlayerStats.getSkillByJob(93, pPlayer.getJob())).getEffect(1).applyTo(pPlayer);
             }
         }
         byte offset = 0;
@@ -305,17 +308,17 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
                 offset = 0;
             }
         }
-        chr.getMap().broadcastMessage(chr, CField.damagePlayer(chr.getId(), type_, damage, monsteridfrom, direction, skillid, pDMG, pPhysical, pID, pType, pPos, offset, offset_d, fake), false);
+        pPlayer.getMap().broadcastMessage(pPlayer, CField.damagePlayer(pPlayer.getId(), type_, damage, monsteridfrom, direction, skillid, pDMG, pPhysical, pID, pType, pPos, offset, offset_d, fake), false);
         
         // Revive Passives
-        if (!chr.isAlive()) {
-            if (chr.hasBuff(CharacterTemporaryStat.ReviveOnce)) {
-                chr.getStat().setHp(chr.getStat().getMaxHp(), chr);
-                chr.updateSingleStat(MapleStat.HP, chr.getStat().getMaxHp());
-                chr.getStat().setMp(chr.getStat().getMaxMp(), chr);
-                chr.updateSingleStat(MapleStat.MP, chr.getStat().getMaxMp());
-                chr.dispelDebuffs();
-                chr.cancelAllBuffs();
+        if (!pPlayer.isAlive()) {
+            if (pPlayer.hasBuff(CharacterTemporaryStat.ReviveOnce)) {
+                pPlayer.getStat().setHp(pPlayer.getStat().getMaxHp(), pPlayer);
+                pPlayer.updateSingleStat(MapleStat.HP, pPlayer.getStat().getMaxHp());
+                pPlayer.getStat().setMp(pPlayer.getStat().getMaxMp(), pPlayer);
+                pPlayer.updateSingleStat(MapleStat.MP, pPlayer.getStat().getMaxMp());
+                pPlayer.dispelDebuffs();
+                pPlayer.cancelAllBuffs();
             }
         }
     }
