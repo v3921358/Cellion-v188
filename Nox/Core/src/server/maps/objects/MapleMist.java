@@ -18,7 +18,7 @@ import tools.packet.CField;
 public class MapleMist extends MapleMapObject {
 
     private Rectangle mistPosition;
-    private MapleCharacter owner = null;
+    private User owner = null;
     private MapleMonster mob = null;
     private MapleStatEffect source;
     private MobSkill skill;
@@ -45,7 +45,7 @@ public class MapleMist extends MapleMapObject {
         isTimeCapsule = false;
     }
 
-    public MapleMist(Rectangle mistPosition, MapleCharacter owner, MapleStatEffect source) {
+    public MapleMist(Rectangle mistPosition, User owner, MapleStatEffect source) {
         this.mistPosition = mistPosition;
         this.ownerId = owner.getId();
         this.source = source;
@@ -99,7 +99,7 @@ public class MapleMist extends MapleMapObject {
     }
 
     //fake
-    public MapleMist(Rectangle mistPosition, MapleCharacter owner) {
+    public MapleMist(Rectangle mistPosition, User owner) {
         this.mistPosition = mistPosition;
         this.ownerId = owner.getId();
         this.source = new MapleStatEffect();
@@ -211,7 +211,7 @@ public class MapleMist extends MapleMapObject {
         return mob;
     }
 
-    public MapleCharacter getOwner() {
+    public User getOwner() {
         return owner;
     }
 

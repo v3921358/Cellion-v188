@@ -3,7 +3,7 @@ package client;
 import java.io.Serializable;
 
 import constants.GameConstants;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.messages.TraitMessage;
 import tools.packet.CWvsContext;
 
@@ -66,11 +66,11 @@ public class MapleTrait {
         }
     }
 
-    public void addExp(int e, MapleCharacter c) {
+    public void addExp(int e, User c) {
         addTrueExp((int) (e * c.getClient().getChannelServer().getTraitRate()), c);
     }
 
-    public void addTrueExp(int e, MapleCharacter c) {
+    public void addTrueExp(int e, User c) {
         if (e != 0) {
             this.totalExp += e;
             this.localTotalExp += e;

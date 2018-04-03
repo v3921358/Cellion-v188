@@ -11,7 +11,7 @@ import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
 import server.AutobanManager;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 import net.InPacket;
 import tools.packet.CWvsContext;
@@ -30,7 +30,7 @@ public class DistributeSPHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         c.getPlayer().updateTick(iPacket.DecodeInteger());
         final int skillid = iPacket.DecodeInteger();

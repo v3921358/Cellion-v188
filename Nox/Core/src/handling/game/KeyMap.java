@@ -25,7 +25,7 @@ import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import net.InPacket;
 import netty.ProcessPacket;
@@ -39,7 +39,7 @@ public final class KeyMap implements ProcessPacket<MapleClient> { // oh here it 
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         if (chr == null) {
             return;
         }

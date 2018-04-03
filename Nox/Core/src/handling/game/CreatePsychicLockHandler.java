@@ -6,7 +6,7 @@
 package handling.game;
 
 import client.MapleClient;
-import handling.jobs.KinesisPsychicLock;
+import client.jobs.KinesisPsychicLock;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;

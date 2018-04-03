@@ -28,7 +28,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import client.MapleClient;
 import client.MapleStat;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 import net.InPacket;
 import tools.packet.CField;
@@ -72,7 +72,7 @@ public final class RespawnPvpHandler implements ProcessPacket<MapleClient> {
             lvl = 3;
         }
 
-        List<MapleCharacter> players = c.getPlayer().getEventInstance().getPlayers();
+        List<User> players = c.getPlayer().getEventInstance().getPlayers();
         List<Pair<Integer, String>> players1 = new LinkedList<>();
         for (int xx = 0; xx < players.size(); xx++) {
             players1.add(new Pair<>(players.get(xx).getId(), players.get(xx).getName()));

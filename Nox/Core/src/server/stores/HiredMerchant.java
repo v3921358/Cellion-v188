@@ -33,7 +33,7 @@ import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Timer.EtcTimer;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CWvsContext;
 import tools.packet.PlayerShopPacket;
 
@@ -44,7 +44,7 @@ public class HiredMerchant extends AbstractPlayerStore {
     private int storeid;
     private final long start;
 
-    public HiredMerchant(MapleCharacter owner, int itemId, String desc) {
+    public HiredMerchant(User owner, int itemId, String desc) {
         super(owner, itemId, desc, "", 6);
         start = System.currentTimeMillis();
         blacklist = new LinkedList<>();
@@ -106,7 +106,7 @@ public class HiredMerchant extends AbstractPlayerStore {
                 bought.add(new BoughtItem(newItem.getItemId(), quantity, theQuantity, c.getPlayer().getName()));
                 c.getPlayer().gainMeso(-theQuantity, false);
                 saveItems();
-                MapleCharacter chr = getMCOwnerWorld();
+                User chr = getMCOwnerWorld();
                 if (chr != null) {
                     chr.dropMessage(-5, "Item " + MapleItemInformationProvider.getInstance().getName(newItem.getItemId()) + " (" + perbundle + ") x " + quantity + " has sold in the Hired Merchant. Quantity left: " + pItem.bundles);
                 }

@@ -9,7 +9,7 @@ import client.MapleClient;
 import constants.GameConstants;
 import net.InPacket;
 import scripting.provider.NPCScriptManager;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import tools.packet.CField;
 import tools.packet.CWvsContext;

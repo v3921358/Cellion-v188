@@ -29,7 +29,7 @@ import java.sql.SQLException;
 import client.CharacterTemporaryStat;
 import database.DatabaseConnection;
 import server.Randomizer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
 
@@ -40,9 +40,9 @@ public class MapleMount implements Serializable {
     private byte fatigue, level;
     private transient boolean changed = false;
     private long lastFatigue = 0;
-    private final transient WeakReference<MapleCharacter> owner;
+    private final transient WeakReference<User> owner;
 
-    public MapleMount(MapleCharacter owner, int id, int skillid, byte fatigue, byte level, int exp) {
+    public MapleMount(User owner, int id, int skillid, byte fatigue, byte level, int exp) {
         this.itemid = id;
         this.skillid = skillid;
         this.fatigue = fatigue;
@@ -146,7 +146,7 @@ public class MapleMount implements Serializable {
     }
 
     public void update() {
-        final MapleCharacter chr = owner.get();
+        final User chr = owner.get();
         if (chr != null) {
 //	    cancelSchedule();
             chr.getMap().broadcastMessage(CWvsContext.updateMount(chr, false));

@@ -7,8 +7,8 @@ import client.inventory.PetDataFactory;
 import constants.GameConstants;
 import net.InPacket;
 import server.Randomizer;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import tools.packet.CField;
 import tools.packet.PetPacket;
 import netty.ProcessPacket;
@@ -26,8 +26,8 @@ public class PetCommandHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
-        MaplePet pet = chr.getPet(c.getPlayer().getPetIndex((int) iPacket.DecodeLong()));
+        User chr = c.getPlayer();
+        Pet pet = chr.getPet(c.getPlayer().getPetIndex((int) iPacket.DecodeLong()));
         iPacket.DecodeByte(); //always 0?
         if (pet == null) {
             return;

@@ -34,7 +34,7 @@ import provider.wz.MapleDataType;
 import provider.wz.cache.WzDataStorage;
 import server.StructSetItem.SetItem;
 import server.farm.inventory.FarmItemInformation;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 import tools.Triple;
 
@@ -684,7 +684,7 @@ public class MapleItemInformationProvider {
         return i.scrollReqs;
     }
 
-    public final Item scrollEquipWithId(final Item equip, final Item scrollId, final boolean ws, final MapleCharacter chr, final int vegas) {
+    public final Item scrollEquipWithId(final Item equip, final Item scrollId, final boolean ws, final User chr, final int vegas) {
         final Equip nEquip = (Equip) equip;
         final Map<String, Integer> stats = getEquipStats(scrollId.getItemId());
         final Map<String, Integer> eqstats = getEquipStats(equip.getItemId());

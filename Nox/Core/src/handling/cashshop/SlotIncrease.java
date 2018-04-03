@@ -9,7 +9,7 @@ import constants.GameConstants;
 import static handling.cashshop.CashShopOperation.playerCashShopInfo;
 import server.CashItemFactory;
 import server.CashItemInfo;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import net.InPacket;
 import tools.packet.CField;
@@ -22,7 +22,7 @@ import tools.packet.CSPacket;
  */
 public class SlotIncrease {
 
-    public static void inventory(InPacket iPacket, MapleClient c, MapleCharacter pPlayer) {
+    public static void inventory(InPacket iPacket, MapleClient c, User pPlayer) {
         iPacket.Skip(7);
         byte nType = (byte) iPacket.Decode();
         System.out.println(nType);
@@ -64,7 +64,7 @@ public class SlotIncrease {
         }
     }*/
 
-    public static void storage(InPacket iPacket, MapleClient c, MapleCharacter pPlayer) {
+    public static void storage(InPacket iPacket, MapleClient c, User pPlayer) {
         iPacket.Skip(1);
         int itemPrice = iPacket.DecodeInteger();
         int coupon = iPacket.DecodeByte() > 0 ? 2 : 1;
@@ -79,7 +79,7 @@ public class SlotIncrease {
         }
     }
     
-    public static void charSlots(InPacket iPacket, MapleClient c, MapleCharacter pPlayer) {
+    public static void charSlots(InPacket iPacket, MapleClient c, User pPlayer) {
         int nSlots = MapleCharacterCreationUtil.getCharacterSlots(c.getAccID(), pPlayer.getWorld());
         
         if (nSlots == 0 || c.getPlayer().getCSPoints(2) < 6900 || nSlots >= GameConstants.characterSlotMax) {
@@ -120,7 +120,7 @@ public class SlotIncrease {
         }
     }*/
 
-    public static void pendantSlots(InPacket iPacket, MapleClient c, MapleCharacter pPlayer) {
+    public static void pendantSlots(InPacket iPacket, MapleClient c, User pPlayer) {
        
         MapleQuestStatus pPendantStatus = c.getPlayer().getQuestNoAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT));
         

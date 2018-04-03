@@ -11,7 +11,7 @@ import server.Randomizer;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
 import server.life.MobSkill;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import tools.packet.MonsterCarnivalPacket;
@@ -40,7 +40,7 @@ public class MonsterCarnivalHandler {
                 if (mons != null && c.getPlayer().getMap().makeCarnivalSpawn(c.getPlayer().getCarnivalParty().getTeam(), mons, num)) {
                     c.getPlayer().getCarnivalParty().useCP(c.getPlayer(), mobs.get(num));
                     c.getPlayer().CPUpdate(false, c.getPlayer().getAvailableCP(), c.getPlayer().getTotalCP(), 0);
-                    for (MapleCharacter chr : c.getPlayer().getMap().getCharacters()) {
+                    for (User chr : c.getPlayer().getMap().getCharacters()) {
                         chr.CPUpdate(true, c.getPlayer().getCarnivalParty().getAvailableCP(), c.getPlayer().getCarnivalParty().getTotalCP(), c.getPlayer().getCarnivalParty().getTeam());
                     }
                     c.getPlayer().getMap().broadcastMessage(MonsterCarnivalPacket.playerSummoned(c.getPlayer().getName(), tab, num));
@@ -68,7 +68,7 @@ public class MonsterCarnivalHandler {
                 }
                 final MapleDisease dis = skil.getDisease();
                 boolean found = false;
-                for (MapleCharacter chr : c.getPlayer().getMap().getCharacters()) {
+                for (User chr : c.getPlayer().getMap().getCharacters()) {
                     if (chr.getParty() == null || (c.getPlayer().getParty() != null && chr.getParty().getId() != c.getPlayer().getParty().getId())) {
                         if (skil.targetsAll || Randomizer.nextBoolean()) {
                             found = true;
@@ -91,7 +91,7 @@ public class MonsterCarnivalHandler {
                 if (found) {
                     c.getPlayer().getCarnivalParty().useCP(c.getPlayer(), skil.cpLoss);
                     c.getPlayer().CPUpdate(false, c.getPlayer().getAvailableCP(), c.getPlayer().getTotalCP(), 0);
-                    for (MapleCharacter chr : c.getPlayer().getMap().getCharacters()) {
+                    for (User chr : c.getPlayer().getMap().getCharacters()) {
                         chr.CPUpdate(true, c.getPlayer().getCarnivalParty().getAvailableCP(), c.getPlayer().getCarnivalParty().getTotalCP(), c.getPlayer().getCarnivalParty().getTeam());
                         //chr.dropMessage(5, "[" + (c.getPlayer().getCarnivalParty().getTeam() == 0 ? "Red" : "Blue") + "] " + c.getPlayer().getName() + " has used a skill. [" + dis.name() + "].");
                     }
@@ -114,7 +114,7 @@ public class MonsterCarnivalHandler {
                 if (c.getPlayer().getMap().makeCarnivalReactor(c.getPlayer().getCarnivalParty().getTeam(), num)) {
                     c.getPlayer().getCarnivalParty().useCP(c.getPlayer(), skil.cpLoss);
                     c.getPlayer().CPUpdate(false, c.getPlayer().getAvailableCP(), c.getPlayer().getTotalCP(), 0);
-                    for (MapleCharacter chr : c.getPlayer().getMap().getCharacters()) {
+                    for (User chr : c.getPlayer().getMap().getCharacters()) {
                         chr.CPUpdate(true, c.getPlayer().getCarnivalParty().getAvailableCP(), c.getPlayer().getCarnivalParty().getTotalCP(), c.getPlayer().getCarnivalParty().getTeam());
                     }
                     c.getPlayer().getMap().broadcastMessage(MonsterCarnivalPacket.playerSummoned(c.getPlayer().getName(), tab, num));

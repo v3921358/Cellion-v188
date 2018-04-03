@@ -1,7 +1,7 @@
 package client;
 
 import constants.skills.Global;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 /**
  * Defines hyper stat, honor, and hyper skills
@@ -48,7 +48,7 @@ public class MapleSpecialStats {
 
     public static class MapleHyperStats {
 
-        public static int getRemainingHyperStat(MapleCharacter chr) {
+        public static int getRemainingHyperStat(User chr) {
             int usedHyperStatAmount = 0;
             for (int hyperSkill : ALL_HYPER_STATS) {
                 int hyperSkillLevel = chr.getSkillLevel(hyperSkill);

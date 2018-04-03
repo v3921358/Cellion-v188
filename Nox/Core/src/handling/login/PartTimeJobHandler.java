@@ -4,7 +4,7 @@ import client.MapleClient;
 import client.PartTimeJob;
 import constants.ServerConstants;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CLogin;
 import netty.ProcessPacket;
 
@@ -28,7 +28,7 @@ public final class PartTimeJobHandler implements ProcessPacket<MapleClient> {
         final byte mode = iPacket.DecodeByte();
         final int cid = iPacket.DecodeInteger();
         if (mode == 1) {
-            final PartTimeJob partTime = MapleCharacter.getPartTime(cid);
+            final PartTimeJob partTime = User.getPartTime(cid);
             final byte job = iPacket.DecodeByte();
             if (/*chr.getLevel() < 30 || */job < 0 || job > 5 || partTime.getReward() > 0
                     || (partTime.getJob() > 0 && partTime.getJob() <= 5)) {
@@ -38,10 +38,10 @@ public final class PartTimeJobHandler implements ProcessPacket<MapleClient> {
             partTime.setTime(System.currentTimeMillis());
             partTime.setJob(job);
             c.write(CLogin.updatePartTimeJob(partTime));
-            MapleCharacter.removePartTime(cid);
-            MapleCharacter.addPartTime(partTime);
+            User.removePartTime(cid);
+            User.addPartTime(partTime);
         } else if (mode == 2) {
-            final PartTimeJob partTime = MapleCharacter.getPartTime(cid);
+            final PartTimeJob partTime = User.getPartTime(cid);
             if (/*chr.getLevel() < 30 || */partTime.getReward() > 0
                     || partTime.getJob() < 0 || partTime.getJob() > 5) {
                 c.close();
@@ -55,8 +55,8 @@ public final class PartTimeJobHandler implements ProcessPacket<MapleClient> {
                 partTime.setReward(0);
             }
             partTime.setTime(System.currentTimeMillis());
-            MapleCharacter.removePartTime(cid);
-            MapleCharacter.addPartTime(partTime);
+            User.removePartTime(cid);
+            User.addPartTime(partTime);
             c.write(CLogin.updatePartTimeJob(partTime));
         }
     }

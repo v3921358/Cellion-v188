@@ -4,7 +4,7 @@ import java.util.List;
 import service.SendPacketOpcode;
 import net.OutPacket;
 import net.Packet;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 /**
  *
@@ -105,7 +105,7 @@ public class CUserLocal {
      * @param chr
      * @return
      */
-    public static Packet zeroTag(MapleCharacter chr) {
+    public static Packet zeroTag(User chr) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.ZERO_TAG.getValue());

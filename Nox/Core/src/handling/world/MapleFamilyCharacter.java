@@ -3,7 +3,7 @@ package handling.world;
 import java.util.ArrayList;
 import java.util.List;
 
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 public class MapleFamilyCharacter implements java.io.Serializable {
 
@@ -16,7 +16,7 @@ public class MapleFamilyCharacter implements java.io.Serializable {
 
     // either read from active character...
     // if it's online
-    public MapleFamilyCharacter(MapleCharacter c, int fid, int sid, int j1, int j2) {
+    public MapleFamilyCharacter(User c, int fid, int sid, int j1, int j2) {
         name = c.getName();
         level = c.getLevel();
         id = c.getId();

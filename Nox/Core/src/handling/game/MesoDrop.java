@@ -22,7 +22,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -36,7 +36,7 @@ public final class MesoDrop implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         chr.updateTick(iPacket.DecodeInteger());
         int meso = iPacket.DecodeInteger();
         if ((!chr.isAlive()) || (meso < 10) || (meso > 50000) || (meso > chr.getMeso())) {

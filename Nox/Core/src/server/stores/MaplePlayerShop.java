@@ -27,7 +27,7 @@ import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import server.MapleInventoryManipulator;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.PlayerShopPacket;
 
 public class MaplePlayerShop extends AbstractPlayerStore {
@@ -35,7 +35,7 @@ public class MaplePlayerShop extends AbstractPlayerStore {
     private int boughtnumber = 0;
     private final List<String> bannedList = new ArrayList<>();
 
-    public MaplePlayerShop(MapleCharacter owner, int itemId, String desc) {
+    public MaplePlayerShop(User owner, int itemId, String desc) {
         super(owner, itemId, desc, "", 3);
     }
 
@@ -84,7 +84,7 @@ public class MaplePlayerShop extends AbstractPlayerStore {
 
     @Override
     public void closeShop(boolean saveItems, boolean remove) {
-        MapleCharacter owner = getMCOwner();
+        User owner = getMCOwner();
         removeAllVisitors(10, 1);
         getMap().removeMapObject(this);
 
@@ -110,7 +110,7 @@ public class MaplePlayerShop extends AbstractPlayerStore {
             bannedList.add(name);
         }
         for (int i = 0; i < 3; i++) {
-            MapleCharacter chr = getVisitor(i);
+            User chr = getVisitor(i);
             if (chr.getName().equals(name)) {
                 chr.getClient().write(PlayerShopPacket.shopErrorMessage(5, 1));
                 chr.setPlayerShop(null);

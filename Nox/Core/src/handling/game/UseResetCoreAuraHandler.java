@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import netty.ProcessPacket;
 
@@ -18,7 +18,7 @@ public class UseResetCoreAuraHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         /*    Item starDust = chr.getInventory(MapleInventoryType.USE).getItem((byte) slot);
         if ((starDust == null) || (c.getPlayer().hasBlockedInventory())) {
             c.write(CWvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));

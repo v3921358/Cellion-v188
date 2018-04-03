@@ -7,7 +7,7 @@ import handling.PacketThrottleLimits;
 import handling.world.World;
 import net.InPacket;
 import server.commands.CommandProcessor;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -31,7 +31,7 @@ public class PartyChatHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         chr.updateTick(iPacket.DecodeInteger());
         final int type = iPacket.DecodeByte();

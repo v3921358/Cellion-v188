@@ -6,7 +6,7 @@ import client.MapleClient;
 import handling.AbstractMaplePacketHandler;
 import handling.world.MovementParse;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.movement.LifeMovementFragment;
 import tools.packet.CField;
 import netty.ProcessPacket;
@@ -24,7 +24,7 @@ public class FamiliarMovement implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         if (chr == null || chr.getSummonedFamiliar() == null) {
             return;
         }

@@ -26,7 +26,7 @@ import client.MapleQuestStatus;
 import java.time.LocalDateTime;
 import net.InPacket;
 import server.MapleInventoryManipulator;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import tools.packet.CField;
 import netty.ProcessPacket;
@@ -41,7 +41,7 @@ public final class OnUserMedalReissueRequest implements ProcessPacket<MapleClien
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         MapleQuest q = MapleQuest.getInstance(iPacket.DecodeShort());
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         if (q == null) {
             return;
         }

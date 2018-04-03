@@ -24,7 +24,7 @@ package handling.game;
 import client.MapleClient;
 import net.InPacket;
 import server.maps.FieldLimitType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CSPacket;
 import netty.ProcessPacket;
 
@@ -37,7 +37,7 @@ public final class OnUserMapTransferRequest implements ProcessPacket<MapleClient
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         byte addrem = iPacket.DecodeByte();
         byte vip = iPacket.DecodeByte();

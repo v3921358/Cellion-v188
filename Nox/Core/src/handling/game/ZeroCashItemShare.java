@@ -8,7 +8,7 @@ import client.inventory.MapleInventoryType;
 import client.inventory.ModifyInventory;
 import client.inventory.ModifyInventoryOperation;
 import constants.GameConstants;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -31,7 +31,7 @@ public class ZeroCashItemShare implements ProcessPacket<MapleClient> {
      */
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         if (chr == null) {
             return;
         }

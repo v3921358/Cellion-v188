@@ -4,7 +4,7 @@ import client.MapleClient;
 import handling.world.World;
 import handling.world.MapleGuild;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CWvsContext.GuildPacket;
 import netty.ProcessPacket;
 
@@ -21,7 +21,7 @@ public final class GuildJoinRequestHandler implements ProcessPacket<MapleClient>
             return;
         }
         int guildId = iPacket.DecodeInteger();
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         MapleGuild guild = World.Guild.getGuild(guildId);
 
         if (guild != null) {

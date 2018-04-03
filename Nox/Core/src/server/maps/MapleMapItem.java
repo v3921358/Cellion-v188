@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import client.MapleClient;
 import client.MapleQuestStatus.MapleQuestState;
 import client.inventory.Item;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CField;
 
 public class MapleMapItem extends MapleMapObject {
@@ -22,7 +22,7 @@ public class MapleMapItem extends MapleMapObject {
 
     private final ReentrantLock lock = new ReentrantLock();
 
-    public MapleMapItem(Item item, Point position, MapleCharacter owner, byte type, int questid) {
+    public MapleMapItem(Item item, Point position, User owner, byte type, int questid) {
         setPosition(position);
         this.item = item;
         this.character_ownerid = owner.getId();
@@ -30,7 +30,7 @@ public class MapleMapItem extends MapleMapObject {
         this.questid = questid;
     }
 
-    public MapleMapItem(int meso, Point position, MapleCharacter owner, byte type) {
+    public MapleMapItem(int meso, Point position, User owner, byte type) {
         setPosition(position);
         this.item = null;
         this.character_ownerid = owner.getId();

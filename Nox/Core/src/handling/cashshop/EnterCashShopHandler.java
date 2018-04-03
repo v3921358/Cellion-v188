@@ -31,7 +31,7 @@ import service.CashShopServer;
 import service.ChannelServer;
 import service.FarmServer;
 import service.LoginServer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -47,7 +47,7 @@ public final class EnterCashShopHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         if (chr.hasBlockedInventory() || chr.getEventInstance() != null) {
             c.write(CWvsContext.enableActions());
             return;

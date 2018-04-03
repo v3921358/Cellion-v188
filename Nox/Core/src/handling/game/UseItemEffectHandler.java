@@ -24,7 +24,7 @@ package handling.game;
 import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -39,7 +39,7 @@ public final class UseItemEffectHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         int itemId = iPacket.DecodeInteger();
         if (chr == null) {
             return;

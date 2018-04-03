@@ -8,7 +8,7 @@ import net.InPacket;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.maps.FieldLimitType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
 
@@ -25,7 +25,7 @@ public class PetAutoPotionHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         iPacket.Skip(9);
         chr.updateTick(iPacket.DecodeInteger());

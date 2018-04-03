@@ -23,7 +23,7 @@ package handling.game;
 
 import client.MapleClient;
 import constants.GameConstants;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import net.InPacket;
 import tools.packet.CWvsContext;
@@ -38,7 +38,7 @@ public final class CodexSetChangeHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         if (chr == null || chr.getMap() == null) {
             return;
         }

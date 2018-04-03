@@ -6,14 +6,14 @@ import service.ChannelServer;
 import service.FarmServer;
 import server.maps.FieldLimitType;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 
 public class InterServerHandler {
 
-    public static void enterFarm(final MapleClient c, final MapleCharacter chr) {
+    public static void enterFarm(final MapleClient c, final User chr) {
         if (chr.hasBlockedInventory() || chr.getMap() == null || chr.getEventInstance() != null || c.getChannelServer() == null
                 || FieldLimitType.UnableToMigrate.check(chr.getMap())) {
             c.write(CWvsContext.enableActions());
@@ -41,7 +41,7 @@ public class InterServerHandler {
         c.setReceiving(false);
     }
 
-    public static final void changeChannel(final InPacket iPacket, final MapleClient c, final MapleCharacter chr, final boolean room) {
+    public static final void changeChannel(final InPacket iPacket, final MapleClient c, final User chr, final boolean room) {
         if (chr == null || chr.hasBlockedInventory() || chr.getEventInstance() != null || chr.getMap() == null || chr.isInBlockedMap()
                 || FieldLimitType.UnableToMigrate.check(chr.getMap())) {
             c.write(CWvsContext.enableActions());

@@ -12,7 +12,7 @@ import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.StructRewardItem;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 import net.InPacket;
 import tools.packet.CField;
@@ -40,7 +40,7 @@ public class UseRewardItemHandler implements ProcessPacket<MapleClient> {
         UseRewardItem(slot, itemId, unseal, c, c.getPlayer());
     }
 
-    public static boolean UseRewardItem(byte slot, int itemId, final boolean unseal, final MapleClient c, final MapleCharacter chr) {
+    public static boolean UseRewardItem(byte slot, int itemId, final boolean unseal, final MapleClient c, final User chr) {
         final Item toUse = c.getPlayer().getInventory(GameConstants.getInventoryType(itemId)).getItem(slot);
         c.write(CWvsContext.enableActions());
         if (toUse != null && toUse.getQuantity() >= 1 && toUse.getItemId() == itemId && !chr.hasBlockedInventory()) {

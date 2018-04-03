@@ -27,7 +27,7 @@ import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.Randomizer;
 import server.life.MobSkill;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import handling.world.AttackMonster;
 import tools.Pair;
 import tools.Triple;
@@ -47,7 +47,7 @@ public final class AttackPvpHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final Lock ThreadLock = new ReentrantLock();
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         final int trueSkill = iPacket.DecodeInteger();
         int skillid = trueSkill;
         if (chr == null || chr.isHidden() || !chr.isAlive() || chr.hasBlockedInventory() || chr.getMap() == null || !chr.inPVP() || !chr.getEventInstance().getProperty("started").equals("1") || skillid >= 90000000) {
@@ -227,7 +227,7 @@ public final class AttackPvpHandler implements ProcessPacket<MapleClient> {
         boolean didAttack = false, killed = false;
         if (!area) {
             List<Pair<Long, Boolean>> attacks;
-            for (MapleCharacter attacked : chr.getMap().getCharactersIntersect(box)) {
+            for (User attacked : chr.getMap().getCharactersIntersect(box)) {
                 if (attacked.getId() != chr.getId() && attacked.isAlive() && !attacked.isHidden() && (type == 0 || attacked.getTeam() != chr.getTeam())) {
                     double rawDamage = maxdamage / Math.max(1, ((magic ? attacked.getStat().mdef : attacked.getStat().wdef) * Math.max(1.0, 100.0 - ignoreDEF) / 100.0) * (type == 3 ? 0.2 : 0.5));
                     if (attacked.getBuffedValue(CharacterTemporaryStat.Invincible) != null || inArea(attacked)) {

@@ -20,8 +20,8 @@ import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.life.MapleLifeFactory;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import server.quest.MapleQuest;
 import net.InPacket;
 import tools.packet.CWvsContext;
@@ -42,7 +42,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         c.getPlayer().updateTick(iPacket.DecodeInteger());
         final byte slot = (byte) iPacket.DecodeShort();
@@ -1003,7 +1003,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
                     if (c.getPlayer().getInventory(MapleInventoryType.CASH).getNumFreeSlot() >= 1 && c.getPlayer().getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() >= 1) {
                         if (Randomizer.nextInt(100) < 30) { //30% for Hilla's Pet
                             if (MapleInventoryManipulator.checkSpace(c, 5000217, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 1, true, false)) {
-                                MapleInventoryManipulator.addById(c, 5000217, (short) 1, "", MaplePet.createPet(5000217, "Blackheart", 1, 0, 100, MapleInventoryIdentifier.getInstance(), 0, (short) 0), 45, false, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
+                                MapleInventoryManipulator.addById(c, 5000217, (short) 1, "", Pet.createPet(5000217, "Blackheart", 1, 0, 100, MapleInventoryIdentifier.getInstance(), 0, (short) 0), 45, false, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                             } else {
                                 c.getPlayer().dropMessage(0, "Please make more space");
                             }

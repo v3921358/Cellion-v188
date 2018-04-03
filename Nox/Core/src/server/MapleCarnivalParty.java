@@ -6,21 +6,21 @@ import java.util.List;
 
 import service.ChannelServer;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CField;
 
 public class MapleCarnivalParty {
 
     private final List<Integer> members = new LinkedList<>();
-    private final WeakReference<MapleCharacter> leader;
+    private final WeakReference<User> leader;
     private final byte team;
     private final int channel;
     private short availableCP = 0, totalCP = 0;
     private boolean winner = false;
 
-    public MapleCarnivalParty(final MapleCharacter owner, final List<MapleCharacter> members1, final byte team1) {
+    public MapleCarnivalParty(final User owner, final List<User> members1, final byte team1) {
         leader = new WeakReference<>(owner);
-        for (MapleCharacter mem : members1) {
+        for (User mem : members1) {
             members.add(mem.getId());
             mem.setCarnivalParty(this);
         }
@@ -28,11 +28,11 @@ public class MapleCarnivalParty {
         channel = owner.getClient().getChannel();
     }
 
-    public final MapleCharacter getLeader() {
+    public final User getLeader() {
         return leader.get();
     }
 
-    public void addCP(MapleCharacter player, int ammount) {
+    public void addCP(User player, int ammount) {
         totalCP += ammount;
         availableCP += ammount;
         player.addCP(ammount);
@@ -46,7 +46,7 @@ public class MapleCarnivalParty {
         return availableCP;
     }
 
-    public void useCP(MapleCharacter player, int ammount) {
+    public void useCP(User player, int ammount) {
         availableCP -= ammount;
         player.useCP(ammount);
     }
@@ -61,7 +61,7 @@ public class MapleCarnivalParty {
 
     public void warp(final MapleMap map, final String portalname) {
         for (int chr : members) {
-            final MapleCharacter c = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterById(chr);
+            final User c = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterById(chr);
             if (c != null) {
                 c.changeMap(map, map.getPortal(portalname));
             }
@@ -70,7 +70,7 @@ public class MapleCarnivalParty {
 
     public void warp(final MapleMap map, final int portalid) {
         for (int chr : members) {
-            final MapleCharacter c = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterById(chr);
+            final User c = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterById(chr);
             if (c != null) {
                 c.changeMap(map, map.getPortal(portalid));
             }
@@ -86,7 +86,7 @@ public class MapleCarnivalParty {
         return true;
     }
 
-    public void removeMember(MapleCharacter chr) {
+    public void removeMember(User chr) {
         for (int i = 0; i < members.size(); i++) {
             if (members.get(i) == chr.getId()) {
                 members.remove(i);
@@ -109,7 +109,7 @@ public class MapleCarnivalParty {
         final String sound = winner ? "MobCarnival/Win" : "MobCarnival/Lose";
         boolean done = false;
         for (int chr : members) {
-            final MapleCharacter c = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterById(chr);
+            final User c = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterById(chr);
             if (c != null) {
                 c.getClient().write(CField.showEffect(effect));
                 c.getClient().write(CField.playSound(sound));

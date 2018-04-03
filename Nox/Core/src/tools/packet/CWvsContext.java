@@ -17,8 +17,8 @@ import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.life.MapleMonster;
 import server.life.PlayerNPC;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import server.maps.objects.MonsterFamiliar;
 import server.messages.ExpGainTypes;
 import server.messages.ExpIncreaseMessage;
@@ -205,11 +205,11 @@ public class CWvsContext {
         return updatePlayerStats(new EnumMap<>(MapleStat.class), true, null);
     }
 
-    public static Packet updatePlayerStats(Map<MapleStat, Long> stats, MapleCharacter chr) {
+    public static Packet updatePlayerStats(Map<MapleStat, Long> stats, User chr) {
         return updatePlayerStats(stats, false, chr);
     }
 
-    public static Packet updatePlayerStats(Map<MapleStat, Long> mystats, boolean itemReaction, MapleCharacter chr) {
+    public static Packet updatePlayerStats(Map<MapleStat, Long> mystats, boolean itemReaction, User chr) {
         OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.StatChanged.getValue());
         oPacket.Encode(itemReaction);
@@ -406,7 +406,7 @@ public class CWvsContext {
         return temporaryStats(stats);
     }
 
-    public static Packet temporaryStats_Balrog(MapleCharacter chr) {
+    public static Packet temporaryStats_Balrog(User chr) {
         Map<Temp, Integer> stats = new EnumMap<>(MapleStat.Temp.class);
 
         int offset = 1 + (chr.getLevel() - 90) / 20;
@@ -662,7 +662,7 @@ public class CWvsContext {
         return oPacket.ToPacket();
     }
 
-    public static Packet updateMount(MapleCharacter chr, boolean levelup) {
+    public static Packet updateMount(User chr, boolean levelup) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.SetTamingMobInfo.getValue());
@@ -684,7 +684,7 @@ public class CWvsContext {
         return oPacket.ToPacket();
     }
 
-    public static Packet useSkillBook(MapleCharacter chr, int skillid, int maxlevel, boolean canuse, boolean success) {
+    public static Packet useSkillBook(User chr, int skillid, int maxlevel, boolean canuse, boolean success) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.SkillLearnItemResult.getValue());
@@ -764,7 +764,7 @@ public class CWvsContext {
         return oPacket.ToPacket();
     }
 
-    public static Packet updateGender(MapleCharacter chr) {
+    public static Packet updateGender(User chr) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.UserGenderResult.getValue());
@@ -773,7 +773,7 @@ public class CWvsContext {
         return oPacket.ToPacket();
     }
 
-    public static Packet charInfo(MapleCharacter chr, boolean isSelf) {
+    public static Packet charInfo(User chr, boolean isSelf) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.CharacterInfo.getValue());
@@ -865,7 +865,7 @@ public class CWvsContext {
         oPacket.Encode(!chr.getSummonedPets().isEmpty());
         oPacket.Encode(!chr.getSummonedPets().isEmpty());
         if (!chr.getSummonedPets().isEmpty()) {
-            for (MaplePet pet : chr.getSummonedPets()) {
+            for (Pet pet : chr.getSummonedPets()) {
                 byte index = 1;
                 oPacket.EncodeInteger(0); // this is the index of the pet.
                 oPacket.EncodeInteger(pet.getItem().getItemId());
@@ -944,7 +944,7 @@ public class CWvsContext {
         return oPacket.ToPacket();
     }
 
-    public static Packet getMonsterBookInfo(MapleCharacter chr) {
+    public static Packet getMonsterBookInfo(User chr) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.ItemCollection_SendCollectionList.getValue());
@@ -1229,7 +1229,7 @@ public class CWvsContext {
         return oPacket.ToPacket();
     }
 
-    public static Packet sendEngagement(byte msg, int item, MapleCharacter male, MapleCharacter female) {
+    public static Packet sendEngagement(byte msg, int item, User male, User female) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.MarriageResult.getValue());
@@ -1384,7 +1384,7 @@ public class CWvsContext {
         return oPacket.ToPacket();
     }
 
-    public static Packet upgradeBook(Item book, MapleCharacter chr) {
+    public static Packet upgradeBook(Item book, User chr) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.LimitedNPCDisableInfo.getValue());
@@ -1409,7 +1409,7 @@ public class CWvsContext {
         return oPacket.ToPacket();
     }
 
-    public static Packet getFamiliarInfo(MapleCharacter chr) {
+    public static Packet getFamiliarInfo(User chr) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.JournalAvatar.getValue());
@@ -1578,7 +1578,7 @@ public class CWvsContext {
         return oPacket.ToPacket();
     }
 
-    public static Packet getAvatarMega(MapleCharacter chr, int channel, int itemId, List<String> text, boolean ear) {
+    public static Packet getAvatarMega(User chr, int channel, int itemId, List<String> text, boolean ear) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.AvatarMegaphoneUpdateMessage.getValue());
@@ -1681,7 +1681,7 @@ public class CWvsContext {
         return oPacket.ToPacket();
     }
 
-    public static Packet updateJaguar(MapleCharacter from) {
+    public static Packet updateJaguar(User from) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.WildHunterInfo.getValue());
@@ -1728,7 +1728,7 @@ public class CWvsContext {
         return oPacket.ToPacket();
     }
 
-    public static Packet findFriendResult(byte mode, List<MapleCharacter> friends, int error, MapleCharacter chr) {
+    public static Packet findFriendResult(byte mode, List<User> friends, int error, User chr) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.AswanResult.getValue());
@@ -1740,7 +1740,7 @@ public class CWvsContext {
                 break;
             case 8:
                 oPacket.EncodeShort(friends.size());
-                for (MapleCharacter mc : friends) {
+                for (User mc : friends) {
                     oPacket.EncodeInteger(mc.getId());
                     oPacket.EncodeString(mc.getName());
                     oPacket.Encode(mc.getLevel());
@@ -1943,7 +1943,7 @@ public class CWvsContext {
         return oPacket.ToPacket();
     }
 
-    public static Packet getMulungRanking(MapleCharacter chr) {
+    public static Packet getMulungRanking(User chr) {
         OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.DojangRanking.getValue());
         oPacket.EncodeInteger(0);
@@ -1997,7 +1997,7 @@ public class CWvsContext {
         return oPacket.ToPacket();
     }
 
-    public static Packet showForeignDamageSkin(MapleCharacter chr, int skinid) {
+    public static Packet showForeignDamageSkin(User chr, int skinid) {
         OutPacket packet = new OutPacket(80);
         packet.EncodeShort(SendPacketOpcode.UserSetDamageSkin.getValue());
         packet.EncodeInteger(chr.getId());
@@ -2096,7 +2096,7 @@ public class CWvsContext {
             return oPacket.ToPacket();
         }
 
-        public static Packet sendAllianceInvite(String allianceName, MapleCharacter inviter) {
+        public static Packet sendAllianceInvite(String allianceName, User inviter) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.AllianceResult.getValue());
@@ -2300,7 +2300,7 @@ public class CWvsContext {
             return oPacket.ToPacket();
         }
 
-        public static Packet getFamilyInfo(MapleCharacter chr) {
+        public static Packet getFamilyInfo(User chr) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.FamilyChartResult.getValue());
@@ -2345,7 +2345,7 @@ public class CWvsContext {
             oPacket.EncodeString(ldr.getName());
         }
 
-        public static Packet getFamilyPedigree(MapleCharacter chr) {
+        public static Packet getFamilyPedigree(User chr) {
             OutPacket oPacket = new OutPacket(80);
             oPacket.EncodeShort(SendPacketOpcode.FamilyPrivilegeList.getValue());
             oPacket.EncodeInteger(chr.getId());
@@ -2786,7 +2786,7 @@ public class CWvsContext {
             return oPacket.ToPacket();
         }
 
-        public static Packet expeditionInvite(MapleCharacter from, int exped) {
+        public static Packet expeditionInvite(User from, int exped) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.ExpedtionResult.getValue());
@@ -2844,7 +2844,7 @@ public class CWvsContext {
             return oPacket.ToPacket();
         }
 
-        public static Packet partyInvite(MapleCharacter from) {
+        public static Packet partyInvite(User from) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.PartyResult.getValue());
@@ -2859,7 +2859,7 @@ public class CWvsContext {
             return oPacket.ToPacket();
         }
 
-        public static Packet partyRequestInvite(MapleCharacter from) {
+        public static Packet partyRequestInvite(User from) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.PartyResult.getValue());
@@ -3084,11 +3084,11 @@ public class CWvsContext {
             return oPacket.ToPacket();
         }
 
-        public static Packet showMemberSearch(List<MapleCharacter> chr) {
+        public static Packet showMemberSearch(List<User> chr) {
             OutPacket oPacket = new OutPacket(80);
             oPacket.EncodeShort(SendPacketOpcode.PartyMemberCandidateResult.getValue());
             oPacket.Encode(chr.size());
-            for (MapleCharacter c : chr) {
+            for (User c : chr) {
                 oPacket.EncodeInteger(c.getId());
                 oPacket.EncodeString(c.getName());
                 oPacket.EncodeShort(c.getJob());
@@ -3243,7 +3243,7 @@ public class CWvsContext {
             return oPacket.ToPacket();
         }
 
-        public static Packet loadGuild_Done(MapleCharacter c) {
+        public static Packet loadGuild_Done(User c) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.GuildResult.getValue());
@@ -3267,7 +3267,7 @@ public class CWvsContext {
             return oPacket.ToPacket();
         }
 
-        public static Packet findGuild_Done(MapleCharacter c, int guildId) {
+        public static Packet findGuild_Done(User c, int guildId) {
             OutPacket oPacket = new OutPacket(80);
             oPacket.EncodeShort(SendPacketOpcode.GuildResult.getValue());
             oPacket.Encode(GuildResult.FindGuild_Done);
@@ -3312,7 +3312,7 @@ public class CWvsContext {
             }
         }
 
-        public static Packet createNewGuild(MapleCharacter c) {
+        public static Packet createNewGuild(User c) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.GuildResult.getValue());
@@ -3593,7 +3593,7 @@ public class CWvsContext {
                 MapleGuild guild = gs.getValue();
                 int avgLevel = gs.getKey();
                 int guildMaster = guild.getLeaderId();
-                MapleCharacter master = c.loadCharacterById(guildMaster);
+                User master = c.loadCharacterById(guildMaster);
                 java.util.Collection<MapleGuildCharacter> members = guild.getMembers();
                 int guildSize = members.size();
 
@@ -3607,7 +3607,7 @@ public class CWvsContext {
             return oPacket.ToPacket();
         }
 
-        public static Packet joinGuildRequest(MapleGuild guild, MapleCharacter chr, int operation) {
+        public static Packet joinGuildRequest(MapleGuild guild, User chr, int operation) {
             OutPacket oPacket = new OutPacket(80);
             oPacket.EncodeShort(SendPacketOpcode.GuildResult.getValue());
             switch (operation) {
@@ -3739,7 +3739,7 @@ public class CWvsContext {
             return oPacket.ToPacket();
         }
 
-        public static Packet sendSetGuildNameMsg(MapleCharacter chr) {
+        public static Packet sendSetGuildNameMsg(User chr) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.UserGuildNameChanged.getValue());
@@ -3758,7 +3758,7 @@ public class CWvsContext {
             return oPacket.ToPacket();
         }
 
-        public static Packet sendSetGuildMarkMsg(MapleCharacter chr) {
+        public static Packet sendSetGuildMarkMsg(User chr) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.UserGuildMarkChanged.getValue());

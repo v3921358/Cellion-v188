@@ -13,7 +13,7 @@ import server.maps.MapleMapObjectType;
 import server.maps.SummonMovementType;
 import tools.packet.CField.SummonPacket;
 
-public class MapleSummon extends AnimatedMapleMapObject {
+public class Summon extends AnimatedMapleMapObject {
 
     private final int ownerid, skillLevel, ownerLevel, skill;
     private MapleMap map; //required for instanceMaps
@@ -29,11 +29,11 @@ public class MapleSummon extends AnimatedMapleMapObject {
     private long summonTickDifference;
     private long lastAttackTime;
 
-    public MapleSummon(MapleCharacter owner, MapleStatEffect skill, Point pos, SummonMovementType movementType, int summonDuration) {
+    public Summon(User owner, MapleStatEffect skill, Point pos, SummonMovementType movementType, int summonDuration) {
         this(owner, skill.getSourceId(), skill.getLevel(), pos, movementType, summonDuration);
     }
 
-    public MapleSummon(MapleCharacter owner, int sourceid, int level, Point pos, SummonMovementType movementType, int summonDuration) {
+    public Summon(User owner, int sourceid, int level, Point pos, SummonMovementType movementType, int summonDuration) {
         super();
         this.ownerid = owner.getId();
         this.ownerLevel = owner.getLevel();
@@ -66,7 +66,7 @@ public class MapleSummon extends AnimatedMapleMapObject {
         this.map = map;
     }
 
-    public final MapleCharacter getOwner() {
+    public final User getOwner() {
         return map.getCharacterById(ownerid);
     }
 
@@ -239,7 +239,7 @@ public class MapleSummon extends AnimatedMapleMapObject {
         return MapleMapObjectType.SUMMON;
     }
 
-    public final void checkSummonAttackFrequency(final MapleCharacter chr, final int tickcount) {
+    public final void checkSummonAttackFrequency(final User chr, final int tickcount) {
         final int tickdifference = (tickcount - lastSummonTickCount);
         if (tickdifference < SkillFactory.getSummonData(skill).delay) {
             chr.getCheatTracker().registerOffense(CheatingOffense.FAST_SUMMON_ATTACK);
@@ -257,7 +257,7 @@ public class MapleSummon extends AnimatedMapleMapObject {
         lastSummonTickCount = tickcount;
     }
 
-    public final void checkPVPSummonAttackFrequency(final MapleCharacter chr) {
+    public final void checkPVPSummonAttackFrequency(final User chr) {
         final long tickdifference = (System.currentTimeMillis() - lastAttackTime);
         if (tickdifference < SkillFactory.getSummonData(skill).delay) {
             chr.getCheatTracker().registerOffense(CheatingOffense.FAST_SUMMON_ATTACK);

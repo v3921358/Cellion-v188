@@ -15,7 +15,7 @@ import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.MapleReactor;
-import server.maps.objects.MapleSummon;
+import server.maps.objects.Summon;
 import tools.packet.CWvsContext;
 
 public class SpawnPoint extends Spawns {
@@ -144,7 +144,7 @@ public class SpawnPoint extends Spawns {
                 }
             }
         }
-        for (MapleSummon s : map.getAllSummons()) {
+        for (Summon s : map.getAllSummons()) {
             if (s.getSkill() == 35111005) {
                 final MapleStatEffect effect = SkillFactory.getSkill(s.getSkill()).getEffect(s.getSkillLevel());
                 for (Map.Entry<MonsterStatus, Integer> stat : effect.getMonsterStati().entrySet()) {

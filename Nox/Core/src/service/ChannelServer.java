@@ -48,7 +48,7 @@ import server.maps.AramiaFireWorks;
 import server.maps.MapleMapFactory;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.stores.HiredMerchant;
 import tools.ConcurrentEnumMap;
 import tools.packet.CWvsContext;
@@ -193,7 +193,7 @@ public class ChannelServer extends Thread {
         return instances.get(channel);
     }
 
-    public final void addPlayer(final MapleCharacter chr) {
+    public final void addPlayer(final User chr) {
         getPlayerStorage().registerPlayer(chr);
     }
 
@@ -204,7 +204,7 @@ public class ChannelServer extends Thread {
         return players;
     }
 
-    public final void removePlayer(final MapleCharacter chr) {
+    public final void removePlayer(final User chr) {
         getPlayerStorage().deregisterPlayer(chr);
 
     }
@@ -549,7 +549,7 @@ public class ChannelServer extends Thread {
         return traitRate;
     }
 
-    public boolean manualEvent(MapleCharacter chr) {
+    public boolean manualEvent(User chr) {
         if (manualEvent) {
             manualEvent = false;
             manualEventMap = 0;
@@ -563,7 +563,7 @@ public class ChannelServer extends Thread {
         return manualEvent;
     }
 
-    public void warpToEvent(MapleCharacter chr) {
+    public void warpToEvent(User chr) {
         if (!manualEvent || manualEventMap <= 0) {
             chr.dropMessage(5, "Sorry, there is currently no event being hosted.");
             return;
@@ -576,7 +576,7 @@ public class ChannelServer extends Thread {
         return bomberman;
     }
 
-    public void toggleBomberman(MapleCharacter chr) {
+    public void toggleBomberman(User chr) {
         bomberman = !bomberman;
         if (bomberman) {
             chr.dropMessage(5, "Bomberman Event is active.");

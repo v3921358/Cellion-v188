@@ -10,7 +10,7 @@ import handling.world.MovementParse;
 import net.InPacket;
 import server.Timer.CloneTimer;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.movement.LifeMovementFragment;
 import tools.packet.CField;
 import netty.ProcessPacket;
@@ -28,7 +28,7 @@ public class DragonMovement implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         if (chr == null || chr.getDragon() == null) {
             return;
         }

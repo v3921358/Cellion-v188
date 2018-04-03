@@ -14,7 +14,7 @@ import handling.world.World;
 import service.ChannelServer;
 import server.Timer.EtcTimer;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -33,7 +33,7 @@ public class MapleSquad {
         public HashMap<Integer, ArrayList<Pair<String, Long>>> queue = new HashMap<>();
     }
 
-    private WeakReference<MapleCharacter> leader;
+    private WeakReference<User> leader;
     private final String leaderName, toSay;
     private final Map<String, String> members = new LinkedHashMap<>();
     private final Map<String, String> bannedMembers = new LinkedHashMap<>();
@@ -45,7 +45,7 @@ public class MapleSquad {
     private byte status = 0;
     private ScheduledFuture<?> removal;
 
-    public MapleSquad(final int ch, final String type, final MapleCharacter leader, final int expiration, final String toSay) {
+    public MapleSquad(final int ch, final String type, final User leader, final int expiration, final String toSay) {
         this.leader = new WeakReference<>(leader);
         this.members.put(leader.getName(), MapleCarnivalChallenge.getJobBasicNameById(leader.getJob()));
         this.leaderName = leader.getName();
@@ -76,7 +76,7 @@ public class MapleSquad {
             final String nextPlayerId = type.queue.get(ch).remove(index).left;
             final int theirCh = World.Find.findChannel(nextPlayerId);
             if (theirCh > 0) {
-                final MapleCharacter lead = ChannelServer.getInstance(theirCh).getPlayerStorage().getCharacterByName(nextPlayerId);
+                final User lead = ChannelServer.getInstance(theirCh).getPlayerStorage().getCharacterByName(nextPlayerId);
                 if (lead != null && lead.getMapId() == beginMapId && lead.getClient().getChannel() == ch) {
                     final MapleSquad squad = new MapleSquad(ch, type.name(), lead, expiration, toSay);
                     if (ChannelServer.getInstance(ch).addMapleSquad(squad, type.name())) {
@@ -119,7 +119,7 @@ public class MapleSquad {
         this.status = 0;
     }
 
-    public MapleCharacter getChar(String name) {
+    public User getChar(String name) {
         return ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(name);
     }
 
@@ -183,7 +183,7 @@ public class MapleSquad {
         type.queue.get(ch).add(new Pair<>(i, System.currentTimeMillis()));
     }
 
-    public MapleCharacter getLeader() {
+    public User getLeader() {
         if (leader == null || leader.get() == null) {
             if (members.size() > 0 && getChar(leaderName) != null) {
                 leader = new WeakReference<>(getChar(leaderName));
@@ -197,7 +197,7 @@ public class MapleSquad {
         return leader.get();
     }
 
-    public boolean containsMember(MapleCharacter member) {
+    public boolean containsMember(User member) {
         for (String mmbr : members.keySet()) {
             if (mmbr.equalsIgnoreCase(member.getName())) {
                 return true;
@@ -218,11 +218,11 @@ public class MapleSquad {
         return members.size();
     }
 
-    public boolean isBanned(MapleCharacter member) {
+    public boolean isBanned(User member) {
         return bannedMembers.containsKey(member.getName());
     }
 
-    public int addMember(MapleCharacter member, boolean join) {
+    public int addMember(User member, boolean join) {
         if (getLeader() == null) {
             return -1;
         }
@@ -261,12 +261,12 @@ public class MapleSquad {
         }
     }
 
-    public void reAddMember(MapleCharacter chr) {
+    public void reAddMember(User chr) {
         removeMember(chr);
         members.put(chr.getName(), MapleCarnivalChallenge.getJobBasicNameById(chr.getJob()));
     }
 
-    public void removeMember(MapleCharacter chr) {
+    public void removeMember(User chr) {
         if (members.containsKey(chr.getName())) {
             members.remove(chr.getName());
         }

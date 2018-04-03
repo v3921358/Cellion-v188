@@ -25,7 +25,7 @@ public class MapleHaku extends AnimatedMapleMapObject {
     private boolean stats;
     private Point pos = new Point(0, 0);
 
-    public MapleHaku(MapleCharacter owner) {
+    public MapleHaku(User owner) {
         this.owner = owner.getId();
         this.jobid = owner.getJob();
         this.fh = owner.getFh();

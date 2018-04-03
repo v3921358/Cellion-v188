@@ -40,7 +40,7 @@ import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.SavedLocationType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import tools.LogHelper;
 import tools.StringUtil;
@@ -64,7 +64,7 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter player = c.getPlayer();
+            User player = c.getPlayer();
             if (splitted.length < 3 || player.hasBlockedInventory()) {
                 c.getPlayer().dropMessage(6, "Syntax: @sell <eq/use/setup/etc> <start slot> <end slot>");
                 return 0;
@@ -201,7 +201,7 @@ public class PlayerCommand {
         private static final int statLim = 5000;
         private static final int hpMpLim = 500000;
 
-        private void setStat(MapleCharacter player, int current, int amount) {
+        private void setStat(User player, int current, int amount) {
             switch (stat) {
                 case STR:
                     player.getStat().setStr((short) (current + amount), player);
@@ -238,7 +238,7 @@ public class PlayerCommand {
             }
         }
 
-        private int getStat(MapleCharacter player) {
+        private int getStat(User player) {
             switch (stat) {
                 case STR:
                     return player.getStat().getStr();

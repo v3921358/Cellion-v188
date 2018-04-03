@@ -7,8 +7,8 @@ import constants.GameConstants;
 import net.InPacket;
 import server.MapleInventoryManipulator;
 import server.Randomizer;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.PetPacket;
@@ -28,14 +28,14 @@ public class PetFoodHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         int previousFullness = 100;
-        MaplePet pet = null;
+        Pet pet = null;
         //  MapleCharacter chr = chr;
         // int previousFullness = 100;
         // MaplePet pet = null;
         if (c.getPlayer() == null) {
             return;
         }
-        for (final MaplePet pets : c.getPlayer().getPets()) {
+        for (final Pet pets : c.getPlayer().getPets()) {
             if (pets.getSummoned()) {
                 if (pets.getFullness() < previousFullness) {
                     previousFullness = pets.getFullness();

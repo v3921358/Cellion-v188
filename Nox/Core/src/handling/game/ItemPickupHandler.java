@@ -21,8 +21,8 @@ import server.MapleItemInformationProvider;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -41,7 +41,7 @@ public class ItemPickupHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         if (chr == null || c.getPlayer().hasBlockedInventory()) { //hack
             return;
@@ -91,15 +91,15 @@ public class ItemPickupHandler implements ProcessPacket<MapleClient> {
 
             if (mapitem.getMeso() > 0) {
                 if (chr.getParty() != null && mapitem.getOwner() != chr.getId()) {
-                    final List<MapleCharacter> toGive = new LinkedList<>();
+                    final List<User> toGive = new LinkedList<>();
                     final int splitMeso = mapitem.getMeso() * 40 / 100;
                     for (MaplePartyCharacter z : chr.getParty().getMembers()) {
-                        MapleCharacter m = chr.getMap().getCharacterById(z.getId());
+                        User m = chr.getMap().getCharacterById(z.getId());
                         if (m != null && m.getId() != chr.getId()) {
                             toGive.add(m);
                         }
                     }
-                    for (final MapleCharacter m : toGive) {
+                    for (final User m : toGive) {
                         int mesos = splitMeso / toGive.size();
                         if (!mapitem.isPlayerDrop() && m.getStat().incMesoProp > 0) {
                             mesos += Math.floor((m.getStat().incMesoProp * mesos) / 100.0f);
@@ -144,7 +144,7 @@ public class ItemPickupHandler implements ProcessPacket<MapleClient> {
 
                     removeItem(chr, mapitem, ob);
                 } else {
-                    MapleInventoryManipulator.addById(c, mapitem.getItemId(), (short) 1, "", MaplePet.createPet(mapitem.getItemId(), MapleItemInformationProvider.getInstance().getName(mapitem.getItemId()), 1, 0, 100, MapleInventoryIdentifier.getInstance(), 0, (short) 0), 90, false, null);
+                    MapleInventoryManipulator.addById(c, mapitem.getItemId(), (short) 1, "", Pet.createPet(mapitem.getItemId(), MapleItemInformationProvider.getInstance().getName(mapitem.getItemId()), 1, 0, 100, MapleInventoryIdentifier.getInstance(), 0, (short) 0), 90, false, null);
                     removeItem_Pet(chr, mapitem, mapitem.getItemId());
                 }
 
@@ -162,7 +162,7 @@ public class ItemPickupHandler implements ProcessPacket<MapleClient> {
         chr.saveItemData(); // Duplication and rollback prevention.
     }
 
-    private static void removeItem(MapleCharacter chr, MapleMapItem mapitem, MapleMapObject ob) {
+    private static void removeItem(User chr, MapleMapItem mapitem, MapleMapObject ob) {
         mapitem.setPickedUp(true);
         chr.getMap().broadcastMessage(CField.removeItemFromMap(mapitem.getObjectId(), 2, chr.getId()), mapitem.getPosition());
         chr.getMap().removeMapObject(ob);
@@ -172,7 +172,7 @@ public class ItemPickupHandler implements ProcessPacket<MapleClient> {
         }
     }
 
-    public static final void removeItem_Pet(final MapleCharacter chr, final MapleMapItem mapitem, int pet) {
+    public static final void removeItem_Pet(final User chr, final MapleMapItem mapitem, int pet) {
         mapitem.setPickedUp(true);
         chr.getMap().broadcastMessage(CField.removeItemFromMap(mapitem.getObjectId(), 5, chr.getId(), pet));
         chr.getMap().removeMapObject(mapitem);

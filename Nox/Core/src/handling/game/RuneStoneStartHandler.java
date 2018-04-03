@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.maps.objects.MapleRuneStone;
 import server.maps.objects.MapleRuneStone.MapleRuneStoneType;
 import net.InPacket;
@@ -24,7 +24,7 @@ public class RuneStoneStartHandler implements ProcessPacket<MapleClient> {
         iPacket.DecodeInteger();
         MapleRuneStoneType type = MapleRuneStoneType.getFromInt(iPacket.DecodeInteger());
 
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         MapleRuneStone runeInMap = c.getPlayer().getMap().getRuneStone();
 
         if (type != null && runeInMap != null/*

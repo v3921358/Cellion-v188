@@ -24,7 +24,7 @@ import java.awt.Point;
 import java.io.Serializable;
 import java.util.List;
 
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.maps.objects.MapleDoor;
 
 public class MaplePartyCharacter implements Serializable {
@@ -42,7 +42,7 @@ public class MaplePartyCharacter implements Serializable {
     private Point doorPosition = new Point(0, 0);
     private boolean online;
 
-    public MaplePartyCharacter(MapleCharacter maplechar) {
+    public MaplePartyCharacter(User maplechar) {
         this.name = maplechar.getName();
         this.level = maplechar.getLevel();
         this.channel = maplechar.getClient().getChannel();

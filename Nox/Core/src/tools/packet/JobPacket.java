@@ -9,14 +9,14 @@ import client.CharacterTemporaryStat;
 import constants.skills.Assassin;
 import constants.skills.Phantom;
 import constants.skills.Shade;
-import handling.jobs.KinesisPsychicLock;
+import client.jobs.KinesisPsychicLock;
 import handling.world.AttackMonster;
 import service.SendPacketOpcode;
 import net.OutPacket;
 import net.Packet;
 import server.Randomizer;
 import server.life.MapleMonster;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.maps.objects.MapleForceAtom;
 import server.maps.objects.MapleForceAtomTypes;
 
@@ -27,7 +27,7 @@ import server.maps.objects.MapleForceAtomTypes;
  */
 public class JobPacket {
 
-    public static Packet encodeForceAtom(MapleForceAtom pAtom, MapleCharacter pPlayer, MapleMonster pMob) {
+    public static Packet encodeForceAtom(MapleForceAtom pAtom, User pPlayer, MapleMonster pMob) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.Encode(pAtom.isByMob());
@@ -244,7 +244,7 @@ public class JobPacket {
 
     public static class NightLordPacket {
 
-        public static Packet AssassinsMark(MapleCharacter pPlayer, MapleMonster pMob) {
+        public static Packet AssassinsMark(User pPlayer, MapleMonster pMob) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
@@ -362,7 +362,7 @@ public class JobPacket {
 
     public static class ShadePacket {
 
-        public static Packet FoxSpirit(MapleCharacter pPlayer, AttackMonster oMonster) {
+        public static Packet FoxSpirit(User pPlayer, AttackMonster oMonster) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
@@ -545,7 +545,7 @@ public class JobPacket {
 
     public static class PhantomPacket {
 
-        public static Packet ThrowCarte(MapleCharacter pPlayer, int nObjectId) {
+        public static Packet ThrowCarte(User pPlayer, int nObjectId) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
@@ -697,7 +697,7 @@ public class JobPacket {
             return oPacket.ToPacket();
         }
 
-        public static Packet updateDress(int transform, MapleCharacter chr) {
+        public static Packet updateDress(int transform, User chr) {
             OutPacket oPacket = new OutPacket(80);
             oPacket.EncodeShort(SendPacketOpcode.UserSetDressUpState.getValue());
             oPacket.EncodeInteger(chr.getId());
@@ -772,7 +772,7 @@ public class JobPacket {
             return oPacket.ToPacket();
         }
 
-        public static Packet SoulSeekerRegen(MapleCharacter chr, int sn) {
+        public static Packet SoulSeekerRegen(User chr, int sn) {
             OutPacket oPacket = new OutPacket(80);
             oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
             oPacket.Encode(1);
@@ -794,7 +794,7 @@ public class JobPacket {
             return oPacket.ToPacket();
         }
 
-        public static Packet SoulSeeker(MapleCharacter chr, int skillid, int sn, int sc1, int sc2) {
+        public static Packet SoulSeeker(User chr, int skillid, int sn, int sc1, int sc2) {
             OutPacket oPacket = new OutPacket(80);
             oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
             oPacket.Encode(0);

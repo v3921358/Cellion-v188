@@ -24,7 +24,7 @@ import java.lang.ref.WeakReference;
 
 import server.life.MapleMonster;
 import server.life.MobSkill;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 public class MonsterStatusEffect {
 
@@ -32,7 +32,7 @@ public class MonsterStatusEffect {
     private final int skill;
     private final MobSkill mobskill;
     private final boolean monsterSkill;
-    private WeakReference<MapleCharacter> weakChr = null;
+    private WeakReference<User> weakChr = null;
     private Integer x;
     private int poisonSchedule = 0;
     private boolean reflect = false;
@@ -97,7 +97,7 @@ public class MonsterStatusEffect {
         return this.cancelTime;
     }
 
-    public final void setPoisonSchedule(final int poisonSchedule, MapleCharacter chrr) {
+    public final void setPoisonSchedule(final int poisonSchedule, User chrr) {
         this.poisonSchedule = poisonSchedule;
         this.weakChr = new WeakReference<>(chrr);
     }

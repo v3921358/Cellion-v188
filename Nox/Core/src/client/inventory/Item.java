@@ -1,6 +1,6 @@
 package client.inventory;
 
-import server.maps.objects.MaplePet;
+import server.maps.objects.Pet;
 
 public class Item implements Comparable<Item> {
 
@@ -9,7 +9,7 @@ public class Item implements Comparable<Item> {
     private short quantity;
     private short flag;
     private long expiration = -1, inventoryitemid = 0;
-    private MaplePet pet = null;
+    private Pet pet = null;
     private int uniqueid;
     private String owner = "";
     private String gmLog = "";
@@ -144,11 +144,11 @@ public class Item implements Comparable<Item> {
         this.inventoryitemid = ui;
     }
 
-    public MaplePet getPet() {
+    public Pet getPet() {
         return pet;
     }
 
-    public void setPet(MaplePet pet) {
+    public void setPet(Pet pet) {
         this.pet = pet;
         if (pet != null) {
             this.uniqueid = pet.getItem().getUniqueId();

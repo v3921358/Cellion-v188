@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import constants.GameConstants;
 import net.OutPacket;
 import server.CharacterCardFactory;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 import tools.Triple;
 
@@ -81,7 +81,7 @@ public class MapleCharacterCards {
         }
     }
 
-    public final void recalcLocalStats(final MapleCharacter chr) {
+    public final void recalcLocalStats(final User chr) {
         int pos = -1;
         for (Entry<Integer, CardData> x : cards.entrySet()) {
             if (x.getValue().cid == chr.getId()) {

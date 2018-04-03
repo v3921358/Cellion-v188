@@ -22,7 +22,7 @@ import server.Randomizer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
 import server.life.MapleMonster;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import service.ChannelServer;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -41,7 +41,7 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter pPlayer = c.getPlayer();
+        final User pPlayer = c.getPlayer();
         if (pPlayer == null || pPlayer.hasBlockedInventory() || pPlayer.getMap() == null) {
             return;
         }

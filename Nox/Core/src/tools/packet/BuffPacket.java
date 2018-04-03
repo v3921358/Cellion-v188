@@ -28,7 +28,7 @@ import server.MapleStatEffect;
 import server.MapleStatInfo;
 import server.Randomizer;
 import server.life.MobSkill;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.LogHelper;
 import tools.Pair;
 
@@ -113,7 +113,7 @@ public class BuffPacket {
         int diceVal = (Math.max(diceId / 100, Math.max(diceId / 10, diceId % 10))); // 1-6
         return giveBuff(null, skillid, duration, statups, effect, diceId, diceVal, 0, 0);
     }*/
-    public static Packet giveEnergyCharged(MapleCharacter chr, int bar, int skillid, int bufflength) {
+    public static Packet giveEnergyCharged(User chr, int bar, int skillid, int bufflength) {
         final EnumMap<CharacterTemporaryStat, Integer> stat = new EnumMap<>(CharacterTemporaryStat.class);
         stat.put(CharacterTemporaryStat.EnergyCharged, bar);
         return giveBuff(chr, skillid, bufflength, stat, null, 0, 0, 0, 0);
@@ -162,11 +162,11 @@ public class BuffPacket {
      * @param effect - The status changes that occur with the buff
      * @return The encoded buff packet.
      */
-    public static Packet giveBuff(MapleCharacter chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect) {
+    public static Packet giveBuff(User chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect) {
         return giveBuff(chr, buffid, bufflength, statups, effect, 0, 0, 0, 0);
     }
 
-    public static Packet giveBuff(MapleCharacter chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect, int diceRange, int diceId, int lightGauge, int darkGauge) {
+    public static Packet giveBuff(User chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect, int diceRange, int diceId, int lightGauge, int darkGauge) {
         OutPacket oPacket = new OutPacket(80);
 
         BuffPacket.clearFakeBuffstats(statups);
@@ -223,7 +223,7 @@ public class BuffPacket {
      * @param pEffect - The status changes that occur with the buff
      * @return The encoded buff packet.
      */
-    private static void encodeForLocal(OutPacket oPacket, MapleCharacter pPlayer, int nBuffID, int tDuration,
+    private static void encodeForLocal(OutPacket oPacket, User pPlayer, int nBuffID, int tDuration,
             Map<CharacterTemporaryStat, Integer> mTemporaryStats, MapleStatEffect pEffect, int diceRange,
             int diceId, int lightGauge, int darkGauge, boolean bEndecode4Byte) {
 
@@ -597,7 +597,7 @@ public class BuffPacket {
      * Encodes TwoState status changes. These states are always applied to any character.
      *
      */
-    private static void encodeTwoStateTemporaryStat(OutPacket oPacket, MapleCharacter chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect) {
+    private static void encodeTwoStateTemporaryStat(OutPacket oPacket, User chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect) {
         if (statups.containsKey(CharacterTemporaryStat.EnergyCharged)) {
             oPacket.EncodeInteger(statups.get(CharacterTemporaryStat.EnergyCharged));//Value
             oPacket.EncodeInteger(buffid);//Reason
@@ -674,7 +674,7 @@ public class BuffPacket {
      * Encodes TwoState status changes. These states are always applied to any character.
      *
      */
-    private static void encodeRemoteTwoStateTemporaryStat(OutPacket oPacket, MapleCharacter chr) {
+    private static void encodeRemoteTwoStateTemporaryStat(OutPacket oPacket, User chr) {
         int nullValueTCur = Randomizer.nextInt();
         if (chr.getBuffSource(CharacterTemporaryStat.EnergyCharged) != -1 && chr.getBuffedValue(CharacterTemporaryStat.EnergyCharged) != null) {
             oPacket.EncodeInteger(chr.getBuffedValue(CharacterTemporaryStat.EnergyCharged));//Value
@@ -965,7 +965,7 @@ public class BuffPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet giveForeignBuff(MapleCharacter chr) {
+    public static Packet giveForeignBuff(User chr) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.UserTemporaryStatSet.getValue());
@@ -1081,7 +1081,7 @@ public class BuffPacket {
         return oPacket.ToPacket();
     }
 
-    public static void encodeForRemote(OutPacket oPacket, MapleCharacter chr) {
+    public static void encodeForRemote(OutPacket oPacket, User chr) {
         final List<Pair<Integer, Integer>> uFlagData = new ArrayList<>();
         final int[] uFlagTemp = new int[GameConstants.CFlagSize + 1];
 

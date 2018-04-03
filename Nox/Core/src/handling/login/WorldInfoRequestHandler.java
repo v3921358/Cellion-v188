@@ -6,7 +6,7 @@ import client.MapleClient;
 import constants.ServerConstants;
 import constants.WorldConstants;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CLogin;
 import netty.ProcessPacket;
 
@@ -40,7 +40,7 @@ public final class WorldInfoRequestHandler implements ProcessPacket<MapleClient>
         c.write(CLogin.getEndOfServerList());
         boolean hasCharacters = false;
         for (int world = 0; world < WorldConstants.WorldOption.values().length; world++) {
-            final List<MapleCharacter> chars = c.loadCharacters(world);
+            final List<User> chars = c.loadCharacters(world);
             if (chars != null) {
                 hasCharacters = true;
                 break;

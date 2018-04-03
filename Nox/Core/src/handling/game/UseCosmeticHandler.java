@@ -5,7 +5,7 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -23,7 +23,7 @@ public class UseCosmeticHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         if (chr == null || !chr.isAlive() || chr.getMap() == null || chr.hasBlockedInventory() || chr.inPVP()) {
             c.write(CWvsContext.enableActions());

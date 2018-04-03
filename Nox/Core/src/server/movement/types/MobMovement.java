@@ -13,7 +13,7 @@ import server.life.MapleMonsterSkill;
 import server.life.MobSkill;
 import server.life.MultiTarget;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.movement.LifeMovementFragment;
 import tools.packet.MobPacket;
 import netty.ProcessPacket;
@@ -32,7 +32,7 @@ public class MobMovement implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         int oid = iPacket.DecodeInteger();
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         if (chr == null) {
             return;
         }

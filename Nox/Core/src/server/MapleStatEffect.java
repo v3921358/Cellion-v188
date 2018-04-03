@@ -364,7 +364,7 @@ public class MapleStatEffect implements Serializable {
      * @param applyto
      * @param obj
      */
-    public final void applyPassive(final MapleCharacter applyto, final MapleMapObject obj) {
+    public final void applyPassive(final User applyto, final MapleMapObject obj) {
         if (makeChanceResult() && !GameConstants.isDemonSlayer(applyto.getJob())) { // demon can't heal mp
             switch (sourceid) { // MP eater
                 case 2100000:
@@ -388,15 +388,15 @@ public class MapleStatEffect implements Serializable {
         }
     }
 
-    public final boolean applyTo(MapleCharacter chr) {
+    public final boolean applyTo(User chr) {
         return applyTo(chr, chr, true, null, info.get(MapleStatInfo.time));
     }
 
-    public final boolean applyTo(MapleCharacter chr, Point pos) {
+    public final boolean applyTo(User chr, Point pos) {
         return applyTo(chr, chr, true, pos, info.get(MapleStatInfo.time));
     }
 
-    public final boolean applyTo(final MapleCharacter applyfrom, final MapleCharacter applyto, final boolean primary, final Point pos, int newDuration) {
+    public final boolean applyTo(final User applyfrom, final User applyto, final boolean primary, final Point pos, int newDuration) {
         if (isHeal() && (applyfrom.getMapId() == 749040100 || applyto.getMapId() == 749040100)) {
             applyfrom.getClient().write(CWvsContext.enableActions());
             return false; //z
@@ -572,14 +572,14 @@ public class MapleStatEffect implements Serializable {
             applyto.getCarnivalParty().addCP(applyto, cp);
             applyto.CPUpdate(false, applyto.getAvailableCP(), applyto.getTotalCP(), 0);
 
-            for (MapleCharacter chr : applyto.getMap().getCharacters()) {
+            for (User chr : applyto.getMap().getCharacters()) {
                 chr.CPUpdate(true, applyto.getCarnivalParty().getAvailableCP(), applyto.getCarnivalParty().getTotalCP(), applyto.getCarnivalParty().getTeam());
             }
         } else if (nuffSkill != 0 && applyto.getParty() != null) {
             final MCSkill skil = MapleCarnivalFactory.getInstance().getSkill(nuffSkill);
             if (skil != null) {
                 final MapleDisease dis = skil.getDisease();
-                for (MapleCharacter chr : applyto.getMap().getCharacters()) {
+                for (User chr : applyto.getMap().getCharacters()) {
                     if (applyto.getParty() == null || chr.getParty() == null || (chr.getParty().getId() != applyto.getParty().getId())) {
                         if (skil.targetsAll || Randomizer.nextBoolean()) {
                             if (dis == null) {
@@ -602,7 +602,7 @@ public class MapleStatEffect implements Serializable {
         } else if ((effectedOnEnemy > 0 || effectedOnAlly > 0) && primary && applyto.inPVP()) {
             final int eventType = Integer.parseInt(applyto.getEventInstance().getProperty("type"));
             if (eventType > 0 || effectedOnEnemy > 0) {
-                for (MapleCharacter chr : applyto.getMap().getCharacters()) {
+                for (User chr : applyto.getMap().getCharacters()) {
                     if (chr.getId() != applyto.getId() && (effectedOnAlly > 0 ? (chr.getTeam() == applyto.getTeam()) : (chr.getTeam() != applyto.getTeam() || eventType == 0))) {
                         applyTo(applyto, chr, false, pos, newDuration);
                     }
@@ -611,7 +611,7 @@ public class MapleStatEffect implements Serializable {
         } else if (mobSkill > 0 && mobSkillLevel > 0 && primary && applyto.inPVP()) {
             if (effectedOnEnemy > 0) {
                 final int eventType = Integer.parseInt(applyto.getEventInstance().getProperty("type"));
-                for (MapleCharacter chr : applyto.getMap().getCharacters()) {
+                for (User chr : applyto.getMap().getCharacters()) {
                     if (chr.getId() != applyto.getId() && (chr.getTeam() != applyto.getTeam() || eventType == 0)) {
                         chr.disease(mobSkill, mobSkillLevel);
                     }
@@ -706,7 +706,7 @@ public class MapleStatEffect implements Serializable {
                     return elite.getEffect(applyfrom.getTotalSkillLevel(elite)).applyTo(applyfrom, applyto, primary, pos, newDuration);
                 }
             }
-            final MapleSummon tosummon = new MapleSummon(
+            final Summon tosummon = new Summon(
                     applyfrom,
                     summId,
                     getLevel(),
@@ -728,7 +728,7 @@ public class MapleStatEffect implements Serializable {
             } else if (sourceid == 32111006) {
                 return true; //no buff
             } else if (sourceid == Mechanic.ROCK_N_SHOCK) {
-                for (MapleSummon s : applyfrom.getSummonsReadLock()) {
+                for (Summon s : applyfrom.getSummonsReadLock()) {
                     if ((sourceid == 14121054) ? (s.getSkill() == 14121054) || (s.getSkill() == 14121055) || (s.getSkill() == 14121056) : (s.getSkill() == sourceid)) {
                         applyfrom.getMap().broadcastMessage(SummonPacket.removeSummon(s, true));
                         applyfrom.getMap().removeMapObject(s);
@@ -740,8 +740,8 @@ public class MapleStatEffect implements Serializable {
                 }
 
                 if (sourceid == 14121054) {
-                    final MapleSummon illusion = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
-                    final MapleSummon illusion2 = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                    final Summon illusion = new Summon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                    final Summon illusion2 = new Summon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
                     illusion.setPosition(pos);
                     illusion2.setPosition(pos);
                     applyfrom.getMap().spawnSummon(illusion);
@@ -751,23 +751,23 @@ public class MapleStatEffect implements Serializable {
                 }
 
                 if (sourceid == NightWalker.SHADOW_BAT) {
-                    final MapleSummon bat = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                    final Summon bat = new Summon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
                     bat.setPosition(pos);
                     applyfrom.getMap().spawnSummon(bat);
                     applyfrom.getSummons().put(NightWalker.SHADOW_BAT, bat);
                 }
 
                 if (sourceid == WildHunter.SUMMON_JAGUAR) {
-                    final MapleSummon pJaguar = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                    final Summon pJaguar = new Summon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
                     pJaguar.setPosition(pos);
                     applyfrom.getMap().spawnSummon(pJaguar);
                     applyfrom.getSummons().put(WildHunter.SUMMON_JAGUAR, pJaguar);
                 }
 
                 List<Integer> count = new ArrayList<>();
-                final List<MapleSummon> ss = applyfrom.getSummonsReadLock();
+                final List<Summon> ss = applyfrom.getSummonsReadLock();
                 try {
-                    for (MapleSummon s : ss) {
+                    for (Summon s : ss) {
                         if (s.getSkill() == sourceid) {
                             count.add(s.getObjectId());
                         }
@@ -781,8 +781,8 @@ public class MapleStatEffect implements Serializable {
                 applyfrom.addCooldown(sourceid, System.currentTimeMillis(), getCooldown(applyfrom));
                 applyfrom.getMap().broadcastMessage(CField.teslaTriangle(applyfrom.getId(), count.get(0), count.get(1), count.get(2)));
             } else if (sourceid == NightWalker.SHADOW_ILLUSION) {
-                final MapleSummon illusion = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
-                final MapleSummon illusion2 = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                final Summon illusion = new Summon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                final Summon illusion2 = new Summon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
                 illusion.setPosition(pos);
                 illusion2.setPosition(pos);
                 applyfrom.getMap().spawnSummon(illusion);
@@ -790,12 +790,12 @@ public class MapleStatEffect implements Serializable {
                 applyfrom.getSummons().put(14121055, illusion);
                 applyfrom.getSummons().put(14121056, illusion2);
             } else if (sourceid == NightWalker.SHADOW_BAT) {
-                final MapleSummon bat = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                final Summon bat = new Summon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
                 bat.setPosition(pos);
                 applyfrom.getMap().spawnSummon(bat);
                 applyfrom.getSummons().put(NightWalker.SHADOW_BAT, bat);
             } else if (sourceid == WildHunter.SUMMON_JAGUAR) {
-                final MapleSummon pJaguar = new MapleSummon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                final Summon pJaguar = new Summon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
                 pJaguar.setPosition(pos);
                 applyfrom.getMap().spawnSummon(pJaguar);
                 applyfrom.getSummons().put(WildHunter.SUMMON_JAGUAR, pJaguar);
@@ -908,14 +908,14 @@ public class MapleStatEffect implements Serializable {
         if (familiarTarget == 2 && applyfrom.getParty() != null && primary) { //to party
             for (MaplePartyCharacter mpc : applyfrom.getParty().getMembers()) {
                 if (mpc.getId() != applyfrom.getId() && mpc.getChannel() == applyfrom.getClient().getChannel() && mpc.getMapid() == applyfrom.getMapId() && mpc.isOnline()) {
-                    MapleCharacter mc = applyfrom.getMap().getCharacterById(mpc.getId());
+                    User mc = applyfrom.getMap().getCharacterById(mpc.getId());
                     if (mc != null) {
                         applyTo(applyfrom, mc, false, null, newDuration);
                     }
                 }
             }
         } else if (familiarTarget == 3 && primary) {
-            for (MapleCharacter mc : applyfrom.getMap().getCharacters()) {
+            for (User mc : applyfrom.getMap().getCharacters()) {
                 if (mc.getId() != applyfrom.getId()) {
                     applyTo(applyfrom, mc, false, null, newDuration);
                 }
@@ -925,7 +925,7 @@ public class MapleStatEffect implements Serializable {
         return true;
     }
 
-    public final boolean applyReturnScroll(final MapleCharacter applyto) {
+    public final boolean applyReturnScroll(final User applyto) {
         if (moveTo != -1) {
 
             if (applyto.getMap().getReturnMap().getId() != applyto.getMapId()
@@ -959,24 +959,24 @@ public class MapleStatEffect implements Serializable {
         return sourceid == Phantom.FINAL_FEINT;
     }
 
-    private void applyBuff(final MapleCharacter applyfrom, int newDuration) {
+    private void applyBuff(final User applyfrom, int newDuration) {
         if (isSoulStone() && sourceid != 24111002) {
             if (applyfrom.getParty() != null) {
                 int membrs = 0;
-                for (MapleCharacter chr : applyfrom.getMap().getCharacters()) {
+                for (User chr : applyfrom.getMap().getCharacters()) {
                     if (chr.getParty() != null && chr.getParty().getId() == applyfrom.getParty().getId() && chr.isAlive()) {
                         membrs++;
                     }
                 }
-                List<MapleCharacter> awarded = new ArrayList<>();
+                List<User> awarded = new ArrayList<>();
                 while (awarded.size() < Math.min(membrs, info.get(MapleStatInfo.y))) {
-                    for (MapleCharacter chr : applyfrom.getMap().getCharacters()) {
+                    for (User chr : applyfrom.getMap().getCharacters()) {
                         if (chr != null && chr.isAlive() && chr.getParty() != null && chr.getParty().getId() == applyfrom.getParty().getId() && !awarded.contains(chr) && Randomizer.nextInt(info.get(MapleStatInfo.y)) == 0) {
                             awarded.add(chr);
                         }
                     }
                 }
-                for (MapleCharacter chr : awarded) {
+                for (User chr : awarded) {
                     applyTo(applyfrom, chr, false, null, newDuration);
                     chr.getClient().write(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level));
                     chr.getMap().broadcastMessage(chr, EffectPacket.showBuffeffect(chr.getId(), sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level), false);
@@ -987,7 +987,7 @@ public class MapleStatEffect implements Serializable {
             final List<MapleMapObject> affecteds = applyfrom.getMap().getMapObjectsInRect(bounds, Arrays.asList(MapleMapObjectType.PLAYER));
 
             for (final MapleMapObject affectedmo : affecteds) {
-                final MapleCharacter affected = (MapleCharacter) affectedmo;
+                final User affected = (User) affectedmo;
 
                 if (affected.getId() != applyfrom.getId() && (isGmBuff() || (applyfrom.inPVP() && affected.getTeam() == applyfrom.getTeam() && Integer.parseInt(applyfrom.getEventInstance().getProperty("type")) != 0) || (applyfrom.getParty() != null && affected.getParty() != null && applyfrom.getParty().getId() == affected.getParty().getId()))) {
                     if ((isResurrection() && !affected.isAlive()) || (!isResurrection() && affected.isAlive())) {
@@ -1008,7 +1008,7 @@ public class MapleStatEffect implements Serializable {
         }
     }
 
-    private void removeMonsterBuff(final MapleCharacter applyfrom) {
+    private void removeMonsterBuff(final User applyfrom) {
         List<MonsterStatus> cancel = new ArrayList<>();
         switch (sourceid) {
             case 1111007:
@@ -1040,7 +1040,7 @@ public class MapleStatEffect implements Serializable {
         }
     }
 
-    public final void applyMonsterBuff(final MapleCharacter applyfrom) {
+    public final void applyMonsterBuff(final User applyfrom) {
         final Rectangle bounds = calculateBoundingBox(applyfrom.getTruePosition(), applyfrom.isFacingLeft());
         final boolean pvp = applyfrom.inPVP();
         final MapleMapObjectType objType = pvp ? MapleMapObjectType.PLAYER : MapleMapObjectType.MONSTER;
@@ -1051,7 +1051,7 @@ public class MapleStatEffect implements Serializable {
             if (makeChanceResult()) {
                 for (Map.Entry<MonsterStatus, Integer> stat : getMonsterStati().entrySet()) {
                     if (pvp) {
-                        MapleCharacter chr = (MapleCharacter) mo;
+                        User chr = (User) mo;
                         MapleDisease d = MonsterStatus.getLinkedDisease(stat.getKey());
                         if (d != null) {
                             MobSkill ms = new MobSkill(d.getDisease(), 1);
@@ -1068,7 +1068,7 @@ public class MapleStatEffect implements Serializable {
                     }
                 }
                 if (pvp) {
-                    MapleCharacter chr = (MapleCharacter) mo;
+                    User chr = (User) mo;
                     handleExtraPVP(applyfrom, chr);
                 }
             }
@@ -1094,7 +1094,7 @@ public class MapleStatEffect implements Serializable {
         return false;
     }
 
-    public final void handleExtraPVP(MapleCharacter applyfrom, MapleCharacter chr) {
+    public final void handleExtraPVP(User applyfrom, User chr) {
         if (sourceid == 2311005 || sourceid == 5121005 || sourceid == 1201006 || (GameConstants.isBeginnerJob(sourceid / 10000) && sourceid % 10000 == 104)) { //doom, threaten, snatch
             final long starttime = System.currentTimeMillis();
 
@@ -1156,12 +1156,12 @@ public class MapleStatEffect implements Serializable {
         this.info.put(MapleStatInfo.time, d);
     }
 
-    public final void silentApplyBuff(MapleCharacter chr, long starttime, int localDuration, Map<CharacterTemporaryStat, Integer> statup, int cid) {
+    public final void silentApplyBuff(User chr, long starttime, int localDuration, Map<CharacterTemporaryStat, Integer> statup, int cid) {
         chr.registerEffect(this, starttime, BuffTimer.getInstance().schedule(new CancelEffectAction(chr, this, starttime, statup),
                 ((starttime + localDuration) - System.currentTimeMillis())), statup, true, localDuration, cid);
         final SummonMovementType summonMovementType = getSummonMovementType();
         if (summonMovementType != null) {
-            final MapleSummon tosummon = new MapleSummon(chr, this, chr.getTruePosition(), summonMovementType, localDuration);
+            final Summon tosummon = new Summon(chr, this, chr.getTruePosition(), summonMovementType, localDuration);
             if (!tosummon.isPuppet()) {
                 chr.getCheatTracker().resetSummonAttack();
                 chr.getMap().spawnSummon(tosummon);
@@ -1174,7 +1174,7 @@ public class MapleStatEffect implements Serializable {
         }
     }
 
-    public final void applyComboAttack(MapleCharacter applyto, short combo) {
+    public final void applyComboAttack(User applyto, short combo) {
         long starttime = System.currentTimeMillis();
         EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
         stat.put(CharacterTemporaryStat.ComboCounter, (int) combo);
@@ -1182,7 +1182,7 @@ public class MapleStatEffect implements Serializable {
         applyto.registerEffect(this, starttime, null, applyto.getId());
     }
 
-    public final void applyKaiserCombo(MapleCharacter applyto, short combo) {
+    public final void applyKaiserCombo(User applyto, short combo) {
         long starttime = System.currentTimeMillis();
         EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
         stat.put(CharacterTemporaryStat.SmashStack, (int) combo);
@@ -1190,7 +1190,7 @@ public class MapleStatEffect implements Serializable {
         applyto.getClient().write(BuffPacket.giveBuff(applyto, 0, 99999, stat, this));
     }
 
-    public final void applyXenonCombo(MapleCharacter applyto, int combo) {
+    public final void applyXenonCombo(User applyto, int combo) {
         long starttime = System.currentTimeMillis();
         EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
         stat.put(CharacterTemporaryStat.SurplusSupply, combo);
@@ -1198,7 +1198,7 @@ public class MapleStatEffect implements Serializable {
         applyto.getClient().write(BuffPacket.giveBuff(applyto, 0, 99999, stat, this));
     }
 
-    public final void applyComboBuff(MapleCharacter applyto, short combo) {
+    public final void applyComboBuff(User applyto, short combo) {
         long starttime = System.currentTimeMillis();
         EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
         stat.put(CharacterTemporaryStat.ComboAbilityBuff, (int) combo);
@@ -1206,7 +1206,7 @@ public class MapleStatEffect implements Serializable {
         applyto.registerEffect(this, starttime, null, applyto.getId());
     }
 
-    public final void applyBlackBlessingBuff(MapleCharacter applyto, int combo) {
+    public final void applyBlackBlessingBuff(User applyto, int combo) {
         long starttime = System.currentTimeMillis();
         EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
         stat.put(CharacterTemporaryStat.BlessOfDarkness, combo);
@@ -1214,7 +1214,7 @@ public class MapleStatEffect implements Serializable {
         applyto.getClient().write(BuffPacket.giveBuff(applyto, this.sourceid, 99999, stat, this));
     }
 
-    public final void applyLunarTideBuff(MapleCharacter applyto) {
+    public final void applyLunarTideBuff(User applyto) {
         final long starttime = System.currentTimeMillis();
         EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
         double hpx = applyto.getStat().getMaxHp() / applyto.getStat().getHp();
@@ -1224,7 +1224,7 @@ public class MapleStatEffect implements Serializable {
         applyto.getClient().write(BuffPacket.giveBuff(applyto, this.sourceid, 99999999, stat, this));
     }
 
-    public final void applyEnergyBuff(final MapleCharacter applyto, int buffid, int targets) {
+    public final void applyEnergyBuff(final User applyto, int buffid, int targets) {
         final EnumMap<CharacterTemporaryStat, Integer> stat = new EnumMap<>(CharacterTemporaryStat.class);
         stat.put(CharacterTemporaryStat.EnergyCharged, 1000);
         applyto.registerEffect(this, System.currentTimeMillis(), null, stat, false, -1, applyto.getId());
@@ -1235,7 +1235,7 @@ public class MapleStatEffect implements Serializable {
     *   Expire Buffs
     *   @purpose Force specified buffstats to expire after a certain time.
     **/
-    public void setBuffExpireRate(MapleCharacter oPlayer, long nDuration, EnumMap<CharacterTemporaryStat, Integer> selectStats) {
+    public void setBuffExpireRate(User oPlayer, long nDuration, EnumMap<CharacterTemporaryStat, Integer> selectStats) {
         Map<CharacterTemporaryStat, Integer> temporaryStats = selectStats;
         final long nStartTime = System.currentTimeMillis();
         final CancelEffectAction cancelAction = new CancelEffectAction(oPlayer, this, nStartTime, temporaryStats);
@@ -1243,7 +1243,7 @@ public class MapleStatEffect implements Serializable {
         oPlayer.registerEffect(this, nStartTime, schedule, temporaryStats, false, (int) nDuration, oPlayer.getId());
     }
 
-    public void applyBuffEffect(final MapleCharacter applyfrom, final MapleCharacter applyto, final boolean primary, final int newDuration) {
+    public void applyBuffEffect(final User applyfrom, final User applyto, final boolean primary, final int newDuration) {
         int localDuration = newDuration;
         if (primary) {
             localDuration = Math.max(newDuration, alchemistModifyVal(applyfrom, localDuration, false));
@@ -1269,7 +1269,7 @@ public class MapleStatEffect implements Serializable {
         }
     }
 
-    private void handleExtraEffect(final MapleCharacter applyfrom, final MapleCharacter applyto, Map<CharacterTemporaryStat, Integer> effects, int localDuration) {
+    private void handleExtraEffect(final User applyfrom, final User applyto, Map<CharacterTemporaryStat, Integer> effects, int localDuration) {
         switch (sourceid) {
             case 2022963: // Ryden's Poison
                 effects.put(CharacterTemporaryStat.IndieSpeed, info.get(MapleStatInfo.indieSpeed));
@@ -1461,7 +1461,7 @@ public class MapleStatEffect implements Serializable {
         }
     }
 
-    private int calcHPChange(final MapleCharacter applyfrom, final boolean primary) {
+    private int calcHPChange(final User applyfrom, final boolean primary) {
         int hpchange = 0;
         if (info.get(MapleStatInfo.hp) != 0) {
             if (primary) {
@@ -1498,7 +1498,7 @@ public class MapleStatEffect implements Serializable {
         return (int) ((Math.random() * ((int) (stat * upperfactor * rate) - (int) (stat * lowerfactor * rate) + 1)) + (int) (stat * lowerfactor * rate));
     }
 
-    private int calcMPChange(final MapleCharacter applyfrom, final boolean primary) {
+    private int calcMPChange(final User applyfrom, final boolean primary) {
         int mpchange = 0;
         if (info.get(MapleStatInfo.mp) != 0) {
             if (primary) {
@@ -1553,11 +1553,11 @@ public class MapleStatEffect implements Serializable {
         return mpchange;
     }
 
-    public final int alchemistModifyVal(final MapleCharacter chr, final int val, final boolean withX) {
+    public final int alchemistModifyVal(final User chr, final int val, final boolean withX) {
         return (val * (100 + (withX ? chr.getStat().RecoveryUP : (chr.getStat().BuffUP_Skill + (getSummonMovementType() == null ? 0 : chr.getStat().BuffUP_Summon)))) / 100);
     }
 
-    public final int calcPowerChange(final MapleCharacter applyfrom) {
+    public final int calcPowerChange(final User applyfrom) {
         int powerchange = 0;
         if (info.get(MapleStatInfo.powerCon) != 0 && GameConstants.isXenon(applyfrom.getJob())) {
             if (applyfrom.getBuffedValue(CharacterTemporaryStat.AmaranthGenerator) != null) {
@@ -1569,7 +1569,7 @@ public class MapleStatEffect implements Serializable {
         return powerchange;
     }
 
-    public final int calcPsychicPowerChange(final MapleCharacter applyfrom) {
+    public final int calcPsychicPowerChange(final User applyfrom) {
         int powerchange = 0;
         if (GameConstants.isKinesis(applyfrom.getJob())) {
             if (info.get(MapleStatInfo.ppCon) != 0) {
@@ -2010,7 +2010,7 @@ public class MapleStatEffect implements Serializable {
         return info.get(MapleStatInfo.mesoR);
     }
 
-    public final int getCooldown(final MapleCharacter chra) {
+    public final int getCooldown(final User chra) {
         if (chra.getStat().coolTimeR > 0) {
             return Math.max(0, ((info.get(MapleStatInfo.cooltime) * (100 - (chra.getStat().coolTimeR / 100))) - chra.getStat().reduceCooltime));
         }
@@ -2703,11 +2703,11 @@ public class MapleStatEffect implements Serializable {
     public static class CancelEffectAction implements Runnable {
 
         private final MapleStatEffect effect;
-        private final WeakReference<MapleCharacter> target;
+        private final WeakReference<User> target;
         private final long startTime;
         private final Map<CharacterTemporaryStat, Integer> statup;
 
-        public CancelEffectAction(final MapleCharacter target, final MapleStatEffect effect, final long startTime, final Map<CharacterTemporaryStat, Integer> statup) {
+        public CancelEffectAction(final User target, final MapleStatEffect effect, final long startTime, final Map<CharacterTemporaryStat, Integer> statup) {
             this.effect = effect;
             this.target = new WeakReference<>(target);
             this.startTime = startTime;
@@ -2716,7 +2716,7 @@ public class MapleStatEffect implements Serializable {
 
         @Override
         public void run() {
-            final MapleCharacter realTarget = target.get();
+            final User realTarget = target.get();
             if (realTarget != null) {
                 realTarget.cancelEffect(effect, false, startTime, statup);
             }

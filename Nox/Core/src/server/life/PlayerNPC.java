@@ -19,9 +19,9 @@ import handling.world.MapleCharacterLook;
 import handling.world.World;
 import service.ChannelServer;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.maps.objects.MapleNPC;
-import server.maps.objects.MaplePet;
+import server.maps.objects.Pet;
 import tools.packet.CField.NPCPacket;
 import tools.packet.CWvsContext;
 
@@ -77,7 +77,7 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
         }
     }
 
-    public PlayerNPC(MapleCharacter cid, int npc, MapleMap map, MapleCharacter base) {
+    public PlayerNPC(User cid, int npc, MapleMap map, User base) {
         super(npc);
         this.name = cid.getName();
         this.charId = cid.getId();
@@ -116,7 +116,7 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
         }
     }
 
-    public static void updateByCharId(MapleCharacter chr) {
+    public static void updateByCharId(User chr) {
         if (World.Find.findChannel(chr.getId()) > 0) { //if character is in cserv
             for (PlayerNPC npc : ChannelServer.getInstance(World.Find.findChannel(chr.getId())).getAllPlayerNPC()) {
                 npc.update(chr);
@@ -136,7 +136,7 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
         }
     }
 
-    private void update(MapleCharacter chr) {
+    private void update(User chr) {
         if (chr == null || charId != chr.getId()) {
             return; //cant use name as it mightve been change actually..
         }
@@ -396,7 +396,7 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
         return pets[i] > 0 ? pets[i] : 0;
     }
 
-    public void setPets(List<MaplePet> p) {
+    public void setPets(List<Pet> p) {
         for (int i = 0; i < 3; i++) {
             if (p != null && p.size() > i && p.get(i) != null) {
                 this.pets[i] = p.get(i).getItem().getItemId();
@@ -440,7 +440,7 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
 	 * @see handling.world.MapleCharacterLook#getPets()
      */
     @Override
-    public List<MaplePet> getPets() {
+    public List<Pet> getPets() {
         return null; //for now
     }
 }

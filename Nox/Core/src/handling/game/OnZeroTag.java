@@ -23,7 +23,7 @@ package handling.game;
 
 import client.MapleClient;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import netty.ProcessPacket;
 
 public final class OnZeroTag implements ProcessPacket<MapleClient> {
@@ -37,7 +37,7 @@ public final class OnZeroTag implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
 
         iPacket.Skip(6);//Might wanna check kms to see what we can get outta these bytes.
-        MapleCharacter player = c.getPlayer();
+        User player = c.getPlayer();
         if (player.isZeroBetaState()) {
             //Change to Alpha
             player.setGender((byte) 0);

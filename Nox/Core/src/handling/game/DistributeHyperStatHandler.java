@@ -5,7 +5,7 @@ import client.MapleSpecialStats.MapleHyperStats;
 import client.Skill;
 import client.SkillFactory;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
 
@@ -22,7 +22,7 @@ public class DistributeHyperStatHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         if (chr == null) {
             return;
         }

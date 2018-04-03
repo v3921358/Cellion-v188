@@ -13,7 +13,7 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import server.MapleItemInformationProvider;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import net.InPacket;
 import tools.packet.CField;
@@ -58,7 +58,7 @@ public final class UltimateCharacterCreator implements ProcessPacket<MapleClient
         //}
         LoginInformationProvider.JobType jobType = LoginInformationProvider.JobType.UltimateAdventurer;
 
-        MapleCharacter newchar = MapleCharacter.getDefault(c, jobType);
+        User newchar = User.getDefault(c, jobType);
         newchar.setJob(job);
         newchar.setWorld((byte) c.getPlayer().getWorld());
         newchar.setFace(face);
@@ -136,7 +136,7 @@ public final class UltimateCharacterCreator implements ProcessPacket<MapleClient
 
         newchar.getInventory(MapleInventoryType.USE).addItem(new Item(2000004, (byte) 0, (short) 200, (byte) 0));
         if (MapleCharacterCreationUtil.canCreateChar(name, c.isGm()) && (!LoginInformationProvider.getInstance().isForbiddenName(name) || c.isGm())) {
-            MapleCharacter.saveNewCharToDB(newchar, jobType, (short) 0);
+            User.saveNewCharToDB(newchar, jobType, (short) 0);
             MapleQuest.getInstance(20734).forceComplete(c.getPlayer(), 1101000);
             c.write(CField.createUltimate(0));
         } else if (!LoginInformationProvider.getInstance().isForbiddenName(name) || c.isGm()) {

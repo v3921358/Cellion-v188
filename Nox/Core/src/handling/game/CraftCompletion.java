@@ -20,7 +20,7 @@ import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.Randomizer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.maps.objects.MapleExtractor;
 import server.quest.MapleQuest;
 import tools.Triple;
@@ -38,7 +38,7 @@ public final class CraftCompletion implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         final int craftID = iPacket.DecodeInteger();
         final SkillFactory.CraftingEntry ce = SkillFactory.getCraft(craftID);
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -67,7 +67,7 @@ public final class CraftCompletion implements ProcessPacket<MapleClient> {
                 if (extractorId <= 0 && (theLevl == 0 || theLevl < (reqLevel > 130 ? 6 : ((reqLevel - 30) / 20)))) {
                     return;
                 } else if (extractorId > 0) {
-                    final MapleCharacter extract = chr.getMap().getCharacterById(extractorId);
+                    final User extract = chr.getMap().getCharacterById(extractorId);
                     if (extract == null || extract.getExtractor() == null) {
                         return;
                     }
@@ -81,7 +81,7 @@ public final class CraftCompletion implements ProcessPacket<MapleClient> {
                             return;
                         }
                         chr.gainMeso(-extractor.fee, true);
-                        final MapleCharacter owner = chr.getMap().getCharacterById(extractor.owner);
+                        final User owner = chr.getMap().getCharacterById(extractor.owner);
                         if (owner != null && owner.getMeso() < (Integer.MAX_VALUE - extractor.fee)) {
                             owner.gainMeso(extractor.fee, false);
                         }

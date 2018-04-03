@@ -32,7 +32,7 @@ import handling.world.World;
 import java.util.Iterator;
 import net.InPacket;
 import server.maps.Event_DojoAgent;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import service.ChannelServer;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -75,7 +75,7 @@ public final class OnExpeditionRequest implements ProcessPacket<MapleClient> {
                 name = iPacket.DecodeString();
                 int theCh = World.Find.findChannel(name);
                 if (theCh > 0) {
-                    MapleCharacter invited = ChannelServer.getInstance(theCh).getPlayerStorage().getCharacterByName(name);
+                    User invited = ChannelServer.getInstance(theCh).getPlayerStorage().getCharacterByName(name);
                     MapleParty party = c.getPlayer().getParty();
                     if ((invited != null) && (invited.getParty() == null) && (party != null) && (party.getExpeditionId() > 0)) {
                         MapleExpedition me = World.Party.getExped(party.getExpeditionId());
@@ -100,7 +100,7 @@ public final class OnExpeditionRequest implements ProcessPacket<MapleClient> {
                 if (theChh <= 0) {
                     break;
                 }
-                MapleCharacter cfrom = ChannelServer.getInstance(theChh).getPlayerStorage().getCharacterByName(name);
+                User cfrom = ChannelServer.getInstance(theChh).getPlayerStorage().getCharacterByName(name);
                 if ((cfrom != null) && (cfrom.getParty() != null) && (cfrom.getParty().getExpeditionId() > 0)) {
                     MapleParty party = cfrom.getParty();
                     exped = World.Party.getExped(party.getExpeditionId());
@@ -255,7 +255,7 @@ public final class OnExpeditionRequest implements ProcessPacket<MapleClient> {
                             if (par != null) {
                                 MaplePartyCharacter expelled = par.getMemberById(cid);
                                 if ((expelled != null) && (expelled.isOnline())) {
-                                    MapleCharacter chr = World.getStorage(expelled.getChannel()).getCharacterById(expelled.getId());
+                                    User chr = World.getStorage(expelled.getChannel()).getCharacterById(expelled.getId());
                                     if (chr == null) {
                                         break;
                                     }

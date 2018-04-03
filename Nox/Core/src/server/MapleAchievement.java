@@ -21,7 +21,7 @@
 package server;
 
 import handling.world.World;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CWvsContext;
 
 /**
@@ -66,7 +66,7 @@ public class MapleAchievement {
         return notice;
     }
 
-    public void finishAchievement(MapleCharacter chr) {
+    public void finishAchievement(User chr) {
         chr.modifyCSPoints(1, reward, false);
         chr.setAchievementFinished(MapleAchievements.getInstance().getByMapleAchievement(this));
         if (notice && !chr.isGM()) {

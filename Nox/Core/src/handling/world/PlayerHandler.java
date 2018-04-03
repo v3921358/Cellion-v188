@@ -22,7 +22,7 @@ import server.life.MapleMonster;
 import server.maps.FieldLimitType;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import net.InPacket;
 import server.MapleStatEffect;
@@ -49,7 +49,7 @@ public class PlayerHandler {
         return 0;
     }
 
-    public static final void TouchRune(final InPacket iPacket, final MapleCharacter chr) {
+    public static final void TouchRune(final InPacket iPacket, final User chr) {
         chr.updateTick(iPacket.DecodeInteger());
         int type = iPacket.DecodeInteger();
         List<MapleRuneStone> runes = chr.getMap().getAllRune();
@@ -66,7 +66,7 @@ public class PlayerHandler {
         chr.getClient().write(CWvsContext.enableActions());
     }
 
-    public static final void UseRune(final InPacket iPacket, final MapleCharacter chr) {
+    public static final void UseRune(final InPacket iPacket, final User chr) {
         final byte result = iPacket.DecodeByte();
         final MapleRuneStone rune = chr.getMap().getAllRune().get(0);
         MapleStatEffect effect;
@@ -111,7 +111,7 @@ public class PlayerHandler {
         }
     }
 
-    public static void KaiserSkillShortcut(final InPacket iPacket, final MapleCharacter chr) {
+    public static void KaiserSkillShortcut(final InPacket iPacket, final User chr) {
         if (GameConstants.isKaiser(chr.getJob())) {
             int count = iPacket.DecodeByte() + 1;
             int tmp1 = 0;
@@ -132,7 +132,7 @@ public class PlayerHandler {
     }
 
     public static void OrbitalFlame(final InPacket iPacket, final MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         int tempskill = iPacket.DecodeInteger();
         byte unk = iPacket.DecodeByte();
@@ -212,13 +212,13 @@ public class PlayerHandler {
         }
     }
 
-    public static void LinkSkill(final InPacket iPacket, final MapleClient c, final MapleCharacter chr) {
+    public static void LinkSkill(final InPacket iPacket, final MapleClient c, final User chr) {
         //iPacket: [76 7F 31 01] [35 00 00 00]
         c.getPlayer().dropMessage(1, "Beginning link skill.");
         int skill = iPacket.DecodeInteger();
         int cid = iPacket.DecodeInteger();
         boolean found = false;
-        for (MapleCharacter chr2 : c.loadCharacters(c.getPlayer().getWorld())) {
+        for (User chr2 : c.loadCharacters(c.getPlayer().getWorld())) {
             if (chr2.getId() == cid) {
                 found = true;
             }
@@ -228,16 +228,16 @@ public class PlayerHandler {
             c.write(CWvsContext.enableActions());
             return;
         }
-        MapleCharacter.addLinkSkill(cid, skill);
+        User.addLinkSkill(cid, skill);
     }
 
-    public static void AdminCommand(InPacket iPacket, MapleClient c, MapleCharacter chr) {
+    public static void AdminCommand(InPacket iPacket, MapleClient c, User chr) {
         if (!c.getPlayer().isGM()) {
             return;
         }
         byte mode = iPacket.DecodeByte();
         String victim;
-        MapleCharacter target;
+        User target;
         switch (mode) {
             case 0x00: // Level1~Level8 & Package1~Package2
                 int[][] toSpawn = MapleItemInformationProvider.getInstance().getSummonMobs(iPacket.DecodeInteger());
@@ -268,7 +268,7 @@ public class PlayerHandler {
                 target = c.getChannelServer().getPlayerStorage().getCharacterByName(victim);
 
                 if (target != null) {
-                    String readableTargetName = MapleCharacter.makeMapleReadable(target.getName());
+                    String readableTargetName = User.makeMapleReadable(target.getName());
                     String ip = target.getClient().GetIP().split(":")[0];
                     reason += readableTargetName + " (IP: " + ip + ")";
                     target.getClient().ban(reason, false, false);
@@ -289,7 +289,7 @@ public class PlayerHandler {
                 reason = c.getPlayer().getName() + " used /ban to ban";
                 target = c.getChannelServer().getPlayerStorage().getCharacterByName(victim);
                 if (target != null) {
-                    String readableTargetName = MapleCharacter.makeMapleReadable(target.getName());
+                    String readableTargetName = User.makeMapleReadable(target.getName());
                     String ip = target.getClient().GetIP().split(":")[0];
                     reason += readableTargetName + " (IP: " + ip + ")";
                     if (duration == -1) {
@@ -318,7 +318,7 @@ public class PlayerHandler {
                 switch (iPacket.DecodeByte()) {
                     case 0:// /u
                         StringBuilder sb = new StringBuilder("USERS ON THIS MAP: ");
-                        for (MapleCharacter mc : c.getPlayer().getMap().getCharacters()) {
+                        for (User mc : c.getPlayer().getMap().getCharacters()) {
                             sb.append(mc.getName());
                             sb.append(" ");
                         }
@@ -386,7 +386,7 @@ public class PlayerHandler {
         }
     }
 
-    public static void aranCombo(MapleClient c, MapleCharacter chr, int toAdd) {
+    public static void aranCombo(MapleClient c, User chr, int toAdd) {
         if ((chr != null) && (chr.getJob() >= 2000) && (chr.getJob() <= 2112)) {
             short combo = chr.getCombo();
             long curr = System.currentTimeMillis();
@@ -420,7 +420,7 @@ public class PlayerHandler {
         }
     }
 
-    public static void ChangeHaku(InPacket iPacket, MapleClient c, MapleCharacter chr) {
+    public static void ChangeHaku(InPacket iPacket, MapleClient c, User chr) {
         int oid = iPacket.DecodeInteger();
         if (chr.getHaku() != null) {
             chr.getHaku().sendStats();
@@ -437,7 +437,7 @@ public class PlayerHandler {
         }
     }
 
-    public static void MessengerRanking(InPacket iPacket, MapleClient c, MapleCharacter chr) {
+    public static void MessengerRanking(InPacket iPacket, MapleClient c, User chr) {
         if (chr == null) {
             return;
         }

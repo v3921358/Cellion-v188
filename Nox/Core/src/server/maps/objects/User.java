@@ -36,7 +36,7 @@ import constants.skills.Zero;
 import database.DatabaseConnection;
 import database.DatabaseException;
 import handling.game.AndroidEmotionChanger;
-import handling.jobs.Explorer.ShadowerHandler;
+import client.jobs.Explorer.ShadowerHandler;
 import handling.login.LoginInformationProvider.JobType;
 import handling.world.*;
 import net.OutPacket;
@@ -95,7 +95,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import server.skills.VMatrixRecord;
 
-public class MapleCharacter extends AnimatedMapleMapObject implements Serializable, MapleCharacterLook {
+public class User extends AnimatedMapleMapObject implements Serializable, MapleCharacterLook {
 
     public int acaneAim = 0, dualBrid = 0;
     private int[] stopForceAtoms;
@@ -121,12 +121,12 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     private List<Integer> lastmonthfameids, lastmonthbattleids, extendedSlots;
     private List<MapleDoor> doors;
     private List<MechDoor> mechDoors;
-    private List<MaplePet> pets;
+    private List<Pet> pets;
     private List<ShopRepurchase> shopRepurchases;
     private MapleShop azwanShopList;
     private MapleImp[] imps;
     private List<Pair<Integer, Boolean>> stolenSkills = new ArrayList<>();
-    private transient WeakReference<MapleCharacter>[] clones;
+    private transient WeakReference<User>[] clones;
     private transient Set<MapleMonster> controlled;
     private transient Set<MapleMapObject> visibleMapObjects;
     private transient ReentrantReadWriteLock visibleMapObjectsLock;
@@ -138,8 +138,8 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     private final Map<Skill, SkillEntry> skills;
     private transient Map<CharacterTemporaryStat, CharacterTemporaryStatValueHolder> effects;
     private final Map<String, String> CustomValues = new HashMap<>();
-    private transient List<MapleSummon> summons;
-    private transient Map<Integer, MapleSummon> summonss;
+    private transient List<Summon> summons;
+    private transient Map<Integer, Summon> summonss;
     private transient Map<Integer, MapleCoolDownValueHolder> coolDowns;
     private transient Map<MapleDisease, MapleDiseaseValueHolder> diseases;
     private Map<ReportType, Integer> reports;
@@ -307,7 +307,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             nMagnusTime = System.currentTimeMillis();
         } else { // If player is in a party, sets the entry time for all players in the party.
             for (MaplePartyCharacter z : getParty().getMembers()) {
-                MapleCharacter pPlayer = getMap().getCharacterById(z.getId());
+                User pPlayer = getMap().getCharacterById(z.getId());
                 pPlayer.nMagnusTime = System.currentTimeMillis();
             }
         }
@@ -322,7 +322,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
 
     public boolean canPartyFightMagnus() {
         for (MaplePartyCharacter z : getParty().getMembers()) {
-            MapleCharacter pPlayer = getMap().getCharacterById(z.getId());
+            User pPlayer = getMap().getCharacterById(z.getId());
             if (!pPlayer.canFightMagnus()) {
                 return false;
             }
@@ -415,7 +415,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     public static int getChannel(int nCharacterID) {
         int nChannelID = 0;
         for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
-            MapleCharacter pPlayer = ChannelServer.getInstance(i).getPlayerStorage().getCharacterById(nCharacterID);
+            User pPlayer = ChannelServer.getInstance(i).getPlayerStorage().getCharacterById(nCharacterID);
             if (pPlayer != null) {
                 nChannelID = i;
                 break;
@@ -424,7 +424,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         return nChannelID;
     }
 
-    private MapleCharacter(final boolean ChannelServer) {
+    private User(final boolean ChannelServer) {
         setStance(0);
         setPosition(new Point(0, 0));
 
@@ -554,8 +554,8 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         }
     }
 
-    public static MapleCharacter getDefault(final MapleClient client, final JobType type) {
-        MapleCharacter ret = new MapleCharacter(false);
+    public static User getDefault(final MapleClient client, final JobType type) {
+        User ret = new User(false);
         ret.client = client;
         ret.map = null;
         ret.exp = 0;
@@ -612,8 +612,8 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         return ret;
     }
 
-    public static MapleCharacter reconstructCharacter(final CharacterTransfer ct, final MapleClient client, final boolean isChannel) {
-        final MapleCharacter ret = new MapleCharacter(true); // Always true, it's change channel
+    public static User reconstructCharacter(final CharacterTransfer ct, final MapleClient client, final boolean isChannel) {
+        final User ret = new User(true); // Always true, it's change channel
         ret.client = client;
         if (!isChannel) {
             ret.client.setChannel(ct.channel);
@@ -811,12 +811,12 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         return ret;
     }
 
-    public static MapleCharacter loadCharFromDB(int charid, MapleClient client, boolean channelserver) {
+    public static User loadCharFromDB(int charid, MapleClient client, boolean channelserver) {
         return loadCharFromDB(charid, client, channelserver, null);
     }
 
-    public static MapleCharacter loadCharFromDB(int charid, MapleClient client, boolean channelserver, final Map<Integer, CardData> cads) {
-        final MapleCharacter ret = new MapleCharacter(channelserver);
+    public static User loadCharFromDB(int charid, MapleClient client, boolean channelserver, final Map<Integer, CardData> cads) {
+        final User ret = new User(channelserver);
         ret.client = client;
         ret.id = charid;
 
@@ -1487,7 +1487,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         return ret;
     }
 
-    public static int getQuestKillCount(MapleCharacter chr, final int mobid) {
+    public static int getQuestKillCount(User chr, final int mobid) {
         try {
             com.mysql.jdbc.Connection con = (com.mysql.jdbc.Connection) DatabaseConnection.getConnection();
             com.mysql.jdbc.PreparedStatement pse;
@@ -1508,7 +1508,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         return -1;
     }
 
-    public static void saveNewCharToDB(final MapleCharacter chr, final JobType type, short db) {
+    public static void saveNewCharToDB(final User chr, final JobType type, short db) {
         Connection con = DatabaseConnection.getConnection();
 
         PreparedStatement ps = null;
@@ -1884,7 +1884,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             ps.setShort(++index, buddylist.getCapacity());
             final StringBuilder petz = new StringBuilder();
             int petLength = 0;
-            for (final MaplePet pet : pets) { // its correct, hmm
+            for (final Pet pet : pets) { // its correct, hmm
                 if (pet.getSummoned()) {
                     pet.saveToDb();
                     petz.append(pet.getItem().getPosition());
@@ -2660,11 +2660,11 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 }
                 if (stat == CharacterTemporaryStat.SUMMON || stat == CharacterTemporaryStat.PUPPET || stat == CharacterTemporaryStat.REAPER || stat == CharacterTemporaryStat.Beholder || stat == CharacterTemporaryStat.DamR || stat == CharacterTemporaryStat.IndiePAD) {
                     final int summonId = mbsvh.effect.getSourceId();
-                    final List<MapleSummon> toRemove = new ArrayList<>();
+                    final List<Summon> toRemove = new ArrayList<>();
                     visibleMapObjectsLock.writeLock().lock(); //We need to lock this later on anyway so do it now to prevent deadlocks.
                     summonsLock.writeLock().lock();
                     try {
-                        for (MapleSummon summon : summons) {
+                        for (Summon summon : summons) {
                             if (summon.getSkill() == summonId || (summonId == 35121009 && summon.getSkill() == 35121011) || ((summonId == 86 || summonId == 88 || summonId == 91 || summonId == 180 || summonId == 96) && summon.getSkill() == summonId + 999) || ((summonId == 1085 || summonId == 1087 || summonId == 1090 || summonId == 1179 || summonId == 1154) && summon.getSkill() == summonId - 999)) { //removes bots n tots
                                 map.broadcastMessage(SummonPacket.removeSummon(summon, true));
                                 map.removeMapObject(summon);
@@ -2672,7 +2672,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                                 toRemove.add(summon);
                             }
                         }
-                        for (MapleSummon s : toRemove) {
+                        for (Summon s : toRemove) {
                             summons.remove(s);
                         }
                     } finally {
@@ -2779,13 +2779,13 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             if (effect.isHide() && client.getChannelServer().getPlayerStorage().getCharacterById(this.getId()) != null) { //Wow this is so fking hacky...
                 map.broadcastMessage(this, CField.spawnPlayerMapObject(this), false);
 
-                for (final MaplePet pet : pets) {
+                for (final Pet pet : pets) {
                     if (pet.getSummoned()) {
                         map.broadcastMessage(this, PetPacket.OnActivated(this.id, getPetIndex(pet), true, pet, 0), true);
                     }
                 }
 
-                for (final WeakReference<MapleCharacter> chr : clones) {
+                for (final WeakReference<User> chr : clones) {
                     if (chr.get() != null) {
                         map.broadcastMessage(chr.get(), CField.spawnPlayerMapObject(chr.get()), false);
                     }
@@ -2796,7 +2796,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             SkillFactory.getSkill(35121005).getEffect(getTotalSkillLevel(35121005)).applyTo(this);
         }
         if (!clonez) {
-            for (WeakReference<MapleCharacter> chr : clones) {
+            for (WeakReference<User> chr : clones) {
                 if (chr.get() != null) {
                     chr.get().cancelEffect(effect, overwrite, startTime);
                 }
@@ -3735,7 +3735,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
 
     public void cancelChallenge() {
         if (challenge != 0 && client.getChannelServer() != null) {
-            final MapleCharacter chr = client.getChannelServer().getPlayerStorage().getCharacterById(challenge);
+            final User chr = client.getChannelServer().getPlayerStorage().getCharacterById(challenge);
             if (chr != null) {
                 chr.dropMessage(6, getName() + " has denied your request.");
                 chr.setChallenge(0);
@@ -4433,7 +4433,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             final int channel = client.getChannel();
             for (MaplePartyCharacter partychar : party.getMembers()) {
                 if (partychar != null && partychar.getMapid() == getMapId() && partychar.getChannel() == channel) {
-                    final MapleCharacter other = client.getChannelServer().getPlayerStorage().getCharacterByName(partychar.getName());
+                    final User other = client.getChannelServer().getPlayerStorage().getCharacterByName(partychar.getName());
                     if (other != null) {
                         other.getClient().write(CField.updatePartyMemberHP(getId(), stats.getHp(), stats.getCurrentMaxHp()));
                     }
@@ -4449,7 +4449,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         int channel = client.getChannel();
         for (MaplePartyCharacter partychar : party.getMembers()) {
             if (partychar != null && partychar.getMapid() == getMapId() && partychar.getChannel() == channel) {
-                MapleCharacter other = client.getChannelServer().getPlayerStorage().getCharacterByName(partychar.getName());
+                User other = client.getChannelServer().getPlayerStorage().getCharacterByName(partychar.getName());
                 if (other != null) {
                     client.write(CField.updatePartyMemberHP(other.getId(), other.getStat().getHp(), other.getStat().getCurrentMaxHp()));
                 }
@@ -4480,7 +4480,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     /**
      * Convenience function which adds the supplied parameter to the current hp then directly does a updateSingleStat.
      *
-     * @see MapleCharacter#setHp(int)
+     * @see User#setHp(int)
      * @param delta
      */
     public void addHP(int delta) {
@@ -4492,7 +4492,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     /**
      * Convenience function which adds the supplied parameter to the current mp then directly does a updateSingleStat.
      *
-     * @see MapleCharacter#setMp(int)
+     * @see User#setMp(int)
      * @param delta
      */
     public void addMP(int delta) {
@@ -6572,7 +6572,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     @Override
     public void sendDestroyData(MapleClient client) {
         client.write(CField.removePlayerFromMap(this.getObjectId()));
-        for (final WeakReference<MapleCharacter> chr : clones) {
+        for (final WeakReference<User> chr : clones) {
             if (chr.get() != null) {
                 chr.get().sendDestroyData(client);
             }
@@ -6598,13 +6598,13 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             //if (client.getPlayer() != this)
             client.write(CField.spawnPlayerMapObject(this));
 
-            for (final MaplePet pet : pets) {
+            for (final Pet pet : pets) {
                 if (pet.getSummoned()) {
                     map.broadcastMessage(this, PetPacket.OnActivated(this.id, getPetIndex(pet), true, pet, 0), true);
                 }
             }
 
-            for (final WeakReference<MapleCharacter> chr : clones) {
+            for (final WeakReference<User> chr : clones) {
                 if (chr.get() != null) {
                     chr.get().sendSpawnData(client);
                 }
@@ -6624,7 +6624,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             if (summons != null && summons.size() > 0) {
                 summonsLock.readLock().lock();
                 try {
-                    for (final MapleSummon summon : summons) {
+                    for (final Summon summon : summons) {
                         client.write(SummonPacket.spawnSummon(summon, false));
                     }
                 } finally {
@@ -6648,9 +6648,9 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         }
     }
 
-    public final MaplePet getPet(final int index) {
+    public final Pet getPet(final int index) {
         byte count = 0;
-        for (final MaplePet pet : pets) {
+        for (final Pet pet : pets) {
             if (pet.getSummoned()) {
                 if (count == index) {
                     return pet;
@@ -6661,11 +6661,11 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         return null;
     }
 
-    public void removePetCS(MaplePet pet) {
+    public void removePetCS(Pet pet) {
         pets.remove(pet);
     }
 
-    public void addPet(final MaplePet pet) {
+    public void addPet(final Pet pet) {
         if (pets.contains(pet)) {
             pets.remove(pet);
         }
@@ -6674,7 +6674,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         // Pet index logic :(
     }
 
-    public void removePet(MaplePet pet, boolean shiftLeft) {
+    public void removePet(Pet pet, boolean shiftLeft) {
         pet.setSummoned(0);
         /*
          * int slot = -1; for (int i = 0; i < 3; i++) { if (pets[i] != null) {
@@ -6685,9 +6685,9 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
          */
     }
 
-    public final byte getPetIndex(final MaplePet petz) {
+    public final byte getPetIndex(final Pet petz) {
         byte count = 0;
-        for (final MaplePet pet : pets) {
+        for (final Pet pet : pets) {
             if (pet.getSummoned()) {
                 if (pet.getItem().getUniqueId() == petz.getItem().getUniqueId()) {
                     return count;
@@ -6700,7 +6700,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
 
     public final byte getPetIndex(final int petId) {
         byte count = 0;
-        for (final MaplePet pet : pets) {
+        for (final Pet pet : pets) {
             if (pet.getSummoned()) {
                 if (pet.getItem().getUniqueId() == petId) {
                     return count;
@@ -6711,9 +6711,9 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         return -1;
     }
 
-    public final List<MaplePet> getSummonedPets() {
-        List<MaplePet> ret = new ArrayList<>();
-        for (final MaplePet pet : pets) {
+    public final List<Pet> getSummonedPets() {
+        List<Pet> ret = new ArrayList<>();
+        for (final Pet pet : pets) {
             if (pet.getSummoned()) {
                 ret.add(pet);
             }
@@ -6723,7 +6723,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
 
     public final byte getPetById(final int petId) {
         byte count = 0;
-        for (final MaplePet pet : pets) {
+        for (final Pet pet : pets) {
             if (pet.getSummoned()) {
                 if (pet.getItem().getItemId() == petId) {
                     return count;
@@ -6734,19 +6734,19 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         return -1;
     }
 
-    public final List<MaplePet> getPets() {
+    public final List<Pet> getPets() {
         return pets;
     }
 
     public final void unequipAllPets() {
-        for (final MaplePet pet : pets) {
+        for (final Pet pet : pets) {
             if (pet != null) {
                 unequipPet(pet, true, false);
             }
         }
     }
 
-    public void unequipPet(MaplePet pet, boolean shiftLeft, boolean hunger) {
+    public void unequipPet(Pet pet, boolean shiftLeft, boolean hunger) {
         if (pet.getSummoned()) {
             pet.saveToDb();
 
@@ -6777,7 +6777,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         return lastmonthbattleids;
     }
 
-    public FameStatus canGiveFame(MapleCharacter from) {
+    public FameStatus canGiveFame(User from) {
         if (lastfametime >= System.currentTimeMillis() - 60 * 60 * 24 * 1000) {
             return FameStatus.NOT_TODAY;
         } else if (from == null || lastmonthfameids == null || lastmonthfameids.contains(Integer.valueOf(from.getId()))) {
@@ -6786,7 +6786,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         return FameStatus.OK;
     }
 
-    public void hasGivenFame(MapleCharacter to) {
+    public void hasGivenFame(User to) {
         lastfametime = System.currentTimeMillis();
         lastmonthfameids.add(Integer.valueOf(to.getId()));
         Connection con = DatabaseConnection.getConnection();
@@ -6801,11 +6801,11 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         }
     }
 
-    public boolean canBattle(MapleCharacter to) {
+    public boolean canBattle(User to) {
         return to != null && lastmonthbattleids != null && !lastmonthbattleids.contains(Integer.valueOf(to.getAccountID()));
     }
 
-    public void hasBattled(MapleCharacter to) {
+    public void hasBattled(User to) {
         lastmonthbattleids.add(Integer.valueOf(to.getAccountID()));
         Connection con = DatabaseConnection.getConnection();
         try {
@@ -6898,12 +6898,12 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         return smega;
     }
 
-    public List<MapleSummon> getSummonsReadLock() {
+    public List<Summon> getSummonsReadLock() {
         summonsLock.readLock().lock();
         return summons;
     }
 
-    public Map<Integer, MapleSummon> getSummons() {
+    public Map<Integer, Summon> getSummons() {
         return summonss;
     }
 
@@ -6915,7 +6915,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         summonsLock.readLock().unlock();
     }
 
-    public void addSummon(MapleSummon s) {
+    public void addSummon(Summon s) {
         summonsLock.writeLock().lock();
         try {
             summons.add(s);
@@ -6924,7 +6924,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         }
     }
 
-    public void removeSummon(MapleSummon s) {
+    public void removeSummon(Summon s) {
         summonsLock.writeLock().lock();
         try {
             summons.remove(s);
@@ -8303,7 +8303,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 break;
             }
             default: {
-                final MaplePet pet = item.getPet();
+                final Pet pet = item.getPet();
                 if (pet != null && (item.getItemId() != 5000054 || pet.getSecondsLeft() > 0) && (item.getExpiration() == -1 || item.getExpiration() > System.currentTimeMillis())) {
                     if (pet.getSummoned()) { // Already summoned, let's keep it
                         unequipPet(pet, true, false);
@@ -8599,7 +8599,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         client.write(CWvsContext.getSlotUpdate(type, (byte) inv.getSlotLimit()));
     }
 
-    public boolean allowedToTarget(MapleCharacter other) {
+    public boolean allowedToTarget(User other) {
         return other != null && (!other.isHidden() || getGMLevel() >= other.getGMLevel());
     }
 
@@ -8639,7 +8639,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             map.broadcastMessage(CField.followEffect(id, 0, null));
             map.broadcastMessage(CField.followEffect(followid, 0, null));
         }
-        MapleCharacter tt = map.getCharacterById(followid);
+        User tt = map.getCharacterById(followid);
         client.write(CField.getFollowMessage("Follow canceled."));
         if (tt != null) {
             tt.setFollowId(0);
@@ -8954,10 +8954,10 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
 
     public void removeDoor() {
         final MapleDoor door = getDoors().iterator().next();
-        for (final MapleCharacter chr : door.getTarget().getCharacters()) {
+        for (final User chr : door.getTarget().getCharacters()) {
             door.sendDestroyData(chr.getClient());
         }
-        for (final MapleCharacter chr : door.getTown().getCharacters()) {
+        for (final User chr : door.getTown().getCharacters()) {
             door.sendDestroyData(chr.getClient());
         }
         for (final MapleDoor destroyDoor : getDoors()) {
@@ -8969,7 +8969,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
 
     public void removeMechDoor() {
         for (final MechDoor destroyDoor : getMechDoors()) {
-            for (final MapleCharacter chr : getMap().getCharacters()) {
+            for (final User chr : getMap().getCharacters()) {
                 destroyDoor.sendDestroyData(chr.getClient());
             }
             getMap().removeMapObject(destroyDoor);
@@ -9153,7 +9153,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     }
 
     public void startPartySearch(final List<Integer> jobs, final int maxLevel, final int minLevel, final int membersNeeded) {
-        for (MapleCharacter chr : map.getCharacters()) {
+        for (User chr : map.getCharacters()) {
             if (chr.getId() != id && chr.getParty() == null && chr.getLevel() >= minLevel && chr.getLevel() <= maxLevel && (jobs.isEmpty() || jobs.contains(Integer.valueOf(chr.getJob()))) && (isGM() || !chr.isGM())) {
                 if (party != null && party.getMembers().size() < 6 && party.getMembers().size() < membersNeeded) {
                     chr.setParty(party);
@@ -9653,7 +9653,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                                 }
                             }
                         } else {
-                            MapleCharacter chr = (MapleCharacter) attacke;
+                            User chr = (User) attacke;
                             chr.addHP(-divineShield.getDamage());
                             attack.add((int) divineShield.getDamage());
                         }
@@ -9670,7 +9670,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                             attacker.damage(this, theDmg, true);
                             getMap().broadcastMessage(MobPacket.damageMonster(attacker.getObjectId(), theDmg));
                         } else {
-                            final MapleCharacter attacker = (MapleCharacter) attacke;
+                            final User attacker = (User) attacke;
                             attacker.addHP(-divineShield.getDamage());
                             attack.add((int) divineShield.getDamage());
                         }
@@ -9690,7 +9690,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                             attacker.damage(this, theDmg, true);
                             getMap().broadcastMessage(MobPacket.damageMonster(attacker.getObjectId(), theDmg));
                         } else {
-                            final MapleCharacter attacker = (MapleCharacter) attacke;
+                            final User attacker = (User) attacke;
                             attacker.addHP(-divineShield.getDamage());
                             attack.add((int) divineShield.getDamage());
                         }
@@ -9716,7 +9716,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                             }
                         }
                     } else {
-                        final MapleCharacter attacker = (MapleCharacter) attacke;
+                        final User attacker = (User) attacke;
                         bouncedamage = Math.min(bouncedamage, attacker.getStat().getCurrentMaxHp() / 10);
                         attacker.addHP(-((int) bouncedamage));
                         attack.add((int) bouncedamage);
@@ -9730,9 +9730,9 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                     ret.right = true;
                 }
                 if ((getJob() == 411 || getJob() == 412 || getJob() == 421 || getJob() == 422) && getBuffedValue(CharacterTemporaryStat.SUMMON) != null && attacke != null) {
-                    final List<MapleSummon> ss = getSummonsReadLock();
+                    final List<Summon> ss = getSummonsReadLock();
                     try {
-                        for (MapleSummon sum : ss) {
+                        for (Summon sum : ss) {
                             if (sum.getTruePosition().distanceSq(getTruePosition()) < 400000.0 && (sum.getSkill() == 4111007 || sum.getSkill() == 4211007 || sum.getSkill() == 14111010)) {
                                 final List<Pair<Integer, Long>> allDamage = new ArrayList<>();
                                 if (attacke instanceof MapleMonster) {
@@ -9746,7 +9746,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                                         getClient().write(MobPacket.killMonster(attacker.getObjectId(), 1, false));
                                     }
                                 } else {
-                                    final MapleCharacter chr = (MapleCharacter) attacke;
+                                    final User chr = (User) attacke;
                                     final int dmg = SkillFactory.getSkill(sum.getSkill()).getEffect(sum.getSkillLevel()).getX();
                                     chr.addHP(-dmg);
                                     attack.add(dmg);
@@ -10213,7 +10213,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 }
             }
         } else if (eff.getDuration() > 0 && !eff.getStatups().isEmpty()) {
-            for (MapleCharacter chr : map.getCharacters()) {
+            for (User chr : map.getCharacters()) {
                 chr.cancelEffect(eff, false, -1, eff.getStatups());
 
             }
@@ -10610,7 +10610,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         dropMessage(1, "Use @help for additional commands.");
     }
 
-    private static void addMedalString(final MapleCharacter c, final StringBuilder sb) {
+    private static void addMedalString(final User c, final StringBuilder sb) {
         final Item medal = c.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -46);
         if (medal != null) { // Medal
             sb.append("<");
@@ -11505,7 +11505,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         // }
     }
 
-    public void giveLinkSkill(MapleCharacter chr, int linkSkill, int accID, int charID, int sourceSkillLevel, int sourceSkillMaxLevel) {
+    public void giveLinkSkill(User chr, int linkSkill, int accID, int charID, int sourceSkillLevel, int sourceSkillMaxLevel) {
         Connection con = DatabaseConnection.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -11735,7 +11735,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 if (batCount < 2) {
                     MapleStatEffect batEffect = batSkill.getEffect(getSkillLevel(NightWalker.SHADOW_BAT_3));
                     Point batPos = getTruePosition();
-                    MapleSummon batSummon = new MapleSummon(this, batEffect, batPos, SummonMovementType.CIRCLE_FOLLOW, 60000);
+                    Summon batSummon = new Summon(this, batEffect, batPos, SummonMovementType.CIRCLE_FOLLOW, 60000);
 
                     batSummon.setPosition(batPos);
                     getMap().spawnSummon(batSummon);
@@ -11857,7 +11857,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     }
 
     public void changeLuminousMode() {
-        final MapleCharacter chr = this;
+        final User chr = this;
         chr.getClient().write(JobPacket.LuminousPacket.giveLuminousState(20040220, chr.getLightGauge(), chr.getDarkGauge(), 10000));
         Timer.WorldTimer.getInstance().schedule(() -> {
             chr.dispelBuff(20040220);
@@ -12153,7 +12153,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         client.write(CUserLocal.updateDeathCount(deathCount));
     }*/
     public void giveMiracleBlessing() {
-        for (MapleCharacter chr : getMap().getCharacters()) {
+        for (User chr : getMap().getCharacters()) {
             MapleItemInformationProvider.getInstance().getItemEffect(2023055).applyTo(chr);
         }
         getMap().broadcastMessage(CField.startMapEffect(name + " has received Double Miracle Time's Mysterious Blessing. Congratulations!", 2023055, true));
@@ -12409,7 +12409,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             ps.setInt(2, characterId);
             ps.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(MapleCharacter.class
+            Logger.getLogger(User.class
                     .getName()).log(Level.SEVERE, null, ex);
             return false;
         }
@@ -12441,16 +12441,16 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         this.clone = c;
     }
 
-    public WeakReference<MapleCharacter>[] getClones() {
+    public WeakReference<User>[] getClones() {
         return clones;
     }
 
-    public MapleCharacter cloneLooks() {
+    public User cloneLooks() {
         MapleClient cloneclient = client; //needs to create a new MapleClient for this to work properly. Can't figure that out yet.
 
         final int minus = (getId() + Randomizer.nextInt(Integer.MAX_VALUE - getId())); // really randomize it, dont want it to fail
 
-        MapleCharacter ret = new MapleCharacter(true);
+        User ret = new User(true);
         ret.id = minus;
         ret.client = cloneclient;
         ret.exp = 0;
@@ -12528,7 +12528,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         }
         for (int i = 0; i < clones.length; i++) {
             if (clones[i].get() == null) {
-                final MapleCharacter newp = cloneLooks();
+                final User newp = cloneLooks();
                 map.addPlayer(newp);
                 map.broadcastMessage(CField.updateCharLook(newp, false));
                 map.movePlayer(newp, getTruePosition());

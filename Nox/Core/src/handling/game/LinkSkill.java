@@ -22,7 +22,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import netty.ProcessPacket;
 
@@ -35,7 +35,7 @@ public final class LinkSkill implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         int sourceSkill = iPacket.DecodeInteger();
         int linkSkill = 0;
         int charID = iPacket.DecodeInteger();

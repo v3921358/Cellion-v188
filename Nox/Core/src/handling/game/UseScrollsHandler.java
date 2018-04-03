@@ -17,7 +17,7 @@ import constants.InventoryConstants;
 import constants.ItemConstants;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import server.potentials.ItemPotentialTierType;
 import tools.packet.CField;
@@ -47,7 +47,7 @@ public class UseScrollsHandler implements ProcessPacket<MapleClient> {
 
     }
 
-    public static boolean UseUpgradeScroll(final short slot, final short dst, final short ws, final MapleClient c, final MapleCharacter chr, final int vegas, final boolean legendarySpirit) {
+    public static boolean UseUpgradeScroll(final short slot, final short dst, final short ws, final MapleClient c, final User chr, final int vegas, final boolean legendarySpirit) {
         boolean whiteScroll = false;
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         chr.setScrolledPosition((short) 0);

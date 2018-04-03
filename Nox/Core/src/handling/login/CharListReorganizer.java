@@ -2,7 +2,7 @@ package handling.login;
 
 import client.MapleClient;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import netty.ProcessPacket;
 
 public final class CharListReorganizer implements ProcessPacket<MapleClient> {
@@ -21,7 +21,7 @@ public final class CharListReorganizer implements ProcessPacket<MapleClient> {
         iPacket.DecodeByte(); // 01
         int size = iPacket.DecodeInteger();
         for (int i = 0; i < size; i++) {
-            MapleCharacter character = c.loadCharacterById(iPacket.DecodeInteger());
+            User character = c.loadCharacterById(iPacket.DecodeInteger());
             character.setCharListPosition(i);
             character.updateCharlistPosition(i);
         }

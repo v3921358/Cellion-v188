@@ -19,8 +19,8 @@ import server.MapleItemInformationProvider;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import server.movement.LifeMovementFragment;
 import tools.packet.PetPacket;
 import netty.ProcessPacket;
@@ -38,13 +38,13 @@ public class PetMovement implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         if (chr == null) {
             return;
         }
         int index = iPacket.DecodeInteger();
         iPacket.DecodeByte();
-        MaplePet pet = chr.getPet(index);
+        Pet pet = chr.getPet(index);
         if (pet == null) {
             return;
         }
@@ -91,15 +91,15 @@ public class PetMovement implements ProcessPacket<MapleClient> {
                             }
                             if (mapitem.getMeso() > 0) {
                                 if (chr.getParty() != null && mapitem.getOwner() != chr.getId()) {
-                                    List<MapleCharacter> toGive = new LinkedList<>();
+                                    List<User> toGive = new LinkedList<>();
                                     int splitMeso = mapitem.getMeso() * 40 / 100;
                                     for (MaplePartyCharacter z : chr.getParty().getMembers()) {
-                                        MapleCharacter m = chr.getMap().getCharacterById(z.getId());
+                                        User m = chr.getMap().getCharacterById(z.getId());
                                         if (m != null && m.getId() != chr.getId()) {
                                             toGive.add(m);
                                         }
                                     }
-                                    for (MapleCharacter m : toGive) {
+                                    for (User m : toGive) {
                                         m.gainMeso(splitMeso / toGive.size(), true, true);
                                     }
                                     chr.gainMeso(mapitem.getMeso() - splitMeso, true, true);

@@ -2,7 +2,7 @@ package handling.game;
 
 import client.MapleClient;
 import server.life.MapleMonster;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import netty.ProcessPacket;
 
@@ -19,7 +19,7 @@ public class MonsterBombHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         final int oid = iPacket.DecodeInteger();
         MapleMonster monster = chr.getMap().getMonsterByOid(oid);

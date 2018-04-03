@@ -78,7 +78,7 @@ import server.life.MonsterDropEntry;
 import server.maps.Event_DojoAgent;
 import server.maps.Event_PyramidSubway;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.maps.objects.MapleNPC;
 import server.quest.MapleQuest;
 import server.shops.MapleShopFactory;
@@ -182,7 +182,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         c.write(NPCPacket.getSlideMenu(id, type, lasticon, sel));
     }
 
-    public String getDimensionalMirror(MapleCharacter character) {
+    public String getDimensionalMirror(User character) {
         return MapleSlideMenu.SlideMenu0.getSelectionInfo(character, id);
     }
 
@@ -700,7 +700,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void sendStorage() {
-        c.getPlayer().setConversation(MapleCharacter.MapleCharacterConversationType.Storage);
+        c.getPlayer().setConversation(User.MapleCharacterConversationType.Storage);
         c.getPlayer().getStorage().sendStorage(c, id);
     }
 
@@ -958,7 +958,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         if (getPlayer().getParty() == null) {
             return inMap;
         }
-        for (MapleCharacter char2 : getPlayer().getMap().getCharacters()) {
+        for (User char2 : getPlayer().getMap().getCharacters()) {
             if (char2.getParty() != null && char2.getParty().getId() == getPlayer().getParty().getId()) {
                 inMap++;
             }
@@ -966,14 +966,14 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return inMap;
     }
 
-    public List<MapleCharacter> getPartyMembers() {
+    public List<User> getPartyMembers() {
         if (getPlayer().getParty() == null) {
             return null;
         }
-        List<MapleCharacter> chars = new LinkedList<>(); // creates an empty array full of shit..
+        List<User> chars = new LinkedList<>(); // creates an empty array full of shit..
         for (MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
             for (ChannelServer channel : ChannelServer.getAllInstances()) {
-                MapleCharacter ch = channel.getPlayerStorage().getCharacterById(chr.getId());
+                User ch = channel.getPlayerStorage().getCharacterById(chr.getId());
                 if (ch != null) { // double check <3
                     chars.add(ch);
                 }
@@ -990,7 +990,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
         MapleMap target = getMap(mapId);
         for (MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
-            MapleCharacter curChar = c.getChannelServer().getPlayerStorage().getCharacterByName(chr.getName());
+            User curChar = c.getChannelServer().getPlayerStorage().getCharacterByName(chr.getName());
             if ((curChar.getEventInstance() == null && getPlayer().getEventInstance() == null) || curChar.getEventInstance() == getPlayer().getEventInstance()) {
                 curChar.changeMap(target, target.getPortal(0));
                 curChar.gainExp(exp, true, false, true);
@@ -1007,7 +1007,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
         MapleMap target = getMap(mapId);
         for (MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
-            MapleCharacter curChar = c.getChannelServer().getPlayerStorage().getCharacterByName(chr.getName());
+            User curChar = c.getChannelServer().getPlayerStorage().getCharacterByName(chr.getName());
             if ((curChar.getEventInstance() == null && getPlayer().getEventInstance() == null) || curChar.getEventInstance() == getPlayer().getEventInstance()) {
                 curChar.changeMap(target, target.getPortal(0));
                 curChar.gainExp(exp, true, false, true);
@@ -1302,12 +1302,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void openPackageDeliverer() {
-        c.getPlayer().setConversation(MapleCharacter.MapleCharacterConversationType.Donald);
+        c.getPlayer().setConversation(User.MapleCharacterConversationType.Donald);
         c.write(CField.sendPackageMSG((byte) 9, null));
     }
 
     public void openMerchantItemStore() {
-        c.getPlayer().setConversation(MapleCharacter.MapleCharacterConversationType.HiredMerchant);
+        c.getPlayer().setConversation(User.MapleCharacterConversationType.HiredMerchant);
         HiredMerchantHandler.displayMerch(c);
         c.write(CWvsContext.enableActions());
     }
@@ -1440,7 +1440,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return c.getPlayer().getNextCarnivalRequest();
     }
 
-    public final MapleCarnivalChallenge getCarnivalChallenge(MapleCharacter chr) {
+    public final MapleCarnivalChallenge getCarnivalChallenge(User chr) {
         return new MapleCarnivalChallenge(chr);
     }
 
@@ -1531,15 +1531,15 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     @Override
-    public MapleCharacter getChar() {
+    public User getChar() {
         return getPlayer();
     }
 
-    public static int editEquipById(MapleCharacter chr, int max, int itemid, String stat, int newval) {
+    public static int editEquipById(User chr, int max, int itemid, String stat, int newval) {
         return editEquipById(chr, max, itemid, stat, (short) newval);
     }
 
-    public static int editEquipById(MapleCharacter chr, int max, int itemid, String stat, short newval) {
+    public static int editEquipById(User chr, int max, int itemid, String stat, short newval) {
         // Is it an equip?
         if (!MapleItemInformationProvider.getInstance().isEquip(itemid)) {
             return -1;
@@ -1823,7 +1823,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         if (ii.getItemEffect(buff) != null && getPlayer().getGuildId() > 0) {
             final MapleStatEffect mse = ii.getItemEffect(buff);
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
-                for (MapleCharacter chr : cserv.getPlayerStorage().getAllCharacters()) {
+                for (User chr : cserv.getPlayerStorage().getAllCharacters()) {
                     if (chr.getGuildId() == getPlayer().getGuildId()) {
                         mse.applyTo(chr, chr, true, null, duration);
                         chr.dropMessage(5, "Your guild has gotten a " + msg + " buff.");
@@ -1835,7 +1835,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public boolean createAlliance(String alliancename) {
         MapleParty pt = c.getPlayer().getParty();
-        MapleCharacter otherChar = c.getChannelServer().getPlayerStorage().getCharacterById(pt.getMemberByIndex(1).getId());
+        User otherChar = c.getChannelServer().getPlayerStorage().getCharacterById(pt.getMemberByIndex(1).getId());
         if (otherChar == null || otherChar.getId() == c.getPlayer().getId()) {
             return false;
         }
@@ -1977,7 +1977,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return null;
     }
 
-    public void MakeGMItem(byte slot, MapleCharacter player) {
+    public void MakeGMItem(byte slot, User player) {
         MapleInventory equip = player.getInventory(MapleInventoryType.EQUIP);
         Equip eu = (Equip) equip.getItem(slot);
         int item = equip.getItem(slot).getItemId();
@@ -2021,12 +2021,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public final void setQuestRecord(Object ch, final int questid, final String data) {
-        ((MapleCharacter) ch).getQuestNAdd(MapleQuest.getInstance(questid)).setCustomData(data);
+        ((User) ch).getQuestNAdd(MapleQuest.getInstance(questid)).setCustomData(data);
     }
 
     public final void doWeddingEffect(final Object ch) {
-        final MapleCharacter chr = (MapleCharacter) ch;
-        final MapleCharacter player = getPlayer();
+        final User chr = (User) ch;
+        final User player = getPlayer();
         getMap().broadcastMessage(CWvsContext.yellowChat(player.getName() + ", do you take " + chr.getName() + " as your wife and promise to stay beside her through all downtimes, crashes, and lags?"));
         CloneTimer.getInstance().schedule(new Runnable() {
             @Override
@@ -2094,7 +2094,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return MapleCharacterCreationUtil.canCreateChar(t, getPlayer().isGM()) && (!LoginInformationProvider.getInstance().isForbiddenName(t) || getPlayer().isGM());
     }
 
-    public String checkDrop(MapleCharacter chr, int mobId) {
+    public String checkDrop(User chr, int mobId) {
         final List<MonsterDropEntry> ranks = MapleMonsterInformationProvider.getInstance().retrieveDrop(mobId);
         if (ranks != null && ranks.size() > 0) {
             int num = 0;
@@ -2168,7 +2168,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             sendNext("Please make sure your partner is logged on.");
             return;
         }
-        MapleCharacter cPlayer = ChannelServer.getInstance(chz).getPlayerStorage().getCharacterById(getPlayer().getMarriageId());
+        User cPlayer = ChannelServer.getInstance(chz).getPlayerStorage().getCharacterById(getPlayer().getMarriageId());
         if (cPlayer != null) {
             cPlayer.dropMessage(1, "Your partner has divorced you.");
             cPlayer.setMarriageId(0);
@@ -2652,7 +2652,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
         for (MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
             for (ChannelServer channel : ChannelServer.getAllInstances()) {
-                MapleCharacter ch = channel.getPlayerStorage().getCharacterById(chr.getId());
+                User ch = channel.getPlayerStorage().getCharacterById(chr.getId());
                 if (ch != null) {
                     if (!ch.haveItem(itemid, quantity)) {
                         return false;

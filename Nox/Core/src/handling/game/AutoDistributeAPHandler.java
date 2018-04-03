@@ -6,7 +6,7 @@ import client.PlayerStats;
 import constants.GameConstants;
 import java.util.EnumMap;
 import java.util.Map;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -25,7 +25,7 @@ public class AutoDistributeAPHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         chr.updateTick(iPacket.DecodeInteger());
         iPacket.DecodeInteger();

@@ -45,7 +45,7 @@ import server.life.MapleMonster;
 import server.maps.MapleMap;
 import server.maps.MapleMapItem;
 import server.maps.objects.MapleAndroid;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.maps.objects.MapleDragon;
 import server.maps.objects.MapleHaku;
 import server.maps.objects.MapleKite;
@@ -53,7 +53,7 @@ import server.maps.objects.MapleMist;
 import server.maps.objects.MapleNPC;
 import server.maps.objects.MapleReactor;
 import server.maps.objects.MapleRuneStone;
-import server.maps.objects.MapleSummon;
+import server.maps.objects.Summon;
 import server.maps.objects.MechDoor;
 import server.maps.objects.MonsterFamiliar;
 import server.movement.LifeMovementFragment;
@@ -69,7 +69,7 @@ import server.MapleStatEffect;
 import static server.MapleStatInfo.s;
 import server.maps.Map_MCarnival;
 import server.maps.Map_MaplePlatform;
-import server.maps.objects.MaplePet;
+import server.maps.objects.Pet;
 import tools.Pair;
 import tools.Triple;
 import tools.Utility;
@@ -188,11 +188,11 @@ public class CField {
     /**
      * Handles Final Attack.
      */
-    public static Packet finalAttackRequest(MapleCharacter pPlayer, int nSkill, int nFinalSkill, int nDelay, int nMob, int nRequestTime) {
+    public static Packet finalAttackRequest(User pPlayer, int nSkill, int nFinalSkill, int nDelay, int nMob, int nRequestTime) {
         return finalAttackRequest(pPlayer, nSkill, nFinalSkill, nDelay, nMob, nRequestTime, false, null);
     }
 
-    public static Packet finalAttackRequest(MapleCharacter pPlayer, int nSkill, int nFinalSkill, int nDelay, int nMob, int nRequestTime, boolean bLeft, Point pBase) {
+    public static Packet finalAttackRequest(User pPlayer, int nSkill, int nFinalSkill, int nDelay, int nMob, int nRequestTime, boolean bLeft, Point pBase) {
         OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.UserFinalAttackRequest.getValue());
 
@@ -342,11 +342,11 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet getCharInfo(MapleCharacter mc) {
+    public static Packet getCharInfo(User mc) {
         return getWarpToMap(mc, null, 0, false);
     }
 
-    public static Packet getWarpToMap(MapleCharacter chr, MapleMap to, int spawnPoint, boolean bCharacterData) {
+    public static Packet getWarpToMap(User chr, MapleMap to, int spawnPoint, boolean bCharacterData) {
         OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.SetField.getValue());
 
@@ -936,7 +936,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet gainForce(boolean isRemote, MapleCharacter chr, List<Integer> oid, int type, int skillid, List<Pair<Integer, Integer>> forceInfo, Point monsterpos, int throwingStar) {
+    public static Packet gainForce(boolean isRemote, User chr, List<Integer> oid, int type, int skillid, List<Pair<Integer, Integer>> forceInfo, Point monsterpos, int throwingStar) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
@@ -1043,7 +1043,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet spawnPlayerMapObject(MapleCharacter chr) {
+    public static Packet spawnPlayerMapObject(User chr) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.UserEnterField.getValue());
@@ -1333,7 +1333,7 @@ public class CField {
      * @param oPacket OutPacket to construct the packet
      * @param chr The MapleCharacter to write the appearance of.
      */
-    public static void writeCharacterLook(OutPacket oPacket, MapleCharacter chr) {
+    public static void writeCharacterLook(OutPacket oPacket, User chr) {
         writeCharacterLook(oPacket, chr, true);
     }
 
@@ -1347,7 +1347,7 @@ public class CField {
      * @param chr The MapleCharacter to write the appearance of.
      * @param mega Toggle mega display.
      */
-    public static void writeCharacterLook(OutPacket oPacket, MapleCharacter chr, boolean mega) {
+    public static void writeCharacterLook(OutPacket oPacket, User chr, boolean mega) {
         if (GameConstants.isAngelicBuster(chr.getJob())) {
             if (chr.isAngelicDressupState()) {
                 PacketHelper.addCharLook(oPacket, chr, mega, true);
@@ -1811,7 +1811,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet spawnAndroid(MapleCharacter chr, MapleAndroid android) {
+    public static Packet spawnAndroid(User chr, MapleAndroid android) {
         OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.AndroidEnterField.getValue());
         oPacket.EncodeInteger(chr.getId());
@@ -1832,7 +1832,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet moveAndroid(MapleCharacter chr, List<LifeMovementFragment> res) {
+    public static Packet moveAndroid(User chr, List<LifeMovementFragment> res) {
         OutPacket oPacket = new OutPacket(80);
 
         MapleAndroid android = chr.getAndroid();
@@ -1854,7 +1854,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet updateAndroidLook(boolean itemOnly, MapleCharacter cid, MapleAndroid android, boolean enableActions) {
+    public static Packet updateAndroidLook(boolean itemOnly, User cid, MapleAndroid android, boolean enableActions) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.AndroidModified.getValue());
@@ -2009,7 +2009,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet movePlayer(MapleCharacter chr, List<LifeMovementFragment> moves) {
+    public static Packet movePlayer(User chr, List<LifeMovementFragment> moves) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.UserMove.getValue());
@@ -2187,7 +2187,7 @@ public class CField {
     }
 // </editor-fold>
 
-    public static Packet skillEffect(MapleCharacter from, int skillId, byte level, short display, byte unk) {
+    public static Packet skillEffect(User from, int skillId, byte level, short display, byte unk) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.UserSkillPrepare.getValue());
@@ -2206,7 +2206,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet skillCancel(MapleCharacter from, int skillId) {
+    public static Packet skillCancel(User from, int skillId) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.UserSkillCancel.getValue());
@@ -2256,7 +2256,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet facialExpression(MapleCharacter from, int expression) {
+    public static Packet facialExpression(User from, int expression) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.UserEmotion.getValue());
@@ -2345,7 +2345,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet updateCharLook(MapleCharacter chr, boolean second) {
+    public static Packet updateCharLook(User chr, boolean second) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.UserAvatarModified.getValue());
@@ -2438,7 +2438,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet updateQuestInfo(MapleCharacter c, int quest, int npc, byte progress) {
+    public static Packet updateQuestInfo(User c, int quest, int npc, byte progress) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.UserQuestResult.getValue());
@@ -3185,7 +3185,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet addMessengerPlayer(String from, MapleCharacter chr, int position, int channel) {
+    public static Packet addMessengerPlayer(String from, User chr, int position, int channel) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.Messenger.getValue());
@@ -3210,7 +3210,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet updateMessengerPlayer(String from, MapleCharacter chr, int position, int channel) {
+    public static Packet updateMessengerPlayer(String from, User chr, int position, int channel) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.Messenger.getValue());
@@ -3257,7 +3257,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet messengerOpen(byte type, List<MapleCharacter> chars) {
+    public static Packet messengerOpen(byte type, List<User> chars) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.GetLotteryResult.getValue());
@@ -3265,7 +3265,7 @@ public class CField {
         if (chars.isEmpty()) {
             oPacket.EncodeShort(0);
         }
-        for (MapleCharacter chr : chars) {
+        for (User chr : chars) {
             oPacket.Encode(1);
             oPacket.EncodeInteger(chr.getId());
             oPacket.EncodeInteger(0); //likes
@@ -3277,7 +3277,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet messengerCharInfo(MapleCharacter chr) {
+    public static Packet messengerCharInfo(User chr) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.Messenger.getValue());
@@ -3402,7 +3402,7 @@ public class CField {
         }
     }
 
-    public static void addMRingInfo(OutPacket oPacket, List<MapleRing> rings, MapleCharacter chr) {
+    public static void addMRingInfo(OutPacket oPacket, List<MapleRing> rings, User chr) {
         oPacket.Encode(rings.size());
         for (MapleRing ring : rings) {
             oPacket.EncodeInteger(1);
@@ -3433,7 +3433,7 @@ public class CField {
         return oPacket.ToPacket();
     }
 
-    public static Packet viewSkills(MapleCharacter chr) {
+    public static Packet viewSkills(User chr) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.ResultStealSkillList.getValue());
@@ -3456,7 +3456,7 @@ public class CField {
 
     public static class InteractionPacket {
 
-        public static Packet getTradeInvite(MapleCharacter c) {
+        public static Packet getTradeInvite(User c) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
@@ -3478,7 +3478,7 @@ public class CField {
             return oPacket.ToPacket();
         }
 
-        public static Packet gachaponMessage(Item item, String town, MapleCharacter player) {
+        public static Packet gachaponMessage(Item item, String town, User player) {
             final OutPacket oPacket = new OutPacket(80);
             oPacket.EncodeShort(SendPacketOpcode.BrodcastMsg.getValue());
             oPacket.Encode(0x0B);
@@ -4153,7 +4153,7 @@ public class CField {
          *
          * @return oPacket
          */
-        public static Packet spawnSummon(MapleSummon summon, boolean animated) {
+        public static Packet spawnSummon(Summon summon, boolean animated) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.SummonedEnterField.getValue());
@@ -4178,7 +4178,7 @@ public class CField {
             oPacket.Encode(0);//bBeforeFirstAttack
             oPacket.EncodeInteger(0);//nLookId
             oPacket.EncodeInteger(0);//nBulletId
-            MapleCharacter chr = summon.getOwner();
+            User chr = summon.getOwner();
             oPacket.Encode((summon.getSkill() == DualBlade.MIRRORED_TARGET || summon.getSkill() == 14111024 || summon.getSkill() == 14121054 || summon.getSkill() == 14121055 || summon.getSkill() == 14121056) && chr != null ? 1 : 0); // Mirrored Target boolean for character look
             if ((summon.getSkill() == DualBlade.MIRRORED_TARGET || summon.getSkill() == 14111024 || summon.getSkill() == 14121054 || summon.getSkill() == 14121055 || summon.getSkill() == 14121056) && chr != null) { // Mirrored Target
                 writeCharacterLook(oPacket, chr);
@@ -4233,7 +4233,7 @@ public class CField {
          *
          * @return oPacket
          */
-        public static Packet removeSummon(MapleSummon summon, boolean animated) {
+        public static Packet removeSummon(Summon summon, boolean animated) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.SummonedLeaveField.getValue());
@@ -4278,7 +4278,7 @@ public class CField {
          *
          * @return oPacket
          */
-        public static Packet moveSummon(MapleSummon summon, List<LifeMovementFragment> moves) {
+        public static Packet moveSummon(Summon summon, List<LifeMovementFragment> moves) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.SummonedMove.getValue());
@@ -5151,7 +5151,7 @@ DC 05 00 00  // floating value
             return oPacket.ToPacket();
         }
 
-        public static Packet showOwnPetLevelUp(MapleCharacter chr, byte index) {
+        public static Packet showOwnPetLevelUp(User chr, byte index) {
             OutPacket oPacket = new OutPacket(80);
             if (chr == null) {
                 oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
@@ -5273,7 +5273,7 @@ DC 05 00 00  // floating value
      * @param chr
      * @return MapleCharacter chr - Character object
      */
-    public static Packet zeroTagState(MapleCharacter chr) {
+    public static Packet zeroTagState(User chr) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.ZERO_TAG_STATE.getValue());
@@ -5315,7 +5315,7 @@ DC 05 00 00  // floating value
             return oPacket.ToPacket();
         }
 
-        public static Packet removeRune(MapleRuneStone rune, MapleCharacter chr) {
+        public static Packet removeRune(MapleRuneStone rune, User chr) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.RuneActSuccess.getValue());

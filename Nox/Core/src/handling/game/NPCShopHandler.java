@@ -6,7 +6,7 @@ import client.inventory.ModifyInventory;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import java.util.ArrayList;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.shops.MapleShop;
 import net.InPacket;
 import scripting.provider.NPCScriptManager;
@@ -55,7 +55,7 @@ public class NPCShopHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter pPlayer = c.getPlayer();
+        User pPlayer = c.getPlayer();
 
         NPCShopOperation bmode = NPCShopOperation.getFromValue(iPacket.DecodeByte());
 
@@ -125,7 +125,7 @@ public class NPCShopHandler implements ProcessPacket<MapleClient> {
                 c.write(CWvsContext.enableActions());
                 break;
             default:
-                pPlayer.setConversation(MapleCharacter.MapleCharacterConversationType.None);
+                pPlayer.setConversation(User.MapleCharacterConversationType.None);
                 c.write(CWvsContext.enableActions());
                 break;
         }

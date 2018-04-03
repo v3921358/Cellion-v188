@@ -16,7 +16,7 @@ import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import database.DatabaseConnection;
 import server.MaplePackageActions;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 
 public class PackageHandler {
@@ -66,7 +66,7 @@ public class PackageHandler {
         }
     }
 
-    public static List<MaplePackageActions> loadItems(final MapleCharacter chr) {
+    public static List<MaplePackageActions> loadItems(final User chr) {
         List<MaplePackageActions> packages = new LinkedList<>();
         Connection con = DatabaseConnection.getConnection();
         try {

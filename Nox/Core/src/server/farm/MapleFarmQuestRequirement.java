@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
 
@@ -58,7 +58,7 @@ public class MapleFarmQuestRequirement implements Serializable {
         decoPoint = rse.getInt("decoPoint");
     }
 
-    public boolean check(MapleCharacter c, boolean repeatable) { //getQuest into getFarmQuest
+    public boolean check(User c, boolean repeatable) { //getQuest into getFarmQuest
         if (repeatable && (c.getQuest(quest).getStatus() != MapleQuestState.Completed || c.getQuest(quest).getCompletionTime() <= System.currentTimeMillis() - intStore * 60 * 1000L)) {
             return true;
         }

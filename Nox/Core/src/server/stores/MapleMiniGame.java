@@ -7,7 +7,7 @@ import java.util.List;
 import client.MapleClient;
 import client.MapleQuestStatus;
 import constants.GameConstants;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import tools.packet.PlayerShopPacket;
 
@@ -26,7 +26,7 @@ public final class MapleMiniGame extends AbstractPlayerStore {
     int firstslot = 0;
     int tie = -1;
 
-    public MapleMiniGame(MapleCharacter owner, int itemId, String description, String pass, int GameType) {
+    public MapleMiniGame(User owner, int itemId, String description, String pass, int GameType) {
         super(owner, itemId, description, pass, slots - 1); //?
         this.GameType = GameType;
         this.points = new int[slots];
@@ -148,7 +148,7 @@ public final class MapleMiniGame extends AbstractPlayerStore {
         return ready[slot];
     }
 
-    public void setPiece(int move1, int move2, int type, MapleCharacter chr) {
+    public void setPiece(int move1, int move2, int type, User chr) {
         if (piece[move1][move2] == 0 && !isOpen()) {
             piece[move1][move2] = type;
             this.broadcastToVisitors(PlayerShopPacket.getMiniGameMoveOmok(move1, move2, type));
@@ -175,7 +175,7 @@ public final class MapleMiniGame extends AbstractPlayerStore {
         }
     }
 
-    public void exit(MapleCharacter player) {
+    public void exit(User player) {
         if (player == null) {
             return;
         }
@@ -188,14 +188,14 @@ public final class MapleMiniGame extends AbstractPlayerStore {
         }
     }
 
-    public boolean isExitAfter(MapleCharacter player) {
+    public boolean isExitAfter(User player) {
         if (getVisitorSlot(player) > -1) {
             return this.exitAfter[getVisitorSlot(player)];
         }
         return false;
     }
 
-    public void setExitAfter(MapleCharacter player) {
+    public void setExitAfter(User player) {
         if (getVisitorSlot(player) > -1) {
             this.exitAfter[getVisitorSlot(player)] = !this.exitAfter[getVisitorSlot(player)];
         }
@@ -251,7 +251,7 @@ public final class MapleMiniGame extends AbstractPlayerStore {
         return ret;
     }
 
-    public int getScore(MapleCharacter chr) {
+    public int getScore(User chr) {
         //TODO: Fix formula
         int score = 2000;
         int wins = getWins(chr);
@@ -274,20 +274,20 @@ public final class MapleMiniGame extends AbstractPlayerStore {
     //omok - win = 122200
     //matchcard - win = 122210
     //TODO: record points
-    public int getWins(MapleCharacter chr) {
+    public int getWins(User chr) {
         return Integer.parseInt(getData(chr).split(",")[2]);
     }
 
-    public int getTies(MapleCharacter chr) {
+    public int getTies(User chr) {
         return Integer.parseInt(getData(chr).split(",")[1]);
     }
 
-    public int getLosses(MapleCharacter chr) {
+    public int getLosses(User chr) {
         return Integer.parseInt(getData(chr).split(",")[0]);
     }
 
     public void setPoints(int i, int type) { //lose = 0, tie = 1, win = 2
-        MapleCharacter z;
+        User z;
         if (i == 0) {
             z = getMCOwner();
         } else {
@@ -306,7 +306,7 @@ public final class MapleMiniGame extends AbstractPlayerStore {
         }
     }
 
-    public String getData(MapleCharacter chr) {
+    public String getData(User chr) {
         MapleQuest quest = MapleQuest.getInstance(GameType == 1 ? GameConstants.OMOK_SCORE : GameConstants.MATCH_SCORE);
         MapleQuestStatus record;
         if (chr.getQuestNoAdd(quest) == null) {

@@ -19,7 +19,7 @@ import handling.PacketThrottleLimits;
 import net.InPacket;
 import netty.ProcessPacket;
 import server.MapleItemInformationProvider;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CLogin;
 
@@ -64,7 +64,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         int[][] nGuideBookCollection = new int[][]{{4161001, 0}, {4161047, 1}, {4161048, 2000}, {4161052, 2001}, {4161054, 3}, {4161079, 2002}};
         int nGuideBook = 0;
         int nIndex = 0;
-        MapleCharacter pNewCharacter = MapleCharacter.getDefault(c, pJob);
+        User pNewCharacter = User.getDefault(c, pJob);
         int nCharacterPos = c.loadCharacters(c.getWorld()).size();
         final MapleItemInformationProvider pItemProvider = MapleItemInformationProvider.getInstance();
         final MapleInventory pEquip = pNewCharacter.getInventory(MapleInventoryType.EQUIPPED);
@@ -486,7 +486,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         }
 
         // Save Character
-        MapleCharacter.saveNewCharToDB(pNewCharacter, pJob, subcategory);
+        User.saveNewCharToDB(pNewCharacter, pJob, subcategory);
         c.write(CLogin.addNewCharEntry(pNewCharacter, 0));
         c.createdChar(pNewCharacter.getId());
         pNewCharacter.newCharRewards();

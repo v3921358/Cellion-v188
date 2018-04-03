@@ -19,7 +19,7 @@ import constants.GameConstants;
 import database.DatabaseConnection;
 import scripting.provider.NPCScriptManager;
 import server.farm.MapleFarmQuestRequirement;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 import tools.StringUtil;
 import tools.packet.CField;
@@ -221,7 +221,7 @@ public class MapleQuest implements Serializable {
         return farmQuests.values();
     }
 
-    public boolean canStart(MapleCharacter c, Integer npcid) {
+    public boolean canStart(User c, Integer npcid) {
         if (c.getQuest(this).getStatus() != MapleQuestState.NotStarted && !(c.getQuest(this).getStatus() == MapleQuestState.Completed && repeatable)) {
             return false;
         }
@@ -243,7 +243,7 @@ public class MapleQuest implements Serializable {
         return true;
     }
 
-    public boolean canComplete(MapleCharacter c, Integer npcid) {
+    public boolean canComplete(User c, Integer npcid) {
         if (c.getQuest(this).getStatus() != MapleQuestState.Started) {
             return false;
         }
@@ -262,7 +262,7 @@ public class MapleQuest implements Serializable {
         return true;
     }
 
-    public boolean canCompleteFarm(MapleCharacter c) {
+    public boolean canCompleteFarm(User c) {
         if (c.getQuest(this).getStatus() != MapleQuestState.Started) {
             return false;
         }
@@ -274,7 +274,7 @@ public class MapleQuest implements Serializable {
         return true;
     }
 
-    public final void RestoreLostItem(final MapleCharacter c, final int itemid) {
+    public final void RestoreLostItem(final User c, final int itemid) {
         //if (blocked && !c.isGM()) {
         //    return;
         //}
@@ -285,7 +285,7 @@ public class MapleQuest implements Serializable {
         }
     }
 
-    public void start(MapleCharacter c, int npc) {
+    public void start(User c, int npc) {
         if ((autoStart || checkNPCOnMap(c, npc)) && canStart(c, npc)) {
             for (MapleQuestAction a : startActs) {
                 if (!a.checkEnd(c, null)) { //just in case
@@ -303,11 +303,11 @@ public class MapleQuest implements Serializable {
         }
     }
 
-    public void complete(MapleCharacter c, int npc) {
+    public void complete(User c, int npc) {
         complete(c, npc, null);
     }
 
-    public void complete(MapleCharacter c, int npc, Integer selection) {
+    public void complete(User c, int npc, Integer selection) {
         if (c.getMap() != null && (autoPreComplete || checkNPCOnMap(c, npc)) && canComplete(c, npc)) {
             for (MapleQuestAction a : completeActs) {
                 if (!a.checkEnd(c, selection)) {
@@ -326,7 +326,7 @@ public class MapleQuest implements Serializable {
         }
     }
 
-    public void forfeit(MapleCharacter c) {
+    public void forfeit(User c) {
         if (c.getQuest(this).getStatus() != MapleQuestState.Started) {
             return;
         }
@@ -337,7 +337,7 @@ public class MapleQuest implements Serializable {
         c.updateQuest(newStatus);
     }
 
-    public void forceStart(MapleCharacter c, int npc, String customData) {
+    public void forceStart(User c, int npc, String customData) {
         final MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestState.Started, npc);
         newStatus.setForfeited(c.getQuest(this).getForfeited());
         newStatus.setCompletionTime(c.getQuest(this).getCompletionTime());
@@ -345,8 +345,8 @@ public class MapleQuest implements Serializable {
         c.updateQuest(newStatus);
     }
 
-    public void forceStartHillaGang(List<MapleCharacter> party, int npc, String customData) {
-        for (MapleCharacter chr : party) {
+    public void forceStartHillaGang(List<User> party, int npc, String customData) {
+        for (User chr : party) {
             final MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestState.Started, npc);
             newStatus.setForfeited(chr.getQuest(this).getForfeited());
             newStatus.setCompletionTime(chr.getQuest(this).getCompletionTime());
@@ -355,7 +355,7 @@ public class MapleQuest implements Serializable {
         }
     }
 
-    public void forceComplete(MapleCharacter c, int npc) {
+    public void forceComplete(User c, int npc) {
         final MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestState.Completed, npc);
         newStatus.setForfeited(c.getQuest(this).getForfeited());
         c.updateQuest(newStatus);
@@ -369,7 +369,7 @@ public class MapleQuest implements Serializable {
         return relevantMobs;
     }
 
-    private boolean checkNPCOnMap(MapleCharacter player, int npcid) {
+    private boolean checkNPCOnMap(User player, int npcid) {
         //mir = 1013000
         return (GameConstants.isEvan(player.getJob()) && npcid == 1013000) || npcid == 9000040 || npcid == 9000066 || (player.getMap() != null && player.getMap().containsNPC(npcid));
     }
@@ -382,7 +382,7 @@ public class MapleQuest implements Serializable {
         return blocked;
     }
 
-    public void socomplete(MapleCharacter c, int npc) {
+    public void socomplete(User c, int npc) {
         for (MapleQuestAction a : this.completeActs) {
             if (!a.checkEnd(c, null)) {
                 return;

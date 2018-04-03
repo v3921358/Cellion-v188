@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.InPacket;
 import netty.ProcessPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CField;
 
 /**
@@ -39,7 +39,7 @@ public class GroupMessageHandler implements ProcessPacket<MapleClient> {
                 boolean bAvailable = false;
                 List<Integer> aBuddyListIDs = c.getPlayer().getBuddylist().getBuddyIds();
                 for (int i = 0; i < aBuddyListIDs.size(); i++) {
-                    MapleCharacter pBuddy = c.getChannelServer().getPlayerStorage().getCharacterById(aBuddyListIDs.get(i));
+                    User pBuddy = c.getChannelServer().getPlayerStorage().getCharacterById(aBuddyListIDs.get(i));
                     if (pBuddy != null) {
                         bAvailable = true;
                     }
@@ -63,7 +63,7 @@ public class GroupMessageHandler implements ProcessPacket<MapleClient> {
         }
         
         for(int dwCharacterID : aCharacterID) {
-            MapleCharacter pUser = c.getChannelServer().getPlayerStorage().getCharacterById(dwCharacterID);
+            User pUser = c.getChannelServer().getPlayerStorage().getCharacterById(dwCharacterID);
             if(pUser != null) {
                 pUser.SendPacket(CField.OnGroupMessage(nType, c.getPlayer().getName(), sMessage));
             }

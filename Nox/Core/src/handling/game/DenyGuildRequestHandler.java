@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -22,7 +22,7 @@ public class DenyGuildRequestHandler implements ProcessPacket<MapleClient> {
         iPacket.Skip(1);
         String from = iPacket.DecodeString();
 
-        final MapleCharacter cfrom = c.getChannelServer().getPlayerStorage().getCharacterByName(from);
+        final User cfrom = c.getChannelServer().getPlayerStorage().getCharacterByName(from);
         if (cfrom != null
                 && GuildOperationHandler.getGuildInvitationList().remove(c.getPlayer().getName().toLowerCase()) != null) {
             cfrom.getClient().write(CWvsContext.GuildPacket.rejectInvite(c.getPlayer().getName()));

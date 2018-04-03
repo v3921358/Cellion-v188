@@ -3,7 +3,7 @@ package handling.world;
 import java.util.List;
 import java.util.Map;
 
-import server.maps.objects.MaplePet;
+import server.maps.objects.Pet;
 
 public interface MapleCharacterLook {
 
@@ -37,7 +37,7 @@ public interface MapleCharacterLook {
 
     public short getJob();
 
-    public List<MaplePet> getPets();
+    public List<Pet> getPets();
 
     public Map<Short, Integer> getEquips(boolean fusionAnvil);
 

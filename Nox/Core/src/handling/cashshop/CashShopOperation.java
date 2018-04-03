@@ -17,14 +17,14 @@ import server.CashShop;
 import service.CashShopServer;
 import service.ChannelServer;
 import service.LoginServer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CField;
 import tools.packet.CSPacket;
 import tools.packet.CWvsContext;
 
 public class CashShopOperation {
 
-    public static void LeaveCS(final MapleClient c, final MapleCharacter chr) {
+    public static void LeaveCS(final MapleClient c, final User chr) {
         CashShopServer.getPlayerStorage().deregisterPlayer(chr);
         c.updateLoginState(MapleClient.MapleClientLoginState.LOGIN_SERVER_TRANSITION, c.getSessionIPAddress());
         try {
@@ -44,7 +44,7 @@ public class CashShopOperation {
             c.close();
             return;
         }
-        MapleCharacter chr = MapleCharacter.reconstructCharacter(transfer, c, false);
+        User chr = User.reconstructCharacter(transfer, c, false);
 
         c.setPlayer(chr);
         c.setAccID(chr.getAccountID());

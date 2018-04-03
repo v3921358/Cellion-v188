@@ -42,7 +42,7 @@ import net.Packet;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 import tools.packet.PlayerShopPacket;
 
@@ -52,12 +52,12 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     protected String ownerName, des, pass;
     protected int ownerId, owneraccount, itemId, channel, map;
     protected AtomicInteger meso = new AtomicInteger(0);
-    protected WeakReference<MapleCharacter> chrs[];
+    protected WeakReference<User> chrs[];
     protected List<String> visitors = new LinkedList<>();
     protected List<BoughtItem> bought = new LinkedList<>();
     protected List<MaplePlayerShopItem> items = new LinkedList<>();
 
-    public AbstractPlayerStore(MapleCharacter owner, int itemId, String desc, String pass, int slots) {
+    public AbstractPlayerStore(User owner, int itemId, String desc, String pass, int slots) {
         this.setPosition(owner.getTruePosition());
         this.ownerName = owner.getName();
         this.ownerId = owner.getId();
@@ -89,7 +89,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     }
 
     public void broadcastToVisitors(Packet packet, boolean owner) {
-        for (WeakReference<MapleCharacter> chr : chrs) {
+        for (WeakReference<User> chr : chrs) {
             if (chr != null && chr.get() != null) {
                 chr.get().getClient().write(packet);
             }
@@ -100,7 +100,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     }
 
     public void broadcastToVisitors(Packet packet, int exception) {
-        for (WeakReference<MapleCharacter> chr : chrs) {
+        for (WeakReference<User> chr : chrs) {
             if (chr != null && chr.get() != null && getVisitorSlot(chr.get()) != exception) {
                 chr.get().getClient().write(packet);
             }
@@ -178,7 +178,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
         return false;
     }
 
-    public MapleCharacter getVisitor(int num) {
+    public User getVisitor(int num) {
         return chrs[num].get();
     }
 
@@ -194,7 +194,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     }
 
     @Override
-    public void addVisitor(MapleCharacter visitor) {
+    public void addVisitor(User visitor) {
         int i = getFreeSlot();
         if (i > 0) {
             if (getShopType() >= 3) {
@@ -213,7 +213,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     }
 
     @Override
-    public void removeVisitor(MapleCharacter visitor) {
+    public void removeVisitor(User visitor) {
         final byte slot = getVisitorSlot(visitor);
         boolean shouldUpdate = getFreeSlot() == -1;
         if (slot > 0) {
@@ -226,7 +226,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     }
 
     @Override
-    public byte getVisitorSlot(MapleCharacter visitor) {
+    public byte getVisitorSlot(User visitor) {
         for (byte i = 0; i < chrs.length; i++) {
             if (chrs[i] != null && chrs[i].get() != null && chrs[i].get().getId() == visitor.getId()) {
                 return (byte) (i + 1);
@@ -241,7 +241,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     @Override
     public void removeAllVisitors(int error, int type) {
         for (int i = 0; i < chrs.length; i++) {
-            MapleCharacter visitor = getVisitor(i);
+            User visitor = getVisitor(i);
             if (visitor != null) {
                 if (type != -1) {
                     visitor.getClient().write(PlayerShopPacket.shopErrorMessage(error, type));
@@ -278,8 +278,8 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     }
 
     @Override
-    public List<Pair<Byte, MapleCharacter>> getVisitors() {
-        List<Pair<Byte, MapleCharacter>> chrz = new LinkedList<>();
+    public List<Pair<Byte, User>> getVisitors() {
+        List<Pair<Byte, User>> chrz = new LinkedList<>();
         for (byte i = 0; i < chrs.length; i++) { //include owner or no
             if (chrs[i] != null && chrs[i].get() != null) {
                 boolean add = chrz.add(new Pair<>((byte) (i + 1), chrs[i].get()));
@@ -325,7 +325,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     }
 
     @Override
-    public boolean isOwner(MapleCharacter chr) {
+    public boolean isOwner(User chr) {
         return chr.getId() == ownerId && chr.getName().equals(ownerName);
     }
 
@@ -350,7 +350,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
         return MapleMapObjectType.SHOP;
     }
 
-    public MapleCharacter getMCOwnerWorld() {
+    public User getMCOwnerWorld() {
         int ourChannel = World.Find.findChannel(ownerId);
         if (ourChannel <= 0) {
             return null;
@@ -358,11 +358,11 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
         return ChannelServer.getInstance(ourChannel).getPlayerStorage().getCharacterById(ownerId);
     }
 
-    public MapleCharacter getMCOwnerChannel() {
+    public User getMCOwnerChannel() {
         return ChannelServer.getInstance(channel).getPlayerStorage().getCharacterById(ownerId);
     }
 
-    public MapleCharacter getMCOwner() {
+    public User getMCOwner() {
         return getMap().getCharacterById(ownerId);
     }
 

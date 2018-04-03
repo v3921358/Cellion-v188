@@ -4,8 +4,8 @@ import client.CharacterTemporaryStat;
 import client.MapleClient;
 import java.util.Iterator;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MapleSummon;
+import server.maps.objects.User;
+import server.maps.objects.Summon;
 import tools.packet.CField;
 import netty.ProcessPacket;
 
@@ -28,10 +28,10 @@ public class SummonsDamageHandler implements ProcessPacket<MapleClient> {
         final int monsterIdFrom = iPacket.DecodeInteger();
         //       iPacket.decodeByte(); // stance
 
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
-        final Iterator<MapleSummon> iter = chr.getSummonsReadLock().iterator();
-        MapleSummon summon;
+        final Iterator<Summon> iter = chr.getSummonsReadLock().iterator();
+        Summon summon;
         boolean remove = false;
         try {
             while (iter.hasNext()) {

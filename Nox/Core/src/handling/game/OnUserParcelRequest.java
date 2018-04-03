@@ -36,7 +36,7 @@ import net.InPacket;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MaplePackageActions;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import service.ChannelServer;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -59,14 +59,14 @@ public final class OnUserParcelRequest implements ProcessPacket<MapleClient> {
                 final String AS13Digit = iPacket.DecodeString();
                 //int unk = iPacket.decodeInteger(); // Theres an int here, value = 1
                 //9 = error
-                final MapleCharacter.MapleCharacterConversationType conv = c.getPlayer().getConversation();
-                if (conv == MapleCharacter.MapleCharacterConversationType.Donald) { // Donald
+                final User.MapleCharacterConversationType conv = c.getPlayer().getConversation();
+                if (conv == User.MapleCharacterConversationType.Donald) { // Donald
                     c.write(CField.sendPackageMSG((byte) 10, loadItems(c.getPlayer())));
                 }
                 break;
             }
             case 3: { // Send Item
-                if (c.getPlayer().getConversation() != MapleCharacter.MapleCharacterConversationType.Donald) {
+                if (c.getPlayer().getConversation() != User.MapleCharacterConversationType.Donald) {
                     return;
                 }
                 final byte inventId = iPacket.DecodeByte();
@@ -150,7 +150,7 @@ public final class OnUserParcelRequest implements ProcessPacket<MapleClient> {
                 break;
             }
             case 5: { // Recieve Package
-                if (c.getPlayer().getConversation() != MapleCharacter.MapleCharacterConversationType.Donald) {
+                if (c.getPlayer().getConversation() != User.MapleCharacterConversationType.Donald) {
                     return;
                 }
                 final int packageid = iPacket.DecodeInteger();
@@ -176,7 +176,7 @@ public final class OnUserParcelRequest implements ProcessPacket<MapleClient> {
                 break;
             }
             case 6: { // Remove package
-                if (c.getPlayer().getConversation() != MapleCharacter.MapleCharacterConversationType.Donald) {
+                if (c.getPlayer().getConversation() != User.MapleCharacterConversationType.Donald) {
                     return;
                 }
                 final int packageid = iPacket.DecodeInteger();
@@ -185,8 +185,8 @@ public final class OnUserParcelRequest implements ProcessPacket<MapleClient> {
                 break;
             }
             case 8: { // Close Package Deliverer
-                if (c.getPlayer().getConversation() == MapleCharacter.MapleCharacterConversationType.Donald) {
-                    c.getPlayer().setConversation(MapleCharacter.MapleCharacterConversationType.None);
+                if (c.getPlayer().getConversation() == User.MapleCharacterConversationType.Donald) {
+                    c.getPlayer().setConversation(User.MapleCharacterConversationType.None);
                 }
                 break;
             }

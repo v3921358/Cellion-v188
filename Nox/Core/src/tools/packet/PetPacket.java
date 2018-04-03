@@ -7,8 +7,8 @@ import java.util.List;
 import service.SendPacketOpcode;
 import net.OutPacket;
 import net.Packet;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import server.movement.LifeMovementFragment;
 
 public class PetPacket {
@@ -25,7 +25,7 @@ public class PetPacket {
      * @example PetPacket.OnActivated(MapleCharacter.id, getPetIndex(pet), true, pet, 0)
      *
      */
-    public static final Packet OnActivated(int dwCharacterID, int nIdx, boolean bOnInitialize, MaplePet pPet, int nRemoveReason) {
+    public static final Packet OnActivated(int dwCharacterID, int nIdx, boolean bOnInitialize, Pet pPet, int nRemoveReason) {
         OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.PetActivated.getValue());
         oPacket.EncodeInteger(dwCharacterID);
@@ -65,7 +65,7 @@ public class PetPacket {
      * @example PetPacket.OnActivated(MapleCharacter.id, getPetIndex(pet), pet)
      *
      */
-    public static final Packet OnDeactivated(int dwCharacterID, int nIdx, MaplePet pPet) {
+    public static final Packet OnDeactivated(int dwCharacterID, int nIdx, Pet pPet) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.PetActivated.getValue());
@@ -87,7 +87,7 @@ public class PetPacket {
      * @return OutPacket oPacket
      *
      */
-    public static final Packet updatePet(MaplePet pet, Item item, boolean active) { // what a fucking meme.. this is a hardcode invoperation
+    public static final Packet updatePet(Pet pet, Item item, boolean active) { // what a fucking meme.. this is a hardcode invoperation
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.InventoryOperation.getValue());
@@ -111,7 +111,7 @@ public class PetPacket {
         return oPacket.ToPacket();
     }
 
-    public static final Packet addPetData(MapleCharacter chr, MaplePet pet) {
+    public static final Packet addPetData(User chr, Pet pet) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeInteger(pet.getItem().getItemId());
@@ -140,7 +140,7 @@ public class PetPacket {
      * @return OutPacket oPacket
      *
      */
-    public static Packet movePet(int cid, int index, MaplePet pet, List<LifeMovementFragment> moves) {
+    public static Packet movePet(int cid, int index, Pet pet, List<LifeMovementFragment> moves) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.PetMove.getValue());
@@ -196,7 +196,7 @@ public class PetPacket {
         return oPacket.ToPacket();
     }
 
-    public static final Packet showPetLevelUp(MapleCharacter chr, byte index) {
+    public static final Packet showPetLevelUp(User chr, byte index) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.UserEffectRemote.getValue());
@@ -219,7 +219,7 @@ public class PetPacket {
         return oPacket.ToPacket();
     }
 
-    public static final Packet showPetUpdate(MapleCharacter chr, int uniqueId, byte index) {
+    public static final Packet showPetUpdate(User chr, int uniqueId, byte index) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.PetLoadExceptionList.getValue());

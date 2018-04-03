@@ -7,7 +7,7 @@ import constants.GameConstants;
 import handling.world.World;
 import server.MapleInventoryManipulator;
 import server.RandomRewards;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -28,7 +28,7 @@ public class UseTreasureChestHandler implements ProcessPacket<MapleClient> {
         final short slot = iPacket.DecodeShort();
         final int itemid = iPacket.DecodeInteger();
 
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         final Item toUse = chr.getInventory(MapleInventoryType.ETC).getItem((byte) slot);
         if (toUse == null || toUse.getQuantity() <= 0 || toUse.getItemId() != itemid || chr.hasBlockedInventory()) {

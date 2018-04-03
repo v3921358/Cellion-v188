@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import service.ChannelServer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 public final class MapleMessenger implements Serializable {
 
@@ -150,7 +150,7 @@ public final class MapleMessenger implements Serializable {
             if (m != null) {
                 ch = World.Find.findChannel(m.getName());
                 if (ch != -1) {
-                    MapleCharacter mc = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(m.getName());
+                    User mc = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(m.getName());
                     if (mc != null && mc.getClient() != null && mc.getClient().isMonitored()) {
                         return true;
                     }

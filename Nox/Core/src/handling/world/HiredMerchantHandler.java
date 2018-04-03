@@ -19,11 +19,11 @@ import scripting.provider.NPCChatType;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MerchItemPackage;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 import tools.StringUtil;
 import net.InPacket;
-import server.maps.objects.MapleCharacter.MapleCharacterConversationType;
+import server.maps.objects.User.MapleCharacterConversationType;
 import tools.packet.CField.NPCPacket;
 import tools.packet.CWvsContext;
 import tools.packet.PlayerShopPacket;
@@ -253,7 +253,7 @@ public class HiredMerchantHandler {
         }
     }
 
-    private static boolean check(final MapleCharacter chr, final MerchItemPackage pack) {
+    private static boolean check(final User chr, final MerchItemPackage pack) {
         if (chr.getMeso() + pack.getMesos() < 0) {
             return false;
         }

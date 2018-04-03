@@ -16,7 +16,7 @@ import static handling.cashshop.CashShopOperation.playerCashShopInfo;
 import server.CashItem;
 import server.CashItemFactory;
 import server.CashItemInfo;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Triple;
 import net.InPacket;
 import server.CashShop;
@@ -29,7 +29,7 @@ import tools.packet.CWvsContext;
  */
 public class ItemPurchase {
 
-    public static void BuyNormalItem(InPacket iPacket, MapleClient c, MapleCharacter chr) {
+    public static void BuyNormalItem(InPacket iPacket, MapleClient c, User chr) {
         iPacket.Decode(); // bByMaplePoint
         int type = iPacket.DecodeInteger(); // nPurchaseOption
         iPacket.Decode(); // Unknown
@@ -68,7 +68,7 @@ public class ItemPurchase {
         }
     }
 
-    public static void BuyEquipItem(InPacket iPacket, MapleClient c, MapleCharacter chr) {
+    public static void BuyEquipItem(InPacket iPacket, MapleClient c, User chr) {
         iPacket.Skip(1);
         int itemPrice = iPacket.DecodeInteger();
         CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInteger());
@@ -109,7 +109,7 @@ public class ItemPurchase {
         }
     }
 
-    public static void BuyRings(InPacket iPacket, MapleClient c, MapleCharacter chr, int type) {
+    public static void BuyRings(InPacket iPacket, MapleClient c, User chr, int type) {
         iPacket.DecodeString();
         int itemPrice = iPacket.DecodeInteger();
         CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInteger());

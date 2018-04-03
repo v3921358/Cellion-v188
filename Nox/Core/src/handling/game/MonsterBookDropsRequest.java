@@ -8,7 +8,7 @@ import server.MapleItemInformationProvider;
 import server.life.MapleMonsterInformationProvider;
 import server.life.MonsterDropEntry;
 import server.life.MonsterGlobalDropEntry;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -22,7 +22,7 @@ public final class MonsterBookDropsRequest implements ProcessPacket<MapleClient>
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         if (c.getPlayer() == null || c.getPlayer().getMap() == null) {
             return;
         }

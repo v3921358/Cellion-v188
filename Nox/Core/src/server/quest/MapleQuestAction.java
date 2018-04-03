@@ -24,7 +24,7 @@ import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.RandomRewards;
 import server.Randomizer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.messages.FameMessage;
 import tools.Pair;
 import tools.Triple;
@@ -100,7 +100,7 @@ public class MapleQuestAction implements Serializable {
         }
     }
 
-    private static boolean canGetItem(QuestItem item, MapleCharacter c) {
+    private static boolean canGetItem(QuestItem item, User c) {
         if (item.gender != 2 && item.gender >= 0 && item.gender != c.getGender()) {
             return false;
         }
@@ -127,7 +127,7 @@ public class MapleQuestAction implements Serializable {
         return true;
     }
 
-    public final boolean RestoreLostItem(final MapleCharacter c, final int itemid) {
+    public final boolean RestoreLostItem(final User c, final int itemid) {
         if (type == MapleQuestActionType.item) {
 
             for (QuestItem item : items) {
@@ -142,7 +142,7 @@ public class MapleQuestAction implements Serializable {
         return false;
     }
 
-    public void runStart(MapleCharacter c, Integer extSelection) {
+    public void runStart(User c, Integer extSelection) {
         MapleQuestStatus status;
         switch (type) {
             case exp:
@@ -310,7 +310,7 @@ public class MapleQuestAction implements Serializable {
         }
     }
 
-    public boolean checkEnd(MapleCharacter c, Integer extSelection) {
+    public boolean checkEnd(User c, Integer extSelection) {
         switch (type) {
             case item: {
                 // first check for randomness in item selection
@@ -407,7 +407,7 @@ public class MapleQuestAction implements Serializable {
         return true;
     }
 
-    public void runEnd(MapleCharacter c, Integer extSelection) {
+    public void runEnd(User c, Integer extSelection) {
         switch (type) {
             case exp: {
                 c.gainExp(intStore * GameConstants.getExpRate_Quest(c.getLevel()) * (c.getStat().questBonus) * ((c.getTrait(MapleTraitType.sense).getLevel() * 3 / 10) + 100) / 100, true, true, true);

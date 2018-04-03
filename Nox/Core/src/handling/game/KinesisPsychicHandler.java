@@ -6,13 +6,13 @@
 package handling.game;
 
 import client.MapleClient;
-import handling.jobs.Kinesis;
-import handling.jobs.Kinesis.KinesisHandler;
+import client.jobs.Kinesis;
+import client.jobs.Kinesis.KinesisHandler;
 import net.InPacket;
 import net.OutPacket;
 import netty.ProcessPacket;
 import server.life.MapleMonster;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import service.SendPacketOpcode;
 
 /**

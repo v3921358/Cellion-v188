@@ -24,7 +24,7 @@ package handling.game;
 import client.MapleClient;
 import client.MapleStat;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
 
@@ -37,12 +37,12 @@ public final class OnUserGivePopularityRequest implements ProcessPacket<MapleCli
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         final int who = iPacket.DecodeInteger();
         final int mode = iPacket.DecodeByte();
 
         final int famechange = mode == 0 ? -1 : 1;
-        final MapleCharacter target = chr.getMap().getCharacterById(who);
+        final User target = chr.getMap().getCharacterById(who);
 
         if (target == null || target == chr) { // faming self
             c.write(CWvsContext.giveFameErrorResponse(1));

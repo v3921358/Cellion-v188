@@ -6,7 +6,7 @@ import handling.PacketThrottleLimits;
 import net.InPacket;
 import net.Packet;
 import server.commands.CommandProcessor;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -32,7 +32,7 @@ public class GeneralChatHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
 
         if (chr == null) {
             return;

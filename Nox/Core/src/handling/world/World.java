@@ -46,8 +46,8 @@ import server.maps.MapleMap;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import tools.CollectionUtil;
 import tools.Pair;
 import tools.packet.CField;
@@ -75,7 +75,7 @@ public class World {
     public static void saveAllCharacters() {
         for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
             for (ChannelServer cServer : ChannelServer.getAllInstances()) {
-                for (MapleCharacter oPlayer : cServer.getPlayerStorage().getAllCharacters()) {
+                for (User oPlayer : cServer.getPlayerStorage().getAllCharacters()) {
                     oPlayer.saveToDB(false, false);
                     if (oPlayer.isGM()) {
                         oPlayer.yellowMessage("[Server] All character data has automatically been saved.");
@@ -248,7 +248,7 @@ public class World {
             for (MaplePartyCharacter partychar : party.getMembers()) {
                 int ch = Find.findChannel(partychar.getName());
                 if (ch > 0 && (exception == null || partychar.getId() != exception.getId())) {
-                    MapleCharacter chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(partychar.getName());
+                    User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(partychar.getName());
                     if (chr != null) { //Extra check just in case
                         chr.getClient().write(packet);
                     }
@@ -265,7 +265,7 @@ public class World {
             for (MaplePartyCharacter partychar : party.getMembers()) {
                 int ch = Find.findChannel(partychar.getName());
                 if (ch > 0) {
-                    MapleCharacter chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(partychar.getName());
+                    User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(partychar.getName());
                     if (chr != null && !chr.getName().equalsIgnoreCase(namefrom)) { //Extra check just in case
                         //chr.getClient().write(CField.multiChat(namefrom, chattext, mode));
                         if (chr.getClient().isMonitored()) {
@@ -285,7 +285,7 @@ public class World {
             for (MaplePartyCharacter partychar : party.getMembers()) {
                 int ch = Find.findChannel(partychar.getName());
                 if (ch > 0) {
-                    MapleCharacter chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(partychar.getName());
+                    User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(partychar.getName());
                     if (chr != null) { //Extra check just in case
                         chr.dropMessage(5, chattext);
                     }
@@ -357,7 +357,7 @@ public class World {
             if (operation == PartyOperation.LEAVE || operation == PartyOperation.EXPEL) {
                 int chz = Find.findChannel(target.getName());
                 if (chz > 0) {
-                    MapleCharacter chr = getStorage(chz).getCharacterByName(target.getName());
+                    User chr = getStorage(chz).getCharacterByName(target.getName());
                     if (chr != null) {
                         chr.setParty(null);
                         if (oldExped > 0) {
@@ -387,7 +387,7 @@ public class World {
                 }
                 int ch = Find.findChannel(partychar.getName());
                 if (ch > 0) {
-                    MapleCharacter chr = getStorage(ch).getCharacterByName(partychar.getName());
+                    User chr = getStorage(ch).getCharacterByName(partychar.getName());
                     if (chr != null) {
                         if (operation == PartyOperation.DISBAND) {
                             chr.setParty(null);
@@ -559,7 +559,7 @@ public class World {
             for (int characterId : recipientCharacterIds) {
                 int ch = Find.findChannel(characterId);
                 if (ch > 0) {
-                    MapleCharacter chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(characterId);
+                    User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(characterId);
                     if (chr != null && chr.getBuddylist().containsVisible(cidFrom)) {
                         //chr.getClient().write(CField.multiChat(nameFrom, chattext, 0));
                         if (chr.getClient().isMonitored()) {
@@ -574,7 +574,7 @@ public class World {
             for (int buddy : buddies) {
                 int ch = Find.findChannel(buddy);
                 if (ch > 0) {
-                    MapleCharacter chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(buddy);
+                    User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(buddy);
                     if (chr != null) {
                         BuddylistEntry ble = chr.getBuddylist().get(characterId);
                         if (ble != null) {
@@ -596,7 +596,7 @@ public class World {
         public static void buddyChanged(int cid, int cidFrom, String name, int channel, BuddyOperation operation, boolean accountFriend, String nickname) {
             int buddyChannel = Find.findChannel(cid);
             if (buddyChannel > 0) {
-                final MapleCharacter addChar = ChannelServer.getInstance(buddyChannel).getPlayerStorage().getCharacterById(cid);
+                final User addChar = ChannelServer.getInstance(buddyChannel).getPlayerStorage().getCharacterById(cid);
                 if (addChar != null) {
                     final BuddyList buddylist = addChar.getBuddylist();
                     Buddy b = new Buddy(BuddyResult.NOTIFY);
@@ -630,7 +630,7 @@ public class World {
             }
         }
 
-        public static BuddyOperation requestBuddyAdd(MapleCharacter chr, boolean accountFriend, MapleCharacter otherChar) {
+        public static BuddyOperation requestBuddyAdd(User chr, boolean accountFriend, User otherChar) {
             if (otherChar != null) {
                 final BuddyList buddylist = otherChar.getBuddylist();
                 if (buddylist.isFull()) {
@@ -674,7 +674,7 @@ public class World {
             int ch = Find.findChannel(target);
             if (ch > 0) {
                 ChannelServer cs = ChannelServer.getInstance(ch);
-                MapleCharacter chr = cs.getPlayerStorage().getCharacterByName(target);
+                User chr = cs.getPlayerStorage().getCharacterByName(target);
                 if (chr != null) {
                     MapleMessenger messenger = chr.getMessenger();
                     if (messenger != null) {
@@ -700,7 +700,7 @@ public class World {
                 if (mmc != null) {
                     int ch = Find.findChannel(mmc.getId());
                     if (ch > 0) {
-                        MapleCharacter chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(mmc.getName());
+                        User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(mmc.getName());
                         if (chr != null) {
                             chr.getClient().write(CField.removeMessengerPlayer(position));
                         }
@@ -733,9 +733,9 @@ public class World {
                 if (messengerchar != null && !messengerchar.getName().equals(namefrom)) {
                     int ch = Find.findChannel(messengerchar.getName());
                     if (ch > 0) {
-                        MapleCharacter chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(messengerchar.getName());
+                        User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(messengerchar.getName());
                         if (chr != null) {
-                            MapleCharacter from = ChannelServer.getInstance(fromchannel).getPlayerStorage().getCharacterByName(namefrom);
+                            User from = ChannelServer.getInstance(fromchannel).getPlayerStorage().getCharacterByName(namefrom);
                             chr.getClient().write(CField.updateMessengerPlayer(namefrom, from, position, fromchannel - 1));
                         }
                     }
@@ -755,10 +755,10 @@ public class World {
                     int mposition = messenger.getPositionByName(messengerchar.getName());
                     int ch = Find.findChannel(messengerchar.getName());
                     if (ch > 0) {
-                        MapleCharacter chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(messengerchar.getName());
+                        User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(messengerchar.getName());
                         if (chr != null) {
                             if (!messengerchar.getName().equals(from)) {
-                                MapleCharacter fromCh = ChannelServer.getInstance(fromchannel).getPlayerStorage().getCharacterByName(from);
+                                User fromCh = ChannelServer.getInstance(fromchannel).getPlayerStorage().getCharacterByName(from);
                                 if (fromCh != null) {
                                     chr.getClient().write(CField.addMessengerPlayer(from, fromCh, position, fromchannel - 1));
                                     fromCh.getClient().write(CField.addMessengerPlayer(chr.getName(), chr, mposition, messengerchar.getChannel() - 1));
@@ -782,7 +782,7 @@ public class World {
                 if (messengerchar != null && !messengerchar.getName().equals(namefrom)) {
                     int ch = Find.findChannel(messengerchar.getName());
                     if (ch > 0) {
-                        MapleCharacter chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(messengerchar.getName());
+                        User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(messengerchar.getName());
                         if (chr != null) {
                             chr.getClient().write(CField.messengerChat(charname, text));
                         }
@@ -797,8 +797,8 @@ public class World {
 
                 int ch = Find.findChannel(target);
                 if (ch > 0) {
-                    MapleCharacter from = ChannelServer.getInstance(fromchannel).getPlayerStorage().getCharacterByName(sender);
-                    MapleCharacter targeter = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(target);
+                    User from = ChannelServer.getInstance(fromchannel).getPlayerStorage().getCharacterByName(sender);
+                    User targeter = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(target);
                     if (targeter != null && targeter.getMessenger() == null) {
                         if (!targeter.isIntern() || gm) {
                             targeter.getClient().write(CField.messengerInvite(sender, messengerid));
@@ -911,7 +911,7 @@ public class World {
             try {
                 for (MapleGuild guild : guilds.values()) {
                     int masterId = guild.getLeaderId();
-                    MapleCharacter master = c.loadCharacterById(masterId);
+                    User master = c.loadCharacterById(masterId);
                     String masterName = master.getName();
                     java.util.Collection<MapleGuildCharacter> members = guild.getMembers();
                     double avgLevel = members.stream().mapToInt(MapleGuildCharacter::getLevel).average().getAsDouble();
@@ -946,7 +946,7 @@ public class World {
             }
         }
 
-        public static MapleGuild getGuild(MapleCharacter mc) {
+        public static MapleGuild getGuild(User mc) {
             return getGuild(mc.getGuildId());
         }
 
@@ -1221,12 +1221,12 @@ public class World {
         }
 
         public static void setGuildAndRank(int cid, int guildid, int rank, int contribution, int alliancerank) {
-            int ch = MapleCharacter.getChannel(cid)/*Find.findChannel(cid)*/;
+            int ch = User.getChannel(cid)/*Find.findChannel(cid)*/;
             if (ch == -1) {
                 // System.out.println("ERROR: cannot find player in given channel");
                 return;
             }
-            MapleCharacter mc = getStorage(ch).getCharacterById(cid);
+            User mc = getStorage(ch).getCharacterById(cid);
             if (mc == null) {
                 return;
             }
@@ -1276,7 +1276,7 @@ public class World {
         }
 
         public static void sendPacket(List<Integer> targetIds, Packet packet, int exception) {
-            MapleCharacter c;
+            User c;
             for (int i : targetIds) {
                 if (i == exception) {
                     continue;
@@ -1297,7 +1297,7 @@ public class World {
             if (ch < 0) {
                 return;
             }
-            final MapleCharacter c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetId);
+            final User c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetId);
             if (c != null) {
                 c.getClient().write(packet.Clone());
             }
@@ -1311,7 +1311,7 @@ public class World {
             if (ch < 0) {
                 return;
             }
-            final MapleCharacter c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetIds);
+            final User c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetIds);
             if (c != null && c.getGuildId() == guildid) {
                 c.getClient().write(packet.Clone());
             }
@@ -1325,7 +1325,7 @@ public class World {
             if (ch < 0) {
                 return;
             }
-            final MapleCharacter c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetIds);
+            final User c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetIds);
             if (c != null && c.getFamilyId() == guildid) {
                 c.getClient().write(packet.Clone());
             }
@@ -1723,7 +1723,7 @@ public class World {
             return ret;
         }
 
-        public static void memberFamilyUpdate(MapleFamilyCharacter mfc, MapleCharacter mc) {
+        public static void memberFamilyUpdate(MapleFamilyCharacter mfc, User mc) {
             MapleFamily f = getFamily(mfc.getFamilyId());
             if (f != null) {
                 f.memberLevelJobUpdate(mc);
@@ -1763,7 +1763,7 @@ public class World {
                 // System.out.println("ERROR: cannot find player in given channel");
                 return;
             }
-            MapleCharacter mc = getStorage(ch).getCharacterById(cid);
+            User mc = getStorage(ch).getCharacterById(cid);
             if (mc == null) {
                 return;
             }
@@ -1878,7 +1878,7 @@ public class World {
 
             // Character cooldowns
             for (MapleMapObject o : map.getAllMapObjects(MapleMapObjectType.PLAYER)) {
-                final MapleCharacter chr = (MapleCharacter) o;
+                final User chr = (User) o;
 
                 handleCooldowns(chr, numTimes, hurt, currentTime);
             }
@@ -1910,7 +1910,7 @@ public class World {
      * @param bHurt
      * @param tNow
      */
-    public static void handleCooldowns(final MapleCharacter pPlayer, final int nNumTimes, final boolean bHurt, final long tNow) { //is putting it here a good idea? expensive?
+    public static void handleCooldowns(final User pPlayer, final int nNumTimes, final boolean bHurt, final long tNow) { //is putting it here a good idea? expensive?
         if (pPlayer.getCooldownSize() > 0) {
             List<Pair<Integer, Integer>> cooldowns = new ArrayList<>();
 
@@ -2002,7 +2002,7 @@ public class World {
         }
         if (nNumTimes % 13 == 0) { //we're parsing through the characters anyway (:
             pPlayer.doFamiliarSchedule(tNow);
-            for (MaplePet pet : pPlayer.getSummonedPets()) {
+            for (Pet pet : pPlayer.getSummonedPets()) {
                 if (pet.getItem().getItemId() == 5000054 && pet.getSecondsLeft() > 0) {
                     pet.setSecondsLeft(pet.getSecondsLeft() - 1);
                     if (pet.getSecondsLeft() <= 0) {

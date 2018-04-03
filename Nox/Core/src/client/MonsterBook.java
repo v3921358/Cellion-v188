@@ -23,7 +23,7 @@ import constants.ItemConstants;
 import database.DatabaseConnection;
 import net.OutPacket;
 import server.MapleItemInformationProvider;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import tools.Pair;
 import tools.Triple;
@@ -43,7 +43,7 @@ public final class MonsterBook
     private final List<Integer> cardItems = new ArrayList<>();
     private final Map<Integer, Pair<Integer, Boolean>> sets = new HashMap<>();
 
-    public MonsterBook(Map<Integer, Integer> cards, MapleCharacter chr) {
+    public MonsterBook(Map<Integer, Integer> cards, User chr) {
         this.cards = cards;
         calculateItem();
         calculateScore();
@@ -58,7 +58,7 @@ public final class MonsterBook
         applyBook(chr, true);
     }
 
-    public void applyBook(MapleCharacter chr, boolean first_login) {
+    public void applyBook(User chr, boolean first_login) {
         Equip item = (Equip) chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) EquipSlotType.MonsterBook.getSlot());
         if (item == null) {
             item = (Equip) MapleItemInformationProvider.getInstance().getEquipById(ItemConstants.CRUSADER_CODEX);
@@ -276,7 +276,7 @@ public final class MonsterBook
         return this.cards.get(cardid) == null ? 0 : this.cards.get(cardid);
     }
 
-    public static final MonsterBook loadCards(int charid, MapleCharacter chr) throws SQLException {
+    public static final MonsterBook loadCards(int charid, User chr) throws SQLException {
         Map<Integer, Integer> cards;
         try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT * FROM monsterbook WHERE charid = ? ORDER BY cardid ASC")) {
             ps.setInt(1, charid);

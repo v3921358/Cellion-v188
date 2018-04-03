@@ -38,8 +38,8 @@ import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.SavedLocationType;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import server.maps.objects.MapleReactor;
 import server.messages.GiveBuffMessage;
 import server.quest.MapleQuest;
@@ -74,7 +74,7 @@ public abstract class AbstractPlayerInteraction {
         return c;
     }
 
-    public MapleCharacter getChar() {
+    public User getChar() {
         return c.getPlayer();
     }
 
@@ -82,11 +82,11 @@ public abstract class AbstractPlayerInteraction {
         return c.getChannelServer();
     }
 
-    public final MapleCharacter getPlayer() {
+    public final User getPlayer() {
         return c.getPlayer();
     }
 
-    public final boolean isInventoryFull(MapleCharacter pPlayer, int nInventoryType) {
+    public final boolean isInventoryFull(User pPlayer, int nInventoryType) {
         MapleInventoryType pInventory = MapleInventoryType.getByType((byte) nInventoryType);
         if (pPlayer.getInventory(pInventory).isFull()) {
             return true;
@@ -181,13 +181,13 @@ public abstract class AbstractPlayerInteraction {
         if (map == null) {
             return;
         }
-        for (MapleCharacter chr : c.getPlayer().getMap().getCharacters()) {
+        for (User chr : c.getPlayer().getMap().getCharacters()) {
             chr.changeMap(map, map.getPortal(portal));
         }
     }
 
     public final void warpByName(final int mapid, final String chrname) {
-        MapleCharacter chr = c.getChannelServer().getPlayerStorage().getCharacterByName(chrname);
+        User chr = c.getChannelServer().getPlayerStorage().getCharacterByName(chrname);
         if (chr == null) {
             c.getPlayer().dropMessage(1, "Could not find the character.");
             c.write(CWvsContext.enableActions());
@@ -208,7 +208,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final void mapChangeTimer(final int map, final int nextmap, final int time, final boolean notice) {
-        final List<MapleCharacter> current = c.getChannelServer().getMapFactory().getMap(map).getCharacters();
+        final List<User> current = c.getChannelServer().getMapFactory().getMap(map).getCharacters();
         c.getChannelServer().getMapFactory().getMap(map).broadcastMessage(CField.getClock(time));
         if (notice) {
             c.getChannelServer().getMapFactory().getMap(map).startMapEffect("You will be moved out of the map when the timer ends.", 5120041);
@@ -217,7 +217,7 @@ public abstract class AbstractPlayerInteraction {
             @Override
             public void run() {
                 if (current != null) {
-                    for (MapleCharacter chrs : current) {
+                    for (User chrs : current) {
                         chrs.changeMap(nextmap, 0);
                     }
                 }
@@ -659,7 +659,7 @@ public abstract class AbstractPlayerInteraction {
             return false;
         }
         for (final MaplePartyCharacter mem : c.getPlayer().getParty().getMembers()) {
-            final MapleCharacter chr = c.getPlayer().getMap().getCharacterById(mem.getId());
+            final User chr = c.getPlayer().getMap().getCharacterById(mem.getId());
             if (chr == null) {
                 return false;
             }
@@ -675,7 +675,7 @@ public abstract class AbstractPlayerInteraction {
         final MapleMap target = getMap(mapId);
         final int cMap = getPlayer().getMapId();
         for (final MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
-            final MapleCharacter curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
+            final User curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
             if (curChar != null && (curChar.getMapId() == cMap || curChar.getEventInstance() == getPlayer().getEventInstance())) {
                 curChar.changeMap(target, target.getPortal(0));
             }
@@ -695,7 +695,7 @@ public abstract class AbstractPlayerInteraction {
         final MapleMap target = getMap(mapId);
         final int cMap = getPlayer().getMapId();
         for (final MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
-            final MapleCharacter curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
+            final User curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
             if (curChar != null && (curChar.getMapId() == cMap || curChar.getEventInstance() == getPlayer().getEventInstance())) {
                 if (rand) {
                     try {
@@ -719,7 +719,7 @@ public abstract class AbstractPlayerInteraction {
 
         final int cMap = getPlayer().getMapId();
         for (final MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
-            final MapleCharacter curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
+            final User curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
             if (curChar != null && (curChar.getMapId() == cMap || curChar.getEventInstance() == getPlayer().getEventInstance())) {
                 curChar.changeMap(target, target.getPortal(0));
             }
@@ -744,8 +744,8 @@ public abstract class AbstractPlayerInteraction {
         c.getPlayer().gainSP((short) amount);
     }
 
-    public final void givePartyItems(final int id, final short quantity, final List<MapleCharacter> party) {
-        for (MapleCharacter chr : party) {
+    public final void givePartyItems(final int id, final short quantity, final List<User> party) {
+        for (User chr : party) {
             if (quantity >= 0) {
                 MapleInventoryManipulator.addById(chr.getClient(), id, quantity, "Received from party interaction " + id + " (" + id2 + ")");
             } else {
@@ -755,8 +755,8 @@ public abstract class AbstractPlayerInteraction {
         }
     }
 
-    public void addPartyTrait(String t, int e, final List<MapleCharacter> party) {
-        for (final MapleCharacter chr : party) {
+    public void addPartyTrait(String t, int e, final List<User> party) {
+        for (final User chr : party) {
             chr.getTrait(MapleTraitType.valueOf(t)).addExp(e, chr);
         }
     }
@@ -768,7 +768,7 @@ public abstract class AbstractPlayerInteraction {
         }
         final int cMap = getPlayer().getMapId();
         for (final MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
-            final MapleCharacter curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
+            final User curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
             if (curChar != null && (curChar.getMapId() == cMap || curChar.getEventInstance() == getPlayer().getEventInstance())) {
                 curChar.getTrait(MapleTraitType.valueOf(t)).addExp(e, curChar);
             }
@@ -791,15 +791,15 @@ public abstract class AbstractPlayerInteraction {
 
         final int cMap = getPlayer().getMapId();
         for (final MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
-            final MapleCharacter curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
+            final User curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
             if (curChar != null && (curChar.getMapId() == cMap || curChar.getEventInstance() == getPlayer().getEventInstance())) {
                 gainItem(id, (short) (removeAll ? -curChar.itemQuantity(id) : quantity), false, 0, false, 0, "", curChar.getClient());
             }
         }
     }
 
-    public final void givePartyExp_PQ(final int maxLevel, final double mod, final List<MapleCharacter> party) {
-        for (final MapleCharacter chr : party) {
+    public final void givePartyExp_PQ(final int maxLevel, final double mod, final List<User> party) {
+        for (final User chr : party) {
             final int amount = (int) Math.round(GameConstants.getExpNeededForLevel(chr.getLevel() > maxLevel ? (maxLevel + ((maxLevel - chr.getLevel()) / 10)) : chr.getLevel()) / (Math.min(chr.getLevel(), maxLevel) / 5.0) / (mod * 2.0));
             chr.gainExp((int) (amount * c.getChannelServer().getExpRate(chr.getWorld())), true, true, true);
         }
@@ -818,7 +818,7 @@ public abstract class AbstractPlayerInteraction {
         }
         final int cMap = getPlayer().getMapId();
         for (final MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
-            final MapleCharacter curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
+            final User curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
             if (curChar != null && (curChar.getMapId() == cMap || curChar.getEventInstance() == getPlayer().getEventInstance())) {
                 final int amount = (int) Math.round(GameConstants.getExpNeededForLevel(curChar.getLevel() > maxLevel ? (maxLevel + (curChar.getLevel() / 10)) : curChar.getLevel()) / (Math.min(curChar.getLevel(), maxLevel) / 10.0) / mod);
                 curChar.gainExp((int) (amount * c.getChannelServer().getExpRate(curChar.getWorld())), true, true, true);
@@ -826,8 +826,8 @@ public abstract class AbstractPlayerInteraction {
         }
     }
 
-    public final void givePartyExp(final int amount, final List<MapleCharacter> party) {
-        for (final MapleCharacter chr : party) {
+    public final void givePartyExp(final int amount, final List<User> party) {
+        for (final User chr : party) {
             chr.gainExp((int) (amount * c.getChannelServer().getExpRate(chr.getWorld())), true, true, true);
         }
     }
@@ -838,7 +838,7 @@ public abstract class AbstractPlayerInteraction {
         } else {
             final int cMap = getPlayer().getMapId();
             for (final MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
-                final MapleCharacter curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
+                final User curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
                 if (curChar != null && (curChar.getMapId() == cMap || curChar.getEventInstance() == getPlayer().getEventInstance())) {
                     curChar.gainExp((int) (amount * c.getChannelServer().getExpRate(curChar.getWorld())), true, true, true);
                 }
@@ -846,8 +846,8 @@ public abstract class AbstractPlayerInteraction {
         }
     }
 
-    public final void endPartyQuest(final int amount, final List<MapleCharacter> party) {
-        for (final MapleCharacter chr : party) {
+    public final void endPartyQuest(final int amount, final List<User> party) {
+        for (final User chr : party) {
             chr.endPartyQuest(amount);
         }
     }
@@ -859,15 +859,15 @@ public abstract class AbstractPlayerInteraction {
         }
         final int cMap = getPlayer().getMapId();
         for (final MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
-            final MapleCharacter curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
+            final User curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
             if (curChar != null && (curChar.getMapId() == cMap || curChar.getEventInstance() == getPlayer().getEventInstance())) {
                 curChar.endPartyQuest(amount);
             }
         }
     }
 
-    public final void removeFromParty(final int id, final List<MapleCharacter> party) {
-        for (final MapleCharacter chr : party) {
+    public final void removeFromParty(final int id, final List<User> party) {
+        for (final User chr : party) {
             final int possesed = chr.getInventory(GameConstants.getInventoryType(id)).countById(id);
             if (possesed > 0) {
                 MapleInventoryManipulator.removeById(c, GameConstants.getInventoryType(id), id, possesed, true, false);
@@ -906,7 +906,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final void gainCloseness(final int closeness, final int index) {
-        final MaplePet pet = getPlayer().getPet(index);
+        final Pet pet = getPlayer().getPet(index);
         if (pet != null) {
             pet.setCloseness((int) (pet.getCloseness() + (closeness * getChannelServer().getTraitRate())));
             //  getClient().getPlayer().forceUpdateItem(pet.getItem());
@@ -915,7 +915,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final void gainClosenessAll(final int closeness) {
-        for (final MaplePet pet : getPlayer().getPets()) {
+        for (final Pet pet : getPlayer().getPets()) {
             if (pet != null && pet.getSummoned()) {
                 pet.setCloseness(pet.getCloseness() + closeness);
                 getClient().getPlayer().forceUpdateItem(pet.getItem());
@@ -924,8 +924,8 @@ public abstract class AbstractPlayerInteraction {
         }
     }
 
-    public final void givePartyNX(final int amount, final List<MapleCharacter> party) {
-        for (final MapleCharacter chr : party) {
+    public final void givePartyNX(final int amount, final List<User> party) {
+        for (final User chr : party) {
             chr.modifyCSPoints(1, amount, true);
         }
     }
@@ -937,7 +937,7 @@ public abstract class AbstractPlayerInteraction {
         }
         final int cMap = getPlayer().getMapId();
         for (final MaplePartyCharacter chr : getPlayer().getParty().getMembers()) {
-            final MapleCharacter curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
+            final User curChar = getChannelServer().getPlayerStorage().getCharacterById(chr.getId());
             if (curChar != null && (curChar.getMapId() == cMap || curChar.getEventInstance() == getPlayer().getEventInstance())) {
                 curChar.modifyCSPoints(1, amount, true);
             }
@@ -1176,7 +1176,7 @@ public abstract class AbstractPlayerInteraction {
             fullness = 100;
         }
         try {
-            MapleInventoryManipulator.addById(c, id, (short) 1, "", MaplePet.createPet(id, name, level, closeness, fullness, MapleInventoryIdentifier.getInstance(), id == 5000054 ? (int) period : 0, flags), 45, false, "Pet from interaction " + id + " (" + id2 + ")" + " on " + LocalDateTime.now());
+            MapleInventoryManipulator.addById(c, id, (short) 1, "", Pet.createPet(id, name, level, closeness, fullness, MapleInventoryIdentifier.getInstance(), id == 5000054 ? (int) period : 0, flags), 45, false, "Pet from interaction " + id + " (" + id2 + ")" + " on " + LocalDateTime.now());
         } catch (NullPointerException ex) {
         }
     }
@@ -1305,10 +1305,10 @@ public abstract class AbstractPlayerInteraction {
         map.respawn(true, System.currentTimeMillis());
     }
 
-    public final void startAswanOffSeason(final MapleCharacter leader) {
-        final List<MapleCharacter> check1 = c.getChannelServer().getMapFactory().getMap(955000100).getCharacters();
-        final List<MapleCharacter> check2 = c.getChannelServer().getMapFactory().getMap(955000200).getCharacters();
-        final List<MapleCharacter> check3 = c.getChannelServer().getMapFactory().getMap(955000300).getCharacters();
+    public final void startAswanOffSeason(final User leader) {
+        final List<User> check1 = c.getChannelServer().getMapFactory().getMap(955000100).getCharacters();
+        final List<User> check2 = c.getChannelServer().getMapFactory().getMap(955000200).getCharacters();
+        final List<User> check3 = c.getChannelServer().getMapFactory().getMap(955000300).getCharacters();
         c.getChannelServer().getMapFactory().getMap(955000100).broadcastMessage(CField.getClock(20 * 60));
         c.getChannelServer().getMapFactory().getMap(955000200).broadcastMessage(CField.getClock(20 * 60));
         c.getChannelServer().getMapFactory().getMap(955000300).broadcastMessage(CField.getClock(20 * 60));
@@ -1316,13 +1316,13 @@ public abstract class AbstractPlayerInteraction {
             @Override
             public void run() {
                 if (check1 != null && check2 != null && check3 != null && (leader.getMapId() == 955000100 || leader.getMapId() == 955000200 || leader.getMapId() == 955000300)) {
-                    for (MapleCharacter chrs : check1) {
+                    for (User chrs : check1) {
                         chrs.changeMap(262010000, 0);
                     }
-                    for (MapleCharacter chrs : check2) {
+                    for (User chrs : check2) {
                         chrs.changeMap(262010000, 0);
                     }
-                    for (MapleCharacter chrs : check3) {
+                    for (User chrs : check3) {
                         chrs.changeMap(262010000, 0);
                     }
                 } else {
@@ -1392,7 +1392,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public void warpExpedition(int mapid, int portal) {
-        for (MapleCharacter chr : World.Party.getExped(c.getPlayer().getParty().getId()).getExpeditionMembers(c)) {
+        for (User chr : World.Party.getExped(c.getPlayer().getParty().getId()).getExpeditionMembers(c)) {
             chr.changeMap(mapid, portal);
         }
     }

@@ -26,7 +26,7 @@ import client.anticheat.CheatingOffense;
 import java.awt.Point;
 import net.InPacket;
 import server.MaplePortal;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import netty.ProcessPacket;
 
 public final class OnUserPortalTeleportRequest implements ProcessPacket<MapleClient> {
@@ -39,7 +39,7 @@ public final class OnUserPortalTeleportRequest implements ProcessPacket<MapleCli
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         iPacket.Skip(1);
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         if ((chr == null) || (chr.getMap() == null)) {
             return;

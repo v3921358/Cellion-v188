@@ -1,7 +1,7 @@
 /*
  * Rexion Development
  */
-package handling.jobs;
+package client.jobs;
 
 import client.CharacterTemporaryStat;
 import client.MapleClient;
@@ -16,7 +16,7 @@ import server.MapleStatEffect;
 import server.MapleStatInfo;
 import server.Randomizer;
 import server.Timer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.BuffPacket;
 import tools.packet.CField;
 import tools.packet.JobPacket;
@@ -31,7 +31,7 @@ public class Explorer {
     
     public static class HeroHandler {
         
-        public static void handleComboOrbs(MapleCharacter pPlayer, int nSkillID) {
+        public static void handleComboOrbs(User pPlayer, int nSkillID) {
             if (pPlayer == null && !GameConstants.isWarriorHero(pPlayer.getJob()) && !pPlayer.hasSkill(Fighter.COMBO_ATTACK)) {
                 return;
             }
@@ -64,7 +64,7 @@ public class Explorer {
             setComboAttack(pPlayer, nCombo);
         }
         
-        public static void handleComboAttack(MapleCharacter pPlayer) {
+        public static void handleComboAttack(User pPlayer) {
             if (pPlayer == null && !GameConstants.isWarriorHero(pPlayer.getJob()) && !pPlayer.hasSkill(Fighter.COMBO_ATTACK)) {
                 return;
             }
@@ -104,7 +104,7 @@ public class Explorer {
             setComboAttack(pPlayer, nCombo);
         }
         
-        public static void setComboAttack(MapleCharacter pPlayer, int nAmount) {
+        public static void setComboAttack(User pPlayer, int nAmount) {
             if (pPlayer == null && !GameConstants.isWarriorHero(pPlayer.getJob()) && !pPlayer.hasSkill(Fighter.COMBO_ATTACK)) {
                 return;
             }
@@ -120,7 +120,7 @@ public class Explorer {
             pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, Fighter.COMBO_ATTACK, nDuration, buffEffects.statups, buffEffects));
         }
         
-        public static int getMaxOrbs(MapleCharacter pPlayer) {
+        public static int getMaxOrbs(User pPlayer) {
             int nMaxOrbs = 0;
             
             if (pPlayer.hasSkill(Fighter.COMBO_ATTACK)) {
@@ -136,7 +136,7 @@ public class Explorer {
     
     public static class ShadowerHandler {
         
-        public static void handleBodyCount(MapleCharacter pPlayer) {
+        public static void handleBodyCount(User pPlayer) {
             if (pPlayer == null && !GameConstants.isThiefShadower(pPlayer.getJob()) && !pPlayer.hasSkill(Shadower.SHADOWER_INSTINCT)) {
                 return;
             }
@@ -155,7 +155,7 @@ public class Explorer {
             ShadowerPacket.setKillingPoint(nBodyCount);
         }
         
-        public static void handleShadowerInstinct(MapleCharacter pPlayer) {
+        public static void handleShadowerInstinct(User pPlayer) {
             int nBodyCount = pPlayer.getPrimaryStack();
             
             // Apply the respected buff bonuses to the player.
@@ -176,7 +176,7 @@ public class Explorer {
             pPlayer.dropMessage(-1, "Body Count Reset");
         }
         
-        public static void handleFlipTheCoin(MapleCharacter pPlayer) {
+        public static void handleFlipTheCoin(User pPlayer) {
             int nAmount = pPlayer.getAdditionalStack();
             
             if (pPlayer.hasBuff(CharacterTemporaryStat.FlipTheCoin)) {

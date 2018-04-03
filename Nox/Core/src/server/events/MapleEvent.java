@@ -13,7 +13,7 @@ import server.Timer.EventTimer;
 import server.maps.FieldLimitType;
 import server.maps.MapleMap;
 import server.maps.SavedLocationType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.StringUtil;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -58,7 +58,7 @@ public abstract class MapleEvent {
         }
     }
 
-    public static void givePrize(final MapleCharacter chr) {
+    public static void givePrize(final User chr) {
         final int reward = RandomRewards.getEventReward();
         switch (reward) {
             case 0:
@@ -114,17 +114,17 @@ public abstract class MapleEvent {
         }
     }
 
-    public abstract void finished(MapleCharacter chr); //most dont do shit here
+    public abstract void finished(User chr); //most dont do shit here
 
     public abstract void startEvent();
 
-    public void onMapLoad(MapleCharacter chr) { //most dont do shit here
+    public void onMapLoad(User chr) { //most dont do shit here
         if (GameConstants.isEventMap(chr.getMapId()) && FieldLimitType.Event.checkFlag(chr.getMap()) && FieldLimitType.Event2.checkFlag(chr.getMap())) {
             chr.getClient().write(CField.showEventInstructions());
         }
     }
 
-    public void warpBack(MapleCharacter chr) {
+    public void warpBack(User chr) {
         int map = chr.getSavedLocation(SavedLocationType.EVENT);
         if (map <= -1) {
             map = 104000000;
@@ -169,7 +169,7 @@ public abstract class MapleEvent {
         cserv.setEvent(-1);
     }
 
-    public static void mapLoad(final MapleCharacter chr, final int channel) {
+    public static void mapLoad(final User chr, final int channel) {
         if (chr == null) {
             return;
         } //o_o
@@ -191,7 +191,7 @@ public abstract class MapleEvent {
         }
     }
 
-    public static void onStartEvent(final MapleCharacter chr) {
+    public static void onStartEvent(final User chr) {
         for (MapleEventType t : MapleEventType.values()) {
             final MapleEvent e = chr.getClient().getChannelServer().getEvent(t);
             if (e.isRunning) {

@@ -7,7 +7,7 @@ package server;
 import java.lang.ref.WeakReference;
 
 import handling.world.MaplePartyCharacter;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 /**
  * TODO : Make this a function for NPC instead.. cleaner
@@ -16,14 +16,14 @@ import server.maps.objects.MapleCharacter;
  */
 public class MapleCarnivalChallenge {
 
-    WeakReference<MapleCharacter> challenger;
+    WeakReference<User> challenger;
     String challengeinfo = "";
 
-    public MapleCarnivalChallenge(MapleCharacter challenger) {
+    public MapleCarnivalChallenge(User challenger) {
         this.challenger = new WeakReference<>(challenger);
         challengeinfo += "#b";
         for (MaplePartyCharacter pc : challenger.getParty().getMembers()) {
-            MapleCharacter c = challenger.getMap().getCharacterById(pc.getId());
+            User c = challenger.getMap().getCharacterById(pc.getId());
             if (c != null) {
                 challengeinfo += (c.getName() + " / Level" + c.getLevel() + " / " + getJobNameById(c.getJob()));
             }
@@ -31,7 +31,7 @@ public class MapleCarnivalChallenge {
         challengeinfo += "#k";
     }
 
-    public MapleCharacter getChallenger() {
+    public User getChallenger() {
         return challenger.get();
     }
 

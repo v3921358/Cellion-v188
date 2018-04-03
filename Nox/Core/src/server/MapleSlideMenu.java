@@ -1,7 +1,7 @@
 package server;
 
 import constants.ServerConstants;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 /**
  *
@@ -143,7 +143,7 @@ public class MapleSlideMenu {
             }
         }
 
-        public static String getSelectionInfo(MapleCharacter chr, int npcid) {
+        public static String getSelectionInfo(User chr, int npcid) {
             String mapselect = "";
             for (DimensionalMirror mirror : DimensionalMirror.values()) {
                 if (chr.getLevel() >= mirror.getMinLevel() && chr.getLevel() <= mirror.getMaxLevel() && mirror.show()) {
@@ -225,7 +225,7 @@ public class MapleSlideMenu {
             }
         }
 
-        public static String getSelectionInfo(MapleCharacter chr, int npc) {
+        public static String getSelectionInfo(User chr, int npc) {
             String mapselect = "";
             for (TimeGate gate : TimeGate.values()) {
                 if ((chr.getQuestStatus(gate.getRequieredQuest()).getValue() == gate.getRequieredQuestState()) || gate.getRequieredQuest() == 0) {
@@ -245,7 +245,7 @@ public class MapleSlideMenu {
 
     public static class SlideMenu2 {
 
-        public static String getSelectionInfo(MapleCharacter chr, int npc) {
+        public static String getSelectionInfo(User chr, int npc) {
             return null;
         }
 
@@ -256,7 +256,7 @@ public class MapleSlideMenu {
 
     public static class SlideMenu3 {
 
-        public static String getSelectionInfo(MapleCharacter chr, int npc) {
+        public static String getSelectionInfo(User chr, int npc) {
             return null;
         }
 
@@ -322,7 +322,7 @@ public class MapleSlideMenu {
             }
         }
 
-        public static String getSelectionInfo(MapleCharacter chr, int npc) {
+        public static String getSelectionInfo(User chr, int npc) {
             String buffselect = "";
             for (BuffMenu buffdata : BuffMenu.values()) {
                 buffselect += "#" + buffdata.getId() + "# " + buffdata.getName();
@@ -399,7 +399,7 @@ public class MapleSlideMenu {
             }
         }
 
-        public static String getSelectionInfo(MapleCharacter chr, int npc) {
+        public static String getSelectionInfo(User chr, int npc) {
             String mapselect = "";
             for (TownTeleport gate : TownTeleport.values()) {
                 mapselect += "#" + gate.getId() + "#" + gate.getName();

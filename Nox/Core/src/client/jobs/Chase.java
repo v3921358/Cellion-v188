@@ -1,7 +1,7 @@
 /*
  * Rexion Development
  */
-package handling.jobs;
+package client.jobs;
 
 import client.CharacterTemporaryStat;
 import client.MapleClient;
@@ -14,7 +14,7 @@ import server.MapleStatEffect;
 import server.MapleStatInfo;
 import server.Randomizer;
 import server.Timer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.BuffPacket;
 import tools.packet.CField;
 

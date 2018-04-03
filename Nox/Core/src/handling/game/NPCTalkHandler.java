@@ -5,7 +5,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import scripting.provider.NPCScriptManager;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.maps.objects.MapleNPC;
 import net.InPacket;
 import tools.packet.CWvsContext;
@@ -24,7 +24,7 @@ public class NPCTalkHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter pPlayer = c.getPlayer();
+        User pPlayer = c.getPlayer();
         final MapleNPC pNpc = pPlayer.getMap().getNPCByOid(iPacket.DecodeInteger());
 
         if (pPlayer == null || pPlayer.getMap() == null || pNpc == null || pPlayer.hasBlockedInventory()) {
@@ -53,7 +53,7 @@ public class NPCTalkHandler implements ProcessPacket<MapleClient> {
                 safetyLock.unlock();
             }
         } else if (pNpc.hasShop()) {
-            pPlayer.setConversation(MapleCharacter.MapleCharacterConversationType.NPC_Or_Quest);
+            pPlayer.setConversation(User.MapleCharacterConversationType.NPC_Or_Quest);
             pNpc.sendShop(c);
         }
     }

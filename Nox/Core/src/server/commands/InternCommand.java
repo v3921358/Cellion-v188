@@ -44,7 +44,7 @@ import server.maps.MapleMap;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import server.shops.MapleShopFactory;
 import tools.Pair;
@@ -85,7 +85,7 @@ public class InternCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter oPlayer = c.getPlayer();
+            User oPlayer = c.getPlayer();
 
             if (oPlayer.usingStaffChat()) {
                 oPlayer.toggleStaffChat(true);
@@ -167,7 +167,7 @@ public class InternCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             final StringBuilder builder = new StringBuilder();
-            final MapleCharacter other = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            final User other = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (other == null) {
                 builder.append("...does not exist");
                 c.getPlayer().dropMessage(6, builder.toString());
@@ -448,7 +448,7 @@ public class InternCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[splitted.length - 1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[splitted.length - 1]);
             if (victim != null && c.getPlayer().getGMLevel() >= victim.getGMLevel()) {
                 victim.getClient().close();
                 victim.getClient().disconnect(true, false);
@@ -476,7 +476,7 @@ public class InternCommand {
                 c.getPlayer().dropMessage(6, s.toString());
                 return 0;
             }
-            final MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            final User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             final int reason = Integer.parseInt(splitted[2]);
             final int numHour = Integer.parseInt(splitted[3]);
 
@@ -502,7 +502,7 @@ public class InternCommand {
                 c.getPlayer().dropMessage(6, "Syntax: !jail <name> <minutes, 0 = forever>");
                 return 0;
             }
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             final int minutes = Math.max(0, Integer.parseInt(splitted[2]));
             if (victim != null && c.getPlayer().getGMLevel() >= victim.getGMLevel()) {
                 MapleMap target = ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(GameConstants.JAIL);
@@ -528,7 +528,7 @@ public class InternCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             try {
-                MapleCharacter victim;
+                User victim;
                 int ch = World.Find.findChannel(splitted[1]);
                 if (ch < 0) {
                     MapleMap target = c.getChannelServer().getMapFactory().getMap(Integer.parseInt(splitted[1]));
@@ -777,7 +777,7 @@ public class InternCommand {
             //probably bad way to do it
             final long currentTime = System.currentTimeMillis();
             List<Pair<String, Long>> players = new ArrayList<>();
-            for (MapleCharacter chr : c.getPlayer().getMap().getCharacters()) {
+            for (User chr : c.getPlayer().getMap().getCharacters()) {
                 if (!chr.isIntern()) {
                     players.add(new Pair<>(MapleCharacterUtil.makeMapleReadable(chr.getName()) + (currentTime - chr.getCheatTracker().getLastAttack() > 600000 ? " (AFK)" : ""), chr.getChangeTime()));
                 }
@@ -940,7 +940,7 @@ public class InternCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
-                for (MapleCharacter mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+                for (User mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                     mch.saveToDB(false, false);
                 }
             }
@@ -953,12 +953,12 @@ public class InternCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter player = c.getPlayer();
+            User player = c.getPlayer();
             if (player.getMapId() != 109010100) {
                 player.dropMessage(5, "This command is only usable in map 109010100.");
             } else {
                 c.getChannelServer().toggleBomberman(c.getPlayer());
-                for (MapleCharacter chr : player.getMap().getCharacters()) {
+                for (User chr : player.getMap().getCharacters()) {
                     if (!chr.isIntern()) {
                         chr.cancelAllBuffs();
                         chr.giveDebuff(MapleDisease.SEAL, MobSkillFactory.getMobSkill(120, 1));
@@ -971,7 +971,7 @@ public class InternCommand {
                         //chr.dropMessage(0, "Check inventory for Bomb under use");
                     }
                 }
-                for (MapleCharacter chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+                for (User chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                     chrs.getClient().write(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has started!"));
                 }
                 player.getMap().broadcastMessage(CField.getClock(60));
@@ -993,14 +993,14 @@ public class InternCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter player = c.getPlayer();
+            User player = c.getPlayer();
             if (player.getMapId() != 109010100) {
                 player.dropMessage(5, "This command is only usable in map 109010100.");
             } else {
                 c.getChannelServer().toggleBomberman(c.getPlayer());
                 int count = 0;
                 String winner = "";
-                for (MapleCharacter chr : player.getMap().getCharacters()) {
+                for (User chr : player.getMap().getCharacters()) {
                     if (!chr.isGM()) {
                         if (count == 0) {
                             winner = chr.getName();
@@ -1010,7 +1010,7 @@ public class InternCommand {
                         }
                     }
                 }
-                for (MapleCharacter chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+                for (User chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                     chrs.getClient().write(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has ended! The winners are: " + winner));
                 }
             }

@@ -21,8 +21,8 @@ import server.life.MobSkill;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MapleSummon;
+import server.maps.objects.User;
+import server.maps.objects.Summon;
 import handling.world.AttackMonster;
 import tools.Pair;
 import net.InPacket;
@@ -38,13 +38,13 @@ public final class SummonPvpHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         if (chr == null || chr.isHidden() || !chr.isAlive() || chr.hasBlockedInventory() || chr.getMap() == null || !chr.inPVP() || !chr.getEventInstance().getProperty("started").equals("1")) {
             return;
         }
         final MapleMap map = chr.getMap();
         final MapleMapObject obj = map.getMapObject(iPacket.DecodeInteger(), MapleMapObjectType.SUMMON);
-        if (obj == null || !(obj instanceof MapleSummon)) {
+        if (obj == null || !(obj instanceof Summon)) {
             chr.dropMessage(5, "The summon has disappeared.");
             return;
         }
@@ -53,7 +53,7 @@ public final class SummonPvpHandler implements ProcessPacket<MapleClient> {
             iPacket.Skip(23);
             tick = iPacket.DecodeInteger();
         }
-        final MapleSummon summon = (MapleSummon) obj;
+        final Summon summon = (Summon) obj;
         if (summon.getOwnerId() != chr.getId() || summon.getSkillLevel() <= 0) {
             chr.dropMessage(5, "Error.");
             return;
@@ -99,7 +99,7 @@ public final class SummonPvpHandler implements ProcessPacket<MapleClient> {
         List<Pair<Long, Boolean>> attacks;
         maxdamage *= chr.getStat().dam_r / 100.0;
         for (MapleMapObject mo : chr.getMap().getCharactersIntersect(box)) {
-            final MapleCharacter attacked = (MapleCharacter) mo;
+            final User attacked = (User) mo;
             if (attacked.getId() != chr.getId() && attacked.isAlive() && !attacked.isHidden() && (type == 0 || attacked.getTeam() != chr.getTeam())) {
                 double rawDamage = maxdamage / Math.max(0, ((magic ? attacked.getStat().mdef : attacked.getStat().wdef) * Math.max(1.0, 100.0 - ignoreDEF) / 100.0) * (type == 3 ? 0.1 : 0.25));
                 if (attacked.getBuffedValue(CharacterTemporaryStat.Invincible) != null || PlayersHandler.inArea(attacked)) {

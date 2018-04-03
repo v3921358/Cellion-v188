@@ -11,7 +11,7 @@ public class MechDoor extends MapleMapObject {
 
     private final int owner, partyid, id;
 
-    public MechDoor(MapleCharacter owner, Point pos, int id) {
+    public MechDoor(User owner, Point pos, int id) {
         super();
         this.owner = owner.getId();
         this.partyid = owner.getParty() == null ? 0 : owner.getParty().getId();

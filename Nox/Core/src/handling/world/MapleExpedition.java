@@ -7,7 +7,7 @@ import client.MapleClient;
 import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
 import handling.world.World;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 public class MapleExpedition {
 
@@ -51,8 +51,8 @@ public class MapleExpedition {
         return ret;
     }
 
-    public final ArrayList<MapleCharacter> getExpeditionMembers(final MapleClient c) {
-        ArrayList<MapleCharacter> chars = new ArrayList<>();
+    public final ArrayList<User> getExpeditionMembers(final MapleClient c) {
+        ArrayList<User> chars = new ArrayList<>();
         for (int i = 0; i < parties.size(); i++) {
             MapleParty pp = World.Party.getParty(parties.get(i));
             if (pp == null) {

@@ -26,7 +26,7 @@ import client.anticheat.CheatingOffense;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -41,7 +41,7 @@ public final class OnUserPortableChairSitRequest implements ProcessPacket<MapleC
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         if (chr == null || chr.getMap() == null) {
             return;
         }

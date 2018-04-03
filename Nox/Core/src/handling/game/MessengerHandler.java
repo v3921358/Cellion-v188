@@ -7,7 +7,7 @@ import handling.world.MapleMessenger;
 import handling.world.MapleMessengerCharacter;
 import handling.world.World;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -68,7 +68,7 @@ public class MessengerHandler implements ProcessPacket<MapleClient> {
                         return;
                     }
                     input = iPacket.DecodeString();
-                    final MapleCharacter target = c.getChannelServer().getPlayerStorage().getCharacterByName(input);
+                    final User target = c.getChannelServer().getPlayerStorage().getCharacterByName(input);
 
                     if (target != null) {
                         if (target.getMessenger() == null) {
@@ -90,7 +90,7 @@ public class MessengerHandler implements ProcessPacket<MapleClient> {
                 break;
             case 0x05: // decline
                 final String targeted = iPacket.DecodeString();
-                final MapleCharacter target = c.getChannelServer().getPlayerStorage().getCharacterByName(targeted);
+                final User target = c.getChannelServer().getPlayerStorage().getCharacterByName(targeted);
                 if (target != null) { // This channel
                     if (target.getMessenger() != null) {
                         target.getClient().write(CField.messengerNote(c.getPlayer().getName(), 5, 0));
@@ -136,7 +136,7 @@ public class MessengerHandler implements ProcessPacket<MapleClient> {
             case 0x0B: //char info
                 if (messenger != null) {
                     String charname = iPacket.DecodeString();
-                    MapleCharacter character = c.getChannelServer().getPlayerStorage().getCharacterByName(charname);
+                    User character = c.getChannelServer().getPlayerStorage().getCharacterByName(charname);
                     c.write(CField.messengerCharInfo(character));
                 }
                 break;

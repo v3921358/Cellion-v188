@@ -27,7 +27,7 @@ import static handling.cashshop.CashShopOperation.playerCashShopInfo;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CSPacket;
 import netty.ProcessPacket;
@@ -46,7 +46,7 @@ public final class CashShopPurchase implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         final int action = iPacket.DecodeByte();
         purchaseType actionType = purchaseType.UNK;
         for (final purchaseType availableType : purchaseType.values()) {

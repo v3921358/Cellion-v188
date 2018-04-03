@@ -20,7 +20,7 @@
  */
 package handling.world;
 
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 public class MapleGuildCharacter implements java.io.Serializable { // alias for a character
 
@@ -33,7 +33,7 @@ public class MapleGuildCharacter implements java.io.Serializable { // alias for 
 
     // either read from active character...
     // if it's online
-    public MapleGuildCharacter(final MapleCharacter c) {
+    public MapleGuildCharacter(final User c) {
         name = c.getName();
         level = (short) c.getLevel();
         id = c.getId();

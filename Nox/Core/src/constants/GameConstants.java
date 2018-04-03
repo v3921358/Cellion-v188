@@ -25,7 +25,7 @@ import server.MapleStringInformationProvider;
 import server.NebuliteGrade;
 import server.Randomizer;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 import tools.Tuple;
 
@@ -1002,7 +1002,7 @@ public class GameConstants {
      *  Damage Corrections & Modfications
      *  @purpose This value is added to the damage lines for certain skills, used to fix or modify the result.
      */
-    public static long damageCorrectRequest(MapleCharacter pPlayer, int nSkill, long nDamage) {
+    public static long damageCorrectRequest(User pPlayer, int nSkill, long nDamage) {
         long nDamageChange = 0;
         switch (nSkill) {
             case DemonAvenger.EXCEED_DEMON_STRIKE:
@@ -1084,7 +1084,7 @@ public class GameConstants {
         }
     }
     
-    public short changeExp(short level, MapleCharacter chr) {
+    public short changeExp(short level, User chr) {
         switch (chr.getLevel()) {
             case 100:
                 return 100;

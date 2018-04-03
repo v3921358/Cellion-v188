@@ -11,7 +11,7 @@ public class MapleExtractor extends MapleMapObject {
     public long startTime;
     public String ownerName;
 
-    public MapleExtractor(MapleCharacter owner, int itemId, int fee, int timeLeft) {
+    public MapleExtractor(User owner, int itemId, int fee, int timeLeft) {
         super();
         this.owner = owner.getId();
         this.itemId = itemId;

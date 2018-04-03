@@ -1,7 +1,7 @@
 package server.events;
 
 import server.Randomizer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 public class MapleOla extends MapleSurvival { //survival/ola so similar.
 
@@ -15,7 +15,7 @@ public class MapleOla extends MapleSurvival { //survival/ola so similar.
     }
 
     @Override
-    public void finished(final MapleCharacter chr) {
+    public void finished(final User chr) {
         givePrize(chr);
     }
 

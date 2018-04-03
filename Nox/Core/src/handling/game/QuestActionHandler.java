@@ -5,7 +5,7 @@ import constants.GameConstants;
 import constants.ServerConstants;
 import netty.ProcessPacket;
 import scripting.provider.NPCScriptManager;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import net.InPacket;
 import tools.LogHelper;
@@ -70,7 +70,7 @@ enum QuestRes
             c.write(CWvsContext.ultimateExplorer());
             return;
         }
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         if (chr == null) {
             return;
         }

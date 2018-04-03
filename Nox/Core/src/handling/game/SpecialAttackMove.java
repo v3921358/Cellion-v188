@@ -205,7 +205,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             }
-            case Fighter.COMBO_ATTACK:{
+            case Fighter.COMBO_ATTACK: {
                 pEffect.statups.put(CharacterTemporaryStat.ComboCounter, 0);
                 pEffect.info.put(MapleStatInfo.time, 2100000000);
                 HeroHandler.setComboAttack(pPlayer, 0);
@@ -308,6 +308,10 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
             case Evan.SUMMON_ONYX_DRAGON_1: {
                 pEffect = SkillFactory.getSkill(nSkill).getEffect(c.getPlayer().getTotalSkillLevel(Evan.SUMMON_ONYX_DRAGON));
                 pMovement = SummonMovementType.WEIRD_TELEPORT;
+                break;
+            }
+            case BeastTamer.LIL_FORT: {
+                pMovement = SummonMovementType.FOLLOW;
                 break;
             }
             default: {

@@ -14,7 +14,7 @@ import server.CashItemFactory;
 import server.CashItemInfo;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CSPacket;
 
@@ -24,7 +24,7 @@ import tools.packet.CSPacket;
  */
 public class QuestPurchase {
 
-    public static void buyItem(InPacket iPacket, MapleClient c, MapleCharacter chr) {
+    public static void buyItem(InPacket iPacket, MapleClient c, User chr) {
         CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInteger());
         if (iteminfo == null || !MapleItemInformationProvider.getInstance().isQuestItem(iteminfo.getId())) {
             c.write(CSPacket.sendCSFail(0));

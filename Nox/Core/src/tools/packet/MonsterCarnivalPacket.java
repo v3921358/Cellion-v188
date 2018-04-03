@@ -6,11 +6,11 @@ import service.SendPacketOpcode;
 import net.OutPacket;
 import net.Packet;
 import server.MapleCarnivalParty;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 public class MonsterCarnivalPacket {
 
-    public static Packet startMonsterCarnival(final MapleCharacter chr, final int enemyavailable, final int enemytotal) {
+    public static Packet startMonsterCarnival(final User chr, final int enemyavailable, final int enemytotal) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.MCarnivalEnter.getValue());
@@ -87,12 +87,12 @@ public class MonsterCarnivalPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet showMCRanking(List<MapleCharacter> players) {
+    public static Packet showMCRanking(List<User> players) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.MONSTER_CARNIVAL_RANKING.getValue());
         oPacket.EncodeShort(players.size());
-        for (MapleCharacter i : players) {
+        for (User i : players) {
             oPacket.EncodeInteger(i.getId());
             oPacket.EncodeString(i.getName());
             oPacket.EncodeInteger(10); // points

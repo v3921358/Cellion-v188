@@ -5,7 +5,7 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -19,7 +19,7 @@ public final class RecipeHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         if (chr == null || !chr.isAlive() || chr.getMap() == null || chr.hasBlockedInventory()) {
             c.write(CWvsContext.enableActions());
             return;

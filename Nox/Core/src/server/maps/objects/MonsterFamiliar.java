@@ -54,11 +54,11 @@ public final class MonsterFamiliar extends AnimatedMapleMapObject {
         return MapleLifeFactory.getMonsterStats(MapleItemInformationProvider.getInstance().getFamiliar(familiar).getMob());
     }
 
-    public void addFatigue(MapleCharacter owner) {
+    public void addFatigue(User owner) {
         addFatigue(owner, 1);
     }
 
-    public void addFatigue(MapleCharacter owner, int f) {
+    public void addFatigue(User owner, int f) {
         fatigue = Math.min(vitality * 300, Math.max(0, fatigue + f));
         owner.getClient().write(CField.updateFamiliar(this));
         if (fatigue >= vitality * 300) {

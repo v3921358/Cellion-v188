@@ -8,7 +8,7 @@ import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.life.MapleMonster;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import tools.packet.MobPacket;
@@ -27,7 +27,7 @@ public class UseCatchItemHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         c.getPlayer().updateTick(iPacket.DecodeInteger());
         c.getPlayer().setScrolledPosition((short) 0);

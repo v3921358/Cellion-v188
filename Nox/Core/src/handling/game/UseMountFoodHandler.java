@@ -6,7 +6,7 @@ import client.inventory.MapleInventoryType;
 import client.inventory.MapleMount;
 import constants.GameConstants;
 import server.MapleInventoryManipulator;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -24,7 +24,7 @@ public class UseMountFoodHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         c.getPlayer().updateTick(iPacket.DecodeInteger());
         final byte slot = (byte) iPacket.DecodeShort();

@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import netty.ProcessPacket;
@@ -15,7 +15,7 @@ public final class OnUserSitRequest implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
 
         if (chr.getMap().getSharedMapResources().noChair) {
             return;

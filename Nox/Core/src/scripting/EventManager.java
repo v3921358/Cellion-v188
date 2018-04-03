@@ -48,7 +48,7 @@ import server.maps.MapleMap;
 import server.maps.MapleMapFactory;
 import server.maps.MapleMapObject;
 import server.maps.MapleReactorFactory;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.maps.objects.MapleReactor;
 import tools.LogHelper;
 import tools.packet.CField;
@@ -186,7 +186,7 @@ public class EventManager {
         }
     }
 
-    public void startInstance_Solo(String mapid, MapleCharacter chr) {
+    public void startInstance_Solo(String mapid, User chr) {
         try {
             EventInstanceManager eim = (EventInstanceManager) iv.invokeFunction("setup", (Object) mapid);
             eim.registerPlayer(chr);
@@ -195,7 +195,7 @@ public class EventManager {
         }
     }
 
-    public void startInstance(String mapid, MapleCharacter chr) {
+    public void startInstance(String mapid, User chr) {
         try {
             EventInstanceManager eim = (EventInstanceManager) iv.invokeFunction("setup", (Object) mapid);
             eim.registerCarnivalParty(chr, chr.getMap(), (byte) 0);
@@ -204,7 +204,7 @@ public class EventManager {
         }
     }
 
-    public void startInstance_Party(String mapid, MapleCharacter chr) {
+    public void startInstance_Party(String mapid, User chr) {
         try {
             EventInstanceManager eim = (EventInstanceManager) iv.invokeFunction("setup", (Object) mapid);
             eim.registerParty(chr.getParty(), chr.getMap());
@@ -214,7 +214,7 @@ public class EventManager {
     }
 
     //GPQ
-    public void startInstance(MapleCharacter character, String leader) {
+    public void startInstance(User character, String leader) {
         try {
             EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", (Object) null));
             eim.registerPlayer(character);
@@ -226,7 +226,7 @@ public class EventManager {
         }
     }
 
-    public void startInstance_CharID(MapleCharacter character) {
+    public void startInstance_CharID(User character) {
         try {
             EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", character.getId()));
             eim.registerPlayer(character);
@@ -235,7 +235,7 @@ public class EventManager {
         }
     }
 
-    public void startInstance_CharMapID(MapleCharacter character) {
+    public void startInstance_CharMapID(User character) {
         try {
             EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", character.getId(), character.getMapId()));
             eim.registerPlayer(character);
@@ -244,7 +244,7 @@ public class EventManager {
         }
     }
 
-    public void startInstance(MapleCharacter character) {
+    public void startInstance(User character) {
         try {
             EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", (Object) null));
             eim.registerPlayer(character);
@@ -284,7 +284,7 @@ public class EventManager {
     public void startInstance(MapleClient c, MapleExpedition exped, MapleMap map, int maxLevel) {
         try {
             int averageLevel = 0, size = 0;
-            for (MapleCharacter mpc : exped.getExpeditionMembers(c)) {
+            for (User mpc : exped.getExpeditionMembers(c)) {
                 if (mpc != null && mpc.getMapId() == map.getId() && mpc.getClient().getChannel() == map.getChannel()) {
                     averageLevel += mpc.getLevel();
                     size++;
@@ -368,11 +368,11 @@ public class EventManager {
         if (frommap == null || tomap == null) {
             return;
         }
-        List<MapleCharacter> list = frommap.getCharacters();
+        List<User> list = frommap.getCharacters();
 
         if (list != null && frommap.getCharactersSize() > 0) {
             for (MapleMapObject mmo : list) {
-                ((MapleCharacter) mmo).changeMap(tomap, tomap.getPortal(0));
+                ((User) mmo).changeMap(tomap, tomap.getPortal(0));
             }
         }
     }
@@ -381,7 +381,7 @@ public class EventManager {
         return getChannelServer().getMapFactory();
     }
 
-    public List<MapleCharacter> newCharList() {
+    public List<User> newCharList() {
         return new ArrayList<>();
     }
 

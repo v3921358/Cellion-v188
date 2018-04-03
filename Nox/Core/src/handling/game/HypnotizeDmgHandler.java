@@ -3,7 +3,7 @@ package handling.game;
 import client.MapleClient;
 import static handling.world.MobHandler.checkShammos;
 import server.life.MapleMonster;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import netty.ProcessPacket;
 
@@ -20,7 +20,7 @@ public class HypnotizeDmgHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         MapleMonster mob_from = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
         iPacket.Skip(4);
         int to = iPacket.DecodeInteger();

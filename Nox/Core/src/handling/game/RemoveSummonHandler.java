@@ -5,7 +5,7 @@ import client.MapleClient;
 import net.InPacket;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleSummon;
+import server.maps.objects.Summon;
 import tools.packet.CField;
 import netty.ProcessPacket;
 
@@ -23,10 +23,10 @@ public class RemoveSummonHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final MapleMapObject obj = c.getPlayer().getMap().getMapObject(iPacket.DecodeInteger(), MapleMapObjectType.SUMMON);
-        if (obj == null || !(obj instanceof MapleSummon)) {
+        if (obj == null || !(obj instanceof Summon)) {
             return;
         }
-        final MapleSummon summon = (MapleSummon) obj;
+        final Summon summon = (Summon) obj;
         if (summon.getOwnerId() != c.getPlayer().getId() || summon.getSkillLevel() <= 0) {
             c.getPlayer().dropMessage(5, "Error.");
             return;

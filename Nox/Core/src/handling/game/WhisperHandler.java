@@ -7,7 +7,7 @@ import handling.PacketThrottleLimits;
 import handling.world.World;
 import net.InPacket;
 import server.commands.CommandProcessor;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -31,7 +31,7 @@ public class WhisperHandler implements ProcessPacket<MapleClient> {
         c.getPlayer().updateTick(iPacket.DecodeInteger()); // tRequestTime
         if (dwFlag == WhisperFlag.ReplyRequest || dwFlag == WhisperFlag.FindRequest || dwFlag == WhisperFlag.BlockedResult || dwFlag == WhisperFlag.LocationRequest) {
             String sTarget = iPacket.DecodeString();
-            MapleCharacter pUser = Utility.requestCharacter(sTarget); //c.getChannelServer().getPlayerStorage().getCharacterByName(sTarget);
+            User pUser = Utility.requestCharacter(sTarget); //c.getChannelServer().getPlayerStorage().getCharacterByName(sTarget);
             
             if (dwFlag == WhisperFlag.ReplyRequest || dwFlag == WhisperFlag.BlockedResult) {
                 String sText = iPacket.DecodeString();

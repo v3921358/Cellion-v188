@@ -4,7 +4,7 @@ import service.SendPacketOpcode;
 import net.OutPacket;
 import net.Packet;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 /**
  *
@@ -32,7 +32,7 @@ public class EvolvingPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet showPartyConnect(MapleCharacter chr) {
+    public static Packet showPartyConnect(User chr) {
         OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.EvolvingResult.getValue());//
         oPacket.Encode(1);

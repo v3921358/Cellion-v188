@@ -47,7 +47,7 @@ import server.CharacterCardFactory;
 import server.Randomizer;
 import server.farm.MapleFarm;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import server.stores.IMaplePlayerShop;
 import tools.LogHelper;
@@ -87,7 +87,7 @@ public class MapleClient extends CClientSocket {
 
     private static final long serialVersionUID = 9179541993413738569L;
 
-    private MapleCharacter player;
+    private User player;
     private int channel = 1, accId = -1, world, birthday;
     private long LoginAuthCookie = 0;
     private boolean loggedIn = false, serverTransition = false;
@@ -146,11 +146,11 @@ public class MapleClient extends CClientSocket {
         return npc_mutex;
     }
 
-    public MapleCharacter getPlayer() {
+    public User getPlayer() {
         return player;
     }
 
-    public void setPlayer(MapleCharacter player) {
+    public void setPlayer(User player) {
         this.player = player;
     }
 
@@ -183,12 +183,12 @@ public class MapleClient extends CClientSocket {
         }
     }
 
-    public final List<MapleCharacter> loadCharacters(final int serverId) { // TODO make this less costly zZz
-        final List<MapleCharacter> chars = new LinkedList<>();
+    public final List<User> loadCharacters(final int serverId) { // TODO make this less costly zZz
+        final List<User> chars = new LinkedList<>();
 
         final Map<Integer, CardData> cardss = CharacterCardFactory.getInstance().loadCharacterCards(accId, serverId);
         for (final CharNameAndId cni : loadCharactersInternal(serverId)) {
-            final MapleCharacter chr = MapleCharacter.loadCharFromDB(cni.id, this, false, cardss);
+            final User chr = User.loadCharFromDB(cni.id, this, false, cardss);
             chars.add(chr);
             charInfo.put(chr.getId(), new Pair<>(chr.getLevel(), chr.getJob())); // to be used to update charCards
             if (!login_Auth(chr.getId())) {
@@ -198,8 +198,8 @@ public class MapleClient extends CClientSocket {
         return chars;
     }
 
-    public MapleCharacter loadCharacterById(int playerId) {
-        return MapleCharacter.loadCharFromDB(playerId, this, false);
+    public User loadCharacterById(int playerId) {
+        return User.loadCharFromDB(playerId, this, false);
     }
 
     public final void updateCharacterCards(final Map<Integer, Integer> cids) {
@@ -1259,11 +1259,11 @@ public class MapleClient extends CClientSocket {
         return getLogMessage(cfor, message, new Object[0]);
     }
 
-    public static String getLogMessage(final MapleCharacter cfor, final String message) {
+    public static String getLogMessage(final User cfor, final String message) {
         return getLogMessage(cfor == null ? null : cfor.getClient(), message);
     }
 
-    public static String getLogMessage(final MapleCharacter cfor, final String message, final Object... parms) {
+    public static String getLogMessage(final User cfor, final String message, final Object... parms) {
         return getLogMessage(cfor == null ? null : cfor.getClient(), message, parms);
     }
 

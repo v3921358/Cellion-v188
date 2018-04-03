@@ -23,7 +23,7 @@ package handling.game;
 
 import client.MapleClient;
 import constants.GameConstants;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import net.InPacket;
 import netty.ProcessPacket;
@@ -37,7 +37,7 @@ public final class PetBuff implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         iPacket.DecodeInteger(); //0
         int skill = iPacket.DecodeInteger();
         iPacket.DecodeByte(); //0

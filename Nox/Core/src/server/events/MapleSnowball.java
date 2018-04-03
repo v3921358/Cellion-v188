@@ -6,7 +6,7 @@ import client.MapleDisease;
 import server.Timer.EventTimer;
 import server.life.MobSkillFactory;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 
@@ -19,7 +19,7 @@ public class MapleSnowball extends MapleEvent {
     }
 
     @Override
-    public void finished(MapleCharacter chr) { //do nothing.
+    public void finished(User chr) { //do nothing.
     }
 
     @Override
@@ -125,7 +125,7 @@ public class MapleSnowball extends MapleEvent {
         }
 
         public void broadcast(MapleMap map, int message) {
-            for (MapleCharacter chr : map.getCharacters()) {
+            for (User chr : map.getCharacters()) {
                 //if ((team == 0 && chr.getPosition().y > -80) || (team == 1 && chr.getPosition().y <= -80)) {
                 chr.getClient().write(CField.snowballMessage(team, message));
                 //}
@@ -142,7 +142,7 @@ public class MapleSnowball extends MapleEvent {
             return getLeftX() + 275; //exact pos where you cant hit it, as it should knockback
         }
 
-        public static void hitSnowball(final MapleCharacter chr) {
+        public static void hitSnowball(final User chr) {
             /*                             	TEAM
             0 - bottom snowball
             1 - top snowball
@@ -192,7 +192,7 @@ public class MapleSnowball extends MapleEvent {
                             }
                             chr.getMap().broadcastMessage(CWvsContext.broadcastMsg(6, "Congratulations! Team " + (team == 0 ? "Story" : "Maple") + " has won the Snowball Event!"));
 
-                            for (MapleCharacter chrz : chr.getMap().getCharacters()) {
+                            for (User chrz : chr.getMap().getCharacters()) {
                                 if ((team == 0 && chrz.getTruePosition().y > -80) || (team == 1 && chrz.getTruePosition().y <= -80)) { //winner
                                     MapleSnowball.givePrize(chrz);
                                 }
@@ -230,7 +230,7 @@ public class MapleSnowball extends MapleEvent {
                                     oBall.broadcast(map, 5);
                                 }
                             }, 10000);
-                            for (MapleCharacter chrz : chr.getMap().getCharacters()) {
+                            for (User chrz : chr.getMap().getCharacters()) {
                                 if ((ball.getTeam() == 0 && chr.getTruePosition().y < -80) || (ball.getTeam() == 1 && chr.getTruePosition().y > -80)) {
                                     chrz.giveDebuff(MapleDisease.SEDUCE, MobSkillFactory.getMobSkill(128, 1)); //go left
                                 }

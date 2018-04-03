@@ -8,10 +8,10 @@ import client.inventory.MapleInventoryType;
 import constants.EventConstants;
 import constants.GameConstants;
 import constants.ServerConstants;
-import handling.jobs.Explorer;
-import handling.jobs.Explorer.ShadowerHandler;
-import handling.jobs.Sengoku;
-import handling.jobs.Sengoku.HayatoHandler;
+import client.jobs.Explorer;
+import client.jobs.Explorer.ShadowerHandler;
+import client.jobs.Sengoku;
+import client.jobs.Sengoku.HayatoHandler;
 import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
 import net.Packet;
@@ -23,7 +23,7 @@ import server.Timer.EtcTimer;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.messages.ExpGainTypes;
 import service.ChannelServer;
 import tools.ConcurrentEnumMap;
@@ -182,11 +182,11 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         return sponge.get();
     }
 
-    public void damage(MapleCharacter from, long damage, boolean updateAttackTime) {
+    public void damage(User from, long damage, boolean updateAttackTime) {
         damage(from, damage, updateAttackTime, 0);
     }
 
-    public void damage(MapleCharacter from, long damage, boolean updateAttackTime, int lastSkill) {
+    public void damage(User from, long damage, boolean updateAttackTime, int lastSkill) {
         if (from == null || damage <= 0 || !isAlive()) {
             return;
         }
@@ -269,7 +269,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                 } else { // Show HP
                     for (AttackerEntry mattacker : getAttackers()) {
                         for (AttackingMapleCharacter cattacker : mattacker.getAttackers()) {
-                            MapleCharacter chr = map.getCharacterById(cattacker.getAttacker());
+                            User chr = map.getCharacterById(cattacker.getAttacker());
                             if (chr == null) {
                                 continue; // ref is gone. logged off.
                             }
@@ -330,7 +330,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                             for (AttackerEntry mattacker : getAttackers()) {
                                 if (mattacker != null) {
                                     for (AttackingMapleCharacter cattacker : mattacker.getAttackers()) {
-                                        MapleCharacter chr = map.getCharacterById(cattacker.getAttacker());
+                                        User chr = map.getCharacterById(cattacker.getAttacker());
                                         if (chr == null) {
                                             continue;
                                         }
@@ -405,7 +405,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
      *  @purpose Provide the player will NX upon killing a monster, 
      *  with the value varrying based on multiple factors.
      */
-    public void monsterNxGainResult(MapleCharacter pPlayer, boolean bKiller) {
+    public void monsterNxGainResult(User pPlayer, boolean bKiller) {
         
         long nMobHp = getMobMaxHp();
         short nMobLv = stats.getLevel();
@@ -460,7 +460,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
      * multiple calls to MapleMap.getBurningFieldBonus() per character, since its all the same]
      * @param isKiller - Determines if this character receiving the EXP is the one who had the last hit.
      */
-    private void giveExpToCharacter(MapleCharacter attacker, boolean isKiller, long baseEXP,
+    private void giveExpToCharacter(User attacker, boolean isKiller, long baseEXP,
             int partybonusMultiplier, boolean highestDamage, int numExpSharers, byte partySize, int fieldPartyBonusPercentage,
             byte Class_Bonus_EXP_PERCENT, byte Premium_Bonus_EXP_PERCENT, int burningFieldBonusEXPRate,
             int lastskillID) {
@@ -635,7 +635,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         attacker.mobKilled(stats.getName(), getId(), lastskillID);
     }
 
-    public int killBy(MapleCharacter killer, int lastSkill) {
+    public int killBy(User killer, int lastSkill) {
         int totalBaseExp = getMobExp();
         AttackerEntry highest = null;
         long highdamage = 0;
@@ -656,7 +656,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             }
         }
 
-        MapleCharacter controll = getController();
+        User controll = getController();
         if (controll != null) { // this can/should only happen when a hidden gm attacks the monster
             if (GameConstants.isAzwanMap(killer.getMapId())) {
                 controll.getClient().write(MobPacket.stopControllingMonster(this, true));
@@ -898,15 +898,15 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         return carnivalTeam;
     }
 
-    public MapleCharacter getController() {
+    public User getController() {
         if (controller != -1) {
-            MapleCharacter chr = map.getCharacterById(controller);
+            User chr = map.getCharacterById(controller);
             return chr;
         }
         return null;
     }
 
-    public void setController(MapleCharacter chr) {
+    public void setController(User chr) {
         if (chr != null) {
             this.controller = chr.getId();
         } else {
@@ -914,8 +914,8 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
     }
 
-    public void switchController(MapleCharacter newController, boolean immediateAggro) {
-        MapleCharacter controllers = getController();
+    public void switchController(User newController, boolean immediateAggro) {
+        User controllers = getController();
         if (controllers == newController) {
             return;
         } else if (controllers != null) {
@@ -1024,7 +1024,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         sb.append(" mp, oid: ");
         sb.append(getObjectId());
         sb.append(" || Controller : ");
-        MapleCharacter chr = getController();
+        User chr = getController();
         sb.append(chr != null ? chr.getName() : "none");
 
         return sb.toString();
@@ -1071,7 +1071,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         return stats.getEffectiveness(e);
     }
 
-    public void applyStatus(MapleCharacter from, MonsterStatusEffect status, boolean poison, long duration, boolean checkboss, MapleStatEffect eff) {
+    public void applyStatus(User from, MonsterStatusEffect status, boolean poison, long duration, boolean checkboss, MapleStatEffect eff) {
         if (!isAlive() || getLinkCID() > 0) {
             return;
         }
@@ -1201,7 +1201,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                 damage(from, dam, false);
             }
         }
-        MapleCharacter con = getController();
+        User con = getController();
         if (stat == MonsterStatus.POISON || stat == MonsterStatus.VENOMOUS_WEAPON) {
             poisonsLock.writeLock().lock();
             try {
@@ -1256,7 +1256,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             effectz.setCancelTask(duration);
             stati.put(z.getKey(), effectz);
         }
-        MapleCharacter con = getController();
+        User con = getController();
         if (reflection.size() > 0) {
             this.reflectpack = MobPacket.applyMonsterStatus(getObjectId(), effect, reflection, skill);
             if (con != null) {
@@ -1359,7 +1359,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         return stats.getBuffToGive();
     }
 
-    public void doPoison(MonsterStatusEffect status, WeakReference<MapleCharacter> weakChr) {
+    public void doPoison(MonsterStatusEffect status, WeakReference<User> weakChr) {
         if ((status.getStati() == MonsterStatus.VENOMOUS_WEAPON || status.getStati() == MonsterStatus.POISON) && poisons.size() <= 0) {
             return;
         }
@@ -1371,7 +1371,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
         long damage = status.getPoisonSchedule();
         boolean shadowWeb = status.getSkill() == 4111003 || status.getSkill() == 14111001;
-        MapleCharacter chr = weakChr.get();
+        User chr = weakChr.get();
         boolean cancel = damage <= 0 || chr == null || chr.getMapId() != map.getId();
         if (damage >= hp) {
             damage = hp - 1;
@@ -1417,7 +1417,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         this.stolen = s;
     }
 
-    public void handleSteal(MapleCharacter chr) {
+    public void handleSteal(User chr) {
         double showdown = 100.0;
         MonsterStatusEffect mse = getBuff(MonsterStatus.SHOWDOWN);
         if (mse != null) {
@@ -1475,7 +1475,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             reflectpack = null;
         }
         mse.cancelPoisonSchedule(this);
-        MapleCharacter con = getController();
+        User con = getController();
         if (con != null) {
             map.broadcastMessage(con, MobPacket.cancelMonsterStatus(getObjectId(), stat), getTruePosition());
             con.getClient().write(MobPacket.cancelMonsterStatus(getObjectId(), stat));
@@ -1503,7 +1503,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                 reflectpack = null;
             }
             stat.cancelPoisonSchedule(this);
-            MapleCharacter con = getController();
+            User con = getController();
             if (con != null) {
                 map.broadcastMessage(con, MobPacket.cancelPoison(this.getObjectId(), stat), getTruePosition());
                 con.getClient().write(MobPacket.cancelPoison(this.getObjectId(), stat));
@@ -1622,11 +1622,11 @@ public class MapleMonster extends AbstractLoadedMapleLife {
          */
         List<AttackingMapleCharacter> getAttackers();
 
-        public void addDamage(MapleCharacter from, long damage, boolean updateAttackTime);
+        public void addDamage(User from, long damage, boolean updateAttackTime);
 
         public long getDamage();
 
-        public boolean contains(MapleCharacter chr);
+        public boolean contains(User chr);
 
         public void killedMob(MapleMap map, int baseExp, boolean mostDamage, int lastSkill, int killerCharId);
     }
@@ -1637,12 +1637,12 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         private final int chrid;
         private long lastAttackTime;
 
-        public SingleAttackerEntry(MapleCharacter from) {
+        public SingleAttackerEntry(User from) {
             this.chrid = from.getId();
         }
 
         @Override
-        public void addDamage(MapleCharacter from, long damage, boolean updateAttackTime) {
+        public void addDamage(User from, long damage, boolean updateAttackTime) {
             if (chrid == from.getId()) {
                 this.damage += damage;
                 if (updateAttackTime) {
@@ -1657,7 +1657,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
 
         @Override
-        public boolean contains(MapleCharacter chr) {
+        public boolean contains(User chr) {
             return chrid == chr.getId();
         }
 
@@ -1668,7 +1668,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
 
         @Override
         public void killedMob(MapleMap map, int baseExp, boolean mostDamage, int lastSkill, int killerCharId) {
-            MapleCharacter pPlayer = map.getCharacterById(chrid);
+            User pPlayer = map.getCharacterById(chrid);
             if (pPlayer != null && pPlayer.isAlive()) {
                 // Burning field bonus
                 final int burningFieldBonusEXP = getMap().getBurningFieldBonusEXP();
@@ -1724,10 +1724,10 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             return ret;
         }
 
-        private Map<MapleCharacter, OnePartyAttacker> resolveAttackers() {
-            Map<MapleCharacter, OnePartyAttacker> ret = new HashMap<>(attackers.size());
+        private Map<User, OnePartyAttacker> resolveAttackers() {
+            Map<User, OnePartyAttacker> ret = new HashMap<>(attackers.size());
             for (Entry<Integer, OnePartyAttacker> aentry : attackers.entrySet()) {
-                MapleCharacter chr = map.getCharacterById(aentry.getKey());
+                User chr = map.getCharacterById(aentry.getKey());
                 if (chr != null) {
                     ret.put(chr, aentry.getValue());
                 }
@@ -1736,7 +1736,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
 
         @Override
-        public boolean contains(MapleCharacter chr) {
+        public boolean contains(User chr) {
             return attackers.containsKey(chr.getId());
         }
 
@@ -1746,7 +1746,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
 
         @Override
-        public void addDamage(MapleCharacter from, long damage, boolean updateAttackTime) {
+        public void addDamage(User from, long damage, boolean updateAttackTime) {
             OnePartyAttacker oldPartyAttacker = attackers.get(from.getId());
             if (oldPartyAttacker != null) {
                 oldPartyAttacker.damage += damage;
@@ -1770,26 +1770,26 @@ public class MapleMonster extends AbstractLoadedMapleLife {
 
         @Override
         public void killedMob(MapleMap map, int baseExp, boolean mostDamage, int lastSkill, int killerCharId) {
-            MapleCharacter highestAttacker = null;
+            User highestAttacker = null;
             long iDamage, highestDamage = 0;
             int iexp;
             int fieldPartyMapBonusRate = 0; // bonus EXP rate acquired through a party play field
             double addedPartyLevel, levelMod, innerBaseExp;
 
-            Map<MapleCharacter, ExpMap> expMap = new HashMap<>();
+            Map<User, ExpMap> expMap = new HashMap<>();
             byte classBonusExp;
             byte premiumBonusExp;
 
-            Map<MapleCharacter, OnePartyAttacker> resolvedAttackers = resolveAttackers();
+            Map<User, OnePartyAttacker> resolvedAttackers = resolveAttackers();
 
             // Loop through for every player in the monster's list of attacker
-            for (Entry<MapleCharacter, OnePartyAttacker> attacker : resolvedAttackers.entrySet()) {
+            for (Entry<User, OnePartyAttacker> attacker : resolvedAttackers.entrySet()) {
                 MapleParty party = attacker.getValue().getLastKnownParty();
 
                 addedPartyLevel = 0;
                 classBonusExp = 0;
                 premiumBonusExp = 0;
-                List<MapleCharacter> expApplicable = new ArrayList<>();
+                List<User> expApplicable = new ArrayList<>();
 
                 int partyZoneLeechableSize = 0;
 
@@ -1802,7 +1802,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                             || monsterLevel - partychar.getLevel() <= ServerConstants.EXP_WITHIN_MONSTER; // between 40 of the monster
 
                     if (isEligibleToLeech) {
-                        MapleCharacter pchr = map.getCharacterById(partychar.getId());
+                        User pchr = map.getCharacterById(partychar.getId());
 
                         if (pchr != null && pchr.isAlive()) {
                             expApplicable.add(pchr);
@@ -1837,7 +1837,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                     }
                 }
 
-                for (MapleCharacter expReceiver : expApplicable) {
+                for (User expReceiver : expApplicable) {
                     iexp = expMap.get(expReceiver) == null ? 0 : expMap.get(expReceiver).exp;
                     levelMod = expReceiver.getLevel() / addedPartyLevel * ServerConstants.ATTACKER_EXP_RATIO;
                     iexp += (int) Math.round(((attacker.getKey().getId() == expReceiver.getId() ? ServerConstants.LEECHER_EXP_RATIO : 0.0) + levelMod) * innerBaseExp);
@@ -1862,7 +1862,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             final int burningFieldBonusEXP = getMap().getBurningFieldBonusEXP();
 
             // Give Exp
-            for (Entry<MapleCharacter, ExpMap> expReceiver : expMap.entrySet()) {
+            for (Entry<User, ExpMap> expReceiver : expMap.entrySet()) {
                 ExpMap expmap = expReceiver.getValue();
 
                 giveExpToCharacter(

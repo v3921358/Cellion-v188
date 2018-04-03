@@ -13,7 +13,7 @@ import java.util.List;
 import server.MapleItemInformationProvider;
 import net.InPacket;
 import server.MapleInventoryManipulator;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.potentials.ItemPotentialProvider;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -128,7 +128,7 @@ public class UseMagnifyingGlassHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         chr.setScrolledPosition((short) 0);
 

@@ -167,6 +167,7 @@ public class BeastTamerEffect extends AbstractEffect {
             case BeastTamer.FURIOUS_STRIKES:
                 break;
             case BeastTamer.LIL_FORT:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
                 break;
             case BeastTamer.MAJESTIC_TRUMPET:
                 break;

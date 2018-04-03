@@ -9,7 +9,7 @@ import java.util.Comparator;
 
 import database.DatabaseConnection;
 import server.MapleInventoryManipulator;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.LogHelper;
 
 public class MapleRing
@@ -57,7 +57,7 @@ public class MapleRing
         return null;
     }
 
-    public static void addToDB(int itemid, MapleCharacter chr, String player, int id, int[] ringId) throws SQLException {
+    public static void addToDB(int itemid, User chr, String player, int id, int[] ringId) throws SQLException {
         Connection con = DatabaseConnection.getConnection();
         PreparedStatement ps = con.prepareStatement("INSERT INTO rings (ringId, itemid, partnerChrId, partnerName, partnerRingId) VALUES (?, ?, ?, ?, ?)");
         ps.setInt(1, ringId[0]);
@@ -78,7 +78,7 @@ public class MapleRing
         ps.close();
     }
 
-    public static int createRing(int itemid, MapleCharacter partner1, String partner2, String msg, int id2, int sn) {
+    public static int createRing(int itemid, User partner1, String partner2, String msg, int id2, int sn) {
         try {
             if (partner1 == null) {
                 return -2;
@@ -93,7 +93,7 @@ public class MapleRing
         return 0;
     }
 
-    public static int[] makeRing(int itemid, MapleCharacter partner1, MapleCharacter partner2) throws Exception {
+    public static int[] makeRing(int itemid, User partner1, User partner2) throws Exception {
         int[] ringID = {MapleInventoryIdentifier.getInstance(), MapleInventoryIdentifier.getInstance()};
         try {
             addToDB(itemid, partner1, partner2.getName(), partner2.getId(), ringID);
@@ -103,7 +103,7 @@ public class MapleRing
         return ringID;
     }
 
-    public static int makeRing(int itemid, MapleCharacter partner1, String partner2, int id2, String msg, int sn) throws Exception {
+    public static int makeRing(int itemid, User partner1, String partner2, int id2, String msg, int sn) throws Exception {
         int[] ringID = {MapleInventoryIdentifier.getInstance(), MapleInventoryIdentifier.getInstance()};
         try {
             addToDB(itemid, partner1, partner2, id2, ringID);
@@ -163,7 +163,7 @@ public class MapleRing
         return hash;
     }
 
-    public static void removeRingFromDb(MapleCharacter player) {
+    public static void removeRingFromDb(User player) {
         try {
             Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT * FROM rings WHERE partnerChrId = ?");

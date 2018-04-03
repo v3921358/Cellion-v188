@@ -38,10 +38,10 @@ import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.SummonMovementType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.maps.objects.MapleDoor;
 import server.maps.objects.MapleMist;
-import server.maps.objects.MapleSummon;
+import server.maps.objects.Summon;
 import server.maps.objects.MechDoor;
 import server.quest.MapleQuest;
 import tools.LogHelper;
@@ -53,7 +53,7 @@ import tools.packet.JobPacket;
 
 public class PlayersHandler {
 
-    public static void Note(final InPacket iPacket, final MapleCharacter chr) {
+    public static void Note(final InPacket iPacket, final User chr) {
         final byte type = iPacket.DecodeByte();
 
         switch (type) {
@@ -88,7 +88,7 @@ public class PlayersHandler {
         }
     }
 
-    public static void UseDoor(final InPacket iPacket, final MapleCharacter chr) {
+    public static void UseDoor(final InPacket iPacket, final User chr) {
         final int oid = iPacket.DecodeInteger();
         final boolean mode = iPacket.DecodeByte() == 0; // specifies if backwarp or not, 1 town to target, 0 target to town
 
@@ -101,7 +101,7 @@ public class PlayersHandler {
         }
     }
 
-    public static void UseMechDoor(final InPacket iPacket, final MapleCharacter chr) {
+    public static void UseMechDoor(final InPacket iPacket, final User chr) {
         final int oid = iPacket.DecodeInteger();
         final Point pos = iPacket.DecodePosition();
         final int mode = iPacket.DecodeByte(); // specifies if backwarp or not, 1 town to target, 0 target to town
@@ -116,7 +116,7 @@ public class PlayersHandler {
         }
     }
 
-    public static void DressUpRequest(final MapleCharacter chr, InPacket iPacket) {
+    public static void DressUpRequest(final User chr, InPacket iPacket) {
         int code = iPacket.DecodeInteger();
         switch (code) {
             case 5010093:
@@ -130,7 +130,7 @@ public class PlayersHandler {
         }
     }
 
-    public static void TransformPlayer(final InPacket iPacket, final MapleClient c, final MapleCharacter chr) {
+    public static void TransformPlayer(final InPacket iPacket, final MapleClient c, final User chr) {
         // D9 A4 FD 00
         // 11 00
         // A0 C0 21 00
@@ -148,7 +148,7 @@ public class PlayersHandler {
         }
         switch (itemId) {
             case 2212000:
-                final MapleCharacter search_chr = chr.getMap().getCharacterByName(target);
+                final User search_chr = chr.getMap().getCharacterByName(target);
                 if (search_chr != null) {
                     MapleItemInformationProvider.getInstance().getItemEffect(2210023).applyTo(search_chr);
                     search_chr.dropMessage(6, chr.getName() + " has played a prank on you!");
@@ -158,7 +158,7 @@ public class PlayersHandler {
         }
     }
 
-    public static void startEvo(InPacket iPacket, MapleCharacter player, MapleClient c) {
+    public static void startEvo(InPacket iPacket, User player, MapleClient c) {
 
         /*     final List<Integer> maps = new ArrayList<>();
         switch (mapid) {
@@ -197,7 +197,7 @@ public class PlayersHandler {
     }
 
     public static void HOLLY(MapleClient c, InPacket iPacket) {
-        final MapleSummon obj = (MapleSummon) c.getPlayer().getMap().getMapObject(iPacket.DecodeInteger(), MapleMapObjectType.SUMMON);
+        final Summon obj = (Summon) c.getPlayer().getMap().getMapObject(iPacket.DecodeInteger(), MapleMapObjectType.SUMMON);
         if (obj == null) {
             return;
         }
@@ -206,7 +206,7 @@ public class PlayersHandler {
         if (skillid == 3121013) {
             Point poss = c.getPlayer().getPosition();
 
-            final MapleSummon tosummon = new MapleSummon(
+            final Summon tosummon = new Summon(
                     c.getPlayer(),
                     SkillFactory.getSkill(3121013).getEffect(obj.getSkillLevel()),
                     new Point(obj.getTruePosition().x, obj.getTruePosition().y),
@@ -222,7 +222,7 @@ public class PlayersHandler {
     }
 
     public static void FollowRequest(final InPacket iPacket, final MapleClient c) {
-        MapleCharacter tt = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInteger());
+        User tt = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInteger());
         if (iPacket.DecodeByte() > 0) {
             //1 when changing map
             tt = c.getPlayer().getMap().getCharacterById(c.getPlayer().getFollowId());
@@ -255,7 +255,7 @@ public class PlayersHandler {
 
     public static void FollowReply(final InPacket iPacket, final MapleClient c) {
         if (c.getPlayer().getFollowId() > 0 && c.getPlayer().getFollowId() == iPacket.DecodeInteger()) {
-            MapleCharacter tt = c.getPlayer().getMap().getCharacterById(c.getPlayer().getFollowId());
+            User tt = c.getPlayer().getMap().getCharacterById(c.getPlayer().getFollowId());
             if (tt != null && tt.getPosition().distanceSq(c.getPlayer().getPosition()) < 10000 && tt.getFollowId() == 0 && tt.getId() != c.getPlayer().getId()) { //estimate, should less
                 boolean accepted = iPacket.DecodeByte() > 0;
                 if (accepted) {
@@ -294,7 +294,7 @@ public class PlayersHandler {
     //     }
     public static void DoRing(final MapleClient c, final String name, final int itemid) {
         final int newItemId = itemid == 2240000 ? 1112803 : (itemid == 2240001 ? 1112806 : (itemid == 2240002 ? 1112807 : (itemid == 2240003 ? 1112809 : (1112300 + (itemid - 2240004)))));
-        final MapleCharacter chr = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
+        final User chr = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
         int errcode = 0;
         if (c.getPlayer().getMarriageId() > 0) {
             errcode = 0x17;
@@ -335,7 +335,7 @@ public class PlayersHandler {
                 final boolean accepted = iPacket.DecodeByte() > 0;
                 final String name = iPacket.DecodeString();
                 final int id = iPacket.DecodeInteger();
-                final MapleCharacter chr = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
+                final User chr = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
                 if (c.getPlayer().getMarriageId() > 0 || chr == null || chr.getId() != id || chr.getMarriageItemId() <= 0 || !chr.haveItem(chr.getMarriageItemId(), 1) || chr.getMarriageId() > 0 || !chr.isAlive() || chr.getEventInstance() != null || !c.getPlayer().isAlive() || c.getPlayer().getEventInstance() != null) {
                     c.write(CWvsContext.sendEngagement((byte) 0x1D, 0, null, null));
                     c.write(CWvsContext.enableActions());
@@ -423,7 +423,7 @@ public class PlayersHandler {
 
     public static void Report(final InPacket iPacket, final MapleClient c) {
         //0 = success 1 = unable to locate 2 = once a day 3 = you've been reported 4+ = unknown reason
-        MapleCharacter other;
+        User other;
         ReportType type;
         type = ReportType.getById(iPacket.DecodeByte());
         other = c.getPlayer().getMap().getCharacterByName(iPacket.DecodeString());
@@ -609,8 +609,8 @@ public class PlayersHandler {
                     return;
                 }
             case 7:
-                List<MapleCharacter> characters = new LinkedList();
-                for (MapleCharacter chr : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+                List<User> characters = new LinkedList();
+                for (User chr : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                     if (chr != c.getPlayer()) {
                         if (c.getPlayer().getQuestStatus(GameConstants.PLAYER_INFORMATION) == MapleQuestState.NotStarted || characters.isEmpty()) {
                             characters.add(chr);
@@ -635,13 +635,13 @@ public class PlayersHandler {
         }
     }
 
-    public static void LinkSkill(final InPacket iPacket, final MapleClient c, final MapleCharacter chr) {
+    public static void LinkSkill(final InPacket iPacket, final MapleClient c, final User chr) {
         //iPacket: [76 7F 31 01] [35 00 00 00]
         c.getPlayer().dropMessage(1, "Beginning link skill.");
         int skill = iPacket.DecodeInteger();
         int cid = iPacket.DecodeInteger();
         boolean found = false;
-        for (MapleCharacter chr2 : c.loadCharacters(c.getPlayer().getWorld())) {
+        for (User chr2 : c.loadCharacters(c.getPlayer().getWorld())) {
             if (chr2.getId() == cid) {
                 found = true;
             }
@@ -651,7 +651,7 @@ public class PlayersHandler {
             c.write(CWvsContext.enableActions());
             return;
         }
-        MapleCharacter.addLinkSkill(cid, skill);
+        User.addLinkSkill(cid, skill);
     }
 
     public static void reviveAzwan(InPacket iPacket, MapleClient c) {
@@ -743,7 +743,7 @@ public class PlayersHandler {
         c.getPlayer().setFriendShipPoints(joejoe, hermoninny, littledragon, ika);
     }
 
-    public static boolean inArea(MapleCharacter chr) {
+    public static boolean inArea(User chr) {
         for (Rectangle rect : chr.getMap().getSharedMapResources().areas) {
             if (rect.contains(chr.getTruePosition())) {
                 return true;

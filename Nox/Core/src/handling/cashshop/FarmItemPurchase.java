@@ -9,7 +9,7 @@ import client.MapleClient;
 import client.inventory.Item;
 import server.CashItem;
 import server.CashItemFactory;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CSPacket;
 
@@ -19,7 +19,7 @@ import tools.packet.CSPacket;
  */
 public class FarmItemPurchase {
 
-    public static void gems(InPacket iPacket, MapleClient c, MapleCharacter chr) {
+    public static void gems(InPacket iPacket, MapleClient c, User chr) {
         iPacket.Skip(1);
         int type = iPacket.DecodeInteger();//type again? #astral?
         int sn = iPacket.DecodeInteger();

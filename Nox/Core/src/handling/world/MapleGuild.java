@@ -27,7 +27,7 @@ import handling.world.MapleBBSThread.MapleBBSReply;
 import net.OutPacket;
 import net.Packet;
 import server.MapleStatEffect;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -41,7 +41,7 @@ public class MapleGuild implements java.io.Serializable {
     }
     public static final long serialVersionUID = 6322150443228168192L;
     private final List<MapleGuildCharacter> members = new CopyOnWriteArrayList<>();
-    private final List<MapleCharacter> pendingMembers = new CopyOnWriteArrayList<>();
+    private final List<User> pendingMembers = new CopyOnWriteArrayList<>();
     private final Map<Integer, MapleGuildSkill> guildSkills = new HashMap<>();
     private final String rankTitles[] = new String[5]; // 1 = master, 2 = jr, 5 = lowest member
     private String name, notice;
@@ -425,7 +425,7 @@ public class MapleGuild implements java.io.Serializable {
         return leader;
     }
 
-    public final MapleCharacter getLeader(final MapleClient c) {
+    public final User getLeader(final MapleClient c) {
         return c.getChannelServer().getPlayerStorage().getCharacterById(leader);
     }
 
@@ -675,7 +675,7 @@ public class MapleGuild implements java.io.Serializable {
         return 1;
     }
 
-    public final int addPendingGuildMember(final MapleCharacter chr) {
+    public final int addPendingGuildMember(final User chr) {
         // first of all, insert it into the members keeping alphabetical order of lowest ranks ;)
         lock.writeLock().lock();
         try {
@@ -689,7 +689,7 @@ public class MapleGuild implements java.io.Serializable {
         return 1;
     }
 
-    public final int removePendingGuildMember(final MapleCharacter chr) {
+    public final int removePendingGuildMember(final User chr) {
         // first of all, insert it into the members keeping alphabetical order of lowest ranks ;)
         lock.writeLock().lock();
         try {
@@ -1073,10 +1073,10 @@ public class MapleGuild implements java.io.Serializable {
     public final void addPendingMemberData(final OutPacket oPacket) {
         oPacket.EncodeShort(pendingMembers.size());//members.size()
 
-        for (final MapleCharacter mgc : pendingMembers) {
+        for (final User mgc : pendingMembers) {
             oPacket.EncodeInteger(mgc.getId());
         }
-        for (final MapleCharacter chr : pendingMembers) {
+        for (final User chr : pendingMembers) {
             GuildPacket.guildMemberEncode(oPacket, new MapleGuildCharacter(chr));
         }
     }
@@ -1086,7 +1086,7 @@ public class MapleGuild implements java.io.Serializable {
     // so this will be running mostly on a channel server, unlike the rest
     // of the class
     public static final MapleGuildResponse sendInvite(final MapleClient c, final String targetName) {
-        final MapleCharacter mc = c.getChannelServer().getPlayerStorage().getCharacterByName(targetName);
+        final User mc = c.getChannelServer().getPlayerStorage().getCharacterByName(targetName);
         if (mc == null) {
             return MapleGuildResponse.NOT_IN_CHANNEL;
         }
@@ -1101,7 +1101,7 @@ public class MapleGuild implements java.io.Serializable {
         return java.util.Collections.unmodifiableCollection(members);
     }
 
-    public Collection<MapleCharacter> getPendingMembers() {
+    public Collection<User> getPendingMembers() {
         return java.util.Collections.unmodifiableCollection(pendingMembers);
     }
 

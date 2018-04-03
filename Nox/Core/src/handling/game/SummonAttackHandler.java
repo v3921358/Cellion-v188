@@ -19,8 +19,8 @@ import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.SummonMovementType;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MapleSummon;
+import server.maps.objects.User;
+import server.maps.objects.Summon;
 import tools.Pair;
 import tools.packet.CField;
 import tools.packet.MobPacket;
@@ -46,7 +46,7 @@ public class SummonAttackHandler implements ProcessPacket<MapleClient> {
          * 34 D5 A0
          *
          */
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         if (chr == null || !chr.isAlive() || chr.getMap() == null) {
             return;
@@ -56,7 +56,7 @@ public class SummonAttackHandler implements ProcessPacket<MapleClient> {
         if (obj == null) {
             return;
         }
-        MapleSummon summon = (MapleSummon) obj;
+        Summon summon = (Summon) obj;
         SummonSkillEntry sse = SkillFactory.getSummonData(summon.getSkill());
         if (summon.getSkill() / 1000000 != 35 && summon.getSkill() != 33101008 && sse == null) {
             chr.dropMessage(5, "Error in processing attack.");

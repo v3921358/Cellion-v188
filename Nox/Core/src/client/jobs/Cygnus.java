@@ -1,7 +1,7 @@
 /*
  * Rexion Development
  */
-package handling.jobs;
+package client.jobs;
 
 import client.CharacterTemporaryStat;
 import client.MapleClient;
@@ -15,7 +15,7 @@ import java.util.concurrent.ScheduledFuture;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
 import server.Timer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.BuffPacket;
 import tools.packet.CField;
 
@@ -40,7 +40,7 @@ public class Cygnus {
 
     public static class NightWalkerHandler {
 
-        public static void handleDominionBuff(MapleCharacter pPlayer) {
+        public static void handleDominionBuff(User pPlayer) {
             if (!GameConstants.isNightWalkerCygnus(pPlayer.getJob())) {
                 return;
             }
@@ -60,7 +60,7 @@ public class Cygnus {
 
     public static class ThunderBreakerHandler {
 
-        public static void handleLightningBuff(MapleCharacter pPlayer) {
+        public static void handleLightningBuff(User pPlayer) {
             if (pPlayer == null && !GameConstants.isThunderBreakerCygnus(pPlayer.getJob()) && !pPlayer.hasSkill(ThunderBreaker.LIGHTNING_ELEMENTAL)) {
                 return;
             }

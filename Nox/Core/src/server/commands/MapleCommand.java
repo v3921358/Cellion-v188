@@ -2,7 +2,7 @@ package server.commands;
 
 import client.MapleClient;
 import constants.ServerConstants.CommandType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 /**
  * Represents a command given by a user
@@ -12,7 +12,7 @@ import server.maps.objects.MapleCharacter;
 public class MapleCommand {
 
     /**
-     * what {@link MapleCharacter#gm} level is required to use this command
+     * what {@link User#gm} level is required to use this command
      */
     private final int gmLevelReq;
     /**

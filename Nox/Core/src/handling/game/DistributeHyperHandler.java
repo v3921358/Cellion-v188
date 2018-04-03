@@ -5,7 +5,7 @@ import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
 import constants.ServerConstants;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -23,7 +23,7 @@ public class DistributeHyperHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         chr.updateTick(iPacket.DecodeInteger());
         int skillid = iPacket.DecodeInteger();

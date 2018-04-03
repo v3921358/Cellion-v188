@@ -4,7 +4,7 @@ import java.util.List;
 
 import client.MapleClient;
 import net.Packet;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.stores.AbstractPlayerStore.BoughtItem;
 import tools.Pair;
 
@@ -19,7 +19,7 @@ public interface IMaplePlayerShop {
 
     public String getDescription();
 
-    public List<Pair<Byte, MapleCharacter>> getVisitors();
+    public List<Pair<Byte, User>> getVisitors();
 
     public List<MaplePlayerShopItem> getItems();
 
@@ -27,11 +27,11 @@ public interface IMaplePlayerShop {
 
     public boolean removeItem(int item);
 
-    public boolean isOwner(MapleCharacter chr);
+    public boolean isOwner(User chr);
 
     public byte getShopType();
 
-    public byte getVisitorSlot(MapleCharacter visitor);
+    public byte getVisitorSlot(User visitor);
 
     public byte getFreeSlot();
 
@@ -53,9 +53,9 @@ public interface IMaplePlayerShop {
 
     public void broadcastToVisitors(Packet packet);
 
-    public void addVisitor(MapleCharacter visitor);
+    public void addVisitor(User visitor);
 
-    public void removeVisitor(MapleCharacter visitor);
+    public void removeVisitor(User visitor);
 
     public void removeAllVisitors(int error, int type);
 

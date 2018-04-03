@@ -14,7 +14,7 @@ import server.MapleStatEffect;
 import server.Timer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -31,7 +31,7 @@ public final class NonTargetAtomAttackHandler implements ProcessPacket<MapleClie
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         if (chr == null || chr.hasBlockedInventory() || chr.getMap() == null) {
             return;
         }
@@ -121,7 +121,7 @@ public final class NonTargetAtomAttackHandler implements ProcessPacket<MapleClie
         attack.cleanupMemory();
     }
 
-    public static void handleLuminousState(MapleCharacter chr, AttackInfo attack) {
+    public static void handleLuminousState(User chr, AttackInfo attack) {
         if (chr.getLevel() <= 30 || chr.getLuminousState() > 20040000) {
             return;
         }

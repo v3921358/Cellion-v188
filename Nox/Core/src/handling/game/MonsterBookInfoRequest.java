@@ -22,7 +22,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -40,7 +40,7 @@ public final class MonsterBookInfoRequest implements ProcessPacket<MapleClient> 
             return;
         }
         iPacket.DecodeInteger(); // tick
-        final MapleCharacter player = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInteger());
+        final User player = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInteger());
         c.write(CWvsContext.enableActions());
         if (player != null) {
             if (!player.isGM() || c.getPlayer().isGM()) {

@@ -7,7 +7,7 @@ import constants.GameConstants;
 import java.util.EnumMap;
 import java.util.Map;
 import server.Randomizer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -25,7 +25,7 @@ public class DistributeAPHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         Map<MapleStat, Long> statupdate = new EnumMap<>(MapleStat.class);
         chr.updateTick(iPacket.DecodeInteger());

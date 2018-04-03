@@ -12,7 +12,7 @@ import netty.ProcessPacket;
 import scripting.AbstractPlayerInteraction;
 import scripting.provider.NPCScriptManager;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CWvsContext;
 
 /**
@@ -96,7 +96,7 @@ public class BossMatchmakingHandler implements ProcessPacket<MapleClient> {
     
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter pPlayer = c.getPlayer();
+        final User pPlayer = c.getPlayer();
         pPlayer.updateTick(iPacket.DecodeInteger());
         int nBossType = iPacket.DecodeInteger();
         BossOperation nType = BossOperation.getFromValue(nBossType);

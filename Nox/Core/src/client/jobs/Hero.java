@@ -1,7 +1,7 @@
 /*
  * Rexion Development
  */
-package handling.jobs;
+package client.jobs;
 
 import client.CharacterTemporaryStat;
 import client.SkillFactory;
@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
 import server.Timer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.BuffPacket;
 import tools.packet.CField;
 import tools.packet.JobPacket.LuminousPacket;
@@ -31,7 +31,7 @@ public class Hero {
 
     public static class AranHandler {
 
-        public static void handleSwingStudies(MapleCharacter pPlayer) {
+        public static void handleSwingStudies(User pPlayer) {
             if (pPlayer == null && !GameConstants.isAran(pPlayer.getJob()) && !pPlayer.hasSkill(Aran.SWING_STUDIES_I)) {
                 return;
             }
@@ -47,7 +47,7 @@ public class Hero {
             pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, Aran.SWING_STUDIES_I, nDuration, buffEffects.statups, buffEffects));
         }
 
-        public static void handleAdrenalineRush(MapleCharacter pPlayer) {
+        public static void handleAdrenalineRush(User pPlayer) {
             if (pPlayer == null && !GameConstants.isAran(pPlayer.getJob()) && !pPlayer.hasSkill(Aran.ADRENALINE_RUSH)) {
                 return;
             }
@@ -68,7 +68,7 @@ public class Hero {
             pPlayer.getClient().write(CField.updateCombo(500));
         }
 
-        public static void handleComboAbility(MapleCharacter pPlayer, int nIncreaseCount) {
+        public static void handleComboAbility(User pPlayer, int nIncreaseCount) {
             if (pPlayer == null && !GameConstants.isAran(pPlayer.getJob()) && !pPlayer.hasSkill(Aran.COMBO_ABILITY)) {
                 return;
             }
@@ -114,7 +114,7 @@ public class Hero {
 
     public static class LuminousHandler {
         
-        public static void handleLuminousGauge(MapleCharacter pPlayer, int nSkillID) {
+        public static void handleLuminousGauge(User pPlayer, int nSkillID) {
             int nLightGauge = pPlayer.getLarknessRequest(false, false);
             int nDarkGauge = pPlayer.getLarknessRequest(false, true);
             int nLightFeathers = pPlayer.getLarknessRequest(true, false);
@@ -168,7 +168,7 @@ public class Hero {
     
     public static class PhantomHandler {
         
-        public static void handleDeck(MapleCharacter pPlayer) {
+        public static void handleDeck(User pPlayer) {
             int nCardCount = pPlayer.getPrimaryStack();
             if (nCardCount < 40) {
                 nCardCount++;
@@ -176,12 +176,12 @@ public class Hero {
             updateDeckRequest(pPlayer, nCardCount);
         }
         
-        public static void updateDeckRequest(MapleCharacter pPlayer, int nCardCount) {
+        public static void updateDeckRequest(User pPlayer, int nCardCount) {
             pPlayer.setPrimaryStack(nCardCount);
             pPlayer.getMap().broadcastMessage(PhantomPacket.updateCardStack(nCardCount));
         }
         
-        public static void judgementDrawRequest(MapleCharacter pPlayer, int nSkillID) {
+        public static void judgementDrawRequest(User pPlayer, int nSkillID) {
             Random pRandom = new Random();
             int nMinimumCard;
             int nMaximumCard;

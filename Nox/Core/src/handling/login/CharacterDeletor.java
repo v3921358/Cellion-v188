@@ -5,7 +5,7 @@ import java.util.List;
 import client.MapleClient;
 import handling.PacketThrottleLimits;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CLogin;
 import netty.ProcessPacket;
 
@@ -54,7 +54,7 @@ public final class CharacterDeletor implements ProcessPacket<MapleClient> {
             }
         }
         if (state == 0) {
-            List<MapleCharacter> chars = c.loadCharacters(c.getWorld());
+            List<User> chars = c.loadCharacters(c.getWorld());
             for (int i = 0; i < chars.size(); i++) {
                 if (chars.get(i).getCharListPosition() > c.loadCharacterById(charId).getCharListPosition()) {
                     chars.get(i).setCharListPosition(chars.get(i).getCharListPosition() - 1);
@@ -64,7 +64,7 @@ public final class CharacterDeletor implements ProcessPacket<MapleClient> {
             }
             //This is somewhat useless, but it's here becuase characters aren't actually deleted. (#ProLogging hehe) 
             //So we set the burning effect to false to make sure that players can make new ones
-            MapleCharacter deletedchar = c.loadCharacterById(charId);
+            User deletedchar = c.loadCharacterById(charId);
             if (!deletedchar.updateBurning(charId, false)) {
                 state = 20;
             } else {

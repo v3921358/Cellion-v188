@@ -22,7 +22,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -41,7 +41,7 @@ public final class CharacterInfoRequestHandler implements ProcessPacket<MapleCli
             return;
         }
         int objectid = iPacket.DecodeInteger();
-        MapleCharacter player = c.getPlayer().getMap().getCharacterById(objectid);
+        User player = c.getPlayer().getMap().getCharacterById(objectid);
         c.write(CWvsContext.enableActions());
         if (player != null) {
             c.write(CWvsContext.charInfo(player, c.getPlayer().getId() == objectid));

@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import server.MapleItemInformationProvider;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 /**
  * @author Steven
@@ -488,7 +488,7 @@ public class Enchant {
      * @param chr - character object
      * @param equip - The equip that will be upgraded
      */
-    public void canUpgrade(MapleCharacter chr, Equip equip) {
+    public void canUpgrade(User chr, Equip equip) {
         final List<EquipStat> eqStats = EquipHelper.calculateEquipStatsForEncoding(equip);
         if (InventoryConstants.isWeapon(equip.getItemId())) {
             if (!eqStats.contains(EquipStat.MMP)) {

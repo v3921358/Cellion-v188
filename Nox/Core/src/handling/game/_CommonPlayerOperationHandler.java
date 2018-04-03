@@ -10,8 +10,8 @@ import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.maps.FieldLimitType;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -304,7 +304,7 @@ public class _CommonPlayerOperationHandler {
                 }
             } else {
                 final String name = iPacket.DecodeString();
-                final MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
+                final User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
                 if (victim != null && !victim.isIntern() && c.getPlayer().getEventInstance() == null && victim.getEventInstance() == null) {
                     if (!FieldLimitType.VipRock.checkFlag(c.getPlayer().getMap()) && !FieldLimitType.VipRock.checkFlag(c.getChannelServer().getMapFactory().getMap(victim.getMapId())) && !victim.isInBlockedMap() && !c.getPlayer().isInBlockedMap()) {
                         c.getPlayer().changeMap(victim.getMap(), victim.getMap().findClosestPortal(victim.getTruePosition()));
@@ -365,7 +365,7 @@ public class _CommonPlayerOperationHandler {
         if (eff.getConsume() == 2) {
             if (c.getPlayer().getParty() != null && c.getPlayer().isAlive()) {
                 for (final MaplePartyCharacter pc : c.getPlayer().getParty().getMembers()) {
-                    final MapleCharacter chr = c.getPlayer().getMap().getCharacterById(pc.getId());
+                    final User chr = c.getPlayer().getMap().getCharacterById(pc.getId());
                     if (chr != null && chr.isAlive()) {
                         eff.applyTo(chr);
                     }
@@ -379,7 +379,7 @@ public class _CommonPlayerOperationHandler {
     }
 
     public static final boolean UsePetFood(MapleClient c, int itemId) {
-        MaplePet pet = c.getPlayer().getPet(0);
+        Pet pet = c.getPlayer().getPet(0);
         if (pet == null) {
             return false;
         }

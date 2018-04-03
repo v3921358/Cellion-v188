@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import server.Timer.EventTimer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 
@@ -21,7 +21,7 @@ public class MapleCoconut extends MapleEvent {
     }
 
     @Override
-    public void finished(MapleCharacter chr) { //do nothing.
+    public void finished(User chr) { //do nothing.
     }
 
     @Override
@@ -38,7 +38,7 @@ public class MapleCoconut extends MapleEvent {
     }
 
     @Override
-    public void onMapLoad(MapleCharacter chr) {
+    public void onMapLoad(User chr) {
         super.onMapLoad(chr);
         chr.getClient().write(CField.coconutScore(getCoconutScore()));
     }
@@ -131,7 +131,7 @@ public class MapleCoconut extends MapleEvent {
                 if (getMapleScore() == getStoryScore()) {
                     bonusTime();
                 } else {
-                    for (MapleCharacter chr : getMap(0).getCharacters()) {
+                    for (User chr : getMap(0).getCharacters()) {
                         if (chr.getTeam() == (getMapleScore() > getStoryScore() ? 0 : 1)) {
                             chr.getClient().write(CField.showEffect("event/coconut/victory"));
                             chr.getClient().write(CField.playSound("Coconut/Victory"));
@@ -153,13 +153,13 @@ public class MapleCoconut extends MapleEvent {
             @Override
             public void run() {
                 if (getMapleScore() == getStoryScore()) {
-                    for (MapleCharacter chr : getMap(0).getCharacters()) {
+                    for (User chr : getMap(0).getCharacters()) {
                         chr.getClient().write(CField.showEffect("event/coconut/lose"));
                         chr.getClient().write(CField.playSound("Coconut/Failed"));
                     }
                     warpOut();
                 } else {
-                    for (MapleCharacter chr : getMap(0).getCharacters()) {
+                    for (User chr : getMap(0).getCharacters()) {
                         if (chr.getTeam() == (getMapleScore() > getStoryScore() ? 0 : 1)) {
                             chr.getClient().write(CField.showEffect("event/coconut/victory"));
                             chr.getClient().write(CField.playSound("Coconut/Victory"));
@@ -181,7 +181,7 @@ public class MapleCoconut extends MapleEvent {
 
             @Override
             public void run() {
-                for (MapleCharacter chr : getMap(0).getCharacters()) {
+                for (User chr : getMap(0).getCharacters()) {
                     if ((getMapleScore() > getStoryScore() && chr.getTeam() == 0) || (getStoryScore() > getMapleScore() && chr.getTeam() == 1)) {
                         givePrize(chr);
                     }

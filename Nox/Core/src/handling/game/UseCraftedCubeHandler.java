@@ -13,7 +13,7 @@ import java.util.List;
 import server.MapleInventoryManipulator;
 import net.InPacket;
 import server.MapleItemInformationProvider;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.potentials.ItemPotentialProvider;
 import server.potentials.ItemPotentialTierType;
 import tools.LogHelper;
@@ -35,7 +35,7 @@ public class UseCraftedCubeHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         chr.updateTick(iPacket.DecodeInteger());
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(iPacket.DecodeShort());

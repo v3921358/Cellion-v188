@@ -9,7 +9,7 @@ import service.ChannelServer;
 import server.Randomizer;
 import server.Timer.MapTimer;
 import server.life.MapleLifeFactory;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import tools.LogHelper;
 import tools.packet.CField;
@@ -21,7 +21,7 @@ public class Event_DojoAgent {
             point2 = new Point(-193, 0),
             point3 = new Point(355, 0);
 
-    public static boolean warpStartAgent(final MapleCharacter c, final boolean party) {
+    public static boolean warpStartAgent(final User c, final boolean party) {
         final int stage = 1;
         final int mapid = baseAgentMapId + (stage * 100);
 
@@ -38,7 +38,7 @@ public class Event_DojoAgent {
         return false;
     }
 
-    public static boolean warpNextMap_Agent(final MapleCharacter c, final boolean fromResting) {
+    public static boolean warpNextMap_Agent(final User c, final boolean fromResting) {
         final int currentmap = c.getMapId();
         final int thisStage = (currentmap - baseAgentMapId) / 100;
 
@@ -74,7 +74,7 @@ public class Event_DojoAgent {
         return false;
     }
 
-    public static boolean warpStartDojo(final MapleCharacter c, final boolean party, final MapleMap currentmap) {
+    public static boolean warpStartDojo(final User c, final boolean party, final MapleMap currentmap) {
         int stage = 1;
         if (party || stage <= -1 || stage > 38) {
             stage = 1;
@@ -121,7 +121,7 @@ public class Event_DojoAgent {
         if (canenter) {
             if (party && c.getParty() != null) {
                 for (MaplePartyCharacter mem : c.getParty().getMembers()) {
-                    MapleCharacter chr = mapidd.getCharacterById(mem.getId());
+                    User chr = mapidd.getCharacterById(mem.getId());
                     if (chr != null && chr.isAlive()) {
                         chr.changeMap(map, map.getPortal(0));
                     }
@@ -134,12 +134,12 @@ public class Event_DojoAgent {
         return canenter;
     }
 
-    public static void failed(final MapleCharacter c) {
+    public static void failed(final User c) {
         final MapleMap currentmap = c.getMap();
         final MapleMap deadMap = c.getClient().getChannelServer().getMapFactory().getMap(925020002);
         if (c.getParty() != null && c.getParty().getMembers().size() > 1) {
             for (MaplePartyCharacter mem : c.getParty().getMembers()) {
-                MapleCharacter chr = currentmap.getCharacterById(mem.getId());
+                User chr = currentmap.getCharacterById(mem.getId());
                 if (chr != null) {
                     chr.changeMap(deadMap, deadMap.getPortal(0));
                 }
@@ -155,7 +155,7 @@ public class Event_DojoAgent {
     // 925023000 ~ 925023009
     // 925023600 ~ 925023609
     // 925024200 ~ 925024209
-    public static boolean warpNextMap(final MapleCharacter c, final boolean fromResting, final MapleMap currentmap) {
+    public static boolean warpNextMap(final User c, final boolean fromResting, final MapleMap currentmap) {
         try {
             final int temp = (currentmap.getId() - 925000000) / 100;
             final int thisStage = (int) (temp - ((temp / 100) * 100));
@@ -171,7 +171,7 @@ public class Event_DojoAgent {
                 clearMap(currentmap, true);
                 if (c.getParty() != null && c.getParty().getMembers().size() > 1) {
                     for (MaplePartyCharacter mem : c.getParty().getMembers()) {
-                        MapleCharacter chr = currentmap.getCharacterById(mem.getId());
+                        User chr = currentmap.getCharacterById(mem.getId());
                         if (chr != null) {
                             final int point = (points * 3);
                             c.getTrait(MapleTraitType.will).addExp(points, c);
@@ -196,7 +196,7 @@ public class Event_DojoAgent {
 
                 if (c.getParty() != null && c.getParty().getMembers().size() > 1) {
                     for (MaplePartyCharacter mem : c.getParty().getMembers()) {
-                        MapleCharacter chr = currentmap.getCharacterById(mem.getId());
+                        User chr = currentmap.getCharacterById(mem.getId());
                         if (chr != null) {
                             if (!chr.isAlive()) {
                                 chr.addHP(50);
@@ -238,7 +238,7 @@ public class Event_DojoAgent {
                     clearMap(map, false);
                     if (c.getParty() != null) {
                         for (MaplePartyCharacter mem : c.getParty().getMembers()) {
-                            MapleCharacter chr = currentmap.getCharacterById(mem.getId());
+                            User chr = currentmap.getCharacterById(mem.getId());
                             if (chr != null) {
                                 if (!chr.isAlive()) {
                                     chr.addHP(50);
@@ -267,7 +267,7 @@ public class Event_DojoAgent {
                             clearMap(mapz, false);
                             if (c.getParty() != null) {
                                 for (MaplePartyCharacter mem : c.getParty().getMembers()) {
-                                    MapleCharacter chr = currentmap.getCharacterById(mem.getId());
+                                    User chr = currentmap.getCharacterById(mem.getId());
                                     if (chr != null) {
                                         if (!chr.isAlive()) {
                                             chr.addHP(50);
@@ -289,7 +289,7 @@ public class Event_DojoAgent {
                 final MapleMap mappz = ch.getMapFactory().getMap(925020001);
                 if (c.getParty() != null) {
                     for (MaplePartyCharacter mem : c.getParty().getMembers()) {
-                        MapleCharacter chr = currentmap.getCharacterById(mem.getId());
+                        User chr = currentmap.getCharacterById(mem.getId());
                         if (chr != null) {
                             chr.dropMessage(5, "An error has occurred and you shall be brought to the beginning.");
                             chr.changeMap(mappz, mappz.getPortal(0));

@@ -28,7 +28,7 @@ import client.anticheat.CheatingOffense;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import server.Timer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import netty.ProcessPacket;
@@ -42,7 +42,7 @@ public final class PlayerEmotionHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         int emote = iPacket.DecodeInteger();
         if (emote > 7) {
             final int emoteid = 5159992 + emote;

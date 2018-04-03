@@ -6,8 +6,8 @@ import client.MapleClient;
 import handling.AbstractMaplePacketHandler;
 import handling.world.MovementParse;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MapleSummon;
+import server.maps.objects.User;
+import server.maps.objects.Summon;
 import server.movement.LifeMovementFragment;
 import tools.packet.CField.SummonPacket;
 import netty.ProcessPacket;
@@ -25,12 +25,12 @@ public class SummonMovement implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         int oid = iPacket.DecodeInteger();
-        MapleSummon sum = null;
-        List<MapleSummon> summons = chr.getSummonsReadLock();
+        Summon sum = null;
+        List<Summon> summons = chr.getSummonsReadLock();
         try {
-            for (MapleSummon summon : summons) {
+            for (Summon summon : summons) {
                 if (summon.getObjectId() == oid) {
                     sum = summon;
                 }

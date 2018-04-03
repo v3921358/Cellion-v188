@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import database.DatabaseConnection;
 import handling.world.World;
 import net.Packet;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
 import tools.packet.CWvsContext.FamilyPacket;
@@ -344,7 +344,7 @@ public final class MapleFamily implements java.io.Serializable {
         return 0;
     }
 
-    public final MapleFamilyCharacter addFamilyMemberInfo(final MapleCharacter mc, final int seniorid, final int junior1, final int junior2) {
+    public final MapleFamilyCharacter addFamilyMemberInfo(final User mc, final int seniorid, final int junior1, final int junior2) {
         final MapleFamilyCharacter ret = new MapleFamilyCharacter(mc, id, seniorid, junior1, junior2);
         members.put(mc.getId(), ret);
         ret.resetPedigree(this);
@@ -429,7 +429,7 @@ public final class MapleFamily implements java.io.Serializable {
         this.notice = notice;
     }
 
-    public final void memberLevelJobUpdate(final MapleCharacter mgc) {
+    public final void memberLevelJobUpdate(final User mgc) {
         final MapleFamilyCharacter member = getMFC(mgc.getId());
         if (member != null) {
             int old_level = member.getLevel();

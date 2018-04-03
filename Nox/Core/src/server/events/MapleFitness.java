@@ -3,7 +3,7 @@ package server.events;
 import java.util.concurrent.ScheduledFuture;
 
 import server.Timer.EventTimer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 
@@ -19,12 +19,12 @@ public class MapleFitness extends MapleEvent {
     }
 
     @Override
-    public void finished(final MapleCharacter chr) {
+    public void finished(final User chr) {
         givePrize(chr);
     }
 
     @Override
-    public void onMapLoad(MapleCharacter chr) {
+    public void onMapLoad(User chr) {
         super.onMapLoad(chr);
         if (isTimerStarted()) {
             chr.getClient().write(CField.getClock((int) (getTimeLeft() / 1000)));
@@ -44,7 +44,7 @@ public class MapleFitness extends MapleEvent {
             @Override
             public void run() {
                 for (int i = 0; i < type.mapids.length; i++) {
-                    for (MapleCharacter chr : getMap(i).getCharacters()) {
+                    for (User chr : getMap(i).getCharacters()) {
                         warpBack(chr);
                     }
                 }

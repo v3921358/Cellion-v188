@@ -42,7 +42,7 @@ import server.movement.LifeMovementFragment;
 import server.movement.MovementTypeA;
 import tools.LogHelper;
 
-public class MaplePet extends MapleMapObject {
+public class Pet extends MapleMapObject {
 
     public static enum PetFlag {
 
@@ -101,13 +101,13 @@ public class MaplePet extends MapleMapObject {
     private boolean changed = false;
     private int color = -1, giant = 100, transform = 0, reinforced = 0;
 
-    public MaplePet(int id, short position, int uniqueid, short flag) {
+    public Pet(int id, short position, int uniqueid, short flag) {
         petItem = new Item(id, position, (short) 1, flag, uniqueid);
     }
 
-    public static final MaplePet loadFromDb(int itemid, int uId, short inventorypos, short flags) {
+    public static final Pet loadFromDb(int itemid, int uId, short inventorypos, short flags) {
         try {
-            final MaplePet ret = new MaplePet(itemid, inventorypos, uId, flags);
+            final Pet ret = new Pet(itemid, inventorypos, uId, flags);
 
             Connection con = DatabaseConnection.getConnection(); // Get a connection to the database
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM pets WHERE petid = ?")) {
@@ -157,11 +157,11 @@ public class MaplePet extends MapleMapObject {
         }
     }
 
-    public static final MaplePet createPet(final int itemid, final int uniqueid) {
+    public static final Pet createPet(final int itemid, final int uniqueid) {
         return createPet(itemid, MapleItemInformationProvider.getInstance().getName(itemid), 1, 0, 100, uniqueid, itemid == 5000054 ? 18000 : 0, (short) 0);
     }
 
-    public static final MaplePet createPet(int itemid, String name, int level, int closeness, int fullness, int uniqueid, int secondsLeft, short flag) {
+    public static final Pet createPet(int itemid, String name, int level, int closeness, int fullness, int uniqueid, int secondsLeft, short flag) {
         if (uniqueid <= -1) { //wah
             uniqueid = MapleInventoryIdentifier.getInstance();
         }
@@ -181,7 +181,7 @@ public class MaplePet extends MapleMapObject {
             return null;
         }
 
-        final MaplePet pet = new MaplePet(itemid, (short) -1, uniqueid, flag);
+        final Pet pet = new Pet(itemid, (short) -1, uniqueid, flag);
         pet.setName(name);
         pet.setLevel(level);
         pet.setFullness(fullness);

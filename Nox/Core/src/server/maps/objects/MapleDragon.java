@@ -10,7 +10,7 @@ public class MapleDragon extends AnimatedMapleMapObject {
 
     private final int owner, jobid;
 
-    public MapleDragon(MapleCharacter owner) {
+    public MapleDragon(User owner) {
         super();
         this.owner = owner.getId();
         this.jobid = owner.getJob();

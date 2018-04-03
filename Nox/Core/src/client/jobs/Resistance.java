@@ -1,12 +1,11 @@
 /*
  * Rexion Development
  */
-package handling.jobs;
+package client.jobs;
 
 import client.CharacterTemporaryStat;
 import client.MapleStat;
 import client.Skill;
-import handling.jobs.*;
 import client.SkillFactory;
 import constants.GameConstants;
 import constants.skills.Aran;
@@ -14,7 +13,7 @@ import constants.skills.Blaster;
 import java.util.concurrent.ScheduledFuture;
 import server.MapleStatEffect;
 import server.Timer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.BuffPacket;
 import tools.packet.JobPacket;
 import tools.packet.JobPacket.BlasterPacket;
@@ -28,25 +27,25 @@ public class Resistance {
 
     public static class BlasterHandler {
 
-        public static void enterCylinderState(MapleCharacter pPlayer) {
+        public static void enterCylinderState(User pPlayer) {
             short nAmmo = (short) getMaxAmmo(pPlayer);
             int nGauge = 0;
             updateCylinderRequest(pPlayer, nAmmo, nGauge);
         }
 
-        public static void handleCylinderReload(MapleCharacter pPlayer) {
+        public static void handleCylinderReload(User pPlayer) {
             short nAmmo = (short) getMaxAmmo(pPlayer);
             int nGauge = pPlayer.getAdditionalStack();
             updateCylinderRequest(pPlayer, nAmmo, nGauge);
         }
 
-        public static void handleAmmoCost(MapleCharacter pPlayer) {
+        public static void handleAmmoCost(User pPlayer) {
             short nAmmo = (short) (pPlayer.getPrimaryStack() - 1);
             int nGauge = pPlayer.getAdditionalStack();
             updateCylinderRequest(pPlayer, nAmmo, nGauge);
         }
 
-        public static void handleGaugeIncrease(MapleCharacter pPlayer) {
+        public static void handleGaugeIncrease(User pPlayer) {
             short nAmmo = (short) (pPlayer.getPrimaryStack());
             int nGauge = pPlayer.getAdditionalStack() + 1;
             if (nGauge > getMaxAmmo(pPlayer)) {
@@ -55,7 +54,7 @@ public class Resistance {
             updateCylinderRequest(pPlayer, nAmmo, nGauge);
         }
 
-        public static void updateCylinderRequest(MapleCharacter pPlayer, int nAmmo, int nGauge) {
+        public static void updateCylinderRequest(User pPlayer, int nAmmo, int nGauge) {
             pPlayer.setPrimaryStack(nAmmo);
             pPlayer.setAdditionalStack(nGauge);
             
@@ -65,7 +64,7 @@ public class Resistance {
             pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, Blaster.REVOLVING_CANNON, 2100000000, buffEffects.statups, buffEffects));
         }
         
-        public static void handleOverheat(MapleCharacter pPlayer) {
+        public static void handleOverheat(User pPlayer) {
             int nDuration = 7000;
             final MapleStatEffect buffEffects = SkillFactory.getSkill(Blaster.BUNKER_BUSTER_EXPLOSION).getEffect(pPlayer.getTotalSkillLevel(Blaster.BUNKER_BUSTER_EXPLOSION));
             
@@ -79,7 +78,7 @@ public class Resistance {
             updateCylinderRequest(pPlayer, pPlayer.getPrimaryStack(), 0);
         }
         
-        public static int getMaxAmmo(MapleCharacter pPlayer) {
+        public static int getMaxAmmo(User pPlayer) {
             int nMaxAmmo = 3;
             if(pPlayer.hasSkill(Blaster.REVOLVING_CANNON_PLUS)) {
                 nMaxAmmo = 4;
@@ -93,7 +92,7 @@ public class Resistance {
             return nMaxAmmo;
         }
         
-        public static void requestBlastShield(MapleCharacter pPlayer) {
+        public static void requestBlastShield(User pPlayer) {
             Skill pSkill = SkillFactory.getSkill(constants.skills.Blaster.BLAST_SHIELD);
             MapleStatEffect pEffect = pSkill.getEffect(pPlayer.getTotalSkillLevel(pSkill));
             
@@ -102,7 +101,7 @@ public class Resistance {
             pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, pSkill.getId(), 3000, pEffect.statups, pEffect));
         }
         
-        public static void requestVitalityShield(MapleCharacter pPlayer) {
+        public static void requestVitalityShield(User pPlayer) {
             if (!pPlayer.hasBuff(CharacterTemporaryStat.RWBarrier)) {
                 return;
             }

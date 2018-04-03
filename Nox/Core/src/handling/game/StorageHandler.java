@@ -9,9 +9,9 @@ import constants.InventoryConstants;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MapleStorage;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
-import server.maps.objects.MapleCharacter.MapleCharacterConversationType;
+import server.maps.objects.User.MapleCharacterConversationType;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -32,7 +32,7 @@ public class StorageHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         byte mode = iPacket.DecodeByte();
 
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         if (chr == null) {
             return;
         }

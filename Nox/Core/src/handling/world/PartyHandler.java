@@ -5,7 +5,7 @@ import java.util.List;
 
 import client.MapleClient;
 import server.maps.FieldLimitType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 
@@ -25,7 +25,7 @@ public class PartyHandler {
             return;
         }
         List<MapleParty> parties = new ArrayList<>();
-        for (MapleCharacter chr : c.getPlayer().getMap().getCharacters()) {
+        for (User chr : c.getPlayer().getMap().getCharacters()) {
             if ((chr.getParty() != null)
                     && (chr.getParty().getId() != c.getPlayer().getParty().getId()) && (!parties.contains(chr.getParty()))) {
                 parties.add(chr.getParty());

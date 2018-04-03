@@ -4,7 +4,7 @@ import client.MapleClient;
 import client.MonsterStatus;
 import server.life.MapleMonster;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import netty.ProcessPacket;
 
@@ -21,7 +21,7 @@ public class MobBombHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         MapleMap map = chr.getMap();
         if (map == null) {
             return;

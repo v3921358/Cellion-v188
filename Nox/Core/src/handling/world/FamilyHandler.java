@@ -5,7 +5,7 @@ import java.util.List;
 import client.MapleCharacterUtil;
 import client.MapleClient;
 import server.maps.FieldLimitType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import tools.packet.CWvsContext.FamilyPacket;
@@ -13,7 +13,7 @@ import tools.packet.CWvsContext.FamilyPacket;
 public class FamilyHandler {
 
     public static final void RequestFamily(final InPacket iPacket, MapleClient c) {
-        MapleCharacter chr = c.getChannelServer().getPlayerStorage().getCharacterByName(iPacket.DecodeString());
+        User chr = c.getChannelServer().getPlayerStorage().getCharacterByName(iPacket.DecodeString());
         if (chr != null) {
             c.write(FamilyPacket.getFamilyPedigree(chr));
         }
@@ -33,7 +33,7 @@ public class FamilyHandler {
         if (!success) {
             return;
         }
-        MapleCharacter victim = null;
+        User victim = null;
         switch (entry) {
             case Teleport: //teleport: need add check for if not a safe place
                 victim = c.getChannelServer().getPlayerStorage().getCharacterByName(iPacket.DecodeString());
@@ -85,13 +85,29 @@ public class FamilyHandler {
                         if (chr == -1) {
                             continue; //STOP WTF?! take reps though..
                         }
-                        MapleCharacter chrr = World.getStorage(chr).getCharacterById(chrz.getId());
+                        User chrr = World.getStorage(chr).getCharacterById(chrz.getId());
                         entry.applyTo(chrr);
                         //chrr.getClient().write(FamilyPacket.familyBuff(entry.type, type, entry.effect, entry.duration*60000));
                     }
                 }
                 break;
             /*case EXP_Party:
+             case Drop_Party_12: // drop rate + 100% party 30 min
+             case Drop_Party_15: // exp rate + 100% party 30 min
+             entry.applyTo(c.getPlayer());
+             //c.write(FamilyPacket.familyBuff(entry.type, type, entry.effect, entry.duration*60000));
+             if (c.getPlayer().getParty() != null ) {
+             for (MaplePartyCharacter mpc : c.getPlayer().getParty().getMembers()) {
+             if (mpc.getId() != c.getPlayer().getId()) {
+             MapleCharacter chr = c.getPlayer().getMap().getCharacterById(mpc.getId());
+             if (chr != null) {
+             entry.applyTo(chr);
+             //chr.getClient().write(FamilyPacket.familyBuff(entry.type, type, entry.effect, entry.duration*60000));
+             }
+             }
+             }
+             }
+             break;*/            /*case EXP_Party:
              case Drop_Party_12: // drop rate + 100% party 30 min
              case Drop_Party_15: // exp rate + 100% party 30 min
              entry.applyTo(c.getPlayer());
@@ -122,7 +138,7 @@ public class FamilyHandler {
         if (c.getPlayer() == null) {
             return;
         }
-        MapleCharacter addChr = c.getChannelServer().getPlayerStorage().getCharacterByName(iPacket.DecodeString());
+        User addChr = c.getChannelServer().getPlayerStorage().getCharacterByName(iPacket.DecodeString());
         if (addChr == null) {
             c.getPlayer().dropMessage(1, "The name you requested is incorrect or he/she is currently not logged in.");
         } else if (addChr.getFamilyId() == c.getPlayer().getFamilyId() && addChr.getFamilyId() > 0) {
@@ -157,7 +173,7 @@ public class FamilyHandler {
 
     public static final void FamilySummon(final InPacket iPacket, MapleClient c) {
         MapleFamilyBuff cost = MapleFamilyBuff.Summon;
-        MapleCharacter tt = c.getChannelServer().getPlayerStorage().getCharacterByName(iPacket.DecodeString());
+        User tt = c.getChannelServer().getPlayerStorage().getCharacterByName(iPacket.DecodeString());
         if (c.getPlayer().getFamilyId() > 0 && tt != null && tt.getFamilyId() == c.getPlayer().getFamilyId() && !FieldLimitType.VipRock.checkFlag(tt.getMap())
                 && !FieldLimitType.VipRock.checkFlag(c.getPlayer().getMap()) && tt.canUseFamilyBuff(cost)
                 && c.getPlayer().getTeleportName().equals(tt.getName()) && tt.getCurrentRep() > cost.rep && !c.getPlayer().isInBlockedMap() && !tt.isInBlockedMap()) {
@@ -242,7 +258,7 @@ public class FamilyHandler {
     }
 
     public static final void AcceptFamily(InPacket iPacket, MapleClient c) {
-        MapleCharacter inviter = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInteger());
+        User inviter = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInteger());
         if (inviter != null && c.getPlayer().getSeniorId() == 0 && (c.getPlayer().isGM() || !inviter.isHidden()) && inviter.getLevel() - 20 <= c.getPlayer().getLevel() && inviter.getLevel() >= 10 && inviter.getName().equals(iPacket.DecodeString()) && inviter.getNoJuniors() < 2 /*&& inviter.getFamily().getGens() < 1000*/ && c.getPlayer().getLevel() >= 10) {
             boolean accepted = iPacket.DecodeByte() > 0;
             inviter.getClient().write(FamilyPacket.sendFamilyJoinResponse(accepted, c.getPlayer().getName()));

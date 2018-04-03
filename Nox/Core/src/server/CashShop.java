@@ -19,7 +19,7 @@ import client.inventory.MapleRing;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import database.DatabaseConnection;
-import server.maps.objects.MaplePet;
+import server.maps.objects.Pet;
 import tools.Pair;
 import tools.packet.CSPacket;
 
@@ -119,7 +119,7 @@ public class CashShop implements Serializable {
             item.setGMLog("Cash Shop: " + cItem.getSN() + " on " + LocalDateTime.now());
             item.setGiftFrom(gift);
             if (InventoryConstants.isPet(cItem.getId())) {
-                final MaplePet pet = MaplePet.createPet(cItem.getId(), uniqueid);
+                final Pet pet = Pet.createPet(cItem.getId(), uniqueid);
                 if (pet != null) {
                     item.setPet(pet);
                 }
@@ -167,7 +167,7 @@ public class CashShop implements Serializable {
             item.setGMLog("Cash Shop: " + cItem.getSN() + " on " + LocalDateTime.now());
             item.setGiftFrom(gift);
             if (InventoryConstants.isPet(cItem.getItemId())) {
-                final MaplePet pet = MaplePet.createPet(cItem.getItemId(), uniqueid);
+                final Pet pet = Pet.createPet(cItem.getItemId(), uniqueid);
                 if (pet != null) {
                     item.setPet(pet);
                 }

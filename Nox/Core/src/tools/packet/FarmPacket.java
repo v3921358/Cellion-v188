@@ -10,7 +10,7 @@ import service.SendPacketOpcode;
 import net.OutPacket;
 import net.Packet;
 import server.farm.MapleFarm;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 
 /**
@@ -332,7 +332,7 @@ public class FarmPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet updateUserFarmInfo(MapleCharacter chr, boolean update) {
+    public static Packet updateUserFarmInfo(User chr, boolean update) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.FARM_USER_INFO.getValue());
@@ -347,7 +347,7 @@ public class FarmPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet sendFarmRanking(MapleCharacter chr, List<Pair<MapleFarm, Integer>> rankings) {
+    public static Packet sendFarmRanking(User chr, List<Pair<MapleFarm, Integer>> rankings) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.FARM_RANKING.getValue());
@@ -370,7 +370,7 @@ public class FarmPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet updateAvatar(Pair<WorldOption, MapleCharacter> from, Pair<WorldOption, MapleCharacter> to, boolean change) {
+    public static Packet updateAvatar(Pair<WorldOption, User> from, Pair<WorldOption, User> to, boolean change) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.FARM_AVATAR.getValue());

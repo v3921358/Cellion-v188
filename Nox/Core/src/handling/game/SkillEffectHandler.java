@@ -25,7 +25,7 @@ import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -40,7 +40,7 @@ public final class SkillEffectHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         int skillId = iPacket.DecodeInteger();
         if (skillId >= 91000000 && skillId < 100000000) {
             chr.getClient().write(CWvsContext.enableActions());

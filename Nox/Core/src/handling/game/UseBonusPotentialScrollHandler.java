@@ -19,7 +19,7 @@ import net.InPacket;
 import netty.ProcessPacket;
 import server.MapleInventoryManipulator;
 import server.Randomizer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.potentials.ItemPotentialProvider;
 import static server.potentials.ItemPotentialProvider.generateBonusPotential;
 import server.potentials.ItemPotentialTierType;
@@ -39,7 +39,7 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<MapleClient
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter pPlayer = c.getPlayer();
+        User pPlayer = c.getPlayer();
         pPlayer.updateTick(iPacket.DecodeInteger());
         short nSlot = iPacket.DecodeShort();
         short nDestination = iPacket.DecodeShort();

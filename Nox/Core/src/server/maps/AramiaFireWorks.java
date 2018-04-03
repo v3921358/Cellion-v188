@@ -7,7 +7,7 @@ import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.Timer.EventTimer;
 import server.life.MapleLifeFactory;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.maps.objects.MapleReactor;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -32,7 +32,7 @@ public class AramiaFireWorks {
         1234, 1234, 1234, 1234, 1234, 1114, 1114, 1140};
     private static final int flake_Y = 149;
 
-    public final void giveKegs(final MapleCharacter c, final int kegs) {
+    public final void giveKegs(final User c, final int kegs) {
         this.kegs += kegs;
         if (this.kegs >= MAX_KEGS) {
             this.kegs = 0;
@@ -40,7 +40,7 @@ public class AramiaFireWorks {
         }
     }
 
-    private void broadcastServer(final MapleCharacter c, final int itemid) {
+    private void broadcastServer(final User c, final int itemid) {
         World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(6, itemid, "<Channel " + c.getClient().getChannel() + "> " + c.getMap().getMapName() + " : The amount of {" + MapleItemInformationProvider.getInstance().getName(itemid) + "} has reached the limit!"));
     }
 
@@ -48,7 +48,7 @@ public class AramiaFireWorks {
         return (short) ((kegs / MAX_KEGS) * 10000);
     }
 
-    private void broadcastEvent(final MapleCharacter c) {
+    private void broadcastEvent(final User c) {
         broadcastServer(c, KEG_ID);
         // Henesys Park
         EventTimer.getInstance().schedule(new Runnable() {
@@ -81,7 +81,7 @@ public class AramiaFireWorks {
         }
     }
 
-    public final void giveSuns(final MapleCharacter c, final int kegs) {
+    public final void giveSuns(final User c, final int kegs) {
         this.sunshines += kegs;
         //have to broadcast a Reactor?
         final MapleMap map = c.getClient().getChannelServer().getMapFactory().getMap(970010000);
@@ -116,7 +116,7 @@ public class AramiaFireWorks {
         return (short) ((sunshines / MAX_SUN) * 10000);
     }
 
-    private void broadcastSun(final MapleCharacter c) {
+    private void broadcastSun(final User c) {
         broadcastServer(c, SUN_ID);
         // Henesys Park
         EventTimer.getInstance().schedule(new Runnable() {
@@ -164,7 +164,7 @@ public class AramiaFireWorks {
         }
     }
 
-    public final void giveDecs(final MapleCharacter c, final int kegs) {
+    public final void giveDecs(final User c, final int kegs) {
         this.decorations += kegs;
         //have to broadcast a Reactor?
         final MapleMap map = c.getClient().getChannelServer().getMapFactory().getMap(555000000);
@@ -199,7 +199,7 @@ public class AramiaFireWorks {
         return (short) ((decorations / MAX_DEC) * 10000);
     }
 
-    private void broadcastDec(final MapleCharacter c) {
+    private void broadcastDec(final User c) {
         broadcastServer(c, DEC_ID);
         EventTimer.getInstance().schedule(new Runnable() {
 

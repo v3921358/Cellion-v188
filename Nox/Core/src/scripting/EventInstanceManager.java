@@ -33,7 +33,7 @@ import server.Timer.EventTimer;
 import server.life.MapleMonster;
 import server.maps.MapleMap;
 import server.maps.MapleMapFactory;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.messages.GiveBuffMessage;
 import server.quest.MapleQuest;
 import tools.LogHelper;
@@ -43,7 +43,7 @@ import tools.packet.CWvsContext;
 
 public class EventInstanceManager {
 
-    private List<MapleCharacter> chars = new LinkedList<>(); //this is messy
+    private List<User> chars = new LinkedList<>(); //this is messy
     private List<Integer> dced = new LinkedList<>();
     private List<MapleMonster> mobs = new LinkedList<>();
     private Map<Integer, Integer> killCount = new HashMap<>();
@@ -66,7 +66,7 @@ public class EventInstanceManager {
         this.channel = channel;
     }
 
-    public void registerPlayer(MapleCharacter chr) {
+    public void registerPlayer(User chr) {
         if (disposed || chr == null) {
             return;
         }
@@ -84,7 +84,7 @@ public class EventInstanceManager {
         }
     }
 
-    public void changedMap(final MapleCharacter chr, final int mapid) {
+    public void changedMap(final User chr, final int mapid) {
         if (disposed) {
             return;
         }
@@ -135,7 +135,7 @@ public class EventInstanceManager {
             eventTimer = null;
             final int timesend = (int) time / 1000;
 
-            for (MapleCharacter chr : getPlayers()) {
+            for (User chr : getPlayers()) {
                 if (name.startsWith("PVP")) {
                     chr.getClient().write(CField.getPVPClock(Integer.parseInt(getProperty("type")), timesend));
                 } else {
@@ -178,7 +178,7 @@ public class EventInstanceManager {
         if (disposed) {
             return;
         }
-        for (MapleCharacter pc : exped.getExpeditionMembers(c)) {
+        for (User pc : exped.getExpeditionMembers(c)) {
             registerPlayer(pc);
         }
         PartySearch ps = World.Party.getSearch(exped);
@@ -187,7 +187,7 @@ public class EventInstanceManager {
         }
     }
 
-    public void unregisterPlayerAzwan(MapleCharacter chr) {
+    public void unregisterPlayerAzwan(User chr) {
         wL.lock();
         try {
             chars.remove(chr);
@@ -200,7 +200,7 @@ public class EventInstanceManager {
     public void unregisterAll() {
         wL.lock();
         try {
-            for (MapleCharacter chr : chars) {
+            for (User chr : chars) {
                 chr.setEventInstance(null);
             }
             chars.clear();
@@ -209,7 +209,7 @@ public class EventInstanceManager {
         }
     }
 
-    public void unregisterPlayer(final MapleCharacter chr) {
+    public void unregisterPlayer(final User chr) {
         if (disposed) {
             chr.setEventInstance(null);
             return;
@@ -222,7 +222,7 @@ public class EventInstanceManager {
         }
     }
 
-    private boolean unregisterPlayer_NoLock(final MapleCharacter chr) {
+    private boolean unregisterPlayer_NoLock(final User chr) {
         if (name.equals("CWKPQ")) { //hard code it because i said so
             final MapleSquad squad = ChannelServer.getInstance(channel).getMapleSquad("CWKPQ");//so fkin hacky
             if (squad != null) {
@@ -255,8 +255,8 @@ public class EventInstanceManager {
         wL.lock();
         try {
             if (chars != null && chars.size() <= size) {
-                final List<MapleCharacter> chrs = new LinkedList<>(chars);
-                for (MapleCharacter chr : chrs) {
+                final List<User> chrs = new LinkedList<>(chars);
+                for (User chr : chrs) {
                     if (chr == null) {
                         continue;
                     }
@@ -280,7 +280,7 @@ public class EventInstanceManager {
         if (disposed) {
             return;
         }
-        for (MapleCharacter chr : getPlayers()) {
+        for (User chr : getPlayers()) {
             final MapleQuestStatus record = chr.getQuestNAdd(MapleQuest.getInstance(GameConstants.BOSS_PQ));
 
             if (record.getCustomData() != null) {
@@ -297,12 +297,12 @@ public class EventInstanceManager {
         if (disposed) {
             return;
         }
-        for (MapleCharacter chr : getPlayers()) {
+        for (User chr : getPlayers()) {
             chr.modifyCSPoints(1, points, true);
         }
     }
 
-    public List<MapleCharacter> getPlayers() {
+    public List<User> getPlayers() {
         if (disposed) {
             return Collections.emptyList();
         }
@@ -350,7 +350,7 @@ public class EventInstanceManager {
         }
     }
 
-    public void playerKilled(MapleCharacter chr) {
+    public void playerKilled(User chr) {
         if (disposed) {
             return;
         }
@@ -361,7 +361,7 @@ public class EventInstanceManager {
         }
     }
 
-    public boolean revivePlayer(MapleCharacter chr) {
+    public boolean revivePlayer(User chr) {
         if (disposed) {
             return false;
         }
@@ -376,7 +376,7 @@ public class EventInstanceManager {
         return true;
     }
 
-    public void playerDisconnected(final MapleCharacter chr, int idz) {
+    public void playerDisconnected(final User chr, int idz) {
         if (disposed) {
             return;
         }
@@ -403,8 +403,8 @@ public class EventInstanceManager {
                     dispose_NoLock();
                 }
             } else if ((ret > 0 && getPlayerCount() < ret) || (ret < 0 && (iiPacketder(chr) || getPlayerCount() < (ret * -1)))) {
-                final List<MapleCharacter> chrs = new LinkedList<>(chars);
-                for (MapleCharacter player : chrs) {
+                final List<User> chrs = new LinkedList<>(chars);
+                for (User player : chrs) {
                     if (player.getId() != idz) {
                         removePlayer(player);
                     }
@@ -424,7 +424,7 @@ public class EventInstanceManager {
      * @param chr
      * @param mob
      */
-    public void monsterKilled(final MapleCharacter chr, final MapleMonster mob) {
+    public void monsterKilled(final User chr, final MapleMonster mob) {
         if (disposed) {
             return;
         }
@@ -452,7 +452,7 @@ public class EventInstanceManager {
         }
     }
 
-    public void monsterDamaged(final MapleCharacter chr, final MapleMonster mob, final int damage) {
+    public void monsterDamaged(final User chr, final MapleMonster mob, final int damage) {
         if (disposed || mob.getId() != 9700037) { //ghost PQ boss only.
             return;
         }
@@ -465,7 +465,7 @@ public class EventInstanceManager {
         }
     }
 
-    public void addPVPScore(final MapleCharacter chr, final int score) {
+    public void addPVPScore(final User chr, final int score) {
         if (disposed) { //ghost PQ boss only.
             return;
         }
@@ -478,7 +478,7 @@ public class EventInstanceManager {
         }
     }
 
-    public int getKillCount(MapleCharacter chr) {
+    public int getKillCount(User chr) {
         if (disposed) {
             return 0;
         }
@@ -498,7 +498,7 @@ public class EventInstanceManager {
         try {
 
             disposed = true;
-            for (MapleCharacter chr : chars) {
+            for (User chr : chars) {
                 chr.setEventInstance(null);
             }
             chars.clear();
@@ -557,7 +557,7 @@ public class EventInstanceManager {
         if (disposed) {
             return;
         }
-        for (MapleCharacter chr : getPlayers()) {
+        for (User chr : getPlayers()) {
             chr.dropMessage(type, msg);
         }
     }
@@ -571,11 +571,11 @@ public class EventInstanceManager {
         e.add(new Pair<>(e1, e2));
     }
 
-    public final List<Pair<Integer, MapleCharacter>> newPair_chr() {
+    public final List<Pair<Integer, User>> newPair_chr() {
         return new ArrayList<>();
     }
 
-    public void addToPair_chr(List<Pair<Integer, MapleCharacter>> e, int e1, MapleCharacter e2) {
+    public void addToPair_chr(List<Pair<Integer, User>> e, int e1, User e2) {
         e.add(new Pair<>(e1, e2));
     }
 
@@ -583,7 +583,7 @@ public class EventInstanceManager {
         if (disposed) {
             return;
         }
-        for (MapleCharacter chr : getPlayers()) {
+        for (User chr : getPlayers()) {
             chr.getClient().write(p);
         }
     }
@@ -592,7 +592,7 @@ public class EventInstanceManager {
         if (disposed) {
             return;
         }
-        for (MapleCharacter chr : getPlayers()) {
+        for (User chr : getPlayers()) {
             if (chr.getTeam() == team) {
                 chr.getClient().write(p);
             }
@@ -726,7 +726,7 @@ public class EventInstanceManager {
         return props;
     }
 
-    public final void leftParty(final MapleCharacter chr) {
+    public final void leftParty(final User chr) {
         if (disposed) {
             return;
         }
@@ -760,7 +760,7 @@ public class EventInstanceManager {
         }
     }
 
-    public final void removePlayer(final MapleCharacter chr) {
+    public final void removePlayer(final User chr) {
         if (disposed) {
             return;
         }
@@ -771,19 +771,19 @@ public class EventInstanceManager {
         }
     }
 
-    public final void registerCarnivalParty(final MapleCharacter leader, final MapleMap map, final byte team) {
+    public final void registerCarnivalParty(final User leader, final MapleMap map, final byte team) {
         if (disposed) {
             return;
         }
         leader.clearCarnivalRequests();
-        List<MapleCharacter> characters = new LinkedList<>();
+        List<User> characters = new LinkedList<>();
         final MapleParty party = leader.getParty();
 
         if (party == null) {
             return;
         }
         for (MaplePartyCharacter pc : party.getMembers()) {
-            final MapleCharacter c = map.getCharacterById(pc.getId());
+            final User c = map.getCharacterById(pc.getId());
             if (c != null) {
                 characters.add(c);
                 registerPlayer(c);
@@ -804,7 +804,7 @@ public class EventInstanceManager {
         }
     }
 
-    public void onMapLoad(final MapleCharacter chr) {
+    public void onMapLoad(final User chr) {
         if (disposed) {
             return;
         }
@@ -817,7 +817,7 @@ public class EventInstanceManager {
         }
     }
 
-    public boolean iiPacketder(final MapleCharacter chr) {
+    public boolean iiPacketder(final User chr) {
         return (chr != null && chr.getParty() != null && chr.getParty().getLeader().getId() == chr.getId());
     }
 
@@ -828,7 +828,7 @@ public class EventInstanceManager {
         final int mapid = map.getId();
 
         for (String chr : squad.getMembers()) {
-            MapleCharacter player = squad.getChar(chr);
+            User player = squad.getChar(chr);
             if (player != null && player.getMapId() == mapid) {
                 if (questID > 0) {
                     player.getQuestNAdd(MapleQuest.getInstance(questID)).setCustomData(String.valueOf(System.currentTimeMillis()));
@@ -846,7 +846,7 @@ public class EventInstanceManager {
         squad.getBeginMap().broadcastMessage(CField.stopClock());
     }
 
-    public boolean isDisconnected(final MapleCharacter chr) {
+    public boolean isDisconnected(final User chr) {
         if (disposed) {
             return false;
         }
@@ -864,13 +864,13 @@ public class EventInstanceManager {
         return em;
     }
 
-    public void applyBuff(final MapleCharacter chr, final int id) {
+    public void applyBuff(final User chr, final int id) {
         MapleItemInformationProvider.getInstance().getItemEffect(id).applyTo(chr);
         GiveBuffMessage buff = new GiveBuffMessage(id);
         chr.write(CWvsContext.messagePacket(buff));
     }
 
-    public void applySkill(final MapleCharacter chr, final int id) {
+    public void applySkill(final User chr, final int id) {
         SkillFactory.getSkill(id).getEffect(1).applyTo(chr);
     }
 }

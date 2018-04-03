@@ -22,7 +22,7 @@ import server.Timer.MapTimer;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
 import server.maps.SharedMapResources.DirectionInfo;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.maps.objects.MapleReactor;
 import server.quest.MapleQuest;
 import server.quest.MapleQuest.MedalQuest;
@@ -1040,7 +1040,7 @@ public class MapScriptMethods {
                     final MapleMonster shammos = MapleLifeFactory.getMonster(9300275);
                     if (c.getPlayer().getEventInstance() != null) {
                         int averageLevel = 0, size = 0;
-                        for (MapleCharacter pl : c.getPlayer().getEventInstance().getPlayers()) {
+                        for (User pl : c.getPlayer().getEventInstance().getPlayers()) {
                             averageLevel += pl.getLevel();
                             size++;
                         }
@@ -1083,7 +1083,7 @@ public class MapScriptMethods {
                     final MapleMonster shammos = MapleLifeFactory.getMonster(9300438);
                     if (c.getPlayer().getEventInstance() != null) {
                         int averageLevel = 0, size = 0;
-                        for (MapleCharacter pl : c.getPlayer().getEventInstance().getPlayers()) {
+                        for (User pl : c.getPlayer().getEventInstance().getPlayers()) {
                             averageLevel += pl.getLevel();
                             size++;
                         }
@@ -3278,7 +3278,7 @@ public class MapScriptMethods {
                     final MapleMonster shammos = MapleLifeFactory.getMonster(8880000);
                     if (c.getPlayer().getEventInstance() != null) {
                         int averageLevel = 0, size = 0;
-                        for (MapleCharacter pl : c.getPlayer().getEventInstance().getPlayers()) {
+                        for (User pl : c.getPlayer().getEventInstance().getPlayers()) {
                             averageLevel += pl.getLevel();
                             size++;
                         }
@@ -3861,7 +3861,7 @@ public class MapScriptMethods {
         map.spawnMonsterOnGroundBelow(theMob, witchTowerPos);
     }
 
-    public static void startDirectionInfo(MapleCharacter chr, boolean start) {
+    public static void startDirectionInfo(User chr, boolean start) {
         final MapleClient c = chr.getClient();
         DirectionInfo di = chr.getMap().getSharedMapResources().getDirection(start ? 0 : chr.getDirection());
         if (di != null && di.eventQ.size() > 0) {

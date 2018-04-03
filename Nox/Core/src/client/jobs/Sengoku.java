@@ -1,10 +1,9 @@
 /*
  * Rexion Development
  */
-package handling.jobs;
+package client.jobs;
 
 import client.CharacterTemporaryStat;
-import handling.jobs.*;
 import client.SkillFactory;
 import constants.GameConstants;
 import constants.skills.Aran;
@@ -16,7 +15,7 @@ import java.util.concurrent.ScheduledFuture;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
 import server.Timer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.BuffPacket;
 import tools.packet.JobPacket;
 import tools.packet.JobPacket.BlasterPacket;
@@ -31,7 +30,7 @@ public class Sengoku {
 
     public static class HayatoHandler {
         
-        public static void handleBladeStance(MapleCharacter pPlayer) {
+        public static void handleBladeStance(User pPlayer) {
             int nStack = pPlayer.getPrimaryStack() + 5;
             if (nStack > 1000) {
                 nStack = 1000;
@@ -39,7 +38,7 @@ public class Sengoku {
             updateBladeStanceRequest(pPlayer, nStack);
         }
         
-        public static void updateBladeStanceRequest(MapleCharacter pPlayer, int nStack) {
+        public static void updateBladeStanceRequest(User pPlayer, int nStack) {
             pPlayer.setPrimaryStack(nStack);
             pPlayer.getClient().write(HayatoPacket.SwordEnergy(nStack));
         }

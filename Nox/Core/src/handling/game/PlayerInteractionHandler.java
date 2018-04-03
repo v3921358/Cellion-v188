@@ -14,7 +14,7 @@ import server.MapleTrade;
 import server.maps.FieldLimitType;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.stores.HiredMerchant;
 import server.stores.IMaplePlayerShop;
 import server.stores.MapleMiniGame;
@@ -160,7 +160,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         //        System.err.println(iPacket.toString());
         final Interaction action = Interaction.getByAction(iPacket.DecodeByte());
@@ -238,7 +238,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                 if (chr.getMap() == null) {
                     return;
                 }
-                MapleCharacter chrr = chr.getMap().getCharacterById(iPacket.DecodeInteger());
+                User chrr = chr.getMap().getCharacterById(iPacket.DecodeInteger());
                 if (chrr == null || c.getChannelServer().isShutdown() || chrr.hasBlockedInventory()) {
                     c.write(CWvsContext.enableActions());
                     return;

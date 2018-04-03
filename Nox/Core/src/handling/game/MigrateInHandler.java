@@ -18,10 +18,10 @@ import constants.GameConstants;
 import constants.ServerConstants;
 import handling.cashshop.CashShopOperation;
 import handling.farm.FarmOperation;
-import handling.jobs.Hero;
-import handling.jobs.Hero.PhantomHandler;
-import handling.jobs.Resistance;
-import handling.jobs.Resistance.BlasterHandler;
+import client.jobs.Hero;
+import client.jobs.Hero.PhantomHandler;
+import client.jobs.Resistance;
+import client.jobs.Resistance.BlasterHandler;
 import handling.world.CharacterIdChannelPair;
 import handling.world.CharacterTransfer;
 import handling.world.MapleMessenger;
@@ -41,7 +41,7 @@ import net.InPacket;
 import net.Packet;
 import scripting.provider.NPCScriptManager;
 import server.LoginAuthorization;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import tools.LogHelper;
 import tools.packet.CField;
@@ -65,7 +65,7 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         final long nLoginAuthCookie = iPacket.DecodeLong();
 
         boolean bFromTransfer = false;
-        MapleCharacter pPlayer;
+        User pPlayer;
 
         CharacterTransfer CashShopTransition = CashShopServer.getPlayerStorage().getPendingCharacter(nPlayerID);
         if (CashShopTransition != null) {
@@ -98,10 +98,10 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
             }
             c.setTempIP(ip.getIPAddress());
             c.setChannel(ip.getChannel());
-            pPlayer = MapleCharacter.loadCharFromDB(nPlayerID, c, true);
+            pPlayer = User.loadCharFromDB(nPlayerID, c, true);
         } else {
             bFromTransfer = true;
-            pPlayer = MapleCharacter.reconstructCharacter(CashShopTransition, c, true);
+            pPlayer = User.reconstructCharacter(CashShopTransition, c, true);
         }
         final ChannelServer channelServer = c.getChannelServer();
         c.setPlayer(pPlayer);

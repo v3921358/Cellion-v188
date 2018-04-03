@@ -16,7 +16,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import client.SkillFactory;
 import constants.GameConstants;
 import server.Timer.CheatTimer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.StringUtil;
 
 public class CheatTracker {
@@ -24,7 +24,7 @@ public class CheatTracker {
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock rL = lock.readLock(), wL = lock.writeLock();
     private final Map<CheatingOffense, CheatingOffenseEntry> offenses = new LinkedHashMap<>();
-    private WeakReference<MapleCharacter> chr;
+    private WeakReference<User> chr;
     // For keeping track of speed attack hack.
     private long lastAttackTime = 0;
     private int lastAttackTickCount = 0;
@@ -54,7 +54,7 @@ public class CheatTracker {
     private int numSequentialFamiliarAttack = 0;
     private long familiarSummonTime = 0;
 
-    public CheatTracker(final MapleCharacter chr) {
+    public CheatTracker(final User chr) {
         start(chr);
     }
 
@@ -178,7 +178,7 @@ public class CheatTracker {
         //Server_ClientFamiliarTickDiff = 0;
     }
 
-    public final boolean checkFamiliarAttack(final MapleCharacter chr) {
+    public final boolean checkFamiliarAttack(final User chr) {
         /*final int tickdifference = (tickcount - lastFamiliarTickCount);
          if (tickdifference < 500) {
          chr.getCheatTracker().registerOffense(CheatingOffense.FAST_SUMMON_ATTACK);
@@ -241,7 +241,7 @@ public class CheatTracker {
     }
 
     public final void registerOffense(final CheatingOffense offense, final String param) {
-        final MapleCharacter chrhardref = chr.get();
+        final User chrhardref = chr.get();
         if (chrhardref == null || !offense.isEnabled() || chrhardref.isGM()) {
             return;
         }
@@ -423,7 +423,7 @@ public class CheatTracker {
         chr = new WeakReference<>(null);
     }
 
-    public final void start(final MapleCharacter chr) {
+    public final void start(final User chr) {
         this.chr = new WeakReference<>(chr);
         invalidationTask = CheatTimer.getInstance().register(new InvalidationTask(), 60000);
         takingDamageSince = System.currentTimeMillis();

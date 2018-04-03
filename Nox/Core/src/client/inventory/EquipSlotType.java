@@ -5,7 +5,7 @@ import constants.GameConstants;
 import java.util.ArrayList;
 import java.util.List;
 import server.MapleInventoryManipulator;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 
 /**
@@ -90,7 +90,7 @@ public enum EquipSlotType {
      * @param chr
      * @return 1 = Successful, -1 = Inventory full for unequipping, 0 = Slot check Error
      */
-    public final int checkEquipmentSlotNumber(boolean isCashItem, short dst, int itemid, MapleCharacter chr) {
+    public final int checkEquipmentSlotNumber(boolean isCashItem, short dst, int itemid, User chr) {
         boolean isEquippingToAndroidCashSlot = false;
         if (isCashItem && dst > -1400 && dst <= -1300) {
             isEquippingToAndroidCashSlot = true;

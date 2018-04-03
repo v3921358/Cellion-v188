@@ -5,7 +5,7 @@ import java.util.Calendar;
 import client.MapleClient;
 import constants.ServerConstants;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CWvsContext;
 import tools.packet.CLogin;
 import tools.packet.PacketHelper;
@@ -37,7 +37,7 @@ public final class LoginPasswordHandler implements ProcessPacket<MapleClient> {
             loginok = 3;
             if (macBan) {
                 // this is only an ipban o.O" - maybe we should refactor this a bit so it's more readable
-                MapleCharacter.ban(c.GetIP().split(":")[0], "Enforcing account ban, account " + login, false, 4, false);
+                User.ban(c.GetIP().split(":")[0], "Enforcing account ban, account " + login, false, 4, false);
             }
         }
         if (loginok != 0) {

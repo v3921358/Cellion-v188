@@ -11,7 +11,7 @@ import service.ChannelServer;
 import server.Randomizer;
 import server.Timer.MapTimer;
 import server.life.MapleLifeFactory;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -23,7 +23,7 @@ public class Event_PyramidSubway {
     private ScheduledFuture<?> energyBarDecrease, timerSchedule;
     //type: -1 = subway, 0-3 = difficulty of nett's pyramid.
 
-    public Event_PyramidSubway(final MapleCharacter c) {
+    public Event_PyramidSubway(final User c) {
         final int mapid = c.getMapId();
         if (mapid / 10000 == 91032) {
             type = -1;
@@ -56,7 +56,7 @@ public class Event_PyramidSubway {
         }
     }
 
-    public final void fullUpdate(final MapleCharacter c, final int stage) {
+    public final void fullUpdate(final User c, final int stage) {
         broadcastEnergy(c, "massacre_party", c.getParty() == null ? 0 : c.getParty().getMembers().size()); //huh
         broadcastEnergy(c, "massacre_miss", miss);
         broadcastEnergy(c, "massacre_cool", cool);
@@ -66,7 +66,7 @@ public class Event_PyramidSubway {
         broadcastUpdate(c);
     }
 
-    public final void commenceTimerNextMap(final MapleCharacter c, final int stage) {
+    public final void commenceTimerNextMap(final User c, final int stage) {
         if (timerSchedule != null) {
             timerSchedule.cancel(false);
             timerSchedule = null;
@@ -77,7 +77,7 @@ public class Event_PyramidSubway {
         bar = 0;
         if (c.getParty() != null && c.getParty().getMembers().size() > 1) {
             for (MaplePartyCharacter mpc : c.getParty().getMembers()) {
-                final MapleCharacter chr = ourMap.getCharacterById(mpc.getId());
+                final User chr = ourMap.getCharacterById(mpc.getId());
                 if (chr != null) {
                     chr.getClient().write(CField.getClock(time));
                     chr.getClient().write(CField.showEffect("killing/first/number/" + stage));
@@ -117,7 +117,7 @@ public class Event_PyramidSubway {
         }, time * 1000L);
     }
 
-    public final void onKill(final MapleCharacter c) {
+    public final void onKill(final User c) {
         kill++;
         bar++;
         if (Randomizer.nextInt(100) < 5) { //monster properties coolDamage and coolDamageProb determine this, will code later
@@ -147,14 +147,14 @@ public class Event_PyramidSubway {
         broadcastEnergy(c, "massacre_hit", kill);
     }
 
-    public final void onMiss(final MapleCharacter c) {
+    public final void onMiss(final User c) {
         miss++;
         energybar -= 5;
         broadcastUpdate(c);
         broadcastEnergy(c, "massacre_miss", miss);
     }
 
-    public final boolean onSkillUse(final MapleCharacter c) {
+    public final boolean onSkillUse(final User c) {
         if (skill > 0 && type != -1) {
             skill--;
             broadcastEnergy(c, "massacre_skill", skill);
@@ -163,7 +163,7 @@ public class Event_PyramidSubway {
         return false;
     }
 
-    public final void onChangeMap(final MapleCharacter c, final int newmapid) {
+    public final void onChangeMap(final User c, final int newmapid) {
         if ((newmapid == 910330001 && type == -1) || (newmapid == 926020001 + type && type != -1)) {
             succeed(c);
         } else {
@@ -178,7 +178,7 @@ public class Event_PyramidSubway {
         }
     }
 
-    public final void succeed(final MapleCharacter c) {
+    public final void succeed(final User c) {
         final MapleQuestStatus record = c.getQuestNAdd(MapleQuest.getInstance(type == -1 ? 7662 : 7760));
         String data = record.getCustomData();
         if (data == null) {
@@ -305,7 +305,7 @@ public class Event_PyramidSubway {
         dispose(c);
     }
 
-    public final void fail(final MapleCharacter c) {
+    public final void fail(final User c) {
         final MapleMap map;
         if (type == -1) {
             map = c.getClient().getChannelServer().getMapFactory().getMap(910320001);
@@ -316,7 +316,7 @@ public class Event_PyramidSubway {
         dispose(c);
     }
 
-    public final void dispose(final MapleCharacter c) {
+    public final void dispose(final User c) {
         final boolean lead = energyBarDecrease != null && timerSchedule != null;
         if (energyBarDecrease != null) {
             energyBarDecrease.cancel(false);
@@ -333,19 +333,19 @@ public class Event_PyramidSubway {
         c.setPyramidSubway(null);
     }
 
-    public final void broadcastUpdate(final MapleCharacter c) {
+    public final void broadcastUpdate(final User c) {
         //c.getClient().write(CField.sendPyramidUpdate(bar));
     }
 
-    public final void broadcastEffect(final MapleCharacter c, final String effect) {
+    public final void broadcastEffect(final User c, final String effect) {
         c.getClient().write(CField.showEffect(effect));
     }
 
-    public final void broadcastEnergy(final MapleCharacter c, final String type, final int amount) {
+    public final void broadcastEnergy(final User c, final String type, final int amount) {
         c.getClient().write(CWvsContext.sendPyramidEnergy(type, String.valueOf(amount)));
     }
 
-    public static boolean warpStartSubway(final MapleCharacter c) {
+    public static boolean warpStartSubway(final User c) {
         final int mapid = 910320100;
 
         final ChannelServer ch = c.getClient().getChannelServer();
@@ -360,7 +360,7 @@ public class Event_PyramidSubway {
         return false;
     }
 
-    public static boolean warpBonusSubway(final MapleCharacter c) {
+    public static boolean warpBonusSubway(final User c) {
         final int mapid = 910320010;
 
         final ChannelServer ch = c.getClient().getChannelServer();
@@ -375,7 +375,7 @@ public class Event_PyramidSubway {
         return false;
     }
 
-    public static boolean warpNextMap_Subway(final MapleCharacter c) {
+    public static boolean warpNextMap_Subway(final User c) {
         final int currentmap = c.getMapId();
         final int thisStage = (currentmap - 910320100) / 100;
 
@@ -399,7 +399,7 @@ public class Event_PyramidSubway {
         return false;
     }
 
-    public static boolean warpStartPyramid(final MapleCharacter c, final int difficulty) {
+    public static boolean warpStartPyramid(final User c, final int difficulty) {
         final int mapid = 926010100 + (difficulty * 1000);
         int minLevel = 40, maxLevel = 60;
         switch (difficulty) {
@@ -426,7 +426,7 @@ public class Event_PyramidSubway {
         return false;
     }
 
-    public static boolean warpBonusPyramid(final MapleCharacter c, final int difficulty) {
+    public static boolean warpBonusPyramid(final User c, final int difficulty) {
         final int mapid = 926010010 + (difficulty * 20);
 
         final ChannelServer ch = c.getClient().getChannelServer();
@@ -441,7 +441,7 @@ public class Event_PyramidSubway {
         return false;
     }
 
-    public static boolean warpNextMap_Pyramid(final MapleCharacter c, final int difficulty) {
+    public static boolean warpNextMap_Pyramid(final User c, final int difficulty) {
         final int currentmap = c.getMapId();
         final int thisStage = (currentmap - (926010100 + (difficulty * 1000))) / 100;
 
@@ -465,15 +465,15 @@ public class Event_PyramidSubway {
         return false;
     }
 
-    private static void changeMap(final MapleCharacter c, final MapleMap map, final int minLevel, final int maxLevel) {
+    private static void changeMap(final User c, final MapleMap map, final int minLevel, final int maxLevel) {
         changeMap(c, map, minLevel, maxLevel, 0);
     }
 
-    private static void changeMap(final MapleCharacter c, final MapleMap map, final int minLevel, final int maxLevel, final int clear) {
+    private static void changeMap(final User c, final MapleMap map, final int minLevel, final int maxLevel, final int clear) {
         final MapleMap oldMap = c.getMap();
         if (c.getParty() != null && c.getParty().getMembers().size() > 1) {
             for (MaplePartyCharacter mpc : c.getParty().getMembers()) {
-                final MapleCharacter chr = oldMap.getCharacterById(mpc.getId());
+                final User chr = oldMap.getCharacterById(mpc.getId());
                 if (chr != null && chr.getId() != c.getId() && chr.getLevel() >= minLevel && chr.getLevel() <= maxLevel) {
                     if (clear == 1) {
                         chr.getClient().write(CField.showEffect("killing/clear"));

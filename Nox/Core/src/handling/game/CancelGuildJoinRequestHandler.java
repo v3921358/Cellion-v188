@@ -4,7 +4,7 @@ import client.MapleClient;
 import handling.world.World;
 import handling.world.MapleGuild;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CWvsContext.GuildPacket;
 import netty.ProcessPacket;
 
@@ -20,7 +20,7 @@ public final class CancelGuildJoinRequestHandler implements ProcessPacket<MapleC
         if (c.getPlayer() == null) {
             return;
         }
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         int currpending = chr.getPendingGuildId();
         MapleGuild guild = World.Guild.getGuild(currpending);
         if (guild != null) {

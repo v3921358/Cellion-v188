@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 
 import client.MapleClient;
 import database.DatabaseConnection;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
 
@@ -111,7 +111,7 @@ public class BuddyList {
         }
     }
 
-    public void addBuddyRequest(MapleClient c, int channelFrom, MapleCharacter chr, boolean accountFriend) {
+    public void addBuddyRequest(MapleClient c, int channelFrom, User chr, boolean accountFriend) {
         Buddy buddy = new Buddy(BuddyResult.INVITE);
         BuddylistEntry ble = new BuddylistEntry(chr.getName(), chr.getId(), "Default Group", channelFrom, true, "", accountFriend, chr.getName());
         if (accountFriend) {

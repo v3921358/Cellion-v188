@@ -4,7 +4,7 @@ import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -22,7 +22,7 @@ public class UseExpPotionHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         //iPacket: [F5 4F D6 2E] [60 00] [F4 06 22 00]
         System.err.println("eror");

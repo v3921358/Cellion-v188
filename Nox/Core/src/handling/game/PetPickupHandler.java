@@ -19,8 +19,8 @@ import server.life.MapleMonster;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -39,7 +39,7 @@ public class PetPickupHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         if (chr == null) {
             return;
         }
@@ -50,7 +50,7 @@ public class PetPickupHandler implements ProcessPacket<MapleClient> {
         }
 
         final byte petz = (byte) iPacket.DecodeInteger();//c.getPlayer().getPetIndex((int)slea.readLong());
-        final MaplePet pet = chr.getPet(petz);
+        final Pet pet = chr.getPet(petz);
         chr.updateTick(iPacket.DecodeInteger());
         c.getPlayer().setScrolledPosition((short) 0);
         iPacket.Skip(1); // [4] Zero, [4] Seems to be tickcount, [1] Always zero
@@ -92,15 +92,15 @@ public class PetPickupHandler implements ProcessPacket<MapleClient> {
             // Meso Pickup Handling
             if (mapitem.getMeso() > 0) {
                 if (chr.getParty() != null && mapitem.getOwner() != chr.getId()) {
-                    final List<MapleCharacter> toGive = new LinkedList<>();
+                    final List<User> toGive = new LinkedList<>();
                     final int splitMeso = mapitem.getMeso() * 40 / 100;
                     for (MaplePartyCharacter z : chr.getParty().getMembers()) {
-                        MapleCharacter m = chr.getMap().getCharacterById(z.getId());
+                        User m = chr.getMap().getCharacterById(z.getId());
                         if (m != null && m.getId() != chr.getId()) {
                             toGive.add(m);
                         }
                     }
-                    for (final MapleCharacter m : toGive) {
+                    for (final User m : toGive) {
                         m.gainMeso(splitMeso / toGive.size(), true);
                     }
                     chr.gainMeso(mapitem.getMeso() - splitMeso, true);
@@ -127,7 +127,7 @@ public class PetPickupHandler implements ProcessPacket<MapleClient> {
         }
     }
 
-    public static final void removeItem_Pet(final MapleCharacter chr, final MapleMapItem mapitem, int pet) {
+    public static final void removeItem_Pet(final User chr, final MapleMapItem mapitem, int pet) {
         mapitem.setPickedUp(true);
         chr.getMap().broadcastMessage(CField.removeItemFromMap(mapitem.getObjectId(), 5, chr.getId(), pet));
         chr.getMap().removeMapObject(mapitem);

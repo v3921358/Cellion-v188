@@ -25,7 +25,7 @@ import client.MapleClient;
 import client.MapleStat;
 import client.Skill;
 import client.SkillFactory;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -40,7 +40,7 @@ public final class BuffCancel implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         int sourceid = iPacket.DecodeInteger();
         if ((chr == null) || (chr.getMap() == null)) {
             return;

@@ -13,7 +13,7 @@ import scripting.AbstractPlayerInteraction;
 import scripting.NPCConversationManager;
 import scripting.NpcConversationStatelessManager;
 import scripting.NpcConversationType;
-import server.maps.objects.MapleCharacter.MapleCharacterConversationType;
+import server.maps.objects.User.MapleCharacterConversationType;
 import server.quest.MapleQuest;
 import tools.LogHelper;
 

@@ -5,7 +5,7 @@ import client.MapleSpecialStats.MapleHyperStats;
 import client.MapleSpecialStats.MapleSpecialStatUpdateType;
 import constants.ServerConstants;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -28,7 +28,7 @@ public class UpdateHyperStatHandler implements ProcessPacket<MapleClient> {
         int requestValue = iPacket.DecodeInteger();
 
         MapleSpecialStatUpdateType stat = MapleSpecialStatUpdateType.getFromString(statStr);
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         switch (stat) {
             case UpdateHonor: {

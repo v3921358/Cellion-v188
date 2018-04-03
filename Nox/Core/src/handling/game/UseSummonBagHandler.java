@@ -9,7 +9,7 @@ import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -27,7 +27,7 @@ public class UseSummonBagHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         if (!chr.isAlive() || chr.hasBlockedInventory() || chr.inPVP()) {
             c.write(CWvsContext.enableActions());

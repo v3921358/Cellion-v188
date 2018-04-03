@@ -17,7 +17,7 @@ import service.SendPacketOpcode;
 import provider.data.HexTool;
 import net.OutPacket;
 import net.Packet;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import service.ChannelServer;
 
 public class CLogin {
@@ -456,7 +456,7 @@ public class CLogin {
      * Dummy pic 4 = Outdated pic
      * @return oPacket
      */
-    public static Packet getCharList(MapleClient c, String secondpw, List<MapleCharacter> chars, int charslots, boolean isRebootServer) {
+    public static Packet getCharList(MapleClient c, String secondpw, List<User> chars, int charslots, boolean isRebootServer) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.SelectWorldResult.getValue());
@@ -470,12 +470,12 @@ public class CLogin {
         oPacket.Encode(0); // not sure what this is?
 
         // Characters by order
-        MapleCharacter[] characters = chars.toArray(new MapleCharacter[chars.size()]);
+        User[] characters = chars.toArray(new User[chars.size()]);
         oPacket.EncodeInteger(characters.length); // the character reorganization packet
         for (int i = 0; i < characters.length - 1; i++) {
             if (characters[i].getCharListPosition() > characters[i + 1].getCharListPosition()) {
-                MapleCharacter temp = characters[i];
-                MapleCharacter temp2 = characters[i + 1];
+                User temp = characters[i];
+                User temp2 = characters[i + 1];
                 characters[i] = temp2;
                 characters[i + 1] = temp;
                 i = -1;
@@ -487,7 +487,7 @@ public class CLogin {
 
         // Characters information
         oPacket.Encode(chars.size());
-        for (MapleCharacter chr : chars) {
+        for (User chr : chars) {
             addCharEntry(oPacket, chr);
             oPacket.Encode(0);
 
@@ -527,7 +527,7 @@ public class CLogin {
      * @param result
      * @return
      */
-    public static Packet addNewCharEntry(MapleCharacter chr, int result) {
+    public static Packet addNewCharEntry(User chr, int result) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.CreateNewCharacterResult.getValue());
@@ -548,7 +548,7 @@ public class CLogin {
         return oPacket.ToPacket();
     }
 
-    private static void addCharEntry(OutPacket oPacket, MapleCharacter chr) {
+    private static void addCharEntry(OutPacket oPacket, User chr) {
         PacketHelper.addCharStats(oPacket, chr);
         PacketHelper.addCharLook(oPacket, chr, true, false);
         if (GameConstants.isZero(chr.getJob())) {

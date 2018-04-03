@@ -36,7 +36,7 @@ import database.DatabaseConnection;
 import scripting.provider.NPCChatByType;
 import scripting.provider.NPCChatType;
 import service.ChannelServer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CField;
 
@@ -204,7 +204,7 @@ public class CommandProcessor {
         return false;
     }
 
-    public static void logCommandToDB(MapleCharacter player, String command, String table) {
+    public static void logCommandToDB(User player, String command, String table) {
         PreparedStatement ps = null;
         try {
             ps = DatabaseConnection.getConnection().prepareStatement("INSERT INTO " + table + " (cid, command, mapid) VALUES (?, ?, ?)");

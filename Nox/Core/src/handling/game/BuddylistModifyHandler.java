@@ -20,7 +20,7 @@ import database.DatabaseConnection;
 import handling.world.World;
 import service.ChannelServer;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -67,7 +67,7 @@ public class BuddylistModifyHandler implements ProcessPacket<MapleClient> {
                     try {
                         CharacterIdNameBuddyCapacity charWithId = null;
                         int channel = World.Find.findChannel(name);
-                        MapleCharacter otherChar = null;
+                        User otherChar = null;
                         if (channel > 0) {
                             otherChar = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterByName(name);
                             if (otherChar == null) {
@@ -232,11 +232,11 @@ public class BuddylistModifyHandler implements ProcessPacket<MapleClient> {
         }
     }
 
-    private static List<BuddylistEntry> getPendingAccountFriends(List<MapleCharacter> chrs) {
+    private static List<BuddylistEntry> getPendingAccountFriends(List<User> chrs) {
         Connection con = DatabaseConnection.getConnection();
         List<BuddylistEntry> bl = new ArrayList<>();
         try {
-            for (MapleCharacter chr : chrs) {
+            for (User chr : chrs) {
                 PreparedStatement ps = con.prepareStatement("SELECT c.name as buddyname, b.characterid, b.buddyid, b.pending, b.groupname, b.memo, b.friend, b.nickname, b.flag FROM buddies as b, characters as c WHERE b.buddyid = c.id AND b.characterid = ? AND b.pending = 1 AND c.deletedAt is null AND b.friend = 1");
                 ps.setInt(1, chr.getId());
                 ResultSet rs = ps.executeQuery();
@@ -273,7 +273,7 @@ public class BuddylistModifyHandler implements ProcessPacket<MapleClient> {
     }
 
     private static void notifyRemoteChannel(MapleClient c, int remoteChannel, int otherCid, BuddyOperation operation, boolean accountFriend, String nickname) {
-        MapleCharacter player = c.getPlayer();
+        User player = c.getPlayer();
         if (remoteChannel > 0) {
             World.WorldBuddy.buddyChanged(otherCid, player.getId(), player.getName(), c.getChannel(), operation, accountFriend, nickname);
         }

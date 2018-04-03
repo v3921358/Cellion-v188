@@ -45,7 +45,7 @@ import server.life.MapleLifeFactory;
 import server.life.MapleMonsterInformationProvider;
 import server.life.PlayerNPC;
 import server.maps.MapleMapFactory;
-import server.maps.objects.MaplePet;
+import server.maps.objects.Pet;
 import server.quest.MapleQuest;
 import server.skills.VCore;
 
@@ -303,7 +303,7 @@ public class Start {
         }
 
         //Clear Broken Pets
-        MaplePet.clearPet();
+        Pet.clearPet();
         System.out.println("[Info] Pets Cleaned.");
 
         ////////////////////// Multithread loader ends here.

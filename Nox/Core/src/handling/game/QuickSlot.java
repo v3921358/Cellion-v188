@@ -22,7 +22,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.quest.MapleQuest;
 import net.InPacket;
 import netty.ProcessPacket;
@@ -36,7 +36,7 @@ public final class QuickSlot implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         if ((iPacket.Available() == 32L) && (chr != null)) {
             StringBuilder ret = new StringBuilder();
             for (int i = 0; i < 8; i++) {

@@ -17,7 +17,7 @@ import server.MapleStatEffect;
 import java.util.ArrayList;
 import java.util.List;
 import tools.Pair;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 /**
  *
@@ -32,7 +32,7 @@ public final class ReleaseTempestBlades implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         if (!chr.isAlive()) {
             chr.getClient().write(CWvsContext.enableActions());
             return;

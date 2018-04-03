@@ -7,7 +7,7 @@ package handling.game;
 
 import client.MapleClient;
 import constants.GameConstants;
-import static handling.jobs.Kinesis.KinesisHandler.handlePsychicPoint;
+import static client.jobs.Kinesis.KinesisHandler.handlePsychicPoint;
 import net.InPacket;
 import netty.ProcessPacket;
 

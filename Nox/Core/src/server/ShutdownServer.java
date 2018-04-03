@@ -23,7 +23,7 @@ import server.Timer.EventTimer;
 import server.Timer.MapTimer;
 import server.Timer.PingTimer;
 import server.Timer.WorldTimer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CWvsContext;
 
 public class ShutdownServer implements ShutdownServerMBean {
@@ -50,7 +50,7 @@ public class ShutdownServer implements ShutdownServerMBean {
         // Saves all character data before shutting down.
         for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
             for (ChannelServer cServer : ChannelServer.getAllInstances()) {
-                for (MapleCharacter oPlayer : cServer.getPlayerStorage().getAllCharacters()) {
+                for (User oPlayer : cServer.getPlayerStorage().getAllCharacters()) {
                     oPlayer.saveToDB(false, false);
                 }
             }

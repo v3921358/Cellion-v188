@@ -9,8 +9,8 @@ import database.DatabaseConnection;
 import server.AutobanManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import tools.LogHelper;
 import tools.Pair;
 import tools.packet.CField;
@@ -135,7 +135,7 @@ public class MapleShop {
 
                     // Give item
                     if (InventoryConstants.isPet(itemId)) {
-                        MapleInventoryManipulator.addById(c, itemId, totalQuantity, "", MaplePet.createPet(itemId, MapleInventoryIdentifier.getInstance()), -1, false, "Bought from shop " + id + ", " + npcId + " on " + LocalDateTime.now());
+                        MapleInventoryManipulator.addById(c, itemId, totalQuantity, "", Pet.createPet(itemId, MapleInventoryIdentifier.getInstance()), -1, false, "Bought from shop " + id + ", " + npcId + " on " + LocalDateTime.now());
                     } else {
                         MapleInventoryManipulator.addById(c, itemId, totalQuantity, "Bought from shop " + this.id + ", " + this.npcId + " on " + LocalDateTime.now());
                     }
@@ -161,7 +161,7 @@ public class MapleShop {
 
                     // Give item
                     if (InventoryConstants.isPet(itemId)) {
-                        MapleInventoryManipulator.addById(c, itemId, totalQuantity, "", MaplePet.createPet(itemId, MapleInventoryIdentifier.getInstance()), -1, false, "Bought from shop " + id + ", " + npcId + " on " + LocalDateTime.now());
+                        MapleInventoryManipulator.addById(c, itemId, totalQuantity, "", Pet.createPet(itemId, MapleInventoryIdentifier.getInstance()), -1, false, "Bought from shop " + id + ", " + npcId + " on " + LocalDateTime.now());
                     } else {
                         MapleInventoryManipulator.addById(c, itemId, totalQuantity, "Bought from shop " + this.id + ", " + this.npcId + " on " + LocalDateTime.now());
                     }
@@ -210,7 +210,7 @@ public class MapleShop {
                                     MapleInventoryManipulator.addbyItem(c, item);
 
                                 } else if (InventoryConstants.isPet(rePurchaseItemId)) {
-                                    MapleInventoryManipulator.addById(c, rePurchaseItemId, rePurchaseQuantity, "", MaplePet.createPet(rePurchaseItemId, MapleInventoryIdentifier.getInstance()), -1, false, "Bought from shop " + id + ", " + npcId + " on " + LocalDateTime.now());
+                                    MapleInventoryManipulator.addById(c, rePurchaseItemId, rePurchaseQuantity, "", Pet.createPet(rePurchaseItemId, MapleInventoryIdentifier.getInstance()), -1, false, "Bought from shop " + id + ", " + npcId + " on " + LocalDateTime.now());
 
                                 } else {
                                     MapleInventoryManipulator.addById(c, rePurchaseItemId, rePurchaseQuantity, "Bought from shop " + this.id + ", " + this.npcId + " on " + LocalDateTime.now());
@@ -229,7 +229,7 @@ public class MapleShop {
         c.write(CWvsContext.enableActions());
     }
 
-    private boolean checkRankEligibility(final MapleCharacter chr, final MapleShopItem shopitem) {
+    private boolean checkRankEligibility(final User chr, final MapleShopItem shopitem) {
         if (shopitem.getRank() >= 0) {
             boolean passed = true;
             int y = 0;

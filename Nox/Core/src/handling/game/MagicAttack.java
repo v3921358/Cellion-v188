@@ -6,18 +6,18 @@ import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
-import handling.jobs.Hero;
-import handling.jobs.Hero.LuminousHandler;
+import client.jobs.Hero;
+import client.jobs.Hero.LuminousHandler;
 import handling.world.AttackInfo;
 import handling.world.AttackType;
 import handling.world.DamageParse;
-import handling.jobs.Kinesis.*;
+import client.jobs.Kinesis.*;
 import service.ChannelServer;
 import server.MapleStatEffect;
 import server.Timer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -34,7 +34,7 @@ public final class MagicAttack implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter pPlayer = c.getPlayer();
+        final User pPlayer = c.getPlayer();
         if (pPlayer == null || pPlayer.hasBlockedInventory() || pPlayer.getMap() == null) {
             return;
         }
@@ -136,7 +136,7 @@ public final class MagicAttack implements ProcessPacket<MapleClient> {
         attack.cleanupMemory();
     }
 
-    public static void handleLuminousState(MapleCharacter chr, AttackInfo attack) {
+    public static void handleLuminousState(User chr, AttackInfo attack) {
         if (chr.getLevel() <= 30 || chr.getLuminousState() > 20040000) {
             return;
         }

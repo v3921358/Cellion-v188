@@ -24,7 +24,7 @@ package handling.game;
 import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import netty.ProcessPacket;
@@ -38,7 +38,7 @@ public final class MechCancel implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         if (chr == null) {
             return;
         }

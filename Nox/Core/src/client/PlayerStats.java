@@ -46,7 +46,7 @@ import server.MapleStringInformationProvider;
 import server.StructSetItem;
 import server.StructSetItem.SetItem;
 import server.life.Element;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.potentials.ItemPotentialOption;
 import server.potentials.ItemPotentialProvider;
 import server.potentials.ItemPotentialStats;
@@ -201,7 +201,7 @@ public class PlayerStats implements Serializable {
         def = 100;
     }
 
-    public void recalcLocalStats(MapleCharacter chra) {
+    public void recalcLocalStats(User chra) {
         recalcLocalStats(false, chra);
     }
 
@@ -217,7 +217,7 @@ public class PlayerStats implements Serializable {
      * @param first_login
      * @param chra
      */
-    public void recalcLocalStats(boolean first_login, MapleCharacter chra) {
+    public void recalcLocalStats(boolean first_login, User chra) {
 
         reLock.lock();
         try {
@@ -704,7 +704,7 @@ public class PlayerStats implements Serializable {
         }
     }
 
-    private void handleEquipPotentialStats(MapleCharacter chr, int equipRequiredLevel, int potentialId) {
+    private void handleEquipPotentialStats(User chr, int equipRequiredLevel, int potentialId) {
         final ItemPotentialOption option = ItemPotentialProvider.getPotentialInfo(potentialId);
         if (option != null) {
             final List<Pair<ItemPotentialType, ItemPotentialStats>> statsForThisEquipLevel = option.getSuitableStats(equipRequiredLevel);
@@ -911,7 +911,7 @@ public class PlayerStats implements Serializable {
         return psdSkills;
     }
 
-    private void handlePassiveSkills(MapleCharacter chra) {
+    private void handlePassiveSkills(User chra) {
         Skill bx;
         int bof;
         MapleStatEffect eff;
@@ -2596,7 +2596,7 @@ public class PlayerStats implements Serializable {
         }
     }
 
-    private void handleHyperStatPassive(MapleCharacter chra) {
+    private void handleHyperStatPassive(User chra) {
         for (int hyperSkill : MapleSpecialStats.ALL_HYPER_STATS) {
             Skill skill = SkillFactory.getSkill(hyperSkill);
             int currentSkillLevel = chra.getSkillLevel(skill);
@@ -2670,7 +2670,7 @@ public class PlayerStats implements Serializable {
         }
     }
 
-    private void handleHyperPassiveSkills(MapleCharacter chra) {
+    private void handleHyperPassiveSkills(User chra) {
         int prefix = chra.getJob() * 10000;
         Skill bx;
         int bof;
@@ -2743,7 +2743,7 @@ public class PlayerStats implements Serializable {
         }
     }
 
-    private void handleTemporaryStats(MapleCharacter chra) {
+    private void handleTemporaryStats(User chra) {
         for (Map.Entry<CharacterTemporaryStat, CharacterTemporaryStatValueHolder> buffedValue
                 : chra.getBuffedValuesPlayerStats()) {
             final MapleStatEffect eff = buffedValue.getValue().effect;
@@ -3199,7 +3199,7 @@ public class PlayerStats implements Serializable {
         return 1;
     }
 
-    public boolean checkEquipLevels(final MapleCharacter chr, long gain) {
+    public boolean checkEquipLevels(final User chr, long gain) {
         boolean changed = false;
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         List<Equip> all = new ArrayList<>(equipLevelHandling);
@@ -3262,11 +3262,11 @@ public class PlayerStats implements Serializable {
         return changed;
     }
 
-    public boolean checkEquipDurabilitys(final MapleCharacter chr, int gain) {
+    public boolean checkEquipDurabilitys(final User chr, int gain) {
         return checkEquipDurabilitys(chr, gain, false);
     }
 
-    public boolean checkEquipDurabilitys(final MapleCharacter chr, int gain, boolean aboveZero) {
+    public boolean checkEquipDurabilitys(final User chr, int gain, boolean aboveZero) {
         if (chr.inPVP()) {
             return true;
         }
@@ -3296,7 +3296,7 @@ public class PlayerStats implements Serializable {
         return true;
     }
 
-    private void calcPassive_SharpEye(final MapleCharacter player) {
+    private void calcPassive_SharpEye(final User player) {
         Skill critSkill;
         int critlevel;
         if (GameConstants.isDemonSlayer(player.getJob())) {
@@ -3508,7 +3508,7 @@ public class PlayerStats implements Serializable {
         }
     }
 
-    private void calcPassiveMasteryAmount(final MapleCharacter player) {
+    private void calcPassiveMasteryAmount(final User player) {
         if (player.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -11) == null) {
             passive_mastery = 0;
             return;
@@ -3602,7 +3602,7 @@ public class PlayerStats implements Serializable {
         }
     }
 
-    private void calculateFame(final MapleCharacter player) {
+    private void calculateFame(final User player) {
         player.getTrait(MapleTraitType.charm).addLocalExp(player.getFame());
         for (MapleTraitType t : MapleTraitType.values()) {
             player.getTrait(t).recalcLevel();
@@ -3625,7 +3625,7 @@ public class PlayerStats implements Serializable {
         return passive_mastery; //* 5 + 10 for mastery %
     }
 
-    public final void calculateMaxBaseDamage(final int watk, final int pvpDamage, MapleCharacter chra) {
+    public final void calculateMaxBaseDamage(final int watk, final int pvpDamage, User chra) {
         if (watk <= 0) {
             localmaxbasedamage = 1;
             localmaxbasepvpdamage = 1;
@@ -3690,7 +3690,7 @@ public class PlayerStats implements Serializable {
         return shouldHealMP;
     }
 
-    public final void relocHeal(MapleCharacter chra) {
+    public final void relocHeal(User chra) {
         final int playerjob = chra.getJob();
 
         shouldHealHP = 10 + recoverHP; // Reset
@@ -3799,18 +3799,18 @@ public class PlayerStats implements Serializable {
         return accuracy;
     }
 
-    public void heal_noUpdate(MapleCharacter chra) {
+    public void heal_noUpdate(User chra) {
         setHp(getCurrentMaxHp(), chra);
         setMp(getCurrentMaxMp(chra.getJob()), chra);
     }
 
-    public void heal(MapleCharacter chra) {
+    public void heal(User chra) {
         heal_noUpdate(chra);
         chra.updateSingleStat(MapleStat.HP, getCurrentMaxHp());
         chra.updateSingleStat(MapleStat.MP, getCurrentMaxMp(chra.getJob()));
     }
 
-    public Pair<Integer, Integer> handleEquipAdditions(MapleItemInformationProvider ii, MapleCharacter chra, boolean first_login, Map<Skill, SkillEntry> sData, final int itemId) {
+    public Pair<Integer, Integer> handleEquipAdditions(MapleItemInformationProvider ii, User chra, boolean first_login, Map<Skill, SkillEntry> sData, final int itemId) {
         final List<Triple<String, String, String>> additions = ii.getEquipAdditions(itemId);
         if (additions == null) {
             return null;
@@ -4005,7 +4005,7 @@ public class PlayerStats implements Serializable {
         return new Pair<>(localmaxhp_x, localmaxmp_x);
     }
 
-    public final void handleProfessionTool(final MapleCharacter chra) {
+    public final void handleProfessionTool(final User chra) {
         if (chra.getProfessionLevel(92000000) > 0 || chra.getProfessionLevel(92010000) > 0) {
             final Iterator<Item> itera = chra.getInventory(MapleInventoryType.EQUIP).newList().iterator();
             while (itera.hasNext()) { //goes to first harvesting tool and stops
@@ -4021,7 +4021,7 @@ public class PlayerStats implements Serializable {
         }
     }
 
-    public void recalcPVPRank(MapleCharacter chra) {
+    public void recalcPVPRank(User chra) {
         this.pvpRank = 10;
         this.pvpExp = chra.getTotalBattleExp();
         for (int i = 0; i < 10; i++) {
@@ -4068,31 +4068,31 @@ public class PlayerStats implements Serializable {
         return maxmp;
     }
 
-    public final void setStr(final short str, MapleCharacter chra) {
+    public final void setStr(final short str, User chra) {
         this.str = str;
         recalcLocalStats(chra);
     }
 
-    public final void setDex(final short dex, MapleCharacter chra) {
+    public final void setDex(final short dex, User chra) {
         this.dex = dex;
         recalcLocalStats(chra);
     }
 
-    public final void setInt(final short int_, MapleCharacter chra) {
+    public final void setInt(final short int_, User chra) {
         this.int_ = int_;
         recalcLocalStats(chra);
     }
 
-    public final void setLuk(final short luk, MapleCharacter chra) {
+    public final void setLuk(final short luk, User chra) {
         this.luk = luk;
         recalcLocalStats(chra);
     }
 
-    public final boolean setHp(final int newhp, MapleCharacter chra) {
+    public final boolean setHp(final int newhp, User chra) {
         return setHp(newhp, false, chra);
     }
 
-    public boolean setHp(int newhp, boolean silent, MapleCharacter chra) {
+    public boolean setHp(int newhp, boolean silent, User chra) {
         final int oldHp = hp;
         int thp = newhp;
         if (thp < 0) {
@@ -4118,7 +4118,7 @@ public class PlayerStats implements Serializable {
         return hp != oldHp;
     }
 
-    public final boolean setMp(final int newmp, final MapleCharacter chra) {
+    public final boolean setMp(final int newmp, final User chra) {
         final int oldMp = mp;
         int tmp = newmp;
         if (tmp < 0) {
@@ -4131,12 +4131,12 @@ public class PlayerStats implements Serializable {
         return mp != oldMp;
     }
 
-    public final void setMaxHp(final int hp, MapleCharacter chra) {
+    public final void setMaxHp(final int hp, User chra) {
         this.maxhp = hp;
         recalcLocalStats(chra);
     }
 
-    public final void setMaxMp(final int mp, MapleCharacter chra) {
+    public final void setMaxMp(final int mp, User chra) {
         this.maxmp = mp;
         recalcLocalStats(chra);
     }

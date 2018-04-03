@@ -7,7 +7,7 @@ import scripting.provider.NPCScriptManager;
 import server.AutobanManager;
 import server.maps.MapScriptMethods;
 import net.InPacket;
-import server.maps.objects.MapleCharacter.MapleCharacterConversationType;
+import server.maps.objects.User.MapleCharacterConversationType;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
 

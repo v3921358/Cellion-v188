@@ -30,7 +30,7 @@ import handling.world.AttackInfo;
 import handling.world.AttackType;
 import handling.world.DamageParse;
 import handling.world.PlayerHandler;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import netty.ProcessPacket;
 import server.MapleStatEffect;
@@ -50,7 +50,7 @@ public final class AtomCollisionHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         if (chr == null || chr.hasBlockedInventory() || chr.getMap() == null) {
             return;
         }

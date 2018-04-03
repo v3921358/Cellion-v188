@@ -15,10 +15,10 @@ import constants.skills.Hayato;
 import constants.skills.NightWalker;
 import constants.skills.Page;
 import constants.skills.Zero;
-import handling.jobs.Explorer;
-import handling.jobs.Resistance;
-import handling.jobs.Sengoku;
-import handling.jobs.Sengoku.HayatoHandler;
+import client.jobs.Explorer;
+import client.jobs.Resistance;
+import client.jobs.Sengoku;
+import client.jobs.Sengoku.HayatoHandler;
 import handling.world.AttackInfo;
 import handling.world.AttackType;
 import handling.world.DamageParse;
@@ -30,7 +30,7 @@ import server.Randomizer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
 import server.events.MapleSnowball;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import service.ChannelServer;
 import service.RecvPacketOpcode;
 import tools.packet.CField;
@@ -39,7 +39,7 @@ import tools.packet.JobPacket;
 
 public final class CloseRangeAttack {
 
-    public static void closeRangeAttack(InPacket iPacket, MapleClient c, MapleCharacter pPlayer, boolean passiveAttack) {
+    public static void closeRangeAttack(InPacket iPacket, MapleClient c, User pPlayer, boolean passiveAttack) {
 
         if (pPlayer == null || pPlayer.hasBlockedInventory() || pPlayer.getMap() == null
                 || (passiveAttack

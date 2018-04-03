@@ -19,7 +19,7 @@ import service.ChannelServer;
 import service.FarmServer;
 import service.LoginServer;
 import server.farm.MapleFarm;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 import net.InPacket;
 import tools.packet.CField;
@@ -36,7 +36,7 @@ public class FarmOperation {
             c.close();
             return;
         }
-        MapleCharacter chr = MapleCharacter.reconstructCharacter(transfer, c, false);
+        User chr = User.reconstructCharacter(transfer, c, false);
 
         c.setPlayer(chr);
         c.setAccID(chr.getAccountID());
@@ -96,7 +96,7 @@ public class FarmOperation {
         }
     }
 
-    public static void LeaveFarm(final InPacket iPacket, final MapleClient c, final MapleCharacter chr) {
+    public static void LeaveFarm(final InPacket iPacket, final MapleClient c, final User chr) {
         FarmServer.getPlayerStorage().deregisterPlayer(chr);
 
         c.updateLoginState(MapleClientLoginState.LOGIN_SERVER_TRANSITION, c.getSessionIPAddress());

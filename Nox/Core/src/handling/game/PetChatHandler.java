@@ -2,7 +2,7 @@ package handling.game;
 
 import client.MapleClient;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.PetPacket;
 import netty.ProcessPacket;
 
@@ -23,7 +23,7 @@ public class PetChatHandler implements ProcessPacket<MapleClient> {
         if (iPacket.Available() < 12) {
             return;
         }
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         final int petid = chr.getPetIndex((int) iPacket.DecodeLong());
         c.getPlayer().updateTick(iPacket.DecodeInteger());

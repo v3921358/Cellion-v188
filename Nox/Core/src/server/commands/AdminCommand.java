@@ -30,8 +30,8 @@ import server.Randomizer;
 import server.ShutdownServer;
 import server.Timer.EventTimer;
 import server.Timer.WorldTimer;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import tools.StringUtil;
 import tools.packet.CField;
 import tools.packet.CField.NPCPacket;
@@ -52,7 +52,7 @@ public class AdminCommand {
                 c.getPlayer().dropMessage(6, "Need playername and amount.");
                 return 0;
             }
-            MapleCharacter chrs = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User chrs = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (chrs == null) {
                 c.getPlayer().dropMessage(6, "Make sure they are in the correct channel.");
             } else {
@@ -67,7 +67,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MaplePet pet = c.getPlayer().getPet(0);
+            Pet pet = c.getPlayer().getPet(0);
             if (pet == null) {
                 return 0;
             }
@@ -205,7 +205,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter chr = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User chr = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             chr.addReward(Integer.parseInt(splitted[2]), Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5]), Integer.parseInt(splitted[6]), StringUtil.joinStringFrom(splitted, 7));
             chr.updateReward();
             return 1;
@@ -239,7 +239,7 @@ public class AdminCommand {
             World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(4, "It's Miracle Time!  Between 2:00 PM and 4:00 PM (Pacific) today, Miracle, Premium, Revolutionary Miracle, Super Miracle, Enlightening Miracle and Carved Slot Miracle Cubes have increased chances to raise your item to the next potential tier!"));
             //}
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
-                for (MapleCharacter mch : cserv.getPlayerStorage().getAllCharacters()) {
+                for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
                     mch.dropMessage(0, "Double Time Event has " + (EventConstants.DoubleTime ? "began!" : "ended"));
                 }
             }
@@ -253,7 +253,7 @@ public class AdminCommand {
         public int execute(MapleClient c, String[] splitted) {
             EventConstants.DoubleMiracleTime = !EventConstants.DoubleMiracleTime;
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
-                for (MapleCharacter mch : cserv.getPlayerStorage().getAllCharacters()) {
+                for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
                     mch.dropMessage(0, "Double Miracle Time Event has " + (EventConstants.DoubleMiracleTime ? "began!" : "ended"));
                 }
             }
@@ -284,7 +284,7 @@ public class AdminCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             ChannelServer cs = c.getChannelServer();
-            for (MapleCharacter mchr : cs.getPlayerStorage().getAllCharacters()) {
+            for (User mchr : cs.getPlayerStorage().getAllCharacters()) {
                 if (c.getPlayer().isGM()) {
                     continue;
                 }
@@ -306,7 +306,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             MapleInventory equipped = victim.getInventory(MapleInventoryType.EQUIPPED);
             MapleInventory equip = victim.getInventory(MapleInventoryType.EQUIP);
             List<Short> ids = new ArrayList<>();
@@ -332,7 +332,7 @@ public class AdminCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
-                for (MapleCharacter mch : cserv.getPlayerStorage().getAllCharacters()) {
+                for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
                     mch.gainMeso(Long.parseLong(splitted[1]), true);
                 }
             }
@@ -353,7 +353,7 @@ public class AdminCommand {
                 return 0;
             }
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
-                for (MapleCharacter mch : cserv.getPlayerStorage().getAllCharacters()) {
+                for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
                     if (c.canClickNPC()) {
                         mch.gainItem(Integer.parseInt(splitted[1]), 1);
                         mch.getClient().write(CField.NPCPacket.getNPCTalk(9010010, NPCChatType.OK, "You got the #t" + Integer.parseInt(splitted[1]) + "#, right? Click it to see what's inside. Go ahead and check your item inventory now, if you're curious.", NPCChatByType.NPC_UnCancellable, 9010010));
@@ -369,7 +369,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            for (MapleCharacter mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+            for (User mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 if (mch.getMapId() != c.getPlayer().getMapId()) {
                     mch.changeMap(c.getPlayer().getMap(), c.getPlayer().getPosition());
                 }

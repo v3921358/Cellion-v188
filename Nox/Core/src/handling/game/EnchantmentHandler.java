@@ -14,7 +14,7 @@ import client.inventory.Equip;
 import client.inventory.MapleInventoryType;
 import net.InPacket;
 import server.MapleInventoryManipulator;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
 
@@ -36,7 +36,7 @@ public class EnchantmentHandler implements ProcessPacket<MapleClient> {
      */
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         byte type = iPacket.DecodeByte();
         Enchant enchant = new Enchant(type);
         short pos = 0;

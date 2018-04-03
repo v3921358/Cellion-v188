@@ -4,7 +4,7 @@ import client.MapleClient;
 import constants.ServerConstants;
 import java.util.List;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CWvsContext;
 import tools.packet.CLogin;
 import netty.ProcessPacket;
@@ -35,7 +35,7 @@ public final class CharacterBurnRequestHandler implements ProcessPacket<MapleCli
             return;
         }
         int characterId = iPacket.DecodeInteger();
-        MapleCharacter character = c.loadCharacterById(characterId);
+        User character = c.loadCharacterById(characterId);
         if (character.getAccountID() != c.getAccID()) {
             return;
         }
@@ -46,8 +46,8 @@ public final class CharacterBurnRequestHandler implements ProcessPacket<MapleCli
     }
 
     private boolean canBurn(MapleClient c) {
-        final List<MapleCharacter> chars = c.loadCharacters(c.getWorld());
-        MapleCharacter[] characters = chars.toArray(new MapleCharacter[chars.size()]);
+        final List<User> chars = c.loadCharacters(c.getWorld());
+        User[] characters = chars.toArray(new User[chars.size()]);
         for (int i = 0; i < characters.length; i++) {
             if (characters[i].isBurning()) {
                 return false;

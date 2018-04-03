@@ -26,8 +26,8 @@ import client.inventory.MapleMount;
 import client.inventory.ShopRepurchase;
 import constants.GameConstants;
 import java.util.HashMap;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import server.maps.objects.MonsterFamiliar;
 import server.quest.MapleQuest;
 import server.skills.VMatrixRecord;
@@ -90,7 +90,7 @@ public class CharacterTransfer {
         mbook = new LinkedHashMap<>();
     }
 
-    public CharacterTransfer(final MapleCharacter chr) {
+    public CharacterTransfer(final User chr) {
         this.characterid = chr.getId();
         this.accountid = chr.getAccountID();
         this.accountname = chr.getClient().getAccountName();
@@ -185,7 +185,7 @@ public class CharacterTransfer {
         this.rebuy = chr.getShopRepurchases();
         boolean uneq = false;
         for (int i = 0; i < this.petStore.length; i++) {
-            final MaplePet pet = chr.getPet(i);
+            final Pet pet = chr.getPet(i);
             if (this.petStore[i] == 0) {
                 this.petStore[i] = (byte) -1;
             }

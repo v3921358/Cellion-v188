@@ -3,7 +3,7 @@ package handling.game;
 import client.MapleClient;
 import handling.world.World;
 import handling.world.MapleGuild;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import net.Packet;
 import tools.packet.CWvsContext;
@@ -26,7 +26,7 @@ public class AllianceOperationHandler implements ProcessPacket<MapleClient> {
         if (inviteid > 0) {
             final int newAlliance = World.Alliance.getAllianceLeader(inviteid);
             if (newAlliance > 0) {
-                final MapleCharacter chr = c.getChannelServer().getPlayerStorage().getCharacterById(newAlliance);
+                final User chr = c.getChannelServer().getPlayerStorage().getCharacterById(newAlliance);
                 if (chr != null) {
                     chr.dropMessage(5, gs.getName() + " Guild has rejected the Guild Union invitation.");
                 }
@@ -69,7 +69,7 @@ public class AllianceOperationHandler implements ProcessPacket<MapleClient> {
             DenyInvite(c, gs);
             return;
         }
-        MapleCharacter chr;
+        User chr;
         int inviteid;
         switch (op) {
             case 1: //load... must be in world op

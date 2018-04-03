@@ -9,14 +9,14 @@ import constants.GameConstants;
 import constants.ItemConstants;
 import constants.ServerConstants;
 import constants.skills.*;
-import handling.jobs.Cygnus;
-import handling.jobs.Cygnus.NightWalkerHandler;
-import handling.jobs.Cygnus.ThunderBreakerHandler;
-import handling.jobs.Explorer.HeroHandler;
-import handling.jobs.Explorer.ShadowerHandler;
-import handling.jobs.Hero.AranHandler;
-import handling.jobs.Hero.PhantomHandler;
-import handling.jobs.Kinesis.KinesisHandler;
+import client.jobs.Cygnus;
+import client.jobs.Cygnus.NightWalkerHandler;
+import client.jobs.Cygnus.ThunderBreakerHandler;
+import client.jobs.Explorer.HeroHandler;
+import client.jobs.Explorer.ShadowerHandler;
+import client.jobs.Hero.AranHandler;
+import client.jobs.Hero.PhantomHandler;
+import client.jobs.Kinesis.KinesisHandler;
 import net.InPacket;
 import server.MapleStatEffect;
 import server.Randomizer;
@@ -24,7 +24,7 @@ import server.life.*;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.messages.StylishKillMessage;
 import server.messages.StylishKillMessage.StylishKillMessageType;
 import tools.Pair;
@@ -36,6 +36,7 @@ import java.util.List;
 import server.maps.objects.MapleForceAtom;
 import server.maps.objects.MapleForceAtomTypes;
 import service.RecvPacketOpcode;
+import tools.Utility;
 import tools.packet.CField;
 import tools.packet.JobPacket;
 import tools.packet.JobPacket.ShadowerPacket;
@@ -43,7 +44,7 @@ import tools.packet.MobPacket;
 
 public class DamageParse {
 
-    public static void applyAttack(AttackInfo attack, Skill theSkill, MapleCharacter pPlayer, int attackCount, double maxDamagePerMonster, MapleStatEffect effect, AttackType attackType) {
+    public static void applyAttack(AttackInfo attack, Skill theSkill, User pPlayer, int attackCount, double maxDamagePerMonster, MapleStatEffect effect, AttackType attackType) {
         if (!pPlayer.isAlive()) {
             pPlayer.getCheatTracker().registerOffense(CheatingOffense.ATTACKING_WHILE_DEAD);
             return;
@@ -469,11 +470,14 @@ public class DamageParse {
                     if (GameConstants.isNightWalkerCygnus(pPlayer.getJob())) {
 
                         if (pPlayer.hasBuff(CharacterTemporaryStat.NightWalkerBat)) {
-                            for (AttackMonster at : attack.allDamage) {
+                            if (Utility.resultSuccess(40)) {
+                                pPlayer.getMap().broadcastMessage(JobPacket.NightWalkerPacket.ShadowBats(pPlayer.getId(), 0));
+                            }
+                            /*for (AttackMonster at : attack.allDamage) {
                                 if (Randomizer.nextInt(100) < 60) {
                                     pPlayer.getMap().broadcastMessage(JobPacket.NightWalkerPacket.ShadowBats(pPlayer.getId(), at.getObjectId()));
                                 }
-                            }
+                            }*/
                         }
                         
                         if (attack.skill == NightWalker.DOMINION) {
@@ -813,7 +817,7 @@ public class DamageParse {
         }
     }
 
-    public static void applyAttackMagic(AttackInfo attack, Skill theSkill, MapleCharacter pPlayer, MapleStatEffect effect) {
+    public static void applyAttackMagic(AttackInfo attack, Skill theSkill, User pPlayer, MapleStatEffect effect) {
 
         if (attack.real && GameConstants.getAttackDelay(attack.skill, theSkill) >= 100) {
             pPlayer.getCheatTracker().checkAttack(attack.skill, attack.lastAttackTickCount);
@@ -1038,7 +1042,7 @@ public class DamageParse {
      * @param attack
      * @param player
      */
-    private static void handleMultiKillsAndCombo(AttackInfo attack, MapleCharacter player) {
+    private static void handleMultiKillsAndCombo(AttackInfo attack, User player) {
         if (attack.after_NumMobsKilled > 0) {
             if (attack.allDamage.isEmpty()) {
                 return;
@@ -1107,7 +1111,7 @@ public class DamageParse {
         }
     }
 
-    private static double calculateMaxMagicDamagePerHit(MapleCharacter chr, Skill skill, MapleMonster monster, MapleMonsterStats mobstats, PlayerStats stats, Element elem, Integer sharpEye, double maxDamagePerMonster, MapleStatEffect attackEffect) {
+    private static double calculateMaxMagicDamagePerHit(User chr, Skill skill, MapleMonster monster, MapleMonsterStats mobstats, PlayerStats stats, Element elem, Integer sharpEye, double maxDamagePerMonster, MapleStatEffect attackEffect) {
         int dLevel = Math.max(mobstats.getLevel() - chr.getLevel(), 0) * 2;
         int HitRate = Math.min((int) Math.floor(Math.sqrt(stats.getAccuracy())) - (int) Math.floor(Math.sqrt(mobstats.getEva())) + 100, 100);
         if (dLevel > HitRate) {
@@ -1203,13 +1207,13 @@ public class DamageParse {
         return elemMaxDamagePerMob / 100.0D * (stats.def + stats.getElementBoost(elem));
     }
 
-    private static void handlePickPocket(MapleCharacter player, MapleMonster mob, AttackMonster oned) {
+    private static void handlePickPocket(User player, MapleMonster mob, AttackMonster oned) {
         if (Randomizer.nextInt(99) <= player.getStat().pickRate) {
             player.getMap().spawnMesoDrop(1, new Point((int) (mob.getTruePosition().getX() + Randomizer.nextInt(100) - 50.0D), (int) mob.getTruePosition().getY()), mob, player, false, (byte) 0);
         }
     }
 
-    private static double calculateMaxWeaponDamagePerHit(MapleCharacter player, MapleMonster monster, AttackInfo attack, Skill theSkill, MapleStatEffect attackEffect, double maximumDamageToMonster, Integer CriticalDamagePercent) {
+    private static double calculateMaxWeaponDamagePerHit(User player, MapleMonster monster, AttackInfo attack, Skill theSkill, MapleStatEffect attackEffect, double maximumDamageToMonster, Integer CriticalDamagePercent) {
         int dLevel = Math.max(monster.getStats().getLevel() - player.getLevel(), 0) * 2;
         int HitRate = Math.min((int) Math.floor(Math.sqrt(player.getStat().getAccuracy())) - (int) Math.floor(Math.sqrt(monster.getStats().getEva())) + 100, 100);
         if (dLevel > HitRate) {
@@ -1420,7 +1424,7 @@ public class DamageParse {
         return attack;
     }
 
-    public static final void modifyCriticalAttack(AttackInfo pAttack, MapleCharacter pPlayer, int nType, MapleStatEffect pEffect) {
+    public static final void modifyCriticalAttack(AttackInfo pAttack, User pPlayer, int nType, MapleStatEffect pEffect) {
         int nCriticalRate;
         boolean bShadow;
         List damages;
@@ -1500,7 +1504,7 @@ public class DamageParse {
         }
     }
 
-    public static AttackInfo OnAttack(RecvPacketOpcode eType, InPacket iPacket, MapleCharacter chr) {
+    public static AttackInfo OnAttack(RecvPacketOpcode eType, InPacket iPacket, User chr) {
         AttackInfo ret = new AttackInfo();
         if (eType == RecvPacketOpcode.UserShootAttack) {
             iPacket.DecodeByte();

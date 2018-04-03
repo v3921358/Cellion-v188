@@ -32,6 +32,7 @@ import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.JobPacket;
 import netty.ProcessPacket;
+import server.maps.objects.User;
 
 public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
 

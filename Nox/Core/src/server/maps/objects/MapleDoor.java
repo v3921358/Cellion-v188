@@ -18,7 +18,7 @@ import tools.packet.CWvsContext.PartyPacket;
 
 public class MapleDoor extends MapleMapObject {
 
-    private final WeakReference<MapleCharacter> owner;
+    private final WeakReference<User> owner;
     private final MapleMap town;
     private final MaplePortal townPortal;
     private final MapleMap target;
@@ -26,7 +26,7 @@ public class MapleDoor extends MapleMapObject {
     private final Point targetPosition;
     private final Point originalCharacterPosition;
 
-    public MapleDoor(final MapleCharacter owner, final Point targetPosition, final int skillId) {
+    public MapleDoor(final User owner, final Point targetPosition, final int skillId) {
         super();
         this.owner = new WeakReference<>(owner);
         this.ownerId = owner.getId();
@@ -123,7 +123,7 @@ public class MapleDoor extends MapleMapObject {
         }
     }
 
-    public final void warp(final MapleCharacter chr, final boolean toTown) {
+    public final void warp(final User chr, final boolean toTown) {
         if (chr.getId() == getOwnerId() || (getOwner() != null && getOwner().getParty() != null && chr.getParty() != null && getOwner().getParty().getId() == chr.getParty().getId())) {
             if (!toTown) {
                 chr.changeMap(target, target.findClosestPortal(targetPosition));
@@ -135,7 +135,7 @@ public class MapleDoor extends MapleMapObject {
         }
     }
 
-    public final MapleCharacter getOwner() {
+    public final User getOwner() {
         return owner.get();
     }
 

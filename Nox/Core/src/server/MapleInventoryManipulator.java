@@ -33,8 +33,8 @@ import provider.MapleDataTool;
 import provider.wz.cache.WzDataStorage;
 import server.maps.MapleMapItem;
 import server.maps.objects.MapleAndroid;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import server.potentials.ItemPotentialOption;
 import server.potentials.ItemPotentialProvider;
 import server.potentials.ItemPotentialTierType;
@@ -48,7 +48,7 @@ import tools.packet.CWvsContext.InfoPacket;
 
 public class MapleInventoryManipulator {
 
-    public static void addRing(MapleCharacter chr, int itemId, int ringId, int sn, String partner) {
+    public static void addRing(User chr, int itemId, int ringId, int sn, String partner) {
         CashItemInfo csi = CashItemFactory.getInstance().getItem(sn);
         if (csi == null) {
             return;
@@ -86,7 +86,7 @@ public class MapleInventoryManipulator {
         return newSlot;
     }
 
-    public static int getUniqueId(int itemId, MaplePet pet) {
+    public static int getUniqueId(int itemId, Pet pet) {
         int uniqueid = -1;
         if (InventoryConstants.isPet(itemId)) {
             if (pet != null) {
@@ -112,15 +112,15 @@ public class MapleInventoryManipulator {
         return addId(c, itemId, quantity, owner, null, 0, false, gmLog);
     }
 
-    public static boolean addById(MapleClient c, int itemId, short quantity, String owner, MaplePet pet, String gmLog) {
+    public static boolean addById(MapleClient c, int itemId, short quantity, String owner, Pet pet, String gmLog) {
         return addById(c, itemId, quantity, owner, pet, 0, false, gmLog);
     }
 
-    public static boolean addById(MapleClient c, int itemId, short quantity, String owner, MaplePet pet, long period, boolean hours, String gmLog) {
+    public static boolean addById(MapleClient c, int itemId, short quantity, String owner, Pet pet, long period, boolean hours, String gmLog) {
         return addId(c, itemId, quantity, owner, pet, period, hours, gmLog) >= 0;
     }
 
-    public static byte addId(MapleClient c, int itemId, short quantity, String owner, MaplePet pet, long period, boolean hours, String gmLog) {
+    public static byte addId(MapleClient c, int itemId, short quantity, String owner, Pet pet, long period, boolean hours, String gmLog) {
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if (ii.isPickupRestricted(itemId) && c.getPlayer().haveItem(itemId, 1, true, false) || !ii.itemExists(itemId)) {
             c.write(CWvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));
@@ -655,7 +655,7 @@ public class MapleInventoryManipulator {
     }
 
     public static void equip(final MapleClient c, final short src, short dst) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         if (chr.isDeveloper()) chr.dropMessage(5, "[Equip Debug] Slot Type : " + dst);
         if (chr == null || dst == EquipSlotType.MonsterBook.getSlot()) {
             return;
@@ -851,7 +851,7 @@ public class MapleInventoryManipulator {
      * @param isEquipping
      * @param lineOption
      */
-    private static void handleEquipPotentialSkill(MapleCharacter chr, boolean isEquipping, ItemPotentialOption lineOption) {
+    private static void handleEquipPotentialSkill(User chr, boolean isEquipping, ItemPotentialOption lineOption) {
         if (lineOption != null) {
             int skillIdForJob = PlayerStats.getSkillByJob(lineOption.getSkill().getBasicSkillId(), chr.getJob());
             Skill skill = SkillFactory.getSkill(skillIdForJob);

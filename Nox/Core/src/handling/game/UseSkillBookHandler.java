@@ -9,7 +9,7 @@ import java.util.Map;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -35,7 +35,7 @@ public class UseSkillBookHandler implements ProcessPacket<MapleClient> {
     }
 
     public static boolean UseSkillBook(MapleClient c, short slot, int itemId) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         final Item toUse = chr.getInventory(GameConstants.getInventoryType(itemId)).getItem(slot);
 

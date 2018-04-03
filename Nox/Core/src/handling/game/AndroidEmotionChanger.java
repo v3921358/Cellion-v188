@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CField;
 
 /**
@@ -14,7 +14,7 @@ import tools.packet.CField;
  */
 public class AndroidEmotionChanger {
 
-    public static void changeEmotion(MapleCharacter chr, int emote) {
+    public static void changeEmotion(User chr, int emote) {
         if ((emote > 0) && (chr != null) && (chr.getMap() != null) && (!chr.isHidden()) && (emote <= 17) && (chr.getAndroid() != null)) {
             chr.getMap().broadcastMessage(CField.showAndroidEmotion(chr.getId(), (byte) emote));
         }

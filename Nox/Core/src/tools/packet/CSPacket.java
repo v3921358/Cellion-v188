@@ -21,7 +21,7 @@ import server.CashCategory;
 import server.CashItem;
 import server.CashItemFactory;
 import server.CashShop;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 import static tools.packet.PacketHelper.getTime;
 
@@ -116,7 +116,7 @@ public class CSPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet Favorite(MapleCharacter chr) {
+    public static Packet Favorite(User chr) {
         final OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.CASH_SHOP_UPDATE.getValue());
@@ -307,7 +307,7 @@ public class CSPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet showNXMapleTokens(MapleCharacter chr) {
+    public static Packet showNXMapleTokens(User chr) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.CS_UPDATE.getValue());
@@ -319,7 +319,7 @@ public class CSPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet showMesos(MapleCharacter chr) {
+    public static Packet showMesos(User chr) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.CS_MESO_UPDATE.getValue());
@@ -395,7 +395,7 @@ public class CSPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet sendWishList(MapleCharacter chr, boolean update) {
+    public static Packet sendWishList(User chr, boolean update) {
         OutPacket oPacket = new OutPacket(80);
 
 //        oPacket.encodeShort(SendPacketOpcode.CS_OPERATION.getValue());
@@ -852,7 +852,7 @@ public class CSPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet changePetName(MapleCharacter chr, String newname, int slot) {
+    public static Packet changePetName(User chr, String newname, int slot) {
         OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.PetNameChanged.getValue());
 
@@ -916,7 +916,7 @@ public class CSPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet OnMapTransferResult(MapleCharacter chr, byte vip, boolean delete) {
+    public static Packet OnMapTransferResult(User chr, byte vip, boolean delete) {
         OutPacket oPacket = new OutPacket(80);
 
         // 31 00 05/08 00 // You cannot go to that place.

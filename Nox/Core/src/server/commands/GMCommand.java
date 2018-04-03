@@ -29,9 +29,9 @@ import server.life.MapleMonster;
 import server.life.MapleMonsterInformationProvider;
 import server.life.PlayerNPC;
 import server.maps.*;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.maps.objects.MapleNPC;
-import server.maps.objects.MaplePet;
+import server.maps.objects.Pet;
 import server.maps.objects.MapleReactor;
 import server.quest.MapleQuest;
 import server.shops.MapleShopFactory;
@@ -74,7 +74,7 @@ public class GMCommand {
         
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter pPlayer = c.getPlayer();
+            User pPlayer = c.getPlayer();
             int nMorphID = Integer.valueOf(splitted[1]);
             
             if (nMorphID == 0) {
@@ -94,7 +94,7 @@ public class GMCommand {
         
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter pPlayer = c.getPlayer();
+            User pPlayer = c.getPlayer();
             int nMountID = Integer.valueOf(splitted[1]);
             
             if (nMountID == 0) {
@@ -124,7 +124,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter pPlayer = c.getPlayer();
+            User pPlayer = c.getPlayer();
             
             if (pPlayer.hasGodMode()) {
                 pPlayer.toggleGodMode(false);
@@ -144,7 +144,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter pUser = null;
+            User pUser = null;
             int nOnline = 0;
 
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
@@ -216,7 +216,7 @@ public class GMCommand {
                 c.getPlayer().dropMessage(6, ret.append(']').toString());
                 return 0;
             }
-            final MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            final User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (victim == null) {
                 c.getPlayer().dropMessage(5, "Does not exist");
                 return 0;
@@ -264,7 +264,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter oPlayer;
+            User oPlayer;
             int nJob;
             if (splitted.length == 3) {
                 oPlayer = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
@@ -296,7 +296,7 @@ public class GMCommand {
             MapleMap map = c.getPlayer().getMap();
             List<MapleMapObject> players = map.getMapObjectsInRange(c.getPlayer().getPosition(), (double) 25000, Arrays.asList(MapleMapObjectType.PLAYER));
             for (MapleMapObject closeplayers : players) {
-                MapleCharacter playernear = (MapleCharacter) closeplayers;
+                User playernear = (User) closeplayers;
                 if (playernear.isAlive() && playernear != c.getPlayer() && playernear.getJob() != 910) {
                     playernear.setHp(0);
                     playernear.updateSingleStat(MapleStat.HP, 0);
@@ -321,8 +321,8 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter player = c.getPlayer();
-            for (MapleCharacter mch : player.getMap().getCharacters()) {
+            User player = c.getPlayer();
+            for (User mch : player.getMap().getCharacters()) {
                 if (mch != null) {
                     mch.getStat().setHp(mch.getStat().getMaxHp(), mch);
                     mch.updateSingleStat(MapleStat.HP, mch.getStat().getMaxHp());
@@ -339,7 +339,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter player = c.getPlayer();
+            User player = c.getPlayer();
             if (splitted.length < 2 || player.hasBlockedInventory()) {
                 c.getPlayer().dropMessage(5, "!clearinv <eq / use / setup / etc / cash / all >");
                 return 0;
@@ -640,7 +640,7 @@ public class GMCommand {
                     return 0;
                 }
                 final MapleMap from = c.getPlayer().getMap();
-                for (MapleCharacter chr : from.getCharacters()) {
+                for (User chr : from.getCharacters()) {
                     chr.changeMap(target, target.getPortal(0));
                 }
             } catch (NumberFormatException e) {
@@ -715,7 +715,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (victim != null) {
                 if (c.getPlayer().inPVP() || (!c.getPlayer().isGM() && (victim.isInBlockedMap() || victim.isGM()))) {
                     c.getPlayer().dropMessage(5, "Try again later.");
@@ -760,7 +760,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (victim != null && c.getPlayer().getGMLevel() >= victim.getGMLevel() && !victim.inPVP() && !c.getPlayer().inPVP()) {
                 if (splitted.length == 2) {
                     c.getPlayer().changeMap(victim.getMap(), victim.getMap().findClosestSpawnpoint(victim.getTruePosition()));
@@ -853,7 +853,7 @@ public class GMCommand {
             } else {
                 sb.append(StringUtil.joinStringFrom(splitted, 2));
             }
-            MapleCharacter target = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User target = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (target != null) {
                 if ((c.getPlayer().getGMLevel() > target.getGMLevel() || c.getPlayer().isAdmin()) && !target.getClient().isGm() && !target.isAdmin()) {
                     //sb.append(" (IP: ").append(target.getClient().getSessionIPAddress()).append(")");
@@ -868,7 +868,7 @@ public class GMCommand {
                     c.getPlayer().dropMessage(6, "[" + getCommand() + "] May not ban GMs...");
                     return 1;
                 }
-            } else if (MapleCharacter.ban(splitted[1], sb.toString(), false, c.getPlayer().isAdmin() ? 250 : c.getPlayer().getGMLevel(), hellban)) {
+            } else if (User.ban(splitted[1], sb.toString(), false, c.getPlayer().isAdmin() ? 250 : c.getPlayer().getGMLevel(), hellban)) {
                 c.getPlayer().dropMessage(6, "[" + getCommand() + "] Successfully offline banned " + splitted[1] + ".");
                 return 1;
             } else {
@@ -882,7 +882,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[splitted.length - 1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[splitted.length - 1]);
             if (victim != null && c.getPlayer().getGMLevel() >= victim.getGMLevel()) {
                 victim.getClient().close();
                 victim.getClient().disconnect(true, false);
@@ -898,12 +898,12 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter player = c.getPlayer();
+            User player = c.getPlayer();
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(6, "Syntax: !kill <list player names>");
                 return 0;
             }
-            MapleCharacter victim = null;
+            User victim = null;
             for (int i = 1; i < splitted.length; i++) {
                 try {
                     victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[i]);
@@ -929,7 +929,7 @@ public class GMCommand {
                 c.getPlayer().dropMessage(0, splitted[0] + " <character name> <petid> <petname> <petlevel> <petcloseness> <petfullness>");
                 return 0;
             }
-            MapleCharacter petowner = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User petowner = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             int id = Integer.parseInt(splitted[2]);
             String name = splitted[3];
             int level = Integer.parseInt(splitted[4]);
@@ -960,7 +960,7 @@ public class GMCommand {
                 fullness = 0;
             }
             try {
-                MapleInventoryManipulator.addById(petowner.getClient(), id, (short) 1, "", MaplePet.createPet(id, name, level, closeness, fullness, MapleInventoryIdentifier.getInstance(), id == 5000054 ? (int) period : 0, flags), 45, false, null);
+                MapleInventoryManipulator.addById(petowner.getClient(), id, (short) 1, "", Pet.createPet(id, name, level, closeness, fullness, MapleInventoryIdentifier.getInstance(), id == 5000054 ? (int) period : 0, flags), 45, false, null);
             } catch (NullPointerException ex) {
             }
             return 1;
@@ -1008,12 +1008,12 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter player = c.getPlayer();
+            User player = c.getPlayer();
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(6, "Syntax: !fame <player> <amount>");
                 return 0;
             }
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             int fame;
             try {
                 fame = Integer.parseInt(splitted[2]);
@@ -1043,7 +1043,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            for (MapleCharacter map : c.getPlayer().getMap().getCharacters()) {
+            for (User map : c.getPlayer().getMap().getCharacters()) {
                 if (map != null && !map.isIntern()) {
                     map.getStat().setHp((short) 0, map);
                     map.getStat().setMp((short) 0, map);
@@ -1078,7 +1078,7 @@ public class GMCommand {
                 c.getPlayer().updateSingleStat(MapleStat.EXP, 0);
                 c.getPlayer().updateSingleStat(MapleStat.LEVEL, c.getPlayer().getLevel());
             } else if (splitted.length == 1) {
-                MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+                User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
                 victim.setLevel((short) Integer.parseInt(splitted[1]));
                 victim.setExp(0);
                 victim.updateSingleStat(MapleStat.EXP, 0);
@@ -1130,7 +1130,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             //for (int i = 0; i < Integer.parseInt(splitted[2]) - victim.getLevel(); i++) {
             while (victim.getLevel() < Integer.parseInt(splitted[2])) {
                 if (victim.getLevel() < 255) {
@@ -1146,7 +1146,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter oPlayer;
+            User oPlayer;
             if (splitted.length > 1) {
                 oPlayer = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             } else {
@@ -1163,7 +1163,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter oPlayer;
+            User oPlayer;
             if (splitted.length > 1) {
                 oPlayer = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             } else {
@@ -1212,7 +1212,7 @@ public class GMCommand {
                 item.setGMLog(c.getPlayer().getName() + " used !getitem");
                 if (MapleItemInformationProvider.getInstance().isCash(itemId)) {
                     if (InventoryConstants.isPet(item.getItemId())) {
-                        final MaplePet pet = MaplePet.createPet(item.getItemId(), MapleInventoryManipulator.getUniqueId(itemId, null));
+                        final Pet pet = Pet.createPet(item.getItemId(), MapleInventoryManipulator.getUniqueId(itemId, null));
                         if (pet != null) {
                             item.setExpiration(System.currentTimeMillis() + (20000 * 24 * 60 * 60 * 1000));
                             item.setPet(pet);
@@ -1315,7 +1315,7 @@ public class GMCommand {
                 c.getPlayer().dropMessage(6, "Need <name> <itemid>");
                 return 0;
             }
-            MapleCharacter chr = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User chr = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (chr == null) {
                 c.getPlayer().dropMessage(6, "This player does not exist");
                 return 0;
@@ -1335,7 +1335,7 @@ public class GMCommand {
                 c.getPlayer().dropMessage(6, "Need <name> <itemid>");
                 return 0;
             }
-            MapleCharacter chr = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User chr = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (chr == null) {
                 c.getPlayer().dropMessage(6, "This player does not exist");
                 return 0;
@@ -1375,7 +1375,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (victim == null) {
                 c.getPlayer().dropMessage(0, "The person isn't login, or doesn't exists.");
                 return 0;
@@ -1389,7 +1389,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            for (MapleCharacter mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+            for (User mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 if (mch == null) {
                     return 0;
                 } else {
@@ -1404,7 +1404,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (victim == null) {
                 c.getPlayer().dropMessage(5, "unable to find '" + splitted[1]);
                 return 0;
@@ -1464,7 +1464,7 @@ public class GMCommand {
                 c.getPlayer().dropMessage(6, "!disease <type> <level> where type = SEAL/DARKNESS/WEAKEN/STUN/CURSE/POISON/SLOW/SEDUCE/REVERSE/ZOMBIFY/POTION/SHADOW/BLIND/FREEZE/POTENTIAL/SLOW2/TORNADO/FLAG");
                 return 0;
             }
-            for (MapleCharacter mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+            for (User mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 if (mch.getMapId() == c.getPlayer().getMapId()) {
                     if (splitted.length == 4) {
                         mch.disease(type, CommandProcessorUtil.getOptionalIntArg(splitted, 2, 1));
@@ -1527,14 +1527,14 @@ public class GMCommand {
                 return 0;
             }
             if (splitted.length == 4) {
-                MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[2]);
+                User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[2]);
                 if (victim == null) {
                     c.getPlayer().dropMessage(5, "Not found.");
                     return 0;
                 }
                 victim.disease(type, CommandProcessorUtil.getOptionalIntArg(splitted, 3, 1));
             } else {
-                for (MapleCharacter victim : c.getPlayer().getMap().getCharacters()) {
+                for (User victim : c.getPlayer().getMap().getCharacters()) {
                     victim.disease(type, CommandProcessorUtil.getOptionalIntArg(splitted, 3, 1));
                 }
             }
@@ -1593,7 +1593,7 @@ public class GMCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             StringBuilder builder = new StringBuilder("Players on Map: ").append(c.getPlayer().getMap().getCharactersSize()).append(", ");
-            for (MapleCharacter chr : c.getPlayer().getMap().getCharacters()) {
+            for (User chr : c.getPlayer().getMap().getCharacters()) {
                 if (builder.length() > 150) { // wild guess :o
                     builder.setLength(builder.length() - 2);
                     c.getPlayer().dropMessage(6, builder.toString());
@@ -1665,7 +1665,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            for (MapleCharacter all : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+            for (User all : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 all.dropMessage(-6, StringUtil.joinStringFrom(splitted, 1));
             }
             return 1;
@@ -2034,7 +2034,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String splitted[]) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             victim.canTalk(false);
             return 1;
         }
@@ -2044,7 +2044,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String splitted[]) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             victim.canTalk(true);
             return 1;
         }
@@ -2054,7 +2054,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String splitted[]) {
-            for (MapleCharacter chr : c.getPlayer().getMap().getCharacters()) {
+            for (User chr : c.getPlayer().getMap().getCharacters()) {
                 chr.canTalk(false);
             }
             return 1;
@@ -2065,7 +2065,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String splitted[]) {
-            for (MapleCharacter chr : c.getPlayer().getMap().getCharacters()) {
+            for (User chr : c.getPlayer().getMap().getCharacters()) {
                 chr.canTalk(true);
             }
             return 1;
@@ -2111,7 +2111,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            for (MapleCharacter all : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+            for (User all : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 all.getClient().getChannelServer().broadcastMessage(CWvsContext.broadcastMsg(Integer.parseInt(splitted[1]), Integer.parseInt(splitted[2]), StringUtil.joinStringFrom(splitted, 3)));
             }
             return 1;
@@ -2125,7 +2125,7 @@ public class GMCommand {
             String message = StringUtil.joinStringFrom(splitted, 2);
             int type = Integer.parseInt(splitted[1]);
 
-            for (MapleCharacter all : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+            for (User all : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 all.getClient().getChannelServer().broadcastMessage(CWvsContext.getSpecialMsg(message, type, true, 10000));
             }
             return 1;
@@ -2136,7 +2136,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            for (MapleCharacter all : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+            for (User all : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 all.getClient().getChannelServer().broadcastMessage(CWvsContext.getSpecialMsg("", 0, false, 0));
             }
             return 1;
@@ -2155,7 +2155,7 @@ public class GMCommand {
             EventTimer.getInstance().schedule(new Runnable() {
                 @Override
                 public void run() {
-                    for (MapleCharacter mch : c.getChannelServer().getMapFactory().getMap(map).getCharacters()) {
+                    for (User mch : c.getChannelServer().getMapFactory().getMap(map).getCharacters()) {
                         if (mch == null) {
                             return;
                         } else {
@@ -2172,7 +2172,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(6, "Syntax: setname <player> <new name>");
                 return 0;
@@ -2196,7 +2196,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            for (MapleCharacter mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+            for (User mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 if (splitted.length > 1) {
                     StringBuilder sb = new StringBuilder();
                     sb.append(StringUtil.joinStringFrom(splitted, 1));
@@ -2214,7 +2214,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            for (MapleCharacter mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+            for (User mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 mch.getAndroid().saveToDb();
                 mch.dropMessage(0, "Androids successfully saved!");
             }
@@ -2326,7 +2326,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             Skill skill = SkillFactory.getSkill(Integer.parseInt(splitted[2]));
             byte level = (byte) CommandProcessorUtil.getOptionalIntArg(splitted, 3, 1);
             byte masterlevel = (byte) CommandProcessorUtil.getOptionalIntArg(splitted, 4, 1);
@@ -2556,13 +2556,13 @@ public class GMCommand {
             if (!GameConstants.isEffectRing(itemId)) {
                 c.getPlayer().dropMessage(6, "Invalid itemID.");
             } else {
-                MapleCharacter fff = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+                User fff = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
                 if (fff == null) {
                     c.getPlayer().dropMessage(6, "Player must be online");
                 } else {
                     int[] ringID = {MapleInventoryIdentifier.getInstance(), MapleInventoryIdentifier.getInstance()};
                     try {
-                        MapleCharacter[] chrz = {fff, c.getPlayer()};
+                        User[] chrz = {fff, c.getPlayer()};
                         for (int i = 0; i < chrz.length; i++) {
                             Equip eq = (Equip) MapleItemInformationProvider.getInstance().getEquipById(itemId, ringID[i]);
                             if (eq == null) {
@@ -2589,7 +2589,7 @@ public class GMCommand {
                 c.getPlayer().dropMessage(6, "Need playername and amount.");
                 return 0;
             }
-            MapleCharacter chrs = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User chrs = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (chrs == null) {
                 c.getPlayer().dropMessage(6, "Make sure they are in the correct channel");
             } else {
@@ -2608,7 +2608,7 @@ public class GMCommand {
                 c.getPlayer().dropMessage(6, "Need playername and amount.");
                 return 0;
             }
-            MapleCharacter chrs = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User chrs = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (chrs == null) {
                 c.getPlayer().dropMessage(6, "Make sure they are in the correct channel");
             } else {
@@ -2623,7 +2623,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            for (MapleCharacter victim : c.getPlayer().getMap().getCharacters()) {
+            for (User victim : c.getPlayer().getMap().getCharacters()) {
                 if (victim.getId() != c.getPlayer().getId()) {
                     victim.getMap().broadcastMessage(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), true));
                 }
@@ -2636,7 +2636,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            for (MapleCharacter victim : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+            for (User victim : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 if (victim.getId() != c.getPlayer().getId()) {
                     victim.getMap().broadcastMessage(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), true));
                 }
@@ -2650,7 +2650,7 @@ public class GMCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
-                for (MapleCharacter victim : cserv.getPlayerStorage().getAllCharacters()) {
+                for (User victim : cserv.getPlayerStorage().getAllCharacters()) {
                     if (victim.getId() != c.getPlayer().getId()) {
                         victim.getMap().broadcastMessage(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), true));
                     }
@@ -2664,7 +2664,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter target = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User target = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (target != null) {
                 if (target.getClient().isMonitored()) {
                     target.getClient().setMonitored(false);
@@ -3041,7 +3041,7 @@ public class GMCommand {
             try {
                 c.getPlayer().dropMessage(6, "Making playerNPC...");
                 MapleClient cs = new MapleClient(null, 0, 0);
-                MapleCharacter chhr = MapleCharacter.loadCharFromDB(MapleCharacterUtil.getIdByName(splitted[1]), cs, false);
+                User chhr = User.loadCharFromDB(MapleCharacterUtil.getIdByName(splitted[1]), cs, false);
                 if (chhr == null) {
                     c.getPlayer().dropMessage(6, splitted[1] + " does not exist");
                     return 0;
@@ -3258,7 +3258,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (victim != null && c.getPlayer().getGMLevel() >= victim.getGMLevel()) {
                 victim.getClient().close();
                 return 1;
@@ -3296,7 +3296,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter player = c.getPlayer();
+            User player = c.getPlayer();
             if (getRevision() != -1) {
                 c.getPlayer().dropMessage(5, "Revision: " + ServerConstants.SOURCE_REVISION);
             } else {
@@ -3361,7 +3361,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             victim.gainMeso(9999999 - c.getPlayer().getMeso(), true);
             return 1;
         }
@@ -3380,7 +3380,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             victim.gainMeso(Integer.parseInt(splitted[2]), true);
             return 1;
         }
@@ -3390,7 +3390,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (splitted.length < 3) {
                 c.getPlayer().dropMessage(5, "!gaincash <player> <amount>");
                 return 0;
@@ -3664,7 +3664,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (splitted.length >= 2) {
                 String text = StringUtil.joinStringFrom(splitted, 1);
                 c.getPlayer().sendNote(victim.getName(), text);
@@ -3683,7 +3683,7 @@ public class GMCommand {
 
             if (splitted.length >= 1) {
                 String text = StringUtil.joinStringFrom(splitted, 1);
-                for (MapleCharacter mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+                for (User mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                     c.getPlayer().sendNote(mch.getName(), text);
                 }
             } else {
@@ -3734,7 +3734,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            for (MapleCharacter mch : c.getPlayer().getMap().getCharacters()) {
+            for (User mch : c.getPlayer().getMap().getCharacters()) {
                 SkillFactory.getSkill(Integer.parseInt(splitted[1])).getEffect(Integer.parseInt(splitted[2])).applyTo(mch);
             }
             return 0;
@@ -3745,7 +3745,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            for (MapleCharacter mch : c.getPlayer().getMap().getCharacters()) {
+            for (User mch : c.getPlayer().getMap().getCharacters()) {
                 MapleItemInformationProvider.getInstance().getItemEffect(Integer.parseInt(splitted[1])).applyTo(mch);
             }
             return 0;
@@ -3756,7 +3756,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            for (MapleCharacter mch : c.getPlayer().getMap().getCharacters()) {
+            for (User mch : c.getPlayer().getMap().getCharacters()) {
                 MapleItemInformationProvider.getInstance().getItemEffectEX(Integer.parseInt(splitted[1])).applyTo(mch);
             }
             return 0;

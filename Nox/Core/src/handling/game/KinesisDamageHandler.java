@@ -9,7 +9,7 @@ import client.MapleClient;
 import net.InPacket;
 import net.OutPacket;
 import netty.ProcessPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import service.SendPacketOpcode;
 
 /**

@@ -4,7 +4,7 @@ import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.LogHelper;
 import net.InPacket;
 import netty.ProcessPacket;
@@ -25,7 +25,7 @@ public class UserEffectLocalHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         int skillId = iPacket.DecodeInteger();
         int skillLevel_client = iPacket.DecodeShort();

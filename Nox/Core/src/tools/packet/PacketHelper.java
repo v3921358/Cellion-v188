@@ -13,8 +13,8 @@ import provider.data.HexTool;
 import server.CashItem;
 import server.MapleItemInformationProvider;
 import server.maps.MapleMapObject;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import server.movement.LifeMovementFragment;
 import server.quest.MapleQuest;
 import server.shops.MapleShop;
@@ -95,7 +95,7 @@ public class PacketHelper {
         oPacket.Encode(image);
     }
 
-    public static void addStartedQuestInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addStartedQuestInfo(OutPacket oPacket, User chr) {
         oPacket.Encode(1);
         final List<MapleQuestStatus> started = chr.getStartedQuests();
         oPacket.EncodeShort(started.size());
@@ -115,7 +115,7 @@ public class PacketHelper {
         addNXQuestInfo(oPacket, chr);
     }
 
-    public static void addNXQuestInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addNXQuestInfo(OutPacket oPacket, User chr) {
         oPacket.EncodeShort(0);
         /*
          oPacket.encodeShort(7);
@@ -136,7 +136,7 @@ public class PacketHelper {
          */
     }
 
-    public static void addCompletedQuestInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addCompletedQuestInfo(OutPacket oPacket, User chr) {
         oPacket.Encode(1);
         final List<MapleQuestStatus> completed = chr.getCompletedQuests();
         oPacket.EncodeShort(completed.size());
@@ -148,7 +148,7 @@ public class PacketHelper {
         }
     }
 
-    public static void addSkillInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addSkillInfo(OutPacket oPacket, User chr) {
         Map<Skill, SkillEntry> skills = chr.getSkills();
 
         oPacket.Encode(skills != null); // when true, size: short (size), short (size)
@@ -175,7 +175,7 @@ public class PacketHelper {
         }
     }
 
-    public static void addCoolDownInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addCoolDownInfo(OutPacket oPacket, User chr) {
         List<MapleCoolDownValueHolder> cd = chr.getCooldowns();
         long cTime = System.currentTimeMillis();
 
@@ -186,7 +186,7 @@ public class PacketHelper {
         }
     }
 
-    public static void addRocksInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addRocksInfo(OutPacket oPacket, User chr) {
         int[] mapz = chr.getRegRocks();
         for (int i = 0; i < 5; i++) {
             oPacket.EncodeInteger(mapz[i]);
@@ -206,7 +206,7 @@ public class PacketHelper {
         }
     }
 
-    public static void addMiniGameRecordInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addMiniGameRecordInfo(OutPacket oPacket, User chr) {
         short size = 0;
         oPacket.EncodeShort(size);
         for (int i = 0; i < size; i++) {
@@ -218,7 +218,7 @@ public class PacketHelper {
         }
     }
 
-    public static void addRingInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addRingInfo(OutPacket oPacket, User chr) {
         Triple<List<MapleRing>, List<MapleRing>, List<MapleRing>> aRing = chr.getRings(true);
 
         List<MapleRing> cRing = aRing.getLeft();
@@ -255,7 +255,7 @@ public class PacketHelper {
         }
     }
 
-    public static void addInventoryInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addInventoryInfo(OutPacket oPacket, User chr) {
         oPacket.EncodeInteger(0); // if this int > 0, write 3 ints and a long GW_ExpConsumeItem
         /*
 		dummyBLD.nItemID = CInPacket::Decode4(iPacket);
@@ -465,7 +465,7 @@ public class PacketHelper {
         oPacket.Encode(0);
     }
 
-    public static void addPotionPotInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addPotionPotInfo(OutPacket oPacket, User chr) {
         /*if (chr.getPotionPots() == null) {
             oPacket.EncodeInteger(0);
             return;
@@ -484,7 +484,7 @@ public class PacketHelper {
         oPacket.EncodeInteger(0);
     }
 
-    public static void addCharStats(OutPacket oPacket, MapleCharacter chr) {
+    public static void addCharStats(OutPacket oPacket, User chr) {
         oPacket.EncodeInteger(chr.getId());
         oPacket.EncodeInteger(chr.getId()); // dwCharacterIDForLog
         oPacket.EncodeInteger(0); //dwWorldIDForLog
@@ -545,7 +545,7 @@ public class PacketHelper {
         oPacket.Encode(6); //nPvPModeType
         oPacket.EncodeInteger(0); //nEventPoint
 
-        addPartTimeJob(oPacket, MapleCharacter.getPartTime(chr.getId()));
+        addPartTimeJob(oPacket, User.getPartTime(chr.getId()));
 
         // Character card
         for (int i = 0; i < 9; i++) {
@@ -664,7 +664,7 @@ public class PacketHelper {
 
         // Checks if player has a listed cash weapon equip and fetchs the ID for the integer being written below.
         // Hack fix but neccessary for now as for some reason attempting to fetch the ID normally results in null. -MazenMapleCharacter oPlayer = (MapleCharacter) chr;
-        MapleCharacter pPlayer = (MapleCharacter) chr;
+        User pPlayer = (User) chr;
         for (int i = 0; i < GameConstants.aCashWeapons.length; i++) {
             if (pPlayer.hasEquipped(GameConstants.aCashWeapons[i])) {
                 cWeapon = GameConstants.aCashWeapons[i];
@@ -725,7 +725,7 @@ public class PacketHelper {
         addItemInfo(oPacket, item, null);
     }
 
-    public static void addItemInfo(final OutPacket oPacket, final Item item, final MapleCharacter chr) {
+    public static void addItemInfo(final OutPacket oPacket, final Item item, final User chr) {
         oPacket.Encode(item.getPet() != null ? 3 : item.getType().getTypeValue());// Actually, getTypeValue for pet returns '3' already, but in case of server error.. 
         oPacket.EncodeInteger(item.getItemId());
         boolean hasUniqueId = item.getUniqueId() > 0 && !GameConstants.isMarriageRing(item.getItemId()) && item.getItemId() / 10000 != 166;
@@ -950,7 +950,7 @@ public class PacketHelper {
         }
     }
 
-    public static void addAnnounceBox(OutPacket oPacket, MapleCharacter chr) {
+    public static void addAnnounceBox(OutPacket oPacket, User chr) {
         if (chr.getPlayerShop() != null && chr.getPlayerShop().isOwner(chr) && chr.getPlayerShop().getShopType() != 1 && chr.getPlayerShop().isAvailable()) {
             addInteraction(oPacket, chr.getPlayerShop());
         } else {
@@ -973,7 +973,7 @@ public class PacketHelper {
         }
     }
 
-    public static void addCharacterInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addCharacterInfo(OutPacket oPacket, User chr) {
         long mask = 0xFFFFFFFFFFFFFFFFL;
         oPacket.EncodeLong(mask);//dbcharFlag
         oPacket.Encode(0); //nCombatOrders, guessing combat orders level
@@ -1292,7 +1292,7 @@ public class PacketHelper {
         return 0;
     }
 
-    public static void addAbilityInfo(final OutPacket oPacket, MapleCharacter chr) {
+    public static void addAbilityInfo(final OutPacket oPacket, User chr) {
         final List<InnerSkillValueHolder> skills = chr.getInnerSkills();
         oPacket.EncodeShort(skills.size());
         for (int i = 0; i < skills.size(); ++i) {
@@ -1304,17 +1304,17 @@ public class PacketHelper {
 
     }
 
-    public static void addHonorInfo(final OutPacket oPacket, MapleCharacter chr) {
+    public static void addHonorInfo(final OutPacket oPacket, User chr) {
         oPacket.EncodeInteger(chr.getHonorLevel()); //honor lvl
         oPacket.EncodeInteger(chr.getHonourExp()); //honor exp
     }
 
-    public static void addEvolutionInfo(final OutPacket oPacket, MapleCharacter chr) {
+    public static void addEvolutionInfo(final OutPacket oPacket, User chr) {
         oPacket.EncodeShort(0); // if > 0, write short and two ints  for core id and left count (amount maybe)
         oPacket.EncodeShort(0); // if > 0, write short and two ints for core id and left count (amount maybe)
     }
 
-    public static void addCoreAura(OutPacket oPacket, MapleCharacter chr) {
+    public static void addCoreAura(OutPacket oPacket, User chr) {
         MapleCoreAura aura = chr.getCoreAura();
         oPacket.EncodeInteger(aura.getId()); // never changes
         oPacket.EncodeInteger(chr.getId());
@@ -1340,7 +1340,7 @@ public class PacketHelper {
 
     }
 
-    public static void addStolenSkills(OutPacket oPacket, MapleCharacter chr, int jobNum, boolean writeJob) {
+    public static void addStolenSkills(OutPacket oPacket, User chr, int jobNum, boolean writeJob) {
         if (writeJob) {
             oPacket.EncodeInteger(jobNum);
         }
@@ -1368,7 +1368,7 @@ public class PacketHelper {
      * @param oPacket
      * @param chr
      */
-    public static void addChosenSkills(OutPacket oPacket, MapleCharacter chr) {
+    public static void addChosenSkills(OutPacket oPacket, User chr) {
         for (int i = 1; i <= 5; i++) {
             boolean found = false;
             if (chr.getStolenSkills() != null) {
@@ -1386,7 +1386,7 @@ public class PacketHelper {
         }
     }
 
-    public static void addMonsterBookInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addMonsterBookInfo(OutPacket oPacket, User chr) {
         /*if (chr.getMonsterBook().getSetScore() > 0) {
             chr.getMonsterBook().writeFinished(oPacket);
         } else {
@@ -1396,7 +1396,7 @@ public class PacketHelper {
         oPacket.EncodeShort(0);
     }
 
-    public static void addPetItemInfo(OutPacket oPacket, Item item, MaplePet pet, boolean active) {
+    public static void addPetItemInfo(OutPacket oPacket, Item item, Pet pet, boolean active) {
         if (item == null) {
             oPacket.EncodeLong(PacketHelper.getKoreanTimestamp((long) (System.currentTimeMillis() * 1.5)));
         } else {
@@ -1518,7 +1518,7 @@ public class PacketHelper {
         }
         addRedLeafInfo(oPacket, chr);
     }*/
-    public static void addShopItemInfo(OutPacket oPacket, MapleShopItem item, MapleShop shop, MapleItemInformationProvider ii, Item repurchaseItemInfo, MapleCharacter chr) {
+    public static void addShopItemInfo(OutPacket oPacket, MapleShopItem item, MapleShop shop, MapleItemInformationProvider ii, Item repurchaseItemInfo, User chr) {
         oPacket.EncodeInteger(item.getItemId());
         oPacket.EncodeInteger(item.getCategory());
         oPacket.EncodeInteger(1440 * item.getExpiration());
@@ -1562,14 +1562,14 @@ public class PacketHelper {
         }
     }
 
-    public static void addJaguarInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addJaguarInfo(OutPacket oPacket, User chr) {
         oPacket.Encode(chr.getIntNoRecord(GameConstants.JAGUAR));
         for (int i = 0; i < 5; i++) {
             oPacket.EncodeInteger(0);
         }
     }
 
-    public static void addZeroInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addZeroInfo(OutPacket oPacket, User chr) {
         short mask = 0;
         oPacket.EncodeShort(mask);
         if ((mask & 1) != 0) {
@@ -1606,7 +1606,7 @@ public class PacketHelper {
         }
     }
 
-    public static void addBeastTamerInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addBeastTamerInfo(OutPacket oPacket, User chr) {
         int beast = GameConstants.isBeastTamer(chr.getJob()) ? 1 : 0;
         String ears = Integer.toString(chr.getEars());
         String tail = Integer.toString(chr.getTail());
@@ -1633,7 +1633,7 @@ public class PacketHelper {
         oPacket.EncodeInteger(1); //nLockerSlotCount
     }
 
-    public static void addRedLeafInfo(OutPacket oPacket, MapleCharacter chr) {
+    public static void addRedLeafInfo(OutPacket oPacket, User chr) {
         oPacket.EncodeInteger(chr.getClient().getAccID());//4 ints, correct
         oPacket.EncodeInteger(chr.getId());
         oPacket.EncodeInteger(4);

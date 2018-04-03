@@ -12,8 +12,8 @@ import server.Randomizer;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.SummonMovementType;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MapleSummon;
+import server.maps.objects.User;
+import server.maps.objects.Summon;
 import tools.packet.CField;
 import netty.ProcessPacket;
 
@@ -30,12 +30,12 @@ public class SubSummonHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         final MapleMapObject obj = chr.getMap().getMapObject(iPacket.DecodeInteger(), MapleMapObjectType.SUMMON);
-        if (obj == null || !(obj instanceof MapleSummon)) {
+        if (obj == null || !(obj instanceof Summon)) {
             return;
         }
-        final MapleSummon sum = (MapleSummon) obj;
+        final Summon sum = (Summon) obj;
         if (sum == null || sum.getOwnerId() != chr.getId() || sum.getSkillLevel() <= 0 || !chr.isAlive()) {
             return;
         }
@@ -51,7 +51,7 @@ public class SubSummonHandler implements ProcessPacket<MapleClient> {
                 iPacket.Skip(1); // 0E?
                 chr.updateTick(iPacket.DecodeInteger());
                 for (int i = 0; i < 3; i++) {
-                    final MapleSummon tosummon = new MapleSummon(
+                    final Summon tosummon = new Summon(
                             chr,
                             SkillFactory.getSkill(35121011).getEffect(sum.getSkillLevel()),
                             new Point(sum.getTruePosition().x, sum.getTruePosition().y - 5),

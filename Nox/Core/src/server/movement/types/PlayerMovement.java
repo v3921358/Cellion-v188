@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 import net.InPacket;
 import server.maps.MapleMap;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.movement.LifeMovementFragment;
 import tools.packet.CField;
 import netty.ProcessPacket;
@@ -20,7 +20,7 @@ import server.MapleInventoryManipulator;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MaplePet;
+import server.maps.objects.Pet;
 
 /**
  * @author Steven
@@ -35,7 +35,7 @@ public class PlayerMovement implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
         if (chr == null) {
             return;
         }
@@ -65,7 +65,7 @@ public class PlayerMovement implements ProcessPacket<MapleClient> {
             map.movePlayer(chr, pos);
 
             if (chr.getFollowId() > 0 && chr.isFollowOn() && chr.isFollowInitiator()) {
-                MapleCharacter follower = map.getCharacterById(chr.getFollowId());
+                User follower = map.getCharacterById(chr.getFollowId());
                 if (follower != null) {
                     Point originalPosition = follower.getPosition();
                     follower.getClient().write(CField.moveFollow(position, originalPosition, pos, res));
@@ -108,7 +108,7 @@ public class PlayerMovement implements ProcessPacket<MapleClient> {
                 MapleMapItem mapLoot;
                 boolean bHasPet = false;
                 for (int i = 0; i <= 3; i++) {
-                    MaplePet pet = chr.getPet(i);
+                    Pet pet = chr.getPet(i);
                     if (pet != null) {
                         bHasPet = true; // Checks all pet slots to confirm if player has a pet active.
                     }

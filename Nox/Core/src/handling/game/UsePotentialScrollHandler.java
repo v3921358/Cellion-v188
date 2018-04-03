@@ -17,7 +17,7 @@ import net.InPacket;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.potentials.ItemPotentialProvider;
 import server.potentials.ItemPotentialTierType;
 import tools.packet.CField;
@@ -41,7 +41,7 @@ public class UsePotentialScrollHandler implements ProcessPacket<MapleClient> {
         //03 00 
         //01 00 
         //00
-        MapleCharacter chr = c.getPlayer();
+        User chr = c.getPlayer();
 
         chr.updateTick(iPacket.DecodeInteger());
         //iPacket.decode();

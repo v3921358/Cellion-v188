@@ -1,7 +1,7 @@
 /*
  * Rexion Development
  */
-package handling.jobs;
+package client.jobs;
 
 import client.CharacterTemporaryStat;
 import client.MapleClient;
@@ -14,7 +14,7 @@ import net.InPacket;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
 import server.life.MapleMonster;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.BuffPacket;
 import tools.packet.JobPacket;
 import constants.GameConstants;
@@ -29,7 +29,7 @@ public class Kinesis {
 
     public static class KinesisHandler {
 
-        public static void handlePsychicPoint(MapleCharacter pPlayer, int nSkill) {
+        public static void handlePsychicPoint(User pPlayer, int nSkill) {
             MapleStatEffect pEffect = SkillFactory.getSkill(nSkill).getEffect(pPlayer.getTotalSkillLevel(nSkill));
 
             int nPsychicPointChange = pEffect.calcPsychicPowerChange(pPlayer);
@@ -49,12 +49,12 @@ public class Kinesis {
             psychicPointResult(pPlayer, nPsychicPoint);
         }
         
-        public static void psychicPointResult(MapleCharacter pPlayer, int nAmount) {
+        public static void psychicPointResult(User pPlayer, int nAmount) {
             pPlayer.setPrimaryStack(nAmount);
             pPlayer.write(KinesisPacket.updatePsychicPoint(nAmount));
         }
         
-        public static void requestMentalShield(MapleCharacter pPlayer) {
+        public static void requestMentalShield(User pPlayer) {
             Skill pSkill = SkillFactory.getSkill(constants.skills.Kinesis.MENTAL_SHIELD);
             MapleStatEffect pEffect = pSkill.getEffect(pPlayer.getTotalSkillLevel(pSkill));
             

@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import server.MapleStatEffect;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Pair;
 import net.InPacket;
 import net.Packet;
@@ -328,7 +328,7 @@ public class GuildOperationHandler implements ProcessPacket<MapleClient> {
         return true;
     }
 
-    private static void respawnPlayer(final MapleCharacter mc) {
+    private static void respawnPlayer(final User mc) {
         if (mc.getMap() == null) {
             return;
         }

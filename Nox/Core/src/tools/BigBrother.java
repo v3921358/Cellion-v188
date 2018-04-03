@@ -8,13 +8,13 @@ import handling.world.MaplePartyCharacter;
 import service.ChannelServer;
 import server.MapleItemInformationProvider;
 import server.MapleTrade;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 public class BigBrother {
 
-    public static void general(String message, MapleCharacter source) {
+    public static void general(String message, User source) {
         for (ChannelServer ch : ChannelServer.getAllInstances()) {
-            for (MapleCharacter player : ch.getPlayerStorage().getAllCharacters()) {
+            for (User player : ch.getPlayerStorage().getAllCharacters()) {
                 if (player.isGM() && player.bigBrother()) {
                     if (player.getClient().getChannel() == source.getClient().getChannel() && player.getMapId() == source.getMapId()) {
                         return;//If GM and source is on same map AND same channel, ignore to avoid double messages
@@ -25,9 +25,9 @@ public class BigBrother {
         }
     }
 
-    public static void whisper(String message, MapleCharacter source, MapleCharacter destination) {
+    public static void whisper(String message, User source, User destination) {
         for (ChannelServer ch : ChannelServer.getAllInstances()) {
-            for (MapleCharacter player : ch.getPlayerStorage().getAllCharacters()) {
+            for (User player : ch.getPlayerStorage().getAllCharacters()) {
                 if (player.isGM() && player.bigBrother()) {
                     if (player.equals(destination) || player.equals(source)) {
                         return; //To avoid double whispers
@@ -40,7 +40,7 @@ public class BigBrother {
 
     public static void buddy(int[] recipientCharacterIds, int cidFrom, String nameFrom, String chattext) {
         for (ChannelServer ch : ChannelServer.getAllInstances()) {
-            for (MapleCharacter player : ch.getPlayerStorage().getAllCharacters()) {
+            for (User player : ch.getPlayerStorage().getAllCharacters()) {
                 if (player.isGM() && player.bigBrother()) {
                     if (cidFrom == player.getId()) {
                         return; //To avoid double buddy chats
@@ -58,7 +58,7 @@ public class BigBrother {
 
     public static void guild(String guildName, String source, String message) {
         for (ChannelServer ch : ChannelServer.getAllInstances()) {
-            for (MapleCharacter player : ch.getPlayerStorage().getAllCharacters()) {
+            for (User player : ch.getPlayerStorage().getAllCharacters()) {
                 if (player.isGM() && player.bigBrother()) {
                     if (player.getGuild() != null && player.getGuild().getName().equalsIgnoreCase(guildName)) {
                         return; //Avoid same-guild messages
@@ -71,7 +71,7 @@ public class BigBrother {
 
     public static void party(MapleParty party, String chattext, String namefrom) {
         for (ChannelServer ch : ChannelServer.getAllInstances()) {
-            for (MapleCharacter player : ch.getPlayerStorage().getAllCharacters()) {
+            for (User player : ch.getPlayerStorage().getAllCharacters()) {
                 if (player.isGM() && player.bigBrother()) {
                     for (MaplePartyCharacter partyMember : party.getMembers()) {
                         if (partyMember.getId() == player.getId()) { //Prevent same-party messages
@@ -84,9 +84,9 @@ public class BigBrother {
         }
     }
 
-    public static void trade(MapleCharacter chr, MapleCharacter chr2, String message) {
+    public static void trade(User chr, User chr2, String message) {
         for (ChannelServer ch : ChannelServer.getAllInstances()) {
-            for (MapleCharacter player : ch.getPlayerStorage().getAllCharacters()) {
+            for (User player : ch.getPlayerStorage().getAllCharacters()) {
                 if (player.isGM() && player.bigBrother()) {
                     if (player.equals(chr) || player.equals(chr2)) {
                         return; //You're in the trade itself
@@ -102,7 +102,7 @@ public class BigBrother {
             return;
         }
         for (ChannelServer ch : ChannelServer.getAllInstances()) {
-            for (MapleCharacter player : ch.getPlayerStorage().getAllCharacters()) {
+            for (User player : ch.getPlayerStorage().getAllCharacters()) {
                 if (player.isGM() && player.bigBrother()) {
                     if (player.getName().equals(from) || player.getName().equals(to1) || player.getName().equals(to2)) {
                         return; //You're in the chat itself
@@ -142,7 +142,7 @@ public class BigBrother {
         return minutes + " Minutes and " + seconds + " Seconds";
     }
 
-    public static void logGacha(MapleCharacter player, int itemid, String map) {
+    public static void logGacha(User player, int itemid, String map) {
         String itemName = MapleItemInformationProvider.getInstance().getName(itemid);
         LogHelper.GACHAPON.get().info(player.getName() + " got a " + itemName + " (" + itemid + ") from the " + map + " gachapon.\r\n");
     }

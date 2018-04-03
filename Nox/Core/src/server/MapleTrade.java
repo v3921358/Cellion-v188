@@ -15,7 +15,7 @@ import constants.InventoryConstants;
 import constants.ServerConstants;
 import handling.world.World;
 import server.commands.CommandProcessor;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.PlayerShopPacket;
@@ -29,10 +29,10 @@ public class MapleTrade {
     private long exchangeMeso = 0;
     private boolean locked = false;
     private boolean inTrade = false;
-    private MapleCharacter chr;
+    private User chr;
     private byte tradingslot;
 
-    public MapleTrade(byte tradingslot, MapleCharacter chr) {
+    public MapleTrade(byte tradingslot, User chr) {
         this.tradingslot = tradingslot;
         this.chr = chr;
     }
@@ -59,11 +59,11 @@ public class MapleTrade {
         chr.getClient().write(CField.InteractionPacket.TradeMessage(tradingslot, (byte) 7));
     }
 
-    public void cancel(MapleClient c, MapleCharacter chr) {
+    public void cancel(MapleClient c, User chr) {
         cancel(c, chr, true);
     }
 
-    public void cancel(MapleClient c, MapleCharacter chr, boolean unsuccessful) {
+    public void cancel(MapleClient c, User chr, boolean unsuccessful) {
         if (items != null) {
             List<Item> itemz = new LinkedList<>(items);
             for (Item item : itemz) {
@@ -145,7 +145,7 @@ public class MapleTrade {
         this.partner = partner;
     }
 
-    public MapleCharacter getCharacter() {
+    public User getCharacter() {
         return chr;
     }
 
@@ -227,7 +227,7 @@ public class MapleTrade {
         return true;
     }
 
-    public static void completeTrade(MapleCharacter c) {
+    public static void completeTrade(User c) {
         MapleTrade local = c.getTrade();
         MapleTrade partner = local.getPartner();
 
@@ -255,7 +255,7 @@ public class MapleTrade {
         }
     }
 
-    public static void cancelTrade(MapleTrade trade, MapleClient c, MapleCharacter chr) {
+    public static void cancelTrade(MapleTrade trade, MapleClient c, User chr) {
         trade.cancel(c, chr);
 
         MapleTrade partner = trade.getPartner();
@@ -266,7 +266,7 @@ public class MapleTrade {
         chr.setTrade(null);
     }
 
-    public static void startTrade(MapleCharacter c) {
+    public static void startTrade(User c) {
         if (GameConstants.isZero(c.getJob())) {
             c.getClient().write(CWvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
             return;
@@ -280,7 +280,7 @@ public class MapleTrade {
         }
     }
 
-    public static void inviteTrade(MapleCharacter c1, MapleCharacter c2) {
+    public static void inviteTrade(User c1, User c2) {
         if (GameConstants.isZero(c2.getJob())) {
             c1.getClient().write(CWvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
             c1.getTrade().cancel(c1.getClient(), c1);
@@ -301,7 +301,7 @@ public class MapleTrade {
         }
     }
 
-    public static void visitTrade(MapleCharacter c1, MapleCharacter c2) {
+    public static void visitTrade(User c1, User c2) {
         if (GameConstants.isZero(c2.getJob())) {
             c1.getClient().write(CWvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
             return;
@@ -316,11 +316,11 @@ public class MapleTrade {
         }
     }
 
-    public static void declineTrade(MapleCharacter c) {
+    public static void declineTrade(User c) {
         MapleTrade trade = c.getTrade();
         if (trade != null) {
             if (trade.getPartner() != null) {
-                MapleCharacter other = trade.getPartner().getCharacter();
+                User other = trade.getPartner().getCharacter();
                 if (other != null && other.getTrade() != null) {
                     other.getTrade().cancel(other.getClient(), other);
                     other.setTrade(null);

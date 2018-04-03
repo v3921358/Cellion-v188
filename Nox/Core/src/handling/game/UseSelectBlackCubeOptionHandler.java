@@ -8,7 +8,7 @@ import constants.ItemConstants;
 import java.util.ArrayList;
 import java.util.List;
 import net.InPacket;
-import server.maps.objects.MapleCharacter.CharacterTemporaryValues;
+import server.maps.objects.User.CharacterTemporaryValues;
 import tools.Pair;
 import tools.packet.CWvsContext;
 import tools.packet.MiracleCubePacket;

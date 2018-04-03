@@ -50,15 +50,15 @@ import server.life.MapleLifeFactory;
 import server.maps.FieldLimitType;
 import server.maps.MapleMap;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.maps.objects.MapleMist;
-import server.maps.objects.MaplePet;
+import server.maps.objects.Pet;
 import server.maps.objects.MonsterFamiliar;
 import server.quest.MapleQuest;
 import server.shops.MapleShopFactory;
 import server.stores.HiredMerchant;
 import net.InPacket;
-import server.maps.objects.MapleCharacter.CharacterTemporaryValues;
+import server.maps.objects.User.CharacterTemporaryValues;
 import server.potentials.ItemPotentialProvider;
 import server.potentials.ItemPotentialTierType;
 import tools.LogHelper;
@@ -69,7 +69,7 @@ import tools.packet.CWvsContext;
 import tools.packet.MiracleCubePacket;
 import tools.packet.PetPacket;
 import netty.ProcessPacket;
-import server.maps.objects.MaplePet.PetFlag;
+import server.maps.objects.Pet.PetFlag;
 
 /**
  *
@@ -84,7 +84,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleCharacter pPlayer = c.getPlayer();
+        User pPlayer = c.getPlayer();
 
         if (pPlayer == null || pPlayer.getMap() == null || pPlayer.inPVP()) {
             c.write(CWvsContext.enableActions());
@@ -276,7 +276,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 break;
             }
             case 5450005: {
-                c.getPlayer().setConversation(MapleCharacter.MapleCharacterConversationType.Storage);
+                c.getPlayer().setConversation(User.MapleCharacterConversationType.Storage);
                 c.getPlayer().getStorage().sendStorage(c, 1022005);
                 break;
             }
@@ -1706,7 +1706,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                     iPacket.DecodeByte(); //who knows
                 }
                 boolean ear = tvType != 1 && tvType != 2 && iPacket.DecodeByte() > 1; //for tvType 1/2, there is no byte. 
-                MapleCharacter victim = tvType == 1 || tvType == 4 ? null : c.getChannelServer().getPlayerStorage().getCharacterByName(iPacket.DecodeString()); //for tvType 4, there is no string.
+                User victim = tvType == 1 || tvType == 4 ? null : c.getChannelServer().getPlayerStorage().getCharacterByName(iPacket.DecodeString()); //for tvType 4, there is no string.
                 if (tvType == 0 || tvType == 3) { //doesn't allow two
                     victim = null;
                 } else if (victim == null) {
@@ -1746,7 +1746,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             case 5190008:
             case 5190000: { // Pet Flags
                 final int uniqueid = (int) iPacket.DecodeLong();
-                MaplePet pet = c.getPlayer().getPet(0);
+                Pet pet = c.getPlayer().getPet(0);
                 int slo = 0;
 
                 if (pet == null) {
@@ -1787,7 +1787,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             case 5191004:
             case 5191000: { // Pet Flags
                 final int uniqueid = (int) iPacket.DecodeLong();
-                MaplePet pet = c.getPlayer().getPet(0);
+                Pet pet = c.getPlayer().getPet(0);
                 int slo = 0;
 
                 if (pet == null) {
@@ -1812,7 +1812,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                         break;
                     }
                 }
-                MaplePet.PetFlag zz = MaplePet.PetFlag.getByDelId(itemId);
+                Pet.PetFlag zz = Pet.PetFlag.getByDelId(itemId);
                 if (zz != null && zz.check(pet.getItem().getFlag())) {
                     pet.getItem().setFlag((short) (pet.getItem().getFlag() - zz.getValue()));
                     c.write(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
@@ -1840,7 +1840,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             }
             case 5170000: { // Pet name change
                 final int uniqueid = (int) iPacket.DecodeLong();
-                MaplePet pet = c.getPlayer().getPet(0);
+                Pet pet = c.getPlayer().getPet(0);
                 int slo = 0;
 
                 if (pet == null) {
@@ -2043,7 +2043,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
 
                         final int buff = ii.getStateChangeItem(itemId);
                         if (buff != 0) {
-                            for (MapleCharacter mChar : c.getPlayer().getMap().getCharacters()) {
+                            for (User mChar : c.getPlayer().getMap().getCharacters()) {
                                 ii.getItemEffect(buff).applyTo(mChar);
                             }
                         }
@@ -2093,7 +2093,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
         }
     }
 
-    private static void addMedalString(final MapleCharacter c, final StringBuilder sb) {
+    private static void addMedalString(final User c, final StringBuilder sb) {
         final Item medal = c.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -49);
         if (medal != null) { // Medal
             sb.append("<");

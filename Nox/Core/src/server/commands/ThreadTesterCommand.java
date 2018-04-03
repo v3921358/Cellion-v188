@@ -7,7 +7,7 @@ import service.ChannelServer;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.Timer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 /**
  * Unit test command just to test for racing conditions/threading issue in giving player buff... >>> LOL never to use this on production
@@ -47,7 +47,7 @@ public class ThreadTesterCommand {
 
                 }
 
-                private void giveBuffInternal(MapleCharacter chr) {
+                private void giveBuffInternal(User chr) {
                     MapleStatEffect effect = MapleItemInformationProvider.getInstance().getItemEffect(2022179); // onyx apple
                     chr.registerEffect(effect, 0, null, chr.getId());
 
@@ -75,7 +75,7 @@ public class ThreadTesterCommand {
 
                 }
 
-                private void giveBuffInternal(MapleCharacter chr) {
+                private void giveBuffInternal(User chr) {
                     chr.getAllBuffs();
                     chr.cancelMagicDoor();
                     chr.getMorphState();

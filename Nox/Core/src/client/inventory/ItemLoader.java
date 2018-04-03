@@ -17,7 +17,7 @@ import constants.InventoryConstants;
 import database.DatabaseConnection;
 import server.MapleItemInformationProvider;
 import server.maps.objects.MapleAndroid;
-import server.maps.objects.MaplePet;
+import server.maps.objects.Pet;
 import server.potentials.ItemPotentialTierType;
 import tools.LogHelper;
 import tools.Pair;
@@ -190,7 +190,7 @@ public enum ItemLoader {
 
                         if (InventoryConstants.isPet(item.getItemId())) {
                             if (item.getUniqueId() > -1) {
-                                MaplePet pet = MaplePet.loadFromDb(item.getItemId(), item.getUniqueId(), item.getPosition(), item.getFlag());
+                                Pet pet = Pet.loadFromDb(item.getItemId(), item.getUniqueId(), item.getPosition(), item.getFlag());
                                 if (pet != null) {
                                     item.setPet(pet);
                                 }

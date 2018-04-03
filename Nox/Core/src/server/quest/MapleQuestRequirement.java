@@ -15,8 +15,8 @@ import client.SkillFactory;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
-import server.maps.objects.MapleCharacter;
-import server.maps.objects.MaplePet;
+import server.maps.objects.User;
+import server.maps.objects.Pet;
 import tools.Pair;
 
 public class MapleQuestRequirement implements Serializable {
@@ -84,7 +84,7 @@ public class MapleQuestRequirement implements Serializable {
         }
     }
 
-    public boolean check(MapleCharacter c, Integer npcid) {
+    public boolean check(User c, Integer npcid) {
         switch (type) {
             case job:
                 for (Pair<Integer, Integer> a : dataStore) {
@@ -201,7 +201,7 @@ public class MapleQuestRequirement implements Serializable {
                 }
                 return false;
             case pettamenessmin:
-                for (MaplePet pet : c.getPets()) {
+                for (Pet pet : c.getPets()) {
                     if (pet.getSummoned() && pet.getCloseness() >= intStore) {
                         return true;
                     }

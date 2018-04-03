@@ -10,7 +10,7 @@ import constants.WorldConstants.WorldOption;
 import handling.world.World;
 import service.ChannelServer;
 import net.InPacket;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.CWvsContext;
 import tools.packet.CLogin;
 import netty.ProcessPacket;
@@ -44,7 +44,7 @@ public final class CharListRequestHandler implements ProcessPacket<MapleClient> 
             c.write(CLogin.getLoginFailed(1)); //Shows no message, but it is used to unstuck
             return;
         }
-        final List<MapleCharacter> chars = c.loadCharacters(server);
+        final List<User> chars = c.loadCharacters(server);
         if (chars != null && ChannelServer.getInstance(channel) != null) {
             c.setWorld(server);
             c.setChannel(channel);
@@ -59,8 +59,8 @@ public final class CharListRequestHandler implements ProcessPacket<MapleClient> 
         c.write(CLogin.getJobListPacket());
     }
 
-    private void handleBurningEvent(MapleClient c, List<MapleCharacter> chars) {
-        MapleCharacter[] characters = chars.toArray(new MapleCharacter[chars.size()]);
+    private void handleBurningEvent(MapleClient c, List<User> chars) {
+        User[] characters = chars.toArray(new User[chars.size()]);
         boolean hasBurningCharacter = false;
         int burningCharacterId = 0;
         for (int i = 0; i < characters.length; i++) {

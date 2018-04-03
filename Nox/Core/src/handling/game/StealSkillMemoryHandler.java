@@ -6,7 +6,7 @@ import constants.GameConstants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
@@ -53,7 +53,7 @@ public class StealSkillMemoryHandler implements ProcessPacket<MapleClient> {
             c.getPlayer().changed_skills = true;
             c.getPlayer().changeSkillLevelSkip(SkillFactory.getSkill(nStealSkillID), 0, (byte) 0);
         } else {
-            MapleCharacter pUser = c.getPlayer().getMap().getCharacterById(dwCharacterID);
+            User pUser = c.getPlayer().getMap().getCharacterById(dwCharacterID);
             nResult = 0; // Steal
             if (pUser != null) {
                 List<Integer> aPOS = new ArrayList<>();

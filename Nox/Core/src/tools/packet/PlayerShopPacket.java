@@ -9,7 +9,7 @@ import service.SendPacketOpcode;
 import net.OutPacket;
 import net.Packet;
 import server.MerchItemPackage;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import server.stores.AbstractPlayerStore.BoughtItem;
 import server.stores.HiredMerchant;
 import server.stores.IMaplePlayerShop;
@@ -56,7 +56,7 @@ public class PlayerShopPacket {
         return oPacket.ToPacket();
     }
 
-    public static final Packet addCharBox(final MapleCharacter c, final int type) {
+    public static final Packet addCharBox(final User c, final int type) {
         final OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.UserMiniRoomBalloon.getValue());
@@ -66,7 +66,7 @@ public class PlayerShopPacket {
         return oPacket.ToPacket();
     }
 
-    public static final Packet removeCharBox(final MapleCharacter c) {
+    public static final Packet removeCharBox(final User c) {
         final OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.UserMiniRoomBalloon.getValue());
@@ -76,7 +76,7 @@ public class PlayerShopPacket {
         return oPacket.ToPacket();
     }
 
-    public static final Packet sendPlayerShopBox(final MapleCharacter c) {
+    public static final Packet sendPlayerShopBox(final User c) {
         final OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.UserMiniRoomBalloon.getValue());
@@ -86,7 +86,7 @@ public class PlayerShopPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet getHiredMerch(MapleCharacter chr, HiredMerchant merch, boolean firstTime) {
+    public static Packet getHiredMerch(User chr, HiredMerchant merch, boolean firstTime) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
@@ -98,9 +98,9 @@ public class PlayerShopPacket {
         oPacket.EncodeString("Hired Merchant");
         for (Pair storechr : merch.getVisitors()) {
             oPacket.Encode(((Byte) storechr.left).byteValue());
-            CField.writeCharacterLook(oPacket, (MapleCharacter) storechr.right, false);//MapleCharacterLook
-            oPacket.EncodeString(((MapleCharacter) storechr.right).getName());
-            oPacket.EncodeShort(((MapleCharacter) storechr.right).getJob());
+            CField.writeCharacterLook(oPacket, (User) storechr.right, false);//MapleCharacterLook
+            oPacket.EncodeString(((User) storechr.right).getName());
+            oPacket.EncodeShort(((User) storechr.right).getJob());
         }
         oPacket.Encode(-1);
         oPacket.EncodeShort(0);
@@ -133,7 +133,7 @@ public class PlayerShopPacket {
         return oPacket.ToPacket();
     }
 
-    public static final Packet getPlayerStore(final MapleCharacter chr, final boolean firstTime) {
+    public static final Packet getPlayerStore(final User chr, final boolean firstTime) {
         final OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
@@ -157,7 +157,7 @@ public class PlayerShopPacket {
         CField.writeCharacterLook(oPacket, ((MaplePlayerShop) ips).getMCOwner(), false);
         oPacket.EncodeString(ips.getOwnerName());
         oPacket.EncodeShort(((MaplePlayerShop) ips).getMCOwner().getJob());
-        for (final Pair<Byte, MapleCharacter> storechr : ips.getVisitors()) {
+        for (final Pair<Byte, User> storechr : ips.getVisitors()) {
             oPacket.Encode(storechr.left);
             CField.writeCharacterLook(oPacket, storechr.right, false);
             oPacket.EncodeString(storechr.right.getName());
@@ -243,7 +243,7 @@ public class PlayerShopPacket {
         return oPacket.ToPacket();
     }
 
-    public static final Packet shopVisitorAdd(final MapleCharacter chr, final int slot) {
+    public static final Packet shopVisitorAdd(final User chr, final int slot) {
         final OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
@@ -351,16 +351,16 @@ public class PlayerShopPacket {
         oPacket.EncodeShort(minigame.getMCOwner().getJob());
         for (Pair visitorz : minigame.getVisitors()) {
             oPacket.Encode(((Byte) visitorz.getLeft()).byteValue());
-            CField.writeCharacterLook(oPacket, (MapleCharacter) visitorz.getRight(), false);//MapleCharacterLook
-            oPacket.EncodeString(((MapleCharacter) visitorz.getRight()).getName());
-            oPacket.EncodeShort(((MapleCharacter) visitorz.getRight()).getJob());
+            CField.writeCharacterLook(oPacket, (User) visitorz.getRight(), false);//MapleCharacterLook
+            oPacket.EncodeString(((User) visitorz.getRight()).getName());
+            oPacket.EncodeShort(((User) visitorz.getRight()).getJob());
         }
         oPacket.Encode(-1);
         oPacket.Encode(0);
         addGameInfo(oPacket, minigame.getMCOwner(), minigame);
         for (Pair visitorz : minigame.getVisitors()) {
             oPacket.Encode(((Byte) visitorz.getLeft()).byteValue());
-            addGameInfo(oPacket, (MapleCharacter) visitorz.getRight(), minigame);
+            addGameInfo(oPacket, (User) visitorz.getRight(), minigame);
         }
         oPacket.Encode(-1);
         oPacket.EncodeString(minigame.getDescription());
@@ -431,7 +431,7 @@ public class PlayerShopPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet getMiniGameNewVisitor(MapleCharacter c, int slot, MapleMiniGame game) {
+    public static Packet getMiniGameNewVisitor(User c, int slot, MapleMiniGame game) {
         OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
         oPacket.Encode(9);
@@ -443,7 +443,7 @@ public class PlayerShopPacket {
         return oPacket.ToPacket();
     }
 
-    public static void addGameInfo(OutPacket oPacket, MapleCharacter chr, MapleMiniGame game) {
+    public static void addGameInfo(OutPacket oPacket, User chr, MapleMiniGame game) {
         oPacket.EncodeInteger(game.getGameType());
         oPacket.EncodeInteger(game.getWins(chr));
         oPacket.EncodeInteger(game.getTies(chr));
@@ -504,7 +504,7 @@ public class PlayerShopPacket {
         }
         addGameInfo(oPacket, game.getMCOwner(), game);
         for (Pair visitorz : game.getVisitors()) {
-            addGameInfo(oPacket, (MapleCharacter) visitorz.right, game);
+            addGameInfo(oPacket, (User) visitorz.right, game);
         }
 
         return oPacket.ToPacket();

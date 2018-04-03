@@ -9,7 +9,7 @@ import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.MapleStatEffect.CancelEffectAction;
 import server.Timer.BuffTimer;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.packet.BuffPacket;
 
 public enum MapleFamilyBuff {
@@ -72,7 +72,7 @@ public enum MapleFamilyBuff {
         }
     }
 
-    public void applyTo(MapleCharacter chr) {
+    public void applyTo(User chr) {
         for (Map.Entry<CharacterTemporaryStat, Integer> stat : effects.entrySet()) {
             chr.setBuffedValue(stat.getKey(), stat.getValue());
         }

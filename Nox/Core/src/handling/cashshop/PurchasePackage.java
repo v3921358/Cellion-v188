@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import server.CashItemFactory;
 import server.CashItemInfo;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Triple;
 import net.InPacket;
 import tools.packet.CSPacket;
@@ -28,7 +28,7 @@ import tools.packet.CSPacket;
  */
 public class PurchasePackage {
 
-    public static void BuyGiftPackage(InPacket iPacket, MapleClient c, MapleCharacter chr) {
+    public static void BuyGiftPackage(InPacket iPacket, MapleClient c, User chr) {
         iPacket.Skip(1);
         iPacket.DecodeString(); // pic - Has to be CHECKED!
         CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInteger());
@@ -54,7 +54,7 @@ public class PurchasePackage {
         }
     }
 
-    public static void Regular(InPacket iPacket, MapleClient c, MapleCharacter chr) {
+    public static void Regular(InPacket iPacket, MapleClient c, User chr) {
         iPacket.Skip(1);
         int unk = iPacket.DecodeInteger();//is1
         CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInteger());

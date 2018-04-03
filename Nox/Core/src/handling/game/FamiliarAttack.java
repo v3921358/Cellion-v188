@@ -13,7 +13,7 @@ import client.anticheat.CheatingOffense;
 import constants.GameConstants;
 import server.life.MapleMonster;
 import server.life.MapleMonsterStats;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 import tools.Triple;
 import net.InPacket;
 import tools.packet.CField;
@@ -28,7 +28,7 @@ public final class FamiliarAttack implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleCharacter chr = c.getPlayer();
+        final User chr = c.getPlayer();
         if (chr.getSummonedFamiliar() == null) {
             return;
         }

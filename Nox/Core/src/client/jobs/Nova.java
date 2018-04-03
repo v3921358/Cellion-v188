@@ -1,11 +1,10 @@
 /*
  * Rexion Development
  */
-package handling.jobs;
+package client.jobs;
 
-import handling.jobs.*;
 import client.SkillFactory;
-import server.maps.objects.MapleCharacter;
+import server.maps.objects.User;
 
 /**
  * Nova Class Handlers
@@ -16,14 +15,14 @@ public class Nova {
 
     public static class KaiserHandler {
 
-        public static void handleKaiserCombo(MapleCharacter pPlayer) {
+        public static void handleKaiserCombo(User pPlayer) {
             if (pPlayer.getPrimaryStack() < 1000) {
                 pPlayer.setPrimaryStack(pPlayer.getPrimaryStack() + 3);
             }
             SkillFactory.getSkill(61111008).getEffect(1).applyKaiserCombo(pPlayer, (short) pPlayer.getPrimaryStack());
         }
 
-        public static void resetKaiserCombo(MapleCharacter pPlayer) {
+        public static void resetKaiserCombo(User pPlayer) {
             pPlayer.setPrimaryStack(0);
             SkillFactory.getSkill(61111008).getEffect(1).applyKaiserCombo(pPlayer, (short) pPlayer.getPrimaryStack());
         }
