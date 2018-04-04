@@ -22,10 +22,24 @@
 package handling.game;
 
 import client.MapleClient;
+import client.Skill;
+import client.SkillFactory;
+import constants.skills.BlazeWizard;
+import constants.skills.NightWalker;
 import handling.world.PlayerHandler;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 import server.maps.objects.User;
 import net.InPacket;
 import netty.ProcessPacket;
+import server.MapleStatEffect;
+import server.MapleStatInfo;
+import server.commands.GMCommand.Position;
+import server.maps.objects.ForceAtom;
+import server.maps.objects.ForceAtomType;
+import tools.packet.CField;
 
 public final class OrbitalFlameHandler implements ProcessPacket<MapleClient> {
 
@@ -36,7 +50,52 @@ public final class OrbitalFlameHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final User chr = c.getPlayer();
-        PlayerHandler.OrbitalFlame(iPacket, c);
+        User pPlayer = c.getPlayer();
+        int nSkillID = iPacket.DecodeInteger();
+        byte nSLV = iPacket.DecodeByte();
+        short nDirection = iPacket.DecodeShort();
+        Skill pSkill = SkillFactory.getSkill(nSkillID);
+        MapleStatEffect pEffect = pSkill.getEffect(nSLV);
+        int nRange = pEffect.info.get(MapleStatInfo.range);
+        
+        ForceAtomType fae;
+        switch (nSkillID) {
+            case BlazeWizard.FINAL_ORBITAL_FLAME:
+                fae = ForceAtomType.ORBITAL_FLAME_4;
+                nSkillID = BlazeWizard.FINAL_ORBITAL_FLAME_1;
+                break;
+            case BlazeWizard.GRAND_ORBITAL_FLAME:
+                fae = ForceAtomType.ORBITAL_FLAME_3;
+                nSkillID = BlazeWizard.GRAND_ORBITAL_FLAME_1;
+                break;
+            case BlazeWizard.GREATER_ORBITAL_FLAME:
+                fae = ForceAtomType.ORBITAL_FLAME_2;
+                nSkillID = BlazeWizard.GREATER_ORBITAL_FLAME_1;
+                break;
+            default:
+                fae = ForceAtomType.ORBITAL_FLAME_1;
+                nSkillID = BlazeWizard.ORBITAL_FLAME_1;
+                break;
+        }
+        int curTime = (int) System.currentTimeMillis();
+        int angle = 0;
+        switch (nDirection) {
+            case 1:
+                angle = 180;
+                break;
+            case 2:
+                angle = 270;
+                break;
+            case 3:
+                angle = 90;
+                break;
+        }
+        ForceAtom fai = new ForceAtom(1, fae.getInc(), 11, 13, angle, 0, curTime, pEffect.info.get(MapleStatInfo.mobCount), BlazeWizard.ORBITAL_FLAME_1, new Point(0, 0));
+        List<ForceAtom> faiList = new ArrayList<>();
+        faiList.add(fai);
+        pPlayer.getMap().broadcastMessage(CField.createForceAtom(false, 0, pPlayer.getId(), fae.getForceAtomType(), false,
+                new ArrayList<>(), nSkillID, faiList, new Rectangle(), nDirection, nRange, null, 0, null));
+        
+        //PlayerHandler.OrbitalFlame(iPacket, c);
     }
 }

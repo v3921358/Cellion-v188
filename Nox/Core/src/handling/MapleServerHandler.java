@@ -193,6 +193,7 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
         //handlers[672] = new BossMatchmakingHandler(); //TODO: Handle this, for Ursus + Cygnus?
         // Buddy List handlers
         handlers[RecvPacketOpcode.FriendRequest.getValue()] = new BuddylistModifyHandler();
+        handlers[RecvPacketOpcode.LoadAccountIDOfCharacterFriendRequest.getValue()] = new FriendRequestAccIdHandler();
         // Reactor handlers
         handlers[RecvPacketOpcode.ReactorClick.getValue()] = new ClickTouchReactorHandler();
         handlers[RecvPacketOpcode.ReactorRectInMob.getValue()] = new ClickTouchReactorHandler();

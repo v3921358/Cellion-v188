@@ -54,6 +54,7 @@ import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.CWvsContext.AlliancePacket;
 import tools.packet.CWvsContext.ExpeditionPacket;
+import tools.packet.CWvsContext.FriendPacket;
 import tools.packet.CWvsContext.GuildPacket;
 import tools.packet.CWvsContext.PartyPacket;
 import tools.packet.PetPacket;

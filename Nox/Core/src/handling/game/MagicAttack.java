@@ -23,6 +23,7 @@ import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.JobPacket;
 import netty.ProcessPacket;
+import server.life.mob.MobStatRequest;
 import service.RecvPacketOpcode;
 
 public final class MagicAttack implements ProcessPacket<MapleClient> {
@@ -40,36 +41,39 @@ public final class MagicAttack implements ProcessPacket<MapleClient> {
         }
 
         //AttackInfo attack = DamageParse.parseDmgMa(iPacket, chr);
-        AttackInfo attack = DamageParse.OnAttack(RecvPacketOpcode.UserMagicAttack, iPacket, pPlayer);
+        AttackInfo pAttack = DamageParse.OnAttack(RecvPacketOpcode.UserMagicAttack, iPacket, pPlayer);
         
         if (GameConstants.isLuminous(pPlayer.getJob())) {
-            LuminousHandler.handleLuminousGauge(pPlayer, attack.skill);
+            LuminousHandler.handleLuminousGauge(pPlayer, pAttack.skill);
         }
         
-        if (attack == null) {
+        if (pAttack == null) {
             c.write(CWvsContext.enableActions());
             return;
         }
-        Skill skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
-        if (skill == null || (GameConstants.isAngel(attack.skill) && (pPlayer.getStat().equippedSummon % 10000 != attack.skill % 10000))) {
+        Skill pSkill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(pAttack.skill));
+        if (pSkill == null || (GameConstants.isAngel(pAttack.skill) && (pPlayer.getStat().equippedSummon % 10000 != pAttack.skill % 10000))) {
             c.write(CWvsContext.enableActions());
             return;
         }
-        int skillLevel = pPlayer.getTotalSkillLevel(skill);
-        MapleStatEffect effect = attack.getAttackEffect(pPlayer, skillLevel, skill);
-        if (effect == null) { // Is it neccessary to check this?
-            effect = attack.getAttackEffect(pPlayer, skill.getMaxLevel(), skill);
+        int nSkillLevel = pPlayer.getTotalSkillLevel(pSkill);
+        MapleStatEffect pEffect = pAttack.getAttackEffect(pPlayer, nSkillLevel, pSkill);
+        if (pEffect == null) { // Is it neccessary to check this?
+            pEffect = pAttack.getAttackEffect(pPlayer, pSkill.getMaxLevel(), pSkill);
             //return;
-        } else if (effect.getCooldown(pPlayer) > 0) {  // Handle cooldowns
-            if (pPlayer.skillisCooling(attack.skill)) {
+        } else if (pEffect.getCooldown(pPlayer) > 0) {  // Handle cooldowns
+            if (pPlayer.skillisCooling(pAttack.skill)) {
                 c.write(CWvsContext.enableActions());
                 return;
             }
-            pPlayer.addCooldown(attack.skill, System.currentTimeMillis(), effect.getCooldown(pPlayer));
+            pPlayer.addCooldown(pAttack.skill, System.currentTimeMillis(), pEffect.getCooldown(pPlayer));
         }
+        
+        
+        MobStatRequest.apply(pPlayer, pAttack, pEffect);
 
         int bulletCount = 1;
-        switch (attack.skill) {
+        switch (pAttack.skill) {
             case 140001289: // Psychic Attack
             case 27101100: // Sylvan Lance
             case 27101202: // Pressure Void
@@ -93,14 +97,14 @@ public final class MagicAttack implements ProcessPacket<MapleClient> {
             case 36121013:
                 //   case 36101009:
                 //     case 36111010:
-                bulletCount = effect.getAttackCount();
-                DamageParse.applyAttack(attack, skill, pPlayer, skillLevel, GameConstants.damageCap, effect, AttackType.RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
+                bulletCount = pEffect.getAttackCount();
+                DamageParse.applyAttack(pAttack, pSkill, pPlayer, nSkillLevel, GameConstants.damageCap, pEffect, AttackType.RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
                 break;
             default:
-                DamageParse.applyAttackMagic(attack, skill, pPlayer, effect);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
+                DamageParse.applyAttackMagic(pAttack, pSkill, pPlayer, pEffect);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
                 break;
         }
-        DamageParse.modifyCriticalAttack(attack, pPlayer, 3, effect);
+        DamageParse.modifyCriticalAttack(pAttack, pPlayer, 3, pEffect);
 
         if (GameConstants.isEventMap(pPlayer.getMapId())) {
             for (MapleEventType t : MapleEventType.values()) {
@@ -118,22 +122,22 @@ public final class MagicAttack implements ProcessPacket<MapleClient> {
 
         // Kinesis Psychic Points handling.
         if (GameConstants.isKinesis(pPlayer.getJob())) {
-           KinesisHandler.handlePsychicPoint(pPlayer, attack.skill);
+           KinesisHandler.handlePsychicPoint(pPlayer, pAttack.skill);
         }
 
         // Map attack/movement broadcast, this needs to be broadcasted first before applying
         // otherwise if the monster is killed with a single hit the damage is not shown.
         if (!pPlayer.isHidden()) {
-            pPlayer.getMap().broadcastMessage(pPlayer, CField.magicAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, pPlayer.getLevel(), attack.attackFlag), pPlayer.getTruePosition());
+            pPlayer.getMap().broadcastMessage(pPlayer, CField.magicAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSkillLevel, pAttack.display, pAttack.speed, pAttack.allDamage, pAttack.charge, pPlayer.getLevel(), pAttack.attackFlag), pPlayer.getTruePosition());
         } else {
-            pPlayer.getMap().broadcastGMMessage(pPlayer, CField.magicAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, pPlayer.getLevel(), attack.attackFlag), false);
+            pPlayer.getMap().broadcastGMMessage(pPlayer, CField.magicAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSkillLevel, pAttack.display, pAttack.speed, pAttack.allDamage, pAttack.charge, pPlayer.getLevel(), pAttack.attackFlag), false);
         }
 
         // Other unimportant stuff here... highest priority = first
         pPlayer.checkFollow();
 
         // Cleanup memory refs
-        attack.cleanupMemory();
+        pAttack.cleanupMemory();
     }
 
     public static void handleLuminousState(User chr, AttackInfo attack) {

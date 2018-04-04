@@ -4,6 +4,7 @@ import client.*;
 import client.MapleSpecialStats.MapleSpecialStatUpdateType;
 import client.MapleStat.Temp;
 import client.buddy.Buddy;
+import client.buddy.BuddyList;
 import client.buddy.BuddylistEntry;
 import client.inventory.*;
 import constants.GameConstants;
@@ -2571,6 +2572,19 @@ public class CWvsContext {
         }
     }
 
+    public static Packet OnLoadAccountIDOfCharacterFriendResult(BuddyList pBuddy) {
+        OutPacket oPacket = new OutPacket(80);
+        oPacket.EncodeShort(SendPacketOpcode.LoadAccountIDOfCharacterFriendResult.getValue());
+        
+        oPacket.EncodeInteger(pBuddy.getBuddies().size());
+        for (BuddylistEntry pEntry : pBuddy.getBuddies()) {
+            oPacket.EncodeInteger(pEntry.getCharacterId());
+            oPacket.EncodeInteger(pEntry.getAccountId());
+        }
+
+        return oPacket.ToPacket();
+    }
+    
     /**
      * This packet handles all of the functions for buddies
      *
@@ -4342,5 +4356,107 @@ public class CWvsContext {
             oPacket.EncodeInteger(nStealSkillID);
         }
         return oPacket.ToPacket();
+    }
+
+    public static class FriendPacket {
+
+        /*public static Packet declinedRequest(String declinedName) {
+            OutPacket oPacket = new OutPacket(80);
+
+            oPacket.EncodeShort(SendPacketOpcode.FriendResult.getValue());
+            oPacket.Encode(FriendType.DECLINE_MESSAGE.getValue());
+            oPacket.EncodeString(declinedName);
+
+            return oPacket.ToPacket();
+        }
+
+        public static Packet updateBuddylist(Collection<FriendEntry> buddylist) {
+            return updateBuddylist(buddylist, false, false);
+        }
+
+        public static Packet updateBuddylist(Collection<FriendEntry> buddylist, boolean deleted, boolean add) {
+            OutPacket oPacket = new OutPacket(80);
+
+            oPacket.EncodeShort(SendPacketOpcode.FriendResult.getValue());
+            oPacket.Encode(deleted ? FriendType.UPDATE.getValue() : add ? FriendType.UPDATE.getValue() : FriendType.UPDATE.getValue()); // TODO find add/delete values
+            oPacket.EncodeInteger(buddylist.size());
+            for (FriendEntry buddy : buddylist) {
+                buddy.encode(oPacket);
+            }
+            for (int x = 0; x < buddylist.size(); x++) {
+                oPacket.EncodeInteger(0);
+            }
+
+            return oPacket.ToPacket();
+        }
+
+        public static Packet updateBuddyChannel(int characterid, int channel) {
+            OutPacket oPacket = new OutPacket(80);
+
+            oPacket.EncodeShort(SendPacketOpcode.FriendResult.getValue());
+            oPacket.Encode(20);
+            oPacket.EncodeInteger(characterid);
+            oPacket.Encode(0);
+            oPacket.EncodeInteger(channel);
+
+            return oPacket.ToPacket();
+        }
+
+        public static Packet requestMessage(String toName) {
+            OutPacket oPacket = new OutPacket(80);
+
+            oPacket.EncodeShort(SendPacketOpcode.FriendResult.getValue());
+            oPacket.Encode(FriendType.REQUEST_SENT.getValue());
+            oPacket.EncodeString(toName);
+
+            return oPacket.ToPacket();
+        }
+
+        public static Packet requestBuddyAdd(boolean inShop, int id, int accId, String name, int level, int job, int subJob, FriendEntry ble) {
+            OutPacket oPacket = new OutPacket(80);
+
+            oPacket.EncodeShort(SendPacketOpcode.FriendResult.getValue());
+            oPacket.Encode(FriendType.RECEIVE_REQUEST.getValue());
+            oPacket.Encode(inShop);
+            oPacket.EncodeInteger(id);
+            oPacket.EncodeInteger(accId);
+            oPacket.EncodeString(name);
+            oPacket.EncodeInteger(level);
+            oPacket.EncodeInteger(job);
+            oPacket.EncodeInteger(subJob);
+
+            ble.encode(oPacket);
+
+            return oPacket.ToPacket();
+        }
+
+        public static Packet updateBuddyCapacity(int capacity) {
+            OutPacket oPacket = new OutPacket(80);
+
+            oPacket.EncodeShort(SendPacketOpcode.FriendResult.getValue());
+            oPacket.Encode(FriendType.UPDATE_FRIEND_MAX.getValue());
+            oPacket.Encode(capacity);
+
+            return oPacket.ToPacket();
+        }
+
+        public static Packet buddylistMessage(byte message) {
+            OutPacket oPacket = new OutPacket(80);
+
+            oPacket.EncodeShort(SendPacketOpcode.FriendResult.getValue());
+            oPacket.Encode(message);
+
+            return oPacket.ToPacket();
+        }
+
+        public static Packet addBuddy(FriendEntry ble) {
+            OutPacket oPacket = new OutPacket(80);
+
+            oPacket.EncodeShort(SendPacketOpcode.FriendResult.getValue());
+            oPacket.Encode(FriendType.ADD.getValue());
+            ble.encode(oPacket);
+
+            return oPacket.ToPacket();
+        }*/
     }
 }

@@ -47,6 +47,10 @@ import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import tools.Utility;
 import tools.packet.CField.SummonPacket;
 
 public class MapleStatEffect implements Serializable {
@@ -2698,6 +2702,32 @@ public class MapleStatEffect implements Serializable {
 
     public void moveTo(int moveTo) {
         this.moveTo = moveTo;
+    }
+
+    public int getValue(MapleStatInfo mapleStatInfo, int slv) {
+        int result = 0;
+        String value = mapleStatInfo.toString();
+        if(value == null) {
+            return 0;
+        }
+        if(Utility.isNumber(value)) {
+            result = Integer.parseInt(value);
+        } else {
+            ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
+            try {
+                value = value.replace("u", "Math.ceil");
+                value = value.replace("d", "Math.floor");
+                Object res = engine.eval(value.replace("x", slv + ""));
+                if(res instanceof Integer) {
+                    result = (Integer) res;
+                } else if(res instanceof Double) {
+                    result = ((Double) res).intValue();
+                }
+            } catch (ScriptException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
     public static class CancelEffectAction implements Runnable {

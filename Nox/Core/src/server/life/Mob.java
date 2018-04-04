@@ -1,5 +1,7 @@
 package server.life;
 
+import server.life.mob.MobTemporaryStat;
+import server.life.mob.ForcedMobStat;
 import client.*;
 import client.MapleTrait.MapleTraitType;
 import client.inventory.Equip;
@@ -33,12 +35,17 @@ import tools.packet.MobPacket;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Mob extends AbstractLoadedMapleLife {
 
     private MapleMonsterStats stats;
     private ForcedMonsterStats forcedStats = null;
+    
+    private ForcedMobStat forcedMobStat;
+    private MobTemporaryStat temporaryStat;
+    
     private long hp, mp, nextKill = 0, lastDropTime = 0;
     private byte carnivalTeam = -1;
     private MapleMap map;
@@ -63,11 +70,17 @@ public class Mob extends AbstractLoadedMapleLife {
     public Mob(int id, MapleMonsterStats stats) {
         super(id);
         initWithStats(stats);
+        
+        forcedMobStat = new ForcedMobStat();
+        temporaryStat = new MobTemporaryStat(this);
     }
 
     public Mob(Mob monster) {
         super(monster);
         initWithStats(monster.stats);
+        
+        forcedMobStat = new ForcedMobStat();
+        temporaryStat = new MobTemporaryStat(this);
     }
 
     private void initWithStats(MapleMonsterStats stats) {
@@ -1585,6 +1598,14 @@ public class Mob extends AbstractLoadedMapleLife {
 
     public int getTriangulation() {
         return triangulation;
+    }
+
+    public void setTemporaryStat(MobTemporaryStat temporaryStat) {
+        this.temporaryStat = temporaryStat;
+    }
+
+    public MobTemporaryStat getTemporaryStat() {
+        return temporaryStat;
     }
 
     // <editor-fold defaultstate="visible" desc="Attacks & EXP Handling"> 

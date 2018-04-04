@@ -507,7 +507,7 @@ public enum RecvPacketOpcode {
     UserTimerReq(658),// Version 179
     UaerMannequin(659),// Version 179
     UserBufferFlyReq(660),// Version 179
-    UserNonTargetForceAtomAttack(661),// Version 179
+    UserNonTargetForceAtomAttack(662),// Version 179 // UserNonTargetForceAtomAttack(661),// Version 179
     UserRunScript(662),// Version 179
     CheckBossPartyByScript(663),// Version 179
     SetGoToShineCityWaitField(664),// Version 179

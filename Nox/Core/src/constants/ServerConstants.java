@@ -70,7 +70,7 @@ public class ServerConstants {
     
     /*Apply Hotfix*/
  /*In MapleStory GMS v.179 - v.183 the request for the ApplyHotFix packet does not always gets sent, good job Nexon.*/
-    public static final boolean FORCE_HOTFIX = true; //Forces the server to send the Apply Hotfix packet regardless.
+    public static final boolean FORCE_HOTFIX = false; //Forces the server to send the Apply Hotfix packet regardless.
     
     /*General Configuration*/
     public static final String SOURCE_REVISION = "0.9";

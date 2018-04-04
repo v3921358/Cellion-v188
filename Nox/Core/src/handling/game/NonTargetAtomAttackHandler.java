@@ -6,7 +6,9 @@ import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
+import constants.SkillConstants;
 import handling.world.AttackInfo;
+import handling.world.AttackMonster;
 import handling.world.AttackType;
 import handling.world.DamageParse;
 import service.ChannelServer;
@@ -20,6 +22,7 @@ import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.JobPacket;
 import netty.ProcessPacket;
+import server.life.MobAttackInfo;
 import service.RecvPacketOpcode;
 
 public final class NonTargetAtomAttackHandler implements ProcessPacket<MapleClient> {
@@ -144,4 +147,5 @@ public final class NonTargetAtomAttackHandler implements ProcessPacket<MapleClie
                 break;
         }
     }
+    
 }

@@ -90,6 +90,15 @@ public class Utility {
     }
     
     /**
+     * Check if Number
+     * @param sString
+     * @return True or false on whether the string value is a number.
+     */
+    public static boolean isNumber(String sString) {
+        return sString.matches("-?\\d+(\\.\\d+)?");
+    }
+    
+    /**
      * Remove Buff from Player's Map
      * @param pPlayer The function checks all users that are on the same map as this character object.
      * @param pStat The temporary stat that will be removed from this map.

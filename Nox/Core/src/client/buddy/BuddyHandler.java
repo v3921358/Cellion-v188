@@ -1,4 +1,12 @@
-package handling.game;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package client.buddy;
+
+import client.MapleClient;
+import net.InPacket;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,23 +33,16 @@ import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
 import netty.ProcessPacket;
+import tools.Utility;
 
 /**
  *
- * @author
+ * @author Mazen
  */
-public class BuddylistModifyHandler implements ProcessPacket<MapleClient> {
-
-    @Override
-    public boolean ValidateState(MapleClient c) {
-        return true;
-    }
-
-    @Override
-    public void Process(MapleClient c, InPacket iPacket) {
-        BuddyHandler.handleOperation(c, iPacket);
-        
-        /*BuddyRequest mode = BuddyRequest.UNKNOWN.getRequest(iPacket.DecodeByte());
+public class BuddyHandler {
+    
+    public static void handleOperation(MapleClient c, InPacket iPacket) {
+        BuddyRequest mode = BuddyRequest.UNKNOWN.getRequest(iPacket.DecodeByte());
         BuddyList buddylist = c.getPlayer().getBuddylist();
         Buddy buddy = new Buddy();
         BuddylistEntry ble;
@@ -69,7 +70,7 @@ public class BuddylistModifyHandler implements ProcessPacket<MapleClient> {
                 } else if (ble == null) {
                     try {
                         CharacterIdNameBuddyCapacity charWithId = null;
-                        int channel = World.Find.findChannel(name);
+                        int channel = Utility.requestChannel(name);
                         User otherChar = null;
                         if (channel > 0) {
                             otherChar = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterByName(name);
@@ -114,7 +115,6 @@ public class BuddylistModifyHandler implements ProcessPacket<MapleClient> {
                                 }
                                 rs.close();
                                 ps.close();
-
                             }
                             if (buddyAddResult == BuddyOperation.BUDDYLIST_FULL) {
                                 c.write(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_OTHER)));
@@ -166,7 +166,7 @@ public class BuddylistModifyHandler implements ProcessPacket<MapleClient> {
                 int otherCid = iPacket.DecodeInteger();
                 ble = buddylist.get(otherCid);
                 if (!buddylist.isFull() && ble != null) {
-                    int channel = World.Find.findChannel(otherCid);
+                    int channel = Utility.requestChannel(otherCid);
                     BuddylistEntry entry = new BuddylistEntry(ble.getName(), otherCid, "Default Group", channel, false, "", false, "");
                     byte flag = 0;
                     if (ble.isOnline()) {
@@ -189,7 +189,7 @@ public class BuddylistModifyHandler implements ProcessPacket<MapleClient> {
                 int otherCid = iPacket.DecodeInteger();
                 ble = buddylist.get(otherCid);
                 if (ble != null) {
-                    notifyRemoteChannel(c, World.Find.findChannel(otherCid), otherCid, BuddyOperation.DELETE, false, "");
+                    notifyRemoteChannel(c, Utility.requestChannel(otherCid), otherCid, BuddyOperation.DELETE, false, "");
                 }
                 buddylist.remove(otherCid);
                 buddy.setResult(BuddyResult.DELETE_FRIEND_DONE);
@@ -202,7 +202,7 @@ public class BuddylistModifyHandler implements ProcessPacket<MapleClient> {
                 if (!entries.isEmpty()) {
                     ble = entries.get(index);
                     if (!buddylist.isFull()) {
-                        int channel = World.Find.findChannel(ble.getCharacterId());
+                        int channel = Utility.requestChannel(ble.getCharacterId());
                         BuddylistEntry entry = new BuddylistEntry(ble.getName(), ble.getCharacterId(), "Default Group", channel, false, "", true, ble.getName());
                         byte flag = 0;
                         if (ble.isOnline()) {
@@ -232,9 +232,9 @@ public class BuddylistModifyHandler implements ProcessPacket<MapleClient> {
             }
             default:
                 break;
-        }*/
+        }
     }
-
+    
     private static List<BuddylistEntry> getPendingAccountFriends(List<User> chrs) {
         Connection con = DatabaseConnection.getConnection();
         List<BuddylistEntry> bl = new ArrayList<>();

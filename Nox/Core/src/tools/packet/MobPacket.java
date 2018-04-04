@@ -10,9 +10,12 @@ import client.MonsterStatusEffect;
 import service.SendPacketOpcode;
 import net.OutPacket;
 import net.Packet;
+import server.life.mob.BurnedInfo;
 import server.life.MapleLifeFactory;
 import server.life.Mob;
 import server.life.MobSkill;
+import server.life.mob.MobStat;
+import server.life.mob.MobTemporaryStat;
 import server.life.MultiTarget;
 import server.maps.MapleMap;
 import server.maps.SharedMapResources.MapleNodeInfo;
@@ -20,6 +23,84 @@ import server.movement.LifeMovementFragment;
 
 public class MobPacket {
 
+    public static Packet mobStatSet(Mob mob, short delay) {
+        OutPacket oPacket = new OutPacket(80); //(OutHeader.MOB_STAT_SET);
+        oPacket.EncodeShort(SendPacketOpcode.MobStatSet.getValue());
+        MobTemporaryStat mts = mob.getTemporaryStat();
+        boolean hasMovementStat = mts.hasNewMovementAffectingStat();
+        oPacket.EncodeInteger(mob.getObjectId());
+        mts.Encode(oPacket);
+        oPacket.EncodeShort(delay);
+        oPacket.Encode(1); // nCalcDamageStatIndex
+        if(hasMovementStat) {
+            oPacket.Encode(0); // ?
+        }
+
+        return oPacket.ToPacket();
+    }
+
+    public static Packet mobStatReset(Mob mob, byte byteCalcDamageStatIndex, boolean sn) {
+        return mobStatReset(mob, byteCalcDamageStatIndex, sn, null);
+    }
+
+    public synchronized static Packet mobStatReset(Mob mob, byte calcDamageStatIndex, boolean sn, List<BurnedInfo> biList) {
+        OutPacket oPacket = new OutPacket(80); 
+        oPacket.EncodeShort(SendPacketOpcode.MobStatReset.getValue());
+        MobTemporaryStat resetStats = mob.getTemporaryStat();
+        int[] mask = resetStats.getRemovedMask();
+        oPacket.EncodeInteger(mob.getObjectId());
+        for (int i = 0; i < 3; i++) {
+            oPacket.EncodeInteger(mask[i]);
+        }
+        if(resetStats.hasRemovedMobStat(MobStat.BurnedInfo)) {
+            if(biList == null) {
+                oPacket.EncodeInteger(0);
+                oPacket.EncodeInteger(0);
+            } else {
+                int dotCount = biList.stream().mapToInt(BurnedInfo::getDotCount).sum();
+                oPacket.EncodeInteger(dotCount);
+                oPacket.EncodeInteger(biList.size());
+                for(BurnedInfo bi : biList) {
+                    oPacket.EncodeInteger(bi.getCharacterId());
+                    oPacket.EncodeInteger(bi.getSuperPos());
+                }
+            }
+            resetStats.getBurnedInfos().clear();
+        }
+        oPacket.Encode(calcDamageStatIndex);
+        if(resetStats.hasRemovedMovementAffectingStat()) {
+            oPacket.Encode(sn);
+        }
+        resetStats.getRemovedStatVals().clear();
+        return oPacket.ToPacket();
+    }
+
+    public static Packet mobSpecialEffectBySkill(Mob mob, int skillID, int charId, short hit) {
+        OutPacket oPacket = new OutPacket(80); 
+        oPacket.EncodeShort(SendPacketOpcode.MobSpecialEffectBySkill.getValue());
+
+        oPacket.EncodeInteger(mob.getObjectId());
+        oPacket.EncodeInteger(skillID);
+        oPacket.EncodeInteger(charId);
+        oPacket.EncodeShort(hit);
+
+        return oPacket.ToPacket();
+    }
+
+    public static Packet mobAffected(Mob mob, int skillID, int slv, boolean userSkill, short delay) {
+        OutPacket oPacket = new OutPacket(80); 
+        oPacket.EncodeShort(SendPacketOpcode.MobAffected.getValue());
+
+        oPacket.EncodeInteger(mob.getObjectId());
+        oPacket.EncodeInteger(skillID);
+        oPacket.EncodeShort(delay);
+        oPacket.Encode(userSkill);
+        oPacket.EncodeInteger(slv);
+
+        return oPacket.ToPacket();
+    }
+    
+    
     public static Packet damageMonster(int oid, long damage) {
         OutPacket oPacket = new OutPacket(80);
 

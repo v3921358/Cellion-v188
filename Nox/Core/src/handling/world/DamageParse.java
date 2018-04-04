@@ -35,6 +35,7 @@ import tools.packet.CWvsContext;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import server.life.mob.MobStatRequest;
 import server.maps.objects.ForceAtom;
 import server.maps.objects.ForceAtomType;
 import service.RecvPacketOpcode;
@@ -124,6 +125,9 @@ public class DamageParse {
         }
 
         double maxDamagePerHit = 0.0D;
+        
+        // Apply monster statuses.
+        MobStatRequest.apply(pPlayer, attack, effect);
 
         for (AttackMonster oned : attack.allDamage) {
             Mob monster = oned.getMonster();
