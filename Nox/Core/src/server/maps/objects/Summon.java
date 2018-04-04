@@ -6,6 +6,7 @@ import client.MapleClient;
 import client.SkillFactory;
 import client.anticheat.CheatingOffense;
 import constants.GameConstants;
+import constants.skills.BeastTamer;
 import server.MapleStatEffect;
 import server.maps.AnimatedMapleMapObject;
 import server.maps.MapleMap;
@@ -122,7 +123,7 @@ public class Summon extends AnimatedMapleMapObject {
     }
 
     public final boolean isMultiAttack() {
-        return skill == 61111002 || skill == 35111002 || skill == 36121002 || skill == 36121013 || skill == 35121003 || (!isGaviota() && skill != 33101008 && skill < 35000000) || skill == 35111009 || skill == 35111010 || skill == 35111001 || skill == 42111003;
+        return skill == BeastTamer.LIL_FORT || skill == 61111002 || skill == 35111002 || skill == 36121002 || skill == 36121013 || skill == 35121003 || (!isGaviota() && skill != 33101008 && skill < 35000000) || skill == 35111009 || skill == 35111010 || skill == 35111001 || skill == 42111003;
     }
 
     public final boolean isGaviota() {

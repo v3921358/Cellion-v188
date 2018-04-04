@@ -11,7 +11,7 @@ import client.SkillFactory;
 import client.SkillFactory.FamiliarEntry;
 import client.anticheat.CheatingOffense;
 import constants.GameConstants;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.life.MapleMonsterStats;
 import server.maps.objects.User;
 import tools.Triple;
@@ -59,7 +59,7 @@ public final class FamiliarAttack implements ProcessPacket<MapleClient> {
         MapleMonsterStats oStats = chr.getSummonedFamiliar().getStats();
         chr.getMap().broadcastMessage(chr, CField.familiarAttack(chr.getId(), unk, attackPair), chr.getTruePosition());
         for (Triple attack : attackPair) {
-            MapleMonster mons = chr.getMap().getMonsterByOid(((Integer) attack.left).intValue());
+            Mob mons = chr.getMap().getMonsterByOid(((Integer) attack.left).intValue());
             if ((mons != null) && (mons.isAlive()) && (!mons.getStats().isFriendly()) && (mons.getLinkCID() <= 0) && (((List) attack.right).size() <= f.attackCount)) {
                 if ((chr.getTruePosition().distanceSq(mons.getTruePosition()) > 640000.0D) || (chr.getSummonedFamiliar().getTruePosition().distanceSq(mons.getTruePosition()) > GameConstants.getAttackRange(f.lt, f.rb))) {
                     chr.getCheatTracker().registerOffense(CheatingOffense.ATTACK_FARAWAY_MONSTER_SUMMON);

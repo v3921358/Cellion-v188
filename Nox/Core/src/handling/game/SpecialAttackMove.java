@@ -14,14 +14,12 @@ import server.MapleStatEffect;
 import server.Randomizer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.FieldLimitType;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
-import server.maps.objects.MapleForceAtom;
-import server.maps.objects.MapleForceAtomTypes;
 import server.quest.MapleQuest;
 import service.ChannelServer;
 import tools.packet.*;
@@ -99,7 +97,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
         nSkillLevel = pPlayer.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(nSkill));
         MapleStatEffect pEffect = pPlayer.inPVP() ? pSkill.getPVPEffect(nSkillLevel) : pSkill.getEffect(nSkillLevel);
         int nMob;
-        MapleMonster pMob;
+        Mob pMob;
         
         if ((pSkill == null) || ((GameConstants.isAngel(nSkill)) && (pPlayer.getStat().equippedSummon % 10000 != nSkill % 10000)) || ((pPlayer.inPVP()) && (pSkill.isPVPDisabled()))) {
             c.write(CWvsContext.enableActions());
@@ -311,6 +309,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 break;
             }
             case BeastTamer.LIL_FORT: {
+                pEffect.info.put(MapleStatInfo.time, 60000);
                 pMovement = SummonMovementType.FOLLOW;
                 break;
             }
@@ -544,7 +543,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 pPlayer.setKeyDownSkillTime(0);
                 pPlayer.getMap().broadcastMessage(pPlayer, CField.skillCancel(pPlayer, nSkill), false);
                 break;
-            case ChiefBandit.MESO_EXPLOSION:
+            /*case ChiefBandit.MESO_EXPLOSION:
                 int counter = 0;
                 MapleForceAtom atom = new MapleForceAtom(MapleForceAtomTypes.MesoExplosion);
                 atom.setCharId(pPlayer.getId());
@@ -574,7 +573,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                     atom.setAttackCount(counter);
                     c.write(JobPacket.encodeForceAtom(atom, pPlayer, null));
                 }
-                break;
+                break;*/
             default: {
                 Point pPOS = null;
                 if ((iPacket.Available() == 5L) || (iPacket.Available() == 7L)) {

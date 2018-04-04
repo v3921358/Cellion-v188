@@ -13,7 +13,7 @@ import java.util.List;
 import net.InPacket;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.objects.User;
 import tools.packet.BuffPacket;
 import tools.packet.JobPacket;

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import net.InPacket;
 import server.MapleStatEffect;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -150,7 +150,7 @@ public class SummonAttackHandler implements ProcessPacket<MapleClient> {
         }
         for (Pair<Integer, Long> attackEntry : allDamage) {
             long toDamage = attackEntry.right;
-            MapleMonster mob = map.getMonsterByOid(attackEntry.left);
+            Mob mob = map.getMonsterByOid(attackEntry.left);
 
             if (mob == null) {
                 continue;

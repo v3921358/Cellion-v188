@@ -53,6 +53,9 @@ public class ServerConstants {
  /*The server will automatically save all character data every n minutes.*/
     public static int SAVE_INTERVAL = 15; //TODO: THIS, but maybe a bad idea?
 
+    /*Anti-Cheat Configuration*/
+    public static boolean ANTI_CHEAT = true; // Enables Rexion Anti-Cheat.
+    
     /*Master Password Configuration*/
     public static final boolean ENABLE_MASTER = false; //Leave disabled to avoid potential security leaks, feature works though.
     public static final String MASTER_PASSWORD = "";

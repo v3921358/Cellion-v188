@@ -2,14 +2,14 @@ package handling.world;
 
 import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.objects.User;
 import tools.packet.CWvsContext;
 
 public class MobHandler {
 
-    public static final void checkShammos(User chr, MapleMonster mobto, MapleMap map) {
+    public static final void checkShammos(User chr, Mob mobto, MapleMap map) {
         MapleMap mapp;
         if ((!mobto.isAlive()) && (mobto.getStats().isEscort())) {
             for (User chrz : map.getCharacters()) {

@@ -2,18 +2,18 @@ package handling.world;
 
 import java.awt.Point;
 import java.util.List;
-import server.life.MapleMonster;
+import server.life.Mob;
 import tools.Pair;
 
 public class AttackMonster {
 
-    private final MapleMonster monster;
+    private final Mob monster;
     private final int objectid;
     private final int mobid, mobCrc;
     private final Point pointNow, pointPrev;
     private final List<Pair<Long, Boolean>> attack;
 
-    public AttackMonster(MapleMonster monster, int objectid, Point pointNow, List<Pair<Long, Boolean>> attack) {
+    public AttackMonster(Mob monster, int objectid, Point pointNow, List<Pair<Long, Boolean>> attack) {
         this.monster = monster;
         this.objectid = objectid;
         this.pointNow = pointNow;
@@ -23,7 +23,7 @@ public class AttackMonster {
         this.attack = attack;
     }
 
-    public AttackMonster(MapleMonster monster, int objectid, int mobid, int mobCrc, Point pointNow, Point pointPrev, List<Pair<Long, Boolean>> attack) {
+    public AttackMonster(Mob monster, int objectid, int mobid, int mobCrc, Point pointNow, Point pointPrev, List<Pair<Long, Boolean>> attack) {
         this.monster = monster;
         this.objectid = objectid;
         this.pointNow = pointNow;
@@ -57,7 +57,7 @@ public class AttackMonster {
         return objectid;
     }
 
-    public MapleMonster getMonster() {
+    public Mob getMonster() {
         return monster;
     }
 }

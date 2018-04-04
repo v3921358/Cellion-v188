@@ -18,7 +18,7 @@ public class SpawnPointAreaBoss extends Spawns {
     private final AtomicBoolean spawned = new AtomicBoolean(false);
     private final String msg;
 
-    public SpawnPointAreaBoss(final MapleMonster monster, final Point pos1, final Point pos2, final Point pos3, final int mobTime, final String msg, final boolean shouldSpawn) {
+    public SpawnPointAreaBoss(final Mob monster, final Point pos1, final Point pos2, final Point pos3, final int mobTime, final String msg, final boolean shouldSpawn) {
         this.monster = monster.getStats();
         this.id = monster.getId();
         this.fh = monster.getFh();
@@ -81,9 +81,9 @@ public class SpawnPointAreaBoss extends Spawns {
     }
 
     @Override
-    public final MapleMonster spawnMonster(final MapleMap map) {
+    public final Mob spawnMonster(final MapleMap map) {
         final Point pos = getPosition();
-        final MapleMonster mob = new MapleMonster(id, monster);
+        final Mob mob = new Mob(id, monster);
         mob.setPosition(pos);
         mob.setCy(pos.y);
         mob.setRx0(pos.x - 50);

@@ -20,7 +20,7 @@ import server.Randomizer;
 import server.Timer.EventTimer;
 import server.Timer.MapTimer;
 import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.SharedMapResources.DirectionInfo;
 import server.maps.objects.User;
 import server.maps.objects.MapleReactor;
@@ -570,7 +570,7 @@ public class MapScriptMethods {
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390706), new Point(-364, 336));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390706), new Point(78, 336));
                 //   c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(2600208), new Point(736, 336));
-                MapleMonster theMob = MapleLifeFactory.getMonster(2600208);
+                Mob theMob = MapleLifeFactory.getMonster(2600208);
                 /*   OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -589,7 +589,7 @@ public class MapScriptMethods {
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(995, 336));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(527, 28));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(842, 28));
-                MapleMonster theMob = MapleLifeFactory.getMonster(2600209);
+                Mob theMob = MapleLifeFactory.getMonster(2600209);
                 /*    OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -610,7 +610,7 @@ public class MapScriptMethods {
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(842, 28));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(1218, -84));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(768, -84));
-                MapleMonster theMob = MapleLifeFactory.getMonster(2600015);
+                Mob theMob = MapleLifeFactory.getMonster(2600015);
                 /* OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -627,7 +627,7 @@ public class MapScriptMethods {
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(-14, -204));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(505, -204));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(748, -204));
-                MapleMonster theMob = MapleLifeFactory.getMonster(2600030);
+                Mob theMob = MapleLifeFactory.getMonster(2600030);
                 /*  OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -640,7 +640,7 @@ public class MapScriptMethods {
                 //   c.write(CField.showEffect("Sao/Start1"));
                 c.getPlayer().getMap().resetFully();
                 //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
-                MapleMonster theMob = MapleLifeFactory.getMonster(9300003);
+                Mob theMob = MapleLifeFactory.getMonster(9300003);
                 /*  OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -656,7 +656,7 @@ public class MapScriptMethods {
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390706), new Point(-364, 336));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390706), new Point(78, 336));
                 //   c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(2600208), new Point(736, 336));
-                MapleMonster theMob = MapleLifeFactory.getMonster(6220001);
+                Mob theMob = MapleLifeFactory.getMonster(6220001);
                 /*  OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -675,7 +675,7 @@ public class MapScriptMethods {
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(995, 336));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(527, 28));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(842, 28));
-                MapleMonster theMob = MapleLifeFactory.getMonster(8210013);
+                Mob theMob = MapleLifeFactory.getMonster(8210013);
                 /* OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -696,7 +696,7 @@ public class MapScriptMethods {
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(842, 28));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(1218, -84));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(768, -84));
-                MapleMonster theMob = MapleLifeFactory.getMonster(8220006);
+                Mob theMob = MapleLifeFactory.getMonster(8220006);
                 /*   OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -713,7 +713,7 @@ public class MapScriptMethods {
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(-14, -204));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(505, -204));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(748, -204));
-                MapleMonster theMob = MapleLifeFactory.getMonster(8620009);
+                Mob theMob = MapleLifeFactory.getMonster(8620009);
                 /*  OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -726,7 +726,7 @@ public class MapScriptMethods {
                 //   c.write(CField.showEffect("Sao/Start1"));
                 c.getPlayer().getMap().resetFully();
                 //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
-                MapleMonster theMob = MapleLifeFactory.getMonster(8620011);
+                Mob theMob = MapleLifeFactory.getMonster(8620011);
                 /* OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -950,7 +950,7 @@ public class MapScriptMethods {
                             mobId = Randomizer.nextBoolean() ? 9300106 : 9300105; //enraged
                             break;
                     }
-                    final MapleMonster shammos = MapleLifeFactory.getMonster(mobId);
+                    final Mob shammos = MapleLifeFactory.getMonster(mobId);
                     if (c.getPlayer().getEventInstance() != null) {
                         c.getPlayer().getEventInstance().registerMonster(shammos);
                     }
@@ -1028,7 +1028,7 @@ public class MapScriptMethods {
             case mPark_summonBoss: {
                 if (c.getPlayer().getEventInstance() != null && c.getPlayer().getEventInstance().getProperty("boss") != null && c.getPlayer().getEventInstance().getProperty("boss").equals("0")) {
                     for (int i = 9800119; i < 9800125; i++) {
-                        final MapleMonster boss = MapleLifeFactory.getMonster(i);
+                        final Mob boss = MapleLifeFactory.getMonster(i);
                         c.getPlayer().getEventInstance().registerMonster(boss);
                         c.getPlayer().getMap().spawnMonsterOnGroundBelow(boss, new Point(c.getPlayer().getMap().getPortal(2).getPosition()));
                     }
@@ -1037,7 +1037,7 @@ public class MapScriptMethods {
             }
             case shammos_Fenter: {
                 if (c.getPlayer().getMapId() >= 921120100 && c.getPlayer().getMapId() < 921120300) {
-                    final MapleMonster shammos = MapleLifeFactory.getMonster(9300275);
+                    final Mob shammos = MapleLifeFactory.getMonster(9300275);
                     if (c.getPlayer().getEventInstance() != null) {
                         int averageLevel = 0, size = 0;
                         for (User pl : c.getPlayer().getEventInstance().getPlayers()) {
@@ -1080,7 +1080,7 @@ public class MapScriptMethods {
             //5120038 =  dr bing. 5120039 = visitor lady. 5120041 = unknown dr bing.
             case iceman_FEnter: {
                 if (c.getPlayer().getMapId() >= 932000100 && c.getPlayer().getMapId() < 932000300) {
-                    final MapleMonster shammos = MapleLifeFactory.getMonster(9300438);
+                    final Mob shammos = MapleLifeFactory.getMonster(9300438);
                     if (c.getPlayer().getEventInstance() != null) {
                         int averageLevel = 0, size = 0;
                         for (User pl : c.getPlayer().getEventInstance().getPlayers()) {
@@ -3275,7 +3275,7 @@ public class MapScriptMethods {
             }
             case magnus_enter_HP: {
                 if (c.getPlayer().getMapId() >= 401060100 && c.getPlayer().getMapId() < 401060100) {
-                    final MapleMonster shammos = MapleLifeFactory.getMonster(8880000);
+                    final Mob shammos = MapleLifeFactory.getMonster(8880000);
                     if (c.getPlayer().getEventInstance() != null) {
                         int averageLevel = 0, size = 0;
                         for (User pl : c.getPlayer().getEventInstance().getPlayers()) {
@@ -3303,15 +3303,23 @@ public class MapScriptMethods {
 
             case DI_Hillah:
                 c.getPlayer().getMap().resetFully();
-                final MapleMonster boss1 = MapleLifeFactory.getMonster(9300627);
+                final Mob boss1 = MapleLifeFactory.getMonster(9300627);
                 c.getPlayer().getMap().spawnMonsterOnGroudBelow(boss1, new Point(2630, 29));
                 break;
             case DI_HvsM:
                 c.getPlayer().getMap().resetFully();
-                final MapleMonster boss = MapleLifeFactory.getMonster(9300627);
+                final Mob boss = MapleLifeFactory.getMonster(9300627);
                 c.getPlayer().getMap().spawnMonsterOnGroudBelow(boss, new Point(2630, 29));
                 break;
 //            case DI_.Magnus:
+//                if (c.getPlayer().getMap().getMobsSize() < 1) {
+//                    final MapleMonster boss = MapleLifeFactory.getMonster(9300627);
+//                    boss.changeLevel(c.getPlayer().getLevel());
+////                    boss.setHp(stage);
+//                    c.getPlayer().getEventInstance().registerMonster(boss);
+//                    c.getPlayer().getMap().spawnMonsterOnGroudBelow(boss, new Point(2630, 0));
+//                }
+//                break;//            case DI_.Magnus:
 //                if (c.getPlayer().getMap().getMobsSize() < 1) {
 //                    final MapleMonster boss = MapleLifeFactory.getMonster(9300627);
 //                    boss.changeLevel(c.getPlayer().getLevel());
@@ -3333,7 +3341,7 @@ public class MapScriptMethods {
                 }
                 synchronized (MapScriptMethods.class) {
                     for (MapleMapObject mon : c.getPlayer().getMap().getAllMapObjects(MapleMapObjectType.MONSTER)) {
-                        MapleMonster mob = (MapleMonster) mon;
+                        Mob mob = (Mob) mon;
                         if (mob.getEventInstance() == null) {
                             c.getPlayer().getEventInstance().registerMonster(mob);
                         }
@@ -3852,7 +3860,7 @@ public class MapScriptMethods {
         } else {
             mob = 9300377;
         }
-        MapleMonster theMob = MapleLifeFactory.getMonster(mob);
+        Mob theMob = MapleLifeFactory.getMonster(mob);
         /*  OverrideMonsterStats oms = new OverrideMonsterStats();
         oms.setOMp(theMob.getMobMaxMp());
         oms.setOExp(theMob.getMobExp());

@@ -8,6 +8,9 @@ import server.potentials.ItemPotentialTierType;
  */
 public class ItemConstants {
 
+    // Item required for pet vac to be active.
+    public static final int PET_VAC = 4032031; // Lucky Charm
+    
     // Equips
     public static final int CRUSADER_CODEX = 1172000;
 

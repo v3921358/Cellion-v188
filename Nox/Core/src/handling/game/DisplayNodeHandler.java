@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.MobPacket;
@@ -21,7 +21,7 @@ public class DisplayNodeHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
-        MapleMonster mob_from = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
+        Mob mob_from = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
         if (mob_from != null) {
             chr.getClient().write(MobPacket.getNodeProperties(mob_from, chr.getMap()));
         }

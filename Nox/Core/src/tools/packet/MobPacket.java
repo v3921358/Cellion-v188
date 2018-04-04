@@ -11,7 +11,7 @@ import service.SendPacketOpcode;
 import net.OutPacket;
 import net.Packet;
 import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.life.MobSkill;
 import server.life.MultiTarget;
 import server.maps.MapleMap;
@@ -33,7 +33,7 @@ public class MobPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet damageFriendlyMob(MapleMonster mob, long damage, boolean display) {
+    public static Packet damageFriendlyMob(Mob mob, long damage, boolean display) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.MobDamaged.getValue());
@@ -182,7 +182,7 @@ public class MobPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet showBossHP(MapleMonster mob) {
+    public static Packet showBossHP(Mob mob) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.BossEnvironment.getValue());
@@ -196,7 +196,7 @@ public class MobPacket {
     }
 
     public static Packet showBossHP(int monsterId, long currentHp, long maxHp) {
-        MapleMonster mob = MapleLifeFactory.getMonster(monsterId);
+        Mob mob = MapleLifeFactory.getMonster(monsterId);
 
         OutPacket oPacket = new OutPacket(80);
 
@@ -225,7 +225,7 @@ public class MobPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet moveMonster(MapleMonster monster, boolean useskill, int teleportEnd, int skillId, int skillLv, short option, int oid, List<LifeMovementFragment> moves, List<MultiTarget> multiTarget, List<Short> randomTime) {
+    public static Packet moveMonster(Mob monster, boolean useskill, int teleportEnd, int skillId, int skillLv, short option, int oid, List<LifeMovementFragment> moves, List<MultiTarget> multiTarget, List<Short> randomTime) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.MobMove.getValue());
@@ -267,7 +267,7 @@ public class MobPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet spawnMonster(MapleMonster life, int spawnType, int link, boolean azwan) {
+    public static Packet spawnMonster(Mob life, int spawnType, int link, boolean azwan) {
         OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.MobEnterField.getValue());
 
@@ -281,7 +281,7 @@ public class MobPacket {
         return oPacket.ToPacket();
     }
 
-    public static void addMonsterStatus(OutPacket oPacket, MapleMonster life) {
+    public static void addMonsterStatus(OutPacket oPacket, Mob life) {
 
         // ForcedMobStat::Decode
         oPacket.Encode(life.getChangedStats() != null);
@@ -305,7 +305,7 @@ public class MobPacket {
         oPacket.Fill(0, 12); //mask
     }
 
-    public static void addMonsterInformation(OutPacket oPacket, MapleMonster life, int spawnType, int link, boolean summon, boolean newSpawn) {
+    public static void addMonsterInformation(OutPacket oPacket, Mob life, int spawnType, int link, boolean summon, boolean newSpawn) {
         oPacket.EncodePosition(life.getTruePosition());
         oPacket.Encode(life.getStance());
         if (life.getId() == 8910000 || life.getId() == 8910100) { // Von Bon
@@ -347,7 +347,7 @@ public class MobPacket {
         oPacket.EncodeInteger(0);
     }
 
-    public static Packet controlMonster(MapleMonster life, boolean newSpawn, boolean aggro, boolean azwan) {
+    public static Packet controlMonster(Mob life, boolean newSpawn, boolean aggro, boolean azwan) {
         OutPacket oPacket = new OutPacket(80);
 
         if (azwan) {
@@ -365,7 +365,7 @@ public class MobPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet stopControllingMonster(MapleMonster life, boolean azwan) {
+    public static Packet stopControllingMonster(Mob life, boolean azwan) {
         OutPacket oPacket = new OutPacket(80);
 
         if (azwan) {
@@ -388,15 +388,15 @@ public class MobPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet makeMonsterReal(MapleMonster life, boolean azwan) {
+    public static Packet makeMonsterReal(Mob life, boolean azwan) {
         return spawnMonster(life, -1, 0, azwan);
     }
 
-    public static Packet makeMonsterFake(MapleMonster life, boolean azwan) {
+    public static Packet makeMonsterFake(Mob life, boolean azwan) {
         return spawnMonster(life, -4, 0, azwan);
     }
 
-    public static Packet makeMonsterEffect(MapleMonster life, int effect, boolean azwan) {
+    public static Packet makeMonsterEffect(Mob life, int effect, boolean azwan) {
         return spawnMonster(life, effect, 0, azwan);
     }
 
@@ -455,7 +455,7 @@ public class MobPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet applyMonsterStatus(MapleMonster mons, MonsterStatusEffect ms) {
+    public static Packet applyMonsterStatus(Mob mons, MonsterStatusEffect ms) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.MobStatSet.getValue());
@@ -483,7 +483,7 @@ public class MobPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet applyMonsterStatus(MapleMonster mons, List<MonsterStatusEffect> mse) { // WHY MY VERSION forces me into adding this funtion "EncodeTemporary" into the spawnmonster/controlmonstrer packets.. It handles "Monster Buffs" there hmmm
+    public static Packet applyMonsterStatus(Mob mons, List<MonsterStatusEffect> mse) { // WHY MY VERSION forces me into adding this funtion "EncodeTemporary" into the spawnmonster/controlmonstrer packets.. It handles "Monster Buffs" there hmmm
         if ((mse.size() <= 0) || (mse.get(0) == null)) {
             return CWvsContext.enableActions();
         }
@@ -560,7 +560,7 @@ public class MobPacket {
         return oPacket.ToPacket();
     }
 
-    public static Packet applyPoison(MapleMonster mons, List<MonsterStatusEffect> mse) {
+    public static Packet applyPoison(Mob mons, List<MonsterStatusEffect> mse) {
         if ((mse.size() <= 0) || (mse.get(0) == null)) {
             return CWvsContext.enableActions();
         }
@@ -652,7 +652,7 @@ public class MobPacket {
         return oPacket.ToPacket();
     }
 
-    public static final Packet getNodeProperties(MapleMonster objectid, MapleMap map) {
+    public static final Packet getNodeProperties(Mob objectid, MapleMap map) {
         if (objectid.getNodePacket() != null) {
             return objectid.getNodePacket();
         }

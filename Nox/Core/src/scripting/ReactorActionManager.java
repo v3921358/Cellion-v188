@@ -18,7 +18,7 @@ import server.MapleCarnivalFactory.MCSkill;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.ReactorDropEntry;
@@ -203,7 +203,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         final MCSkill skil = MapleCarnivalFactory.getInstance().getGuardian(num);
         if (skil != null) {
             for (MapleMapObject o : getMap().getAllMapObjects(MapleMapObjectType.MONSTER)) {
-                final MapleMonster mons = (MapleMonster) o;
+                final Mob mons = (Mob) o;
 
                 mons.dispelSkill(skil.getSkill());
             }

@@ -41,7 +41,7 @@ import service.ChannelServer;
 import service.FarmServer;
 import net.Packet;
 import server.Timer.WorldTimer;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
@@ -1884,7 +1884,7 @@ public class World {
             }
             if (map.getAllMapObjectSize(MapleMapObjectType.MONSTER) > 0) {
                 for (MapleMapObject o : map.getAllMapObjects(MapleMapObjectType.MONSTER)) {
-                    final MapleMonster mons = (MapleMonster) o;
+                    final Mob mons = (Mob) o;
 
                     if (mons.isAlive() && mons.shouldKill(currentTime)) {
                         map.killMonster(mons);

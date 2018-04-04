@@ -6,7 +6,7 @@ import client.inventory.MapleInventoryType;
 import java.time.LocalDateTime;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.objects.User;
 import net.InPacket;
@@ -33,7 +33,7 @@ public class UseCatchItemHandler implements ProcessPacket<MapleClient> {
         c.getPlayer().setScrolledPosition((short) 0);
         final byte slot = (byte) iPacket.DecodeShort();
         final int itemid = iPacket.DecodeInteger();
-        final MapleMonster mob = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
+        final Mob mob = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
         final MapleMap map = chr.getMap();
 

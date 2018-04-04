@@ -8,7 +8,7 @@ import handling.AbstractMaplePacketHandler;
 import handling.world.MovementParse;
 import net.InPacket;
 import server.Randomizer;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.life.MapleMonsterSkill;
 import server.life.MobSkill;
 import server.life.MultiTarget;
@@ -36,7 +36,7 @@ public class MobMovement implements ProcessPacket<MapleClient> {
         if (chr == null) {
             return;
         }
-        MapleMonster monster = chr.getMap().getMonsterByOid(oid);
+        Mob monster = chr.getMap().getMonsterByOid(oid);
         if (monster == null) {
             return;
         }

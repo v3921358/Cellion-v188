@@ -23,7 +23,7 @@ package scripting;
 import client.MapleClient;
 import server.MaplePortal;
 import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.Mob;
 
 public class PortalPlayerInteraction extends AbstractPlayerInteraction {
 
@@ -76,7 +76,7 @@ public class PortalPlayerInteraction extends AbstractPlayerInteraction {
 
     // summon special monsters on reactor location
     public void spawnMonster(int id, long hp, int mp, int qty, int exp) {
-        MapleMonster monster = MapleLifeFactory.getMonster(id);
+        Mob monster = MapleLifeFactory.getMonster(id);
         for (int i = 0; i < qty; i++) {
             getMap().spawnMonsterOnGroundBelow(monster, portal.getPosition());
         }

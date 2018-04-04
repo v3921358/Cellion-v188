@@ -21,6 +21,7 @@ import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.Pet;
+import tools.Utility;
 
 /**
  * @author Steven
@@ -35,54 +36,54 @@ public class PlayerMovement implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        User chr = c.getPlayer();
-        if (chr == null) {
+        User pPlayer = c.getPlayer();
+        if (pPlayer == null) {
             return;
         }
-        MapleMap map = c.getPlayer().getMap();
-        Point position = chr.getPosition();
+        MapleMap pMap = c.getPlayer().getMap();
+        Point pPOS = pPlayer.getPosition();
 
         iPacket.DecodeByte(); //fieldKey
         iPacket.DecodeInteger(); //fieldCrc?
         iPacket.DecodeInteger(); //update_time
         iPacket.DecodeByte(); //unkown
-        chr.settEncodedGatherDuration(iPacket.DecodeInteger()); //tEncodedGatherDuration
-        chr.setxCS(iPacket.DecodeShort()); //x_CS
-        chr.setyCS(iPacket.DecodeShort()); //y_CS
-        chr.setvXCS(iPacket.DecodeShort());//vx_CS
-        chr.setvYCS(iPacket.DecodeShort()); //vy_CS
+        pPlayer.settEncodedGatherDuration(iPacket.DecodeInteger()); //tEncodedGatherDuration
+        pPlayer.setxCS(iPacket.DecodeShort()); //x_CS
+        pPlayer.setyCS(iPacket.DecodeShort()); //y_CS
+        pPlayer.setvXCS(iPacket.DecodeShort());//vx_CS
+        pPlayer.setvYCS(iPacket.DecodeShort()); //vy_CS
 
         List<LifeMovementFragment> res = MovementParse.parseMovement(iPacket);
         if (res != null) {
             iPacket.DecodeByte();//aKeyPadState
-            if (chr.isHidden()) {
-                c.getPlayer().getMap().broadcastGMMessage(chr, CField.movePlayer(chr, res), false);
+            if (pPlayer.isHidden()) {
+                c.getPlayer().getMap().broadcastGMMessage(pPlayer, CField.movePlayer(pPlayer, res), false);
             } else {
-                c.getPlayer().getMap().broadcastMessage(c.getPlayer(), CField.movePlayer(chr, res), false);
+                c.getPlayer().getMap().broadcastMessage(c.getPlayer(), CField.movePlayer(pPlayer, res), false);
             }
-            MovementParse.updatePosition(res, chr);
-            Point pos = chr.getTruePosition();
-            map.movePlayer(chr, pos);
+            MovementParse.updatePosition(res, pPlayer);
+            Point pPOS_ = pPlayer.getTruePosition();
+            pMap.movePlayer(pPlayer, pPOS_);
 
-            if (chr.getFollowId() > 0 && chr.isFollowOn() && chr.isFollowInitiator()) {
-                User follower = map.getCharacterById(chr.getFollowId());
+            if (pPlayer.getFollowId() > 0 && pPlayer.isFollowOn() && pPlayer.isFollowInitiator()) {
+                User follower = pMap.getCharacterById(pPlayer.getFollowId());
                 if (follower != null) {
                     Point originalPosition = follower.getPosition();
-                    follower.getClient().write(CField.moveFollow(position, originalPosition, pos, res));
+                    follower.getClient().write(CField.moveFollow(pPOS, originalPosition, pPOS_, res));
                     MovementParse.updatePosition(res, follower);
-                    map.movePlayer(follower, pos);
-                    map.broadcastMessage(follower, CField.movePlayer(follower, res), false);
+                    pMap.movePlayer(follower, pPOS_);
+                    pMap.broadcastMessage(follower, CField.movePlayer(follower, res), false);
                 } else {
-                    chr.checkFollow();
+                    pPlayer.checkFollow();
                 }
             }
 
-            // checks
+            // Checks
             int count = c.getPlayer().getFallCounter();
-            boolean samepos = (pos.y > c.getPlayer().getOldPosition().y) && (Math.abs(pos.x - c.getPlayer().getOldPosition().x) < 5);
-            if (samepos && ((pos.y > map.getSharedMapResources().bottom + 250) || (map.getSharedMapResources().footholds.findBelow(pos) == null))) {
+            boolean samepos = (pPOS_.y > c.getPlayer().getOldPosition().y) && (Math.abs(pPOS_.x - c.getPlayer().getOldPosition().x) < 5);
+            if (samepos && ((pPOS_.y > pMap.getSharedMapResources().bottom + 250) || (pMap.getSharedMapResources().footholds.findBelow(pPOS_) == null))) {
                 if (count > 5) {
-                    c.getPlayer().changeMap(map, map.getPortal(0));
+                    c.getPlayer().changeMap(pMap, pMap.getPortal(0));
                     c.getPlayer().setFallCounter(0);
                 } else {
                     count++;
@@ -91,7 +92,7 @@ public class PlayerMovement implements ProcessPacket<MapleClient> {
             } else if (count > 0) {
                 c.getPlayer().setFallCounter(0);
             }
-            c.getPlayer().setOldPosition(pos);
+            c.getPlayer().setOldPosition(pPOS_);
 
             // Battle Mage Aura Handling
             if (!samepos && (c.getPlayer().getBuffSource(CharacterTemporaryStat.BMageAura) == BattleMage.DARK_AURA)) {
@@ -101,48 +102,15 @@ public class PlayerMovement implements ProcessPacket<MapleClient> {
             }
 
             // Pet Loot Handling
-            ReentrantLock petSafety = new ReentrantLock();
-            if (ServerConstants.AUTO_PET_LOOT) {
-                petSafety.lock();
-                final List<MapleMapObject> items = chr.getMap().getMapObjectsInRange(chr.getPosition(), 2500, Arrays.asList(MapleMapObjectType.ITEM));
-                MapleMapItem mapLoot;
-                boolean bHasPet = false;
-                for (int i = 0; i <= 3; i++) {
-                    Pet pet = chr.getPet(i);
-                    if (pet != null) {
-                        bHasPet = true; // Checks all pet slots to confirm if player has a pet active.
-                    }
-                }
-                if (bHasPet) {
-                    for (MapleMapObject item : items) {
-                        mapLoot = (MapleMapItem) item;
-                        if (mapLoot.getMeso() > 0) {
-                            chr.gainMeso(mapLoot.getMeso(), true);
-                        } else if (mapLoot.getItem() == null || !MapleInventoryManipulator.addFromDrop(chr.getClient(), mapLoot.getItem(), true)) {
-                            continue;
-                        }
-                        /*if (ServerConstants.STRICT_PET_LOOT) {
-                            // Strict pet loot ignores equipment.
-                            if (mapLoot.getItem().getType() == ItemType.Equipment) {
-                                continue;
-                            }
-                        }*/
-
-                        mapLoot.setPickedUp(true);
-                        chr.getMap().broadcastMessage(CField.removeItemFromMap(mapLoot.getObjectId(), 5, chr.getId()), mapLoot.getPosition());
-                        chr.getMap().removeMapObject(item);
-                    }
-                    try {
-                        //System.out.println("[Debug] Pet Loot Size: " + items.size());
-                    } finally {
-                        petSafety.unlock();
-                    }
-                }
+            if (pPlayer.hasPetVacuum()) {
+                Utility.petVacuumRequest(pPlayer);
+            } else if (ServerConstants.AUTO_PET_LOOT) {
+                Utility.petLootRequest(pPlayer);
             }
 
             // for vac hack
-            if (chr.isGM()) {
-                chr.setLastGMMovement(res); // Etc for GM vac hack
+            if (pPlayer.isGM()) {
+                pPlayer.setLastGMMovement(res); // Etc for GM vac hack
             }
         }
     }

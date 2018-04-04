@@ -30,7 +30,7 @@ import server.MapleCarnivalParty;
 import server.MapleItemInformationProvider;
 import server.MapleSquad;
 import server.Timer.EventTimer;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.MapleMapFactory;
 import server.maps.objects.User;
@@ -45,7 +45,7 @@ public class EventInstanceManager {
 
     private List<User> chars = new LinkedList<>(); //this is messy
     private List<Integer> dced = new LinkedList<>();
-    private List<MapleMonster> mobs = new LinkedList<>();
+    private List<Mob> mobs = new LinkedList<>();
     private Map<Integer, Integer> killCount = new HashMap<>();
     private final EventManager em;
     private final int channel;
@@ -325,7 +325,7 @@ public class EventInstanceManager {
         return chars.size();
     }
 
-    public void registerMonster(MapleMonster mob) {
+    public void registerMonster(Mob mob) {
         if (disposed) {
             return;
         }
@@ -333,7 +333,7 @@ public class EventInstanceManager {
         mob.setEventInstance(this);
     }
 
-    public void unregisterMonster(MapleMonster mob) {
+    public void unregisterMonster(Mob mob) {
         mob.setEventInstance(null);
         if (disposed) {
             return;
@@ -424,7 +424,7 @@ public class EventInstanceManager {
      * @param chr
      * @param mob
      */
-    public void monsterKilled(final User chr, final MapleMonster mob) {
+    public void monsterKilled(final User chr, final Mob mob) {
         if (disposed) {
             return;
         }
@@ -452,7 +452,7 @@ public class EventInstanceManager {
         }
     }
 
-    public void monsterDamaged(final User chr, final MapleMonster mob, final int damage) {
+    public void monsterDamaged(final User chr, final Mob mob, final int damage) {
         if (disposed || mob.getId() != 9700037) { //ghost PQ boss only.
             return;
         }
@@ -504,7 +504,7 @@ public class EventInstanceManager {
             chars.clear();
             chars = null;
             if (mobs.size() >= 1) {
-                for (MapleMonster mob : mobs) {
+                for (Mob mob : mobs) {
                     if (mob != null) {
                         mob.setEventInstance(null);
                     }
@@ -549,7 +549,7 @@ public class EventInstanceManager {
         return ChannelServer.getInstance(channel);
     }
 
-    public List<MapleMonster> getMobs() {
+    public List<Mob> getMobs() {
         return mobs;
     }
 

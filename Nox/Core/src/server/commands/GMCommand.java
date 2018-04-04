@@ -25,7 +25,7 @@ import server.Timer.*;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
 import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.life.MapleMonsterInformationProvider;
 import server.life.PlayerNPC;
 import server.maps.*;
@@ -670,9 +670,9 @@ public class GMCommand {
                 c.getPlayer().dropMessage(6, "Map does not exist");
                 return 0;
             }
-            MapleMonster mob;
+            Mob mob;
             for (MapleMapObject monstermo : map.getMapObjectsInRange(c.getPlayer().getPosition(), range, Arrays.asList(MapleMapObjectType.MONSTER))) {
-                mob = (MapleMonster) monstermo;
+                mob = (Mob) monstermo;
                 if (!mob.getStats().isBoss() || mob.getStats().isPartyBonus() || c.getPlayer().isGM()) {
                     map.killMonster(mob, c.getPlayer(), false, false, (byte) 1);
                 }
@@ -700,9 +700,9 @@ public class GMCommand {
                 c.getPlayer().dropMessage(6, "Map does not exist");
                 return 0;
             }
-            MapleMonster mob;
+            Mob mob;
             for (MapleMapObject monstermo : map.getMapObjectsInRange(c.getPlayer().getPosition(), range, Arrays.asList(MapleMapObjectType.MONSTER))) {
-                mob = (MapleMonster) monstermo;
+                mob = (Mob) monstermo;
                 if (!mob.getStats().isBoss() || mob.getStats().isPartyBonus() || c.getPlayer().isGM()) {
                     map.killMonster(mob, c.getPlayer(), true, false, (byte) 1);
                 }
@@ -1644,7 +1644,7 @@ public class GMCommand {
         public int execute(MapleClient c, String[] splitted) {
             MapleMap map = c.getPlayer().getMap();
             int targetId = Integer.parseInt(splitted[1]);
-            MapleMonster monster = map.getMonsterByOid(targetId);
+            Mob monster = map.getMonsterByOid(targetId);
             if (monster != null) {
                 map.killMonster(monster, c.getPlayer(), false, false, (byte) 1);
             }
@@ -1923,7 +1923,7 @@ public class GMCommand {
             Double php = CommandProcessorUtil.getNamedDoubleArg(splitted, 1, "php");
             Double pexp = CommandProcessorUtil.getNamedDoubleArg(splitted, 1, "pexp");
 
-            MapleMonster onemob;
+            Mob onemob;
             try {
                 onemob = MapleLifeFactory.getMonster(mid);
             } catch (RuntimeException e) {
@@ -1956,7 +1956,7 @@ public class GMCommand {
 
             // final OverrideMonsterStats overrideStats = new OverrideMonsterStats(newhp, onemob.getMobMaxMp(), newexp, false);
             for (int i = 0; i < num; i++) {
-                MapleMonster mob = MapleLifeFactory.getMonster(mid);
+                Mob mob = MapleLifeFactory.getMonster(mid);
                 mob.setHp(newhp);
                 if (level != null) {
                     mob.changeLevel(level.intValue(), false);
@@ -1983,7 +1983,7 @@ public class GMCommand {
                 }
             }
 
-            MapleMonster onemob;
+            Mob onemob;
             try {
                 onemob = MapleLifeFactory.getMonster(mid);
             } catch (RuntimeException e) {
@@ -1995,7 +1995,7 @@ public class GMCommand {
                 return 0;
             }
             for (int i = 0; i < num; i++) {
-                MapleMonster mob = MapleLifeFactory.getMonster(mid);
+                Mob mob = MapleLifeFactory.getMonster(mid);
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(mob, c.getPlayer().getPosition());
             }
             return 1;
@@ -2009,7 +2009,7 @@ public class GMCommand {
             if (c.getPlayer().getLastGMMovement() != null) {
 
                 for (MapleMapObject mmo : c.getPlayer().getMap().getAllMapObjects(MapleMapObjectType.MONSTER)) {
-                    final MapleMonster monster = (MapleMonster) mmo;
+                    final Mob monster = (Mob) mmo;
                     c.getPlayer().getMap().broadcastMessage(MobPacket.moveMonster(
                             monster, false, -1, 0, 0, (short) 0, monster.getObjectId(), c.getPlayer().getLastGMMovement(), null, null));
                     monster.setPosition(c.getPlayer().getPosition());
@@ -2800,7 +2800,7 @@ public class GMCommand {
             MapleMap map = c.getPlayer().getMap();
             int targetId = Integer.parseInt(splitted[1]);
             int damage = Integer.parseInt(splitted[2]);
-            MapleMonster monster = map.getMonsterByOid(targetId);
+            Mob monster = map.getMonsterByOid(targetId);
             if (monster != null) {
                 map.broadcastMessage(MobPacket.damageMonster(targetId, damage));
                 monster.damage(c.getPlayer(), damage, false);
@@ -2828,9 +2828,9 @@ public class GMCommand {
                 return 0;
             }
             int damage = Integer.parseInt(splitted[1]);
-            MapleMonster mob;
+            Mob mob;
             for (MapleMapObject monstermo : map.getMapObjectsInRange(c.getPlayer().getPosition(), range, Arrays.asList(MapleMapObjectType.MONSTER))) {
-                mob = (MapleMonster) monstermo;
+                mob = (Mob) monstermo;
                 map.broadcastMessage(MobPacket.damageMonster(mob.getObjectId(), damage));
                 mob.damage(c.getPlayer(), damage, false);
             }
@@ -2845,9 +2845,9 @@ public class GMCommand {
             MapleMap map = c.getPlayer().getMap();
             double range = Double.POSITIVE_INFINITY;
             int damage = Integer.parseInt(splitted[1]);
-            MapleMonster mob;
+            Mob mob;
             for (MapleMapObject monstermo : map.getMapObjectsInRange(c.getPlayer().getPosition(), range, Arrays.asList(MapleMapObjectType.MONSTER))) {
-                mob = (MapleMonster) monstermo;
+                mob = (Mob) monstermo;
                 if (mob.getId() == Integer.parseInt(splitted[2])) {
                     map.broadcastMessage(MobPacket.damageMonster(mob.getObjectId(), damage));
                     mob.damage(c.getPlayer(), damage, false);
@@ -2863,9 +2863,9 @@ public class GMCommand {
         public int execute(MapleClient c, String[] splitted) {
             MapleMap map = c.getPlayer().getMap();
             double range = Double.POSITIVE_INFINITY;
-            MapleMonster mob;
+            Mob mob;
             for (MapleMapObject monstermo : map.getMapObjectsInRange(c.getPlayer().getPosition(), range, Arrays.asList(MapleMapObjectType.MONSTER))) {
-                mob = (MapleMonster) monstermo;
+                mob = (Mob) monstermo;
                 if (mob.getId() == Integer.parseInt(splitted[1])) {
                     mob.damage(c.getPlayer(), mob.getHp(), false);
                 }
@@ -2894,9 +2894,9 @@ public class GMCommand {
                 c.getPlayer().dropMessage(6, "Map does not exist");
                 return 0;
             }
-            MapleMonster mob;
+            Mob mob;
             for (MapleMapObject monstermo : map.getMapObjectsInRange(c.getPlayer().getPosition(), range, Arrays.asList(MapleMapObjectType.MONSTER))) {
-                mob = (MapleMonster) monstermo;
+                mob = (Mob) monstermo;
                 mob.damage(c.getPlayer(), mob.getHp(), false);
             }
             return 1;
@@ -2986,7 +2986,7 @@ public class GMCommand {
             }
             int mobid = Integer.parseInt(splitted[1]);
             int mobTime = Integer.parseInt(splitted[2]);
-            MapleMonster npc;
+            Mob npc;
             try {
                 npc = MapleLifeFactory.getMonster(mobid);
             } catch (RuntimeException e) {

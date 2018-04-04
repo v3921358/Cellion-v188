@@ -20,7 +20,7 @@ import client.jobs.Resistance.BlasterHandler;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.Randomizer;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.life.MobAttackInfo;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
@@ -93,7 +93,7 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
         byte direction = 0;
         byte pType = 0;
         Point pPos = new Point(0, 0);
-        MapleMonster attacker = null;
+        Mob attacker = null;
 
         if (GameConstants.isXenon(pPlayer.getJob())) { // Making sure EazisSystem still works when a GM is hiding
             if (pPlayer.hasBuff(CharacterTemporaryStat.XenonAegisSystem)) {

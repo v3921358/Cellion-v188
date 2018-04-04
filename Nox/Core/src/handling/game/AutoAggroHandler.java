@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
 import netty.ProcessPacket;
@@ -23,7 +23,7 @@ public class AutoAggroHandler implements ProcessPacket<MapleClient> {
         if ((chr == null) || (chr.getMap() == null) || (chr.isHidden())) {
             return;
         }
-        MapleMonster monster = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
+        Mob monster = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
 
         if (monster != null && chr.getTruePosition().distanceSq(monster.getTruePosition()) < 200000.0D && monster.getLinkCID() <= 0) {
             if (monster.getController() != null) {

@@ -41,7 +41,7 @@ import server.MaplePackageActions;
 import server.MapleTrade;
 import server.Randomizer;
 import server.events.MapleSnowball;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.MapleMapItem;
 import server.maps.objects.MapleAndroid;
@@ -63,12 +63,14 @@ import server.shops.ShopOperationType;
 import handling.world.AttackMonster;
 import handling.game.PlayerDamageHandler;
 import handling.game.WhisperHandler.WhisperFlag;
+import java.awt.Rectangle;
 import javax.swing.text.Position;
 import net.Packet;
 import server.MapleStatEffect;
 import static server.MapleStatInfo.s;
 import server.maps.Map_MCarnival;
 import server.maps.Map_MaplePlatform;
+import server.maps.objects.ForceAtom;
 import server.maps.objects.Pet;
 import tools.Pair;
 import tools.Triple;
@@ -182,6 +184,88 @@ public class CField {
         oPacket.Encode(nType);
         oPacket.EncodeString(sFrom);
         oPacket.EncodeString(sMsg);
+        return oPacket.ToPacket();
+    }
+    
+    public static Packet createForceAtom(boolean bByMob, int nUserOwner, int nTargetID, int nForceAtomType, boolean bToMob,
+                                     int nTargets, int nSkillID, ForceAtom pForceAtom, Rectangle rRect, int nArriveDirection, int nArriveRange,
+                                     Point forcedTargetPos, int bulletID, Point pos) {
+        
+        List<Integer> nNumbers = new ArrayList<>();
+        nNumbers.add(nTargets);
+        List<ForceAtom> forceAtomInfos = new ArrayList<>();
+        forceAtomInfos.add(pForceAtom);
+        return createForceAtom(bByMob, nUserOwner, nTargetID, nForceAtomType, bToMob, nNumbers, nSkillID, forceAtomInfos,
+                rRect, nArriveDirection, nArriveRange, forcedTargetPos, bulletID, pos);
+    }
+
+    public static Packet createForceAtom(boolean bByMob, int nUserOwner, int nCharID, int nForceAtomType, boolean bToMob,
+                                     List<Integer> aTargets, int nSkillID, List<ForceAtom> aForceAtoms, Rectangle rRect, int nArriveDirection, int nArriveRange,
+                                     Point forcedTargetPos, int bulletID, Point pos) {
+        
+        OutPacket oPacket = new OutPacket(80);
+        oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
+        oPacket.Encode(bByMob);
+        if(bByMob) {
+            oPacket.EncodeInteger(nUserOwner);
+        }
+        oPacket.EncodeInteger(nCharID);
+        oPacket.EncodeInteger(nForceAtomType);
+        if(nForceAtomType != 0 && nForceAtomType != 9 && nForceAtomType != 14) {
+            oPacket.Encode(bToMob);
+            switch (nForceAtomType) {
+                case 2:
+                case 3:
+                case 6:
+                case 7:
+                case 11:
+                case 12:
+                case 13:
+                case 17:
+                case 19:
+                case 20:
+                case 23:
+                case 24:
+                case 25:
+                    oPacket.EncodeInteger(aTargets.size());
+                    for (int i : aTargets) {
+                        oPacket.EncodeInteger(i);
+                    }
+                    break;
+                default:
+                    oPacket.EncodeInteger(aTargets.get(0));
+                    break;
+            }
+            oPacket.EncodeInteger(nSkillID);
+        }
+        for(ForceAtom pAtom : aForceAtoms) {
+            oPacket.Encode(1);
+            pAtom.encode(oPacket);
+        }
+        oPacket.Encode(0);
+        switch (nForceAtomType) {
+            case 11:
+                oPacket.EncodeRectangle(rRect);
+                oPacket.EncodeInteger(bulletID);
+                break;
+            case 9:
+            case 15:
+                oPacket.EncodeRectangle(rRect);
+                break;
+            case 16:
+                oPacket.EncodePosition(pos);
+                break;
+            case 17:
+                oPacket.EncodeInteger(nArriveDirection);
+                oPacket.EncodeInteger(nArriveRange);
+                break;
+            case 18:
+                oPacket.EncodePosition(forcedTargetPos);
+                break;
+        }
+        
+        oPacket.Fill(0, 29);
+
         return oPacket.ToPacket();
     }
     
@@ -2649,7 +2733,7 @@ public class CField {
         return dropItemFromMapObject(drop, null, dropfrom, dropto, nEnterType);
     }
 
-    public static Packet dropItemFromMapObject(MapleMapItem drop, MapleMonster mob, Point dropfrom, Point dropto, byte nEnterType) {
+    public static Packet dropItemFromMapObject(MapleMapItem drop, Mob mob, Point dropfrom, Point dropto, byte nEnterType) {
         OutPacket oPacket = new OutPacket(80);
 
         oPacket.EncodeShort(SendPacketOpcode.DropEnterField.getValue());

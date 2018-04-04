@@ -15,7 +15,7 @@ import net.Packet;
 import server.MapleFamiliar;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.life.PlayerNPC;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
@@ -1527,7 +1527,7 @@ public class CWvsContext {
     }
 
     //mark packet
-    public static Packet giveMarkOfTheif(int cid, int oid, int skillid, List<MapleMonster> monsters, Point p1, Point p2, int javelin) {
+    public static Packet giveMarkOfTheif(int cid, int oid, int skillid, List<Mob> monsters, Point p1, Point p2, int javelin) {
         OutPacket oPacket = new OutPacket(80);
         oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
         oPacket.Encode(1);
@@ -1536,7 +1536,7 @@ public class CWvsContext {
         oPacket.EncodeInteger(11); //type
         oPacket.Encode(1);
         oPacket.EncodeInteger(monsters.size());
-        for (MapleMonster monster : monsters) {
+        for (Mob monster : monsters) {
             oPacket.EncodeInteger(monster.getObjectId());
         }
         oPacket.EncodeInteger(skillid); //skillid

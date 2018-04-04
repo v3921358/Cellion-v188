@@ -11,7 +11,7 @@ import client.jobs.Kinesis.KinesisHandler;
 import net.InPacket;
 import net.OutPacket;
 import netty.ProcessPacket;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.objects.User;
 import service.SendPacketOpcode;
 

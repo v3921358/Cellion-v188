@@ -2,7 +2,7 @@ package handling.game;
 
 import client.MapleClient;
 import client.MonsterStatus;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.objects.User;
 import net.InPacket;
@@ -26,7 +26,7 @@ public class MobBombHandler implements ProcessPacket<MapleClient> {
         if (map == null) {
             return;
         }
-        MapleMonster mobfrom = map.getMonsterByOid(iPacket.DecodeInteger());
+        Mob mobfrom = map.getMonsterByOid(iPacket.DecodeInteger());
         iPacket.Skip(4);
         iPacket.DecodeInteger();
 

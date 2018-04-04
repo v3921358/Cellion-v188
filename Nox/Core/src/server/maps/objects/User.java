@@ -37,6 +37,7 @@ import database.DatabaseConnection;
 import database.DatabaseException;
 import handling.game.AndroidEmotionChanger;
 import client.jobs.Explorer.ShadowerHandler;
+import constants.ItemConstants;
 import handling.login.LoginInformationProvider.JobType;
 import handling.world.*;
 import net.OutPacket;
@@ -127,7 +128,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private MapleImp[] imps;
     private List<Pair<Integer, Boolean>> stolenSkills = new ArrayList<>();
     private transient WeakReference<User>[] clones;
-    private transient Set<MapleMonster> controlled;
+    private transient Set<Mob> controlled;
     private transient Set<MapleMapObject> visibleMapObjects;
     private transient ReentrantReadWriteLock visibleMapObjectsLock;
     private transient ReentrantReadWriteLock summonsLock;
@@ -261,6 +262,16 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      */
     public List<VMatrixRecord> aVMatrixRecord = new ArrayList<>();
 
+    /**
+     * Pet Features
+     */
+    public boolean hasPetVacuum() {
+        if (haveItem(ItemConstants.PET_VAC)) {
+            return true;
+        }
+        return false;
+    }
+    
     /*
      *  Staff Variables
      */
@@ -3749,7 +3760,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         controlledLock.writeLock().lock();
         visibleMapObjectsLock.writeLock().lock();
         try {
-            for (MapleMonster mons : controlled) {
+            for (Mob mons : controlled) {
                 if (mons != null) {
                     mons.setController(null);
                     mons.setControllerHasAggro(false);
@@ -4985,7 +4996,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    public void controlMonster(MapleMonster monster, boolean aggro) {
+    public void controlMonster(Mob monster, boolean aggro) {
         if (clone || monster == null) {
             return;
         }
@@ -5001,7 +5012,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         monster.sendStatus(client);
     }
 
-    public void stopControllingMonster(MapleMonster monster) {
+    public void stopControllingMonster(Mob monster) {
         if (clone || monster == null) {
             return;
         }
@@ -5015,7 +5026,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    public void checkMonsterAggro(MapleMonster monster) {
+    public void checkMonsterAggro(Mob monster) {
         if (clone || monster == null) {
             return;
         }
@@ -9589,7 +9600,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (barrier != null) {
             damage = ((barrier.getX() / 1000.0) * damage);
         }
-        List<Integer> attack = attacke instanceof MapleMonster || attacke == null ? null : (new ArrayList<>());
+        List<Integer> attack = attacke instanceof Mob || attacke == null ? null : (new ArrayList<>());
         if (damage > 0) {
             if (getJob() == 122 && !skillisCooling(1220013)) {
                 final Skill divine = SkillFactory.getSkill(1220013);
@@ -9633,13 +9644,13 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 if (getTotalSkillLevel(divine) > 0) {
                     final MapleStatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
                     if (divineShield.makeChanceResult()) {
-                        if (attacke instanceof MapleMonster) {
+                        if (attacke instanceof Mob) {
                             final Rectangle bounds = divineShield.calculateBoundingBox(getTruePosition(), isFacingLeft());
                             final List<MapleMapObject> affected = getMap().getMapObjectsInRect(bounds, Arrays.asList(attacke.getType()));
                             int i = 0;
 
                             for (final MapleMapObject mo : affected) {
-                                MapleMonster mons = (MapleMonster) mo;
+                                Mob mons = (Mob) mo;
                                 if (mons.getStats().isFriendly() || mons.isFake()) {
                                     continue;
                                 }
@@ -9664,8 +9675,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 if (getTotalSkillLevel(divine) > 0) {
                     final MapleStatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
                     if (divineShield.makeChanceResult()) {
-                        if (attacke instanceof MapleMonster) {
-                            final MapleMonster attacker = (MapleMonster) attacke;
+                        if (attacke instanceof Mob) {
+                            final Mob attacker = (Mob) attacke;
                             final int theDmg = (int) (divineShield.getDamage() * getStat().getCurrentMaxBaseDamage() / 100.0);
                             attacker.damage(this, theDmg, true);
                             getMap().broadcastMessage(MobPacket.damageMonster(attacker.getObjectId(), theDmg));
@@ -9684,8 +9695,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     if (divineShield.makeChanceResult()) {
                         addCooldown(divine.getId(), System.currentTimeMillis(), divineShield.getCooldown(this) * 0);
 
-                        if (attacke instanceof MapleMonster) {
-                            final MapleMonster attacker = (MapleMonster) attacke;
+                        if (attacke instanceof Mob) {
+                            final Mob attacker = (Mob) attacke;
                             final int theDmg = (int) (divineShield.getDamage() * getStat().getCurrentMaxBaseDamage() / 100.0);
                             attacker.damage(this, theDmg, true);
                             getMap().broadcastMessage(MobPacket.damageMonster(attacker.getObjectId(), theDmg));
@@ -9704,8 +9715,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     long bouncedamage = (long) (damage * bouncedam_ / 100);
                     long bouncer = (long) (damage * damr / 100);
                     damage -= bouncer;
-                    if (attacke instanceof MapleMonster) {
-                        final MapleMonster attacker = (MapleMonster) attacke;
+                    if (attacke instanceof Mob) {
+                        final Mob attacker = (Mob) attacke;
                         bouncedamage = Math.min(bouncedamage, attacker.getMobMaxHp() / 10);
                         attacker.damage(this, bouncedamage, true);
                         getMap().broadcastMessage(this, MobPacket.damageMonster(attacker.getObjectId(), bouncedamage), getTruePosition());
@@ -9735,8 +9746,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                         for (Summon sum : ss) {
                             if (sum.getTruePosition().distanceSq(getTruePosition()) < 400000.0 && (sum.getSkill() == 4111007 || sum.getSkill() == 4211007 || sum.getSkill() == 14111010)) {
                                 final List<Pair<Integer, Long>> allDamage = new ArrayList<>();
-                                if (attacke instanceof MapleMonster) {
-                                    final MapleMonster attacker = (MapleMonster) attacke;
+                                if (attacke instanceof Mob) {
+                                    final Mob attacker = (Mob) attacke;
                                     final long theDmg = (long) (SkillFactory.getSkill(sum.getSkill()).getEffect(sum.getSkillLevel()).getX() * damage / 100.0);
                                     allDamage.add(new Pair<>(attacker.getObjectId(), theDmg));
                                     getMap().broadcastMessage(SummonPacket.summonAttack(sum.getOwnerId(), sum.getObjectId(), (byte) 0x84, allDamage, getLevel(), true));
@@ -9822,7 +9833,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             final Skill skill = SkillFactory.getSkill(i);
             if (getTotalSkillLevel(skill) > 0) {
                 final MapleStatEffect venomEffect = skill.getEffect(getTotalSkillLevel(skill));
-                final MapleMonster monster = map.getMonsterByOid(oid);
+                final Mob monster = map.getMonsterByOid(oid);
                 if (venomEffect.makeChanceResult() && monster != null) {
                     monster.applyStatus(this, new MonsterStatusEffect(MonsterStatus.POISON, 1, i, null, false), true, venomEffect.getDuration(), true, venomEffect);
                 }
@@ -10204,7 +10215,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
         if (eff.isMonsterBuff() || (eff.getStatups().isEmpty() && !eff.getMonsterStati().isEmpty())) {
             for (MapleMapObject o : map.getAllMapObjects(MapleMapObjectType.MONSTER)) {
-                final MapleMonster mons = (MapleMonster) o;
+                final Mob mons = (Mob) o;
 
                 for (MonsterStatus b : eff.getMonsterStati().keySet()) {
                     if (mons.isBuffed(b) && mons.getBuff(b).getFromID() == this.id) {

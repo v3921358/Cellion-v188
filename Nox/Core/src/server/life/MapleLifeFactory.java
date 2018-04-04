@@ -199,12 +199,12 @@ public class MapleLifeFactory {
         return QUEST_COUNT_GROUP.get(id);
     }
 
-    public static MapleMonster getMonster(int mid) {
+    public static Mob getMonster(int mid) {
         MapleMonsterStats stats = getMonsterStats(mid);
         if (stats == null) {
             return null;
         }
-        return new MapleMonster(mid, stats);
+        return new Mob(mid, stats);
     }
 
     public static MapleNPC getNPC(final int nid) {

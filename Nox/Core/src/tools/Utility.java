@@ -136,12 +136,12 @@ public class Utility {
             for (MapleMapObject item : mItems) {
                 pMapLoot = (MapleMapItem) item;
                 
-                if (pMapLoot.getMeso() > 0) {
+                if (pMapLoot.getMeso() > 0) { // Meso Drops
                     pPlayer.gainMeso(pMapLoot.getMeso(), true);
                     pMapLoot.setPickedUp(true);
                     pPlayer.getMap().removeMapObject(item);
                     pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
-                } else {
+                } else { // Item Drops
                     if (pMapLoot.isPickedUp()) {
                         pPlayer.getClient().write(CWvsContext.enableActions());
                         continue;
@@ -217,12 +217,12 @@ public class Utility {
             for (MapleMapObject item : mItems) {
                 pMapLoot = (MapleMapItem) item;
                 
-                if (pMapLoot.getMeso() > 0) {
+                if (pMapLoot.getMeso() > 0) { // Meso Drops
                     pPlayer.gainMeso(pMapLoot.getMeso(), true);
                     pMapLoot.setPickedUp(true);
                     pPlayer.getMap().removeMapObject(item);
                     pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
-                } else {
+                } else { // Item Drops
                     if (pMapLoot.isPickedUp()) {
                         pPlayer.getClient().write(CWvsContext.enableActions());
                         continue;

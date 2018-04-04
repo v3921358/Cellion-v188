@@ -12,7 +12,9 @@ import constants.skills.*;
 import client.jobs.Cygnus;
 import client.jobs.Cygnus.NightWalkerHandler;
 import client.jobs.Cygnus.ThunderBreakerHandler;
+import client.jobs.Explorer;
 import client.jobs.Explorer.HeroHandler;
+import client.jobs.Explorer.NightLordHandler;
 import client.jobs.Explorer.ShadowerHandler;
 import client.jobs.Hero.AranHandler;
 import client.jobs.Hero.PhantomHandler;
@@ -33,8 +35,8 @@ import tools.packet.CWvsContext;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import server.maps.objects.MapleForceAtom;
-import server.maps.objects.MapleForceAtomTypes;
+import server.maps.objects.ForceAtom;
+import server.maps.objects.ForceAtomType;
 import service.RecvPacketOpcode;
 import tools.Utility;
 import tools.packet.CField;
@@ -124,7 +126,7 @@ public class DamageParse {
         double maxDamagePerHit = 0.0D;
 
         for (AttackMonster oned : attack.allDamage) {
-            MapleMonster monster = oned.getMonster();
+            Mob monster = oned.getMonster();
             if (monster == null || monster.getId() != oned.getMonsterId()) {
                 continue;
             }
@@ -380,7 +382,7 @@ public class DamageParse {
                     int percent = 45;
                     int percent2 = 25;
                     for (AttackMonster at : attack.allDamage) {
-                        MapleMonster mob = map.getMonsterByOid(at.getObjectId());
+                        Mob mob = map.getMonsterByOid(at.getObjectId());
                         if (map.getMonsterByOid(at.getObjectId()).getStats().isBoss()) {
                             if (Randomizer.nextInt(100) < percent) {
                                 if (mob != null) {
@@ -453,26 +455,28 @@ public class DamageParse {
                         }
                     }
                     if (GameConstants.isThiefNightLord(pPlayer.getJob())) {
-                        if (pPlayer.hasBuff(CharacterTemporaryStat.NightLordMark)) {
-                            /*if (Randomizer.nextInt(100) < 40) {
-                                MapleForceAtom pAtom = new MapleForceAtom(MapleForceAtomTypes.MarkOfAssassin);
-                                pAtom.setSkillId(Assassin.ASSASSINS_MARK_2);
-                                pAtom.setCharId(pPlayer.getId());
-                                pAtom.setTargetOid(monster.getObjectId());
-                                pAtom.setToMob(true);
-                                pAtom.setByMob(true);
-                                //pPlayer.getMap().broadcastMessage(JobPacket.encodeForceAtom(pAtom, pPlayer, monster));
-                                //pPlayer.dropMessage(5, "Creating force atom.");
-                                //pPlayer.getMap().broadcastMessage(JobPacket.NightLordPacket.AssassinsMark(pPlayer, monster));
-                            }*/
-                        }
+                        NightLordHandler.handleAssassinsMark(pPlayer, monster, attack);
                     }
                     if (GameConstants.isNightWalkerCygnus(pPlayer.getJob())) {
 
                         if (pPlayer.hasBuff(CharacterTemporaryStat.NightWalkerBat)) {
+                            //if (Utility.resultSuccess(40)) {
+                            //    pPlayer.getMap().broadcastMessage(JobPacket.NightWalkerPacket.ShadowBats(pPlayer.getId(), 0));
+                            //}
+                            
                             if (Utility.resultSuccess(40)) {
-                                pPlayer.getMap().broadcastMessage(JobPacket.NightWalkerPacket.ShadowBats(pPlayer.getId(), 0));
+                                int mobID = monster.getObjectId();
+                                int position = new Random().nextInt(80);
+                                int inc = ForceAtomType.NIGHT_WALKER_FROM_MOB_4.getInc();
+                                int type = ForceAtomType.NIGHT_WALKER_FROM_MOB_4.getForceAtomType();
+                                ForceAtom forceAtomInfo = new ForceAtom(1, inc, 3, 3,
+                                        90, 0, (int) System.currentTimeMillis(), 1, 0,
+                                        new Point(-20, position));
+                                pPlayer.write(CField.createForceAtom(false, 0, pPlayer.getId(), type,
+                                        true, mobID, NightWalker.SHADOW_BAT, forceAtomInfo, new Rectangle(), 0, 300,
+                                        monster.getPosition(), NightWalker.SHADOW_BAT, monster.getPosition()));    //TODO mob.getPosition()  QUINT_THROW giving NPE
                             }
+                            
                             /*for (AttackMonster at : attack.allDamage) {
                                 if (Randomizer.nextInt(100) < 60) {
                                     pPlayer.getMap().broadcastMessage(JobPacket.NightWalkerPacket.ShadowBats(pPlayer.getId(), at.getObjectId()));
@@ -738,7 +742,7 @@ public class DamageParse {
             if (eff.makeChanceResult()) {
                 for (Map.Entry z : effect.getMonsterStati().entrySet()) {
                     for (AttackMonster ap : attack.allDamage) {
-                        final MapleMonster monster = pPlayer.getMap().getMonsterByOid(ap.getObjectId());
+                        final Mob monster = pPlayer.getMap().getMonsterByOid(ap.getObjectId());
                         monster.applyStatus(pPlayer,
                                 new MonsterStatusEffect((MonsterStatus) z.getKey(), (Integer) z.getValue(),
                                         theSkill.getId(), null, false),
@@ -767,7 +771,7 @@ public class DamageParse {
 
             int bulletCount = eff.getBulletCount();
             for (AttackMonster ap : attack.allDamage) {
-                final MapleMonster source = pPlayer.getMap().getMonsterByOid(ap.getObjectId());
+                final Mob source = pPlayer.getMap().getMonsterByOid(ap.getObjectId());
 
                 // source.get
                 final MonsterStatusEffect check = source.getBuff(MonsterStatus.POISON);
@@ -777,15 +781,15 @@ public class DamageParse {
                 if (check != null && check.getSkill() == 4100011 && check.getOwnerId() == pPlayer.getId()) { // :3
                     final List<MapleMapObject> objs = pPlayer.getMap().getMapObjectsInRange(pPlayer.getPosition(), 500000,
                             Arrays.asList(MapleMapObjectType.MONSTER));
-                    final List<MapleMonster> monsters = new ArrayList<>();
+                    final List<Mob> monsters = new ArrayList<>();
                     for (int i = 0; i < bulletCount; i++) {
                         int rand = Randomizer.rand(0, objs.size() - 1);
                         if (objs.size() < bulletCount) {
                             if (i < objs.size()) {
-                                monsters.add((MapleMonster) objs.get(i));
+                                monsters.add((Mob) objs.get(i));
                             }
                         } else {
-                            monsters.add((MapleMonster) objs.get(rand));
+                            monsters.add((Mob) objs.get(rand));
                             objs.remove(rand);
                         }
                     }
@@ -794,7 +798,7 @@ public class DamageParse {
                         return;
                     }
                     final List<Point> points = new ArrayList<>();
-                    for (MapleMonster mob : monsters) {
+                    for (Mob mob : monsters) {
                         points.add(mob.getPosition());
                     }
                     pPlayer.getMap().broadcastMessage(CWvsContext.giveMarkOfTheif(pPlayer.getId(), source.getObjectId(),
@@ -809,7 +813,7 @@ public class DamageParse {
                 final List<MapleMapObject> objs = pPlayer.getMap().getMapObjectsInRange(pPlayer.getPosition(), 500000,
                         Arrays.asList(MapleMapObjectType.MONSTER));
 
-                final List<MapleMonster> monsters = new ArrayList<>();
+                final List<Mob> monsters = new ArrayList<>();
 
                 pPlayer.getMap().broadcastMessage(CWvsContext.giveMarkOfTheif(pPlayer.getId(), ap.getObjectId(),
                         4100012, monsters, pPlayer.getPosition(), ap.getPosition(), 2070005));
@@ -894,7 +898,7 @@ public class DamageParse {
         int eaterLevel = pPlayer.getTotalSkillLevel(eaterSkill);
 
         for (AttackMonster oned : attack.allDamage) {
-            final MapleMonster monster = oned.getMonster();
+            final Mob monster = oned.getMonster();
             if (monster == null || monster.getId() != oned.getMonsterId()) {
                 continue;
             }
@@ -1111,7 +1115,7 @@ public class DamageParse {
         }
     }
 
-    private static double calculateMaxMagicDamagePerHit(User chr, Skill skill, MapleMonster monster, MapleMonsterStats mobstats, PlayerStats stats, Element elem, Integer sharpEye, double maxDamagePerMonster, MapleStatEffect attackEffect) {
+    private static double calculateMaxMagicDamagePerHit(User chr, Skill skill, Mob monster, MapleMonsterStats mobstats, PlayerStats stats, Element elem, Integer sharpEye, double maxDamagePerMonster, MapleStatEffect attackEffect) {
         int dLevel = Math.max(mobstats.getLevel() - chr.getLevel(), 0) * 2;
         int HitRate = Math.min((int) Math.floor(Math.sqrt(stats.getAccuracy())) - (int) Math.floor(Math.sqrt(mobstats.getEva())) + 100, 100);
         if (dLevel > HitRate) {
@@ -1207,13 +1211,13 @@ public class DamageParse {
         return elemMaxDamagePerMob / 100.0D * (stats.def + stats.getElementBoost(elem));
     }
 
-    private static void handlePickPocket(User player, MapleMonster mob, AttackMonster oned) {
+    private static void handlePickPocket(User player, Mob mob, AttackMonster oned) {
         if (Randomizer.nextInt(99) <= player.getStat().pickRate) {
             player.getMap().spawnMesoDrop(1, new Point((int) (mob.getTruePosition().getX() + Randomizer.nextInt(100) - 50.0D), (int) mob.getTruePosition().getY()), mob, player, false, (byte) 0);
         }
     }
 
-    private static double calculateMaxWeaponDamagePerHit(User player, MapleMonster monster, AttackInfo attack, Skill theSkill, MapleStatEffect attackEffect, double maximumDamageToMonster, Integer CriticalDamagePercent) {
+    private static double calculateMaxWeaponDamagePerHit(User player, Mob monster, AttackInfo attack, Skill theSkill, MapleStatEffect attackEffect, double maximumDamageToMonster, Integer CriticalDamagePercent) {
         int dLevel = Math.max(monster.getStats().getLevel() - player.getLevel(), 0) * 2;
         int HitRate = Math.min((int) Math.floor(Math.sqrt(player.getStat().getAccuracy())) - (int) Math.floor(Math.sqrt(monster.getStats().getEva())) + 100, 100);
         if (dLevel > HitRate) {
@@ -1665,7 +1669,7 @@ public class DamageParse {
                     iPacket.DecodeString();
                     iPacket.DecodeInteger();
                 }
-                final MapleMonster monster = chr.getMap().getMonsterByOid(dwMobID);
+                final Mob monster = chr.getMap().getMonsterByOid(dwMobID);
                 ret.allDamage.add(new AttackMonster(monster, dwMobID, monster.getId(), dwMobCRC, ptHit, ptPosPrev, null));
             }
         } else {
@@ -1739,7 +1743,7 @@ public class DamageParse {
                 }
                 iPacket.DecodeByte(); // Unknown
                 if(ret.skill == 142120001) iPacket.DecodeLong(); // haxfix?
-                final MapleMonster monster = chr.getMap().getMonsterByOid(dwMobID);
+                final Mob monster = chr.getMap().getMonsterByOid(dwMobID);
                 ret.allDamage.add(new AttackMonster(monster, dwMobID, monster.getId(), dwMobCRC, ptHit, ptPosPrev, damageNumbers));
             }
         }

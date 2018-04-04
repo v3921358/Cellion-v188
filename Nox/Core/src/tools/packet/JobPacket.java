@@ -15,10 +15,8 @@ import service.SendPacketOpcode;
 import net.OutPacket;
 import net.Packet;
 import server.Randomizer;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.objects.User;
-import server.maps.objects.MapleForceAtom;
-import server.maps.objects.MapleForceAtomTypes;
 
 /**
  *
@@ -27,191 +25,6 @@ import server.maps.objects.MapleForceAtomTypes;
  */
 public class JobPacket {
 
-    public static Packet encodeForceAtom(MapleForceAtom pAtom, User pPlayer, MapleMonster pMob) {
-        OutPacket oPacket = new OutPacket(80);
-
-        oPacket.Encode(pAtom.isByMob());
-        if (pAtom.isByMob()) {
-            oPacket.EncodeInteger(pAtom.getTargetOid());
-        }
-        oPacket.EncodeInteger(pAtom.getCharId());
-        oPacket.Encode(pAtom.getType().getType());
-        if (pAtom.getType() != MapleForceAtomTypes.ZeroForce && pAtom.getType() != MapleForceAtomTypes.EventPoint) {
-            oPacket.Encode(pAtom.isToMob()); //bToMob
-            if (pAtom.isToMob()) {
-                switch (pAtom.getType()) {
-                    case NetherShield:
-                    case SoulSeeker:
-                    case Aegis:
-                    case TriflingWind:
-                    case MarkOfAssassin:
-                    case MesoExplosion:
-                    case Possession:
-                    case NonTarget:
-                    case SSFShooting:
-                    case HomingBeacon:
-                    case MagicWreckage:
-                    case AdvancedMagicWreckage:
-                    case AutoSoulSeeker:
-                    case AfterImage:
-                    case DoTPunisher:
-                    case Unknown: // Unknown
-                    case Unknown_2: // Unknown
-                    case IdleWhim: { // Unknown
-                        oPacket.EncodeInteger(pAtom.getObjects().size());
-                        for (int pObject : pAtom.getObjects()) {
-                            oPacket.EncodeInteger(pObject); //dwTarget oid
-                        }
-                        break;
-                    }
-                    default: {
-                        oPacket.EncodeInteger(pAtom.getObjects().get(0)); //dwFirstMobID
-                        break;
-                    }
-                }
-                oPacket.EncodeInteger(pAtom.getSkillId());
-            }
-        }
-
-        for (int i = 0; i < pAtom.getAttackCount(); i++) {
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(i + 2); //dwKey
-            oPacket.EncodeInteger(1); //nInc
-            oPacket.EncodeInteger(pAtom.getFirstImpact()); //nFirstImpact
-            oPacket.EncodeInteger(pAtom.getSecondImpact()); //nSecondImpact
-            oPacket.EncodeInteger(pAtom.getAngle()); //nAngle
-            oPacket.EncodeInteger(pAtom.getSpawnDelay()); //nStartDelay
-            oPacket.EncodeInteger(pAtom.getPosition().x); //char pos x
-            oPacket.EncodeInteger(pAtom.getPosition().y); //char pos y
-            oPacket.EncodeInteger((int) System.currentTimeMillis()); //dwCreateTime
-            oPacket.EncodeInteger(pAtom.getAttackCount()); //nMaxHitCount
-            oPacket.EncodeInteger(0); //nEffectIdx
-            //oPacket.EncodeInteger(0); // Unknown v188
-        }
-        oPacket.Encode(0); // Ends Loop Above
-
-        if (pAtom.getType() == MapleForceAtomTypes.MarkOfAssassin) {
-            oPacket.EncodeInteger(pMob.getPosition().x); //rcTargetArrive.left
-            oPacket.EncodeInteger(pMob.getPosition().y); //rcTargetArrive.top
-            oPacket.EncodeInteger(pMob.getPosition().x); //rcTargetArrive.right
-            oPacket.EncodeInteger(pMob.getPosition().y); //rcTargetArrive.bottom
-            oPacket.EncodeInteger(2070000); // nBulletID
-        }
-        if (pAtom.getType() == MapleForceAtomTypes.SparkleBurst) {
-            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.left
-            oPacket.EncodeInteger(pMob.getPosition().y); // rcTargetArrive.top
-            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.right
-            oPacket.EncodeInteger(pMob.getPosition().y); // rcTargetArrive.bottom
-            oPacket.EncodeInteger(pMob.getPosition().x); // ptArriveTarget.x
-            oPacket.EncodeInteger(pMob.getPosition().y); // ptArriveTarget.y
-        }
-        if (pAtom.getType() == MapleForceAtomTypes.ShadowBat) {
-            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.left
-            oPacket.EncodeInteger(pMob.getPosition().y); // rcTargetArrive.top
-            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.right
-            oPacket.EncodeInteger(pMob.getPosition().y); // rcTargetArrive.bottom
-        }
-        if (pAtom.getType() == MapleForceAtomTypes.ShadowBatBound) {
-            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.right
-            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.right
-        }
-        if (pAtom.getType() == MapleForceAtomTypes.NonTarget) {
-            oPacket.EncodeInteger(0); // nArriveDirection
-            oPacket.EncodeInteger(pPlayer.getPosition().x - pMob.getPosition().x); // nArriveDistance
-        }
-        if (pAtom.getType() == MapleForceAtomTypes.TypingGame || pAtom.getType() == MapleForceAtomTypes.SpiritStone) {
-            oPacket.EncodeInteger(pMob.getPosition().x); // ptArriveTarget.x
-            oPacket.EncodeInteger(pMob.getPosition().x); // ptArriveTarget.y
-        }
-        if (pAtom.getType() == MapleForceAtomTypes.AfterImage || pAtom.getType() == MapleForceAtomTypes.SparkleBurst || pAtom.getType().getType() == 30
-                || pAtom.getType().getType() == 31 || pAtom.getType().getType() == 32 || pAtom.getType().getType() == 33) {
-            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.left
-            oPacket.EncodeInteger(pMob.getPosition().y); // rcTargetArrive.top
-            oPacket.EncodeInteger(pMob.getPosition().x); // rcTargetArrive.right
-            oPacket.EncodeInteger(pMob.getPosition().y); // rcTargetArrive.bottom
-            oPacket.EncodeInteger(pAtom.getSpawnDelay()); // tDelay
-        }
-
-        return oPacket.ToPacket();
-    }
-
-    /*public static Packet createForceAtom(MapleForceAtom atom) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
-        oPacket.Encode(atom.isByMob());//bByMob
-        if (!atom.isByMob()) {
-            oPacket.EncodeInteger(atom.getCharId());
-        }
-        oPacket.EncodeInteger(atom.getType().getType());//nForceAtomType
-
-        if (atom.getType() != MapleForceAtomTypes.ZeroForce && atom.getType() != MapleForceAtomTypes.EventPoint) {
-            oPacket.Encode(atom.isToMob());//bToMob
-            switch (atom.getType()) {
-                case FLYINGSWORD_BOTH:
-                case SOULSEEKER_BOTH:
-                case AEGISACTIVE_BOTH:
-                case TRIFLINGWHIM_BOTH:
-                case MARKOFASSASSIN_BOTH:
-                case MESOEXPLOSION_BOTH:
-                case POSSESSION_BOTH:
-                case NONTARGET_BOTH:
-                case SSFSHOOTING_BOTH:
-                case HORMING:
-                case MAGIC_WRECKAGE:
-                case ADV_MAGIC_WRECKAGE:
-                case AUTO_SOULSEEKER_BOTH:
-                    oPacket.EncodeInteger(atom.getObjects().size());
-                    for (int object : atom.getObjects()) {
-                        oPacket.EncodeInteger(object); //dwTarget oid
-                    }
-                    break;
-                default:
-                    oPacket.EncodeInteger(atom.getObjects().get(0));//dwFirstMobID
-                    break;
-            }
-        }
-        oPacket.EncodeInteger(atom.getSkillId()); //skillId
-        for (int i = 0; i < atom.getAttackCount(); i++) {
-            oPacket.Encode(i < atom.getAttackCount()); //part of the doWhile loop
-            oPacket.EncodeInteger(i + 2); //dwKey
-            oPacket.EncodeInteger(0); //nInc
-            oPacket.EncodeInteger(atom.getFirstImpact()); //nFirstImpact
-            oPacket.EncodeInteger(atom.getSecondImpact()); //nSecondImpact
-            oPacket.EncodeInteger(atom.getAngle()); //nAngle
-            oPacket.EncodeInteger(atom.getSpawnDelay()); //nStartDelay
-            oPacket.EncodeInteger(atom.getPosition().x); //char pos x
-            oPacket.EncodeInteger(atom.getPosition().y); //char pos y
-            oPacket.EncodeInteger(0); //dwCreateTime
-            oPacket.EncodeInteger(0); //nMaxHitCount
-        }
-        if (atom.getType() == MapleForceAtomTypes.QUIVERCATRIDGE_BOTH) {
-            oPacket.EncodeInteger(0);//rcStart.left
-            oPacket.EncodeInteger(0);//rcStart.top
-            oPacket.EncodeInteger(0);//rcStart.right
-            oPacket.EncodeInteger(0);//rcStart.bottom
-            oPacket.EncodeInteger(0);//nBulletItemID
-        }
-        if (atom.getType() == MapleForceAtomTypes.ZEROFORCE_LOCAL || atom.getType() == MapleForceAtomTypes.SHADOW_BAT_BOTH) {
-            oPacket.EncodeInteger(0);//rcStart.left
-            oPacket.EncodeInteger(0);//rcStart.top
-            oPacket.EncodeInteger(0);//rcStart.right
-            oPacket.EncodeInteger(0);//rcStart.bottom
-        }
-        if (atom.getType() == MapleForceAtomTypes.SHADOW_BAT_BOUND_BOTH) {
-            oPacket.EncodeInteger(0);//rcStart.right
-            oPacket.EncodeInteger(0);//rcStart.top
-        }
-        if (atom.getType() == MapleForceAtomTypes.SSFSHOOTING_BOTH) {
-            oPacket.EncodeInteger(0);//nArriveDir
-            oPacket.EncodeInteger(0);//nArriveRange
-        }
-        if (atom.getType() == MapleForceAtomTypes.TYPINGGAME_BOTH) {
-            oPacket.EncodeInteger(0);//nForceTargetX
-            oPacket.EncodeInteger(0);//ptForcedTarget.y
-        }
-        oPacket.Encode(0);
-        return oPacket.ToPacket();
-    }*/
     public static Packet explodeMeso(Point pos, int cid, int skill, int size, int obj) {
         OutPacket oPacket = new OutPacket(80);
 
@@ -244,7 +57,7 @@ public class JobPacket {
 
     public static class NightLordPacket {
 
-        public static Packet AssassinsMark(User pPlayer, MapleMonster pMob) {
+        public static Packet AssassinsMark(User pPlayer, Mob pMob) {
             OutPacket oPacket = new OutPacket(80);
 
             oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());

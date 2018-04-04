@@ -72,7 +72,7 @@ import server.potentials.ItemPotentialOption;
 import server.potentials.ItemPotentialProvider;
 import server.Timer.CloneTimer;
 import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.life.MapleMonsterInformationProvider;
 import server.life.MonsterDropEntry;
 import server.maps.Event_DojoAgent;
@@ -2816,7 +2816,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public static String getMobImg(int mob) {
-        MapleMonster monster = MapleLifeFactory.getMonster(mob);
+        Mob monster = MapleLifeFactory.getMonster(mob);
         if (monster.getStats().getLinkId() != 0) {
             mob = monster.getStats().getLinkId();
         }

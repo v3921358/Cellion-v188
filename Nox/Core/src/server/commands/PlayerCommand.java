@@ -35,7 +35,7 @@ import server.MapleItemInformationProvider;
 import server.RankingWorker;
 import server.RankingWorker.RankingInformation;
 import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -314,19 +314,19 @@ public class PlayerCommand {
         }
     }
 
-    public static class Mob extends CommandExecute {
+    public static class Monster extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleMonster mob = null;
+            Mob pMob = null;
             for (final MapleMapObject monstermo : c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), 100000, Arrays.asList(MapleMapObjectType.MONSTER))) {
-                mob = (MapleMonster) monstermo;
-                if (mob.isAlive()) {
-                    c.getPlayer().dropMessage(6, "Monster " + mob.toString());
+                pMob = (Mob) monstermo;
+                if (pMob.isAlive()) {
+                    c.getPlayer().dropMessage(6, "Monster " + pMob.toString());
                     break; //only one
                 }
             }
-            if (mob == null) {
+            if (pMob == null) {
                 c.getPlayer().dropMessage(6, "Sorry, no monster was found nearby.");
             }
             return 1;

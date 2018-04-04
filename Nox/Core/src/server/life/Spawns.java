@@ -14,7 +14,7 @@ public abstract class Spawns {
 
     public abstract int getCarnivalId();
 
-    public abstract MapleMonster spawnMonster(MapleMap map);
+    public abstract Mob spawnMonster(MapleMap map);
 
     public abstract int getMobTime();
 

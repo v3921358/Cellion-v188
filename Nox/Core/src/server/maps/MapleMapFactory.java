@@ -19,7 +19,7 @@ import provider.wz.cache.WzDataStorage;
 import server.MaplePortalFactory;
 import server.life.AbstractLoadedMapleLife;
 import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.life.MapleLifeType;
 import server.maps.SharedMapResources.DirectionInfo;
 import server.maps.objects.MapleNPC;
@@ -739,7 +739,7 @@ public class MapleMapFactory {
 
                 switch (l.type) {
                     case Monster: {
-                        final MapleMonster mob = (MapleMonster) myLife;
+                        final Mob mob = (Mob) myLife;
                         mob.setCarnivalTeam(l.team);
 
                         map.addMonsterSpawn(mob,

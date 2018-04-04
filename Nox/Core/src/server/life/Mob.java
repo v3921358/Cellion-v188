@@ -35,14 +35,14 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class MapleMonster extends AbstractLoadedMapleLife {
+public class Mob extends AbstractLoadedMapleLife {
 
     private MapleMonsterStats stats;
     private ForcedMonsterStats forcedStats = null;
     private long hp, mp, nextKill = 0, lastDropTime = 0;
     private byte carnivalTeam = -1;
     private MapleMap map;
-    private WeakReference<MapleMonster> sponge = new WeakReference<>(null);
+    private WeakReference<Mob> sponge = new WeakReference<>(null);
     private int linkoid = 0, lastNode = -1, highestDamageChar = 0, linkCID = 0; // Just a reference for monster EXP distribution after dead
     private int controller = -1;
     private boolean fake = false, dropsDisabled = false, controllerHasAggro = false, statChanged;
@@ -60,12 +60,12 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     private ChangeableStats ostats = null;
     private int bloodlessPartyBonus = 0;
 
-    public MapleMonster(int id, MapleMonsterStats stats) {
+    public Mob(int id, MapleMonsterStats stats) {
         super(id);
         initWithStats(stats);
     }
 
-    public MapleMonster(MapleMonster monster) {
+    public Mob(Mob monster) {
         super(monster);
         initWithStats(monster.stats);
     }
@@ -110,7 +110,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         return dropsDisabled;
     }
 
-    public void setSponge(MapleMonster mob) {
+    public void setSponge(Mob mob) {
         sponge = new WeakReference<>(mob);
         if (linkoid <= 0) {
             linkoid = mob.getObjectId();
@@ -178,7 +178,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         this.forcedStats.setExp(forcedStats.getExp() * newLevel * 100);
     }
 
-    public MapleMonster getSponge() {
+    public Mob getSponge() {
         return sponge.get();
     }
 
@@ -705,12 +705,12 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             killer.getPyramidSubway().onKill(killer);
         }
         hp = 0;
-        MapleMonster oldSponge = getSponge();
+        Mob oldSponge = getSponge();
         sponge = new WeakReference<>(null);
         if (oldSponge != null && oldSponge.isAlive()) {
             boolean set = true;
             for (MapleMapObject mon : map.getAllMapObjects(MapleMapObjectType.MONSTER)) {
-                MapleMonster mons = (MapleMonster) mon;
+                Mob mons = (Mob) mon;
                 if (mons.isAlive() && mons.getObjectId() != oldSponge.getObjectId() && mons.getStats().getLevel() > 1 && mons.getObjectId() != this.getObjectId() && (mons.getSponge() == oldSponge || mons.getLinkOid() == oldSponge.getObjectId())) { //sponge was this, please update
                     set = false;
                     break;
@@ -758,7 +758,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         if (toSpawn == null || this.getLinkCID() > 0) {
             return;
         }
-        MapleMonster spongy = null;
+        Mob spongy = null;
         switch (getId()) {
             case 8820002:
             case 8820003:
@@ -774,7 +774,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             case 8810120:
             case 8810121: //must update sponges
                 for (int i : toSpawn) {
-                    MapleMonster mob = MapleLifeFactory.getMonster(i);
+                    Mob mob = MapleLifeFactory.getMonster(i);
 
                     mob.setPosition(getTruePosition());
                     if (eventInstance != null) {
@@ -795,7 +795,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                 if (spongy != null && map.getMonsterById(spongy.getId()) == null) {
                     map.spawnMonster(spongy, -2);
                     for (MapleMapObject mon : map.getAllMapObjects(MapleMapObjectType.MONSTER)) {
-                        MapleMonster mons = (MapleMonster) mon;
+                        Mob mons = (Mob) mon;
                         if (mons.getObjectId() != spongy.getObjectId() && (mons.getSponge() == this || mons.getLinkOid() == this.getObjectId())) { //sponge was this, please update
                             mons.setSponge(spongy);
                         }
@@ -810,10 +810,10 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             case 8820011:
             case 8820012:
             case 8820013: {
-                List<MapleMonster> mobs = new ArrayList<>();
+                List<Mob> mobs = new ArrayList<>();
 
                 for (int i : toSpawn) {
-                    MapleMonster mob = MapleLifeFactory.getMonster(i);
+                    Mob mob = MapleLifeFactory.getMonster(i);
 
                     mob.setPosition(getTruePosition());
                     if (eventInstance != null) {
@@ -841,7 +841,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                 if (spongy != null && map.getMonsterById(spongy.getId()) == null) {
                     map.spawnMonster(spongy, -2);
 
-                    for (MapleMonster i : mobs) {
+                    for (Mob i : mobs) {
                         map.spawnMonster(i, -2);
                         i.setSponge(spongy);
                     }
@@ -850,7 +850,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             }
             case 8820014: {
                 for (int i : toSpawn) {
-                    MapleMonster mob = MapleLifeFactory.getMonster(i);
+                    Mob mob = MapleLifeFactory.getMonster(i);
 
                     if (eventInstance != null) {
                         eventInstance.registerMonster(mob);
@@ -865,7 +865,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             }
             default: {
                 for (int i : toSpawn) {
-                    MapleMonster mob = MapleLifeFactory.getMonster(i);
+                    Mob mob = MapleLifeFactory.getMonster(i);
 
                     if (eventInstance != null) {
                         eventInstance.registerMonster(mob);

@@ -21,7 +21,7 @@ import server.MapleStatEffect;
 import server.Randomizer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.objects.User;
 import service.ChannelServer;
 import tools.packet.CField;
@@ -154,7 +154,7 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
                     percent = 5;
                 }
                 for (AttackMonster at : attack.allDamage) {
-                    MapleMonster mob = pPlayer.getMap().getMonsterByOid(at.getObjectId());
+                    Mob mob = pPlayer.getMap().getMonsterByOid(at.getObjectId());
                     if (Randomizer.nextInt(100) < percent) {
                         if (mob != null) {
                             c.getPlayer().getMap().broadcastMessage(c.getPlayer(), JobPacket.WindArcherPacket.TrifleWind(c.getPlayer().getId(), skillid, count, mob.getObjectId(), type), false);

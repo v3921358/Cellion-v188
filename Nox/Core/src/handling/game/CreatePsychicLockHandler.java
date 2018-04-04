@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.InPacket;
 import netty.ProcessPacket;
-import server.life.MapleMonster;
+import server.life.Mob;
 import tools.packet.JobPacket;
 
 /**
@@ -48,7 +48,7 @@ public class CreatePsychicLockHandler implements ProcessPacket<MapleClient> {
                 Point posStart = new Point(iPacket.DecodeInteger(), iPacket.DecodeInteger());
                 Point posRelPosSecond = new Point(iPacket.DecodeInteger(), iPacket.DecodeInteger());
                 if (dwMobID != 0) {
-                    MapleMonster monster = c.getPlayer().getMap().getMonsterByOid(dwMobID);
+                    Mob monster = c.getPlayer().getMap().getMonsterByOid(dwMobID);
                     nMobCurHP = monster.getHp();
                     nMobMaxHP = monster.getMobMaxHp();
                 }

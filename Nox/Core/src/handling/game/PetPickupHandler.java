@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;

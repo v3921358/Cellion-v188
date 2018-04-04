@@ -32,7 +32,7 @@ import server.Timer.EventTimer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
 import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.Event_DojoAgent;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
@@ -964,7 +964,7 @@ public abstract class AbstractPlayerInteraction {
 
     public boolean haveMonster(final int mobid) {
         for (MapleMapObject obj : c.getPlayer().getMap().getAllMapObjects(MapleMapObjectType.MONSTER)) {
-            final MapleMonster mob = (MapleMonster) obj;
+            final Mob mob = (Mob) obj;
             if (mob.getId() == mobid) {
                 return true;
             }
@@ -1004,12 +1004,12 @@ public abstract class AbstractPlayerInteraction {
     *   @param (Map ID, Mob ID, X-Coordinate, Y-Coordinate).
     **/
     public void spawnMonsterInMap(final int nMapId, final int nMobId, int posX, int posY) {
-        MapleMonster pMob = MapleLifeFactory.getMonster(nMobId);
+        Mob pMob = MapleLifeFactory.getMonster(nMobId);
         c.getChannelServer().getMapFactory().getMap(nMapId).spawnMonsterOnGroundBelow(pMob, new Point(posX, posY));
     }
     
     public void spawnModifiedMonsterInMap(final int nMapId, final int nMobId, int posX, int posY, long nNewHp) {
-        MapleMonster pMob = MapleLifeFactory.getMonster(nMobId);
+        Mob pMob = MapleLifeFactory.getMonster(nMobId);
         pMob.setHp(nNewHp);
         pMob.getStats().setHp(nNewHp);
         c.getChannelServer().getMapFactory().getMap(nMapId).spawnMonsterOnGroundBelow(pMob, new Point(posX, posY));

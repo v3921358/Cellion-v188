@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
 import netty.ProcessPacket;
@@ -22,7 +22,7 @@ public class MonsterBombHandler implements ProcessPacket<MapleClient> {
         User chr = c.getPlayer();
 
         final int oid = iPacket.DecodeInteger();
-        MapleMonster monster = chr.getMap().getMonsterByOid(oid);
+        Mob monster = chr.getMap().getMonsterByOid(oid);
 
         if ((monster == null) || (!chr.isAlive()) || (chr.isHidden()) || (monster.getLinkCID() > 0)) {
             return;

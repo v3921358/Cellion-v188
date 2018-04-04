@@ -18,7 +18,7 @@ import server.MapleItemInformationProvider;
 import server.MaplePortal;
 import server.Randomizer;
 import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.FieldLimitType;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -338,7 +338,7 @@ public class PlayerHandler {
                 int amount = iPacket.DecodeInteger();
                 List<MapleMapObject> monsterx = c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
                 for (int x = 0; x < amount; x++) {
-                    MapleMonster monster = (MapleMonster) monsterx.get(x);
+                    Mob monster = (Mob) monsterx.get(x);
                     if (monster.getId() == mobToKill) {
                         c.getPlayer().getMap().killMonster(monster, c.getPlayer(), false, false, (byte) 1);
                     }
@@ -359,7 +359,7 @@ public class PlayerHandler {
                 c.getPlayer().dropMessage(5, "Monsters HP");
                 List<MapleMapObject> monsters = c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
                 for (MapleMapObject mobs : monsters) {
-                    MapleMonster monster = (MapleMonster) mobs;
+                    Mob monster = (Mob) mobs;
                     if (monster.getId() == mobHp) {
                         c.getPlayer().dropMessage(5, monster.getName() + ": " + monster.getHp());
                     }

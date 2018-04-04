@@ -29,7 +29,7 @@ public class SpawnPoint extends Spawns {
     private final String msg;
     private final byte carnivalTeam;
 
-    public SpawnPoint(final MapleMonster monster, final Point pos, final int mobTime, final byte carnivalTeam, final String msg) {
+    public SpawnPoint(final Mob monster, final Point pos, final int mobTime, final byte carnivalTeam, final String msg) {
         this.monster = monster.getStats();
         this.pos = pos;
         this.id = monster.getId();
@@ -108,8 +108,8 @@ public class SpawnPoint extends Spawns {
     }
 
     @Override
-    public final MapleMonster spawnMonster(final MapleMap map) {
-        final MapleMonster mob = new MapleMonster(id, monster);
+    public final Mob spawnMonster(final MapleMap map) {
+        final Mob mob = new Mob(id, monster);
         mob.setPosition(new Point(pos));
         mob.setCy(pos.y);
         mob.setRx0(pos.x - 50);

@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
@@ -23,7 +23,7 @@ public final class TouchFamiliarHandler implements ProcessPacket<MapleClient> {
         iPacket.Skip(6);
         byte unk = iPacket.DecodeByte();
 
-        MapleMonster target = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
+        Mob target = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
         if (target == null) {
             return;
         }

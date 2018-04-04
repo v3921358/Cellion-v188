@@ -22,7 +22,7 @@ package client;
 
 import java.lang.ref.WeakReference;
 
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.life.MobSkill;
 import server.maps.objects.User;
 
@@ -122,7 +122,7 @@ public class MonsterStatusEffect {
         return weakChr == null || weakChr.get() == null ? 0 : weakChr.get().getId();
     }
 
-    public final void cancelPoisonSchedule(MapleMonster mm) {
+    public final void cancelPoisonSchedule(Mob mm) {
         mm.doPoison(this, weakChr);
         this.poisonSchedule = 0;
         this.weakChr = null;

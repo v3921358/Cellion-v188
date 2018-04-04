@@ -36,7 +36,7 @@ import server.MaplePortal;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
 import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.life.MapleMonsterInformationProvider;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;

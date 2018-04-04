@@ -9,7 +9,7 @@ import client.Skill;
 import client.SkillFactory;
 import net.Packet;
 import server.MapleStatEffect;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.life.MobSkill;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -19,7 +19,7 @@ public class MapleMist extends MapleMapObject {
 
     private Rectangle mistPosition;
     private User owner = null;
-    private MapleMonster mob = null;
+    private Mob mob = null;
     private MapleStatEffect source;
     private MobSkill skill;
     private boolean isMobMist, isShelter, isRecovery, isTimeCapsule;
@@ -28,7 +28,7 @@ public class MapleMist extends MapleMapObject {
     private int clockType;
     private boolean isUsed;
 
-    public MapleMist(Rectangle mistPosition, MapleMonster mob, MobSkill skill) {
+    public MapleMist(Rectangle mistPosition, Mob mob, MobSkill skill) {
         this.mistPosition = mistPosition;
         this.ownerId = mob.getId();
         this.skill = skill;
@@ -207,7 +207,7 @@ public class MapleMist extends MapleMapObject {
         return source;
     }
 
-    public MapleMonster getMobOwner() {
+    public Mob getMobOwner() {
         return mob;
     }
 

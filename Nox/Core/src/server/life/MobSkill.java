@@ -92,7 +92,7 @@ public class MobSkill {
         this.limit = limit;
     }
 
-    public boolean checkCurrentBuff(User player, MapleMonster monster) {
+    public boolean checkCurrentBuff(User player, Mob monster) {
         boolean stop = false;
         switch (skillId) {
             case 100:
@@ -148,11 +148,11 @@ public class MobSkill {
         return stop;
     }
 
-    public void applyEffect(User player, MapleMonster monster, boolean skill) {
+    public void applyEffect(User player, Mob monster, boolean skill) {
         applyEffect(player, monster, skill, 0);
     }
 
-    public void applyEffect(User player, MapleMonster monster, boolean skill, int delay) {
+    public void applyEffect(User player, Mob monster, boolean skill, int delay) {
         MapleDisease disease = MapleDisease.getBySkill(skillId);
         Map<MonsterStatus, Integer> stats = new EnumMap<>(MonsterStatus.class);
         List<Integer> reflection = new LinkedList<>();
@@ -196,7 +196,7 @@ public class MobSkill {
                     List<MapleMapObject> objects = getObjectsInRange(monster, MapleMapObjectType.MONSTER);
                     final int hp = (getX() / 1000) * (int) (950 + 1050 * Math.random());
                     for (MapleMapObject mons : objects) {
-                        ((MapleMonster) mons).heal(hp, getY(), true);
+                        ((Mob) mons).heal(hp, getY(), true);
                     }
                 } else if (monster != null) {
                     monster.heal(getX(), getY(), true);
@@ -207,7 +207,7 @@ public class MobSkill {
                     List<MapleMapObject> objects = getObjectsInRange(monster, MapleMapObjectType.MONSTER);
                     for (MapleMapObject mons : objects) {
                         if (mons.getObjectId() != monster.getObjectId()) {
-                            player.getMap().killMonster((MapleMonster) mons, player, true, false, (byte) 1, 0);
+                            player.getMap().killMonster((Mob) mons, player, true, false, (byte) 1, 0);
                             monster.heal(getX(), getY(), true);
                             break;
                         }
@@ -308,7 +308,7 @@ public class MobSkill {
                     return;
                 }
                 for (Integer mobId : getSummons()) {
-                    MapleMonster toSpawn = null;
+                    Mob toSpawn = null;
                     try {
                         toSpawn = MapleLifeFactory.getMonster(GameConstants.getCustomSpawnID(monster.getId(), mobId));
                     } catch (RuntimeException e) { //monster doesn't exist
@@ -368,7 +368,7 @@ public class MobSkill {
             if (!checkCurrentBuff(player, monster)) {
                 if (lt != null && rb != null && skill) {
                     for (MapleMapObject mons : getObjectsInRange(monster, MapleMapObjectType.MONSTER)) {
-                        ((MapleMonster) mons).applyMonsterBuff(stats, getSkillId(), getDuration(), this, reflection);
+                        ((Mob) mons).applyMonsterBuff(stats, getSkillId(), getDuration(), this, reflection);
                     }
                 } else {
                     monster.applyMonsterBuff(stats, getSkillId(), getDuration(), this, reflection);
@@ -458,14 +458,14 @@ public class MobSkill {
         return bounds;
     }
 
-    private List<User> getPlayersInRange(MapleMonster monster, User player) {
+    private List<User> getPlayersInRange(Mob monster, User player) {
         final Rectangle bounds = calculateBoundingBox(monster.getTruePosition(), monster.isFacingLeft());
         List<User> players = new ArrayList<>();
         players.add(player);
         return monster.getMap().getPlayersInRectAndInList(bounds, players);
     }
 
-    private List<MapleMapObject> getObjectsInRange(MapleMonster monster, MapleMapObjectType objectType) {
+    private List<MapleMapObject> getObjectsInRange(Mob monster, MapleMapObjectType objectType) {
         final Rectangle bounds = calculateBoundingBox(monster.getTruePosition(), monster.isFacingLeft());
         List<MapleMapObjectType> objectTypes = new ArrayList<>();
         objectTypes.add(objectType);
@@ -501,7 +501,7 @@ public class MobSkill {
      * @param nextSkill
      * @param option
      */
-    public void setDelay(User chr, MapleMonster monster, int nextSkill, short option) {
+    public void setDelay(User chr, Mob monster, int nextSkill, short option) {
 
     }
 

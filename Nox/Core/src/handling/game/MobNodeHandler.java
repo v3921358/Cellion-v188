@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
 import server.maps.SharedMapResources.MapleNodeInfo;
@@ -22,7 +22,7 @@ public class MobNodeHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
-        MapleMonster mob_from = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
+        Mob mob_from = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
         int newNode = iPacket.DecodeInteger();
         int nodeSize = chr.getMap().getSharedMapResources().getNodes().size();
 

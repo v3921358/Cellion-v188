@@ -8,6 +8,10 @@ import client.MapleClient;
 import client.SkillFactory;
 import constants.GameConstants;
 import constants.skills.*;
+import handling.world.AttackInfo;
+import handling.world.AttackMonster;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
@@ -17,6 +21,10 @@ import server.MapleStatInfo;
 import server.Randomizer;
 import server.Timer;
 import server.maps.objects.User;
+import server.life.Mob;
+import server.maps.objects.ForceAtom;
+import server.maps.objects.ForceAtomType;
+import tools.Utility;
 import tools.packet.BuffPacket;
 import tools.packet.CField;
 import tools.packet.JobPacket;
@@ -204,6 +212,27 @@ public class Explorer {
             // Turn off Flip The Coin in order for the player to require another critical strike for next use.
             pPlayer.getMap().broadcastMessage(ShadowerPacket.toggleFlipTheCoin(false));
             pPlayer.dropMessage(-1, "Flip of the Coin (" + nAmount + "/5)");
+        }
+    }
+    
+    public static class NightLordHandler {
+        
+        public static void handleAssassinsMark(User pPlayer, Mob pMob, AttackInfo pAttack) {
+           if (pPlayer.hasBuff(CharacterTemporaryStat.NightLordMark)) {
+                //for (AttackMonster pAttackMob : pAttack.allDamage) {
+                    if (Utility.resultSuccess(60)) {
+                        int nMobID = pMob.getObjectId();
+                        int nInc = ForceAtomType.ASSASSIN_MARK.getInc();
+                        int nType = ForceAtomType.ASSASSIN_MARK.getForceAtomType();
+                        ForceAtom forceAtomInfo = new ForceAtom(1, nInc, 20, 40,
+                                0, 100, (int) System.currentTimeMillis(), 1, 0,
+                                new Point());
+                        pPlayer.getMap().broadcastMessage(CField.createForceAtom(false, nMobID, pPlayer.getId(), nType,
+                                true, nMobID, Assassin.ASSASSINS_MARK, forceAtomInfo, new Rectangle(), 0, 300,
+                                pMob.getPosition(), 2070000, pMob.getPosition()));
+                    }
+                //}
+            }
         }
     }
 }

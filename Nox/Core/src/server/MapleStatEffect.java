@@ -18,7 +18,7 @@ import server.MapleCarnivalFactory.MCSkill;
 import server.Timer.BuffTimer;
 import server.skills.effects.manager.EffectManager;
 import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.life.MapleMonsterStats;
 import server.life.MobSkill;
 import server.maps.MapleMap;
@@ -373,7 +373,7 @@ public class MapleStatEffect implements Serializable {
                     if (obj == null || obj.getType() != MapleMapObjectType.MONSTER) {
                         return;
                     }
-                    final MapleMonster mob = (MapleMonster) obj; // x is absorb percentage
+                    final Mob mob = (Mob) obj; // x is absorb percentage
                     if (!mob.getStats().isBoss()) {
                         final long absorbMp = Math.min((int) (mob.getMobMaxMp() * (getX() / 100.0)), mob.getMp());
                         if (absorbMp > 0) {
@@ -1030,7 +1030,7 @@ public class MapleStatEffect implements Serializable {
         for (final MapleMapObject mo : affected) {
             if (makeChanceResult()) {
                 for (MonsterStatus stat : cancel) {
-                    ((MapleMonster) mo).cancelStatus(stat);
+                    ((Mob) mo).cancelStatus(stat);
                 }
             }
             i++;
@@ -1060,7 +1060,7 @@ public class MapleStatEffect implements Serializable {
                             chr.giveDebuff(d, ms);
                         }
                     } else {
-                        MapleMonster mons = (MapleMonster) mo;
+                        Mob mons = (Mob) mo;
                         if (sourceid == 35111005 && mons.getStats().isBoss()) {
                             break;
                         }

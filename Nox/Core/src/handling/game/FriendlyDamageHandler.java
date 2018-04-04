@@ -3,7 +3,7 @@ package handling.game;
 import client.MapleClient;
 import static handling.world.MobHandler.checkShammos;
 import server.Randomizer;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.objects.User;
 import net.InPacket;
@@ -27,9 +27,9 @@ public class FriendlyDamageHandler implements ProcessPacket<MapleClient> {
         if (map == null) {
             return;
         }
-        MapleMonster mobfrom = map.getMonsterByOid(iPacket.DecodeInteger());
+        Mob mobfrom = map.getMonsterByOid(iPacket.DecodeInteger());
         iPacket.Skip(4);
-        MapleMonster mobto = map.getMonsterByOid(iPacket.DecodeInteger());
+        Mob mobto = map.getMonsterByOid(iPacket.DecodeInteger());
 
         if ((mobfrom != null) && (mobto != null) && (mobto.getStats().isFriendly())) {
             int damage = mobto.getStats().getLevel() * Randomizer.nextInt(mobto.getStats().getLevel()) / 2;

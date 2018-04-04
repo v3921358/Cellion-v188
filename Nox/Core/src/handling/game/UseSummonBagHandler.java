@@ -8,7 +8,7 @@ import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
@@ -45,7 +45,7 @@ public class UseSummonBagHandler implements ProcessPacket<MapleClient> {
                 c.write(CWvsContext.enableActions());
                 return;
             }
-            MapleMonster ht = null;
+            Mob ht = null;
             int type = 0;
             for (Map.Entry<String, Integer> i : toSpawn.entrySet()) {
                 if (i.getKey().startsWith("mob") && Randomizer.nextInt(99) <= i.getValue()) {
