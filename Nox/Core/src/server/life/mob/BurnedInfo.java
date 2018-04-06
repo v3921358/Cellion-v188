@@ -146,10 +146,8 @@ public class BurnedInfo {
         oPacket.EncodeInteger(getDotTickDamR());
         oPacket.EncodeInteger(getLastUpdate());
         oPacket.EncodeInteger(getStartTime());
-    }
-
-    void Encode(OutPacket oPacket) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        oPacket.Fill(0, 69);
     }
 }
 

@@ -932,7 +932,10 @@ public class ItemPotentialProvider {
                 aPossiblePotential.add(nValue); // Adds Custom Potential Values (Rare)
             }
         } else {
-            return decideStats(pEquip, pTier, nReqLevel).getOptionId(); // Very Random Potential
+            for (int nValue : aCustomRarePotential) {
+                aPossiblePotential.add(nValue); // Adds Custom Potential Values (Rare)
+            }
+            //return decideStats(pEquip, pTier, nReqLevel).getOptionId(); // Very Random Potential
         }
 
         Random pRandomPotential = new Random();

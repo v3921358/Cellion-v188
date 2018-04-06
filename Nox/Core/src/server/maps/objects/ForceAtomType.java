@@ -7,7 +7,7 @@ package server.maps.objects;
 
 /**
  *
- * @author Mazen
+ * @author 
  */
 public enum ForceAtomType {
     PHANTOM_CARD_1(1, 1), //Phantom - Carte Blanch (2nd Job)
@@ -54,7 +54,7 @@ public enum ForceAtomType {
     MECH_MEGA_ROCKET_1(20, 1),
     MECH_MEGA_ROCKET_2(20, 2),
     KINESIS_ORB_REAL(22, 1),
-    FAST_STAR_ORB(24, 1), //idk
+    FAST_STAR_ORB(24, 1), // ?
     TRANSPARENT_AB_ORB(25, 1), // same for 26, but that disappears
     ;
 

@@ -10,7 +10,7 @@ import net.OutPacket;
 
 /**
  *
- * @author Mazen
+ * @author 
  */
 public class ForceAtom {
     private int key;

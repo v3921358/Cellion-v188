@@ -32,7 +32,7 @@ import tools.packet.MobPacket;
 
 /**
  *
- * @author Mazen
+ * @author Sjonnie
  */
 public class MobTemporaryStat {
     private List<BurnedInfo> burnedInfos = new ArrayList<>();
@@ -255,7 +255,7 @@ public class MobTemporaryStat {
             if (hasNewMobStat(BurnedInfo)) {
                 oPacket.Encode(getBurnedInfos().size());
                 for (BurnedInfo bi : getBurnedInfos()) {
-                    bi.Encode(oPacket);
+                    bi.encode(oPacket);
                 }
             }
             if (hasNewMobStat(InvincibleBalog)) {
@@ -542,15 +542,15 @@ public class MobTemporaryStat {
         BurnedInfo bi = new BurnedInfo();
         bi.setCharacterId(charId);
         bi.setSkillId(skill.getId());
-        bi.setDamage(si.getValue(dot, slv));
-        bi.setInterval(si.getValue(dotInterval, slv) * 1000);
-        int time = si.getValue(dotTime, slv) * 1000;
+        bi.setDamage(si.info.get(dot));
+        bi.setInterval(si.info.get(dotInterval) * 1000);
+        int time = si.info.get(dotTime) * 1000;
         bi.setEnd((int) (System.currentTimeMillis() + time));
-        bi.setDotCount(time / bi.getInterval());
-        bi.setSuperPos(si.getValue(dotSuperpos, slv));
+        bi.setDotCount(10 /*time / bi.getInterval()*/); // divide by zero lol
+        bi.setSuperPos(si.info.get(dotSuperpos));
         bi.setAttackDelay(0);
         bi.setDotTickIdx(0);
-        bi.setDotTickDamR(si.getValue(dot, slv));
+        bi.setDotTickDamR(si.info.get(dot));
         bi.setDotAnimation(bi.getAttackDelay() + bi.getInterval() + time);
         bi.setStartTime((int) System.currentTimeMillis());
         bi.setLastUpdate((int) System.currentTimeMillis());
@@ -561,7 +561,7 @@ public class MobTemporaryStat {
         addStatOptionsAndBroadcast(MobStat.BurnedInfo, new Option());
         ScheduledFuture sf = EventManager.addEvent(() -> removeBurnedInfo(charId, true), time);
         ScheduledFuture burn = EventManager.addFixedRateEvent(() -> getMob().damage(Utility.requestCharacter(charId), (long) bi.getDamage(), false), 0, bi.getInterval(), bi.getDotCount());
-                //() -> getMob().damage((long) bi.getDamage()), 0, bi.getInterval(), bi.getDotCount());
+        // ScheduledFuture burn = EventManager.addFixedRateEvent(() -> getMob().damage((long) bi.getDamage()), 0, bi.getInterval(), bi.getDotCount());
         getBurnCancelSchedules().put(charId, sf);
         getBurnSchedules().put(charId, burn);
     }

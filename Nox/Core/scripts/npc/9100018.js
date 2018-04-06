@@ -385,8 +385,9 @@ function action(mode, type, selection) {
 			} else if (itemCategory == 5005) { // Mounts
 				if (dp >= nMountPrice){
                     cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - nMountPrice);
-					cm.getPlayer().changeSkillLevel(aMountID[selection], 1, 1);
+					cm.teachSkill(aMountID[selection], 1);
                     cm.sendOk("Thank you for supporting #dREXION#k.\r\nEnjoy your new mount!");
+					cm.getPlayer().saveToDB(false, false);
                 } else {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }

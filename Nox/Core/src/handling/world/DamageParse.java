@@ -126,9 +126,6 @@ public class DamageParse {
 
         double maxDamagePerHit = 0.0D;
         
-        // Apply monster statuses.
-        MobStatRequest.apply(pPlayer, attack, effect);
-
         for (AttackMonster oned : attack.allDamage) {
             Mob monster = oned.getMonster();
             if (monster == null || monster.getId() != oned.getMonsterId()) {
@@ -1752,6 +1749,12 @@ public class DamageParse {
             }
         }
         // TODO: See if can parse with just this.. the rest is so much and i dont think u use any of the vars
+        
+        // Apply Monster Status, check if this is enough for now. -Mazen
+        if (ret != null && ret.skill != 0) {
+            MobStatRequest.apply(chr, ret, ((chr.getSkillLevel(ret.skill) > 0) ? SkillFactory.getSkill(ret.skill).getEffect(chr.getSkillLevel(ret.skill)) : SkillFactory.getSkill(ret.skill).getEffect(1)));
+        } 
+        
         return ret;
     }
 }

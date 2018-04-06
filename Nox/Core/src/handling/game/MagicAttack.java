@@ -69,9 +69,6 @@ public final class MagicAttack implements ProcessPacket<MapleClient> {
             pPlayer.addCooldown(pAttack.skill, System.currentTimeMillis(), pEffect.getCooldown(pPlayer));
         }
         
-        
-        MobStatRequest.apply(pPlayer, pAttack, pEffect);
-
         int bulletCount = 1;
         switch (pAttack.skill) {
             case 140001289: // Psychic Attack

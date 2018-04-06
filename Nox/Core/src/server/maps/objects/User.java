@@ -314,14 +314,15 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void setLastMagnusTime() {
-        if (getParty() == null) { // Sets latest Magnus entry time for player.
-            nMagnusTime = System.currentTimeMillis();
-        } else { // If player is in a party, sets the entry time for all players in the party.
+        if (getParty() == null) { // If player is in a party, sets the entry time for all players in the party.
             for (MaplePartyCharacter z : getParty().getMembers()) {
                 User pPlayer = getMap().getCharacterById(z.getId());
                 pPlayer.nMagnusTime = System.currentTimeMillis();
             }
+            return;
         }
+        nMagnusTime = System.currentTimeMillis();
+        saveToDB(false, false);
     }
 
     public boolean canFightMagnus() {
@@ -929,7 +930,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
              * End of Custom Features
              */
 
- /*Start of Boss Features*/
+            /*Start of Boss Features*/
             ret.nMagnusTime = rs.getLong("magnusTime");
             /*End of Boss Features*/
 
@@ -1934,7 +1935,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
              * End of Custom Features
              */
 
- /*Start of Boss Features*/
+            /*Start of Boss Features*/
             ps.setLong(++index, nMagnusTime);
             /*End of Boss Features*/
 

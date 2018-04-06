@@ -125,7 +125,9 @@ function start() {
 			+ "\r\n#L4#1 VP - Change your Hair Colour#l"
 			+ "\r\n#L6#1 VP - Change your Eye Colour#l\r\n"
 			+ "\r\n#L8#3 VP - Double Experience Boost (2 Hours)#l"
-			+ "\r\n#L9#8 VP - Double Experience Boost (6 Hours)#l", 2);
+			+ "\r\n#L9#8 VP - Double Experience Boost (6 Hours)#l\r\n"
+			+ "\r\n#L11#2 VP - Double Experience Boost (Per Hour)#l"
+			+ "\r\n#L12#2 VP - Double Experience Boost (Per Hour)#l", 2);
 			
 }
 
@@ -273,7 +275,7 @@ function action(mode, type, selection) {
 				case 10:
 					if (cm.getPlayer().getVPoints() >= 10) {
 						cm.getPlayer().setVPoints(cm.getPlayer().getVPoints() - 10);
-						cm.getPlayer().changeSkillLevel(aMountID[selection], 1, 1);
+						cm.teachSkill(aMountID[selection], 1);
 						cm.sendOk("#fs12##dThank you for voting and showing your support!\r\n#fs10##rRemember that you can vote for Rexion once every day.#k");
 					} else {
 						cm.sendOk("Sorry, you don't have enough vote points.\r\nGuess you need to vote more often #r;)#k.");

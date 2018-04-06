@@ -94,7 +94,7 @@ public final class OrbitalFlameHandler implements ProcessPacket<MapleClient> {
         List<ForceAtom> faiList = new ArrayList<>();
         faiList.add(fai);
         pPlayer.getMap().broadcastMessage(CField.createForceAtom(false, 0, pPlayer.getId(), fae.getForceAtomType(), false,
-                new ArrayList<>(), nSkillID, faiList, new Rectangle(), nDirection, nRange, null, 0, null));
+                new ArrayList<>(), nSkillID, faiList, null, nDirection, nRange, null, 0, null));
         
         //PlayerHandler.OrbitalFlame(iPacket, c);
     }

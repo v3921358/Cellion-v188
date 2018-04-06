@@ -7,7 +7,7 @@ package server.life.mob;
 
 /**
  *
- * @author Mazen
+ * @author Sjonnie
  */
 public enum MobStat {
     PAD(0x80000000, 0),

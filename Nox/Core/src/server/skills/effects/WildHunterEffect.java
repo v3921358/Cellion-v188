@@ -63,9 +63,9 @@ public class WildHunterEffect extends AbstractEffect {
             case WildHunter.SUMMON_JAGUAR_8:
             case WildHunter.SUMMON_JAGUAR_9:
             case WildHunter.SUMMON_JAGUAR_10:
-                //pEffect.statups.put(CharacterTemporaryStat.SUMMON, 3870); //Fake flag for summons
-                /*pEffect.statups.put(CharacterTemporaryStat.JaguarSummoned, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);*/
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 3870); //Fake flag for summons
+                pEffect.statups.put(CharacterTemporaryStat.JaguarSummoned, pEffect.info.get(MapleStatInfo.x));
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             case WildHunter.SWIPE:
                 break;
