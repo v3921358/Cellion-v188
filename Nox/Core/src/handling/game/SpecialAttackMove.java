@@ -99,7 +99,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
         int nMob;
         Mob pMob;
         
-        if ((pSkill == null) || ((GameConstants.isAngel(nSkill)) && (pPlayer.getStat().equippedSummon % 10000 != nSkill % 10000)) || ((pPlayer.inPVP()) && (pSkill.isPVPDisabled()))) {
+        if (((GameConstants.isAngel(nSkill)) && (pPlayer.getStat().equippedSummon % 10000 != nSkill % 10000)) || ((pPlayer.inPVP()) && (pSkill.isPVPDisabled()))) {
             c.write(CWvsContext.enableActions());
             return;
         }
@@ -136,6 +136,8 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 return;
             }
         }
+        
+        pPlayer.dropMessage(5, "" + nSkill);
         if (GameConstants.isEventMap(pPlayer.getMapId())) {
             for (MapleEventType t : MapleEventType.values()) {
                 MapleEvent e = ChannelServer.getInstance(pPlayer.getClient().getChannel()).getEvent(t);
@@ -254,7 +256,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
             }
             case Xenon.MANIFEST_PROJECTOR: {
                 pEffect.statups.put(CharacterTemporaryStat.ShadowPartner, 1);
-                pEffect.info.put(MapleStatInfo.time, 60000);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
                 break;
             }
             case NightWalker.DARK_SERVANT: {
@@ -583,12 +585,12 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 if ((iPacket.Available() == 5L) || (iPacket.Available() == 7L)) {
                     pPOS = iPacket.DecodePosition();
                 }
-                if ((pEffect.isMagicDoor() && !FieldLimitType.UnableToUseMysticDoor.check(pPlayer.getMap())) // check magic door
+                /*if ((pEffect.isMagicDoor() && !FieldLimitType.UnableToUseMysticDoor.check(pPlayer.getMap())) // check magic door
                         // check mount req
                         || ((!c.getPlayer().isIntern()) && (c.getPlayer().getBuffedValue(CharacterTemporaryStat.RideVehicle) == null) && (c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -122) == null))) {
                     c.write(CWvsContext.enableActions());
                     return;
-                }
+                }*/
                 pEffect.applyTo(c.getPlayer(), pPOS);
             }
         }
@@ -662,8 +664,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
             }
         }
         
-        
-        // Apply skill effect and broadcast to map.
+        // Broadcast effect to other players.
         if (!GameConstants.nonForeignEffect(nSkill)) {
             if (pEffect.statups.containsKey(CharacterTemporaryStat.RideVehicle) || pEffect.statups.containsKey(CharacterTemporaryStat.Morph)) {
                 pPlayer.getMap().broadcastMessage(c.getPlayer(), BuffPacket.giveForeignBuff(pPlayer), false);
