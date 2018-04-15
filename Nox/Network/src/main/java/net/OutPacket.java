@@ -146,9 +146,10 @@ public class OutPacket {
         return HexUtils.ToHex(aData);
     }
 
-    public final byte[] GetData() {
+    public byte[] GetData() {
         byte[] aData = new byte[pSendBuff.readableBytes()];
-        pSendBuff.readBytes(aData);
+        int nReaderIndex = pSendBuff.readerIndex();
+        pSendBuff.getBytes(nReaderIndex, aData);
         return aData;
     }
     

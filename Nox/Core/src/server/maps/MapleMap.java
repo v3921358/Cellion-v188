@@ -2810,13 +2810,13 @@ public final class MapleMap {
                             if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
                                 System.err.println("[Debug] Sending Ranged Broadcast Packet (" + chr.getName() + ")");
                             }
-                            chr.getClient().SendPacket(packet.Clone());
+                            chr.getClient().SendPacket(packet);
                         }
                     } else {
                         if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
                             System.err.println("[Debug] Sending Broadcast Packet (" + chr.getName() + ")");
                         }
-                        chr.getClient().SendPacket(packet.Clone());
+                        chr.getClient().SendPacket(packet);
                     }
                 }
             }
@@ -2838,7 +2838,7 @@ public final class MapleMap {
                         System.err.println("[Debug] Sending GM Broadcast Packet to (" + chr.getName() + ")");
                     }
                     if (chr.isGM()) {
-                        chr.getClient().SendPacket(packet.Clone());
+                        chr.getClient().SendPacket(packet);
                     }
                 }
             } else {
@@ -2847,7 +2847,7 @@ public final class MapleMap {
                         System.err.println("[Debug] Sending GM Broadcast Packet to (" + chr.getName() + ")");
                     }
                     if (chr != source && (chr.isGM())) {
-                        chr.getClient().SendPacket(packet.Clone());
+                        chr.getClient().SendPacket(packet);
                     }
                 }
             }
@@ -2866,13 +2866,13 @@ public final class MapleMap {
             if (source == null) {
                 for (User chr : characters) {
                     if (!chr.isGM()) {
-                        chr.getClient().SendPacket(packet.Clone());
+                        chr.getClient().SendPacket(packet);
                     }
                 }
             } else {
                 for (User chr : characters) {
                     if (chr != source && (!chr.isGM())) {
-                        chr.getClient().SendPacket(packet.Clone());
+                        chr.getClient().SendPacket(packet);
                     }
                 }
             }
@@ -2900,7 +2900,7 @@ public final class MapleMap {
                         System.err.println("[Debug] Sending Whisper Broadcast Packet to (" + chr.getName() + ")");
                     }
                     if (chr == c.getChannelServer().getPlayerStorage().getCharacterByName(msgDestination)) {
-                        chr.getClient().SendPacket(packet.Clone());
+                        chr.getClient().SendPacket(packet);
                     }
                 }
             } else {
@@ -2909,7 +2909,7 @@ public final class MapleMap {
                         System.err.println("[Debug] Sending Whisper Broadcast Packet to (" + chr.getName() + ")");
                     }
                     if (chr != source && chr == c.getChannelServer().getPlayerStorage().getCharacterByName(msgDestination)) {
-                        chr.getClient().SendPacket(packet.Clone());
+                        chr.getClient().SendPacket(packet);
                     }
                 }
             }

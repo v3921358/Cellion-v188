@@ -1288,7 +1288,7 @@ public class World {
                 }
                 c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(i);
                 if (c != null) {
-                    c.getClient().SendPacket(packet.Clone());
+                    c.getClient().SendPacket(packet);
                 }
             }
         }
@@ -1300,7 +1300,7 @@ public class World {
             }
             final User c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetId);
             if (c != null) {
-                c.getClient().SendPacket(packet.Clone());
+                c.getClient().SendPacket(packet);
             }
         }
 
@@ -1314,7 +1314,7 @@ public class World {
             }
             final User c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetIds);
             if (c != null && c.getGuildId() == guildid) {
-                c.getClient().SendPacket(packet.Clone());
+                c.getClient().SendPacket(packet);
             }
         }
 
@@ -1328,7 +1328,7 @@ public class World {
             }
             final User c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetIds);
             if (c != null && c.getFamilyId() == guildid) {
-                c.getClient().SendPacket(packet.Clone());
+                c.getClient().SendPacket(packet);
             }
         }
     }

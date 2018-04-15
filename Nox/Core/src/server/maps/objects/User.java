@@ -1768,46 +1768,25 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             return;
         }
 
-        PreparedStatement ps = null;
-        PreparedStatement pse = null;
-        ResultSet rs = null;
         try (Connection con = Database.GetConnection()) {
             System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             deleteWhereCharacterId(con, "DELETE FROM inventoryslot WHERE characterid = ?");
-            ps = con.prepareStatement("INSERT INTO inventoryslot (characterid, `equip`, `use`, `setup`, `etc`, `cash`) VALUES (?, ?, ?, ?, ?, ?)");
-            ps.setInt(1, id);
-            ps.setByte(2, getInventory(MapleInventoryType.EQUIP).getSlotLimit());
-            ps.setByte(3, getInventory(MapleInventoryType.USE).getSlotLimit());
-            ps.setByte(4, getInventory(MapleInventoryType.SETUP).getSlotLimit());
-            ps.setByte(5, getInventory(MapleInventoryType.ETC).getSlotLimit());
-            ps.setByte(6, getInventory(MapleInventoryType.CASH).getSlotLimit());
-            ps.execute();
-            ps.close();
+            try (PreparedStatement ps = con.prepareStatement("INSERT INTO inventoryslot (characterid, `equip`, `use`, `setup`, `etc`, `cash`) VALUES (?, ?, ?, ?, ?, ?)")) {
+                ps.setInt(1, id);
+                ps.setByte(2, getInventory(MapleInventoryType.EQUIP).getSlotLimit());
+                ps.setByte(3, getInventory(MapleInventoryType.USE).getSlotLimit());
+                ps.setByte(4, getInventory(MapleInventoryType.SETUP).getSlotLimit());
+                ps.setByte(5, getInventory(MapleInventoryType.ETC).getSlotLimit());
+                ps.setByte(6, getInventory(MapleInventoryType.CASH).getSlotLimit());
+                ps.execute();
+                ps.close();
+            } catch (SQLException e) {
+                LogHelper.SQL.get().info("Could not save character information:\n{}", e);
+            }
 
             saveInventory(con);
         } catch (SQLException e) {
             LogHelper.SQL.get().info("Could not save character information:\n{}", e);
-            try {
-                Database.GetConnection().rollback();
-            } catch (SQLException ex) {
-                LogHelper.SQL.get().info("Rolling back because character information could not be saved:\n{}", e);
-            }
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (pse != null) {
-                    pse.close();
-                }
-                if (rs != null) {
-                    rs.close();
-                }
-                Database.GetConnection().setAutoCommit(true);
-                Database.GetConnection().setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
-            } catch (SQLException e) {
-                LogHelper.SQL.get().info("Could not close the connection thread:\n{}", e);
-            }
         }
 
         if (isDeveloper()) {
@@ -2381,7 +2360,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     }
                 }
             }
-            
+
             changed_wishlist = false;
             changed_trocklocations = false;
             changed_regrocklocations = false;
@@ -2395,14 +2374,14 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             changed_reports = false;
         } catch (SQLException e) {
             LogHelper.SQL.get().info("Could not save character information:\n{}", e);
-        } 
+        }
     }
 
-    private void deleteWhereCharacterId(Connection con, String sql) throws SQLException {
+    private void deleteWhereCharacterId(Connection con, String sql) {
         deleteWhereCharacterId(con, sql, id);
     }
 
-    public static void deleteWhereCharacterId(Connection con, String sql, int id) throws SQLException {
+    public static void deleteWhereCharacterId(Connection con, String sql, int id) {
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
             ps.executeUpdate();
@@ -2411,7 +2390,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    public static void deleteWhereCharacterId_NoLock(Connection con, String sql, int id) throws SQLException {
+    public static void deleteWhereCharacterId_NoLock(Connection con, String sql, int id) {
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
             ps.execute();

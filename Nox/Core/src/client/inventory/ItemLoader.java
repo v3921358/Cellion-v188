@@ -279,7 +279,7 @@ public enum ItemLoader {
                         }
                         iid = rs.getLong(1);
                     } catch (Exception e) {
-                        LogHelper.SQL.get().info(this.getClass().getName() + "\nThere was an issue with generating keys for the database:\n", e);
+                        e.printStackTrace();
                     }
 
                     item.setInventoryId(iid);

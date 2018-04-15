@@ -260,7 +260,7 @@ public class PlayerStorage {
         try {
             final Iterator<User> itr = nameToChar.values().iterator();
             while (itr.hasNext()) {
-                itr.next().getClient().SendPacket(data.Clone());
+                itr.next().getClient().SendPacket(data);
             }
         } finally {
             rL.unlock();
@@ -276,7 +276,7 @@ public class PlayerStorage {
                 chr = itr.next();
 
                 if (chr.getClient().isLoggedIn() && chr.getSmega()) {
-                    chr.getClient().SendPacket(data.Clone());
+                    chr.getClient().SendPacket(data);
                 }
             }
         } finally {
@@ -292,7 +292,7 @@ public class PlayerStorage {
             while (itr.hasNext()) {
                 chr = itr.next();
                 if (chr.getClient().isLoggedIn() && chr.isIntern()) {
-                    chr.getClient().SendPacket(data.Clone());
+                    chr.getClient().SendPacket(data);
                 }
             }
         } finally {
@@ -308,7 +308,7 @@ public class PlayerStorage {
             while (itr.hasNext()) {
                 chr = itr.next();
                 if (chr.getClient().isLoggedIn() && chr == chr.getClient().getChannelServer().getPlayerStorage().getCharacterByName(msgDestination)) {
-                    chr.getClient().SendPacket(data.Clone());
+                    chr.getClient().SendPacket(data);
                 }
             }
         } finally {
