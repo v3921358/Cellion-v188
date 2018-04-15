@@ -1,2 +1,0 @@
-INSERT INTO `nox`.`cashshop_items` (`category`, `subcategory`, `parent`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES ('1000000', '1040100', '1040100', '100000778', '5062009', '4', '12000', '12000', '11', '90', '2', '69');
-INSERT INTO `nox`.`cashshop_items` (`category`, `subcategory`, `parent`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES ('1000000', '1040100', '1040100', '100000779', '5062009', '4', '36000', '36000', '33', '90', '2', '1337');
