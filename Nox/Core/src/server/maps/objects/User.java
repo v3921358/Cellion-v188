@@ -112,7 +112,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public int accountid, id, hair, face, zeroBetaHair, zeroBetaFace, angelicDressupHair, angelicDressupFace, angelicDressupSuit, faceMarking, ears, tail, elf, mapid, fame, pvpExp, pvpPoints, totalWins, totalLosses,
             guildid = 0, fallcounter, maplepoints, acash, nxcredit, chair, itemEffect, points, vpoints, dpoints, epoints,
             rank = 1, rankMove = 0, jobRank = 1, jobRankMove = 0, marriageId, marriageItemId, dotHP,
-            currentrep, totalrep, coconutteam, followid, battleshipHP, gachexp, challenge, guildContribution = 0,
+            currentrep, totalrep, coconutteam, followid, battleshipHP, gachexp, challenge, guildContribution = 0, maplerewards = 0,
             remainingAp, honourExp, honorLevel, runningLight, runningLightSlot, runningDark, runningDarkSlot, luminousState, starterquest, starterquestid, evoentry, touchedrune;
     private Point oldPos;
     private MonsterFamiliar summonedFamiliar;
@@ -6425,23 +6425,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 ps.setString(1, client.getSessionIPAddress());
                 ps.execute();
                 ps.close();
-
-                if (hellban) {
-                    try (PreparedStatement psa = con.prepareStatement("SELECT * FROM accounts WHERE id = ?")) {
-                        psa.setInt(1, accountid);
-                        try (ResultSet rsa = psa.executeQuery()) {
-                            if (rsa.next()) {
-                                try (PreparedStatement pss = con.prepareStatement("UPDATE accounts SET banned = ?, banreason = ? WHERE email = ? OR SessionIP = ?")) {
-                                    pss.setInt(1, autoban ? 2 : 1);
-                                    pss.setString(2, reason);
-                                    pss.setString(3, rsa.getString("email"));
-                                    pss.setString(4, client.getSessionIPAddress());
-                                    pss.execute();
-                                }
-                            }
-                        }
-                    }
-                }
             }
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
@@ -6495,16 +6478,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                                         String[] macData = rsa.getString("macs").split(", ");
                                         if (macData.length > 0) {
                                             MapleClient.banMacs(macData);
-                                        }
-                                    }
-                                    if (hellban) {
-                                        try (PreparedStatement pss = con.prepareStatement("UPDATE accounts SET banned = 1, banreason = ? WHERE email = ?" + (sessionIP == null ? "" : " OR SessionIP = ?"))) {
-                                            pss.setString(1, reason);
-                                            pss.setString(2, rsa.getString("email"));
-                                            if (sessionIP != null) {
-                                                pss.setString(3, sessionIP);
-                                            }
-                                            pss.execute();
                                         }
                                     }
                                 }
@@ -7184,6 +7157,18 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 maplepoints += quantity;
                 client.SendPacket(CWvsContext.updateMaplePoint(maplepoints));
                 break;
+            case 3:
+                if (maplerewards + quantity < 0) {
+                    if (show) {
+                        dropMessage(-1, "You have the maximum amount of Maple Reward points.");
+                    }
+                    return;
+                }
+                ///if (quantity > 0) {
+                //    quantity = (quantity / 2); //stuff is cheaper lol
+                //}
+                maplerewards += quantity;
+                break;
             case 4:
                 if (acash + quantity < 0) {
                     if (show) {
@@ -7210,11 +7195,17 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 return nxcredit;
             case 2:
                 return maplepoints;
+            case 3:
+                return maplerewards;
             case 4:
                 return acash;
             default:
                 return 0;
         }
+    }
+    
+    public void setMapleRewards(int nRewards) {
+        this.maplerewards = nRewards;
     }
 
     public final boolean hasEquipped(int itemid) {

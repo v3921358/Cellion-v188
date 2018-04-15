@@ -116,9 +116,19 @@ public class MapleClient extends Socket {
     private int client_increnement = 1;
     private MapleFarm farm;
     private ScheduledFuture<?> ping;
+    private int authID = 0;
+    public String sAccountToken = "";
 
     public MapleClient(Channel c, int uSendSeq, int uRcvSeq) {
         super(c, uSendSeq, uRcvSeq);
+    }
+
+    public int getAuthID() {
+        return authID;
+    }
+
+    public void setAuthID(int auth) {
+        this.authID = auth;
     }
 
     @Override
@@ -546,24 +556,22 @@ public class MapleClient extends Socket {
         charInfo.clear();
     }
 
-    public int login(String login, String pwd, boolean ipMacBanned) {
+    public int login(String name, int authID) {
         int loginok = 5;
 
         try (Connection con = Database.GetConnection()) {
             System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
-            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM accounts WHERE name = ?")) {
-                ps.setString(1, login);
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM accounts WHERE authID = ?")) {
+                ps.setInt(1, authID);
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()) {
                     final int banned = rs.getInt("banned");
-                    final String passhash = rs.getString("password");
                     final String oldSession = rs.getString("SessionIP");
 
-                    accountName = login;
+                    accountName = name;
                     accId = rs.getInt("id");
                     secondPassword = rs.getString("2ndpassword");
-                    //gm = rs.getInt("gm") > 0; //original line
                     gm = rs.getInt("gm") >= ServerConstants.MAINTENANCE_LEVEL; //only considers account GM if level is higher than variable.
                     greason = rs.getByte("greason");
                     tempban = getTempBanCalendar(rs);
@@ -577,9 +585,9 @@ public class MapleClient extends Socket {
                         }
                         MapleClientLoginState loginstate = getLoginState();
                         if (loginstate.getState() > MapleClientLoginState.LOGIN_NOTLOGGEDIN.getState()) { // already loggedin
-                            if (crypto.BCrypt.checkpw(pwd, passhash) && getSessionIPAddress().equals(oldSession) && oldSession != null && getPlayer() == null || (pwd.equals(ServerConstants.MASTER_PASSWORD) && ServerConstants.ENABLE_MASTER)) {
+                            if (getSessionIPAddress().equals(oldSession) && oldSession != null && getPlayer() == null) {
                                 try (PreparedStatement ps2 = con.prepareStatement("UPDATE accounts SET loggedin = 0 WHERE name = ?")) {
-                                    ps2.setString(1, login);
+                                    ps2.setString(1, name);
                                     ps2.executeUpdate();
                                     ps2.close();
                                     disconnect(true, false);
@@ -593,26 +601,17 @@ public class MapleClient extends Socket {
                                 loginok = 7;
                             }
                         } else {
-                            //if (crypto.BCrypt.checkpw(pwd, passhash)) {
-                            if (crypto.BCrypt.checkpw(pwd, passhash) || (pwd.equals(ServerConstants.MASTER_PASSWORD) && ServerConstants.ENABLE_MASTER)) {
-                                if (!ServerConstants.MAINTENANCE) { //maintenance check
-                                    loginok = 0; //new standard
-                                    //PASS CRYPT AND CHECK HERE
-                                } else {
-                                    if (gm) { //only login if gm
-                                        loginok = 0; //new standard
-                                        //PASS CRYPT AND CHECK HERE   
-                                    } else {
-                                        this.SendPacket(CWvsContext.broadcastMsg("The server is currently undergoing maintenance."));
-                                        loggedIn = false;
-                                        loginok = 4;
-                                    }
-                                }
-                            } else {
-                                loggedIn = false;
-                                loginok = 4;
-                            }
+                            loginok = 0;
                         }
+                    }
+                } else {
+                    try (PreparedStatement psi = con.prepareStatement("INSERT INTO accounts (name, authID) VALUES (?, ?)")) {
+                        psi.setString(1, name);
+                        psi.setInt(2, authID);
+                        psi.executeUpdate();
+                        loginok = 23;
+                    } catch (SQLException e) {
+                        LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", e);
                     }
                 }
                 rs.close();
@@ -1383,48 +1382,6 @@ public class MapleClient extends Socket {
                 ret++;
             }
             return ret;
-        } catch (SQLException e) {
-            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
-            return -2;
-        }
-    }
-
-    public static byte unHellban(String charname) {
-        try (Connection con = Database.GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
-            PreparedStatement ps = con.prepareStatement("SELECT accountid from characters where name = ? AND deletedAt is null");
-            ps.setString(1, charname);
-
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                rs.close();
-                ps.close();
-                return -1;
-            }
-            final int accid = rs.getInt(1);
-            rs.close();
-            ps.close();
-
-            ps = con.prepareStatement("SELECT * FROM accounts WHERE id = ?");
-            ps.setInt(1, accid);
-            rs = ps.executeQuery();
-            if (!rs.next()) {
-                rs.close();
-                ps.close();
-                return -1;
-            }
-            final String sessionIP = rs.getString("sessionIP");
-            final String email = rs.getString("email");
-            rs.close();
-            ps.close();
-            ps = con.prepareStatement("UPDATE accounts SET banned = 0, banreason = '' WHERE email = ?" + (sessionIP == null ? "" : " OR sessionIP = ?"));
-            ps.setString(1, email);
-            if (sessionIP != null) {
-                ps.setString(2, sessionIP);
-            }
-            ps.execute();
-            ps.close();
-            return 0;
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             return -2;

@@ -2265,11 +2265,7 @@ public class GMCommand {
                 return 0;
             }
             byte ret;
-            if (hellban) {
-                ret = MapleClient.unHellban(splitted[1]);
-            } else {
-                ret = MapleClient.unban(splitted[1]);
-            }
+            ret = MapleClient.unban(splitted[1]);
             if (ret == -2) {
                 c.getPlayer().dropMessage(6, "[" + getCommand() + "] SQL error.");
                 return 0;

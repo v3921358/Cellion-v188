@@ -292,7 +292,7 @@ public class CSPacket {
         OutPacket oPacket = new OutPacket(SendPacketOpcode.CS_UPDATE.getValue());
         oPacket.EncodeInt(chr.getCSPoints(1)); // NX Credit
         oPacket.EncodeInt(chr.getCSPoints(2)); // MPoint
-        oPacket.EncodeInt(chr.getCSPoints(3)); // Maple Rewards (Not in v144.3) but needed to show Nx prepaid for some reason ._.
+        oPacket.EncodeInt(chr.getCSPoints(3)); // Maple Rewards
         oPacket.EncodeInt(chr.getCSPoints(4)); // Nx Prepaid
 
         return oPacket;

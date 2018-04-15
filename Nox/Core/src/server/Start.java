@@ -39,6 +39,9 @@ import server.Timer.EventTimer;
 import server.Timer.MapTimer;
 import server.Timer.PingTimer;
 import server.Timer.WorldTimer;
+import server.api.ApiCallback;
+import server.api.ApiFactory;
+import server.api.ApiRuntimeException;
 import server.skills.effects.manager.EffectManager;
 import server.events.MapleOxQuizFactory;
 import server.life.MapleLifeFactory;
@@ -48,11 +51,13 @@ import server.maps.MapleMapFactory;
 import server.maps.objects.Pet;
 import server.quest.MapleQuest;
 import server.skills.VCore;
+import tools.LogHelper;
 
 public class Start {
 
     public static long startTime = System.currentTimeMillis();
     public static final Start instance = new Start();
+    private QueueWorker queue = null;
     public static AtomicInteger CompletedLoadingThreads = new AtomicInteger(0);
 
     public void run() throws InterruptedException, IOException {
@@ -324,6 +329,35 @@ public class Start {
         long now = System.currentTimeMillis() - start;
         long seconds = now / 1000;
         long ms = now % 1000;
+        
+        if (!ServerConstants.DEVMODE) {
+            try {
+                ApiFactory.getFactory().ping(new ApiCallback() {
+                   @Override
+                   public void onSuccess() {
+                       
+                   }
+
+                   @Override
+                   public void onFail() {
+                   }
+                });
+
+                ApiFactory.getFactory().getServerAuthToken();
+            } catch (IOException ex) {
+                LogHelper.CONSOLE.get().error("Error fetching token from Lumiere Network.", ex);
+                System.exit(1);
+            } catch (ApiRuntimeException apiex) {
+                LogHelper.CONSOLE.get().error("An error occured with the API.", apiex);
+                System.exit(1);
+            }
+            LogHelper.CONSOLE.get().info("Cellion API initialized");
+        }
+ 
+        if(!ServerConstants.DEVMODE) {
+            queue = new QueueWorker();
+            queue.start();
+        }
         System.out.println("\n" + ServerConstants.SERVER_NAME + " started successfully in " + seconds + " seconds and " + ms + " milliseconds.\n");
     }
 

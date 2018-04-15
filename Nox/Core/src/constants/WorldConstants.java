@@ -55,7 +55,7 @@ public class WorldConstants {
         Broa(2, 100, 1000, 3, 1, (byte) 1, false, false, 20, "Fun 100x rates! RBS!"),
         Bera(1, 1, 1, 1, 1, (byte) 1, false, false, 20, "Low, GMS like rates!"),
         Scania(0, 1, 1, 1, 1, (byte) 2, false, false, 20, "Default world!");
-        private final float exp, meso, drop, miraclecube;
+        private float exp, meso, drop, miraclecube;
         private final int world, channels;
         private final byte flag;
         private final boolean show, available;

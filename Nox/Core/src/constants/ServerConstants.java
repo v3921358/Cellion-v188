@@ -185,6 +185,7 @@ public class ServerConstants {
     public static final float LEECHER_EXP_RATIO = 0.2f;
 
     public static final boolean APPLY_HOTFIX = false;
+    public static boolean DEVMODE = true;
 
     public static final byte[] hotfix() {
         if (APPLY_HOTFIX) {
