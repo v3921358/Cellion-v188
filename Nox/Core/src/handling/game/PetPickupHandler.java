@@ -24,7 +24,7 @@ import server.maps.objects.Pet;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -49,13 +49,13 @@ public class PetPickupHandler implements ProcessPacket<MapleClient> {
             return;
         }
 
-        final byte petz = (byte) iPacket.DecodeInteger();//c.getPlayer().getPetIndex((int)slea.readLong());
+        final byte petz = (byte) iPacket.DecodeInt();//c.getPlayer().getPetIndex((int)slea.readLong());
         final Pet pet = chr.getPet(petz);
-        chr.updateTick(iPacket.DecodeInteger());
+        chr.updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
         iPacket.Skip(1); // [4] Zero, [4] Seems to be tickcount, [1] Always zero
         final Point Client_ReportedPos = iPacket.DecodePosition();
-        final MapleMapObject ob = chr.getMap().getMapObject(iPacket.DecodeInteger(), MapleMapObjectType.ITEM);
+        final MapleMapObject ob = chr.getMap().getMapObject(iPacket.DecodeInt(), MapleMapObjectType.ITEM);
 
         if (ob == null || pet == null) {
             c.getPlayer().dropMessage(5, "The item pickup has failed due to an unknown reason.");
@@ -66,19 +66,19 @@ public class PetPickupHandler implements ProcessPacket<MapleClient> {
         lock.lock();
         try {
             if (mapitem.isPickedUp()) {
-                c.write(CWvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));
-                c.write(CWvsContext.getInventoryFull());
+                c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));
+                c.SendPacket(CWvsContext.getInventoryFull());
                 return;
             }
             if (mapitem.getOwner() != chr.getId() && mapitem.isPlayerDrop()) {
                 return;
             }
             if (mapitem.getOwner() != chr.getId() && ((!mapitem.isPlayerDrop() && mapitem.getDropType() == 0) || (mapitem.isPlayerDrop() && chr.getMap().getSharedMapResources().everlast))) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             if (!mapitem.isPlayerDrop() && mapitem.getDropType() == 1 && mapitem.getOwner() != chr.getId() && (chr.getParty() == null || chr.getParty().getMemberById(mapitem.getOwner()) == null)) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
 
@@ -109,7 +109,7 @@ public class PetPickupHandler implements ProcessPacket<MapleClient> {
                 }
                 removeItem_Pet(chr, mapitem, petz);
             } else if (MapleItemInformationProvider.getInstance().isPickupBlocked(mapitem.getItemId()) || mapitem.getItemId() / 10000 == 291) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
             } else if (useItem(c, mapitem.getItemId())) {
                 removeItem_Pet(chr, mapitem, petz);
             } else if (mapitem.getItemId() / 10000 != 291 && MapleInventoryManipulator.checkSpace(c, mapitem.getItemId(), mapitem.getItem().getQuantity(), mapitem.getItem().getOwner())) {
@@ -119,7 +119,7 @@ public class PetPickupHandler implements ProcessPacket<MapleClient> {
 
                 // Display
                 if (!mapitem.isPlayerDrop() && mapitem.getItem().getType() == ItemType.Equipment) {
-                    chr.getClient().write(CWvsContext.InfoPacket.showEquipmentPickedUp((Equip) mapitem.getItem()));
+                    chr.getClient().SendPacket(CWvsContext.InfoPacket.showEquipmentPickedUp((Equip) mapitem.getItem()));
                 }
             }
         } finally {

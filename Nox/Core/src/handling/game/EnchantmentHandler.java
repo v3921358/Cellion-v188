@@ -16,7 +16,7 @@ import net.InPacket;
 import server.MapleInventoryManipulator;
 import server.maps.objects.User;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  * @author Steven
@@ -45,11 +45,11 @@ public class EnchantmentHandler implements ProcessPacket<MapleClient> {
         EnchantmentScroll scroll = null;
         switch (enchant.getAction()) {
             case SCROLL_UPGRADE:
-                chr.updateTick(iPacket.DecodeInteger());
+                chr.updateTick(iPacket.DecodeInt());
                 pos = iPacket.DecodeShort();
                 loadScrolls(scrolls); //hard-coded for now
                 enchant.setScrolls(scrolls);
-                scroll = scrolls.get(iPacket.DecodeInteger());
+                scroll = scrolls.get(iPacket.DecodeInt());
                 if (scroll == null) {
                     chr.write(CWvsContext.enableActions());
                     return;
@@ -57,14 +57,14 @@ public class EnchantmentHandler implements ProcessPacket<MapleClient> {
                 enchant.setAction(EnchantmentActions.SCROLL_RESULT);
                 break;
             case HYPER_UPGRADE:
-                chr.updateTick(iPacket.DecodeInteger());
+                chr.updateTick(iPacket.DecodeInt());
                 pos = iPacket.DecodeShort();
                 bonus = (byte) ((iPacket.DecodeByte() != 0) ? 12 : 0); //I do not know the real bonus value
                 if (bonus > 1) {
-                    iPacket.DecodeInteger(); //unsigned int max gets returned no matter what
+                    iPacket.DecodeInt(); //unsigned int max gets returned no matter what
                 }
-                iPacket.DecodeInteger();//This has to do with like the above (scroll position)
-                iPacket.DecodeInteger();//-1
+                iPacket.DecodeInt();//This has to do with like the above (scroll position)
+                iPacket.DecodeInt();//-1
                 enchant.setAction(EnchantmentActions.STARFORCE_RESULT);
                 break;
             case FEVER_TIME:
@@ -74,12 +74,12 @@ public class EnchantmentHandler implements ProcessPacket<MapleClient> {
                 //No more data coming from client
                 break;
             case TRANSFER_HAMMER:
-                chr.updateTick(iPacket.DecodeInteger());
+                chr.updateTick(iPacket.DecodeInt());
                 pos = iPacket.DecodeShort();
                 enchant.setAction(EnchantmentActions.TRANSFER_HAMMER_RESULT);
                 break;
             default:
-                pos = (short) iPacket.DecodeInteger();
+                pos = (short) iPacket.DecodeInt();
                 break;
         }
         Equip equip = (Equip) chr.getInventory(MapleInventoryType.EQUIP).getItem(pos);
@@ -91,11 +91,11 @@ public class EnchantmentHandler implements ProcessPacket<MapleClient> {
             enchant.setOldEquip(copy);
             Random r = new Random();
             int chance = r.nextInt(99);
-            
+
             switch (enchant.getAction()) {
                 case SCROLLLIST:
                     if (equip.getUpgradeSlots() < 1) {
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                         return;
                     }
                     loadScrolls(scrolls); //hard-coded for now
@@ -103,14 +103,14 @@ public class EnchantmentHandler implements ProcessPacket<MapleClient> {
                     break;
                 case SCROLL_RESULT:
                     if (equip.getUpgradeSlots() < 1) {
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                         return;
                     }
                     int cost = scroll.getCost();
                     if (chr.haveItem(4001832, cost)) {
                         chr.removeItem(4001832, cost);
                     } else {
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                         return;
                     }
                     int probability = 0;
@@ -219,7 +219,7 @@ public class EnchantmentHandler implements ProcessPacket<MapleClient> {
             }
         }
         //chr.fakeRelog2();
-        c.write(CWvsContext.enchantmentSystem(enchant));
+        c.SendPacket(CWvsContext.enchantmentSystem(enchant));
     }
 
     /*

@@ -25,7 +25,7 @@ import client.MapleClient;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class LeaveAzwanHandler implements ProcessPacket<MapleClient> {
 
@@ -37,8 +37,8 @@ public final class LeaveAzwanHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         if (c.getPlayer() == null || c.getPlayer().getMap() == null || !c.getPlayer().inAzwan()) {
-            c.write(CField.pvpBlocked(6));
-            c.write(CWvsContext.enableActions());
+            //c.SendPacket(CField.pvpBlocked(6));
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         //c.getPlayer().cancelAllBuffs();
@@ -47,8 +47,8 @@ public final class LeaveAzwanHandler implements ProcessPacket<MapleClient> {
         //c.getPlayer().clearAllCooldowns();
         //c.write(CWvsContext.clearMidMsg());
         //c.getPlayer().changeMap(c.getChannelServer().getMapFactory().getMap(262000200));
-        c.write(CField.showEffect("hillah/fail"));
-        c.write(CField.UIPacket.sendAzwanResult());
+        c.SendPacket(CField.showEffect("hillah/fail"));
+        c.SendPacket(CField.UIPacket.sendAzwanResult());
         //c.getPlayer().getStats().recalcLocalStats(c.getPlayer());
         //c.getPlayer().getStats().heal(c.getPlayer());
     }

@@ -26,7 +26,7 @@ import net.InPacket;
 import server.maps.FieldLimitType;
 import server.maps.objects.User;
 import tools.packet.CSPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class OnUserMapTransferRequest implements ProcessPacket<MapleClient> {
 
@@ -45,7 +45,7 @@ public final class OnUserMapTransferRequest implements ProcessPacket<MapleClient
         switch (vip) {
             case 1:
                 if (addrem == 0) {
-                    chr.deleteFromRegRocks(iPacket.DecodeInteger());
+                    chr.deleteFromRegRocks(iPacket.DecodeInt());
                 } else if (addrem == 1) {
                     if (!FieldLimitType.VipRock.checkFlag(chr.getMap())) {
                         chr.addRegRockMap();
@@ -56,7 +56,7 @@ public final class OnUserMapTransferRequest implements ProcessPacket<MapleClient
                 break;
             case 2:
                 if (addrem == 0) {
-                    chr.deleteFromRocks(iPacket.DecodeInteger());
+                    chr.deleteFromRocks(iPacket.DecodeInt());
                 } else if (addrem == 1) {
                     if (!FieldLimitType.VipRock.checkFlag(chr.getMap())) {
                         chr.addRockMap();
@@ -68,7 +68,7 @@ public final class OnUserMapTransferRequest implements ProcessPacket<MapleClient
             case 3:
             case 5:
                 if (addrem == 0) {
-                    chr.deleteFromHyperRocks(iPacket.DecodeInteger());
+                    chr.deleteFromHyperRocks(iPacket.DecodeInt());
                 } else if (addrem == 1) {
                     if (!FieldLimitType.VipRock.checkFlag(chr.getMap())) {
                         chr.addHyperRockMap();
@@ -80,6 +80,6 @@ public final class OnUserMapTransferRequest implements ProcessPacket<MapleClient
             default:
                 break;
         }
-        c.write(CSPacket.OnMapTransferResult(chr, vip, addrem == 0));
+        c.SendPacket(CSPacket.OnMapTransferResult(chr, vip, addrem == 0));
     }
 }

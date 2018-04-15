@@ -28,15 +28,15 @@ public class MovementTypeB extends AbstractLifeMovement {
 
     @Override
     public void serialize(OutPacket oPacket) {
-        oPacket.Encode(getCommand());
+        oPacket.EncodeByte(getCommand());
         oPacket.EncodeShort(getPosition().x);
         oPacket.EncodeShort(getPosition().y);
         oPacket.EncodeShort(getWobble().x);
         oPacket.EncodeShort(getWobble().y);
         oPacket.EncodeShort(getFoothold());
-        oPacket.Encode(getStance());
+        oPacket.EncodeByte(getStance());
         oPacket.EncodeShort(getDuration());
-        oPacket.Encode(getbForcedStop());
+        oPacket.EncodeByte(getbForcedStop());
 
     }
 }

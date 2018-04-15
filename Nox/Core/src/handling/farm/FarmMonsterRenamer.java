@@ -24,7 +24,7 @@ package handling.farm;
 import client.MapleClient;
 import net.InPacket;
 import tools.packet.FarmPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class FarmMonsterRenamer implements ProcessPacket<MapleClient> {
 
@@ -35,10 +35,10 @@ public final class FarmMonsterRenamer implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int monsterIndex = iPacket.DecodeInteger();
+        int monsterIndex = iPacket.DecodeInt();
         String name = iPacket.DecodeString();
         //c.getFarm().getMonster(monsterIndex).setName(name);
-        c.write(FarmPacket.renameMonster(monsterIndex, name));
+        c.SendPacket(FarmPacket.renameMonster(monsterIndex, name));
     }
 
 }

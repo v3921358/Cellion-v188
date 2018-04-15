@@ -60,7 +60,7 @@ public final class MonsterFamiliar extends AnimatedMapleMapObject {
 
     public void addFatigue(User owner, int f) {
         fatigue = Math.min(vitality * 300, Math.max(0, fatigue + f));
-        owner.getClient().write(CField.updateFamiliar(this));
+        owner.getClient().SendPacket(CField.updateFamiliar(this));
         if (fatigue >= vitality * 300) {
             owner.removeFamiliar();
         }
@@ -120,12 +120,12 @@ public final class MonsterFamiliar extends AnimatedMapleMapObject {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.write(CField.spawnFamiliar(this, true, false));
+        client.SendPacket(CField.spawnFamiliar(this, true, false));
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.write(CField.spawnFamiliar(this, false, false));
+        client.SendPacket(CField.spawnFamiliar(this, false, false));
     }
 
     @Override
@@ -134,12 +134,12 @@ public final class MonsterFamiliar extends AnimatedMapleMapObject {
     }
 
     public void writeRegisterPacket(OutPacket oPacket, boolean chr) {
-        oPacket.EncodeInteger(getCharacterId());
-        oPacket.EncodeInteger(getFamiliar());
+        oPacket.EncodeInt(getCharacterId());
+        oPacket.EncodeInt(getFamiliar());
         oPacket.Fill(0, 13);
-        oPacket.Encode(chr ? 1 : 0);
+        oPacket.EncodeByte(chr ? 1 : 0);
         oPacket.EncodeShort(getVitality());
-        oPacket.EncodeInteger(getFatigue());
+        oPacket.EncodeInt(getFatigue());
         oPacket.EncodeLong(PacketHelper.getTime(getVitality() >= 3 ? System.currentTimeMillis() : -2L));
         oPacket.EncodeLong(PacketHelper.getTime(System.currentTimeMillis()));
         oPacket.EncodeLong(PacketHelper.getTime(getExpiry()));

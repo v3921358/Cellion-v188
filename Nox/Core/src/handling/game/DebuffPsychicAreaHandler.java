@@ -8,7 +8,7 @@ package handling.game;
 import client.MapleClient;
 import java.awt.Point;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -23,12 +23,12 @@ public class DebuffPsychicAreaHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int nSkillID = iPacket.DecodeInteger();
+        int nSkillID = iPacket.DecodeInt();
         int nSLV = iPacket.DecodeShort();
-        int nPsychicAreaKey = iPacket.DecodeInteger(); // 04 00 00 00
+        int nPsychicAreaKey = iPacket.DecodeInt(); // 04 00 00 00
         byte bData = iPacket.DecodeByte(); // 01
-        Point posStart = new Point(iPacket.DecodeInteger(), iPacket.DecodeInteger());
-        int unk = iPacket.DecodeInteger(); // 00 00 00 00
+        Point posStart = new Point(iPacket.DecodeInt(), iPacket.DecodeInt());
+        int unk = iPacket.DecodeInt(); // 00 00 00 00
         // todo this isnt finished
     }
 

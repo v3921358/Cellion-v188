@@ -3,7 +3,7 @@ package handling.game;
 import client.MapleClient;
 import server.maps.objects.User;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -20,9 +20,9 @@ public class OpenItemUI implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
-        chr.updateTick(iPacket.DecodeInteger());
+        chr.updateTick(iPacket.DecodeInt());
         short pos = iPacket.DecodeShort();
-        int itemId = iPacket.DecodeInteger();
+        int itemId = iPacket.DecodeInt();
     }
 
 }

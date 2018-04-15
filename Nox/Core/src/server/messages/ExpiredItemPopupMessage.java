@@ -16,7 +16,7 @@ public class ExpiredItemPopupMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.ExpiredItemPopup.getType());
+        oPacket.EncodeByte(_MessageOpcodesType.ExpiredItemPopup.getType());
     }
 
 }

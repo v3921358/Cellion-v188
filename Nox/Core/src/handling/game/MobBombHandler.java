@@ -6,7 +6,7 @@ import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.objects.User;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -26,9 +26,9 @@ public class MobBombHandler implements ProcessPacket<MapleClient> {
         if (map == null) {
             return;
         }
-        Mob mobfrom = map.getMonsterByOid(iPacket.DecodeInteger());
+        Mob mobfrom = map.getMonsterByOid(iPacket.DecodeInt());
         iPacket.Skip(4);
-        iPacket.DecodeInteger();
+        iPacket.DecodeInt();
 
         if ((mobfrom != null) && (mobfrom.getBuff(MonsterStatus.MONSTER_BOMB) != null));
     }

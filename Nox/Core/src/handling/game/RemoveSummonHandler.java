@@ -7,7 +7,7 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.Summon;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -22,7 +22,7 @@ public class RemoveSummonHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleMapObject obj = c.getPlayer().getMap().getMapObject(iPacket.DecodeInteger(), MapleMapObjectType.SUMMON);
+        final MapleMapObject obj = c.getPlayer().getMap().getMapObject(iPacket.DecodeInt(), MapleMapObjectType.SUMMON);
         if (obj == null || !(obj instanceof Summon)) {
             return;
         }

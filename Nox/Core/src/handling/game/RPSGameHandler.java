@@ -4,7 +4,7 @@ import client.MapleClient;
 import client.RockPaperScissors;
 import net.InPacket;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -19,7 +19,7 @@ public class RPSGameHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        if ((iPacket.Available() == 0L) || (c.getPlayer() == null) || (c.getPlayer().getMap() == null) || (!c.getPlayer().getMap().containsNPC(9000019))) {
+        if ((iPacket.GetRemainder() == 0L) || (c.getPlayer() == null) || (c.getPlayer().getMap() == null) || (!c.getPlayer().getMap().containsNPC(9000019))) {
             if ((c.getPlayer() != null) && (c.getPlayer().getRPS() != null)) {
                 c.getPlayer().getRPS().dispose(c);
             }
@@ -35,29 +35,29 @@ public class RPSGameHandler implements ProcessPacket<MapleClient> {
                 if (c.getPlayer().getMeso() >= 1000L) {
                     c.getPlayer().setRPS(new RockPaperScissors(c, mode));
                 } else {
-                    c.write(CField.getRPSMode((byte) 8, -1, -1, -1));
+                    c.SendPacket(CField.getRPSMode((byte) 8, -1, -1, -1));
                 }
                 break;
             case 1:
                 if ((c.getPlayer().getRPS() == null) || (!c.getPlayer().getRPS().answer(c, iPacket.DecodeByte()))) {
-                    c.write(CField.getRPSMode((byte) 13, -1, -1, -1));
+                    c.SendPacket(CField.getRPSMode((byte) 13, -1, -1, -1));
                 }
                 break;
             case 2:
                 if ((c.getPlayer().getRPS() == null) || (!c.getPlayer().getRPS().timeOut(c))) {
-                    c.write(CField.getRPSMode((byte) 13, -1, -1, -1));
+                    c.SendPacket(CField.getRPSMode((byte) 13, -1, -1, -1));
                 }
                 break;
             case 3:
                 if ((c.getPlayer().getRPS() == null) || (!c.getPlayer().getRPS().nextRound(c))) {
-                    c.write(CField.getRPSMode((byte) 13, -1, -1, -1));
+                    c.SendPacket(CField.getRPSMode((byte) 13, -1, -1, -1));
                 }
                 break;
             case 4:
                 if (c.getPlayer().getRPS() != null) {
                     c.getPlayer().getRPS().dispose(c);
                 } else {
-                    c.write(CField.getRPSMode((byte) 13, -1, -1, -1));
+                    c.SendPacket(CField.getRPSMode((byte) 13, -1, -1, -1));
                 }
                 break;
         }

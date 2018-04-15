@@ -10,7 +10,7 @@ import client.jobs.Kinesis;
 import client.jobs.Kinesis.KinesisHandler;
 import net.InPacket;
 import net.OutPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.life.Mob;
 import server.maps.objects.User;
 import service.SendPacketOpcode;
@@ -29,16 +29,16 @@ public final class KinesisPsychicHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         //KinesisHandler.handlePsychicPoint(c.getPlayer(), 0);
-        /*OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.UserCreatePsychicArea.getValue());
+        /*
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserCreatePsychicArea.getValue());
         // First AttackInfo Start
-        oPacket.EncodeInteger(c.getPlayer().getId());
+        oPacket.EncodeInt(c.getPlayer().getId());
         oPacket.Encode(1);
-        final int skillid = iPacket.DecodeInteger();
-        oPacket.EncodeInteger(skillid);
+        final int skillid = iPacket.DecodeInt();
+        oPacket.EncodeInt(skillid);
         oPacket.EncodeShort(iPacket.DecodeShort());
-        oPacket.EncodeInteger(iPacket.DecodeInteger());
-        oPacket.EncodeInteger(iPacket.DecodeInteger());
+        oPacket.EncodeInt(iPacket.DecodeInt());
+        oPacket.EncodeInt(iPacket.DecodeInt());
         // First AttackInfo End
         int i = 0;
         int point = 0;
@@ -49,21 +49,21 @@ public final class KinesisPsychicHandler implements ProcessPacket<MapleClient> {
             oPacket.Encode(!end ? 1 : 0);
             if (!end) {
                 oPacket.Encode(!end ? 1 : 0);
-                oPacket.EncodeInteger(iPacket.DecodeInteger());
+                oPacket.EncodeInt(iPacket.DecodeInt());
             } else {
                 break;
             }
             iPacket.Skip(4);
-            oPacket.EncodeInteger((i) + 1);
-            final int monsterid = iPacket.DecodeInteger();
-            oPacket.EncodeInteger(monsterid); //
+            oPacket.EncodeInt((i) + 1);
+            final int monsterid = iPacket.DecodeInt();
+            oPacket.EncodeInt(monsterid); //
             oPacket.EncodeShort(iPacket.DecodeShort());
             if (monsterid != 0) {
                 target = c.getPlayer().getMap().getMonsterByOid(monsterid);
             }
             iPacket.Skip(2);
-            oPacket.EncodeInteger(monsterid != 0 ? (int) target.getHp() : 100);
-            oPacket.EncodeInteger(monsterid != 0 ? (int) target.getHp() : 100);
+            oPacket.EncodeInt(monsterid != 0 ? (int) target.getHp() : 100);
+            oPacket.EncodeInt(monsterid != 0 ? (int) target.getHp() : 100);
             oPacket.Encode(iPacket.DecodeByte());
             oPacket.EncodePosition(iPacket.DecodePosition());
             oPacket.EncodePosition(iPacket.DecodePosition());
@@ -74,7 +74,7 @@ public final class KinesisPsychicHandler implements ProcessPacket<MapleClient> {
         // PPoint Check
         c.getPlayer().handlePsychicPoint(skillid);
 
-        c.write(oPacket.ToPacket());*/
+        c.write(oPacket);*/
     }
 
 }

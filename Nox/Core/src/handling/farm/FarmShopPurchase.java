@@ -23,7 +23,7 @@ package handling.farm;
 
 import client.MapleClient;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class FarmShopPurchase implements ProcessPacket<MapleClient> {
 
@@ -34,7 +34,7 @@ public final class FarmShopPurchase implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int itemId = iPacket.DecodeInteger();
+        int itemId = iPacket.DecodeInt();
         //c.getFarm().getFarmInventory().gainWaru(-price);
         //c.getFarm().getFarmInventory().updateItemQuantity(itemId, 1);
         //c.getFarm().gainAestheticPoints(aesthetic); //rewarded from building

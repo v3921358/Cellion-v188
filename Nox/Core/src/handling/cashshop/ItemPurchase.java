@@ -31,23 +31,23 @@ public class ItemPurchase {
 
     public static void BuyNormalItem(InPacket iPacket, MapleClient c, User chr) {
         iPacket.Decode(); // bByMaplePoint
-        int type = iPacket.DecodeInteger(); // nPurchaseOption
+        int type = iPacket.DecodeInt(); // nPurchaseOption
         iPacket.Decode(); // Unknown
-        int sn = iPacket.DecodeInteger(); // nCommoditySN
+        int sn = iPacket.DecodeInt(); // nCommoditySN
         CashItem item = CashItemFactory.getInstance().getAllItem(sn);
-        int itemPrice = iPacket.DecodeInteger(); // nPrice
-        int nQuantity = iPacket.DecodeInteger(); // Quantity of items bought, used for cart
-        iPacket.DecodeInteger(); // Unknown
-        iPacket.DecodeInteger(); // Unknown
-        iPacket.DecodeInteger(); // Unknown
+        int itemPrice = iPacket.DecodeInt(); // nPrice
+        int nQuantity = iPacket.DecodeInt(); // Quantity of items bought, used for cart
+        iPacket.DecodeInt(); // Unknown
+        iPacket.DecodeInt(); // Unknown
+        iPacket.DecodeInt(); // Unknown
 
         if (item == null) {
-            c.write(CSPacket.sendCSFail(0));
+            c.SendPacket(CSPacket.sendCSFail(0));
             return;
         }
 
         if (itemPrice != item.getDiscountPrice()) {
-            c.write(CSPacket.sendCSFail(0));
+            c.SendPacket(CSPacket.sendCSFail(0));
             return;
         }
 
@@ -57,41 +57,41 @@ public class ItemPurchase {
         Item changedItem = chr.getCashInventory().toItem(item);
         if ((changedItem != null)) {
             if (blockedCS && !ServerConstants.CS_COUPONS) {//check if it's an exp/drop rate coupon and if they're enabled.
-                c.write(CSPacket.sendCSFail(0)); //can't buy lol.
+                c.SendPacket(CSPacket.sendCSFail(0)); //can't buy lol.
                 c.getPlayer().modifyCSPoints(type, itemPrice); //instant refund basically.
             } else {
                 chr.getCashInventory().addToInventory(changedItem);
-                c.write(CSPacket.showBoughtCSItem(changedItem, item.getSN(), c.getAccID()));
+                c.SendPacket(CSPacket.showBoughtCSItem(changedItem, item.getSN(), c.getAccID()));
             }
         } else {
-            c.write(CSPacket.sendCSFail(0));
+            c.SendPacket(CSPacket.sendCSFail(0));
         }
     }
 
     public static void BuyEquipItem(InPacket iPacket, MapleClient c, User chr) {
         iPacket.Skip(1);
-        int itemPrice = iPacket.DecodeInteger();
-        CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInteger());
+        int itemPrice = iPacket.DecodeInt();
+        CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInt());
 
         if (iteminfo != null && chr.getCSPoints(itemPrice) >= iteminfo.getPrice()) {
             if (!iteminfo.genderEquals(c.getPlayer().getGender())/* && c.getPlayer().getAndroid() == null*/) {
-                c.write(CSPacket.sendCSFail(0xA7));
+                c.SendPacket(CSPacket.sendCSFail(0xA7));
                 playerCashShopInfo(c);
                 return;
             } else if (iteminfo.getId() == 5211046 || iteminfo.getId() == 5211047 || iteminfo.getId() == 5211048 || iteminfo.getId() == 5050100 || iteminfo.getId() == 5051001) {
-                c.write(CWvsContext.broadcastMsg(1, "You cannot purchase this item through cash shop."));
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.broadcastMsg(1, "You cannot purchase this item through cash shop."));
+                c.SendPacket(CWvsContext.enableActions());
                 playerCashShopInfo(c);
                 return;
             } else if (c.getPlayer().getCashInventory().getItemsSize() >= 100) {
-                c.write(CSPacket.sendCSFail(0xB2));
+                c.SendPacket(CSPacket.sendCSFail(0xB2));
                 playerCashShopInfo(c);
                 return;
             }
             for (int id : GameConstants.cashBlock) {
                 if (iteminfo.getId() == id) {
-                    c.write(CWvsContext.broadcastMsg(1, "You cannot purchase this item through cash shop."));
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.broadcastMsg(1, "You cannot purchase this item through cash shop."));
+                    c.SendPacket(CWvsContext.enableActions());
                     playerCashShopInfo(c);
                     return;
                 }
@@ -100,23 +100,23 @@ public class ItemPurchase {
             Item changedItem = chr.getCashInventory().toItem(iteminfo);
             if (changedItem != null && changedItem.getUniqueId() > 0 && changedItem.getItemId() == iteminfo.getId() && changedItem.getQuantity() == iteminfo.getCount()) {
                 chr.getCashInventory().addToInventory(changedItem);
-                c.write(CSPacket.showBoughtCSItem(changedItem, iteminfo.getSN(), c.getAccID()));
+                c.SendPacket(CSPacket.showBoughtCSItem(changedItem, iteminfo.getSN(), c.getAccID()));
             } else {
-                c.write(CSPacket.sendCSFail(0));
+                c.SendPacket(CSPacket.sendCSFail(0));
             }
         } else {
-            c.write(CSPacket.sendCSFail(0));
+            c.SendPacket(CSPacket.sendCSFail(0));
         }
     }
 
     public static void BuyRings(InPacket iPacket, MapleClient c, User chr, int type) {
         iPacket.DecodeString();
-        int itemPrice = iPacket.DecodeInteger();
-        CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInteger());
+        int itemPrice = iPacket.DecodeInt();
+        CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInt());
         String partnerName = iPacket.DecodeString();
         String msg = iPacket.DecodeString();
         if ((iteminfo == null) || (!GameConstants.isEffectRing(iteminfo.getId())) || (c.getPlayer().getCSPoints(itemPrice) < iteminfo.getPrice()) || (msg.length() > 73) || (msg.length() < 1)) {
-            c.write(CSPacket.sendCSFail(0));
+            c.SendPacket(CSPacket.sendCSFail(0));
             playerCashShopInfo(c);
             return;
         }

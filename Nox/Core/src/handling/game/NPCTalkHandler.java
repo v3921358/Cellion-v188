@@ -9,7 +9,7 @@ import server.maps.objects.User;
 import server.maps.objects.MapleNPC;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -25,7 +25,7 @@ public class NPCTalkHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
-        final MapleNPC pNpc = pPlayer.getMap().getNPCByOid(iPacket.DecodeInteger());
+        final MapleNPC pNpc = pPlayer.getMap().getNPCByOid(iPacket.DecodeInt());
 
         if (pPlayer == null || pPlayer.getMap() == null || pNpc == null || pPlayer.hasBlockedInventory()) {
             return;
@@ -38,7 +38,7 @@ public class NPCTalkHandler implements ProcessPacket<MapleClient> {
         if (NPCScriptManager.getInstance().getCM(c) != null) { // Meme auto dispose when clicking an NPC.
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
         }
 
         ReentrantLock safetyLock = new ReentrantLock(); // Lock to avoid running the script twice and receiving a runtime error.

@@ -26,7 +26,7 @@ import server.MaplePortal;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class MapChangeSpecialHandler implements ProcessPacket<MapleClient> {
 
@@ -47,7 +47,7 @@ public final class MapChangeSpecialHandler implements ProcessPacket<MapleClient>
         if ((portal != null) && (!chr.hasBlockedInventory())) {
             portal.enterPortal(c);
         } else {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
         }
     }
 }

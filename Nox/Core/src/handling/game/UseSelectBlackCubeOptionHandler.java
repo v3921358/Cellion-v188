@@ -12,7 +12,7 @@ import server.maps.objects.User.CharacterTemporaryValues;
 import tools.Pair;
 import tools.packet.CWvsContext;
 import tools.packet.MiracleCubePacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -27,7 +27,7 @@ public class UseSelectBlackCubeOptionHandler implements ProcessPacket<MapleClien
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         final short option = iPacket.DecodeShort();
         final long temporaryKeyValue = iPacket.DecodeLong(); // or also the equipment's uniqueid which Nexon uses
 
@@ -51,14 +51,14 @@ public class UseSelectBlackCubeOptionHandler implements ProcessPacket<MapleClien
                 // Update inventory equipment 
                 List<ModifyInventory> modifications = new ArrayList<>();
                 modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, eq_originalRef));
-                c.write(CWvsContext.inventoryOperation(true, modifications));
+                c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
 
                 if (temporaryKeyValue == CharacterTemporaryValues.KEY_MEMORIAL_CUBE) {
-                    c.write(MiracleCubePacket.memorialCubeModified(false, eq_originalRef.getPosition(), ItemConstants.MEMORY_CUBE, eq_originalRef));
+                    c.SendPacket(MiracleCubePacket.memorialCubeModified(false, eq_originalRef.getPosition(), ItemConstants.MEMORY_CUBE, eq_originalRef));
                 }
                 return;
             }
-            c.close(); // nuuu u h4x0r
+            c.Close(); // nuuu u h4x0r
         } else {
             // do nothing, since the original equipment state remains.
         }

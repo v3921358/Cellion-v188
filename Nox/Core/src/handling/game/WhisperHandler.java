@@ -10,7 +10,7 @@ import server.commands.CommandProcessor;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import tools.Utility;
 import tools.packet.CField;
 
@@ -28,11 +28,11 @@ public class WhisperHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         int dwFlag = iPacket.DecodeByte();
-        c.getPlayer().updateTick(iPacket.DecodeInteger()); // tRequestTime
+        c.getPlayer().updateTick(iPacket.DecodeInt()); // tRequestTime
         if (dwFlag == WhisperFlag.ReplyRequest || dwFlag == WhisperFlag.FindRequest || dwFlag == WhisperFlag.BlockedResult || dwFlag == WhisperFlag.LocationRequest) {
             String sTarget = iPacket.DecodeString();
             User pUser = Utility.requestCharacter(sTarget); //c.getChannelServer().getPlayerStorage().getCharacterByName(sTarget);
-            
+
             if (dwFlag == WhisperFlag.ReplyRequest || dwFlag == WhisperFlag.BlockedResult) {
                 String sText = iPacket.DecodeString();
                 if (pUser != null && pUser.getMap() != null) {

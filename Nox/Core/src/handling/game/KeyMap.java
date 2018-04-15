@@ -28,7 +28,7 @@ import constants.GameConstants;
 import server.maps.objects.User;
 import server.quest.MapleQuest;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class KeyMap implements ProcessPacket<MapleClient> { // oh here it is
 
@@ -44,14 +44,14 @@ public final class KeyMap implements ProcessPacket<MapleClient> { // oh here it 
             return;
         }
 
-        if (iPacket.Available() > 8L) {
+        if (iPacket.GetRemainder() > 8L) {
             iPacket.Skip(4);
-            int numChanges = iPacket.DecodeInteger();
+            int numChanges = iPacket.DecodeInt();
 
             for (int i = 0; i < numChanges; i++) {
-                int key = iPacket.DecodeInteger();
+                int key = iPacket.DecodeInt();
                 byte type = iPacket.DecodeByte();
-                int action = iPacket.DecodeInteger();
+                int action = iPacket.DecodeInt();
 
                 if ((type == 1) && (action >= 1000)) {
                     Skill skil = SkillFactory.getSkill(action);
@@ -62,8 +62,8 @@ public final class KeyMap implements ProcessPacket<MapleClient> { // oh here it 
                 chr.changeKeybinding(key, type, action);
             }
         } else {
-            int type = iPacket.DecodeInteger();
-            int data = iPacket.DecodeInteger();
+            int type = iPacket.DecodeInt();
+            int data = iPacket.DecodeInt();
             switch (type) {
                 case 1:
                     if (data <= 0) {

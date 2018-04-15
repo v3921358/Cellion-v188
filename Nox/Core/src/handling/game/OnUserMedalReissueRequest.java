@@ -29,7 +29,7 @@ import server.MapleInventoryManipulator;
 import server.maps.objects.User;
 import server.quest.MapleQuest;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class OnUserMedalReissueRequest implements ProcessPacket<MapleClient> {
 
@@ -47,24 +47,24 @@ public final class OnUserMedalReissueRequest implements ProcessPacket<MapleClien
         }
 
         int itemid = q.getMedalItem();
-        if ((itemid != iPacket.DecodeInteger()) || (itemid <= 0) || (chr.getQuestStatus(q.getId()) != MapleQuestStatus.MapleQuestState.Completed)) {
-            c.write(CField.UIPacket.reissueMedal(itemid, 4));
+        if ((itemid != iPacket.DecodeInt()) || (itemid <= 0) || (chr.getQuestStatus(q.getId()) != MapleQuestStatus.MapleQuestState.Completed)) {
+            c.SendPacket(CField.UIPacket.reissueMedal(itemid, 4));
             return;
         }
         if (chr.haveItem(itemid, 1, true, true)) {
-            c.write(CField.UIPacket.reissueMedal(itemid, 3));
+            c.SendPacket(CField.UIPacket.reissueMedal(itemid, 3));
             return;
         }
         if (!MapleInventoryManipulator.checkSpace(c, itemid, 1, "")) {
-            c.write(CField.UIPacket.reissueMedal(itemid, 2));
+            c.SendPacket(CField.UIPacket.reissueMedal(itemid, 2));
             return;
         }
         if (chr.getMeso() < 100) {
-            c.write(CField.UIPacket.reissueMedal(itemid, 1));
+            c.SendPacket(CField.UIPacket.reissueMedal(itemid, 1));
             return;
         }
         chr.gainMeso(-100, true, true);
         MapleInventoryManipulator.addById(c, itemid, (byte) 1, new StringBuilder().append("Redeemed item through medal quest ").append(q.getId()).append(" on ").append(LocalDateTime.now()).toString());
-        c.write(CField.UIPacket.reissueMedal(itemid, 0));
+        c.SendPacket(CField.UIPacket.reissueMedal(itemid, 0));
     }
 }

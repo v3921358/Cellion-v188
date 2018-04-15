@@ -16,7 +16,7 @@ public class InterServerHandler {
     public static void enterFarm(final MapleClient c, final User chr) {
         if (chr.hasBlockedInventory() || chr.getMap() == null || chr.getEventInstance() != null || c.getChannelServer() == null
                 || FieldLimitType.UnableToMigrate.check(chr.getMap())) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
 
@@ -36,7 +36,7 @@ public class InterServerHandler {
 
         chr.saveToDB(false, false);
         chr.getMap().removePlayer(chr);
-        c.write(CField.getChannelChange(c, Integer.parseInt(FarmServer.getIP().split(":")[1])));
+        c.SendPacket(CField.getChannelChange(c, Integer.parseInt(FarmServer.getIP().split(":")[1])));
         c.setPlayer(null);
         c.setReceiving(false);
     }
@@ -44,34 +44,34 @@ public class InterServerHandler {
     public static final void changeChannel(final InPacket iPacket, final MapleClient c, final User chr, final boolean room) {
         if (chr == null || chr.hasBlockedInventory() || chr.getEventInstance() != null || chr.getMap() == null || chr.isInBlockedMap()
                 || FieldLimitType.UnableToMigrate.check(chr.getMap())) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
 
         final int targetChannel = iPacket.DecodeByte() + 1;
         int mapid = 0;
         if (room) {
-            mapid = iPacket.DecodeInteger();
+            mapid = iPacket.DecodeInt();
 
             if (mapid < 910000001 || mapid > 910000022) {
                 chr.dropMessage(1, "Request denied due to an unknown error.");
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
         }
-        chr.updateTick(iPacket.DecodeInteger());
+        chr.updateTick(iPacket.DecodeInt());
 
         // Check if target channel is available
         if (!World.isChannelAvailable(targetChannel, chr.getWorld())) {
             chr.dropMessage(1, "Request denied due to an unknown error.");
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         if (room) {
             if (chr.getMapId() == mapid) {
                 if (c.getChannel() == targetChannel) {
                     chr.dropMessage(1, "You are already in " + chr.getMap().getMapName());
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                 } else { // diff channel
                     chr.changeChannel(targetChannel);
                 }
@@ -84,7 +84,7 @@ public class InterServerHandler {
                     chr.changeMap(warpz, warpz.getPortal("out00"));
                 } else {
                     chr.dropMessage(1, "Request denied due to an unknown error.");
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                 }
             }
         } else {

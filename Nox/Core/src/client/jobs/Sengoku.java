@@ -1,5 +1,5 @@
 /*
- * Rexion Development
+ * Cellion Development
  */
 package client.jobs;
 
@@ -29,7 +29,7 @@ import tools.packet.JobPacket.HayatoPacket;
 public class Sengoku {
 
     public static class HayatoHandler {
-        
+
         public static void handleBladeStance(User pPlayer) {
             int nStack = pPlayer.getPrimaryStack() + 5;
             if (nStack > 1000) {
@@ -37,11 +37,11 @@ public class Sengoku {
             }
             updateBladeStanceRequest(pPlayer, nStack);
         }
-        
+
         public static void updateBladeStanceRequest(User pPlayer, int nStack) {
             pPlayer.setPrimaryStack(nStack);
-            pPlayer.getClient().write(HayatoPacket.SwordEnergy(nStack));
+            pPlayer.getClient().SendPacket(HayatoPacket.SwordEnergy(nStack));
         }
-    
+
     }
 }

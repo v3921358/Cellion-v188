@@ -31,48 +31,48 @@ public class PurchasePackage {
     public static void BuyGiftPackage(InPacket iPacket, MapleClient c, User chr) {
         iPacket.Skip(1);
         iPacket.DecodeString(); // pic - Has to be CHECKED!
-        CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInteger());
+        CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInt());
         String partnerName = iPacket.DecodeString();
         String msg = iPacket.DecodeString();
         if (iteminfo == null || c.getPlayer().getCSPoints(1) < iteminfo.getPrice() || msg.length() > 73 || msg.length() < 1) { //dont want packet editors gifting random stuff =P
-            c.write(CSPacket.sendCSFail(0));
+            c.SendPacket(CSPacket.sendCSFail(0));
             playerCashShopInfo(c);
             return;
         }
         Triple<Integer, Integer, Integer> info = MapleCharacterUtil.getInfoByName(partnerName, c.getPlayer().getWorld());
         if (info == null || info.getLeft() <= 0 || info.getLeft() == c.getPlayer().getId() || info.getMid() == c.getAccID()) {
-            c.write(CSPacket.sendCSFail(0xA2)); //9E v75
+            c.SendPacket(CSPacket.sendCSFail(0xA2)); //9E v75
             playerCashShopInfo(c);
         } else if (!iteminfo.genderEquals(info.getRight())) {
-            c.write(CSPacket.sendCSFail(0xA3));
+            c.SendPacket(CSPacket.sendCSFail(0xA3));
             playerCashShopInfo(c);
         } else {
             //get the packets for that
             c.getPlayer().getCashInventory().gift(info.getLeft(), c.getPlayer().getName(), msg, iteminfo.getSN(), MapleInventoryIdentifier.getInstance());
             c.getPlayer().modifyCSPoints(1, -iteminfo.getPrice(), false);
-            c.write(CSPacket.sendGift(iteminfo.getPrice(), iteminfo.getId(), iteminfo.getCount(), partnerName, false));
+            c.SendPacket(CSPacket.sendGift(iteminfo.getPrice(), iteminfo.getId(), iteminfo.getCount(), partnerName, false));
         }
     }
 
     public static void Regular(InPacket iPacket, MapleClient c, User chr) {
         iPacket.Skip(1);
-        int unk = iPacket.DecodeInteger();//is1
-        CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInteger());
-        int itemPrice = iPacket.DecodeInteger();
+        int unk = iPacket.DecodeInt();//is1
+        CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInt());
+        int itemPrice = iPacket.DecodeInt();
         List<Integer> ccc = null;
         if (iteminfo != null) {
             ccc = CashItemFactory.getInstance().getPackageItems(iteminfo.getId());
         }
         if (iteminfo == null || ccc == null || c.getPlayer().getCSPoints(itemPrice) < iteminfo.getPrice()) {
-            c.write(CSPacket.sendCSFail(0));
+            c.SendPacket(CSPacket.sendCSFail(0));
             playerCashShopInfo(c);
             return;
         } else if (!iteminfo.genderEquals(c.getPlayer().getGender())) {
-            c.write(CSPacket.sendCSFail(0xA6));
+            c.SendPacket(CSPacket.sendCSFail(0xA6));
             playerCashShopInfo(c);
             return;
         } else if (c.getPlayer().getCashInventory().getItemsSize() >= (100 - ccc.size())) {
-            c.write(CSPacket.sendCSFail(0xB1));
+            c.SendPacket(CSPacket.sendCSFail(0xB1));
             playerCashShopInfo(c);
             return;
         }
@@ -94,6 +94,6 @@ public class PurchasePackage {
             c.getPlayer().getCashInventory().addToInventory(itemz);
         }
         chr.modifyCSPoints(itemPrice, -iteminfo.getPrice(), false);
-        c.write(CSPacket.showBoughtCSPackage(ccz, c.getAccID()));
+        c.SendPacket(CSPacket.showBoughtCSPackage(ccz, c.getAccID()));
     }
 }

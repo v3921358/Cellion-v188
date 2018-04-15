@@ -41,15 +41,15 @@ public class MapleNPC extends AbstractLoadedMapleLife {
     public void sendSpawnData(final MapleClient client) {
         if (getId() >= 9901000) {
         } else {
-            client.write(NPCPacket.spawnNPC(this, true));
-            client.write(NPCPacket.spawnNPCRequestController(this, true));
+            client.SendPacket(NPCPacket.spawnNPC(this, true));
+            client.SendPacket(NPCPacket.spawnNPCRequestController(this, true));
         }
     }
 
     @Override
     public final void sendDestroyData(final MapleClient client) {
-        client.write(NPCPacket.removeNPCController(getObjectId()));
-        client.write(NPCPacket.removeNPC(getObjectId()));
+        client.SendPacket(NPCPacket.removeNPCController(getObjectId()));
+        client.SendPacket(NPCPacket.removeNPC(getObjectId()));
     }
 
     @Override

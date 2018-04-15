@@ -27,7 +27,7 @@ import handling.world.InterServerHandler;
 import net.InPacket;
 import scripting.provider.NPCScriptManager;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class FarmEntryHandler implements ProcessPacket<MapleClient> {
 
@@ -40,7 +40,7 @@ public final class FarmEntryHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
 
         if (!ServerConstants.FARM) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             NPCScriptManager.getInstance().getCM(c).dispose();
             NPCScriptManager.getInstance().dispose(c);
             return;

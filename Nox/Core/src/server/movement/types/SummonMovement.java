@@ -10,7 +10,7 @@ import server.maps.objects.User;
 import server.maps.objects.Summon;
 import server.movement.LifeMovementFragment;
 import tools.packet.CField.SummonPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  * @author Steven
@@ -26,7 +26,7 @@ public class SummonMovement implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
-        int oid = iPacket.DecodeInteger();
+        int oid = iPacket.DecodeInt();
         Summon sum = null;
         List<Summon> summons = chr.getSummonsReadLock();
         try {
@@ -39,7 +39,7 @@ public class SummonMovement implements ProcessPacket<MapleClient> {
             chr.unlockSummonsReadLock();
         }
         if (sum != null) {
-            sum.settEncodedGatherDuration(iPacket.DecodeInteger());
+            sum.settEncodedGatherDuration(iPacket.DecodeInt());
             sum.setxCS(iPacket.DecodeShort());
             sum.setyCS(iPacket.DecodeShort());
             sum.setvXCS(iPacket.DecodeShort());

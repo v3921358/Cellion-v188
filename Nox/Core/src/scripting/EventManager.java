@@ -462,13 +462,13 @@ public class EventManager {
             eventChannel[i] = Randomizer.nextInt(ChannelServer.getAllInstances().size() - 4) + 2 + i; //2-13
         }
     }
-    
+
     ///
-    
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
 
     /**
      * Adds and returns an event that executes after a given delay.
+     *
      * @param callable The method that should be called
      * @param delay The delay (in ms) after which the call should start
      * @param <V> Return type of the given callable
@@ -480,6 +480,7 @@ public class EventManager {
 
     /**
      * Adds and returns an event that executes after a given delay.
+     *
      * @param callable The method that should be called
      * @param delay The delay after which the call should start
      * @param timeUnit The time unit of the delay
@@ -491,9 +492,10 @@ public class EventManager {
     }
 
     /**
-     * Adds and returns an event that executes after a given initial delay, and then after every delay.
-     * See https://stackoverflow.com/questions/24649842/scheduleatfixedrate-vs-schedulewithfixeddelay for difference
-     * between this method and addFixedDelayEvent.
+     * Adds and returns an event that executes after a given initial delay, and then after every delay. See
+     * https://stackoverflow.com/questions/24649842/scheduleatfixedrate-vs-schedulewithfixeddelay for difference between this method and
+     * addFixedDelayEvent.
+     *
      * @param runnable The method that should be run
      * @param initialDelay The time that it should take before the first execution should start
      * @param delay The time it should (in ms) take between the start of execution n and execution n+1
@@ -504,9 +506,10 @@ public class EventManager {
     }
 
     /**
-     * Adds and returns an event that executes after a given initial delay, and then after every delay.
-     * See https://stackoverflow.com/questions/24649842/scheduleatfixedrate-vs-schedulewithfixeddelay for difference
-     * between this method and addFixedDelayEvent.
+     * Adds and returns an event that executes after a given initial delay, and then after every delay. See
+     * https://stackoverflow.com/questions/24649842/scheduleatfixedrate-vs-schedulewithfixeddelay for difference between this method and
+     * addFixedDelayEvent.
+     *
      * @param runnable The method that should be run
      * @param initialDelay The time that it should take before the first execution should start
      * @param delay The time it should (in ms) take between the start of execution n and execution n+1
@@ -520,9 +523,10 @@ public class EventManager {
     }
 
     /**
-     * Adds and returns an event that executes after a given initial delay, and then after every delay.
-     * See https://stackoverflow.com/questions/24649842/scheduleatfixedrate-vs-schedulewithfixeddelay for difference
-     * between this method and addFixedDelayEvent.
+     * Adds and returns an event that executes after a given initial delay, and then after every delay. See
+     * https://stackoverflow.com/questions/24649842/scheduleatfixedrate-vs-schedulewithfixeddelay for difference between this method and
+     * addFixedDelayEvent.
+     *
      * @param runnable The method that should be run
      * @param initialDelay The time that it should take before the first execution should start
      * @param delay The time it should take between the start of execution n and execution n+1
@@ -534,9 +538,10 @@ public class EventManager {
     }
 
     /**
-     * Adds and returns an event that executes after a given initial delay, and then after every delay after the task has finished.
-     * See https://stackoverflow.com/questions/24649842/scheduleatfixedrate-vs-schedulewithfixeddelay for difference
-     * between this method and addFixedDelayEvent.
+     * Adds and returns an event that executes after a given initial delay, and then after every delay after the task has finished. See
+     * https://stackoverflow.com/questions/24649842/scheduleatfixedrate-vs-schedulewithfixeddelay for difference between this method and
+     * addFixedDelayEvent.
+     *
      * @param runnable The method that should be run
      * @param initialDelay The time that it should take before the first execution should start
      * @param delay The time it should (in ms) take between the start of execution n and execution n+1
@@ -547,9 +552,10 @@ public class EventManager {
     }
 
     /**
-     * Adds and returns an event that executes after a given initial delay, and then after every delay.
-     * See https://stackoverflow.com/questions/24649842/scheduleatfixedrate-vs-schedulewithfixeddelay for difference
-     * between this method and addFixedDelayEvent.
+     * Adds and returns an event that executes after a given initial delay, and then after every delay. See
+     * https://stackoverflow.com/questions/24649842/scheduleatfixedrate-vs-schedulewithfixeddelay for difference between this method and
+     * addFixedDelayEvent.
+     *
      * @param runnable The method that should be run
      * @param initialDelay The time that it should take before the first execution should start
      * @param delay The time it should take between the start of execution n and execution n+1
@@ -562,6 +568,7 @@ public class EventManager {
 
     /**
      * Adds and returns an event that executes after a given delay.
+     *
      * @param runnable The method that should be run
      * @param delay The delay (in ms) after which the call should start
      * @return The created event (ScheduledFuture)
@@ -572,6 +579,7 @@ public class EventManager {
 
     /**
      * Adds and returns an event that executes after a given delay.
+     *
      * @param runnable The method that should be run
      * @param delay The delay after which the call should start
      * @param timeUnit The time unit of the delay

@@ -12,7 +12,7 @@ import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import tools.packet.MobPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -29,11 +29,11 @@ public class UseCatchItemHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
 
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
         final byte slot = (byte) iPacket.DecodeShort();
-        final int itemid = iPacket.DecodeInteger();
-        final Mob mob = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
+        final int itemid = iPacket.DecodeInt();
+        final Mob mob = chr.getMap().getMonsterByOid(iPacket.DecodeInt());
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
         final MapleMap map = chr.getMap();
 
@@ -47,9 +47,9 @@ public class UseCatchItemHandler implements ProcessPacket<MapleClient> {
                 }
             } else {
                 map.broadcastMessage(MobPacket.catchMonster(mob.getObjectId(), itemid, (byte) 0));
-                c.write(CWvsContext.catchMob(mob.getId(), itemid, (byte) 0));
+                c.SendPacket(CWvsContext.catchMob(mob.getId(), itemid, (byte) 0));
             }
         }
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 }

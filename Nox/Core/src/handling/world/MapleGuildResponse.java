@@ -20,7 +20,7 @@
  */
 package handling.world;
 
-import net.Packet;
+import net.OutPacket;
 import tools.packet.CWvsContext.GuildPacket;
 
 public enum MapleGuildResponse {
@@ -38,7 +38,7 @@ public enum MapleGuildResponse {
         return value;
     }
 
-    public Packet createPacket() {
+    public OutPacket createPacket() {
         return GuildPacket.genericGuildMessage((byte) value);
     }
 }

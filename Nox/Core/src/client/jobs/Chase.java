@@ -1,5 +1,5 @@
 /*
- * Rexion Development
+ * Cellion Development
  */
 package client.jobs;
 
@@ -24,8 +24,8 @@ import tools.packet.CField;
  * @author Mazen Massoud
  */
 public class Chase {
-    
+
     public static class BeastTamerHandler {
-        
+
     }
 }

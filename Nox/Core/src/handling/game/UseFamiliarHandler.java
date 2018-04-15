@@ -33,7 +33,7 @@ import server.maps.objects.MonsterFamiliar;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class UseFamiliarHandler implements ProcessPacket<MapleClient> {
 
@@ -46,15 +46,15 @@ public final class UseFamiliarHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if ((chr == null) || (!chr.isAlive()) || (chr.getMap() == null) || (chr.hasBlockedInventory())) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         short slot = iPacket.DecodeShort();
-        int itemId = iPacket.DecodeInteger();
+        int itemId = iPacket.DecodeInt();
         Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
         if ((toUse == null) || (toUse.getQuantity() < 1) || (toUse.getItemId() != itemId) || (itemId / 10000 != 287)) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         MapleFamiliar f = MapleItemInformationProvider.getInstance().getFamiliarByItem(itemId);
@@ -72,7 +72,7 @@ public final class UseFamiliarHandler implements ProcessPacket<MapleClient> {
                 c.getPlayer().getFamiliars().put(f.getFamiliar(), mf);
             }
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false, false);
-            c.write(CField.registerFamiliar(mf));
+            c.SendPacket(CField.registerFamiliar(mf));
         }
     }
 

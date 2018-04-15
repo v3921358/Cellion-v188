@@ -25,7 +25,7 @@ import client.MapleClient;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class MonsterBookInfoRequest implements ProcessPacket<MapleClient> {
 
@@ -39,12 +39,12 @@ public final class MonsterBookInfoRequest implements ProcessPacket<MapleClient> 
         if (c.getPlayer() == null || c.getPlayer().getMap() == null) {
             return;
         }
-        iPacket.DecodeInteger(); // tick
-        final User player = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInteger());
-        c.write(CWvsContext.enableActions());
+        iPacket.DecodeInt(); // tick
+        final User player = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInt());
+        c.SendPacket(CWvsContext.enableActions());
         if (player != null) {
             if (!player.isGM() || c.getPlayer().isGM()) {
-                c.write(CWvsContext.getMonsterBookInfo(player));
+                c.SendPacket(CWvsContext.getMonsterBookInfo(player));
             }
         }
     }

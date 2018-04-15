@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Comparator;
 
-import database.DatabaseConnection;
+import database.Database;
 import server.MapleInventoryManipulator;
 import server.maps.objects.User;
 import tools.LogHelper;
@@ -36,8 +36,8 @@ public class MapleRing
     }
 
     public static MapleRing loadFromDb(int ringId, boolean equipped) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             MapleRing ret;
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM rings WHERE ringId = ?")) {
                 ps.setInt(1, ringId);
@@ -58,24 +58,29 @@ public class MapleRing
     }
 
     public static void addToDB(int itemid, User chr, String player, int id, int[] ringId) throws SQLException {
-        Connection con = DatabaseConnection.getConnection();
-        PreparedStatement ps = con.prepareStatement("INSERT INTO rings (ringId, itemid, partnerChrId, partnerName, partnerRingId) VALUES (?, ?, ?, ?, ?)");
-        ps.setInt(1, ringId[0]);
-        ps.setInt(2, itemid);
-        ps.setInt(3, chr.getId());
-        ps.setString(4, chr.getName());
-        ps.setInt(5, ringId[1]);
-        ps.executeUpdate();
-        ps.close();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            PreparedStatement ps = con.prepareStatement("INSERT INTO rings (ringId, itemid, partnerChrId, partnerName, partnerRingId) VALUES (?, ?, ?, ?, ?)");
+            ps.setInt(1, ringId[0]);
+            ps.setInt(2, itemid);
+            ps.setInt(3, chr.getId());
+            ps.setString(4, chr.getName());
+            ps.setInt(5, ringId[1]);
+            ps.executeUpdate();
+            ps.close();
 
-        ps = con.prepareStatement("INSERT INTO rings (ringId, itemid, partnerChrId, partnerName, partnerRingId) VALUES (?, ?, ?, ?, ?)");
-        ps.setInt(1, ringId[1]);
-        ps.setInt(2, itemid);
-        ps.setInt(3, id);
-        ps.setString(4, player);
-        ps.setInt(5, ringId[0]);
-        ps.executeUpdate();
-        ps.close();
+            ps = con.prepareStatement("INSERT INTO rings (ringId, itemid, partnerChrId, partnerName, partnerRingId) VALUES (?, ?, ?, ?, ?)");
+            ps.setInt(1, ringId[1]);
+            ps.setInt(2, itemid);
+            ps.setInt(3, id);
+            ps.setString(4, player);
+            ps.setInt(5, ringId[0]);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
+            throw ex;
+        }
     }
 
     public static int createRing(int itemid, User partner1, String partner2, String msg, int id2, int sn) {
@@ -164,8 +169,8 @@ public class MapleRing
     }
 
     public static void removeRingFromDb(User player) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             PreparedStatement ps = con.prepareStatement("SELECT * FROM rings WHERE partnerChrId = ?");
             ps.setInt(1, player.getId());
             ResultSet rs = ps.executeQuery();

@@ -2,7 +2,7 @@ package handling.game;
 
 import client.MapleClient;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class NormalCloseRangeAttack implements ProcessPacket<MapleClient> {
 

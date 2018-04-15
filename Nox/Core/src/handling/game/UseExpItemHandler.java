@@ -8,7 +8,7 @@ import server.MapleItemInformationProvider;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -25,21 +25,21 @@ public class UseExpItemHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
         if (chr == null || !chr.isAlive() || chr.getMap() == null || chr.hasBlockedInventory() || chr.inPVP()) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
 
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         final byte slot = (byte) iPacket.DecodeShort();
-        final int itemId = iPacket.DecodeInteger();
+        final int itemId = iPacket.DecodeInt();
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
 
         if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         if (!MapleItemInformationProvider.getInstance().getEquipStats(itemId).containsKey("exp")) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         MapleItemInformationProvider.getInstance().getEquipStats(itemId).get("exp");

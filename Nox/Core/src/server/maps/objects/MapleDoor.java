@@ -101,11 +101,11 @@ public class MapleDoor extends MapleMapObject {
             return;
         }
         if (target.getId() == client.getPlayer().getMapId() || getOwnerId() == client.getPlayer().getId() || (getOwner() != null && getOwner().getParty() != null && client.getPlayer().getParty() != null && getOwner().getParty().getId() == client.getPlayer().getParty().getId())) {
-            client.write(CField.spawnDoor(getOwnerId(), target.getId() == client.getPlayer().getMapId() ? targetPosition : townPortal.getPosition(), originalCharacterPosition, true, skillId)); //spawnDoor always has same position.
+            client.SendPacket(CField.spawnDoor(getOwnerId(), target.getId() == client.getPlayer().getMapId() ? targetPosition : townPortal.getPosition(), originalCharacterPosition, true, skillId)); //spawnDoor always has same position.
             if (getOwner() != null && getOwner().getParty() != null && client.getPlayer().getParty() != null && (getOwnerId() == client.getPlayer().getId() || getOwner().getParty().getId() == client.getPlayer().getParty().getId())) {
-                client.write(PartyPacket.partyPortal(town.getId(), target.getId(), skillId, target.getId() == client.getPlayer().getMapId() ? targetPosition : townPortal.getPosition(), true));
+                client.SendPacket(PartyPacket.partyPortal(town.getId(), target.getId(), skillId, target.getId() == client.getPlayer().getMapId() ? targetPosition : townPortal.getPosition(), true));
             }
-            client.write(CWvsContext.spawnPortal(town.getId(), target.getId(), skillId, target.getId() == client.getPlayer().getMapId() ? targetPosition : townPortal.getPosition()));
+            client.SendPacket(CWvsContext.spawnPortal(town.getId(), target.getId(), skillId, target.getId() == client.getPlayer().getMapId() ? targetPosition : townPortal.getPosition()));
         }
     }
 
@@ -115,11 +115,11 @@ public class MapleDoor extends MapleMapObject {
             return;
         }
         if (target.getId() == client.getPlayer().getMapId() || getOwnerId() == client.getPlayer().getId() || (getOwner() != null && getOwner().getParty() != null && client.getPlayer().getParty() != null && getOwner().getParty().getId() == client.getPlayer().getParty().getId())) {
-            client.write(CField.removeDoor(getOwnerId(), false));
+            client.SendPacket(CField.removeDoor(getOwnerId(), false));
             if (getOwner() != null && getOwner().getParty() != null && client.getPlayer().getParty() != null && (getOwnerId() == client.getPlayer().getId() || getOwner().getParty().getId() == client.getPlayer().getParty().getId())) {
-                client.write(PartyPacket.partyPortal(999999999, 999999999, 0, new Point(-1, -1), false));
+                client.SendPacket(PartyPacket.partyPortal(999999999, 999999999, 0, new Point(-1, -1), false));
             }
-            client.write(CWvsContext.spawnPortal(999999999, 999999999, 0, null));
+            client.SendPacket(CWvsContext.spawnPortal(999999999, 999999999, 0, null));
         }
     }
 
@@ -131,7 +131,7 @@ public class MapleDoor extends MapleMapObject {
                 chr.changeMap(town, townPortal);
             }
         } else {
-            chr.getClient().write(CWvsContext.enableActions());
+            chr.getClient().SendPacket(CWvsContext.enableActions());
         }
     }
 

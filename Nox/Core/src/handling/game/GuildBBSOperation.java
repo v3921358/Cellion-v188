@@ -6,7 +6,7 @@ import handling.world.MapleBBSThread;
 import java.util.List;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -34,12 +34,12 @@ public class GuildBBSOperation implements ProcessPacket<MapleClient> {
                 }
                 final boolean bEdit = iPacket.DecodeByte() > 0;
                 if (bEdit) {
-                    localthreadid = iPacket.DecodeInteger();
+                    localthreadid = iPacket.DecodeInt();
                 }
                 final boolean bNotice = iPacket.DecodeByte() > 0;
                 final String title = correctLength(iPacket.DecodeString(), 25);
                 String text = correctLength(iPacket.DecodeString(), 600);
-                final int icon = iPacket.DecodeInteger();
+                final int icon = iPacket.DecodeInt();
                 if (icon >= 0x64 && icon <= 0x6a) {
                     if (!c.getPlayer().haveItem(5290000 + icon - 0x64, 1, false, true)) {
                         return; // hax, using an nx icon that s/he doesn't have
@@ -54,15 +54,15 @@ public class GuildBBSOperation implements ProcessPacket<MapleClient> {
                 }
                 break;
             case 1: // delete a thread
-                localthreadid = iPacket.DecodeInteger();
+                localthreadid = iPacket.DecodeInt();
                 deleteBBSThread(c, localthreadid);
                 break;
             case 2: // list threads
-                int start = iPacket.DecodeInteger();
+                int start = iPacket.DecodeInt();
                 listBBSThreads(c, start * 10);
                 break;
             case 3: // list thread + reply, followed by id (int)
-                localthreadid = iPacket.DecodeInteger();
+                localthreadid = iPacket.DecodeInt();
                 displayThread(c, localthreadid);
                 break;
             case 4: // reply
@@ -70,13 +70,13 @@ public class GuildBBSOperation implements ProcessPacket<MapleClient> {
                     c.getPlayer().dropMessage(1, "You may only start a new reply every 60 seconds.");
                     return;
                 }
-                localthreadid = iPacket.DecodeInteger();
+                localthreadid = iPacket.DecodeInt();
                 text = correctLength(iPacket.DecodeString(), 25);
                 newBBSReply(c, localthreadid, text);
                 break;
             case 5: // delete reply
-                localthreadid = iPacket.DecodeInteger();
-                int replyid = iPacket.DecodeInteger();
+                localthreadid = iPacket.DecodeInt();
+                int replyid = iPacket.DecodeInt();
                 deleteBBSReply(c, localthreadid, replyid);
                 break;
         }
@@ -133,7 +133,7 @@ public class GuildBBSOperation implements ProcessPacket<MapleClient> {
         if (c.getPlayer().getGuildId() <= 0) {
             return;
         }
-        c.write(CWvsContext.GuildPacket.BBSThreadList(World.Guild.getBBS(c.getPlayer().getGuildId()), start));
+        c.SendPacket(CWvsContext.GuildPacket.BBSThreadList(World.Guild.getBBS(c.getPlayer().getGuildId()), start));
     }
 
     private static void displayThread(final MapleClient c, final int localthreadid) {
@@ -144,7 +144,7 @@ public class GuildBBSOperation implements ProcessPacket<MapleClient> {
         if (bbsList != null) {
             for (MapleBBSThread t : bbsList) {
                 if (t != null && t.localthreadID == localthreadid) {
-                    c.write(CWvsContext.GuildPacket.showThread(t));
+                    c.SendPacket(CWvsContext.GuildPacket.showThread(t));
                 }
             }
         }

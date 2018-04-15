@@ -22,7 +22,7 @@ import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.JobPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.life.mob.MobStatRequest;
 import service.RecvPacketOpcode;
 
@@ -42,18 +42,18 @@ public final class MagicAttack implements ProcessPacket<MapleClient> {
 
         //AttackInfo attack = DamageParse.parseDmgMa(iPacket, chr);
         AttackInfo pAttack = DamageParse.OnAttack(RecvPacketOpcode.UserMagicAttack, iPacket, pPlayer);
-        
+
         if (GameConstants.isLuminous(pPlayer.getJob())) {
             LuminousHandler.handleLuminousGauge(pPlayer, pAttack.skill);
         }
-        
+
         if (pAttack == null) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         Skill pSkill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(pAttack.skill));
         if (pSkill == null || (GameConstants.isAngel(pAttack.skill) && (pPlayer.getStat().equippedSummon % 10000 != pAttack.skill % 10000))) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         int nSkillLevel = pPlayer.getTotalSkillLevel(pSkill);
@@ -63,12 +63,12 @@ public final class MagicAttack implements ProcessPacket<MapleClient> {
             //return;
         } else if (pEffect.getCooldown(pPlayer) > 0) {  // Handle cooldowns
             if (pPlayer.skillisCooling(pAttack.skill)) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             pPlayer.addCooldown(pAttack.skill, System.currentTimeMillis(), pEffect.getCooldown(pPlayer));
         }
-        
+
         int bulletCount = 1;
         switch (pAttack.skill) {
             case 140001289: // Psychic Attack
@@ -119,7 +119,7 @@ public final class MagicAttack implements ProcessPacket<MapleClient> {
 
         // Kinesis Psychic Points handling.
         if (GameConstants.isKinesis(pPlayer.getJob())) {
-           KinesisHandler.handlePsychicPoint(pPlayer, pAttack.skill);
+            KinesisHandler.handlePsychicPoint(pPlayer, pAttack.skill);
         }
 
         // Map attack/movement broadcast, this needs to be broadcasted first before applying
@@ -148,14 +148,14 @@ public final class MagicAttack implements ProcessPacket<MapleClient> {
             case 27101100: //Sylvan Lance
             case 27111100: //Spectral Light
             case 27121100: //Reflection
-                chr.getClient().write(JobPacket.LuminousPacket.giveLuminousState(20040216, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
+                chr.getClient().SendPacket(JobPacket.LuminousPacket.giveLuminousState(20040216, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
                 chr.setLuminousState(20040216);
                 break;
             case 27001201:
             case 27101202:
             case 27111202:
             case 27121202:
-                chr.getClient().write(JobPacket.LuminousPacket.giveLuminousState(20040217, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
+                chr.getClient().SendPacket(JobPacket.LuminousPacket.giveLuminousState(20040217, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
                 chr.setLuminousState(20040217);
                 break;
         }

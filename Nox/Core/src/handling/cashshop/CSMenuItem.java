@@ -6,9 +6,10 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import database.DatabaseConnection;
+import database.Database;
 import provider.data.HexTool;
 import net.OutPacket;
+import tools.LogHelper;
 import tools.packet.PacketHelper;
 
 public class CSMenuItem {
@@ -16,8 +17,8 @@ public class CSMenuItem {
     private static final List<CSMenuItem> pictureItems = new LinkedList<>();
 
     public static void loadFromDb() {
-        Connection con = DatabaseConnection.getConnection();
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             try (ResultSet rs = con.prepareStatement("SELECT * FROM cs_picture").executeQuery()) {
                 while (rs.next()) {
                     pictureItems.add(new CSMenuItem(
@@ -34,8 +35,11 @@ public class CSMenuItem {
                             rs.getInt("duration"),
                             rs.getInt("likes")));
                 }
+            } catch (SQLException ex) {
+                LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
             }
         } catch (SQLException ex) {
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
         }
 
     }
@@ -59,27 +63,27 @@ public class CSMenuItem {
     }
 
     public static void writeData(CSMenuItem csmi, OutPacket oPacket) {
-        oPacket.EncodeInteger(csmi.c);
-        oPacket.EncodeInteger(csmi.sc);
-        oPacket.EncodeInteger(csmi.p);
+        oPacket.EncodeInt(csmi.c);
+        oPacket.EncodeInt(csmi.sc);
+        oPacket.EncodeInt(csmi.p);
         oPacket.EncodeString(csmi.img); // TODO add check if cat != 4 write empty string
-        oPacket.EncodeInteger(csmi.sn);
-        oPacket.EncodeInteger(csmi.id);
-        oPacket.EncodeInteger(1);
-        oPacket.EncodeInteger(csmi.flag);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0); // this one changes
-        oPacket.EncodeInteger(csmi.op);
+        oPacket.EncodeInt(csmi.sn);
+        oPacket.EncodeInt(csmi.id);
+        oPacket.EncodeInt(1);
+        oPacket.EncodeInt(csmi.flag);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(0); // this one changes
+        oPacket.EncodeInt(csmi.op);
         oPacket.Encode(HexTool.getByteArrayFromHexString("00 80 22 D6 94 EF C4 01")); // 1/1/2005
         oPacket.EncodeLong(PacketHelper.MAX_TIME);
         oPacket.Encode(HexTool.getByteArrayFromHexString("00 80 22 D6 94 EF C4 01")); // 1/1/2005
         oPacket.EncodeLong(PacketHelper.MAX_TIME);
-        oPacket.EncodeInteger(csmi.sp);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(csmi.qty);
-        oPacket.EncodeInteger(csmi.dur);
+        oPacket.EncodeInt(csmi.sp);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(csmi.qty);
+        oPacket.EncodeInt(csmi.dur);
         oPacket.Encode(HexTool.getByteArrayFromHexString("01 00 01 00 01 00 00 00 01 00 02 00 00 00")); // flags maybe
-        oPacket.EncodeInteger(csmi.likes);
+        oPacket.EncodeInt(csmi.likes);
         oPacket.Fill(0, 20);
     }
 }

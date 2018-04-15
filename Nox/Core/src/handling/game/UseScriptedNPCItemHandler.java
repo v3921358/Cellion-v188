@@ -25,7 +25,7 @@ import server.maps.objects.Pet;
 import server.quest.MapleQuest;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.skills.VCore;
 import server.skills.VMatrixRecord;
 
@@ -44,9 +44,9 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
 
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         final byte slot = (byte) iPacket.DecodeShort();
-        final int itemId = iPacket.DecodeInteger();
+        final int itemId = iPacket.DecodeInt();
         final Item toUse = chr.getInventory(GameConstants.getInventoryType(itemId)).getItem(slot);
         long expiration_days = 0;
         int mountid = 0;
@@ -1194,11 +1194,11 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
                         String skinString = String.valueOf(skinnum);
                         queststatus.setCustomData(skinString == null ? "0" : skinString);
                         c.getPlayer().updateQuest(queststatus);
-                        c.write(CWvsContext.showQuestMsg("Damage skin has been changed!"));
+                        c.SendPacket(CWvsContext.showQuestMsg("Damage skin has been changed!"));
                         chr.getMap().broadcastMessage(chr, CWvsContext.showForeignDamageSkin(chr, skinnum), false);
                         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
                     } else {
-                        c.write(CWvsContext.showQuestMsg("Zero can't used skins!"));
+                        c.SendPacket(CWvsContext.showQuestMsg("Zero can't used skins!"));
                     }
                     break;
                 }
@@ -1359,6 +1359,6 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
                 c.getPlayer().dropMessage(5, "The skill has been attained.");
             }
         }
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 }

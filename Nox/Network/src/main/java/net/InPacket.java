@@ -1,157 +1,193 @@
+/*
+ * Copyright (C) 2018 Kaz Voeten
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package net;
 
+import crypto.AESCipher;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
+import util.HexUtils;
 
 /**
- * Artifact from Invictus. Modified by Zygon for Desu, modified by Novak for
- * ResistanceMS
  *
- * @author Zygon
- * @author Novak (reworked)
+ * @author Kaz Voeten
  */
-public final class InPacket {
+public class InPacket {
 
-    private int nOffset;
-    private byte[] aData;
+    private final ByteBuf pRecvBuff;
+    private byte[] aRawData;
+    public int uRawSeq = 0, uDataLen = 0, nState = 0;
     private static Charset ASCII = Charset.forName("US-ASCII");
 
     public InPacket() {
-        nOffset = -1;
-        aData = null;
+        this.pRecvBuff = Unpooled.buffer().order(ByteOrder.LITTLE_ENDIAN);
+    }
+    
+    public InPacket(int uDataLen) {
+        this.pRecvBuff = Unpooled.buffer().order(ByteOrder.LITTLE_ENDIAN);
+        this.uDataLen = uDataLen;
+        this.nState = 1;
     }
 
-    public InPacket Next(byte[] d) {
-        nOffset = 0;
-        aData = d;
-        return this;
+    public boolean DecryptData(int uSeqKey) {
+        if (uDataLen > 0 && aRawData.length >= uDataLen) {
+            AESCipher.Crypt(aRawData, uSeqKey, false);
+            pRecvBuff.writeBytes(aRawData);
+            return true;
+        }
+        return false;
     }
 
-    public InPacket Next(Packet p) {
-        return InPacket.this.Next(p.GetData());
+    public int AppendBuffer(ByteBuf pBuff, boolean bEncrypt) {
+        int uSize = pBuff.readableBytes();
+        if (nState == 0) {
+            if (uSize >= 4) {
+                nState = 1;
+                uRawSeq = pBuff.readShort();
+                uDataLen = pBuff.readShort();
+                if (bEncrypt) {
+                    uDataLen ^= uRawSeq;
+                }
+            }
+            return nState;
+        }
+        if (nState == 1) {
+            if (uSize >= uDataLen) {
+                if (bEncrypt) {
+                    aRawData = new byte[uDataLen];
+                    pBuff.readBytes(aRawData);
+                } else {
+                    pRecvBuff.writeBytes(pBuff);
+                }
+                nState = 2;
+            }
+        }
+        return nState;
+    }
+
+    public short DecodeSeqBase(int uSeqKey) {
+        return (short) ((uSeqKey >> 16) ^ uRawSeq);
     }
 
     public int Decode() {
-        try {
-            return 0xFF & aData[nOffset++];
-        } catch (Exception e) {
-            return -1;
-        }
+        return pRecvBuff.readByte();
     }
 
-    public void Decode(byte[] in) {
-        InPacket.this.Decode(in, 0, in.length);
+    public void Decode(byte[] aData) {
+        Decode(aData, 0, aData.length);
     }
 
-    public void Decode(byte[] in, int nOffset, int nLen) {
+    public void Decode(byte[] aData, int nOffset, int nLen) {
         for (int i = nOffset; i < nLen; i++) {
-            in[i] = DecodeByte();
+            aData[i] = DecodeByte();
         }
     }
 
     public byte[] Decode(int nLen) {
-        byte[] ret = new byte[nLen];
+        byte[] aRet = new byte[nLen];
         for (int i = 0; i < nLen; i++) {
-            ret[i] = DecodeByte();
+            aRet[i] = DecodeByte();
         }
-        return ret;
+        return aRet;
     }
 
-    public boolean DecodeBoolean() {
-        return InPacket.this.Decode() > 0;
+    public boolean DecodeBool() {
+        return pRecvBuff.readBoolean();
     }
 
     public byte DecodeByte() {
-        return (byte) InPacket.this.Decode();
+        return (byte) Decode();
     }
 
     public short DecodeShort() {
-        return (short) (InPacket.this.Decode() + (InPacket.this.Decode() << 8));
+        return pRecvBuff.readShort();
     }
 
     public char DecodeChar() {
-        return (char) (InPacket.this.Decode() + (InPacket.this.Decode() << 8));
+        return pRecvBuff.readChar();
     }
 
-    public int DecodeInteger() {
-        return InPacket.this.Decode() + (InPacket.this.Decode() << 8) + (InPacket.this.Decode() << 16)
-                + (InPacket.this.Decode() << 24);
+    public int DecodeInt() {
+        return pRecvBuff.readInt();
     }
 
     public float DecodeFloat() {
-        return Float.intBitsToFloat(DecodeInteger());
+        return Float.intBitsToFloat(DecodeInt());
     }
 
     public long DecodeLong() {
-        return InPacket.this.Decode() + (InPacket.this.Decode() << 8) + (InPacket.this.Decode() << 16)
-                + (InPacket.this.Decode() << 24) + (InPacket.this.Decode() << 32)
-                + (InPacket.this.Decode() << 40) + (InPacket.this.Decode() << 48)
-                + (InPacket.this.Decode() << 56);
+        return pRecvBuff.readLong();
     }
 
     public double DecodeDouble() {
         return Double.longBitsToDouble(DecodeLong());
     }
 
-    public String DecodeString(int len) {
-        byte[] sd = new byte[len];
-        for (int i = 0; i < len; i++) {
-            sd[i] = DecodeByte();
+    public String DecodeString(int nLen) {
+        byte[] aData = new byte[nLen];
+        for (int i = 0; i < nLen; i++) {
+            aData[i] = DecodeByte();
         }
-        return new String(sd, ASCII);
+        return new String(aData, ASCII);
     }
 
     public String DecodeString() {
-        return InPacket.this.DecodeString(DecodeShort());
+        return DecodeString(DecodeShort());
     }
 
     public String DecodeNullTerminatedString() {
-        int c = 0;
-        while (InPacket.this.Decode() != 0) {
-            c++;
+        int nOffset = pRecvBuff.readerIndex();
+        int nLen = 0;
+        while (Decode() != 0) {
+            nLen++;
         }
-        nOffset -= (c + 1);
-        return InPacket.this.DecodeString(c);
+        pRecvBuff.readerIndex(nOffset);
+        return DecodeString(nLen);
     }
 
     public Point DecodePosition() {
-        return new Point(this.DecodeShort(), this.DecodeShort());
+        return new Point(DecodeShort(), DecodeShort());
     }
-    
+
     public Rectangle DecodeRectanlge() {
-        return new Rectangle(this.DecodeShort(), this.DecodeShort());
+        return new Rectangle(DecodeShort(), DecodeShort());
     }
 
     public InPacket Skip(int nLen) {
-        nOffset += nLen;
+        pRecvBuff.readerIndex(pRecvBuff.readerIndex() + nLen);
         return this;
     }
 
-    public int Available() {
-        return aData.length - nOffset;
+    public int GetRemainder() {
+        return pRecvBuff.readableBytes();
     }
 
-    public int GetOffset() {
-        return nOffset;
-    }
-
-    public byte[] GetData() {
-        return aData;
-    }
-
-    public void Clear() {
-        nOffset = -1;
-        aData = null;
-    }
-
-    public byte[] GetRemainder() {
-        byte[] remainder = new byte[Available()];
-        System.arraycopy(aData, nOffset, remainder, 0, Available());
-        return remainder;
-    }
-
-    public void Reverse(int nLength) {
-        nOffset -= nLength;
+    @Override
+    public final String toString() {
+        if (pRecvBuff.readableBytes() > 0) {
+            byte[] aData = new byte[pRecvBuff.readableBytes()];
+            int nReaderIndex = pRecvBuff.readerIndex();
+            pRecvBuff.getBytes(nReaderIndex, aData);
+            return HexUtils.ToHex(aData);
+        } else {
+            return "";
+        }
     }
 }

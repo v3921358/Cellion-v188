@@ -5,9 +5,10 @@ import handling.world.World;
 import handling.world.MapleGuild;
 import server.maps.objects.User;
 import net.InPacket;
-import net.Packet;
+import net.OutPacket;
+
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import tools.LogHelper;
 
 /**
@@ -38,12 +39,12 @@ public class AllianceOperationHandler implements ProcessPacket<MapleClient> {
 
     public static void handleAllianceRequest(InPacket iPacket, MapleClient c, boolean denied) {
         if (c.getPlayer().getGuildId() <= 0) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         final MapleGuild gs = World.Guild.getGuild(c.getPlayer().getGuildId());
         if (gs == null) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         byte op = iPacket.DecodeByte();
@@ -74,9 +75,9 @@ public class AllianceOperationHandler implements ProcessPacket<MapleClient> {
         switch (op) {
             case 1: //load... must be in world op
 
-                for (Packet pack : World.Alliance.getAllianceInfo(gs.getAllianceId(), false)) {
+                for (OutPacket pack : World.Alliance.getAllianceInfo(gs.getAllianceId(), false)) {
                     if (pack != null) {
-                        c.write(pack);
+                        c.SendPacket(pack);
                     }
                 }
                 break;
@@ -85,7 +86,7 @@ public class AllianceOperationHandler implements ProcessPacket<MapleClient> {
                 if (newGuild > 0 && c.getPlayer().getAllianceRank() == 1 && leaderid == c.getPlayer().getId()) {
                     chr = c.getChannelServer().getPlayerStorage().getCharacterById(newGuild);
                     if (chr != null && chr.getGuildId() > 0 && World.Alliance.canInvite(gs.getAllianceId())) {
-                        chr.getClient().write(CWvsContext.AlliancePacket.sendAllianceInvite(World.Alliance.getAlliance(gs.getAllianceId()).getName(), c.getPlayer()));
+                        chr.getClient().SendPacket(CWvsContext.AlliancePacket.sendAllianceInvite(World.Alliance.getAlliance(gs.getAllianceId()).getName(), c.getPlayer()));
                         World.Guild.setInvitedId(chr.getGuildId(), gs.getAllianceId());
                     } else {
                         c.getPlayer().dropMessage(1, "Make sure the leader of the guild is online and in your channel.");
@@ -106,9 +107,9 @@ public class AllianceOperationHandler implements ProcessPacket<MapleClient> {
             case 2: //leave; nothing
             case 6: //expel, guildid(int) -> allianceid(don't care, a/b check)
                 final int gid;
-                if (op == 6 && iPacket.Available() >= 4) {
-                    gid = iPacket.DecodeInteger();
-                    if (iPacket.Available() >= 4 && gs.getAllianceId() != iPacket.DecodeInteger()) {
+                if (op == 6 && iPacket.GetRemainder() >= 4) {
+                    gid = iPacket.DecodeInt();
+                    if (iPacket.GetRemainder() >= 4 && gs.getAllianceId() != iPacket.DecodeInt()) {
                         break;
                     }
                 } else {
@@ -122,7 +123,7 @@ public class AllianceOperationHandler implements ProcessPacket<MapleClient> {
                 break;
             case 7: //change leader
                 if (c.getPlayer().getAllianceRank() == 1 && leaderid == c.getPlayer().getId()) {
-                    if (!World.Alliance.changeAllianceLeader(gs.getAllianceId(), iPacket.DecodeInteger())) {
+                    if (!World.Alliance.changeAllianceLeader(gs.getAllianceId(), iPacket.DecodeInt())) {
                         c.getPlayer().dropMessage(5, "An error occured when changing leader.");
                     }
                 }
@@ -138,7 +139,7 @@ public class AllianceOperationHandler implements ProcessPacket<MapleClient> {
                 break;
             case 9:
                 if (c.getPlayer().getAllianceRank() <= 2) {
-                    if (!World.Alliance.changeAllianceRank(gs.getAllianceId(), iPacket.DecodeInteger(), iPacket.DecodeByte())) {
+                    if (!World.Alliance.changeAllianceRank(gs.getAllianceId(), iPacket.DecodeInt(), iPacket.DecodeByte())) {
                         c.getPlayer().dropMessage(5, "An error occured when changing rank.");
                     }
                 }

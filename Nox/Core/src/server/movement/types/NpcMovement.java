@@ -10,7 +10,7 @@ import net.OutPacket;
 import net.InPacket;
 import server.movement.LifeMovementFragment;
 import tools.packet.PacketHelper;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  * @author Steven
@@ -25,20 +25,20 @@ public class NpcMovement implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.NpcMove.getValue());
-        int length = (int) iPacket.Available();
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.NpcMove.getValue());
+        int length = (int) iPacket.GetRemainder();
         if (length == 10) {
-            oPacket.EncodeInteger(iPacket.DecodeInteger()); //Npc Id
-            oPacket.Encode(iPacket.DecodeByte());
-            oPacket.Encode(iPacket.DecodeByte()); // nChatIdx
-            oPacket.EncodeInteger(iPacket.DecodeInteger()); //tDuration
+            oPacket.EncodeInt(iPacket.DecodeInt()); //Npc Id
+            oPacket.EncodeByte(iPacket.DecodeByte());
+            oPacket.EncodeByte(iPacket.DecodeByte()); // nChatIdx
+            oPacket.EncodeInt(iPacket.DecodeInt()); //tDuration
         } else if (length > 10) {
-            oPacket.EncodeInteger(iPacket.DecodeInteger()); //Npc Id
-            oPacket.Encode(iPacket.DecodeByte());
-            oPacket.Encode(iPacket.DecodeByte()); // nChatIdx
-            oPacket.EncodeInteger(iPacket.DecodeInteger()); //tDuration
-            oPacket.EncodeInteger(iPacket.DecodeInteger()); //tEncodedGatherDuration
+            oPacket.EncodeInt(iPacket.DecodeInt()); //Npc Id
+            oPacket.EncodeByte(iPacket.DecodeByte());
+            oPacket.EncodeByte(iPacket.DecodeByte()); // nChatIdx
+            oPacket.EncodeInt(iPacket.DecodeInt()); //tDuration
+            oPacket.EncodeInt(iPacket.DecodeInt()); //tEncodedGatherDuration
             oPacket.EncodeShort(iPacket.DecodeShort()); //x_CS
             oPacket.EncodeShort(iPacket.DecodeShort()); //y_CS
             oPacket.EncodeShort(iPacket.DecodeShort());//vx_CS
@@ -49,7 +49,7 @@ public class NpcMovement implements ProcessPacket<MapleClient> {
         } else {
             return;
         }
-        c.write(oPacket.ToPacket());
+        c.SendPacket(oPacket);
     }
 
 }

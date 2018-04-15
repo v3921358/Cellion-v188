@@ -9,7 +9,7 @@ import net.InPacket;
 import server.maps.objects.User;
 import server.movement.LifeMovementFragment;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  * @author Steven
@@ -28,7 +28,7 @@ public class AndroidMovement implements ProcessPacket<MapleClient> {
         if (chr == null || chr.getAndroid() == null) {
             return;
         }
-        chr.getAndroid().settEncodedGatherDuration(iPacket.DecodeInteger()); //tEncodedGatherDuration
+        chr.getAndroid().settEncodedGatherDuration(iPacket.DecodeInt()); //tEncodedGatherDuration
         chr.getAndroid().setxCS(iPacket.DecodeShort()); //x_CS
         chr.getAndroid().setyCS(iPacket.DecodeShort()); //y_CS
         chr.getAndroid().setvXCS(iPacket.DecodeShort());//vx_CS

@@ -7,7 +7,7 @@ import client.SkillFactory;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -26,8 +26,8 @@ public class DistributeHyperStatHandler implements ProcessPacket<MapleClient> {
         if (chr == null) {
             return;
         }
-        chr.updateTick(iPacket.DecodeInteger());
-        int skillid = iPacket.DecodeInteger(); // 80000400
+        chr.updateTick(iPacket.DecodeInt());
+        int skillid = iPacket.DecodeInt(); // 80000400
 
         Skill skill = SkillFactory.getSkill(skillid);
 
@@ -47,6 +47,6 @@ public class DistributeHyperStatHandler implements ProcessPacket<MapleClient> {
             }
 
         }
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 }

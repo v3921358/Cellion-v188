@@ -9,7 +9,7 @@ import java.util.Map;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.Randomizer;
 
 /**
@@ -27,10 +27,10 @@ public class AutoDistributeAPHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
 
-        chr.updateTick(iPacket.DecodeInteger());
-        iPacket.DecodeInteger();
+        chr.updateTick(iPacket.DecodeInt());
+        iPacket.DecodeInt();
         long primaryStat = iPacket.DecodeLong();
-        int amount = iPacket.DecodeInteger();
+        int amount = iPacket.DecodeInt();
         long secondaryStat = 0;
         int amount2 = 0;
 
@@ -39,7 +39,7 @@ public class AutoDistributeAPHandler implements ProcessPacket<MapleClient> {
 
         if (!GameConstants.isXenon(chr.getJob())) {
             secondaryStat = iPacket.DecodeLong();
-            amount2 = iPacket.DecodeInteger();
+            amount2 = iPacket.DecodeInt();
         }
 
         if (GameConstants.isDemonAvenger(chr.getJob()) && MapleStat.MAXHP.getValue() != 0) {
@@ -57,7 +57,7 @@ public class AutoDistributeAPHandler implements ProcessPacket<MapleClient> {
                 chr.setRemainingAp((short) (chr.getRemainingAp() - (amount)));
                 statupdate.put(MapleStat.AVAILABLEAP, (long) chr.getRemainingAp());
 
-                c.write(CWvsContext.updatePlayerStats(statupdate, true, chr));
+                c.SendPacket(CWvsContext.updatePlayerStats(statupdate, true, chr));
             }
         }
 
@@ -114,7 +114,7 @@ public class AutoDistributeAPHandler implements ProcessPacket<MapleClient> {
             }
             chr.setRemainingAp((short) (chr.getRemainingAp() - (amount + amount2)));
             statupdate.put(MapleStat.AVAILABLEAP, (long) chr.getRemainingAp());
-            c.write(CWvsContext.updatePlayerStats(statupdate, true, chr));
+            c.SendPacket(CWvsContext.updatePlayerStats(statupdate, true, chr));
         }
     }
 

@@ -6,7 +6,7 @@ import handling.world.MapleGuild;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.CWvsContext.GuildPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class GuildJoinRequestHandler implements ProcessPacket<MapleClient> {
 
@@ -20,33 +20,33 @@ public final class GuildJoinRequestHandler implements ProcessPacket<MapleClient>
         if (c.getPlayer() == null) {
             return;
         }
-        int guildId = iPacket.DecodeInteger();
+        int guildId = iPacket.DecodeInt();
         User chr = c.getPlayer();
         MapleGuild guild = World.Guild.getGuild(guildId);
 
         if (guild != null) {
             if (guild.getPendingMembers().contains(chr)) {
                 guild.removePendingGuildMember(chr);
-                c.write(GuildPacket.updateJoinRequestClientInfo(""));
-                chr.getClient().write(GuildPacket.joinGuildRequest(guild, chr, GuildPacket.GuildResult.JoinGuild_Unknown));
-                chr.getClient().write(GuildPacket.findGuild_Done(chr, guildId));
+                c.SendPacket(GuildPacket.updateJoinRequestClientInfo(""));
+                chr.getClient().SendPacket(GuildPacket.joinGuildRequest(guild, chr, GuildPacket.GuildResult.JoinGuild_Unknown));
+                chr.getClient().SendPacket(GuildPacket.findGuild_Done(chr, guildId));
                 chr.setPendingGuildId(0);
             } else {
                 try {
                     guild.addPendingGuildMember(chr);
                     chr.setPendingGuildId(guildId);
                     //c.write(GuildPacket.updateJoinRequestClientInfo(""));
-                    c.write(GuildPacket.updateJoinRequestClientInfo(guild.getName()));
+                    c.SendPacket(GuildPacket.updateJoinRequestClientInfo(guild.getName()));
                 } catch (Exception Ex) {
                     chr.setPendingGuildId(0);
-                    c.write(GuildPacket.updateJoinRequestClientInfo(""));
-                    chr.getClient().write(GuildPacket.joinGuildRequest(guild, chr, GuildPacket.GuildResult.JoinRequest_AlreadyFull));
+                    c.SendPacket(GuildPacket.updateJoinRequestClientInfo(""));
+                    chr.getClient().SendPacket(GuildPacket.joinGuildRequest(guild, chr, GuildPacket.GuildResult.JoinRequest_AlreadyFull));
                 }
             }
         } else {
             chr.setPendingGuildId(0);
-            c.write(GuildPacket.updateJoinRequestClientInfo(""));
-            chr.getClient().write(GuildPacket.joinGuildRequest(guild, chr, GuildPacket.GuildResult.JoinGuild_Unknown));
+            c.SendPacket(GuildPacket.updateJoinRequestClientInfo(""));
+            chr.getClient().SendPacket(GuildPacket.joinGuildRequest(guild, chr, GuildPacket.GuildResult.JoinGuild_Unknown));
         }
     }
 }

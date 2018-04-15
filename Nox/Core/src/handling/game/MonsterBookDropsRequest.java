@@ -11,7 +11,7 @@ import server.life.MonsterGlobalDropEntry;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class MonsterBookDropsRequest implements ProcessPacket<MapleClient> {
 
@@ -26,11 +26,11 @@ public final class MonsterBookDropsRequest implements ProcessPacket<MapleClient>
         if (c.getPlayer() == null || c.getPlayer().getMap() == null) {
             return;
         }
-        chr.updateTick(iPacket.DecodeInteger()); // tick
-        final int cardid = iPacket.DecodeInteger();
+        chr.updateTick(iPacket.DecodeInt()); // tick
+        final int cardid = iPacket.DecodeInt();
         final int mobid = MapleItemInformationProvider.getInstance().getCardMobId(cardid);
         if (mobid <= 0 || !chr.getMonsterBook().hasCard(cardid)) {
-            c.write(CWvsContext.getCardDrops(cardid, null));
+            c.SendPacket(CWvsContext.getCardDrops(cardid, null));
             return;
         }
         final MapleMonsterInformationProvider ii = MapleMonsterInformationProvider.getInstance();
@@ -45,7 +45,7 @@ public final class MonsterBookDropsRequest implements ProcessPacket<MapleClient>
                 newDrops.add(de.itemId);
             }
         }
-        c.write(CWvsContext.getCardDrops(cardid, newDrops));
+        c.SendPacket(CWvsContext.getCardDrops(cardid, newDrops));
     }
 
 }

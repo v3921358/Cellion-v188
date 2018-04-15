@@ -35,10 +35,12 @@ import client.inventory.Item;
 import client.inventory.ItemLoader;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
-import database.DatabaseConnection;
+import database.Database;
 import handling.world.World;
+import static java.sql.Statement.RETURN_GENERATED_KEYS;
+import net.OutPacket;
 import service.ChannelServer;
-import net.Packet;
+
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -84,29 +86,29 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     }
 
     @Override
-    public void broadcastToVisitors(Packet packet) {
+    public void broadcastToVisitors(OutPacket packet) {
         broadcastToVisitors(packet, true);
     }
 
-    public void broadcastToVisitors(Packet packet, boolean owner) {
+    public void broadcastToVisitors(OutPacket packet, boolean owner) {
         for (WeakReference<User> chr : chrs) {
             if (chr != null && chr.get() != null) {
-                chr.get().getClient().write(packet);
+                chr.get().getClient().SendPacket(packet);
             }
         }
         if (getShopType() != IMaplePlayerShop.HIRED_MERCHANT && owner && getMCOwner() != null) {
-            getMCOwner().getClient().write(packet);
+            getMCOwner().getClient().SendPacket(packet);
         }
     }
 
-    public void broadcastToVisitors(Packet packet, int exception) {
+    public void broadcastToVisitors(OutPacket packet, int exception) {
         for (WeakReference<User> chr : chrs) {
             if (chr != null && chr.get() != null && getVisitorSlot(chr.get()) != exception) {
-                chr.get().getClient().write(packet);
+                chr.get().getClient().SendPacket(packet);
             }
         }
         if (getShopType() != IMaplePlayerShop.HIRED_MERCHANT && getMCOwner() != null && exception != ownerId) {
-            getMCOwner().getClient().write(packet);
+            getMCOwner().getClient().SendPacket(packet);
         }
     }
 
@@ -134,14 +136,14 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
         if (getShopType() != IMaplePlayerShop.HIRED_MERCHANT) { //hired merch only
             return false;
         }
-        Connection con = DatabaseConnection.getConnection();
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             PreparedStatement ps = con.prepareStatement("DELETE FROM hiredmerch WHERE accountid = ? OR characterid = ?");
             ps.setInt(1, owneraccount);
             ps.setInt(2, ownerId);
             ps.executeUpdate();
             ps.close();
-            ps = con.prepareStatement("INSERT INTO hiredmerch (characterid, accountid, Mesos, time) VALUES (?, ?, ?, ?)", DatabaseConnection.RETURN_GENERATED_KEYS);
+            ps = con.prepareStatement("INSERT INTO hiredmerch (characterid, accountid, Mesos, time) VALUES (?, ?, ?, ?)", RETURN_GENERATED_KEYS);
             ps.setInt(1, ownerId);
             ps.setInt(2, owneraccount);
             ps.setInt(3, meso.get());
@@ -171,9 +173,10 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
                 item.setQuantity((short) (item.getQuantity() * pItems.bundles));
                 boolean add = iters.add(new Pair<>(item, GameConstants.getInventoryType(item.getItemId())));
             }
-            ItemLoader.HIRED_MERCHANT.saveItems(iters, packageid);
+            ItemLoader.HIRED_MERCHANT.saveItems(iters, packageid, con);
             return true;
         } catch (SQLException se) {
+            se.printStackTrace();
         }
         return false;
     }
@@ -244,7 +247,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
             User visitor = getVisitor(i);
             if (visitor != null) {
                 if (type != -1) {
-                    visitor.getClient().write(PlayerShopPacket.shopErrorMessage(error, type));
+                    visitor.getClient().SendPacket(PlayerShopPacket.shopErrorMessage(error, type));
                 }
                 broadcastToVisitors(PlayerShopPacket.shopVisitorLeave(getVisitorSlot(visitor)), getVisitorSlot(visitor));
                 visitor.setPlayerShop(null);

@@ -7,7 +7,7 @@ import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.CWvsContext;
 import tools.packet.CLogin;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /*
  * @Author Novak
@@ -24,25 +24,25 @@ public final class CharacterBurnRequestHandler implements ProcessPacket<MapleCli
     public void Process(MapleClient c, InPacket iPacket) {
         String errormsg = "The Character Burning Event is currently unavailable. Check our website to see when your characters can burn again.";
         if (!ServerConstants.BURNING_CHARACTER_EVENT || iPacket.DecodeByte() != 0) {
-            c.write(CWvsContext.broadcastMsg(errormsg));
+            c.SendPacket(CWvsContext.broadcastMsg(errormsg));
             return;
         }
-        int accountId = iPacket.DecodeInteger();
+        int accountId = iPacket.DecodeInt();
         if (c == null || accountId != c.getAccID()) {
             return;
         }
         if (!canBurn(c)) {
             return;
         }
-        int characterId = iPacket.DecodeInteger();
+        int characterId = iPacket.DecodeInt();
         User character = c.loadCharacterById(characterId);
         if (character.getAccountID() != c.getAccID()) {
             return;
         }
         if (!character.updateBurning(characterId, true)) {
-            c.write(CWvsContext.broadcastMsg(errormsg));
+            c.SendPacket(CWvsContext.broadcastMsg(errormsg));
         }
-        c.write(CLogin.burningEventEffect((byte) 1, characterId));
+        c.SendPacket(CLogin.burningEventEffect((byte) 1, characterId));
     }
 
     private boolean canBurn(MapleClient c) {

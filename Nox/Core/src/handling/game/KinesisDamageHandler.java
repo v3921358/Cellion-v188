@@ -8,7 +8,7 @@ package handling.game;
 import client.MapleClient;
 import net.InPacket;
 import net.OutPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.maps.objects.User;
 import service.SendPacketOpcode;
 
@@ -25,11 +25,11 @@ public final class KinesisDamageHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.UserReleasePsychicArea.getValue());
-        oPacket.EncodeInteger(iPacket.DecodeInteger());
-        oPacket.EncodeInteger(1);
 
-        c.write(oPacket.ToPacket());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserReleasePsychicArea.getValue());
+        oPacket.EncodeInt(iPacket.DecodeInt());
+        oPacket.EncodeInt(1);
+
+        c.SendPacket(oPacket);
     }
 }

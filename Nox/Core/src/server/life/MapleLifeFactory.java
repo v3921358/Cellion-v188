@@ -1,7 +1,7 @@
 package server.life;
 
 import constants.ServerConstants;
-import database.DatabaseConnection;
+import database.Database;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataTool;
@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import tools.LogHelper;
 
 public class MapleLifeFactory {
 
@@ -121,8 +122,8 @@ public class MapleLifeFactory {
 
     public static void loadAllCustomLifeFromDatabase() {
 
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             PreparedStatement ps = con.prepareStatement("SELECT * FROM wz_customlife");
             ResultSet rs = ps.executeQuery();
             short mobs = 0;
@@ -154,10 +155,10 @@ public class MapleLifeFactory {
 
                 smr.LifeStorage.add(new SharedMapResources.TemporaryStorage_Life(id, x, y, fh_, cy, rx0, rx1, mobTime, f, team, type, "", hide));
             }
-
+            ps.close();
             System.out.printf("[Info] Loaded %s NPCs and %s Mobs from the database.\n", mobs, npcs);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
     }
 

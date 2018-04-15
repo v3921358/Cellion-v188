@@ -33,7 +33,7 @@ import handling.world.DamageParse;
 import handling.world.PlayerHandler;
 import server.maps.objects.User;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.MapleStatEffect;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
@@ -59,24 +59,30 @@ public final class AtomCollisionHandler implements ProcessPacket<MapleClient> {
         //AttackInfo attack = DamageParse.parseDmgMa(iPacket, chr);
         AttackInfo attack = DamageParse.OnAttack(RecvPacketOpcode.UserForceAtomCollision, iPacket, pPlayer); // Not sure if my parse will work here
         if (attack == null) {
-            if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[AtomCollision Debug] Atom ID : " + attack.skill);
-            c.write(CWvsContext.enableActions());
+            if (pPlayer.isDeveloper()) {
+                pPlayer.dropMessage(5, "[AtomCollision Debug] Atom ID : " + attack.skill);
+            }
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         Skill skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
         if (skill == null || (GameConstants.isAngel(attack.skill) && (pPlayer.getStat().equippedSummon % 10000 != attack.skill % 10000))) {
-            if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[AtomCollision Debug] Returning Early 1 / Atom ID : " + attack.skill);
-            c.write(CWvsContext.enableActions());
+            if (pPlayer.isDeveloper()) {
+                pPlayer.dropMessage(5, "[AtomCollision Debug] Returning Early 1 / Atom ID : " + attack.skill);
+            }
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         int skillLevel = pPlayer.getTotalSkillLevel(skill);
         MapleStatEffect effect = attack.getAttackEffect(pPlayer, skillLevel, skill);
         if (effect == null) {
-            if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[AtomCollision Debug] Returning Early 2 / Atom ID : " + attack.skill);
+            if (pPlayer.isDeveloper()) {
+                pPlayer.dropMessage(5, "[AtomCollision Debug] Returning Early 2 / Atom ID : " + attack.skill);
+            }
             return;
         } else if (effect.getCooldown(pPlayer) > 0) {  // Handle cooldowns
             if (pPlayer.skillisCooling(attack.skill)) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             pPlayer.addCooldown(attack.skill, System.currentTimeMillis(), effect.getCooldown(pPlayer));

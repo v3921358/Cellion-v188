@@ -22,7 +22,7 @@ import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import constants.ItemConstants;
-import database.DatabaseConnection;
+import database.Database;
 import provider.MapleData;
 import provider.MapleDataDirectoryEntry;
 import provider.MapleDataEntry;
@@ -244,8 +244,8 @@ public class MapleItemInformationProvider {
             monsterBookSets.put(Integer.parseInt(d.getName()), new Triple<>(MapleDataTool.getInt("setScore", d, 0), set, potential));
         }
 
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
 
             // Load Item Data
             PreparedStatement ps = con.prepareStatement("SELECT * FROM wz_itemdata");
@@ -301,6 +301,7 @@ public class MapleItemInformationProvider {
                 }
             }
         } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 

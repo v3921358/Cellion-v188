@@ -10,9 +10,10 @@ import net.OutPacket;
 
 /**
  *
- * @author 
+ * @author
  */
 public class ForceAtom {
+
     private int key;
     private int inc;
     private int firstImpact;
@@ -41,17 +42,17 @@ public class ForceAtom {
     }
 
     public void encode(OutPacket oPacket) {
-        oPacket.EncodeInteger(getKey());
-        oPacket.EncodeInteger(getInc());
-        oPacket.EncodeInteger(getFirstImpact());
-        oPacket.EncodeInteger(getSecondImpact());
-        oPacket.EncodeInteger(getAngle());
-        oPacket.EncodeInteger(getStartDelay());
-        oPacket.EncodeInteger((int) getStartPosition().getX());
-        oPacket.EncodeInteger((int) getStartPosition().getY());
-        oPacket.EncodeInteger(getCreateTime());
-        oPacket.EncodeInteger(getMaxHitCount());
-        oPacket.EncodeInteger(getEffectIdx());
+        oPacket.EncodeInt(getKey());
+        oPacket.EncodeInt(getInc());
+        oPacket.EncodeInt(getFirstImpact());
+        oPacket.EncodeInt(getSecondImpact());
+        oPacket.EncodeInt(getAngle());
+        oPacket.EncodeInt(getStartDelay());
+        oPacket.EncodeInt((int) getStartPosition().getX());
+        oPacket.EncodeInt((int) getStartPosition().getY());
+        oPacket.EncodeInt(getCreateTime());
+        oPacket.EncodeInt(getMaxHitCount());
+        oPacket.EncodeInt(getEffectIdx());
     }
 
     public int getKey() {

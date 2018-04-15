@@ -27,7 +27,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import database.DatabaseConnection;
+import database.Database;
+import tools.LogHelper;
 
 public class MapleDojoRanking {
 
@@ -50,11 +51,10 @@ public class MapleDojoRanking {
 
     private void reload() {
         ranks.clear();
-        Connection con;
         PreparedStatement ps;
         ResultSet rs;
-        try {
-            con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             ps = con.prepareStatement("SELECT * FROM dojorankings ORDER BY `rank` DESC LIMIT 50");
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -64,7 +64,7 @@ public class MapleDojoRanking {
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            System.err.println("Error handling dojo rankings: " + e);
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
     }
 

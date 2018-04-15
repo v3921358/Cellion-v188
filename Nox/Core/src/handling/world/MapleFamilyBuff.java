@@ -76,7 +76,7 @@ public enum MapleFamilyBuff {
         for (Map.Entry<CharacterTemporaryStat, Integer> stat : effects.entrySet()) {
             chr.setBuffedValue(stat.getKey(), stat.getValue());
         }
-        chr.getClient().write(BuffPacket.giveBuff(chr, -getEffectId(), duration * 60000, effects, null));
+        chr.getClient().SendPacket(BuffPacket.giveBuff(chr, -getEffectId(), duration * 60000, effects, null));
         final MapleStatEffect eff = MapleItemInformationProvider.getInstance().getItemEffect(getEffectId());
         chr.cancelEffect(eff, true, -1, effects);
         final long starttime = System.currentTimeMillis();

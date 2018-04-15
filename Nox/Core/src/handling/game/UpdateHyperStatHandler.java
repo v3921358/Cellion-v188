@@ -8,7 +8,7 @@ import net.InPacket;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -24,27 +24,27 @@ public class UpdateHyperStatHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         String statStr = iPacket.DecodeString();
-        int requestType = iPacket.DecodeInteger();
-        int requestValue = iPacket.DecodeInteger();
+        int requestType = iPacket.DecodeInt();
+        int requestValue = iPacket.DecodeInt();
 
         MapleSpecialStatUpdateType stat = MapleSpecialStatUpdateType.getFromString(statStr);
         User chr = c.getPlayer();
 
         switch (stat) {
             case UpdateHonor: {
-                c.write(CWvsContext.updateSpecialStat(stat, requestType, requestValue, c.getPlayer().getHonourNextExp()));
+                c.SendPacket(CWvsContext.updateSpecialStat(stat, requestType, requestValue, c.getPlayer().getHonourNextExp()));
                 break;
             }
             case UpdateHyperSkills: {
-                c.write(CWvsContext.updateSpecialStat(stat, requestType, requestValue, chr.getRemainingHSp(requestValue)));
+                c.SendPacket(CWvsContext.updateSpecialStat(stat, requestType, requestValue, chr.getRemainingHSp(requestValue)));
                 break;
             }
             case RequiredHyperStatNext: { // Required hyper stat amount
-                c.write(CWvsContext.updateSpecialStat(stat, requestType, requestValue, MapleHyperStats.getRequiredHyperStatSP(requestType - 1)));
+                c.SendPacket(CWvsContext.updateSpecialStat(stat, requestType, requestValue, MapleHyperStats.getRequiredHyperStatSP(requestType - 1)));
                 break;
             }
             case GetHyperStatDistributionPerLevel: {
-                c.write(CWvsContext.updateSpecialStat(stat, requestType, requestValue, MapleHyperStats.getHyperStatDistribution(requestType)));
+                c.SendPacket(CWvsContext.updateSpecialStat(stat, requestType, requestValue, MapleHyperStats.getHyperStatDistribution(requestType)));
                 break;
             }
             default:

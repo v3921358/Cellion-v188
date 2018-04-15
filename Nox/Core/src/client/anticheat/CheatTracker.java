@@ -213,7 +213,7 @@ public class CheatTracker {
             dropsPerSecond++;
             if (dropsPerSecond >= (dc ? 32 : 16) && chr.get() != null && !chr.get().isGM()) {
                 if (dc) {
-                    chr.get().getClient().close();
+                    chr.get().getClient().Close();
                 } else {
                     chr.get().getClient().setMonitored(true);
                 }
@@ -315,7 +315,7 @@ public class CheatTracker {
     public void updateTick(int newTick) {
         if (newTick <= lastTickCount) { //definitely packet spamming or the added feature in many PEs which is to generate random tick
             if (tickSame >= 500 && chr.get() != null && !chr.get().isGM()) { //this might be one of the d/c issues. -originally 5
-                chr.get().getClient().close();
+                chr.get().getClient().Close();
             } else {
                 tickSame++;
             }

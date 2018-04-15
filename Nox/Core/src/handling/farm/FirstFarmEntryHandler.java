@@ -24,7 +24,7 @@ package handling.farm;
 import client.MapleClient;
 import net.InPacket;
 import tools.packet.FarmPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class FirstFarmEntryHandler implements ProcessPacket<MapleClient> {
 
@@ -36,7 +36,7 @@ public final class FirstFarmEntryHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         //give random waru consume item
-        c.write(FarmPacket.farmMessage("Find your reward for logging in today \r\nin your inventory."));
+        c.SendPacket(FarmPacket.farmMessage("Find your reward for logging in today \r\nin your inventory."));
     }
 
 }

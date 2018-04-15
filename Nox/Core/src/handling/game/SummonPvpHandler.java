@@ -27,7 +27,7 @@ import handling.world.AttackMonster;
 import tools.Pair;
 import net.InPacket;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class SummonPvpHandler implements ProcessPacket<MapleClient> {
 
@@ -43,15 +43,15 @@ public final class SummonPvpHandler implements ProcessPacket<MapleClient> {
             return;
         }
         final MapleMap map = chr.getMap();
-        final MapleMapObject obj = map.getMapObject(iPacket.DecodeInteger(), MapleMapObjectType.SUMMON);
+        final MapleMapObject obj = map.getMapObject(iPacket.DecodeInt(), MapleMapObjectType.SUMMON);
         if (obj == null || !(obj instanceof Summon)) {
             chr.dropMessage(5, "The summon has disappeared.");
             return;
         }
         int tick = -1;
-        if (iPacket.Available() == 27) {
+        if (iPacket.GetRemainder() == 27) {
             iPacket.Skip(23);
-            tick = iPacket.DecodeInteger();
+            tick = iPacket.DecodeInt();
         }
         final Summon summon = (Summon) obj;
         if (summon.getOwnerId() != chr.getId() || summon.getSkillLevel() <= 0) {
@@ -155,7 +155,7 @@ public final class SummonPvpHandler implements ProcessPacket<MapleClient> {
                     }
                     effect.handleExtraPVP(chr, attacked);
                 }
-                chr.getClient().write(CField.getPVPHPBar(attacked.getId(), attacked.getStat().getHp(), attacked.getStat().getCurrentMaxHp()));
+                chr.getClient().SendPacket(CField.getPVPHPBar(attacked.getId(), attacked.getStat().getHp(), attacked.getStat().getCurrentMaxHp()));
                 addedScore += (totalHPLoss / 100) + (totalMPLoss / 100); //ive NO idea
                 if (!attacked.isAlive()) {
                     killed = true;

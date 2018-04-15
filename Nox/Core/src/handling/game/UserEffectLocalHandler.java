@@ -7,7 +7,7 @@ import constants.GameConstants;
 import server.maps.objects.User;
 import tools.LogHelper;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  * When the player uses a skill such as 'Escape' for Xenon, 'Temple Recall' for Zero or 'Return' for Kinesis E4 00 EE E5 F5 05 01 00
@@ -27,7 +27,7 @@ public class UserEffectLocalHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
 
-        int skillId = iPacket.DecodeInteger();
+        int skillId = iPacket.DecodeInt();
         int skillLevel_client = iPacket.DecodeShort();
 
         Skill skill = SkillFactory.getSkill(skillId);
@@ -49,7 +49,7 @@ public class UserEffectLocalHandler implements ProcessPacket<MapleClient> {
         if (GameConstants.isMechanic(chr.getJob())) { //incorrect disconnect
             return;
         } else {
-            c.close(); // hacker
+            c.Close(); // hacker
         }
     }
 

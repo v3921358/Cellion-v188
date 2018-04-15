@@ -146,14 +146,14 @@ public class MapleRuneStone extends AnimatedMapleMapObject {
     @Override
     public void sendSpawnData(MapleClient client) {
         if (nextRuneSpawnTime == 0) {
-            client.write(CField.RunePacket.spawnRune(this));
+            client.SendPacket(CField.RunePacket.spawnRune(this));
         }
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
         if (nextRuneSpawnTime == 0) {
-            client.write(CField.RunePacket.removeAllRune());
+            client.SendPacket(CField.RunePacket.removeAllRune());
             //client.write(CField.RunePacket.removeRune());
         }
     }

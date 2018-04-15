@@ -3,7 +3,6 @@ package tools.packet;
 import client.inventory.Equip;
 import service.SendPacketOpcode;
 import net.OutPacket;
-import net.Packet;
 
 /**
  *
@@ -19,16 +18,16 @@ public class MiracleCubePacket {
      * @param eqSlotId
      * @param cubeid
      * @param equip
-     * @return * public static Packet onWhiteAdditionalCubeResult(long newstateIdentificationID, boolean upgrade, int eqSlotId, int cubeid,
-     * Equip equip) { OutPacket oPacket = new OutPacket();
+     * @return * public static OutPacket onWhiteAdditionalCubeResult(long newstateIdentificationID, boolean upgrade, int eqSlotId, int
+     * cubeid, Equip equip) { OutPacket oPacket = new OutPacket();
      *
-     * oPacket.encodeShort(SendPacketOpcode.BLACK_CUBE_RESULT.getValue()); oPacket.encodeLong(newstateIdentificationID); //
+     * OutPacket oPacket = new OutPacket(SendPacketOpcode.BLACK_CUBE_RESULT.getValue()); oPacket.encodeLong(newstateIdentificationID); //
      * CInPacket::DecodeBuffer(iPacket, &liSN, 8u); // supposed to be uniqueid, odin always write it as 00 80 05 BB 46 E6 17 02, 1/1/2079
      * anyway
      *
      * final boolean unk = true; oPacket.encode(unk); if (unk) { PacketHelper.addItemInfo(oPacket, equip); // v5 =
-     * GW_ItemSlotBase::Decode(&result, iPacket); oPacket.encodeInteger(cubeid); oPacket.encodeInteger(eqSlotId); }
-     * oPacket.encodeInteger(upgrade ? 1 : 0);
+     * GW_ItemSlotBase::Decode(&result, iPacket); oPacket.EncodeInt(cubeid); oPacket.EncodeInt(eqSlotId); } oPacket.EncodeInt(upgrade ? 1 :
+     * 0);
      *
      * return oPacket.createPacket(); }
      */
@@ -42,17 +41,16 @@ public class MiracleCubePacket {
      * @param equip
      * @return
      */
-    public static Packet onMemorialCubeResult(long newstateIdentificationID, boolean upgrade, int eqSlotId, int cubeid, Equip equip) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket onMemorialCubeResult(long newstateIdentificationID, boolean upgrade, int eqSlotId, int cubeid, Equip equip) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MemorialCubeResult.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MemorialCubeResult.getValue());
         oPacket.EncodeLong(newstateIdentificationID); // CInPacket::DecodeBuffer(iPacket, &liSN, 8u); // supposed to be uniqueid, odin always write it as 00 80 05 BB 46 E6 17 02, 1/1/2079 anyway
 
         memorialCubeInfo_Decode(oPacket, eqSlotId, cubeid, equip);
 
-        oPacket.EncodeInteger(upgrade ? 1 : 0);
+        oPacket.EncodeInt(upgrade ? 1 : 0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -64,14 +62,13 @@ public class MiracleCubePacket {
      * @param equip
      * @return
      */
-    public static Packet memorialCubeModified(boolean upgrade, int eqSlotId, int cubeid, Equip equip) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket memorialCubeModified(boolean upgrade, int eqSlotId, int cubeid, Equip equip) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MemorialCubeModified.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MemorialCubeModified.getValue());
 
         memorialCubeInfo_Decode(oPacket, eqSlotId, cubeid, equip);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -84,11 +81,11 @@ public class MiracleCubePacket {
      */
     public static void memorialCubeInfo_Decode(OutPacket oPacket, int eqSlotId, int cubeid, Equip equip) {
         final boolean unk = true;
-        oPacket.Encode(unk);
+        oPacket.EncodeBool(unk);
         if (unk) {
             PacketHelper.addItemInfo(oPacket, equip); // v5 = GW_ItemSlotBase::Decode(&result, iPacket);
-            oPacket.EncodeInteger(cubeid);
-            oPacket.EncodeInteger(eqSlotId);
+            oPacket.EncodeInt(cubeid);
+            oPacket.EncodeInt(eqSlotId);
         }
     }
 
@@ -104,17 +101,16 @@ public class MiracleCubePacket {
      * @param equip
      * @return
      */
-    public static Packet onBlackCubeResult(long newstateIdentificationID, boolean upgrade, int eqSlotId, int cubeid, Equip equip) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket onBlackCubeResult(long newstateIdentificationID, boolean upgrade, int eqSlotId, int cubeid, Equip equip) {
 
-        oPacket.EncodeShort(SendPacketOpcode.BlackCubeResult.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.BlackCubeResult.getValue());
         oPacket.EncodeLong(newstateIdentificationID); // CInPacket::DecodeBuffer(iPacket, &liSN, 8u); // supposed to be uniqueid, odin always write it as 00 80 05 BB 46 E6 17 02, 1/1/2079 anyway
 
         memorialCubeInfo_Decode(oPacket, eqSlotId, cubeid, equip);
 
-        oPacket.EncodeInteger(upgrade ? 1 : 0);
+        oPacket.EncodeInt(upgrade ? 1 : 0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -127,17 +123,16 @@ public class MiracleCubePacket {
      * @param equip
      * @return
      */
-    public static Packet onInGameCubeResult(int charid, boolean upgrade, int eqSlotId, int cubeid, Equip equip) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket onInGameCubeResult(int charid, boolean upgrade, int eqSlotId, int cubeid, Equip equip) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserItemInGameCubeResult.getValue());
-        oPacket.EncodeInteger(charid);
-        oPacket.Encode(upgrade);
-        oPacket.EncodeInteger(cubeid);
-        oPacket.EncodeInteger(eqSlotId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserItemInGameCubeResult.getValue());
+        oPacket.EncodeInt(charid);
+        oPacket.EncodeBool(upgrade);
+        oPacket.EncodeInt(cubeid);
+        oPacket.EncodeInt(eqSlotId);
         PacketHelper.addItemInfo(oPacket, equip);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -150,18 +145,17 @@ public class MiracleCubePacket {
      * @param equip
      * @return
      */
-    public static Packet onRedCubeResult(int charid, boolean upgrade, int eqSlotId, int cubeid, Equip equip) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket onRedCubeResult(int charid, boolean upgrade, int eqSlotId, int cubeid, Equip equip) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserItemRedCubeResult.getValue());
-        oPacket.EncodeInteger(charid);
-        oPacket.Encode(upgrade);
-        oPacket.EncodeInteger(cubeid);//(5062009); // CubeID
-        oPacket.EncodeInteger(eqSlotId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserItemRedCubeResult.getValue());
+        oPacket.EncodeInt(charid);
+        oPacket.EncodeBool(upgrade);
+        oPacket.EncodeInt(cubeid);//(5062009); // CubeID
+        oPacket.EncodeInt(eqSlotId);
         PacketHelper.addItemInfo(oPacket, equip);
         //PacketHelper.addItemPosition(oPacket, equip, false, false);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -174,17 +168,16 @@ public class MiracleCubePacket {
      * @param equip
      * @return
      */
-    public static Packet onBonusCubeResult(int charid, boolean upgrade, int eqSlotId, int cubeid, Equip equip) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket onBonusCubeResult(int charid, boolean upgrade, int eqSlotId, int cubeid, Equip equip) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserItemBonusCubeResult.getValue());
-        oPacket.EncodeInteger(charid);
-        oPacket.Encode(upgrade);
-        oPacket.EncodeInteger(cubeid);//(5062009); // CubeID
-        oPacket.EncodeInteger(eqSlotId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserItemBonusCubeResult.getValue());
+        oPacket.EncodeInt(charid);
+        oPacket.EncodeBool(upgrade);
+        oPacket.EncodeInt(cubeid);//(5062009); // CubeID
+        oPacket.EncodeInt(eqSlotId);
         PacketHelper.addItemInfo(oPacket, equip);
         //PacketHelper.addItemPosition(oPacket, equip, false, false);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 }

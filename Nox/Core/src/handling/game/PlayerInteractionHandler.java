@@ -23,7 +23,7 @@ import server.stores.MaplePlayerShopItem;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import tools.packet.PlayerShopPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -173,7 +173,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
             case CREATE: {
                 if (chr.getPlayerShop() != null || c.getChannelServer().isShutdown() || chr.hasBlockedInventory()) {
                     //System.err.println("amq");
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                     return;
                 }
                 final byte createType = iPacket.DecodeByte();
@@ -186,12 +186,12 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                     //}
                     if (!chr.getMap().getMapObjectsInRange(chr.getTruePosition(), 20000, Arrays.asList(MapleMapObjectType.SHOP, MapleMapObjectType.HIRED_MERCHANT)).isEmpty() || !chr.getMap().getPortalsInRange(chr.getTruePosition(), 20000).isEmpty()) {
                         chr.dropMessage(1, "You may not establish a store here.");
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                         return;
                     } else if (createType == 1 || createType == 2) {
                         if (FieldLimitType.UnableToOpenMiniGame.check(chr.getMap()) || chr.getMap().getSharedMapResources().personalShop) {
                             chr.dropMessage(1, "You may not use minigames here.");
-                            c.write(CWvsContext.enableActions());
+                            c.SendPacket(CWvsContext.enableActions());
                             return;
                         }
                     }
@@ -216,7 +216,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                         game.update();
                     } else if (chr.getMap().getSharedMapResources().personalShop) {
                         Item shop = c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) iPacket.DecodeShort());
-                        if (shop == null || shop.getQuantity() <= 0 || shop.getItemId() != iPacket.DecodeInteger() || c.getPlayer().getMapId() < 910000001 || c.getPlayer().getMapId() > 910000022) {
+                        if (shop == null || shop.getQuantity() <= 0 || shop.getItemId() != iPacket.DecodeInt() || c.getPlayer().getMapId() < 910000001 || c.getPlayer().getMapId() > 910000022) {
                             return;
                         }
                         if (createType == 3) {
@@ -228,7 +228,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                             final HiredMerchant merch = new HiredMerchant(chr, shop.getItemId(), desc);
                             chr.setPlayerShop(merch);
                             chr.getMap().addMapObject(merch);
-                            c.write(PlayerShopPacket.getHiredMerch(chr, merch, true));
+                            c.SendPacket(PlayerShopPacket.getHiredMerch(chr, merch, true));
                         }
                     }
                 }
@@ -238,9 +238,9 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                 if (chr.getMap() == null) {
                     return;
                 }
-                User chrr = chr.getMap().getCharacterById(iPacket.DecodeInteger());
+                User chrr = chr.getMap().getCharacterById(iPacket.DecodeInt());
                 if (chrr == null || c.getChannelServer().isShutdown() || chrr.hasBlockedInventory()) {
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                     return;
                 }
                 MapleTrade.inviteTrade(chr, chrr);
@@ -252,13 +252,13 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
             }
             case VISIT: {
                 if (c.getChannelServer().isShutdown()) {
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                     return;
                 }
                 if (chr.getTrade() != null && chr.getTrade().getPartner() != null && !chr.getTrade().inTrade()) {
                     MapleTrade.visitTrade(chr, chr.getTrade().getPartner().getCharacter());
                 } else if (chr.getMap() != null && chr.getTrade() == null) {
-                    final int obid = iPacket.DecodeInteger();
+                    final int obid = iPacket.DecodeInt();
                     MapleMapObject ob = chr.getMap().getMapObject(obid, MapleMapObjectType.HIRED_MERCHANT);
                     if (ob == null) {
                         ob = chr.getMap().getMapObject(obid, MapleMapObjectType.SHOP);
@@ -284,15 +284,15 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                             } else {
                                 chr.setPlayerShop(ips);
                                 merchant.addVisitor(chr);
-                                c.write(PlayerShopPacket.getHiredMerch(chr, merchant, false));
+                                c.SendPacket(PlayerShopPacket.getHiredMerch(chr, merchant, false));
                             }
                             //}
                         } else if (ips instanceof MaplePlayerShop && ((MaplePlayerShop) ips).isBanned(chr.getName())) {
                             chr.dropMessage(1, "You have been banned from this store.");
                         } else if (ips.getFreeSlot() < 0 || ips.getVisitorSlot(chr) > -1 || !ips.isOpen() || !ips.isAvailable()) {
-                            c.write(PlayerShopPacket.getMiniGameFull());
+                            c.SendPacket(PlayerShopPacket.getMiniGameFull());
                         } else {
-                            if (iPacket.Available() > 0 && iPacket.DecodeByte() > 0) { //a password has been entered
+                            if (iPacket.GetRemainder() > 0 && iPacket.DecodeByte() > 0) { //a password has been entered
                                 String pass = iPacket.DecodeString();
                                 if (!pass.equals(ips.getPassword())) {
                                     c.getPlayer().dropMessage(1, "The password you entered is incorrect.");
@@ -307,7 +307,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                             if (ips instanceof MapleMiniGame) {
                                 ((MapleMiniGame) ips).send(c);
                             } else {
-                                c.write(PlayerShopPacket.getPlayerStore(chr, false));
+                                c.SendPacket(PlayerShopPacket.getPlayerStore(chr, false));
                             }
                         }
                     }
@@ -316,7 +316,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
             }
             case HIRED_MERCHANT_MAINTENANCE: {
                 if (c.getChannelServer().isShutdown() || chr.getMap() == null || chr.getTrade() != null) {
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                     return;
                 }
                 /*[RECV] PLAYER_INTERACTION 0x196:
@@ -332,13 +332,13 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                 final String password = iPacket.DecodeString();
                 if (!c.checkSecondPassword(password, true) || password.length() < 6 || password.length() > 16) {
                     chr.dropMessage(5, "Please enter a valid PIC.");
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                     return;
                 }
-                final int obid = iPacket.DecodeInteger();
+                final int obid = iPacket.DecodeInt();
                 MapleMapObject ob = chr.getMap().getMapObject(obid, MapleMapObjectType.HIRED_MERCHANT);
                 if (ob == null || chr.getPlayerShop() != null) {
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                     return;
                 }
                 if (ob instanceof IMaplePlayerShop && ob instanceof HiredMerchant) {
@@ -348,15 +348,15 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                         merchant.setOpen(false);
                         merchant.removeAllVisitors((byte) 16, (byte) 0);
                         chr.setPlayerShop(ips);
-                        c.write(PlayerShopPacket.getHiredMerch(chr, merchant, false));
+                        c.SendPacket(PlayerShopPacket.getHiredMerch(chr, merchant, false));
                     } else {
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                     }
                 }
                 break;
             }
             case CHAT: {
-                chr.updateTick(iPacket.DecodeInteger());
+                chr.updateTick(iPacket.DecodeInt());
                 final String message = iPacket.DecodeString();
                 if (chr.getTrade() != null) {
                     try {
@@ -399,7 +399,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                     if (chr.getMap().getSharedMapResources().personalShop) {
                         if (c.getChannelServer().isShutdown()) {
                             chr.dropMessage(1, "The server is about to shut down.");
-                            c.write(CWvsContext.enableActions());
+                            c.SendPacket(CWvsContext.enableActions());
                             shop.closeShop(shop.getShopType() == 1, false);
                             return;
                         }
@@ -418,7 +418,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                             shop.update();
                         }
                     } else {
-                        c.close();
+                        c.Close();
                     }
                 }
 
@@ -466,7 +466,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                 final byte slot = (byte) iPacket.DecodeShort();
                 final short bundles = iPacket.DecodeShort(); // How many in a bundle
                 final short perBundle = iPacket.DecodeShort(); // Price per bundle
-                final int price = iPacket.DecodeInteger();
+                final int price = iPacket.DecodeInt();
 
                 if (price <= 0 || bundles <= 0 || perBundle <= 0) {
                     return;
@@ -490,18 +490,18 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                     if (ivItem.getQuantity() >= bundles_perbundle) {
                         final short flag = ivItem.getFlag();
                         if (ItemFlag.UNTRADABLE.check(flag) || ItemFlag.LOCK.check(flag)) {
-                            c.write(CWvsContext.enableActions());
+                            c.SendPacket(CWvsContext.enableActions());
                             return;
                         }
                         if (ii.isDropRestricted(ivItem.getItemId()) || ii.isAccountShared(ivItem.getItemId())) {
                             if (!(ItemFlag.KARMA_EQ.check(flag) || ItemFlag.KARMA_USE.check(flag))) {
-                                c.write(CWvsContext.enableActions());
+                                c.SendPacket(CWvsContext.enableActions());
                                 return;
                             }
                         }
                         if (GameConstants.getLowestPrice(ivItem.getItemId()) > price) {
                             c.getPlayer().dropMessage(1, "The lowest you can sell this for is " + GameConstants.getLowestPrice(ivItem.getItemId()));
-                            c.write(CWvsContext.enableActions());
+                            c.SendPacket(CWvsContext.enableActions());
                             return;
 
                         }
@@ -518,7 +518,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                             sellItem.setQuantity(perBundle);
                             shop.addItem(new MaplePlayerShopItem(sellItem, bundles, price));
                         }
-                        c.write(PlayerShopPacket.shopItemUpdate(shop));
+                        c.SendPacket(PlayerShopPacket.shopItemUpdate(shop));
                     }
                 }
                 break;
@@ -594,7 +594,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                         }
                     }
                 }
-                c.write(PlayerShopPacket.shopItemUpdate(shop));
+                c.SendPacket(PlayerShopPacket.shopItemUpdate(shop));
                 break;
             }
             case MAINTANCE_OFF: {
@@ -617,7 +617,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                         chr.gainMeso(imps.getMeso(), false);
                         imps.setMeso(0);
                     }
-                    c.write(PlayerShopPacket.shopItemUpdate(imps));
+                    c.SendPacket(PlayerShopPacket.shopItemUpdate(imps));
                 }
                 break;
             }
@@ -628,8 +628,8 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
                     merchant.removeAllVisitors(-1, -1);
                     chr.setPlayerShop(null);
                     merchant.closeShop(true, true);
-                    c.write(CWvsContext.broadcastMsg(1, "Please visit Fredrick for your items."));
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.broadcastMsg(1, "Please visit Fredrick for your items."));
+                    c.SendPacket(CWvsContext.enableActions());
                 }
                 break;
             }
@@ -790,7 +790,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
 //                        game.broadcastToVisitors(PlayerShopPacket.shopChat("Omok could not be placed by " + chr.getName() + ". Loser: " + game.getLoser() + " Visitor: " + game.getVisitorSlot(chr), game.getVisitorSlot(chr)));
 //                        return;
 //                    }
-//                    game.setPiece(iPacket.decodeInteger(), iPacket.decodeInteger(), iPacket.decodeByte(), chr);
+//                    game.setPiece(iPacket.DecodeInt(), iPacket.DecodeInt(), iPacket.decodeByte(), chr);
 //                }
 //                break;
 //            }

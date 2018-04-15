@@ -32,7 +32,8 @@ import server.MapleInventoryManipulator;
 import tools.Triple;
 import net.InPacket;
 import tools.packet.CSPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
+import tools.LogHelper;
 
 /**
  *
@@ -66,8 +67,8 @@ public final class CashCouponHandler implements ProcessPacket<MapleClient> {
         try {
             info = MapleCharacterUtil.getNXCodeInfo(code);
         } catch (SQLException e) {
-            //Coupon System offline
-            c.write(CSPacket.sendCSFail(49));
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
+            c.SendPacket(CSPacket.sendCSFail(49));
             return;
         }
         if (info != null && info.left) {
@@ -76,8 +77,8 @@ public final class CashCouponHandler implements ProcessPacket<MapleClient> {
                 try {
                     MapleCharacterUtil.setNXCodeUsed(c.getPlayer().getName(), code);
                 } catch (SQLException e) {
-                    //Coupon System offline
-                    c.write(CSPacket.sendCSFail(49));
+                    LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
+                    c.SendPacket(CSPacket.sendCSFail(49));
                     return;
                 }
                 /*
@@ -109,13 +110,13 @@ public final class CashCouponHandler implements ProcessPacket<MapleClient> {
                         MapleInventoryManipulator.addById(c, item, (short) 100, null);
                         break;
                 }
-                c.write(CSPacket.showCouponRedeemedItem(itemz, mesos, maplePoints, c));
+                c.SendPacket(CSPacket.showCouponRedeemedItem(itemz, mesos, maplePoints, c));
                 playerCashShopInfo(c);
             }
         } else if (CouponCodeAttempt(c) == true) {
-            c.write(CSPacket.sendCSFail(48)); //A1, 9F
+            c.SendPacket(CSPacket.sendCSFail(48)); //A1, 9F
         } else {
-            c.write(CSPacket.sendCSFail(info == null ? 14 : 17)); //A1, 9F
+            c.SendPacket(CSPacket.sendCSFail(info == null ? 14 : 17)); //A1, 9F
         }
     }
 }

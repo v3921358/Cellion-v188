@@ -6,7 +6,7 @@ import handling.PacketThrottleLimits.PacketThrottleBanType;
 import provider.data.HexTool;
 import tools.LogHelper;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 @PacketThrottleLimits(
         FlagCount = 2,
@@ -24,7 +24,7 @@ public final class ClientErrorDumper implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        if (iPacket.Available() < 8) {
+        if (iPacket.GetRemainder() < 8) {
             System.out.println(iPacket.toString());
             return;
         }
@@ -43,7 +43,7 @@ public final class ClientErrorDumper implements ProcessPacket<MapleClient> {
             default:
                 break;
         }
-        int errortype = iPacket.DecodeInteger(); // example error 38
+        int errortype = iPacket.DecodeInt(); // example error 38
         //if (errortype == 0) { // i don't wanna log error code 0 stuffs, (usually some bounceback to login)
         //    return;
         //}
@@ -57,7 +57,7 @@ public final class ClientErrorDumper implements ProcessPacket<MapleClient> {
                 errortype, data_length,
                 c.getAccountName(), c.getPlayer().getMapId(), c.getPlayer().getName(),
                 HexTool.toString(opcodeheader).toUpperCase(), opcodeheader,
-                HexTool.toString(iPacket.Decode((int) iPacket.Available()))
+                HexTool.toString(iPacket.Decode((int) iPacket.GetRemainder()))
         ));
     }
 }

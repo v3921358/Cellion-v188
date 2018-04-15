@@ -21,10 +21,10 @@ public class ItemProtectExpireMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.ItemProtectExpire.getType());
-        oPacket.Encode(items.size());
+        oPacket.EncodeByte(_MessageOpcodesType.ItemProtectExpire.getType());
+        oPacket.EncodeByte(items.size());
         for (Integer item : items) {
-            oPacket.EncodeInteger(item);
+            oPacket.EncodeInt(item);
         }
     }
 

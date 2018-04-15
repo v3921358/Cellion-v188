@@ -7,7 +7,7 @@ package handling.game;
 
 import client.MapleClient;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.maps.objects.User;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -25,6 +25,6 @@ public class FriendRequestAccIdHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        c.write(CWvsContext.OnLoadAccountIDOfCharacterFriendResult(c.getPlayer().getBuddylist()));
+        c.SendPacket(CWvsContext.OnLoadAccountIDOfCharacterFriendResult(c.getPlayer().getBuddylist()));
     }
 }

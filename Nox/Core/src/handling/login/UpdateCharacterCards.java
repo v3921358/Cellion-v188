@@ -28,7 +28,7 @@ import client.MapleClient;
 import constants.WorldConstants;
 import service.ChannelServer;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class UpdateCharacterCards implements ProcessPacket<MapleClient> {
 
@@ -39,15 +39,15 @@ public final class UpdateCharacterCards implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        if (iPacket.Available() != 36 || !c.isLoggedIn()) {
-            c.close();
+        if (iPacket.GetRemainder() != 36 || !c.isLoggedIn()) {
+            c.Close();
             return;
         }
         final Map<Integer, Integer> cids = new LinkedHashMap<>();
         for (int i = 1; i <= 6; i++) { // 6 chars
-            final int charId = iPacket.DecodeInteger();
+            final int charId = iPacket.DecodeInt();
             if ((!c.login_Auth(charId) && charId != 0) || ChannelServer.getInstance(c.getChannel()) == null || !WorldConstants.WorldOption.isExists(c.getWorld())) {
-                c.close();
+                c.Close();
                 return;
             }
             cids.put(i, charId);

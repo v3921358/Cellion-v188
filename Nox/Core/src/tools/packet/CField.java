@@ -65,7 +65,7 @@ import handling.game.PlayerDamageHandler;
 import handling.game.WhisperHandler.WhisperFlag;
 import java.awt.Rectangle;
 import javax.swing.text.Position;
-import net.Packet;
+
 import server.MapleStatEffect;
 import static server.MapleStatInfo.s;
 import server.maps.Map_MCarnival;
@@ -92,32 +92,32 @@ public class CField {
      * @param clientId The ID of the client.
      * @return The server IP packet.
      */
-    public static Packet getServerIP(MapleClient c, int port, int clientId) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.SelectCharacterResult.getValue());
-        oPacket.Encode(0);
-        oPacket.Encode(0);
+    public static OutPacket getServerIP(MapleClient c, int port, int clientId) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SelectCharacterResult.getValue());
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(0);
 
         oPacket.Encode(ServerConstants.NEXON_IP);
         oPacket.EncodeShort(port);
-        oPacket.EncodeInteger(0);
+        oPacket.EncodeInt(0);
         oPacket.EncodeShort(0);
 
         oPacket.Encode(ServerConstants.NEXON_CHAT_IP); // another ip address
         oPacket.EncodeShort(0); // another port
 
-        oPacket.EncodeInteger(clientId);
+        oPacket.EncodeInt(clientId);
 
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(0);
-        oPacket.Encode(0);
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(0);
 
         byte[] interServerAuthBuffer = new byte[8];
         Randomizer.nextBytes(interServerAuthBuffer);
         oPacket.Encode(interServerAuthBuffer); // TODO: Check on this when the client sends PLAYER_LOGGEDIN on the channel servers
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -127,70 +127,69 @@ public class CField {
      * @param port The port the channel is on.
      * @return The server IP packet.
      */
-    public static Packet getChannelChange(MapleClient c, int port) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getChannelChange(MapleClient c, int port) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MigrateCommand.getValue());
-        oPacket.Encode(1);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MigrateCommand.getValue());
+        oPacket.EncodeByte(1);
         oPacket.Encode(ServerConstants.NEXON_IP);
         oPacket.EncodeShort(port);
-        oPacket.EncodeInteger(0); //dunno, couldnt find the packet in the idb because I was not looking hard enough
-        return oPacket.ToPacket();
+        oPacket.EncodeInt(0); //dunno, couldnt find the packet in the idb because I was not looking hard enough
+        return oPacket;
     }
-    
-    public static Packet OnWhisper(int nFlag, String sFind, String sReceiver, String sMsg, int nLocationResult, int dwLocation, int nTargetPosition_X, int nTargetPosition_Y, boolean bFromAdmin, boolean bSuccess) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.Whisper.getValue());
-        
-        oPacket.Encode(nFlag);
+
+    public static OutPacket OnWhisper(int nFlag, String sFind, String sReceiver, String sMsg, int nLocationResult, int dwLocation, int nTargetPosition_X, int nTargetPosition_Y, boolean bFromAdmin, boolean bSuccess) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Whisper.getValue());
+
+        oPacket.EncodeByte(nFlag);
         switch (nFlag) {
             case WhisperFlag.ReplyReceive:
                 oPacket.EncodeString(sReceiver);
-                oPacket.Encode(dwLocation);
-                oPacket.Encode(bFromAdmin);
+                oPacket.EncodeByte(dwLocation);
+                oPacket.EncodeBool(bFromAdmin);
                 oPacket.EncodeString(sMsg);
                 break;
             case WhisperFlag.BlowWeather:
                 oPacket.EncodeString(sReceiver);
-                oPacket.Encode(bFromAdmin);
+                oPacket.EncodeBool(bFromAdmin);
                 oPacket.EncodeString(sMsg);
                 break;
             case WhisperFlag.ReplyResult:
             case WhisperFlag.AdminResult:
                 oPacket.EncodeString(sFind);
-                oPacket.Encode(bSuccess);
+                oPacket.EncodeBool(bSuccess);
                 break;
             case WhisperFlag.FindResult:
             case WhisperFlag.LocationResult:
                 oPacket.EncodeString(sFind);
-                oPacket.Encode(nLocationResult);
-                oPacket.EncodeInteger(dwLocation);
+                oPacket.EncodeByte(nLocationResult);
+                oPacket.EncodeInt(dwLocation);
                 if (nLocationResult == WhisperFlag.GameSvr) {
-                    oPacket.EncodeInteger(nTargetPosition_X);
-                    oPacket.EncodeInteger(nTargetPosition_Y);
+                    oPacket.EncodeInt(nTargetPosition_X);
+                    oPacket.EncodeInt(nTargetPosition_Y);
                 }
                 break;
             case WhisperFlag.BlockedResult:
                 oPacket.EncodeString(sFind);
-                oPacket.Encode(bSuccess);
+                oPacket.EncodeBool(bSuccess);
                 break;
         }
-        return oPacket.ToPacket();
+        return oPacket;
     }
-    
-    public static Packet OnGroupMessage(int nType, String sFrom, String sMsg) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.GroupMessage.getValue());
-        oPacket.Encode(nType);
+
+    public static OutPacket OnGroupMessage(int nType, String sFrom, String sMsg) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.GroupMessage.getValue());
+        oPacket.EncodeByte(nType);
         oPacket.EncodeString(sFrom);
         oPacket.EncodeString(sMsg);
-        return oPacket.ToPacket();
+        return oPacket;
     }
-    
-    public static Packet createForceAtom(boolean bByMob, int nUserOwner, int nTargetID, int nForceAtomType, boolean bToMob,
-                                     int nTargets, int nSkillID, ForceAtom pForceAtom, Rectangle rRect, int nArriveDirection, int nArriveRange,
-                                     Point forcedTargetPos, int bulletID, Point pos) {
-        
+
+    public static OutPacket createForceAtom(boolean bByMob, int nUserOwner, int nTargetID, int nForceAtomType, boolean bToMob,
+            int nTargets, int nSkillID, ForceAtom pForceAtom, Rectangle rRect, int nArriveDirection, int nArriveRange,
+            Point forcedTargetPos, int bulletID, Point pos) {
+
         List<Integer> nNumbers = new ArrayList<>();
         nNumbers.add(nTargets);
         List<ForceAtom> forceAtomInfos = new ArrayList<>();
@@ -199,20 +198,19 @@ public class CField {
                 rRect, nArriveDirection, nArriveRange, forcedTargetPos, bulletID, pos);
     }
 
-    public static Packet createForceAtom(boolean bByMob, int nUserOwner, int nCharID, int nForceAtomType, boolean bToMob,
-                                     List<Integer> aTargets, int nSkillID, List<ForceAtom> aForceAtoms, Rectangle rRect, int nArriveDirection, int nArriveRange,
-                                     Point forcedTargetPos, int bulletID, Point pos) {
-        
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
-        oPacket.Encode(bByMob);
-        if(bByMob) {
-            oPacket.EncodeInteger(nUserOwner);
+    public static OutPacket createForceAtom(boolean bByMob, int nUserOwner, int nCharID, int nForceAtomType, boolean bToMob,
+            List<Integer> aTargets, int nSkillID, List<ForceAtom> aForceAtoms, Rectangle rRect, int nArriveDirection, int nArriveRange,
+            Point forcedTargetPos, int bulletID, Point pos) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ForceAtomCreate.getValue());
+        oPacket.EncodeBool(bByMob);
+        if (bByMob) {
+            oPacket.EncodeInt(nUserOwner);
         }
-        oPacket.EncodeInteger(nCharID);
-        oPacket.EncodeInteger(nForceAtomType);
-        if(nForceAtomType != 0 && nForceAtomType != 9 && nForceAtomType != 14) {
-            oPacket.Encode(bToMob);
+        oPacket.EncodeInt(nCharID);
+        oPacket.EncodeInt(nForceAtomType);
+        if (nForceAtomType != 0 && nForceAtomType != 9 && nForceAtomType != 14) {
+            oPacket.EncodeBool(bToMob);
             switch (nForceAtomType) {
                 case 2:
                 case 3:
@@ -227,26 +225,26 @@ public class CField {
                 case 23:
                 case 24:
                 case 25:
-                    oPacket.EncodeInteger(aTargets.size());
+                    oPacket.EncodeInt(aTargets.size());
                     for (int i : aTargets) {
-                        oPacket.EncodeInteger(i);
+                        oPacket.EncodeInt(i);
                     }
                     break;
                 default:
-                    oPacket.EncodeInteger(aTargets.get(0));
+                    oPacket.EncodeInt(aTargets.get(0));
                     break;
             }
-            oPacket.EncodeInteger(nSkillID);
+            oPacket.EncodeInt(nSkillID);
         }
-        for(ForceAtom pAtom : aForceAtoms) {
-            oPacket.Encode(1);
+        for (ForceAtom pAtom : aForceAtoms) {
+            oPacket.EncodeByte(1);
             pAtom.encode(oPacket);
         }
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
         switch (nForceAtomType) {
             case 11:
                 oPacket.EncodeRectangle(rRect);
-                oPacket.EncodeInteger(bulletID);
+                oPacket.EncodeInt(bulletID);
                 break;
             case 9:
             case 15:
@@ -256,183 +254,180 @@ public class CField {
                 oPacket.EncodePosition(pos);
                 break;
             case 17:
-                oPacket.EncodeInteger(nArriveDirection);
-                oPacket.EncodeInteger(nArriveRange);
+                oPacket.EncodeInt(nArriveDirection);
+                oPacket.EncodeInt(nArriveRange);
                 break;
             case 18:
                 oPacket.EncodePosition(forcedTargetPos);
                 break;
         }
-        
+
         oPacket.Fill(0, 29);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
-    
+
     /**
      * Handles Final Attack.
      */
-    public static Packet finalAttackRequest(User pPlayer, int nSkill, int nFinalSkill, int nDelay, int nMob, int nRequestTime) {
+    public static OutPacket finalAttackRequest(User pPlayer, int nSkill, int nFinalSkill, int nDelay, int nMob, int nRequestTime) {
         return finalAttackRequest(pPlayer, nSkill, nFinalSkill, nDelay, nMob, nRequestTime, false, null);
     }
 
-    public static Packet finalAttackRequest(User pPlayer, int nSkill, int nFinalSkill, int nDelay, int nMob, int nRequestTime, boolean bLeft, Point pBase) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.UserFinalAttackRequest.getValue());
+    public static OutPacket finalAttackRequest(User pPlayer, int nSkill, int nFinalSkill, int nDelay, int nMob, int nRequestTime, boolean bLeft, Point pBase) {
 
-        oPacket.EncodeInteger(nSkill); // nSkillId
-        oPacket.EncodeInteger(nFinalSkill); // nFinalSkillId
-        oPacket.EncodeInteger(pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11).getItemId()); // nWeaponId
-        oPacket.EncodeInteger(nDelay); // nDelay
-        oPacket.EncodeInteger(nMob); // nMobId
-        oPacket.EncodeInteger(nRequestTime); // nReqTime
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserFinalAttackRequest.getValue());
+
+        oPacket.EncodeInt(nSkill); // nSkillId
+        oPacket.EncodeInt(nFinalSkill); // nFinalSkillId
+        oPacket.EncodeInt(pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11).getItemId()); // nWeaponId
+        oPacket.EncodeInt(nDelay); // nDelay
+        oPacket.EncodeInt(nMob); // nMobId
+        oPacket.EncodeInt(nRequestTime); // nReqTime
 
         if (nSkill == 101000102) { // Air Riot
-            oPacket.Encode(bLeft);
+            oPacket.EncodeBool(bLeft);
             oPacket.EncodePosition(pBase);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet OrbitalFlame(int cid, int skillid, int effect, int direction, int range) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
+    public static OutPacket OrbitalFlame(int cid, int skillid, int effect, int direction, int range) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ForceAtomCreate.getValue());
         oPacket.Fill(0, 1);
-        oPacket.EncodeInteger(cid);
+        oPacket.EncodeInt(cid);
         /* Unk */
-        oPacket.EncodeInteger(0x11);
+        oPacket.EncodeInt(0x11);
         /* onOrbitalFlame */
-        oPacket.Encode(1);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(skillid);
-        oPacket.Encode(1);
-        oPacket.EncodeInteger(2);
-        oPacket.EncodeInteger(effect); // Orbital Flame Effect
-        oPacket.EncodeInteger(17);
-        oPacket.EncodeInteger(17);
-        oPacket.EncodeInteger(90);
+        oPacket.EncodeByte(1);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(skillid);
+        oPacket.EncodeByte(1);
+        oPacket.EncodeInt(2);
+        oPacket.EncodeInt(effect); // Orbital Flame Effect
+        oPacket.EncodeInt(17);
+        oPacket.EncodeInt(17);
+        oPacket.EncodeInt(90);
         oPacket.Fill(0, 12);
-        oPacket.EncodeInteger(Randomizer.nextInt());
-        oPacket.EncodeInteger(8);
-        oPacket.EncodeInteger(0); // v174+
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(direction);
-        oPacket.EncodeInteger(range);
+        oPacket.EncodeInt(Randomizer.nextInt());
+        oPacket.EncodeInt(8);
+        oPacket.EncodeInt(0); // v174+
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(direction);
+        oPacket.EncodeInt(range);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet sendKaiserSkillShortcut(int[] skills) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket sendKaiserSkillShortcut(int[] skills) {
 
-        oPacket.EncodeShort(SendPacketOpcode.KaiserSkillShortcut.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.KaiserSkillShortcut.getValue());
         for (int i = 0; i < 3; i++) {
             if (skills[i] != 0) {
-                oPacket.Encode(true);
-                oPacket.Encode(i);
-                oPacket.EncodeInteger(skills[i]);
+                oPacket.EncodeBool(true);
+                oPacket.EncodeByte(i);
+                oPacket.EncodeInt(skills[i]);
                 int x = 0;
-                oPacket.Encode(x);
+                oPacket.EncodeByte(x);
                 if (x != 0) {
-                    oPacket.Encode(0);
-                    oPacket.EncodeInteger(0);
+                    oPacket.EncodeByte(0);
+                    oPacket.EncodeInt(0);
                 }
             }
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getMacros(SkillMacro[] macros) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getMacros(SkillMacro[] macros) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MacroSysDataInit.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MacroSysDataInit.getValue());
         int count = 0;
         for (int i = 0; i < 5; i++) {
             if (macros[i] != null) {
                 count++;
             }
         }
-        oPacket.Encode(count);
+        oPacket.EncodeByte(count);
         for (int i = 0; i < 5; i++) {
             SkillMacro macro = macros[i];
             if (macro != null) {
                 oPacket.EncodeString(macro.getName());
-                oPacket.Encode(macro.getShout());
-                oPacket.EncodeInteger(macro.getSkill1());
-                oPacket.EncodeInteger(macro.getSkill2());
-                oPacket.EncodeInteger(macro.getSkill3());
+                oPacket.EncodeByte(macro.getShout());
+                oPacket.EncodeInt(macro.getSkill1());
+                oPacket.EncodeInt(macro.getSkill2());
+                oPacket.EncodeInt(macro.getSkill3());
             }
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet gameMsg(String msg) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.UserNoticeMsg.getValue());
-        oPacket.encodeString(msg, false);
-        oPacket.Encode(1);
+    public static OutPacket gameMsg(String msg) {
 
-        return oPacket.ToPacket();
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserNoticeMsg.getValue());
+        oPacket.EncodeString(msg);
+        oPacket.EncodeByte(1);
+
+        return oPacket;
     }
 
-    public static Packet innerPotentialMsg(String msg) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.GetCharacterPosition.getValue());
+    public static OutPacket innerPotentialMsg(String msg) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.GetCharacterPosition.getValue());
         oPacket.EncodeString(msg);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet updateInnerPotential(byte ability, int skill, int level, int rank) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.CharacterPotentialSet.getValue());
-        oPacket.Encode(1); //unlock
-        oPacket.Encode(1); //0 = no update
+    public static OutPacket updateInnerPotential(byte ability, int skill, int level, int rank) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CharacterPotentialSet.getValue());
+        oPacket.EncodeByte(1); //unlock
+        oPacket.EncodeByte(1); //0 = no update
         oPacket.EncodeShort(ability); //1-3
-        oPacket.EncodeInteger(skill); //skill id (7000000+)
+        oPacket.EncodeInt(skill); //skill id (7000000+)
         oPacket.EncodeShort(level); //level, 0 = blank inner ability
         oPacket.EncodeShort(rank); //rank
-        oPacket.Encode(1); //0 = no update
+        oPacket.EncodeByte(1); //0 = no update
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet innerPotentialResetMessage() {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.CharacterPotentialReset.getValue());
+    public static OutPacket innerPotentialResetMessage() {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CharacterPotentialReset.getValue());
         oPacket.EncodeString("Inner Potential has been reconfigured.");
-        oPacket.Encode(1);
-        return oPacket.ToPacket();
+        oPacket.EncodeByte(1);
+        return oPacket;
     }
 
-    public static Packet updateHonour(int honourLevel, int honourExp, boolean levelup) {
+    public static OutPacket updateHonour(int honourLevel, int honourExp, boolean levelup) {
         /*
          * data:
          * 03 00 00 00
          * 69 00 00 00
          * 01
          */
-        OutPacket oPacket = new OutPacket(80);
 
-        oPacket.EncodeShort(SendPacketOpcode.CharacterHonorExp.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CharacterHonorExp.getValue());
 
-        oPacket.EncodeInteger(honourLevel);
-        oPacket.EncodeInteger(honourExp);
-        oPacket.Encode(levelup ? 1 : 0); //shows level up effect
+        oPacket.EncodeInt(honourLevel);
+        oPacket.EncodeInt(honourExp);
+        oPacket.EncodeByte(levelup ? 1 : 0); //shows level up effect
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getCharInfo(User mc) {
+    public static OutPacket getCharInfo(User mc) {
         return getWarpToMap(mc, null, 0, false);
     }
 
-    public static Packet getWarpToMap(User chr, MapleMap to, int spawnPoint, boolean bCharacterData) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.SetField.getValue());
+    public static OutPacket getWarpToMap(User chr, MapleMap to, int spawnPoint, boolean bCharacterData) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SetField.getValue());
 
         // Save character data upon entering a new map.
         chr.saveToDB(false, false);
@@ -448,10 +443,10 @@ public class CField {
         oPacket.EncodeShort(0);
 
         /*oPacket.encodeShort(2);
-        oPacket.encodeInteger(1);
-        oPacket.encodeInteger(0);
-        oPacket.encodeInteger(2);
-        oPacket.encodeInteger(0);
+        oPacket.EncodeInt(1);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(2);
+        oPacket.EncodeInt(0);
         /*
         public static final int GlobalOpt = 0x0;
     	public static final int LastConnectInfo = 0x1;
@@ -466,29 +461,29 @@ public class CField {
             }
         }*/
         //Channel
-        oPacket.EncodeInteger(chr.getClient().getChannel() - 1);
+        oPacket.EncodeInt(chr.getClient().getChannel() - 1);
 
         //Admin Byte
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
 
         //Follow Feature (wOldDriverID)
-        oPacket.EncodeInteger(0);
+        oPacket.EncodeInt(0);
 
         //Logging Into Handler (1) Changing Map (2) bPopupDlg
-        oPacket.Encode(bCharacterData ? 1 : 2);
+        oPacket.EncodeByte(bCharacterData ? 1 : 2);
 
         //oPacket.encode(1); // bPopupDlg
         //?
-        oPacket.EncodeInteger(0);
+        oPacket.EncodeInt(0);
 
         //nFieldWidth (Map Width)
-        oPacket.EncodeInteger(800);
+        oPacket.EncodeInt(800);
 
         //nFieldHeight (Map Height)
-        oPacket.EncodeInteger(600);
+        oPacket.EncodeInt(600);
 
         //bCharacterData
-        oPacket.Encode(bCharacterData);
+        oPacket.EncodeBool(bCharacterData);
 
         //Size (string (size->string))
         oPacket.EncodeShort(0); // notifier check (used for block reason)
@@ -499,12 +494,12 @@ public class CField {
 
             PacketHelper.addCharacterInfo(oPacket, chr);
             //PacketHelper.addLuckyLogoutInfo(oPacket, false, null, null, null);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
         } else {
 
             //bUsingBuffProtector (Calls the revive function upon death)
-            oPacket.Encode(0);
+            oPacket.EncodeByte(0);
 
             /*
 	        if ( (*(TSingleton<CUserLocal>::ms_pInstance._m_pStr + 336) & 0xFFFFFFFE) == 18 || v13 )
@@ -513,12 +508,12 @@ public class CField {
 		      v2->m_bUsingBuffProtector = 0;
 		    }
              */
-            oPacket.EncodeInteger(to.getId());
-            oPacket.Encode(spawnPoint);
-            oPacket.EncodeInteger(chr.getStat().getHp());
+            oPacket.EncodeInt(to.getId());
+            oPacket.EncodeByte(spawnPoint);
+            oPacket.EncodeInt(chr.getStat().getHp());
 
             //Boolean (int + int)
-            oPacket.Encode(0);
+            oPacket.EncodeByte(0);
 
             /*
 	         *(&off_20DFDB8 + 73) = (void **)v25;
@@ -531,19 +526,19 @@ public class CField {
         }
 
         //CWvsContext::SetWhiteFadeInOut
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
 
         //pChatBlockReason
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
 
         //Some Korean Event (Fame-up)
         oPacket.EncodeLong(PacketHelper.getTime(System.currentTimeMillis()));
 
         //paramFieldInit.nMobStatAdjustRate
-        oPacket.EncodeInteger(100);
+        oPacket.EncodeInt(100);
 
         //Party Map Experience Boolean (int + string(bgm) + int(fieldid))
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
 
         /*if ( CInPacket::Decode1(iPacket) )
         {
@@ -551,17 +546,17 @@ public class CField {
           CFieldCustom::Decode(paramFieldInit.pFieldCustom.p, iPacket);
         }*/
         //Boolean
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
 
         /*
            if ( CInPacket::Decode1(iPacket) )
     		CWvsContext::OnInitPvPStat(v2); 
          */
         //bCanNotifyAnnouncedQuest
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
 
         //Boolean ((int + byte(size))->(int, int, int))->(long, int, int)
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
 
         /*if ( CInPacket::Decode1(iPacket) )
         {
@@ -575,231 +570,213 @@ public class CField {
           CField::DrawStackEventGauge(v36, v34);
         }*/
         boolean starPlanet = false;
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
         if (starPlanet) {
             //nRoundID
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(0);
 
             //the size, cannot exceed the count of 10
-            oPacket.Encode(0);
+            oPacket.EncodeByte(0);
 
             //anPoint
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(0);
 
             //anRanking
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(0);
 
             //atLastCheckRank (timeGetTime - 300000)
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(0);
 
             //ftShiningStarExpiredTime
             oPacket.EncodeLong(0);
 
             //nShiningStarPickedCount
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(0);
 
             //nRoundStarPoint
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(0);
         }
 
         //Boolean (int + byte + long)
         boolean aStarPlanetRoundInfo = false;
-        oPacket.Encode(aStarPlanetRoundInfo);
+        oPacket.EncodeBool(aStarPlanetRoundInfo);
         if (aStarPlanetRoundInfo) {
             //nStarPlanetRoundID
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(0);
 
             //nStarPlanetRoundState
-            oPacket.Encode(0);
+            oPacket.EncodeByte(0);
 
             //ftStarPlanetRoundEndDate
             oPacket.EncodeLong(0);
         }
 
         //CWvsContext::DecodeStarPlanetRoundInfo(pCtx, iPacket);
-        oPacket.EncodeInteger(0);//CUser::DecodeTextEquipInfo
+        oPacket.EncodeInt(0);//CUser::DecodeTextEquipInfo
 
         //FreezeAndHotEventInfo::Decode
-        oPacket.Encode(0); //nAccountType
-        oPacket.EncodeInteger(0); //dwAccountID
+        oPacket.EncodeByte(0); //nAccountType
+        oPacket.EncodeInt(0); //dwAccountID
 
         //CCUser::DecodeEventBestFriendInfo
-        oPacket.EncodeInteger(0); //dwEventBestFriendAID
-        oPacket.EncodeInteger(0);
+        oPacket.EncodeInt(0); //dwEventBestFriendAID
+        oPacket.EncodeInt(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet removeBGLayer(boolean remove, int map, byte layer, int duration) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket removeBGLayer(boolean remove, int map, byte layer, int duration) {
 
-        oPacket.EncodeShort(SendPacketOpcode.REMOVE_BG_LAYER.getValue());
-        oPacket.Encode(remove ? 1 : 0); //Boolean show or remove
-        oPacket.EncodeInteger(map);
-        oPacket.Encode(layer); //Layer to show/remove
-        oPacket.EncodeInteger(duration);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.REMOVE_BG_LAYER.getValue());
+        oPacket.EncodeByte(remove ? 1 : 0); //Boolean show or remove
+        oPacket.EncodeInt(map);
+        oPacket.EncodeByte(layer); //Layer to show/remove
+        oPacket.EncodeInt(duration);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet setMapObjectVisible(List<Pair<String, Byte>> objects) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket setMapObjectVisible(List<Pair<String, Byte>> objects) {
 
-        oPacket.EncodeShort(SendPacketOpcode.SET_MAP_OBJECT_VISIBLE.getValue());
-        oPacket.Encode(objects.size());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SET_MAP_OBJECT_VISIBLE.getValue());
+        oPacket.EncodeByte(objects.size());
         for (Pair<String, Byte> object : objects) {
             oPacket.EncodeString(object.getLeft());
-            oPacket.Encode(object.getRight());
+            oPacket.EncodeByte(object.getRight());
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet pvpBlocked(int type) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket enchantResult(int result) {
 
-        oPacket.Encode(type);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserItemInGameCubeResult.getValue());
+        oPacket.EncodeInt(result);//0=fail/1=sucess/2=idk/3=shows stats
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet enchantResult(int result) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showEquipEffect() {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserItemInGameCubeResult.getValue());
-        oPacket.EncodeInteger(result);//0=fail/1=sucess/2=idk/3=shows stats
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetActiveEffectItem.getValue());
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showEquipEffect() {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showEquipEffect(int team) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserSetActiveEffectItem.getValue());
-
-        return oPacket.ToPacket();
-    }
-
-    public static Packet showEquipEffect(int team) {
-        OutPacket oPacket = new OutPacket(80);
-
-        oPacket.EncodeShort(SendPacketOpcode.UserSetActiveEffectItem.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetActiveEffectItem.getValue());
         oPacket.EncodeShort(team);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet MapEff(String path) {
+    public static OutPacket MapEff(String path) {
         return environmentChange(path, 4, 0);//was 3
     }
 
-    public static Packet MapNameDisplay(int mapid) {
+    public static OutPacket MapNameDisplay(int mapid) {
         return environmentChange("maplemap/enter/" + mapid, 4, 0);
     }
 
-    public static Packet Aran_Start() {
+    public static OutPacket Aran_Start() {
         return environmentChange("Aran/balloon", 4, 0);
     }
 
-    public static Packet musicChange(String song) {
+    public static OutPacket musicChange(String song) {
         return environmentChange(song, 7, 0);//was 6
     }
 
-    public static Packet showEffect(String effect) {
+    public static OutPacket showEffect(String effect) {
         return environmentChange(effect, 4, 0);//was 3
     }
 
-    public static Packet playSound(String sound) {
+    public static OutPacket playSound(String sound) {
         return environmentChange(sound, 5, 0);//was 4
     }
 
-    public static Packet playSound(String sound, int delay) {
+    public static OutPacket playSound(String sound, int delay) {
         return environmentChange(sound, 5, delay);//was 4
     }
 
-    public static Packet environmentChange(String env, int mode, int delay) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket environmentChange(String env, int mode, int delay) {
 
-        oPacket.EncodeShort(SendPacketOpcode.BossEnvironment.getValue());
-        oPacket.Encode(mode);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.BossEnvironment.getValue());
+        oPacket.EncodeByte(mode);
         oPacket.EncodeString(env);
-        oPacket.EncodeInteger(delay); // 0x64
+        oPacket.EncodeInt(delay); // 0x64
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet trembleEffect(int type, int delay) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket trembleEffect(int type, int delay) {
 
-        oPacket.EncodeShort(SendPacketOpcode.BossEnvironment.getValue());
-        oPacket.Encode(1);
-        oPacket.Encode(type);
-        oPacket.EncodeInteger(delay);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.BossEnvironment.getValue());
+        oPacket.EncodeByte(1);
+        oPacket.EncodeByte(type);
+        oPacket.EncodeInt(delay);
         oPacket.EncodeShort(30);
-        // oPacket.encodeInteger(0);
+        // oPacket.EncodeInt(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet environmentMove(String env, int mode) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket environmentMove(String env, int mode) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MoveEnvironment.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MoveEnvironment.getValue());
         oPacket.EncodeString(env);
-        oPacket.EncodeInteger(mode);
+        oPacket.EncodeInt(mode);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getUpdateEnvironment(MapleMap map) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getUpdateEnvironment(MapleMap map) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UpdateEnvironment.getValue());
-        oPacket.EncodeInteger(map.getEnvironment().size());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UpdateEnvironment.getValue());
+        oPacket.EncodeInt(map.getEnvironment().size());
         for (Entry<String, Integer> mp : map.getEnvironment().entrySet()) {
             oPacket.EncodeString(mp.getKey());
-            oPacket.EncodeInteger(mp.getValue());
+            oPacket.EncodeInt(mp.getValue());
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet startMapEffect(String msg, int itemid, boolean active) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket startMapEffect(String msg, int itemid, boolean active) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FieldEffect.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FieldEffect.getValue());
         //oPacket.encode(active ? 0 : 1);
 
-        oPacket.EncodeInteger(itemid);
+        oPacket.EncodeInt(itemid);
         if (active) {
             oPacket.EncodeString(msg);
         }
-        oPacket.Encode(active ? 0 : 1); // Moved down here for v176
+        oPacket.EncodeByte(active ? 0 : 1); // Moved down here for v176
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet removeMapEffect() {
+    public static OutPacket removeMapEffect() {
         return startMapEffect(null, 0, false);
     }
 
-    public static Packet CriticalGrowing(int critical) { // Prime Critical
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.TemporaryStatSet.getValue());
+    public static OutPacket CriticalGrowing(int critical) { // Prime Critical
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.TemporaryStatSet.getValue());
         PacketHelper.writeSingleMask(oPacket, CharacterTemporaryStat.CriticalGrowing);
         oPacket.EncodeShort(critical);
-        oPacket.EncodeInteger(4220015);
+        oPacket.EncodeInt(4220015);
         oPacket.Fill(0, 22);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet OnOffFlipTheCoin(boolean on) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.UserFlipTheCoinEnabled.getValue());
-        oPacket.Encode(on ? 1 : 0);
+    public static OutPacket OnOffFlipTheCoin(boolean on) {
 
-        return oPacket.ToPacket();
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserFlipTheCoinEnabled.getValue());
+        oPacket.EncodeByte(on ? 1 : 0);
+
+        return oPacket;
     }
 
     /**
@@ -807,16 +784,16 @@ public class CField {
      *
      * @return
      */
-    /* public static Packet getEliteState() {
-        OutPacket oPacket = new OutPacket(80);
+    /* public static OutPacket getEliteState() {
         
-        oPacket.encodeShort(SendPacketOpcode.ELITE_STATE.getValue());
+        
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ELITE_STATE.getValue());
         
         final int eliteState = 2;
         final int v3 = 0;
         
-        oPacket.encodeInteger(eliteState); // this->m_nEliteState = CInPacket::Decode4(iPacket);
-        oPacket.encodeInteger(v3); // v3 = CInPacket::Decode4(iPacket);
+        oPacket.EncodeInt(eliteState); // this->m_nEliteState = CInPacket::Decode4(iPacket);
+        oPacket.EncodeInt(v3); // v3 = CInPacket::Decode4(iPacket);
         
         if (eliteState == 2) {
             oPacket.encodeString("Bgm06/FinalFight"); // CInPacket::DecodeStr(iPacket, &sBgm);
@@ -835,25 +812,23 @@ public class CField {
         
         return oPacket.createPacket();
     }*/
-    public static Packet getGMEffect(int value, int mode) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getGMEffect(int value, int mode) {
 
-        oPacket.EncodeShort(SendPacketOpcode.GM_EFFECT.getValue());
-        oPacket.Encode(value);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.GM_EFFECT.getValue());
+        oPacket.EncodeByte(value);
         oPacket.Fill(0, 17);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showOXQuiz(int questionSet, int questionId, boolean askQuestion) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showOXQuiz(int questionSet, int questionId, boolean askQuestion) {
 
-        oPacket.EncodeShort(SendPacketOpcode.OX_QUIZ.getValue());
-        oPacket.Encode(askQuestion ? 1 : 0);
-        oPacket.Encode(questionSet);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.OX_QUIZ.getValue());
+        oPacket.EncodeByte(askQuestion ? 1 : 0);
+        oPacket.EncodeByte(questionSet);
         oPacket.EncodeShort(questionId);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -861,278 +836,261 @@ public class CField {
      *
      * @return
      */
-    public static Packet showEventInstructions() {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showEventInstructions() {
 
-        oPacket.EncodeShort(SendPacketOpcode.GMEVENT_INSTRUCTIONS.getValue());
-        oPacket.Encode(0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.GMEVENT_INSTRUCTIONS.getValue());
+        oPacket.EncodeByte(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getPVPClock(int type, int time) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getPVPClock(int type, int time) {
 
-        oPacket.EncodeShort(SendPacketOpcode.Clock.getValue());
-        oPacket.Encode(3);
-        oPacket.Encode(type);
-        oPacket.EncodeInteger(time);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Clock.getValue());
+        oPacket.EncodeByte(3);
+        oPacket.EncodeByte(type);
+        oPacket.EncodeInt(time);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getBanBanClock(int time, int direction) {
-        OutPacket packet = new OutPacket(80);
-        packet.EncodeShort(SendPacketOpcode.Clock.getValue());
-        packet.Encode(5);
-        packet.Encode(direction); //0:?????? 1:????
-        packet.EncodeInteger(time);
-        return packet.ToPacket();
+    public static OutPacket getBanBanClock(int time, int direction) {
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Clock.getValue());
+        oPacket.EncodeByte(5);
+        oPacket.EncodeByte(direction); //0:?????? 1:????
+        oPacket.EncodeInt(time);
+        return oPacket;
     }
 
-    public static Packet getClock(int time) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getClock(int time) {
 
-        oPacket.EncodeShort(SendPacketOpcode.Clock.getValue());
-        oPacket.Encode(2);
-        oPacket.EncodeInteger(time);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Clock.getValue());
+        oPacket.EncodeByte(2);
+        oPacket.EncodeInt(time);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getClockTime(int hour, int min, int sec) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getClockTime(int hour, int min, int sec) {
 
-        oPacket.EncodeShort(SendPacketOpcode.Clock.getValue());
-        oPacket.Encode(1);
-        oPacket.Encode(hour);
-        oPacket.Encode(min);
-        oPacket.Encode(sec);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Clock.getValue());
+        oPacket.EncodeByte(1);
+        oPacket.EncodeByte(hour);
+        oPacket.EncodeByte(min);
+        oPacket.EncodeByte(sec);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet boatPacket(int effect, int mode) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket boatPacket(int effect, int mode) {
 
-        oPacket.EncodeShort(SendPacketOpcode.ContiMove.getValue());
-        oPacket.Encode(effect);
-        oPacket.Encode(mode);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ContiMove.getValue());
+        oPacket.EncodeByte(effect);
+        oPacket.EncodeByte(mode);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet setBoatState(int effect) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket setBoatState(int effect) {
 
-        oPacket.EncodeShort(SendPacketOpcode.ContiState.getValue());
-        oPacket.Encode(effect);
-        oPacket.Encode(1);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ContiState.getValue());
+        oPacket.EncodeByte(effect);
+        oPacket.EncodeByte(1);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet stopClock() {
-        return (new OutPacket(10)).Encode(getPacketFromHexString(Integer.toHexString(SendPacketOpcode.DestroyClock.getValue()) + " 00")).ToPacket();
+    public static OutPacket stopClock() {
+        return (new OutPacket(SendPacketOpcode.DestroyClock.getValue()));
     }
 
-    public static Packet showAriantScoreBoard() {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showAriantScoreBoard() {
 
-        oPacket.EncodeShort(SendPacketOpcode.ShowArenaResult.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ShowArenaResult.getValue());
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet quickSlot(String skil) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket quickSlot(String skil) {
 
-        oPacket.EncodeShort(SendPacketOpcode.QuickslotMappedInit.getValue());
-        oPacket.Encode(skil == null ? 0 : 1);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.QuickslotMappedInit.getValue());
+        oPacket.EncodeByte(skil == null ? 0 : 1);
         if (skil != null) {
             String[] slots = skil.split(",");
             for (int i = 0; i < 8; i++) {
-                oPacket.EncodeInteger(Integer.parseInt(slots[i]));
+                oPacket.EncodeInt(Integer.parseInt(slots[i]));
             }
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getMovingPlatforms(MapleMap map) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getMovingPlatforms(MapleMap map) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FootHoldMove.getValue());
-        oPacket.EncodeInteger(map.getSharedMapResources().footholds.getMovingPlatforms().size());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FootHoldMove.getValue());
+        oPacket.EncodeInt(map.getSharedMapResources().footholds.getMovingPlatforms().size());
         for (Map_MaplePlatform mp : map.getSharedMapResources().footholds.getMovingPlatforms()) {
             oPacket.EncodeString(mp.name);
-            oPacket.EncodeInteger(mp.start);
-            oPacket.EncodeInteger(mp.SN.size());
+            oPacket.EncodeInt(mp.start);
+            oPacket.EncodeInt(mp.SN.size());
             for (int x = 0; x < mp.SN.size(); x++) {
-                oPacket.EncodeInteger(mp.SN.get(x));
+                oPacket.EncodeInt(mp.SN.get(x));
             }
-            oPacket.EncodeInteger(mp.speed);
-            oPacket.EncodeInteger(mp.x1);
-            oPacket.EncodeInteger(mp.x2);
-            oPacket.EncodeInteger(mp.y1);
-            oPacket.EncodeInteger(mp.y2);
-            oPacket.EncodeInteger(mp.x1);
-            oPacket.EncodeInteger(mp.y1);
+            oPacket.EncodeInt(mp.speed);
+            oPacket.EncodeInt(mp.x1);
+            oPacket.EncodeInt(mp.x2);
+            oPacket.EncodeInt(mp.y1);
+            oPacket.EncodeInt(mp.y2);
+            oPacket.EncodeInt(mp.x1);
+            oPacket.EncodeInt(mp.y1);
             oPacket.EncodeShort(mp.r);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet sendPVPMaps() {
-        final OutPacket oPacket = new OutPacket(80);
-
-        oPacket.EncodeShort(SendPacketOpcode.PvPStatusResult.getValue());
-        oPacket.Encode(3); //max amount of players
+    public static OutPacket sendPVPMaps() {
+        final OutPacket oPacket = new OutPacket(SendPacketOpcode.PvPStatusResult.getValue());
+        oPacket.EncodeByte(3); //max amount of players
         for (int i = 0; i < 20; i++) {
-            oPacket.EncodeInteger(10); //how many peoples in each map
+            oPacket.EncodeInt(10); //how many peoples in each map
         }
         oPacket.Fill(0, 124);
         oPacket.EncodeShort(150); ////PVP 1.5 EVENT!
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet gainForce(int oid, int count, int color) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket gainForce(int oid, int count, int color) {
 
-        oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
-        oPacket.Encode(1); // 0 = remote user?
-        oPacket.EncodeInteger(oid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ForceAtomCreate.getValue());
+        oPacket.EncodeByte(1); // 0 = remote user?
+        oPacket.EncodeInt(oid);
         byte newcheck = 0;
-        oPacket.EncodeInteger(newcheck); //unk
+        oPacket.EncodeInt(newcheck); //unk
         if (newcheck > 0) {
-            oPacket.EncodeInteger(0); //unk
-            oPacket.EncodeInteger(0); //unk
+            oPacket.EncodeInt(0); //unk
+            oPacket.EncodeInt(0); //unk
         }
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(4); // size, for each below
-        oPacket.EncodeInteger(count); //count
-        oPacket.EncodeInteger(color); //color, 1-10 for demon, 1-2 for phantom
-        oPacket.EncodeInteger(0); //unk
-        oPacket.EncodeInteger(0); //unk
-        return oPacket.ToPacket();
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(4); // size, for each below
+        oPacket.EncodeInt(count); //count
+        oPacket.EncodeInt(color); //color, 1-10 for demon, 1-2 for phantom
+        oPacket.EncodeInt(0); //unk
+        oPacket.EncodeInt(0); //unk
+        return oPacket;
     }
 
-    public static Packet gainForce(boolean isRemote, User chr, List<Integer> oid, int type, int skillid, List<Pair<Integer, Integer>> forceInfo, Point monsterpos, int throwingStar) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket gainForce(boolean isRemote, User chr, List<Integer> oid, int type, int skillid, List<Pair<Integer, Integer>> forceInfo, Point monsterpos, int throwingStar) {
 
-        oPacket.EncodeShort(SendPacketOpcode.ForceAtomCreate.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ForceAtomCreate.getValue());
         // int orbitalFlame = GameConstants.getOrbitalFlame(skillid);
-        oPacket.Encode(isRemote);
+        oPacket.EncodeBool(isRemote);
         if (isRemote) {
-            oPacket.EncodeInteger(chr.getId());
+            oPacket.EncodeInt(chr.getId());
         }
-        oPacket.EncodeInteger(isRemote ? oid.get(0) : chr.getId());// dwTargetID
-        oPacket.EncodeInteger(type); // ForceAtomType
+        oPacket.EncodeInt(isRemote ? oid.get(0) : chr.getId());// dwTargetID
+        oPacket.EncodeInt(type); // ForceAtomType
 
         if (!(type == 0 || type == 9 || type == 14)) {
-            oPacket.Encode(1);
+            oPacket.EncodeByte(1);
             if (GameConstants.isSpecialForce(type)) {
-                oPacket.EncodeInteger(oid.size()); // size
+                oPacket.EncodeInt(oid.size()); // size
                 for (int i = 0; i < oid.size(); i++) {
-                    oPacket.EncodeInteger(oid.get(i));
+                    oPacket.EncodeInt(oid.get(i));
                 }
             } else {
-                oPacket.EncodeInteger(oid.get(0));
+                oPacket.EncodeInt(oid.get(0));
             }
-            oPacket.EncodeInteger(skillid); //skillid
+            oPacket.EncodeInt(skillid); //skillid
         }
 
         for (Pair<Integer, Integer> info : forceInfo) {
-            oPacket.Encode(1); // while on/off
-            oPacket.EncodeInteger(info.left); // count(dwKey)
-            oPacket.EncodeInteger(info.right); // color(nInc)
-            oPacket.EncodeInteger(Randomizer.rand(15, 29));//nFirstImpact
-            oPacket.EncodeInteger(Randomizer.rand(5, 6));//nSecondImpact
-            oPacket.EncodeInteger(Randomizer.rand(35, 50));//nAngle
-            oPacket.EncodeInteger((skillid / 1000000) == 14 ? 1 : 0); //nStartDelay
-            oPacket.EncodeInteger(0); //ptStart.x
-            oPacket.EncodeInteger(0); //ptStart.y
-            oPacket.EncodeInteger((skillid / 1000000) == 14 ? 51399013 : 0); // dwCreateTime
-            //  oPacket.EncodeInteger(GameConstants.getOrbitalCount(orbitalFlame)); //nMaxHitCount
+            oPacket.EncodeByte(1); // while on/off
+            oPacket.EncodeInt(info.left); // count(dwKey)
+            oPacket.EncodeInt(info.right); // color(nInc)
+            oPacket.EncodeInt(Randomizer.rand(15, 29));//nFirstImpact
+            oPacket.EncodeInt(Randomizer.rand(5, 6));//nSecondImpact
+            oPacket.EncodeInt(Randomizer.rand(35, 50));//nAngle
+            oPacket.EncodeInt((skillid / 1000000) == 14 ? 1 : 0); //nStartDelay
+            oPacket.EncodeInt(0); //ptStart.x
+            oPacket.EncodeInt(0); //ptStart.y
+            oPacket.EncodeInt((skillid / 1000000) == 14 ? 51399013 : 0); // dwCreateTime
+            //  oPacket.EncodeInt(GameConstants.getOrbitalCount(orbitalFlame)); //nMaxHitCount
             // maybe mroe int
         }
 
-        oPacket.Encode(0); // where read??
+        oPacket.EncodeByte(0); // where read??
 
         if (type == 11) {
-            oPacket.EncodeInteger(chr.getPosition().x);
-            oPacket.EncodeInteger(chr.getPosition().y);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(chr.getPosition().x);
+            oPacket.EncodeInt(chr.getPosition().y);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
         }
         if (type == 9 || type == 15) {
-            oPacket.EncodeInteger(0x1E3);
-            oPacket.EncodeInteger(-106);
-            oPacket.EncodeInteger(0x1F7);
-            oPacket.EncodeInteger(-86);
+            oPacket.EncodeInt(0x1E3);
+            oPacket.EncodeInt(-106);
+            oPacket.EncodeInt(0x1F7);
+            oPacket.EncodeInt(-86);
         }
         if (type == 16) {
-            oPacket.EncodeInteger(543);
-            oPacket.EncodeInteger(-325);
+            oPacket.EncodeInt(543);
+            oPacket.EncodeInt(-325);
         }
         if (type == 17) {
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
         }
         if (type == 18) {
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getAndroidTalkStyle(int npc, String talk, int... args) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getAndroidTalkStyle(int npc, String talk, int... args) {
 
-        oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-        oPacket.Encode(4);
-        oPacket.EncodeInteger(npc);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+        oPacket.EncodeByte(4);
+        oPacket.EncodeInt(npc);
         oPacket.EncodeShort(10);
         oPacket.EncodeString(talk);
-        oPacket.Encode(args.length);
+        oPacket.EncodeByte(args.length);
 
         for (int i = 0; i < args.length; i++) {
-            oPacket.EncodeInteger(args[i]);
+            oPacket.EncodeInt(args[i]);
         }
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getQuickMoveInfo(boolean show, List<QuickMoveNPC> qm) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getQuickMoveInfo(boolean show, List<QuickMoveNPC> qm) {
 
-        oPacket.EncodeShort(SendPacketOpcode.SetQuickMoveInfo.getValue());
-        oPacket.Encode(qm.size() <= 0 ? 0 : show ? qm.size() : 0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SetQuickMoveInfo.getValue());
+        oPacket.EncodeByte(qm.size() <= 0 ? 0 : show ? qm.size() : 0);
         if (show && qm.size() > 0) {
             for (QuickMoveNPC qmn : qm) {
-                oPacket.EncodeInteger(0);
-                oPacket.EncodeInteger(qmn.getId());
-                oPacket.EncodeInteger(qmn.getType());
-                oPacket.EncodeInteger(qmn.getLevel());
+                oPacket.EncodeInt(0);
+                oPacket.EncodeInt(qmn.getId());
+                oPacket.EncodeInt(qmn.getType());
+                oPacket.EncodeInt(qmn.getLevel());
                 oPacket.EncodeString(qmn.getDescription());
                 oPacket.EncodeLong(PacketHelper.getTime(-2));
                 oPacket.EncodeLong(PacketHelper.getTime(-1));
             }
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet spawnPlayerMapObject(User chr) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket spawnPlayerMapObject(User chr) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserEnterField.getValue());
-        oPacket.EncodeInteger(chr.getId());
-        oPacket.Encode(chr.getLevel());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEnterField.getValue());
+        oPacket.EncodeInt(chr.getId());
+        oPacket.EncodeByte(chr.getLevel());
         oPacket.EncodeString(chr.getName());
         MapleQuestStatus ultExplorer = chr.getQuestNoAdd(MapleQuest.getInstance(111111));
         if (ultExplorer != null && ultExplorer.getCustomData() != null) {
@@ -1144,73 +1102,73 @@ public class CField {
         if (gs != null) {
             oPacket.EncodeString(gs.getName());
             oPacket.EncodeShort(gs.getLogoBG());
-            oPacket.Encode(gs.getLogoBGColor());
+            oPacket.EncodeByte(gs.getLogoBGColor());
             oPacket.EncodeShort(gs.getLogo());
-            oPacket.Encode(gs.getLogoColor());
+            oPacket.EncodeByte(gs.getLogoColor());
         } else {
             oPacket.Encode(new byte[8]);
         }
 
-        oPacket.Encode(chr.getGender());
-        oPacket.EncodeInteger(chr.getFame());
-        oPacket.EncodeInteger(1); //m_nFarmLevel
-        oPacket.EncodeInteger(0); //m_nNameTagMark
+        oPacket.EncodeByte(chr.getGender());
+        oPacket.EncodeInt(chr.getFame());
+        oPacket.EncodeInt(1); //m_nFarmLevel
+        oPacket.EncodeInt(0); //m_nNameTagMark
 
         // Remove certain effects upon entering the map in order to avoid disconnects, for now. 
         Utility.removeBuffFromMap(chr, CharacterTemporaryStat.ShadowServant);
         Utility.removeBuffFromMap(chr, CharacterTemporaryStat.ShadowIllusion);
-        
+
         BuffPacket.encodeForRemote(oPacket, chr);
 
         oPacket.EncodeShort(chr.getJob());
         oPacket.EncodeShort(chr.getSubcategory());
-        oPacket.EncodeInteger(chr.getStat().starForceEnhancement); //m_nTotalCHUC
-        oPacket.EncodeInteger(0);
+        oPacket.EncodeInt(chr.getStat().starForceEnhancement); //m_nTotalCHUC
+        oPacket.EncodeInt(0);
         writeCharacterLook(oPacket, chr, true);
-        oPacket.EncodeInteger(0); // Unknown
-        oPacket.EncodeInteger(0); // Unknown
+        oPacket.EncodeInt(0); // Unknown
+        oPacket.EncodeInt(0); // Unknown
 
         // Begins a sub (sub_1158EC0) 188T
-        oPacket.EncodeInteger(0); // Unknown
-        oPacket.EncodeInteger(0); // Unknown
-        oPacket.EncodeInteger(0); // Unknown // Encode 2 ints per size
+        oPacket.EncodeInt(0); // Unknown
+        oPacket.EncodeInt(0); // Unknown
+        oPacket.EncodeInt(0); // Unknown // Encode 2 ints per size
         // End Sub
 
-        oPacket.EncodeInteger(0); //m_dwDriverID
-        oPacket.EncodeInteger(0); //m_dwPassenserID
-        oPacket.EncodeInteger(Math.min(250, chr.getInventory(MapleInventoryType.CASH).countById(5110000))); //nChocoCount
-        oPacket.EncodeInteger(chr.getItemEffect()); //nActiveEffectItemID
-        //oPacket.EncodeInteger(0); //nMonkeyEffectItemID
+        oPacket.EncodeInt(0); //m_dwDriverID
+        oPacket.EncodeInt(0); //m_dwPassenserID
+        oPacket.EncodeInt(Math.min(250, chr.getInventory(MapleInventoryType.CASH).countById(5110000))); //nChocoCount
+        oPacket.EncodeInt(chr.getItemEffect()); //nActiveEffectItemID
+        //oPacket.EncodeInt(0); //nMonkeyEffectItemID
         //MapleQuestStatus stat = chr.getQuestNoAdd(MapleQuest.getInstance(124000));
-        //oPacket.EncodeInteger(stat != null && stat.getCustomData() != null ? Integer.parseInt(stat.getCustomData()) : 0); //nActiveNickItemID (Title)
-        oPacket.EncodeInteger(0); //nDamageSkin
-        oPacket.EncodeInteger(0); //ptPos.x
-        oPacket.EncodeInteger(0); //nDemonWingID
-        oPacket.EncodeInteger(0); //nKaiserWingID
-        oPacket.EncodeInteger(0); //nKaiserTailID
-        oPacket.EncodeInteger(0); //m_nCompletedSetItemID
+        //oPacket.EncodeInt(stat != null && stat.getCustomData() != null ? Integer.parseInt(stat.getCustomData()) : 0); //nActiveNickItemID (Title)
+        oPacket.EncodeInt(0); //nDamageSkin
+        oPacket.EncodeInt(0); //ptPos.x
+        oPacket.EncodeInt(0); //nDemonWingID
+        oPacket.EncodeInt(0); //nKaiserWingID
+        oPacket.EncodeInt(0); //nKaiserTailID
+        oPacket.EncodeInt(0); //m_nCompletedSetItemID
         oPacket.EncodeShort(-1); //m_nFieldSeatID
-        oPacket.EncodeInteger(GameConstants.getInventoryType(chr.getChair()) == MapleInventoryType.SETUP ? chr.getChair() : 0); //m_nPortableChairID
-        oPacket.EncodeInteger(0);// if (int > 0), decodestr
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0);
-        oPacket.Encode(0); // Unknown
+        oPacket.EncodeInt(GameConstants.getInventoryType(chr.getChair()) == MapleInventoryType.SETUP ? chr.getChair() : 0); //m_nPortableChairID
+        oPacket.EncodeInt(0);// if (int > 0), decodestr
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeByte(0); // Unknown
         oPacket.EncodeShort(chr.getTruePosition().x);
         oPacket.EncodeShort(chr.getTruePosition().y);
-        oPacket.Encode(chr.getStance());
+        oPacket.EncodeByte(chr.getStance());
         oPacket.EncodeShort(chr.getFh());
-        oPacket.Encode(0);
-        oPacket.Encode(0); // if this byte is > 0, do a loop and write an int for pet
-        oPacket.Encode(0);
-        oPacket.Encode(0);
-        oPacket.Encode(0);//CAvatar::SetMechanicHUE
-        oPacket.EncodeInteger(chr.getMount().getLevel());
-        oPacket.EncodeInteger(chr.getMount().getExp());
-        oPacket.EncodeInteger(chr.getMount().getFatigue());
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(0); // if this byte is > 0, do a loop and write an int for pet
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(0);//CAvatar::SetMechanicHUE
+        oPacket.EncodeInt(chr.getMount().getLevel());
+        oPacket.EncodeInt(chr.getMount().getExp());
+        oPacket.EncodeInt(chr.getMount().getFatigue());
 
         PacketHelper.addAnnounceBox(oPacket, chr);
-        oPacket.Encode(chr.getChalkboard() != null);
+        oPacket.EncodeBool(chr.getChalkboard() != null);
 
         if (chr.getChalkboard() != null && chr.getChalkboard().length() > 0) {
             oPacket.EncodeString(chr.getChalkboard());
@@ -1221,196 +1179,51 @@ public class CField {
         addRingInfo(oPacket, rings.getMid());
         addMRingInfo(oPacket, rings.getRight(), chr);
 
-        oPacket.Encode(0);//mask
-        oPacket.EncodeInteger(0); //v4->m_nEvanDragonGlide_Riding
+        oPacket.EncodeByte(0);//mask
+        oPacket.EncodeInt(0); //v4->m_nEvanDragonGlide_Riding
 
         if (GameConstants.isKaiser(chr.getJob())) {
             String x = chr.getOneInfo(12860, "extern");
-            oPacket.EncodeInteger(x == null ? 0 : Integer.parseInt(x));
+            oPacket.EncodeInt(x == null ? 0 : Integer.parseInt(x));
             x = chr.getOneInfo(12860, "inner");
-            oPacket.EncodeInteger(x == null ? 0 : Integer.parseInt(x));
+            oPacket.EncodeInt(x == null ? 0 : Integer.parseInt(x));
             x = chr.getOneInfo(12860, "primium");
-            oPacket.Encode(x == null ? 0 : Integer.parseInt(x));
+            oPacket.EncodeByte(x == null ? 0 : Integer.parseInt(x));
         }
 
-        oPacket.EncodeInteger(0); //CUser::SetMakingMeisterSkillEff
+        oPacket.EncodeInt(0); //CUser::SetMakingMeisterSkillEff
 
         PacketHelper.addFarmInfo(oPacket, chr.getClient(), 0);
         for (int i = 0; i < 5; i++) {
-            oPacket.Encode(-1);
+            oPacket.EncodeByte(-1);
         }
 
-        oPacket.EncodeInteger(0); // LOOP: If int > 0, write a string
-        oPacket.Encode(1);
+        oPacket.EncodeInt(0); // LOOP: If int > 0, write a string
+        oPacket.EncodeByte(1);
 
         // TO-DO: If it is a Honey Butterfly mount, write an  int. If that int > 0, loop and write an int on each iteration.
-        oPacket.Encode(0); // if byte > 0 && another byte, decode two ints, two shorts, something to do with 12101025 (Flashfire)
-        oPacket.Encode(0);//CUser::StarPlanetRank::Decode
-        oPacket.EncodeInteger(0); //sub_15ECDF0
-        oPacket.EncodeInteger(0); //CUser::DecodeTextEquipInfo
-        oPacket.Encode(0); //CUser::DecodeFreezeHotEventInfo
-        oPacket.EncodeInteger(0); //CUser::DecodeFreezeHotEventInfo
-        oPacket.EncodeInteger(0); //CUser::DecodeEventBestFriendInfo
-        oPacket.Encode(0); //CUserRemote::OnKinesisPsychicEnergyShieldEffect
-        oPacket.Encode(1);//asume this and the next int is some waterEvent shit
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(1);
-        oPacket.EncodeInteger(0);
+        oPacket.EncodeByte(0); // if byte > 0 && another byte, decode two ints, two shorts, something to do with 12101025 (Flashfire)
+        oPacket.EncodeByte(0);//CUser::StarPlanetRank::Decode
+        oPacket.EncodeInt(0); //sub_15ECDF0
+        oPacket.EncodeInt(0); //CUser::DecodeTextEquipInfo
+        oPacket.EncodeByte(0); //CUser::DecodeFreezeHotEventInfo
+        oPacket.EncodeInt(0); //CUser::DecodeFreezeHotEventInfo
+        oPacket.EncodeInt(0); //CUser::DecodeEventBestFriendInfo
+        oPacket.EncodeByte(0); //CUserRemote::OnKinesisPsychicEnergyShieldEffect
+        oPacket.EncodeByte(1);//asume this and the next int is some waterEvent shit
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(1);
+        oPacket.EncodeInt(0);
         oPacket.EncodeString("");
-        oPacket.EncodeInteger(0);
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0); //sub_15B8CB0
+        oPacket.EncodeInt(0);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(0); //sub_15B8CB0
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    // Back up of spawnPlayerMapObject (January 6, 2018)
-    /*public static Packet spawnPlayerMapObject(MapleCharacter chr) {
-        OutPacket oPacket = new OutPacket(80);
-
-        oPacket.EncodeShort(SendPacketOpcode.UserEnterField.getValue());
-        oPacket.EncodeInteger(chr.getId());
-        oPacket.Encode(chr.getLevel());
-        oPacket.EncodeString(chr.getName());
-        MapleQuestStatus ultExplorer = chr.getQuestNoAdd(MapleQuest.getInstance(111111));
-        if (ultExplorer != null && ultExplorer.getCustomData() != null) {
-            oPacket.EncodeString(ultExplorer.getCustomData());
-        } else {
-            oPacket.EncodeString("");
-        }
-        MapleGuild gs = Guild.getGuild(chr.getGuildId());
-        if (gs != null) {
-            oPacket.EncodeString(gs.getName());
-            oPacket.EncodeShort(gs.getLogoBG());
-            oPacket.Encode(gs.getLogoBGColor());
-            oPacket.EncodeShort(gs.getLogo());
-            oPacket.Encode(gs.getLogoColor());
-        } else {
-            oPacket.Encode(new byte[8]);
-        }
-
-        oPacket.Encode(chr.getGender());
-        oPacket.EncodeInteger(chr.getFame());
-        oPacket.EncodeInteger(1); //m_nFarmLevel
-        oPacket.EncodeInteger(0); //m_nNameTagMark
-
-        BuffPacket.encodeForRemote(oPacket, chr);
-
-        oPacket.EncodeShort(chr.getJob());
-        oPacket.EncodeShort(chr.getSubcategory());
-        oPacket.EncodeInteger(chr.getStat().starForceEnhancement); //m_nTotalCHUC
-        writeCharacterLook(oPacket, chr, true);
-        oPacket.EncodeInteger(0); //m_dwDriverID
-        oPacket.EncodeInteger(0); //m_dwPassenserID
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(Math.min(250, chr.getInventory(MapleInventoryType.CASH).countById(5110000))); //nChocoCount
-        oPacket.EncodeInteger(chr.getItemEffect()); //nActiveEffectItemID
-        oPacket.EncodeInteger(0); //nMonkeyEffectItemID
-        MapleQuestStatus stat = chr.getQuestNoAdd(MapleQuest.getInstance(124000));
-        oPacket.EncodeInteger(stat != null && stat.getCustomData() != null ? Integer.parseInt(stat.getCustomData()) : 0); //nActiveNickItemID (Title)
-        oPacket.EncodeInteger(0); //nDamageSkin
-        oPacket.EncodeInteger(0); //ptPos.x
-        oPacket.EncodeInteger(0); //nDemonWingID
-        oPacket.EncodeInteger(0); //nKaiserWingID
-        oPacket.EncodeInteger(0); //nKaiserTailID
-        oPacket.EncodeInteger(0); //m_nCompletedSetItemID
-        oPacket.EncodeShort(-1); //m_nFieldSeatID
-        oPacket.EncodeInteger(GameConstants.getInventoryType(chr.getChair()) == MapleInventoryType.SETUP ? chr.getChair() : 0); //m_nPortableChairID
-        oPacket.EncodeInteger(0);// if (int > 0), decodestr
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeShort(chr.getTruePosition().x);
-        oPacket.EncodeShort(chr.getTruePosition().y);
-        oPacket.Encode(chr.getStance());
-        oPacket.EncodeShort(chr.getFh());
-        oPacket.Encode(0); // bAdminClient boolean
-        oPacket.Encode(chr.getPets().size() > 0); // if this byte is > 0, do a loop and write an int for pet
-        
-        for (MaplePet pet : chr.getPets()) {
-            if (pet.getSummoned()) {
-                oPacket.Encode(1);
-                oPacket.EncodeInteger(chr.getPetIndex(pet));
-                PetPacket.addPetData(chr, pet);
-            }
-        }
-        
-        //for (int i = 0; i < 3; i++) {
-        //    MaplePet pPet = chr.getPet(i);
-        //    if (pPet.getSummoned()) {
-        //        oPacket.Encode(1);
-        //        oPacket.EncodeInteger(chr.getPetIndex(pPet));
-        //        PetPacket.addPetData(chr, pPet);
-        //    }
-        //}
-        
-        //oPacket.Encode(0);
-        oPacket.Encode(0); 
-        oPacket.Encode(0);//CAvatar::SetMechanicHUE
-        oPacket.EncodeInteger(chr.getMount().getLevel());
-        oPacket.EncodeInteger(chr.getMount().getExp());
-        oPacket.EncodeInteger(chr.getMount().getFatigue());
-
-        PacketHelper.addAnnounceBox(oPacket, chr);
-        oPacket.Encode(chr.getChalkboard() != null);
-
-        if (chr.getChalkboard() != null && chr.getChalkboard().length() > 0) {
-            oPacket.EncodeString(chr.getChalkboard());
-        }
-
-        Triple<List<MapleRing>, List<MapleRing>, List<MapleRing>> rings = chr.getRings(false);
-        addRingInfo(oPacket, rings.getLeft());
-        addRingInfo(oPacket, rings.getMid());
-        addMRingInfo(oPacket, rings.getRight(), chr);
-
-        oPacket.Encode(0);//mask
-        oPacket.EncodeInteger(0); //v4->m_nEvanDragonGlide_Riding
-
-        if (GameConstants.isKaiser(chr.getJob())) {
-            String x = chr.getOneInfo(12860, "extern");
-            oPacket.EncodeInteger(x == null ? 0 : Integer.parseInt(x));
-            x = chr.getOneInfo(12860, "inner");
-            oPacket.EncodeInteger(x == null ? 0 : Integer.parseInt(x));
-            x = chr.getOneInfo(12860, "primium");
-            oPacket.Encode(x == null ? 0 : Integer.parseInt(x));
-        }
-
-        oPacket.EncodeInteger(0); //CUser::SetMakingMeisterSkillEff
-
-        PacketHelper.addFarmInfo(oPacket, chr.getClient(), 0);
-        for (int i = 0; i < 5; i++) {
-            oPacket.Encode(-1);
-        }
-
-        oPacket.EncodeInteger(0); // LOOP: If int > 0, write a string
-        oPacket.Encode(1);
-
-        // TO-DO: If it is a Honey Butterfly mount, write an  int. If that int > 0, loop and write an int on each iteration.
-        oPacket.Encode(0); // if byte > 0 && another byte, decode two ints, two shorts, something to do with 12101025 (Flashfire)
-        oPacket.Encode(0);//CUser::StarPlanetRank::Decode
-        oPacket.EncodeInteger(0); //sub_15ECDF0
-        oPacket.EncodeInteger(0); //CUser::DecodeTextEquipInfo
-        oPacket.Encode(0); //CUser::DecodeFreezeHotEventInfo
-        oPacket.EncodeInteger(0); //CUser::DecodeFreezeHotEventInfo
-        oPacket.EncodeInteger(0); //CUser::DecodeEventBestFriendInfo
-        oPacket.Encode(0); //CUserRemote::OnKinesisPsychicEnergyShieldEffect
-        oPacket.Encode(1);//asume this and the next int is some waterEvent shit
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(1);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeString("");
-        oPacket.EncodeInteger(0);
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0); //sub_15B8CB0
-
-        return oPacket.ToPacket();
-    }*/
     /**
      * Jumps to writeCharacterLook() with mega display toggled off.
      *
@@ -1451,27 +1264,25 @@ public class CField {
         }
     }
 
-    public static Packet removePlayerFromMap(int cid) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket removePlayerFromMap(int cid) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserLeaveField.getValue());
-        oPacket.EncodeInteger(cid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserLeaveField.getValue());
+        oPacket.EncodeInt(cid);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getChatText(int cidfrom, String text, boolean whiteBG, boolean appendToChatLogList) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getChatText(int cidfrom, String text, boolean whiteBG, boolean appendToChatLogList) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserChat.getValue());
-        oPacket.EncodeInteger(cidfrom);
-        oPacket.Encode(whiteBG ? 1 : 0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserChat.getValue());
+        oPacket.EncodeInt(cidfrom);
+        oPacket.EncodeByte(whiteBG ? 1 : 0);
         oPacket.EncodeString(text);//
-        oPacket.Encode(appendToChatLogList ? 0 : 1); // Changed to the ! opposite on v176
-        oPacket.Encode(0);
-        oPacket.Encode(-1);
+        oPacket.EncodeByte(appendToChatLogList ? 0 : 1); // Changed to the ! opposite on v176
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(-1);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -1485,20 +1296,19 @@ public class CField {
      *
      * @return oPacket
      */
-    public static Packet getScrollEffect(int chr, ScrollResult scrollSuccess, boolean legendarySpirit, int item, int scroll) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getScrollEffect(int chr, ScrollResult scrollSuccess, boolean legendarySpirit, int item, int scroll) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserItemUpgradeEffect.getValue());
-        oPacket.EncodeInteger(chr);
-        oPacket.Encode(scrollSuccess == ScrollResult.SUCCESS ? 1 : scrollSuccess == ScrollResult.CURSE ? 2 : 0);
-        oPacket.Encode(legendarySpirit);
-        oPacket.EncodeInteger(scroll);
-        oPacket.EncodeInteger(item);
-        oPacket.EncodeInteger(0);
-        oPacket.Encode(0);
-        oPacket.Encode(0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserItemUpgradeEffect.getValue());
+        oPacket.EncodeInt(chr);
+        oPacket.EncodeByte(scrollSuccess == ScrollResult.SUCCESS ? 1 : scrollSuccess == ScrollResult.CURSE ? 2 : 0);
+        oPacket.EncodeBool(legendarySpirit);
+        oPacket.EncodeInt(scroll);
+        oPacket.EncodeInt(item);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -1508,15 +1318,14 @@ public class CField {
      * @param short pos - position of the item to reveal
      *
      */
-    public static Packet showMagnifyingEffect(int chr, short pos) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showMagnifyingEffect(int chr, short pos) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserItemReleaseEffect.getValue());
-        oPacket.EncodeInteger(chr);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserItemReleaseEffect.getValue());
+        oPacket.EncodeInt(chr);
         oPacket.EncodeShort(pos);
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -1529,13 +1338,13 @@ public class CField {
      * @return oPacket
      *
      */
-    public static Packet showPotentialReset(int chr, boolean success, int itemid) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.UserItemUnreleaseEffect.getValue());
-        oPacket.EncodeInteger(chr);
-        oPacket.Encode(success);
-        oPacket.EncodeInteger(itemid);
-        return oPacket.ToPacket();
+    public static OutPacket showPotentialReset(int chr, boolean success, int itemid) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserItemUnreleaseEffect.getValue());
+        oPacket.EncodeInt(chr);
+        oPacket.EncodeBool(success);
+        oPacket.EncodeInt(itemid);
+        return oPacket;
     }
 
     /**
@@ -1547,13 +1356,13 @@ public class CField {
      *
      * @return oPacket
      */
-    public static Packet showLuckyEffect(int cId, boolean success, int itemId) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.UserItemLuckyItemEffect.getValue());
-        oPacket.EncodeInteger(cId);
-        oPacket.Encode(success);
-        oPacket.EncodeInteger(itemId); //guess
-        return oPacket.ToPacket();
+    public static OutPacket showLuckyEffect(int cId, boolean success, int itemId) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserItemLuckyItemEffect.getValue());
+        oPacket.EncodeInt(cId);
+        oPacket.EncodeBool(success);
+        oPacket.EncodeInt(itemId); //guess
+        return oPacket;
     }
 
     /**
@@ -1566,13 +1375,13 @@ public class CField {
      * @return oPacket
      *
      */
-    public static Packet showMemorialEffect(int chr, boolean success, int cubeId) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.UserItemMemorialCubeEffect.getValue());
-        oPacket.EncodeInteger(chr);
-        oPacket.Encode(success);
-        oPacket.EncodeInteger(cubeId);
-        return oPacket.ToPacket();
+    public static OutPacket showMemorialEffect(int chr, boolean success, int cubeId) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserItemMemorialCubeEffect.getValue());
+        oPacket.EncodeInt(chr);
+        oPacket.EncodeBool(success);
+        oPacket.EncodeInt(cubeId);
+        return oPacket;
     }
 
     /**
@@ -1585,242 +1394,227 @@ public class CField {
      * @return oPacket
      *
      */
-    public static Packet showBonusPotentialReset(int chr, boolean success, int cubeId) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.UserItemAdditionalUnReleaseEffect.getValue());
-        oPacket.EncodeInteger(chr);
-        oPacket.Encode(success);
-        oPacket.EncodeInteger(cubeId);
-        return oPacket.ToPacket();
+    public static OutPacket showBonusPotentialReset(int chr, boolean success, int cubeId) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserItemAdditionalUnReleaseEffect.getValue());
+        oPacket.EncodeInt(chr);
+        oPacket.EncodeBool(success);
+        oPacket.EncodeInt(cubeId);
+        return oPacket;
     }
 
-    public static Packet showNebuliteEffect(int chr, boolean success) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showNebuliteEffect(int chr, boolean success) {
 
-        oPacket.EncodeShort(SendPacketOpcode.ShowNebuliteEffect.getValue());
-        oPacket.EncodeInteger(chr);
-        oPacket.Encode(success);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ShowNebuliteEffect.getValue());
+        oPacket.EncodeInt(chr);
+        oPacket.EncodeBool(success);
         oPacket.EncodeString(success ? "Successfully mounted Nebulite." : "Failed to mount Nebulite.");
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet useNebuliteFusion(int cid, int itemId, boolean success) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket useNebuliteFusion(int cid, int itemId, boolean success) {
 
-        oPacket.EncodeShort(SendPacketOpcode.SHOW_FUSION_EFFECT.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(success);
-        oPacket.EncodeInteger(itemId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SHOW_FUSION_EFFECT.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeBool(success);
+        oPacket.EncodeInt(itemId);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet pvpAttack(int cid, int playerLevel, int skill, int skillLevel, int speed, int mastery, int projectile, int attackCount, int chargeTime, int stance, int direction, int range, int linkSkill, int linkSkillLevel, boolean movementSkill, boolean pushTarget, boolean pullTarget, List<AttackMonster> attack) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket pvpAttack(int cid, int playerLevel, int skill, int skillLevel, int speed, int mastery, int projectile, int attackCount, int chargeTime, int stance, int direction, int range, int linkSkill, int linkSkillLevel, boolean movementSkill, boolean pushTarget, boolean pullTarget, List<AttackMonster> attack) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserHitByUser.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(playerLevel);
-        oPacket.EncodeInteger(skill);
-        oPacket.Encode(skillLevel);
-        oPacket.EncodeInteger(linkSkill != skill ? linkSkill : 0);
-        oPacket.Encode(linkSkillLevel != skillLevel ? linkSkillLevel : 0);
-        oPacket.Encode(direction);
-        oPacket.Encode(movementSkill ? 1 : 0);
-        oPacket.Encode(pushTarget ? 1 : 0);
-        oPacket.Encode(pullTarget ? 1 : 0);
-        oPacket.Encode(0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserHitByUser.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeByte(playerLevel);
+        oPacket.EncodeInt(skill);
+        oPacket.EncodeByte(skillLevel);
+        oPacket.EncodeInt(linkSkill != skill ? linkSkill : 0);
+        oPacket.EncodeByte(linkSkillLevel != skillLevel ? linkSkillLevel : 0);
+        oPacket.EncodeByte(direction);
+        oPacket.EncodeByte(movementSkill ? 1 : 0);
+        oPacket.EncodeByte(pushTarget ? 1 : 0);
+        oPacket.EncodeByte(pullTarget ? 1 : 0);
+        oPacket.EncodeByte(0);
         oPacket.EncodeShort(stance);
-        oPacket.Encode(speed);
-        oPacket.Encode(mastery);
-        oPacket.EncodeInteger(projectile);
-        oPacket.EncodeInteger(chargeTime);
-        oPacket.EncodeInteger(range);
-        oPacket.Encode(attack.size());
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(0);
-        oPacket.Encode(attackCount);
-        oPacket.Encode(0);
+        oPacket.EncodeByte(speed);
+        oPacket.EncodeByte(mastery);
+        oPacket.EncodeInt(projectile);
+        oPacket.EncodeInt(chargeTime);
+        oPacket.EncodeInt(range);
+        oPacket.EncodeByte(attack.size());
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeByte(attackCount);
+        oPacket.EncodeByte(0);
 
         for (AttackMonster p : attack) {
-            oPacket.EncodeInteger(p.getObjectId());
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(p.getObjectId());
+            oPacket.EncodeInt(0);
             oPacket.EncodePosition(p.getPosition());
-            oPacket.Encode(0);
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeByte(0);
+            oPacket.EncodeInt(0);
             for (Pair<Long, Boolean> atk : p.getAttacks()) {
                 oPacket.EncodeLong(atk.left);
-                oPacket.Encode(atk.right);
+                oPacket.EncodeBool(atk.right);
                 oPacket.EncodeShort(0);
             }
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getPVPMist(int cid, int mistSkill, int mistLevel, int damage) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getPVPMist(int cid, int mistSkill, int mistLevel, int damage) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FieldWeather_Add.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.EncodeInteger(mistSkill);
-        oPacket.Encode(mistLevel);
-        oPacket.EncodeInteger(damage);
-        oPacket.Encode(8);
-        oPacket.EncodeInteger(1000);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FieldWeather_Add.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeInt(mistSkill);
+        oPacket.EncodeByte(mistLevel);
+        oPacket.EncodeInt(damage);
+        oPacket.EncodeByte(8);
+        oPacket.EncodeInt(1000);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet pvpCool(int cid, List<Integer> attack) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket pvpCool(int cid, List<Integer> attack) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserResetAllDot.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(attack.size());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserResetAllDot.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeByte(attack.size());
         for (int i : attack) {
-            oPacket.EncodeInteger(i);
+            oPacket.EncodeInt(i);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet teslaTriangle(int cid, int sum1, int sum2, int sum3) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket teslaTriangle(int cid, int sum1, int sum2, int sum3) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserTeslaTriangle.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.EncodeInteger(sum1);
-        oPacket.EncodeInteger(sum2);
-        oPacket.EncodeInteger(sum3);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserTeslaTriangle.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeInt(sum1);
+        oPacket.EncodeInt(sum2);
+        oPacket.EncodeInt(sum3);
 
         oPacket.Fill(0, 69);//test
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet followEffect(int initiator, int replier, Point toMap) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket followEffect(int initiator, int replier, Point toMap) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserFollowCharacter.getValue());
-        oPacket.EncodeInteger(initiator);
-        oPacket.EncodeInteger(replier);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserFollowCharacter.getValue());
+        oPacket.EncodeInt(initiator);
+        oPacket.EncodeInt(replier);
         oPacket.EncodeLong(0);
         if (replier == 0) {
-            oPacket.Encode(toMap == null ? 0 : 1);
+            oPacket.EncodeByte(toMap == null ? 0 : 1);
             if (toMap != null) {
-                oPacket.EncodeInteger(toMap.x);
-                oPacket.EncodeInteger(toMap.y);
+                oPacket.EncodeInt(toMap.x);
+                oPacket.EncodeInt(toMap.y);
             }
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showPQReward(int cid) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showPQReward(int cid) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserShowPQReward.getValue());
-        oPacket.EncodeInteger(cid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserShowPQReward.getValue());
+        oPacket.EncodeInt(cid);
         for (int i = 0; i < 6; i++) {
-            oPacket.Encode(0);
+            oPacket.EncodeByte(0);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet craftMake(int cid, int something, int time) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket craftMake(int cid, int something, int time) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserMakingSkillResult.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.EncodeInteger(something);
-        oPacket.EncodeInteger(time);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserMakingSkillResult.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeInt(something);
+        oPacket.EncodeInt(time);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet craftFinished(int cid, int craftID, int ranking, int itemId, int quantity, int exp) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket craftFinished(int cid, int craftID, int ranking, int itemId, int quantity, int exp) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserMakingMeisterSkillEff.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.EncodeInteger(craftID);
-        oPacket.EncodeInteger(ranking);
-        oPacket.EncodeInteger(itemId);
-        oPacket.EncodeInteger(quantity);
-        oPacket.EncodeInteger(exp);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserMakingMeisterSkillEff.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeInt(craftID);
+        oPacket.EncodeInt(ranking);
+        oPacket.EncodeInt(itemId);
+        oPacket.EncodeInt(quantity);
+        oPacket.EncodeInt(exp);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet harvestResult(int cid, boolean success) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket harvestResult(int cid, boolean success) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserGatherResult.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(success ? 1 : 0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserGatherResult.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeByte(success ? 1 : 0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet playerDamaged(int cid, int dmg) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket playerDamaged(int cid, int dmg) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserExplode.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.EncodeInteger(dmg);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserExplode.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeInt(dmg);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showPyramidEffect(int chr) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showPyramidEffect(int chr) {
 
-        oPacket.EncodeShort(SendPacketOpcode.PyramidLethalAttack.getValue());
-        oPacket.EncodeInteger(chr);
-        oPacket.Encode(1);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.PyramidLethalAttack.getValue());
+        oPacket.EncodeInt(chr);
+        oPacket.EncodeByte(1);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet pamsSongEffect(int cid) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.UserWaitQueueReponse.getValue());
-        oPacket.EncodeInteger(cid);
-        return oPacket.ToPacket();
+    public static OutPacket pamsSongEffect(int cid) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserWaitQueueReponse.getValue());
+        oPacket.EncodeInt(cid);
+        return oPacket;
     }
 
-    public static Packet enableHaku(MapleHaku haku) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.FoxManExclResult.getValue());
-        oPacket.EncodeInteger(haku.getOwner());
-        return oPacket.ToPacket();
+    public static OutPacket enableHaku(MapleHaku haku) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FoxManExclResult.getValue());
+        oPacket.EncodeInt(haku.getOwner());
+        return oPacket;
     }
 
-    public static Packet changeHakuEquip(MapleHaku haku, boolean change, boolean enableActions) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket changeHakuEquip(MapleHaku haku, boolean change, boolean enableActions) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FoxManModified.getValue());
-        oPacket.EncodeInteger(haku.getOwner());
-        oPacket.Encode(change);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FoxManModified.getValue());
+        oPacket.EncodeInt(haku.getOwner());
+        oPacket.EncodeBool(change);
         if (change) {
-            oPacket.EncodeInteger(haku.getEquipId());
+            oPacket.EncodeInt(haku.getEquipId());
         }
-        oPacket.Encode(enableActions);
-        return oPacket.ToPacket();
+        oPacket.EncodeBool(enableActions);
+        return oPacket;
     }
 
-    public static Packet transformHaku(int cid, boolean change) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket transformHaku(int cid, boolean change) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FoxManShowChangeEffect.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(change ? 2 : 1);
-        return oPacket.ToPacket();
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FoxManShowChangeEffect.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeByte(change ? 2 : 1);
+        return oPacket;
     }
 
     /**
@@ -1832,77 +1626,72 @@ public class CField {
      * @return oPacket
      *
      */
-    public static Packet spawnHaku(MapleHaku h, boolean oldForm) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket spawnHaku(MapleHaku h, boolean oldForm) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FoxManEnterField.getValue());
-        oPacket.EncodeInteger(h.getOwner());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FoxManEnterField.getValue());
+        oPacket.EncodeInt(h.getOwner());
         oPacket.EncodeShort(oldForm ? 1 : 0);  //value % map size
         oPacket.EncodePosition(h.getPosition());
-        oPacket.Encode(h.getStance());//m_nMoveAction
+        oPacket.EncodeByte(h.getStance());//m_nMoveAction
         oPacket.EncodeShort(h.getFootHold());
-        oPacket.EncodeInteger(0);//m_nUpgrade
-        oPacket.EncodeInteger(0);//m_anFoxManEquip[0]
-        return oPacket.ToPacket();
+        oPacket.EncodeInt(0);//m_nUpgrade
+        oPacket.EncodeInt(0);//m_anFoxManEquip[0]
+        return oPacket;
     }
 
-    public static Packet moveHaku(MapleHaku h, Point pos, List<LifeMovementFragment> res) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket moveHaku(MapleHaku h, Point pos, List<LifeMovementFragment> res) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FoxManMove.getValue());
-        oPacket.EncodeInteger(h.getOwner());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FoxManMove.getValue());
+        oPacket.EncodeInt(h.getOwner());
 
         PacketHelper.serializeMovementList(oPacket, h, res, 0);
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet destroyHaku(int charId) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.FoxManMove.getValue());
-        oPacket.EncodeInteger(charId);
-        return oPacket.ToPacket();
+    public static OutPacket destroyHaku(int charId) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FoxManMove.getValue());
+        oPacket.EncodeInt(charId);
+        return oPacket;
     }
 
-    public static Packet spawnDragon(MapleDragon d) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket spawnDragon(MapleDragon d) {
 
-        oPacket.EncodeShort(SendPacketOpcode.DragonEnterField.getValue());
-        oPacket.EncodeInteger(d.getOwner());
-        oPacket.EncodeInteger(d.getPosition().x);
-        oPacket.EncodeInteger(d.getPosition().y);
-        oPacket.Encode(d.getStance());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.DragonEnterField.getValue());
+        oPacket.EncodeInt(d.getOwner());
+        oPacket.EncodeInt(d.getPosition().x);
+        oPacket.EncodeInt(d.getPosition().y);
+        oPacket.EncodeByte(d.getStance());
         oPacket.EncodeShort(0);
         oPacket.EncodeShort(d.getJobId());
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet removeDragon(int chrid) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket removeDragon(int chrid) {
 
-        oPacket.EncodeShort(SendPacketOpcode.DragonVanish_Script.getValue());
-        oPacket.EncodeInteger(chrid);
-        return oPacket.ToPacket();
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.DragonVanish_Script.getValue());
+        oPacket.EncodeInt(chrid);
+        return oPacket;
     }
 
-    public static Packet moveDragon(MapleDragon d, Point startPos, List<LifeMovementFragment> moves) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket moveDragon(MapleDragon d, Point startPos, List<LifeMovementFragment> moves) {
 
-        oPacket.EncodeShort(SendPacketOpcode.DragonMove.getValue());
-        oPacket.EncodeInteger(d.getOwner());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.DragonMove.getValue());
+        oPacket.EncodeInt(d.getOwner());
 
         PacketHelper.serializeMovementList(oPacket, d, moves, 0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet spawnAndroid(User chr, MapleAndroid android) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.AndroidEnterField.getValue());
-        oPacket.EncodeInteger(chr.getId());
-        oPacket.Encode(MapleAndroid.getAndroidTemplateId(android.getItem().getItemId()));
+    public static OutPacket spawnAndroid(User chr, MapleAndroid android) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.AndroidEnterField.getValue());
+        oPacket.EncodeInt(chr.getId());
+        oPacket.EncodeByte(MapleAndroid.getAndroidTemplateId(android.getItem().getItemId()));
         oPacket.EncodeShort(android.getPos().x);
         oPacket.EncodeShort(android.getPos().y - 20);
-        oPacket.Encode(android.getStance());
+        oPacket.EncodeByte(android.getStance());
         oPacket.EncodeShort(chr.getFh());
         oPacket.EncodeShort(android.getSkin() - 2000);
         oPacket.EncodeShort(android.getHair() - 30000);
@@ -1910,44 +1699,42 @@ public class CField {
         oPacket.EncodeString(android.getName());
         for (short i = -1200; i > -1207; i = (short) (i - 1)) {
             Item item = chr.getInventory(MapleInventoryType.EQUIPPED).getItem(i);
-            oPacket.EncodeInteger(item != null ? item.getItemId() : 0);
+            oPacket.EncodeInt(item != null ? item.getItemId() : 0);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet moveAndroid(User chr, List<LifeMovementFragment> res) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket moveAndroid(User chr, List<LifeMovementFragment> res) {
 
         MapleAndroid android = chr.getAndroid();
 
-        oPacket.EncodeShort(SendPacketOpcode.AndroidMove.getValue());
-        oPacket.EncodeInteger(chr.getId());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.AndroidMove.getValue());
+        oPacket.EncodeInt(chr.getId());
 
         PacketHelper.serializeMovementList(oPacket, android, res, 0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showAndroidEmotion(int cid, byte emo1) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.AndroidActionSet.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(0);//nActingSet
-        oPacket.Encode(emo1);
-        return oPacket.ToPacket();
+    public static OutPacket showAndroidEmotion(int cid, byte emo1) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.AndroidActionSet.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeByte(0);//nActingSet
+        oPacket.EncodeByte(emo1);
+        return oPacket;
     }
 
-    public static Packet updateAndroidLook(boolean itemOnly, User cid, MapleAndroid android, boolean enableActions) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket updateAndroidLook(boolean itemOnly, User cid, MapleAndroid android, boolean enableActions) {
 
-        oPacket.EncodeShort(SendPacketOpcode.AndroidModified.getValue());
-        oPacket.EncodeInteger(cid.getId());
-        oPacket.Encode(itemOnly ? 1 : 0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.AndroidModified.getValue());
+        oPacket.EncodeInt(cid.getId());
+        oPacket.EncodeByte(itemOnly ? 1 : 0);
         if (itemOnly) {
             for (short i = -1200; i > -1207; i = (short) (i - 1)) {
                 Item item = cid.getInventory(MapleInventoryType.EQUIPPED).getItem(i);
-                oPacket.EncodeInteger(item != null ? item.getItemId() : 0);
+                oPacket.EncodeInt(item != null ? item.getItemId() : 0);
             }
         } else {
             oPacket.EncodeShort(0);
@@ -1955,47 +1742,45 @@ public class CField {
             oPacket.EncodeShort(android.getFace() - 20000);
             oPacket.EncodeString(android.getName());
         }
-        oPacket.Encode(enableActions);
-        return oPacket.ToPacket();
+        oPacket.EncodeBool(enableActions);
+        return oPacket;
     }
 
-    public static Packet deactivateAndroid(int cid) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.AndroidLeaveField.getValue());
-        oPacket.EncodeInteger(cid);
-        return oPacket.ToPacket();
+    public static OutPacket deactivateAndroid(int cid) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.AndroidLeaveField.getValue());
+        oPacket.EncodeInt(cid);
+        return oPacket;
     }
 
-    public static Packet removeFamiliar(int cid) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket removeFamiliar(int cid) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FamiliarEnterField.getValue());
-        oPacket.EncodeInteger(cid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FamiliarEnterField.getValue());
+        oPacket.EncodeInt(cid);
         oPacket.EncodeShort(0);
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet spawnFamiliar(MonsterFamiliar mf, boolean spawn, boolean respawn) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket spawnFamiliar(MonsterFamiliar mf, boolean spawn, boolean respawn) {
 
-        oPacket.EncodeShort(respawn ? SendPacketOpcode.FamiliarTransferField.getValue() : SendPacketOpcode.FamiliarEnterField.getValue());
-        oPacket.EncodeInteger(mf.getCharacterId());
-        oPacket.Encode(spawn ? 1 : 0);
-        oPacket.Encode(respawn ? 1 : 0);
-        oPacket.Encode(0);
+        OutPacket oPacket = new OutPacket(respawn ? SendPacketOpcode.FamiliarTransferField.getValue() : SendPacketOpcode.FamiliarEnterField.getValue());
+        oPacket.EncodeInt(mf.getCharacterId());
+        oPacket.EncodeByte(spawn ? 1 : 0);
+        oPacket.EncodeByte(respawn ? 1 : 0);
+        oPacket.EncodeByte(0);
         if (spawn) {
-            oPacket.EncodeInteger(mf.getFamiliar());
-            oPacket.EncodeInteger(mf.getFatigue());
-            oPacket.EncodeInteger(mf.getVitality() * 300); //max fatigue
+            oPacket.EncodeInt(mf.getFamiliar());
+            oPacket.EncodeInt(mf.getFatigue());
+            oPacket.EncodeInt(mf.getVitality() * 300); //max fatigue
             oPacket.EncodeString(mf.getName());
             oPacket.EncodePosition(mf.getTruePosition());
-            oPacket.Encode(mf.getStance());
+            oPacket.EncodeByte(mf.getStance());
             oPacket.EncodeShort(mf.getFh());
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -2006,15 +1791,14 @@ public class CField {
      *
      * @return oPacket
      */
-    public static Packet moveFamiliar(MonsterFamiliar fam, List<LifeMovementFragment> moves) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket moveFamiliar(MonsterFamiliar fam, List<LifeMovementFragment> moves) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FamiliarMove.getValue());
-        oPacket.EncodeInteger(fam.getCharacterId());
-        oPacket.Encode(0); //idk
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FamiliarMove.getValue());
+        oPacket.EncodeInt(fam.getCharacterId());
+        oPacket.EncodeByte(0); //idk
         PacketHelper.serializeMovementList(oPacket, fam, moves, 0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -2025,19 +1809,18 @@ public class CField {
      *
      * @return oPacket
      */
-    public static Packet touchFamiliar(int cid, byte unk, int objectid, int type, int delay, int damage) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket touchFamiliar(int cid, byte unk, int objectid, int type, int delay, int damage) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FamiliarAction.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(0);
-        oPacket.Encode(unk);
-        oPacket.EncodeInteger(objectid); //possibly mobid or oid for mob
-        oPacket.EncodeInteger(type);
-        oPacket.EncodeInteger(delay);
-        oPacket.EncodeInteger(damage); //
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FamiliarAction.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(unk);
+        oPacket.EncodeInt(objectid); //possibly mobid or oid for mob
+        oPacket.EncodeInt(type);
+        oPacket.EncodeInt(delay);
+        oPacket.EncodeInt(damage); //
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -2049,111 +1832,107 @@ public class CField {
      *
      * @return oPacket
      */
-    public static Packet familiarAttack(int cid, byte unk, List<Triple<Integer, Integer, List<Integer>>> attackPair) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket familiarAttack(int cid, byte unk, List<Triple<Integer, Integer, List<Integer>>> attackPair) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FamiliarAttack.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(0);// idk
-        oPacket.Encode(unk);
-        oPacket.Encode(attackPair.size());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FamiliarAttack.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeByte(0);// idk
+        oPacket.EncodeByte(unk);
+        oPacket.EncodeByte(attackPair.size());
         for (Triple<Integer, Integer, List<Integer>> s : attackPair) {
-            oPacket.EncodeInteger(s.left);
-            oPacket.Encode(s.mid);
-            oPacket.Encode(s.right.size());
+            oPacket.EncodeInt(s.left);
+            oPacket.EncodeByte(s.mid);
+            oPacket.EncodeByte(s.right.size());
             for (int damage : s.right) {
-                oPacket.EncodeInteger(damage);
+                oPacket.EncodeInt(damage);
             }
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet renameFamiliar(MonsterFamiliar mf) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket renameFamiliar(MonsterFamiliar mf) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FamiliarNameResult.getValue());
-        oPacket.EncodeInteger(mf.getCharacterId());
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(mf.getFamiliar());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FamiliarNameResult.getValue());
+        oPacket.EncodeInt(mf.getCharacterId());
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(mf.getFamiliar());
         oPacket.EncodeString(mf.getName());
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet updateFamiliar(MonsterFamiliar mf) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket updateFamiliar(MonsterFamiliar mf) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FamiliarFatigueResult.getValue());
-        oPacket.EncodeInteger(mf.getCharacterId());
-        oPacket.EncodeInteger(mf.getFamiliar());
-        oPacket.EncodeInteger(mf.getFatigue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FamiliarFatigueResult.getValue());
+        oPacket.EncodeInt(mf.getCharacterId());
+        oPacket.EncodeInt(mf.getFamiliar());
+        oPacket.EncodeInt(mf.getFatigue());
         oPacket.EncodeLong(PacketHelper.getTime(mf.getVitality() >= 3 ? System.currentTimeMillis() : -2L));
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet movePlayer(User chr, List<LifeMovementFragment> moves) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket movePlayer(User chr, List<LifeMovementFragment> moves) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserMove.getValue());
-        oPacket.EncodeInteger(chr.getId());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserMove.getValue());
+        oPacket.EncodeInt(chr.getId());
         PacketHelper.serializeMovementList(oPacket, chr, moves, 0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     // <editor-fold defaultstate="visible" desc="Third party attack display"> 
-    public static Packet closeRangeAttack(int cid, int tbyte, int skill, int level, int display, byte speed, List<AttackMonster> damage, boolean energy, int lvl, byte mastery, byte unk, int charge) {
+    public static OutPacket closeRangeAttack(int cid, int tbyte, int skill, int level, int display, byte speed, List<AttackMonster> damage, boolean energy, int lvl, byte mastery, byte unk, int charge) {
         return addAttackInfo(energy ? 4 : 0, cid, tbyte, skill, level, display, speed, damage, lvl, mastery, unk, 0, null, 0);
     }
 
-    public static Packet rangedAttack(int cid, int tbyte, int skill, int level, int display, byte speed, int itemid, List<AttackMonster> damage, Point pos, int lvl, byte mastery, byte unk) {
+    public static OutPacket rangedAttack(int cid, int tbyte, int skill, int level, int display, byte speed, int itemid, List<AttackMonster> damage, Point pos, int lvl, byte mastery, byte unk) {
         return addAttackInfo(1, cid, tbyte, skill, level, display, speed, damage, lvl, mastery, unk, itemid, pos, 0);
     }
 
-    public static Packet strafeAttack(int cid, int tbyte, int skill, int level, int display, byte speed, int itemid, List<AttackMonster> damage, Point pos, int lvl, byte mastery, byte unk, int ultLevel) {
+    public static OutPacket strafeAttack(int cid, int tbyte, int skill, int level, int display, byte speed, int itemid, List<AttackMonster> damage, Point pos, int lvl, byte mastery, byte unk, int ultLevel) {
         return addAttackInfo(2, cid, tbyte, skill, level, display, speed, damage, lvl, mastery, unk, itemid, pos, ultLevel);
     }
 
-    public static Packet magicAttack(int cid, int tbyte, int skill, int level, int display, byte speed, List<AttackMonster> damage, int charge, int lvl, byte unk) {
+    public static OutPacket magicAttack(int cid, int tbyte, int skill, int level, int display, byte speed, List<AttackMonster> damage, int charge, int lvl, byte unk) {
         return addAttackInfo(3, cid, tbyte, skill, level, display, speed, damage, lvl, (byte) 0, unk, charge, null, 0);
     }
 
-    public static Packet addAttackInfo(int type, int cid, int tbyte, int skill, int level, int display, byte speed, List<AttackMonster> damage, int lvl, byte mastery, byte unk, int charge, Point pos, int ultLevel) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket addAttackInfo(int type, int cid, int tbyte, int skill, int level, int display, byte speed, List<AttackMonster> damage, int lvl, byte mastery, byte unk, int charge, Point pos, int ultLevel) {
 
+        OutPacket oPacket;
         switch (type) {
             case 0:
-                oPacket.EncodeShort(SendPacketOpcode.UserMeleeAttack.getValue());
+                oPacket = new OutPacket(SendPacketOpcode.UserMeleeAttack.getValue());
                 break;
             case 1:
             case 2:
-                oPacket.EncodeShort(SendPacketOpcode.UserShootAttack.getValue());
+                oPacket = new OutPacket(SendPacketOpcode.UserShootAttack.getValue());
                 break;
             case 3:
-                oPacket.EncodeShort(SendPacketOpcode.UserMagicAttack.getValue());
+                oPacket = new OutPacket(SendPacketOpcode.UserMagicAttack.getValue());
                 break;
             default:
-                oPacket.EncodeShort(SendPacketOpcode.UserBodyAttack.getValue());
+                oPacket = new OutPacket(SendPacketOpcode.UserBodyAttack.getValue());
                 break;
         }
 
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(0);
-        oPacket.Encode(tbyte);
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(tbyte);
         byte mobCount = (byte) (tbyte >> 4);
         byte damagePerMob = (byte) (tbyte & 0xF);
-        oPacket.Encode(lvl);//moblvl
-        oPacket.Encode(level);//skillvl
+        oPacket.EncodeByte(lvl);//moblvl
+        oPacket.EncodeByte(level);//skillvl
         if (level > 0) {
-            oPacket.EncodeInteger(skill);
+            oPacket.EncodeInt(skill);
         }
 
         if (Skill.isZeroSkill(skill)) {
             short zero1 = 0;
             short zero2 = 0;
-            oPacket.Encode(zero1 > 0 || zero2 > 0); //boolean
+            oPacket.EncodeBool(zero1 > 0 || zero2 > 0); //boolean
             if (zero1 > 0 || zero2 > 0) {
                 oPacket.EncodeShort(zero1);
                 oPacket.EncodeShort(zero2);
@@ -2162,34 +1941,34 @@ public class CField {
         }
 
         if (type == 2) {
-            oPacket.Encode(ultLevel);
+            oPacket.EncodeByte(ultLevel);
             if (ultLevel > 0) {
-                oPacket.EncodeInteger(3220010);
+                oPacket.EncodeInt(3220010);
             }
         }
 
         if (skill == 80001850) {
-            oPacket.Encode(0); //boolean if true then int
+            oPacket.EncodeByte(0); //boolean if true then int
         }
         if ((skill == 42001000 || skill > 42001004 && skill <= 42001006) || (skill == 40021185 || skill == 42001006 || skill == 80011067)) {
-            oPacket.Encode(0); // Unknown
+            oPacket.EncodeByte(0); // Unknown
             // if above > 0 encode int
         }
 
-        oPacket.Encode(0); //v20
+        oPacket.EncodeByte(0); //v20
         // nTime = v20 & 0x20
         // bRepeatAttack = v20 & 4
         // bShadowPartner = v20 & 8
 
         byte v22 = 0;
-        oPacket.Encode(v22); //v22
-        oPacket.EncodeInteger(0); //nOption3
-        oPacket.EncodeInteger(0); //nBySummonedID
+        oPacket.EncodeByte(v22); //v22
+        oPacket.EncodeInt(0); //nOption3
+        oPacket.EncodeInt(0); //nBySummonedID
 
         /*
         if ((v22 & 2) != 0) { //bBuckShot
-            oPacket.encodeInteger(0);//nSkillID
-            oPacket.encodeInteger(0);//nSkillLvl
+            oPacket.EncodeInt(0);//nSkillID
+            oPacket.EncodeInt(0);//nSkillLvl
         }
 
         if ((v22 & 8) != 0) {
@@ -2198,45 +1977,45 @@ public class CField {
          */
         oPacket.EncodeShort(display);
         if (display <= 1616) {
-            oPacket.Encode(-1);//v30 bDragon ataack and move action?
+            oPacket.EncodeByte(-1);//v30 bDragon ataack and move action?
             oPacket.EncodeShort(0); // ptAttackRefPoint.x (Dragon specific)
             oPacket.EncodeShort(0); // ptAttackRefPoint.y (Dragon specific)
-            oPacket.Encode(0); //bShowFixedDamage
-            oPacket.Encode(6); //v206
-            oPacket.Encode(speed); //nActionSpeed
-            oPacket.Encode(mastery); //nMastery
-            oPacket.EncodeInteger(charge); //nBulletItemID 
+            oPacket.EncodeByte(0); //bShowFixedDamage
+            oPacket.EncodeByte(6); //v206
+            oPacket.EncodeByte(speed); //nActionSpeed
+            oPacket.EncodeByte(mastery); //nMastery
+            oPacket.EncodeInt(charge); //nBulletItemID 
             for (AttackMonster monster : damage) {
                 if (monster.getAttacks() != null) {
-                    oPacket.EncodeInteger(monster.getObjectId());
-                    oPacket.Encode(0);//v38-38)*
-                    oPacket.Encode(0);//v38*
-                    oPacket.Encode(0);//v38[1]
+                    oPacket.EncodeInt(monster.getObjectId());
+                    oPacket.EncodeByte(0);//v38-38)*
+                    oPacket.EncodeByte(0);//v38*
+                    oPacket.EncodeByte(0);//v38[1]
                     oPacket.EncodeShort(0);//v40
                     if (skill == 80001835 || skill == 42111002 || skill == 80011050) {
-                        oPacket.Encode(0);//bKeyDown
+                        oPacket.EncodeByte(0);//bKeyDown
                         //if bKeyDown annoying loop about how long and other shit
                     } else {
                         for (Pair<Long, Boolean> hits : monster.getAttacks()) {
-                            oPacket.Encode(hits.right);//bCrit
+                            oPacket.EncodeBool(hits.right);//bCrit
                             oPacket.EncodeLong(hits.left); //Iterate over damage.
                         }
                     }
                     if (Kinesis.is_kinesis_psychiclock_skill(skill)) {
-                        oPacket.EncodeInteger(0);//idk
+                        oPacket.EncodeInt(0);//idk
                     }
 
                     if (skill == Blaster.ROCKET_RUSH) {
-                        oPacket.Encode(0);
+                        oPacket.EncodeByte(0);
                     }
                 }
             }
             if (skill == 2321001 || skill == 2221052 || skill == 11121052 || skill == 12121054) { //Keydown skills
-                oPacket.EncodeInteger(0); //tKeyDown
+                oPacket.EncodeInt(0); //tKeyDown
             } else if (Skill.isSupernovaSkill(skill) || Skill.isScreenCenterAttackSkill(skill) || skill == 101000202 || skill == 101000102
                     || skill == 80001762 || skill == 80002212 || skill == 400041019 || skill == 400031016 || skill == 400041024) {
-                oPacket.EncodeInteger(0);//attackRefPointx
-                oPacket.EncodeInteger(0);//attackRefPointy
+                oPacket.EncodeInt(0);//attackRefPointx
+                oPacket.EncodeInt(0);//attackRefPointy
             }
 
             //if is_keydown_skill_rect_move_xyz : encode new position (2 shorts)
@@ -2245,41 +2024,40 @@ public class CField {
                 oPacket.EncodeShort(0);
             }
             if (skill == 51121009) {
-                oPacket.Encode(0); //bEncodeFixedDamage
+                oPacket.EncodeByte(0); //bEncodeFixedDamage
             } else if (skill == 112110003) {
-                oPacket.EncodeInteger(0);
+                oPacket.EncodeInt(0);
             } else if (skill == 42100007) {
                 oPacket.EncodeShort(0);
-                oPacket.Encode(0);
+                oPacket.EncodeByte(0);
             }
 
             if (skill == 21120019 || skill == 37121052 || skill >= 400041002 && skill <= 400041005 || skill == 11121014 || skill == 5101004) {
-                oPacket.EncodeInteger(0); // pTeleport.pt.x
-                oPacket.EncodeInteger(0); // pTeleport.pt.y
+                oPacket.EncodeInt(0); // pTeleport.pt.x
+                oPacket.EncodeInt(0); // pTeleport.pt.y
             }
             if (skill == 400020009 || skill == 400020010 || skill == 400020011 || skill == 400021029 || skill == 400021053) {
                 oPacket.EncodeShort(0);
                 oPacket.EncodeShort(0);
             }
             if (Skill.IsUnknown5thJobFunc(skill)) {
-                oPacket.EncodeInteger(0); // Unknown
-                oPacket.Encode(false); // Unknown
+                oPacket.EncodeInt(0); // Unknown
+                oPacket.EncodeBool(false); // Unknown
             }
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 // </editor-fold>
 
-    public static Packet skillEffect(User from, int skillId, byte level, short display, byte unk) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket skillEffect(User from, int skillId, byte level, short display, byte unk) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserSkillPrepare.getValue());
-        oPacket.EncodeInteger(from.getId());
-        oPacket.EncodeInteger(skillId);
-        oPacket.Encode(level);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSkillPrepare.getValue());
+        oPacket.EncodeInt(from.getId());
+        oPacket.EncodeInt(skillId);
+        oPacket.EncodeByte(level);
         oPacket.EncodeShort(display);
-        oPacket.Encode(unk);
+        oPacket.EncodeByte(unk);
         if (skillId == 13111020) {
             oPacket.EncodePosition(from.getPosition()); // Position
         }
@@ -2287,17 +2065,16 @@ public class CField {
             oPacket.EncodePosition(from.getPosition()); // Position
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet skillCancel(User from, int skillId) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket skillCancel(User from, int skillId) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserSkillCancel.getValue());
-        oPacket.EncodeInteger(from.getId());
-        oPacket.EncodeInteger(skillId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSkillCancel.getValue());
+        oPacket.EncodeInt(from.getId());
+        oPacket.EncodeInt(skillId);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -2306,50 +2083,48 @@ public class CField {
      * This method deals with damage being done to the player
      *
      */
-    public static Packet damagePlayer(int cid, PlayerDamageHandler.PlayerDamageType type, int damage, int monsteridfrom, byte direction, int skillid, int pDMG, boolean pPhysical, int pID, byte pType, Point pPos, byte offset, int offset_d, int fake) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket damagePlayer(int cid, PlayerDamageHandler.PlayerDamageType type, int damage, int monsteridfrom, byte direction, int skillid, int pDMG, boolean pPhysical, int pID, byte pType, Point pPos, byte offset, int offset_d, int fake) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserHit.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(type.getType());
-        oPacket.EncodeInteger(damage);
-        oPacket.Encode(0); //bCritical
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserHit.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeByte(type.getType());
+        oPacket.EncodeInt(damage);
+        oPacket.EncodeByte(0); //bCritical
         //oPacket.encode(0); //goes to CUser::MakeIncDecHPEffect REMOVED v176+ ?
         if (type.getType() >= -1) {
-            oPacket.EncodeInteger(monsteridfrom);
-            oPacket.Encode(direction);
-            oPacket.EncodeInteger(skillid);
-            oPacket.EncodeInteger(pDMG);
-            oPacket.Encode(0);
+            oPacket.EncodeInt(monsteridfrom);
+            oPacket.EncodeByte(direction);
+            oPacket.EncodeInt(skillid);
+            oPacket.EncodeInt(pDMG);
+            oPacket.EncodeByte(0);
             if (pDMG > 0) {
-                oPacket.Encode(pPhysical ? 1 : 0);
-                oPacket.EncodeInteger(pID);
-                oPacket.Encode(pType);
+                oPacket.EncodeByte(pPhysical ? 1 : 0);
+                oPacket.EncodeInt(pID);
+                oPacket.EncodeByte(pType);
                 oPacket.EncodePosition(pPos);
             }
-            oPacket.Encode(offset);
+            oPacket.EncodeByte(offset);
             if (offset == 1) {
-                oPacket.EncodeInteger(offset_d);
+                oPacket.EncodeInt(offset_d);
             }
         }
-        oPacket.EncodeInteger(damage);
+        oPacket.EncodeInt(damage);
         if ((damage <= 0) || (fake > 0)) {
-            oPacket.EncodeInteger(fake);
+            oPacket.EncodeInt(fake);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet facialExpression(User from, int expression) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket facialExpression(User from, int expression) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserEmotion.getValue());
-        oPacket.EncodeInteger(from.getId());
-        oPacket.EncodeInteger(expression);
-        oPacket.EncodeInteger(-1);
-        oPacket.Encode(0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEmotion.getValue());
+        oPacket.EncodeInt(from.getId());
+        oPacket.EncodeInt(expression);
+        oPacket.EncodeInt(-1);
+        oPacket.EncodeByte(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -2361,339 +2136,311 @@ public class CField {
      * 11 - Kiss 12 - Wink 13 - Ouch! 14 - Goo goo eyes 15 - Blaze 16 - Star 17 - Love 18 - Ghost 19 - Constant Sigh 20 - Sleepy 21 -
      * Flaming hot 22 - Bleh 23 - No Face
      */
-    public static Packet directionFacialExpression(int expression, int duration) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket directionFacialExpression(int expression, int duration) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserEmotionLocal.getValue());
-        oPacket.EncodeInteger(expression);
-        oPacket.EncodeInteger(duration);
-        oPacket.Encode(0);
-        return oPacket.ToPacket();
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEmotionLocal.getValue());
+        oPacket.EncodeInt(expression);
+        oPacket.EncodeInt(duration);
+        oPacket.EncodeByte(0);
+        return oPacket;
     }
 
-    public static Packet itemEffect(int characterid, int itemid) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket itemEffect(int characterid, int itemid) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserSetActiveEffectItem.getValue());
-        oPacket.EncodeInteger(characterid);
-        oPacket.EncodeInteger(itemid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetActiveEffectItem.getValue());
+        oPacket.EncodeInt(characterid);
+        oPacket.EncodeInt(itemid);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showTitle(int characterid, int itemid) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showTitle(int characterid, int itemid) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserSetActiveNickItem.getValue());
-        oPacket.EncodeInteger(characterid);
-        oPacket.EncodeInteger(itemid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetActiveNickItem.getValue());
+        oPacket.EncodeInt(characterid);
+        oPacket.EncodeInt(itemid);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showAngelicBusterTransformation(int characterid, int effectId) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showAngelicBusterTransformation(int characterid, int effectId) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserSetDressUpState.getValue());
-        oPacket.EncodeInteger(characterid);
-        oPacket.EncodeInteger(effectId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetDressUpState.getValue());
+        oPacket.EncodeInt(characterid);
+        oPacket.EncodeInt(effectId);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet setAngelicBusterTransformation(int bSet, int infinite) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket setAngelicBusterTransformation(int bSet, int infinite) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserSetDressUpState.getValue());
-        oPacket.Encode(bSet);
-        oPacket.Encode(infinite);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetDressUpState.getValue());
+        oPacket.EncodeByte(bSet);
+        oPacket.EncodeByte(infinite);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showChair(int characterid, int itemid) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showChair(int characterid, int itemid) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserSetActivePortableChair.getValue());
-        oPacket.EncodeInteger(characterid);
-        oPacket.EncodeInteger(itemid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetActivePortableChair.getValue());
+        oPacket.EncodeInt(characterid);
+        oPacket.EncodeInt(itemid);
 
-        oPacket.EncodeInteger(0); // bPortableMessage
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0); // lTowerChair.size
-        oPacket.Encode(false);
-        oPacket.EncodeInteger(0);
-        oPacket.Encode(false);
+        oPacket.EncodeInt(0); // bPortableMessage
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(0); // lTowerChair.size
+        oPacket.EncodeBool(false);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeBool(false);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet updateCharLook(User chr, boolean second) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket updateCharLook(User chr, boolean second) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserAvatarModified.getValue());
-        oPacket.EncodeInteger(chr.getId());
-        oPacket.Encode(1);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserAvatarModified.getValue());
+        oPacket.EncodeInt(chr.getId());
+        oPacket.EncodeByte(1);
         PacketHelper.addCharLook(oPacket, chr, false, second);
         Triple<List<MapleRing>, List<MapleRing>, List<MapleRing>> rings = chr.getRings(false);
         addRingInfo(oPacket, rings.getLeft());
         addRingInfo(oPacket, rings.getMid());
         addMRingInfo(oPacket, rings.getRight(), chr);
-        oPacket.EncodeInteger(0); // completedSetItemID
-        oPacket.EncodeInteger(0); // totalCHUC
-        oPacket.EncodeInteger(0);
-        return oPacket.ToPacket();
+        oPacket.EncodeInt(0); // completedSetItemID
+        oPacket.EncodeInt(0); // totalCHUC
+        oPacket.EncodeInt(0);
+        return oPacket;
     }
 
-    public static Packet updatePartyMemberHP(int cid, int curhp, int maxhp) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket updatePartyMemberHP(int cid, int curhp, int maxhp) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserHP.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.EncodeInteger(curhp);
-        oPacket.EncodeInteger(maxhp);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserHP.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeInt(curhp);
+        oPacket.EncodeInt(maxhp);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet changeTeam(int cid, int type) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket changeTeam(int cid, int type) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserPvPTeamChanged.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(type);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserPvPTeamChanged.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeByte(type);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showHarvesting(int cid, int tool) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showHarvesting(int cid, int tool) {
 
-        oPacket.EncodeShort(SendPacketOpcode.GatherActionSet.getValue());
-        oPacket.EncodeInteger(cid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.GatherActionSet.getValue());
+        oPacket.EncodeInt(cid);
         if (tool > 0) {
-            oPacket.Encode(1);
-            oPacket.Encode(0);
+            oPacket.EncodeByte(1);
+            oPacket.EncodeByte(0);
             oPacket.EncodeShort(0);
-            oPacket.EncodeInteger(tool);
+            oPacket.EncodeInt(tool);
             oPacket.Fill(0, 30);
         } else {
-            oPacket.Encode(0);
+            oPacket.EncodeByte(0);
             oPacket.Fill(0, 33);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getPVPHPBar(int cid, int hp, int maxHp) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getPVPHPBar(int cid, int hp, int maxHp) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UpdatePvPHPTag.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.EncodeInteger(hp);
-        oPacket.EncodeInteger(maxHp);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UpdatePvPHPTag.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeInt(hp);
+        oPacket.EncodeInt(maxHp);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet cancelChair(int chrId, int id) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket cancelChair(int chrId, int id) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserSitResult.getValue());
-        oPacket.EncodeInteger(chrId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSitResult.getValue());
+        oPacket.EncodeInt(chrId);
         if (id == -1) {
-            oPacket.Encode(0);
+            oPacket.EncodeByte(0);
         } else {
-            oPacket.Encode(1);
+            oPacket.EncodeByte(1);
             oPacket.EncodeShort(id);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet instantMapWarp(byte portal) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket instantMapWarp(byte portal) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserTeleport.getValue());
-        oPacket.Encode(0);
-        oPacket.Encode(portal);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserTeleport.getValue());
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(portal);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet updateQuestInfo(User c, int quest, int npc, byte progress) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket updateQuestInfo(User c, int quest, int npc, byte progress) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserQuestResult.getValue());
-        oPacket.Encode(progress);
-        oPacket.EncodeInteger(quest);
-        oPacket.EncodeInteger(npc);
-        oPacket.EncodeInteger(0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserQuestResult.getValue());
+        oPacket.EncodeByte(progress);
+        oPacket.EncodeInt(quest);
+        oPacket.EncodeInt(npc);
+        oPacket.EncodeInt(0);
 
         if (c.isIntern()) {
             c.dropMessage(5, "[Quest Debug] Updating Quest ID : " + quest);
         }
-        
-        return oPacket.ToPacket();
+
+        return oPacket;
     }
 
-    public static Packet updateQuestFinish(int quest, int npc, int nextquest) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket updateQuestFinish(int quest, int npc, int nextquest) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserQuestResult.getValue());
-        oPacket.Encode(11);//was 10
-        oPacket.EncodeInteger(quest);  // Version 174, this is an integer 
-        oPacket.EncodeInteger(npc);
-        oPacket.EncodeInteger(nextquest);
-        oPacket.Encode(1);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserQuestResult.getValue());
+        oPacket.EncodeByte(11);//was 10
+        oPacket.EncodeInt(quest);  // Version 174, this is an integer 
+        oPacket.EncodeInt(npc);
+        oPacket.EncodeInt(nextquest);
+        oPacket.EncodeByte(1);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet sendHint(String hint, int width, int height) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket sendHint(String hint, int width, int height) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserHint.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserHint.getValue());
         oPacket.EncodeString(hint);
         oPacket.EncodeShort(width < 1 ? Math.max(hint.length() * 10, 40) : width);
         oPacket.EncodeShort(Math.max(height, 5));
-        oPacket.Encode(1);
+        oPacket.EncodeByte(1);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet updateCombo(int value) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket updateCombo(int value) {
 
-        oPacket.EncodeShort(SendPacketOpcode.ModCombo.getValue());
-        oPacket.EncodeInteger(value);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ModCombo.getValue());
+        oPacket.EncodeInt(value);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet rechargeCombo(int value) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket rechargeCombo(int value) {
 
-        oPacket.EncodeShort(SendPacketOpcode.IncComboByComboRecharge.getValue());
-        oPacket.EncodeInteger(value);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.IncComboByComboRecharge.getValue());
+        oPacket.EncodeInt(value);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getFollowMessage(String msg) {
+    public static OutPacket getFollowMessage(String msg) {
         return getGameMessage(msg, (short) 11);
     }
 
-    public static Packet getGameMessage(String msg, short colour) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getGameMessage(String msg, short colour) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserChatMsg.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserChatMsg.getValue());
         oPacket.EncodeShort(colour);
         oPacket.EncodeString(msg);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getBuffZoneEffect(int itemId) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getBuffZoneEffect(int itemId) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserBuffzoneEffect.getValue());
-        oPacket.EncodeInteger(itemId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserBuffzoneEffect.getValue());
+        oPacket.EncodeInt(itemId);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getTimeBombAttack() {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getTimeBombAttack() {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserTimeBombAttack.getValue());
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(10);
-        oPacket.EncodeInteger(6);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserTimeBombAttack.getValue());
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(10);
+        oPacket.EncodeInt(6);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet moveFollow(Point otherStart, Point myStart, Point otherEnd, List<LifeMovementFragment> moves) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket moveFollow(Point otherStart, Point myStart, Point otherEnd, List<LifeMovementFragment> moves) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserPassiveMove.getValue());
-        oPacket.EncodeInteger(0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserPassiveMove.getValue());
+        oPacket.EncodeInt(0);
         oPacket.EncodePosition(otherStart);
         oPacket.EncodePosition(myStart);
         PacketHelper.serializeMovementList(oPacket, null, moves, 0);
-        oPacket.Encode(17);
+        oPacket.EncodeByte(17);
         for (int i = 0; i < 8; i++) {
-            oPacket.Encode(0);
+            oPacket.EncodeByte(0);
         }
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
         oPacket.EncodePosition(otherEnd);
         oPacket.EncodePosition(otherStart);
         oPacket.Fill(0, 100);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }//CUser::OnPassiveMove
 
-    public static Packet getFollowMsg(int opcode) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getFollowMsg(int opcode) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserFollowCharacterFailed.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserFollowCharacterFailed.getValue());
         oPacket.EncodeLong(opcode);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet registerFamiliar(MonsterFamiliar mf) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket registerFamiliar(MonsterFamiliar mf) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FamiliarRegister.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FamiliarRegister.getValue());
         oPacket.EncodeLong(mf.getId());
         mf.writeRegisterPacket(oPacket, false);
         oPacket.EncodeShort(mf.getVitality() >= 3 ? 1 : 0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet createUltimate(int amount) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket createUltimate(int amount) {
 
-        oPacket.EncodeShort(SendPacketOpcode.CreateNewCharacterResultPremiumAdventurer.getValue());
-        oPacket.EncodeInteger(amount);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CreateNewCharacterResultPremiumAdventurer.getValue());
+        oPacket.EncodeInt(amount);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet harvestMessage(int oid, int msg) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket harvestMessage(int oid, int msg) {
 
-        oPacket.EncodeShort(SendPacketOpcode.GatherRequestResult.getValue());
-        oPacket.EncodeInteger(oid);
-        oPacket.EncodeInteger(msg);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.GatherRequestResult.getValue());
+        oPacket.EncodeInt(oid);
+        oPacket.EncodeInt(msg);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet openBag(int index, int itemId, boolean firstTime) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket openBag(int index, int itemId, boolean firstTime) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserBagItemUseResult.getValue());
-        oPacket.EncodeInteger(index);
-        oPacket.EncodeInteger(itemId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserBagItemUseResult.getValue());
+        oPacket.EncodeInt(index);
+        oPacket.EncodeInt(itemId);
         oPacket.EncodeShort(firstTime ? 1 : 0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet dragonBlink(int portalId) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket dragonBlink(int portalId) {
 
-        oPacket.EncodeShort(SendPacketOpcode.RandomTeleportKey.getValue());
-        oPacket.Encode(portalId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.RandomTeleportKey.getValue());
+        oPacket.EncodeByte(portalId);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -2703,7 +2450,7 @@ public class CField {
      * @param time
      * @return the packet
      */
-    public static Packet skillCooldown(int skillid, int time) {
+    public static OutPacket skillCooldown(int skillid, int time) {
         List<Pair<Integer, Integer>> cooldowns = new ArrayList<Pair<Integer, Integer>>();
         cooldowns.add(new Pair<Integer, Integer>(skillid, time));
 
@@ -2716,47 +2463,45 @@ public class CField {
      * @param cooldowns An array of skills to sent, pair left = skillid & pair right = time in seconds
      * @return
      */
-    public static Packet skillCooldown(List<Pair<Integer, Integer>> cooldowns) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket skillCooldown(List<Pair<Integer, Integer>> cooldowns) {
 
-        oPacket.EncodeShort(SendPacketOpcode.SkillCooltimeSet.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SkillCooltimeSet.getValue());
 
-        oPacket.EncodeInteger(cooldowns.size()); // number of skills to cooldown, new in v170
+        oPacket.EncodeInt(cooldowns.size()); // number of skills to cooldown, new in v170
         for (Pair<Integer, Integer> cooldown : cooldowns) {
-            oPacket.EncodeInteger(cooldown.getLeft());
-            oPacket.EncodeInteger(cooldown.getRight());
+            oPacket.EncodeInt(cooldown.getLeft());
+            oPacket.EncodeInt(cooldown.getRight());
         }
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet dropItemFromMapObject(MapleMapItem drop, Point dropfrom, Point dropto, byte nEnterType) {
+    public static OutPacket dropItemFromMapObject(MapleMapItem drop, Point dropfrom, Point dropto, byte nEnterType) {
         return dropItemFromMapObject(drop, null, dropfrom, dropto, nEnterType);
     }
 
-    public static Packet dropItemFromMapObject(MapleMapItem drop, Mob mob, Point dropfrom, Point dropto, byte nEnterType) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket dropItemFromMapObject(MapleMapItem drop, Mob mob, Point dropfrom, Point dropto, byte nEnterType) {
 
-        oPacket.EncodeShort(SendPacketOpcode.DropEnterField.getValue());
-        oPacket.Encode(0); //eDropType
-        oPacket.Encode(nEnterType); //nEnterType
-        oPacket.EncodeInteger(drop.getObjectId()); //dwId
-        oPacket.Encode(drop.getMeso() > 0); //bIsMoney
-        oPacket.EncodeInteger(0); //nDropMotionType
-        oPacket.EncodeInteger(0); //nDropSpeed
-        oPacket.Encode(drop.isNoMoveItem()); //bNoMove
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.DropEnterField.getValue());
+        oPacket.EncodeByte(0); //eDropType
+        oPacket.EncodeByte(nEnterType); //nEnterType
+        oPacket.EncodeInt(drop.getObjectId()); //dwId
+        oPacket.EncodeBool(drop.getMeso() > 0); //bIsMoney
+        oPacket.EncodeInt(0); //nDropMotionType
+        oPacket.EncodeInt(0); //nDropSpeed
+        oPacket.EncodeBool(drop.isNoMoveItem()); //bNoMove
         oPacket.Fill(0, 3);
-        oPacket.EncodeInteger(drop.getItemId()); //nInfo
-        oPacket.EncodeInteger(drop.getOwner()); //dwOwnerID
-        oPacket.Encode(drop.getDropType()); //nOwnType
+        oPacket.EncodeInt(drop.getItemId()); //nInfo
+        oPacket.EncodeInt(drop.getOwner()); //dwOwnerID
+        oPacket.EncodeByte(drop.getDropType()); //nOwnType
         oPacket.EncodePosition(dropto);
-        oPacket.EncodeInteger(mob != null ? mob.getId() : 0); //dwSourceID
-        oPacket.Encode(0);
-        oPacket.Encode(0);
+        oPacket.EncodeInt(mob != null ? mob.getId() : 0); //dwSourceID
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(0);
         if (nEnterType != 2) {
             oPacket.EncodePosition(dropfrom);
-            oPacket.EncodeInteger(0);//tDelay
+            oPacket.EncodeInt(0);//tDelay
         }
-        oPacket.Encode(0); //bExplosiveDrop
+        oPacket.EncodeByte(0); //bExplosiveDrop
         /* 
         if (pFakeMoney)
 	        oPacket.encode(0); //bByPet
@@ -2771,15 +2516,15 @@ public class CField {
 	        oPacket.encodeShort(0); //nFallingVY
 	        oPacket.encode(0); //v8->bFadeInEffect = CInPacket::Decode1(iPacket) != 0;
 	        oPacket.encode(0); //nMakeType
-	        oPacket.encodeInteger(0); //bCollisionPickUp
+	        oPacket.EncodeInt(0); //bCollisionPickUp
 	        oPacket.encode(0);
 	        oPacket.encode(0); //bPrepareCollisionPickUp
          */
         if (drop.getMeso() == 0) {
             PacketHelper.addExpirationTime(oPacket, drop.getItem().getExpiration());
         }
-        oPacket.Encode(!drop.isPlayerDrop()); //bByPet
-        oPacket.Encode(0);
+        oPacket.EncodeBool(!drop.isPlayerDrop()); //bByPet
+        oPacket.EncodeByte(0);
 
         /*
         if ( CInPacket::Decode1(iPacket) ) {
@@ -2789,104 +2534,100 @@ public class CField {
 	        } 
          */
         oPacket.EncodeShort(0); //nFallingVY
-        oPacket.Encode(0); //v8->bFadeInEffect = CInPacket::Decode1(iPacket) != 0;
-        oPacket.Encode(0); //nMakeType
-        oPacket.Encode(drop.isCollisionPickUpDrop()); // bCollisionPickUp
+        oPacket.EncodeByte(0); //v8->bFadeInEffect = CInPacket::Decode1(iPacket) != 0;
+        oPacket.EncodeByte(0); //nMakeType
+        oPacket.EncodeBool(drop.isCollisionPickUpDrop()); // bCollisionPickUp
         oPacket.Fill(0, 3);
-        oPacket.Encode(0); //goes to a swtich with four possibilities
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0); //goes to a swtich with four possibilities
+        oPacket.EncodeByte(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet explodeDrop(int oid) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket explodeDrop(int oid) {
 
-        oPacket.EncodeShort(SendPacketOpcode.DropLeaveField.getValue());
-        oPacket.Encode(4);
-        oPacket.EncodeInteger(oid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.DropLeaveField.getValue());
+        oPacket.EncodeByte(4);
+        oPacket.EncodeInt(oid);
         oPacket.EncodeShort(655);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet removeItemFromMap(int oid, int animation, int cid) {
+    public static OutPacket removeItemFromMap(int oid, int animation, int cid) {
         return removeItemFromMap(oid, animation, cid, 0);
     }
 
-    public static Packet removeItemFromMap(int oid, int animation, int cid, int slot) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket removeItemFromMap(int oid, int animation, int cid, int slot) {
 
-        oPacket.EncodeShort(SendPacketOpcode.DropLeaveField.getValue());
-        oPacket.Encode(animation);
-        oPacket.EncodeInteger(oid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.DropLeaveField.getValue());
+        oPacket.EncodeByte(animation);
+        oPacket.EncodeInt(oid);
         if (animation >= 2) {
-            oPacket.EncodeInteger(cid);
+            oPacket.EncodeInt(cid);
             if (animation == 5) {
-                oPacket.EncodeInteger(slot);
+                oPacket.EncodeInt(slot);
             }
         }
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet spawnClockMist(final MapleMist clock) {
-        OutPacket packet = new OutPacket(80);
+    public static OutPacket spawnClockMist(final MapleMist clock) {
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.AffectedAreaCreated.getValue());
 
-        packet.EncodeShort(SendPacketOpcode.AffectedAreaCreated.getValue());
-        packet.EncodeInteger(clock.getObjectId());
-        packet.Encode(1);
-        packet.EncodeInteger(clock.getMobOwner().getObjectId());
-        packet.EncodeInteger(clock.getMobSkill().getSkillId());
-        packet.Encode(clock.getClockType());
-        packet.EncodeShort(0x07);//clock.getSkillDelay());
-        packet.EncodeInteger(clock.getBox().x);
-        packet.EncodeInteger(clock.getBox().y);
-        packet.EncodeInteger(clock.getBox().x + clock.getBox().width);
-        packet.EncodeInteger(clock.getBox().y + clock.getBox().height);
-        packet.EncodeInteger(0);
-        packet.EncodePosition(clock.getMobOwner().getPosition());
-        packet.EncodeInteger(0);
-        packet.EncodeInteger(clock.getClockType() == 1 ? 15 : clock.getClockType() == 2 ? -15 : 0);
-        packet.EncodeInteger(0x78);
+        oPacket.EncodeInt(clock.getObjectId());
+        oPacket.EncodeByte(1);
+        oPacket.EncodeInt(clock.getMobOwner().getObjectId());
+        oPacket.EncodeInt(clock.getMobSkill().getSkillId());
+        oPacket.EncodeByte(clock.getClockType());
+        oPacket.EncodeShort(0x07);//clock.getSkillDelay());
+        oPacket.EncodeInt(clock.getBox().x);
+        oPacket.EncodeInt(clock.getBox().y);
+        oPacket.EncodeInt(clock.getBox().x + clock.getBox().width);
+        oPacket.EncodeInt(clock.getBox().y + clock.getBox().height);
+        oPacket.EncodeInt(0);
+        oPacket.EncodePosition(clock.getMobOwner().getPosition());
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(clock.getClockType() == 1 ? 15 : clock.getClockType() == 2 ? -15 : 0);
+        oPacket.EncodeInt(0x78);
         //System.out.println(packet.toString());
 
-        return packet.ToPacket();
+        return oPacket;
     }
 
-    public static Packet spawnObtacleAtomBomb() {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket spawnObtacleAtomBomb() {
 
-        oPacket.EncodeShort(SendPacketOpcode.ObtacleAtomCreate.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ObtacleAtomCreate.getValue());
 
         //Number of bomb objects to spawn.  You can also just send multiple packets instead of putting them all in one packet.
-        oPacket.EncodeInteger(500);
+        oPacket.EncodeInt(500);
 
         //Unknown, this part is from IDA.
         byte unk = 0;
-        oPacket.Encode(unk); //animation data or some shit
+        oPacket.EncodeByte(unk); //animation data or some shit
         if (unk == 1) {
-            oPacket.EncodeInteger(300); //from Effect.img/BasicEff/ObtacleAtomCreate/%d
-            oPacket.Encode(0); //rest idk
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(300); //from Effect.img/BasicEff/ObtacleAtomCreate/%d
+            oPacket.EncodeByte(0); //rest idk
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
         }
 
-        oPacket.Encode(1);
-        oPacket.EncodeInteger(1);
-        oPacket.EncodeInteger(1);
-        oPacket.EncodeInteger(900); //POSX
-        oPacket.EncodeInteger(-1347); //POSY
-        oPacket.EncodeInteger(25);
-        oPacket.EncodeInteger(3);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(25);
-        oPacket.EncodeInteger(-5);
-        oPacket.EncodeInteger(1000);
-        oPacket.EncodeInteger(800);
-        oPacket.EncodeInteger(80);
-        return oPacket.ToPacket();
+        oPacket.EncodeByte(1);
+        oPacket.EncodeInt(1);
+        oPacket.EncodeInt(1);
+        oPacket.EncodeInt(900); //POSX
+        oPacket.EncodeInt(-1347); //POSY
+        oPacket.EncodeInt(25);
+        oPacket.EncodeInt(3);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(25);
+        oPacket.EncodeInt(-5);
+        oPacket.EncodeInt(1000);
+        oPacket.EncodeInt(800);
+        oPacket.EncodeInt(80);
+        return oPacket;
     }
 
     /**
@@ -2895,83 +2636,40 @@ public class CField {
      * @param mist
      * @return
      */
-    public static Packet spawnMist(MapleMist mist) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket spawnMist(MapleMist mist) {
 
-        oPacket.EncodeShort(SendPacketOpcode.AffectedAreaCreated.getValue());
-        oPacket.EncodeInteger(mist.getObjectId());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.AffectedAreaCreated.getValue());
+        oPacket.EncodeInt(mist.getObjectId());
 
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
         //oPacket.Encode(0);
-        oPacket.EncodeInteger(mist.getOwnerId());
+        oPacket.EncodeInt(mist.getOwnerId());
         if (mist.getMobSkill() == null) {
-            oPacket.EncodeInteger(mist.getSourceSkill().getId());
+            oPacket.EncodeInt(mist.getSourceSkill().getId());
         } else {
-            oPacket.EncodeInteger(mist.getMobSkill().getSkillId());
+            oPacket.EncodeInt(mist.getMobSkill().getSkillId());
         }
-        oPacket.Encode(mist.getSkillLevel());
+        oPacket.EncodeByte(mist.getSkillLevel());
         oPacket.EncodeShort(mist.getSkillDelay());
-        oPacket.EncodeInteger(mist.getBox().x);
-        oPacket.EncodeInteger(mist.getBox().y);
-        oPacket.EncodeInteger(mist.getBox().x + mist.getBox().width);
-        oPacket.EncodeInteger(mist.getBox().y + mist.getBox().height);
-        oPacket.EncodeInteger(mist.isShelter() ? 1 : 0);
-        oPacket.EncodeInteger(0);
+        oPacket.EncodeInt(mist.getBox().x);
+        oPacket.EncodeInt(mist.getBox().y);
+        oPacket.EncodeInt(mist.getBox().x + mist.getBox().width);
+        oPacket.EncodeInt(mist.getBox().y + mist.getBox().height);
+        oPacket.EncodeInt(mist.isShelter() ? 1 : 0);
+        oPacket.EncodeInt(0);
         oPacket.EncodePosition(mist.getPosition());
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0);
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(0);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(0);
         if (GameConstants.isFlipAffectedAreaSkill(mist.getSourceSkill().getId())) {
-            oPacket.Encode(0);
+            oPacket.EncodeByte(0);
         }
-        oPacket.EncodeInteger(0);
+        oPacket.EncodeInt(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    // Previous Packet for spawnMist
-    /*public static Packet spawnMist(MapleMist mist) {
-        OutPacket oPacket = new OutPacket(80);
-
-        oPacket.EncodeShort(SendPacketOpcode.AffectedAreaCreated.getValue());
-        oPacket.EncodeInteger(mist.getObjectId());//wsUOL
-
-        oPacket.Encode(mist.isMobMist() ? 0 : mist.isPoisonMist());
-        oPacket.EncodeInteger(mist.getOwnerId());//pProp
-
-        int sourceSkillId = 0;
-        if (mist.getMobSkill() == null) {
-            sourceSkillId = mist.getSourceSkill().getId();
-        } else {
-            sourceSkillId = mist.getMobSkill().getSkillId();
-        }
-        oPacket.EncodeInteger(sourceSkillId);
-
-        oPacket.Encode(mist.getSkillLevel());
-        oPacket.EncodeShort(mist.getSkillDelay());//sLoopUOL
-        oPacket.EncodeRectangle(mist.getBox());
-        oPacket.EncodeInteger(0);//bFail
-        oPacket.EncodeShort(0);
-        oPacket.EncodeShort(0);
-        oPacket.EncodeInteger(0);
-        oPacket.EncodeInteger(0);
-
-        // New in v170
-        oPacket.Encode(true); // sPreUOL.baseclass_0.m_Data = (_bstr_t::Data_t *)(CInPacket::Decode1(iPacket) != 0); cache of some sort?    
-        oPacket.EncodeInteger(0); // sTemp.baseclass_0.m_Data = (_bstr_t::Data_t *)CInPacket::Decode4(iPacket);
-
-        if (GameConstants.isFlipAffectedAreaSkill(sourceSkillId)) { // This is hard coded! We still need to look into WZ on other flip affected area skill
-            oPacket.Encode(0);
-        }
-        oPacket.EncodeInteger(0); // v4 = (_bstr_t::Data_t *)CInPacket::Decode4(iPacket);
-
-        // Write an additional int to be safe, because we don't have the list of flipAffectedSkill from WZ yet...
-        // If any new skill uses it
-        oPacket.EncodeInteger(0);
-
-        return oPacket.ToPacket();
-    }*/
     /**
      * Remove the mist from the map ?OnAffectedAreaRemoved@CAffectedAreaPool@@IAEXAAVCInPacket@@@Z
      *
@@ -2979,14 +2677,13 @@ public class CField {
      * @param eruption
      * @return
      */
-    public static Packet removeMist(int oid, boolean eruption) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket removeMist(int oid, boolean eruption) {
 
-        oPacket.EncodeShort(SendPacketOpcode.AffectedAreaRemoved.getValue());
-        oPacket.EncodeInteger(oid);
-        oPacket.Encode(eruption ? 1 : 0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.AffectedAreaRemoved.getValue());
+        oPacket.EncodeInt(oid);
+        oPacket.EncodeByte(eruption ? 1 : 0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -2999,429 +2696,397 @@ public class CField {
      * @param skillid
      * @return
      */
-    public static Packet spawnDoor(int oid, Point pos, Point originalCharacterPosition, boolean animation, int skillid) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket spawnDoor(int oid, Point pos, Point originalCharacterPosition, boolean animation, int skillid) {
 
-        oPacket.EncodeShort(SendPacketOpcode.TownPortalCreated.getValue());
-        oPacket.Encode(animation ? 0 : 1);
-        oPacket.EncodeInteger(oid);
-        oPacket.EncodeInteger(skillid); // new on v170
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.TownPortalCreated.getValue());
+        oPacket.EncodeByte(animation ? 0 : 1);
+        oPacket.EncodeInt(oid);
+        oPacket.EncodeInt(skillid); // new on v170
         oPacket.EncodePosition(pos);
         oPacket.EncodePosition(originalCharacterPosition);// new in v170, character position
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet removeDoor(int oid, boolean animation) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket removeDoor(int oid, boolean animation) {
 
-        oPacket.EncodeShort(SendPacketOpcode.TownPortalRemoved.getValue());
-        oPacket.Encode(animation ? 0 : 1);
-        oPacket.EncodeInteger(oid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.TownPortalRemoved.getValue());
+        oPacket.EncodeByte(animation ? 0 : 1);
+        oPacket.EncodeInt(oid);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet spawnKiteError() {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket spawnKiteError() {
 
-        oPacket.EncodeShort(SendPacketOpcode.CreateMessageBoxFailed.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CreateMessageBoxFailed.getValue());
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet spawnKite(MapleKite kite) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket spawnKite(MapleKite kite) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MessageBoxEnterField.getValue());
-        oPacket.EncodeInteger(kite.getObjectId());
-        oPacket.EncodeInteger(kite.getItemID());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MessageBoxEnterField.getValue());
+        oPacket.EncodeInt(kite.getObjectId());
+        oPacket.EncodeInt(kite.getItemID());
         oPacket.EncodeString(kite.getMessage());
         oPacket.EncodeString(kite.getName());
         oPacket.EncodePosition(kite.getPosition());
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet destroyKite(int oid, boolean animation) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket destroyKite(int oid, boolean animation) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MessageBoxLeaveField.getValue());
-        oPacket.Encode(animation ? 0 : 1);
-        oPacket.EncodeInteger(oid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MessageBoxLeaveField.getValue());
+        oPacket.EncodeByte(animation ? 0 : 1);
+        oPacket.EncodeInt(oid);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet spawnMechDoor(MechDoor md, boolean animated) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket spawnMechDoor(MechDoor md, boolean animated) {
 
-        oPacket.EncodeShort(SendPacketOpcode.OpenGateCreated.getValue());
-        oPacket.Encode(animated ? 0 : 1);
-        oPacket.EncodeInteger(md.getOwnerId());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.OpenGateCreated.getValue());
+        oPacket.EncodeByte(animated ? 0 : 1);
+        oPacket.EncodeInt(md.getOwnerId());
         oPacket.EncodePosition(md.getTruePosition());
-        oPacket.Encode(md.getId());
-        oPacket.EncodeInteger(md.getPartyId());
-        return oPacket.ToPacket();
+        oPacket.EncodeByte(md.getId());
+        oPacket.EncodeInt(md.getPartyId());
+        return oPacket;
     }
 
-    public static Packet removeMechDoor(MechDoor md, boolean animated) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket removeMechDoor(MechDoor md, boolean animated) {
 
-        oPacket.EncodeShort(SendPacketOpcode.OpenGateClose.getValue());
-        oPacket.Encode(animated ? 0 : 1);
-        oPacket.EncodeInteger(md.getOwnerId());
-        oPacket.Encode(md.getId());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.OpenGateClose.getValue());
+        oPacket.EncodeByte(animated ? 0 : 1);
+        oPacket.EncodeInt(md.getOwnerId());
+        oPacket.EncodeByte(md.getId());
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet triggerReactor(MapleReactor reactor, int stance) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket triggerReactor(MapleReactor reactor, int stance) {
 
-        oPacket.EncodeShort(SendPacketOpcode.ReactorChangeState.getValue());
-        oPacket.EncodeInteger(reactor.getObjectId());
-        oPacket.Encode(reactor.getState());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ReactorChangeState.getValue());
+        oPacket.EncodeInt(reactor.getObjectId());
+        oPacket.EncodeByte(reactor.getState());
         oPacket.EncodePosition(reactor.getTruePosition());
-        oPacket.EncodeInteger(stance);
-        oPacket.Encode(0);
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(0);
-        return oPacket.ToPacket();
+        oPacket.EncodeInt(stance);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(0);
+        return oPacket;
     }
 
-    public static Packet spawnReactor(MapleReactor reactor) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket spawnReactor(MapleReactor reactor) {
 
-        oPacket.EncodeShort(SendPacketOpcode.ReactorEnterField.getValue());
-        oPacket.EncodeInteger(reactor.getObjectId());
-        oPacket.EncodeInteger(reactor.getReactorId());
-        oPacket.Encode(reactor.getState());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ReactorEnterField.getValue());
+        oPacket.EncodeInt(reactor.getObjectId());
+        oPacket.EncodeInt(reactor.getReactorId());
+        oPacket.EncodeByte(reactor.getState());
         oPacket.EncodePosition(reactor.getTruePosition());
-        oPacket.Encode(reactor.getFacingDirection());
+        oPacket.EncodeByte(reactor.getFacingDirection());
         oPacket.EncodeString(reactor.getName());
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet destroyReactor(MapleReactor reactor) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket destroyReactor(MapleReactor reactor) {
 
-        oPacket.EncodeShort(SendPacketOpcode.ReactorStateReset.getValue());
-        oPacket.EncodeInteger(reactor.getObjectId());
-        oPacket.Encode(reactor.getState());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ReactorStateReset.getValue());
+        oPacket.EncodeInt(reactor.getObjectId());
+        oPacket.EncodeByte(reactor.getState());
         oPacket.EncodePosition(reactor.getPosition());
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet makeExtractor(int cid, String cname, Point pos, int timeLeft, int itemId, int fee) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket makeExtractor(int cid, String cname, Point pos, int timeLeft, int itemId, int fee) {
 
-        oPacket.EncodeShort(SendPacketOpcode.DecomposerEnterField.getValue());
-        oPacket.EncodeInteger(cid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.DecomposerEnterField.getValue());
+        oPacket.EncodeInt(cid);
         oPacket.EncodeString(cname);
-        oPacket.EncodeInteger(pos.x);
-        oPacket.EncodeInteger(pos.y);
+        oPacket.EncodeInt(pos.x);
+        oPacket.EncodeInt(pos.y);
         oPacket.EncodeShort(timeLeft);
-        oPacket.EncodeInteger(itemId);
-        oPacket.EncodeInteger(fee);
+        oPacket.EncodeInt(itemId);
+        oPacket.EncodeInt(fee);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet removeExtractor(int cid) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket removeExtractor(int cid) {
 
-        oPacket.EncodeShort(SendPacketOpcode.DecomposerLeaveField.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.EncodeInteger(1);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.DecomposerLeaveField.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeInt(1);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet rollSnowball(int type, MapleSnowball.MapleSnowballs ball1, MapleSnowball.MapleSnowballs ball2) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket rollSnowball(int type, MapleSnowball.MapleSnowballs ball1, MapleSnowball.MapleSnowballs ball2) {
 
-        oPacket.EncodeShort(SendPacketOpcode.SnowBallState.getValue());
-        oPacket.Encode(type);
-        oPacket.EncodeInteger(ball1 == null ? 0 : ball1.getSnowmanHP() / 75);
-        oPacket.EncodeInteger(ball2 == null ? 0 : ball2.getSnowmanHP() / 75);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SnowBallState.getValue());
+        oPacket.EncodeByte(type);
+        oPacket.EncodeInt(ball1 == null ? 0 : ball1.getSnowmanHP() / 75);
+        oPacket.EncodeInt(ball2 == null ? 0 : ball2.getSnowmanHP() / 75);
         oPacket.EncodeShort(ball1 == null ? 0 : ball1.getPosition());
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
         oPacket.EncodeShort(ball2 == null ? 0 : ball2.getPosition());
         oPacket.Fill(0, 11);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet enterSnowBall() {
+    public static OutPacket enterSnowBall() {
         return rollSnowball(0, null, null);
     }
 
-    public static Packet hitSnowBall(int team, int damage, int distance, int delay) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket hitSnowBall(int team, int damage, int distance, int delay) {
 
-        oPacket.EncodeShort(SendPacketOpcode.SnowBallHit.getValue());
-        oPacket.Encode(team);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SnowBallHit.getValue());
+        oPacket.EncodeByte(team);
         oPacket.EncodeShort(damage);
-        oPacket.Encode(distance);
-        oPacket.Encode(delay);
+        oPacket.EncodeByte(distance);
+        oPacket.EncodeByte(delay);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet snowballMessage(int team, int message) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket snowballMessage(int team, int message) {
 
-        oPacket.EncodeShort(SendPacketOpcode.SnowBallMsg.getValue());
-        oPacket.Encode(team);
-        oPacket.EncodeInteger(message);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SnowBallMsg.getValue());
+        oPacket.EncodeByte(team);
+        oPacket.EncodeInt(message);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet leftKnockBack() {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket leftKnockBack() {
 
-        oPacket.EncodeShort(SendPacketOpcode.SnowBallTouch.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SnowBallTouch.getValue());
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet hitCoconut(boolean spawn, int id, int type) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket hitCoconut(boolean spawn, int id, int type) {
 
-        oPacket.EncodeShort(SendPacketOpcode.CoconutHit.getValue());
-        oPacket.EncodeInteger(spawn ? 32768 : id);
-        oPacket.Encode(spawn ? 0 : type);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CoconutHit.getValue());
+        oPacket.EncodeInt(spawn ? 32768 : id);
+        oPacket.EncodeByte(spawn ? 0 : type);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet coconutScore(int[] coconutscore) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket coconutScore(int[] coconutscore) {
 
-        oPacket.EncodeShort(SendPacketOpcode.CoconutScore.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CoconutScore.getValue());
         oPacket.EncodeShort(coconutscore[0]);
         oPacket.EncodeShort(coconutscore[1]);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showChaosZakumShrine(boolean spawned, int time) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showChaosZakumShrine(boolean spawned, int time) {
 
-        oPacket.EncodeShort(SendPacketOpcode.CHAOS_ZAKUM_SHRINE.getValue());
-        oPacket.Encode(spawned ? 1 : 0);
-        oPacket.EncodeInteger(time);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CHAOS_ZAKUM_SHRINE.getValue());
+        oPacket.EncodeByte(spawned ? 1 : 0);
+        oPacket.EncodeInt(time);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showChaosHorntailShrine(boolean spawned, int time) {
+    public static OutPacket showChaosHorntailShrine(boolean spawned, int time) {
         return showHorntailShrine(spawned, time);
     }
 
-    public static Packet showHorntailShrine(boolean spawned, int time) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showHorntailShrine(boolean spawned, int time) {
 
-        oPacket.EncodeShort(SendPacketOpcode.HORNTAIL_SHRINE.getValue());
-        oPacket.Encode(spawned ? 1 : 0);
-        oPacket.EncodeInteger(time);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.HORNTAIL_SHRINE.getValue());
+        oPacket.EncodeByte(spawned ? 1 : 0);
+        oPacket.EncodeInt(time);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getRPSMode(byte mode, int mesos, int selection, int answer) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getRPSMode(byte mode, int mesos, int selection, int answer) {
 
-        oPacket.EncodeShort(SendPacketOpcode.RPSGame.getValue());
-        oPacket.Encode(mode);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.RPSGame.getValue());
+        oPacket.EncodeByte(mode);
         switch (mode) {
             case 6:
                 if (mesos == -1) {
                     break;
                 }
-                oPacket.EncodeInteger(mesos);
+                oPacket.EncodeInt(mesos);
                 break;
             case 8:
-                oPacket.EncodeInteger(9000019);
+                oPacket.EncodeInt(9000019);
                 break;
             case 11:
-                oPacket.Encode(selection);
-                oPacket.Encode(answer);
+                oPacket.EncodeByte(selection);
+                oPacket.EncodeByte(answer);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet messengerInvite(String from, int messengerid) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket messengerInvite(String from, int messengerid) {
 
-        oPacket.EncodeShort(SendPacketOpcode.Messenger.getValue());
-        oPacket.Encode(3);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Messenger.getValue());
+        oPacket.EncodeByte(3);
         oPacket.EncodeString(from);
-        oPacket.Encode(1);//channel?
-        oPacket.EncodeInteger(messengerid);
-        oPacket.Encode(0);
+        oPacket.EncodeByte(1);//channel?
+        oPacket.EncodeInt(messengerid);
+        oPacket.EncodeByte(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet addMessengerPlayer(String from, User chr, int position, int channel) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket addMessengerPlayer(String from, User chr, int position, int channel) {
 
-        oPacket.EncodeShort(SendPacketOpcode.Messenger.getValue());
-        oPacket.Encode(0);
-        oPacket.Encode(position);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Messenger.getValue());
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(position);
         writeCharacterLook(oPacket, chr);
         oPacket.EncodeString(from);
-        oPacket.Encode(channel);
-        oPacket.Encode(1); // v140
-        oPacket.EncodeInteger(chr.getJob());
+        oPacket.EncodeByte(channel);
+        oPacket.EncodeByte(1); // v140
+        oPacket.EncodeInt(chr.getJob());
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet removeMessengerPlayer(int position) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket removeMessengerPlayer(int position) {
 
-        oPacket.EncodeShort(SendPacketOpcode.Messenger.getValue());
-        oPacket.Encode(2);
-        oPacket.Encode(position);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Messenger.getValue());
+        oPacket.EncodeByte(2);
+        oPacket.EncodeByte(position);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet updateMessengerPlayer(String from, User chr, int position, int channel) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket updateMessengerPlayer(String from, User chr, int position, int channel) {
 
-        oPacket.EncodeShort(SendPacketOpcode.Messenger.getValue());
-        oPacket.Encode(0); // v140.
-        oPacket.Encode(position);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Messenger.getValue());
+        oPacket.EncodeByte(0); // v140.
+        oPacket.EncodeByte(position);
         writeCharacterLook(oPacket, chr);
         oPacket.EncodeString(from);
-        oPacket.Encode(channel);
-        oPacket.Encode(0); // v140.
-        oPacket.EncodeInteger(chr.getJob()); // doubt it's the job, lol. v140.
+        oPacket.EncodeByte(channel);
+        oPacket.EncodeByte(0); // v140.
+        oPacket.EncodeInt(chr.getJob()); // doubt it's the job, lol. v140.
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet joinMessenger(int position) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket joinMessenger(int position) {
 
-        oPacket.EncodeShort(SendPacketOpcode.Messenger.getValue());
-        oPacket.Encode(1);
-        oPacket.Encode(position);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Messenger.getValue());
+        oPacket.EncodeByte(1);
+        oPacket.EncodeByte(position);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet messengerChat(String charname, String text) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket messengerChat(String charname, String text) {
 
-        oPacket.EncodeShort(SendPacketOpcode.Messenger.getValue());
-        oPacket.Encode(6);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Messenger.getValue());
+        oPacket.EncodeByte(6);
         oPacket.EncodeString(charname);
         oPacket.EncodeString(text);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet messengerNote(String text, int mode, int mode2) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket messengerNote(String text, int mode, int mode2) {
 
-        oPacket.EncodeShort(SendPacketOpcode.Messenger.getValue());
-        oPacket.Encode(mode);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Messenger.getValue());
+        oPacket.EncodeByte(mode);
         oPacket.EncodeString(text);
-        oPacket.Encode(mode2);
+        oPacket.EncodeByte(mode2);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet messengerOpen(byte type, List<User> chars) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket messengerOpen(byte type, List<User> chars) {
 
-        oPacket.EncodeShort(SendPacketOpcode.GetLotteryResult.getValue());
-        oPacket.Encode(type); //7 in messenger open ui 8 new ui
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.GetLotteryResult.getValue());
+        oPacket.EncodeByte(type); //7 in messenger open ui 8 new ui
         if (chars.isEmpty()) {
             oPacket.EncodeShort(0);
         }
         for (User chr : chars) {
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(chr.getId());
-            oPacket.EncodeInteger(0); //likes
+            oPacket.EncodeByte(1);
+            oPacket.EncodeInt(chr.getId());
+            oPacket.EncodeInt(0); //likes
             oPacket.EncodeLong(0); //some time
             oPacket.EncodeString(chr.getName());
             writeCharacterLook(oPacket, chr);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet messengerCharInfo(User chr) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket messengerCharInfo(User chr) {
 
-        oPacket.EncodeShort(SendPacketOpcode.Messenger.getValue());
-        oPacket.Encode(0x0B);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Messenger.getValue());
+        oPacket.EncodeByte(0x0B);
         oPacket.EncodeString(chr.getName());
-        oPacket.EncodeInteger(chr.getJob());
-        oPacket.EncodeInteger(chr.getFame());
-        oPacket.EncodeInteger(0); //likes
+        oPacket.EncodeInt(chr.getJob());
+        oPacket.EncodeInt(chr.getFame());
+        oPacket.EncodeInt(0); //likes
         MapleGuild gs = World.Guild.getGuild(chr.getGuildId());
         oPacket.EncodeString(gs != null ? gs.getName() : "-");
         MapleGuildAlliance alliance = World.Alliance.getAlliance(gs.getAllianceId());
         oPacket.EncodeString(alliance != null ? alliance.getName() : "");
-        oPacket.Encode(2);
+        oPacket.EncodeByte(2);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet removeFromPackageList(boolean remove, int Package) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket removeFromPackageList(boolean remove, int Package) {
 
-        oPacket.EncodeShort(SendPacketOpcode.Parcel.getValue());
-        oPacket.Encode(24);
-        oPacket.EncodeInteger(Package);
-        oPacket.Encode(remove ? 3 : 4);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Parcel.getValue());
+        oPacket.EncodeByte(24);
+        oPacket.EncodeInt(Package);
+        oPacket.EncodeByte(remove ? 3 : 4);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet sendPackageMSG(byte operation, List<MaplePackageActions> packages) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket sendPackageMSG(byte operation, List<MaplePackageActions> packages) {
 
-        oPacket.EncodeShort(SendPacketOpcode.Parcel.getValue());
-        oPacket.Encode(operation);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Parcel.getValue());
+        oPacket.EncodeByte(operation);
 
         switch (operation) {
             case 9:
-                oPacket.Encode(1);
+                oPacket.EncodeByte(1);
                 break;
             case 10:
-                oPacket.Encode(0);
-                oPacket.Encode(packages.size());
+                oPacket.EncodeByte(0);
+                oPacket.EncodeByte(packages.size());
 
                 for (MaplePackageActions dp : packages) {
-                    oPacket.EncodeInteger(dp.getPackageId());
+                    oPacket.EncodeInt(dp.getPackageId());
                     oPacket.EncodeString(dp.getSender(), 13);
-                    oPacket.EncodeInteger(dp.getMesos());
+                    oPacket.EncodeInt(dp.getMesos());
                     oPacket.EncodeLong(PacketHelper.getTime(dp.getSentTime()));
                     oPacket.Fill(0, 205);
 
                     if (dp.getItem() != null) {
-                        oPacket.Encode(1);
+                        oPacket.EncodeByte(1);
                         PacketHelper.addItemInfo(oPacket, dp.getItem());
                     } else {
-                        oPacket.Encode(0);
+                        oPacket.EncodeByte(0);
                     }
                 }
-                oPacket.Encode(0);
+                oPacket.EncodeByte(0);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -3431,164 +3096,153 @@ public class CField {
      * @param jobid
      * @return
      */
-    public static Packet getKeymap(MapleKeyLayout layout, int jobid) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getKeymap(MapleKeyLayout layout, int jobid) {
 
-        oPacket.EncodeShort(SendPacketOpcode.FuncKeyMappedInit.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FuncKeyMappedInit.getValue());
         layout.writeData(oPacket, jobid);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet petAutoHP(int itemId) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket petAutoHP(int itemId) {
 
-        oPacket.EncodeShort(SendPacketOpcode.PetConsumeItemInit.getValue());
-        oPacket.EncodeInteger(itemId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.PetConsumeItemInit.getValue());
+        oPacket.EncodeInt(itemId);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet petAutoMP(int itemId) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket petAutoMP(int itemId) {
 
-        oPacket.EncodeShort(SendPacketOpcode.PetConsumeMPItemInit.getValue());
-        oPacket.EncodeInteger(itemId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.PetConsumeMPItemInit.getValue());
+        oPacket.EncodeInt(itemId);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet petAutoCure(int itemId) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket petAutoCure(int itemId) {
 
-        oPacket.EncodeShort(SendPacketOpcode.PetConsumeCureItemInit.getValue());
-        oPacket.EncodeInteger(itemId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.PetConsumeCureItemInit.getValue());
+        oPacket.EncodeInt(itemId);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet petAutoBuff(int skillId) {
-        OutPacket oPacket = new OutPacket(80);
+    /*
+    public static OutPacket petAutoBuff(int skillId) {
+        
 
-        //oPacket.encodeShort(SendPacketOpcode.PET_AUTO_BUFF.getValue());
-        oPacket.EncodeInteger(skillId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.PET_AUTO_BUFF.getValue());
+        oPacket.EncodeInt(skillId);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
-
+     */
     public static void addRingInfo(OutPacket oPacket, List<MapleRing> rings) {
-        oPacket.Encode(rings.size());
+        oPacket.EncodeByte(rings.size());
         for (MapleRing ring : rings) {
-            oPacket.EncodeInteger(1);
+            oPacket.EncodeInt(1);
             oPacket.EncodeLong(ring.getRingId());
             oPacket.EncodeLong(ring.getPartnerRingId());
-            oPacket.EncodeInteger(ring.getItemId());
+            oPacket.EncodeInt(ring.getItemId());
         }
     }
 
     public static void addMRingInfo(OutPacket oPacket, List<MapleRing> rings, User chr) {
-        oPacket.Encode(rings.size());
+        oPacket.EncodeByte(rings.size());
         for (MapleRing ring : rings) {
-            oPacket.EncodeInteger(1);
-            oPacket.EncodeInteger(chr.getId());
-            oPacket.EncodeInteger(ring.getPartnerChrId());
-            oPacket.EncodeInteger(ring.getItemId());
+            oPacket.EncodeInt(1);
+            oPacket.EncodeInt(chr.getId());
+            oPacket.EncodeInt(ring.getPartnerChrId());
+            oPacket.EncodeInt(ring.getItemId());
         }
     }
 
-    public static Packet getBuffBar(long millis) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getBuffBar(long millis) {
 
-        oPacket.EncodeShort(SendPacketOpcode.BUFF_BAR.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.BUFF_BAR.getValue());
         oPacket.EncodeLong(millis);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getBoosterFamiliar(int cid, int familiar, int id) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getBoosterFamiliar(int cid, int familiar, int id) {
 
-        oPacket.EncodeShort(SendPacketOpcode.BOOSTER_FAMILIAR.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.EncodeInteger(familiar);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.BOOSTER_FAMILIAR.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeInt(familiar);
         oPacket.EncodeLong(id);
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet viewSkills(User chr) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket viewSkills(User chr) {
 
-        oPacket.EncodeShort(SendPacketOpcode.ResultStealSkillList.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ResultStealSkillList.getValue());
         List<Integer> skillz = new ArrayList<Integer>();
         for (Skill sk : chr.getSkills().keySet()) {
             if ((sk.canBeLearnedBy(chr.getJob())) && (GameConstants.canSteal(sk)) && (!skillz.contains(Integer.valueOf(sk.getId())))) {
                 skillz.add(Integer.valueOf(sk.getId()));
             }
         }
-        oPacket.Encode(1);
-        oPacket.EncodeInteger(chr.getId());
-        oPacket.EncodeInteger(skillz.isEmpty() ? 2 : 4);
-        oPacket.EncodeInteger(chr.getJob());
-        oPacket.EncodeInteger(skillz.size());
+        oPacket.EncodeByte(1);
+        oPacket.EncodeInt(chr.getId());
+        oPacket.EncodeInt(skillz.isEmpty() ? 2 : 4);
+        oPacket.EncodeInt(chr.getJob());
+        oPacket.EncodeInt(skillz.size());
         for (int skill : skillz) {
-            oPacket.EncodeInteger(skill);
+            oPacket.EncodeInt(skill);
         }
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     public static class InteractionPacket {
 
-        public static Packet getTradeInvite(User c) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getTradeInvite(User c) {
 
-            oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-            oPacket.Encode(PlayerInteractionHandler.Interaction.INVITE_TRADE.action);
-            oPacket.Encode(4);//was 3
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+            oPacket.EncodeByte(PlayerInteractionHandler.Interaction.INVITE_TRADE.action);
+            oPacket.EncodeByte(4);//was 3
             oPacket.EncodeString(c.getName());
-//            oPacket.encodeInteger(c.getLevel());
-            oPacket.EncodeInteger(c.getJob());
-            return oPacket.ToPacket();
+//            oPacket.EncodeInt(c.getLevel());
+            oPacket.EncodeInt(c.getJob());
+            return oPacket;
         }
 
-        public static Packet getTradeMesoSet(byte number, long meso) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getTradeMesoSet(byte number, long meso) {
 
-            oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-            oPacket.Encode(PlayerInteractionHandler.Interaction.UPDATE_MESO.action);
-            oPacket.Encode(number);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+            oPacket.EncodeByte(PlayerInteractionHandler.Interaction.UPDATE_MESO.action);
+            oPacket.EncodeByte(number);
             oPacket.EncodeLong(meso);
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet gachaponMessage(Item item, String town, User player) {
-            final OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.BrodcastMsg.getValue());
-            oPacket.Encode(0x0B);
+        public static OutPacket gachaponMessage(Item item, String town, User player) {
+            final OutPacket oPacket = new OutPacket(SendPacketOpcode.BrodcastMsg.getValue());
+            oPacket.EncodeByte(0x0B);
             oPacket.EncodeString(player.getName() + " : got a(n)");
-            oPacket.EncodeInteger(0); //random?
+            oPacket.EncodeInt(0); //random?
             oPacket.EncodeString(town);
             PacketHelper.addItemInfo(oPacket, item);
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getTradeItemAdd(byte number, Item item) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getTradeItemAdd(byte number, Item item) {
 
-            oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-            oPacket.Encode(PlayerInteractionHandler.Interaction.SET_ITEMS.action);
-            oPacket.Encode(number);
-            oPacket.Encode(item.getPosition());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+            oPacket.EncodeByte(PlayerInteractionHandler.Interaction.SET_ITEMS.action);
+            oPacket.EncodeByte(number);
+            oPacket.EncodeByte(item.getPosition());
             PacketHelper.addItemInfo(oPacket, item);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getTradeStart(MapleClient c, MapleTrade trade, byte number) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getTradeStart(MapleClient c, MapleTrade trade, byte number) {
 
-            oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
 //            oPacket.encode(PlayerInteractionHandler.Interaction.START_TRADE.action);
 //            if (number != 0){//13 a0
 ////                oPacket.encode(HexTool.getByteArrayFromHexString("13 01 01 03 FE 53 00 00 40 08 00 00 00 E2 7B 00 00 01 E9 50 0F 00 03 62 98 0F 00 04 56 BF 0F 00 05 2A E7 0F 00 07 B7 5B 10 00 08 3D 83 10 00 09 D3 D1 10 00 0B 13 01 16 00 11 8C 1F 11 00 12 BF 05 1D 00 13 CB 2C 1D 00 31 40 6F 11 00 32 6B 46 11 00 35 32 5C 19 00 37 20 E2 11 00 FF 03 B6 98 0F 00 05 AE 0A 10 00 09 CC D0 10 00 FF FF 00 00 00 00 13 01 16 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0B 00 4D 6F 6D 6F 6C 6F 76 65 73 4B 48 40 08"));
@@ -3598,228 +3252,219 @@ public class CField {
 //                oPacket.encodeString(trade.getPartner().getChr().getName());
 //                oPacket.encodeShort(trade.getPartner().getChr().getJob());
 //            }else{
-            oPacket.Encode(20);
-            oPacket.Encode(4);
-            oPacket.Encode(2);
-            oPacket.Encode(number);
+            oPacket.EncodeByte(20);
+            oPacket.EncodeByte(4);
+            oPacket.EncodeByte(2);
+            oPacket.EncodeByte(number);
 
             if (number == 1) {
-                oPacket.Encode(0);
+                oPacket.EncodeByte(0);
                 writeCharacterLook(oPacket, trade.getPartner().getCharacter());
                 oPacket.EncodeString(trade.getPartner().getCharacter().getName());
                 oPacket.EncodeShort(trade.getPartner().getCharacter().getJob());
             }
-            oPacket.Encode(number);
+            oPacket.EncodeByte(number);
             writeCharacterLook(oPacket, c.getPlayer());
             oPacket.EncodeString(c.getPlayer().getName());
             oPacket.EncodeShort(c.getPlayer().getJob());
-            oPacket.Encode(255);
+            oPacket.EncodeByte(255);
 //            }
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getTradeConfirmation() {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getTradeConfirmation() {
 
-            oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-            oPacket.Encode(PlayerInteractionHandler.Interaction.CONFIRM_TRADE.action);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+            oPacket.EncodeByte(PlayerInteractionHandler.Interaction.CONFIRM_TRADE.action);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet TradeMessage(byte UserSlot, byte message) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket TradeMessage(byte UserSlot, byte message) {
 
-            oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-            oPacket.Encode(PlayerInteractionHandler.Interaction.EXIT.action);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+            oPacket.EncodeByte(PlayerInteractionHandler.Interaction.EXIT.action);
 //            oPacket.encode(25);//new v141
-            oPacket.Encode(UserSlot);
-            oPacket.Encode(message);
+            oPacket.EncodeByte(UserSlot);
+            oPacket.EncodeByte(message);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getTradeCancel(byte UserSlot) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getTradeCancel(byte UserSlot) {
 
-            oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-            oPacket.Encode(PlayerInteractionHandler.Interaction.EXIT.action);
-            oPacket.Encode(UserSlot);
-            oPacket.Encode(2);//was 2 originally, 7 = Trade Successful message.
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+            oPacket.EncodeByte(PlayerInteractionHandler.Interaction.EXIT.action);
+            oPacket.EncodeByte(UserSlot);
+            oPacket.EncodeByte(2);//was 2 originally, 7 = Trade Successful message.
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
     }
 
     public static class NPCPacket {
 
-        public static Packet spawnNPC(MapleNPC life, boolean minimap) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket spawnNPC(MapleNPC life, boolean minimap) {
 
-            oPacket.EncodeShort(SendPacketOpcode.NpcEnterField.getValue());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.NpcEnterField.getValue());
 
             encodeSpawnNPCData(oPacket, life, minimap);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet spawnNPCRequestController(MapleNPC life, boolean minimap) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket spawnNPCRequestController(MapleNPC life, boolean minimap) {
 
-            oPacket.EncodeShort(SendPacketOpcode.NpcChangeController.getValue());
-            oPacket.Encode(1);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.NpcChangeController.getValue());
+            oPacket.EncodeByte(1);
 
             encodeSpawnNPCData(oPacket, life, minimap);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
         private static void encodeSpawnNPCData(OutPacket oPacket, MapleNPC life, boolean minimap) {
-            oPacket.EncodeInteger(life.getObjectId());
-            oPacket.EncodeInteger(life.getId());
+            oPacket.EncodeInt(life.getObjectId());
+            oPacket.EncodeInt(life.getId());
             oPacket.EncodeShort(life.getPosition().x);
             oPacket.EncodeShort(life.getCy());
-            oPacket.Encode(0); // New in v176
-            oPacket.Encode(life.getF() == 1 ? 0 : 1);
+            oPacket.EncodeByte(0); // New in v176
+            oPacket.EncodeByte(life.getF() == 1 ? 0 : 1);
             oPacket.EncodeShort(life.getFh());
             oPacket.EncodeShort(life.getRx0());
             oPacket.EncodeShort(life.getRx1());
-            oPacket.Encode(minimap ? 1 : 0);
-            oPacket.EncodeInteger(0);//new 143
+            oPacket.EncodeByte(minimap ? 1 : 0);
+            oPacket.EncodeInt(0);//new 143
 
             // new v169
-            oPacket.Encode(0); // m_nMoveAction
-            oPacket.EncodeInteger(-1); // CNpc::SetPresentItem(v3, v69);
+            oPacket.EncodeByte(0); // m_nMoveAction
+            oPacket.EncodeInt(-1); // CNpc::SetPresentItem(v3, v69);
 
             int n_tPresent = 0;
-            oPacket.EncodeInteger(n_tPresent);
+            oPacket.EncodeInt(n_tPresent);
 
             int m_nNoticeBoardType = 0;
-            oPacket.EncodeInteger(m_nNoticeBoardType);
+            oPacket.EncodeInt(m_nNoticeBoardType);
             if (m_nNoticeBoardType == 1) {
-                oPacket.EncodeInteger(0); // m_nNoticeBoardType
+                oPacket.EncodeInt(0); // m_nNoticeBoardType
             }
 
-            oPacket.EncodeInteger(0); // if ( !v3->m_bHideToLocalUser && v74 ) CNpc::ApplyCreateAlpha(v3, v74);
+            oPacket.EncodeInt(0); // if ( !v3->m_bHideToLocalUser && v74 ) CNpc::ApplyCreateAlpha(v3, v74);
 
             final String sLocalRepeatEffect = "";
             oPacket.EncodeString(sLocalRepeatEffect);
 
             boolean decodeCScreenInfo = false;
-            oPacket.Encode(decodeCScreenInfo);
+            oPacket.EncodeBool(decodeCScreenInfo);
             if (decodeCScreenInfo) {
                 // v77 = CScreenInfo::Decode((ZRef<CScreenInfo> *)&pvarg.boolVal, iPacket);
 
-                oPacket.Encode(0); // v2 = CInPacket::Decode1(iPacket); CScreenInfo::CreateScreenInfo(&pScreenInfo, (unsigned __int8)v2);
-                oPacket.EncodeInteger(0);
+                oPacket.EncodeByte(0); // v2 = CInPacket::Decode1(iPacket); CScreenInfo::CreateScreenInfo(&pScreenInfo, (unsigned __int8)v2);
+                oPacket.EncodeInt(0);
             }
         }
 
-        public static Packet getMapSelection(final int npcid, final String sel) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getMapSelection(final int npcid, final String sel) {
 
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-            oPacket.Encode(4);
-            oPacket.EncodeInteger(npcid);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+            oPacket.EncodeByte(4);
+            oPacket.EncodeInt(npcid);
             oPacket.EncodeShort(0x11);
-            oPacket.EncodeInteger(npcid == 2083006 ? 1 : 0); //neo city
-            oPacket.EncodeInteger(npcid == 9010022 ? 1 : 0); //dimensional
+            oPacket.EncodeInt(npcid == 2083006 ? 1 : 0); //neo city
+            oPacket.EncodeInt(npcid == 9010022 ? 1 : 0); //dimensional
             oPacket.EncodeString(sel);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet removeNPC(int objectid) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket removeNPC(int objectid) {
 
-            oPacket.EncodeShort(SendPacketOpcode.NpcLeaveField.getValue());
-            oPacket.EncodeInteger(objectid);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.NpcLeaveField.getValue());
+            oPacket.EncodeInt(objectid);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet removeNPCController(int objectid) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket removeNPCController(int objectid) {
 
-            oPacket.EncodeShort(SendPacketOpcode.NpcChangeController.getValue());
-            oPacket.Encode(0);
-            oPacket.EncodeInteger(objectid);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.NpcChangeController.getValue());
+            oPacket.EncodeByte(0);
+            oPacket.EncodeInt(objectid);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet toggleNPCShow(int oid, boolean hide) {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.NpcUpdateLimitedInfo.getValue());
-            oPacket.EncodeInteger(oid);
-            oPacket.Encode(hide ? 0 : 1);
-            return oPacket.ToPacket();
+        public static OutPacket toggleNPCShow(int oid, boolean hide) {
+
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.NpcUpdateLimitedInfo.getValue());
+            oPacket.EncodeInt(oid);
+            oPacket.EncodeByte(hide ? 0 : 1);
+            return oPacket;
         }
 
-        public static Packet setNPCSpecialAction(int oid, String action) {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.NpcEmotion.getValue());
-            oPacket.EncodeInteger(oid);
+        public static OutPacket setNPCSpecialAction(int oid, String action) {
+
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.NpcEmotion.getValue());
+            oPacket.EncodeInt(oid);
             oPacket.EncodeString(action);
-            oPacket.EncodeInteger(0); //unknown yet
-            oPacket.Encode(0); //unknown yet
-            return oPacket.ToPacket();
+            oPacket.EncodeInt(0); //unknown yet
+            oPacket.EncodeByte(0); //unknown yet
+            return oPacket;
         }
 
-        public static Packet NPCSpecialAction(int oid, int x, int y) {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.ForceMoveByScript.getValue());
-            oPacket.EncodeInteger(oid);
-            oPacket.EncodeInteger(x);
-            oPacket.EncodeInteger(y);
-            return oPacket.ToPacket();
+        public static OutPacket NPCSpecialAction(int oid, int x, int y) {
+
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ForceMoveByScript.getValue());
+            oPacket.EncodeInt(oid);
+            oPacket.EncodeInt(x);
+            oPacket.EncodeInt(y);
+            return oPacket;
         }
 
-        public static Packet setNPCScriptable() {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.NpcCharacterBaseAction.getValue());
+        public static OutPacket setNPCScriptable() {
+
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.NpcCharacterBaseAction.getValue());
 
             List<Pair<Integer, String>> npcs = new LinkedList<Pair<Integer, String>>();
             npcs.add(new Pair<>(9070006, "Why...why has this happened to me? My knightly honor... My knightly pride..."));
             npcs.add(new Pair<>(9000021, "Are you enjoying the event?"));
 
-            oPacket.Encode(npcs.size());
+            oPacket.EncodeByte(npcs.size());
             for (Pair<Integer, String> s : npcs) {
-                oPacket.EncodeInteger(s.getLeft());
+                oPacket.EncodeInt(s.getLeft());
                 oPacket.EncodeString(s.getRight());
-                oPacket.EncodeInteger(0);
-//                oPacket.encodeInteger(Integer.MAX_VALUE);
-                oPacket.Encode(0);
+                oPacket.EncodeInt(0);
+//                oPacket.EncodeInt(Integer.MAX_VALUE);
+                oPacket.EncodeByte(0);
             }
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getNPCTalk(int npc, NPCChatType msgType, String talk, NPCChatByType type) {
+        public static OutPacket getNPCTalk(int npc, NPCChatType msgType, String talk, NPCChatByType type) {
             return getNPCTalk(npc, msgType, talk, type, npc);
         }
 
-        public static Packet getNPCTalk(int npc, NPCChatType msgType, String talk, NPCChatByType type, int overrideNpcId) {
+        public static OutPacket getNPCTalk(int npc, NPCChatType msgType, String talk, NPCChatByType type, int overrideNpcId) {
             return getNPCTalk(npc, msgType, talk, type.getValue(), overrideNpcId); // legacy compatible for now, there are just too many scripts.. my god
         }
 
-        public static Packet getNPCTalk(int npc, NPCChatType msgType, String talk, byte type, int overrideNpcId) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getNPCTalk(int npc, NPCChatType msgType, String talk, byte type, int overrideNpcId) {
 
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-            oPacket.Encode(4);
-            oPacket.EncodeInteger(npc); // npc
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+            oPacket.EncodeByte(4);
+            oPacket.EncodeInt(npc); // npc
 
             final boolean unk = false;
-            oPacket.Encode(unk); // bSpecificSpeaker
+            oPacket.EncodeBool(unk); // bSpecificSpeaker
             if (unk) {
-                oPacket.EncodeInteger(0); // nSpecificSpeakerTemplateID
+                oPacket.EncodeInt(0); // nSpecificSpeakerTemplateID
             }
 
-            oPacket.Encode(msgType.getType());
+            oPacket.EncodeByte(msgType.getType());
             oPacket.EncodeShort(type); // mask
-            oPacket.Encode(0); // eColor
+            oPacket.EncodeByte(0); // eColor
             if ((type & 0x4) != 0) {
-                oPacket.EncodeInteger(overrideNpcId);
+                oPacket.EncodeInt(overrideNpcId);
             }
             oPacket.EncodeString(talk);
 
@@ -3834,87 +3479,83 @@ public class CField {
                 case OnInitialSpeedQuiz:
                     break;
                 default:
-                    oPacket.Encode(msgType.allowBack() ? 1 : 0);
-                    oPacket.Encode(msgType.allowForward() ? 1 : 0);
+                    oPacket.EncodeByte(msgType.allowBack() ? 1 : 0);
+                    oPacket.EncodeByte(msgType.allowForward() ? 1 : 0);
                     break;
             }
-            oPacket.EncodeInteger(0); // new v169
-            return oPacket.ToPacket();
+            oPacket.EncodeInt(0); // new v169
+            return oPacket;
         }
 
-        public static Packet getEnglishQuiz(int npc, byte type, int diffNPC, String talk, String endBytes) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getEnglishQuiz(int npc, byte type, int diffNPC, String talk, String endBytes) {
 
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-            oPacket.Encode(4);
-            oPacket.EncodeInteger(npc);
-            oPacket.Encode(10); //not sure
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+            oPacket.EncodeByte(4);
+            oPacket.EncodeInt(npc);
+            oPacket.EncodeByte(10); //not sure
             oPacket.EncodeShort(type);
-            oPacket.Encode(0); // new v169
+            oPacket.EncodeByte(0); // new v169
             if ((type & 0x4) != 0) {
-                oPacket.EncodeInteger(diffNPC);
+                oPacket.EncodeInt(diffNPC);
             }
             oPacket.EncodeString(talk);
             oPacket.Encode(HexTool.getByteArrayFromHexString(endBytes));
-            oPacket.EncodeInteger(0); // new v169
+            oPacket.EncodeInt(0); // new v169
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getAdviceTalk(String[] wzinfo) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getAdviceTalk(String[] wzinfo) {
 
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-            oPacket.Encode(8);
-            oPacket.EncodeInteger(0);
-            oPacket.Encode(1);
-            oPacket.Encode(1);
-            oPacket.Encode(wzinfo.length);
-            oPacket.Encode(0); // new v169
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+            oPacket.EncodeByte(8);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeByte(1);
+            oPacket.EncodeByte(1);
+            oPacket.EncodeByte(wzinfo.length);
+            oPacket.EncodeByte(0); // new v169
             for (String data : wzinfo) {
                 oPacket.EncodeString(data);
             }
-            oPacket.EncodeInteger(0); // new v169
-            return oPacket.ToPacket();
+            oPacket.EncodeInt(0); // new v169
+            return oPacket;
         }
 
-        public static Packet getSlideMenu(int npcid, int type, int lasticon, String sel) {
+        public static OutPacket getSlideMenu(int npcid, int type, int lasticon, String sel) {
             //Types: 0 - map selection 1 - neo city map selection 2 - korean map selection 3 - tele rock map selection 4 - dojo buff selection
-            OutPacket oPacket = new OutPacket(80);
 
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-            oPacket.Encode(4); //slide menu
-            oPacket.EncodeInteger(npcid);
-            oPacket.Encode(0);
-            oPacket.Encode(NPCChatType.OnAskSlideMenu.getType());//0x12
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+            oPacket.EncodeByte(4); //slide menu
+            oPacket.EncodeInt(npcid);
+            oPacket.EncodeByte(0);
+            oPacket.EncodeByte(NPCChatType.OnAskSlideMenu.getType());//0x12
             oPacket.EncodeShort(0);//bParam = false
-            oPacket.Encode(0);//bsecond for a few types
-            oPacket.EncodeInteger(type); //menu type
-            oPacket.EncodeInteger(type == 0 ? lasticon : 0); //last icon on menu
+            oPacket.EncodeByte(0);//bsecond for a few types
+            oPacket.EncodeInt(type); //menu type
+            oPacket.EncodeInt(type == 0 ? lasticon : 0); //last icon on menu
             oPacket.EncodeString(sel);
-            oPacket.EncodeInteger(0); // new v169
+            oPacket.EncodeInt(0); // new v169
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getNPCTalkStyle(int npc, String talk, int[] args, boolean second) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getNPCTalkStyle(int npc, String talk, int[] args, boolean second) {
 
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-            oPacket.Encode(4);
-            oPacket.EncodeInteger(npc);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+            oPacket.EncodeByte(4);
+            oPacket.EncodeInt(npc);
 
             boolean unk = false;
-            oPacket.Encode(unk);
+            oPacket.EncodeBool(unk);
             if (unk) {
                 /* 
                 if ( (unsigned __int8)CInPacket::Decode1(a2) )
                     CInPacket::Decode4(a2);*/
-                oPacket.EncodeInteger(0); // 
+                oPacket.EncodeInt(0); // 
             }
-            oPacket.Encode(NPCChatType.OnAskAvater.getType());
+            oPacket.EncodeByte(NPCChatType.OnAskAvater.getType());
             oPacket.EncodeShort(0); // mask? idk
-            oPacket.Encode(second ? 1 : 0);//new143
+            oPacket.EncodeByte(second ? 1 : 0);//new143
 
             /* new in v170, these 2 bytes seems to show preview of some type
             See: http://pastebin.com/m643nXtt sub_D0C230
@@ -3926,307 +3567,295 @@ public class CField {
                     goto LABEL_10;
                 v24 = *(_DWORD *)(CWvsContext::GetCharacterData((int)v65, (int)&v72) + 4);
              */
-            oPacket.Encode(0);
-            oPacket.Encode(0);
+            oPacket.EncodeByte(0);
+            oPacket.EncodeByte(0);
 
             oPacket.EncodeString(talk);
 
-            oPacket.Encode(args.length);
+            oPacket.EncodeByte(args.length);
             for (int i = 0; i < args.length; i++) {
-                oPacket.EncodeInteger(args[i]);
+                oPacket.EncodeInt(args[i]);
             }
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getNPCTalkNum(int npc, String talk, int def, int min, int max) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getNPCTalkNum(int npc, String talk, int def, int min, int max) {
 
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-            oPacket.Encode(4);
-            oPacket.EncodeInteger(npc);
-            oPacket.Encode(0);//new 142
-            oPacket.Encode(NPCChatType.OnAskNumber.getType());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+            oPacket.EncodeByte(4);
+            oPacket.EncodeInt(npc);
+            oPacket.EncodeByte(0);//new 142
+            oPacket.EncodeByte(NPCChatType.OnAskNumber.getType());
             oPacket.EncodeShort(0);//bParam = false
-            oPacket.Encode(0);//bsecond for a few types
+            oPacket.EncodeByte(0);//bsecond for a few types
             oPacket.EncodeString(talk);
-            oPacket.EncodeInteger(def);
-            oPacket.EncodeInteger(min);
-            oPacket.EncodeInteger(max);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0); // new v169
+            oPacket.EncodeInt(def);
+            oPacket.EncodeInt(min);
+            oPacket.EncodeInt(max);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0); // new v169
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getNPCTalkText(int npc, String talk) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getNPCTalkText(int npc, String talk) {
 
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-            oPacket.Encode(4);
-            oPacket.EncodeInteger(npc);
-            oPacket.Encode(0);
-            oPacket.Encode(NPCChatType.OnAskText.getType());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+            oPacket.EncodeByte(4);
+            oPacket.EncodeInt(npc);
+            oPacket.EncodeByte(0);
+            oPacket.EncodeByte(NPCChatType.OnAskText.getType());
             oPacket.EncodeShort(0);//bParam = false
-            oPacket.Encode(0);//bsecond for a few types
+            oPacket.EncodeByte(0);//bsecond for a few types
             oPacket.EncodeString(talk);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0); // new v169
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0); // new v169
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getNPCTalkQuiz(int npc, String caption, String talk, int time) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getNPCTalkQuiz(int npc, String caption, String talk, int time) {
 
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-            oPacket.Encode(4);
-            oPacket.EncodeInteger(npc);
-            oPacket.Encode(0);
-            oPacket.Encode(NPCChatType.OnInitialQuiz.getType());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+            oPacket.EncodeByte(4);
+            oPacket.EncodeInt(npc);
+            oPacket.EncodeByte(0);
+            oPacket.EncodeByte(NPCChatType.OnInitialQuiz.getType());
             oPacket.EncodeShort(0);//bParam = false
-            oPacket.Encode(0);//bsecond for a few types
+            oPacket.EncodeByte(0);//bsecond for a few types
             oPacket.EncodeString(caption);
             oPacket.EncodeString(talk);
             oPacket.EncodeShort(0);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0xF); //no idea
-            oPacket.EncodeInteger(time); //seconds
-            oPacket.EncodeInteger(0); // new v169
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0xF); //no idea
+            oPacket.EncodeInt(time); //seconds
+            oPacket.EncodeInt(0); // new v169
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getSelfTalkText(String text) {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-            oPacket.Encode(3);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(1);
+        public static OutPacket getSelfTalkText(String text) {
+
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+            oPacket.EncodeByte(3);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(1);
             oPacket.EncodeShort(0);
-            oPacket.Encode(17);
-            oPacket.Encode(0); // new v169
+            oPacket.EncodeByte(17);
+            oPacket.EncodeByte(0); // new v169
             oPacket.EncodeString(text);
-            oPacket.Encode(0);
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(0); // new v169
+            oPacket.EncodeByte(0);
+            oPacket.EncodeByte(1);
+            oPacket.EncodeInt(0); // new v169
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getNPCTutoEffect(String effect) {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-            oPacket.Encode(3);
-            oPacket.EncodeInteger(0);
-            oPacket.Encode(0);
-            oPacket.Encode(1);
+        public static OutPacket getNPCTutoEffect(String effect) {
+
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+            oPacket.EncodeByte(3);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeByte(0);
+            oPacket.EncodeByte(1);
             oPacket.EncodeShort(257);
             oPacket.EncodeString(effect);
-            oPacket.EncodeInteger(0); // new v169
-            return oPacket.ToPacket();
+            oPacket.EncodeInt(0); // new v169
+            return oPacket;
         }
 
-        public static Packet getCutSceneSkip() {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-            oPacket.Encode(3);
-            oPacket.EncodeInteger(0);
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(0);
-            oPacket.Encode(2);
-            oPacket.Encode(5);
-            oPacket.EncodeInteger(9010000); //Maple administrator
+        public static OutPacket getCutSceneSkip() {
+
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+            oPacket.EncodeByte(3);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeByte(1);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeByte(2);
+            oPacket.EncodeByte(5);
+            oPacket.EncodeInt(9010000); //Maple administrator
             oPacket.EncodeString("Would you like to skip the tutorial cutscenes?");
-            oPacket.EncodeInteger(0); // new v169
-            return oPacket.ToPacket();
+            oPacket.EncodeInt(0); // new v169
+            return oPacket;
         }
 
-        public static Packet getDemonSelection() {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-            oPacket.Encode(3);
-            oPacket.EncodeInteger(0);
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(2159311); //npc
-            oPacket.Encode(0x16);
-            oPacket.Encode(1);
+        public static OutPacket getDemonSelection() {
+
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+            oPacket.EncodeByte(3);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeByte(1);
+            oPacket.EncodeInt(2159311); //npc
+            oPacket.EncodeByte(0x16);
+            oPacket.EncodeByte(1);
             oPacket.EncodeShort(1);
             oPacket.Fill(0, 8);
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getAngelicBusterAvatarSelect(int npc) {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
-            oPacket.Encode(4);
-            oPacket.EncodeInteger(npc);
-            oPacket.Encode(0);
-            oPacket.Encode(NPCChatType.OnAskSlideMenu.getType());
+        public static OutPacket getAngelicBusterAvatarSelect(int npc) {
+
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
+            oPacket.EncodeByte(4);
+            oPacket.EncodeInt(npc);
+            oPacket.EncodeByte(0);
+            oPacket.EncodeByte(NPCChatType.OnAskSlideMenu.getType());
             oPacket.EncodeShort(0);//bParam = false
-            oPacket.Encode(0);//bsecond for a few types
-            return oPacket.ToPacket();
+            oPacket.EncodeByte(0);//bsecond for a few types
+            return oPacket;
         }
 
-        public static Packet getEvanTutorial(String data) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getEvanTutorial(String data) {
 
-            oPacket.EncodeShort(SendPacketOpcode.ScriptMessage.getValue());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ScriptMessage.getValue());
 
-            oPacket.Encode(8);
-            oPacket.EncodeInteger(0);
-            oPacket.Encode(1);
-            oPacket.Encode(1);
-            oPacket.Encode(1);
+            oPacket.EncodeByte(8);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeByte(1);
+            oPacket.EncodeByte(1);
+            oPacket.EncodeByte(1);
             oPacket.EncodeString(data);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getNPCShop(int shopNPCId, MapleShop shop, MapleClient c) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getNPCShop(int shopNPCId, MapleShop shop, MapleClient c) {
 
-            oPacket.EncodeShort(SendPacketOpcode.OpenShopDlg.getValue());
-            oPacket.Encode(0); //if this is true then send a int with m_dwPetTemplateID (pet item id)
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.OpenShopDlg.getValue());
+            oPacket.EncodeByte(0); //if this is true then send a int with m_dwPetTemplateID (pet item id)
             PacketHelper.addShopInfo(oPacket, shop, c);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet confirmShopTransaction(ShopOperationType code, MapleShop shop, MapleClient c, int indexBought) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket confirmShopTransaction(ShopOperationType code, MapleShop shop, MapleClient c, int indexBought) {
 
-            oPacket.EncodeShort(SendPacketOpcode.ShopResult.getValue());
-            oPacket.Encode(code.getOp());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ShopResult.getValue());
+            oPacket.EncodeByte(code.getOp());
             if (code == ShopOperationType.Sell) {
                 PacketHelper.addShopInfo(oPacket, shop, c);
             } else {
-                oPacket.Encode(indexBought >= 0);
+                oPacket.EncodeBool(indexBought >= 0);
                 if (indexBought >= 0) {
-                    oPacket.EncodeInteger(indexBought);
-                    oPacket.EncodeInteger(0);
+                    oPacket.EncodeInt(indexBought);
+                    oPacket.EncodeInt(0);
                     oPacket.EncodeShort(0);
                 } else {
-                    oPacket.Encode(0);
-                    oPacket.EncodeInteger(0);
+                    oPacket.EncodeByte(0);
+                    oPacket.EncodeInt(0);
                 }
             }
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getStorage(int npcId, byte slots, Collection<Item> items, long meso) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getStorage(int npcId, byte slots, Collection<Item> items, long meso) {
 
-            oPacket.EncodeShort(SendPacketOpcode.TrunkResult.getValue());
-            oPacket.Encode(22); // 0x16
-            oPacket.EncodeInteger(npcId);
-            oPacket.Encode(slots);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.TrunkResult.getValue());
+            oPacket.EncodeByte(22); // 0x16
+            oPacket.EncodeInt(npcId);
+            oPacket.EncodeByte(slots);
             oPacket.EncodeLong(0x7E); // BUFFER	[7E00000000000000]
             oPacket.EncodeLong(meso);
-            oPacket.Encode(0);
-            oPacket.Encode((byte) items.size());
+            oPacket.EncodeByte(0);
+            oPacket.EncodeByte((byte) items.size());
             for (Item item : items) {
                 PacketHelper.addItemInfo(oPacket, item);
             }
-            oPacket.Encode(0);
-            oPacket.Encode(0);
-            oPacket.Encode(0);
+            oPacket.EncodeByte(0);
+            oPacket.EncodeByte(0);
+            oPacket.EncodeByte(0);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet getStorageFull() {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getStorageFull() {
 
-            oPacket.EncodeShort(SendPacketOpcode.TrunkResult.getValue());
-            oPacket.Encode(17);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.TrunkResult.getValue());
+            oPacket.EncodeByte(17);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet mesoStorage(byte slots, long meso) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket mesoStorage(byte slots, long meso) {
 
-            oPacket.EncodeShort(SendPacketOpcode.TrunkResult.getValue());
-            oPacket.Encode(19);
-            oPacket.Encode(slots);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.TrunkResult.getValue());
+            oPacket.EncodeByte(19);
+            oPacket.EncodeByte(slots);
             oPacket.EncodeShort(2);
             oPacket.EncodeShort(0);
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(0);
             oPacket.EncodeLong(meso);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet arrangeStorage(byte slots, Collection<Item> items, boolean changed) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket arrangeStorage(byte slots, Collection<Item> items, boolean changed) {
 
-            oPacket.EncodeShort(SendPacketOpcode.TrunkResult.getValue());
-            oPacket.Encode(15);
-            oPacket.Encode(slots);
-            oPacket.Encode(124);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.TrunkResult.getValue());
+            oPacket.EncodeByte(15);
+            oPacket.EncodeByte(slots);
+            oPacket.EncodeByte(124);
             oPacket.Fill(0, 10);
-            oPacket.Encode(items.size());
+            oPacket.EncodeByte(items.size());
             for (Item item : items) {
                 PacketHelper.addItemInfo(oPacket, item);
             }
-            oPacket.Encode(0);
-            return oPacket.ToPacket();
+            oPacket.EncodeByte(0);
+            return oPacket;
         }
 
-        public static Packet storeStorage(byte slots, MapleInventoryType type, Collection<Item> items) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket storeStorage(byte slots, MapleInventoryType type, Collection<Item> items) {
 
-            oPacket.EncodeShort(SendPacketOpcode.TrunkResult.getValue());
-            oPacket.Encode(13);
-            oPacket.Encode(slots);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.TrunkResult.getValue());
+            oPacket.EncodeByte(13);
+            oPacket.EncodeByte(slots);
             oPacket.EncodeShort(type.getBitfieldEncoding());
             oPacket.EncodeShort(0);
-            oPacket.EncodeInteger(0);
-            oPacket.Encode(items.size());
+            oPacket.EncodeInt(0);
+            oPacket.EncodeByte(items.size());
             for (Item item : items) {
                 PacketHelper.addItemInfo(oPacket, item);
             }
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet takeOutStorage(byte slots, MapleInventoryType type, Collection<Item> items) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket takeOutStorage(byte slots, MapleInventoryType type, Collection<Item> items) {
 
-            oPacket.EncodeShort(SendPacketOpcode.TrunkResult.getValue());
-            oPacket.Encode(9);
-            oPacket.Encode(slots);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.TrunkResult.getValue());
+            oPacket.EncodeByte(9);
+            oPacket.EncodeByte(slots);
             oPacket.EncodeShort(type.getBitfieldEncoding());
             oPacket.EncodeShort(0);
-            oPacket.EncodeInteger(0);
-            oPacket.Encode(items.size());
+            oPacket.EncodeInt(0);
+            oPacket.EncodeByte(items.size());
             for (Item item : items) {
                 PacketHelper.addItemInfo(oPacket, item);
             }
-            return oPacket.ToPacket();
+            return oPacket;
         }
     }
 
     public static class SummonPacket {
 
-        public static Packet jaguarActive(boolean active) {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.JaguarActive.getValue());
+        public static OutPacket jaguarActive(boolean active) {
 
-            oPacket.Encode(active);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.JaguarActive.getValue());
 
-            return oPacket.ToPacket();
+            oPacket.EncodeBool(active);
+
+            return oPacket;
         }
-        
-        public static Packet jaguarSkillRequest(int nSkillID) {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.JaguarSkill.getValue());
 
-            oPacket.EncodeInteger(nSkillID);
+        public static OutPacket jaguarSkillRequest(int nSkillID) {
 
-            return oPacket.ToPacket();
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.JaguarSkill.getValue());
+
+            oPacket.EncodeInt(nSkillID);
+
+            return oPacket;
         }
 
         /**
@@ -4237,38 +3866,37 @@ public class CField {
          *
          * @return oPacket
          */
-        public static Packet spawnSummon(Summon summon, boolean animated) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket spawnSummon(Summon summon, boolean animated) {
 
-            oPacket.EncodeShort(SendPacketOpcode.SummonedEnterField.getValue());
-            oPacket.EncodeInteger(summon.getOwnerId());
-            oPacket.EncodeInteger(summon.getObjectId());
-            oPacket.EncodeInteger(summon.getSkill());
-            oPacket.Encode(summon.getOwnerLevel() - 1);
-            oPacket.Encode(summon.getSkillLevel());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.SummonedEnterField.getValue());
+            oPacket.EncodeInt(summon.getOwnerId());
+            oPacket.EncodeInt(summon.getObjectId());
+            oPacket.EncodeInt(summon.getSkill());
+            oPacket.EncodeByte(summon.getOwnerLevel() - 1);
+            oPacket.EncodeByte(summon.getSkillLevel());
             oPacket.EncodePosition(summon.getPosition());
-            oPacket.Encode(summon.getSkill() == 32111006 || summon.getSkill() == 33101005 || summon.getSkill() == 14000027 ? 5 : 4);// Summon Reaper Buff - Call of the Wild
+            oPacket.EncodeByte(summon.getSkill() == 32111006 || summon.getSkill() == 33101005 || summon.getSkill() == 14000027 ? 5 : 4);// Summon Reaper Buff - Call of the Wild
 
             if (summon.getSkill() == 35121003 && summon.getOwner().getMap() != null) {//Giant Robot SG-88
                 oPacket.EncodeShort(summon.getOwner().getMap().getSharedMapResources().footholds.findBelow(summon.getPosition()).getId());
             } else {
                 oPacket.EncodeShort(0);
             }
-            oPacket.Encode(summon.getMovementType().getValue());
-            oPacket.Encode(summon.getSummonType());
-            oPacket.Encode(animated ? 1 : 0);
-            oPacket.EncodeInteger(0);//dwMobId
-            oPacket.Encode(0); //bFlyMob
-            oPacket.Encode(0);//bBeforeFirstAttack
-            oPacket.EncodeInteger(0);//nLookId
-            oPacket.EncodeInteger(0);//nBulletId
+            oPacket.EncodeByte(summon.getMovementType().getValue());
+            oPacket.EncodeByte(summon.getSummonType());
+            oPacket.EncodeByte(animated ? 1 : 0);
+            oPacket.EncodeInt(0);//dwMobId
+            oPacket.EncodeByte(0); //bFlyMob
+            oPacket.EncodeByte(0);//bBeforeFirstAttack
+            oPacket.EncodeInt(0);//nLookId
+            oPacket.EncodeInt(0);//nBulletId
             User chr = summon.getOwner();
-            oPacket.Encode((summon.getSkill() == DualBlade.MIRRORED_TARGET || summon.getSkill() == 14111024 || summon.getSkill() == 14121054 || summon.getSkill() == 14121055 || summon.getSkill() == 14121056) && chr != null ? 1 : 0); // Mirrored Target boolean for character look
+            oPacket.EncodeByte((summon.getSkill() == DualBlade.MIRRORED_TARGET || summon.getSkill() == 14111024 || summon.getSkill() == 14121054 || summon.getSkill() == 14121055 || summon.getSkill() == 14121056) && chr != null ? 1 : 0); // Mirrored Target boolean for character look
             if ((summon.getSkill() == DualBlade.MIRRORED_TARGET || summon.getSkill() == 14111024 || summon.getSkill() == 14121054 || summon.getSkill() == 14121055 || summon.getSkill() == 14121056) && chr != null) { // Mirrored Target
                 writeCharacterLook(oPacket, chr);
             }
             if (summon.getSkill() == Mechanic.ROCK_N_SHOCK) {// Rock 'n Shock m_nTeslaCoilState
-                oPacket.Encode(0);
+                oPacket.EncodeByte(0);
                 /*
 	         do
 		        {
@@ -4281,8 +3909,8 @@ public class CField {
                  */
             }
             if (GameConstants.SUB_ADCBA0(summon.getSkill())) {
-                oPacket.EncodeInteger(400); // Unknown
-                oPacket.EncodeInteger(30); // Unknown
+                oPacket.EncodeInt(400); // Unknown
+                oPacket.EncodeInt(30); // Unknown
             } else {
                 if (summon.getSkill() == 42111003) {
                     oPacket.EncodeShort(0);
@@ -4292,21 +3920,21 @@ public class CField {
                 } else if (summon.getSkill() == 400051014) {
                     oPacket.EncodeLong(0);
                 } else if (summon.getSkill() >= 400051028 && summon.getSkill() <= 400051032) {
-                    oPacket.Encode(0);
+                    oPacket.EncodeByte(0);
                 }
             }
-            oPacket.Encode(0); //m_bJaguarActive
+            oPacket.EncodeByte(0); //m_bJaguarActive
 
             // v176
-            oPacket.EncodeInteger(summon.getSummonDuration()); // v2->m_tSummonTerm = CInPacket::Decode4(iPacket);
-            oPacket.Encode(1); // m_bAttackActive
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(summon.getSummonDuration()); // v2->m_tSummonTerm = CInPacket::Decode4(iPacket);
+            oPacket.EncodeByte(1); // m_bAttackActive
+            oPacket.EncodeInt(0);
             if (summon.getSkill() >= 33001007 && summon.getSkill() <= 33001015) { // Jaguars
-                oPacket.Encode(0);
-                oPacket.EncodeInteger(0);
+                oPacket.EncodeByte(0);
+                oPacket.EncodeInt(0);
             }
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
         /**
@@ -4317,19 +3945,18 @@ public class CField {
          *
          * @return oPacket
          */
-        public static Packet removeSummon(Summon summon, boolean animated) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket removeSummon(Summon summon, boolean animated) {
 
-            oPacket.EncodeShort(SendPacketOpcode.SummonedLeaveField.getValue());
-            oPacket.EncodeInteger(summon.getOwnerId());
-            oPacket.EncodeInteger(summon.getObjectId());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.SummonedLeaveField.getValue());
+            oPacket.EncodeInt(summon.getOwnerId());
+            oPacket.EncodeInt(summon.getObjectId());
             if (animated) {
                 switch (summon.getSkill()) {
                     case 35121003:
                     case 14000027:
                     case 14111024:
                     case 14121054:
-                        oPacket.Encode(10);
+                        oPacket.EncodeByte(10);
                         break;
                     case 33101008:
                     case 35111001:
@@ -4341,17 +3968,17 @@ public class CField {
                     case 35121009:
                     case 35121010:
                     case 35121011:
-                        oPacket.Encode(5);
+                        oPacket.EncodeByte(5);
                         break;
                     default:
-                        oPacket.Encode(4);
+                        oPacket.EncodeByte(4);
                         break;
                 }
             } else {
-                oPacket.Encode(1);
+                oPacket.EncodeByte(1);
             }
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
         /**
@@ -4362,15 +3989,14 @@ public class CField {
          *
          * @return oPacket
          */
-        public static Packet moveSummon(Summon summon, List<LifeMovementFragment> moves) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket moveSummon(Summon summon, List<LifeMovementFragment> moves) {
 
-            oPacket.EncodeShort(SendPacketOpcode.SummonedMove.getValue());
-            oPacket.EncodeInteger(summon.getOwnerId());
-            oPacket.EncodeInteger(summon.getObjectId());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.SummonedMove.getValue());
+            oPacket.EncodeInt(summon.getOwnerId());
+            oPacket.EncodeInt(summon.getObjectId());
             PacketHelper.serializeMovementList(oPacket, summon, moves, 0);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
         /**
@@ -4384,185 +4010,171 @@ public class CField {
          * @param boolean counter - If the summon does a counter attack
          *
          */
-        public static Packet summonAttack(int cid, int summonSkillId, byte animation, List<Pair<Integer, Long>> allDamage, int level, boolean counter) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket summonAttack(int cid, int summonSkillId, byte animation, List<Pair<Integer, Long>> allDamage, int level, boolean counter) {
 
-            oPacket.EncodeShort(SendPacketOpcode.SummonedAttack.getValue());
-            oPacket.EncodeInteger(cid);
-            oPacket.EncodeInteger(summonSkillId);
-            oPacket.Encode(level - 1);
-            oPacket.Encode(animation); //nAction
-            oPacket.Encode(allDamage.size()); //nAttackCount
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.SummonedAttack.getValue());
+            oPacket.EncodeInt(cid);
+            oPacket.EncodeInt(summonSkillId);
+            oPacket.EncodeByte(level - 1);
+            oPacket.EncodeByte(animation); //nAction
+            oPacket.EncodeByte(allDamage.size()); //nAttackCount
             for (Pair<Integer, Long> attackEntry : allDamage) {
-                oPacket.EncodeInteger(attackEntry.left);
-                oPacket.Encode(7);
+                oPacket.EncodeInt(attackEntry.left);
+                oPacket.EncodeByte(7);
                 oPacket.EncodeLong(attackEntry.right);
             }
-            oPacket.Encode(counter); //bCounterAttack
-            oPacket.Encode(false); // bNoAction?
+            oPacket.EncodeBool(counter); //bCounterAttack
+            oPacket.EncodeBool(false); // bNoAction?
             oPacket.EncodeShort(0); // X (Spirit Bond?)
             oPacket.EncodeShort(0); // Y (Spirit Bond?)
-            oPacket.EncodeInteger(0); // SkillID?
-            return oPacket.ToPacket();
+            oPacket.EncodeInt(0); // SkillID?
+            return oPacket;
         }
 
-        public static Packet pvpSummonAttack(int cid, int playerLevel, int oid, int animation, Point pos, List<AttackMonster> attack) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket pvpSummonAttack(int cid, int playerLevel, int oid, int animation, Point pos, List<AttackMonster> attack) {
 
-            oPacket.EncodeShort(SendPacketOpcode.SummonedAttackPvP.getValue());
-            oPacket.EncodeInteger(cid);
-            oPacket.EncodeInteger(oid);
-            oPacket.Encode(playerLevel);
-            oPacket.Encode(animation);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.SummonedAttackPvP.getValue());
+            oPacket.EncodeInt(cid);
+            oPacket.EncodeInt(oid);
+            oPacket.EncodeByte(playerLevel);
+            oPacket.EncodeByte(animation);
             oPacket.EncodePosition(pos);
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(0);
 
-            oPacket.Encode(attack.size());
+            oPacket.EncodeByte(attack.size());
             for (AttackMonster p : attack) {
-                oPacket.EncodeInteger(p.getObjectId());
+                oPacket.EncodeInt(p.getObjectId());
                 oPacket.EncodePosition(p.getPosition());
-                oPacket.Encode(p.getAttacks().size());
-                oPacket.Encode(0);
+                oPacket.EncodeByte(p.getAttacks().size());
+                oPacket.EncodeByte(0);
 
                 for (Pair<Long, Boolean> atk : p.getAttacks()) {
                     oPacket.EncodeLong(atk.left);
                 }
             }
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet summonSkill(int cid, int summonSkillId, int newStance) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket summonSkill(int cid, int summonSkillId, int newStance) {
 
-            oPacket.EncodeShort(SendPacketOpcode.SummonedSetReference.getValue());
-            oPacket.EncodeInteger(cid);
-            oPacket.EncodeInteger(summonSkillId);
-            oPacket.Encode(newStance);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.SummonedSetReference.getValue());
+            oPacket.EncodeInt(cid);
+            oPacket.EncodeInt(summonSkillId);
+            oPacket.EncodeByte(newStance);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet damageSummon(int cid, int summonSkillId, int damage, int unkByte, int monsterIdFrom) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket damageSummon(int cid, int summonSkillId, int damage, int unkByte, int monsterIdFrom) {
 
-            oPacket.EncodeShort(SendPacketOpcode.SummonedHPTagUpdate.getValue());
-            oPacket.EncodeInteger(cid);
-            oPacket.EncodeInteger(summonSkillId);
-            oPacket.Encode(unkByte);
-            oPacket.EncodeInteger(damage);
-            oPacket.EncodeInteger(monsterIdFrom);
-            oPacket.Encode(0);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.SummonedHPTagUpdate.getValue());
+            oPacket.EncodeInt(cid);
+            oPacket.EncodeInt(summonSkillId);
+            oPacket.EncodeByte(unkByte);
+            oPacket.EncodeInt(damage);
+            oPacket.EncodeInt(monsterIdFrom);
+            oPacket.EncodeByte(0);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
     }
 
     public static class UIPacket {
 
-        public static Packet getDirectionStatus(boolean enable) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket getDirectionStatus(boolean enable) {
 
-            oPacket.EncodeShort(SendPacketOpcode.InGameCurNodeEventEnd.getValue());
-            oPacket.Encode(enable ? 1 : 0);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.InGameCurNodeEventEnd.getValue());
+            oPacket.EncodeByte(enable ? 1 : 0);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet openUI(int type) {
-            OutPacket oPacket = new OutPacket(3);
+        public static OutPacket openUI(int type) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserOpenUI.getValue());
-            oPacket.EncodeInteger(type);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserOpenUI.getValue());
+            oPacket.EncodeInt(type);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet sendRepairWindow(int npc) {
-            OutPacket oPacket = new OutPacket(10);
+        public static OutPacket sendRepairWindow(int npc) {
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserOpenUIWithOption.getValue());
+            oPacket.EncodeInt(33);
+            oPacket.EncodeInt(npc);
+            oPacket.EncodeInt(0);//new143
 
-            oPacket.EncodeShort(SendPacketOpcode.UserOpenUIWithOption.getValue());
-            oPacket.EncodeInteger(33);
-            oPacket.EncodeInteger(npc);
-            oPacket.EncodeInteger(0);//new143
-
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet sendJewelCraftWindow(int npc) {
-            OutPacket oPacket = new OutPacket(10);
+        public static OutPacket sendJewelCraftWindow(int npc) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserOpenUIWithOption.getValue());
-            oPacket.EncodeInteger(104);
-            oPacket.EncodeInteger(npc);
-            oPacket.EncodeInteger(0);//new143
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserOpenUIWithOption.getValue());
+            oPacket.EncodeInt(104);
+            oPacket.EncodeInt(npc);
+            oPacket.EncodeInt(0);//new143
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet startAzwan(int npc) {
-            OutPacket oPacket = new OutPacket(10);
-            oPacket.EncodeShort(SendPacketOpcode.UserOpenUIWithOption.getValue());
-            oPacket.EncodeInteger(70);
-            oPacket.EncodeInteger(npc);
-            oPacket.EncodeInteger(0);//new143
-            return oPacket.ToPacket();
+        public static OutPacket startAzwan(int npc) {
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserOpenUIWithOption.getValue());
+            oPacket.EncodeInt(70);
+            oPacket.EncodeInt(npc);
+            oPacket.EncodeInt(0);//new143
+            return oPacket;
         }
 
-        public static Packet openUIOption(int type, int npc) {
-            OutPacket oPacket = new OutPacket(10);
-            oPacket.EncodeShort(SendPacketOpcode.UserOpenUIWithOption.getValue());
-            oPacket.EncodeInteger(type);
-            oPacket.EncodeInteger(npc);
-            return oPacket.ToPacket();
+        public static OutPacket openUIOption(int type, int npc) {
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserOpenUIWithOption.getValue());
+            oPacket.EncodeInt(type);
+            oPacket.EncodeInt(npc);
+            return oPacket;
         }
 
-        public static Packet sendDojoResult(int points) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket sendDojoResult(int points) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserOpenUIWithOption.getValue());
-            oPacket.EncodeInteger(0x48);
-            oPacket.EncodeInteger(points);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserOpenUIWithOption.getValue());
+            oPacket.EncodeInt(0x48);
+            oPacket.EncodeInt(points);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet sendAzwanResult() {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket sendAzwanResult() {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserOpenUIWithOption.getValue());
-            oPacket.EncodeInteger(0x45);
-            oPacket.EncodeInteger(0);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserOpenUIWithOption.getValue());
+            oPacket.EncodeInt(0x45);
+            oPacket.EncodeInt(0);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet DublStart(boolean dark) { // Lmao
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.UserEffectRemote.getValue());
-            oPacket.Encode(0x28);
-            oPacket.Encode(dark ? 1 : 0);
+        public static OutPacket DublStart(boolean dark) { // Lmao
 
-            return oPacket.ToPacket();
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
+            oPacket.EncodeByte(0x28);
+            oPacket.EncodeByte(dark ? 1 : 0);
+
+            return oPacket;
         }
 
-        public static Packet DublStartAutoMove() {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.FieldCreateFallingCatcher.getValue());
-            oPacket.Encode(3);
-            oPacket.EncodeInteger(2);
+        public static OutPacket DublStartAutoMove() {
 
-            return oPacket.ToPacket();
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.FieldCreateFallingCatcher.getValue());
+            oPacket.EncodeByte(3);
+            oPacket.EncodeInt(2);
+
+            return oPacket;
         }
 
-        public static Packet IntroLock(boolean enable) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket IntroLock(boolean enable) {
 
-            oPacket.EncodeShort(SendPacketOpcode.INTRO_LOCK.getValue());
-            oPacket.Encode(enable ? 1 : 0);
-            oPacket.EncodeInteger(0);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.INTRO_LOCK.getValue());
+            oPacket.EncodeByte(enable ? 1 : 0);
+            oPacket.EncodeInt(0);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
         /**
@@ -4571,216 +4183,203 @@ public class CField {
          * @param enable
          * @return
          */
-        public static Packet IntroEnableUI(boolean enable) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket IntroEnableUI(boolean enable) {
 
-            oPacket.EncodeShort(SendPacketOpcode.INTRO_ENABLE_UI.getValue());
-            oPacket.Encode(enable ? 1 : 0);
-            oPacket.Encode(1);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.INTRO_ENABLE_UI.getValue());
+            oPacket.EncodeByte(enable ? 1 : 0);
+            oPacket.EncodeByte(1);
             if (enable) {
-                oPacket.Encode(1);
-                oPacket.Encode(0);
+                oPacket.EncodeByte(1);
+                oPacket.EncodeByte(0);
             }
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet UserHireTutor(boolean summon) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket UserHireTutor(boolean summon) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserHireTutor.getValue());
-            oPacket.Encode(summon ? 1 : 0);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserHireTutor.getValue());
+            oPacket.EncodeByte(summon ? 1 : 0);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet UserTutorMessage(int type) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket UserTutorMessage(int type) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserTutorMsg.getValue());
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(type);
-            oPacket.EncodeInteger(7000);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserTutorMsg.getValue());
+            oPacket.EncodeByte(1);
+            oPacket.EncodeInt(type);
+            oPacket.EncodeInt(7000);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet UserTutorMessage(String message) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket UserTutorMessage(String message) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserTutorMsg.getValue());
-            oPacket.Encode(0);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserTutorMsg.getValue());
+            oPacket.EncodeByte(0);
             oPacket.EncodeString(message);
-            oPacket.EncodeInteger(200);
+            oPacket.EncodeInt(200);
             oPacket.EncodeShort(0);
-            oPacket.EncodeInteger(10000);
+            oPacket.EncodeInt(10000);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet UserInGameDirectionEvent(int type, int value, int x) {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.UserInGameDirectionEvent.getValue());
+        public static OutPacket UserInGameDirectionEvent(int type, int value, int x) {
+
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserInGameDirectionEvent.getValue());
             if (x > 0) {
-                oPacket.Encode(x);
+                oPacket.EncodeByte(x);
             }
-            oPacket.Encode((byte) type);
-            oPacket.EncodeInteger(value);
+            oPacket.EncodeByte((byte) type);
+            oPacket.EncodeInt(value);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet UserInGameDirectionEvent(int type, int value) {
-            OutPacket oPacket = new OutPacket(80);
-            oPacket.EncodeShort(SendPacketOpcode.UserInGameDirectionEvent.getValue());
+        public static OutPacket UserInGameDirectionEvent(int type, int value) {
 
-            oPacket.Encode((byte) type);
-            oPacket.EncodeInteger(value);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserInGameDirectionEvent.getValue());
 
-            return oPacket.ToPacket();
+            oPacket.EncodeByte((byte) type);
+            oPacket.EncodeInt(value);
+
+            return oPacket;
         }
 
-        public static Packet UserInGameDirectionEvent(String data, int value, int x, int y, int a, int b) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket UserInGameDirectionEvent(String data, int value, int x, int y, int a, int b) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserInGameDirectionEvent.getValue());
-            oPacket.Encode(2);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserInGameDirectionEvent.getValue());
+            oPacket.EncodeByte(2);
             oPacket.EncodeString(data);
-            oPacket.EncodeInteger(value);
-            oPacket.EncodeInteger(x);
-            oPacket.EncodeInteger(y);
-            oPacket.Encode(a);
+            oPacket.EncodeInt(value);
+            oPacket.EncodeInt(x);
+            oPacket.EncodeInt(y);
+            oPacket.EncodeByte(a);
             if (a > 0) {
-                oPacket.EncodeInteger(0);
+                oPacket.EncodeInt(0);
             }
-            oPacket.Encode(b);
+            oPacket.EncodeByte(b);
             if (b > 1) {
-                oPacket.EncodeInteger(0);
+                oPacket.EncodeInt(0);
             }
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet UserInGameDirectionEvent(String data, int value, int x, int y) {
+        public static OutPacket UserInGameDirectionEvent(String data, int value, int x, int y) {
             return UIPacket.UserInGameDirectionEvent(data, value, x, y, 0);
         }
 
-        public static Packet UserInGameDirectionEvent(String data, int value, int x, int y, int npc) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket UserInGameDirectionEvent(String data, int value, int x, int y, int npc) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserInGameDirectionEvent.getValue());
-            oPacket.Encode(2);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserInGameDirectionEvent.getValue());
+            oPacket.EncodeByte(2);
             oPacket.EncodeString(data);
-            oPacket.EncodeInteger(value);
-            oPacket.EncodeInteger(x);
-            oPacket.EncodeInteger(y);
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(0);
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(npc);
-            oPacket.Encode(1);
-            oPacket.Encode(0);
+            oPacket.EncodeInt(value);
+            oPacket.EncodeInt(x);
+            oPacket.EncodeInt(y);
+            oPacket.EncodeByte(1);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeByte(1);
+            oPacket.EncodeInt(npc);
+            oPacket.EncodeByte(1);
+            oPacket.EncodeByte(0);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet UserInGameDirectionEvent(byte x, int value, int a, int b) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket UserInGameDirectionEvent(byte x, int value, int a, int b) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserInGameDirectionEvent.getValue());
-            oPacket.Encode(5);
-            oPacket.Encode(x);
-            oPacket.EncodeInteger(value);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserInGameDirectionEvent.getValue());
+            oPacket.EncodeByte(5);
+            oPacket.EncodeByte(x);
+            oPacket.EncodeInt(value);
             if (x == 0) {
-                oPacket.EncodeInteger(a);
-                oPacket.EncodeInteger(b);
+                oPacket.EncodeInt(a);
+                oPacket.EncodeInt(b);
             }
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet UserInGameDirectionEvent(byte x, int value) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket UserInGameDirectionEvent(byte x, int value) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserInGameDirectionEvent.getValue());
-            oPacket.Encode(5);
-            oPacket.Encode(x);
-            oPacket.EncodeInteger(value);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserInGameDirectionEvent.getValue());
+            oPacket.EncodeByte(5);
+            oPacket.EncodeByte(x);
+            oPacket.EncodeInt(value);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet UserInGameDirectionEvent_1(String data, int value, int x, int y, int npc) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket UserInGameDirectionEvent_1(String data, int value, int x, int y, int npc) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserInGameDirectionEvent.getValue());
-            oPacket.Encode(2);
-            oPacket.encodeString(data, false);
-            oPacket.EncodeInteger(value);
-            oPacket.EncodeInteger(x);
-            oPacket.EncodeInteger(y);
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(npc);
-            oPacket.Encode(0);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserInGameDirectionEvent.getValue());
+            oPacket.EncodeByte(2);
+            oPacket.EncodeString(data);
+            oPacket.EncodeInt(value);
+            oPacket.EncodeInt(x);
+            oPacket.EncodeInt(y);
+            oPacket.EncodeByte(1);
+            oPacket.EncodeInt(npc);
+            oPacket.EncodeByte(0);
 
             // Added for BeastTamer
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet UserInGameDirectionEvent_new(byte x, int value) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket UserInGameDirectionEvent_new(byte x, int value) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserInGameDirectionEvent.getValue());
-            oPacket.Encode(5);
-            oPacket.Encode(x);
-            oPacket.EncodeInteger(value);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserInGameDirectionEvent.getValue());
+            oPacket.EncodeByte(5);
+            oPacket.EncodeByte(x);
+            oPacket.EncodeInt(value);
             if (x == 0) {
-                oPacket.EncodeInteger(value);
-                oPacket.EncodeInteger(value);
+                oPacket.EncodeInt(value);
+                oPacket.EncodeInt(value);
             }
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet moveScreen(int x) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket moveScreen(int x) {
 
-            oPacket.EncodeShort(SendPacketOpcode.MOVE_SCREEN_X.getValue());
-            oPacket.EncodeInteger(x);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.MOVE_SCREEN_X.getValue());
+            oPacket.EncodeInt(x);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet screenDown() {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket screenDown() {
 
-            oPacket.EncodeShort(SendPacketOpcode.MOVE_SCREEN_DOWN.getValue());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.MOVE_SCREEN_DOWN.getValue());
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet reissueMedal(int itemId, int type) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket reissueMedal(int itemId, int type) {
 
-            oPacket.EncodeShort(SendPacketOpcode.MedalReissueResult.getValue());
-            oPacket.Encode(type);
-            oPacket.EncodeInteger(itemId);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.MedalReissueResult.getValue());
+            oPacket.EncodeByte(type);
+            oPacket.EncodeInt(itemId);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet playMovie(String data, boolean show) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket playMovie(String data, boolean show) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserPlayMovieClip.getValue());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserPlayMovieClip.getValue());
             oPacket.EncodeString(data);
-            oPacket.Encode(show ? 1 : 0);
+            oPacket.EncodeByte(show ? 1 : 0);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet setRedLeafStatus(int joejoe, int hermoninny, int littledragon, int ika) {
+        /*
+        public static OutPacket setRedLeafStatus(int joejoe, int hermoninny, int littledragon, int ika) {
             //packet made to set status
             //should remove it and make a handler for it, it's a recv opcode
             /*
@@ -4798,42 +4397,40 @@ public class CField {
              * 00 00 00 00
              * 78 96 8F 00
              * 00 00 00 00
-             */
-            OutPacket oPacket = new OutPacket(80);
+         */
+        //oPacket.encodeShort()
+        /*
+            oPacket.EncodeInt(7512034); //no idea
+            oPacket.EncodeInt(24316509); //no idea
+            oPacket.EncodeInt(7512034); //no idea
+            oPacket.EncodeInt(4); //no idea
+            oPacket.EncodeInt(0); //no idea
+            oPacket.EncodeInt(9410165); //joe joe
+            oPacket.EncodeInt(joejoe); //amount points added
+            oPacket.EncodeInt(9410166); //hermoninny
+            oPacket.EncodeInt(hermoninny); //amount points added
+            oPacket.EncodeInt(9410167); //little dragon
+            oPacket.EncodeInt(littledragon); //amount points added
+            oPacket.EncodeInt(9410168); //ika
+            oPacket.EncodeInt(ika); //amount points added
 
-            //oPacket.encodeShort();
-            oPacket.EncodeInteger(7512034); //no idea
-            oPacket.EncodeInteger(24316509); //no idea
-            oPacket.EncodeInteger(7512034); //no idea
-            oPacket.EncodeInteger(4); //no idea
-            oPacket.EncodeInteger(0); //no idea
-            oPacket.EncodeInteger(9410165); //joe joe
-            oPacket.EncodeInteger(joejoe); //amount points added
-            oPacket.EncodeInteger(9410166); //hermoninny
-            oPacket.EncodeInteger(hermoninny); //amount points added
-            oPacket.EncodeInteger(9410167); //little dragon
-            oPacket.EncodeInteger(littledragon); //amount points added
-            oPacket.EncodeInteger(9410168); //ika
-            oPacket.EncodeInteger(ika); //amount points added
-
-            return oPacket.ToPacket();
+            return oPacket;
         }
-
-        public static Packet sendRedLeaf(int points, boolean viewonly) {
+         */
+        public static OutPacket sendRedLeaf(int points, boolean viewonly) {
             /*
              * slea:
              * 73 00 00 00
              * 0A 00 00 00
              * 01
              */
-            OutPacket oPacket = new OutPacket(10);
 
-            oPacket.EncodeShort(SendPacketOpcode.UserOpenUIWithOption.getValue());
-            oPacket.EncodeInteger(0x73);
-            oPacket.EncodeInteger(points);
-            oPacket.Encode(viewonly ? 1 : 0); //if view only, then complete button is disabled
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserOpenUIWithOption.getValue());
+            oPacket.EncodeInt(0x73);
+            oPacket.EncodeInt(points);
+            oPacket.EncodeByte(viewonly ? 1 : 0); //if view only, then complete button is disabled
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
     }
 
@@ -4931,37 +4528,37 @@ public class CField {
             }
         }
 
-        public static Packet showForeignEffect(UserEffectCodes effect) {
+        public static OutPacket showForeignEffect(UserEffectCodes effect) {
             return showForeignEffect(-1, effect, 0);
         }
 
-        public static Packet showForeignEffect(int cid, UserEffectCodes effect) {
+        public static OutPacket showForeignEffect(int cid, UserEffectCodes effect) {
             return showForeignEffect(-1, effect, 0);
         }
 
-        public static Packet showForeignEffect(int cid, UserEffectCodes effect, int val) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket showForeignEffect(int cid, UserEffectCodes effect, int val) {
 
+            OutPacket oPacket;
             if (cid == -1) {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
             } else {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeInteger(cid);
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
+                oPacket.EncodeInt(cid);
             }
-            oPacket.Encode(effect.getEffectId());
+            oPacket.EncodeByte(effect.getEffectId());
 
             switch (effect) {
                 case ItemMaker:
                     oPacket.Fill(0, 4); // hmm could this be the delay?
                     break;
                 case FieldItemConsumed:
-                    oPacket.EncodeInteger(val);
+                    oPacket.EncodeInt(val);
                     break;
             }
 
             oPacket.Fill(0, 69);//I really can't be fucked rn..
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
         /**
@@ -4970,8 +4567,8 @@ public class CField {
          * @param bannerText
          * @return
          */
-        public static Packet showBurningFieldTextEffect(String bannerText) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket showBurningFieldTextEffect(String bannerText) {
+
 
             /*3D 
 4F 00 
@@ -4992,178 +4589,174 @@ DC 05 00 00  // floating value
 02 00 00 00 // v640
 00 00 00 00 
 00 00 00 00*/
-            oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.Encode(UserEffectCodes.TextEffect.getEffectId());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
+            oPacket.EncodeByte(UserEffectCodes.TextEffect.getEffectId());
             //oPacket.encodeString("#fn³ª´®°íµñ ExtraBold##fs26#          Burning Stage 1: 10% Bonus EXP!  ");
             oPacket.EncodeString(String.format("#fn³ª´®°íµñ ExtraBold##fs26#          %s        ", bannerText));
-            oPacket.EncodeInteger(0x32); // *(float *)&v848 = COERCE_FLOAT(CInPacket::Decode4(a2));
-            oPacket.EncodeInteger(0x5DC); // *(float *)&v854 = COERCE_FLOAT(CInPacket::Decode4(a2));
-            oPacket.EncodeInteger(0x4); // Align whole text    3 = Left, 5 = right, 4 = Center
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0xFFFFFF38); // Seems to be the X and Y position? 
-            oPacket.EncodeInteger(1);
-            oPacket.EncodeInteger(4);
-            oPacket.EncodeInteger(2);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(0x32); // *(float *)&v848 = COERCE_FLOAT(CInPacket::Decode4(a2));
+            oPacket.EncodeInt(0x5DC); // *(float *)&v854 = COERCE_FLOAT(CInPacket::Decode4(a2));
+            oPacket.EncodeInt(0x4); // Align whole text    3 = Left, 5 = right, 4 = Center
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0xFFFFFF38); // Seems to be the X and Y position? 
+            oPacket.EncodeInt(1);
+            oPacket.EncodeInt(4);
+            oPacket.EncodeInt(2);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet showOwnDiceEffect(int skillid, int effectid, int effectid2, int level) {
+        public static OutPacket showOwnDiceEffect(int skillid, int effectid, int effectid2, int level) {
             return showDiceEffect(-1, skillid, effectid, effectid2, level);
         }
 
-        public static Packet showDiceEffect(int cid, int skillid, int effectid, int effectid2, int level) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket showDiceEffect(int cid, int skillid, int effectid, int effectid2, int level) {
 
+            OutPacket oPacket;
             if (cid == -1) {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
             } else {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeInteger(cid);
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
+                oPacket.EncodeInt(cid);
             }
-            oPacket.Encode(UserEffectCodes.Skill_DiceEffect.getEffectId()); // TODO
-            oPacket.EncodeInteger(effectid);
-            oPacket.EncodeInteger(effectid2);
-            oPacket.EncodeInteger(skillid);
-            oPacket.Encode(level);
-            oPacket.Encode(0);
+            oPacket.EncodeByte(UserEffectCodes.Skill_DiceEffect.getEffectId()); // TODO
+            oPacket.EncodeInt(effectid);
+            oPacket.EncodeInt(effectid2);
+            oPacket.EncodeInt(skillid);
+            oPacket.EncodeByte(level);
+            oPacket.EncodeByte(0);
             oPacket.Fill(0, 100);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet useCharm(byte charmsleft, byte daysleft, boolean safetyCharm) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket useCharm(byte charmsleft, byte daysleft, boolean safetyCharm) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.Encode(UserEffectCodes.ProtectOnDieItemUse.getEffectId());
-            oPacket.Encode(safetyCharm ? 1 : 0);
-            oPacket.Encode(charmsleft);
-            oPacket.Encode(daysleft);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
+            oPacket.EncodeByte(UserEffectCodes.ProtectOnDieItemUse.getEffectId());
+            oPacket.EncodeByte(safetyCharm ? 1 : 0);
+            oPacket.EncodeByte(charmsleft);
+            oPacket.EncodeByte(daysleft);
             if (!safetyCharm) {
-                oPacket.EncodeInteger(0);
+                oPacket.EncodeInt(0);
             }
             oPacket.Fill(0, 4);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet Mulung_DojoUp2() {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket Mulung_DojoUp2() {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.Encode(10);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
+            oPacket.EncodeByte(10);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet showOwnHpHealed(int amount) {
+        public static OutPacket showOwnHpHealed(int amount) {
             return showHpHealed(-1, amount);
         }
 
-        public static Packet showHpHealed(int cid, int amount) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket showHpHealed(int cid, int amount) {
 
+            OutPacket oPacket;
             if (cid == -1) {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
             } else {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeInteger(cid);
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
+                oPacket.EncodeInt(cid);
             }
-            oPacket.Encode(UserEffectCodes.IncDecHPEffect_EX.getEffectId());
-            oPacket.EncodeInteger(amount);
+            oPacket.EncodeByte(UserEffectCodes.IncDecHPEffect_EX.getEffectId());
+            oPacket.EncodeInt(amount);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet showRewardItemAnimation(int itemId, String effect) {
+        public static OutPacket showRewardItemAnimation(int itemId, String effect) {
             return showRewardItemAnimation(itemId, effect, -1);
         }
 
-        public static Packet showRewardItemAnimation(int itemId, String effect, int from_playerid) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket showRewardItemAnimation(int itemId, String effect, int from_playerid) {
 
+            OutPacket oPacket;
             if (from_playerid == -1) {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
             } else {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeInteger(from_playerid);
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
+                oPacket.EncodeInt(from_playerid);
             }
-            oPacket.Encode(UserEffectCodes.BuffItemEffect.getEffectId());
-            oPacket.EncodeInteger(itemId);
+            oPacket.EncodeByte(UserEffectCodes.BuffItemEffect.getEffectId());
+            oPacket.EncodeInt(itemId);
 
             if (effect != null && effect.length() > 0) {
-                oPacket.Encode(1);
+                oPacket.EncodeByte(1);
                 oPacket.EncodeString(effect);
             } else {
-                oPacket.Encode(0);
+                oPacket.EncodeByte(0);
             }
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet showCashItemEffect(int itemId) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket showCashItemEffect(int itemId) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.Encode(UserEffectCodes.FieldItemConsumed.getEffectId());
-            oPacket.EncodeInteger(itemId);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
+            oPacket.EncodeByte(UserEffectCodes.FieldItemConsumed.getEffectId());
+            oPacket.EncodeInt(itemId);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet useWheel(byte charmsleft) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket useWheel(byte charmsleft) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.Encode(UserEffectCodes.UpgradeTombItemUse.getEffectId());
-            oPacket.Encode(charmsleft);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
+            oPacket.EncodeByte(UserEffectCodes.UpgradeTombItemUse.getEffectId());
+            oPacket.EncodeByte(charmsleft);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet showOwnBuffEffect(int skillid, UserEffectCodes effect, int playerLevel, int skillLevel) {
+        public static OutPacket showOwnBuffEffect(int skillid, UserEffectCodes effect, int playerLevel, int skillLevel) {
             return showBuffeffect(-1, skillid, effect, playerLevel, skillLevel, (byte) 3);
         }
 
-        public static Packet showOwnBuffEffect(int skillid, UserEffectCodes effect, int playerLevel, int skillLevel, byte direction) {
+        public static OutPacket showOwnBuffEffect(int skillid, UserEffectCodes effect, int playerLevel, int skillLevel, byte direction) {
             return showBuffeffect(-1, skillid, effect, playerLevel, skillLevel, direction);
         }
 
-        public static Packet showBuffeffect(int cid, int skillid, UserEffectCodes effect, int playerLevel, int skillLevel) {
+        public static OutPacket showBuffeffect(int cid, int skillid, UserEffectCodes effect, int playerLevel, int skillLevel) {
             return showBuffeffect(cid, skillid, effect, playerLevel, skillLevel, (byte) 3);
         }
 
-        public static Packet showBuffeffect(int cid, int skillid, UserEffectCodes effect, int playerLevel, int skillLevel, byte direction) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket showBuffeffect(int cid, int skillid, UserEffectCodes effect, int playerLevel, int skillLevel, byte direction) {
 
+            OutPacket oPacket;
             if (cid == -1) {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
             } else {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeInteger(cid);
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
+                oPacket.EncodeInt(cid);
             }
-            oPacket.Encode(effect.getEffectId());  // TODO, update for V170 [check]
-            oPacket.EncodeInteger(skillid);
-            oPacket.Encode(playerLevel - 1);
+            oPacket.EncodeByte(effect.getEffectId());  // TODO, update for V170 [check]
+            oPacket.EncodeInt(skillid);
+            oPacket.EncodeByte(playerLevel - 1);
             if (effect == UserEffectCodes.SkillUseBySummoned && skillid == 31111003) {
-                oPacket.EncodeInteger(0);
+                oPacket.EncodeInt(0);
             }
-            oPacket.Encode(skillLevel);
+            oPacket.EncodeByte(skillLevel);
             if ((direction != 3) || (skillid == 1320006) || (skillid == 30001062) || (skillid == 30001061)) {
-                oPacket.Encode(direction);
+                oPacket.EncodeByte(direction);
             }
             if (skillid == 30001062) {
-                oPacket.EncodeInteger(0);
+                oPacket.EncodeInt(0);
             }
             oPacket.Fill(0, 10);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet showWZUOLEffect(String data, boolean flipImage) {
+        public static OutPacket showWZUOLEffect(String data, boolean flipImage) {
             return showWZUOLEffect(data, flipImage, -1, 0, 0);
         }
 
@@ -5178,28 +4771,28 @@ DC 05 00 00  // floating value
          * @param mode
          * @return
          */
-        public static Packet showWZUOLEffect(String data, boolean flipImage, int characterid, int time, int mode) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket showWZUOLEffect(String data, boolean flipImage, int characterid, int time, int mode) {
 
+            OutPacket oPacket;
             if (characterid == -1) {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
             } else {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeInteger(characterid);
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
+                oPacket.EncodeInt(characterid);
             }
-            oPacket.Encode(UserEffectCodes.EffectUOL.getEffectId());
+            oPacket.EncodeByte(UserEffectCodes.EffectUOL.getEffectId());
             oPacket.EncodeString(data);
 
-            oPacket.Encode(flipImage ? 1 : 0); // new in v170
+            oPacket.EncodeByte(flipImage ? 1 : 0); // new in v170
 
-            oPacket.EncodeInteger(time); // v868 = CInPacket::Decode4(a3);
-            oPacket.EncodeInteger(mode); // v874 = CInPacket::Decode4(a3);
+            oPacket.EncodeInt(time); // v868 = CInPacket::Decode4(a3);
+            oPacket.EncodeInt(mode); // v874 = CInPacket::Decode4(a3);
 
             switch (mode) {
                 case 1:
                     break;
                 case 2:
-                    oPacket.EncodeInteger(0); // Most likely the delay.
+                    oPacket.EncodeInt(0); // Most likely the delay.
                     break;
                 case 3:
                     break;
@@ -5207,7 +4800,7 @@ DC 05 00 00  // floating value
 
             // Client seems to do something 
             // if v868 < 0, else something
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
         /**
@@ -5216,122 +4809,102 @@ DC 05 00 00  // floating value
          * @param data
          * @return
          */
-        public static Packet showReservedEffect_CutScene(String data) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket showReservedEffect_CutScene(String data) {
 
-            oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.Encode(UserEffectCodes.ReservedEffect.getEffectId());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
+            oPacket.EncodeByte(UserEffectCodes.ReservedEffect.getEffectId());
 
             /*LOBYTE(bFlip) = CInPacket::Decode1(iPacket) != 0;
 	      nRange = CInPacket::Decode4(iPacket);
 	      nNameHeight = CInPacket::Decode4(iPacket);
 	      CInPacket::DecodeStr(iPacket, &sMsg);*/
             boolean show = true;
-            oPacket.Encode(show);
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeBool(show);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
             oPacket.EncodeString(data);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet showOwnPetLevelUp(User chr, byte index) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket showOwnPetLevelUp(User chr, byte index) {
+            OutPacket oPacket;
             if (chr == null) {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
             } else {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectRemote.getValue());
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
             }
-            oPacket.Encode((int) UserEffectCodes.Pet.getEffectId());
-            oPacket.Encode(new int[]{0, index, 0}[0]);
-            oPacket.EncodeInteger(new int[]{0, index, 0}[1]);
+            oPacket.EncodeByte((int) UserEffectCodes.Pet.getEffectId());
+            oPacket.EncodeByte(0);
+            oPacket.EncodeInt(index);
             if (chr == null) {
-                oPacket.EncodeInteger(new int[]{0, index, 0}[2]);
+                oPacket.EncodeInt(0);
             }
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet showOwnPVPChampionEffect() {
+        public static OutPacket showOwnPVPChampionEffect() {
             return showPVPChampionEffect(-1);
         }
 
-        public static Packet showPVPChampionEffect(int from_playerid) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket showPVPChampionEffect(int from_playerid) {
 
+            OutPacket oPacket;
             if (from_playerid == -1) {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
             } else {
-                oPacket.EncodeShort(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeInteger(from_playerid);
+                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
+                oPacket.EncodeInt(from_playerid);
             }
-            oPacket.Encode(UserEffectCodes.PvPChampion.getEffectId());  // TODO, update for V170
-            oPacket.EncodeInteger(30000);
+            oPacket.EncodeByte(UserEffectCodes.PvPChampion.getEffectId());  // TODO, update for V170
+            oPacket.EncodeInt(30000);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet showWeirdEffect(String effect, int itemId) {
-            final OutPacket oPacket = new OutPacket(80);
-
-            oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.Encode(UserEffectCodes.PlayExclSoundWithDownBGM.getEffectId());
+        public static OutPacket showWeirdEffect(String effect, int itemId) {
+            final OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
+            oPacket.EncodeByte(UserEffectCodes.PlayExclSoundWithDownBGM.getEffectId());
             oPacket.EncodeString(effect);
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(0);//weird high number is it will keep showing it lol
-            oPacket.EncodeInteger(2);
-            oPacket.EncodeInteger(itemId);
-            return oPacket.ToPacket();
+            oPacket.EncodeByte(1);
+            oPacket.EncodeInt(0);//weird high number is it will keep showing it lol
+            oPacket.EncodeInt(2);
+            oPacket.EncodeInt(itemId);
+            return oPacket;
         }
 
-        public static Packet showWeirdEffect(int chrId, String effect, int itemId) {
-            final OutPacket oPacket = new OutPacket(80);
-
-            oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.EncodeInteger(chrId);
-            oPacket.Encode(UserEffectCodes.PlayExclSoundWithDownBGM.getEffectId());
+        public static OutPacket showWeirdEffect(int chrId, String effect, int itemId) {
+            final OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
+            oPacket.EncodeInt(chrId);
+            oPacket.EncodeByte(UserEffectCodes.PlayExclSoundWithDownBGM.getEffectId());
             oPacket.EncodeString(effect);
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(0);//weird high number is it will keep showing it lol
-            oPacket.EncodeInteger(2);//this makes it read the itemId
-            oPacket.EncodeInteger(itemId);
+            oPacket.EncodeByte(1);
+            oPacket.EncodeInt(0);//weird high number is it will keep showing it lol
+            oPacket.EncodeInt(2);//this makes it read the itemId
+            oPacket.EncodeInt(itemId);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
     }
 
-    public static Packet sendBoxDebug(short opcode, int itemId, List<Integer> items) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getCassandrasCollection() {
 
-        oPacket.EncodeShort(opcode);
-        oPacket.EncodeShort(1);
-        oPacket.EncodeInteger(itemId);
-        oPacket.EncodeInteger(items.size());
-        for (int item : items) {
-            oPacket.EncodeInteger(item);
-        }
-        return oPacket.ToPacket();
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.BingoCassandraResult.getValue());
+        oPacket.EncodeByte(6);
+
+        return oPacket;
     }
 
-    public static Packet getCassandrasCollection() {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket unsealBox(int reward) {
 
-        oPacket.EncodeShort(SendPacketOpcode.BingoCassandraResult.getValue());
-        oPacket.Encode(6);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
+        oPacket.EncodeByte(0x31);
+        oPacket.EncodeByte(1);
+        oPacket.EncodeInt(reward);
+        oPacket.EncodeInt(1);
 
-        return oPacket.ToPacket();
-    }
-
-    public static Packet unsealBox(int reward) {
-        OutPacket oPacket = new OutPacket(80);
-
-        oPacket.EncodeShort(SendPacketOpcode.UserEffectLocal.getValue());
-        oPacket.Encode(0x31);
-        oPacket.Encode(1);
-        oPacket.EncodeInteger(reward);
-        oPacket.EncodeInteger(1);
-
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -5343,12 +4916,12 @@ DC 05 00 00  // floating value
      * @return oPacket
      *
      */
-    public static Packet consumeItemEffect(int cId, int itemId) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.UserConsumeItemEffect.getValue());
-        oPacket.EncodeInteger(cId);
-        oPacket.EncodeInteger(itemId);
-        return oPacket.ToPacket();
+    public static OutPacket consumeItemEffect(int cId, int itemId) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserConsumeItemEffect.getValue());
+        oPacket.EncodeInt(cId);
+        oPacket.EncodeInt(itemId);
+        return oPacket;
     }
 
     /**
@@ -5357,25 +4930,23 @@ DC 05 00 00  // floating value
      * @param chr
      * @return MapleCharacter chr - Character object
      */
-    public static Packet zeroTagState(User chr) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket zeroTagState(User chr) {
 
-        oPacket.EncodeShort(SendPacketOpcode.ZERO_TAG_STATE.getValue());
-        oPacket.EncodeInteger(chr.getId());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ZERO_TAG_STATE.getValue());
+        oPacket.EncodeInt(chr.getId());
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     public static class RunePacket {
 
-        public static Packet runeMsg(int type, long time) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket runeMsg(int type, long time) {
 
-            oPacket.EncodeShort(SendPacketOpcode.SHOW_MAP_NAME.getValue());
-            oPacket.EncodeInteger(type);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.SHOW_MAP_NAME.getValue());
+            oPacket.EncodeInt(type);
             switch (type) {
                 case 2://Cant use another rune yet (time left)
-                    oPacket.EncodeInteger((int) time);
+                    oPacket.EncodeInt((int) time);
                     break;
                 case 4://That rune is to strong for you to handle
                     break;
@@ -5383,72 +4954,66 @@ DC 05 00 00  // floating value
                     break;
             }
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet spawnRune(MapleRuneStone rune) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket spawnRune(MapleRuneStone rune) {
 
-            oPacket.EncodeShort(SendPacketOpcode.RuneEnterField.getValue());
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(rune.getRuneType().getType());
-            oPacket.EncodeInteger((int) rune.getPosition().getX());
-            oPacket.EncodeInteger((int) rune.getPosition().getY());
-            oPacket.Encode(rune.isFacingLeft());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.RuneEnterField.getValue());
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(rune.getRuneType().getType());
+            oPacket.EncodeInt((int) rune.getPosition().getX());
+            oPacket.EncodeInt((int) rune.getPosition().getY());
+            oPacket.EncodeBool(rune.isFacingLeft());
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet removeRune(MapleRuneStone rune, User chr) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket removeRune(MapleRuneStone rune, User chr) {
 
-            oPacket.EncodeShort(SendPacketOpcode.RuneActSuccess.getValue());
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(chr.getId());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.RuneActSuccess.getValue());
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(chr.getId());
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet removeAllRune() {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket removeAllRune() {
 
-            oPacket.EncodeShort(SendPacketOpcode.RUNE_STONE_CLEAR_AND_ALL_REGISTER.getValue());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.RUNE_STONE_CLEAR_AND_ALL_REGISTER.getValue());
             int count = 0;
-            oPacket.EncodeInteger(count); // count
+            oPacket.EncodeInt(count); // count
             for (int i = 0; i < count; i++) {
-                oPacket.EncodeInteger(0); // not sure, but whatever
+                oPacket.EncodeInt(0); // not sure, but whatever
             }
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet finishRune() {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket finishRune() {
 
-            oPacket.EncodeShort(SendPacketOpcode.RuneLeaveField.getValue());
-            oPacket.EncodeInteger(0);
-            oPacket.EncodeInteger(6041607);//idk?//was 7032481
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.RuneLeaveField.getValue());
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(6041607);//idk?//was 7032481
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet RuneAction(int type, int time) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket RuneAction(int type, int time) {
 
-            oPacket.EncodeShort(SendPacketOpcode.RuneActSuccess.getValue());
-            oPacket.EncodeInteger(type);
-            oPacket.EncodeInteger(time);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.RuneActSuccess.getValue());
+            oPacket.EncodeInt(type);
+            oPacket.EncodeInt(time);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
-        public static Packet showRuneEffect(int type) {
-            OutPacket oPacket = new OutPacket(80);
+        public static OutPacket showRuneEffect(int type) {
 
-            oPacket.EncodeShort(SendPacketOpcode.RuneStoneSkillAck.getValue());
-            oPacket.EncodeInteger(type);
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.RuneStoneSkillAck.getValue());
+            oPacket.EncodeInt(type);
 
-            return oPacket.ToPacket();
+            return oPacket;
         }
 
     }

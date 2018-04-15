@@ -19,7 +19,7 @@ public class AbstractMessages implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(mode);
+        oPacket.EncodeByte(mode);
     }
 
 }

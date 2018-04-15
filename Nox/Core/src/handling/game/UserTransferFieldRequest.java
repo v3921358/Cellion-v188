@@ -12,7 +12,7 @@ import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import tools.packet.CField.SummonPacket;
 
 public final class UserTransferFieldRequest implements ProcessPacket<MapleClient> {
@@ -28,17 +28,17 @@ public final class UserTransferFieldRequest implements ProcessPacket<MapleClient
         if (chr == null) {
             return;
         }
-        
+
         if (chr.getMap() == null) {
             CashShopOperation.LeaveCS(c, c.getPlayer());
         } else {
-            if (iPacket.Available() != 0L) {
+            if (iPacket.GetRemainder() != 0L) {
                 iPacket.DecodeByte();
-                int targetid = iPacket.DecodeInteger();
-                iPacket.DecodeInteger();
+                int targetid = iPacket.DecodeInt();
+                iPacket.DecodeInt();
                 MaplePortal portal = chr.getMap().getPortal(iPacket.DecodeString());
-                if (iPacket.Available() >= 7L) {
-                    chr.updateTick(iPacket.DecodeInteger());
+                if (iPacket.GetRemainder() >= 7L) {
+                    chr.updateTick(iPacket.DecodeInt());
                 }
                 iPacket.Skip(1);
                 boolean wheel = (iPacket.DecodeShort() > 0) && (!GameConstants.isEventMap(chr.getMapId())) && (chr.haveItem(5510000, 1, false, true)) && (chr.getMapId() / 1000000 != 925);
@@ -65,7 +65,7 @@ public final class UserTransferFieldRequest implements ProcessPacket<MapleClient
                         MapleMap to = chr.getMap().getReturnMap();
                         chr.changeMap(to, to.getPortal(0));
                     } else {
-                        c.write(CField.EffectPacket.useWheel((byte) (chr.getInventory(MapleInventoryType.CASH).countById(5510000) - 1)));
+                        c.SendPacket(CField.EffectPacket.useWheel((byte) (chr.getInventory(MapleInventoryType.CASH).countById(5510000) - 1)));
                         chr.getStat().setHp(chr.getStat().getMaxHp() / 100 * 40, chr);
                         MapleInventoryManipulator.removeById(c, MapleInventoryType.CASH, 5510000, 1, true, false);
 
@@ -149,9 +149,9 @@ public final class UserTransferFieldRequest implements ProcessPacket<MapleClient
                         warp = true;
                     }
                     if (unlock) {
-                        c.write(CField.UIPacket.IntroEnableUI(false));
-                        c.write(CField.UIPacket.IntroLock(false));
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CField.UIPacket.IntroEnableUI(false));
+                        c.SendPacket(CField.UIPacket.IntroLock(false));
+                        c.SendPacket(CWvsContext.enableActions());
                     }
                     if (warp) {
                         MapleMap to = ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(targetid);
@@ -160,7 +160,7 @@ public final class UserTransferFieldRequest implements ProcessPacket<MapleClient
                 } else if ((portal != null) && (!chr.hasBlockedInventory())) {
                     portal.enterPortal(c);
                 } else {
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                 }
             }
         }

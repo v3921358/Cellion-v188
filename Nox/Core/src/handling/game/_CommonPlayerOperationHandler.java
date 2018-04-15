@@ -289,7 +289,7 @@ public class _CommonPlayerOperationHandler {
         }
         if ((itemId == 5040004) || itemId == 5041001) {
             if (iPacket.DecodeByte() == 0) {
-                final MapleMap target = c.getChannelServer().getMapFactory().getMap(iPacket.DecodeInteger());
+                final MapleMap target = c.getChannelServer().getMapFactory().getMap(iPacket.DecodeInt());
                 if (target != null) { //Premium and Hyper rocks are allowed to go anywhere. Blocked maps are checked below. 
                     if (!FieldLimitType.VipRock.checkFlag(c.getPlayer().getMap()) && !FieldLimitType.VipRock.checkFlag(target) && !c.getPlayer().isInBlockedMap()) { //Makes sure this map doesn't have a forced return map
                         c.getPlayer().changeMap(target, target.getPortal(0));
@@ -351,7 +351,7 @@ public class _CommonPlayerOperationHandler {
             if (consumeval > 0) {
                 consumeItem(c, eff);
                 consumeItem(c, ii.getItemEffectEX(id));
-                c.write(CWvsContext.InfoPacket.getShowItemGain(id, (byte) 1));
+                c.SendPacket(CWvsContext.InfoPacket.getShowItemGain(id, (byte) 1));
                 return true;
             }
         }
@@ -410,12 +410,12 @@ public class _CommonPlayerOperationHandler {
             }
             if (pet.getCloseness() >= GameConstants.getClosenessNeededForLevel(pet.getLevel() + 1)) {
                 pet.setLevel(pet.getLevel() + 1);
-                c.write(CField.EffectPacket.showOwnPetLevelUp(null, c.getPlayer().getPetIndex(pet)));
+                c.SendPacket(CField.EffectPacket.showOwnPetLevelUp(null, c.getPlayer().getPetIndex(pet)));
                 c.getPlayer().getMap().broadcastMessage(PetPacket.showPetLevelUp(c.getPlayer(), petindex));
             }
         }
         // c.getPlayer().forceUpdateItem(pet.getItem());
-        c.write(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
+        c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, petindex, true, true), true);
         return true;
     }

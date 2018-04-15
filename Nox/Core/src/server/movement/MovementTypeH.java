@@ -23,7 +23,7 @@ public class MovementTypeH extends AbstractLifeMovement {
 
     @Override
     public void serialize(OutPacket oPacket) {
-        oPacket.Encode(getCommand());
-        oPacket.Encode(getbStat());
+        oPacket.EncodeByte(getCommand());
+        oPacket.EncodeByte(getbStat());
     }
 }

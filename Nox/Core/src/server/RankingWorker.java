@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import database.DatabaseConnection;
+import database.Database;
 import tools.LogHelper;
 
 public class RankingWorker {
@@ -33,8 +33,8 @@ public class RankingWorker {
         //System.out.println("Loading Rankings::");
         //long startTime = System.currentTimeMillis();
         loadJobCommands();
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             updateRanking(con);
         } catch (Exception ex) {
             LogHelper.SQL.get().info("Could not update rankings:\n{}", ex);
@@ -74,6 +74,7 @@ public class RankingWorker {
             ps.executeBatch();
         }
         ps.close();
+        con.close();
     }
 
     public static void loadJobCommands() {

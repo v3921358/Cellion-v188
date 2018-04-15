@@ -10,7 +10,7 @@ import server.RandomRewards;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -26,13 +26,13 @@ public class UseTreasureChestHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final short slot = iPacket.DecodeShort();
-        final int itemid = iPacket.DecodeInteger();
+        final int itemid = iPacket.DecodeInt();
 
         User chr = c.getPlayer();
 
         final Item toUse = chr.getInventory(MapleInventoryType.ETC).getItem((byte) slot);
         if (toUse == null || toUse.getQuantity() <= 0 || toUse.getItemId() != itemid || chr.hasBlockedInventory()) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         int reward;
@@ -69,19 +69,19 @@ public class UseTreasureChestHandler implements ProcessPacket<MapleClient> {
 
             if (item == null) {
                 chr.dropMessage(5, "Please check your item inventory and see if you have a Master Key, or if the inventory is full.");
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.ETC, (byte) slot, (short) 1, true);
             MapleInventoryManipulator.removeById(c, MapleInventoryType.CASH, keyIDforRemoval, 1, true, false);
-            c.write(CWvsContext.InfoPacket.getShowItemGain(reward, (short) amount, true));
+            c.SendPacket(CWvsContext.InfoPacket.getShowItemGain(reward, (short) amount, true));
 
             if (GameConstants.gachaponRareItem(item.getItemId()) > 0) {
                 World.Broadcast.broadcastMessage(CWvsContext.getGachaponMega(c.getPlayer().getName(), " : got a(n)", item, (byte) 2, "from a chest!"));
             }
         } else {
             chr.dropMessage(5, "Please check your item inventory and see if you have a Master Key, or if the inventory is full.");
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
         }
     }
 }

@@ -4,7 +4,7 @@ import client.MapleClient;
 import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -23,9 +23,9 @@ public class SwitchBagHandler implements ProcessPacket<MapleClient> {
             return;
         }
         c.getPlayer().setScrolledPosition((short) 0);
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
-        final short src = (short) iPacket.DecodeInteger();                                       //01 00
-        final short dst = (short) iPacket.DecodeInteger();                                       //00 00
+        c.getPlayer().updateTick(iPacket.DecodeInt());
+        final short src = (short) iPacket.DecodeInt();                                       //01 00
+        final short dst = (short) iPacket.DecodeInt();                                       //00 00
         if (src < 100 || dst < 100) {
             return;
         }

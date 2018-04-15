@@ -25,7 +25,7 @@ import client.MapleClient;
 import server.maps.objects.MonsterFamiliar;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class SpawnFamiliarHandler implements ProcessPacket<MapleClient> {
 
@@ -36,8 +36,8 @@ public final class SpawnFamiliarHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
-        int mId = iPacket.DecodeInteger();
+        c.getPlayer().updateTick(iPacket.DecodeInt());
+        int mId = iPacket.DecodeInt();
         c.getPlayer().removeFamiliar();
         if ((c.getPlayer().getFamiliars().containsKey(mId)) && (iPacket.DecodeByte() > 0)) {
             MonsterFamiliar mf = (MonsterFamiliar) c.getPlayer().getFamiliars().get(mId);
@@ -47,7 +47,7 @@ public final class SpawnFamiliarHandler implements ProcessPacket<MapleClient> {
                 c.getPlayer().spawnFamiliar(mf, false);
             }
         }
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 
 }

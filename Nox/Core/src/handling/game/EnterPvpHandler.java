@@ -31,7 +31,7 @@ import server.Randomizer;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class EnterPvpHandler implements ProcessPacket<MapleClient> {
 
@@ -43,16 +43,16 @@ public final class EnterPvpHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         if (c.getPlayer() == null || c.getPlayer().getMap() == null || c.getPlayer().getMapId() != 960000000) {
-            c.write(CField.pvpBlocked(1));
-            c.write(CWvsContext.enableActions());
+            //c.SendPacket(CField.pvpBlocked(1));
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         if (c.getPlayer().getParty() != null) {
-            c.write(CField.pvpBlocked(9));
-            c.write(CWvsContext.enableActions());
+            //c.SendPacket(CField.pvpBlocked(9));
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         iPacket.Skip(1);
         int type = iPacket.DecodeByte(), lvl = iPacket.DecodeByte(), playerCount = 0;
         boolean passed = false;
@@ -72,8 +72,8 @@ public final class EnterPvpHandler implements ProcessPacket<MapleClient> {
         }
         final EventManager em = c.getChannelServer().getEventSM().getEventManager("PVP");
         if (!passed || em == null) {
-            c.write(CField.pvpBlocked(1));
-            c.write(CWvsContext.enableActions());
+            //c.SendPacket(CField.pvpBlocked(1));
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         final List<Integer> maps = new ArrayList<>();
@@ -101,8 +101,8 @@ public final class EnterPvpHandler implements ProcessPacket<MapleClient> {
                 break;
         }
         if (!passed) {
-            c.write(CField.pvpBlocked(1));
-            c.write(CWvsContext.enableActions());
+            //c.SendPacket(CField.pvpBlocked(1));
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         c.getPlayer().getStat().heal(c.getPlayer());

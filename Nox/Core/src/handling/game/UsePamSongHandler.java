@@ -7,7 +7,7 @@ import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
 import net.InPacket;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *

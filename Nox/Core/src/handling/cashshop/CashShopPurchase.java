@@ -23,14 +23,16 @@ package handling.cashshop;
 
 import client.MapleClient;
 import client.inventory.Item;
+import database.Database;
 import static handling.cashshop.CashShopOperation.playerCashShopInfo;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CSPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import tools.LogHelper;
 
 /**
@@ -98,10 +100,10 @@ public final class CashShopPurchase implements ProcessPacket<MapleClient> {
                 QuestPurchase.buyItem(iPacket, c, chr);
                 break;
             case PURCHASE_LOG_UPDATE:
-                c.write(CSPacket.updatePurchaseRecord());
+                c.SendPacket(CSPacket.updatePurchaseRecord());
                 break;
             case RANDOM_BOX:
-                c.write(CSPacket.sendRandomBox((int) iPacket.DecodeLong(), new Item(1302000, (short) 1, (short) 1, (short) 0, 10), (short) 0));
+                c.SendPacket(CSPacket.sendRandomBox((int) iPacket.DecodeLong(), new Item(1302000, (short) 1, (short) 1, (short) 0, 10), (short) 0));
                 break;
             case FARM_GEM_UPDATE://UNSURE!
                 FarmItemPurchase.gems(iPacket, c, chr);
@@ -109,13 +111,13 @@ public final class CashShopPurchase implements ProcessPacket<MapleClient> {
             default:
                 System.out.println("[Cash Shop Debug] New Operation Found (" + actionType + ")");
                 LogHelper.GENERAL_EXCEPTION.get().info("[CashShopPurchase] Unknow action type: " + actionType);
-                c.write(CSPacket.sendCSFail(0));
+                c.SendPacket(CSPacket.sendCSFail(0));
                 break;
         }
-        try {
-            c.getPlayer().getCashInventory().save();
+        try (Connection con = Database.GetConnection()) {
+            c.getPlayer().getCashInventory().save(con);
         } catch (SQLException ex) {
-            Logger.getLogger(CashShopPurchase.class.getName()).log(Level.SEVERE, null, ex);
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
         }
         playerCashShopInfo(c);
     }

@@ -21,12 +21,12 @@ public class MechDoor extends MapleMapObject {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.write(CField.spawnMechDoor(this, false));
+        client.SendPacket(CField.spawnMechDoor(this, false));
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.write(CField.removeMechDoor(this, false));
+        client.SendPacket(CField.removeMechDoor(this, false));
     }
 
     public int getOwnerId() {

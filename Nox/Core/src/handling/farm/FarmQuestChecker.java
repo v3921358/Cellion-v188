@@ -23,7 +23,7 @@ package handling.farm;
 
 import client.MapleClient;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class FarmQuestChecker implements ProcessPacket<MapleClient> {
 
@@ -34,7 +34,7 @@ public final class FarmQuestChecker implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int farmId = iPacket.DecodeInteger();
+        int farmId = iPacket.DecodeInt();
         //TODO code farm quests
         if (c.getFarm().getName().equals("Creating...")) {
             //c.write(FarmPacket.updateQuestInfo(1111, 1, "A1/Z/"));

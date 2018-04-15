@@ -72,7 +72,7 @@ public class MapleAchievement {
         if (notice && !chr.isGM()) {
             World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(6, "[Achievement] Congratulations to " + chr.getName() + " on " + name + " and rewarded with " + (reward / 2) + " cash!"));
         } else {
-            chr.getClient().write(CWvsContext.broadcastMsg(5, "[Achievement] You've gained " + (reward / 2) + " Cash as you " + name + "."));
+            chr.getClient().SendPacket(CWvsContext.broadcastMsg(5, "[Achievement] You've gained " + (reward / 2) + " Cash as you " + name + "."));
         }
     }
 }

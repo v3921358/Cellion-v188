@@ -38,7 +38,7 @@ public enum EnchantmentActions {
     public EnchantmentActions getAction() {
         return this;
     }
-    
+
     public int getValue() {
         return action;
     }

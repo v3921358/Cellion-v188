@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import client.MapleClient;
-import database.DatabaseConnection;
+import database.Database;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
@@ -93,10 +93,8 @@ public class BuddyList {
         }
     }
 
-    public void loadFromDb(int characterId) {
-        Connection con = DatabaseConnection.getConnection();
-        try {
-            PreparedStatement ps = con.prepareStatement("SELECT b.buddyid, b.pending, c.name as buddyname, b.groupname, b.memo, b.friend, b.nickname, b.flag FROM buddies as b, characters as c WHERE c.id = b.buddyid AND c.deletedAt is null AND b.characterid = ?");
+    public void loadFromDb(int characterId, Connection con) {
+        try (PreparedStatement ps = con.prepareStatement("SELECT b.buddyid, b.pending, c.name as buddyname, b.groupname, b.memo, b.friend, b.nickname, b.flag FROM buddies as b, characters as c WHERE c.id = b.buddyid AND c.deletedAt is null AND b.characterid = ?")) {
             ps.setInt(1, characterId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -124,7 +122,7 @@ public class BuddyList {
         buddy.setJob(chr.getJob());
         buddy.setSubJob(chr.getSubcategory());
         put(buddy.getEntry());
-        c.write(CWvsContext.buddylistMessage(buddy));
+        c.SendPacket(CWvsContext.buddylistMessage(buddy));
     }
 
     public void setChanged(boolean v) {

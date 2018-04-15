@@ -37,9 +37,9 @@ public class PlayerRandomStream {
 
         CRand32__Seed(v5, s2, v6);
 
-        oPacket.EncodeInteger((int) v5);
-        oPacket.EncodeInteger((int) s2);
-        oPacket.EncodeInteger((int) v6);
+        oPacket.EncodeInt((int) v5);
+        oPacket.EncodeInt((int) s2);
+        oPacket.EncodeInt((int) v6);
     }
 
     public long Random() {

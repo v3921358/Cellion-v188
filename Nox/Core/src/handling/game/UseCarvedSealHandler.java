@@ -15,7 +15,7 @@ import server.Randomizer;
 import server.potentials.ItemPotentialProvider;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -31,7 +31,7 @@ public class UseCarvedSealHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         //iPacket: [90 64 C8 14] [04 00] [0F 00]
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         final Item toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(iPacket.DecodeShort());
         final Equip itemEq = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(iPacket.DecodeShort());
 
@@ -40,7 +40,7 @@ public class UseCarvedSealHandler implements ProcessPacket<MapleClient> {
         if (toUse == null || itemEq == null
                 || toUse.getItemId() / 100 != 20495
                 || !ii.getEquipStats(toUse.getItemId()).containsKey("success")) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
 
@@ -55,7 +55,7 @@ public class UseCarvedSealHandler implements ProcessPacket<MapleClient> {
 
                 List<ModifyInventory> modifications = new ArrayList<>();
                 modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, itemEq));
-                c.write(CWvsContext.inventoryOperation(true, modifications));
+                c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
 
                 c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), true, toUse.getItemId()));
             }
@@ -68,7 +68,7 @@ public class UseCarvedSealHandler implements ProcessPacket<MapleClient> {
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, toUse.getPosition(), (short) 1, false);
         }
 
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 
 }

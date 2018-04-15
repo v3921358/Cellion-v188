@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.InPacket;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.maps.objects.User;
 import tools.packet.CWvsContext;
 
@@ -25,7 +25,7 @@ public class StealSkillListHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final int NoTarget = 0, NotAdventurer = 1, NoSkill = 2, Unknown = 3, Success = 4;
-        int dwCharacterID = iPacket.DecodeInteger();
+        int dwCharacterID = iPacket.DecodeInt();
         User pUser = c.getChannelServer().getPlayerStorage().getCharacterById(dwCharacterID);
         int nPhantomStealResult = Success;
         int nJob = 0;
@@ -42,12 +42,12 @@ public class StealSkillListHandler implements ProcessPacket<MapleClient> {
                     aSkill.add(sk.getId());
                 }
             }
-            if(aSkill.isEmpty()) {
+            if (aSkill.isEmpty()) {
                 nPhantomStealResult = NoSkill;
             }
         } else {
             nPhantomStealResult = NoTarget;
         }
-        c.write(CWvsContext.OnResultStealSkillList(1, dwCharacterID, nPhantomStealResult, nJob, aSkill));
+        c.SendPacket(CWvsContext.OnResultStealSkillList(1, dwCharacterID, nPhantomStealResult, nJob, aSkill));
     }
 }

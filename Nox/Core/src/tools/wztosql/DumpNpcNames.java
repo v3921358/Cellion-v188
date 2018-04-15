@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import database.DatabaseConnection;
+import database.Database;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataTool;
@@ -19,7 +19,6 @@ import tools.StringUtil;
  */
 public class DumpNpcNames {
 
-    private final Connection con = DatabaseConnection.getConnection();
     private static final Map<Integer, String> npcNames = new HashMap<>();
 
     public static void main(String[] args) throws SQLException {
@@ -33,7 +32,7 @@ public class DumpNpcNames {
         MapleDataProvider npcData = WzDataStorage.getNPCWz();
         MapleDataProvider stringDataWZ = WzDataStorage.getStringWZ();
         MapleData npcStringData = stringDataWZ.getData("Npc.img");
-        try (PreparedStatement ps = con.prepareStatement("DELETE FROM `wz_npcnamedata`")) {
+        try (PreparedStatement ps = Database.GetConnection().prepareStatement("DELETE FROM `wz_npcnamedata`")) {
             ps.execute();
         }
         for (MapleData c : npcStringData) {
@@ -53,7 +52,7 @@ public class DumpNpcNames {
         }
         for (int key : npcNames.keySet()) {
             try {
-                try (PreparedStatement ps = con.prepareStatement(
+                try (PreparedStatement ps = Database.GetConnection().prepareStatement(
                         "INSERT INTO `wz_npcnamedata` (`npc`, `name`) VALUES (?, ?)")) {
                     ps.setInt(1, key);
                     ps.setString(2, npcNames.get(key));

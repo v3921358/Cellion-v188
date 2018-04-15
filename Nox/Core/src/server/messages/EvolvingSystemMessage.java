@@ -21,9 +21,9 @@ public class EvolvingSystemMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.EvolvingSystem.getType());
-        oPacket.Encode(unk);
-        oPacket.Encode(type);
+        oPacket.EncodeByte(_MessageOpcodesType.EvolvingSystem.getType());
+        oPacket.EncodeByte(unk);
+        oPacket.EncodeByte(type);
     }
 
 }

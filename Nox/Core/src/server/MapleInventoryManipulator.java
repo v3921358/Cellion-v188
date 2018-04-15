@@ -58,7 +58,7 @@ public class MapleInventoryManipulator {
             return;
         }
         chr.getCashInventory().addToInventory(ring);
-        chr.getClient().write(CSPacket.sendBoughtRings(GameConstants.isCrushRing(itemId), ring, sn, chr.getClient().getAccID(), partner));
+        chr.getClient().SendPacket(CSPacket.sendBoughtRings(GameConstants.isCrushRing(itemId), ring, sn, chr.getClient().getAccID(), partner));
     }
 
     public static boolean addbyItem(final MapleClient c, final Item item) {
@@ -70,7 +70,7 @@ public class MapleInventoryManipulator {
         final short newSlot = c.getPlayer().getInventory(type).addItem(item);
         if (newSlot == -1) {
             if (!fromcs) {
-                c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
             }
             return newSlot;
         }
@@ -80,7 +80,7 @@ public class MapleInventoryManipulator {
 
         List<ModifyInventory> mod = new ArrayList<>();
         mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-        c.write(CWvsContext.inventoryOperation(true, mod));
+        c.SendPacket(CWvsContext.inventoryOperation(true, mod));
 
         c.getPlayer().havePartyQuest(item.getItemId());
         return newSlot;
@@ -123,7 +123,7 @@ public class MapleInventoryManipulator {
     public static byte addId(MapleClient c, int itemId, short quantity, String owner, Pet pet, long period, boolean hours, String gmLog) {
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if (ii.isPickupRestricted(itemId) && c.getPlayer().haveItem(itemId, 1, true, false) || !ii.itemExists(itemId)) {
-            c.write(CWvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));
+            c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));
             return -1;
         }
         final MapleInventoryType type = GameConstants.getInventoryType(itemId);
@@ -142,7 +142,7 @@ public class MapleInventoryManipulator {
 
                         List<ModifyInventory> mod = new ArrayList<>();
                         mod.add(new ModifyInventory(ModifyInventoryOperation.UpdateQuantity, eItem));
-                        c.write(CWvsContext.inventoryOperation(true, mod));
+                        c.SendPacket(CWvsContext.inventoryOperation(true, mod));
                     }
                 }
                 Item nItem; // add new slots if there is still something left
@@ -153,7 +153,7 @@ public class MapleInventoryManipulator {
                         nItem = new Item(itemId, (byte) 0, newQ, (byte) 0, uniqueid);
                         newSlot = c.getPlayer().getInventory(type).addItem(nItem);
                         if (newSlot == -1) {
-                            c.write(CWvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));
+                            c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));
                             return -1;
                         }
                         if (gmLog != null) {
@@ -172,13 +172,13 @@ public class MapleInventoryManipulator {
                         }
                         List<ModifyInventory> mod = new ArrayList<>();
                         mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, nItem));
-                        c.write(CWvsContext.inventoryOperation(true, mod));
+                        c.SendPacket(CWvsContext.inventoryOperation(true, mod));
                         if (GameConstants.isRechargable(itemId) && quantity == 0) {
                             break;
                         }
                     } else {
                         c.getPlayer().havePartyQuest(itemId);
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                         return (byte) newSlot;
                     }
                 }
@@ -188,7 +188,7 @@ public class MapleInventoryManipulator {
                 newSlot = c.getPlayer().getInventory(type).addItem(nItem);
 
                 if (newSlot == -1) {
-                    c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                    c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
                     return -1;
                 }
                 if (period > 0) {
@@ -199,7 +199,7 @@ public class MapleInventoryManipulator {
                 }
                 List<ModifyInventory> mod = new ArrayList<>();
                 mod.add(new ModifyInventory(ModifyInventoryOperation.UpdateQuantity, nItem));
-                c.write(CWvsContext.inventoryOperation(true, mod));
+                c.SendPacket(CWvsContext.inventoryOperation(true, mod));
             }
         } else {
             if (quantity == 1) {
@@ -215,12 +215,12 @@ public class MapleInventoryManipulator {
                 }
                 newSlot = c.getPlayer().getInventory(type).addItem(nEquip);
                 if (newSlot == -1) {
-                    c.write(CWvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));
+                    c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));
                     return -1;
                 }
                 List<ModifyInventory> mod = new ArrayList<>();
                 mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, nEquip));
-                c.write(CWvsContext.inventoryOperation(true, mod));
+                c.SendPacket(CWvsContext.inventoryOperation(true, mod));
                 if (GameConstants.isHarvesting(itemId)) {
                     c.getPlayer().getStat().handleProfessionTool(c.getPlayer());
                 }
@@ -238,7 +238,7 @@ public class MapleInventoryManipulator {
         }
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if ((ii.isPickupRestricted(itemId) && c.getPlayer().haveItem(itemId, 1, true, false)) || (!ii.itemExists(itemId))) {
-            c.write(CWvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));
+            c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));
             return null;
         }
         final MapleInventoryType type = GameConstants.getInventoryType(itemId);
@@ -266,7 +266,7 @@ public class MapleInventoryManipulator {
                                 nItem.setQuantity(newQ);
                                 List<ModifyInventory> mod = new ArrayList<>();
                                 mod.add(new ModifyInventory(ModifyInventoryOperation.UpdateQuantity, nItem));
-                                c.write(CWvsContext.inventoryOperation(true, mod));
+                                c.SendPacket(CWvsContext.inventoryOperation(true, mod));
                             }
                         } else {
                             break;
@@ -289,7 +289,7 @@ public class MapleInventoryManipulator {
 
                         List<ModifyInventory> mod = new ArrayList<>();
                         mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, nItem));
-                        c.write(CWvsContext.inventoryOperation(true, mod));
+                        c.SendPacket(CWvsContext.inventoryOperation(true, mod));
                         if (GameConstants.isRechargable(itemId) && quantity == 0) {
                             break;
                         }
@@ -311,7 +311,7 @@ public class MapleInventoryManipulator {
                 }
                 List<ModifyInventory> mod = new ArrayList<>();
                 mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, nItem));
-                c.write(CWvsContext.inventoryOperation(true, mod));
+                c.SendPacket(CWvsContext.inventoryOperation(true, mod));
                 c.getPlayer().havePartyQuest(nItem.getItemId());
                 return nItem;
             }
@@ -325,7 +325,7 @@ public class MapleInventoryManipulator {
                 }
                 List<ModifyInventory> mod = new ArrayList<>();
                 mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                c.write(CWvsContext.inventoryOperation(true, mod));
+                c.SendPacket(CWvsContext.inventoryOperation(true, mod));
                 c.getPlayer().havePartyQuest(item.getItemId());
                 return item;
             } else {
@@ -360,7 +360,7 @@ public class MapleInventoryManipulator {
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
 
         if (c.getPlayer() == null || (ii.isPickupRestricted(item.getItemId()) && c.getPlayer().haveItem(item.getItemId(), 1, true, false)) || (!ii.itemExists(item.getItemId()))) {
-            c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+            c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
             return false;
         }
         short quantity = item.getQuantity();
@@ -371,7 +371,7 @@ public class MapleInventoryManipulator {
             final List<Item> existing = c.getPlayer().getInventory(type).listById(item.getItemId());
             if (!GameConstants.isRechargable(item.getItemId())) {
                 if (quantity < 1) { //wth
-                    c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                    c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
                     return false;
                 }
                 if (existing.size() > 0) { // first update all existing slots to slotMax
@@ -387,7 +387,7 @@ public class MapleInventoryManipulator {
 
                                 List<ModifyInventory> mod = new ArrayList<>();
                                 mod.add(new ModifyInventory(ModifyInventoryOperation.UpdateQuantity, eItem));
-                                c.write(CWvsContext.inventoryOperation(true, mod));
+                                c.SendPacket(CWvsContext.inventoryOperation(true, mod));
                             }
                         } else {
                             break;
@@ -405,13 +405,13 @@ public class MapleInventoryManipulator {
                     nItem.setGMLog(item.getGMLog());
                     short newSlot = c.getPlayer().getInventory(type).addItem(nItem);
                     if (newSlot == -1) {
-                        c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                        c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
                         item.setQuantity((short) (quantity + newQ));
                         return false;
                     }
                     List<ModifyInventory> mod = new ArrayList<>();
                     mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, nItem));
-                    c.write(CWvsContext.inventoryOperation(true, mod));
+                    c.SendPacket(CWvsContext.inventoryOperation(true, mod));
                 }
             } else {
                 // Throwing Stars and Bullets - Add all into one slot regardless of quantity.
@@ -422,13 +422,13 @@ public class MapleInventoryManipulator {
                 nItem.setGMLog(item.getGMLog());
                 final short newSlot = c.getPlayer().getInventory(type).addItem(nItem);
                 if (newSlot == -1) {
-                    c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                    c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
                     return false;
                 }
 
                 List<ModifyInventory> mod = new ArrayList<>();
                 mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, nItem));
-                c.write(CWvsContext.inventoryOperation(true, mod));
+                c.SendPacket(CWvsContext.inventoryOperation(true, mod));
             }
         } else {
             if (quantity == 1) {
@@ -440,12 +440,12 @@ public class MapleInventoryManipulator {
 
                 final short newSlot = c.getPlayer().getInventory(type).addItem(item);
                 if (newSlot == -1) {
-                    c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                    c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
                     return false;
                 }
                 List<ModifyInventory> mod = new ArrayList<>();
                 mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                c.write(CWvsContext.inventoryOperation(true, mod));
+                c.SendPacket(CWvsContext.inventoryOperation(true, mod));
                 if (GameConstants.isHarvesting(item.getItemId())) {
                     c.getPlayer().getStat().handleProfessionTool(c.getPlayer());
                 }
@@ -456,7 +456,7 @@ public class MapleInventoryManipulator {
 
         c.getPlayer().havePartyQuest(item.getItemId());
         if (show) {
-            c.write(InfoPacket.getShowItemGain(item.getItemId(), item.getQuantity()));
+            c.SendPacket(InfoPacket.getShowItemGain(item.getItemId(), item.getQuantity()));
         }
         return true;
     }
@@ -464,7 +464,7 @@ public class MapleInventoryManipulator {
     public static boolean checkSpace(final MapleClient c, final int itemid, int quantity, final String owner) {
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if (c == null || c.getPlayer() == null || (ii.isPickupRestricted(itemid) && c.getPlayer().haveItem(itemid, 1, true, false)) || (!ii.itemExists(itemid))) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return false;
         }
         if (quantity <= 0 && !GameConstants.isRechargable(itemid)) {
@@ -523,10 +523,10 @@ public class MapleInventoryManipulator {
             List<ModifyInventory> mod = new ArrayList<>();
             if (item.getQuantity() == 0 && !allowZero) {
                 mod.add(new ModifyInventory(ModifyInventoryOperation.Remove, item));
-                c.write(CWvsContext.inventoryOperation(true, mod));
+                c.SendPacket(CWvsContext.inventoryOperation(true, mod));
             } else {
                 mod.add(new ModifyInventory(ModifyInventoryOperation.UpdateQuantity, item));
-                c.write(CWvsContext.inventoryOperation(true, mod));
+                c.SendPacket(CWvsContext.inventoryOperation(true, mod));
             }
             return true;
         }
@@ -593,7 +593,7 @@ public class MapleInventoryManipulator {
                     final MapleStatEffect ee = ii.getItemEffect(eSlot);
                     if (dst % 100 > ee.getSlotCount() || ee.getType() != ii.getBagType(source.getItemId()) || ee.getType() <= 0) {
                         c.getPlayer().dropMessage(1, "You may not move that item to the bag.");
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                         return;
                     } else {
                         eqIndicator = 0;
@@ -601,12 +601,12 @@ public class MapleInventoryManipulator {
                     }
                 } else {
                     c.getPlayer().dropMessage(1, "You may not move it to that bag.");
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                     return;
                 }
             } else {
                 c.getPlayer().dropMessage(1, "You may not move it there.");
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
         }
@@ -651,12 +651,14 @@ public class MapleInventoryManipulator {
             mod.add(new ModifyInventory(ModifyInventoryOperation.Move, source, src));
         }
 
-        c.write(CWvsContext.inventoryOperation(true, mod));
+        c.SendPacket(CWvsContext.inventoryOperation(true, mod));
     }
 
     public static void equip(final MapleClient c, final short src, short dst) {
         final User chr = c.getPlayer();
-        if (chr.isDeveloper()) chr.dropMessage(5, "[Equip Debug] Slot Type : " + dst);
+        if (chr.isDeveloper()) {
+            chr.dropMessage(5, "[Equip Debug] Slot Type : " + dst);
+        }
         if (chr == null || dst == EquipSlotType.MonsterBook.getSlot()) {
             return;
         }
@@ -666,7 +668,7 @@ public class MapleInventoryManipulator {
         final Equip target = (Equip) chr.getInventory(MapleInventoryType.EQUIPPED).getItem(dst); // Currently equipping
 
         if (source == null || source.getDurability() == 0 || GameConstants.isHarvesting(source.getItemId())) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
 
@@ -676,7 +678,7 @@ public class MapleInventoryManipulator {
         if (stats == null
                 || !ii.canEquip(stats, source.getItemId(), chr.getLevel(), chr.getJob(), chr.getFame(), statst.getTotalStr(), statst.getTotalDex(), statst.getTotalLuk(), statst.getTotalInt(), c.getPlayer().getStat().levelBonus, source.getReqLevel())) {
 
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         // Equipment slot check
@@ -777,7 +779,7 @@ public class MapleInventoryManipulator {
 
         source.setPosition(dst);
         mod.add(new ModifyInventory(ModifyInventoryOperation.Move, source, src));
-        c.write(CWvsContext.inventoryOperation(true, mod));
+        c.SendPacket(CWvsContext.inventoryOperation(true, mod));
         chr.equipChanged(); // this code also update the character's stats
     }
 
@@ -840,7 +842,7 @@ public class MapleInventoryManipulator {
         }
 
         mod.add(new ModifyInventory(ModifyInventoryOperation.Move, source, src));
-        c.write(CWvsContext.inventoryOperation(true, mod));
+        c.SendPacket(CWvsContext.inventoryOperation(true, mod));
         c.getPlayer().equipChanged();
     }
 
@@ -876,17 +878,17 @@ public class MapleInventoryManipulator {
         }
         final Item source = c.getPlayer().getInventory(type).getItem(src);
         if (quantity < 0 || source == null || src == -55 || (!npcInduced && InventoryConstants.isPet(source.getItemId())) || (quantity == 0 && !GameConstants.isRechargable(source.getItemId())) || c.getPlayer().inPVP()) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return false;
         }
 
         final short flag = source.getFlag();
         if (quantity > source.getQuantity() && !GameConstants.isRechargable(source.getItemId())) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return false;
         }
         if (ItemFlag.LOCK.check(flag) || (quantity != 1 && type == MapleInventoryType.EQUIP)) { // hack
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return false;
         }
         final Point dropPos = new Point(c.getPlayer().getPosition());
@@ -898,7 +900,7 @@ public class MapleInventoryManipulator {
 
             List<ModifyInventory> mod = new ArrayList<>();
             mod.add(new ModifyInventory(ModifyInventoryOperation.UpdateQuantity, source));
-            c.write(CWvsContext.inventoryOperation(true, mod));
+            c.SendPacket(CWvsContext.inventoryOperation(true, mod));
 
             if (ii.isDropRestricted(target.getItemId()) || ii.isAccountShared(target.getItemId())) {
                 if (ItemFlag.KARMA_EQ.check(flag)) {
@@ -926,7 +928,7 @@ public class MapleInventoryManipulator {
             }
             List<ModifyInventory> mod = new ArrayList<>();
             mod.add(new ModifyInventory(ModifyInventoryOperation.Remove, source));
-            c.write(CWvsContext.inventoryOperation(true, mod));
+            c.SendPacket(CWvsContext.inventoryOperation(true, mod));
             if (src < 0) {
                 c.getPlayer().equipChanged();
             }

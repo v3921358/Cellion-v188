@@ -7,7 +7,7 @@ import net.InPacket;
 import server.maps.objects.User;
 import server.maps.objects.Summon;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -24,8 +24,8 @@ public class SummonsDamageHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         iPacket.Skip(4);
         final int unkByte = iPacket.DecodeByte();
-        final int damage = iPacket.DecodeInteger();
-        final int monsterIdFrom = iPacket.DecodeInteger();
+        final int damage = iPacket.DecodeInt();
+        final int monsterIdFrom = iPacket.DecodeInt();
         //       iPacket.decodeByte(); // stance
 
         User chr = c.getPlayer();

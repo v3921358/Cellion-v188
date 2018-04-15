@@ -9,8 +9,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import database.DatabaseConnection;
+import database.Database;
 import handling.world.ExpeditionType;
+import java.sql.Connection;
+import tools.LogHelper;
 import tools.Pair;
 import tools.StringUtil;
 import tools.Triple;
@@ -45,12 +47,13 @@ public class SpeedRunner {
     }
 
     public final static void loadSpeedRunData(ExpeditionType type) {
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             StringBuilder ret; //or should we do less
             Map<Integer, String> rett;
             boolean changed;
             long tmp;
-            try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT * FROM speedruns WHERE type = ? ORDER BY time LIMIT 25")) {
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM speedruns WHERE type = ? ORDER BY time LIMIT 25")) {
                 ps.setString(1, type.name());
                 ret = new StringBuilder(getPreamble(type));
                 rett = new LinkedHashMap<>();
@@ -75,6 +78,7 @@ public class SpeedRunner {
                 speedRunData.put(type, new Triple<>(ret.toString(), rett, tmp));
             }
         } catch (SQLException e) {
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
     }
 

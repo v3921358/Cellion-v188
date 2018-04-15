@@ -20,7 +20,7 @@ import tools.LogHelper;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.MiracleCubePacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -37,13 +37,13 @@ public class UseCraftedCubeHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
 
-        chr.updateTick(iPacket.DecodeInteger());
+        chr.updateTick(iPacket.DecodeInt());
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(iPacket.DecodeShort());
         final Equip item = (Equip) chr.getInventory(MapleInventoryType.EQUIP).getItem(iPacket.DecodeShort());
 
         if (toUse == null || item == null
                 || toUse.getItemId() / 10000 != 271 || toUse.getQuantity() <= 0) {
-            c.write(CField.enchantResult(0));
+            c.SendPacket(CField.enchantResult(0));
             return;
         }
 
@@ -83,7 +83,7 @@ public class UseCraftedCubeHandler implements ProcessPacket<MapleClient> {
                 maxTier = ItemPotentialTierType.Epic;
                 break;
             default: {
-                c.write(CField.enchantResult(0));
+                c.SendPacket(CField.enchantResult(0));
                 throw new RuntimeException(String.format("New crafted cube detected. Itemid: %d, Character: %d [%s], AccountID: %d", toUse.getItemId(), c.getPlayer().getId(), c.getPlayer().getName(), c.getAccID()));
             }
         }
@@ -94,7 +94,7 @@ public class UseCraftedCubeHandler implements ProcessPacket<MapleClient> {
             LogHelper.PACKET_EDIT_HACK.get().info(
                     String.format("[UseCraftedCubeHandler] %s [ChrID: %d; AccId %d] has tried to use a crafted cube on an item beyond the level requirement. EquipmentID = %d, CubeID = %d", chr.getName(), chr.getId(), c.getAccID(), item.getItemId(), toUse.getItemId())
             );
-            c.close();
+            c.Close();
             return;
         }
         ItemPotentialTierType lastTierBeforeCube = item.getPotentialTier();
@@ -109,7 +109,7 @@ public class UseCraftedCubeHandler implements ProcessPacket<MapleClient> {
                             lastTierBeforeCube.toString(),
                             item.getItemId(), toUse.getItemId())
             );
-            c.close();
+            c.Close();
             return;
         }
 
@@ -120,16 +120,16 @@ public class UseCraftedCubeHandler implements ProcessPacket<MapleClient> {
             // Update inventory equipment 
             List<ModifyInventory> modifications = new ArrayList<>();
             modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-            c.write(CWvsContext.inventoryOperation(true, modifications));
+            c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
 
-            c.write(MiracleCubePacket.onInGameCubeResult(chr.getId(), lastTierBeforeCube != item.getPotentialTier(), item.getPosition(), toUse.getItemId(), item));
+            c.SendPacket(MiracleCubePacket.onInGameCubeResult(chr.getId(), lastTierBeforeCube != item.getPotentialTier(), item.getPosition(), toUse.getItemId(), item));
         } else {
             chr.dropMessage(5, "This item's Potential cannot be reset.");
         }
 
         // Show to map
         chr.getMap().broadcastMessage(CField.showPotentialReset(chr.getId(), renewedPotential, item.getItemId()));
-        c.write(CField.enchantResult(renewedPotential ? 0 : 0));
+        c.SendPacket(CField.enchantResult(renewedPotential ? 0 : 0));
     }
 
 }

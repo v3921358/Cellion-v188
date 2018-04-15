@@ -75,8 +75,8 @@ LABEL_7:
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.WeddingPortal.getType());
-        oPacket.Encode(type);
+        oPacket.EncodeByte(_MessageOpcodesType.WeddingPortal.getType());
+        oPacket.EncodeByte(type);
     }
 
 }

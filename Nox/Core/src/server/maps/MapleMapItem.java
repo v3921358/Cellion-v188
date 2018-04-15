@@ -137,13 +137,13 @@ public class MapleMapItem extends MapleMapObject {
     @Override
     public void sendSpawnData(final MapleClient client) {
         if (questid <= 0 || client.getPlayer().getQuestStatus(questid) == MapleQuestState.Started) {
-            client.write(CField.dropItemFromMapObject(this, null, getTruePosition(), (byte) 2));
+            client.SendPacket(CField.dropItemFromMapObject(this, null, getTruePosition(), (byte) 2));
         }
     }
 
     @Override
     public void sendDestroyData(final MapleClient client) {
-        client.write(CField.removeItemFromMap(getObjectId(), 1, 0));
+        client.SendPacket(CField.removeItemFromMap(getObjectId(), 1, 0));
     }
 
     public Lock getLock() {

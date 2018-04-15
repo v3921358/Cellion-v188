@@ -18,7 +18,7 @@ import client.inventory.MapleInventoryType;
 import client.inventory.MapleRing;
 import constants.GameConstants;
 import constants.InventoryConstants;
-import database.DatabaseConnection;
+import database.Database;
 import server.maps.objects.Pet;
 import tools.Pair;
 import tools.packet.CSPacket;
@@ -31,10 +31,10 @@ public class CashShop implements Serializable {
     private final List<Item> inventory = new ArrayList<>();
     private final List<Integer> uniqueids = new ArrayList<>();
 
-    public CashShop(int accountId, int characterId, int jobType) throws SQLException {
+    public CashShop(int accountId, int characterId, int jobType, Connection con) throws SQLException {
         this.accountId = accountId;
         this.characterId = characterId;
-        for (Pair<Item, MapleInventoryType> item : factory.loadItems(false, accountId).values()) {
+        for (Pair<Item, MapleInventoryType> item : factory.loadItems(false, accountId, con).values()) {
             inventory.add(item.getLeft());
         }
     }
@@ -67,7 +67,7 @@ public class CashShop implements Serializable {
         if (toberemove.size() > 0) {
             for (Item item : toberemove) {
                 removeFromInventory(item);
-                c.write(CSPacket.cashItemExpired(item.getUniqueId()));
+                c.SendPacket(CSPacket.cashItemExpired(item.getUniqueId()));
             }
             toberemove.clear();
         }
@@ -190,8 +190,9 @@ public class CashShop implements Serializable {
     }
 
     public void gift(int recipient, String from, String message, int sn, int uniqueid) {
-        try {
-            try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("INSERT INTO `gifts` VALUES (DEFAULT, ?, ?, ?, ?, ?)")) {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            try (PreparedStatement ps = con.prepareStatement("INSERT INTO `gifts` VALUES (DEFAULT, ?, ?, ?, ?, ?)")) {
                 ps.setInt(1, recipient);
                 ps.setString(2, from);
                 ps.setString(3, message);
@@ -200,13 +201,14 @@ public class CashShop implements Serializable {
                 ps.executeUpdate();
             }
         } catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
     }
 
     public List<Pair<Item, String>> loadGifts() {
         List<Pair<Item, String>> gifts = new ArrayList<>();
-        Connection con = DatabaseConnection.getConnection();
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             PreparedStatement ps = con.prepareStatement("SELECT * FROM `gifts` WHERE `recipient` = ?");
             ps.setInt(1, characterId);
             ResultSet rs = ps.executeQuery();
@@ -238,8 +240,9 @@ public class CashShop implements Serializable {
             ps.setInt(1, characterId);
             ps.executeUpdate();
             ps.close();
-            save();
+            save(con);
         } catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
         return gifts;
     }
@@ -256,13 +259,13 @@ public class CashShop implements Serializable {
         }
     }
 
-    public void save() throws SQLException {
+    public void save(Connection con) {
         List<Pair<Item, MapleInventoryType>> itemsWithType = new ArrayList<>();
 
         for (Item item : inventory) {
             itemsWithType.add(new Pair<>(item, GameConstants.getInventoryType(item.getItemId())));
         }
 
-        factory.saveItems(itemsWithType, accountId);
+        factory.saveItems(itemsWithType, accountId, con);
     }
 }

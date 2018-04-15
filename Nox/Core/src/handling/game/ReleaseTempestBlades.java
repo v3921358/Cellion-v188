@@ -11,7 +11,7 @@ import handling.world.PlayerHandler;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import client.CharacterTemporaryStat;
 import server.MapleStatEffect;
 import java.util.ArrayList;
@@ -34,13 +34,13 @@ public final class ReleaseTempestBlades implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (!chr.isAlive()) {
-            chr.getClient().write(CWvsContext.enableActions());
+            chr.getClient().SendPacket(CWvsContext.enableActions());
             return;
         }
-        final int mobcount = iPacket.DecodeInteger();
+        final int mobcount = iPacket.DecodeInt();
         final List<Integer> oids = new ArrayList<>();
         for (int i = 0; i < mobcount; i++) {
-            oids.add(iPacket.DecodeInteger());
+            oids.add(iPacket.DecodeInt());
         }
         int skillid = chr.getBuffSource(CharacterTemporaryStat.StopForceAtomInfo);
 

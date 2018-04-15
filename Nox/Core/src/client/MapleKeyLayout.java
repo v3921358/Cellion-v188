@@ -1,7 +1,7 @@
 package client;
 
 import constants.GameConstants;
-import database.DatabaseConnection;
+import database.Database;
 import net.OutPacket;
 import tools.Pair;
 
@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import tools.LogHelper;
 
 public class MapleKeyLayout implements Serializable {
 
@@ -66,7 +67,7 @@ public class MapleKeyLayout implements Serializable {
     }
 
     public final void writeData(final OutPacket oPacket, int jobid) {
-        oPacket.Encode(keymap.isEmpty() ? 1 : 0);
+        oPacket.EncodeByte(keymap.isEmpty() ? 1 : 0);
         if (keymap.isEmpty()) {
             return;
         }
@@ -75,52 +76,52 @@ public class MapleKeyLayout implements Serializable {
             for (int x = 0; x < 89; x++) { // Animal 1
                 binding = keymap.get(x);
                 if (binding != null) {
-                    oPacket.Encode(binding.getLeft());
-                    oPacket.EncodeInteger(binding.getRight());
+                    oPacket.EncodeByte(binding.getLeft());
+                    oPacket.EncodeInt(binding.getRight());
                 } else {
-                    oPacket.Encode(0);
-                    oPacket.EncodeInteger(0);
+                    oPacket.EncodeByte(0);
+                    oPacket.EncodeInt(0);
                 }
             }
             for (int x = 0; x < 89; x++) { // Animal 2
                 binding = keymap.get(x);
                 if (binding != null) {
-                    oPacket.Encode(binding.getLeft());
-                    oPacket.EncodeInteger(binding.getRight());
+                    oPacket.EncodeByte(binding.getLeft());
+                    oPacket.EncodeInt(binding.getRight());
                 } else {
-                    oPacket.Encode(0);
-                    oPacket.EncodeInteger(0);
+                    oPacket.EncodeByte(0);
+                    oPacket.EncodeInt(0);
                 }
             }
             for (int x = 0; x < 89; x++) { // Animal 3
                 binding = keymap.get(x);
                 if (binding != null) {
-                    oPacket.Encode(binding.getLeft());
-                    oPacket.EncodeInteger(binding.getRight());
+                    oPacket.EncodeByte(binding.getLeft());
+                    oPacket.EncodeInt(binding.getRight());
                 } else {
-                    oPacket.Encode(0);
-                    oPacket.EncodeInteger(0);
+                    oPacket.EncodeByte(0);
+                    oPacket.EncodeInt(0);
                 }
             }
             for (int x = 0; x < 89; x++) { // Animal 4
                 binding = keymap.get(x);
                 if (binding != null) {
-                    oPacket.Encode(binding.getLeft());
-                    oPacket.EncodeInteger(binding.getRight());
+                    oPacket.EncodeByte(binding.getLeft());
+                    oPacket.EncodeInt(binding.getRight());
                 } else {
-                    oPacket.Encode(0);
-                    oPacket.EncodeInteger(0);
+                    oPacket.EncodeByte(0);
+                    oPacket.EncodeInt(0);
                 }
             }
         }
         for (int x = 0; x < 89; x++) { // Normal
             binding = keymap.get(x);
             if (binding != null) {
-                oPacket.Encode(binding.getLeft());
-                oPacket.EncodeInteger(binding.getRight());
+                oPacket.EncodeByte(binding.getLeft());
+                oPacket.EncodeInt(binding.getRight());
             } else {
-                oPacket.Encode(0);
-                oPacket.EncodeInteger(0);
+                oPacket.EncodeByte(0);
+                oPacket.EncodeInt(0);
             }
         }
     }
@@ -129,33 +130,37 @@ public class MapleKeyLayout implements Serializable {
         if (!changed) {
             return;
         }
-        Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
 
-        try (PreparedStatement ps = con.prepareStatement("DELETE FROM keymap WHERE characterid = ?")) {
-            ps.setInt(1, charid);
-            ps.execute();
-        }
-        if (keymap.isEmpty()) {
-            return;
-        }
-        boolean first = true;
-        StringBuilder query = new StringBuilder();
-
-        for (Entry<Integer, Pair<Byte, Integer>> keybinding : keymap.entrySet()) {
-            if (first) {
-                first = false;
-                query.append("INSERT INTO keymap VALUES (");
-            } else {
-                query.append(",(");
+            try (PreparedStatement ps = con.prepareStatement("DELETE FROM keymap WHERE characterid = ?")) {
+                ps.setInt(1, charid);
+                ps.execute();
             }
-            query.append("DEFAULT,");
-            query.append(charid).append(",");
-            query.append(keybinding.getKey().intValue()).append(",");
-            query.append(keybinding.getValue().getLeft().byteValue()).append(",");
-            query.append(keybinding.getValue().getRight().intValue()).append(")");
-        }
-        try (PreparedStatement ps2 = con.prepareStatement(query.toString())) {
-            ps2.execute();
+            if (keymap.isEmpty()) {
+                return;
+            }
+            boolean first = true;
+            StringBuilder query = new StringBuilder();
+
+            for (Entry<Integer, Pair<Byte, Integer>> keybinding : keymap.entrySet()) {
+                if (first) {
+                    first = false;
+                    query.append("INSERT INTO keymap VALUES (");
+                } else {
+                    query.append(",(");
+                }
+                query.append("DEFAULT,");
+                query.append(charid).append(",");
+                query.append(keybinding.getKey().intValue()).append(",");
+                query.append(keybinding.getValue().getLeft().byteValue()).append(",");
+                query.append(keybinding.getValue().getRight().intValue()).append(")");
+            }
+            try (PreparedStatement ps2 = con.prepareStatement(query.toString())) {
+                ps2.execute();
+            }
+        } catch (SQLException ex) {
+            LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", ex);
         }
     }
 }

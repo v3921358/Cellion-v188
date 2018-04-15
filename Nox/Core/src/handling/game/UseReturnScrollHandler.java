@@ -10,7 +10,7 @@ import server.maps.FieldLimitType;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -28,16 +28,16 @@ public class UseReturnScrollHandler implements ProcessPacket<MapleClient> {
         User chr = c.getPlayer();
 
         if (!chr.isAlive() || chr.getMapId() == 749040100 || chr.hasBlockedInventory() || chr.isInBlockedMap() || chr.inPVP()) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         final byte slot = (byte) iPacket.DecodeShort();
-        final int itemId = iPacket.DecodeInteger();
+        final int itemId = iPacket.DecodeInt();
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
 
         if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         if ((itemId == ItemConstants.RETURN_SCROLL_NEAREST_TOWN && !FieldLimitType.UnableToUsePortalScroll.check(chr.getMap()))
@@ -45,10 +45,10 @@ public class UseReturnScrollHandler implements ProcessPacket<MapleClient> {
             if (MapleItemInformationProvider.getInstance().getItemEffect(toUse.getItemId()).applyReturnScroll(chr)) {
                 MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
             } else {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
             }
         } else {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
         }
     }
 

@@ -6,7 +6,7 @@ import constants.GameConstants;
 import net.InPacket;
 import server.MapleInventoryManipulator;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import tools.LogHelper;
 
 public final class OnUserRewardClaimRequest implements ProcessPacket<MapleClient> {
@@ -18,36 +18,36 @@ public final class OnUserRewardClaimRequest implements ProcessPacket<MapleClient
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int id = iPacket.DecodeInteger();
-        int type = iPacket.DecodeInteger();
-        int itemId = iPacket.DecodeInteger();
-        iPacket.DecodeInteger(); //might be item quantity
-        iPacket.DecodeInteger(); //no idea
+        int id = iPacket.DecodeInt();
+        int type = iPacket.DecodeInt();
+        int itemId = iPacket.DecodeInt();
+        iPacket.DecodeInt(); //might be item quantity
+        iPacket.DecodeInt(); //no idea
         iPacket.DecodeLong(); //no idea
-        iPacket.DecodeInteger(); //no idea
-        int mp = iPacket.DecodeInteger();
-        int meso = iPacket.DecodeInteger();
-        int exp = iPacket.DecodeInteger();
-        iPacket.DecodeInteger(); //no idea
-        iPacket.DecodeInteger(); //no idea
+        iPacket.DecodeInt(); //no idea
+        int mp = iPacket.DecodeInt();
+        int meso = iPacket.DecodeInt();
+        int exp = iPacket.DecodeInt();
+        iPacket.DecodeInt(); //no idea
+        iPacket.DecodeInt(); //no idea
         iPacket.DecodeString(); //no idea
         iPacket.DecodeString(); //no idea
         iPacket.DecodeString(); //no idea
         byte mode = iPacket.DecodeByte();
         if (mode == 2) { //Decline
             c.getPlayer().deleteReward(id);
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         } else if (mode == 1) { //Accept
             if (type < 0 || type > 5) {
                 LogHelper.ANTI_HACK.get().info("[Hacking Attempt] " + c.getPlayer().getName() + " has tried to receive reward with unavailable type.");
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             MapleReward reward = c.getPlayer().getReward(id);
             if (reward == null) {
-                c.write(CWvsContext.Reward.receiveReward(id, (byte) 0x15, 0));
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.Reward.receiveReward(id, (byte) 0x15, 0));
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             if (reward.getType() != type || reward.getItem() != itemId
@@ -55,7 +55,7 @@ public final class OnUserRewardClaimRequest implements ProcessPacket<MapleClient
                     || reward.getExp() != exp) {
 
                 LogHelper.ANTI_HACK.get().info("[Hacking Attempt] " + c.getPlayer().getName() + " has tried to exploit the reward receive.");
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             byte msg = 0x15;
@@ -107,7 +107,7 @@ public final class OnUserRewardClaimRequest implements ProcessPacket<MapleClient
                     System.out.println("New reward type found: " + type);
                     break;
             }
-            c.write(CWvsContext.Reward.receiveReward(id, msg, quantity));
+            c.SendPacket(CWvsContext.Reward.receiveReward(id, msg, quantity));
         }
         if (mode < 0 || mode > 2) {
             System.out.println("New reward mode found: " + mode);

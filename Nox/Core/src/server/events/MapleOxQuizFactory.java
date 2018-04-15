@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import database.DatabaseConnection;
+import database.Database;
 import server.Randomizer;
 import tools.Pair;
 
@@ -37,8 +37,8 @@ public class MapleOxQuizFactory {
     }
 
     private void initialize() {
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM wz_oxdata");
                     ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -46,6 +46,7 @@ public class MapleOxQuizFactory {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

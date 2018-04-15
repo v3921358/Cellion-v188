@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import database.DatabaseConnection;
+import database.Database;
 
 public class DropTool extends javax.swing.JFrame {
 
@@ -167,8 +167,7 @@ public class DropTool extends javax.swing.JFrame {
             int dropper = Integer.parseInt(this.jTextField4.getText());
             int chance = Integer.parseInt(this.jTextField5.getText());
 
-            Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("INSERT INTO drop_data (dropperid, itemid, minimum_quantity, maximum_quantity, chance) VALUES (?, ?, ?, ?, ?)")) {
+            try (PreparedStatement ps = Database.GetConnection().prepareStatement("INSERT INTO drop_data (dropperid, itemid, minimum_quantity, maximum_quantity, chance) VALUES (?, ?, ?, ?, ?)")) {
                 ps.setInt(1, dropper);
                 ps.setInt(2, itemId);
                 ps.setInt(3, minQ);
@@ -177,6 +176,7 @@ public class DropTool extends javax.swing.JFrame {
                 ps.executeQuery();
             }
         } catch (NumberFormatException | SQLException e) {
+            e.printStackTrace();
         }
 
     }

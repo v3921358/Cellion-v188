@@ -1,29 +1,20 @@
 package server.commands;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.HashMap;
 
 import client.MapleClient;
-import client.MapleQuestStatus;
 import client.MapleStat;
-import client.Skill;
-import client.SkillEntry;
-import client.SkillFactory;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
-import constants.skills.DanceMoves;
-import database.DatabaseConnection;
+import database.Database;
 import handling.world.World;
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import service.ChannelServer;
 import scripting.EventInstanceManager;
 import scripting.EventManager;
@@ -32,8 +23,6 @@ import scripting.provider.NPCChatType;
 import scripting.provider.NPCScriptManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.RankingWorker;
-import server.RankingWorker.RankingInformation;
 import server.life.MapleLifeFactory;
 import server.life.Mob;
 import server.maps.MapleMap;
@@ -41,15 +30,13 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.SavedLocationType;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
 import tools.LogHelper;
 import tools.StringUtil;
 import tools.packet.CField;
-import tools.packet.CField.NPCPacket;
 import tools.packet.CWvsContext;
 
 /*
- * REXION Player Commands
+ * Cellion Player Commands
  *
  * @author Mazen
  * @author Emilyx3
@@ -107,7 +94,7 @@ public class PlayerCommand {
         public int execute(MapleClient c, String[] splitted) {
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             c.getPlayer().dropMessage(5, "Your characters actions have been enabled.");
             return 1;
         }
@@ -359,7 +346,7 @@ public class PlayerCommand {
                 sMessage += ChannelServer.getInstance(i).getPlayerStorage().formatOnlinePlayers(true);
             }
 
-            c.write(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage, NPCChatByType.NPC_Cancellable));
+            c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage, NPCChatByType.NPC_Cancellable));
             return 1;
             /*String online = "";
             int size = 0;
@@ -369,7 +356,7 @@ public class PlayerCommand {
                 size += ChannelServer.getInstance(i).getPlayerStorage().getAllCharacters().size();
             }
 
-            c.getPlayer().dropMessage(6, "[REXION Realm: " + size + " Connected] " + online);
+            c.getPlayer().dropMessage(6, "[Cellion Realm: " + size + " Connected] " + online);
             if (size > 1) {
                 c.getPlayer().dropMessage(6, "There are currently " + size + " people online.");
             } else {
@@ -416,7 +403,7 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getPlayer().yellowMessage("REXION Character Profile");
+            c.getPlayer().yellowMessage("Cellion Character Profile");
             c.getPlayer().dropMessage(6, "- Maple Points (" + c.getPlayer().getCSPoints(2) + ")");
             c.getPlayer().dropMessage(6, "- Donor Points (" + c.getPlayer().getDPoints() + ")");
             c.getPlayer().dropMessage(6, "- Vote Points (" + c.getPlayer().getVPoints() + ")");
@@ -443,7 +430,7 @@ public class PlayerCommand {
 
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return 1;
         }
     }
@@ -452,37 +439,37 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getPlayer().yellowMessage("----------------- REXION PLAYER COMMANDS -----------------");
+            c.getPlayer().yellowMessage("----------------- Cellion PLAYER COMMANDS -----------------");
             //c.getPlayer().yellowMessage("@w <name> <message> : Send a whisper to the specified player.");
             //c.getPlayer().yellowMessage("@f <name> : Find a specified character's location and information.");
             c.getPlayer().yellowMessage("@str, @dex, @int, @luk <amount> : Place ability points in specified statistic.");
             c.getPlayer().yellowMessage("@support <message> : Send a message to availible staff members.");
             c.getPlayer().yellowMessage("@sell <from slot> <to slot> : Sell specific item slots instantly.");
-            c.getPlayer().yellowMessage("@vote : Claim vote points after voting at (https://playrexion.net/vote).");
+            c.getPlayer().yellowMessage("@vote : Claim vote points after voting at (https://playCellion.net/vote).");
             c.getPlayer().yellowMessage("@dispose : Enables your character's actions when stuck.");
             c.getPlayer().yellowMessage("@event : Quick travel to the current event, if available.");
-            c.getPlayer().yellowMessage("@rexion : Open the REXION Quick Access system.");
+            c.getPlayer().yellowMessage("@Cellion : Open the Cellion Quick Access system.");
             c.getPlayer().yellowMessage("@profile : View your account and character information.");
             c.getPlayer().yellowMessage("@online : Display the current online players.");
             c.getPlayer().yellowMessage("@mob : Display information on closest monster.");
             c.getPlayer().yellowMessage("@fm : Quick travel to the Free Market.");
             c.getPlayer().yellowMessage("@help : Display the general player commands.");
-            c.getPlayer().yellowMessage("@home : Quick travel to the Rexion Courtyard.");
+            c.getPlayer().yellowMessage("@home : Quick travel to the Cellion Courtyard.");
 
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return 1;
         }
     }
 
-    public static class Rexion extends CommandExecute {
+    public static class Cellion extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
 
             if (c.getPlayer().isInBlockedMap()) {
                 c.getPlayer().dropMessage(5, "This command may not be used here.");
@@ -500,7 +487,7 @@ public class PlayerCommand {
         public int execute(MapleClient c, String[] splitted) {
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
 
             if (c.getPlayer().isInBlockedMap()) {
                 c.getPlayer().dropMessage(5, "This command may not be used here.");
@@ -508,7 +495,7 @@ public class PlayerCommand {
             } else {
                 MapleMap map = c.getChannelServer().getMapFactory().getMap(101071300);
                 c.getPlayer().changeMap(map, map.getPortal(0));
-                c.getPlayer().yellowMessage("Welcome to the Rexion Courtyard!");
+                c.getPlayer().yellowMessage("Welcome to the Cellion Courtyard!");
                 return 1;
             }
         }
@@ -528,25 +515,29 @@ public class PlayerCommand {
             int nAmount = 0;
             boolean bSuccess = false;
 
-            Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM cms_votes WHERE accountid = " + c.getPlayer().getAccountID() + " AND collected = 0")) {
+            try (Connection con = Database.GetConnection()) {
+                System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+                try (PreparedStatement ps = con.prepareStatement("SELECT * FROM cms_votes WHERE accountid = " + c.getPlayer().getAccountID() + " AND collected = 0")) {
 
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        nAmount += rs.getInt(5);
-                        PreparedStatement ps_2 = (PreparedStatement) con.prepareStatement("UPDATE cms_votes SET collected = 1 WHERE id = " + rs.getInt(1));
-                        ps_2.executeUpdate();
-                        ps_2.close();
+                    try (ResultSet rs = ps.executeQuery()) {
+                        while (rs.next()) {
+                            nAmount += rs.getInt(5);
+                            PreparedStatement ps_2 = (PreparedStatement) con.prepareStatement("UPDATE cms_votes SET collected = 1 WHERE id = " + rs.getInt(1));
+                            ps_2.executeUpdate();
+                            ps_2.close();
 
-                        bSuccess = true;
+                            bSuccess = true;
+                        }
+                        c.getPlayer().setVPoints(c.getPlayer().getVPoints() + nAmount);
                     }
-                    c.getPlayer().setVPoints(c.getPlayer().getVPoints() + nAmount);
-                }
 
-                if (bSuccess) {
-                    c.getPlayer().dropMessage(6, "You have claimed " + nAmount + " vote points, and now have a total of " + c.getPlayer().getVPoints() + ".");
-                } else {
-                    c.getPlayer().dropMessage(5, "Sorry, looks like you don't have any unclaimed vote points.");
+                    if (bSuccess) {
+                        c.getPlayer().dropMessage(6, "You have claimed " + nAmount + " vote points, and now have a total of " + c.getPlayer().getVPoints() + ".");
+                    } else {
+                        c.getPlayer().dropMessage(5, "Sorry, looks like you don't have any unclaimed vote points.");
+                    }
+                } catch (SQLException e) {
+                    LogHelper.SQL.get().info("[Vote Claim] Error retrieving last character creation time\n", e);
                 }
             } catch (SQLException e) {
                 LogHelper.SQL.get().info("[Vote Claim] Error retrieving last character creation time\n", e);
@@ -561,7 +552,7 @@ public class PlayerCommand {
         public int execute(MapleClient c, String[] splitted) {
             long currentUsage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000000;
 
-            c.getPlayer().dropMessage(6, "REXION Memory Usage (" + currentUsage + " MB)");
+            c.getPlayer().dropMessage(6, "Cellion Memory Usage (" + currentUsage + " MB)");
             return 1;
         }
     }
@@ -641,7 +632,7 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            World.Broadcast.broadcastGMMessage(CWvsContext.broadcastMsg(c.getPlayer().isGM() ? 6 : 5, "[REXION Support] " + c.getPlayer().getName() + ": " + StringUtil.joinStringFrom(splitted, 1)));
+            World.Broadcast.broadcastGMMessage(CWvsContext.broadcastMsg(c.getPlayer().isGM() ? 6 : 5, "[Cellion Support] " + c.getPlayer().getName() + ": " + StringUtil.joinStringFrom(splitted, 1)));
             c.getPlayer().dropMessage(5, "Your message has been sent successfully.");
             return 1;
         }

@@ -24,7 +24,7 @@ import server.maps.objects.Summon;
 import tools.Pair;
 import tools.packet.CField;
 import tools.packet.MobPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -52,7 +52,7 @@ public class SummonAttackHandler implements ProcessPacket<MapleClient> {
             return;
         }
         MapleMap map = chr.getMap();
-        MapleMapObject obj = map.getMapObject(iPacket.DecodeInteger(), MapleMapObjectType.SUMMON);
+        MapleMapObject obj = map.getMapObject(iPacket.DecodeInt(), MapleMapObjectType.SUMMON);
         if (obj == null) {
             return;
         }
@@ -62,14 +62,14 @@ public class SummonAttackHandler implements ProcessPacket<MapleClient> {
             chr.dropMessage(5, "Error in processing attack.");
             return;
         }
-        int tick = iPacket.DecodeInteger();
+        int tick = iPacket.DecodeInt();
         if (sse != null && sse.delay > 0) {
             chr.updateTick(tick);
             //summon.CheckSummonAttackFrequency(chr, tick);
             //chr.getCheatTracker().checkSummonAttack();
         }
-        int skillId = iPacket.DecodeInteger();
-        iPacket.DecodeInteger(); // v176
+        int skillId = iPacket.DecodeInt();
+        iPacket.DecodeInt(); // v176
         byte animation = iPacket.DecodeByte();
         short tbyte = (short) iPacket.DecodeByte();
         short nMobCount = (short) (tbyte >>> 4 & 0xF);
@@ -85,12 +85,12 @@ public class SummonAttackHandler implements ProcessPacket<MapleClient> {
         iPacket.DecodeShort();
         iPacket.DecodeShort();
 
-        iPacket.DecodeInteger(); // 0x94 / 148
+        iPacket.DecodeInt(); // 0x94 / 148
         iPacket.DecodeShort(); // 0x8E / 142
-        iPacket.DecodeInteger(); // -1
-        iPacket.DecodeInteger(); // 0
+        iPacket.DecodeInt(); // -1
+        iPacket.DecodeInt(); // 0
 
-        iPacket.DecodeInteger();
+        iPacket.DecodeInt();
 
         if (sse != null && nMobCount > sse.mobCount) {
             chr.dropMessage(5, "Warning: Attacking more monster than summon can do");
@@ -102,19 +102,19 @@ public class SummonAttackHandler implements ProcessPacket<MapleClient> {
             iPacket.Skip(24);
         } else {
             iPacket.DecodePosition();
-            iPacket.DecodeInteger(); //*(TSingleton<CUserLocal>::ms_pInstance._m_pStr + 13929)
-            iPacket.DecodeInteger();
+            iPacket.DecodeInt(); //*(TSingleton<CUserLocal>::ms_pInstance._m_pStr + 13929)
+            iPacket.DecodeInt();
         }*/
         List<Pair<Integer, Long>> allDamage = new ArrayList<>();
         for (int i = 0; i < nMobCount; i++) {
-            int oid = iPacket.DecodeInteger();
-            int monsterId = iPacket.DecodeInteger();//mobId
+            int oid = iPacket.DecodeInt();
+            int monsterId = iPacket.DecodeInt();//mobId
             iPacket.DecodeByte();
             iPacket.DecodeByte();
             iPacket.DecodeByte();
             iPacket.DecodeByte();
             iPacket.DecodeByte();
-            int monsterId2 = iPacket.DecodeInteger();//mobId
+            int monsterId2 = iPacket.DecodeInt();//mobId
             iPacket.DecodeByte();//m_nCalcDamageStatIndex
             final Point posNow = iPacket.DecodePosition(); //pos
             final Point posPrev = iPacket.DecodePosition();//previous pos
@@ -124,23 +124,23 @@ public class SummonAttackHandler implements ProcessPacket<MapleClient> {
                 long damage = iPacket.DecodeLong();
                 allDamage.add(new Pair<>(oid, damage));
             }
-            iPacket.DecodeInteger(); //yDown
+            iPacket.DecodeInt(); //yDown
             int nSkeletonResult = iPacket.DecodeByte();
             if (nSkeletonResult == 1) {
                 iPacket.DecodeString();
                 iPacket.DecodeString();
-                iPacket.DecodeInteger();
-                for (int s = 0; s < iPacket.DecodeInteger(); s++) {
+                iPacket.DecodeInt();
+                for (int s = 0; s < iPacket.DecodeInt(); s++) {
                     iPacket.DecodeString();
                 }
             } else if (nSkeletonResult == 2) {
                 iPacket.DecodeString();
                 iPacket.DecodeString();
-                iPacket.DecodeInteger();
+                iPacket.DecodeInt();
             }
             iPacket.DecodeByte();
         }
-        iPacket.DecodeInteger(); //crc
+        iPacket.DecodeInt(); //crc
 
         map.broadcastMessage(chr, CField.SummonPacket.summonAttack(summon.getOwnerId(), summon.getObjectId(), animation, allDamage, chr.getLevel(), false), summon.getTruePosition());
         Skill summonSkill = SkillFactory.getSkill(summon.getSkill());
@@ -170,7 +170,7 @@ public class SummonAttackHandler implements ProcessPacket<MapleClient> {
                 mob.damage(chr, toDamage, true);
                 chr.checkMonsterAggro(mob);
                 if (!mob.isAlive()) {
-                    chr.getClient().write(MobPacket.killMonster(mob.getObjectId(), 1, false));
+                    chr.getClient().SendPacket(MobPacket.killMonster(mob.getObjectId(), 1, false));
                 }
             } else {
                 //chr.dropMessage(5, "Warning - high damage.");

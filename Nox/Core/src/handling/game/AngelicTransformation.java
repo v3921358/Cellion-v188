@@ -28,7 +28,7 @@ import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.JobPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class AngelicTransformation implements ProcessPacket<MapleClient> {
 
@@ -43,11 +43,11 @@ public final class AngelicTransformation implements ProcessPacket<MapleClient> {
         byte type = iPacket.DecodeByte();
         if (type == 1) {
             if (GameConstants.isAngelicBuster(c.getPlayer().getJob())) {
-                c.write(JobPacket.AngelicPacket.DressUpTime(type));
-                c.write(JobPacket.AngelicPacket.updateDress(chr.getAngelicDressupSuit(), c.getPlayer()));//default = 5010094
+                c.SendPacket(JobPacket.AngelicPacket.DressUpTime(type));
+                c.SendPacket(JobPacket.AngelicPacket.updateDress(chr.getAngelicDressupSuit(), c.getPlayer()));//default = 5010094
                 chr.getMap().broadcastMessage(chr, CField.updateCharLook(chr, true), false);//PLZ TEST ANGELIC CHANGE! <-- tells me these handlers might be fucked
             } else {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
             }
         }
     }

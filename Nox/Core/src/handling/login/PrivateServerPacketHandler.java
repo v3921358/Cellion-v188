@@ -4,7 +4,7 @@ import client.MapleClient;
 import handling.PacketThrottleLimits;
 import net.InPacket;
 import tools.packet.CLogin;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 @PacketThrottleLimits(
         FlagCount = 5,
@@ -90,9 +90,9 @@ public final class PrivateServerPacketHandler implements ProcessPacket<MapleClie
          */
 
         // dwPrivateAuth = GetCurrentThreadId() ^ 0x86
-        int clientCurrentThreadId = iPacket.DecodeInteger();
+        int clientCurrentThreadId = iPacket.DecodeInt();
 
-        c.write(CLogin.sendAuthResponse(clientCurrentThreadId));
+        c.SendPacket(CLogin.sendAuthResponse(clientCurrentThreadId));
     }
 
 }

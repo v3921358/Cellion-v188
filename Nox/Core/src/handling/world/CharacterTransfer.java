@@ -99,8 +99,8 @@ public class CharacterTransfer {
         this.ACash = chr.getCSPoints(4);
         this.MaplePoints = chr.getCSPoints(2);
         // this.stolenSkills = chr.getStolenSkills();
-        for(int i = 1; i <= 5; i++) {
-            for(int j = 0; j < GameConstants.getNumSteal(i); j++) {
+        for (int i = 1; i <= 5; i++) {
+            for (int j = 0; j < GameConstants.getNumSteal(i); j++) {
                 this.aStealMemory[i][j] = chr.aStealMemory[i][j];
             }
         }

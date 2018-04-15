@@ -9,7 +9,7 @@ import java.util.Map;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -24,13 +24,13 @@ public class StealSkillMemoryHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int nStealSkillID = iPacket.DecodeInteger();
-        int dwCharacterID = iPacket.DecodeInteger();
-        boolean bRemove = iPacket.DecodeBoolean();
+        int nStealSkillID = iPacket.DecodeInt();
+        int dwCharacterID = iPacket.DecodeInt();
+        boolean bRemove = iPacket.DecodeBool();
         int nResult;
         int nSkillRoot = nStealSkillID / 10000;
         int nSlotID = GameConstants.getJobNumber(nSkillRoot);
-        if(GameConstants.isHyperSkill(SkillFactory.getSkill(nStealSkillID))) {
+        if (GameConstants.isHyperSkill(SkillFactory.getSkill(nStealSkillID))) {
             nSlotID = 5;
         }
         int nPOS = 0;
@@ -87,6 +87,6 @@ public class StealSkillMemoryHandler implements ProcessPacket<MapleClient> {
                 nResult = 1; // NoTarget
             }
         }
-        c.write(CWvsContext.OnChangeStealMemoryResult(1, nResult, nSlotID, nPOS, nStealSkillID, nStealSLV, nStealSMLV));
+        c.SendPacket(CWvsContext.OnChangeStealMemoryResult(1, nResult, nSlotID, nPOS, nStealSkillID, nStealSLV, nStealSMLV));
     }
 }

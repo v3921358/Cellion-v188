@@ -108,12 +108,12 @@ public class MapleReactor extends AnimatedMapleMapObject {
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.write(CField.destroyReactor(this));
+        client.SendPacket(CField.destroyReactor(this));
     }
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.write(CField.spawnReactor(this));
+        client.SendPacket(CField.spawnReactor(this));
     }
 
     public void forceStartReactor(MapleClient c) {

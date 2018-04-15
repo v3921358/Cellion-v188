@@ -50,20 +50,20 @@ public class PlayerHandler {
     }
 
     public static final void TouchRune(final InPacket iPacket, final User chr) {
-        chr.updateTick(iPacket.DecodeInteger());
-        int type = iPacket.DecodeInteger();
+        chr.updateTick(iPacket.DecodeInt());
+        int type = iPacket.DecodeInt();
         List<MapleRuneStone> runes = chr.getMap().getAllRune();
         MapleRuneStone rune = chr.getMap().getAllRune().get(0);
         if (rune != null) {
             if (chr.getKeyValue("LastTouchedRune") != null && chr.getRuneTimeStamp() > System.currentTimeMillis()) {
-                chr.getClient().write(CField.RunePacket.RuneAction(2, (int) (chr.getRuneTimeStamp() - System.currentTimeMillis())));
-                chr.getClient().write(CWvsContext.enableActions());
+                chr.getClient().SendPacket(CField.RunePacket.RuneAction(2, (int) (chr.getRuneTimeStamp() - System.currentTimeMillis())));
+                chr.getClient().SendPacket(CWvsContext.enableActions());
                 return;
             }
             chr.setTouchedRune(type);
-            chr.getClient().write(CField.RunePacket.RuneAction(5, 0));
+            chr.getClient().SendPacket(CField.RunePacket.RuneAction(5, 0));
         }
-        chr.getClient().write(CWvsContext.enableActions());
+        chr.getClient().SendPacket(CWvsContext.enableActions());
     }
 
     public static final void UseRune(final InPacket iPacket, final User chr) {
@@ -121,20 +121,20 @@ public class PlayerHandler {
                 if (tmp1 > 2) {
                     return;
                 }
-                skills[tmp1] = iPacket.DecodeInteger();
+                skills[tmp1] = iPacket.DecodeInt();
                 if (chr.getSkillLevel(skills[tmp1]) == 0) {
                     return;
                 }
                 chr.updateOneInfo(52554, "cmd" + tmp1, String.valueOf(skills[tmp1]));
             }
-            chr.getClient().write(KaiserPacket.sendKaiserSkillShortcut(skills));
+            chr.getClient().SendPacket(KaiserPacket.sendKaiserSkillShortcut(skills));
         }
     }
 
     public static void OrbitalFlame(final InPacket iPacket, final MapleClient c) {
         User chr = c.getPlayer();
 
-        int tempskill = iPacket.DecodeInteger();
+        int tempskill = iPacket.DecodeInt();
         byte unk = iPacket.DecodeByte();
         int direction = iPacket.DecodeShort();
         int skillid = 0;
@@ -176,38 +176,38 @@ public class PlayerHandler {
     }
 
     public static void absorbingDF(InPacket iPacket, final MapleClient c) {
-        int size = iPacket.DecodeInteger();
+        int size = iPacket.DecodeInt();
         int room = 0;
         byte unk = 0;
         int sn;
         int skillid = 0;
         if (GameConstants.isKaiser(c.getPlayer().getJob()) || GameConstants.isShade(c.getPlayer().getJob()) || GameConstants.isNightWalkerCygnus(c.getPlayer().getJob()) || GameConstants.isAngelicBuster(c.getPlayer().getJob())) {
-            skillid = iPacket.DecodeInteger();
+            skillid = iPacket.DecodeInt();
         }
         for (int i = 0; i < size; i++) {
-            room = GameConstants.isDemonAvenger(c.getPlayer().getJob()) || c.getPlayer().getJob() == 212 ? 0 : iPacket.DecodeInteger();
+            room = GameConstants.isDemonAvenger(c.getPlayer().getJob()) || c.getPlayer().getJob() == 212 ? 0 : iPacket.DecodeInt();
             unk = iPacket.DecodeByte();
-            sn = iPacket.DecodeInteger();
+            sn = iPacket.DecodeInt();
             if (GameConstants.isDemonSlayer(c.getPlayer().getJob())) {
                 //c.getPlayer().addMP(c.getPlayer().getStat().getForce(room));
             }
-            if (iPacket.Available() > 0 && !GameConstants.isNightWalkerCygnus(c.getPlayer().getJob()) && !GameConstants.isAngelicBuster(c.getPlayer().getJob())) {
+            if (iPacket.GetRemainder() > 0 && !GameConstants.isNightWalkerCygnus(c.getPlayer().getJob()) && !GameConstants.isAngelicBuster(c.getPlayer().getJob())) {
                 unk = iPacket.DecodeByte();
-                sn = iPacket.DecodeInteger();
+                sn = iPacket.DecodeInt();
             }
             if (GameConstants.isAngelicBuster(c.getPlayer().getJob())) {
                 boolean rand = Randomizer.isSuccess(80);
                 if (sn > 0) {
                     if (rand) {
-                        c.write(JobPacket.AngelicPacket.SoulSeekerRegen(c.getPlayer(), sn));
+                        c.SendPacket(JobPacket.AngelicPacket.SoulSeekerRegen(c.getPlayer(), sn));
                     }
                 }
             }
-            if ((GameConstants.isDemonAvenger(c.getPlayer().getJob())) && iPacket.Available() >= 8) {
-                //c.getPlayer().getMap().broadcastMessage(MainPacketCreator.ShieldChacingRe(c.getPlayer().getId(), iPacket.decodeInteger(), iPacket.decodeInteger(), unk, c.getPlayer().getKeyValue2("schacing")));
+            if ((GameConstants.isDemonAvenger(c.getPlayer().getJob())) && iPacket.GetRemainder() >= 8) {
+                //c.getPlayer().getMap().broadcastMessage(MainPacketCreator.ShieldChacingRe(c.getPlayer().getId(), iPacket.DecodeInt(), iPacket.DecodeInt(), unk, c.getPlayer().getKeyValue2("schacing")));
             }
             if (c.getPlayer().getJob() == 212) {
-                //c.getPlayer().getMap().broadcastMessage(MainPacketCreator.MegidoFlameRe(c.getPlayer().getId(), unk, iPacket.decodeInteger()));
+                //c.getPlayer().getMap().broadcastMessage(MainPacketCreator.MegidoFlameRe(c.getPlayer().getId(), unk, iPacket.DecodeInt()));
             }
         }
     }
@@ -215,8 +215,8 @@ public class PlayerHandler {
     public static void LinkSkill(final InPacket iPacket, final MapleClient c, final User chr) {
         //iPacket: [76 7F 31 01] [35 00 00 00]
         c.getPlayer().dropMessage(1, "Beginning link skill.");
-        int skill = iPacket.DecodeInteger();
-        int cid = iPacket.DecodeInteger();
+        int skill = iPacket.DecodeInt();
+        int cid = iPacket.DecodeInt();
         boolean found = false;
         for (User chr2 : c.loadCharacters(c.getPlayer().getWorld())) {
             if (chr2.getId() == cid) {
@@ -225,7 +225,7 @@ public class PlayerHandler {
         }
         if (GameConstants.getLinkSkillByJob(chr.getJob()) != skill || !found || chr.getLevel() > 70) {
             c.getPlayer().dropMessage(1, "An error has occured.");
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         User.addLinkSkill(cid, skill);
@@ -240,13 +240,13 @@ public class PlayerHandler {
         User target;
         switch (mode) {
             case 0x00: // Level1~Level8 & Package1~Package2
-                int[][] toSpawn = MapleItemInformationProvider.getInstance().getSummonMobs(iPacket.DecodeInteger());
+                int[][] toSpawn = MapleItemInformationProvider.getInstance().getSummonMobs(iPacket.DecodeInt());
                 for (int[] toSpawnChild : toSpawn) {
                     if (Randomizer.nextInt(101) <= toSpawnChild[1]) {
                         c.getPlayer().getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());
                     }
                 }
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 break;
             case 0x01: { // /d (inv)
                 byte type = iPacket.DecodeByte();
@@ -260,7 +260,7 @@ public class PlayerHandler {
                 break;
             }
             case 0x02: // Exp
-                c.getPlayer().setExp(iPacket.DecodeInteger());
+                c.getPlayer().setExp(iPacket.DecodeInt());
                 break;
             case 0x03: // /ban <name>
                 victim = iPacket.DecodeString();
@@ -274,17 +274,17 @@ public class PlayerHandler {
                     target.getClient().ban(reason, false, false);
                     target.sendPolice();
 
-                    c.write(CField.getGMEffect(4, (byte) 0));
+                    c.SendPacket(CField.getGMEffect(4, (byte) 0));
                 } else if (MapleClient.banOfflineCharacter(reason, victim)) {
-                    c.write(CField.getGMEffect(4, (byte) 0));
+                    c.SendPacket(CField.getGMEffect(4, (byte) 0));
                 } else {
-                    c.write(CField.getGMEffect(6, (byte) 1));
+                    c.SendPacket(CField.getGMEffect(6, (byte) 1));
                 }
                 break;
             case 0x04: // /block <name> <duration (in days)> <HACK/BOT/AD/HARASS/CURSE/SCAM/MISCONDUCT/SELL/ICASH/TEMP/GM/IPROGRAM/MEGAPHONE>
                 victim = iPacket.DecodeString();
                 int type = iPacket.DecodeByte(); //reason
-                int duration = iPacket.DecodeInteger();
+                int duration = iPacket.DecodeInt();
                 String description = iPacket.DecodeString();
                 reason = c.getPlayer().getName() + " used /ban to ban";
                 target = c.getChannelServer().getPlayerStorage().getCharacterByName(victim);
@@ -300,11 +300,11 @@ public class PlayerHandler {
                         target.tempban(description, cal, type, false);
                         target.sendPolice();
                     }
-                    c.write(CField.getGMEffect(4, (byte) 0));
+                    c.SendPacket(CField.getGMEffect(4, (byte) 0));
                 } else if (MapleClient.banOfflineCharacter(reason, victim)) {
-                    c.write(CField.getGMEffect(4, (byte) 0));
+                    c.SendPacket(CField.getGMEffect(4, (byte) 0));
                 } else {
-                    c.write(CField.getGMEffect(6, (byte) 1));
+                    c.SendPacket(CField.getGMEffect(6, (byte) 1));
                 }
                 break;
             case 0x10: // /h, information by vana (and tele mode f1) ... hide ofcourse
@@ -330,12 +330,12 @@ public class PlayerHandler {
                 break;
             case 0x12: // Send
                 victim = iPacket.DecodeString();
-                int mapId = iPacket.DecodeInteger();
+                int mapId = iPacket.DecodeInt();
                 c.getChannelServer().getPlayerStorage().getCharacterByName(victim).changeMap(c.getChannelServer().getMapFactory().getMap(mapId));
                 break;
             case 0x15: // Kill
-                int mobToKill = iPacket.DecodeInteger();
-                int amount = iPacket.DecodeInteger();
+                int mobToKill = iPacket.DecodeInt();
+                int amount = iPacket.DecodeInt();
                 List<MapleMapObject> monsterx = c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
                 for (int x = 0; x < amount; x++) {
                     Mob monster = (Mob) monsterx.get(x);
@@ -348,14 +348,14 @@ public class PlayerHandler {
                 MapleQuest.getInstance(iPacket.DecodeShort()).forfeit(c.getPlayer());
                 break;
             case 0x17: // Summon
-                int mobId = iPacket.DecodeInteger();
-                int quantity = iPacket.DecodeInteger();
+                int mobId = iPacket.DecodeInt();
+                int quantity = iPacket.DecodeInt();
                 for (int i = 0; i < quantity; i++) {
                     c.getPlayer().getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(mobId), c.getPlayer().getPosition());
                 }
                 break;
             case 0x18: // Maple & Mobhp
-                int mobHp = iPacket.DecodeInteger();
+                int mobHp = iPacket.DecodeInt();
                 c.getPlayer().dropMessage(5, "Monsters HP");
                 List<MapleMapObject> monsters = c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
                 for (MapleMapObject mobs : monsters) {
@@ -370,10 +370,10 @@ public class PlayerHandler {
                 String message = iPacket.DecodeString();
                 target = c.getChannelServer().getPlayerStorage().getCharacterByName(victim);
                 if (target != null) {
-                    target.getClient().write(CWvsContext.broadcastMsg(1, message));
-                    c.write(CField.getGMEffect(0x1E, (byte) 1));
+                    target.getClient().SendPacket(CWvsContext.broadcastMsg(1, message));
+                    c.SendPacket(CField.getGMEffect(0x1E, (byte) 1));
                 } else {
-                    c.write(CField.getGMEffect(0x1E, (byte) 0));
+                    c.SendPacket(CField.getGMEffect(0x1E, (byte) 0));
                 }
                 break;
             case 0x24:// /Artifact Ranking
@@ -398,7 +398,7 @@ public class PlayerHandler {
             chr.setLastCombo(curr);
             chr.setCombo(combo);
 
-            c.write(CField.updateCombo(combo));
+            c.SendPacket(CField.updateCombo(combo));
 
             switch (combo) {
                 case 10:
@@ -421,7 +421,7 @@ public class PlayerHandler {
     }
 
     public static void ChangeHaku(InPacket iPacket, MapleClient c, User chr) {
-        int oid = iPacket.DecodeInteger();
+        int oid = iPacket.DecodeInt();
         if (chr.getHaku() != null) {
             chr.getHaku().sendStats();
             // chr.getMap().broadcastMessage(chr, CField.spawnHaku_change0(chr.getId()), true);
@@ -432,8 +432,8 @@ public class PlayerHandler {
 
     public static void leftKnockBack(InPacket iPacket, MapleClient c) {
         if (c.getPlayer().getMapId() / 10000 == 10906) {
-            c.write(CField.leftKnockBack());
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CField.leftKnockBack());
+            c.SendPacket(CWvsContext.enableActions());
         }
     }
 
@@ -441,6 +441,6 @@ public class PlayerHandler {
         if (chr == null) {
             return;
         }
-        c.write(CField.messengerOpen(iPacket.DecodeByte(), null));
+        c.SendPacket(CField.messengerOpen(iPacket.DecodeByte(), null));
     }
 }

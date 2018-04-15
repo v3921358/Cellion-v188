@@ -4,7 +4,7 @@ import client.MapleClient;
 import client.MapleSpecialStats.MapleSpecialStatUpdateType;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class ProfessionInfo implements ProcessPacket<MapleClient> {
 
@@ -17,8 +17,8 @@ public final class ProfessionInfo implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         /*    String typeStr = iPacket.decodeString();
         MapleSpecialStatUpdateType type = MapleSpecialStatUpdateType.getFromString(typeStr);
-        int level1 = iPacket.decodeInteger();
-        int level2 = iPacket.decodeInteger();
+        int level1 = iPacket.DecodeInt();
+        int level2 = iPacket.DecodeInt();
         int rate;
         
         switch (type) {

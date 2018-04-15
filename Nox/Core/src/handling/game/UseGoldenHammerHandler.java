@@ -9,7 +9,7 @@ import server.Randomizer;
 import net.InPacket;
 import tools.packet.CSPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -25,16 +25,16 @@ public class UseGoldenHammerHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         //[21 D5 10 04] [16 00 00 00] [7B B0 25 00] [01 00 00 00] [03 00 00 00]
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
-        byte slot = (byte) iPacket.DecodeInteger();
-        int itemId = iPacket.DecodeInteger();
+        c.getPlayer().updateTick(iPacket.DecodeInt());
+        byte slot = (byte) iPacket.DecodeInt();
+        int itemId = iPacket.DecodeInt();
         iPacket.Skip(4);
-        byte equipslot = (byte) iPacket.DecodeInteger();
+        byte equipslot = (byte) iPacket.DecodeInt();
         Item toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
         Equip equip = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(equipslot);
 
         if (toUse == null || toUse.getItemId() != itemId || toUse.getQuantity() < 1) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         int success;
@@ -50,7 +50,7 @@ public class UseGoldenHammerHandler implements ProcessPacket<MapleClient> {
         } else {
             success = 1;
         }
-        c.write(CSPacket.GoldenHammer((byte) 2, success));
+        c.SendPacket(CSPacket.GoldenHammer((byte) 2, success));
         equip.setViciousHammer((byte) 1);
         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, true);
     }

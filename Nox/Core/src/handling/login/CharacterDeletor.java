@@ -7,7 +7,7 @@ import handling.PacketThrottleLimits;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.CLogin;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 @PacketThrottleLimits(
         FlagCount = 3,
@@ -37,17 +37,17 @@ public final class CharacterDeletor implements ProcessPacket<MapleClient> {
             iPacket.DecodeString();
         }
 
-        final int charId = iPacket.DecodeInteger();
+        final int charId = iPacket.DecodeInt();
 
         if (!c.login_Auth(charId) || !c.isLoggedIn() || loginFailCount(c)) {
-            c.close();
+            c.Close();
             return; // Attempting to delete other character
         }
         byte state = 0;
 
         if (c.getSecondPassword() != null) { // On the server, there's a second password
             if (secondPW == null) { // Client's hacking
-                c.close();
+                c.Close();
                 return;
             } else if (!c.checkSecondPassword(secondPW, false)) { // Wrong Password
                 state = 20;
@@ -71,7 +71,7 @@ public final class CharacterDeletor implements ProcessPacket<MapleClient> {
                 state = (byte) c.deleteCharacter(charId);
             }
         }
-        c.write(CLogin.deleteCharResponse(charId, state));
+        c.SendPacket(CLogin.deleteCharResponse(charId, state));
     }
 
 }

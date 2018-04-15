@@ -26,7 +26,7 @@ import constants.GameConstants;
 import server.maps.objects.User;
 import server.quest.MapleQuest;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class PetBuff implements ProcessPacket<MapleClient> {
 
@@ -38,8 +38,8 @@ public final class PetBuff implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
-        iPacket.DecodeInteger(); //0
-        int skill = iPacket.DecodeInteger();
+        iPacket.DecodeInt(); //0
+        int skill = iPacket.DecodeInt();
         iPacket.DecodeByte(); //0
         if (skill <= 0) {
             chr.getQuestRemove(MapleQuest.getInstance(GameConstants.BUFF_ITEM));

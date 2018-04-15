@@ -4,7 +4,7 @@ import client.MapleClient;
 import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -23,7 +23,7 @@ public class ItemMoveHandler implements ProcessPacket<MapleClient> {
             return;
         }
         c.getPlayer().setScrolledPosition((short) 0);
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         MapleInventoryType type = MapleInventoryType.getByType(iPacket.DecodeByte());
         final short src = iPacket.DecodeShort();
         final short dst = iPacket.DecodeShort();
@@ -40,7 +40,7 @@ public class ItemMoveHandler implements ProcessPacket<MapleClient> {
         } else {
             MapleInventoryManipulator.move(c, type, src, dst);
         }
-        
+
         c.getPlayer().saveItemData(); // Duplication and rollback prevention.
     }
 }

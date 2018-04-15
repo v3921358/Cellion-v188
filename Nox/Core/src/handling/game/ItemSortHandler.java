@@ -6,7 +6,7 @@ import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -21,12 +21,12 @@ public class ItemSortHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
         final MapleInventoryType pInvType = MapleInventoryType.getByType(iPacket.DecodeByte());
 
         if (pInvType == MapleInventoryType.UNDEFINED || c.getPlayer().hasBlockedInventory()) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         final MapleInventory pInv = c.getPlayer().getInventory(pInvType); //Mode should correspond with MapleInventoryType
@@ -51,7 +51,7 @@ public class ItemSortHandler implements ProcessPacket<MapleClient> {
                 sorted = true;
             }
         }
-        c.write(CWvsContext.finishedSort(pInvType.getType()));
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.finishedSort(pInvType.getType()));
+        c.SendPacket(CWvsContext.enableActions());
     }
 }

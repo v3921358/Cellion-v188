@@ -2,7 +2,6 @@ package constants.skills;
 
 public class Hayato {
 
-
     public static final int BATTOUJUTSU_ADVANCE = 41001010;
     public static final int BATTOUJUTSU_ADVANCE_1 = 41001014;
     public static final int BATTOUJUTSU_DASH = 41001012;

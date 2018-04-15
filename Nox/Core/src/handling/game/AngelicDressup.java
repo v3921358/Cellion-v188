@@ -26,7 +26,7 @@ import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class AngelicDressup implements ProcessPacket<MapleClient> {
 
@@ -41,21 +41,21 @@ public final class AngelicDressup implements ProcessPacket<MapleClient> {
         if ((chr == null) || (chr.getMap() == null)) {
             return;
         }
-        int transformationId = iPacket.DecodeInteger();
+        int transformationId = iPacket.DecodeInt();
         boolean isAngelic;
         if (transformationId == 5010094 || transformationId == 5010093) {//5010093 too?
             isAngelic = true;
             chr.getMap().broadcastMessage(chr, CField.showAngelicBusterTransformation(chr.getId(), transformationId), false);
             chr.getMap().broadcastMessage(chr, CField.updateCharLook(chr, isAngelic), false);
             chr.setAngelicDressupState(isAngelic);
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
         } else {
             //change back?
             isAngelic = false;
             chr.getMap().broadcastMessage(chr, CField.showAngelicBusterTransformation(chr.getId(), transformationId), false);
             chr.getMap().broadcastMessage(chr, CField.updateCharLook(chr, isAngelic), false);
             chr.setAngelicDressupState(isAngelic);
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
         }
     }
 }

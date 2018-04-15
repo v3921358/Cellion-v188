@@ -24,7 +24,7 @@ package handling.game;
 import client.MapleClient;
 import handling.world.InterServerHandler;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class ChannelChangeHandler implements ProcessPacket<MapleClient> {
 

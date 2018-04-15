@@ -27,7 +27,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import client.CharacterTemporaryStat;
-import database.DatabaseConnection;
+import database.Database;
 import server.Randomizer;
 import server.maps.objects.User;
 import tools.LogHelper;
@@ -55,8 +55,7 @@ public class MapleMount implements Serializable {
         if (!changed) {
             return;
         }
-        Connection con = DatabaseConnection.getConnection();
-        try (PreparedStatement ps = con.prepareStatement("UPDATE mountdata set `Level` = ?, `Exp` = ?, `Fatigue` = ? WHERE characterid = ?")) {
+        try (PreparedStatement ps = Database.GetConnection().prepareStatement("UPDATE mountdata set `Level` = ?, `Exp` = ?, `Fatigue` = ? WHERE characterid = ?")) {
             ps.setByte(1, level);
             ps.setInt(2, exp);
             ps.setByte(3, fatigue);

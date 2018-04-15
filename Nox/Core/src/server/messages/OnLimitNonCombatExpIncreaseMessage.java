@@ -19,7 +19,7 @@ public class OnLimitNonCombatExpIncreaseMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.LimitNonCombatExpIncrease.getType());
+        oPacket.EncodeByte(_MessageOpcodesType.LimitNonCombatExpIncrease.getType());
         oPacket.EncodeLong(flag);
         /*
 		  if ( !(v21 & 0x100000) )

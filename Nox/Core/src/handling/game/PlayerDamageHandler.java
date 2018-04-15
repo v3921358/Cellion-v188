@@ -31,7 +31,7 @@ import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.JobPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.maps.objects.User;
 
 public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
@@ -75,11 +75,11 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
         }
 
         iPacket.Skip(4);
-        pPlayer.updateTick(iPacket.DecodeInteger());
+        pPlayer.updateTick(iPacket.DecodeInt());
         int type = iPacket.DecodeByte();
         PlayerDamageType type_ = PlayerDamageType.getTypeFromInt((byte) type);
         iPacket.Skip(1);
-        int damage = iPacket.DecodeInteger();
+        int damage = iPacket.DecodeInt();
         iPacket.Skip(2);
         boolean isDeadlyAttack = false;
         boolean pPhysical = false;
@@ -102,7 +102,7 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
                 }
             }
         }
-        
+
         if (GameConstants.isKinesis(pPlayer.getJob())) {
             if (pPlayer.hasBuff(CharacterTemporaryStat.KinesisPsychicShield)) {
                 pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.KinesisPsychicShield); // Use Shield
@@ -122,7 +122,7 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
             pPlayer.applyLifeTidal();
         }
         if (pPlayer.isHidden() || pPlayer.getMap() == null || (pPlayer.isGM() && pPlayer.isInvincible())) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
 
@@ -130,8 +130,8 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
         if (type_ != PlayerDamageType.UnkDamage
                 && type_ != PlayerDamageType.MapDamage
                 && type_ != PlayerDamageType.MistDamage) {
-            monsteridfrom = iPacket.DecodeInteger();
-            oid = iPacket.DecodeInteger();
+            monsteridfrom = iPacket.DecodeInt();
+            oid = iPacket.DecodeInt();
             attacker = pPlayer.getMap().getMonsterByOid(oid);
             direction = iPacket.DecodeByte();
 
@@ -176,8 +176,8 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
                     attacker.setMp(attacker.getMp() - attackInfo.getMpCon());
                 }
             }
-            skillid = iPacket.DecodeInteger();
-            pDMG = iPacket.DecodeInteger();
+            skillid = iPacket.DecodeInt();
+            pDMG = iPacket.DecodeInt();
             byte defType = iPacket.DecodeByte();
             iPacket.Skip(1);
 
@@ -193,7 +193,7 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
             }
             if (skillid != 0) {
                 pPhysical = iPacket.DecodeByte() > 0;
-                pID = iPacket.DecodeInteger();
+                pID = iPacket.DecodeInt();
                 pType = iPacket.DecodeByte();
                 iPacket.Skip(4);
                 pPos = iPacket.DecodePosition();
@@ -219,7 +219,7 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
                 return;
             }
         } else if ((damage < -1) || (damage > 200000)) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         // Resist is handled by the client! 
@@ -300,17 +300,17 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
         }
         byte offset = 0;
         int offset_d = 0;
-        if (iPacket.Available() == 1L) {
+        if (iPacket.GetRemainder() == 1L) {
             offset = iPacket.DecodeByte();
-            if (offset == 1 && iPacket.Available() >= 4L) {
-                offset_d = iPacket.DecodeInteger();
+            if (offset == 1 && iPacket.GetRemainder() >= 4L) {
+                offset_d = iPacket.DecodeInt();
             }
             if (offset < 0 || offset > 2) {
                 offset = 0;
             }
         }
         pPlayer.getMap().broadcastMessage(pPlayer, CField.damagePlayer(pPlayer.getId(), type_, damage, monsteridfrom, direction, skillid, pDMG, pPhysical, pID, pType, pPos, offset, offset_d, fake), false);
-        
+
         // Revive Passives
         if (!pPlayer.isAlive()) {
             if (pPlayer.hasBuff(CharacterTemporaryStat.ReviveOnce)) {

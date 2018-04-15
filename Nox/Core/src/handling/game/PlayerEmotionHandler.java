@@ -31,7 +31,7 @@ import server.Timer;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class PlayerEmotionHandler implements ProcessPacket<MapleClient> {
 
@@ -43,7 +43,7 @@ public final class PlayerEmotionHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
-        int emote = iPacket.DecodeInteger();
+        int emote = iPacket.DecodeInt();
         if (emote > 7) {
             final int emoteid = 5159992 + emote;
             final MapleInventoryType type = GameConstants.getInventoryType(emoteid);

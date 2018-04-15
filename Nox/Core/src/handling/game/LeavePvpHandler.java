@@ -25,7 +25,7 @@ import client.MapleClient;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class LeavePvpHandler implements ProcessPacket<MapleClient> {
 
@@ -37,8 +37,8 @@ public final class LeavePvpHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         if (c.getPlayer() == null || c.getPlayer().getMap() == null || !c.getPlayer().inPVP()) {
-            c.write(CField.pvpBlocked(6));
-            c.write(CWvsContext.enableActions());
+            //c.SendPacket(CField.pvpBlocked(6));
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         int x = Integer.parseInt(c.getPlayer().getEventInstance().getProperty(String.valueOf(c.getPlayer().getId())));
@@ -52,8 +52,8 @@ public final class LeavePvpHandler implements ProcessPacket<MapleClient> {
         c.getPlayer().changeRemoval();
         c.getPlayer().dispelDebuffs();
         c.getPlayer().clearAllCooldowns();
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
-        c.write(CWvsContext.clearMidMsg());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
+        c.SendPacket(CWvsContext.clearMidMsg());
         c.getPlayer().changeMap(c.getChannelServer().getMapFactory().getMap(960000000));
         c.getPlayer().getStat().recalcLocalStats(c.getPlayer());
         c.getPlayer().getStat().heal(c.getPlayer());

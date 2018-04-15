@@ -21,18 +21,18 @@ public class FarmItemPurchase {
 
     public static void gems(InPacket iPacket, MapleClient c, User chr) {
         iPacket.Skip(1);
-        int type = iPacket.DecodeInteger();//type again? #astral?
-        int sn = iPacket.DecodeInteger();
+        int type = iPacket.DecodeInt();//type again? #astral?
+        int sn = iPacket.DecodeInt();
         CashItem item = CashItemFactory.getInstance().getAllItem(sn);
         if (item == null) {
-            c.write(CSPacket.sendCSFail(0));
+            c.SendPacket(CSPacket.sendCSFail(0));
         }
         Item changedItem = chr.getCashInventory().toItem(item);
         if (changedItem != null) {
             chr.getCashInventory().addToInventory(changedItem);
-            c.write(CSPacket.showBoughtCSItem(changedItem, item.getSN(), c.getAccID()));
+            c.SendPacket(CSPacket.showBoughtCSItem(changedItem, item.getSN(), c.getAccID()));
         } else {
-            c.write(CSPacket.sendCSFail(0));
+            c.SendPacket(CSPacket.sendCSFail(0));
         }
     }
 }

@@ -27,15 +27,15 @@ public class MovementTypeC extends AbstractLifeMovement {
 
     @Override
     public void serialize(OutPacket oPacket) {
-        oPacket.Encode(getCommand());
+        oPacket.EncodeByte(getCommand());
         oPacket.EncodeShort(getWobble().x);
         oPacket.EncodeShort(getWobble().y);
 
         if (getCommand() == 20 || getCommand() == 21) {
             oPacket.EncodeShort(getFootholdFallStart());
         }
-        oPacket.Encode(getStance());
+        oPacket.EncodeByte(getStance());
         oPacket.EncodeShort(getDuration());
-        oPacket.Encode(getbForcedStop());
+        oPacket.EncodeByte(getbForcedStop());
     }
 }

@@ -11,7 +11,7 @@ import javax.management.MalformedObjectNameException;
 import javax.management.NotCompliantMBeanException;
 import javax.management.ObjectName;
 
-import database.DatabaseConnection;
+import database.Database;
 import handling.world.World;
 import service.CashShopServer;
 import service.ChannelServer;
@@ -97,39 +97,34 @@ public class ShutdownServer implements ShutdownServerMBean {
         } else if (mode == 1) {
             mode++;
             System.out.println("Shutdown 2 commencing...");
-            try {
-                World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(0, "The world is going to shutdown now. Please log off safely."));
-                Integer[] chs = ChannelServer.getAllInstance().toArray(new Integer[0]);
+            World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(0, "The world is going to shutdown now. Please log off safely."));
+            Integer[] chs = ChannelServer.getAllInstance().toArray(new Integer[0]);
 
-                for (int i : chs) {
-                    try {
-                        ChannelServer cs = ChannelServer.getInstance(i);
-                        synchronized (this) {
-                            cs.shutdown();
-                        }
-                    } catch (Exception e) {
+            for (int i : chs) {
+                try {
+                    ChannelServer cs = ChannelServer.getInstance(i);
+                    synchronized (this) {
+                        cs.shutdown();
                     }
+                } catch (Exception e) {
                 }
-                CashShopServer.getInstance().shutdown();
-                DatabaseConnection.closeAll();
-            } catch (SQLException e) {
-                System.err.println("THROW" + e);
             }
-            WorldTimer.getInstance().stop();
-            MapTimer.getInstance().stop();
-            BuffTimer.getInstance().stop();
-            CloneTimer.getInstance().stop();
-            EventTimer.getInstance().stop();
-            EtcTimer.getInstance().stop();
-            PingTimer.getInstance().stop();
-            LoginServer.getInstance().shutdown();
-            System.out.println("Shutdown 2 has finished.");
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                //shutdown
-            }
-            System.exit(0); //not sure if this is really needed for ChannelServer
+            CashShopServer.getInstance().shutdown();
         }
+        WorldTimer.getInstance().stop();
+        MapTimer.getInstance().stop();
+        BuffTimer.getInstance().stop();
+        CloneTimer.getInstance().stop();
+        EventTimer.getInstance().stop();
+        EtcTimer.getInstance().stop();
+        PingTimer.getInstance().stop();
+        LoginServer.getInstance().shutdown();
+        System.out.println("Shutdown 2 has finished.");
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            //shutdown
+        }
+        System.exit(0); //not sure if this is really needed for ChannelServer
     }
 }

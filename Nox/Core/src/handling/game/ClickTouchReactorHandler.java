@@ -6,7 +6,7 @@ import scripting.provider.ReactorScriptManager;
 import server.MapleInventoryManipulator;
 import server.maps.objects.MapleReactor;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -21,8 +21,8 @@ public class ClickTouchReactorHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final int oid = iPacket.DecodeInteger();
-        final boolean touched = iPacket.Available() == 0 || iPacket.DecodeByte() > 0; //the byte is probably the state to set it to
+        final int oid = iPacket.DecodeInt();
+        final boolean touched = iPacket.GetRemainder() == 0 || iPacket.DecodeByte() > 0; //the byte is probably the state to set it to
         final MapleReactor reactor = c.getPlayer().getMap().getReactorByOid(oid);
 
         if (c.getPlayer().isIntern()) {

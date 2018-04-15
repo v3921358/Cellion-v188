@@ -11,7 +11,7 @@ import java.util.List;
 import server.MapleInventoryManipulator;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -29,10 +29,10 @@ public class ItemGatherHandler implements ProcessPacket<MapleClient> {
         // [41 00] [E5 1D 55 00] [01]
         // [32 00] [01] [01] // Sent after
 
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
         if (c.getPlayer().hasBlockedInventory()) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         final byte mode = iPacket.DecodeByte();
@@ -51,8 +51,8 @@ public class ItemGatherHandler implements ProcessPacket<MapleClient> {
         for (Item item : sortedItems) {
             MapleInventoryManipulator.addFromDrop(c, item, false);
         }
-        c.write(CWvsContext.finishedGather(mode));
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.finishedGather(mode));
+        c.SendPacket(CWvsContext.enableActions());
         itemMap.clear();
         sortedItems.clear();
     }

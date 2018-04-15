@@ -9,7 +9,7 @@ import server.maps.objects.User;
 import server.quest.MapleQuest;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -27,7 +27,7 @@ public class DenyPartyRequestHandler implements ProcessPacket<MapleClient> {
         int action = iPacket.DecodeByte();
         System.out.println("[Debug] Party Result Operation: " + action);
         if ((action == 50)) {
-            User chr = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInteger());
+            User chr = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInt());
             if ((chr != null) && (chr.getParty() == null) && (c.getPlayer().getParty() != null) && (c.getPlayer().getParty().getLeader().getId() == c.getPlayer().getId()) && (c.getPlayer().getParty().getMembers().size() < 6) && (c.getPlayer().getParty().getExpeditionId() <= 0) && (chr.getQuestNoAdd(MapleQuest.getInstance(122901)) == null) && (c.getPlayer().getQuestNoAdd(MapleQuest.getInstance(122900)) == null)) {
                 chr.setParty(c.getPlayer().getParty());
                 World.Party.updateParty(c.getPlayer().getParty().getId(), PartyOperation.JOIN, new MaplePartyCharacter(chr));
@@ -36,7 +36,7 @@ public class DenyPartyRequestHandler implements ProcessPacket<MapleClient> {
             }
             return;
         }
-        int partyid = iPacket.DecodeInteger();
+        int partyid = iPacket.DecodeInt();
         if ((c.getPlayer().getParty() == null) && (c.getPlayer().getQuestNoAdd(MapleQuest.getInstance(122901)) == null)) {
             MapleParty party = World.Party.getParty(partyid);
             if (party != null) {
@@ -52,13 +52,13 @@ public class DenyPartyRequestHandler implements ProcessPacket<MapleClient> {
                             c.getPlayer().receivePartyMemberHP();
                             c.getPlayer().updatePartyMemberHP();
                         } else {
-                            c.write(CWvsContext.PartyPacket.partyStatusMessage(22, null));
+                            c.SendPacket(CWvsContext.PartyPacket.partyStatusMessage(22, null));
                         }
                         break;
                     case 33:
                         User cfrom = c.getChannelServer().getPlayerStorage().getCharacterById(party.getLeader().getId());
                         if (cfrom != null) { //Currently giving "Your request for a party didn't work due to an unexpected error"
-                            cfrom.getClient().write(CWvsContext.PartyPacket.partyStatusMessage(23, c.getPlayer().getName()));
+                            cfrom.getClient().SendPacket(CWvsContext.PartyPacket.partyStatusMessage(23, c.getPlayer().getName()));
                         }
                         break;
                     case 37: //Decline invite

@@ -11,7 +11,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import database.DatabaseConnection;
+import database.Database;
+import tools.LogHelper;
 
 /**
  *
@@ -39,12 +40,11 @@ public class MapleGeneralRanking {
 
     public void reload() {
         candyranks.clear();
-        Connection con;
         PreparedStatement ps;
         ResultSet rs;
         short rank = 1;
-        try {
-            con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             ps = con.prepareStatement("SELECT * FROM characters WHERE  deletedAt is null ORDER BY `candies` DESC LIMIT " + max);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -55,7 +55,7 @@ public class MapleGeneralRanking {
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            System.err.println("Error handling custom rankings: " + e);
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
     }
 

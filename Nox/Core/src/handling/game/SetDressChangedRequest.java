@@ -3,7 +3,7 @@ package handling.game;
 import client.MapleClient;
 import constants.GameConstants;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import tools.packet.CField;
 
 public class SetDressChangedRequest implements ProcessPacket<MapleClient> {
@@ -29,7 +29,7 @@ public class SetDressChangedRequest implements ProcessPacket<MapleClient> {
 
         if (!c.getPlayer().isAngelicDressupState()) {
             c.getPlayer().setAngelicDressupState(true);
-            c.write(CField.setAngelicBusterTransformation(bDressChanged, 1));
+            c.SendPacket(CField.setAngelicBusterTransformation(bDressChanged, 1));
         } else {
             c.getPlayer().setAngelicDressupState(false);
             // c.write(CField.setAngelicBusterTransformation(0, 0));

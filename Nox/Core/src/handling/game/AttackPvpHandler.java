@@ -35,7 +35,7 @@ import net.InPacket;
 import server.maps.Map_MCarnival;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class AttackPvpHandler implements ProcessPacket<MapleClient> {
 
@@ -48,10 +48,10 @@ public final class AttackPvpHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         final Lock ThreadLock = new ReentrantLock();
         final User chr = c.getPlayer();
-        final int trueSkill = iPacket.DecodeInteger();
+        final int trueSkill = iPacket.DecodeInt();
         int skillid = trueSkill;
         if (chr == null || chr.isHidden() || !chr.isAlive() || chr.hasBlockedInventory() || chr.getMap() == null || !chr.inPVP() || !chr.getEventInstance().getProperty("started").equals("1") || skillid >= 90000000) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         final int lvl = Integer.parseInt(chr.getEventInstance().getProperty("lvl"));
@@ -73,7 +73,7 @@ public final class AttackPvpHandler implements ProcessPacket<MapleClient> {
         iPacket.Skip(1); //skill level
         int chargeTime = 0;
         if (GameConstants.isMagicChargeSkill(skillid)) {
-            chargeTime = iPacket.DecodeInteger();
+            chargeTime = iPacket.DecodeInt();
         } else {
             iPacket.Skip(4);
         }
@@ -84,7 +84,7 @@ public final class AttackPvpHandler implements ProcessPacket<MapleClient> {
             }
             final Skill skil = SkillFactory.getSkill(skillid);
             if (skil == null || skil.isPVPDisabled()) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             magic = skil.isMagic();
@@ -93,7 +93,7 @@ public final class AttackPvpHandler implements ProcessPacket<MapleClient> {
             pull = skil.isPull();
             if (chr.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(skillid)) <= 0) {
                 if (!GameConstants.isIceKnightSkill(skillid) && chr.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(skillid)) <= 0) {
-                    c.close();
+                    c.Close();
                     return;
                 }
                 if (GameConstants.isIceKnightSkill(skillid) && chr.getBuffSource(CharacterTemporaryStat.Morph) % 10000 != 1105) {
@@ -143,7 +143,7 @@ public final class AttackPvpHandler implements ProcessPacket<MapleClient> {
 
             if (effect.getCooldown(chr) > 0) {
                 if (chr.skillisCooling(skillid)) {
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                     return;
                 }
                 if ((skillid != 35111004 && skillid != 35121013) || chr.getBuffSource(CharacterTemporaryStat.Mechanic) != skillid) { // Battleship
@@ -382,7 +382,7 @@ public final class AttackPvpHandler implements ProcessPacket<MapleClient> {
                     if (ice == attacked.getId()) {
                         //chr.getClient().write(CField.getPVPIceHPBar(attacked.getStat().getHp(), attacked.getStat().getCurrentMaxHp()));
                     } else {
-                        chr.getClient().write(CField.getPVPHPBar(attacked.getId(), attacked.getStat().getHp(), attacked.getStat().getCurrentMaxHp()));
+                        chr.getClient().SendPacket(CField.getPVPHPBar(attacked.getId(), attacked.getStat().getHp(), attacked.getStat().getCurrentMaxHp()));
                     }
 
                     if (!attacked.isAlive()) {
@@ -422,7 +422,7 @@ public final class AttackPvpHandler implements ProcessPacket<MapleClient> {
             }
         }
         if (chr.getEventInstance() == null) { //if the PVP ends 
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
 
@@ -436,13 +436,13 @@ public final class AttackPvpHandler implements ProcessPacket<MapleClient> {
             if (skillid > 0 && (ourAttacks.size() > 0 || (skillid != 4331003 && skillid != 4341002)) && !GameConstants.isNoDelaySkill(skillid)) {
                 boolean applyTo = effect.applyTo(chr, chr.getTruePosition());
             } else {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
             }
         } else {
             move = false;
             pull = false;
             push = false;
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
         }
         chr.getMap().broadcastMessage(CField.pvpAttack(chr.getId(), chr.getLevel(), trueSkill, trueSkillLevel, speed, fakeMastery, visProjectile, attackCount, chargeTime, animation, facingLeft ? 1 : 0, chr.getStat().defRange, skillid, skillLevel, move, push, pull, ourAttacks));
         if (addedScore > 0 && GameConstants.getAttackDelay(skillid, SkillFactory.getSkill(skillid)) >= 100) {

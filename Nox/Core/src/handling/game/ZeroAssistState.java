@@ -4,7 +4,7 @@ import client.MapleClient;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  * This is where the zero assist state is changed

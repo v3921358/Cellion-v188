@@ -680,7 +680,7 @@ public class PlayerStats implements Serializable {
                 localmaxmp = 100;
             }
             if (GameConstants.isDemonAvenger(chra.getJob())) {
-                chra.getClient().write(JobPacket.AvengerPacket.giveAvengerHpBuff(hp));
+                chra.getClient().SendPacket(JobPacket.AvengerPacket.giveAvengerHpBuff(hp));
             }
             calcPassive_SharpEye(chra);
             calcPassiveMasteryAmount(chra);
@@ -1447,7 +1447,7 @@ public class PlayerStats implements Serializable {
                     asrR += eff.getASRRate();
                     terR += eff.getTERRate();
                 }
-                
+
                 bx = SkillFactory.getSkill(4001005); // Haste
                 bof = chra.getTotalSkillLevel(bx);
                 if (bof > 0) {
@@ -3256,7 +3256,7 @@ public class PlayerStats implements Serializable {
         }
         if (changed) {
             chr.equipChanged();
-            chr.getClient().write(EffectPacket.showForeignEffect(EffectPacket.UserEffectCodes.ItemLevelup));
+            chr.getClient().SendPacket(EffectPacket.showForeignEffect(EffectPacket.UserEffectCodes.ItemLevelup));
             chr.getMap().broadcastMessage(chr, EffectPacket.showForeignEffect(chr.getId(), EffectPacket.UserEffectCodes.ItemLevelup), false);
         }
         return changed;
@@ -3283,7 +3283,7 @@ public class PlayerStats implements Serializable {
             if (eqq != null && eqq.getDurability() == 0 && eqq.getPosition() < 0) { //> 0 went to negative
                 if (chr.getInventory(MapleInventoryType.EQUIP).isFull()) {
                     List<ModifyInventory> mod = new ArrayList<>();
-                    chr.getClient().write(CWvsContext.inventoryOperation(true, mod));
+                    chr.getClient().SendPacket(CWvsContext.inventoryOperation(true, mod));
                     return false;
                 }
                 durabilityHandling.remove(eqq);
@@ -3694,7 +3694,7 @@ public class PlayerStats implements Serializable {
         final int playerjob = chra.getJob();
 
         shouldHealHP = 10 + recoverHP; // Reset
-        shouldHealMP = /*GameConstants.isDemonSlayer(chra.getJob()) ? 0 : */(3 + recoverMP + (localint_ / 10)); // i think
+        shouldHealMP = /*GameConstants.isDemonSlayer(chra.getJob()) ? 0 : */ (3 + recoverMP + (localint_ / 10)); // i think
         mpRecoverTime = 0;
         hpRecoverTime = 0;
         if (playerjob == 111 || playerjob == 112) {
@@ -3761,10 +3761,10 @@ public class PlayerStats implements Serializable {
         oPacket.EncodeShort(dex);
         oPacket.EncodeShort(int_);
         oPacket.EncodeShort(luk);
-        oPacket.EncodeInteger(hp);
-        oPacket.EncodeInteger(maxhp);
-        oPacket.EncodeInteger(mp);
-        oPacket.EncodeInteger(maxmp);
+        oPacket.EncodeInt(hp);
+        oPacket.EncodeInt(maxhp);
+        oPacket.EncodeInt(mp);
+        oPacket.EncodeInt(maxmp);
     }
 
     private final static int[] allJobs = {0, 10000, 10000000, 20000000, 20010000, 20020000, 20030000, 20040000, 30000000, 30010000, 50000000};
@@ -4113,7 +4113,7 @@ public class PlayerStats implements Serializable {
             }
         }
         if (GameConstants.isDemonAvenger(chra.getJob())) {
-            chra.getClient().write(JobPacket.AvengerPacket.giveAvengerHpBuff(hp));
+            chra.getClient().SendPacket(JobPacket.AvengerPacket.giveAvengerHpBuff(hp));
         }
         return hp != oldHp;
     }

@@ -36,7 +36,7 @@ import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.FarmPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class EnterCashShopHandler implements ProcessPacket<MapleClient> {
 
@@ -49,13 +49,13 @@ public final class EnterCashShopHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
         if (chr.hasBlockedInventory() || chr.getEventInstance() != null) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         CharacterTransfer farmtransfer = FarmServer.getPlayerStorage().getPendingCharacter(chr.getId());
         if (farmtransfer != null) {
-            c.write(FarmPacket.farmMessage("You cannot move into Cash Shop while visiting your farm."));
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(FarmPacket.farmMessage("You cannot move into Cash Shop while visiting your farm."));
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         ChannelServer ch = ChannelServer.getInstance(c.getChannel());
@@ -72,7 +72,7 @@ public final class EnterCashShopHandler implements ProcessPacket<MapleClient> {
         c.updateLoginState(MapleClientLoginState.CHANGE_CHANNEL, s);
 
         LoginServer.addIPAuth(s.substring(s.indexOf('/') + 1, s.length()));
-        c.write(CField.getChannelChange(c, Integer.parseInt(CashShopServer.getIP().split(":")[1])));
+        c.SendPacket(CField.getChannelChange(c, Integer.parseInt(CashShopServer.getIP().split(":")[1])));
         chr.saveToDB(false, false);
         chr.getMap().removePlayer(chr);
 

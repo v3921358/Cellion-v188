@@ -4,7 +4,7 @@ import client.MapleCharacterCreationUtil;
 import client.MapleClient;
 import net.InPacket;
 import tools.packet.CLogin;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class CheckDuplicatedIDHandler implements ProcessPacket<MapleClient> {
 
@@ -25,7 +25,7 @@ public final class CheckDuplicatedIDHandler implements ProcessPacket<MapleClient
         if (li.isForbiddenName(name) && !c.isGm()) {
             nameUsed = false;
         }
-        c.write(CLogin.charNameResponse(name, nameUsed));
+        c.SendPacket(CLogin.charNameResponse(name, nameUsed));
     }
 
 }

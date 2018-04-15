@@ -1,10 +1,8 @@
 package crypto;
 
 /**
- * Fragment borrowed from some remote site for AES cryptography.
- * Author is unknown at the moment, was an artifact used in Invictus that
- * has made its way into this engine as well.  Not well documented since
- * getting into the math with regards to how AES functions is not something
+ * Fragment borrowed from some remote site for AES cryptography. Author is unknown at the moment, was an artifact used in Invictus that has
+ * made its way into this engine as well. Not well documented since getting into the math with regards to how AES functions is not something
  * easily written here.
  */
 public final class AES {
@@ -14,7 +12,7 @@ public final class AES {
             KEY_LENGTH = 32;
     int numRounds;
     byte[][] Ke;
-    byte[][] Kd;  
+    byte[][] Kd;
     byte[] Ker;
     byte[] ta;
     static final byte[] S = {
@@ -99,7 +97,7 @@ public final class AES {
                 ? alog[(log[a & 0xFF] + log[b & 0xFF]) % 255]
                 : 0;
     }
-    
+
     public byte[] encrypt(byte[] a) {
         ta = new byte[BLOCK_SIZE];
         int i, k, row, col;

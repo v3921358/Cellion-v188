@@ -6,7 +6,7 @@ import server.maps.objects.User;
 import net.InPacket;
 import server.maps.SharedMapResources.MapleNodeInfo;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -22,8 +22,8 @@ public class MobNodeHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
-        Mob mob_from = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
-        int newNode = iPacket.DecodeInteger();
+        Mob mob_from = chr.getMap().getMonsterByOid(iPacket.DecodeInt());
+        int newNode = iPacket.DecodeInt();
         int nodeSize = chr.getMap().getSharedMapResources().getNodes().size();
 
         if (mob_from != null && nodeSize > 0) {

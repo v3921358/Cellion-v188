@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import scripting.provider.NPCScriptManager;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -21,7 +21,7 @@ public class NPCQuickMoveHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final int npcid = iPacket.DecodeInteger();
+        final int npcid = iPacket.DecodeInt();
         if (c.getPlayer().hasBlockedInventory() || c.getPlayer().isInBlockedMap() || c.getPlayer().getLevel() < 10) {
             return;
         }

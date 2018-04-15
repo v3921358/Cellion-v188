@@ -168,7 +168,7 @@ public class Enchant {
      */
     public boolean canDowngrade() {
         if (!isSuperior(oldEquip.getItemId())) {
-        //if (!GameConstants.isSuperiorEquip(oldEquip.getItemId())) {
+            //if (!GameConstants.isSuperiorEquip(oldEquip.getItemId())) {
             if (oldEquip.getEnhance() > 4 && oldEquip.getEnhance() < 10 || oldEquip.getEnhance() > 10 && oldEquip.getEnhance() < 15) {
                 return true;
             }
@@ -473,7 +473,7 @@ public class Enchant {
     private short statBoost(Equip equip) {
         short stat = (short) ((equip.getEnhance() > 4) ? 3 : 2);
         if (isSuperior(equip.getItemId()) && equip.getEnhance() < 6) {
-        //if (GameConstants.isSuperiorEquip(equip.getItemId()) && equip.getEnhance() < 6) {
+            //if (GameConstants.isSuperiorEquip(equip.getItemId()) && equip.getEnhance() < 6) {
             stat = 19;
             for (int i = 0; i < equip.getEnhance(); i++) {
                 stat += i;
@@ -670,7 +670,7 @@ public class Enchant {
         int star = oldEquip.getEnhance();
         int level = oldEquip.getReqLevel();
         if (isSuperior(oldEquip.getItemId())) {
-        //if (GameConstants.isSuperiorEquip(oldEquip.getItemId())) {
+            //if (GameConstants.isSuperiorEquip(oldEquip.getItemId())) {
             return price[star];
         }
         level = level / 10 > 14 ? 14 : (level / 10);

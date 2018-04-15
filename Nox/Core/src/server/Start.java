@@ -14,8 +14,7 @@ import constants.ServerConstants;
 import constants.WorldConstants;
 import constants.WorldConstants.TespiaWorldOption;
 import constants.WorldConstants.WorldOption;
-import crypto.CAESCipher;
-import database.DatabaseConnection;
+import database.Database;
 import handling.world.MapleDojoRanking;
 import handling.world.MapleGuildRanking;
 import handling.login.LoginInformationProvider;
@@ -23,6 +22,7 @@ import handling.world.World;
 import handling.world.MapleFamily;
 import handling.world.MapleGuild;
 import java.io.FileInputStream;
+import java.sql.Connection;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -68,6 +68,8 @@ public class Start {
             System.exit(0);
         }
 
+        Database.Initialize();
+
         /*Setting Server Rates*/
         ServerConstants.EXP_RATE = Float.valueOf(config.getProperty("EXP_RATE"));
         ServerConstants.MESO_RATE = Float.valueOf(config.getProperty("MESO_RATE"));
@@ -107,8 +109,10 @@ public class Start {
         /*Configuration End*/
 
         System.setProperty("wzpath", "wz");
-        try {
-            try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("UPDATE accounts SET loggedin = 0")) {
+
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin = 0")) {
                 ps.executeUpdate();
                 System.out.println("Database Connection Established");
             }
@@ -122,7 +126,6 @@ public class Start {
             System.out.println("Server Maintenance Enabled: GM Level " + ServerConstants.MAINTENANCE_LEVEL + " Required");
         }
 
-        CAESCipher.Initialize(ServerConstants.MAPLE_VERSION);
         World.init();
         System.out.println("\nHost IP: " + ServerConstants.HOST);
         System.out.println("Port: " + LoginServer.PORT);

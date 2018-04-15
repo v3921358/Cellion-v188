@@ -9,7 +9,7 @@ import server.maps.MapScriptMethods;
 import net.InPacket;
 import server.maps.objects.User.MapleCharacterConversationType;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -25,7 +25,7 @@ public class NPCMoreTalkHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final NPCChatType lastMsgType = NPCChatType.fromInt(iPacket.DecodeByte()); // 00 (last msg type I think)
-        if (lastMsgType == NPCChatType.OnAskAvater && iPacket.Available() >= 4) {
+        if (lastMsgType == NPCChatType.OnAskAvater && iPacket.GetRemainder() >= 4) {
             iPacket.DecodeShort();
         }
         final byte action = iPacket.DecodeByte(); // 00 = end chat, 01 == follow
@@ -34,10 +34,10 @@ public class NPCMoreTalkHandler implements ProcessPacket<MapleClient> {
                 || (lastMsgType == NPCChatType.OnAskSlideMenu && c.getPlayer().getDirection() == -1)) && action == 1) {
             byte lastbyte = iPacket.DecodeByte(); // 00 = end chat, 01 == follow
             if (lastbyte == 0) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
             } else {
                 MapScriptMethods.startDirectionInfo(c.getPlayer(), lastMsgType == NPCChatType.OnAskUserDirection);
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
             }
             return;
         }
@@ -49,7 +49,7 @@ public class NPCMoreTalkHandler implements ProcessPacket<MapleClient> {
         final NPCChatType lastMsgType_server = cm.getLastChatType(); // 00 (last msg type I think)
 
         /*if (cm != null && lastMsg == 0x17) {
-            c.getPlayer().handleDemonJob(iPacket.decodeInteger());
+            c.getPlayer().handleDemonJob(iPacket.DecodeInt());
             return;
         }*/
         int selection = -1;
@@ -63,9 +63,9 @@ public class NPCMoreTalkHandler implements ProcessPacket<MapleClient> {
             case OnAskMenu: // Simple
             case OnAskAvater: // Style
             case OnAskSlideMenu: // Mirror Dimension
-                if (iPacket.Available() > 0) {
-                    if (iPacket.Available() >= 4) {
-                        selection = iPacket.DecodeInteger();
+                if (iPacket.GetRemainder() > 0) {
+                    if (iPacket.GetRemainder() >= 4) {
+                        selection = iPacket.DecodeInt();
                     } else {
                         selection = iPacket.DecodeByte();
                     }

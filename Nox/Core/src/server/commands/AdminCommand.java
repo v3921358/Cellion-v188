@@ -16,11 +16,10 @@ import constants.EventConstants;
 import constants.GameConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
-import tools.packet.LoadPacket;
 import handling.world.World;
+import net.OutPacket;
 import service.ChannelServer;
-import net.Packet;
-import provider.data.HexTool;
+
 import scripting.provider.NPCChatByType;
 import scripting.provider.NPCChatType;
 import server.MapleInventoryManipulator;
@@ -119,7 +118,7 @@ public class AdminCommand {
             int end = Randomizer.nextInt(10);
             String data = "Magic Wheel";
             c.getPlayer().setWheelItem(items.get(end));
-            c.write(CWvsContext.magicWheel((byte) 3, items, data, end));
+            c.SendPacket(CWvsContext.magicWheel((byte) 3, items, data, end));
             return 1;
         }
     }
@@ -146,8 +145,8 @@ public class AdminCommand {
                     MapleInventoryManipulator.removeById(c, GameConstants.getInventoryType(itemId), itemId, 1, false, false);
                     Item item = ii.getEquipById(items.get(Randomizer.nextInt(items.size())));
                     MapleInventoryManipulator.addbyItem(c, item);
-                    c.write(CField.unsealBox(item.getItemId()));
-                    c.write(CField.EffectPacket.showRewardItemAnimation(2028162, "")); //sealed box
+                    c.SendPacket(CField.unsealBox(item.getItemId()));
+                    c.SendPacket(CField.EffectPacket.showRewardItemAnimation(2028162, "")); //sealed box
                 }
             }, 10000);
             return 1;
@@ -167,16 +166,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.write(NPCPacket.getDemonSelection());
-            return 1;
-        }
-    }
-
-    public static class CPacket extends CommandExecute {
-
-        @Override
-        public int execute(MapleClient c, String[] splitted) {
-            c.write(LoadPacket.createPacket());
+            c.SendPacket(NPCPacket.getDemonSelection());
             return 1;
         }
     }
@@ -265,7 +255,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.write(CField.UIPacket.UserInGameDirectionEvent(StringUtil.joinStringFrom(splitted, 5), Integer.parseInt(splitted[1]), Integer.parseInt(splitted[2]), Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5])));
+            c.SendPacket(CField.UIPacket.UserInGameDirectionEvent(StringUtil.joinStringFrom(splitted, 5), Integer.parseInt(splitted[1]), Integer.parseInt(splitted[2]), Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5])));
             return 1;
         }
     }
@@ -274,7 +264,10 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.write(new Packet(StringUtil.joinStringFrom(splitted, 1).getBytes()));
+            byte[] aData = StringUtil.joinStringFrom(splitted, 1).getBytes();
+            byte[] aDataTrim = new byte[aData.length - 2];
+            System.arraycopy(aData, 2, aDataTrim, 0, aDataTrim.length);
+            c.SendPacket(new OutPacket((short) ((aData[0] & 0xFF) + (aData[1] >>> 8))).Encode(aDataTrim));
             return 1;
         }
     }
@@ -356,7 +349,7 @@ public class AdminCommand {
                 for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
                     if (c.canClickNPC()) {
                         mch.gainItem(Integer.parseInt(splitted[1]), 1);
-                        mch.getClient().write(CField.NPCPacket.getNPCTalk(9010010, NPCChatType.OK, "You got the #t" + Integer.parseInt(splitted[1]) + "#, right? Click it to see what's inside. Go ahead and check your item inventory now, if you're curious.", NPCChatByType.NPC_UnCancellable, 9010010));
+                        mch.getClient().SendPacket(CField.NPCPacket.getNPCTalk(9010010, NPCChatType.OK, "You got the #t" + Integer.parseInt(splitted[1]) + "#, right? Click it to see what's inside. Go ahead and check your item inventory now, if you're curious.", NPCChatByType.NPC_UnCancellable, 9010010));
                     }
                 }
             }

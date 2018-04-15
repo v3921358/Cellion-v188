@@ -54,18 +54,17 @@ public final class CloseRangeAttack {
 
         //AttackInfo attack = DamageParse.parseCloseRangeAttack(iPacket, chr, passiveAttack);
         AttackInfo attack = DamageParse.OnAttack(RecvPacketOpcode.UserMeleeAttack, iPacket, pPlayer);
-        
+
         /*if (passiveAttack) {
             attack = DamageParse.OnAttack(RecvPacketOpcode.UserBodyAttack, iPacket, chr);
         } else {
             attack = DamageParse.OnAttack(RecvPacketOpcode.UserMeleeAttack, iPacket, chr);
         }*/
-        
         if (pPlayer.isDeveloper()) {
             c.getPlayer().dropMessage(5, "[CloseRangeAttack Debug] Skill ID : " + attack.skill);
-            
+
         }
-        
+
         final boolean mirror = (pPlayer.hasBuff(CharacterTemporaryStat.ShadowPartner) || pPlayer.hasBuff(CharacterTemporaryStat.ShadowServant));
         double maxdamage = pPlayer.getStat().getCurrentMaxBaseDamage();
 
@@ -78,7 +77,7 @@ public final class CloseRangeAttack {
         if (attack.skill != 0) {
             skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
             if (skill == null || (GameConstants.isAngel(attack.skill) && pPlayer.getStat().equippedSummon % 10000 != attack.skill % 10000)) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
 
@@ -99,15 +98,15 @@ public final class CloseRangeAttack {
                     pPlayer.handleExceedAttack(skill.getId());
                 }
             } else if (GameConstants.isDemonSlayer(pPlayer.getJob()) && !pPlayer.hasBuff(CharacterTemporaryStat.InfinityForce)) {
-                
+
                 switch (attack.skill) { // Hack fix for some Fury Costs.
-                    case DemonSlayer.DEMON_CRY: 
+                    case DemonSlayer.DEMON_CRY:
                         pPlayer.setMp(pPlayer.getStat().getMp() + 20);
                         break;
-                    case DemonSlayer.CHAOS_LOCK: 
+                    case DemonSlayer.CHAOS_LOCK:
                         pPlayer.setMp(pPlayer.getStat().getMp() + 10);
                         break;
-                    case DemonSlayer.CERBERUS_CHOMP: 
+                    case DemonSlayer.CERBERUS_CHOMP:
                         pPlayer.setMp(pPlayer.getStat().getMp() + 50);
                         break;
                 }
@@ -129,10 +128,10 @@ public final class CloseRangeAttack {
                     case 37001004:
                     case Blaster.REVOLVING_CANNON_PLUS:
                     case Blaster.REVOLVING_CANNON_PLUS_II:
-                    case Blaster.REVOLVING_CANNON_PLUS_III: 
+                    case Blaster.REVOLVING_CANNON_PLUS_III:
                         Resistance.BlasterHandler.handleAmmoCost(pPlayer);
                         Resistance.BlasterHandler.handleGaugeIncrease(pPlayer);
-                        c.write(JobPacket.BlasterPacket.onRWMultiChargeCancelRequest((byte) 1, attack.skill));
+                        c.SendPacket(JobPacket.BlasterPacket.onRWMultiChargeCancelRequest((byte) 1, attack.skill));
                         break;
                 }
             } else if (GameConstants.isHayato(pPlayer.getJob()) && attack.skill == Hayato.SUMMER_RAIN) {
@@ -140,7 +139,7 @@ public final class CloseRangeAttack {
                     HayatoHandler.updateBladeStanceRequest(pPlayer, 0);
                 }
             } else if (GameConstants.isPhantom(pPlayer.getJob())) {
-                
+
             }
 
             switch (attack.skill) {
@@ -178,13 +177,13 @@ public final class CloseRangeAttack {
                     int Recharge = effect.getOnActive();
                     if (Recharge > -1) {
                         if (Randomizer.isSuccess(Recharge)) {
-                            c.write(JobPacket.AngelicPacket.unlockSkill());
-                            c.write(JobPacket.AngelicPacket.showRechargeEffect());
+                            c.SendPacket(JobPacket.AngelicPacket.unlockSkill());
+                            c.SendPacket(JobPacket.AngelicPacket.showRechargeEffect());
                         } else {
-                            c.write(JobPacket.AngelicPacket.lockSkill(attack.skill));
+                            c.SendPacket(JobPacket.AngelicPacket.lockSkill(attack.skill));
                         }
                     } else {
-                        c.write(JobPacket.AngelicPacket.lockSkill(attack.skill));
+                        c.SendPacket(JobPacket.AngelicPacket.lockSkill(attack.skill));
                     }
                 }
             }
@@ -195,7 +194,7 @@ public final class CloseRangeAttack {
                 // Handle cooldown
                 if (effect.getCooldown(pPlayer) > 0 && !passiveAttack) {
                     if (pPlayer.skillisCooling(attack.skill)) {
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                         return;
                     }
                     pPlayer.addCooldown(attack.skill, System.currentTimeMillis(), effect.getCooldown(pPlayer));
@@ -225,9 +224,9 @@ public final class CloseRangeAttack {
             }
         }
         pPlayer.checkFollow();
-        
+
         if (attack.skill != Aran.MAHAS_DOMAIN) {
-        
+
             if (!pPlayer.isHidden()) {
                 pPlayer.getMap().broadcastMessage(pPlayer, CField.closeRangeAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, passiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), attack.attackFlag, attack.charge), pPlayer.getTruePosition());
             } else {
@@ -236,8 +235,7 @@ public final class CloseRangeAttack {
         } else {
             pPlayer.write(CField.closeRangeAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, passiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), attack.attackFlag, attack.charge));
         }
-        
-        
+
         DamageParse.applyAttack(attack, skill, c.getPlayer(), attackCount, maxdamage, effect, mirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
         int bulletCount = 1;
         switch (attack.skill) {

@@ -22,25 +22,25 @@ public class TraitMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.Trait.getType());//MessageType
+        oPacket.EncodeByte(_MessageOpcodesType.Trait.getType());//MessageType
         oPacket.EncodeLong(flag);
         if ((flag & MapleStat.CHARISMA.getValue()) != 0) {
-            oPacket.EncodeInteger(amount);
+            oPacket.EncodeInt(amount);
         }
         if ((flag & MapleStat.INSIGHT.getValue()) != 0) {
-            oPacket.EncodeInteger(amount);
+            oPacket.EncodeInt(amount);
         }
         if ((flag & MapleStat.WILL.getValue()) != 0) {
-            oPacket.EncodeInteger(amount);
+            oPacket.EncodeInt(amount);
         }
         if ((flag & MapleStat.CRAFT.getValue()) != 0) {
-            oPacket.EncodeInteger(amount);
+            oPacket.EncodeInt(amount);
         }
         if ((flag & MapleStat.SENSE.getValue()) != 0) {
-            oPacket.EncodeInteger(amount);
+            oPacket.EncodeInt(amount);
         }
         if ((flag & MapleStat.CHARM.getValue()) != 0) {
-            oPacket.EncodeInteger(amount);
+            oPacket.EncodeInt(amount);
         }
     }
 

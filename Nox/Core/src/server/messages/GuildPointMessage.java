@@ -19,8 +19,8 @@ public class GuildPointMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.GuildPoint.getType());
-        oPacket.EncodeInteger(guildPoint);
+        oPacket.EncodeByte(_MessageOpcodesType.GuildPoint.getType());
+        oPacket.EncodeInt(guildPoint);
     }
 
 }

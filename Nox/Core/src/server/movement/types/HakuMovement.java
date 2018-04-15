@@ -10,7 +10,7 @@ import net.InPacket;
 import server.maps.objects.User;
 import server.movement.LifeMovementFragment;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  * @author Steven
@@ -32,7 +32,7 @@ public class HakuMovement implements ProcessPacket<MapleClient> {
         if (chr.getHaku() == null) {
             return;
         }
-        chr.getHaku().settEncodedGatherDuration(iPacket.DecodeInteger());
+        chr.getHaku().settEncodedGatherDuration(iPacket.DecodeInt());
         chr.getHaku().setxCS(iPacket.DecodeShort());
         chr.getHaku().setyCS(iPacket.DecodeShort());
         chr.getHaku().setvXCS(iPacket.DecodeShort());

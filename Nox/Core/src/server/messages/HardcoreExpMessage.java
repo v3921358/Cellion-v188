@@ -21,9 +21,9 @@ public class HardcoreExpMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.HardcoreExp.getType());
-        oPacket.EncodeInteger(unk);
-        oPacket.EncodeInteger(unk1);
+        oPacket.EncodeByte(_MessageOpcodesType.HardcoreExp.getType());
+        oPacket.EncodeInt(unk);
+        oPacket.EncodeInt(unk1);
     }
 
 }

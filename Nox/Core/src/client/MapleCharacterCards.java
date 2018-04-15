@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import constants.GameConstants;
+import java.sql.Connection;
 import net.OutPacket;
 import server.CharacterCardFactory;
 import server.maps.objects.User;
@@ -99,8 +100,8 @@ public class MapleCharacterCards {
         calculateEffects(); // recalculate, just incase 
     }
 
-    public final void loadCards(final MapleClient c, final boolean channelserver) throws SQLException {
-        cards = CharacterCardFactory.getInstance().loadCharacterCards(c.getAccID(), c.getWorld());
+    public final void loadCards(final MapleClient c, final boolean channelserver, Connection con) throws SQLException {
+        cards = CharacterCardFactory.getInstance().loadCharacterCards(c.getAccID(), c.getWorld(), con);
         if (channelserver) {
             calculateEffects();
         }
@@ -117,9 +118,9 @@ public class MapleCharacterCards {
             if (poss > 9) {
                 break;
             }
-            oPacket.EncodeInteger(i.cid);
-            oPacket.Encode(i.level);
-            oPacket.EncodeInteger(i.job);
+            oPacket.EncodeInt(i.cid);
+            oPacket.EncodeByte(i.level);
+            oPacket.EncodeInt(i.job);
         }
     }
 }

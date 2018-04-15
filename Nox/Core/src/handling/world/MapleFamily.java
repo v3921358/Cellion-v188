@@ -33,9 +33,10 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import database.DatabaseConnection;
+import database.Database;
 import handling.world.World;
-import net.Packet;
+import net.OutPacket;
+
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
@@ -57,8 +58,8 @@ public final class MapleFamily implements java.io.Serializable {
     public MapleFamily(final int fid) {
         super();
 
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             PreparedStatement ps = con.prepareStatement("SELECT * FROM families WHERE familyid = ?");
             ps.setInt(1, fid);
             ResultSet rs = ps.executeQuery();
@@ -137,7 +138,7 @@ public final class MapleFamily implements java.io.Serializable {
             resetPedigree();
             resetDescendants(); //set
         } catch (SQLException se) {
-            System.err.println("unable to read family information from sql");
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
         }
     }
 
@@ -161,22 +162,22 @@ public final class MapleFamily implements java.io.Serializable {
     }
 
     public static final void loadAll() {
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             try (PreparedStatement ps = con.prepareStatement("SELECT familyid FROM families"); ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     World.Family.addLoadedFamily(new MapleFamily(rs.getInt("familyid")));
                 }
             }
         } catch (SQLException se) {
-            System.err.println("unable to read family information from sql");
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
         }
     }
 
     public static final void loadAll(Object toNotify) {
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             boolean cont = false;
-            Connection con = DatabaseConnection.getConnection();
             try (PreparedStatement ps = con.prepareStatement("SELECT familyid FROM families"); ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     FamilyLoad.QueueFamilyForLoad(rs.getInt("familyid"));
@@ -187,7 +188,7 @@ public final class MapleFamily implements java.io.Serializable {
                 return;
             }
         } catch (SQLException se) {
-            System.err.println("unable to read family information from sql");
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
         }
         AtomicInteger FinishedThreads = new AtomicInteger(0);
         FamilyLoad.Execute(toNotify);
@@ -208,8 +209,8 @@ public final class MapleFamily implements java.io.Serializable {
     }
 
     public final void writeToDB(final boolean bDisband) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             if (!bDisband) {
                 if (changed) {
                     try (PreparedStatement ps = con.prepareStatement("UPDATE families SET notice = ? WHERE familyid = ?")) {
@@ -230,7 +231,7 @@ public final class MapleFamily implements java.io.Serializable {
                 }
             }
         } catch (SQLException se) {
-            System.err.println("Error saving family to SQL");
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
         }
     }
 
@@ -253,15 +254,15 @@ public final class MapleFamily implements java.io.Serializable {
         return leadername;
     }
 
-    public final void broadcast(final Packet packet, List<Integer> cids) {
+    public final void broadcast(final OutPacket packet, List<Integer> cids) {
         broadcast(packet, -1, FCOp.NONE, cids);
     }
 
-    public final void broadcast(final Packet packet, final int exception, List<Integer> cids) {
+    public final void broadcast(final OutPacket packet, final int exception, List<Integer> cids) {
         broadcast(packet, exception, FCOp.NONE, cids);
     }
 
-    public final void broadcast(final Packet packet, final int exceptionId, final FCOp bcop, List<Integer> cids) {
+    public final void broadcast(final OutPacket packet, final int exceptionId, final FCOp bcop, List<Integer> cids) {
         //passing null to cids will ensure all
         buildNotifications();
         if (members.size() < 2) {
@@ -458,8 +459,8 @@ public final class MapleFamily implements java.io.Serializable {
     }
 
     public static void setOfflineFamilyStatus(int familyid, int seniorid, int junior1, int junior2, int currentrep, int totalrep, int cid) {
-        try {
-            java.sql.Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             try (java.sql.PreparedStatement ps = con.prepareStatement("UPDATE characters SET familyid = ?, seniorid = ?, junior1 = ?, junior2 = ?, currentrep = ?, totalrep = ? WHERE id = ?")) {
                 ps.setInt(1, familyid);
                 ps.setInt(2, seniorid);
@@ -476,8 +477,8 @@ public final class MapleFamily implements java.io.Serializable {
     }
 
     public static int createFamily(int leaderId) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
 
             int ret;
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO families (`leaderid`) VALUES (?)", Statement.RETURN_GENERATED_KEYS)) {
@@ -494,6 +495,7 @@ public final class MapleFamily implements java.io.Serializable {
             }
             return ret;
         } catch (SQLException e) {
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             return 0;
         }
     }

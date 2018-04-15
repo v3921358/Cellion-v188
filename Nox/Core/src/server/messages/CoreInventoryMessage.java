@@ -19,16 +19,16 @@ public class CoreInventoryMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.CoreInventory.getType());
-        oPacket.Encode(mode);
+        oPacket.EncodeByte(_MessageOpcodesType.CoreInventory.getType());
+        oPacket.EncodeByte(mode);
         switch (mode) {
             case 0x16:
-                oPacket.EncodeInteger(0); //itemId
-                oPacket.EncodeInteger(0);
+                oPacket.EncodeInt(0); //itemId
+                oPacket.EncodeInt(0);
                 break;
             case 0x19:
-                oPacket.EncodeInteger(0); //itemId
-                oPacket.EncodeInteger(0);
+                oPacket.EncodeInt(0); //itemId
+                oPacket.EncodeInt(0);
                 break;
         }
     }

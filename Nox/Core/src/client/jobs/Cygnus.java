@@ -1,5 +1,5 @@
 /*
- * Rexion Development
+ * Cellion Development
  */
 package client.jobs;
 
@@ -53,9 +53,9 @@ public class Cygnus {
             final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
             final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, 30000);
             pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), buffSchedule, buffEffects.statups, false, 30000, pPlayer.getId());
-            pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, 0, 30000, buffEffects.statups, buffEffects));
+            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, 0, 30000, buffEffects.statups, buffEffects));
         }
-        
+
     }
 
     public static class ThunderBreakerHandler {
@@ -105,7 +105,7 @@ public class Cygnus {
             final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
             final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, buffEffects.info.get(MapleStatInfo.time));
             pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), buffSchedule, buffEffects.statups, false, buffEffects.info.get(MapleStatInfo.time), pPlayer.getId());
-            pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, ThunderBreaker.LIGHTNING_ELEMENTAL, buffEffects.info.get(MapleStatInfo.time), buffEffects.statups, buffEffects));
+            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, ThunderBreaker.LIGHTNING_ELEMENTAL, buffEffects.info.get(MapleStatInfo.time), buffEffects.statups, buffEffects));
         }
     }
 

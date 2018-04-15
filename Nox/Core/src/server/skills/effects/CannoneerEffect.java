@@ -21,12 +21,12 @@ public class CannoneerEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Cannoneer.BARREL_BOMB:
-                pEffect.monsterStatus.put(MonsterStatus.STUN, 1); 
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Cannoneer.BARREL_BOMB_1:
                 break;
             case Cannoneer.CANNON_BOOSTER:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x)); 
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Cannoneer.CANNON_MASTERY:
                 break;

@@ -3,7 +3,7 @@ package handling.game;
 import client.MapleClient;
 import net.InPacket;
 import server.maps.FieldLimitType;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -18,7 +18,7 @@ public class SpawnPetHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
 
         if (!FieldLimitType.UnableToUsePet.check(c.getPlayer().getMap())) {
             c.getPlayer().spawnPet(iPacket.DecodeByte(), iPacket.DecodeByte() > 0, true);

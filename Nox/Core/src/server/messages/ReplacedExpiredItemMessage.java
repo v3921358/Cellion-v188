@@ -20,8 +20,8 @@ public class ReplacedExpiredItemMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.ReplaceExpiredItem.getType());
-        oPacket.Encode(messages.size());
+        oPacket.EncodeByte(_MessageOpcodesType.ReplaceExpiredItem.getType());
+        oPacket.EncodeByte(messages.size());
         for (String message : messages) {
             oPacket.EncodeString(message);
         }

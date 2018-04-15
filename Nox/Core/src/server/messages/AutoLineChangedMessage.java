@@ -19,7 +19,7 @@ public class AutoLineChangedMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.AutoLineChanged.getType());
+        oPacket.EncodeByte(_MessageOpcodesType.AutoLineChanged.getType());
         oPacket.EncodeString(message);
     }
 

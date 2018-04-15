@@ -2408,7 +2408,7 @@ public class Global {
     public static final int RESISTANCE_WARRIOR_DEMON_SLAYER = 71000311;
     public static final int SONG_OF_SPIRITS = 71000821;
     public static final int THE_GLORIOUS_RETURN = 71001007;
-    public static final int THUNDEROUS_SPIRIT= 71000421;
+    public static final int THUNDEROUS_SPIRIT = 71000421;
     public static final int WARRIORS_FEAT = 71001102;
     public static final int WARRIORS_FIRST_STEP = 71001100;
     public static final int WARRIORS_GROWTH = 71001101;

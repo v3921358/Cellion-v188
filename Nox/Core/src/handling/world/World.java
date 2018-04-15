@@ -34,12 +34,13 @@ import constants.WorldConstants.WorldOption;
 import constants.skills.BattleMage;
 import constants.skills.DemonSlayer;
 import constants.skills.Mihile;
-import database.DatabaseConnection;
+import database.Database;
 import handling.game.PlayerStorage;
+import net.OutPacket;
 import service.CashShopServer;
 import service.ChannelServer;
 import service.FarmServer;
-import net.Packet;
+
 import server.Timer.WorldTimer;
 import server.life.Mob;
 import server.maps.MapleMap;
@@ -49,6 +50,7 @@ import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
 import tools.CollectionUtil;
+import tools.LogHelper;
 import tools.Pair;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -95,7 +97,6 @@ public class World {
     }
 
     /*End of Automated Save Handling*/
-
     public static String getStatus() {
         StringBuilder ret = new StringBuilder();
         int totalUsers = 0;
@@ -205,11 +206,10 @@ public class World {
         private static final AtomicInteger runningPartyId = new AtomicInteger(1), runningExpedId = new AtomicInteger(1);
 
         static {
-            try {
-                try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("UPDATE characters SET party = -1, fatigue = 0")) {
-                    ps.executeUpdate();
-                }
+            try (PreparedStatement ps = Database.GetConnection().prepareStatement("UPDATE characters SET party = -1, fatigue = 0")) {
+                ps.executeUpdate();
             } catch (SQLException e) {
+                LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             }
             for (PartySearchType pst : PartySearchType.values()) {
                 searches.put(pst, new ArrayList<PartySearch>()); //according to client, max 10, even though theres page numbers ?!
@@ -230,7 +230,7 @@ public class World {
             }
         }
 
-        public static void expedPacket(int expedId, Packet packet, MaplePartyCharacter exception) {
+        public static void expedPacket(int expedId, OutPacket packet, MaplePartyCharacter exception) {
             MapleExpedition party = getExped(expedId);
             if (party == null) {
                 return;
@@ -240,7 +240,7 @@ public class World {
             }
         }
 
-        public static void partyPacket(int partyid, Packet packet, MaplePartyCharacter exception) {
+        public static void partyPacket(int partyid, OutPacket packet, MaplePartyCharacter exception) {
             MapleParty party = getParty(partyid);
             if (party == null) {
                 return;
@@ -251,7 +251,7 @@ public class World {
                 if (ch > 0 && (exception == null || partychar.getId() != exception.getId())) {
                     User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(partychar.getName());
                     if (chr != null) { //Extra check just in case
-                        chr.getClient().write(packet);
+                        chr.getClient().SendPacket(packet);
                     }
                 }
             }
@@ -362,9 +362,9 @@ public class World {
                     if (chr != null) {
                         chr.setParty(null);
                         if (oldExped > 0) {
-                            chr.getClient().write(ExpeditionPacket.expeditionMessage(80));
+                            chr.getClient().SendPacket(ExpeditionPacket.expeditionMessage(80));
                         }
-                        chr.getClient().write(PartyPacket.updateParty(chr.getClient().getChannel(), party, operation, target));
+                        chr.getClient().SendPacket(PartyPacket.updateParty(chr.getClient().getChannel(), party, operation, target));
                     }
                 }
                 if (target.getId() == party.getLeader().getId() && party.getMembers().size() > 0) { //pass on lead
@@ -393,12 +393,12 @@ public class World {
                         if (operation == PartyOperation.DISBAND) {
                             chr.setParty(null);
                             if (oldExped > 0) {
-                                chr.getClient().write(ExpeditionPacket.expeditionMessage(79));//83
+                                chr.getClient().SendPacket(ExpeditionPacket.expeditionMessage(79));//83
                             }
                         } else {
                             chr.setParty(party);
                         }
-                        chr.getClient().write(PartyPacket.updateParty(chr.getClient().getChannel(), party, operation, target));
+                        chr.getClient().SendPacket(PartyPacket.updateParty(chr.getClient().getChannel(), party, operation, target));
                     }
                 }
             }
@@ -587,7 +587,7 @@ public class World {
                             ble.setFlag(BuddyFlags.ACCOUNT_FRIEND.getFlag(ble));
                             Buddy bud = new Buddy(BuddyResult.NOTIFY);
                             bud.setEntry(ble);
-                            chr.getClient().write(CWvsContext.buddylistMessage(bud));
+                            chr.getClient().SendPacket(CWvsContext.buddylistMessage(bud));
                         }
                     }
                 }
@@ -609,7 +609,7 @@ public class World {
                                 entry.setFlag(BuddyFlags.ACCOUNT_FRIEND.getFlag(entry));
                                 buddylist.put(entry);
                                 b.setEntry(entry);
-                                addChar.getClient().write(CWvsContext.buddylistMessage(b));
+                                addChar.getClient().SendPacket(CWvsContext.buddylistMessage(b));
                             }
                             break;
                         case DELETE:
@@ -618,7 +618,7 @@ public class World {
                                 entry.setFlag(BuddyFlags.OFFLINE.getFlag());
                                 buddylist.put(entry);
                                 b.setEntry(entry);
-                                addChar.getClient().write(CWvsContext.buddylistMessage(b));
+                                addChar.getClient().SendPacket(CWvsContext.buddylistMessage(b));
                             }
                             break;
                         default:
@@ -626,7 +626,7 @@ public class World {
                     }
                     b.setResult(BuddyResult.LOAD_FRIENDS);
                     b.setEntries(new ArrayList<>(buddylist.getBuddies()));
-                    addChar.getClient().write(CWvsContext.buddylistMessage(b));
+                    addChar.getClient().SendPacket(CWvsContext.buddylistMessage(b));
                 }
             }
         }
@@ -679,7 +679,7 @@ public class World {
                 if (chr != null) {
                     MapleMessenger messenger = chr.getMessenger();
                     if (messenger != null) {
-                        chr.getClient().write(CField.messengerNote(namefrom, 5, 0));
+                        chr.getClient().SendPacket(CField.messengerNote(namefrom, 5, 0));
                     }
                 }
             }
@@ -703,7 +703,7 @@ public class World {
                     if (ch > 0) {
                         User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(mmc.getName());
                         if (chr != null) {
-                            chr.getClient().write(CField.removeMessengerPlayer(position));
+                            chr.getClient().SendPacket(CField.removeMessengerPlayer(position));
                         }
                     }
                 }
@@ -737,7 +737,7 @@ public class World {
                         User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(messengerchar.getName());
                         if (chr != null) {
                             User from = ChannelServer.getInstance(fromchannel).getPlayerStorage().getCharacterByName(namefrom);
-                            chr.getClient().write(CField.updateMessengerPlayer(namefrom, from, position, fromchannel - 1));
+                            chr.getClient().SendPacket(CField.updateMessengerPlayer(namefrom, from, position, fromchannel - 1));
                         }
                     }
                 }
@@ -761,11 +761,11 @@ public class World {
                             if (!messengerchar.getName().equals(from)) {
                                 User fromCh = ChannelServer.getInstance(fromchannel).getPlayerStorage().getCharacterByName(from);
                                 if (fromCh != null) {
-                                    chr.getClient().write(CField.addMessengerPlayer(from, fromCh, position, fromchannel - 1));
-                                    fromCh.getClient().write(CField.addMessengerPlayer(chr.getName(), chr, mposition, messengerchar.getChannel() - 1));
+                                    chr.getClient().SendPacket(CField.addMessengerPlayer(from, fromCh, position, fromchannel - 1));
+                                    fromCh.getClient().SendPacket(CField.addMessengerPlayer(chr.getName(), chr, mposition, messengerchar.getChannel() - 1));
                                 }
                             } else {
-                                chr.getClient().write(CField.joinMessenger(mposition));
+                                chr.getClient().SendPacket(CField.joinMessenger(mposition));
                             }
                         }
                     }
@@ -785,7 +785,7 @@ public class World {
                     if (ch > 0) {
                         User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(messengerchar.getName());
                         if (chr != null) {
-                            chr.getClient().write(CField.messengerChat(charname, text));
+                            chr.getClient().SendPacket(CField.messengerChat(charname, text));
                         }
                     }
                 }
@@ -802,13 +802,13 @@ public class World {
                     User targeter = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(target);
                     if (targeter != null && targeter.getMessenger() == null) {
                         if (!targeter.isIntern() || gm) {
-                            targeter.getClient().write(CField.messengerInvite(sender, messengerid));
-                            from.getClient().write(CField.messengerNote(target, 4, 1));
+                            targeter.getClient().SendPacket(CField.messengerInvite(sender, messengerid));
+                            from.getClient().SendPacket(CField.messengerNote(target, 4, 1));
                         } else {
-                            from.getClient().write(CField.messengerNote(target, 4, 0));
+                            from.getClient().SendPacket(CField.messengerNote(target, 4, 0));
                         }
                     } else {
-                        from.getClient().write(CField.messengerChat(sender, " : " + target + " is already using Maple Messenger"));
+                        from.getClient().SendPacket(CField.messengerChat(sender, " : " + target + " is already using Maple Messenger"));
                     }
                 }
             }
@@ -958,7 +958,7 @@ public class World {
             }
         }
 
-        public static void guildPacket(int gid, Packet message) {
+        public static void guildPacket(int gid, OutPacket message) {
             MapleGuild g = getGuild(gid);
             if (g != null) {
                 g.broadcast(message);
@@ -1252,31 +1252,31 @@ public class World {
 
     public static class Broadcast {
 
-        public static void broadcastSmega(Packet message) {
+        public static void broadcastSmega(OutPacket message) {
             for (ChannelServer cs : ChannelServer.getAllInstances()) {
                 cs.broadcastSmega(message);
             }
         }
 
-        public static void broadcastGMMessage(Packet message) {
+        public static void broadcastGMMessage(OutPacket message) {
             for (ChannelServer cs : ChannelServer.getAllInstances()) {
                 cs.broadcastGMMessage(message);
             }
         }
 
-        public static void broadcastMessage(Packet message) {
+        public static void broadcastMessage(OutPacket message) {
             for (ChannelServer cs : ChannelServer.getAllInstances()) {
                 cs.broadcastMessage(message);
             }
         }
 
-        public static void broadcastWhisper(Packet message, String msgDestination) {
+        public static void broadcastWhisper(OutPacket message, String msgDestination) {
             for (ChannelServer cs : ChannelServer.getAllInstances()) {
                 cs.broadcastWhisper(message, msgDestination);
             }
         }
 
-        public static void sendPacket(List<Integer> targetIds, Packet packet, int exception) {
+        public static void sendPacket(List<Integer> targetIds, OutPacket packet, int exception) {
             User c;
             for (int i : targetIds) {
                 if (i == exception) {
@@ -1288,23 +1288,23 @@ public class World {
                 }
                 c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(i);
                 if (c != null) {
-                    c.getClient().write(packet.Clone());
+                    c.getClient().SendPacket(packet.Clone());
                 }
             }
         }
 
-        public static void sendPacket(int targetId, Packet packet) {
+        public static void sendPacket(int targetId, OutPacket packet) {
             int ch = Find.findChannel(targetId);
             if (ch < 0) {
                 return;
             }
             final User c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetId);
             if (c != null) {
-                c.getClient().write(packet.Clone());
+                c.getClient().SendPacket(packet.Clone());
             }
         }
 
-        public static void sendGuildPacket(int targetIds, Packet packet, int exception, int guildid) {
+        public static void sendGuildPacket(int targetIds, OutPacket packet, int exception, int guildid) {
             if (targetIds == exception) {
                 return;
             }
@@ -1314,11 +1314,11 @@ public class World {
             }
             final User c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetIds);
             if (c != null && c.getGuildId() == guildid) {
-                c.getClient().write(packet.Clone());
+                c.getClient().SendPacket(packet.Clone());
             }
         }
 
-        public static void sendFamilyPacket(int targetIds, Packet packet, int exception, int guildid) {
+        public static void sendFamilyPacket(int targetIds, OutPacket packet, int exception, int guildid) {
             if (targetIds == exception) {
                 return;
             }
@@ -1328,7 +1328,7 @@ public class World {
             }
             final User c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetIds);
             if (c != null && c.getFamilyId() == guildid) {
-                c.getClient().write(packet.Clone());
+                c.getClient().SendPacket(packet.Clone());
             }
         }
     }
@@ -1559,7 +1559,7 @@ public class World {
             }
         }
 
-        public static void sendGuild(final Packet packet, final int exceptionId, final int allianceid) {
+        public static void sendGuild(final OutPacket packet, final int exceptionId, final int allianceid) {
             final MapleGuildAlliance alliance = getAlliance(allianceid);
             if (alliance != null) {
                 for (int i = 0; i < alliance.getNoGuilds(); i++) {
@@ -1664,8 +1664,8 @@ public class World {
             }
         }
 
-        public static List<Packet> getAllianceInfo(final int allianceid, final boolean start) {
-            List<Packet> ret = new ArrayList<>();
+        public static List<OutPacket> getAllianceInfo(final int allianceid, final boolean start) {
+            List<OutPacket> ret = new ArrayList<>();
             final MapleGuildAlliance alliance = getAlliance(allianceid);
             if (alliance != null) {
                 if (start) {
@@ -1777,7 +1777,7 @@ public class World {
             }
         }
 
-        public static void familyPacket(int gid, Packet message, int cid) {
+        public static void familyPacket(int gid, OutPacket message, int cid) {
             MapleFamily f = getFamily(gid);
             if (f != null) {
                 f.broadcast(message, -1, f.getMFC(cid).getPedigree());
@@ -1845,13 +1845,11 @@ public class World {
 
         //TODO: test the achievement reset
         if (getHour() == 0 && getMinute() >= 0 && getMinute() <= 1) { //not sure if put it here
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps;
-            try {
-                ps = con.prepareStatement("DELETE FROM `moonlightachievements` where achievementid > 0;");
+            try (PreparedStatement ps = Database.GetConnection().prepareStatement("DELETE FROM `moonlightachievements` where achievementid > 0;")) {
                 ps.executeUpdate();
                 ps.close();
             } catch (SQLException ex) {
+                LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
             }
         }
         if (map.getAllMapObjectSize(MapleMapObjectType.ITEM) > 0) {
@@ -1924,7 +1922,7 @@ public class World {
                 }
             }
             if (!cooldowns.isEmpty()) {
-                pPlayer.getClient().write(CField.skillCooldown(cooldowns));
+                pPlayer.getClient().SendPacket(CField.skillCooldown(cooldowns));
             }
         }
         if (pPlayer.isAlive()) {
@@ -1940,7 +1938,7 @@ public class World {
                 if (pPlayer.darkElementalTimeout(tNow)) { // Mark of Darkness timeout
                     pPlayer.setDarkElementalCombo(0);
                 }
-            } else if (GameConstants.isDemonSlayer(pPlayer.getJob())) { 
+            } else if (GameConstants.isDemonSlayer(pPlayer.getJob())) {
                 if (pPlayer.hasSkill(DemonSlayer.MAX_FURY)) {
                     pPlayer.getStat().setMp(pPlayer.getStat().getMp() + 10, pPlayer);
                     pPlayer.updateSingleStat(MapleStat.MP, pPlayer.getStat().getMp());
@@ -2018,7 +2016,7 @@ public class World {
                 } else {
                     pet.setFullness(newFullness);
                     //chr.forceUpdateItem(pet);
-                    pPlayer.getClient().write(PetPacket.updatePet(pet, pPlayer.getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+                    pPlayer.getClient().SendPacket(PetPacket.updatePet(pet, pPlayer.getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
                 }
             }
         }

@@ -135,30 +135,8 @@ public class InternCommand {
                 }
             }
 
-            c.write(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage, NPCChatByType.NPC_Cancellable));
+            c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage, NPCChatByType.NPC_Cancellable));
             return 1;
-        }
-    }
-
-    public static class Seal extends CommandExecute {
-
-        @Override
-        public int execute(MapleClient c, String[] splitted) {
-            if (splitted.length < 2) {
-                c.getPlayer().dropMessage(6, "Syntax: !seal opcode");
-                return 1;
-            } else {
-                short opcode = 0;
-                String text = splitted[1];
-                opcode = Short.parseShort(text);
-                List<Integer> items;
-                Integer[] itemArray = {1002140, 1302000, 1302001,
-                    1302002, 1302003, 1302004, 1302005, 1302006,
-                    1302007};
-                items = Arrays.asList(itemArray);
-                c.write(CField.sendBoxDebug(opcode, 2028162, items)); //sealed box
-                return 1;
-            }
         }
     }
 
@@ -300,9 +278,9 @@ public class InternCommand {
             }
             gotomaps.put("gmmap100", 180000100);
             gotomaps.put("gmmap105", 180000105);
-            
+
             gotomaps.put("guild", 200000301);
-            
+
             gotomaps.put("happy", 209000000);
             gotomaps.put("happyville", 209000000);
             gotomaps.put("harbor", 104000000);
@@ -450,7 +428,7 @@ public class InternCommand {
         public int execute(MapleClient c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[splitted.length - 1]);
             if (victim != null && c.getPlayer().getGMLevel() >= victim.getGMLevel()) {
-                victim.getClient().close();
+                victim.getClient().Close();
                 victim.getClient().disconnect(true, false);
                 return 1;
             } else {
@@ -754,7 +732,7 @@ public class InternCommand {
                             c.getPlayer().dropMessage(6, "Sorry, that search call is unavailable");
                             break;
                     }
-                    c.write(NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sb.toString(), NPCChatByType.NPC_Cancellable));
+                    c.SendPacket(NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sb.toString(), NPCChatByType.NPC_Cancellable));
                     break;
             }
             return 0;
@@ -972,7 +950,7 @@ public class InternCommand {
                     }
                 }
                 for (User chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                    chrs.getClient().write(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has started!"));
+                    chrs.getClient().SendPacket(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has started!"));
                 }
                 player.getMap().broadcastMessage(CField.getClock(60));
             }
@@ -1011,7 +989,7 @@ public class InternCommand {
                     }
                 }
                 for (User chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                    chrs.getClient().write(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has ended! The winners are: " + winner));
+                    chrs.getClient().SendPacket(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has ended! The winners are: " + winner));
                 }
             }
             return 1;

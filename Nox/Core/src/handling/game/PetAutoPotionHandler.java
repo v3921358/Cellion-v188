@@ -10,7 +10,7 @@ import server.MapleItemInformationProvider;
 import server.maps.FieldLimitType;
 import server.maps.objects.User;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -28,21 +28,21 @@ public class PetAutoPotionHandler implements ProcessPacket<MapleClient> {
         User chr = c.getPlayer();
 
         iPacket.Skip(9);
-        chr.updateTick(iPacket.DecodeInteger());
+        chr.updateTick(iPacket.DecodeInt());
         final short slot = iPacket.DecodeShort();
         if (!chr.isAlive() || chr.getMapId() == 749040100 || chr.getMap() == null || chr.hasDisease(MapleDisease.POTION)) {
             return;
         }
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
 
-        if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != iPacket.DecodeInteger()) {
-            c.write(CWvsContext.enableActions());
+        if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != iPacket.DecodeInt()) {
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         final long time = System.currentTimeMillis();
         if (chr.getNextConsume() > time) {
             chr.dropMessage(5, "You may not use this item yet.");
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         if (!FieldLimitType.UnableToConsumeStatChangeItem.check(chr.getMap())) { //cwk quick hack
@@ -53,7 +53,7 @@ public class PetAutoPotionHandler implements ProcessPacket<MapleClient> {
                 }
             }
         } else {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
         }
     }
 }

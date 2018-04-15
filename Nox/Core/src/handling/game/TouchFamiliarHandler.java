@@ -5,7 +5,7 @@ import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class TouchFamiliarHandler implements ProcessPacket<MapleClient> {
 
@@ -23,13 +23,13 @@ public final class TouchFamiliarHandler implements ProcessPacket<MapleClient> {
         iPacket.Skip(6);
         byte unk = iPacket.DecodeByte();
 
-        Mob target = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
+        Mob target = chr.getMap().getMonsterByOid(iPacket.DecodeInt());
         if (target == null) {
             return;
         }
-        int type = iPacket.DecodeInteger();
+        int type = iPacket.DecodeInt();
         iPacket.Skip(4);
-        int damage = iPacket.DecodeInteger();
+        int damage = iPacket.DecodeInt();
         int maxDamage = chr.getSummonedFamiliar().getStats().getPADamage() * 5;
         if (damage < maxDamage) {
             damage = maxDamage;

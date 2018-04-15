@@ -1199,19 +1199,19 @@ public enum SendPacketOpcode {
     RANDOM_Morph(404), // VERSION 170 
     CANCEL_NAME_CHANGE_2(405);//:v
 
-    private int code;
+    private short code;
     public static SendPacketOpcode eOp;
 
-    public void setValue(int code) {
+    public void setValue(short code) {
         this.code = code;
     }
 
-    public int getValue() {
+    public short getValue() {
         eOp = this;
         return code;
     }
 
     private SendPacketOpcode(int code) {
-        this.code = code;
+        this.code = (short) code;
     }
 }

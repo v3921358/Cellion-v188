@@ -111,8 +111,8 @@ public class MapleCarnivalParty {
         for (int chr : members) {
             final User c = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterById(chr);
             if (c != null) {
-                c.getClient().write(CField.showEffect(effect));
-                c.getClient().write(CField.playSound(sound));
+                c.getClient().SendPacket(CField.showEffect(effect));
+                c.getClient().SendPacket(CField.playSound(sound));
                 if (!done) {
                     done = true;
                     c.getMap().killAllMonsters(true);

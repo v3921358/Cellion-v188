@@ -20,7 +20,7 @@ import server.Randomizer;
 import tools.Pair;
 import net.InPacket;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -35,11 +35,11 @@ public class ItemMakerHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final int makerType = iPacket.DecodeInteger();
+        final int makerType = iPacket.DecodeInt();
 
         switch (makerType) {
             case 1: { // Gem
-                final int toCreate = iPacket.DecodeInteger();
+                final int toCreate = iPacket.DecodeInt();
 
                 if (GameConstants.isGem(toCreate)) {
                     final ItemMakerFactory.GemCreateEntry gem = ItemMakerFactory.getInstance().getGemInfo(toCreate);
@@ -64,7 +64,7 @@ public class ItemMakerHandler implements ProcessPacket<MapleClient> {
                     c.getPlayer().gainMeso(-gem.getCost(), false);
                     MapleInventoryManipulator.addById(c, randGemGiven, (byte) (taken == randGemGiven ? 9 : 1), "Made by Gem " + toCreate + " on " + LocalDateTime.now()); // Gem is always 1
 
-                    c.write(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.ItemMaker));
+                    c.SendPacket(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.ItemMaker));
                     c.getPlayer().getMap().broadcastMessage(c.getPlayer(), CField.EffectPacket.showForeignEffect(c.getPlayer().getId(), CField.EffectPacket.UserEffectCodes.ItemMaker), false);
                 } else if (GameConstants.isOtherGem(toCreate)) {
                     //non-gems that are gems
@@ -93,11 +93,11 @@ public class ItemMakerHandler implements ProcessPacket<MapleClient> {
                         MapleInventoryManipulator.addById(c, toCreate, (byte) 1, "Made by Gem " + toCreate + " on " + LocalDateTime.now()); // Gem is always 1
                     }
 
-                    c.write(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.ItemMaker));
+                    c.SendPacket(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.ItemMaker));
                     c.getPlayer().getMap().broadcastMessage(c.getPlayer(), CField.EffectPacket.showForeignEffect(c.getPlayer().getId(), CField.EffectPacket.UserEffectCodes.ItemMaker), false);
                 } else {
                     final boolean stimulator = iPacket.DecodeByte() > 0;
-                    final int numEnchanter = iPacket.DecodeInteger();
+                    final int numEnchanter = iPacket.DecodeInt();
 
                     final ItemMakerFactory.ItemMakerCreateEntry create = ItemMakerFactory.getInstance().getCreateInfo(toCreate);
                     if (create == null) {
@@ -129,7 +129,7 @@ public class ItemMakerHandler implements ProcessPacket<MapleClient> {
                             MapleInventoryManipulator.removeById(c, MapleInventoryType.ETC, create.getStimulator(), 1, false, false);
                         }
                         for (int i = 0; i < numEnchanter; i++) {
-                            final int enchant = iPacket.DecodeInteger();
+                            final int enchant = iPacket.DecodeInt();
                             if (c.getPlayer().haveItem(enchant, 1, false, true)) {
                                 final Map<String, Integer> stats = ii.getEquipStats(enchant);
                                 if (stats != null) {
@@ -147,25 +147,25 @@ public class ItemMakerHandler implements ProcessPacket<MapleClient> {
                     } else {
                         c.getPlayer().dropMessage(5, "The item was overwhelmed by the stimulator.");
                     }
-                    c.write(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.ItemMaker));
+                    c.SendPacket(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.ItemMaker));
                 }
                 break;
             }
             case 3: { // Making Crystals
-                final int etc = iPacket.DecodeInteger();
+                final int etc = iPacket.DecodeInt();
                 if (c.getPlayer().haveItem(etc, 100, false, true)) {
                     MapleInventoryManipulator.addById(c, getCreateCrystal(etc), (short) 1, "Made by Maker " + etc + " on " + LocalDateTime.now());
                     MapleInventoryManipulator.removeById(c, MapleInventoryType.ETC, etc, 100, false, false);
 
-                    c.write(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.ItemMaker));
+                    c.SendPacket(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.ItemMaker));
                     c.getPlayer().getMap().broadcastMessage(c.getPlayer(), CField.EffectPacket.showForeignEffect(c.getPlayer().getId(), CField.EffectPacket.UserEffectCodes.ItemMaker), false);
                 }
                 break;
             }
             case 4: { // Disassembling EQ.
-                final int itemId = iPacket.DecodeInteger();
-                c.getPlayer().updateTick(iPacket.DecodeInteger());
-                final byte slot = (byte) iPacket.DecodeInteger();
+                final int itemId = iPacket.DecodeInt();
+                c.getPlayer().updateTick(iPacket.DecodeInt());
+                final byte slot = (byte) iPacket.DecodeInt();
 
                 final Item toUse = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(slot);
                 if (toUse == null || toUse.getItemId() != itemId || toUse.getQuantity() < 1) {
@@ -178,7 +178,7 @@ public class ItemMakerHandler implements ProcessPacket<MapleClient> {
                     MapleInventoryManipulator.addById(c, toGive[0], (byte) toGive[1], "Made by disassemble " + itemId + " on " + LocalDateTime.now());
                     MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.EQUIP, slot, (byte) 1, false);
                 }
-                c.write(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.ItemMaker));
+                c.SendPacket(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.ItemMaker));
                 c.getPlayer().getMap().broadcastMessage(c.getPlayer(), CField.EffectPacket.showForeignEffect(c.getPlayer().getId(), CField.EffectPacket.UserEffectCodes.ItemMaker), false);
                 break;
             }

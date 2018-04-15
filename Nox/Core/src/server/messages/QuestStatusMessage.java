@@ -21,13 +21,13 @@ public class QuestStatusMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.QuestStatus.getType()); //MessageType
-        oPacket.EncodeInteger(quest.getQuest().getId());
-        oPacket.Encode(quest.getStatus().getValue());
+        oPacket.EncodeByte(_MessageOpcodesType.QuestStatus.getType()); //MessageType
+        oPacket.EncodeInt(quest.getQuest().getId());
+        oPacket.EncodeByte(quest.getStatus().getValue());
 
         switch (quest.getStatus()) {
             case NotStarted:
-                oPacket.Encode(0);
+                oPacket.EncodeByte(0);
                 break;
             case Started:
                 oPacket.EncodeString(quest.getCustomData() != null ? quest.getCustomData() : "");

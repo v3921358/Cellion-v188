@@ -16,8 +16,8 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import static service.LoginServer.PORT;
 import service.ServerMode.MapleServerMode;
-import netty.PacketDecoder;
-import netty.PacketEncoder;
+import net.PacketDecoder;
+import net.PacketEncoder;
 
 /**
  *

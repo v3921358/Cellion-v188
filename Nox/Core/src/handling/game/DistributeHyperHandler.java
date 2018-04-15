@@ -8,7 +8,7 @@ import constants.ServerConstants;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -25,8 +25,8 @@ public class DistributeHyperHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
 
-        chr.updateTick(iPacket.DecodeInteger());
-        int skillid = iPacket.DecodeInteger();
+        chr.updateTick(iPacket.DecodeInt());
+        int skillid = iPacket.DecodeInt();
         final Skill skill = SkillFactory.getSkill(skillid);
         final int remainingSp = chr.getRemainingHSp(skill.getHyper() - 1);
 
@@ -35,7 +35,7 @@ public class DistributeHyperHandler implements ProcessPacket<MapleClient> {
 
         if (skill.isInvisible() && chr.getSkillLevel(skill) == 0) {
             if (maxlevel <= 0) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 //AutobanManager.getInstance().addPoints(c, 1000, 0, "Illegal distribution of SP to invisible skills (" + skillid + ")");
                 return;
             }
@@ -43,7 +43,7 @@ public class DistributeHyperHandler implements ProcessPacket<MapleClient> {
 
         for (int i : GameConstants.blockedSkills) {
             if (skill.getId() == i) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 chr.dropMessage(1, "This skill has been blocked and may not be added.");
                 return;
             }
@@ -55,7 +55,7 @@ public class DistributeHyperHandler implements ProcessPacket<MapleClient> {
 
             chr.changeSingleSkillLevel(skill, (byte) 1, (byte) 1, SkillFactory.getDefaultSExpiry(skill), true);
         } else {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
         }
     }
 

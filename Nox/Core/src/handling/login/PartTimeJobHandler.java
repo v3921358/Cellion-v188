@@ -6,7 +6,7 @@ import constants.ServerConstants;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.CLogin;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class PartTimeJobHandler implements ProcessPacket<MapleClient> {
 
@@ -22,29 +22,29 @@ public final class PartTimeJobHandler implements ProcessPacket<MapleClient> {
         }
 
         if (c.getPlayer() != null || !c.isLoggedIn()) {
-            c.close();
+            c.Close();
             return;
         }
         final byte mode = iPacket.DecodeByte();
-        final int cid = iPacket.DecodeInteger();
+        final int cid = iPacket.DecodeInt();
         if (mode == 1) {
             final PartTimeJob partTime = User.getPartTime(cid);
             final byte job = iPacket.DecodeByte();
             if (/*chr.getLevel() < 30 || */job < 0 || job > 5 || partTime.getReward() > 0
                     || (partTime.getJob() > 0 && partTime.getJob() <= 5)) {
-                c.close();
+                c.Close();
                 return;
             }
             partTime.setTime(System.currentTimeMillis());
             partTime.setJob(job);
-            c.write(CLogin.updatePartTimeJob(partTime));
+            c.SendPacket(CLogin.updatePartTimeJob(partTime));
             User.removePartTime(cid);
             User.addPartTime(partTime);
         } else if (mode == 2) {
             final PartTimeJob partTime = User.getPartTime(cid);
             if (/*chr.getLevel() < 30 || */partTime.getReward() > 0
                     || partTime.getJob() < 0 || partTime.getJob() > 5) {
-                c.close();
+                c.Close();
                 return;
             }
             final long distance = (System.currentTimeMillis() - partTime.getTime()) / (60 * 60 * 1000L);
@@ -57,7 +57,7 @@ public final class PartTimeJobHandler implements ProcessPacket<MapleClient> {
             partTime.setTime(System.currentTimeMillis());
             User.removePartTime(cid);
             User.addPartTime(partTime);
-            c.write(CLogin.updatePartTimeJob(partTime));
+            c.SendPacket(CLogin.updatePartTimeJob(partTime));
         }
     }
 

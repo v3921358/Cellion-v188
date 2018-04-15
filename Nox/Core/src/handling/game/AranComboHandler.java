@@ -27,7 +27,7 @@ import client.jobs.Hero.AranHandler;
 import handling.world.PlayerHandler;
 import server.maps.objects.User;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class AranComboHandler implements ProcessPacket<MapleClient> {
 

@@ -21,9 +21,9 @@ public class IncreaseSpMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.IncreaseSP.getType());
+        oPacket.EncodeByte(_MessageOpcodesType.IncreaseSP.getType());
         oPacket.EncodeShort(jobId);
-        oPacket.Encode(amount);
+        oPacket.EncodeByte(amount);
     }
 
 }

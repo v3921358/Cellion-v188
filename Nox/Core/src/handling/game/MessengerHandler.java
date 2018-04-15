@@ -10,7 +10,7 @@ import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -39,7 +39,7 @@ public class MessengerHandler implements ProcessPacket<MapleClient> {
                 if (messenger == null) {
                     iPacket.DecodeByte();
                     byte mode = iPacket.DecodeByte();
-                    int messengerid = iPacket.DecodeInteger();
+                    int messengerid = iPacket.DecodeInt();
                     if (messengerid == 0) { // create
                         c.getPlayer().setMessenger(World.Messenger.createMessenger(new MapleMessengerCharacter(c.getPlayer())));
                     } else { // join
@@ -73,18 +73,18 @@ public class MessengerHandler implements ProcessPacket<MapleClient> {
                     if (target != null) {
                         if (target.getMessenger() == null) {
                             if (!target.isIntern() || c.getPlayer().isIntern()) {
-                                c.write(CField.messengerNote(input, 4, 1));
-                                target.getClient().write(CField.messengerInvite(c.getPlayer().getName(), messenger.getId()));
+                                c.SendPacket(CField.messengerNote(input, 4, 1));
+                                target.getClient().SendPacket(CField.messengerInvite(c.getPlayer().getName(), messenger.getId()));
                             } else {
-                                c.write(CField.messengerNote(input, 4, 0));
+                                c.SendPacket(CField.messengerNote(input, 4, 0));
                             }
                         } else {
-                            c.write(CField.messengerChat(c.getPlayer().getName(), " : " + target.getName() + " is already using Maple Messenger."));
+                            c.SendPacket(CField.messengerChat(c.getPlayer().getName(), " : " + target.getName() + " is already using Maple Messenger."));
                         }
                     } else if (World.isConnected(input)) {
                         World.Messenger.messengerInvite(c.getPlayer().getName(), messenger.getId(), input, c.getChannel(), c.getPlayer().isIntern());
                     } else {
-                        c.write(CField.messengerNote(input, 4, 0));
+                        c.SendPacket(CField.messengerNote(input, 4, 0));
                     }
                 }
                 break;
@@ -93,7 +93,7 @@ public class MessengerHandler implements ProcessPacket<MapleClient> {
                 final User target = c.getChannelServer().getPlayerStorage().getCharacterByName(targeted);
                 if (target != null) { // This channel
                     if (target.getMessenger() != null) {
-                        target.getClient().write(CField.messengerNote(c.getPlayer().getName(), 5, 0));
+                        target.getClient().SendPacket(CField.messengerNote(c.getPlayer().getName(), 5, 0));
                     }
                 } else // Other channel
                 {
@@ -137,7 +137,7 @@ public class MessengerHandler implements ProcessPacket<MapleClient> {
                 if (messenger != null) {
                     String charname = iPacket.DecodeString();
                     User character = c.getChannelServer().getPlayerStorage().getCharacterByName(charname);
-                    c.write(CField.messengerCharInfo(character));
+                    c.SendPacket(CField.messengerCharInfo(character));
                 }
                 break;
             case 0x0E: //whisper

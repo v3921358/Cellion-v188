@@ -10,7 +10,7 @@ import server.MapleInventoryManipulator;
 import net.InPacket;
 import tools.packet.CSPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -25,23 +25,23 @@ public class UseAlienSocketHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
         final Item alienSocket = c.getPlayer().getInventory(MapleInventoryType.USE).getItem((byte) iPacket.DecodeShort());
-        final int alienSocketId = iPacket.DecodeInteger();
+        final int alienSocketId = iPacket.DecodeInt();
         final Item toMount = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeShort());
 
         if (alienSocket == null || alienSocketId != alienSocket.getItemId() || toMount == null || c.getPlayer().hasBlockedInventory()) {
-            c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+            c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
             return;
         }
         final Equip eqq = (Equip) toMount;
         if (eqq.getSocketState() < 1) { // Used before
-            c.write(CSPacket.useAlienSocket(true));
+            c.SendPacket(CSPacket.useAlienSocket(true));
             eqq.setSocket1(0);
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, alienSocket.getPosition(), (short) 1, false);
             c.getPlayer().forceReAddItem(toMount, MapleInventoryType.EQUIP);
         }
-        c.write(CSPacket.useAlienSocket(false));
+        c.SendPacket(CSPacket.useAlienSocket(false));
     }
 }

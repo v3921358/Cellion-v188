@@ -9,7 +9,7 @@ import server.MapleInventoryManipulator;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -26,9 +26,9 @@ public class UseMountFoodHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
 
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         final byte slot = (byte) iPacket.DecodeShort();
-        final int itemid = iPacket.DecodeInteger(); //2260000 usually
+        final int itemid = iPacket.DecodeInt(); //2260000 usually
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
         final MapleMount mount = chr.getMount();
 
@@ -49,6 +49,6 @@ public class UseMountFoodHandler implements ProcessPacket<MapleClient> {
             chr.getMap().broadcastMessage(CWvsContext.updateMount(chr, levelup));
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
         }
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 }

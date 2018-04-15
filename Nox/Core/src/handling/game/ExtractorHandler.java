@@ -7,7 +7,7 @@ import net.InPacket;
 import server.maps.objects.User;
 import server.maps.objects.MapleExtractor;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class ExtractorHandler implements ProcessPacket<MapleClient> {
 
@@ -20,19 +20,19 @@ public final class ExtractorHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr == null || !chr.isAlive() || chr.getMap() == null || chr.hasBlockedInventory()) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
 
-        final int itemId = iPacket.DecodeInteger();
-        final int fee = iPacket.DecodeInteger();
+        final int itemId = iPacket.DecodeInt();
+        final int fee = iPacket.DecodeInt();
         final Item toUse = chr.getInventory(MapleInventoryType.SETUP).findById(itemId);
 
         if (toUse == null || toUse.getQuantity() < 1
                 || itemId / 10000 != 304
                 || fee <= 0 || fee > 1_000_000
                 || chr.getExtractor() != null || !chr.getMap().getSharedMapResources().town) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         chr.setExtractor(new MapleExtractor(chr, itemId, fee, chr.getFh())); //no clue about time left

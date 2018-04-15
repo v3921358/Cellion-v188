@@ -189,7 +189,7 @@ public class MapleQuestAction implements Serializable {
                             // it's better to catch this here so we'll atleast try to remove the other items
                             System.err.println("[h4x] Completing a quest without meeting the requirements" + ie);
                         }
-                        c.getClient().write(InfoPacket.getShowItemGain(id, count, true));
+                        c.getClient().SendPacket(InfoPacket.getShowItemGain(id, count, true));
                     } else { // add items
                         final int period = item.period / 1440; //im guessing.
                         final String name = MapleItemInformationProvider.getInstance().getName(id);
@@ -199,7 +199,7 @@ public class MapleQuestAction implements Serializable {
                             c.dropMessage(5, msg);
                         }
                         MapleInventoryManipulator.addById(c.getClient(), id, count, "", null, period, false, "Obtained from quest " + quest.getId() + " on " + LocalDateTime.now());
-                        c.getClient().write(InfoPacket.getShowItemGain(id, count, true));
+                        c.getClient().SendPacket(InfoPacket.getShowItemGain(id, count, true));
                     }
                 }
                 break;
@@ -208,7 +208,7 @@ public class MapleQuestAction implements Serializable {
                 if (status.getForfeited() > 0) {
                     break;
                 }
-                c.getClient().write(CField.updateQuestFinish(quest.getId(), status.getNpc(), intStore));
+                c.getClient().SendPacket(CField.updateQuestFinish(quest.getId(), status.getNpc(), intStore));
                 break;
             case money:
                 status = c.getQuest(quest);
@@ -445,7 +445,7 @@ public class MapleQuestAction implements Serializable {
                     final short count = (short) item.count;
                     if (count < 0) { // remove items
                         MapleInventoryManipulator.removeById(c.getClient(), GameConstants.getInventoryType(id), id, (count * -1), true, false);
-                        c.getClient().write(InfoPacket.getShowItemGain(id, count, true));
+                        c.getClient().SendPacket(InfoPacket.getShowItemGain(id, count, true));
                     } else { // add items
                         final int period = item.period / 1440; //im guessing.
                         final String name = MapleItemInformationProvider.getInstance().getName(id);
@@ -455,13 +455,13 @@ public class MapleQuestAction implements Serializable {
                             c.dropMessage(5, msg);
                         }
                         MapleInventoryManipulator.addById(c.getClient(), id, count, "", null, period + " on " + LocalDateTime.now());
-                        c.getClient().write(InfoPacket.getShowItemGain(id, count, true));
+                        c.getClient().SendPacket(InfoPacket.getShowItemGain(id, count, true));
                     }
                 }
                 break;
             }
             case nextQuest: {
-                c.getClient().write(CField.updateQuestFinish(quest.getId(), c.getQuest(quest).getNpc(), intStore));
+                c.getClient().SendPacket(CField.updateQuestFinish(quest.getId(), c.getQuest(quest).getNpc(), intStore));
                 break;
             }
             case money: {

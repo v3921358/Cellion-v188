@@ -19,8 +19,8 @@ public class GiveBuffMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.GiveBuff.getType());
-        oPacket.EncodeInteger(itemId);
+        oPacket.EncodeByte(_MessageOpcodesType.GiveBuff.getType());
+        oPacket.EncodeInt(itemId);
     }
 
 }

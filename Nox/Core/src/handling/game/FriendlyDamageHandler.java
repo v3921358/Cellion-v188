@@ -7,7 +7,7 @@ import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.objects.User;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -27,9 +27,9 @@ public class FriendlyDamageHandler implements ProcessPacket<MapleClient> {
         if (map == null) {
             return;
         }
-        Mob mobfrom = map.getMonsterByOid(iPacket.DecodeInteger());
+        Mob mobfrom = map.getMonsterByOid(iPacket.DecodeInt());
         iPacket.Skip(4);
-        Mob mobto = map.getMonsterByOid(iPacket.DecodeInteger());
+        Mob mobto = map.getMonsterByOid(iPacket.DecodeInt());
 
         if ((mobfrom != null) && (mobto != null) && (mobto.getStats().isFriendly())) {
             int damage = mobto.getStats().getLevel() * Randomizer.nextInt(mobto.getStats().getLevel()) / 2;

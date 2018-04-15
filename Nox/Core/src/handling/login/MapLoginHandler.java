@@ -7,7 +7,7 @@ package handling.login;
 
 import client.MapleClient;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import tools.packet.CLogin;
 
 /**
@@ -28,6 +28,6 @@ public final class MapLoginHandler implements ProcessPacket<MapleClient> {
         if (nMapLogin > 0) {
             sMapLogin = sMapLogin + nMapLogin;
         }
-        c.write(CLogin.OnMapLogin(sMapLogin));
+        c.SendPacket(CLogin.OnMapLogin(sMapLogin));
     }
 }

@@ -26,29 +26,29 @@ public class DropPickUpMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.DropPickup.getType());
-        oPacket.Encode(mode);
+        oPacket.EncodeByte(_MessageOpcodesType.DropPickup.getType());
+        oPacket.EncodeByte(mode);
         switch (mode) {
             case -10:
-                oPacket.EncodeInteger(item.getItemId());
+                oPacket.EncodeInt(item.getItemId());
                 break;
             case 0:
-                oPacket.EncodeInteger(item.getItemId());
-                oPacket.EncodeInteger(itemQuantity);
+                oPacket.EncodeInt(item.getItemId());
+                oPacket.EncodeInt(itemQuantity);
                 break;
             case 1:
-                oPacket.Encode(0);
-                oPacket.EncodeInteger(0);
+                oPacket.EncodeByte(0);
+                oPacket.EncodeInt(0);
                 oPacket.EncodeShort(0);
                 oPacket.EncodeShort(0);
                 break;
             case 2:
-                oPacket.EncodeInteger(item.getItemId());
+                oPacket.EncodeInt(item.getItemId());
                 break;
             case 4:
                 return;
             case 8:
-                oPacket.EncodeInteger(0);
+                oPacket.EncodeInt(0);
                 oPacket.EncodeShort(0);
                 break;
         }

@@ -1,5 +1,5 @@
 /*
- * Rexion Development
+ * Cellion Development
  */
 package client.jobs;
 
@@ -44,7 +44,7 @@ public class Hero {
             final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
             final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, nDuration);
             pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), buffSchedule, buffEffects.statups, false, nDuration, pPlayer.getId());
-            pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, Aran.SWING_STUDIES_I, nDuration, buffEffects.statups, buffEffects));
+            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, Aran.SWING_STUDIES_I, nDuration, buffEffects.statups, buffEffects));
         }
 
         public static void handleAdrenalineRush(User pPlayer) {
@@ -60,12 +60,12 @@ public class Hero {
             final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
             final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, nDuration);
             pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), buffSchedule, buffEffects.statups, false, nDuration, pPlayer.getId());
-            pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, Aran.ADRENALINE_RUSH, nDuration, buffEffects.statups, buffEffects));
+            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, Aran.ADRENALINE_RUSH, nDuration, buffEffects.statups, buffEffects));
 
             // Set combo down to 500 for when adrenaline rush is completed.
             pPlayer.setLastCombo(System.currentTimeMillis() + nDuration);
             pPlayer.setPrimaryStack(500);
-            pPlayer.getClient().write(CField.updateCombo(500));
+            pPlayer.getClient().SendPacket(CField.updateCombo(500));
         }
 
         public static void handleComboAbility(User pPlayer, int nIncreaseCount) {
@@ -89,19 +89,19 @@ public class Hero {
             pPlayer.setPrimaryStack(nCombo);
 
             // Write the combo update packet.
-            pPlayer.getClient().write(CField.updateCombo(nCombo));
+            pPlayer.getClient().SendPacket(CField.updateCombo(nCombo));
 
             // Apply the bonuses provided by the combo.
             final MapleStatEffect buffEffects = SkillFactory.getSkill(Aran.COMBO_ABILITY).getEffect(pPlayer.getTotalSkillLevel(Aran.COMBO_ABILITY));
             buffEffects.statups.put(CharacterTemporaryStat.ComboAbilityBuff, (int) nCombo);
             pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), null, buffEffects.statups, false, buffEffects.info.get(MapleStatInfo.time), pPlayer.getId());
-            pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, Aran.COMBO_ABILITY, 99999, buffEffects.statups, buffEffects));
+            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, Aran.COMBO_ABILITY, 99999, buffEffects.statups, buffEffects));
 
             if (nCombo >= 998) { // Apply Adrenaline Rush upon reaching max stacks.
                 nCombo = (short) 1000;
                 pPlayer.setLastCombo(nCurrentTime);
                 //pPlayer.setCombo(nCombo);
-                pPlayer.getClient().write(CField.updateCombo(nCombo));
+                pPlayer.getClient().SendPacket(CField.updateCombo(nCombo));
 
                 handleAdrenalineRush(pPlayer);
             }
@@ -113,14 +113,14 @@ public class Hero {
     }
 
     public static class LuminousHandler {
-        
+
         public static void handleLuminousGauge(User pPlayer, int nSkillID) {
             int nLightGauge = pPlayer.getLarknessRequest(false, false);
             int nDarkGauge = pPlayer.getLarknessRequest(false, true);
             int nLightFeathers = pPlayer.getLarknessRequest(true, false);
             int nDarkFeathers = pPlayer.getLarknessRequest(true, true);
-            
-            if(GameConstants.isLightSkills(nSkillID)) {
+
+            if (GameConstants.isLightSkills(nSkillID)) {
                 nLightGauge += 100;
                 if (nLightGauge >= 10000) {
                     nLightGauge = 10000;
@@ -141,7 +141,7 @@ public class Hero {
                     nDarkFeathers = 5;
                 }
             }
-            
+
             if (nLightGauge >= 10000) {
                 nLightGauge = 10000;
                 nDarkGauge = 0;
@@ -151,23 +151,23 @@ public class Hero {
                 nLightGauge = 0;
                 pPlayer.setLuminousState(20040216);
             }
-            
+
             pPlayer.setLarknessResult(nLightGauge, false, false);
             pPlayer.setLarknessResult(nDarkGauge, false, true);
             pPlayer.setLarknessResult(nLightFeathers, true, false);
             pPlayer.setLarknessResult(nDarkFeathers, true, true);
             pPlayer.write(LuminousPacket.updateLuminousGauge(nDarkGauge, nLightGauge, nDarkGauge, nLightGauge));
             pPlayer.write(LuminousPacket.setLarknessResult(pPlayer.getLuminousState(), nLightGauge, nDarkGauge, 2100000000));
-            
+
             if (pPlayer.isDeveloper()) {
                 pPlayer.dropMessage(5, "[Luminous Debug] Light: " + pPlayer.getLarknessRequest(false, false) + " / Dark: " + pPlayer.getLarknessRequest(false, true));
                 pPlayer.dropMessage(5, "[Luminous Debug] Light Feathers: " + pPlayer.getLarknessRequest(true, false) + " / Dark Feather: " + pPlayer.getLarknessRequest(true, true));
             }
         }
     }
-    
+
     public static class PhantomHandler {
-        
+
         public static void handleDeck(User pPlayer) {
             int nCardCount = pPlayer.getPrimaryStack();
             if (nCardCount < 40) {
@@ -175,17 +175,17 @@ public class Hero {
             }
             updateDeckRequest(pPlayer, nCardCount);
         }
-        
+
         public static void updateDeckRequest(User pPlayer, int nCardCount) {
             pPlayer.setPrimaryStack(nCardCount);
             pPlayer.getMap().broadcastMessage(PhantomPacket.updateCardStack(nCardCount));
         }
-        
+
         public static void judgementDrawRequest(User pPlayer, int nSkillID) {
             Random pRandom = new Random();
             int nMinimumCard;
             int nMaximumCard;
-            
+
             if (nSkillID == Phantom.JUDGMENT_DRAW_4) {
                 nMinimumCard = 1;
                 nMaximumCard = 4;
@@ -194,7 +194,7 @@ public class Hero {
                 nMaximumCard = 2;
             }
             int nDrawnCard = pRandom.nextInt((nMaximumCard - nMinimumCard) + 1) + nMinimumCard;
-            
+
             final MapleStatEffect pEffect = SkillFactory.getSkill(nSkillID).getEffect(pPlayer.getTotalSkillLevel(nSkillID));
 
             switch (nDrawnCard) {
@@ -216,14 +216,14 @@ public class Hero {
                     pEffect.statups.put(CharacterTemporaryStat.IndieDrainHP, 1);
                     break;
             }
-            
+
             final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
             final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, pEffect.info.get(MapleStatInfo.time));
             pPlayer.registerEffect(pEffect, System.currentTimeMillis(), buffSchedule, pEffect.statups, false, pEffect.info.get(MapleStatInfo.time), pPlayer.getId());
-            pPlayer.getClient().write(BuffPacket.giveBuff(pPlayer, nSkillID, pEffect.info.get(MapleStatInfo.time), pEffect.statups, pEffect));
-            
+            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkillID, pEffect.info.get(MapleStatInfo.time), pEffect.statups, pEffect));
+
             updateDeckRequest(pPlayer, 0); // Reset the deck back to zero.
         }
     }
-    
+
 }

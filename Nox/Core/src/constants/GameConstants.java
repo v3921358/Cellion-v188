@@ -68,6 +68,7 @@ public class GameConstants {
 
     /**
      * Custom Map Spawn Rate Buffs
+     *
      * @note Requires ServerConstants boolean to be enabled.
      */
     public static boolean isCustomMapForBuffedSpawn(int nMapID) {
@@ -1018,7 +1019,7 @@ public class GameConstants {
 
     /*
     *   Checks if Superior Equip for Star Force.
-    */
+     */
     public static boolean isSuperiorEquip(int nItemID) {
         switch (nItemID) {
             case 1122241:
@@ -1083,7 +1084,7 @@ public class GameConstants {
                 return false;
         }
     }
-    
+
     public short changeExp(short level, User chr) {
         switch (chr.getLevel()) {
             case 100:
@@ -1246,6 +1247,7 @@ public class GameConstants {
 
     /**
      * These buffs don't need to write foreign buff effects to other characters.
+     *
      * @param nSkillID
      * @return boolean
      */
@@ -1260,7 +1262,7 @@ public class GameConstants {
                 return false;
         }
     }
-    
+
     public static boolean isJaguarSkill(int nSkillID) {
         switch (nSkillID) {
             case WildHunter.SUMMON_JAGUAR:
@@ -1291,11 +1293,11 @@ public class GameConstants {
             case WildHunter.JAGUAR_RAMPAGE_1:
             case WildHunter.JAGUAR_RAMPAGE_2:
                 return true;
-            default: 
+            default:
                 return false;
         }
     }
-    
+
     //Literally useless function, but I cbf to check linked attack skills rn, its 5am.
     public static boolean bypassLinkedAttackCheck(int nSkillID) {
         switch (nSkillID) {
@@ -1304,11 +1306,11 @@ public class GameConstants {
             case Blaster.REVOLVING_CANNON_1:
             case Blaster.REVOLVING_CANNON_2:
                 return true;
-            default: 
+            default:
                 return false;
         }
     }
-    
+
     public static boolean isLinkedAttackSkill(final int id) {
         return getLinkedAttackSkill(id) != id;
     }
@@ -5380,7 +5382,7 @@ public class GameConstants {
     }
 
     public static boolean isBeastTamer(int job) {
-        return job <= 11213 &&job >= 11000;
+        return job <= 11213 && job >= 11000;
     }
 
     public static List<Balloon> getBalloons() {

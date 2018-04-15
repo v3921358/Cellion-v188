@@ -23,7 +23,7 @@ package handling.farm;
 
 import client.MapleClient;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class FarmMonsterNurtureHandler implements ProcessPacket<MapleClient> {
 
@@ -34,7 +34,7 @@ public final class FarmMonsterNurtureHandler implements ProcessPacket<MapleClien
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int monsterIndex = iPacket.DecodeInteger();
+        int monsterIndex = iPacket.DecodeInt();
     }
 
 }

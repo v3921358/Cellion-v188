@@ -13,7 +13,8 @@ import java.sql.SQLException;
  *
  * @author Maple
  */
-import database.DatabaseConnection;
+import database.Database;
+import tools.LogHelper;
 
 public class DojoRankingsData {
 
@@ -33,8 +34,8 @@ public class DojoRankingsData {
 
     public static DojoRankingsData loadLeaderboard() {
         DojoRankingsData ret = new DojoRankingsData();
-        Connection con = DatabaseConnection.getConnection();
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             PreparedStatement ps = con.prepareStatement("SELECT `name`, `time` FROM `dojorankings` ORDER BY `time` ASC LIMIT " + limit);
             ResultSet rs = ps.executeQuery();
 
@@ -52,11 +53,13 @@ public class DojoRankingsData {
                     //donothing;
                 }
             }
+            ps.close();
+            rs.close();
             //PreparedStatement pss = con.prepareStatement("INSERT INTO dojodata VALUES(DEFAULT, DEFAULT, DEFAULT, ?, DEFAULT, DEFAULT)");
             //pss.setLong(1, time);
             //ResultSet rss = pss.executeQuery(); 
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
         }
         return ret;
     }

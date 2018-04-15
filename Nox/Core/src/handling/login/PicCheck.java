@@ -7,7 +7,7 @@ import service.LoginServer;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CLogin;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class PicCheck implements ProcessPacket<MapleClient> {
 
@@ -25,11 +25,11 @@ public final class PicCheck implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         //boolean view = c.getChannel() == 1;
         final String password = iPacket.DecodeString();
-        final int charId = iPacket.DecodeInteger();
+        final int charId = iPacket.DecodeInt();
 
         c.setWorld(iPacket.DecodeByte());
         if (!c.isLoggedIn() || loginFailCount(c) || c.getSecondPassword() == null || !c.login_Auth(charId) || ChannelServer.getInstance(c.getChannel()) == null || !WorldConstants.WorldOption.isExists(c.getWorld())) {
-            c.close();
+            c.Close();
             return;
         }
         c.updateMacs(iPacket.DecodeString());
@@ -43,9 +43,9 @@ public final class PicCheck implements ProcessPacket<MapleClient> {
             LoginServer.putLoginAuth(charId, s.substring(s.indexOf('/') + 1, s.length()), c.getTempIP(), c.getChannel(), 0);
             c.updateLoginState(MapleClient.MapleClientLoginState.LOGIN_SERVER_TRANSITION, s);
 
-            c.write(CField.getServerIP(c, Integer.parseInt(ChannelServer.getInstance(c.getChannel()).getIP().split(":")[1]), charId));
+            c.SendPacket(CField.getServerIP(c, Integer.parseInt(ChannelServer.getInstance(c.getChannel()).getIP().split(":")[1]), charId));
         } else {
-            c.write(CLogin.getLoginFailed(4)); // Password fail instead, works well enough.
+            c.SendPacket(CLogin.getLoginFailed(4)); // Password fail instead, works well enough.
             //c.write(CLogin.secondPwError((byte) 0x14)); // Error 38.
         }
     }

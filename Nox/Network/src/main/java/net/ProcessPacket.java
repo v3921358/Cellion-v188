@@ -1,6 +1,4 @@
-package netty;
-
-import net.InPacket;
+package net;
 
 /**
  * Represents a packet handler for a received MapleStory packet.
@@ -8,7 +6,7 @@ import net.InPacket;
  * @author Novak
  * @param <E> specific type of NettyClient -> more than likely the inheritance
  */
-public interface ProcessPacket<E extends CClientSocket> {
+public interface ProcessPacket<E extends Socket> {
     
     public boolean ValidateState(E ClientSocket);
     

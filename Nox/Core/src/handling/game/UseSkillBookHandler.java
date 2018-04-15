@@ -12,7 +12,7 @@ import server.Randomizer;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -27,9 +27,9 @@ public class UseSkillBookHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         short slot = iPacket.DecodeShort();
-        int itemId = iPacket.DecodeInteger();
+        int itemId = iPacket.DecodeInt();
 
         UseSkillBook(c, slot, itemId);
     }
@@ -76,7 +76,7 @@ public class UseSkillBookHandler implements ProcessPacket<MapleClient> {
         }
 
         c.getPlayer().getMap().broadcastMessage(CWvsContext.useSkillBook(chr, skill, maxlevel, canuse, success));
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
         return true;
     }
 }

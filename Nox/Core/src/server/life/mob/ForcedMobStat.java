@@ -12,6 +12,7 @@ import net.OutPacket;
  * @author Mazen
  */
 public class ForcedMobStat {
+
     private long maxHP, maxMP, exp;
     private int pad, mad, pdr, mdr, acc, eva, pushed, speed, level, userCount;
 
@@ -120,19 +121,19 @@ public class ForcedMobStat {
     }
 
     public void encode(OutPacket oPaclet) {
-        oPaclet.EncodeInteger((int) getMaxHP());
-        oPaclet.EncodeInteger((int) getMaxMP());
-        oPaclet.EncodeInteger((int) getExp());
-        oPaclet.EncodeInteger(getPad());
-        oPaclet.EncodeInteger(getMad());
-        oPaclet.EncodeInteger(getPdr());
-        oPaclet.EncodeInteger(getMdr());
-        oPaclet.EncodeInteger(getAcc());
-        oPaclet.EncodeInteger(getEva());
-        oPaclet.EncodeInteger(getPushed());
-        oPaclet.EncodeInteger(getSpeed());
-        oPaclet.EncodeInteger(getLevel());
-        oPaclet.EncodeInteger(getUserCount());
+        oPaclet.EncodeInt((int) getMaxHP());
+        oPaclet.EncodeInt((int) getMaxMP());
+        oPaclet.EncodeInt((int) getExp());
+        oPaclet.EncodeInt(getPad());
+        oPaclet.EncodeInt(getMad());
+        oPaclet.EncodeInt(getPdr());
+        oPaclet.EncodeInt(getMdr());
+        oPaclet.EncodeInt(getAcc());
+        oPaclet.EncodeInt(getEva());
+        oPaclet.EncodeInt(getPushed());
+        oPaclet.EncodeInt(getSpeed());
+        oPaclet.EncodeInt(getLevel());
+        oPaclet.EncodeInt(getUserCount());
     }
 
     public ForcedMobStat deepCopy() {

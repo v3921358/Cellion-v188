@@ -8,7 +8,7 @@ import server.maps.objects.User;
 import net.InPacket;
 import server.maps.MapleMapObjectType;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class CraftEffect implements ProcessPacket<MapleClient> {
 
@@ -39,11 +39,11 @@ public final class CraftEffect implements ProcessPacket<MapleClient> {
         final String effect = iPacket.DecodeString();
         final Integer profession = craftingEffects.get(effect);
         if (profession != null && (c.getPlayer().getProfessionLevel(profession) > 0 || (profession == 92040000 && chr.getMap().getAllMapObjectSize(MapleMapObjectType.EXTRACTOR) > 0))) {
-            int time = iPacket.DecodeInteger();
+            int time = iPacket.DecodeInt();
             if (time > 6000 || time < 3000) {
                 time = 4000;
             }
-            c.write(CField.EffectPacket.showWZUOLEffect(effect, chr.getDirection() == 1, -1, time, effect.endsWith("Extract") ? 1 : 0));
+            c.SendPacket(CField.EffectPacket.showWZUOLEffect(effect, chr.getDirection() == 1, -1, time, effect.endsWith("Extract") ? 1 : 0));
             chr.getMap().broadcastMessage(chr, CField.EffectPacket.showWZUOLEffect(effect, chr.getDirection() == 1, chr.getId(), time, effect.endsWith("Extract") ? 1 : 0), false);
         }
     }

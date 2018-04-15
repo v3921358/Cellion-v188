@@ -19,8 +19,8 @@ public class FameMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.Fame.getType());
-        oPacket.EncodeInteger(fame);
+        oPacket.EncodeByte(_MessageOpcodesType.Fame.getType());
+        oPacket.EncodeInt(fame);
     }
 
 }

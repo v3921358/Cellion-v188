@@ -13,7 +13,7 @@ import client.inventory.Item;
 import client.inventory.ItemLoader;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
-import database.DatabaseConnection;
+import database.Database;
 import scripting.provider.NPCChatByType;
 import scripting.provider.NPCChatType;
 import server.MapleInventoryManipulator;
@@ -24,6 +24,7 @@ import tools.Pair;
 import tools.StringUtil;
 import net.InPacket;
 import server.maps.objects.User.MapleCharacterConversationType;
+import tools.LogHelper;
 import tools.packet.CField.NPCPacket;
 import tools.packet.CWvsContext;
 import tools.packet.PlayerShopPacket;
@@ -46,7 +47,7 @@ public class HiredMerchantHandler {
                             return false;
                         }
                         if (packet) {
-                            c.write(PlayerShopPacket.sendTitleBox());
+                            c.SendPacket(PlayerShopPacket.sendTitleBox());
                         }
                         return true;
                     } else {
@@ -58,14 +59,14 @@ public class HiredMerchantHandler {
                     break;
             }
         } else {
-            c.close();
+            c.Close();
         }
         return false;
     }
 
     private static byte checkExistance(final int accid, final int cid) {
-        Connection con = DatabaseConnection.getConnection();
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             try (PreparedStatement ps = con.prepareStatement("SELECT * from hiredmerch where accountid = ? OR characterid = ?")) {
                 ps.setInt(1, accid);
                 ps.setInt(2, cid);
@@ -79,6 +80,7 @@ public class HiredMerchantHandler {
             }
             return 0;
         } catch (SQLException se) {
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
             return -1;
         }
     }
@@ -99,41 +101,41 @@ public class HiredMerchantHandler {
             final MerchItemPackage pack = loadItemFrom_Database(c.getPlayer().getAccountID());
 
             if (pack == null) {
-                c.write(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I don't think you have any items or money to retrieve here.\r\nThis is where you retrieve the items and mesos that you couldn't get from your Hired Merchant. You'll also need to see me as the character that opened the Personal Store.", NPCChatByType.NPC_Cancellable));
+                c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I don't think you have any items or money to retrieve here.\r\nThis is where you retrieve the items and mesos that you couldn't get from your Hired Merchant. You'll also need to see me as the character that opened the Personal Store.", NPCChatByType.NPC_Cancellable));
                 c.getPlayer().setConversation(MapleCharacterConversationType.None);
             } else if (pack.getItems().size() <= 0) { //error fix for complainers.
                 if (!check(c.getPlayer(), pack)) {
-                    c.write(PlayerShopPacket.merchItem_Message((byte) 0x21));
+                    c.SendPacket(PlayerShopPacket.merchItem_Message((byte) 0x21));
                     return;
                 }
                 if (deletePackage(c.getPlayer().getAccountID(), pack.getPackageid(), c.getPlayer().getId())) {
                     //c.getPlayer().fakeRelog();
                     c.getPlayer().gainMeso(pack.getMesos(), false);
-                    c.write(PlayerShopPacket.merchItem_Message((byte) 0x1d));
-                    c.write(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I see that you forgot something here right?\r\nHere is your money sir " + pack.getMesos(), NPCChatByType.NPC_Cancellable));
+                    c.SendPacket(PlayerShopPacket.merchItem_Message((byte) 0x1d));
+                    c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I see that you forgot something here right?\r\nHere is your money sir " + pack.getMesos(), NPCChatByType.NPC_Cancellable));
                     c.getPlayer().setConversation(MapleCharacterConversationType.None);
                 } else {
                     c.getPlayer().dropMessage(1, "An unknown error occured.");
                 }
                 c.getPlayer().setConversation(MapleCharacterConversationType.None);
             } else {
-                c.write(PlayerShopPacket.merchItemStore_ItemData(pack));
+                c.SendPacket(PlayerShopPacket.merchItemStore_ItemData(pack));
                 //MapleInventoryManipulator.checkSpace(c, conv, conv, null);
                 for (final Item item : pack.getItems()) {
                     if (c.getPlayer().getInventory(GameConstants.getInventoryType(item.getItemId())).isFull()) {
-                        c.write(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "Sir, if you want your items back please clean up your inventory before you come here!", NPCChatByType.NPC_Cancellable));
+                        c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "Sir, if you want your items back please clean up your inventory before you come here!", NPCChatByType.NPC_Cancellable));
                         c.getPlayer().setConversation(MapleCharacterConversationType.None);
                         break;
                     }
                     MapleInventoryManipulator.addFromDrop(c, item, true);
                     deletePackage(c.getPlayer().getAccountID(), pack.getPackageid(), c.getPlayer().getId());
-                    c.write(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I saved your items sir, next time don't forget them, have a nice day.", NPCChatByType.NPC_Cancellable));
+                    c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I saved your items sir, next time don't forget them, have a nice day.", NPCChatByType.NPC_Cancellable));
                     c.getPlayer().setConversation(MapleCharacterConversationType.None);
                 }
 
             }
         }
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 
     public static void displayMerch2(MapleClient c) {
@@ -152,41 +154,41 @@ public class HiredMerchantHandler {
             final MerchItemPackage pack = loadItemFrom_Database(c.getPlayer().getAccountID());
 
             if (pack == null) {
-                c.write(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I don't think you have any items or money to retrive here. This is where you retrieve the items and mesos that you couldn't get from your Hired Merchant. You'll also need to see me as the character that opened the Personal Store.", NPCChatByType.NPC_Cancellable));
+                c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I don't think you have any items or money to retrive here. This is where you retrieve the items and mesos that you couldn't get from your Hired Merchant. You'll also need to see me as the character that opened the Personal Store.", NPCChatByType.NPC_Cancellable));
                 c.getPlayer().setConversation(MapleCharacterConversationType.None);
             } else if (pack.getItems().size() <= 0) { //error fix for complainers.
                 if (!check(c.getPlayer(), pack)) {
-                    c.write(PlayerShopPacket.merchItem_Message((byte) 0x21));
+                    c.SendPacket(PlayerShopPacket.merchItem_Message((byte) 0x21));
                     return;
                 }
                 if (deletePackage(c.getPlayer().getAccountID(), pack.getPackageid(), c.getPlayer().getId())) {
                     c.getPlayer().fakeRelog();
                     c.getPlayer().gainMeso(pack.getMesos(), true);
-                    c.write(PlayerShopPacket.merchItem_Message((byte) 0x1d));
+                    c.SendPacket(PlayerShopPacket.merchItem_Message((byte) 0x1d));
                     c.getPlayer().setConversation(MapleCharacterConversationType.None);
                 } else {
                     c.getPlayer().dropMessage(1, "An unknown error occured.");
                 }
                 c.getPlayer().setConversation(MapleCharacterConversationType.None);
             } else {
-                c.write(PlayerShopPacket.merchItemStore_ItemData(pack));
+                c.SendPacket(PlayerShopPacket.merchItemStore_ItemData(pack));
                 //MapleInventoryManipulator.checkSpace(c, conv, conv, null);
                 for (final Item item : pack.getItems()) {
                     if (c.getPlayer().getInventory(GameConstants.getInventoryType(item.getItemId())).isFull()) {
-                        c.write(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "Please clean up your inventory.", NPCChatByType.NPC_Cancellable));
+                        c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "Please clean up your inventory.", NPCChatByType.NPC_Cancellable));
                         c.getPlayer().setConversation(MapleCharacterConversationType.None);
                         break;
                     }
                     MapleInventoryManipulator.addFromDrop(c, item, true);
                     deletePackage(c.getPlayer().getAccountID(), pack.getPackageid(), c.getPlayer().getId());
                     //c.getPlayer().fakeRelog();
-                    c.write(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "Your items have been claimed.", NPCChatByType.NPC_Cancellable));
+                    c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "Your items have been claimed.", NPCChatByType.NPC_Cancellable));
                     c.getPlayer().setConversation(MapleCharacterConversationType.None);
                 }
 
             }
         }
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 
     public static final void MerchantItemStore(final InPacket iPacket, final MapleClient c) {
@@ -224,19 +226,19 @@ public class HiredMerchantHandler {
         final double percentage = days / 100.0;
         final int fee = (int) Math.ceil(percentage * pack.getMesos()); // if no mesos = no tax
         if (request && days > 0 && percentage > 0 && pack.getMesos() > 0 && fee > 0) {
-            c.write(PlayerShopPacket.merchItemStore((byte) 38, days, fee));
+            c.SendPacket(PlayerShopPacket.merchItemStore((byte) 38, days, fee));
             return;
         }
         if (fee < 0) { // impossible
-            c.write(PlayerShopPacket.merchItem_Message(33));
+            c.SendPacket(PlayerShopPacket.merchItem_Message(33));
             return;
         }
         if (c.getPlayer().getMeso() < fee) {
-            c.write(PlayerShopPacket.merchItem_Message(35));
+            c.SendPacket(PlayerShopPacket.merchItem_Message(35));
             return;
         }
         if (!check(c.getPlayer(), pack)) {
-            c.write(PlayerShopPacket.merchItem_Message(36));
+            c.SendPacket(PlayerShopPacket.merchItem_Message(36));
             return;
         }
         if (deletePackage(c.getPlayer().getAccountID(), pack.getPackageid(), c.getPlayer().getId())) {
@@ -247,7 +249,7 @@ public class HiredMerchantHandler {
             for (Item item : pack.getItems()) {
                 MapleInventoryManipulator.addFromDrop(c, item, false);
             }
-            c.write(PlayerShopPacket.merchItem_Message(32));
+            c.SendPacket(PlayerShopPacket.merchItem_Message(32));
         } else {
             c.getPlayer().dropMessage(1, "An unknown error occured.");
         }
@@ -279,31 +281,30 @@ public class HiredMerchantHandler {
     }
 
     private static boolean deletePackage(final int accid, final int packageid, final int chrId) {
-        final Connection con = DatabaseConnection.getConnection();
-
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             try (PreparedStatement ps = con.prepareStatement("DELETE from hiredmerch where accountid = ? OR packageid = ? OR characterid = ?")) {
                 ps.setInt(1, accid);
                 ps.setInt(2, packageid);
                 ps.setInt(3, chrId);
                 ps.executeUpdate();
             }
-            ItemLoader.HIRED_MERCHANT.saveItems(null, packageid);
+            ItemLoader.HIRED_MERCHANT.saveItems(null, packageid, con);
             return true;
         } catch (SQLException e) {
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             return false;
         }
     }
 
     public static final void showFredrick(MapleClient c) {
         final MerchItemPackage pack = HiredMerchantHandler.loadItemFrom_Database(c.getPlayer().getAccountID());
-        c.write(PlayerShopPacket.merchItemStore_ItemData(pack));
+        c.SendPacket(PlayerShopPacket.merchItemStore_ItemData(pack));
     }
 
     private static MerchItemPackage loadItemFrom_Database(final int accountid) {
-        final Connection con = DatabaseConnection.getConnection();
-
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             ResultSet rs;
 
             final int packageid;
@@ -324,7 +325,7 @@ public class HiredMerchantHandler {
             }
             rs.close();
 
-            Map<Long, Pair<Item, MapleInventoryType>> items = ItemLoader.HIRED_MERCHANT.loadItems(false, packageid);
+            Map<Long, Pair<Item, MapleInventoryType>> items = ItemLoader.HIRED_MERCHANT.loadItems(false, packageid, con);
             if (items != null) {
                 List<Item> iters = new ArrayList<>();
                 for (Pair<Item, MapleInventoryType> z : items.values()) {
@@ -335,6 +336,7 @@ public class HiredMerchantHandler {
 
             return pack;
         } catch (SQLException e) {
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             return null;
         }
     }

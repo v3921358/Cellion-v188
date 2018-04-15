@@ -40,7 +40,7 @@ public class LoginWorker {
             int usersOn = 0;
             if (load == null || load.size() <= 0) { // In an unfortunate event that client logged in before load
                 lastUpdate = 0;
-                c.write(CLogin.getLoginFailed(7));
+                c.SendPacket(CLogin.getLoginFailed(7));
                 return;
             }
             final double loadFactor = 1200 / ((double) LoginServer.getInstance().getUserLimit() / load.size());
@@ -53,7 +53,7 @@ public class LoginWorker {
         }
 
         if (c.finishLogin() == 0) {
-            c.write(CLogin.CheckPasswordResult(c));
+            c.SendPacket(CLogin.CheckPasswordResult(c));
             //start temp fix
 
             //CharLoginHandler.ServerStatusRequest(c);
@@ -65,11 +65,11 @@ public class LoginWorker {
 
                 @Override
                 public void run() {
-                    c.close();
+                    c.Close();
                 }
             }, 10 * 60 * 10000));
         } else {
-            c.write(CLogin.getLoginFailed(7));
+            c.SendPacket(CLogin.getLoginFailed(7));
         }
     }
 }

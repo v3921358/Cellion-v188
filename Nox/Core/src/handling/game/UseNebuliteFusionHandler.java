@@ -16,7 +16,7 @@ import server.potentials.ItemPotentialProvider;
 import server.NebuliteGrade;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -31,15 +31,15 @@ public class UseNebuliteFusionHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        /*   c.getPlayer().updateTick(iPacket.decodeInteger());
+        /*   c.getPlayer().updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
 
-        final int nebuliteId1 = iPacket.decodeInteger();
+        final int nebuliteId1 = iPacket.DecodeInt();
         final Item nebulite1 = c.getPlayer().getInventory(MapleInventoryType.SETUP).getItem((byte) iPacket.decodeShort());
-        final int nebuliteId2 = iPacket.decodeInteger();
+        final int nebuliteId2 = iPacket.DecodeInt();
         final Item nebulite2 = c.getPlayer().getInventory(MapleInventoryType.SETUP).getItem((byte) iPacket.decodeShort());
-        final long mesos = iPacket.decodeInteger();
-        final int premiumQuantity = iPacket.decodeInteger();
+        final long mesos = iPacket.DecodeInt();
+        final int premiumQuantity = iPacket.DecodeInt();
 
         if (nebulite1 == null || nebulite2 == null || nebuliteId1 != nebulite1.getItemId() || nebuliteId2 != nebulite2.getItemId() || (mesos == 0 && premiumQuantity == 0) || (mesos != 0 && premiumQuantity != 0) || mesos < 0 || premiumQuantity < 0 || c.getPlayer().hasBlockedInventory()) {
             c.getPlayer().dropMessage(1, "Failed to fuse Nebulite.");

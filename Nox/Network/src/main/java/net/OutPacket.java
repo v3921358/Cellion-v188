@@ -1,105 +1,102 @@
+/*
+ * Copyright (C) 2018 Kaz Voeten
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package net;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
-import util.HexTool;
-import util.IntegerValue;
+import util.HexUtils;
 
 /**
- * Artifact from Invictus. Modified by Zygon for Desu, modified by Novak for
- * ResistanceMS
  *
- * @author Zygon
- * @author Novak (reworked)
+ * @author Kaz Voeten
  */
-public final class OutPacket {
+public class OutPacket {
 
-    private int nOffset;
-    private byte[] aData;
+    public int nPacketID;
+    private final ByteBuf pSendBuff;
     private static final Charset ASCII = Charset.forName("US-ASCII");
 
-    public OutPacket(int nLength) {
-        nOffset = 0;
-        aData = new byte[nLength];
+    public OutPacket(short nPacketID) {
+        this.pSendBuff = Unpooled.buffer().order(ByteOrder.LITTLE_ENDIAN);
+        this.nPacketID = nPacketID;
+        pSendBuff.writeShort(nPacketID);
     }
-
-    private void Expand(int nLength) {
-        byte[] aExpanded = new byte[nLength];
-        System.arraycopy(aData, 0, aExpanded, 0, nOffset);
-        aData = aExpanded;
-    }
-
-    private void Trim() {
-        Expand(nOffset);
-    }
-
-    public final OutPacket Encode(int nValue) {
-        if (nOffset + 1 >= aData.length) {
-            Expand(aData.length * 2);
-        }
-        aData[nOffset++] = (byte) nValue;
+    
+    public final OutPacket EncodeByte(int nValue) {
+        pSendBuff.writeByte(nValue);
         return this;
     }
 
-    private OutPacket Encode(long nValue) {
-        return Encode((int) nValue);
+    public final OutPacket EncodeByte(long nValue) {
+        return EncodeByte((int) nValue);
     }
 
     public final OutPacket Encode(byte[] aData) {
         return Encode(aData, 0, aData.length);
     }
 
+    public final OutPacket EncodeBool(boolean bData) {
+        return EncodeByte(bData ? 1 : 0);
+    }
+
     public final OutPacket Encode(byte[] aData, int nOffset, int nLength) {
         for (int i = nOffset; i < nLength; i++) {
-            Encode(aData[i]);
+            EncodeByte(aData[i]);
         }
         return this;
-    }
-
-    public final OutPacket Encode(int... aValue) {
-        for (int i = 0; i < aValue.length; i++) {
-            Encode(aValue[i]);
-        }
-        return this;
-    }
-
-    public final OutPacket EncodeByte(byte nValue) {
-        return Encode(nValue);
-    }
-
-    public final OutPacket EncodeHeader(IntegerValue nValue) {
-        return EncodeShort(nValue.getValue());
     }
 
     public final OutPacket EncodeShort(int nValue) {
-        return Encode(nValue & 0xFF).Encode(nValue >>> 8);
+        pSendBuff.writeShort(nValue);
+        return this;
     }
 
     public final OutPacket EncodeShort(short nValue) {
-        return Encode(nValue & 0xFF).Encode(nValue >>> 8);
+        pSendBuff.writeShort(nValue);
+        return this;
     }
 
     public final OutPacket EncodeChar(char cValue) {
-        return EncodeShort(cValue);
+        pSendBuff.writeChar(cValue);
+        return this;
     }
 
-    public final OutPacket EncodeInteger(int nValue) {
-        return Encode(nValue & 0xFF).Encode(nValue >>> 8).Encode(nValue >>> 16).Encode(nValue >>> 24);
+    public final OutPacket EncodeInt(int nValue) {
+        pSendBuff.writeInt(nValue);
+        return this;
     }
 
     public final OutPacket EncodeFloat(float nValue) {
-        return EncodeInteger(Float.floatToIntBits(nValue));
+        pSendBuff.writeFloat(nValue);
+        return this;
     }
 
     public final OutPacket EncodeLong(long nValue) {
-        return Encode(nValue & 0xFF).Encode(nValue >>> 8).Encode(nValue >>> 16).
-                Encode(nValue >>> 24).Encode(nValue >>> 32).Encode(nValue >>> 40).
-                Encode(nValue >>> 48).Encode(nValue >>> 56);
+        pSendBuff.writeLong(nValue);
+        return this;
     }
 
     public final OutPacket EncodeDouble(double nValue) {
-        return EncodeLong(Double.doubleToLongBits(nValue));
+        pSendBuff.writeDouble(nValue);
+        return this;
     }
 
     public final OutPacket EncodeString(String sData, int nLen) {
@@ -111,34 +108,19 @@ public final class OutPacket {
     public final OutPacket EncodeString(String sData) {
         return EncodeShort(sData.length()).Encode(sData.getBytes(ASCII));
     }
-    
-    public final OutPacket encodeString(String sData, boolean bEncodeLen) {
-        if (bEncodeLen) {
-            Encode((short) (sData.length()));
-        }
+
+    public final OutPacket EncodeBuffer(String sData) {
         Encode(sData.getBytes(ASCII));
         return this;
     }
 
-    public final OutPacket EncodeNullTerminatedString(String sData) {
-        return Encode(sData.getBytes(ASCII)).Encode(0);
-    }
-
     public final OutPacket EncodeHex(String sData) {
-        return Encode(HexTool.toBytes(sData));
-    }
-
-    public final OutPacket EncodeBool(boolean bData) {
-        return Encode(bData ? 1 : 0);
-    }
-    
-    public final OutPacket Encode(boolean bData) {
-        return EncodeBool(bData);
+        return Encode(HexUtils.ToBytes(sData));
     }
 
     public final OutPacket Fill(int nValue, int nLenth) {
         for (int i = 0; i < nLenth; i++) {
-            Encode(nValue);
+            EncodeByte(nValue);
         }
         return this;
     }
@@ -148,45 +130,29 @@ public final class OutPacket {
     }
 
     public final OutPacket EncodeRectangle(Rectangle rData) {
-        return EncodeInteger(rData.x).EncodeInteger(rData.y)
-                .EncodeInteger(rData.x + rData.width).EncodeInteger(rData.y + rData.height);
+        return EncodeInt(rData.x).EncodeInt(rData.y)
+                .EncodeInt(rData.x + rData.width).EncodeInt(rData.y + rData.height);
     }
-
-    public final int GetOffset() {
-        return nOffset;
-    }
-
-    public final byte[] GetData() {
-        return aData;
-    }
-
-    public final void Clear() {
-        nOffset = -1;
-        aData = null;
+    
+    public int GetLength() {
+        return pSendBuff.readableBytes();
     }
 
     @Override
     public final String toString() {
-        return HexTool.toHex(aData);
+        byte[] aData = new byte[pSendBuff.readableBytes()];
+        int nReaderIndex = pSendBuff.readerIndex();
+        pSendBuff.getBytes(nReaderIndex, aData);
+        return HexUtils.ToHex(aData);
     }
 
-    public final byte[] Data() {
-        if (aData != null) {
-            if (aData.length > nOffset) {
-                Trim();
-            }
-            return aData;
-        }
-        return null;
+    public final byte[] GetData() {
+        byte[] aData = new byte[pSendBuff.readableBytes()];
+        pSendBuff.readBytes(aData);
+        return aData;
     }
-
-    public final Packet ToPacket() {
-        if (aData != null) {
-            if (aData.length > nOffset) {
-                Trim();
-            }
-            return new Packet(aData);
-        }
-        return null;
+    
+    public OutPacket Clone() {
+        return (new OutPacket((short) nPacketID)).Encode(this.GetData());
     }
 }

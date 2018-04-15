@@ -22,13 +22,13 @@
 package handling.cashshop;
 
 import client.MapleClient;
-import database.DatabaseConnection;
+import database.Database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import net.InPacket;
 import tools.packet.CSPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import tools.LogHelper;
 
 /**
@@ -48,8 +48,8 @@ public final class CashCategorySwitch implements ProcessPacket<MapleClient> {
         switch (cat) {
             case 103:
                 iPacket.Skip(1);
-                int itemSn = iPacket.DecodeInteger();
-                try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("INSERT INTO `wishlist` VALUES (?, ?)")) {
+                int itemSn = iPacket.DecodeInt();
+                try (PreparedStatement ps = Database.GetConnection().prepareStatement("INSERT INTO `wishlist` VALUES (?, ?)")) {
                     ps.setInt(1, c.getPlayer().getId());
                     ps.setInt(2, itemSn);
                     ps.executeUpdate();
@@ -57,22 +57,23 @@ public final class CashCategorySwitch implements ProcessPacket<MapleClient> {
                 } catch (SQLException ex) {
                     LogHelper.SQL.get().info("[MapleClient] Failed altering wishlist:\n", ex);
                 }
-                c.write(CSPacket.addFavorite(false, itemSn));
+                c.SendPacket(CSPacket.addFavorite(false, itemSn));
                 break;
             case 105:
-                int item = iPacket.DecodeInteger();
-                try {
-                    Connection con = DatabaseConnection.getConnection();
+                int item = iPacket.DecodeInt();
+                try (Connection con = Database.GetConnection()) {
+                    System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
                     try (PreparedStatement ps = con.prepareStatement("UPDATE cashshop_items SET likes = likes+" + 1 + " WHERE sn = ?")) {
                         ps.setInt(1, item);
                         ps.executeUpdate();
                     }
                 } catch (SQLException ex) {
+                    LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
                 }
-                c.write(CSPacket.Like(item));
+                c.SendPacket(CSPacket.Like(item));
                 break;
             case 109:
-                c.write(CSPacket.Favorite(c.getPlayer()));
+                c.SendPacket(CSPacket.Favorite(c.getPlayer()));
                 break;
             //click on special item TODO
             //int C8 - C9 - CA
@@ -85,12 +86,12 @@ public final class CashCategorySwitch implements ProcessPacket<MapleClient> {
             case 113:
                 break;
             default:
-                int newcat = iPacket.DecodeInteger();
+                int newcat = iPacket.DecodeInt();
                 if (newcat == 4000000) {
-                    c.write(CSPacket.CS_Top_Items());
-                    c.write(CSPacket.SetCashShopBannerPicture());
+                    c.SendPacket(CSPacket.CS_Top_Items());
+                    c.SendPacket(CSPacket.SetCashShopBannerPicture());
                 } else {
-                    c.write(CSPacket.changeCategory(newcat));
+                    c.SendPacket(CSPacket.changeCategory(newcat));
                 }
                 break;
         }

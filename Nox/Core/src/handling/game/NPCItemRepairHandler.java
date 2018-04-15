@@ -7,7 +7,7 @@ import client.inventory.MapleInventoryType;
 import java.util.Map;
 import server.MapleItemInformationProvider;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -22,10 +22,10 @@ public class NPCItemRepairHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        if (iPacket.Available() < 4) { //leafre for now
+        if (iPacket.GetRemainder() < 4) { //leafre for now
             return;
         }
-        final int position = iPacket.DecodeInteger(); //who knows why this is a int
+        final int position = iPacket.DecodeInt(); //who knows why this is a int
         final MapleInventoryType type = position < 0 ? MapleInventoryType.EQUIPPED : MapleInventoryType.EQUIP;
         final Item item = c.getPlayer().getInventory(type).getItem((byte) position);
         if (item == null) {

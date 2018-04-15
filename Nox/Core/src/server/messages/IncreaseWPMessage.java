@@ -16,8 +16,8 @@ public class IncreaseWPMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.IncreaseWP.getType());
-        oPacket.EncodeInteger(0);
+        oPacket.EncodeByte(_MessageOpcodesType.IncreaseWP.getType());
+        oPacket.EncodeInt(0);
     }
 
 }

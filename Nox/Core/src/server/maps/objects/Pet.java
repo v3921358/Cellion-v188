@@ -32,7 +32,7 @@ import java.util.List;
 
 import client.inventory.MapleInventoryIdentifier;
 import constants.ServerConstants;
-import database.DatabaseConnection;
+import database.Database;
 import java.util.ArrayList;
 import server.MapleItemInformationProvider;
 import server.maps.MapleMapObject;
@@ -106,10 +106,9 @@ public class Pet extends MapleMapObject {
     }
 
     public static final Pet loadFromDb(int itemid, int uId, short inventorypos, short flags) {
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             final Pet ret = new Pet(itemid, inventorypos, uId, flags);
-
-            Connection con = DatabaseConnection.getConnection(); // Get a connection to the database
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM pets WHERE petid = ?")) {
                 ps.setInt(1, uId);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -140,8 +139,10 @@ public class Pet extends MapleMapObject {
         if (!changed) {
             return;
         }
-        try {
-            try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("UPDATE pets SET name = ?, level = ?, closeness = ?, fullness = ?, seconds = ?, flags = ? WHERE petid = ?")) {
+
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            try (PreparedStatement ps = con.prepareStatement("UPDATE pets SET name = ?, level = ?, closeness = ?, fullness = ?, seconds = ?, flags = ? WHERE petid = ?")) {
                 ps.setInt(1, getItem().getUniqueId());
                 ps.setString(2, name);
                 ps.setByte(3, level);
@@ -150,8 +151,8 @@ public class Pet extends MapleMapObject {
                 ps.setInt(6, secondsLeft);
                 ps.setShort(7, getItem().getFlag());
                 ps.executeUpdate();
+                changed = false;
             }
-            changed = false;
         } catch (Exception e) {
             LogHelper.SQL.get().info("There was an issue with saving pets to the database:\n", e);
         }
@@ -165,16 +166,18 @@ public class Pet extends MapleMapObject {
         if (uniqueid <= -1) { //wah
             uniqueid = MapleInventoryIdentifier.getInstance();
         }
-        try {
-            try (PreparedStatement pse = DatabaseConnection.getConnection().prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, seconds, flags) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
-                pse.setInt(1, uniqueid); //pse.setInt(1, uniqueid);
-                pse.setString(2, name);
-                pse.setByte(3, (byte) level);
-                pse.setShort(4, (short) closeness);
-                pse.setByte(5, (byte) fullness);
-                pse.setInt(6, secondsLeft);
-                pse.setShort(7, flag);
-                pse.executeUpdate();
+
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            try (PreparedStatement ps = con.prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, seconds, flags) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
+                ps.setInt(1, uniqueid); //pse.setInt(1, uniqueid);
+                ps.setString(2, name);
+                ps.setByte(3, (byte) level);
+                ps.setShort(4, (short) closeness);
+                ps.setByte(5, (byte) fullness);
+                ps.setInt(6, secondsLeft);
+                ps.setShort(7, flag);
+                ps.executeUpdate();
             }
         } catch (final SQLException ex) {
             LogHelper.SQL.get().info("There was an issue with loading a pet from the db\n", ex);
@@ -353,14 +356,14 @@ public class Pet extends MapleMapObject {
     }
 
     public static void clearPet() {
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             PreparedStatement ps = con.prepareStatement("SELECT * FROM pets");
             ResultSet rs = ps.executeQuery();
             ArrayList<Integer> uids = new ArrayList();
             while (rs.next()) {
                 int uid = rs.getInt("petid");
-                if (!ItemLoader.isExistsByUniqueid(uid)) {
+                if (!ItemLoader.isExistsByUniqueid(uid, con)) {
                     if (ServerConstants.DEVELOPER_DEBUG_MODE) {
                         System.err.println("[Debug] Pet (" + rs.getString("name") + ") Pet ID (" + uid + ") doesn't exist, cleaning up.");// It cleans it up if it doesnt exist, OH okay
                     }
@@ -374,8 +377,9 @@ public class Pet extends MapleMapObject {
                 ps.setInt(1, id);
                 ps.executeUpdate();
             }
-        } catch (SQLException se) {
-            System.err.println("[MaplePet] Failed to load pet.");
+            ps.close();
+        } catch (SQLException e) {
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
     }
 

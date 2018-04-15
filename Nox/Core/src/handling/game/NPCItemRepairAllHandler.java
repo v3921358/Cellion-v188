@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import server.MapleItemInformationProvider;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *

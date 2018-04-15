@@ -4,7 +4,7 @@ import client.MapleClient;
 import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -23,7 +23,7 @@ public class AutoAggroHandler implements ProcessPacket<MapleClient> {
         if ((chr == null) || (chr.getMap() == null) || (chr.isHidden())) {
             return;
         }
-        Mob monster = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
+        Mob monster = chr.getMap().getMonsterByOid(iPacket.DecodeInt());
 
         if (monster != null && chr.getTruePosition().distanceSq(monster.getTruePosition()) < 200000.0D && monster.getLinkCID() <= 0) {
             if (monster.getController() != null) {

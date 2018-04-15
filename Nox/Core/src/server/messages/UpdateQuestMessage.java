@@ -21,8 +21,8 @@ public class UpdateQuestMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.QuestInfoEx.getType()); //messageType
-        oPacket.EncodeInteger(questId);
+        oPacket.EncodeByte(_MessageOpcodesType.QuestInfoEx.getType()); //messageType
+        oPacket.EncodeInt(questId);
         oPacket.EncodeString(data);
     }
 

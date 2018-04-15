@@ -15,8 +15,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import service.ServerMode.MapleServerMode;
-import netty.PacketDecoder;
-import netty.PacketEncoder;
+import net.PacketDecoder;
+import net.PacketEncoder;
 import server.LoginAuthorization;
 
 public class LoginServer extends Thread {

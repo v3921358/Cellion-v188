@@ -13,7 +13,7 @@ import server.maps.objects.User;
 import server.quest.MapleQuest;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *

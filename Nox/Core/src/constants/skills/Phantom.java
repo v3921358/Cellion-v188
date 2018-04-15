@@ -13,7 +13,7 @@ public class Phantom {
     public static final int VOL_DAME = 24121007;
     public static final int MAPLE_WARRIOR = 24121008;
     public static final int HEROS_WILL = 24121009;
-    
+
     public static final int TEMPEST_REINFORCE = 24120043;
     public static final int TEMPEST_COOLDOWN_CUTTER = 24120044;
     public static final int TEMPEST_EXTRA_TARGET = 24120045;
@@ -27,8 +27,7 @@ public class Phantom {
     public static final int ROSE_CARTE_FINALE = 24120055;
     public static final int HEROIC_MEMORIES = 24121053;
     public static final int FINAL_JUDGMENT_DRAW = 24121054;
-    
-    
+
     public static final int DOUBLE_ENTENDRE = 24001000;
     public static final int FEATHER_FOOT = 24000003;
     public static final int IMPECCABLE_MEMORY_I = 24001001;

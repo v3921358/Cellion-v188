@@ -34,14 +34,14 @@ public class CashShopOperation {
         } finally {
             final String s = c.getSessionIPAddress();
             LoginServer.addIPAuth(s.substring(s.indexOf('/') + 1, s.length()));
-            c.write(CField.getChannelChange(c, Integer.parseInt(ChannelServer.getInstance(c.getChannel()).getIP().split(":")[1])));
+            c.SendPacket(CField.getChannelChange(c, Integer.parseInt(ChannelServer.getInstance(c.getChannel()).getIP().split(":")[1])));
             c.disconnect(false, true);
         }
     }
 
     public static void EnterCS(final CharacterTransfer transfer, final MapleClient c) {
         if (transfer == null) {
-            c.close();
+            c.Close();
             return;
         }
         User chr = User.reconstructCharacter(transfer, c, false);
@@ -50,7 +50,7 @@ public class CashShopOperation {
         c.setAccID(chr.getAccountID());
 
         if (!c.CheckIPAddress()) { // Remote hack
-            c.close();
+            c.Close();
             return;
         }
 
@@ -68,7 +68,7 @@ public class CashShopOperation {
 
         if (!allowLogin) {
             c.setPlayer(null);
-            c.close();
+            c.Close();
             return;
         }
 
@@ -80,18 +80,18 @@ public class CashShopOperation {
 
         c.updateLoginState(MapleClientLoginState.LOGIN_LOGGEDIN, c.getSessionIPAddress());
         CashShopServer.getPlayerStorage().registerPlayer(chr);
-        c.write(CSPacket.warpCS(c));
-        c.write(CSPacket.loadCategories());
-        c.write(CSPacket.SetCashShopBannerPicture());
-        c.write(CSPacket.CS_Top_Items());
-        c.write(CSPacket.CS_Special_Item());
-        c.write(CSPacket.CS_Featured_Item());
-        c.write(CSPacket.showNXMapleTokens(c.getPlayer()));
+        c.SendPacket(CSPacket.warpCS(c));
+        c.SendPacket(CSPacket.loadCategories());
+        c.SendPacket(CSPacket.SetCashShopBannerPicture());
+        c.SendPacket(CSPacket.CS_Top_Items());
+        c.SendPacket(CSPacket.CS_Special_Item());
+        c.SendPacket(CSPacket.CS_Featured_Item());
+        c.SendPacket(CSPacket.showNXMapleTokens(c.getPlayer()));
         playerCashShopInfo(c);
         CashShop mci = c.getPlayer().getCashInventory();
         if (mci != null && mci.getItemsSize() > 0) {
             for (Item itemz : mci.getInventory()) {
-                c.write(CSPacket.showBoughtCSItem(itemz, itemz.getUniqueId(), c.getAccID()));
+                c.SendPacket(CSPacket.showBoughtCSItem(itemz, itemz.getUniqueId(), c.getAccID()));
             }
         }
     }
@@ -112,16 +112,16 @@ public class CashShopOperation {
     }
 
     public static void playerCashShopInfo(MapleClient c) {
-        c.write(CSPacket.getCSInventory(c));
-        c.write(CSPacket.doCSMagic());
-        c.write(CSPacket.getCSGifts(c));
+        c.SendPacket(CSPacket.getCSInventory(c));
+        c.SendPacket(CSPacket.doCSMagic());
+        c.SendPacket(CSPacket.getCSGifts(c));
         Buddy buddy = new Buddy(BuddyResult.LOAD_FRIENDS);
         buddy.setEntries(new ArrayList<>(c.getPlayer().getBuddylist().getBuddies()));
-        c.write(CWvsContext.buddylistMessage(buddy));
-        c.write(CSPacket.showNXMapleTokens(c.getPlayer()));
+        c.SendPacket(CWvsContext.buddylistMessage(buddy));
+        c.SendPacket(CSPacket.showNXMapleTokens(c.getPlayer()));
         //c.write(CSPacket.sendWishList(c.getPlayer(), false));
         //c.write(CSPacket.showNXMapleTokens(c.getPlayer()));
-        c.write(CSPacket.enableCSUse());
+        c.SendPacket(CSPacket.enableCSUse());
         c.getPlayer().getCashInventory().checkExpire(c);
     }
 }

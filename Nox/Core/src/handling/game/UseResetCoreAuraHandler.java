@@ -3,7 +3,7 @@ package handling.game;
 import client.MapleClient;
 import server.maps.objects.User;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *

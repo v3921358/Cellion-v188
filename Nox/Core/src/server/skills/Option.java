@@ -11,6 +11,7 @@ import server.MapleStatInfo;
  * Created on 1/3/2018.
  */
 public class Option {
+
     public int nOption;
     public int rOption;
     public int tOption;
@@ -40,10 +41,10 @@ public class Option {
 
     public Option(int itemID, long duration) {
         // hack to have a constructorfor items
-            this.tTerm = (int) duration;
-            this.nReason = itemID;
-            this.rOption = itemID;
-            this.tOption = (int) duration;
+        this.tTerm = (int) duration;
+        this.nReason = itemID;
+        this.rOption = itemID;
+        this.tOption = (int) duration;
     }
 
     public Option(int skillID, byte slv) {
@@ -83,9 +84,9 @@ public class Option {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Option &&
-                ((((Option) obj).rOption == rOption && ((Option) obj).rOption > 0) ||
-                        ((((Option) obj).nReason == nReason && ((Option) obj).nReason > 0)));
+        return obj instanceof Option
+                && ((((Option) obj).rOption == rOption && ((Option) obj).rOption > 0)
+                || ((((Option) obj).nReason == nReason && ((Option) obj).nReason > 0)));
     }
 
     @Override

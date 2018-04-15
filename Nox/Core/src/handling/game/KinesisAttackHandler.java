@@ -8,7 +8,7 @@ package handling.game;
 import client.MapleClient;
 import net.InPacket;
 import net.OutPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.maps.objects.User;
 import service.SendPacketOpcode;
 
@@ -26,21 +26,20 @@ public final class KinesisAttackHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
 
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.UserEnterFieldPsychicInfo.getValue());
-        oPacket.EncodeInteger(c.getPlayer().getId());
-        oPacket.Encode(1);
-        oPacket.EncodeInteger(iPacket.DecodeInteger());
-        oPacket.EncodeInteger((int) iPacket.DecodeLong());
-        final int mobcount = iPacket.DecodeInteger();
-        oPacket.EncodeInteger(mobcount);
-        final int skillid = iPacket.DecodeInteger();
-        oPacket.EncodeInteger(skillid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEnterFieldPsychicInfo.getValue());
+        oPacket.EncodeInt(c.getPlayer().getId());
+        oPacket.EncodeByte(1);
+        oPacket.EncodeInt(iPacket.DecodeInt());
+        oPacket.EncodeInt((int) iPacket.DecodeLong());
+        final int mobcount = iPacket.DecodeInt();
+        oPacket.EncodeInt(mobcount);
+        final int skillid = iPacket.DecodeInt();
+        oPacket.EncodeInt(skillid);
         oPacket.EncodeShort(iPacket.DecodeShort());
-        oPacket.EncodeInteger((0xFFFFFFFF - mobcount) + 1);
-        final int unknown_i = iPacket.DecodeInteger();
-        oPacket.EncodeInteger(unknown_i != 0xFFFFFFFF ? unknown_i + 4000 : unknown_i);
-        oPacket.Encode(iPacket.DecodeByte());
+        oPacket.EncodeInt((0xFFFFFFFF - mobcount) + 1);
+        final int unknown_i = iPacket.DecodeInt();
+        oPacket.EncodeInt(unknown_i != 0xFFFFFFFF ? unknown_i + 4000 : unknown_i);
+        oPacket.EncodeByte(iPacket.DecodeByte());
         final short unknown_si = iPacket.DecodeShort();
         oPacket.EncodeShort(unknown_si != 0xFFFF ? unknown_si : 0);
         final short unknown_sii = iPacket.DecodeShort();
@@ -53,6 +52,6 @@ public final class KinesisAttackHandler implements ProcessPacket<MapleClient> {
         /* PPoint Check */
         c.getPlayer().handlePsychicPoint(skillid);
 
-        c.write(oPacket.ToPacket());
+        c.SendPacket(oPacket);
     }
 }

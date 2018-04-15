@@ -13,7 +13,7 @@ import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.CWvsContext;
 import tools.packet.CLogin;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class CharListRequestHandler implements ProcessPacket<MapleClient> {
 
@@ -25,7 +25,7 @@ public final class CharListRequestHandler implements ProcessPacket<MapleClient> 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         if (!c.isLoggedIn()) {
-            c.close();
+            c.Close();
             return;
         }
         iPacket.DecodeByte(); //2?
@@ -33,15 +33,15 @@ public final class CharListRequestHandler implements ProcessPacket<MapleClient> 
         final int channel = iPacket.DecodeByte() + 1;
 
         if (!World.isChannelAvailable(channel, server) || !WorldConstants.WorldOption.isExists(server)) {
-            c.write(CLogin.getLoginFailed(10)); //cannot process so many
+            c.SendPacket(CLogin.getLoginFailed(10)); //cannot process so many
             return;
         }
 
         WorldOption world = WorldConstants.WorldOption.getById(server);
 
         if (!world.isAvailable() && !(c.isGm() && server == WorldConstants.gmserver)) {
-            c.write(CWvsContext.broadcastMsg(1, "We are sorry, but " + WorldConstants.getNameById(server) + " is currently not available. \r\nPlease try another world."));
-            c.write(CLogin.getLoginFailed(1)); //Shows no message, but it is used to unstuck
+            c.SendPacket(CWvsContext.broadcastMsg(1, "We are sorry, but " + WorldConstants.getNameById(server) + " is currently not available. \r\nPlease try another world."));
+            c.SendPacket(CLogin.getLoginFailed(1)); //Shows no message, but it is used to unstuck
             return;
         }
         final List<User> chars = c.loadCharacters(server);
@@ -51,12 +51,12 @@ public final class CharListRequestHandler implements ProcessPacket<MapleClient> 
             if (c.isGm() || ServerConstants.BURNING_CHARACTER_EVENT) {
                 handleBurningEvent(c, chars);
             }
-            c.write(CLogin.getCharList(c, c.getSecondPassword(), chars,
+            c.SendPacket(CLogin.getCharList(c, c.getSecondPassword(), chars,
                     MapleCharacterCreationUtil.getCharacterSlots(c.getAccID(), c.getWorld()), world == WorldOption.Reboot));
         } else {
-            c.close();
+            c.Close();
         }
-        c.write(CLogin.getJobListPacket());
+        c.SendPacket(CLogin.getJobListPacket());
     }
 
     private void handleBurningEvent(MapleClient c, List<User> chars) {
@@ -70,11 +70,11 @@ public final class CharListRequestHandler implements ProcessPacket<MapleClient> 
             }
         }
         if (hasBurningCharacter) {
-            c.write(CLogin.burningEventEffect((byte) 1, burningCharacterId));
+            c.SendPacket(CLogin.burningEventEffect((byte) 1, burningCharacterId));
         }
         if (!hasBurningCharacter) {
             for (int i = 0; i < characters.length; i++) {
-                c.write(CLogin.burningEventEffect((byte) 1, characters[i].getId()));
+                c.SendPacket(CLogin.burningEventEffect((byte) 1, characters[i].getId()));
             }
         }
     }

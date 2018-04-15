@@ -4,14 +4,12 @@ import client.*;
 import client.anticheat.CheatingOffense;
 import client.anticheat.ReportType;
 import client.inventory.*;
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
 import constants.skills.Fighter;
-import database.DatabaseConnection;
+import database.Database;
 import handling.world.CheaterData;
 import handling.world.World;
 import net.OutPacket;
@@ -49,12 +47,15 @@ import tools.packet.MobPacket;
 import java.awt.*;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
 import server.messages.QuestStatusMessage;
+import tools.LogHelper;
 
 import static tools.StringUtil.getOptionalIntArg;
 import tools.packet.BuffPacket;
@@ -71,45 +72,45 @@ public class GMCommand {
     }
 
     public static class Morph extends CommandExecute {
-        
+
         @Override
         public int execute(MapleClient c, String[] splitted) {
             User pPlayer = c.getPlayer();
             int nMorphID = Integer.valueOf(splitted[1]);
-            
+
             if (nMorphID == 0) {
                 pPlayer.cancelMorphs();
                 c.getPlayer().dropMessage(6, "You have been demorphed.");
             } else {
                 final EnumMap<CharacterTemporaryStat, Integer> stat = new EnumMap<>(CharacterTemporaryStat.class);
                 stat.put(CharacterTemporaryStat.Morph, nMorphID);
-                c.write(BuffPacket.giveBuff(pPlayer, 0, 1, stat, null));
+                c.SendPacket(BuffPacket.giveBuff(pPlayer, 0, 1, stat, null));
                 c.getPlayer().dropMessage(6, "You have morphed into " + nMorphID + ".");
             }
             return 1;
         }
     }
-    
+
     public static class Mount extends CommandExecute {
-        
+
         @Override
         public int execute(MapleClient c, String[] splitted) {
             User pPlayer = c.getPlayer();
             int nMountID = Integer.valueOf(splitted[1]);
-            
+
             if (nMountID == 0) {
                 pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.RideVehicle);
                 c.getPlayer().dropMessage(6, "You have been unmounted.");
             } else {
                 final EnumMap<CharacterTemporaryStat, Integer> stat = new EnumMap<>(CharacterTemporaryStat.class);
                 stat.put(CharacterTemporaryStat.RideVehicle, nMountID);
-                c.write(BuffPacket.giveBuff(pPlayer, 0, 1, stat, null));
+                c.SendPacket(BuffPacket.giveBuff(pPlayer, 0, 1, stat, null));
                 c.getPlayer().dropMessage(6, "You have mounted " + nMountID + ".");
             }
             return 1;
         }
     }
-    
+
     public static class SetPlayer extends CommandExecute {
 
         @Override
@@ -119,13 +120,13 @@ public class GMCommand {
             return 1;
         }
     }
-    
+
     public static class GodMode extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
             User pPlayer = c.getPlayer();
-            
+
             if (pPlayer.hasGodMode()) {
                 pPlayer.toggleGodMode(false);
                 pPlayer.dropMessage(5, "God mode has been disabled.");
@@ -133,13 +134,13 @@ public class GMCommand {
                 pPlayer.toggleGodMode(true);
                 pPlayer.dropMessage(5, "God mode is now enabled.");
             }
-            
+
             pPlayer.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAGUAR)).setCustomData(String.valueOf((9304004 - 9303999) * 10));
-            c.write(CWvsContext.updateJaguar(pPlayer));
+            c.SendPacket(CWvsContext.updateJaguar(pPlayer));
             return 0;
         }
     }
-    
+
     public static class Dox extends CommandExecute {
 
         @Override
@@ -156,12 +157,12 @@ public class GMCommand {
             if (pUser == null) {
                 c.getPlayer().dropMessage(5, "Sorry, the specified user can't be found.");
             }
-            
+
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
                 nOnline += ChannelServer.getInstance(i).getPlayerStorage().getAllCharacters().size();
             }
             if (pUser.getClient().getAccountName().equals("Mazen") && c.getAccountName() != "Mazen") {
-                c.write(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, "Enjoy your ban!", NPCChatByType.NPC_Cancellable));
+                c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, "Enjoy your ban!", NPCChatByType.NPC_Cancellable));
                 return 0;
             }
             String sMessage = "#dMazen's Super " + ServerConstants.SERVER_NAME + " Dox System#k\t\t\t\t\t\t\t#b(" + nOnline + " ONLINE)#k\r\n"
@@ -185,7 +186,7 @@ public class GMCommand {
                     + "Mesos: #r" + pUser.getMeso() + "#k\r\n"
                     + "Vote Points: #r" + pUser.getVPoints() + "#k / Donor Credits: #r" + pUser.getDPoints() + "#k\r\n"
                     + "Maple Points: #r" + pUser.getCSPoints(2) + "#k / Currently Trading: #r" + (pUser.getTrade() != null) + "#k\r\n";
-            c.write(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage, NPCChatByType.NPC_Cancellable));
+            c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage, NPCChatByType.NPC_Cancellable));
             return 1;
         }
     }
@@ -622,7 +623,7 @@ public class GMCommand {
                             c.getPlayer().dropMessage(6, "Sorry, that search call is unavailable");
                             break;
                     }
-                    c.write(NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sb.toString(), NPCChatByType.NPC_Cancellable));
+                    c.SendPacket(NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sb.toString(), NPCChatByType.NPC_Cancellable));
                     break;
             }
             return 0;
@@ -884,7 +885,7 @@ public class GMCommand {
         public int execute(MapleClient c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[splitted.length - 1]);
             if (victim != null && c.getPlayer().getGMLevel() >= victim.getGMLevel()) {
-                victim.getClient().close();
+                victim.getClient().Close();
                 victim.getClient().disconnect(true, false);
                 return 1;
             } else {
@@ -1348,7 +1349,7 @@ public class GMCommand {
                 List<ModifyInventory> mod = new ArrayList<>();
                 mod.add(new ModifyInventory(ModifyInventoryOperation.Remove, item));
                 mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                c.write(CWvsContext.inventoryOperation(true, mod));
+                c.SendPacket(CWvsContext.inventoryOperation(true, mod));
             }
             if (type == MapleInventoryType.EQUIP) {
                 type = MapleInventoryType.EQUIPPED;
@@ -1742,7 +1743,7 @@ public class GMCommand {
             joinmod += tfrom;
             sb.append(StringUtil.joinStringFrom(splitted, joinmod));
 
-            net.Packet packet = CWvsContext.broadcastMsg(type, sb.toString());
+            OutPacket packet = CWvsContext.broadcastMsg(type, sb.toString());
             if (range == 0) {
                 c.getPlayer().getMap().broadcastMessage(packet);
             } else if (range == 1) {
@@ -1773,7 +1774,7 @@ public class GMCommand {
             if (range == -1) {
                 range = 2;
             }
-            net.Packet packet = CWvsContext.yellowChat((splitted[0].equals("!y") ? ("[" + c.getPlayer().getName() + "] ") : "") + StringUtil.joinStringFrom(splitted, 2));
+            OutPacket packet = CWvsContext.yellowChat((splitted[0].equals("!y") ? ("[" + c.getPlayer().getName() + "] ") : "") + StringUtil.joinStringFrom(splitted, 2));
             switch (range) {
                 case 0:
                     c.getPlayer().getMap().broadcastMessage(packet);
@@ -2095,14 +2096,14 @@ public class GMCommand {
                         result += singleRetItem;
                     } else {
                         result += "\r\n#bCouldn't load all items, there are too many results.#k";
-                        c.write(NPCPacket.getNPCTalk(9010000, NPCChatType.OK, result, NPCChatByType.NPC_Cancellable));
+                        c.SendPacket(NPCPacket.getNPCTalk(9010000, NPCChatType.OK, result, NPCChatByType.NPC_Cancellable));
                         return 1;
                     }
                 }
             } else {
                 result = "No Items Found";
             }
-            c.write(NPCPacket.getNPCTalk(9010000, NPCChatType.OnAskMenu, result, NPCChatByType.NPC_Cancellable));
+            c.SendPacket(NPCPacket.getNPCTalk(9010000, NPCChatType.OnAskMenu, result, NPCChatByType.NPC_Cancellable));
             return 1;
         }
     }
@@ -2185,7 +2186,7 @@ public class GMCommand {
                 c.getPlayer().dropMessage(6, "Only an Admin can change player's name.");
                 return 0;
             }
-            victim.getClient().close();
+            victim.getClient().Close();
             victim.getClient().disconnect(true, false);
             victim.setName(splitted[2]);
             return 1;
@@ -2574,6 +2575,7 @@ public class GMCommand {
                         }
                         MapleRing.addToDB(itemId, c.getPlayer(), fff.getName(), fff.getId(), ringID);
                     } catch (SQLException e) {
+                        LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
                     }
                 }
             }
@@ -2944,9 +2946,10 @@ public class GMCommand {
                 npc.setRx0(xpos);
                 npc.setRx1(xpos);
                 npc.setFh(fh);
-                try {
-                    Connection con = (Connection) DatabaseConnection.getConnection();
-                    try (PreparedStatement ps = (PreparedStatement) con.prepareStatement("INSERT INTO wz_customlife (mid, idd, x, y, fh, cy, rx0, rx1, mobtime, f, team, type, hide) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+
+                try (Connection con = Database.GetConnection()) {
+                    System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO wz_customlife (mid, idd, x, y, fh, cy, rx0, rx1, mobtime, f, team, type, hide) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                         ps.setInt(1, c.getPlayer().getMapId());
                         ps.setInt(2, npcId);
                         ps.setInt(3, xpos);
@@ -2963,6 +2966,7 @@ public class GMCommand {
                         ps.executeUpdate();
                     }
                 } catch (SQLException e) {
+                    LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
                     c.getPlayer().dropMessage(6, "Failed to save NPC to the database.");
                 }
                 c.getPlayer().getMap().addMapObject(npc);
@@ -3003,9 +3007,10 @@ public class GMCommand {
                 npc.setRx1(xpos);
                 npc.setFh(fh);
                 System.out.printf("The current map (%s) \r\n", c.getPlayer().getMapId());
-                try {
-                    Connection con = (Connection) DatabaseConnection.getConnection();
-                    try (PreparedStatement ps = (PreparedStatement) con.prepareStatement("INSERT INTO wz_customlife (mid, idd, x, y, fh, cy, rx0, rx1, mobtime, f, team, type, hide) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+
+                try (Connection con = Database.GetConnection()) {
+                    System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO wz_customlife (mid, idd, x, y, fh, cy, rx0, rx1, mobtime, f, team, type, hide) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                         ps.setInt(1, c.getPlayer().getMapId());
                         ps.setInt(2, mobid);
                         ps.setInt(3, xpos);
@@ -3022,6 +3027,7 @@ public class GMCommand {
                         ps.executeUpdate();
                     }
                 } catch (SQLException e) {
+                    LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
                     c.getPlayer().dropMessage(6, "Failed to save monster to the database.");
                 }
                 c.getPlayer().getMap().addMonsterSpawn(npc, mobTime, null);
@@ -3083,78 +3089,6 @@ public class GMCommand {
             String outputMessage = StringUtil.joinStringFrom(splitted, 1);
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 cserv.setServerMessage(outputMessage);
-            }
-            return 1;
-        }
-    }
-
-    public static class PS extends CommandExecute {
-
-        protected static StringBuilder builder = new StringBuilder();
-
-        @Override
-        public int execute(MapleClient c, String[] splitted) {
-            if (builder.length() > 1) {
-                c.write((new OutPacket(80)).Encode(CField.getPacketFromHexString(builder.toString())).ToPacket());
-                builder = new StringBuilder();
-            } else {
-                c.getPlayer().dropMessage(6, "Please enter packet data!");
-            }
-            return 1;
-        }
-    }
-
-    public static class APS extends PS {
-
-        @Override
-        public int execute(MapleClient c, String[] splitted) {
-            if (splitted.length > 1) {
-                builder.append(StringUtil.joinStringFrom(splitted, 1));
-                c.getPlayer().dropMessage(6, "String is now: " + builder.toString());
-            } else {
-                c.getPlayer().dropMessage(6, "Please enter packet data!");
-            }
-            return 1;
-        }
-    }
-
-    public static class CPS extends PS {
-
-        @Override
-        public int execute(MapleClient c, String[] splitted) {
-            builder = new StringBuilder();
-            return 1;
-        }
-    }
-
-    public static class P extends CommandExecute {
-
-        @Override
-        public int execute(MapleClient c, String[] splitted) {
-            if (splitted.length > 1) {
-                c.write((new OutPacket(80)).Encode(CField.getPacketFromHexString(StringUtil.joinStringFrom(splitted, 1))).ToPacket());
-            } else {
-                c.getPlayer().dropMessage(6, "Please enter packet data!");
-            }
-            return 1;
-        }
-    }
-
-    public static class Packet extends P {
-    }
-
-    public static class PTS extends CommandExecute {
-
-        @Override
-        public int execute(MapleClient c, String[] splitted) {
-            if (splitted.length > 1) {
-                try {
-                    c.write((new OutPacket(80)).Encode(CField.getPacketFromHexString(StringUtil.joinStringFrom(splitted, 1))).ToPacket());
-                } catch (Exception e) {
-                    c.getPlayer().dropMessage(6, "Error: " + e);
-                }
-            } else {
-                c.getPlayer().dropMessage(6, "Please enter packet data!");
             }
             return 1;
         }
@@ -3260,7 +3194,7 @@ public class GMCommand {
         public int execute(MapleClient c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (victim != null && c.getPlayer().getGMLevel() >= victim.getGMLevel()) {
-                victim.getClient().close();
+                victim.getClient().Close();
                 return 1;
             } else {
                 c.getPlayer().dropMessage(6, "The victim does not exist.");
@@ -3776,7 +3710,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.write(CField.UIPacket.openUIOption(Integer.parseInt(splitted[1]), 9010000));
+            c.SendPacket(CField.UIPacket.openUIOption(Integer.parseInt(splitted[1]), 9010000));
             return 1;
         }
     }
@@ -3785,7 +3719,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.write(CField.UIPacket.openUI(Integer.parseInt(splitted[1])));
+            c.SendPacket(CField.UIPacket.openUI(Integer.parseInt(splitted[1])));
             return 1;
         }
     }

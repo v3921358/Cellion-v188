@@ -14,7 +14,7 @@ import java.util.Map.Entry;
 import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
-import database.DatabaseConnection;
+import database.Database;
 import handling.world.MapleCharacterLook;
 import handling.world.World;
 import service.ChannelServer;
@@ -22,6 +22,7 @@ import server.maps.MapleMap;
 import server.maps.objects.User;
 import server.maps.objects.MapleNPC;
 import server.maps.objects.Pet;
+import tools.LogHelper;
 import tools.packet.CField.NPCPacket;
 import tools.packet.CWvsContext;
 
@@ -65,8 +66,7 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
             }
         }
 
-        Connection con = DatabaseConnection.getConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM playernpcs_equip WHERE NpcId = ?")) {
+        try (PreparedStatement ps = Database.GetConnection().prepareStatement("SELECT * FROM playernpcs_equip WHERE NpcId = ?")) {
             ps.setInt(1, getId());
             try (ResultSet rs2 = ps.executeQuery()) {
                 while (rs2.next()) {
@@ -74,6 +74,7 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
                     secondEquips.put((short) rs2.getByte("equippos"), rs2.getInt("equipid"));
                 }
             }
+            ps.close();
         }
     }
 
@@ -102,8 +103,8 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
 
     public static void loadAll() {
         List<PlayerNPC> toAdd = new ArrayList<>();
-        Connection con = DatabaseConnection.getConnection();
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM playernpcs"); ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     toAdd.add(new PlayerNPC(rs));
@@ -180,8 +181,8 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
     }
 
     public void destroy(boolean remove) {
-        Connection con = DatabaseConnection.getConnection();
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             PreparedStatement ps = con.prepareStatement("DELETE FROM playernpcs WHERE scriptid = ?");
             ps.setInt(1, getId());
             ps.executeUpdate();
@@ -194,13 +195,14 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
             if (remove) {
                 removeFromServer();
             }
-        } catch (SQLException se) {
+        } catch (SQLException e) {
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
     }
 
     public void saveToDB() {
-        Connection con = DatabaseConnection.getConnection();
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
 
             if (getNPCFromWZ() == null) {
                 destroy(true);
@@ -246,6 +248,7 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
             }
             ps.close();
         } catch (SQLException se) {
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
         }
     }
 
@@ -408,9 +411,9 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.write(NPCPacket.spawnNPC(this, true));
-        client.write(CWvsContext.spawnPlayerNPC(this));
-        client.write(NPCPacket.spawnNPCRequestController(this, true));
+        client.SendPacket(NPCPacket.spawnNPC(this, true));
+        client.SendPacket(CWvsContext.spawnPlayerNPC(this));
+        client.SendPacket(NPCPacket.spawnNPCRequestController(this, true));
     }
 
     public MapleNPC getNPCFromWZ() {

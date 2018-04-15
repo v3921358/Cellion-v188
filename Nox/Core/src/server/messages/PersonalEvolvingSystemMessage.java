@@ -23,9 +23,9 @@ public class PersonalEvolvingSystemMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.PersonalEvolvingSystemMessage.getType());
-        oPacket.Encode(unk);
-        oPacket.Encode(type);
+        oPacket.EncodeByte(_MessageOpcodesType.PersonalEvolvingSystemMessage.getType());
+        oPacket.EncodeByte(unk);
+        oPacket.EncodeByte(type);
         oPacket.EncodeString(name);
     }
 

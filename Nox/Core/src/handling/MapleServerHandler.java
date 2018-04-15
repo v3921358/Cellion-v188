@@ -4,12 +4,11 @@ import handling.game.GroupMessageHandler;
 import handling.game.BossMatchmakingHandler;
 import client.MapleClient;
 import constants.ServerConstants;
-import crypto.CAESCipher;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import service.LoginServer;
-import net.Packet;
+
 import service.RecvPacketOpcode;
 import service.ServerMode.MapleServerMode;
 import net.InPacket;
@@ -21,7 +20,7 @@ import handling.farm.*;
 import handling.game.*;
 import handling.login.*;
 import server.movement.types.*;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public class MapleServerHandler extends ChannelInboundHandlerAdapter {
 
@@ -314,19 +313,8 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
         client.setChannel(channel);
         client.setReceiving(true);
 
-        client.write(CLogin.Handshake(SendSeq, RecvSeq));
-
-        ch.attr(MapleClient.CLIENT_KEY).set(client);
-        ch.attr(MapleClient.CRYPTO_KEY).set(new CAESCipher(new byte[]{
-            (byte) 0x29, 0x00, 0x00, 0x00,
-            (byte) 0xF6, 0x00, 0x00, 0x00,
-            (byte) 0x18, 0x00, 0x00, 0x00,
-            (byte) 0x5E, 0x00, 0x00, 0x00,
-            (byte) 0xCA, 0x00, 0x00, 0x00,
-            (byte) 0x5A, 0x00, 0x00, 0x00,
-            (byte) 0x40, 0x00, 0x00, 0x00,
-            (byte) 0x61, 0x00, 0x00, 0x00
-        }));
+        client.SendPacket(CLogin.Handshake(SendSeq, RecvSeq));
+        ch.attr(MapleClient.SESSION_KEY).set(client);
 
         client.startPing(ch);
     }
@@ -335,7 +323,7 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
     public void channelInactive(ChannelHandlerContext ctx) {
         Channel ch = ctx.channel();
 
-        MapleClient c = (MapleClient) ch.attr(MapleClient.CLIENT_KEY).get();
+        MapleClient c = (MapleClient) ch.attr(MapleClient.SESSION_KEY).get();
 
         c.disconnect(true, false); // handle this is we don't soft disconnect through handler
 
@@ -348,11 +336,10 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        Packet buffer = (Packet) msg;
+        InPacket iPacket = (InPacket) msg;
         Channel ch = ctx.channel();
 
-        MapleClient ClientSocket = (MapleClient) ch.attr(MapleClient.CLIENT_KEY).get();
-        InPacket iPacket = ClientSocket.GetDecoder().Next(buffer);
+        MapleClient ClientSocket = (MapleClient) ch.attr(MapleClient.SESSION_KEY).get();
 
         if (!ClientSocket.isReceiving() || msg == null) {
             return;
@@ -385,7 +372,7 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
                                 break; // Doesn't display these packets, prevents major console spam.
                             }
                         default:
-                            System.out.printf("[Recv Operation] %s (%d) : %s%n", head, packetId, buffer.toString());
+                            System.out.printf("[Recv Operation] %s (%d) : %s%n", head, packetId, iPacket.toString());
                             break;
                     }
                     handler.Process(ClientSocket, iPacket);

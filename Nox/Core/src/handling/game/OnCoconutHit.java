@@ -26,7 +26,7 @@ import net.InPacket;
 import server.events.MapleCoconut;
 import server.events.MapleEventType;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class OnCoconutHit implements ProcessPacket<MapleClient> {
 

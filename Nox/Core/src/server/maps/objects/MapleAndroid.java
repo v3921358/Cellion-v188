@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 import client.inventory.MapleInventoryIdentifier;
-import database.DatabaseConnection;
+import database.Database;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataTool;
@@ -46,10 +46,9 @@ public class MapleAndroid extends MapleMapObject {
     }
 
     public static MapleAndroid loadFromDb(int itemid, int uid) {
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             MapleAndroid ret = new MapleAndroid(itemid, uid);
-
-            Connection con = DatabaseConnection.getConnection();
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM androids WHERE uniqueid = ?")) {
                 ps.setInt(1, uid);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -77,17 +76,17 @@ public class MapleAndroid extends MapleMapObject {
         if (!this.changed) {
             return;
         }
-        try {
-            try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("UPDATE androids SET hair = ?, face = ?, name = ?, skin=? WHERE uniqueid = ?")) {
-                ps.setInt(1, this.hair);
-                ps.setInt(2, this.face);
-                ps.setString(3, this.name);
-                ps.setInt(4, getItem().getUniqueId());
-                ps.setInt(5, this.skin);
-                ps.executeUpdate();
-            }
+        try (PreparedStatement ps = Database.GetConnection().prepareStatement("UPDATE androids SET hair = ?, face = ?, name = ?, skin=? WHERE uniqueid = ?")) {
+            ps.setInt(1, this.hair);
+            ps.setInt(2, this.face);
+            ps.setString(3, this.name);
+            ps.setInt(4, getItem().getUniqueId());
+            ps.setInt(5, this.skin);
+            ps.executeUpdate();
+
             this.changed = false;
-        } catch (SQLException ex) {
+        } catch (SQLException e) {
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
     }
 
@@ -113,15 +112,13 @@ public class MapleAndroid extends MapleMapObject {
         if (uniqueid < 0) {
             uniqueid = MapleInventoryIdentifier.getInstance();
         }
-        try {
-            try (PreparedStatement pse = DatabaseConnection.getConnection().prepareStatement("INSERT INTO androids (uniqueid, hair, face, name, skin) VALUES (?, ?, ?, ?, ?)")) {
-                pse.setInt(1, uniqueid);
-                pse.setInt(2, hair);
-                pse.setInt(3, face);
-                pse.setString(4, "Android");
-                pse.setInt(5, skin);
-                pse.executeUpdate();
-            }
+        try (PreparedStatement pse = Database.GetConnection().prepareStatement("INSERT INTO androids (uniqueid, hair, face, name, skin) VALUES (?, ?, ?, ?, ?)")) {
+            pse.setInt(1, uniqueid);
+            pse.setInt(2, hair);
+            pse.setInt(3, face);
+            pse.setString(4, "Android");
+            pse.setInt(5, skin);
+            pse.executeUpdate();
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("There were issues saving the new android\n", ex);
             return null;

@@ -40,7 +40,7 @@ public class MapleCoconut extends MapleEvent {
     @Override
     public void onMapLoad(User chr) {
         super.onMapLoad(chr);
-        chr.getClient().write(CField.coconutScore(getCoconutScore()));
+        chr.getClient().SendPacket(CField.coconutScore(getCoconutScore()));
     }
 
     public MapleCoconuts getCoconut(int id) {
@@ -133,11 +133,11 @@ public class MapleCoconut extends MapleEvent {
                 } else {
                     for (User chr : getMap(0).getCharacters()) {
                         if (chr.getTeam() == (getMapleScore() > getStoryScore() ? 0 : 1)) {
-                            chr.getClient().write(CField.showEffect("event/coconut/victory"));
-                            chr.getClient().write(CField.playSound("Coconut/Victory"));
+                            chr.getClient().SendPacket(CField.showEffect("event/coconut/victory"));
+                            chr.getClient().SendPacket(CField.playSound("Coconut/Victory"));
                         } else {
-                            chr.getClient().write(CField.showEffect("event/coconut/lose"));
-                            chr.getClient().write(CField.playSound("Coconut/Failed"));
+                            chr.getClient().SendPacket(CField.showEffect("event/coconut/lose"));
+                            chr.getClient().SendPacket(CField.playSound("Coconut/Failed"));
                         }
                     }
                     warpOut();
@@ -154,18 +154,18 @@ public class MapleCoconut extends MapleEvent {
             public void run() {
                 if (getMapleScore() == getStoryScore()) {
                     for (User chr : getMap(0).getCharacters()) {
-                        chr.getClient().write(CField.showEffect("event/coconut/lose"));
-                        chr.getClient().write(CField.playSound("Coconut/Failed"));
+                        chr.getClient().SendPacket(CField.showEffect("event/coconut/lose"));
+                        chr.getClient().SendPacket(CField.playSound("Coconut/Failed"));
                     }
                     warpOut();
                 } else {
                     for (User chr : getMap(0).getCharacters()) {
                         if (chr.getTeam() == (getMapleScore() > getStoryScore() ? 0 : 1)) {
-                            chr.getClient().write(CField.showEffect("event/coconut/victory"));
-                            chr.getClient().write(CField.playSound("Coconut/Victory"));
+                            chr.getClient().SendPacket(CField.showEffect("event/coconut/victory"));
+                            chr.getClient().SendPacket(CField.playSound("Coconut/Victory"));
                         } else {
-                            chr.getClient().write(CField.showEffect("event/coconut/lose"));
-                            chr.getClient().write(CField.playSound("Coconut/Failed"));
+                            chr.getClient().SendPacket(CField.showEffect("event/coconut/lose"));
+                            chr.getClient().SendPacket(CField.playSound("Coconut/Failed"));
                         }
                     }
                     warpOut();

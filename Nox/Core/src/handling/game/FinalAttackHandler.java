@@ -7,7 +7,7 @@ package handling.game;
 
 import client.MapleClient;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.maps.objects.User;
 import tools.packet.CField;
 
@@ -25,10 +25,10 @@ public class FinalAttackHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final User pPlayer = c.getPlayer();
-        int nSkill = iPacket.DecodeInteger();
-        int pSkill = iPacket.DecodeInteger(); // Might actually be nDamage.
-        int nTarget = iPacket.DecodeInteger();
-        int tRequest = iPacket.DecodeInteger();
-        c.write(CField.finalAttackRequest(pPlayer, nSkill, pPlayer.getFinalAttackSkill(), 0, nTarget, tRequest));
+        int nSkill = iPacket.DecodeInt();
+        int pSkill = iPacket.DecodeInt(); // Might actually be nDamage.
+        int nTarget = iPacket.DecodeInt();
+        int tRequest = iPacket.DecodeInt();
+        c.SendPacket(CField.finalAttackRequest(pPlayer, nSkill, pPlayer.getFinalAttackSkill(), 0, nTarget, tRequest));
     }
 }

@@ -3,7 +3,7 @@ package handling.login;
 import client.MapleClient;
 import net.InPacket;
 import tools.packet.CLogin;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -18,6 +18,6 @@ public class CheckHotFixHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        c.write(CLogin.ApplyHotFix());
+        c.SendPacket(CLogin.ApplyHotFix());
     }
 }

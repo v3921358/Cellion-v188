@@ -16,7 +16,7 @@ import server.maps.MapleMap;
 import server.maps.objects.User;
 import server.movement.LifeMovementFragment;
 import tools.packet.MobPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  * @author Steven
@@ -31,7 +31,7 @@ public class MobMovement implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int oid = iPacket.DecodeInteger();
+        int oid = iPacket.DecodeInt();
         User chr = c.getPlayer();
         if (chr == null) {
             return;
@@ -103,24 +103,24 @@ public class MobMovement implements ProcessPacket<MapleClient> {
         //}
 /*
         iPacket.DecodeByte(); //IsCheatMobMoveRand
-        iPacket.DecodeInteger(); //GetHackedCode
-        iPacket.DecodeInteger(); //nMoveAction?
-        iPacket.DecodeInteger(); //nMoveAction?
-        iPacket.DecodeInteger(); //tHitExpire
+        iPacket.DecodeInt(); //GetHackedCode
+        iPacket.DecodeInt(); //nMoveAction?
+        iPacket.DecodeInt(); //nMoveAction?
+        iPacket.DecodeInt(); //tHitExpire
         iPacket.DecodeByte(); //fucking pointer.. (v20->vfptr[4].Update)(v20);
          */
 
         iPacket.DecodeLong(); // Padding 20 bytes
         iPacket.DecodeLong(); // Padding 20 bytes
-        iPacket.DecodeInteger(); // Padding 20 bytes
+        iPacket.DecodeInt(); // Padding 20 bytes
 
-        monster.settEncodedGatherDuration(iPacket.DecodeInteger());
+        monster.settEncodedGatherDuration(iPacket.DecodeInt());
         monster.setxCS(iPacket.DecodeShort());
         monster.setyCS(iPacket.DecodeShort());
         monster.setvXCS(iPacket.DecodeShort());
         monster.setvYCS(iPacket.DecodeShort());
         List<LifeMovementFragment> res = MovementParse.parseMovement(iPacket);
-        c.write(MobPacket.moveMonsterResponse(oid, moveid, (int) monster.getMp(), monster.isControllerHasAggro(), skillId, skillLv, forceAttack));
+        c.SendPacket(MobPacket.moveMonsterResponse(oid, moveid, (int) monster.getMp(), monster.isControllerHasAggro(), skillId, skillLv, forceAttack));
         MapleMap map = c.getPlayer().getMap();
         MovementParse.updatePosition(res, monster);
         map.moveMonster(monster, monster.getPosition());

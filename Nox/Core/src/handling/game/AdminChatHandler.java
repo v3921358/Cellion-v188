@@ -9,9 +9,10 @@ import client.MapleClient;
 import handling.PacketThrottleLimits;
 import handling.world.World;
 import net.InPacket;
-import net.Packet;
+import net.OutPacket;
+
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -33,12 +34,12 @@ public class AdminChatHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         if (!c.getPlayer().isGM()) {//if ( (signed int)CWvsContext::GetAdminLevel((void *)v294) > 2 )
-            c.close();
+            c.Close();
             return;
         }
         byte mode = iPacket.DecodeByte();
         //not saving slides...
-        Packet packet = CWvsContext.broadcastMsg(iPacket.DecodeByte(), iPacket.DecodeString());//maybe I should make a check for the iPacket.decodeByte()... but I just hope gm's don't fuck things up :)
+        OutPacket packet = CWvsContext.broadcastMsg(iPacket.DecodeByte(), iPacket.DecodeString());//maybe I should make a check for the iPacket.decodeByte()... but I just hope gm's don't fuck things up :)
         switch (mode) {
             case 0:// /alertall, /noticeall, /slideall
                 World.Broadcast.broadcastMessage(packet);

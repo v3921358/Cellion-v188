@@ -9,7 +9,7 @@ import client.MapleClient;
 import java.util.ArrayList;
 import java.util.List;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.maps.objects.User;
 import tools.packet.CField;
 
@@ -28,11 +28,11 @@ public class GroupMessageHandler implements ProcessPacket<MapleClient> {
         int nType = iPacket.DecodeByte();
         int nCount = iPacket.DecodeByte();
         List<Integer> aCharacterID = new ArrayList<>(nCount);
-        for(int i = 0; i < nCount; i++) {
-            aCharacterID.add(iPacket.DecodeInteger());
+        for (int i = 0; i < nCount; i++) {
+            aCharacterID.add(iPacket.DecodeInt());
         }
         String sMessage = iPacket.DecodeString();
-        
+
         // nTypes: 0 = Buddy; 1 = Party; 2 = Guild; 3 = Alliance;
         switch (nType) { // TODO: I dont know how u check for parties/buddies/guilds/alliances but make sure they exist and have at least 1 user online else return
             case 0: // Buddy Check
@@ -61,10 +61,10 @@ public class GroupMessageHandler implements ProcessPacket<MapleClient> {
             case 3: // Alliance Check
                 break;
         }
-        
-        for(int dwCharacterID : aCharacterID) {
+
+        for (int dwCharacterID : aCharacterID) {
             User pUser = c.getChannelServer().getPlayerStorage().getCharacterById(dwCharacterID);
-            if(pUser != null) {
+            if (pUser != null) {
                 pUser.SendPacket(CField.OnGroupMessage(nType, c.getPlayer().getName(), sMessage));
             }
         }

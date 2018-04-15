@@ -125,7 +125,7 @@ public class DamageParse {
         }
 
         double maxDamagePerHit = 0.0D;
-        
+
         for (AttackMonster oned : attack.allDamage) {
             Mob monster = oned.getMonster();
             if (monster == null || monster.getId() != oned.getMonsterId()) {
@@ -193,7 +193,7 @@ public class DamageParse {
                                     pPlayer.getCheatTracker().registerOffense(CheatingOffense.HIGH_DAMAGE_2, new StringBuilder().append("[Damage: ").append(eachd).append(", Expected: ").append(maxDamagePerHit).append(", Mob: ").append(monster.getId()).append("] [Job: ").append(pPlayer.getJob()).append(", Level: ").append(pPlayer.getLevel()).append(", Skill: ").append(attack.skill).append("]").toString());
                                     eachd = (int) (maxDamagePerHit * 2.0D);
                                     if (eachd >= playerDamageCap) {
-                                        pPlayer.getClient().close();
+                                        pPlayer.getClient().Close();
                                     }
                                 }
                             }
@@ -226,12 +226,12 @@ public class DamageParse {
                         pPlayer.addMP((int) (totDamageToOneMonster * 0.01)); // +1% Mana Leech
                     }
                 }
-                
+
                 /*
                  *  Damage Correction Handler
                  *  @purpose 
                  */
-                if(ServerConstants.DAMAGE_CORRECTION) {
+                if (ServerConstants.DAMAGE_CORRECTION) {
                     int nDamageChange = (int) GameConstants.damageCorrectRequest(pPlayer, attack.skill, totDamageToOneMonster);
                     totDamageToOneMonster += nDamageChange;
                 }
@@ -287,7 +287,7 @@ public class DamageParse {
                                 @Override
                                 public void run() {
                                     monster.damage(pPlayer, nFinalAttackDamage, true, pPlayer.getFinalAttackSkill());
-                                    pPlayer.getClient().write(MobPacket.showMonsterHP(monster.getObjectId(), monster.getHPPercent()));
+                                    pPlayer.getClient().SendPacket(MobPacket.showMonsterHP(monster.getObjectId(), monster.getHPPercent()));
                                     cancel();
                                 }
                             }, 500); // 0.5 Second Delay
@@ -387,13 +387,13 @@ public class DamageParse {
                         if (map.getMonsterByOid(at.getObjectId()).getStats().isBoss()) {
                             if (Randomizer.nextInt(100) < percent) {
                                 if (mob != null) {
-                                    pPlayer.getClient().write(JobPacket.XenonPacket.MegidoFlameRe(pPlayer.getId(), mob.getObjectId()));
+                                    pPlayer.getClient().SendPacket(JobPacket.XenonPacket.MegidoFlameRe(pPlayer.getId(), mob.getObjectId()));
                                 }
                             }
                         } else {
                             if (Randomizer.nextInt(100) < percent2) {
                                 if (mob != null) {
-                                    pPlayer.getClient().write(JobPacket.XenonPacket.MegidoFlameRe(pPlayer.getId(), mob.getObjectId()));
+                                    pPlayer.getClient().SendPacket(JobPacket.XenonPacket.MegidoFlameRe(pPlayer.getId(), mob.getObjectId()));
                                 }
                             }
                         }
@@ -410,7 +410,7 @@ public class DamageParse {
                         if (pPlayer.hasBuff(CharacterTemporaryStat.ChangeFoxMan)) {
                             for (AttackMonster at : attack.allDamage) {
                                 int nPercent = 35;
-                                if (Randomizer.nextInt(100) < nPercent && attack.skill != 25100010 && attack.skill != 25100010) { 
+                                if (Randomizer.nextInt(100) < nPercent && attack.skill != 25100010 && attack.skill != 25100010) {
                                     pPlayer.getMap().broadcastMessage(JobPacket.ShadePacket.FoxSpirit(pPlayer, at));
                                 }
                             }
@@ -432,12 +432,12 @@ public class DamageParse {
                         pPlayer.handleForceGain(monster.getObjectId(), attack.skill);
                     }
                     if ((GameConstants.isPhantom(pPlayer.getJob())) && (attack.skill != 24120002) && (attack.skill != 24100003)) {
-                        if(pPlayer.hasSkill(Phantom.CARTE_BLANCHE)) {
+                        if (pPlayer.hasSkill(Phantom.CARTE_BLANCHE)) {
                             //for (AttackMonster at : attack.allDamage) {
-                                if (Randomizer.nextInt(100) < 20) { 
-                                    pPlayer.getMap().broadcastMessage(JobPacket.PhantomPacket.ThrowCarte(pPlayer, 0/*at.getObjectId()*/));
-                                    PhantomHandler.handleDeck(pPlayer);
-                                }
+                            if (Randomizer.nextInt(100) < 20) {
+                                pPlayer.getMap().broadcastMessage(JobPacket.PhantomPacket.ThrowCarte(pPlayer, 0/*at.getObjectId()*/));
+                                PhantomHandler.handleDeck(pPlayer);
+                            }
                             //}
                         }
                     }
@@ -464,7 +464,7 @@ public class DamageParse {
                             //if (Utility.resultSuccess(40)) {
                             //    pPlayer.getMap().broadcastMessage(JobPacket.NightWalkerPacket.ShadowBats(pPlayer.getId(), 0));
                             //}
-                            
+
                             if (Utility.resultSuccess(40)) {
                                 int mobID = monster.getObjectId();
                                 int position = new Random().nextInt(80);
@@ -477,14 +477,14 @@ public class DamageParse {
                                         true, mobID, NightWalker.SHADOW_BAT, forceAtomInfo, new Rectangle(), 0, 300,
                                         monster.getPosition(), NightWalker.SHADOW_BAT, monster.getPosition()));    //TODO mob.getPosition()  QUINT_THROW giving NPE
                             }
-                            
+
                             /*for (AttackMonster at : attack.allDamage) {
                                 if (Randomizer.nextInt(100) < 60) {
                                     pPlayer.getMap().broadcastMessage(JobPacket.NightWalkerPacket.ShadowBats(pPlayer.getId(), at.getObjectId()));
                                 }
                             }*/
                         }
-                        
+
                         if (attack.skill == NightWalker.DOMINION) {
                             //NightWalkerHandler.handleDominionBuff(pPlayer);
                         }
@@ -944,7 +944,7 @@ public class DamageParse {
                                     eachd = (int) (MaxDamagePerHit * 2.0D);
 
                                     if (eachd >= playerDamageCap) {
-                                        pPlayer.getClient().close();
+                                        pPlayer.getClient().Close();
                                     }
 
                                     // Attempt at Anti-Cheat
@@ -963,7 +963,7 @@ public class DamageParse {
 
                     totDamageToOneMonster += eachd;
                 }
-                
+
                 totDamage += totDamageToOneMonster;
 
                 if ((GameConstants.getAttackDelay(attack.skill, theSkill) >= 100) && (!GameConstants.isNoDelaySkill(attack.skill)) && !GameConstants.isMismatchingBulletSkill(attack.skill) && (!monster.getStats().isBoss()) && (pPlayer.getTruePosition().distanceSq(monster.getTruePosition()) > GameConstants.getAttackRange(effect, pPlayer.getStat().defRange))) {
@@ -978,7 +978,7 @@ public class DamageParse {
 
                 // Apply damage to monster
                 monster.damage(pPlayer, totDamageToOneMonster, true, attack.skill);
-                
+
                 // Monster is still alive after being hit.
                 if (monster.isAlive()) {
                     pPlayer.checkMonsterAggro(monster);
@@ -987,7 +987,6 @@ public class DamageParse {
                 }
 
             }
-            
 
             if (GameConstants.isLuminous(pPlayer.getJob())) {
                 final Integer dark_cresendo_value = pPlayer.getBuffedValue(CharacterTemporaryStat.Larkness);
@@ -1070,7 +1069,7 @@ public class DamageParse {
                     final long totalEXPGained = (long) (((long) (expRate_Server * monsterExp)) * (additionalExpPercentage * 0.01f));
 
                     player.gainExp(totalEXPGained, false, false, false);
-                    player.getClient().write(CWvsContext.messagePacket(new StylishKillMessage(StylishKillMessageType.MultiKill, totalEXPGained, numMultiKills)));
+                    player.getClient().SendPacket(CWvsContext.messagePacket(new StylishKillMessage(StylishKillMessageType.MultiKill, totalEXPGained, numMultiKills)));
                 }
 
             }
@@ -1112,7 +1111,7 @@ public class DamageParse {
             player.setLastCombo(cTime);
             player.setCombo(combo);
 
-            player.getClient().write(CWvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, combo, mob.get().getObjectId())));
+            player.getClient().SendPacket(CWvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, combo, mob.get().getObjectId())));
         }
     }
 
@@ -1437,7 +1436,7 @@ public class DamageParse {
         List damage;
         if ((pAttack.skill != 4211006) && (pAttack.skill != 3211003) && (pAttack.skill != 4111004)) {
             nCriticalRate = pPlayer.getStat().passive_sharpeye_rate() + (pEffect == null ? 0 : pEffect.getCr());
-            boolean bMirror = pPlayer.hasBuff(CharacterTemporaryStat.ShadowPartner) || pPlayer.hasBuff(CharacterTemporaryStat.ShadowServant); 
+            boolean bMirror = pPlayer.hasBuff(CharacterTemporaryStat.ShadowPartner) || pPlayer.hasBuff(CharacterTemporaryStat.ShadowServant);
             bShadow = bMirror && ((nType == 1) || (nType == 2));
             damages = new ArrayList<>();
             damage = new ArrayList<>();
@@ -1494,7 +1493,7 @@ public class DamageParse {
                         pPlayer.getMap().broadcastMessage(ShadowerPacket.toggleFlipTheCoin(true));
                     }
                 }
-                
+
                 if (bCritical) {
                     if (GameConstants.isThiefShadower(pPlayer.getJob())) {
                         pPlayer.getMap().broadcastMessage(ShadowerPacket.toggleFlipTheCoin(true));
@@ -1515,16 +1514,16 @@ public class DamageParse {
             iPacket.DecodeByte();
         }
         if (eType == RecvPacketOpcode.UserNonTargetForceAtomAttack) {
-            iPacket.DecodeInteger(); // nSkillID
-            iPacket.DecodeInteger(); // Unknown
-            iPacket.DecodeInteger(); // Unknown
+            iPacket.DecodeInt(); // nSkillID
+            iPacket.DecodeInt(); // Unknown
+            iPacket.DecodeInt(); // Unknown
         }
         int bFieldKey = iPacket.DecodeByte();
         ret.allDamage = new ArrayList<>();
         ret.tbyte = iPacket.DecodeByte();
         ret.mobCount = (ret.tbyte >>> 4 & 0xF);
         ret.numberOfHits = ((byte) (ret.tbyte & 0xF));
-        ret.skill = iPacket.DecodeInteger();
+        ret.skill = iPacket.DecodeInt();
 
         if (ServerConstants.DEVELOPER_DEBUG_MODE) {
             System.err.println("[Damage Operation] Skill (" + ret.skill + ")");
@@ -1533,7 +1532,7 @@ public class DamageParse {
         ret.skillLevel = iPacket.DecodeByte();
         boolean bAddAttackProc = false;
         if (eType != RecvPacketOpcode.UserMagicAttack && eType != RecvPacketOpcode.UserBodyAttack) {
-            bAddAttackProc = iPacket.DecodeBoolean();
+            bAddAttackProc = iPacket.DecodeBool();
         }
         int nBulletItemID = 0;
         int nBulletCashItemID = 0;
@@ -1541,72 +1540,72 @@ public class DamageParse {
         int nBulletCashItemPos = 0;
         int nShootRange = 0;
 
-        int dwMobCRC = iPacket.DecodeInteger();
+        int dwMobCRC = iPacket.DecodeInt();
         if (eType != RecvPacketOpcode.UserNonTargetForceAtomAttack) { // This is actually a sub, not sure what it does yet
             iPacket.DecodeByte(); // Unknown
             nBulletItemPos = iPacket.DecodeShort();
-            iPacket.DecodeInteger(); // Unknown
+            iPacket.DecodeInt(); // Unknown
         }
         ret.slot = (byte) nBulletItemPos;
         int tDelay = 0;
         int nBySummonedID = 0;
         if (eType == RecvPacketOpcode.UserMeleeAttack && (Skill.isKeydownSkill(ret.skill) || Skill.isSupernovaSkill(ret.skill))) {
-            ret.charge = iPacket.DecodeInteger();
+            ret.charge = iPacket.DecodeInt();
         } else if ((eType == RecvPacketOpcode.UserShootAttack || eType == RecvPacketOpcode.UserMagicAttack) && Skill.isKeydownSkill(ret.skill)) {
-            ret.charge = iPacket.DecodeInteger();
+            ret.charge = iPacket.DecodeInt();
         }
         int nGrenade = 0;
         if (eType == RecvPacketOpcode.UserMeleeAttack) {
             if (Skill.isRushBombSkill(ret.skill) || ret.skill == 5300007 || ret.skill == 27120211 || ret.skill == 14111023
                     || ret.skill == 400031003 || ret.skill == 400031004 || ret.skill == 80011389 || ret.skill == 80011390) {
-                nGrenade = iPacket.DecodeInteger();
+                nGrenade = iPacket.DecodeInt();
             }
         }
         boolean bZeroTag = false;
         if (Skill.isZeroSkill(ret.skill)) {
-            bZeroTag = iPacket.DecodeBoolean();
+            bZeroTag = iPacket.DecodeBool();
         }
         if (Skill.IsUsercloneSummonableSkill(ret.skill)) {
-            nBySummonedID = iPacket.DecodeInteger();
+            nBySummonedID = iPacket.DecodeInt();
         }
         if (ret.skill == 400031010) {
-            iPacket.DecodeInteger(); // Unknown
-            iPacket.DecodeInteger(); // Unknown
+            iPacket.DecodeInt(); // Unknown
+            iPacket.DecodeInt(); // Unknown
         }
         if (ret.skill == 400041019) {
-            iPacket.DecodeInteger(); // pRepeatSkill.ptAttackRefPoint.x
-            iPacket.DecodeInteger(); // pRepeatSkill.ptAttackRefPoint.y
+            iPacket.DecodeInt(); // pRepeatSkill.ptAttackRefPoint.x
+            iPacket.DecodeInt(); // pRepeatSkill.ptAttackRefPoint.y
         }
         iPacket.DecodeByte(); // Unknown (Always 0)
         ret.attackFlag = iPacket.DecodeByte();
         if (eType == RecvPacketOpcode.UserShootAttack) {
-            iPacket.DecodeInteger(); // Unknown
-            iPacket.DecodeBoolean(); // bNextShootExJablin && CheckApplyExJablin(pSkill, nAction)
+            iPacket.DecodeInt(); // Unknown
+            iPacket.DecodeBool(); // bNextShootExJablin && CheckApplyExJablin(pSkill, nAction)
         }
         ret.display = iPacket.DecodeShort();
-        int nPsdTargetPlus = iPacket.DecodeInteger();
+        int nPsdTargetPlus = iPacket.DecodeInt();
         int nAttackActionType = iPacket.DecodeByte();
         if (Skill.IsEvanForceSkill(ret.skill)) {
             iPacket.DecodeByte(); // Unknown
         }
         if (ret.skill == 23111001 || ret.skill == 80001915 || ret.skill == 36111010) {
-            iPacket.DecodeInteger(); // Unknown
-            iPacket.DecodeInteger(); // Unknown
-            iPacket.DecodeInteger(); // Unknown
+            iPacket.DecodeInt(); // Unknown
+            iPacket.DecodeInt(); // Unknown
+            iPacket.DecodeInt(); // Unknown
         }
         boolean bBySteal = false;
         int nOption = 0;
         if (eType == RecvPacketOpcode.UserShootAttack) {
-            bBySteal = iPacket.DecodeBoolean();
+            bBySteal = iPacket.DecodeBool();
         } else {
             nOption = iPacket.DecodeByte();
         }
-        int tAttackTime = iPacket.DecodeInteger();
-        iPacket.DecodeInteger(); // Unknown
+        int tAttackTime = iPacket.DecodeInt();
+        iPacket.DecodeInt(); // Unknown
 
         int nLastSkillID = 0;
         if (eType == RecvPacketOpcode.UserMeleeAttack) {
-            nLastSkillID = iPacket.DecodeInteger();
+            nLastSkillID = iPacket.DecodeInt();
             if (ret.skill > 0 && nLastSkillID > 0) {
                 iPacket.DecodeByte(); // Unknown
             }
@@ -1614,11 +1613,11 @@ public class DamageParse {
                 iPacket.DecodeByte(); // Unknown
             }
             if (ret.skill == 25111005) {
-                iPacket.DecodeInteger(); // nSpiritCoreEnhance
+                iPacket.DecodeInt(); // nSpiritCoreEnhance
             }
         }
         if (eType == RecvPacketOpcode.UserShootAttack) {
-            iPacket.DecodeInteger(); // Unknown
+            iPacket.DecodeInt(); // Unknown
             nBulletCashItemPos = iPacket.DecodeShort();
             nShootRange = iPacket.DecodeByte();
             /*nBulletItemPos = iPacket.DecodeShort();
@@ -1635,21 +1634,21 @@ public class DamageParse {
             iPacket.DecodeShort();
 
             if (ret.skill == 2211007) { // hackfix atm
-                iPacket.DecodeInteger();
+                iPacket.DecodeInt();
             }
             if (ret.skill == 3111013) { // hackfix atm
                 iPacket.DecodeLong();
             }
         }
         if (eType == RecvPacketOpcode.UserNonTargetForceAtomAttack) {
-            iPacket.DecodeInteger(); // Always 0
+            iPacket.DecodeInt(); // Always 0
         }
 
         ret.allDamage = new ArrayList<>();
         if (eType == RecvPacketOpcode.UserBodyAttack) {
             for (int i = 0; i < ret.mobCount; i++) {
-                int dwMobID = iPacket.DecodeInteger();
-                iPacket.DecodeInteger(); // Unknown
+                int dwMobID = iPacket.DecodeInt();
+                iPacket.DecodeInt(); // Unknown
                 Point ptHit = new Point();
                 Point ptPosPrev = new Point();
                 ptHit.x = iPacket.DecodeShort();
@@ -1661,21 +1660,21 @@ public class DamageParse {
                 if (nSkeletonResult == 1) {
                     iPacket.DecodeString();
                     iPacket.DecodeString();
-                    iPacket.DecodeInteger();
-                    for (int s = 0; s < iPacket.DecodeInteger(); s++) {
+                    iPacket.DecodeInt();
+                    for (int s = 0; s < iPacket.DecodeInt(); s++) {
                         iPacket.DecodeString();
                     }
                 } else if (nSkeletonResult == 2) {
                     iPacket.DecodeString();
                     iPacket.DecodeString();
-                    iPacket.DecodeInteger();
+                    iPacket.DecodeInt();
                 }
                 final Mob monster = chr.getMap().getMonsterByOid(dwMobID);
                 ret.allDamage.add(new AttackMonster(monster, dwMobID, monster.getId(), dwMobCRC, ptHit, ptPosPrev, null));
             }
         } else {
             for (int i = 0; i < ret.mobCount; i++) {
-                int dwMobID = iPacket.DecodeInteger();
+                int dwMobID = iPacket.DecodeInt();
                 if (ServerConstants.DEVELOPER_DEBUG_MODE) {
                     System.err.println("[Damage Operation] Mob Object (" + dwMobID + ")");
                 }
@@ -1686,7 +1685,7 @@ public class DamageParse {
                 int nForeAction = (v37 & 0x7F);
                 int bLeft = (byte) ((v37 >> 7) & 1);
                 int nFrameIdx = iPacket.DecodeByte();
-                iPacket.DecodeInteger(); // Unknown
+                iPacket.DecodeInt(); // Unknown
                 int v38 = iPacket.DecodeByte();
                 int nCalcDamageStatIndex = (v38 & 0x7F);
                 boolean bDoomed = ((v38 >> 7 & 1) > 0);
@@ -1723,38 +1722,40 @@ public class DamageParse {
                     }
                 }
                 if (eType != RecvPacketOpcode.UserNonTargetForceAtomAttack) {
-                    iPacket.DecodeInteger(); // pMob.GetMobUpDownYRange
-                    iPacket.DecodeInteger(); // pMob.GetCrc
+                    iPacket.DecodeInt(); // pMob.GetMobUpDownYRange
+                    iPacket.DecodeInt(); // pMob.GetCrc
                 }
                 if (ret.skill == 37111005) {
-                    iPacket.DecodeBoolean(); // bRWLiftPress
+                    iPacket.DecodeBool(); // bRWLiftPress
                 }
                 int nSkeletonResult = iPacket.DecodeByte();
                 if (nSkeletonResult == 1) {
                     iPacket.DecodeString();
                     iPacket.DecodeString();
-                    iPacket.DecodeInteger();
-                    for (int s = 0; s < iPacket.DecodeInteger(); s++) {
+                    iPacket.DecodeInt();
+                    for (int s = 0; s < iPacket.DecodeInt(); s++) {
                         iPacket.DecodeString();
                     }
                 } else if (nSkeletonResult == 2) {
                     iPacket.DecodeString();
                     iPacket.DecodeString();
-                    iPacket.DecodeInteger();
+                    iPacket.DecodeInt();
                 }
                 iPacket.DecodeByte(); // Unknown
-                if(ret.skill == 142120001) iPacket.DecodeLong(); // haxfix?
+                if (ret.skill == 142120001) {
+                    iPacket.DecodeLong(); // haxfix?
+                }
                 final Mob monster = chr.getMap().getMonsterByOid(dwMobID);
                 ret.allDamage.add(new AttackMonster(monster, dwMobID, monster.getId(), dwMobCRC, ptHit, ptPosPrev, damageNumbers));
             }
         }
         // TODO: See if can parse with just this.. the rest is so much and i dont think u use any of the vars
-        
+
         // Apply Monster Status, check if this is enough for now. -Mazen
         if (ret != null && ret.skill != 0) {
             MobStatRequest.apply(chr, ret, ((chr.getSkillLevel(ret.skill) > 0) ? SkillFactory.getSkill(ret.skill).getEffect(chr.getSkillLevel(ret.skill)) : SkillFactory.getSkill(ret.skill).getEffect(1)));
-        } 
-        
+        }
+
         return ret;
     }
 }

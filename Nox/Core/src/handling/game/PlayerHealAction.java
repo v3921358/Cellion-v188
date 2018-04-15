@@ -26,7 +26,7 @@ import client.PlayerStats;
 import constants.GameConstants;
 import server.maps.objects.User;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class PlayerHealAction implements ProcessPacket<MapleClient> {
 
@@ -41,9 +41,9 @@ public final class PlayerHealAction implements ProcessPacket<MapleClient> {
         if (chr == null) {
             return;
         }
-        chr.updateTick(iPacket.DecodeInteger());
-        if (iPacket.Available() >= 8L) {
-            iPacket.Skip(iPacket.Available() >= 12L ? 8 : 4);
+        chr.updateTick(iPacket.DecodeInt());
+        if (iPacket.GetRemainder() >= 8L) {
+            iPacket.Skip(iPacket.GetRemainder() >= 12L ? 8 : 4);
         }
         int healHP = iPacket.DecodeShort();
         int healMP = iPacket.DecodeShort();

@@ -4,7 +4,7 @@ import client.MapleClient;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class EnterAzwanEventHandler implements ProcessPacket<MapleClient> {
 
@@ -16,11 +16,11 @@ public final class EnterAzwanEventHandler implements ProcessPacket<MapleClient> 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         if (c.getPlayer() == null || c.getPlayer().getMap() == null) {
-            c.write(CField.pvpBlocked(1));
-            c.write(CWvsContext.enableActions());
+            //c.SendPacket(CField.pvpBlocked(1));
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
-        int mapid = iPacket.DecodeInteger();
+        int mapid = iPacket.DecodeInt();
         c.getPlayer().changeMap(c.getChannelServer().getMapFactory().getMap(mapid));
     }
 

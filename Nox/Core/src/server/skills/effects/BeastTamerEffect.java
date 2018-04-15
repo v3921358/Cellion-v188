@@ -2,8 +2,6 @@ package server.skills.effects;
 
 import server.skills.effects.manager.AbstractEffect;
 import client.CharacterTemporaryStat;
-import client.MapleJob;
-import client.MonsterStatus;
 import constants.skills.BeastTamer;
 import server.MapleStatEffect;
 import server.MapleStatInfo;

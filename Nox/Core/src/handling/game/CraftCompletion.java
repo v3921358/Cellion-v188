@@ -27,7 +27,7 @@ import tools.Triple;
 import net.InPacket;
 import server.maps.MapleMapObjectType;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class CraftCompletion implements ProcessPacket<MapleClient> {
 
@@ -39,7 +39,7 @@ public final class CraftCompletion implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
-        final int craftID = iPacket.DecodeInteger();
+        final int craftID = iPacket.DecodeInt();
         final SkillFactory.CraftingEntry ce = SkillFactory.getCraft(craftID);
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if ((chr.getMapId() != 910001000 && (craftID != 92049000 || chr.getMap().getAllMapObjectSize(MapleMapObjectType.EXTRACTOR) <= 0)) || ce == null || chr.getFatigue() >= 200) {
@@ -56,8 +56,8 @@ public final class CraftCompletion implements ProcessPacket<MapleClient> {
         switch (craftID) {
             case 92049000: {
                 //disassembling
-                final int extractorId = iPacket.DecodeInteger();
-                final int itemId = iPacket.DecodeInteger();
+                final int extractorId = iPacket.DecodeInt();
+                final int itemId = iPacket.DecodeInt();
                 final long invId = iPacket.DecodeLong();
                 final int reqLevel = ii.getReqLevel(itemId);
                 final Item item = chr.getInventory(MapleInventoryType.EQUIP).findByInventoryId(invId, itemId);
@@ -111,7 +111,7 @@ public final class CraftCompletion implements ProcessPacket<MapleClient> {
             }
             case 92049001: {
                 //fusing.
-                final int itemId = iPacket.DecodeInteger();
+                final int itemId = iPacket.DecodeInt();
                 final long invId1 = iPacket.DecodeLong();
                 final long invId2 = iPacket.DecodeLong();
                 final int reqLevel = ii.getReqLevel(itemId);

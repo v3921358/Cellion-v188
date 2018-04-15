@@ -28,7 +28,7 @@ import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class UseItemEffectHandler implements ProcessPacket<MapleClient> {
 
@@ -40,7 +40,7 @@ public final class UseItemEffectHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
-        int itemId = iPacket.DecodeInteger();
+        int itemId = iPacket.DecodeInt();
         if (chr == null) {
             return;
         }
@@ -52,7 +52,7 @@ public final class UseItemEffectHandler implements ProcessPacket<MapleClient> {
         }
         Item toUse = chr.getInventory(type).findById(itemId);
         if (toUse == null || toUse.getItemId() != itemId || toUse.getQuantity() < 1) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         if (itemId != 5510000) {

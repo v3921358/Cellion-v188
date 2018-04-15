@@ -16,7 +16,7 @@ import constants.ServerConstants;
 import java.util.ArrayList;
 import java.util.List;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.MapleInventoryManipulator;
 import server.Randomizer;
 import server.maps.objects.User;
@@ -40,7 +40,7 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<MapleClient
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
-        pPlayer.updateTick(iPacket.DecodeInteger());
+        pPlayer.updateTick(iPacket.DecodeInt());
         short nSlot = iPacket.DecodeShort();
         short nDestination = iPacket.DecodeShort();
         pPlayer.yellowMessage("Slot: " + nSlot + " / nDestination: " + nDestination);
@@ -50,7 +50,7 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<MapleClient
         ItemPotentialTierType pTier = pEquip.getPotentialBonusTier();
 
         if (pScroll == null || pScroll.getQuantity() <= 0 || pEquip == null/* || !ItemConstants.isPotentialScroll(pScroll.getItemId())*/) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         Equip.ScrollResult pResult;
@@ -64,14 +64,14 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<MapleClient
         /*pEquip.setBonusPotential1(generateBonusPotential(pEquip, pTier));
         pEquip.setBonusPotential2(generateBonusPotential(pEquip, pTier));
         pEquip.setBonusPotential3(generateBonusPotential(pEquip, pTier));*/
-        
+
         //if (bPotential) {
-            pResult = Equip.ScrollResult.SUCCESS;
-            aModifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, pEquip));
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, pScroll.getPosition(), (short) 1, false);
-            c.write(CField.enchantResult(pResult == Equip.ScrollResult.SUCCESS ? 1 : pResult == Equip.ScrollResult.CURSE ? 2 : 0));
-            pPlayer.getMap().broadcastMessage(pPlayer, CField.getScrollEffect(c.getPlayer().getId(), pResult, false, pEquip.getItemId(), pScroll.getItemId()), true);
-            c.write(CWvsContext.inventoryOperation(true, aModifications));
+        pResult = Equip.ScrollResult.SUCCESS;
+        aModifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, pEquip));
+        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, pScroll.getPosition(), (short) 1, false);
+        c.SendPacket(CField.enchantResult(pResult == Equip.ScrollResult.SUCCESS ? 1 : pResult == Equip.ScrollResult.CURSE ? 2 : 0));
+        pPlayer.getMap().broadcastMessage(pPlayer, CField.getScrollEffect(c.getPlayer().getId(), pResult, false, pEquip.getItemId(), pScroll.getItemId()), true);
+        c.SendPacket(CWvsContext.inventoryOperation(true, aModifications));
         //}
     }
 }

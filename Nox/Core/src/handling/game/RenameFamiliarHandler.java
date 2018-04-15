@@ -28,7 +28,7 @@ import server.maps.objects.MonsterFamiliar;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class RenameFamiliarHandler implements ProcessPacket<MapleClient> {
 
@@ -40,19 +40,19 @@ public final class RenameFamiliarHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
-        MonsterFamiliar mf = (MonsterFamiliar) c.getPlayer().getFamiliars().get(iPacket.DecodeInteger());
+        MonsterFamiliar mf = (MonsterFamiliar) c.getPlayer().getFamiliars().get(iPacket.DecodeInt());
         if (mf == null) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         String newName = iPacket.DecodeString();
         if (newName.isEmpty() || MapleCharacterUtil.isEligibleFamiliarName(newName, c.isGm())) {
             mf.setName(newName);
-            c.write(CField.renameFamiliar(mf));
+            c.SendPacket(CField.renameFamiliar(mf));
         } else {
             chr.dropMessage(1, "This name cannot be used.");
         }
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 
 }

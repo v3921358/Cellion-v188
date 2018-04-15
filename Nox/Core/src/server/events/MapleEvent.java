@@ -4,8 +4,9 @@ import java.time.LocalDateTime;
 
 import constants.GameConstants;
 import handling.world.World;
+import net.OutPacket;
 import service.ChannelServer;
-import net.Packet;
+
 import server.MapleInventoryManipulator;
 import server.RandomRewards;
 import server.Randomizer;
@@ -52,7 +53,7 @@ public abstract class MapleEvent {
         return ChannelServer.getInstance(channel);
     }
 
-    public void broadcast(final Packet packet) {
+    public void broadcast(final OutPacket packet) {
         for (int i = 0; i < type.mapids.length; i++) {
             getMap(i).broadcastMessage(packet);
         }
@@ -120,7 +121,7 @@ public abstract class MapleEvent {
 
     public void onMapLoad(User chr) { //most dont do shit here
         if (GameConstants.isEventMap(chr.getMapId()) && FieldLimitType.Event.checkFlag(chr.getMap()) && FieldLimitType.Event2.checkFlag(chr.getMap())) {
-            chr.getClient().write(CField.showEventInstructions());
+            chr.getClient().SendPacket(CField.showEventInstructions());
         }
     }
 

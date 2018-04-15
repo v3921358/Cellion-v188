@@ -17,7 +17,7 @@ import constants.skills.Xenon;
 import constants.skills.Zero;
 import handling.PacketThrottleLimits;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.MapleItemInformationProvider;
 import server.maps.objects.User;
 import tools.LogHelper;
@@ -46,15 +46,15 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         String name = iPacket.DecodeString();
-        iPacket.DecodeInteger(); // 0
-        iPacket.DecodeInteger(); // -1
-        LoginInformationProvider.JobType pJob = LoginInformationProvider.JobType.getByType(iPacket.DecodeInteger());
+        iPacket.DecodeInt(); // 0
+        iPacket.DecodeInt(); // -1
+        LoginInformationProvider.JobType pJob = LoginInformationProvider.JobType.getByType(iPacket.DecodeInt());
         short subcategory = iPacket.DecodeShort();
         byte nGender = iPacket.DecodeByte();
         byte nSkin = iPacket.DecodeByte();
         iPacket.DecodeByte(); // 6/7/8
-        int nFace = iPacket.DecodeInteger();
-        int nHair = iPacket.DecodeInteger();
+        int nFace = iPacket.DecodeInt();
+        int nHair = iPacket.DecodeInt();
         int nHairColour = -1, nHat = -1, nTop, nBottom = -1, nCape = -1, nFaceMark = -1, nEars = -1, nTail = -1, nShield = -1, nShoes, nWeapon;
         int[] wrongEars = {1004062, 1004063, 1004064};
         int[] correctEars = {5010116, 5010117, 5010118};
@@ -71,52 +71,52 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         Item pItem;
 
         if (pJob == null) {
-            c.write(CLogin.addNewCharEntry(null, 10));
+            c.SendPacket(CLogin.addNewCharEntry(null, 10));
             return;
         }
 
         for (JobConstants.LoginJob j : JobConstants.LoginJob.values()) {
             if (j.getJobType() == pJob.getType()) {
                 if (j.getFlag() != JobConstants.LoginJob.JobFlag.ENABLED.getFlag()) {
-                    c.write(CLogin.addNewCharEntry(null, 10));
+                    c.SendPacket(CLogin.addNewCharEntry(null, 10));
                     return;
                 }
             }
         }
 
         if (pJob.hasHairColor()) {
-            nHairColour = iPacket.DecodeInteger();
+            nHairColour = iPacket.DecodeInt();
         }
         if (pJob.hasSkinColor()) {
-            iPacket.DecodeInteger();
+            iPacket.DecodeInt();
         }
         if (pJob.hasFaceMark()) {
-            nFaceMark = iPacket.DecodeInteger();
+            nFaceMark = iPacket.DecodeInt();
         }
         if (pJob.hasEars()) {
-            nEars = iPacket.DecodeInteger();
+            nEars = iPacket.DecodeInt();
         }
         if (pJob.hasTail()) {
-            nTail = iPacket.DecodeInteger();
+            nTail = iPacket.DecodeInt();
         }
         if (pJob.hasHat()) {
-            nHat = iPacket.DecodeInteger();
+            nHat = iPacket.DecodeInt();
         }
 
-        nTop = iPacket.DecodeInteger();
+        nTop = iPacket.DecodeInt();
 
         if (pJob.hasBottom()) {
-            nBottom = iPacket.DecodeInteger();
+            nBottom = iPacket.DecodeInt();
         }
         if (pJob.hasCape()) {
-            nCape = iPacket.DecodeInteger();
+            nCape = iPacket.DecodeInt();
         }
 
-        nShoes = iPacket.DecodeInteger();
-        nWeapon = iPacket.DecodeInteger();
+        nShoes = iPacket.DecodeInt();
+        nWeapon = iPacket.DecodeInt();
 
-        if (iPacket.Available() >= 4) {
-            nShield = iPacket.DecodeInteger();
+        if (iPacket.GetRemainder() >= 4) {
+            nShield = iPacket.DecodeInt();
         }
 
         int[] nItems = new int[]{nFace, nHair, nHairColour, bNoSkin ? -1 : nSkin, nFaceMark, nEars, nTail, nHat, nTop, nBottom, nCape, nShoes, nWeapon, nShield};
@@ -125,7 +125,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
                 if (i > -1) {
                     if (!LoginInformationProvider.getInstance().isEligibleItem(nGender, nIndex, pJob.getType(), i)) {
                         LogHelper.PACKET_EDIT_HACK.get().info(String.format("[CharacterCreator] Account [ID = %d, name = %s] has tried to create a character with ineligible items. Job [%s %d], ItemID: %d", c.getAccID(), c.getAccountName(), pJob.toString(), pJob.getJobId(), i));
-                        c.close();
+                        c.Close();
                         return;
                     }
                     nIndex++;
@@ -137,7 +137,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
         if (!MapleCharacterCreationUtil.canCreateChar(name, c.isGm())
                 || (LoginInformationProvider.getInstance().isForbiddenName(name) && !c.isGm())
                 || (!MapleCharacterCreationUtil.canMakeCharacter(c.getWorld(), c.getAccID()) && !c.isGm())) {
-            c.write(CLogin.addNewCharEntry(null, 10));
+            c.SendPacket(CLogin.addNewCharEntry(null, 10));
             return;
         }
 
@@ -366,20 +366,20 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
                 mSkill.put(SkillFactory.getSkill(Shade.SPIRIT_BOND_1), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Shade.CLOSE_CALL), new SkillEntry((byte) 1, (byte) 1, -1));
             }
-            if (pJob == LoginInformationProvider.JobType.Hayato) { 
+            if (pJob == LoginInformationProvider.JobType.Hayato) {
                 mSkill.put(SkillFactory.getSkill(Hayato.QUICK_DRAW), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Hayato.SUMMER_RAIN), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Hayato.MASTER_OF_BLADES), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Hayato.SHIMADA_HEART), new SkillEntry((byte) 1, (byte) 1, -1));
             }
-            
+
             mSkill.put(SkillFactory.getSkill(80001436), new SkillEntry((byte) 1, (byte) 1, -1));// Actions Skill (Allows Dancing)
             for (DanceMoves moves : DanceMoves.values()) {
                 mSkill.put(SkillFactory.getSkill(moves.getSkillid()), new SkillEntry((byte) 1, (byte) 1, -1));
             }
             pNewCharacter.changeSkillLevelSkip(mSkill, false);
         }
-        
+
         /*if (GameConstants.isBeastTamer(oNewCharacter.getJob())) {
             HashMap<Skill, SkillEntry> sa = new HashMap<>();
             for (Skill skil : SkillFactory.getAllSkills()) {
@@ -389,7 +389,6 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
             }
             oNewCharacter.changeSkillsLevel(sa);
         }*/
-        
         for (int[] i : nGuideBookCollection) {
             if (pNewCharacter.getJob() == i[1]) {
                 nGuideBook = i[0];
@@ -445,7 +444,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
                     pNewCharacter.setRemainingSp(5, 1); //beta
                     break;
                 case Kinesis:
-                    pNewCharacter.setJob((short) 14200); 
+                    pNewCharacter.setJob((short) 14200);
                     pNewCharacter.setLevel((short) 10);
                     pNewCharacter.getStat().str = 4;
                     pNewCharacter.getStat().int_ = 52;
@@ -487,7 +486,7 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
 
         // Save Character
         User.saveNewCharToDB(pNewCharacter, pJob, subcategory);
-        c.write(CLogin.addNewCharEntry(pNewCharacter, 0));
+        c.SendPacket(CLogin.addNewCharEntry(pNewCharacter, 0));
         c.createdChar(pNewCharacter.getId());
         pNewCharacter.newCharRewards();
     }

@@ -25,7 +25,7 @@ import client.MapleClient;
 import server.maps.objects.User;
 import server.quest.MapleQuest;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class QuickSlot implements ProcessPacket<MapleClient> {
 
@@ -37,10 +37,10 @@ public final class QuickSlot implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
-        if ((iPacket.Available() == 32L) && (chr != null)) {
+        if ((iPacket.GetRemainder() == 32L) && (chr != null)) {
             StringBuilder ret = new StringBuilder();
             for (int i = 0; i < 8; i++) {
-                ret.append(iPacket.DecodeInteger()).append(",");
+                ret.append(iPacket.DecodeInt()).append(",");
             }
             ret.deleteCharAt(ret.length() - 1);
             chr.getQuestNAdd(MapleQuest.getInstance(123000)).setCustomData(ret.toString());

@@ -24,7 +24,7 @@ package handling.game;
 import client.MapleClient;
 import net.InPacket;
 import server.maps.objects.User;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class OnZeroTag implements ProcessPacket<MapleClient> {
 

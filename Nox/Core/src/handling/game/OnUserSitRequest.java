@@ -4,7 +4,7 @@ import client.MapleClient;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class OnUserSitRequest implements ProcessPacket<MapleClient> {
 
@@ -26,12 +26,12 @@ public final class OnUserSitRequest implements ProcessPacket<MapleClient> {
         if (chairId == -1) {
             chr.cancelFishingTask();
             chr.setChair(0);
-            c.write(CField.cancelChair(chr.getId(), -1));
+            c.SendPacket(CField.cancelChair(chr.getId(), -1));
 
             chr.getMap().broadcastMessage(chr, CField.showChair(chr.getId(), 0), false);
         } else {
             chr.setChair(chairId);
-            c.write(CField.cancelChair(chr.getId(), chairId));
+            c.SendPacket(CField.cancelChair(chr.getId(), chairId));
         }
     }
 }

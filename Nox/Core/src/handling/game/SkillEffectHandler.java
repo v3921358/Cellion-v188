@@ -29,7 +29,7 @@ import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class SkillEffectHandler implements ProcessPacket<MapleClient> {
 
@@ -41,9 +41,9 @@ public final class SkillEffectHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
-        int skillId = iPacket.DecodeInteger();
+        int skillId = iPacket.DecodeInt();
         if (skillId >= 91000000 && skillId < 100000000) {
-            chr.getClient().write(CWvsContext.enableActions());
+            chr.getClient().SendPacket(CWvsContext.enableActions());
             return;
         }
         byte level = iPacket.DecodeByte();
@@ -59,7 +59,7 @@ public final class SkillEffectHandler implements ProcessPacket<MapleClient> {
         if ((skilllevel_serv > 0) && (skilllevel_serv == level) && ((skillId == 33101005) || (skill.isChargeSkill()))) {
             chr.setKeyDownSkillTime(System.currentTimeMillis());
             if (skillId == 33101005 || skillId == 27101202) {
-                chr.setLinkMid(iPacket.DecodeInteger(), 0);
+                chr.setLinkMid(iPacket.DecodeInt(), 0);
             }
             chr.getMap().broadcastMessage(chr, CField.skillEffect(chr, skillId, level, direction, unk), false);
         }

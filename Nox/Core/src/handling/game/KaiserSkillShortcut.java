@@ -25,7 +25,7 @@ import client.MapleClient;
 import handling.world.PlayerHandler;
 import server.maps.objects.User;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *

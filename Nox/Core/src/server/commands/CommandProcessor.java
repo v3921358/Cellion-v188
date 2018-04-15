@@ -32,7 +32,8 @@ import client.MapleClient;
 import constants.ServerConstants;
 import constants.ServerConstants.CommandType;
 import constants.ServerConstants.PlayerGMRank;
-import database.DatabaseConnection;
+import database.Database;
+import java.sql.Connection;
 import scripting.provider.NPCChatByType;
 import scripting.provider.NPCChatType;
 import service.ChannelServer;
@@ -118,7 +119,7 @@ public class CommandProcessor {
             sAccessRank = "Intern";
         }
 
-        final StringBuilder sMessage = new StringBuilder("#dRexion Administrative Command List\r\n"
+        final StringBuilder sMessage = new StringBuilder("#dCellion Administrative Command List\r\n"
                 + "Access Level (#b" + sAccessRank + "#k)\r\n\r\n#r");
 
         for (int i = 2; i <= c.getPlayer().getGMLevel(); i++) {
@@ -129,7 +130,7 @@ public class CommandProcessor {
             }
         }
 
-        c.write(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage.toString(), NPCChatByType.NPC_Cancellable));
+        c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage.toString(), NPCChatByType.NPC_Cancellable));
     }
 
     public static boolean processCommand(MapleClient c, String line, CommandType type) {
@@ -205,20 +206,16 @@ public class CommandProcessor {
     }
 
     public static void logCommandToDB(User player, String command, String table) {
-        PreparedStatement ps = null;
-        try {
-            ps = DatabaseConnection.getConnection().prepareStatement("INSERT INTO " + table + " (cid, command, mapid) VALUES (?, ?, ?)");
-            ps.setInt(1, player.getId());
-            ps.setString(2, command);
-            ps.setInt(3, player.getMap().getId());
-            ps.executeUpdate();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            try (PreparedStatement ps = con.prepareStatement("INSERT INTO " + table + " (cid, command, mapid) VALUES (?, ?, ?)")) {
+                ps.setInt(1, player.getId());
+                ps.setString(2, command);
+                ps.setInt(3, player.getMap().getId());
+                ps.executeUpdate();
+            }
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("Logging Error:\n{}", ex);
-        } finally {
-            try {
-                ps.close();
-            } catch (SQLException e) {
-            }
         }
     }
 

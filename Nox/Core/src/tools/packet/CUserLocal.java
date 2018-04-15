@@ -3,7 +3,7 @@ package tools.packet;
 import java.util.List;
 import service.SendPacketOpcode;
 import net.OutPacket;
-import net.Packet;
+
 import server.maps.objects.User;
 
 /**
@@ -42,13 +42,12 @@ public class CUserLocal {
      * @param animate
      * @return
      */
-    public static Packet onSetDead(boolean animate) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket onSetDead(boolean animate) {
 
-        oPacket.EncodeShort(SendPacketOpcode.SetDead.getValue());
-        oPacket.Encode(animate);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SetDead.getValue());
+        oPacket.EncodeBool(animate);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -57,10 +56,9 @@ public class CUserLocal {
      * @param stats
      * @return
      */
-    public static Packet openUIOnDead(List<DeadUIStats> stats) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket openUIOnDead(List<DeadUIStats> stats) {
 
-        oPacket.EncodeShort(SendPacketOpcode.OpenUIOnDead.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.OpenUIOnDead.getValue());
 
         int mask = 0;
         for (DeadUIStats stat : stats) {
@@ -69,9 +67,9 @@ public class CUserLocal {
         final boolean isStarPlanet = false;
         final int reviveType = 0;
 
-        oPacket.EncodeInteger(mask); //  CInPacket::Decode4(iPacket);
-        oPacket.Encode(isStarPlanet); // v3 = (unsigned __int8)CInPacket::Decode1(iPacket);
-        oPacket.EncodeInteger(reviveType); //   nUIReviveType = CInPacket::Decode4(iPacket);
+        oPacket.EncodeInt(mask); //  CInPacket::Decode4(iPacket);
+        oPacket.EncodeBool(isStarPlanet); // v3 = (unsigned __int8)CInPacket::Decode1(iPacket);
+        oPacket.EncodeInt(reviveType); //   nUIReviveType = CInPacket::Decode4(iPacket);
 
         /* int maskTest = 5 << DeadUIStats.OnDeadProtectForBuff.getNumShift();
         System.out.println(maskTest + " " + Integer.toBinaryString(maskTest));
@@ -80,23 +78,22 @@ public class CUserLocal {
         maskTest2 |= maskTest;
         System.out.println(maskTest2 + " " + Integer.toBinaryString(maskTest2));*/
         if (stats.contains(DeadUIStats.bOnDeadProtectExpMaplePoint)) {
-            oPacket.EncodeInteger(123); // hmm
+            oPacket.EncodeInt(123); // hmm
         } else {
             // client will send a packet here.... 
             // COutPacket::COutPacket((COutPacket *)&bFail, 0x2B4);
             // int 11
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet updateDeathCount(int deathCount) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket updateDeathCount(int deathCount) {
 
-        oPacket.EncodeShort(SendPacketOpcode.DeathCountInfo.getValue());
-        oPacket.EncodeInteger(deathCount);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.DeathCountInfo.getValue());
+        oPacket.EncodeInt(deathCount);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -105,14 +102,13 @@ public class CUserLocal {
      * @param chr
      * @return
      */
-    public static Packet zeroTag(User chr) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket zeroTag(User chr) {
 
-        oPacket.EncodeShort(SendPacketOpcode.ZERO_TAG.getValue());
-        oPacket.EncodeInteger(chr.getId());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ZERO_TAG.getValue());
+        oPacket.EncodeInt(chr.getId());
         PacketHelper.addCharLook(oPacket, chr, false, chr.isZeroBetaState());
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -121,13 +117,12 @@ public class CUserLocal {
      * @param skillLevel
      * @return
      */
-    public static Packet kinesisPsychicEnergyShieldEffect(int skillLevel) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket kinesisPsychicEnergyShieldEffect(int skillLevel) {
 
-        oPacket.EncodeShort(SendPacketOpcode.KINESIS_PSYCHIC_ENERGY_SHIELD_EFFECT.getValue());
-        oPacket.Encode(skillLevel);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.KINESIS_PSYCHIC_ENERGY_SHIELD_EFFECT.getValue());
+        oPacket.EncodeByte(skillLevel);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -136,16 +131,15 @@ public class CUserLocal {
      * @param runeSkillId
      * @return
      */
-    public static Packet runeStoneAction(int runeSkillId) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket runeStoneAction(int runeSkillId) {
 
-        oPacket.EncodeShort(SendPacketOpcode.RuneStoneUseAck.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.RuneStoneUseAck.getValue());
 
         boolean start = true;
-        oPacket.Encode(start);
+        oPacket.EncodeBool(start);
         if (!start) {
-            oPacket.EncodeInteger(runeSkillId);//1932016); // itemid?
+            oPacket.EncodeInt(runeSkillId);//1932016); // itemid?
         }
-        return oPacket.ToPacket();
+        return oPacket;
     }
 }

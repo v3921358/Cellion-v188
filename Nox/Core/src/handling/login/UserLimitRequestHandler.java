@@ -25,7 +25,7 @@ import client.MapleClient;
 import service.LoginServer;
 import net.InPacket;
 import tools.packet.CLogin;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class UserLimitRequestHandler implements ProcessPacket<MapleClient> {
 
@@ -42,11 +42,11 @@ public final class UserLimitRequestHandler implements ProcessPacket<MapleClient>
         final int numPlayer = LoginServer.getInstance().getUsersOn();
         final int userLimit = LoginServer.getInstance().getUserLimit();
         if (numPlayer >= userLimit) {
-            c.write(CLogin.getServerStatus(2));
+            c.SendPacket(CLogin.getServerStatus(2));
         } else if (numPlayer * 2 >= userLimit) {
-            c.write(CLogin.getServerStatus(1));
+            c.SendPacket(CLogin.getServerStatus(1));
         } else {
-            c.write(CLogin.getServerStatus(0));
+            c.SendPacket(CLogin.getServerStatus(0));
         }
     }
 

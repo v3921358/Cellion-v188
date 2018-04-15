@@ -24,7 +24,7 @@ package handling.game;
 import client.MapleClient;
 import handling.world.HiredMerchantHandler;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class OnUserEntrustedShopRequest implements ProcessPacket<MapleClient> {
 

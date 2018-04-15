@@ -17,7 +17,7 @@ import server.maps.objects.User;
 import tools.Triple;
 import net.InPacket;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class FamiliarAttack implements ProcessPacket<MapleClient> {
 
@@ -33,7 +33,7 @@ public final class FamiliarAttack implements ProcessPacket<MapleClient> {
             return;
         }
         iPacket.Skip(6);
-        int skillid = iPacket.DecodeInteger();
+        int skillid = iPacket.DecodeInt();
 
         FamiliarEntry f = SkillFactory.getFamiliar(skillid);
         if (f == null) {
@@ -43,13 +43,13 @@ public final class FamiliarAttack implements ProcessPacket<MapleClient> {
         byte size = iPacket.DecodeByte();
         List<Triple<Integer, Integer, List<Integer>>> attackPair = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            int oid = iPacket.DecodeInteger();
-            int type = iPacket.DecodeInteger();
+            int oid = iPacket.DecodeInt();
+            int type = iPacket.DecodeInt();
             iPacket.Skip(10);
             byte si = iPacket.DecodeByte();
             List<Integer> attack = new ArrayList<>(si);
             for (int x = 0; x < si; x++) {
-                attack.add(iPacket.DecodeInteger());
+                attack.add(iPacket.DecodeInt());
             }
             attackPair.add(new Triple<>(oid, type, attack));
         }

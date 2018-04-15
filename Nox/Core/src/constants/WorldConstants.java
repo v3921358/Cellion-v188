@@ -13,7 +13,7 @@ public class WorldConstants {
      * @Warning: World will be duplicated if it's the same as the gm server
      */
     public static enum WorldOption {
-        
+
         Reboot2(46, 1, 1, 1, 1, (byte) 2, false, false, 19),
         Arcane(50, 1, 1, 1, 1, (byte) 2, false, false, 19),
         Aurora(44, 1, 1, 1, 1, (byte) 2, false, false, 19),
@@ -29,9 +29,8 @@ public class WorldConstants {
         Legends(35, 1, 1, 1, 1, (byte) 0, false, false, 19),
         Titan(34, 1, 1, 1, 1, (byte) 0, false, false, 19), //Translation: Titan
         Chaos2(33, 1, 1, 1, 1, (byte) 0, false, false, 19), //Translation: Chaos
-        
+
         Luna(30, ServerConstants.EXP_RATE, ServerConstants.MESO_RATE, ServerConstants.DROP_RATE, 1, (byte) 2, true, true, 19),
-        
         Androa(23, 1, 1, 1, 1, (byte) 0, false, false, 19),
         Cosmo(22, 1, 1, 1, 1, (byte) 0, false, false, 19),
         Aster(21, 1, 1, 1, 1, (byte) 0, false, false, 19),

@@ -38,7 +38,8 @@ import service.ChannelServer;
 import service.FarmServer;
 import service.LoginServer;
 import net.InPacket;
-import net.Packet;
+import net.OutPacket;
+
 import scripting.provider.NPCScriptManager;
 import server.LoginAuthorization;
 import server.maps.objects.User;
@@ -48,7 +49,7 @@ import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.CWvsContext.GuildPacket;
 import tools.packet.JobPacket.AvengerPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class MigrateInHandler implements ProcessPacket<MapleClient> {
 
@@ -59,8 +60,8 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        iPacket.DecodeInteger();
-        final int nPlayerID = iPacket.DecodeInteger();
+        iPacket.DecodeInt();
+        final int nPlayerID = iPacket.DecodeInt();
         iPacket.Skip(18); // 00 00 00 00 00 00 45 9A 4E C8 00 00 00 00 C0 17 00 00 00 00 00 00 00 00 00 00
         final long nLoginAuthCookie = iPacket.DecodeLong();
 
@@ -93,7 +94,7 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
                 if (ip != null) {
                     LoginServer.putLoginAuth(nPlayerID, ip.getIPAddress(), ip.getTempIP(), ip.getChannel(), 0);
                 }
-                c.close();
+                c.Close();
                 return;
             }
             c.setTempIP(ip.getIPAddress());
@@ -108,7 +109,7 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         c.setAccID(pPlayer.getAccountID());
 
         if (!c.CheckIPAddress()) { // Remote hack
-            c.close();
+            c.Close();
             return;
         }
         final MapleClientLoginState state = c.getLoginState();
@@ -124,7 +125,7 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         }
         if (!allowLogin) {
             c.setPlayer(null);
-            c.close();
+            c.Close();
             return;
         }
 
@@ -133,7 +134,7 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
 
         // Writes the wrap to map packet first.
         // otherwise certain packets specific to the map will not work if it is being sent late.
-        c.write(CField.getWarpToMap(pPlayer, null, 0, true));
+        c.SendPacket(CField.getWarpToMap(pPlayer, null, 0, true));
 
         // Add the player to the map.
         pPlayer.getMap().addPlayer(pPlayer);
@@ -151,7 +152,7 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
                 if (party.getExpeditionId() > 0) {
                     final MapleExpedition me = World.Party.getExped(party.getExpeditionId());
                     if (me != null) {
-                        c.write(CWvsContext.ExpeditionPacket.expeditionStatus(me, false, true));
+                        c.SendPacket(CWvsContext.ExpeditionPacket.expeditionStatus(me, false, true));
                     }
                 }
             }
@@ -161,8 +162,8 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
             }
             Buddy buddy = new Buddy(BuddyResult.LOAD_FRIENDS);
             buddy.setEntries(new ArrayList<>(pPlayer.getBuddylist().getBuddies()));
-            c.write(CWvsContext.buddylistMessage(buddy));
-            c.write(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_MESSENGER_MODE)));
+            c.SendPacket(CWvsContext.buddylistMessage(buddy));
+            c.SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_MESSENGER_MODE)));
             // Start of Messenger
             final MapleMessenger messenger = pPlayer.getMessenger();
             if (messenger != null) {
@@ -173,14 +174,14 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
             // Start of Guild and alliance
             if (pPlayer.getGuildId() > 0) {
                 World.Guild.setGuildMemberOnline(pPlayer.getMGC(), true, c.getChannel());
-                c.write(GuildPacket.loadGuild_Done(pPlayer));
+                c.SendPacket(GuildPacket.loadGuild_Done(pPlayer));
                 final MapleGuild gs = World.Guild.getGuild(pPlayer.getGuildId());
                 if (gs != null) {
-                    final List<Packet> packetList = World.Alliance.getAllianceInfo(gs.getAllianceId(), true);
+                    final List<OutPacket> packetList = World.Alliance.getAllianceInfo(gs.getAllianceId(), true);
                     if (packetList != null) {
-                        for (Packet pack : packetList) {
+                        for (OutPacket pack : packetList) {
                             if (pack != null) {
-                                c.write(pack);
+                                c.SendPacket(pack);
                             }
                         }
                     }
@@ -207,20 +208,20 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
 
         // Keymaps
         pPlayer.sendMacros();
-        c.write(CField.getKeymap(pPlayer.getKeyLayout(), pPlayer.getJob()));
+        c.SendPacket(CField.getKeymap(pPlayer.getKeyLayout(), pPlayer.getJob()));
 
         // Server message
-        pPlayer.getClient().write(CWvsContext.broadcastMsg(channelServer.getServerMessage()));
+        pPlayer.getClient().SendPacket(CWvsContext.broadcastMsg(channelServer.getServerMessage()));
 
         // Skills
         pPlayer.baseSkills(); //fix people who've lost skills.
         pPlayer.updateHyperSPAmount();
-        c.write(CWvsContext.updateSkills(c.getPlayer().getSkills(), false));//skill to 0 "fix"
+        c.SendPacket(CWvsContext.updateSkills(c.getPlayer().getSkills(), false));//skill to 0 "fix"
         //c.write(JobPacket.addStolenSkill());
 
         // Pendant expansion
         MapleQuestStatus quest_pendant = pPlayer.getQuestNoAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT));
-        c.write(CWvsContext.pendantExpansionAvailable(
+        c.SendPacket(CWvsContext.pendantExpansionAvailable(
                 quest_pendant != null && quest_pendant.getCustomData() != null && Long.parseLong(quest_pendant.getCustomData()) > System.currentTimeMillis()));
 
         // Zero items, equipments
@@ -246,7 +247,7 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         } else if (GameConstants.isXenon(pPlayer.getJob())) {
             pPlayer.startXenonSupply();
         } else if (GameConstants.isDemonAvenger(pPlayer.getJob())) {
-            c.write(AvengerPacket.giveAvengerHpBuff(pPlayer.getStat().getHp()));
+            c.SendPacket(AvengerPacket.giveAvengerHpBuff(pPlayer.getStat().getHp()));
         } else if (GameConstants.isLuminous(pPlayer.getJob())) {
             pPlayer.applyLifeTidal();
         } else if (GameConstants.isBlaster(pPlayer.getJob())) {
@@ -257,7 +258,7 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
 
         // Quickslots
         MapleQuestStatus quest_quickSlot = pPlayer.getQuestNoAdd(MapleQuest.getInstance(GameConstants.QUICK_SLOT));
-        c.write(CField.quickSlot(quest_quickSlot != null && quest_quickSlot.getCustomData() != null ? quest_quickSlot.getCustomData() : null));
+        c.SendPacket(CField.quickSlot(quest_quickSlot != null && quest_quickSlot.getCustomData() != null ? quest_quickSlot.getCustomData() : null));
 
         // Pets
         pPlayer.updatePetAuto();
@@ -300,9 +301,9 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         } else if (c.getPlayer().getLevel() > 10 && ServerConstants.RED_EVENT) {
             NPCScriptManager.getInstance().start(c, 9000108, "LoginRed");
         }
-        c.write(CWvsContext.updateCrowns(new int[]{-1, -1, -1, -1, -1}));
+        c.SendPacket(CWvsContext.updateCrowns(new int[]{-1, -1, -1, -1, -1}));
 
-        c.write(CWvsContext.getFamiliarInfo(pPlayer));
-        c.write(CWvsContext.shopDiscount(ServerConstants.SHOP_DISCOUNT));
+        c.SendPacket(CWvsContext.getFamiliarInfo(pPlayer));
+        c.SendPacket(CWvsContext.shopDiscount(ServerConstants.SHOP_DISCOUNT));
     }
 }

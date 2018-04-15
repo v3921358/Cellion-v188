@@ -14,7 +14,7 @@ import handling.world.AttackMonster;
 import handling.world.AttackType;
 import handling.world.DamageParse;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
@@ -49,7 +49,7 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
         //AttackInfo attack = DamageParse.parseRangedAttack(iPacket, chr);
         AttackInfo attack = DamageParse.OnAttack(RecvPacketOpcode.UserShootAttack, iPacket, pPlayer);
         if (attack == null) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
 
@@ -78,7 +78,7 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
         if (attack.skill != 0 && attack.skill != 1 && attack.skill != 17) {
             skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
             if ((skill == null) || ((GameConstants.isAngel(attack.skill)) && (pPlayer.getStat().equippedSummon % 10000 != attack.skill % 10000))) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             skillLevel = pPlayer.getTotalSkillLevel(skill);
@@ -87,7 +87,7 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
                 return;
             } else if ((effect.getCooldown(pPlayer) > 0) && ((attack.skill != 35111004 && attack.skill != 35121013) || pPlayer.getBuffSource(CharacterTemporaryStat.Mechanic) != attack.skill)) {
                 if (pPlayer.skillisCooling(attack.skill)) {
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                     return;
                 }
                 pPlayer.addCooldown(attack.skill, System.currentTimeMillis(), effect.getCooldown(pPlayer));
@@ -110,13 +110,13 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
                 int Recharge = effect.getOnActive();
                 if (Recharge > -1) {
                     if (Randomizer.isSuccess(Recharge)) {
-                        c.write(JobPacket.AngelicPacket.unlockSkill());
-                        c.write(JobPacket.AngelicPacket.showRechargeEffect());
+                        c.SendPacket(JobPacket.AngelicPacket.unlockSkill());
+                        c.SendPacket(JobPacket.AngelicPacket.showRechargeEffect());
                     } else {
-                        c.write(JobPacket.AngelicPacket.lockSkill(attack.skill));
+                        c.SendPacket(JobPacket.AngelicPacket.lockSkill(attack.skill));
                     }
                 } else {
-                    c.write(JobPacket.AngelicPacket.lockSkill(attack.skill));
+                    c.SendPacket(JobPacket.AngelicPacket.lockSkill(attack.skill));
                 }
             }
 
@@ -158,7 +158,7 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
                     if (Randomizer.nextInt(100) < percent) {
                         if (mob != null) {
                             c.getPlayer().getMap().broadcastMessage(c.getPlayer(), JobPacket.WindArcherPacket.TrifleWind(c.getPlayer().getId(), skillid, count, mob.getObjectId(), type), false);
-                            c.write(JobPacket.WindArcherPacket.TrifleWind(c.getPlayer().getId(), skillid, count, mob.getObjectId(), type));
+                            c.SendPacket(JobPacket.WindArcherPacket.TrifleWind(c.getPlayer().getId(), skillid, count, mob.getObjectId(), type));
                         }
                     }
                 }
@@ -289,7 +289,7 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
 
                             //if (chr.getBuffedValue(CharacterTemporaryStat.NoBulletConsume) == null) {
                             mod.add(new ModifyInventory(ModifyInventoryOperation.UpdateQuantity, ipp));
-                            c.write(CWvsContext.inventoryOperation(true, mod));
+                            c.SendPacket(CWvsContext.inventoryOperation(true, mod));
                             //}
 
                             bulletConsume = 0;

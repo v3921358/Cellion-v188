@@ -3,7 +3,7 @@ package handling.login;
 import client.MapleClient;
 import net.InPacket;
 import server.maps.objects.User;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class CharListReorganizer implements ProcessPacket<MapleClient> {
 
@@ -14,14 +14,14 @@ public final class CharListReorganizer implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int accountId = iPacket.DecodeInteger();
+        int accountId = iPacket.DecodeInt();
         if (c == null || accountId != c.getAccID()) {
             return;
         }
         iPacket.DecodeByte(); // 01
-        int size = iPacket.DecodeInteger();
+        int size = iPacket.DecodeInt();
         for (int i = 0; i < size; i++) {
-            User character = c.loadCharacterById(iPacket.DecodeInteger());
+            User character = c.loadCharacterById(iPacket.DecodeInt());
             character.setCharListPosition(i);
             character.updateCharlistPosition(i);
         }

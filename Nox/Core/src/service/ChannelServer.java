@@ -29,9 +29,10 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import net.Packet;
-import netty.PacketDecoder;
-import netty.PacketEncoder;
+import net.OutPacket;
+import net.PacketDecoder;
+import net.PacketEncoder;
+
 import scripting.provider.EventScriptManager;
 import server.MapleSquad;
 import server.MapleSquad.MapleSquadType;
@@ -223,19 +224,19 @@ public class ChannelServer extends Thread {
         broadcastPacket(CWvsContext.broadcastMsg(serverMessage));
     }
 
-    public final void broadcastPacket(final Packet data) {
+    public final void broadcastPacket(final OutPacket data) {
         getPlayerStorage().broadcastPacket(data);
     }
 
-    public final void broadcastSmegaPacket(final Packet data) {
+    public final void broadcastSmegaPacket(final OutPacket data) {
         getPlayerStorage().broadcastSmegaPacket(data);
     }
 
-    public final void broadcastGMPacket(final Packet data) {
+    public final void broadcastGMPacket(final OutPacket data) {
         getPlayerStorage().broadcastGMPacket(data);
     }
 
-    public final void broadcastWhisperPacket(final Packet data, String msgDestination) {
+    public final void broadcastWhisperPacket(final OutPacket data, String msgDestination) {
         getPlayerStorage().broadcastWhisperPacket(data, msgDestination);
     }
 
@@ -525,19 +526,19 @@ public class ChannelServer extends Thread {
         return cheaters;
     }
 
-    public void broadcastMessage(Packet message) {
+    public void broadcastMessage(OutPacket message) {
         broadcastPacket(message);
     }
 
-    public void broadcastSmega(Packet message) {
+    public void broadcastSmega(OutPacket message) {
         broadcastSmegaPacket(message);
     }
 
-    public void broadcastGMMessage(Packet message) {
+    public void broadcastGMMessage(OutPacket message) {
         broadcastGMPacket(message);
     }
 
-    public void broadcastWhisper(Packet message, String msgDestination) {
+    public void broadcastWhisper(OutPacket message, String msgDestination) {
         broadcastWhisperPacket(message, msgDestination);
     }
 

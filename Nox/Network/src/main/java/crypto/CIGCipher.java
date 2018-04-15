@@ -1,13 +1,24 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2018 Kaz Voeten
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package crypto;
 
 /**
  *
- * @author kaz_v
+ * @author Kaz Voeten
  */
 public class CIGCipher {
 
@@ -32,9 +43,12 @@ public class CIGCipher {
     /**
      * Generates (or, shuffles) a new hash for the ClientSocket's Sequence.
      *
+     * @Author Eric Smith
+     * 
      * @param pSrc The ClientSocket's current sequence
      * @param nLen The length in bytes of the sequence (default: 4, integer)
      * @param dwKey - The key to shuffle
+     * 
      * @return The new sequence for the ClientSocket.
      */
     public static int InnoHash(int pSrc, int nLen, int dwKey) {
@@ -50,6 +64,9 @@ public class CIGCipher {
 
     /**
      * Transforms and shuffles a 4-byte key source with the provided previous byte of the keys initial sequence.
+     * 
+     * @Author Eric Smith: original conversion from GMS Client to JAVA.
+     * @Author Kaz Voeten: modified code to match shortened version in the later GMS clients.
      *
      * @param pSrc The input key source to modify
      * @param bData The specific byte within the sequence to shuffle
@@ -71,7 +88,7 @@ public class CIGCipher {
         return dwKey;
     }
 
-    public static byte[] Encrypt(byte[] pSrc, int dwKey) {
+    public static byte[] Crypt(byte[] pSrc, int dwKey) {
         byte[] pDest = new byte[pSrc.length];
 
         for (int i = 0; i < pSrc.length; ++i) {

@@ -15,7 +15,7 @@ import server.maps.MapleMap;
 import server.maps.objects.User;
 import server.movement.LifeMovementFragment;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.MapleInventoryManipulator;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
@@ -44,10 +44,10 @@ public class PlayerMovement implements ProcessPacket<MapleClient> {
         Point pPOS = pPlayer.getPosition();
 
         iPacket.DecodeByte(); //fieldKey
-        iPacket.DecodeInteger(); //fieldCrc?
-        iPacket.DecodeInteger(); //update_time
+        iPacket.DecodeInt(); //fieldCrc?
+        iPacket.DecodeInt(); //update_time
         iPacket.DecodeByte(); //unkown
-        pPlayer.settEncodedGatherDuration(iPacket.DecodeInteger()); //tEncodedGatherDuration
+        pPlayer.settEncodedGatherDuration(iPacket.DecodeInt()); //tEncodedGatherDuration
         pPlayer.setxCS(iPacket.DecodeShort()); //x_CS
         pPlayer.setyCS(iPacket.DecodeShort()); //y_CS
         pPlayer.setvXCS(iPacket.DecodeShort());//vx_CS
@@ -69,7 +69,7 @@ public class PlayerMovement implements ProcessPacket<MapleClient> {
                 User follower = pMap.getCharacterById(pPlayer.getFollowId());
                 if (follower != null) {
                     Point originalPosition = follower.getPosition();
-                    follower.getClient().write(CField.moveFollow(pPOS, originalPosition, pPOS_, res));
+                    follower.getClient().SendPacket(CField.moveFollow(pPOS, originalPosition, pPOS_, res));
                     MovementParse.updatePosition(res, follower);
                     pMap.movePlayer(follower, pPOS_);
                     pMap.broadcastMessage(follower, CField.movePlayer(follower, res), false);

@@ -11,7 +11,7 @@ import server.MapleInventoryManipulator;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -26,8 +26,8 @@ public class UseInnerCirculatorHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int itemid = iPacket.DecodeInteger();
-        short slot = (short) iPacket.DecodeInteger();
+        int itemid = iPacket.DecodeInt();
+        short slot = (short) iPacket.DecodeInt();
         Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
         if (item.getItemId() == itemid) {
             List<InnerSkillValueHolder> newValues = new LinkedList<>();
@@ -49,7 +49,7 @@ public class UseInnerCirculatorHandler implements ProcessPacket<MapleClient> {
             byte ability = 1;
             for (InnerSkillValueHolder isvh : newValues) {
                 c.getPlayer().getInnerSkills().add(isvh);
-                c.write(CField.updateInnerPotential(ability, isvh.getSkillId(), isvh.getSkillLevel(), isvh.getRank()));
+                c.SendPacket(CField.updateInnerPotential(ability, isvh.getSkillId(), isvh.getSkillLevel(), isvh.getRank()));
                 ability++;
                 //c.getPlayer().changeSkillLevel(SkillFactory.getSkill(isvh.getSkillId()), isvh.getSkillLevel(), isvh.getSkillLevel());
             }
@@ -58,6 +58,6 @@ public class UseInnerCirculatorHandler implements ProcessPacket<MapleClient> {
             //c.write(CField.gameMsg("Inner Potential has been reconfigured.")); //not sure if it's working
             c.getPlayer().dropMessage(5, "Inner Potential has been reconfigured.");
         }
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 }

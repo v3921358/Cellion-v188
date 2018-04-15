@@ -10,7 +10,7 @@ import server.stores.IMaplePlayerShop;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import tools.packet.PlayerShopPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -28,17 +28,17 @@ public class UseOwlWarpHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         if (!c.getPlayer().isAlive()) {
-            c.write(CWvsContext.getOwlMessage(4));
+            c.SendPacket(CWvsContext.getOwlMessage(4));
             return;
         } else if (c.getPlayer().getTrade() != null) {
-            c.write(CWvsContext.getOwlMessage(7));
+            c.SendPacket(CWvsContext.getOwlMessage(7));
             return;
         }
         if (c.getPlayer().getMapId() >= 910000000 && c.getPlayer().getMapId() <= 910000022 && !c.getPlayer().hasBlockedInventory()) {
-            final int id = iPacket.DecodeInteger();
-            final int map = iPacket.DecodeInteger();
+            final int id = iPacket.DecodeInt();
+            final int map = iPacket.DecodeInt();
             if (map >= 910000001 && map <= 910000022) {
-                c.write(CWvsContext.getOwlMessage(0));
+                c.SendPacket(CWvsContext.getOwlMessage(0));
                 final MapleMap mapp = c.getChannelServer().getMapFactory().getMap(map);
                 c.getPlayer().changeMap(mapp, mapp.getPortal(0));
                 HiredMerchant merchant = null;
@@ -89,7 +89,7 @@ public class UseOwlWarpHandler implements ProcessPacket<MapleClient> {
                         merchant.setOpen(false);
                         merchant.removeAllVisitors((byte) 16, (byte) 0);
                         c.getPlayer().setPlayerShop(merchant);
-                        c.write(PlayerShopPacket.getHiredMerch(c.getPlayer(), merchant, false));
+                        c.SendPacket(PlayerShopPacket.getHiredMerch(c.getPlayer(), merchant, false));
                     } else if (!merchant.isOpen() || !merchant.isAvailable()) {
                         c.getPlayer().dropMessage(1, "The owner of the store is currently undergoing store maintenance. Please try again in a bit.");
                     } else if (merchant.getFreeSlot() == -1) {
@@ -99,16 +99,16 @@ public class UseOwlWarpHandler implements ProcessPacket<MapleClient> {
                     } else {
                         c.getPlayer().setPlayerShop(merchant);
                         merchant.addVisitor(c.getPlayer());
-                        c.write(PlayerShopPacket.getHiredMerch(c.getPlayer(), merchant, false));
+                        c.SendPacket(PlayerShopPacket.getHiredMerch(c.getPlayer(), merchant, false));
                     }
                 } else {
                     c.getPlayer().dropMessage(1, "The room is already closed.");
                 }
             } else {
-                c.write(CWvsContext.getOwlMessage(23));
+                c.SendPacket(CWvsContext.getOwlMessage(23));
             }
         } else {
-            c.write(CWvsContext.getOwlMessage(23));
+            c.SendPacket(CWvsContext.getOwlMessage(23));
         }
     }
 

@@ -12,7 +12,8 @@ import client.MapleCharacterUtil;
 import handling.world.CharacterTransfer;
 import handling.world.CheaterData;
 import handling.world.World;
-import net.Packet;
+import net.OutPacket;
+
 import server.Timer.PingTimer;
 import server.maps.objects.User;
 
@@ -179,7 +180,7 @@ public class PlayerStorage {
 
                 if (!chr.isGM() || !checkGM) {
                     chr.getClient().disconnect(false, false, true);
-                    chr.getClient().close();
+                    chr.getClient().Close();
                     World.Find.forceDeregister(chr.getId(), chr.getName());
                     itr.remove();
                 }
@@ -254,19 +255,19 @@ public class PlayerStorage {
         return sb.toString();
     }
 
-    public final void broadcastPacket(final Packet data) {
+    public final void broadcastPacket(final OutPacket data) {
         rL.lock();
         try {
             final Iterator<User> itr = nameToChar.values().iterator();
             while (itr.hasNext()) {
-                itr.next().getClient().write(data.Clone());
+                itr.next().getClient().SendPacket(data.Clone());
             }
         } finally {
             rL.unlock();
         }
     }
 
-    public final void broadcastSmegaPacket(final Packet data) {
+    public final void broadcastSmegaPacket(final OutPacket data) {
         rL.lock();
         try {
             final Iterator<User> itr = nameToChar.values().iterator();
@@ -275,7 +276,7 @@ public class PlayerStorage {
                 chr = itr.next();
 
                 if (chr.getClient().isLoggedIn() && chr.getSmega()) {
-                    chr.getClient().write(data.Clone());
+                    chr.getClient().SendPacket(data.Clone());
                 }
             }
         } finally {
@@ -283,7 +284,7 @@ public class PlayerStorage {
         }
     }
 
-    public final void broadcastGMPacket(final Packet data) {
+    public final void broadcastGMPacket(final OutPacket data) {
         rL.lock();
         try {
             final Iterator<User> itr = nameToChar.values().iterator();
@@ -291,7 +292,7 @@ public class PlayerStorage {
             while (itr.hasNext()) {
                 chr = itr.next();
                 if (chr.getClient().isLoggedIn() && chr.isIntern()) {
-                    chr.getClient().write(data.Clone());
+                    chr.getClient().SendPacket(data.Clone());
                 }
             }
         } finally {
@@ -299,7 +300,7 @@ public class PlayerStorage {
         }
     }
 
-    public final void broadcastWhisperPacket(final Packet data, String msgDestination) {
+    public final void broadcastWhisperPacket(final OutPacket data, String msgDestination) {
         rL.lock();
         try {
             final Iterator<User> itr = nameToChar.values().iterator();
@@ -307,7 +308,7 @@ public class PlayerStorage {
             while (itr.hasNext()) {
                 chr = itr.next();
                 if (chr.getClient().isLoggedIn() && chr == chr.getClient().getChannelServer().getPlayerStorage().getCharacterByName(msgDestination)) {
-                    chr.getClient().write(data.Clone());
+                    chr.getClient().SendPacket(data.Clone());
                 }
             }
         } finally {

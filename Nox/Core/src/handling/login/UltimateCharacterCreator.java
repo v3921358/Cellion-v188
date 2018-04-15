@@ -17,7 +17,7 @@ import server.maps.objects.User;
 import server.quest.MapleQuest;
 import net.InPacket;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class UltimateCharacterCreator implements ProcessPacket<MapleClient> {
 
@@ -31,23 +31,23 @@ public final class UltimateCharacterCreator implements ProcessPacket<MapleClient
         if (!c.getPlayer().isGM()
                 && (!c.isLoggedIn() || c.getPlayer() == null || c.getPlayer().getLevel() < 120 || c.getPlayer().getMapId() != 130000000
                 || c.getPlayer().getQuestStatus(20734) != MapleQuestState.NotStarted || c.getPlayer().getQuestStatus(20616) != MapleQuestState.Completed || !GameConstants.isCygnusKnight(c.getPlayer().getJob()) || !MapleCharacterCreationUtil.canMakeCharacter(c.getWorld(), c.getAccID()))) {
-            c.write(CField.createUltimate(2));
+            c.SendPacket(CField.createUltimate(2));
             //Character slots are full. Please purchase another slot from the Cash Shop.
             return;
         }
         //System.out.println(iPacket.toString());
         final String name = iPacket.DecodeString();
-        final int job = iPacket.DecodeInteger(); //job ID
+        final int job = iPacket.DecodeInt(); //job ID
 
-        final int face = iPacket.DecodeInteger();
-        final int hair = iPacket.DecodeInteger();
+        final int face = iPacket.DecodeInt();
+        final int hair = iPacket.DecodeInt();
 
         //No idea what are these used for:
-        final int hat = iPacket.DecodeInteger();
-        final int top = iPacket.DecodeInteger();
-        final int glove = iPacket.DecodeInteger();
-        final int shoes = iPacket.DecodeInteger();
-        final int weapon = iPacket.DecodeInteger();
+        final int hat = iPacket.DecodeInt();
+        final int top = iPacket.DecodeInt();
+        final int glove = iPacket.DecodeInt();
+        final int shoes = iPacket.DecodeInt();
+        final int weapon = iPacket.DecodeInt();
 
         final byte gender = c.getPlayer().getGender();
 
@@ -138,11 +138,11 @@ public final class UltimateCharacterCreator implements ProcessPacket<MapleClient
         if (MapleCharacterCreationUtil.canCreateChar(name, c.isGm()) && (!LoginInformationProvider.getInstance().isForbiddenName(name) || c.isGm())) {
             User.saveNewCharToDB(newchar, jobType, (short) 0);
             MapleQuest.getInstance(20734).forceComplete(c.getPlayer(), 1101000);
-            c.write(CField.createUltimate(0));
+            c.SendPacket(CField.createUltimate(0));
         } else if (!LoginInformationProvider.getInstance().isForbiddenName(name) || c.isGm()) {
-            c.write(CField.createUltimate(3)); //"You cannot use this name."
+            c.SendPacket(CField.createUltimate(3)); //"You cannot use this name."
         } else {
-            c.write(CField.createUltimate(1));
+            c.SendPacket(CField.createUltimate(1));
         }
     }
 

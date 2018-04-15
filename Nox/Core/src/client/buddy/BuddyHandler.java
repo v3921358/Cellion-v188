@@ -25,14 +25,13 @@ import client.buddy.BuddyRequest;
 import client.buddy.BuddyResult;
 import client.buddy.BuddylistEntry;
 import client.buddy.CharacterIdNameBuddyCapacity;
-import database.DatabaseConnection;
+import database.Database;
 import handling.world.World;
 import service.ChannelServer;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
 import tools.Utility;
 
 /**
@@ -40,7 +39,7 @@ import tools.Utility;
  * @author Mazen
  */
 public class BuddyHandler {
-    
+
     public static void handleOperation(MapleClient c, InPacket iPacket) {
         BuddyRequest mode = BuddyRequest.UNKNOWN.getRequest(iPacket.DecodeByte());
         BuddyList buddylist = c.getPlayer().getBuddylist();
@@ -63,10 +62,10 @@ public class BuddyHandler {
                 }
                 if (ble != null && (ble.getGroup().equals(group) || !ble.isPending())) {
                     buddy.setResult(BuddyResult.SET_FRIEND_DONE);
-                    c.write(CWvsContext.buddylistMessage(buddy));
+                    c.SendPacket(CWvsContext.buddylistMessage(buddy));
                 } else if (buddylist.isFull()) {
                     buddy.setResult(BuddyResult.SET_FRIEND_FULL_ME);
-                    c.write(CWvsContext.buddylistMessage(buddy));
+                    c.SendPacket(CWvsContext.buddylistMessage(buddy));
                 } else if (ble == null) {
                     try {
                         CharacterIdNameBuddyCapacity charWithId = null;
@@ -88,36 +87,38 @@ public class BuddyHandler {
                             if (channel > 0) {
                                 buddyAddResult = World.WorldBuddy.requestBuddyAdd(c.getPlayer(), accountFriend, otherChar);
                             } else {
-                                Connection con = DatabaseConnection.getConnection();
-                                PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) as buddyCount FROM buddies WHERE characterid = ? AND pending = 0");
-                                ps.setInt(1, charWithId.getId());
-                                ResultSet rs = ps.executeQuery();
+                                try (Connection con = Database.GetConnection()) {
+                                    System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+                                    PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) as buddyCount FROM buddies WHERE characterid = ? AND pending = 0");
+                                    ps.setInt(1, charWithId.getId());
+                                    ResultSet rs = ps.executeQuery();
 
-                                if (!rs.next()) {
-                                    ps.close();
-                                    rs.close();
-                                    throw new RuntimeException("Result set expected");
-                                } else {
-                                    int count = rs.getInt("buddyCount");
-                                    if (count >= charWithId.getBuddyCapacity()) {
-                                        buddyAddResult = BuddyOperation.BUDDYLIST_FULL;
+                                    if (!rs.next()) {
+                                        ps.close();
+                                        rs.close();
+                                        throw new RuntimeException("Result set expected");
+                                    } else {
+                                        int count = rs.getInt("buddyCount");
+                                        if (count >= charWithId.getBuddyCapacity()) {
+                                            buddyAddResult = BuddyOperation.BUDDYLIST_FULL;
+                                        }
                                     }
-                                }
-                                rs.close();
-                                ps.close();
+                                    rs.close();
+                                    ps.close();
 
-                                ps = con.prepareStatement("SELECT pending FROM buddies WHERE characterid = ? AND buddyid = ?");
-                                ps.setInt(1, charWithId.getId());
-                                ps.setInt(2, c.getPlayer().getId());
-                                rs = ps.executeQuery();
-                                if (rs.next()) {
-                                    buddyAddResult = BuddyOperation.ALREADY_ON_LIST;
+                                    ps = con.prepareStatement("SELECT pending FROM buddies WHERE characterid = ? AND buddyid = ?");
+                                    ps.setInt(1, charWithId.getId());
+                                    ps.setInt(2, c.getPlayer().getId());
+                                    rs = ps.executeQuery();
+                                    if (rs.next()) {
+                                        buddyAddResult = BuddyOperation.ALREADY_ON_LIST;
+                                    }
+                                    rs.close();
+                                    ps.close();
                                 }
-                                rs.close();
-                                ps.close();
                             }
                             if (buddyAddResult == BuddyOperation.BUDDYLIST_FULL) {
-                                c.write(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_OTHER)));
+                                c.SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_OTHER)));
                             } else {
                                 int displayChannel = -1;
                                 int otherCid = charWithId.getId();
@@ -128,8 +129,7 @@ public class BuddyHandler {
                                     if (nick.isEmpty()) {
                                         nick = charWithId.getName();
                                     }
-                                    Connection con = DatabaseConnection.getConnection();
-                                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO buddies (`characterid`, `buddyid`, `pending`, `friend`, `nickname`, `memo`, `flag`) VALUES (?, ?, 1, ?, ?, ?, ?)")) {
+                                    try (PreparedStatement ps = Database.GetConnection().prepareStatement("INSERT INTO buddies (`characterid`, `buddyid`, `pending`, `friend`, `nickname`, `memo`, `flag`) VALUES (?, ?, 1, ?, ?, ?, ?)")) {
                                         ps.setInt(1, charWithId.getId());
                                         ps.setInt(2, c.getPlayer().getId());
                                         ps.setBoolean(3, accountFriend);
@@ -144,10 +144,10 @@ public class BuddyHandler {
                                 buddylist.put(ble);
                                 buddy.setResult(BuddyResult.LOAD_FRIENDS);
                                 buddy.setEntries(new ArrayList<>(buddylist.getBuddies()));
-                                c.write(CWvsContext.buddylistMessage(buddy));
+                                c.SendPacket(CWvsContext.buddylistMessage(buddy));
                             }
                         } else {
-                            c.write(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_OTHER)));
+                            c.SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_OTHER)));
                         }
                     } catch (SQLException e) {
                         LogHelper.SQL.get().info("There was an issue with adding buddies:\r\n", e);
@@ -157,13 +157,13 @@ public class BuddyHandler {
                     ble.setFlag(flag);
                     buddy.setResult(BuddyResult.LOAD_FRIENDS);
                     buddy.setEntries(new ArrayList<>(buddylist.getBuddies()));
-                    c.write(CWvsContext.buddylistMessage(buddy));
+                    c.SendPacket(CWvsContext.buddylistMessage(buddy));
 
                 }
                 break;
             }
             case ACCEPT_FRIEND: {
-                int otherCid = iPacket.DecodeInteger();
+                int otherCid = iPacket.DecodeInt();
                 ble = buddylist.get(otherCid);
                 if (!buddylist.isFull() && ble != null) {
                     int channel = Utility.requestChannel(otherCid);
@@ -178,15 +178,15 @@ public class BuddyHandler {
                     buddylist.put(entry);
                     buddy.setResult(BuddyResult.LOAD_FRIENDS);
                     buddy.setEntries(new ArrayList<>(buddylist.getBuddies()));
-                    c.write(CWvsContext.buddylistMessage(buddy));
+                    c.SendPacket(CWvsContext.buddylistMessage(buddy));
                     notifyRemoteChannel(c, channel, otherCid, BuddyOperation.ADD, false, "");
                 } else {
-                    c.write(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_ME)));
+                    c.SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_ME)));
                 }
                 break;
             }
             case DELETE_FRIEND:
-                int otherCid = iPacket.DecodeInteger();
+                int otherCid = iPacket.DecodeInt();
                 ble = buddylist.get(otherCid);
                 if (ble != null) {
                     notifyRemoteChannel(c, Utility.requestChannel(otherCid), otherCid, BuddyOperation.DELETE, false, "");
@@ -194,10 +194,10 @@ public class BuddyHandler {
                 buddylist.remove(otherCid);
                 buddy.setResult(BuddyResult.DELETE_FRIEND_DONE);
                 buddy.setEntry(ble);
-                c.write(CWvsContext.buddylistMessage(buddy));
+                c.SendPacket(CWvsContext.buddylistMessage(buddy));
                 break;
             case ACCEPT_ACCOUNT_FRIEND: {
-                int index = iPacket.DecodeInteger();
+                int index = iPacket.DecodeInt();
                 List<BuddylistEntry> entries = getPendingAccountFriends(c.loadCharacters(c.getPlayer().getWorld()));
                 if (!entries.isEmpty()) {
                     ble = entries.get(index);
@@ -214,10 +214,10 @@ public class BuddyHandler {
                         buddylist.put(entry);
                         buddy.setResult(BuddyResult.LOAD_FRIENDS);
                         buddy.setEntries(new ArrayList<>(buddylist.getBuddies()));
-                        c.write(CWvsContext.buddylistMessage(buddy));
+                        c.SendPacket(CWvsContext.buddylistMessage(buddy));
                         notifyRemoteChannel(c, channel, ble.getCharacterId(), BuddyOperation.ADD, true, ble.getNickname());
                     } else {
-                        c.write(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_ME)));
+                        c.SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_ME)));
                     }
                 }
                 break;
@@ -234,11 +234,11 @@ public class BuddyHandler {
                 break;
         }
     }
-    
+
     private static List<BuddylistEntry> getPendingAccountFriends(List<User> chrs) {
-        Connection con = DatabaseConnection.getConnection();
         List<BuddylistEntry> bl = new ArrayList<>();
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             for (User chr : chrs) {
                 PreparedStatement ps = con.prepareStatement("SELECT c.name as buddyname, b.characterid, b.buddyid, b.pending, b.groupname, b.memo, b.friend, b.nickname, b.flag FROM buddies as b, characters as c WHERE b.buddyid = c.id AND b.characterid = ? AND b.pending = 1 AND c.deletedAt is null AND b.friend = 1");
                 ps.setInt(1, chr.getId());
@@ -258,10 +258,9 @@ public class BuddyHandler {
     }
 
     private static CharacterIdNameBuddyCapacity getCharacterIdAndNameFromDatabase(String name) {
-        Connection con = DatabaseConnection.getConnection();
-
         CharacterIdNameBuddyCapacity ret = null;
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             PreparedStatement ps = con.prepareStatement("SELECT * FROM characters WHERE name LIKE ? AND deletedAt is null");
             ps.setString(1, name);
             try (ResultSet rs = ps.executeQuery()) {
@@ -269,6 +268,7 @@ public class BuddyHandler {
                     ret = new CharacterIdNameBuddyCapacity(rs.getInt("id"), rs.getString("name"), rs.getInt("buddyCapacity"));
                 }
             }
+            ps.close();
         } catch (Exception e) {
             LogHelper.SQL.get().info(e);
         }

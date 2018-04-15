@@ -19,8 +19,8 @@ public class UserInterfaceHandler {
         final String Poll_Question = "Are you mudkiz?";
         final String[] Poll_Answers = {"test1", "test2", "test3"};
         if (PollEnabled) {
-            c.getPlayer().updateTick(iPacket.DecodeInteger());
-            final int selection = iPacket.DecodeInteger();
+            c.getPlayer().updateTick(iPacket.DecodeInt());
+            final int selection = iPacket.DecodeInt();
 
             if (selection >= 0 && selection <= Poll_Answers.length) {
                 //if (MapleCharacterUtil.SetPoll(c.getAccID(), selection)) {

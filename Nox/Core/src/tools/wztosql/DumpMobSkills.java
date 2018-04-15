@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import database.DatabaseConnection;
+import database.Database;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataTool;
@@ -19,7 +19,7 @@ public class DumpMobSkills {
     protected boolean hadError = false;
     protected boolean update = false;
     protected int id = 0;
-    private final Connection con = DatabaseConnection.getConnection();
+    private final Connection con = Database.GetConnection();
 
     public DumpMobSkills(boolean update) throws Exception {
         this.update = update;

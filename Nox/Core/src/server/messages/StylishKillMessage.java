@@ -24,17 +24,17 @@ public class StylishKillMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.StylishKill.getType());
-        oPacket.Encode(mode.getType());
+        oPacket.EncodeByte(_MessageOpcodesType.StylishKill.getType());
+        oPacket.EncodeByte(mode.getType());
 
         switch (mode) {
             case Combo:
-                oPacket.EncodeInteger((int) primaryValue); // count
-                oPacket.EncodeInteger(secondaryValue); // mob id
+                oPacket.EncodeInt((int) primaryValue); // count
+                oPacket.EncodeInt(secondaryValue); // mob id
                 break;
             case MultiKill:
                 oPacket.EncodeLong(primaryValue); //nBonus
-                oPacket.EncodeInteger(secondaryValue); //count
+                oPacket.EncodeInt(secondaryValue); //count
                 break;
         }
     }

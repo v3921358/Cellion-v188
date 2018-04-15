@@ -27,7 +27,7 @@ import client.SkillFactory;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class MechCancel implements ProcessPacket<MapleClient> {
 
@@ -42,7 +42,7 @@ public final class MechCancel implements ProcessPacket<MapleClient> {
         if (chr == null) {
             return;
         }
-        int sourceid = iPacket.DecodeInteger();
+        int sourceid = iPacket.DecodeInt();
         if ((sourceid % 10000 < 1000) && (SkillFactory.getSkill(sourceid) == null)) {
             sourceid += 1000;
         }

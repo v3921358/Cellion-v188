@@ -27,7 +27,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import database.DatabaseConnection;
+import database.Database;
+import tools.LogHelper;
 
 public class MapleGuildRanking {
 
@@ -50,8 +51,8 @@ public class MapleGuildRanking {
 
     private void reload() {
         ranks.clear();
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             ResultSet rs;
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM guilds ORDER BY `GP` DESC LIMIT 50")) {
                 rs = ps.executeQuery();
@@ -69,7 +70,7 @@ public class MapleGuildRanking {
             }
             rs.close();
         } catch (SQLException e) {
-            System.err.println("Error handling guildRanking");
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
     }
 

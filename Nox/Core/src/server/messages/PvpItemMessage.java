@@ -20,7 +20,7 @@ public class PvpItemMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.PvpItem.getType());
+        oPacket.EncodeByte(_MessageOpcodesType.PvpItem.getType());
         oPacket.EncodeString(info);
         oPacket.EncodeString(data);
     }

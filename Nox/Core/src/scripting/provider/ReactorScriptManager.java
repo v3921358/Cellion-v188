@@ -34,7 +34,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import client.MapleClient;
-import database.DatabaseConnection;
+import database.Database;
 import scripting.ReactorActionManager;
 import server.maps.ReactorDropEntry;
 import server.maps.objects.MapleReactor;
@@ -76,8 +76,8 @@ public class ReactorScriptManager extends AbstractScriptManager {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             ps = con.prepareStatement("SELECT * FROM reactordrops WHERE reactorid = ?");
             ps.setInt(1, rid);
             rs = ps.executeQuery();
@@ -98,7 +98,8 @@ public class ReactorScriptManager extends AbstractScriptManager {
                 if (ps != null) {
                     ps.close();
                 }
-            } catch (SQLException ignore) {
+            } catch (SQLException e) {
+                LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
                 return ret;
             }
         }

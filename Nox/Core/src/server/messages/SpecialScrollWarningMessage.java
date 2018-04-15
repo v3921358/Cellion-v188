@@ -25,11 +25,11 @@ public class SpecialScrollWarningMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.SpecialScrollWarningPopup.getType());
-        oPacket.Encode(0); // these may be slotid or something
+        oPacket.EncodeByte(_MessageOpcodesType.SpecialScrollWarningPopup.getType());
+        oPacket.EncodeByte(0); // these may be slotid or something
         oPacket.EncodeShort(0);
         oPacket.EncodeShort(0);
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
     }
 
 }

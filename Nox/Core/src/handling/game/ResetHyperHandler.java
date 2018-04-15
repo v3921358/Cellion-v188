@@ -8,7 +8,7 @@ import java.util.HashMap;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -25,7 +25,7 @@ public class ResetHyperHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
 
-        chr.updateTick(iPacket.DecodeInteger());
+        chr.updateTick(iPacket.DecodeInt());
         short times = iPacket.DecodeShort();
         if (times < 1 || times > 3) {
             times = 3;
@@ -33,7 +33,7 @@ public class ResetHyperHandler implements ProcessPacket<MapleClient> {
         long price = 10000L * (long) Math.pow(10, times);
         if (chr.getMeso() < price) {
             chr.dropMessage(1, "You do not have enough mesos for that.");
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         int ssp = 0;

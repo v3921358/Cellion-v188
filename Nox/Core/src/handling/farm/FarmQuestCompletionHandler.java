@@ -28,7 +28,7 @@ import java.util.TimeZone;
 import client.MapleClient;
 import net.InPacket;
 import tools.packet.FarmPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class FarmQuestCompletionHandler implements ProcessPacket<MapleClient> {
 
@@ -39,16 +39,16 @@ public final class FarmQuestCompletionHandler implements ProcessPacket<MapleClie
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int questId = iPacket.DecodeInteger();
+        int questId = iPacket.DecodeInt();
         if (questId == 1111) {
-            c.write(FarmPacket.updateQuestInfo(1111, 1, ""));
+            c.SendPacket(FarmPacket.updateQuestInfo(1111, 1, ""));
             SimpleDateFormat sdfGMT = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
             sdfGMT.setTimeZone(TimeZone.getTimeZone("Canada/Pacific"));
             String timeStr = sdfGMT.format(Calendar.getInstance().getTime()).replaceAll("-", "");
-            c.write(FarmPacket.updateQuestInfo(1111, 2, timeStr));
-            c.write(FarmPacket.alertQuest(1111, 0));
-            c.write(FarmPacket.updateQuestInfo(1112, 0, "A1/"));
-            c.write(FarmPacket.updateQuestInfo(1112, 1, "A1/Z/"));
+            c.SendPacket(FarmPacket.updateQuestInfo(1111, 2, timeStr));
+            c.SendPacket(FarmPacket.alertQuest(1111, 0));
+            c.SendPacket(FarmPacket.updateQuestInfo(1112, 0, "A1/"));
+            c.SendPacket(FarmPacket.updateQuestInfo(1112, 1, "A1/Z/"));
         }
     }
 

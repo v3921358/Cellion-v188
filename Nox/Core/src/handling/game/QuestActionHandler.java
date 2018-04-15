@@ -3,7 +3,7 @@ package handling.game;
 import client.MapleClient;
 import constants.GameConstants;
 import constants.ServerConstants;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import scripting.provider.NPCScriptManager;
 import server.maps.objects.User;
 import server.quest.MapleQuest;
@@ -65,16 +65,16 @@ enum QuestRes
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final byte action = iPacket.DecodeByte();
-        int quest = iPacket.DecodeInteger();
+        int quest = iPacket.DecodeInt();
         if (quest == 20734) {
-            c.write(CWvsContext.ultimateExplorer());
+            c.SendPacket(CWvsContext.ultimateExplorer());
             return;
         }
         User chr = c.getPlayer();
         if (chr == null) {
             return;
         }
-        
+
         // Detailed Quest Action Debug
         if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) {
             String debugAction = "";
@@ -104,14 +104,14 @@ enum QuestRes
         final MapleQuest q = MapleQuest.getInstance(quest);
         switch (action) {
             case 0: { // Restore lost item
-                //chr.updateTick(iPacket.decodeInteger());
-                iPacket.DecodeInteger();
-                final int itemid = iPacket.DecodeInteger();
+                //chr.updateTick(iPacket.DecodeInt());
+                iPacket.DecodeInt();
+                final int itemid = iPacket.DecodeInt();
                 q.RestoreLostItem(chr, itemid);
                 break;
             }
             case 1: { // Start Quest
-                final int npc = iPacket.DecodeInteger();
+                final int npc = iPacket.DecodeInt();
                 if (npc == 0 && quest > 0) {
                     q.forceStart(chr, npc, null);
                 } else if (!q.hasStartScript()) {
@@ -120,14 +120,14 @@ enum QuestRes
                 break;
             }
             case 2: { // Complete Quest
-                final int npc = iPacket.DecodeInteger();
-                //chr.updateTick(iPacket.decodeInteger());
-                iPacket.DecodeInteger();
+                final int npc = iPacket.DecodeInt();
+                //chr.updateTick(iPacket.DecodeInt());
+                iPacket.DecodeInt();
                 if (q.hasEndScript()) {
                     return;
                 }
-                if (iPacket.Available() >= 4) {
-                    q.complete(chr, npc, iPacket.DecodeInteger());
+                if (iPacket.GetRemainder() >= 4) {
+                    q.complete(chr, npc, iPacket.DecodeInt());
                 } else {
                     q.complete(chr, npc);
                 }
@@ -150,24 +150,24 @@ enum QuestRes
                 break;
             }
             case 4: { // Scripted Start Quest
-                final int npc = iPacket.DecodeInteger();
+                final int npc = iPacket.DecodeInt();
                 if (chr.hasBlockedInventory()) {
                     return;
                 }
 
-                //c.getPlayer().updateTick(iPacket.decodeInteger());
+                //c.getPlayer().updateTick(iPacket.DecodeInt());
                 NPCScriptManager.getInstance().startQuest(c, npc, quest);
                 break;
             }
             case 5: { // Scripted End Quest
-                final int npc = iPacket.DecodeInteger();
-                iPacket.DecodeInteger();
+                final int npc = iPacket.DecodeInt();
+                iPacket.DecodeInt();
                 if (chr.hasBlockedInventory()) {
                     return;
                 }
-                //c.getPlayer().updateTick(iPacket.decodeInteger());
+                //c.getPlayer().updateTick(iPacket.DecodeInt());
                 NPCScriptManager.getInstance().endQuest(c, npc, quest, false);
-                c.write(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.QuestComplete)); // Quest completion
+                c.SendPacket(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.QuestComplete)); // Quest completion
                 chr.getMap().broadcastMessage(chr, CField.EffectPacket.showForeignEffect(chr.getId(), CField.EffectPacket.UserEffectCodes.QuestComplete), false);
                 break;
             }

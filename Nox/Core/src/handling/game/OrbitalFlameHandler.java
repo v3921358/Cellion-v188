@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import server.maps.objects.User;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
 import server.commands.GMCommand.Position;
@@ -51,13 +51,13 @@ public final class OrbitalFlameHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
-        int nSkillID = iPacket.DecodeInteger();
+        int nSkillID = iPacket.DecodeInt();
         byte nSLV = iPacket.DecodeByte();
         short nDirection = iPacket.DecodeShort();
         Skill pSkill = SkillFactory.getSkill(nSkillID);
         MapleStatEffect pEffect = pSkill.getEffect(nSLV);
         int nRange = pEffect.info.get(MapleStatInfo.range);
-        
+
         ForceAtomType fae;
         switch (nSkillID) {
             case BlazeWizard.FINAL_ORBITAL_FLAME:
@@ -95,7 +95,7 @@ public final class OrbitalFlameHandler implements ProcessPacket<MapleClient> {
         faiList.add(fai);
         pPlayer.getMap().broadcastMessage(CField.createForceAtom(false, 0, pPlayer.getId(), fae.getForceAtomType(), false,
                 new ArrayList<>(), nSkillID, faiList, null, nDirection, nRange, null, 0, null));
-        
+
         //PlayerHandler.OrbitalFlame(iPacket, c);
     }
 }

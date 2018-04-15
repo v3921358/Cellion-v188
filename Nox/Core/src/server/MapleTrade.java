@@ -56,7 +56,7 @@ public class MapleTrade {
             chr.gainMeso(exchangeMeso - GameConstants.getTaxAmount(exchangeMeso), false, false);
         }
         exchangeMeso = 0;
-        chr.getClient().write(CField.InteractionPacket.TradeMessage(tradingslot, (byte) 7));
+        chr.getClient().SendPacket(CField.InteractionPacket.TradeMessage(tradingslot, (byte) 7));
     }
 
     public void cancel(MapleClient c, User chr) {
@@ -76,7 +76,7 @@ public class MapleTrade {
         }
         meso = 0;
 
-        c.write(CField.InteractionPacket.getTradeCancel(tradingslot));
+        c.SendPacket(CField.InteractionPacket.getTradeCancel(tradingslot));
     }
 
     public boolean isLocked() {
@@ -90,9 +90,9 @@ public class MapleTrade {
         if (chr.getMeso() >= meso) {
             chr.gainMeso(-meso, false, false);
             this.meso += meso;
-            chr.getClient().write(CField.InteractionPacket.getTradeMesoSet((byte) 0, meso));
+            chr.getClient().SendPacket(CField.InteractionPacket.getTradeMesoSet((byte) 0, meso));
             if (partner != null) {
-                partner.getCharacter().getClient().write(CField.InteractionPacket.getTradeMesoSet((byte) 1, meso));
+                partner.getCharacter().getClient().SendPacket(CField.InteractionPacket.getTradeMesoSet((byte) 1, meso));
             }
         }
     }
@@ -102,9 +102,9 @@ public class MapleTrade {
             return;
         }
         items.add(item);
-        chr.getClient().write(CField.InteractionPacket.getTradeItemAdd((byte) 0, item));
+        chr.getClient().SendPacket(CField.InteractionPacket.getTradeItemAdd((byte) 0, item));
         if (partner != null) {
-            partner.getCharacter().getClient().write(CField.InteractionPacket.getTradeItemAdd((byte) 1, item));
+            partner.getCharacter().getClient().SendPacket(CField.InteractionPacket.getTradeItemAdd((byte) 1, item));
         }
     }
 
@@ -112,7 +112,7 @@ public class MapleTrade {
         if (!CommandProcessor.processCommand(chr.getClient(), message, ServerConstants.CommandType.TRADE)) {
             chr.dropMessage(-2, chr.getName() + " : " + message);
             if (partner != null) {
-                partner.getCharacter().getClient().write(PlayerShopPacket.shopChat(chr.getName() + " : " + message, 1));
+                partner.getCharacter().getClient().SendPacket(PlayerShopPacket.shopChat(chr.getName() + " : " + message, 1));
             }
         }
         if (chr.getClient().isMonitored()) {
@@ -125,7 +125,7 @@ public class MapleTrade {
     public void chatAuto(String message) {
         chr.dropMessage(-2, message);
         if (partner != null) {
-            partner.getCharacter().getClient().write(PlayerShopPacket.shopChat(message, 1));
+            partner.getCharacter().getClient().SendPacket(PlayerShopPacket.shopChat(message, 1));
         }
         if (chr.getClient().isMonitored()) {
             World.Broadcast.broadcastGMMessage(CWvsContext.broadcastMsg(6, chr.getName() + " said in trade [Automated] with " + partner.getCharacter().getName() + ": " + message));
@@ -174,12 +174,12 @@ public class MapleTrade {
         }
         short flag = item.getFlag();
         if (ItemFlag.UNTRADABLE.check(flag) || ItemFlag.LOCK.check(flag)) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return false;
         }
         if ((ii.isDropRestricted(item.getItemId()) || ii.isAccountShared(item.getItemId()))
                 && !ItemFlag.KARMA_EQ.check(flag) && !ItemFlag.KARMA_USE.check(flag)) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return false;
         }
 
@@ -235,7 +235,7 @@ public class MapleTrade {
             return;
         }
         local.locked = true;
-        partner.getCharacter().getClient().write(CField.InteractionPacket.getTradeConfirmation());
+        partner.getCharacter().getClient().SendPacket(CField.InteractionPacket.getTradeConfirmation());
 
         partner.exchangeItems = new LinkedList<>(local.items);
         partner.exchangeMeso = local.meso;
@@ -268,21 +268,21 @@ public class MapleTrade {
 
     public static void startTrade(User c) {
         if (GameConstants.isZero(c.getJob())) {
-            c.getClient().write(CWvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
+            c.getClient().SendPacket(CWvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
             return;
         }
 
         if (c.getTrade() == null) {
             c.setTrade(new MapleTrade((byte) 0, c));
-            c.getClient().write(CField.InteractionPacket.getTradeStart(c.getClient(), c.getTrade(), (byte) 0));
+            c.getClient().SendPacket(CField.InteractionPacket.getTradeStart(c.getClient(), c.getTrade(), (byte) 0));
         } else {
-            c.getClient().write(CWvsContext.broadcastMsg(5, "You are already in a trade window."));
+            c.getClient().SendPacket(CWvsContext.broadcastMsg(5, "You are already in a trade window."));
         }
     }
 
     public static void inviteTrade(User c1, User c2) {
         if (GameConstants.isZero(c2.getJob())) {
-            c1.getClient().write(CWvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
+            c1.getClient().SendPacket(CWvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
             c1.getTrade().cancel(c1.getClient(), c1);
             return;
         }
@@ -294,25 +294,25 @@ public class MapleTrade {
             c2.setTrade(new MapleTrade((byte) 1, c2));
             c2.getTrade().setPartner(c1.getTrade());
             c1.getTrade().setPartner(c2.getTrade());
-            c2.getClient().write(CField.InteractionPacket.getTradeInvite(c1));
+            c2.getClient().SendPacket(CField.InteractionPacket.getTradeInvite(c1));
         } else {
-            c1.getClient().write(CWvsContext.broadcastMsg(5, "The other player is already trading with someone else."));
+            c1.getClient().SendPacket(CWvsContext.broadcastMsg(5, "The other player is already trading with someone else."));
             cancelTrade(c1.getTrade(), c1.getClient(), c1);
         }
     }
 
     public static void visitTrade(User c1, User c2) {
         if (GameConstants.isZero(c2.getJob())) {
-            c1.getClient().write(CWvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
+            c1.getClient().SendPacket(CWvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
             return;
         }
 
         if (c2 != null && c1.getTrade() != null && c1.getTrade().getPartner() == c2.getTrade() && c2.getTrade() != null && c2.getTrade().getPartner() == c1.getTrade()) {
             c1.getTrade().inTrade = true;
-            c2.getClient().write(PlayerShopPacket.shopVisitorAdd(c1, 1));
-            c1.getClient().write(CField.InteractionPacket.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 1));
+            c2.getClient().SendPacket(PlayerShopPacket.shopVisitorAdd(c1, 1));
+            c1.getClient().SendPacket(CField.InteractionPacket.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 1));
         } else {
-            c1.getClient().write(CWvsContext.broadcastMsg(5, "The other player has already closed the trade"));
+            c1.getClient().SendPacket(CWvsContext.broadcastMsg(5, "The other player has already closed the trade"));
         }
     }
 

@@ -61,7 +61,7 @@ public class PlayersHandler {
                 String name = iPacket.DecodeString();
                 String msg = iPacket.DecodeString();
                 boolean fame = iPacket.DecodeByte() > 0;
-                iPacket.DecodeInteger(); //0?
+                iPacket.DecodeInt(); //0?
                 Item itemz = chr.getCashInventory().findByCashId((int) iPacket.DecodeLong());
                 if (itemz == null || !itemz.getGiftFrom().equalsIgnoreCase(name) || !chr.getCashInventory().canSendNote(itemz.getUniqueId())) {
                     return;
@@ -79,7 +79,7 @@ public class PlayersHandler {
                 }
                 iPacket.Skip(1); // first byte = wedding boolean? 
                 for (int i = 0; i < num; i++) {
-                    final int id = iPacket.DecodeInteger();
+                    final int id = iPacket.DecodeInt();
                     chr.deleteNote(id, iPacket.DecodeByte() > 0 ? 1 : 0);
                 }
                 break;
@@ -89,7 +89,7 @@ public class PlayersHandler {
     }
 
     public static void UseDoor(final InPacket iPacket, final User chr) {
-        final int oid = iPacket.DecodeInteger();
+        final int oid = iPacket.DecodeInt();
         final boolean mode = iPacket.DecodeByte() == 0; // specifies if backwarp or not, 1 town to target, 0 target to town
 
         for (MapleMapObject obj : chr.getMap().getAllDoors()) {
@@ -102,10 +102,10 @@ public class PlayersHandler {
     }
 
     public static void UseMechDoor(final InPacket iPacket, final User chr) {
-        final int oid = iPacket.DecodeInteger();
+        final int oid = iPacket.DecodeInt();
         final Point pos = iPacket.DecodePosition();
         final int mode = iPacket.DecodeByte(); // specifies if backwarp or not, 1 town to target, 0 target to town
-        chr.getClient().write(CWvsContext.enableActions());
+        chr.getClient().SendPacket(CWvsContext.enableActions());
         for (MapleMapObject obj : chr.getMap().getAllMechDoors()) {
             final MechDoor door = (MechDoor) obj;
             if (door.getOwnerId() == oid && door.getId() == mode) {
@@ -117,15 +117,15 @@ public class PlayersHandler {
     }
 
     public static void DressUpRequest(final User chr, InPacket iPacket) {
-        int code = iPacket.DecodeInteger();
+        int code = iPacket.DecodeInt();
         switch (code) {
             case 5010093:
-                chr.getClient().write(JobPacket.AngelicPacket.updateDress(code, chr));
-                chr.getClient().write(CField.updateCharLook(chr, true));
+                chr.getClient().SendPacket(JobPacket.AngelicPacket.updateDress(code, chr));
+                chr.getClient().SendPacket(CField.updateCharLook(chr, true));
                 break;
             case 5010094:
-                chr.getClient().write(JobPacket.AngelicPacket.updateDress(code, chr));
-                chr.getClient().write(CField.updateCharLook(chr, true));
+                chr.getClient().SendPacket(JobPacket.AngelicPacket.updateDress(code, chr));
+                chr.getClient().SendPacket(CField.updateCharLook(chr, true));
                 break;
         }
     }
@@ -135,15 +135,15 @@ public class PlayersHandler {
         // 11 00
         // A0 C0 21 00
         // 07 00 64 66 62 64 66 62 64
-        chr.updateTick(iPacket.DecodeInteger());
+        chr.updateTick(iPacket.DecodeInt());
         final byte slot = (byte) iPacket.DecodeShort();
-        final int itemId = iPacket.DecodeInteger();
+        final int itemId = iPacket.DecodeInt();
         final String target = iPacket.DecodeString();
 
         final Item toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
 
         if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         switch (itemId) {
@@ -197,11 +197,11 @@ public class PlayersHandler {
     }
 
     public static void HOLLY(MapleClient c, InPacket iPacket) {
-        final Summon obj = (Summon) c.getPlayer().getMap().getMapObject(iPacket.DecodeInteger(), MapleMapObjectType.SUMMON);
+        final Summon obj = (Summon) c.getPlayer().getMap().getMapObject(iPacket.DecodeInt(), MapleMapObjectType.SUMMON);
         if (obj == null) {
             return;
         }
-        int skillid = iPacket.DecodeInteger();
+        int skillid = iPacket.DecodeInt();
 
         if (skillid == 3121013) {
             Point poss = c.getPlayer().getPosition();
@@ -222,7 +222,7 @@ public class PlayersHandler {
     }
 
     public static void FollowRequest(final InPacket iPacket, final MapleClient c) {
-        User tt = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInteger());
+        User tt = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInt());
         if (iPacket.DecodeByte() > 0) {
             //1 when changing map
             tt = c.getPlayer().getMap().getCharacterById(c.getPlayer().getFollowId());
@@ -247,14 +247,14 @@ public class PlayersHandler {
             tt.setFollowInitiator(false);
             c.getPlayer().setFollowOn(false);
             c.getPlayer().setFollowInitiator(false);
-            tt.getClient().write(CWvsContext.followRequest(c.getPlayer().getId()));
+            tt.getClient().SendPacket(CWvsContext.followRequest(c.getPlayer().getId()));
         } else {
-            c.write(CWvsContext.broadcastMsg(1, "You are too far away."));
+            c.SendPacket(CWvsContext.broadcastMsg(1, "You are too far away."));
         }
     }
 
     public static void FollowReply(final InPacket iPacket, final MapleClient c) {
-        if (c.getPlayer().getFollowId() > 0 && c.getPlayer().getFollowId() == iPacket.DecodeInteger()) {
+        if (c.getPlayer().getFollowId() > 0 && c.getPlayer().getFollowId() == iPacket.DecodeInt()) {
             User tt = c.getPlayer().getMap().getCharacterById(c.getPlayer().getFollowId());
             if (tt != null && tt.getPosition().distanceSq(c.getPlayer().getPosition()) < 10000 && tt.getFollowId() == 0 && tt.getId() != c.getPlayer().getId()) { //estimate, should less
                 boolean accepted = iPacket.DecodeByte() > 0;
@@ -268,14 +268,14 @@ public class PlayersHandler {
                 } else {
                     c.getPlayer().setFollowId(0);
                     tt.setFollowId(0);
-                    tt.getClient().write(CField.getFollowMsg(5));
+                    tt.getClient().SendPacket(CField.getFollowMsg(5));
                 }
             } else {
                 if (tt != null) {
                     tt.setFollowId(0);
                     c.getPlayer().setFollowId(0);
                 }
-                c.write(CWvsContext.broadcastMsg(1, "You are too far away."));
+                c.SendPacket(CWvsContext.broadcastMsg(1, "You are too far away."));
             }
         } else {
             c.getPlayer().setFollowId(0);
@@ -283,7 +283,7 @@ public class PlayersHandler {
     }
 
     //   public static void HOLLY(MapleClient c,  InPacket iPacket) {
-    //     int skillid = iPacket.decodeInteger();
+    //     int skillid = iPacket.DecodeInt();
     //     if (skillid == 3121013) {
     //        Point poss = c.getPlayer().getPosition();
     ///        owner == MapleCharacter;
@@ -312,19 +312,19 @@ public class PlayersHandler {
             errcode = 0x15;
         }
         if (errcode > 0) {
-            c.write(CWvsContext.sendEngagement((byte) errcode, 0, null, null));
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.sendEngagement((byte) errcode, 0, null, null));
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         c.getPlayer().setMarriageItemId(itemid);
-        chr.getClient().write(CWvsContext.sendEngagementRequest(c.getPlayer().getName(), c.getPlayer().getId()));
+        chr.getClient().SendPacket(CWvsContext.sendEngagementRequest(c.getPlayer().getName(), c.getPlayer().getId()));
     }
 
     public static void RingAction(final InPacket iPacket, final MapleClient c) {
         final byte mode = iPacket.DecodeByte();
         switch (mode) {
             case 0:
-                DoRing(c, iPacket.DecodeString(), iPacket.DecodeInteger());
+                DoRing(c, iPacket.DecodeString(), iPacket.DecodeInt());
                 //1112300 + (itemid - 2240004)
                 break;
             case 1:
@@ -334,19 +334,19 @@ public class PlayersHandler {
                 //accept/deny proposal
                 final boolean accepted = iPacket.DecodeByte() > 0;
                 final String name = iPacket.DecodeString();
-                final int id = iPacket.DecodeInteger();
+                final int id = iPacket.DecodeInt();
                 final User chr = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
                 if (c.getPlayer().getMarriageId() > 0 || chr == null || chr.getId() != id || chr.getMarriageItemId() <= 0 || !chr.haveItem(chr.getMarriageItemId(), 1) || chr.getMarriageId() > 0 || !chr.isAlive() || chr.getEventInstance() != null || !c.getPlayer().isAlive() || c.getPlayer().getEventInstance() != null) {
-                    c.write(CWvsContext.sendEngagement((byte) 0x1D, 0, null, null));
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.sendEngagement((byte) 0x1D, 0, null, null));
+                    c.SendPacket(CWvsContext.enableActions());
                     return;
                 }
                 if (accepted) {
                     final int itemid = chr.getMarriageItemId();
                     final int newItemId = itemid == 2240000 ? 1112803 : (itemid == 2240001 ? 1112806 : (itemid == 2240002 ? 1112807 : (itemid == 2240003 ? 1112809 : (1112300 + (itemid - 2240004)))));
                     if (!MapleInventoryManipulator.checkSpace(c, newItemId, 1, "") || !MapleInventoryManipulator.checkSpace(chr.getClient(), newItemId, 1, "")) {
-                        c.write(CWvsContext.sendEngagement((byte) 0x15, 0, null, null));
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.sendEngagement((byte) 0x15, 0, null, null));
+                        c.SendPacket(CWvsContext.enableActions());
                         return;
                     }
                     try {
@@ -367,7 +367,7 @@ public class PlayersHandler {
 
                         MapleInventoryManipulator.removeById(chr.getClient(), MapleInventoryType.USE, chr.getMarriageItemId(), 1, false, false);
 
-                        chr.getClient().write(CWvsContext.sendEngagement((byte) 0x10, newItemId, chr, c.getPlayer()));
+                        chr.getClient().SendPacket(CWvsContext.sendEngagement((byte) 0x10, newItemId, chr, c.getPlayer()));
                         chr.setMarriageId(c.getPlayer().getId());
                         c.getPlayer().setMarriageId(chr.getId());
 
@@ -379,14 +379,14 @@ public class PlayersHandler {
                     }
 
                 } else {
-                    chr.getClient().write(CWvsContext.sendEngagement((byte) 0x1E, 0, null, null));
+                    chr.getClient().SendPacket(CWvsContext.sendEngagement((byte) 0x1E, 0, null, null));
                 }
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 chr.setMarriageItemId(0);
                 break;
             case 3:
                 //drop, only works for ETC
-                final int itemId = iPacket.DecodeInteger();
+                final int itemId = iPacket.DecodeInt();
                 final MapleInventoryType type = GameConstants.getInventoryType(itemId);
                 final Item item = c.getPlayer().getInventory(type).findById(itemId);
                 if (item != null && type == MapleInventoryType.ETC && itemId / 10000 == 421) {
@@ -399,10 +399,10 @@ public class PlayersHandler {
     }
 
     public static void Solomon(final InPacket iPacket, final MapleClient c) {
-        c.write(CWvsContext.enableActions());
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.SendPacket(CWvsContext.enableActions());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(iPacket.DecodeShort());
-        if (item == null || item.getItemId() != iPacket.DecodeInteger() || item.getQuantity() <= 0 || c.getPlayer().getGachExp() > 0 || c.getPlayer().getLevel() > 50 || MapleItemInformationProvider.getInstance().getItemEffect(item.getItemId()).getEXP() <= 0) {
+        if (item == null || item.getItemId() != iPacket.DecodeInt() || item.getQuantity() <= 0 || c.getPlayer().getGachExp() > 0 || c.getPlayer().getLevel() > 50 || MapleItemInformationProvider.getInstance().getItemEffect(item.getItemId()).getEXP() <= 0) {
             return;
         }
         c.getPlayer().setGachExp(c.getPlayer().getGachExp() + MapleItemInformationProvider.getInstance().getItemEffect(item.getItemId()).getEXP());
@@ -411,8 +411,8 @@ public class PlayersHandler {
     }
 
     public static void GachExp(final InPacket iPacket, final MapleClient c) {
-        c.write(CWvsContext.enableActions());
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.SendPacket(CWvsContext.enableActions());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         if (c.getPlayer().getGachExp() <= 0) {
             return;
         }
@@ -429,7 +429,7 @@ public class PlayersHandler {
         other = c.getPlayer().getMap().getCharacterByName(iPacket.DecodeString());
         //then,byte(?) and string(reason)
         if (other == null || type == null || other.isIntern()) {
-            c.write(CWvsContext.report(4));
+            c.SendPacket(CWvsContext.report(4));
             return;
         }
         final MapleQuestStatus stat = c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.REPORT_QUEST));
@@ -439,12 +439,12 @@ public class PlayersHandler {
         final long currentTime = System.currentTimeMillis();
         final long theTime = Long.parseLong(stat.getCustomData());
         if (theTime + 7200000 > currentTime && !c.getPlayer().isIntern()) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             c.getPlayer().dropMessage(5, "You may only report every 2 hours.");
         } else {
             stat.setCustomData(String.valueOf(currentTime));
             other.addReport(type);
-            c.write(CWvsContext.report(2));
+            c.SendPacket(CWvsContext.report(2));
         }
     }
 
@@ -455,15 +455,15 @@ public class PlayersHandler {
     public static void claimSilentCrusadeReward(final InPacket iPacket, final MapleClient c) {
         short chapter = iPacket.DecodeShort();
         if (c.getPlayer() == null || !c.getPlayer().getInfoQuest(1648 + chapter).equals("m0=2;m1=2;m2=2;m3=2;m4=2")) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         final int use = c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot();
         final int setup = c.getPlayer().getInventory(MapleInventoryType.SETUP).getNumFreeSlot();
         final int etc = c.getPlayer().getInventory(MapleInventoryType.ETC).getNumFreeSlot();
         if (use < 1 || setup < 1 || etc < 1) {
-            c.write(CWvsContext.getSilentCrusadeMsg((byte) 2));
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.getSilentCrusadeMsg((byte) 2));
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         switch (chapter) {
@@ -493,14 +493,14 @@ public class PlayersHandler {
             default:
                 System.out.println("New Silent Crusade Chapter found: " + (chapter + 1));
         }
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 
     public static void buySilentCrusade(final InPacket iPacket, final MapleClient c) {
         //ui window is 0x49
         //iPacket: [00 00] [4F 46 11 00] [01 00]
         short slot = iPacket.DecodeShort(); //slot of item in the silent crusade window
-        int itemId = iPacket.DecodeInteger();
+        int itemId = iPacket.DecodeInt();
         short quantity = iPacket.DecodeShort();
         int tokenPrice = 0, potentialGrade = 0;
         final MapleDataProvider prov = WzDataStorage.getEtcWZ();
@@ -531,14 +531,14 @@ public class PlayersHandler {
         }
         if (tokenPrice == 0) {
             System.out.println("[Silent Crusade] " + c.getPlayer().getName() + " has tried to exploit silent crusade shop.");
-            c.write(CWvsContext.getSilentCrusadeMsg((byte) 3));
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.getSilentCrusadeMsg((byte) 3));
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         if (c.getPlayer().getInventory(GameConstants.getInventoryType(itemId)).getNumFreeSlot() >= quantity) {
             if (c.getPlayer().itemQuantity(4310029) < tokenPrice) {
-                c.write(CWvsContext.getSilentCrusadeMsg((byte) 1));
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.getSilentCrusadeMsg((byte) 1));
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             if (MapleInventoryManipulator.checkSpace(c, itemId, quantity, "")) {
@@ -549,26 +549,26 @@ public class PlayersHandler {
                     equip.setGMLog("BUY_SILENT_CRUSADE");
                     equip.setPotential1(-potentialGrade);
                     if (!MapleInventoryManipulator.addbyItem(c, equip)) {
-                        c.write(CWvsContext.getSilentCrusadeMsg((byte) 2));
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.getSilentCrusadeMsg((byte) 2));
+                        c.SendPacket(CWvsContext.enableActions());
                         return;
                     }
                 } else {
                     if (!MapleInventoryManipulator.addById(c, itemId, (short) quantity, "BUY_SILENT_CRUSADE")) {
-                        c.write(CWvsContext.getSilentCrusadeMsg((byte) 2));
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.getSilentCrusadeMsg((byte) 2));
+                        c.SendPacket(CWvsContext.enableActions());
                         return;
                     }
                 }
-                c.write(CWvsContext.getSilentCrusadeMsg((byte) 0));
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.getSilentCrusadeMsg((byte) 0));
+                c.SendPacket(CWvsContext.enableActions());
             } else {
-                c.write(CWvsContext.getSilentCrusadeMsg((byte) 2));
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.getSilentCrusadeMsg((byte) 2));
+                c.SendPacket(CWvsContext.enableActions());
             }
         } else {
-            c.write(CWvsContext.getSilentCrusadeMsg((byte) 2));
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.getSilentCrusadeMsg((byte) 2));
+            c.SendPacket(CWvsContext.enableActions());
         }
     }
 
@@ -578,24 +578,24 @@ public class PlayersHandler {
             if (c.getPlayer().getQuestStatus(GameConstants.PLAYER_INFORMATION) != MapleQuestState.NotStarted) {
                 try {
                     String[] info = c.getPlayer().getQuest(MapleQuest.getInstance(GameConstants.PLAYER_INFORMATION)).getCustomData().split(";");
-                    c.write(CWvsContext.loadInformation((byte) 2, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), Integer.parseInt(info[3]), true));
+                    c.SendPacket(CWvsContext.loadInformation((byte) 2, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), Integer.parseInt(info[3]), true));
                 } catch (NumberFormatException ex) {
-                    c.write(CWvsContext.loadInformation((byte) 4, 0, 0, 0, 0, false));
+                    c.SendPacket(CWvsContext.loadInformation((byte) 4, 0, 0, 0, 0, false));
                     System.out.println("Failed to update account information: " + ex);
                 }
             }
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         if (mode != 3) {
             System.out.println("New account information mode found: " + mode);
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
-        int country = iPacket.DecodeInteger();
-        int birthday = iPacket.DecodeInteger();
-        int favoriteAction = iPacket.DecodeInteger(); //kind of mask
-        int favoriteLocation = iPacket.DecodeInteger(); //kind of mask
+        int country = iPacket.DecodeInt();
+        int birthday = iPacket.DecodeInt();
+        int favoriteAction = iPacket.DecodeInt(); //kind of mask
+        int favoriteLocation = iPacket.DecodeInt(); //kind of mask
         c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.PLAYER_INFORMATION)).setCustomData("location=" + country + ";birthday=" + birthday + ";favoriteaction=" + favoriteAction + ";favoritelocation=" + favoriteLocation);
     }
 
@@ -604,8 +604,8 @@ public class PlayersHandler {
         switch (mode) {
             case 5:
                 if (c.getPlayer().getQuestStatus(GameConstants.PLAYER_INFORMATION) == MapleQuestState.NotStarted) {
-                    c.write(CWvsContext.findFriendResult((byte) 6, null, 0, null));
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.findFriendResult((byte) 6, null, 0, null));
+                    c.SendPacket(CWvsContext.enableActions());
                     return;
                 }
             case 7:
@@ -627,9 +627,9 @@ public class PlayersHandler {
                     }
                 }
                 if (characters.isEmpty()) {
-                    c.write(CWvsContext.findFriendResult((byte) 9, null, 12, null));
+                    c.SendPacket(CWvsContext.findFriendResult((byte) 9, null, 12, null));
                 } else {
-                    c.write(CWvsContext.findFriendResult((byte) 8, characters, 0, null));
+                    c.SendPacket(CWvsContext.findFriendResult((byte) 8, characters, 0, null));
                 }
                 break;
         }
@@ -638,8 +638,8 @@ public class PlayersHandler {
     public static void LinkSkill(final InPacket iPacket, final MapleClient c, final User chr) {
         //iPacket: [76 7F 31 01] [35 00 00 00]
         c.getPlayer().dropMessage(1, "Beginning link skill.");
-        int skill = iPacket.DecodeInteger();
-        int cid = iPacket.DecodeInteger();
+        int skill = iPacket.DecodeInt();
+        int cid = iPacket.DecodeInt();
         boolean found = false;
         for (User chr2 : c.loadCharacters(c.getPlayer().getWorld())) {
             if (chr2.getId() == cid) {
@@ -648,7 +648,7 @@ public class PlayersHandler {
         }
         if (GameConstants.getLinkSkillByJob(chr.getJob()) != skill || !found || chr.getLevel() > 70) {
             c.getPlayer().dropMessage(1, "An error has occured.");
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         User.addLinkSkill(cid, skill);
@@ -656,11 +656,11 @@ public class PlayersHandler {
 
     public static void reviveAzwan(InPacket iPacket, MapleClient c) {
         if (c.getPlayer() == null) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         if (!GameConstants.isAzwanMap(c.getPlayer().getMapId())) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         c.getPlayer().changeMap(c.getPlayer().getMapId(), 0);
@@ -671,18 +671,18 @@ public class PlayersHandler {
     public static void magicWheel(InPacket iPacket, MapleClient c) {
         final byte mode = iPacket.DecodeByte(); // 0 = open 2 = start 4 = receive reward
         if (mode == 2) {
-            iPacket.DecodeInteger(); //4
+            iPacket.DecodeInt(); //4
             final short toUseSlot = iPacket.DecodeShort();
             iPacket.DecodeShort();
-            final int tokenId = iPacket.DecodeInteger();
+            final int tokenId = iPacket.DecodeInt();
             if (c.getPlayer().getInventory(MapleInventoryType.ETC).getItem(toUseSlot).getItemId() != tokenId) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             for (byte inv = 1; inv <= 5; inv++) {
                 if (c.getPlayer().getInventory(MapleInventoryType.getByType(inv)).getNumFreeSlot() < 2) {
-                    c.write(CWvsContext.magicWheel((byte) 7, null, null, 0));
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.magicWheel((byte) 7, null, null, 0));
+                    c.SendPacket(CWvsContext.enableActions());
                     return;
                 }
             }
@@ -692,11 +692,11 @@ public class PlayersHandler {
             String data = "Magic Wheel";
             c.getPlayer().setWheelItem(items.get(end));
             if (!MapleInventoryManipulator.removeFromSlot_Lock(c, GameConstants.getInventoryType(tokenId), toUseSlot, (short) 1, false, false)) {
-                c.write(CWvsContext.magicWheel((byte) 9, null, null, 0));
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.magicWheel((byte) 9, null, null, 0));
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
-            c.write(CWvsContext.magicWheel((byte) 3, items, data, end));
+            c.SendPacket(CWvsContext.magicWheel((byte) 3, items, data, end));
         } else if (mode == 4) {
             final String data = iPacket.DecodeString();
             int item;
@@ -704,8 +704,8 @@ public class PlayersHandler {
             //item = Integer.parseInt(data) / 2;
             item = c.getPlayer().getWheelItem();
             if (item == 0 || !MapleInventoryManipulator.addById(c, item, (short) 1, null)) {
-                c.write(CWvsContext.magicWheel((byte) 0xA, null, null, 0));
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.magicWheel((byte) 0xA, null, null, 0));
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             //} catch (Exception ex) {
@@ -714,7 +714,7 @@ public class PlayersHandler {
             //    return;
             //}
             c.getPlayer().setWheelItem(0);
-            c.write(CWvsContext.magicWheel((byte) 5, null, null, 0));
+            c.SendPacket(CWvsContext.magicWheel((byte) 5, null, null, 0));
         }
     }
 
@@ -727,17 +727,17 @@ public class PlayersHandler {
 
     public static void updateRedLeafHigh(InPacket iPacket, MapleClient c) { //not finished yet
         //TODO: load and set red leaf high in sql
-        iPacket.DecodeInteger(); //questid or something
-        iPacket.DecodeInteger(); //joe joe quest
-        int joejoe = iPacket.DecodeInteger();
-        iPacket.DecodeInteger(); //hermoninny quest
-        int hermoninny = iPacket.DecodeInteger();
-        iPacket.DecodeInteger(); //little dragon quest
-        int littledragon = iPacket.DecodeInteger();
-        iPacket.DecodeInteger(); //ika quest
-        int ika = iPacket.DecodeInteger();
+        iPacket.DecodeInt(); //questid or something
+        iPacket.DecodeInt(); //joe joe quest
+        int joejoe = iPacket.DecodeInt();
+        iPacket.DecodeInt(); //hermoninny quest
+        int hermoninny = iPacket.DecodeInt();
+        iPacket.DecodeInt(); //little dragon quest
+        int littledragon = iPacket.DecodeInt();
+        iPacket.DecodeInt(); //ika quest
+        int ika = iPacket.DecodeInt();
         if (joejoe + hermoninny + littledragon + ika != c.getPlayer().getFriendShipToAdd()) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         c.getPlayer().setFriendShipPoints(joejoe, hermoninny, littledragon, ika);
@@ -758,6 +758,6 @@ public class PlayersHandler {
     }
 
     public static void CassandrasCollection(InPacket iPacket, MapleClient c) {
-        c.write(CField.getCassandrasCollection());
+        c.SendPacket(CField.getCassandrasCollection());
     }
 }

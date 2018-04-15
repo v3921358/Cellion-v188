@@ -1,5 +1,5 @@
 /*
- * Rexion Development - Utility Tools
+ * Cellion Development - Utility Tools
  */
 package tools;
 
@@ -27,10 +27,11 @@ import tools.packet.CWvsContext;
  *
  * @author Mazen Massoud
  */
-public class Utility { 
-    
+public class Utility {
+
     /**
      * Character Retriever
+     *
      * @param dwCharacterID / sCharacterName
      * @return MapleCharacter Object regardless of channel.
      */
@@ -43,7 +44,7 @@ public class Utility {
         }
         return null;
     }
-    
+
     public static User requestCharacter(String sCharacterName) {
         for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
             User pPlayer = ChannelServer.getInstance(i).getPlayerStorage().getCharacterByName(sCharacterName);
@@ -53,9 +54,10 @@ public class Utility {
         }
         return null;
     }
-    
+
     /**
      * Character Channel Locator
+     *
      * @param dwCharacterID / sCharacterName
      * @return Channel of the requested Character.
      */
@@ -68,7 +70,7 @@ public class Utility {
         }
         return 0;
     }
-    
+
     public static int requestChannel(String sCharacterName) {
         for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
             User pPlayer = ChannelServer.getInstance(i).getPlayerStorage().getCharacterByName(sCharacterName);
@@ -78,9 +80,10 @@ public class Utility {
         }
         return 0;
     }
-    
+
     /**
      * Success Chance Generator
+     *
      * @param nChanceToSucceed
      * @return True or false value on whether the chance succeeded.
      */
@@ -88,24 +91,26 @@ public class Utility {
         Random pRandom = new Random();
         return pRandom.nextInt(100) < nChanceToSucceed;
     }
-    
+
     /**
      * Check if Number
+     *
      * @param sString
      * @return True or false on whether the string value is a number.
      */
     public static boolean isNumber(String sString) {
         return sString.matches("-?\\d+(\\.\\d+)?");
     }
-    
+
     /**
      * Remove Buff from Player's Map
+     *
      * @param pPlayer The function checks all users that are on the same map as this character object.
      * @param pStat The temporary stat that will be removed from this map.
      */
     public static void removeBuffFromMap(User pPlayer, CharacterTemporaryStat pStat) {
         List<User> pMapCharacters = pPlayer.getMap().getCharacters();
-        
+
         for (User pUser : pMapCharacters) {
             if (pUser.hasBuff(pStat)) {
                 pUser.removeCooldown(pUser.getBuffSource(pStat)); // Refund the cooldown of the player's buff.
@@ -113,9 +118,10 @@ public class Utility {
             }
         }
     }
-    
+
     /**
      * Auto Pet Loot
+     *
      * @param pPlayer Character object of which the pet loot is requested from.
      */
     public static void petLootRequest(User pPlayer) {
@@ -124,14 +130,14 @@ public class Utility {
         final List<MapleMapObject> mItemsInRange = pPlayer.getMap().getMapObjectsInRange(pPlayer.getPosition(), 2500, Arrays.asList(MapleMapObjectType.ITEM));
         MapleMapItem pMapLoot;
         boolean bHasPet = false;
-        
+
         for (int i = 0; i <= 3; i++) {
             Pet pet = pPlayer.getPet(i);
             if (pet != null) {
                 bHasPet = true; // Checks all pet slots to confirm if player has a pet active.
             }
         }
-        
+
         List<MapleMapObject> mItems = new ArrayList<>();
         if (mItemsInRange.size() <= 10) {
             mItems = mItemsInRange;
@@ -140,11 +146,11 @@ public class Utility {
                 mItems.add(mItemsInRange.get(i));
             }
         }
-        
+
         if (bHasPet) {
             for (MapleMapObject item : mItems) {
                 pMapLoot = (MapleMapItem) item;
-                
+
                 if (pMapLoot.getMeso() > 0) { // Meso Drops
                     pPlayer.gainMeso(pMapLoot.getMeso(), true);
                     pMapLoot.setPickedUp(true);
@@ -152,20 +158,20 @@ public class Utility {
                     pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
                 } else { // Item Drops
                     if (pMapLoot.isPickedUp()) {
-                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
                         continue;
                     }
                     if (pMapLoot.getQuest() > 0 && pPlayer.getQuestStatus(pMapLoot.getQuest()) != MapleQuestStatus.MapleQuestState.Started) {
-                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
                         continue;
                     }
                     if (pMapLoot.getOwner() != pPlayer.getId() && ((!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 0)
                             || (pMapLoot.isPlayerDrop() && pPlayer.getMap().getSharedMapResources().everlast))) {
-                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
                         continue;
                     }
                     if (!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 1 && pMapLoot.getOwner() != pPlayer.getId() && (pPlayer.getParty() == null || pPlayer.getParty().getMemberById(pMapLoot.getOwner()) == null)) {
-                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
                         continue;
                     }
 
@@ -173,30 +179,32 @@ public class Utility {
                             && pMapLoot.getItemId() != 0) {
                         continue;
                     }*/
-
                     if (!pPlayer.haveItem((pMapLoot.getItemId()))) { // Only pick up items the player already has.
                         continue;
                     }
-                    
+
                     if (pMapLoot.getItem() == null || !MapleInventoryManipulator.addFromDrop(pPlayer.getClient(), pMapLoot.getItem(), true)) {
                         continue;
                     }
                 }
-                
+
                 pMapLoot.setPickedUp(true);
                 pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
                 pPlayer.getMap().removeMapObject(item);
             }
             try {
-                if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) System.out.println("[Debug] Pet Loot Size (" + mItems.size() + ")");
+                if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) {
+                    System.out.println("[Debug] Pet Loot Size (" + mItems.size() + ")");
+                }
             } finally {
                 petSafety.unlock();
             }
         }
     }
-    
+
     /**
      * Auto Pet Vacuum
+     *
      * @param pPlayer Character object requesting to vacuum all of it's respected item loot on the map.
      */
     public static void petVacuumRequest(User pPlayer) {
@@ -205,14 +213,14 @@ public class Utility {
         final List<MapleMapObject> mAllMapItems = pPlayer.getMap().getAllMapObjects(MapleMapObjectType.ITEM);
         MapleMapItem pMapLoot;
         boolean bHasPet = false;
-        
+
         for (int i = 0; i <= 3; i++) {
             Pet pet = pPlayer.getPet(i);
             if (pet != null) {
                 bHasPet = true; // Checks all pet slots to confirm if player has a pet active.
             }
         }
-        
+
         List<MapleMapObject> mItems = new ArrayList<>();
         if (mAllMapItems.size() <= 10) {
             mItems = mAllMapItems;
@@ -221,11 +229,11 @@ public class Utility {
                 mItems.add(mAllMapItems.get(i));
             }
         }
-        
+
         if (bHasPet) {
             for (MapleMapObject item : mItems) {
                 pMapLoot = (MapleMapItem) item;
-                
+
                 if (pMapLoot.getMeso() > 0) { // Meso Drops
                     pPlayer.gainMeso(pMapLoot.getMeso(), true);
                     pMapLoot.setPickedUp(true);
@@ -233,20 +241,20 @@ public class Utility {
                     pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
                 } else { // Item Drops
                     if (pMapLoot.isPickedUp()) {
-                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
                         continue;
                     }
                     if (pMapLoot.getQuest() > 0 && pPlayer.getQuestStatus(pMapLoot.getQuest()) != MapleQuestStatus.MapleQuestState.Started) {
-                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
                         continue;
                     }
                     if (pMapLoot.getOwner() != pPlayer.getId() && ((!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 0)
                             || (pMapLoot.isPlayerDrop() && pPlayer.getMap().getSharedMapResources().everlast))) {
-                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
                         continue;
                     }
                     if (!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 1 && pMapLoot.getOwner() != pPlayer.getId() && (pPlayer.getParty() == null || pPlayer.getParty().getMemberById(pMapLoot.getOwner()) == null)) {
-                        pPlayer.getClient().write(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
                         continue;
                     }
 
@@ -254,22 +262,23 @@ public class Utility {
                             && pMapLoot.getItemId() != 0) {
                         continue;
                     }*/
-
                     if (!pPlayer.haveItem((pMapLoot.getItemId()))) { // Only pick up items the player already has.
                         continue;
                     }
-                    
+
                     if (pMapLoot.getItem() == null || !MapleInventoryManipulator.addFromDrop(pPlayer.getClient(), pMapLoot.getItem(), true)) {
                         continue;
                     }
                 }
-                
+
                 pMapLoot.setPickedUp(true);
                 pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
                 pPlayer.getMap().removeMapObject(item);
             }
             try {
-                if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) System.out.println("[Debug] Pet Vacume Loot Size (" + mItems.size() + ")");
+                if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) {
+                    System.out.println("[Debug] Pet Vacume Loot Size (" + mItems.size() + ")");
+                }
             } finally {
                 petSafety.unlock();
             }

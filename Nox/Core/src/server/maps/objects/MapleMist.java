@@ -7,7 +7,8 @@ import java.util.concurrent.ScheduledFuture;
 import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
-import net.Packet;
+import net.OutPacket;
+
 import server.MapleStatEffect;
 import server.life.Mob;
 import server.life.MobSkill;
@@ -219,18 +220,18 @@ public class MapleMist extends MapleMapObject {
     public void setPosition(Point position) {
     }
 
-    public Packet fakeSpawnData(int level) {
+    public OutPacket fakeSpawnData(int level) {
         return CField.spawnMist(this);
     }
 
     @Override
     public void sendSpawnData(final MapleClient c) {
-        c.write(getClockType() > 0 ? CField.spawnClockMist(this) : CField.spawnMist(this));
+        c.SendPacket(getClockType() > 0 ? CField.spawnClockMist(this) : CField.spawnMist(this));
     }
 
     @Override
     public void sendDestroyData(final MapleClient c) {
-        c.write(CField.removeMist(getObjectId(), false));
+        c.SendPacket(CField.removeMist(getObjectId(), false));
     }
 
     public boolean makeChanceResult() {

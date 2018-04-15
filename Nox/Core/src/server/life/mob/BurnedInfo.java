@@ -6,6 +6,7 @@ import net.OutPacket;
  * Created on 1/4/2018.
  */
 public class BurnedInfo {
+
     private int characterId, skillId, damage, interval, end, dotAnimation, dotCount, superPos, attackDelay, dotTickIdx, dotTickDamR;
     private int startTime;
     private int lastUpdate;
@@ -133,21 +134,20 @@ public class BurnedInfo {
     }
 
     public void encode(OutPacket oPacket) {
-        oPacket.EncodeInteger(getCharacterId());
-        oPacket.EncodeInteger(getSkillId());
-        oPacket.EncodeInteger(getDamage());
-        oPacket.EncodeInteger(getInterval());
-        oPacket.EncodeInteger(getEnd());
-        oPacket.EncodeInteger(getDotAnimation());
-        oPacket.EncodeInteger(getDotCount());
-        oPacket.EncodeInteger(getSuperPos());
-        oPacket.EncodeInteger(getAttackDelay());
-        oPacket.EncodeInteger(getDotTickIdx());
-        oPacket.EncodeInteger(getDotTickDamR());
-        oPacket.EncodeInteger(getLastUpdate());
-        oPacket.EncodeInteger(getStartTime());
-        
+        oPacket.EncodeInt(getCharacterId());
+        oPacket.EncodeInt(getSkillId());
+        oPacket.EncodeInt(getDamage());
+        oPacket.EncodeInt(getInterval());
+        oPacket.EncodeInt(getEnd());
+        oPacket.EncodeInt(getDotAnimation());
+        oPacket.EncodeInt(getDotCount());
+        oPacket.EncodeInt(getSuperPos());
+        oPacket.EncodeInt(getAttackDelay());
+        oPacket.EncodeInt(getDotTickIdx());
+        oPacket.EncodeInt(getDotTickDamR());
+        oPacket.EncodeInt(getLastUpdate());
+        oPacket.EncodeInt(getStartTime());
+
         oPacket.Fill(0, 69);
     }
 }
-

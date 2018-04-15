@@ -21,7 +21,7 @@ import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.JobPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.life.MobAttackInfo;
 import service.RecvPacketOpcode;
 
@@ -42,12 +42,12 @@ public final class NonTargetAtomAttackHandler implements ProcessPacket<MapleClie
         //AttackInfo attack = DamageParse.parseDmgMa(iPacket, chr);
         AttackInfo attack = DamageParse.OnAttack(RecvPacketOpcode.UserNonTargetForceAtomAttack, iPacket, chr); // Not sure if parse will work on this
         if (attack == null) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         Skill skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
         if (skill == null || (GameConstants.isAngel(attack.skill) && (chr.getStat().equippedSummon % 10000 != attack.skill % 10000))) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         int skillLevel = chr.getTotalSkillLevel(skill);
@@ -56,7 +56,7 @@ public final class NonTargetAtomAttackHandler implements ProcessPacket<MapleClie
             return;
         } else if (effect.getCooldown(chr) > 0) {  // Handle cooldowns
             if (chr.skillisCooling(attack.skill)) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             chr.addCooldown(attack.skill, System.currentTimeMillis(), effect.getCooldown(chr));
@@ -135,17 +135,17 @@ public final class NonTargetAtomAttackHandler implements ProcessPacket<MapleClie
             case 27101100: //Sylvan Lance
             case 27111100: //Spectral Light
             case 27121100: //Reflection
-                chr.getClient().write(JobPacket.LuminousPacket.giveLuminousState(20040216, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
+                chr.getClient().SendPacket(JobPacket.LuminousPacket.giveLuminousState(20040216, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
                 chr.setLuminousState(20040216);
                 break;
             case 27001201:
             case 27101202:
             case 27111202:
             case 27121202:
-                chr.getClient().write(JobPacket.LuminousPacket.giveLuminousState(20040217, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
+                chr.getClient().SendPacket(JobPacket.LuminousPacket.giveLuminousState(20040217, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
                 chr.setLuminousState(20040217);
                 break;
         }
     }
-    
+
 }

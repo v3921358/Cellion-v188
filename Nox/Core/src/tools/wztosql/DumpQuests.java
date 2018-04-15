@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import database.DatabaseConnection;
+import database.Database;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataTool;
@@ -21,7 +21,7 @@ public class DumpQuests {
     protected boolean hadError = false;
     protected boolean update = false;
     protected int id = 0;
-    private Connection con = DatabaseConnection.getConnection();
+    private Connection con = Database.GetConnection();
 
     public DumpQuests(boolean update) throws Exception {
         this.update = update;

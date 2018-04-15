@@ -2,7 +2,7 @@ package tools.packet;
 
 import service.SendPacketOpcode;
 import net.OutPacket;
-import net.Packet;
+
 import server.maps.MapleMap;
 import server.maps.objects.User;
 
@@ -12,88 +12,88 @@ import server.maps.objects.User;
  */
 public class EvolvingPacket {
 
-    public static Packet showEvolvingMessage(int action) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showEvolvingMessage(int action) {
+
         //24 00 1B 01 00
-        oPacket.EncodeShort(SendPacketOpcode.Message.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Message.getValue());
         oPacket.EncodeShort(284);
-        oPacket.Encode(action);
-        return oPacket.ToPacket();
+        oPacket.EncodeByte(action);
+        return oPacket;
     }
 
-    public static Packet partyCoreInfo(int[] core) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket partyCoreInfo(int[] core) {
+
         //AF 00 /00 /48 EF 36 00 /D3 FB 36 00 /00 00 00 00 /00 00 00 00/ 00 00 00 00/ 00 00 00 00 /00 00 00 00 /32 F3 36 00 /00 00 00 00 /00 00 00 00
-        oPacket.EncodeShort(SendPacketOpcode.EvolvingResult.getValue());//
-        oPacket.Encode(0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.EvolvingResult.getValue());//
+        oPacket.EncodeByte(0);
         for (int i = 0; i < 10; i++) {
-            oPacket.EncodeInteger(core[i]);
+            oPacket.EncodeInt(core[i]);
         }
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showPartyConnect(User chr) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.EvolvingResult.getValue());//
-        oPacket.Encode(1);
-        oPacket.Encode(1);
-        oPacket.Encode(chr.getParty().getLeader().getId() == chr.getId() ? 1 : 0);
-        return oPacket.ToPacket();
+    public static OutPacket showPartyConnect(User chr) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.EvolvingResult.getValue());//
+        oPacket.EncodeByte(1);
+        oPacket.EncodeByte(1);
+        oPacket.EncodeByte(chr.getParty().getLeader().getId() == chr.getId() ? 1 : 0);
+        return oPacket;
     }
 
-    public static Packet connectCancel() {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.EvolvingResult.getValue());//
+    public static OutPacket connectCancel() {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.EvolvingResult.getValue());//
         oPacket.EncodeShort(1);
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet rewardCore(int itemid, int position) {
+    public static OutPacket rewardCore(int itemid, int position) {
         //AF 00 02 01 00 00 00 00 00 D0 F2 36 00 01 00 00 00
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.EvolvingResult.getValue());//
-        oPacket.Encode(2); //슬롯?
-        oPacket.Encode(1);
-        oPacket.EncodeInteger(0);
-        oPacket.Encode(position);
-        oPacket.EncodeInteger(itemid);
-        oPacket.EncodeInteger(1);
-        return oPacket.ToPacket();
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.EvolvingResult.getValue());//
+        oPacket.EncodeByte(2); //슬롯?
+        oPacket.EncodeByte(1);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeByte(position);
+        oPacket.EncodeInt(itemid);
+        oPacket.EncodeInt(1);
+        return oPacket;
     }
 
-    public static Packet showRewardCore(int itemid) {
+    public static OutPacket showRewardCore(int itemid) {
         //24 00 1D 16 D0 F2 36 00 01 00 00 00
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.Message.getValue());
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.Message.getValue());
         oPacket.EncodeShort(5662);
-        oPacket.EncodeInteger(itemid);
-        oPacket.EncodeInteger(1);
-        return oPacket.ToPacket();
+        oPacket.EncodeInt(itemid);
+        oPacket.EncodeInt(1);
+        return oPacket;
     }
 
-    public static Packet moveCore(byte equip, byte slot, byte move, byte to) {
+    public static OutPacket moveCore(byte equip, byte slot, byte move, byte to) {
         //AF 00 03 00 01 02 01 03
         //AF 00 03 00 01 03 01 04
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.EvolvingResult.getValue());//
-        oPacket.Encode(3);
-        oPacket.Encode(0);
-        oPacket.Encode(equip);//무브, 장착해제 : 1, 장착 : 0
-        oPacket.Encode(slot);
-        oPacket.Encode(move);//장착, 무브 : 1, 장착해제 : 0
-        oPacket.Encode(to);
-        return oPacket.ToPacket();
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.EvolvingResult.getValue());//
+        oPacket.EncodeByte(3);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(equip);//무브, 장착해제 : 1, 장착 : 0
+        oPacket.EncodeByte(slot);
+        oPacket.EncodeByte(move);//장착, 무브 : 1, 장착해제 : 0
+        oPacket.EncodeByte(to);
+        return oPacket;
     }
 
-    public static Packet dropCore(byte position, short quantity) {
+    public static OutPacket dropCore(byte position, short quantity) {
         //AF 00 04 01 /00 /01 00 /00 00
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.EvolvingResult.getValue());//
-        oPacket.Encode(4);
-        oPacket.Encode(1);
-        oPacket.Encode(position);
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.EvolvingResult.getValue());//
+        oPacket.EncodeByte(4);
+        oPacket.EncodeByte(1);
+        oPacket.EncodeByte(position);
         oPacket.EncodeShort(quantity);//1
         oPacket.EncodeShort(0);
-        return oPacket.ToPacket();
+        return oPacket;
     }
 }

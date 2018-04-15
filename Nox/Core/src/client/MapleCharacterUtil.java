@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
-import database.DatabaseConnection;
+import database.Database;
 import tools.LogHelper;
 import tools.Triple;
 
@@ -45,10 +45,9 @@ public class MapleCharacterUtil {
     }
 
     public static int getIdByName(final String name) {
-        Connection con = DatabaseConnection.getConnection();
-
         final int id;
-        try (PreparedStatement ps = con.prepareStatement("SELECT id FROM characters WHERE name = ? AND deletedAt is null LIMIT 1")) {
+
+        try (PreparedStatement ps = Database.GetConnection().prepareStatement("SELECT id FROM characters WHERE name = ? AND deletedAt is null LIMIT 1")) {
             ps.setString(1, name);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -70,98 +69,97 @@ public class MapleCharacterUtil {
     // 1 = The password you have input is wrong
     // 2 = Password Changed successfully
     public static int Change_SecondPassword(final int accid, final String password, final String newpassword) {
-        Connection con = DatabaseConnection.getConnection();
-        try {
-            PreparedStatement ps = con.prepareStatement("SELECT * from accounts where id = ?");
-            ps.setInt(1, accid);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next()) {
-                    rs.close();
-                    ps.close();
-                    return -1;
-                }
-                String secondPassword = rs.getString("2ndpassword");
-                if (secondPassword == null) {
-                    rs.close();
-                    ps.close();
-                    return 0;
-                }
-                if (!crypto.BCrypt.checkpw(password, secondPassword)) {
-                    rs.close();
-                    ps.close();
-                    return 1;
-                }
-            }
-            ps.close();
-
-            String BCryptedPass;
-            try {
-                BCryptedPass = crypto.BCrypt.hashpw(newpassword, crypto.BCrypt.gensalt());
-            } catch (Exception e) {
-                LogHelper.GENERAL_EXCEPTION.get().info(e);
-                return -2;
-            }
-            ps = con.prepareStatement("UPDATE accounts set 2ndpassword = ? where id = ?");
-            ps.setString(1, BCryptedPass);
-            ps.setInt(2, accid);
-
-            if (!ps.execute()) {
-                ps.close();
-                return 2;
-            }
-            ps.close();
-            return -2;
-        } catch (Exception e) {
-            LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
-            return -2;
-        }
-    }
-
-    //id accountid gender
-    public static Triple<Integer, Integer, Integer> getInfoByName(String name, int world) {
-        try {
-
-            Connection con = DatabaseConnection.getConnection();
-            Triple<Integer, Integer, Integer> id;
-            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM characters WHERE name = ? AND world = ? AND deletedAt is null")) {
-                ps.setString(1, name);
-                ps.setInt(2, world);
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            try (PreparedStatement ps = con.prepareStatement("SELECT * from accounts where id = ?")) {
+                ps.setInt(1, accid);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (!rs.next()) {
                         rs.close();
                         ps.close();
-                        return null;
+                        return -1;
                     }
-                    id = new Triple<>(rs.getInt("id"), rs.getInt("accountid"), rs.getInt("gender"));
+                    String secondPassword = rs.getString("2ndpassword");
+                    if (secondPassword == null) {
+                        rs.close();
+                        ps.close();
+                        return 0;
+                    }
+                    if (!crypto.BCrypt.checkpw(password, secondPassword)) {
+                        rs.close();
+                        ps.close();
+                        return 1;
+                    }
                 }
             }
-            return id;
+
+            try (PreparedStatement ps = con.prepareStatement("UPDATE accounts set 2ndpassword = ? where id = ?")) {
+                try {
+                    String BCryptedPass = crypto.BCrypt.hashpw(newpassword, crypto.BCrypt.gensalt());
+                    ps.setString(1, BCryptedPass);
+                    ps.setInt(2, accid);
+
+                    if (!ps.execute()) {
+                        ps.close();
+                        return 2;
+                    }
+                } catch (Exception e) {
+                    LogHelper.GENERAL_EXCEPTION.get().info(e);
+                    return -2;
+                }
+            } catch (Exception e) {
+                LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
+                return -2;
+            }
+        } catch (Exception e) {
+            LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
+            return -2;
+        }
+
+        return -2;
+    }
+
+//id accountid gender
+    public static Triple<Integer, Integer, Integer> getInfoByName(String name, int world) {
+
+        Triple<Integer, Integer, Integer> id = null;
+        try (PreparedStatement ps = Database.GetConnection().prepareStatement("SELECT * FROM characters WHERE name = ? AND world = ? AND deletedAt is null")) {
+            ps.setString(1, name);
+            ps.setInt(2, world);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    rs.close();
+                    ps.close();
+                    return null;
+                }
+                id = new Triple<>(rs.getInt("id"), rs.getInt("accountid"), rs.getInt("gender"));
+            }
         } catch (Exception e) {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
         }
-        return null;
+        return id;
     }
 
     public static void setNXCodeUsed(String name, String code) throws SQLException {
-        Connection con = DatabaseConnection.getConnection();
-        try (PreparedStatement ps = con.prepareStatement("UPDATE nxcode SET `user` = ?, `valid` = 0 WHERE code = ?")) {
+
+        try (PreparedStatement ps = Database.GetConnection().prepareStatement("UPDATE nxcode SET `user` = ?, `valid` = 0 WHERE code = ?")) {
             ps.setString(1, name);
             ps.setString(2, code);
             ps.execute();
+        } catch (Exception e) {
+            LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
         }
     }
 
     public static void sendNote(String to, String name, String msg, int fame) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("INSERT INTO notes (`to`, `from`, `message`, `timestamp`, `gift`) VALUES (?, ?, ?, ?, ?)")) {
-                ps.setString(1, to);
-                ps.setString(2, name);
-                ps.setString(3, msg);
-                ps.setLong(4, System.currentTimeMillis());
-                ps.setInt(5, fame);
-                ps.executeUpdate();
-            }
+
+        try (PreparedStatement ps = Database.GetConnection().prepareStatement("INSERT INTO notes (`to`, `from`, `message`, `timestamp`, `gift`) VALUES (?, ?, ?, ?, ?)")) {
+            ps.setString(1, to);
+            ps.setString(2, name);
+            ps.setString(3, msg);
+            ps.setLong(4, System.currentTimeMillis());
+            ps.setInt(5, fame);
+            ps.executeUpdate();
         } catch (Exception e) {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
         }
@@ -169,14 +167,16 @@ public class MapleCharacterUtil {
 
     public static Triple<Boolean, Integer, Integer> getNXCodeInfo(String code) throws SQLException {
         Triple<Boolean, Integer, Integer> ret = null;
-        Connection con = DatabaseConnection.getConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT `valid`, `type`, `item` FROM nxcode WHERE code LIKE ?")) {
+
+        try (PreparedStatement ps = Database.GetConnection().prepareStatement("SELECT `valid`, `type`, `item` FROM nxcode WHERE code LIKE ?")) {
             ps.setString(1, code);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     ret = new Triple<>(rs.getInt("valid") > 0, rs.getInt("type"), rs.getInt("item"));
                 }
             }
+        } catch (Exception e) {
+            LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
         }
         return ret;
     }

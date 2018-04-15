@@ -3,7 +3,7 @@ package handling.game;
 import client.MapleClient;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -20,10 +20,10 @@ public class UseOwlHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         if (c.getPlayer().haveItem(5230000, 1, true, false) || c.getPlayer().haveItem(2310000, 1, true, false)) {
             if (c.getPlayer().getMapId() >= 910000000 && c.getPlayer().getMapId() <= 910000022) {
-                c.write(CWvsContext.getOwlOpen());
+                c.SendPacket(CWvsContext.getOwlOpen());
             } else {
                 c.getPlayer().dropMessage(5, "This can only be used inside the Free Market.");
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
             }
         }
     }

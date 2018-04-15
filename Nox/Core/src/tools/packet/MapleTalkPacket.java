@@ -6,7 +6,6 @@
 package tools.packet;
 
 import net.OutPacket;
-import net.Packet;
 
 /**
  *
@@ -24,22 +23,20 @@ public class MapleTalkPacket {
         OnBlockGuildFriendChat(0x1C),
         ForceLogout(0x0B);
 
-        private final int value;
+        private final short value;
 
         private MapleTalkOps(int mode) {
-            this.value = mode;
+            this.value = (short) mode;
         }
 
-        public int getValue() {
+        public short getValue() {
             return value;
         }
     }
 
-    public static Packet OnLoginResult(boolean unavailable) {
-        final OutPacket oPacket = new OutPacket(80);
-
-        oPacket.EncodeShort(MapleTalkOps.OnLoginResult.getValue());
-        oPacket.Encode(unavailable);
+    public static OutPacket OnLoginResult(boolean unavailable) {
+        OutPacket oPacket = new OutPacket(MapleTalkOps.OnLoginResult.getValue());
+        oPacket.EncodeBool(unavailable);
 
         /*
             If the server is available, the client sends a join guild char request:
@@ -48,55 +45,47 @@ public class MapleTalkPacket {
             
         
          */
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet OnGuildChatMessage() {
-        final OutPacket oPacket = new OutPacket(80);
-
-        oPacket.EncodeShort(MapleTalkOps.OnGuildChatMessage.getValue());
-        oPacket.EncodeInteger(0);//? seems to be charId/info
-        oPacket.EncodeInteger(0);//? getGuildMemberNameByCharacterID
-        oPacket.EncodeInteger(0);//v4
-        oPacket.EncodeInteger(0);//v5
+    public static OutPacket OnGuildChatMessage() {
+        OutPacket oPacket = new OutPacket(MapleTalkOps.OnGuildChatMessage.getValue());
+        oPacket.EncodeInt(0);//? seems to be charId/info
+        oPacket.EncodeInt(0);//? getGuildMemberNameByCharacterID
+        oPacket.EncodeInt(0);//v4
+        oPacket.EncodeInt(0);//v5
         oPacket.EncodeLong(0);//ReadTime
         oPacket.EncodeString("");//RawMessage
-        oPacket.Encode(0);//LowDateTime
+        oPacket.EncodeByte(0);//LowDateTime
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet OnFriendChatMessage() {
-        final OutPacket oPacket = new OutPacket(80);
-
-        oPacket.EncodeShort(MapleTalkOps.OnFriendChatMessage.getValue());
-        oPacket.EncodeInteger(0);//?
-        oPacket.EncodeInteger(0);// SenderAccountId
-        oPacket.EncodeInteger(0);// senderCharacterId
+    public static OutPacket OnFriendChatMessage() {
+        OutPacket oPacket = new OutPacket(MapleTalkOps.OnFriendChatMessage.getValue());
+        oPacket.EncodeInt(0);//?
+        oPacket.EncodeInt(0);// SenderAccountId
+        oPacket.EncodeInt(0);// senderCharacterId
         oPacket.EncodeLong(0);//ReadTime
         oPacket.EncodeString("");//RawMessage
-        oPacket.Encode(0);//LowDateTime
+        oPacket.EncodeByte(0);//LowDateTime
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet OnAliveReq() {
-        final OutPacket oPacket = new OutPacket(80);
-
-        oPacket.EncodeShort(MapleTalkOps.OnAliveReq.getValue());
+    public static OutPacket OnAliveReq() {
+        OutPacket oPacket = new OutPacket(MapleTalkOps.OnAliveReq.getValue());
         /*
             Client will respond with a message containing:
                 Short(aliveResponseOpcode)
                 bIsEncryptedByShanda = 0
          */
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet OnEnterGuildChatRoomResult(boolean success) {
-        final OutPacket oPacket = new OutPacket(80);
-
-        oPacket.EncodeShort(MapleTalkOps.OnEnterGuildChatRoomResult.getValue());
-        oPacket.Encode(success);
+    public static OutPacket OnEnterGuildChatRoomResult(boolean success) {
+        OutPacket oPacket = new OutPacket(MapleTalkOps.OnEnterGuildChatRoomResult.getValue());
+        oPacket.EncodeBool(success);
 
         /*
             client will respond with an outpacket including:
@@ -104,14 +93,12 @@ public class MapleTalkPacket {
             int(charid)
             bIsEncryptedByShanda = 0
          */
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet OnBlockGuildFriendChat(boolean block) {
-        final OutPacket oPacket = new OutPacket(80);
-
-        oPacket.EncodeShort(MapleTalkOps.OnBlockGuildFriendChat.getValue());
-        oPacket.Encode(block);
+    public static OutPacket OnBlockGuildFriendChat(boolean block) {
+        OutPacket oPacket = new OutPacket(MapleTalkOps.OnBlockGuildFriendChat.getValue());
+        oPacket.EncodeBool(block);
         oPacket.EncodeLong(0);//time?
 
         /*
@@ -120,14 +107,13 @@ public class MapleTalkPacket {
             int(charid)
             bIsEncryptedByShanda = 0
          */
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     //Lmao
-    public static Packet ForceLogout() {
-        final OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(MapleTalkOps.ForceLogout.getValue());
-        return oPacket.ToPacket();
+    public static OutPacket ForceLogout() {
+        OutPacket oPacket = new OutPacket(MapleTalkOps.ForceLogout.getValue());
+        return oPacket;
     }
 
 }

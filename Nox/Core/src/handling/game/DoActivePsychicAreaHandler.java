@@ -8,7 +8,7 @@ package handling.game;
 import client.MapleClient;
 import client.jobs.Kinesis.KinesisHandler;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.maps.objects.User;
 import tools.packet.JobPacket;
 
@@ -26,13 +26,15 @@ public class DoActivePsychicAreaHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
-        int nKey = iPacket.DecodeInteger();
-        
-        c.write(JobPacket.Kinesis.OnDoActivePsychicArea(nKey, 1));
+        int nKey = iPacket.DecodeInt();
+
+        c.SendPacket(JobPacket.Kinesis.OnDoActivePsychicArea(nKey, 1));
         pPlayer.getMap().broadcastMessage(c.getPlayer(), JobPacket.Kinesis.OnDoActivePsychicArea(nKey, 1), false);
 
-        if (pPlayer.getPrimaryStack() > 0) KinesisHandler.psychicPointResult(pPlayer, pPlayer.getPrimaryStack() - 1);
-        
+        if (pPlayer.getPrimaryStack() > 0) {
+            KinesisHandler.psychicPointResult(pPlayer, pPlayer.getPrimaryStack() - 1);
+        }
+
         /*if (pPlayer.getPrimaryStack() > 0) {
             c.write(JobPacket.Kinesis.OnDoActivePsychicArea(nKey, 1));
             pPlayer.getMap().broadcastMessage(c.getPlayer(), JobPacket.Kinesis.OnDoActivePsychicArea(nKey, 1), false);
@@ -43,11 +45,11 @@ public class DoActivePsychicAreaHandler implements ProcessPacket<MapleClient> {
             c.getPlayer().getMap().broadcastMessage(c.getPlayer(), JobPacket.Kinesis.OnReleasePsychicArea(c.getPlayer().getId(), nKey), false);
         }*/
     }
-    
+
     /*@Override
     public void Process(MapleClient c, InPacket iPacket) {
         MapleCharacter pPlayer = c.getPlayer();
-        int nKey = iPacket.DecodeInteger();
+        int nKey = iPacket.DecodeInt();
         c.write(JobPacket.Kinesis.OnDoActivePsychicArea(nKey, 1));
         pPlayer.getMap().broadcastMessage(c.getPlayer(), JobPacket.Kinesis.OnDoActivePsychicArea(nKey, 1), false);
     }*/

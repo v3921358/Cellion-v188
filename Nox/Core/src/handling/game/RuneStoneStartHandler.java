@@ -6,7 +6,7 @@ import server.maps.objects.MapleRuneStone;
 import server.maps.objects.MapleRuneStone.MapleRuneStoneType;
 import net.InPacket;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -21,8 +21,8 @@ public class RuneStoneStartHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        iPacket.DecodeInteger();
-        MapleRuneStoneType type = MapleRuneStoneType.getFromInt(iPacket.DecodeInteger());
+        iPacket.DecodeInt();
+        MapleRuneStoneType type = MapleRuneStoneType.getFromInt(iPacket.DecodeInt());
 
         User chr = c.getPlayer();
         MapleRuneStone runeInMap = c.getPlayer().getMap().getRuneStone();
@@ -34,7 +34,7 @@ public class RuneStoneStartHandler implements ProcessPacket<MapleClient> {
 
             long cTime = System.currentTimeMillis();
 
-            c.write(CField.RunePacket.runeMsg(5, 0)); // Shows Arrow
+            c.SendPacket(CField.RunePacket.runeMsg(5, 0)); // Shows Arrow
 
             //       if (cTime >= LASTRUNETIME) {
             //           c.write(CField.runeMsg(5, 0));
@@ -44,6 +44,6 @@ public class RuneStoneStartHandler implements ProcessPacket<MapleClient> {
             return;
         }
         // Fail
-        c.write(CField.RunePacket.runeMsg(4, 0)); // Shows 'that rune is too strong'
+        c.SendPacket(CField.RunePacket.runeMsg(4, 0)); // Shows 'that rune is too strong'
     }
 }

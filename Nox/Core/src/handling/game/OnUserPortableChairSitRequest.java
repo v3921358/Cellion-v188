@@ -30,7 +30,7 @@ import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class OnUserPortableChairSitRequest implements ProcessPacket<MapleClient> {
 
@@ -45,7 +45,7 @@ public final class OnUserPortableChairSitRequest implements ProcessPacket<MapleC
         if (chr == null || chr.getMap() == null) {
             return;
         }
-        int chairItem = iPacket.DecodeInteger();
+        int chairItem = iPacket.DecodeInt();
         final Item toUse = chr.getInventory(MapleInventoryType.SETUP).findById(chairItem);
         if (toUse == null) {
             chr.getCheatTracker().registerOffense(CheatingOffense.USING_UNAVAILABLE_ITEM, Integer.toString(chairItem));
@@ -56,6 +56,6 @@ public final class OnUserPortableChairSitRequest implements ProcessPacket<MapleC
         }
         chr.setChair(chairItem);
         chr.getMap().broadcastMessage(chr, CField.showChair(chr.getId(), chairItem), false);
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 }

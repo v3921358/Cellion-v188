@@ -21,7 +21,8 @@
 package server.maps;
 
 import client.MapleClient;
-import net.Packet;
+import net.OutPacket;
+
 import tools.packet.CField;
 import tools.packet.CSPacket;
 
@@ -49,15 +50,15 @@ public class MapleMapEffect {
         return this.jukebox;
     }
 
-    public Packet makeDestroyData() { //jukebox doesn't REALLY have a destroy, but 0 stops all music
+    public OutPacket makeDestroyData() { //jukebox doesn't REALLY have a destroy, but 0 stops all music
         return jukebox ? CSPacket.playCashSong(0, "") : CField.removeMapEffect();
     }
 
-    public Packet makeStartData() {
+    public OutPacket makeStartData() {
         return jukebox ? CSPacket.playCashSong(itemId, msg) : CField.startMapEffect(msg, itemId, active);
     }
 
     public void sendStartData(MapleClient c) {
-        c.write(makeStartData());
+        c.SendPacket(makeStartData());
     }
 }

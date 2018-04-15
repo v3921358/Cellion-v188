@@ -14,7 +14,7 @@ import java.util.Set;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ItemConstants;
-import database.DatabaseConnection;
+import database.Database;
 import java.io.File;
 import provider.MapleData;
 import provider.MapleDataDirectoryEntry;
@@ -40,7 +40,7 @@ public class DumpItems {
     protected boolean hadError = false;
     protected boolean update = false;
     protected int id = 0;
-    private final Connection con = DatabaseConnection.getConnection();
+    private final Connection con = Database.GetConnection();
     private final List<String> subCon = new LinkedList<>();
     private final List<String> subMain = new LinkedList<>();
 

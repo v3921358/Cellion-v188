@@ -8,7 +8,7 @@ package handling.game;
 import client.MapleClient;
 import net.InPacket;
 import net.OutPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import service.SendPacketOpcode;
 
 /**
@@ -24,12 +24,12 @@ public final class KinesisCancelPsychicRequest implements ProcessPacket<MapleCli
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.UserLeaveFieldPsychicInfo.getValue());
-        oPacket.EncodeInteger(c.getPlayer().getId());
-        oPacket.EncodeInteger(iPacket.DecodeInteger());
 
-        c.write(oPacket.ToPacket());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserLeaveFieldPsychicInfo.getValue());
+        oPacket.EncodeInt(c.getPlayer().getId());
+        oPacket.EncodeInt(iPacket.DecodeInt());
+
+        c.SendPacket(oPacket);
 
     }
 }

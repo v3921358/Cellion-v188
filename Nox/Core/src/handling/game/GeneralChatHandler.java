@@ -4,13 +4,13 @@ import client.MapleClient;
 import constants.ServerConstants;
 import handling.PacketThrottleLimits;
 import net.InPacket;
-import net.Packet;
+
 import server.commands.CommandProcessor;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -37,7 +37,7 @@ public class GeneralChatHandler implements ProcessPacket<MapleClient> {
         if (chr == null) {
             return;
         }
-        chr.updateTick(iPacket.DecodeInteger());
+        chr.updateTick(iPacket.DecodeInt());
 
         final String text = iPacket.DecodeString();
         final boolean appendToChatLogList = iPacket.DecodeByte() == 0;
@@ -48,7 +48,7 @@ public class GeneralChatHandler implements ProcessPacket<MapleClient> {
                         String.format("[GeneralChat] %s [ChrID: %d; AccId %d] has tried to send a general chat of length > 80. [%d]. AppendToChatLog: %s\r\nText:%s",
                                 chr.getName(), chr.getId(), c.getAccID(),
                                 text.length(), String.valueOf(appendToChatLogList), text));
-                c.close();
+                c.Close();
                 return;
             }
 
@@ -142,7 +142,7 @@ public class GeneralChatHandler implements ProcessPacket<MapleClient> {
                     }
                 }
             } else {
-                c.write(CWvsContext.broadcastMsg(6, "You have been muted and are unable to talk."));
+                c.SendPacket(CWvsContext.broadcastMsg(6, "You have been muted and are unable to talk."));
             }
         }
     }

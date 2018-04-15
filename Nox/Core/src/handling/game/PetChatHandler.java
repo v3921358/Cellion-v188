@@ -4,7 +4,7 @@ import client.MapleClient;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.PetPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -20,13 +20,13 @@ public class PetChatHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         //System.out.println("Pet chat: " + iPacket.toString());
-        if (iPacket.Available() < 12) {
+        if (iPacket.GetRemainder() < 12) {
             return;
         }
         User chr = c.getPlayer();
 
         final int petid = chr.getPetIndex((int) iPacket.DecodeLong());
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         short command = iPacket.DecodeShort();
         String text = iPacket.DecodeString();
 

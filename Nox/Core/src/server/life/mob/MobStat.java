@@ -18,7 +18,6 @@ public enum MobStat {
     EVA(0x4000000, 0),
     Speed(0x2000000, 0),
     Stun(0x1000000, 0),
-
     Freeze(0x800000, 0),
     Poison(0x400000, 0),
     Seal(0x200000, 0),
@@ -27,7 +26,6 @@ public enum MobStat {
     MagicUp(0x40000, 0),
     PGuardUp(0x20000, 0),
     MGuardUp(0x10000, 0),
-
     PImmune(0x8000, 0),
     MImmune(0x4000, 0),
     Web(0x2000, 0),
@@ -36,7 +34,6 @@ public enum MobStat {
     Venom(0x400, 0),
     Blind(0x200, 0),
     SealSkill(0x100, 0),
-
     Dazzle(0x80, 0),
     PCounter(0x40, 0),
     MCounter(0x20, 0),
@@ -45,7 +42,6 @@ public enum MobStat {
     Weakness(0x4, 0),
     Showdown(0x2, 0),
     MagicCrash(0x1, 0),
-
     DamagedElemAttr(0x80000000, 1),
     Dark(0x40000000, 1),
     Mystery(0x20000000, 1),
@@ -54,7 +50,6 @@ public enum MobStat {
     Fatality(0x4000000, 1),
     Lifting(0x2000000, 1),
     DeadlyCharge(0x1000000, 1),
-
     Smite(0x800000, 1),
     AddDamSkill(0x400000, 1),
     Incizing(0x200000, 1),
@@ -63,7 +58,6 @@ public enum MobStat {
     AddDamSkill2(0x40000, 1),
     BodyAttack(0x20000, 1),
     TempMoveAbility(0x10000, 1),
-
     FixDamRBuff(0x8000, 1),
     ElementDarkness(0x4000, 1),
     AreaInstallByHit(0x2000, 1),
@@ -72,7 +66,6 @@ public enum MobStat {
     JaguarBleeding(0x400, 1),
     DarkLightning(0x200, 1),
     PinkBeanFlowerPot(0x100, 1),
-
     BattlePvPHelenaMark(0x80, 1),
     PsychicLock(0x40, 1),
     PsychicLockCoolTime(0x20, 1),
@@ -81,7 +74,6 @@ public enum MobStat {
     PsychicForce(0x4, 1),
     MultiPMDR(0x2, 1),
     ElementResetBySummon(0x1, 1),
-
     BahamutLightElemAddDam(0x80000000, 2), // 0000 0000 | 0000 0001 | 0000 0000 | 0000 0000
     BossPropPlus(0x40000000, 2),
     MultiDamSkill(0x20000000, 2),
@@ -90,7 +82,6 @@ public enum MobStat {
     TimeBomb(0x4000000, 2),
     Treasure(0x2000000, 2),
     AddEffect(0x1000000, 2),
-
     Invincible(0x800000, 2),
     Explosion(0x400000, 2),
     HangOver(0x200000, 2),
@@ -99,14 +90,12 @@ public enum MobStat {
     ExchangeAttack(0x40000, 2),
     ExtraBuffStat(0x20000, 2),
     LinkTeam(0x10000, 2),
-
     SoulExplosion(0x8000, 2), // { Might be wrong --v
     SeperateSoulP(0x4000, 2),
     SeperateSoulC(0x2000, 2),
     Ember(0x1000, 2),
     TrueSight(0x800, 2),
-    Laser(0x400, 2),
-    ;
+    Laser(0x400, 2),;
 
     private int val, position;
 
@@ -120,14 +109,14 @@ public enum MobStat {
     }
 
     public int getVal() {
-        if(this == BurnedInfo) {
+        if (this == BurnedInfo) {
             return 0x40000;
         }
         return val;
     }
 
     public boolean isMovementAffectingStat() {
-        switch(this) {
+        switch (this) {
             case Speed:
             case Stun:
             case Freeze:

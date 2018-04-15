@@ -10,7 +10,7 @@ import server.Randomizer;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -28,7 +28,7 @@ public class DistributeAPHandler implements ProcessPacket<MapleClient> {
         User chr = c.getPlayer();
 
         Map<MapleStat, Long> statupdate = new EnumMap<>(MapleStat.class);
-        chr.updateTick(iPacket.DecodeInteger());
+        chr.updateTick(iPacket.DecodeInt());
         final long statmask = iPacket.DecodeLong();
         final PlayerStats stat = chr.getStat();
         final int job = chr.getJob();
@@ -105,7 +105,7 @@ public class DistributeAPHandler implements ProcessPacket<MapleClient> {
             }
             chr.setRemainingAp((short) (chr.getRemainingAp() - 1));
             statupdate.put(MapleStat.AVAILABLEAP, (long) chr.getRemainingAp());
-            c.write(CWvsContext.updatePlayerStats(statupdate, true, chr));
+            c.SendPacket(CWvsContext.updatePlayerStats(statupdate, true, chr));
         }
 
     }

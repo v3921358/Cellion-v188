@@ -23,7 +23,7 @@ package handling.farm;
 
 import client.MapleClient;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class FarmExitHandler implements ProcessPacket<MapleClient> {
 

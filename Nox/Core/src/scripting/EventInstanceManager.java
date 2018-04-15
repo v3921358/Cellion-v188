@@ -24,8 +24,9 @@ import handling.world.MaplePartyCharacter;
 import handling.world.World;
 import handling.world.MapleExpedition;
 import handling.world.PartySearch;
+import net.OutPacket;
 import service.ChannelServer;
-import net.Packet;
+
 import server.MapleCarnivalParty;
 import server.MapleItemInformationProvider;
 import server.MapleSquad;
@@ -137,9 +138,9 @@ public class EventInstanceManager {
 
             for (User chr : getPlayers()) {
                 if (name.startsWith("PVP")) {
-                    chr.getClient().write(CField.getPVPClock(Integer.parseInt(getProperty("type")), timesend));
+                    chr.getClient().SendPacket(CField.getPVPClock(Integer.parseInt(getProperty("type")), timesend));
                 } else {
-                    chr.getClient().write(CField.getClock(timesend));
+                    chr.getClient().SendPacket(CField.getClock(timesend));
                 }
             }
             timeOut(time, this);
@@ -579,22 +580,22 @@ public class EventInstanceManager {
         e.add(new Pair<>(e1, e2));
     }
 
-    public final void broadcastPacket(Packet p) {
+    public final void broadcastPacket(OutPacket p) {
         if (disposed) {
             return;
         }
         for (User chr : getPlayers()) {
-            chr.getClient().write(p);
+            chr.getClient().SendPacket(p);
         }
     }
 
-    public final void broadcastTeamPacket(Packet p, int team) {
+    public final void broadcastTeamPacket(OutPacket p, int team) {
         if (disposed) {
             return;
         }
         for (User chr : getPlayers()) {
             if (chr.getTeam() == team) {
-                chr.getClient().write(p);
+                chr.getClient().SendPacket(p);
             }
         }
     }

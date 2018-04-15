@@ -13,7 +13,7 @@ import server.maps.MapleMap;
 import server.maps.objects.User;
 import server.movement.LifeMovementFragment;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  * @author Steven
@@ -34,7 +34,7 @@ public class DragonMovement implements ProcessPacket<MapleClient> {
         }
 
         final Point pos = chr.getDragon().getPosition();
-        chr.getDragon().settEncodedGatherDuration(iPacket.DecodeInteger());
+        chr.getDragon().settEncodedGatherDuration(iPacket.DecodeInt());
         chr.getDragon().setxCS(iPacket.DecodeShort());
         chr.getDragon().setyCS(iPacket.DecodeShort());
         chr.getDragon().setvXCS(iPacket.DecodeShort());

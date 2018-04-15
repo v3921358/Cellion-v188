@@ -545,8 +545,8 @@ public class ItemPotentialProvider {
             42011, // ATT +14
             40012, // MAG ATT +18
             42012, // MAG ATT +14
-        }; 
-        
+        };
+
         int aNonWeaponLegendaryBonusPotential[] = {
             42043, // 7% LUK
             42044, // 7% INT
@@ -676,26 +676,26 @@ public class ItemPotentialProvider {
             32056, // 7% DEF
         };
         //if (pTier == ItemPotentialTierType.Legendary && nReqLevel >= 70) { // Only defined Legendary Lv. 70+ Potential Lines
-            if (pSlot == EquipSlotType.Si_Emblem) {
-                for (int nValue : aEmblemLegendaryBonusPotential) { // Adds Emblem Potential Values (Legendary)
-                    aPossiblePotential.add(nValue);
-                }
+        if (pSlot == EquipSlotType.Si_Emblem) {
+            for (int nValue : aEmblemLegendaryBonusPotential) { // Adds Emblem Potential Values (Legendary)
+                aPossiblePotential.add(nValue);
             }
-            if (isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) || InventoryConstants.isSecondaryWeapon(pEquip.getItemId())) {
-                for (int nValue : aWeaponLegendaryBonusPotential) { // Adds Weapon Potential Values (Legendary)
-                    aPossiblePotential.add(nValue);
-                }
+        }
+        if (isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) || InventoryConstants.isSecondaryWeapon(pEquip.getItemId())) {
+            for (int nValue : aWeaponLegendaryBonusPotential) { // Adds Weapon Potential Values (Legendary)
+                aPossiblePotential.add(nValue);
             }
-            if (!isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) && !InventoryConstants.isSecondaryWeapon(pEquip.getItemId())) {
-                for (int nValue : aNonWeaponLegendaryBonusPotential) { // Adds Non-Weapon Potential Values (Legendary)
-                    aPossiblePotential.add(nValue);
-                }
+        }
+        if (!isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) && !InventoryConstants.isSecondaryWeapon(pEquip.getItemId())) {
+            for (int nValue : aNonWeaponLegendaryBonusPotential) { // Adds Non-Weapon Potential Values (Legendary)
+                aPossiblePotential.add(nValue);
             }
-            if (pSlot == EquipSlotType.Accessary_Eye || pSlot == EquipSlotType.Accessary_Face || pSlot == EquipSlotType.Accessary_Pocket) {
-                for (int nValue : aAccessoryLegendaryBonusPotential) { // Adds Accessory Potential Values (Legendary)
-                    aPossiblePotential.add(nValue);
-                }
+        }
+        if (pSlot == EquipSlotType.Accessary_Eye || pSlot == EquipSlotType.Accessary_Face || pSlot == EquipSlotType.Accessary_Pocket) {
+            for (int nValue : aAccessoryLegendaryBonusPotential) { // Adds Accessory Potential Values (Legendary)
+                aPossiblePotential.add(nValue);
             }
+        }
         /*} else if (pTier == ItemPotentialTierType.Unique) {
             for (int nValue : aCustomUniqueBonusPotential) {
                 aPossiblePotential.add(nValue); // Adds Custom Potential Values (Unique)
@@ -713,7 +713,7 @@ public class ItemPotentialProvider {
                 aPossiblePotential.add(nValue);
             }
         }*/
-        
+
         Random pRandomPotential = new Random();
         int nIndex = pRandomPotential.nextInt(aPossiblePotential.size());
         return aPossiblePotential.get(nIndex);
@@ -873,13 +873,13 @@ public class ItemPotentialProvider {
             for (int nValue : aMainLegendaryPotential) {
                 aPossiblePotential.add(nValue); // Adds General Potential Values (Legendary)
             }
-            if (isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) || pSlot == EquipSlotType.Si_Emblem 
+            if (isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) || pSlot == EquipSlotType.Si_Emblem
                     || InventoryConstants.isSecondaryWeapon(pEquip.getItemId())) {
                 for (int nValue : aWeaponEmblemLegendaryPotential) { // Adds Emblem Potential Values (Legendary)
                     aPossiblePotential.add(nValue);
                 }
             }
-            if (isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) || InventoryConstants.isSecondaryWeapon(pEquip.getItemId()) 
+            if (isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) || InventoryConstants.isSecondaryWeapon(pEquip.getItemId())
                     || InventoryConstants.isSpecialShield(pEquip.getItemId())) {
                 for (int nValue : aWeaponLegendaryPotential) { // Adds Weapon Potential Values (Legendary)
                     aPossiblePotential.add(nValue);
@@ -1037,7 +1037,7 @@ public class ItemPotentialProvider {
             return false;
         }
         //ItemPotentialTierType pCurrentTier = pEquip.getPotentialBonusTier();
-        
+
         if (pEquip.getBonusPotential1() != 0) {
             pEquip.setBonusPotential1(generateBonusPotential(pEquip));
             //pEquip.setBonusPotential1(generateBonusPotential(pEquip, pCurrentTier));
@@ -1119,10 +1119,10 @@ public class ItemPotentialProvider {
         }
 
         if (ServerConstants.CONTROLLED_POTENTIAL_RESULTS) {
-            equip.setPotential1(generatePotential(equip,tierType));
-            equip.setPotential2(generatePotential(equip,tierType));
+            equip.setPotential1(generatePotential(equip, tierType));
+            equip.setPotential2(generatePotential(equip, tierType));
             if (is3LinePotential) {
-                equip.setPotential3(generatePotential(equip,tierType));
+                equip.setPotential3(generatePotential(equip, tierType));
             } else {
                 equip.setPotential3(0);
             }

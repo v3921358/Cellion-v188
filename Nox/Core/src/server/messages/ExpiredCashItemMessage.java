@@ -16,8 +16,8 @@ public class ExpiredCashItemMessage implements MessageInterface {
 
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.ExpiredCashItem.getType());
-        oPacket.EncodeInteger(itemId);
+        oPacket.EncodeByte(_MessageOpcodesType.ExpiredCashItem.getType());
+        oPacket.EncodeInt(itemId);
     }
 
 }

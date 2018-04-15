@@ -93,7 +93,7 @@ public abstract class AbstractPlayerInteraction {
         }
         return false;
     }
-    
+
     public final EventManager getEventManager(final String event) {
         return c.getChannelServer().getEventSM().getEventManager(event);
     }
@@ -133,7 +133,7 @@ public abstract class AbstractPlayerInteraction {
         if (portal != 0 && map == c.getPlayer().getMapId()) { //test
             final Point portalPos = new Point(c.getPlayer().getMap().getPortal(portal).getPosition());
             if (portalPos.distanceSq(getPlayer().getTruePosition()) < 90000.0) { //estimation
-                c.write(CField.instantMapWarp((byte) portal)); //until we get packet for far movement, this will do
+                c.SendPacket(CField.instantMapWarp((byte) portal)); //until we get packet for far movement, this will do
                 c.getPlayer().checkFollow();
                 c.getPlayer().getMap().movePlayer(c.getPlayer(), portalPos);
             } else {
@@ -158,7 +158,7 @@ public abstract class AbstractPlayerInteraction {
             final Point portalPos = new Point(c.getPlayer().getMap().getPortal(portal).getPosition());
             if (portalPos.distanceSq(getPlayer().getTruePosition()) < 90000.0) { //estimation
                 c.getPlayer().checkFollow();
-                c.write(CField.instantMapWarp((byte) c.getPlayer().getMap().getPortal(portal).getId()));
+                c.SendPacket(CField.instantMapWarp((byte) c.getPlayer().getMap().getPortal(portal).getId()));
                 c.getPlayer().getMap().movePlayer(c.getPlayer(), new Point(c.getPlayer().getMap().getPortal(portal).getPosition()));
             } else {
                 c.getPlayer().changeMap(mapz, mapz.getPortal(portal));
@@ -190,7 +190,7 @@ public abstract class AbstractPlayerInteraction {
         User chr = c.getChannelServer().getPlayerStorage().getCharacterByName(chrname);
         if (chr == null) {
             c.getPlayer().dropMessage(1, "Could not find the character.");
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         final MapleMap mapz = getWarpMap(mapid);
@@ -198,12 +198,12 @@ public abstract class AbstractPlayerInteraction {
             chr.changeMap(mapz, mapz.getPortal(Randomizer.nextInt(mapz.getPortals().size())));
             chr.getClient().removeClickedNPC();
             NPCScriptManager.getInstance().dispose(chr.getClient());
-            chr.getClient().write(CWvsContext.enableActions());
+            chr.getClient().SendPacket(CWvsContext.enableActions());
         } catch (Exception e) {
             chr.changeMap(mapz, mapz.getPortal(0));
             chr.getClient().removeClickedNPC();
             NPCScriptManager.getInstance().dispose(chr.getClient());
-            chr.getClient().write(CWvsContext.enableActions());
+            chr.getClient().SendPacket(CWvsContext.enableActions());
         }
     }
 
@@ -230,7 +230,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final void playPortalSE() {
-        c.write(EffectPacket.showForeignEffect(-1, UserEffectCodes.PlayPortalSE));
+        c.SendPacket(EffectPacket.showForeignEffect(-1, UserEffectCodes.PlayPortalSE));
     }
 
     private MapleMap getWarpMap(final int map) {
@@ -392,7 +392,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final void showQuestMsg(final String msg) {
-        c.write(CWvsContext.showQuestMsg(msg));
+        c.SendPacket(CWvsContext.showQuestMsg(msg));
     }
 
     public final void forceStartQuest(final int id, final String data) {
@@ -572,13 +572,13 @@ public abstract class AbstractPlayerInteraction {
             MapleInventoryManipulator.removeById(cg, GameConstants.getInventoryType(id), id, -quantity, true, false);
         }
         if (show) {
-            cg.write(InfoPacket.getShowItemGain(id, quantity, true));
+            cg.SendPacket(InfoPacket.getShowItemGain(id, quantity, true));
         }
     }
 
     public final boolean removeItem(final int id) { //quantity 1
         if (MapleInventoryManipulator.removeById_Lock(c, GameConstants.getInventoryType(id), id)) {
-            c.write(InfoPacket.getShowItemGain(id, (short) -1, true));
+            c.SendPacket(InfoPacket.getShowItemGain(id, (short) -1, true));
             return true;
         }
         return false;
@@ -751,7 +751,7 @@ public abstract class AbstractPlayerInteraction {
             } else {
                 MapleInventoryManipulator.removeById(chr.getClient(), GameConstants.getInventoryType(id), id, -quantity, true, false);
             }
-            chr.getClient().write(InfoPacket.getShowItemGain(id, quantity, true));
+            chr.getClient().SendPacket(InfoPacket.getShowItemGain(id, quantity, true));
         }
     }
 
@@ -871,7 +871,7 @@ public abstract class AbstractPlayerInteraction {
             final int possesed = chr.getInventory(GameConstants.getInventoryType(id)).countById(id);
             if (possesed > 0) {
                 MapleInventoryManipulator.removeById(c, GameConstants.getInventoryType(id), id, possesed, true, false);
-                chr.getClient().write(InfoPacket.getShowItemGain(id, (short) -possesed, true));
+                chr.getClient().SendPacket(InfoPacket.getShowItemGain(id, (short) -possesed, true));
             }
         }
     }
@@ -910,7 +910,7 @@ public abstract class AbstractPlayerInteraction {
         if (pet != null) {
             pet.setCloseness((int) (pet.getCloseness() + (closeness * getChannelServer().getTraitRate())));
             //  getClient().getPlayer().forceUpdateItem(pet.getItem());
-            getClient().write(PetPacket.updatePet(pet, getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), true));
+            getClient().SendPacket(PetPacket.updatePet(pet, getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), true));
         }
     }
 
@@ -919,7 +919,7 @@ public abstract class AbstractPlayerInteraction {
             if (pet != null && pet.getSummoned()) {
                 pet.setCloseness(pet.getCloseness() + closeness);
                 getClient().getPlayer().forceUpdateItem(pet.getItem());
-                getClient().write(PetPacket.updatePet(pet, getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+                getClient().SendPacket(PetPacket.updatePet(pet, getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
             }
         }
     }
@@ -1007,7 +1007,7 @@ public abstract class AbstractPlayerInteraction {
         Mob pMob = MapleLifeFactory.getMonster(nMobId);
         c.getChannelServer().getMapFactory().getMap(nMapId).spawnMonsterOnGroundBelow(pMob, new Point(posX, posY));
     }
-    
+
     public void spawnModifiedMonsterInMap(final int nMapId, final int nMobId, int posX, int posY, long nNewHp) {
         Mob pMob = MapleLifeFactory.getMonster(nMobId);
         pMob.setHp(nNewHp);
@@ -1032,8 +1032,8 @@ public abstract class AbstractPlayerInteraction {
         c.getPlayer().updateInfoQuest(7215, "0");
         //c.write(InfoPacket.updateInfoQuest(1207, "min=1;tuto=1")); //old - 1207, "pt=1;min=4;belt=1;tuto=1")); //todo
         //c.write(InfoPacket.updateInfoQuest(7281, "item=0;chk=0;cNum=0;sec=" + sec + ";stage=0;lBonus=0"));
-        c.write(EffectPacket.Mulung_DojoUp2());
-        c.write(CField.instantMapWarp((byte) 6));
+        c.SendPacket(EffectPacket.Mulung_DojoUp2());
+        c.SendPacket(CField.instantMapWarp((byte) 6));
     }
 
     public final boolean dojoAgent_NextMap(final boolean dojo, final boolean fromresting) {
@@ -1082,23 +1082,23 @@ public abstract class AbstractPlayerInteraction {
         if (!c.getPlayer().hasSummon()) {
             playerSummonHint(true);
         }
-        c.write(UIPacket.UserTutorMessage(msg));
+        c.SendPacket(UIPacket.UserTutorMessage(msg));
     }
 
     public final void summonMsg(final int type) {
         if (!c.getPlayer().hasSummon()) {
             playerSummonHint(true);
         }
-        c.write(UIPacket.UserTutorMessage(type));
+        c.SendPacket(UIPacket.UserTutorMessage(type));
     }
 
     public final void showInstruction(final String msg, final int width, final int height) {
-        c.write(CField.sendHint(msg, width, height));
+        c.SendPacket(CField.sendHint(msg, width, height));
     }
 
     public final void playerSummonHint(final boolean summon) {
         c.getPlayer().setHasSummon(summon);
-        c.write(UIPacket.UserHireTutor(summon));
+        c.SendPacket(UIPacket.UserHireTutor(summon));
     }
 
     public final String getInfoQuest(final int id) {
@@ -1118,40 +1118,40 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final void Aran_Start() {
-        c.write(CField.Aran_Start());
+        c.SendPacket(CField.Aran_Start());
     }
 
     public final void evanTutorial(final String data, final int v1) {
-        c.write(NPCPacket.getEvanTutorial(data));
+        c.SendPacket(NPCPacket.getEvanTutorial(data));
     }
 
     public final void showWZUOLEffect(final String data) {
-        c.write(EffectPacket.showWZUOLEffect(data, false));
+        c.SendPacket(EffectPacket.showWZUOLEffect(data, false));
     }
 
     public final void showReservedEffect_CutScene(final String data) {
-        c.write(EffectPacket.showReservedEffect_CutScene(data));
+        c.SendPacket(EffectPacket.showReservedEffect_CutScene(data));
     }
 
     public final void EarnTitleMsg(final String data) {
-        c.write(CWvsContext.getTopMsg(data));
+        c.SendPacket(CWvsContext.getTopMsg(data));
     }
 
     public final void topMsg(final String data) {
-        c.write(CWvsContext.getTopMsg(data));
+        c.SendPacket(CWvsContext.getTopMsg(data));
     }
 
     public final void EnableUI(final short i) {
-        c.write(UIPacket.IntroEnableUI(i > 0));
+        c.SendPacket(UIPacket.IntroEnableUI(i > 0));
     }
 
     public final void DisableUI(final boolean enabled) {
-        c.write(UIPacket.IntroEnableUI(enabled));
+        c.SendPacket(UIPacket.IntroEnableUI(enabled));
     }
 
     public final void MovieClipIntroUI(final boolean enabled) {
-        c.write(UIPacket.IntroEnableUI(enabled));
-        c.write(UIPacket.IntroLock(enabled));
+        c.SendPacket(UIPacket.IntroEnableUI(enabled));
+        c.SendPacket(UIPacket.IntroLock(enabled));
     }
 
     public MapleInventoryType getInvType(int i) {
@@ -1200,7 +1200,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public void showMapEffect(String path) {
-        getClient().write(CField.MapEff(path));
+        getClient().SendPacket(CField.MapEff(path));
     }
 
     public int itemQuantity(int itemid) {
@@ -1266,7 +1266,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public void sendUIWindow(final int type, final int npc) {
-        c.write(CField.UIPacket.openUIOption(type, npc));
+        c.SendPacket(CField.UIPacket.openUIOption(type, npc));
     }
 
     public void logPQ(String text) {
@@ -1274,7 +1274,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public void trembleEffect(int type, int delay) {
-        c.write(CField.trembleEffect(type, delay));
+        c.SendPacket(CField.trembleEffect(type, delay));
     }
 
     public int nextInt(int arg0) {
@@ -1337,46 +1337,46 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public void sendDirectionStatus(int key, int value) {
-        c.write(UIPacket.UserInGameDirectionEvent(key, value));
-        c.write(UIPacket.getDirectionStatus(true));
+        c.SendPacket(UIPacket.UserInGameDirectionEvent(key, value));
+        c.SendPacket(UIPacket.getDirectionStatus(true));
     }
 
     public void sendDirectionStatus(int key, int value, boolean direction) {
-        c.write(UIPacket.UserInGameDirectionEvent(key, value));
-        c.write(UIPacket.getDirectionStatus(direction));
+        c.SendPacket(UIPacket.UserInGameDirectionEvent(key, value));
+        c.SendPacket(UIPacket.getDirectionStatus(direction));
     }
 
     public void sendDirectionInfo(String data) {
-        c.write(UIPacket.UserInGameDirectionEvent(data, 2000, 0, -100, 0, 0));
-        c.write(UIPacket.UserInGameDirectionEvent(1, 2000));
+        c.SendPacket(UIPacket.UserInGameDirectionEvent(data, 2000, 0, -100, 0, 0));
+        c.SendPacket(UIPacket.UserInGameDirectionEvent(1, 2000));
     }
 
     public void getDirectionInfo(String data, int value, int x, int y, int a, int b) {
-        c.write(CField.UIPacket.UserInGameDirectionEvent(data, value, x, y, a, b));
+        c.SendPacket(CField.UIPacket.UserInGameDirectionEvent(data, value, x, y, a, b));
     }
 
     public void getDirectionInfo(byte type, int value) {
-        c.write(CField.UIPacket.UserInGameDirectionEvent(type, value));
+        c.SendPacket(CField.UIPacket.UserInGameDirectionEvent(type, value));
     }
 
     public void introEnableUI(int wtf) {
-        c.write(CField.UIPacket.IntroEnableUI(wtf > 0));
+        c.SendPacket(CField.UIPacket.IntroEnableUI(wtf > 0));
     }
 
     public void sendDirectionFacialExpression(int expression, int duration) {
-        c.write(CField.directionFacialExpression(expression, duration));
+        c.SendPacket(CField.directionFacialExpression(expression, duration));
     }
 
     public void introDisableUI(boolean enable) {
-        c.write(CField.UIPacket.IntroEnableUI(enable));
+        c.SendPacket(CField.UIPacket.IntroEnableUI(enable));
     }
 
     public void getDirectionStatus(boolean enable) {
-        c.write(CField.UIPacket.getDirectionStatus(enable));
+        c.SendPacket(CField.UIPacket.getDirectionStatus(enable));
     }
 
     public void playMovie(String data, boolean show) {
-        c.write(UIPacket.playMovie(data, show));
+        c.SendPacket(UIPacket.playMovie(data, show));
     }
 
     public String getCharacterName(int characterid) {

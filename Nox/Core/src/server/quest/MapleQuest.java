@@ -16,7 +16,7 @@ import java.util.Map.Entry;
 import client.MapleQuestStatus;
 import client.MapleQuestStatus.MapleQuestState;
 import constants.GameConstants;
-import database.DatabaseConnection;
+import database.Database;
 import scripting.provider.NPCScriptManager;
 import server.farm.MapleFarmQuestRequirement;
 import server.maps.objects.User;
@@ -156,8 +156,8 @@ public class MapleQuest implements Serializable {
     }
 
     public static void initQuests() {
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             PreparedStatement psr;
             PreparedStatement psa;
             PreparedStatement pss;
@@ -177,6 +177,7 @@ public class MapleQuest implements Serializable {
                     }
                 }
             }
+            /*
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM wz_farmquestdata")) {
                 psr = con.prepareStatement("SELECT * FROM wz_farmquestreqdata WHERE questid = ?");
                 try (ResultSet rs = ps.executeQuery()) {
@@ -185,6 +186,8 @@ public class MapleQuest implements Serializable {
                     }
                 }
             }
+             */
+
             psr.close();
             psa.close();
             pss.close();
@@ -192,6 +195,7 @@ public class MapleQuest implements Serializable {
             psi.close();
             psp.close();
         } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -321,7 +325,7 @@ public class MapleQuest implements Serializable {
             // we save forfeits only for logging purposes, they shouldn't matter anymore
             // completion time is set by the constructor
 
-            c.getClient().write(EffectPacket.showForeignEffect(UserEffectCodes.QuestComplete)); // Quest completion
+            c.getClient().SendPacket(EffectPacket.showForeignEffect(UserEffectCodes.QuestComplete)); // Quest completion
             c.getMap().broadcastMessage(c, EffectPacket.showForeignEffect(c.getId(), UserEffectCodes.QuestComplete), false);
         }
     }
@@ -392,7 +396,7 @@ public class MapleQuest implements Serializable {
         for (MapleQuestAction a : this.completeActs) {
             a.runEnd(c, null);
         }
-        c.getClient().write(CField.EffectPacket.showForeignEffect(UserEffectCodes.QuestComplete));
+        c.getClient().SendPacket(CField.EffectPacket.showForeignEffect(UserEffectCodes.QuestComplete));
         c.getMap().broadcastMessage(c, CField.EffectPacket.showForeignEffect(c.getId(), UserEffectCodes.QuestComplete), false);
     }
 

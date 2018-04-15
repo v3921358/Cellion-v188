@@ -14,11 +14,12 @@ import server.MapleStatEffect;
 import server.maps.objects.User;
 import tools.Pair;
 import net.InPacket;
-import net.Packet;
+import net.OutPacket;
+
 import tools.LogHelper;
 import tools.packet.CWvsContext;
 import tools.packet.CWvsContext.GuildPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -80,12 +81,12 @@ public class GuildOperationHandler implements ProcessPacket<MapleClient> {
         short GuildOperationCode = iPacket.DecodeByte();
         switch (GuildOperationCode) {
             case GuildOperations.joinGuildDataRequest:// open a guild from search results
-                int guildId = iPacket.DecodeInteger();
+                int guildId = iPacket.DecodeInt();
                 MapleGuild g = World.Guild.getGuild(guildId);
                 if (g == null) {
                     break;
                 }
-                c.write(GuildPacket.findGuild_Done(c.getPlayer(), guildId));
+                c.SendPacket(GuildPacket.findGuild_Done(c.getPlayer(), guildId));
                 break;
             case GuildOperations.createGuild: // Create guild
                 if (c.getPlayer().getGuildId() > 0 || c.getPlayer().getMapId() != 200000301) {
@@ -112,7 +113,7 @@ public class GuildOperationHandler implements ProcessPacket<MapleClient> {
                 c.getPlayer().saveGuildStatus();
                 c.getPlayer().finishAchievement(35);
                 World.Guild.setGuildMemberOnline(c.getPlayer().getMGC(), true, c.getChannel());
-                c.write(CWvsContext.GuildPacket.createNewGuild(c.getPlayer()));
+                c.SendPacket(CWvsContext.GuildPacket.createNewGuild(c.getPlayer()));
                 World.Guild.gainGP(c.getPlayer().getGuildId(), 500, c.getPlayer().getId());
                 c.getPlayer().dropMessage(1, "You have successfully created a Guild.");
                 break;
@@ -129,7 +130,7 @@ public class GuildOperationHandler implements ProcessPacket<MapleClient> {
                 final MapleGuildResponse mgr = MapleGuild.sendInvite(c, name);
 
                 if (mgr != null) {
-                    c.write(mgr.createPacket());
+                    c.SendPacket(mgr.createPacket());
                 } else {
                     Pair<Integer, Long> put = invited.put(name, new Pair<>(c.getPlayer().getGuildId(), currentTime + (1 * 60000))); //20 mins expire
                 }
@@ -142,7 +143,7 @@ public class GuildOperationHandler implements ProcessPacket<MapleClient> {
                     invited.remove(name);
                     return;
                 }
-                guildId = iPacket.DecodeInteger();
+                guildId = iPacket.DecodeInt();
                 Pair<Integer, Long> gid = invited.remove(name);
                 if (gid != null && guildId == gid.left) {
                     c.getPlayer().setGuildId(guildId);
@@ -153,11 +154,11 @@ public class GuildOperationHandler implements ProcessPacket<MapleClient> {
                         c.getPlayer().setGuildId(0);
                         return;
                     }
-                    c.write(CWvsContext.GuildPacket.loadGuild_Done(c.getPlayer()));
+                    c.SendPacket(CWvsContext.GuildPacket.loadGuild_Done(c.getPlayer()));
                     final MapleGuild gs = World.Guild.getGuild(guildId);
-                    for (Packet pack : World.Alliance.getAllianceInfo(gs.getAllianceId(), true)) {
+                    for (OutPacket pack : World.Alliance.getAllianceInfo(gs.getAllianceId(), true)) {
                         if (pack != null) {
-                            c.write(pack);
+                            c.SendPacket(pack);
                         }
                     }
                     c.getPlayer().saveGuildStatus();
@@ -165,16 +166,16 @@ public class GuildOperationHandler implements ProcessPacket<MapleClient> {
                 }
                 break;
             case GuildOperations.leaveGuild: // leaving
-                int cid = iPacket.DecodeInteger();
+                int cid = iPacket.DecodeInt();
                 name = iPacket.DecodeString();
                 if (cid != c.getPlayer().getId() || !name.equals(c.getPlayer().getName()) || c.getPlayer().getGuildId() <= 0) {
                     return;
                 }
                 World.Guild.leaveGuild(c.getPlayer().getMGC());
-                c.write(GuildPacket.genericGuildMessage((byte) GuildPacket.GuildResult.WithdrawGuild_Done));
+                c.SendPacket(GuildPacket.genericGuildMessage((byte) GuildPacket.GuildResult.WithdrawGuild_Done));
                 break;
             case GuildOperations.expelMember: // Expel
-                cid = iPacket.DecodeInteger();
+                cid = iPacket.DecodeInt();
                 name = iPacket.DecodeString();
 
                 if (c.getPlayer().getGuildRank() > 2 || c.getPlayer().getGuildId() <= 0) {
@@ -194,7 +195,7 @@ public class GuildOperationHandler implements ProcessPacket<MapleClient> {
                 World.Guild.changeRankTitle(c.getPlayer().getGuildId(), ranks);
                 break;
             case GuildOperations.changePlayerRank: // Rank change
-                cid = iPacket.DecodeInteger();
+                cid = iPacket.DecodeInt();
                 byte newRank = iPacket.DecodeByte();
 
                 if ((newRank <= 1 || newRank > 5) || c.getPlayer().getGuildRank() > 2 || (newRank <= 2 && c.getPlayer().getGuildRank() != 1) || c.getPlayer().getGuildId() <= 0) {
@@ -227,7 +228,7 @@ public class GuildOperationHandler implements ProcessPacket<MapleClient> {
                 World.Guild.setGuildNotice(c.getPlayer().getGuildId(), notice);
                 break;
             case GuildOperations.buyGuildSkill: //guild skill purchase
-                Skill skilli = SkillFactory.getSkill(iPacket.DecodeInteger());
+                Skill skilli = SkillFactory.getSkill(iPacket.DecodeInt());
                 int guild = c.getPlayer().getGuildId();
                 if (guild <= 0 || skilli == null || skilli.getId() < 91000000) {
                     return;
@@ -247,7 +248,7 @@ public class GuildOperationHandler implements ProcessPacket<MapleClient> {
                 }
                 break;
             case GuildOperations.activateGuildSkill: //guild skill activation
-                skilli = SkillFactory.getSkill(iPacket.DecodeInteger());
+                skilli = SkillFactory.getSkill(iPacket.DecodeInt());
                 if (c.getPlayer().getGuildId() <= 0 || skilli == null) {
                     return;
                 }
@@ -264,7 +265,7 @@ public class GuildOperationHandler implements ProcessPacket<MapleClient> {
                 }
                 break;
             case GuildOperations.changeGuildLeader: //guild leader change
-                cid = iPacket.DecodeInteger();
+                cid = iPacket.DecodeInt();
                 if (c.getPlayer().getGuildId() <= 0 || c.getPlayer().getGuildRank() > 1) {
                     return;
                 }
@@ -283,7 +284,7 @@ public class GuildOperationHandler implements ProcessPacket<MapleClient> {
                     byte minAvgMemberLevel = iPacket.DecodeByte();
                     byte maxAvgMemberLevel = iPacket.DecodeByte();
                     Map<Integer, MapleGuild> guildSearchResult = World.Guild.getGuildByNummericalSearch(minGuildLevel, maxGuildLevel, minGuildSize, maxGuildSize, minAvgMemberLevel, maxAvgMemberLevel);
-                    c.write(GuildPacket.guildSearchResult(c, guildSearchResult));
+                    c.SendPacket(GuildPacket.guildSearchResult(c, guildSearchResult));
                 } else {
                     byte type = iPacket.DecodeByte();
                     boolean exactWord = (iPacket.DecodeShort() != 0);
@@ -295,15 +296,15 @@ public class GuildOperationHandler implements ProcessPacket<MapleClient> {
                             Map<Integer, MapleGuild> matchingOverall = new LinkedHashMap<>();
                             matchingOverall.putAll(matchingGuilds);
                             matchingOverall.putAll(matchingOwners);
-                            c.write(GuildPacket.guildSearchResult(c, matchingOverall));
+                            c.SendPacket(GuildPacket.guildSearchResult(c, matchingOverall));
                             break;
                         case GuildSearchTypes.GuildNameSearch:
                             Map<Integer, MapleGuild> guildNameSearchResult = World.Guild.getGuildByNameSearch(c, iPacket.DecodeString(), exactWord);
-                            c.write(GuildPacket.guildSearchResult(c, guildNameSearchResult));
+                            c.SendPacket(GuildPacket.guildSearchResult(c, guildNameSearchResult));
                             break;
                         case GuildSearchTypes.LeaderNameSearch:
                             Map<Integer, MapleGuild> ownerNameSearchResult = World.Guild.getGuildByOwnerSearch(c, iPacket.DecodeString(), exactWord);
-                            c.write(GuildPacket.guildSearchResult(c, ownerNameSearchResult));
+                            c.SendPacket(GuildPacket.guildSearchResult(c, ownerNameSearchResult));
                             break;
                         default:
                             break;

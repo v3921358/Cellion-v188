@@ -4,7 +4,7 @@ import client.MapleClient;
 import handling.PacketThrottleLimits;
 import tools.LogHelper;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 @PacketThrottleLimits(
         FlagCount = 2,

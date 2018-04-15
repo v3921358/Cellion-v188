@@ -24,7 +24,7 @@ package handling.game;
 import client.MapleClient;
 import server.maps.objects.User;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class AndroidEmotion implements ProcessPacket<MapleClient> {
 
@@ -36,7 +36,7 @@ public final class AndroidEmotion implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
-        int emote = iPacket.DecodeInteger();
+        int emote = iPacket.DecodeInt();
         AndroidEmotionChanger.changeEmotion(chr, emote);
     }
 

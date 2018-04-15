@@ -17,7 +17,7 @@ import tools.Pair;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -34,7 +34,7 @@ public class UseRewardItemHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         //System.out.println("[Reward Item] " + iPacket.toString());
         final byte slot = (byte) iPacket.DecodeShort();
-        final int itemId = iPacket.DecodeInteger();
+        final int itemId = iPacket.DecodeInt();
         final boolean unseal = iPacket.DecodeByte() > 0;
 
         UseRewardItem(slot, itemId, unseal, c, c.getPlayer());
@@ -42,7 +42,7 @@ public class UseRewardItemHandler implements ProcessPacket<MapleClient> {
 
     public static boolean UseRewardItem(byte slot, int itemId, final boolean unseal, final MapleClient c, final User chr) {
         final Item toUse = c.getPlayer().getInventory(GameConstants.getInventoryType(itemId)).getItem(slot);
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
         if (toUse != null && toUse.getQuantity() >= 1 && toUse.getItemId() == itemId && !chr.hasBlockedInventory()) {
             if (chr.getInventory(MapleInventoryType.EQUIP).getNextFreeSlot() > -1 && chr.getInventory(MapleInventoryType.USE).getNextFreeSlot() > -1 && chr.getInventory(MapleInventoryType.SETUP).getNextFreeSlot() > -1 && chr.getInventory(MapleInventoryType.ETC).getNextFreeSlot() > -1) {
                 final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -138,7 +138,7 @@ public class UseRewardItemHandler implements ProcessPacket<MapleClient> {
                                 }
                                 MapleInventoryManipulator.removeById(c, GameConstants.getInventoryType(itemId), itemId, 1, false, false);
 
-                                c.write(CField.EffectPacket.showRewardItemAnimation(reward.itemid, reward.effect));
+                                c.SendPacket(CField.EffectPacket.showRewardItemAnimation(reward.itemid, reward.effect));
                                 chr.getMap().broadcastMessage(chr, CField.EffectPacket.showRewardItemAnimation(reward.itemid, reward.effect, chr.getId()), false);
                                 return true;
                             }

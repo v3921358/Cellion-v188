@@ -3,7 +3,7 @@ package handling.common;
 import client.MapleClient;
 import handling.PacketThrottleLimits;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 @PacketThrottleLimits(
         FlagCount = 5,
@@ -20,7 +20,7 @@ public final class KeepAliveHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int GetTickCount = iPacket.DecodeInteger(); // Win32 API for the time in millis since the computer started
+        int GetTickCount = iPacket.DecodeInt(); // Win32 API for the time in millis since the computer started
 
         c.pongReceived();
     }

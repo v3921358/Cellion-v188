@@ -2,7 +2,7 @@ package handling.game;
 
 import client.MapleClient;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -17,7 +17,7 @@ public class PhantomCancelSwipeHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        iPacket.DecodeInteger();
+        iPacket.DecodeInt();
         // does nothing
     }
 }

@@ -4,7 +4,7 @@ import client.MapleClient;
 import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -21,7 +21,7 @@ public class MonsterBombHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
 
-        final int oid = iPacket.DecodeInteger();
+        final int oid = iPacket.DecodeInt();
         Mob monster = chr.getMap().getMonsterByOid(oid);
 
         if ((monster == null) || (!chr.isAlive()) || (chr.isHidden()) || (monster.getLinkCID() > 0)) {

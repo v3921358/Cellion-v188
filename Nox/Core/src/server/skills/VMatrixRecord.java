@@ -26,25 +26,25 @@ public class VMatrixRecord {
 
     public void Decode(InPacket iPacket) {
         iPacket.DecodeLong(); // Unknown
-        this.nCoreID = iPacket.DecodeInteger();
-        this.nSLV = iPacket.DecodeInteger();
-        this.nExp = iPacket.DecodeInteger();
-        this.nState = iPacket.DecodeInteger();
-        this.nSkillID = iPacket.DecodeInteger();
-        this.nSkillID2 = iPacket.DecodeInteger();
-        this.nSkillID3 = iPacket.DecodeInteger();
+        this.nCoreID = iPacket.DecodeInt();
+        this.nSLV = iPacket.DecodeInt();
+        this.nExp = iPacket.DecodeInt();
+        this.nState = iPacket.DecodeInt();
+        this.nSkillID = iPacket.DecodeInt();
+        this.nSkillID2 = iPacket.DecodeInt();
+        this.nSkillID3 = iPacket.DecodeInt();
         this.ftExpirationDate = iPacket.DecodeLong();
     }
 
     public void Encode(OutPacket oPacket) {
         oPacket.EncodeLong((long) Math.random()); // Some kind of counter...
-        oPacket.EncodeInteger(this.nCoreID);
-        oPacket.EncodeInteger(this.nSLV);
-        oPacket.EncodeInteger(this.nExp);
-        oPacket.EncodeInteger(this.nState);
-        oPacket.EncodeInteger(this.nSkillID);
-        oPacket.EncodeInteger(this.nSkillID2);
-        oPacket.EncodeInteger(this.nSkillID3);
+        oPacket.EncodeInt(this.nCoreID);
+        oPacket.EncodeInt(this.nSLV);
+        oPacket.EncodeInt(this.nExp);
+        oPacket.EncodeInt(this.nState);
+        oPacket.EncodeInt(this.nSkillID);
+        oPacket.EncodeInt(this.nSkillID2);
+        oPacket.EncodeInt(this.nSkillID3);
         oPacket.EncodeLong(this.ftExpirationDate);
     }
 }

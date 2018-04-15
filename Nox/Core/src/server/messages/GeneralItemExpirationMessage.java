@@ -21,10 +21,10 @@ public class GeneralItemExpirationMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.GeneralItemExpiration.getType());
-        oPacket.Encode(items.size());
+        oPacket.EncodeByte(_MessageOpcodesType.GeneralItemExpiration.getType());
+        oPacket.EncodeByte(items.size());
         for (Integer item : items) {
-            oPacket.EncodeInteger(item);
+            oPacket.EncodeInt(item);
         }
     }
 

@@ -32,7 +32,7 @@ import server.maps.objects.User;
 import tools.Pair;
 import net.InPacket;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class RespawnPvpHandler implements ProcessPacket<MapleClient> {
 

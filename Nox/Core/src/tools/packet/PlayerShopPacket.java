@@ -7,7 +7,7 @@ import client.inventory.Item;
 import handling.game.PlayerInteractionHandler;
 import service.SendPacketOpcode;
 import net.OutPacket;
-import net.Packet;
+
 import server.MerchItemPackage;
 import server.maps.objects.User;
 import server.stores.AbstractPlayerStore.BoughtItem;
@@ -20,108 +20,102 @@ import tools.Pair;
 
 public class PlayerShopPacket {
 
-    public static Packet sendTitleBox() {
+    public static OutPacket sendTitleBox() {
         return sendTitleBox(7); // SendOpenShopRequest
     }
 
-    public static Packet sendTitleBox(int mode) {
-        OutPacket oPacket = new OutPacket(8);
+    public static OutPacket sendTitleBox(int mode) {
 
-        oPacket.EncodeShort(SendPacketOpcode.EntrustedShopCheckResult.getValue());
-        oPacket.Encode(mode);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.EntrustedShopCheckResult.getValue());
+        oPacket.EncodeByte(mode);
         if ((mode == 8) || (mode == 16)) {
-            oPacket.EncodeInteger(0);
-            oPacket.Encode(0);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeByte(0);
         } else if (mode == 13) {
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeInt(0);
         } else if (mode == 14) {
-            oPacket.Encode(0);
+            oPacket.EncodeByte(0);
         } else if (mode == 18) {
-            oPacket.Encode(1);
+            oPacket.EncodeByte(1);
             oPacket.EncodeString("");
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet requestShopPic(final int oid) {
-        final OutPacket oPacket = new OutPacket(17);
+    public static OutPacket requestShopPic(final int oid) {
 
-        oPacket.EncodeShort(SendPacketOpcode.EntrustedShopCheckResult.getValue());
-        oPacket.Encode(17);
-        oPacket.EncodeInteger(oid);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.EntrustedShopCheckResult.getValue());
+        oPacket.EncodeByte(17);
+        oPacket.EncodeInt(oid);
         oPacket.EncodeShort(0);
         oPacket.EncodeLong(0L);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet addCharBox(final User c, final int type) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket addCharBox(final User c, final int type) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserMiniRoomBalloon.getValue());
-        oPacket.EncodeInteger(c.getId());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserMiniRoomBalloon.getValue());
+        oPacket.EncodeInt(c.getId());
         PacketHelper.addAnnounceBox(oPacket, c);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet removeCharBox(final User c) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket removeCharBox(final User c) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserMiniRoomBalloon.getValue());
-        oPacket.EncodeInteger(c.getId());
-        oPacket.Encode(0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserMiniRoomBalloon.getValue());
+        oPacket.EncodeInt(c.getId());
+        oPacket.EncodeByte(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet sendPlayerShopBox(final User c) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket sendPlayerShopBox(final User c) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserMiniRoomBalloon.getValue());
-        oPacket.EncodeInteger(c.getId());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserMiniRoomBalloon.getValue());
+        oPacket.EncodeInt(c.getId());
         PacketHelper.addAnnounceBox(oPacket, c);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getHiredMerch(User chr, HiredMerchant merch, boolean firstTime) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getHiredMerch(User chr, HiredMerchant merch, boolean firstTime) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(20);//was11
-        oPacket.Encode(6);
-        oPacket.Encode(7);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(20);//was11
+        oPacket.EncodeByte(6);
+        oPacket.EncodeByte(7);
         oPacket.EncodeShort(merch.getVisitorSlot(chr));
-        oPacket.EncodeInteger(merch.getItemId());
+        oPacket.EncodeInt(merch.getItemId());
         oPacket.EncodeString("Hired Merchant");
         for (Pair storechr : merch.getVisitors()) {
-            oPacket.Encode(((Byte) storechr.left).byteValue());
+            oPacket.EncodeByte(((Byte) storechr.left).byteValue());
             CField.writeCharacterLook(oPacket, (User) storechr.right, false);//MapleCharacterLook
             oPacket.EncodeString(((User) storechr.right).getName());
             oPacket.EncodeShort(((User) storechr.right).getJob());
         }
-        oPacket.Encode(-1);
+        oPacket.EncodeByte(-1);
         oPacket.EncodeShort(0);
         oPacket.EncodeString(merch.getOwnerName());
         if (merch.isOwner(chr)) {
-            oPacket.EncodeInteger(merch.getTimeLeft());
-            oPacket.Encode(firstTime ? 1 : 0);
-            oPacket.Encode(merch.getBoughtItems().size());
+            oPacket.EncodeInt(merch.getTimeLeft());
+            oPacket.EncodeByte(firstTime ? 1 : 0);
+            oPacket.EncodeByte(merch.getBoughtItems().size());
             for (final BoughtItem SoldItem : merch.getBoughtItems()) {
-                oPacket.EncodeInteger(SoldItem.id);
+                oPacket.EncodeInt(SoldItem.id);
                 oPacket.EncodeShort(SoldItem.quantity);
                 oPacket.EncodeLong(SoldItem.totalPrice);
                 oPacket.EncodeString(SoldItem.buyer);
             }
             oPacket.EncodeLong(merch.getMeso());
         }
-        oPacket.EncodeInteger(263);
+        oPacket.EncodeInt(263);
         oPacket.EncodeString(merch.getDescription());
-        oPacket.Encode(16);
+        oPacket.EncodeByte(16);
         oPacket.EncodeLong(merch.getMeso());
-        oPacket.Encode(merch.getItems().size());
+        oPacket.EncodeByte(merch.getItems().size());
         for (MaplePlayerShopItem item : merch.getItems()) {
             oPacket.EncodeShort(item.bundles);
             oPacket.EncodeShort(item.item.getQuantity());
@@ -130,27 +124,25 @@ public class PlayerShopPacket {
         }
         oPacket.EncodeShort(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet getPlayerStore(final User chr, final boolean firstTime) {
-        final OutPacket oPacket = new OutPacket(80);
-
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
+    public static final OutPacket getPlayerStore(final User chr, final boolean firstTime) {
+        final OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
         IMaplePlayerShop ips = chr.getPlayerShop();
-        oPacket.Encode(11);
+        oPacket.EncodeByte(11);
         switch (ips.getShopType()) {
             case 2:
-                oPacket.Encode(4);
-                oPacket.Encode(4);
+                oPacket.EncodeByte(4);
+                oPacket.EncodeByte(4);
                 break;
             case 3:
-                oPacket.Encode(2);
-                oPacket.Encode(2);
+                oPacket.EncodeByte(2);
+                oPacket.EncodeByte(2);
                 break;
             case 4:
-                oPacket.Encode(1);
-                oPacket.Encode(2);
+                oPacket.EncodeByte(1);
+                oPacket.EncodeByte(2);
                 break;
         }
         oPacket.EncodeShort(ips.getVisitorSlot(chr));
@@ -158,80 +150,74 @@ public class PlayerShopPacket {
         oPacket.EncodeString(ips.getOwnerName());
         oPacket.EncodeShort(((MaplePlayerShop) ips).getMCOwner().getJob());
         for (final Pair<Byte, User> storechr : ips.getVisitors()) {
-            oPacket.Encode(storechr.left);
+            oPacket.EncodeByte(storechr.left);
             CField.writeCharacterLook(oPacket, storechr.right, false);
             oPacket.EncodeString(storechr.right.getName());
             oPacket.EncodeShort(storechr.right.getJob());
         }
-        oPacket.Encode(255);
+        oPacket.EncodeByte(255);
         oPacket.EncodeString(ips.getDescription());
-        oPacket.Encode(10);
-        oPacket.Encode(ips.getItems().size());
+        oPacket.EncodeByte(10);
+        oPacket.EncodeByte(ips.getItems().size());
 
         for (final MaplePlayerShopItem item : ips.getItems()) {
             oPacket.EncodeShort(item.bundles);
             oPacket.EncodeShort(item.item.getQuantity());
-            oPacket.EncodeInteger(item.price);
+            oPacket.EncodeInt(item.price);
             PacketHelper.addItemInfo(oPacket, item.item);
         }
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet shopChat(final String message, final int slot) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket shopChat(final String message, final int slot) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(24);//was15
-        oPacket.Encode(25);//was15
-        oPacket.Encode(slot);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(24);//was15
+        oPacket.EncodeByte(25);//was15
+        oPacket.EncodeByte(slot);
         oPacket.EncodeString(message);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet shopErrorMessage(final int error, final int type) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket shopErrorMessage(final int error, final int type) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(28);//was18
-        oPacket.Encode(type);
-        oPacket.Encode(error);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(28);//was18
+        oPacket.EncodeByte(type);
+        oPacket.EncodeByte(error);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet spawnHiredMerchant(final HiredMerchant hm) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket spawnHiredMerchant(final HiredMerchant hm) {
 
-        oPacket.EncodeShort(SendPacketOpcode.EmployeeEnterField.getValue());
-        oPacket.EncodeInteger(hm.getOwnerId());
-        oPacket.EncodeInteger(hm.getItemId());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.EmployeeEnterField.getValue());
+        oPacket.EncodeInt(hm.getOwnerId());
+        oPacket.EncodeInt(hm.getItemId());
         oPacket.EncodePosition(hm.getTruePosition());
         oPacket.EncodeShort(0);
         oPacket.EncodeString(hm.getOwnerName());
         PacketHelper.addInteraction(oPacket, hm);
 //        System.err.println(hm.getItemId());
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet destroyHiredMerchant(final int id) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket destroyHiredMerchant(final int id) {
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.EmployeeLeaveField.getValue());
+        oPacket.EncodeInt(id);
 
-        oPacket.EncodeShort(SendPacketOpcode.EmployeeLeaveField.getValue());
-        oPacket.EncodeInteger(id);
-
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet shopItemUpdate(final IMaplePlayerShop shop) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket shopItemUpdate(final IMaplePlayerShop shop) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(77);//was50
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(77);//was50
         if (shop.getShopType() == 1) {
             oPacket.EncodeLong(0L);
         }
-        oPacket.Encode(shop.getItems().size());
+        oPacket.EncodeByte(shop.getItems().size());
         for (final MaplePlayerShopItem item : shop.getItems()) {
             oPacket.EncodeShort(item.bundles);
             oPacket.EncodeShort(item.item.getQuantity());
@@ -240,266 +226,259 @@ public class PlayerShopPacket {
         }
         oPacket.EncodeShort(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet shopVisitorAdd(final User chr, final int slot) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket shopVisitorAdd(final User chr, final int slot) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(PlayerInteractionHandler.Interaction.VISIT.action);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(PlayerInteractionHandler.Interaction.VISIT.action);
 //        oPacket.encode(19);//was10
-        oPacket.Encode(slot);
+        oPacket.EncodeByte(slot);
         CField.writeCharacterLook(oPacket, chr, false);
         oPacket.EncodeString(chr.getName());
         oPacket.EncodeShort(chr.getJob());
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet shopVisitorLeave(final byte slot) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket shopVisitorLeave(final byte slot) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(PlayerInteractionHandler.Interaction.EXIT.action);
-        oPacket.Encode(slot);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(PlayerInteractionHandler.Interaction.EXIT.action);
+        oPacket.EncodeByte(slot);
 
-        return oPacket.ToPacket();
+        return oPacket;
     } // Fix from RZ
 
-    public static final Packet Merchant_Buy_Error(final byte message) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket Merchant_Buy_Error(final byte message) {
 
         // 2 = You have not enough meso
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(44);
-        oPacket.Encode(message);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(44);
+        oPacket.EncodeByte(message);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet updateHiredMerchant(final HiredMerchant shop) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket updateHiredMerchant(final HiredMerchant shop) {
 
-        oPacket.EncodeShort(SendPacketOpcode.EmployeeMiniRoomBalloon.getValue());
-        oPacket.EncodeInteger(shop.getOwnerId());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.EmployeeMiniRoomBalloon.getValue());
+        oPacket.EncodeInt(shop.getOwnerId());
         PacketHelper.addInteraction(oPacket, shop);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet merchItem_Message(final int op) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket merchItem_Message(final int op) {
 
-        oPacket.EncodeShort(SendPacketOpcode.StoreBankGetAllResult.getValue());
-        oPacket.Encode(op);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.StoreBankGetAllResult.getValue());
+        oPacket.EncodeByte(op);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet merchItemStore(final byte op, final int days, final int fees) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket merchItemStore(final byte op, final int days, final int fees) {
 
         // 40: This is currently unavailable.\r\nPlease try again later
-        oPacket.EncodeShort(SendPacketOpcode.StoreBankResult.getValue());
-        oPacket.Encode(op);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.StoreBankResult.getValue());
+        oPacket.EncodeByte(op);
         switch (op) {
             case 39:
-                oPacket.EncodeInteger(999999999); // ? 
-                oPacket.EncodeInteger(999999999); // mapid
-                oPacket.Encode(0); // >= -2 channel
+                oPacket.EncodeInt(999999999); // ? 
+                oPacket.EncodeInt(999999999); // mapid
+                oPacket.EncodeByte(0); // >= -2 channel
                 // if cc -1 or map = 999,999,999 : I don't think you have any items or money to retrieve here. This is where you retrieve the items and mesos that you couldn't get from your Hired Merchant. You'll also need to see me as the character that opened the Personal Store.
                 //Your Personal Store is open #bin Channel %s, Free Market %d#k.\r\nIf you need me, then please close your personal store first before seeing me.
                 break;
             case 38:
-                oPacket.EncodeInteger(days); // % tax or days, 1 day = 1%
-                oPacket.EncodeInteger(fees); // feees
+                oPacket.EncodeInt(days); // % tax or days, 1 day = 1%
+                oPacket.EncodeInt(fees); // feees
                 break;
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet merchItemStore_ItemData(final MerchItemPackage pack) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket merchItemStore_ItemData(final MerchItemPackage pack) {
 
-        oPacket.EncodeShort(SendPacketOpcode.StoreBankResult.getValue());
-        oPacket.Encode(38);
-        oPacket.EncodeInteger(9030000); // Fredrick
-        oPacket.Encode(16); // max items?
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.StoreBankResult.getValue());
+        oPacket.EncodeByte(38);
+        oPacket.EncodeInt(9030000); // Fredrick
+        oPacket.EncodeByte(16); // max items?
         oPacket.EncodeLong(126L); // ?
         oPacket.EncodeLong(pack.getMesos());
-        oPacket.Encode(0);
-        oPacket.Encode(pack.getItems().size());
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(pack.getItems().size());
         for (final Item item : pack.getItems()) {
             PacketHelper.addItemInfo(oPacket, item);
         }
         oPacket.Fill(0, 3);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getMiniGame(MapleClient c, MapleMiniGame minigame) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(10);
-        oPacket.Encode(minigame.getGameType());
-        oPacket.Encode(minigame.getMaxSize());
+    public static OutPacket getMiniGame(MapleClient c, MapleMiniGame minigame) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(10);
+        oPacket.EncodeByte(minigame.getGameType());
+        oPacket.EncodeByte(minigame.getMaxSize());
         oPacket.EncodeShort(minigame.getVisitorSlot(c.getPlayer()));
         CField.writeCharacterLook(oPacket, minigame.getMCOwner(), false);
         oPacket.EncodeString(minigame.getOwnerName());
         oPacket.EncodeShort(minigame.getMCOwner().getJob());
         for (Pair visitorz : minigame.getVisitors()) {
-            oPacket.Encode(((Byte) visitorz.getLeft()).byteValue());
+            oPacket.EncodeByte(((Byte) visitorz.getLeft()).byteValue());
             CField.writeCharacterLook(oPacket, (User) visitorz.getRight(), false);//MapleCharacterLook
             oPacket.EncodeString(((User) visitorz.getRight()).getName());
             oPacket.EncodeShort(((User) visitorz.getRight()).getJob());
         }
-        oPacket.Encode(-1);
-        oPacket.Encode(0);
+        oPacket.EncodeByte(-1);
+        oPacket.EncodeByte(0);
         addGameInfo(oPacket, minigame.getMCOwner(), minigame);
         for (Pair visitorz : minigame.getVisitors()) {
-            oPacket.Encode(((Byte) visitorz.getLeft()).byteValue());
+            oPacket.EncodeByte(((Byte) visitorz.getLeft()).byteValue());
             addGameInfo(oPacket, (User) visitorz.getRight(), minigame);
         }
-        oPacket.Encode(-1);
+        oPacket.EncodeByte(-1);
         oPacket.EncodeString(minigame.getDescription());
         oPacket.EncodeShort(minigame.getPieceType());
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getMiniGameReady(boolean ready) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(ready ? 56 : 60);
-        return oPacket.ToPacket();
+    public static OutPacket getMiniGameReady(boolean ready) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(ready ? 56 : 60);
+        return oPacket;
     }
 
-    public static Packet getMiniGameExitAfter(boolean ready) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(ready ? 54 : 58);
-        return oPacket.ToPacket();
+    public static OutPacket getMiniGameExitAfter(boolean ready) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(ready ? 54 : 58);
+        return oPacket;
     }
 
-    public static Packet getMiniGameStart(int loser) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(62);
-        oPacket.Encode(loser == 1 ? 0 : 1);
-        return oPacket.ToPacket();
+    public static OutPacket getMiniGameStart(int loser) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(62);
+        oPacket.EncodeByte(loser == 1 ? 0 : 1);
+        return oPacket;
     }
 
-    public static Packet getMiniGameSkip(int slot) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(64);
+    public static OutPacket getMiniGameSkip(int slot) {
 
-        oPacket.Encode(slot);
-        return oPacket.ToPacket();
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(64);
+
+        oPacket.EncodeByte(slot);
+        return oPacket;
     }
 
-    public static Packet getMiniGameRequestTie() {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(51);
-        return oPacket.ToPacket();
+    public static OutPacket getMiniGameRequestTie() {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(51);
+        return oPacket;
     }
 
-    public static Packet getMiniGameDenyTie() {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(50);
-        return oPacket.ToPacket();
+    public static OutPacket getMiniGameDenyTie() {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(50);
+        return oPacket;
     }
 
-    public static Packet getMiniGameFull() {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
+    public static OutPacket getMiniGameFull() {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
         oPacket.EncodeShort(10);
-        oPacket.Encode(2);
-        return oPacket.ToPacket();
+        oPacket.EncodeByte(2);
+        return oPacket;
     }
 
-    public static Packet getMiniGameMoveOmok(int move1, int move2, int move3) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(65);
-        oPacket.EncodeInteger(move1);
-        oPacket.EncodeInteger(move2);
-        oPacket.Encode(move3);
-        return oPacket.ToPacket();
+    public static OutPacket getMiniGameMoveOmok(int move1, int move2, int move3) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(65);
+        oPacket.EncodeInt(move1);
+        oPacket.EncodeInt(move2);
+        oPacket.EncodeByte(move3);
+        return oPacket;
     }
 
-    public static Packet getMiniGameNewVisitor(User c, int slot, MapleMiniGame game) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(9);
-        oPacket.Encode(slot);
+    public static OutPacket getMiniGameNewVisitor(User c, int slot, MapleMiniGame game) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(9);
+        oPacket.EncodeByte(slot);
         CField.writeCharacterLook(oPacket, c, false);
         oPacket.EncodeString(c.getName());
         oPacket.EncodeShort(c.getJob());
         addGameInfo(oPacket, c, game);
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     public static void addGameInfo(OutPacket oPacket, User chr, MapleMiniGame game) {
-        oPacket.EncodeInteger(game.getGameType());
-        oPacket.EncodeInteger(game.getWins(chr));
-        oPacket.EncodeInteger(game.getTies(chr));
-        oPacket.EncodeInteger(game.getLosses(chr));
-        oPacket.EncodeInteger(game.getScore(chr));
+        oPacket.EncodeInt(game.getGameType());
+        oPacket.EncodeInt(game.getWins(chr));
+        oPacket.EncodeInt(game.getTies(chr));
+        oPacket.EncodeInt(game.getLosses(chr));
+        oPacket.EncodeInt(game.getScore(chr));
     }
 
-    public static Packet getMiniGameClose(byte number) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(18);
-        oPacket.Encode(1);
-        oPacket.Encode(number);
-        return oPacket.ToPacket();
+    public static OutPacket getMiniGameClose(byte number) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(18);
+        oPacket.EncodeByte(1);
+        oPacket.EncodeByte(number);
+        return oPacket;
     }
 
-    public static Packet getMatchCardStart(MapleMiniGame game, int loser) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(62);
-        oPacket.Encode(loser == 1 ? 0 : 1);
+    public static OutPacket getMatchCardStart(MapleMiniGame game, int loser) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(62);
+        oPacket.EncodeByte(loser == 1 ? 0 : 1);
         int times = game.getPieceType() == 2 ? 30 : game.getPieceType() == 1 ? 20 : 12;
-        oPacket.Encode(times);
+        oPacket.EncodeByte(times);
         for (int i = 1; i <= times; i++) {
-            oPacket.EncodeInteger(game.getCardId(i));
+            oPacket.EncodeInt(game.getCardId(i));
         }
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getMatchCardSelect(int turn, int slot, int firstslot, int type) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(69);
-        oPacket.Encode(turn);
-        oPacket.Encode(slot);
+    public static OutPacket getMatchCardSelect(int turn, int slot, int firstslot, int type) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(69);
+        oPacket.EncodeByte(turn);
+        oPacket.EncodeByte(slot);
         if (turn == 0) {
-            oPacket.Encode(firstslot);
-            oPacket.Encode(type);
+            oPacket.EncodeByte(firstslot);
+            oPacket.EncodeByte(type);
         }
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getMiniGameResult(MapleMiniGame game, int type, int x) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(63);
-        oPacket.Encode(type);
+    public static OutPacket getMiniGameResult(MapleMiniGame game, int type, int x) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(63);
+        oPacket.EncodeByte(type);
         game.setPoints(x, type);
         if (type != 0) {
             game.setPoints(x == 1 ? 0 : 1, type == 2 ? 0 : 1);
         }
         if (type != 1) {
             if (type == 0) {
-                oPacket.Encode(x == 1 ? 0 : 1);
+                oPacket.EncodeByte(x == 1 ? 0 : 1);
             } else {
-                oPacket.Encode(x);
+                oPacket.EncodeByte(x);
             }
         }
         addGameInfo(oPacket, game.getMCOwner(), game);
@@ -507,32 +486,30 @@ public class PlayerShopPacket {
             addGameInfo(oPacket, (User) visitorz.right, game);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
 
     }
 
-    public static final Packet MerchantBlackListView(final List<String> blackList) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket MerchantBlackListView(final List<String> blackList) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(39);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(39);
         oPacket.EncodeShort(blackList.size());
         for (String visit : blackList) {
             oPacket.EncodeString(visit);
         }
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet MerchantVisitorView(List<String> visitor) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket MerchantVisitorView(List<String> visitor) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MiniRoom.getValue());
-        oPacket.Encode(38);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
+        oPacket.EncodeByte(38);
         oPacket.EncodeShort(visitor.size());
         for (String visit : visitor) {
             oPacket.EncodeString(visit);
-            oPacket.EncodeInteger(1);
+            oPacket.EncodeInt(1);
         }
-        return oPacket.ToPacket();
+        return oPacket;
     }
 }

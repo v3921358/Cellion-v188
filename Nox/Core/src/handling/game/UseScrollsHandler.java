@@ -22,7 +22,7 @@ import net.InPacket;
 import server.potentials.ItemPotentialTierType;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -37,7 +37,7 @@ public class UseScrollsHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         short slot = iPacket.DecodeShort();
         short dst = iPacket.DecodeShort();
         iPacket.DecodeShort();
@@ -71,8 +71,8 @@ public class UseScrollsHandler implements ProcessPacket<MapleClient> {
         if (scroll == null) {
             scroll = chr.getInventory(MapleInventoryType.CASH).getItem(slot);
             if (scroll == null) {
-                c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                c.SendPacket(CWvsContext.enableActions());
                 return false;
             }
         }
@@ -80,46 +80,46 @@ public class UseScrollsHandler implements ProcessPacket<MapleClient> {
                 || ItemConstants.isPotentialScroll(scroll.getItemId())
                 || (GameConstants.isAzwanScroll(scroll.getItemId()) && toScroll.getUpgradeSlots() < MapleItemInformationProvider.getInstance().getEquipStats(scroll.getItemId()).get("tuc")) // Check azwan scroll
                 ) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return false;
         }
 
         if (!GameConstants.isSpecialScroll(scroll.getItemId()) && !GameConstants.isCleanSlate(scroll.getItemId()) && !GameConstants.isEquipScroll(scroll.getItemId())) {
             if (toScroll.getUpgradeSlots() < 1) {
-                c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                c.SendPacket(CWvsContext.enableActions());
                 return false;
             }
         } else if (GameConstants.isEquipScroll(scroll.getItemId())) {
             if (toScroll.getUpgradeSlots() >= 1 || toScroll.getEnhance() >= 100 || vegas > 0 || ii.isCash(toScroll.getItemId())) {
-                c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                c.SendPacket(CWvsContext.enableActions());
                 return false;
             }
         } else if (GameConstants.isSpecialScroll(scroll.getItemId())) {
             if (ii.isCash(toScroll.getItemId()) || toScroll.getEnhance() >= 12) {
-                c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                c.SendPacket(CWvsContext.enableActions());
                 return false;
             }
         }
         if (!GameConstants.canScroll(toScroll.getItemId()) && !GameConstants.isChaosScroll(toScroll.getItemId())) {
-            c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+            c.SendPacket(CWvsContext.enableActions());
             return false;
         }
         if ((GameConstants.isCleanSlate(scroll.getItemId()) || GameConstants.isTablet(scroll.getItemId()) || GameConstants.isGeneralScroll(scroll.getItemId()) || GameConstants.isChaosScroll(scroll.getItemId())) && (vegas > 0 || ii.isCash(toScroll.getItemId()))) {
-            c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+            c.SendPacket(CWvsContext.enableActions());
             return false;
         }
         if (GameConstants.isTablet(scroll.getItemId()) && toScroll.getDurability() < 0) { //not a durability item
-            c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+            c.SendPacket(CWvsContext.enableActions());
             return false;
         } else if ((!GameConstants.isTablet(scroll.getItemId()) && !GameConstants.isEquipScroll(scroll.getItemId()) && !GameConstants.isCleanSlate(scroll.getItemId()) && !GameConstants.isSpecialScroll(scroll.getItemId()) && !GameConstants.isChaosScroll(scroll.getItemId())) && toScroll.getDurability() >= 0) {
-            c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+            c.SendPacket(CWvsContext.enableActions());
             return false;
         }
         Item wscroll = null;
@@ -127,8 +127,8 @@ public class UseScrollsHandler implements ProcessPacket<MapleClient> {
         // Anti cheat and validation
         List<Integer> scrollReqs = ii.getScrollReqs(scroll.getItemId());
         if (scrollReqs != null && scrollReqs.size() > 0 && !scrollReqs.contains(toScroll.getItemId())) {
-            c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+            c.SendPacket(CWvsContext.enableActions());
             return false;
         }
 
@@ -142,25 +142,25 @@ public class UseScrollsHandler implements ProcessPacket<MapleClient> {
             switch (scroll.getItemId() % 1000 / 100) {
                 case 0: //1h
                     if (GameConstants.isTwoHanded(toScroll.getItemId()) || !InventoryConstants.isWeapon(toScroll.getItemId())) {
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                         return false;
                     }
                     break;
                 case 1: //2h
                     if (!GameConstants.isTwoHanded(toScroll.getItemId()) || !InventoryConstants.isWeapon(toScroll.getItemId())) {
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                         return false;
                     }
                     break;
                 case 2: //armor
                     if (GameConstants.isAccessory(toScroll.getItemId()) || InventoryConstants.isWeapon(toScroll.getItemId())) {
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                         return false;
                     }
                     break;
                 case 3: //accessory
                     if (!GameConstants.isAccessory(toScroll.getItemId()) || InventoryConstants.isWeapon(toScroll.getItemId())) {
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                         return false;
                     }
                     break;
@@ -171,18 +171,18 @@ public class UseScrollsHandler implements ProcessPacket<MapleClient> {
                 && !GameConstants.isEquipScroll(scroll.getItemId())
                 && !GameConstants.isSpecialScroll(scroll.getItemId())) {
             if (!ii.canScroll(scroll.getItemId(), toScroll.getItemId())) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return false;
             }
         }
         if (GameConstants.isAccessoryScroll(scroll.getItemId()) && !GameConstants.isAccessory(toScroll.getItemId())) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return false;
         }
 
         if (legendarySpirit && vegas == 0) {
             if (chr.getSkillLevel(SkillFactory.getSkill(PlayerStats.getSkillByJob(1003, chr.getJob()))) <= 0) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return false;
             }
         }
@@ -209,7 +209,7 @@ public class UseScrollsHandler implements ProcessPacket<MapleClient> {
         } else if (scrollSuccess == Equip.ScrollResult.FAIL && scrolled.getUpgradeSlots() < oldSlots && c.getPlayer().getInventory(MapleInventoryType.CASH).findById(5640000) != null) {
             chr.setScrolledPosition(scrolled.getPosition());
             if (vegas == 0) {
-                c.write(CWvsContext.pamSongUI());
+                c.SendPacket(CWvsContext.pamSongUI());
             }
         }
 
@@ -225,9 +225,9 @@ public class UseScrollsHandler implements ProcessPacket<MapleClient> {
         modifications.add(new ModifyInventory(ModifyInventoryOperation.Remove, scrolled));
         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, scrolled));
 
-        c.write(CWvsContext.inventoryOperation(true, modifications));
+        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
         chr.getMap().broadcastMessage(chr, CField.getScrollEffect(c.getPlayer().getId(), scrollSuccess, legendarySpirit, toScroll.getItemId(), scroll.getItemId()), vegas == 0);
-        c.write(CField.enchantResult(scrollSuccess == Equip.ScrollResult.SUCCESS ? 1 : scrollSuccess == Equip.ScrollResult.CURSE ? 2 : 0));
+        c.SendPacket(CField.enchantResult(scrollSuccess == Equip.ScrollResult.SUCCESS ? 1 : scrollSuccess == Equip.ScrollResult.CURSE ? 2 : 0));
         if (dst < 0 && (scrollSuccess == Equip.ScrollResult.SUCCESS || scrollSuccess == Equip.ScrollResult.CURSE) && vegas == 0) {
             chr.equipChanged();
         }

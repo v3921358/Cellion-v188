@@ -9,7 +9,7 @@ import net.InPacket;
 import server.maps.objects.User;
 import server.movement.LifeMovementFragment;
 import tools.packet.CField;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  * @author Steven
@@ -29,8 +29,8 @@ public class FamiliarMovement implements ProcessPacket<MapleClient> {
             return;
         }
         iPacket.DecodeByte();
-        iPacket.DecodeInteger();
-        chr.getSummonedFamiliar().settEncodedGatherDuration(iPacket.DecodeInteger());
+        iPacket.DecodeInt();
+        chr.getSummonedFamiliar().settEncodedGatherDuration(iPacket.DecodeInt());
         chr.getSummonedFamiliar().setxCS(iPacket.DecodeShort());
         chr.getSummonedFamiliar().setyCS(iPacket.DecodeShort());
         chr.getSummonedFamiliar().setvXCS(iPacket.DecodeShort());

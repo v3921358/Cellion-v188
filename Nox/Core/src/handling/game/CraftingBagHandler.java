@@ -15,7 +15,7 @@ import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class CraftingBagHandler implements ProcessPacket<MapleClient> {
 
@@ -28,16 +28,16 @@ public final class CraftingBagHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
 
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         final byte slot = (byte) iPacket.DecodeShort();
-        final int itemId = iPacket.DecodeInteger();
+        final int itemId = iPacket.DecodeInt();
         final MapleInventoryType inventoryType = MapleInventoryType.getByType(iPacket.DecodeByte());
 
         final Item toUse = chr.getInventory(inventoryType).getItem(slot);
 
         if (!chr.isAlive() || chr.getMap() == null
                 || chr.hasBlockedInventory() || toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId || inventoryType == MapleInventoryType.UNDEFINED) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         final MapleStatEffect effect = MapleItemInformationProvider.getInstance().getItemEffect(itemId);
@@ -49,7 +49,7 @@ public final class CraftingBagHandler implements ProcessPacket<MapleClient> {
                 <int name="type" value="1"/>
             </imgdir>*/
             // this might not be a bag item..
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
 
@@ -67,10 +67,10 @@ public final class CraftingBagHandler implements ProcessPacket<MapleClient> {
             // Update bag item response to the client
             List<ModifyInventory> mod = new ArrayList<>();
             mod.add(new ModifyInventory(ModifyInventoryOperation.UpdateQuantity, toUse));
-            c.write(CWvsContext.inventoryOperation(true, mod));
+            c.SendPacket(CWvsContext.inventoryOperation(true, mod));
         }
-        c.write(CField.openBag(chr.getExtendedSlots().indexOf(itemId), itemId, firstTime));
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CField.openBag(chr.getExtendedSlots().indexOf(itemId), itemId, firstTime));
+        c.SendPacket(CWvsContext.enableActions());
     }
 
 }

@@ -26,7 +26,7 @@ import client.MapleStat;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class OnUserGivePopularityRequest implements ProcessPacket<MapleClient> {
 
@@ -38,17 +38,17 @@ public final class OnUserGivePopularityRequest implements ProcessPacket<MapleCli
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
-        final int who = iPacket.DecodeInteger();
+        final int who = iPacket.DecodeInt();
         final int mode = iPacket.DecodeByte();
 
         final int famechange = mode == 0 ? -1 : 1;
         final User target = chr.getMap().getCharacterById(who);
 
         if (target == null || target == chr) { // faming self
-            c.write(CWvsContext.giveFameErrorResponse(1));
+            c.SendPacket(CWvsContext.giveFameErrorResponse(1));
             return;
         } else if (chr.getLevel() < 15) {
-            c.write(CWvsContext.giveFameErrorResponse(2));
+            c.SendPacket(CWvsContext.giveFameErrorResponse(2));
             return;
         }
         switch (chr.canGiveFame(target)) {
@@ -60,14 +60,14 @@ public final class OnUserGivePopularityRequest implements ProcessPacket<MapleCli
                 if (!chr.isGM()) {
                     chr.hasGivenFame(target);
                 }
-                c.write(CWvsContext.OnFameResult(0, target.getName(), famechange == 1, target.getFame()));
-                target.getClient().write(CWvsContext.OnFameResult(5, chr.getName(), famechange == 1, 0));
+                c.SendPacket(CWvsContext.OnFameResult(0, target.getName(), famechange == 1, target.getFame()));
+                target.getClient().SendPacket(CWvsContext.OnFameResult(5, chr.getName(), famechange == 1, 0));
                 break;
             case NOT_TODAY:
-                c.write(CWvsContext.giveFameErrorResponse(3));
+                c.SendPacket(CWvsContext.giveFameErrorResponse(3));
                 break;
             case NOT_THIS_MONTH:
-                c.write(CWvsContext.giveFameErrorResponse(4));
+                c.SendPacket(CWvsContext.giveFameErrorResponse(4));
                 break;
         }
     }

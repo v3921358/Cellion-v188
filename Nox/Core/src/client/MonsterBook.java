@@ -20,11 +20,12 @@ import client.inventory.EquipSlotType;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ItemConstants;
-import database.DatabaseConnection;
+import database.Database;
 import net.OutPacket;
 import server.MapleItemInformationProvider;
 import server.maps.objects.User;
 import server.quest.MapleQuest;
+import tools.LogHelper;
 import tools.Pair;
 import tools.Triple;
 import tools.packet.CField;
@@ -130,16 +131,16 @@ public final class MonsterBook
         }
         for (Iterator<Integer> i$ = cardSize.iterator(); i$.hasNext();) {
             int i = i$.next();
-            oPacket.EncodeInteger(i);
+            oPacket.EncodeInt(i);
         }
-        oPacket.EncodeInteger(this.setScore);
-        oPacket.EncodeInteger(this.currentSet);
-        oPacket.EncodeInteger(this.finishedSets);
+        oPacket.EncodeInt(this.setScore);
+        oPacket.EncodeInt(this.currentSet);
+        oPacket.EncodeInt(this.finishedSets);
     }
 
     public void writeFinished(OutPacket oPacket) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-        oPacket.Encode(1);
+        oPacket.EncodeByte(1);
         oPacket.EncodeShort(this.cardItems.size());
         List<Integer> mbList = new ArrayList<>(ii.getMonsterBookList());
         Collections.sort(mbList);
@@ -156,23 +157,23 @@ public final class MonsterBook
                 }
                 currentMask *= 2;
             }
-            oPacket.Encode(maskToWrite);
+            oPacket.EncodeByte(maskToWrite);
         }
 
         int fullSize = this.cardItems.size() / 2 + (this.cardItems.size() % 2 > 0 ? 1 : 0);
         oPacket.EncodeShort(fullSize);
         for (int i = 0; i < fullSize; i++) {
-            oPacket.Encode(i == this.cardItems.size() / 2 ? 1 : 17);
+            oPacket.EncodeByte(i == this.cardItems.size() / 2 ? 1 : 17);
         }
     }
 
     public void writeUnfinished(OutPacket oPacket) {
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
         oPacket.EncodeShort(this.cardItems.size());
         for (Iterator<Integer> i$ = this.cardItems.iterator(); i$.hasNext();) {
             int i = i$.next();
             oPacket.EncodeShort(i % 10000);
-            oPacket.Encode(1);
+            oPacket.EncodeByte(1);
         }
     }
 
@@ -276,9 +277,9 @@ public final class MonsterBook
         return this.cards.get(cardid) == null ? 0 : this.cards.get(cardid);
     }
 
-    public static final MonsterBook loadCards(int charid, User chr) throws SQLException {
+    public static final MonsterBook loadCards(int charid, User chr, Connection con) throws SQLException {
         Map<Integer, Integer> cards;
-        try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT * FROM monsterbook WHERE charid = ? ORDER BY cardid ASC")) {
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM monsterbook WHERE charid = ? ORDER BY cardid ASC")) {
             ps.setInt(1, charid);
             try (ResultSet rs = ps.executeQuery()) {
                 cards = new LinkedHashMap<Integer, Integer>();
@@ -294,43 +295,47 @@ public final class MonsterBook
         if (!this.changed) {
             return;
         }
-        Connection con = DatabaseConnection.getConnection();
-        PreparedStatement ps = con.prepareStatement("DELETE FROM monsterbook WHERE charid = ?");
-        ps.setInt(1, charid);
-        ps.execute();
-        ps.close();
-        this.changed = false;
-        if (this.cards.isEmpty()) {
-            return;
-        }
-
-        boolean first = true;
-        StringBuilder query = new StringBuilder();
-
-        for (Map.Entry all : this.cards.entrySet()) {
-            if (first) {
-                first = false;
-                query.append("INSERT INTO monsterbook VALUES (DEFAULT,");
-            } else {
-                query.append(",(DEFAULT,");
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            PreparedStatement ps = con.prepareStatement("DELETE FROM monsterbook WHERE charid = ?");
+            ps.setInt(1, charid);
+            ps.execute();
+            ps.close();
+            this.changed = false;
+            if (this.cards.isEmpty()) {
+                return;
             }
-            query.append(charid);
-            query.append(",");
-            query.append(all.getKey());
-            query.append(",");
-            query.append(all.getValue());
-            query.append(")");
+
+            boolean first = true;
+            StringBuilder query = new StringBuilder();
+
+            for (Map.Entry all : this.cards.entrySet()) {
+                if (first) {
+                    first = false;
+                    query.append("INSERT INTO monsterbook VALUES (DEFAULT,");
+                } else {
+                    query.append(",(DEFAULT,");
+                }
+                query.append(charid);
+                query.append(",");
+                query.append(all.getKey());
+                query.append(",");
+                query.append(all.getValue());
+                query.append(")");
+            }
+            ps = con.prepareStatement(query.toString());
+            ps.execute();
+            ps.close();
+        } catch (SQLException e) {
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
-        ps = con.prepareStatement(query.toString());
-        ps.execute();
-        ps.close();
     }
 
     public final boolean monsterCaught(MapleClient c, int cardid, String cardname) {
         if ((!this.cards.containsKey(cardid)) || (this.cards.get(cardid) < 2)) {
             this.changed = true;
             c.getPlayer().dropMessage(-6, new StringBuilder().append("Book entry updated - ").append(cardname).toString());
-            c.write(CField.EffectPacket.showForeignEffect(UserEffectCodes.MonsterBookCardGet));
+            c.SendPacket(CField.EffectPacket.showForeignEffect(UserEffectCodes.MonsterBookCardGet));
             this.cards.put(cardid, 2);
 
             if (c.getPlayer().getQuestStatus(50195) != MapleQuestState.Started) {
@@ -345,7 +350,7 @@ public final class MonsterBook
                 if (c.getPlayer().getQuestStatus(50197) != MapleQuestState.Started) {
                     MapleQuest.getInstance(50197).forceStart(c.getPlayer(), 9010000, "1");
                 }
-                c.write(CField.EffectPacket.showForeignEffect(UserEffectCodes.BiteAttack_ReceiveSuccess));//was43
+                c.SendPacket(CField.EffectPacket.showForeignEffect(UserEffectCodes.BiteAttack_ReceiveSuccess));//was43
                 if (rr > 1) {
                     applyBook(c.getPlayer(), false);
                 }
@@ -368,6 +373,6 @@ public final class MonsterBook
 
         c.getPlayer().dropMessage(-6, new StringBuilder().append("New book entry - ").append(cardname).toString());
         this.cards.put(cardid, 1);
-        c.write(CField.EffectPacket.showForeignEffect(UserEffectCodes.MonsterBookCardGet));
+        c.SendPacket(CField.EffectPacket.showForeignEffect(UserEffectCodes.MonsterBookCardGet));
     }
 }

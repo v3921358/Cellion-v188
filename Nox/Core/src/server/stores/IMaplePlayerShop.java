@@ -3,7 +3,8 @@ package server.stores;
 import java.util.List;
 
 import client.MapleClient;
-import net.Packet;
+import net.OutPacket;
+
 import server.maps.objects.User;
 import server.stores.AbstractPlayerStore.BoughtItem;
 import tools.Pair;
@@ -51,7 +52,7 @@ public interface IMaplePlayerShop {
 
     public void removeFromSlot(int slot);
 
-    public void broadcastToVisitors(Packet packet);
+    public void broadcastToVisitors(OutPacket packet);
 
     public void addVisitor(User visitor);
 

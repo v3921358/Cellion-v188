@@ -11,7 +11,7 @@ import constants.GameConstants;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  * @author Steven
@@ -35,7 +35,7 @@ public class ZeroCashItemShare implements ProcessPacket<MapleClient> {
         if (chr == null) {
             return;
         }
-        int position = iPacket.DecodeInteger();
+        int position = iPacket.DecodeInt();
         boolean isShared = iPacket.DecodeByte() > 0;
         byte pos = (byte) (-100 - position);
         Equip alpha = (Equip) chr.getInventory(MapleInventoryType.EQUIPPED).getItem(pos);
@@ -45,7 +45,7 @@ public class ZeroCashItemShare implements ProcessPacket<MapleClient> {
         if (isShared) {
             Equip beta = (Equip) alpha.copy();
             beta.setPosition(GameConstants.getBetaCashPosition(alpha.getPosition()));
-            c.write(CWvsContext.inventoryOperation(true, Collections.singletonList(new ModifyInventory(ModifyInventoryOperation.AddItem, beta, (short) 0)), true));
+            c.SendPacket(CWvsContext.inventoryOperation(true, Collections.singletonList(new ModifyInventory(ModifyInventoryOperation.AddItem, beta, (short) 0)), true));
         }
     }
 

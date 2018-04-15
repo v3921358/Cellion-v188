@@ -4,108 +4,100 @@ import java.util.List;
 
 import service.SendPacketOpcode;
 import net.OutPacket;
-import net.Packet;
+
 import server.MapleCarnivalParty;
 import server.maps.objects.User;
 
 public class MonsterCarnivalPacket {
 
-    public static Packet startMonsterCarnival(final User chr, final int enemyavailable, final int enemytotal) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket startMonsterCarnival(final User chr, final int enemyavailable, final int enemytotal) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MCarnivalEnter.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MCarnivalEnter.getValue());
         final MapleCarnivalParty friendly = chr.getCarnivalParty();
-        oPacket.Encode(friendly.getTeam());
-        oPacket.EncodeInteger(chr.getAvailableCP());
-        oPacket.EncodeInteger(chr.getTotalCP());
-        oPacket.EncodeInteger(friendly.getAvailableCP()); // ??
-        oPacket.EncodeInteger(friendly.getTotalCP()); // ??
-        oPacket.Encode(0); // ??
+        oPacket.EncodeByte(friendly.getTeam());
+        oPacket.EncodeInt(chr.getAvailableCP());
+        oPacket.EncodeInt(chr.getTotalCP());
+        oPacket.EncodeInt(friendly.getAvailableCP()); // ??
+        oPacket.EncodeInt(friendly.getTotalCP()); // ??
+        oPacket.EncodeByte(0); // ??
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet playerDiedMessage(String name, int lostCP, int team) { //CPQ
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket playerDiedMessage(String name, int lostCP, int team) { //CPQ
 
-        oPacket.EncodeShort(SendPacketOpcode.MONSTER_CARNIVAL_DIED.getValue());
-        oPacket.Encode(team); //team
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MONSTER_CARNIVAL_DIED.getValue());
+        oPacket.EncodeByte(team); //team
         oPacket.EncodeString(name);
-        oPacket.Encode(lostCP);
+        oPacket.EncodeByte(lostCP);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet playerLeaveMessage(boolean leader, String name, int team) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket playerLeaveMessage(boolean leader, String name, int team) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MONSTER_CARNIVAL_LEAVE.getValue());
-        oPacket.Encode(leader ? 7 : 0);
-        oPacket.Encode(team); // 0: red, 1: blue
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MONSTER_CARNIVAL_LEAVE.getValue());
+        oPacket.EncodeByte(leader ? 7 : 0);
+        oPacket.EncodeByte(team); // 0: red, 1: blue
         oPacket.EncodeString(name);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet CPUpdate(boolean party, int curCP, int totalCP, int team) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket CPUpdate(boolean party, int curCP, int totalCP, int team) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MONSTER_CARNIVAL_OBTAINED_CP.getValue());
-        oPacket.EncodeInteger(curCP);
-        oPacket.EncodeInteger(totalCP);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MONSTER_CARNIVAL_OBTAINED_CP.getValue());
+        oPacket.EncodeInt(curCP);
+        oPacket.EncodeInt(totalCP);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showMCStats(int left, int right) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showMCStats(int left, int right) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MONSTER_CARNIVAL_STATS.getValue());
-        oPacket.EncodeInteger(left);
-        oPacket.EncodeInteger(right);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MONSTER_CARNIVAL_STATS.getValue());
+        oPacket.EncodeInt(left);
+        oPacket.EncodeInt(right);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet playerSummoned(String name, int tab, int number) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket playerSummoned(String name, int tab, int number) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MONSTER_CARNIVAL_SUMMON.getValue());
-        oPacket.Encode(tab);
-        oPacket.Encode(number);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MONSTER_CARNIVAL_SUMMON.getValue());
+        oPacket.EncodeByte(tab);
+        oPacket.EncodeByte(number);
         oPacket.EncodeString(name);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showMCResult(int mode) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showMCResult(int mode) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MONSTER_CARNIVAL_RESULT.getValue());
-        oPacket.Encode(mode);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MONSTER_CARNIVAL_RESULT.getValue());
+        oPacket.EncodeByte(mode);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet showMCRanking(List<User> players) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket showMCRanking(List<User> players) {
 
-        oPacket.EncodeShort(SendPacketOpcode.MONSTER_CARNIVAL_RANKING.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MONSTER_CARNIVAL_RANKING.getValue());
         oPacket.EncodeShort(players.size());
         for (User i : players) {
-            oPacket.EncodeInteger(i.getId());
+            oPacket.EncodeInt(i.getId());
             oPacket.EncodeString(i.getName());
-            oPacket.EncodeInteger(10); // points
-            oPacket.Encode(0); // team
+            oPacket.EncodeInt(10); // points
+            oPacket.EncodeByte(0); // team
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet startCPQ(byte team, int usedcp, int totalcp) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MCarnivalEnter.getValue());
-        oPacket.Encode(0); //team
+    public static OutPacket startCPQ(byte team, int usedcp, int totalcp) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MCarnivalEnter.getValue());
+        oPacket.EncodeByte(0); //team
         oPacket.EncodeShort(0); //Obtained CP - Used CP
         oPacket.EncodeShort(0); //Total Obtained CP
         oPacket.EncodeShort(0); //Obtained CP - Used CP of the team
@@ -114,42 +106,43 @@ public class MonsterCarnivalPacket {
         oPacket.EncodeShort(0); //Total Obtained CP of the team
         oPacket.EncodeShort(0); //Probably useless nexon shit
         oPacket.EncodeLong(0); //Probably useless nexon shit
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet obtainCP() {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MONSTER_CARNIVAL_OBTAINED_CP.getValue());
+    public static OutPacket obtainCP() {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MONSTER_CARNIVAL_OBTAINED_CP.getValue());
         oPacket.EncodeShort(0); //Obtained CP - Used CP
         oPacket.EncodeShort(0); //Total Obtained CP
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet obtainPartyCP() {
-        OutPacket oPacket = new OutPacket(80);
-        //oPacket.encodeShort(SendPacketOpcode.MONSTER_CARNIVAL_PARTY_CP.getValue());
+    /*
+    public static OutPacket obtainPartyCP() {
+        
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MONSTER_CARNIVAL_PARTY_CP.getValue());
         oPacket.Encode(0); //Team where the points are given to.
         oPacket.EncodeShort(0); //Obtained CP - Used CP
         oPacket.EncodeShort(0); //Total Obtained CP
-        return oPacket.ToPacket();
+        return oPacket;
     }
+     */
+    public static OutPacket CPQSummon() {
 
-    public static Packet CPQSummon() {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MONSTER_CARNIVAL_SUMMON.getValue());
-        oPacket.Encode(0); //Tab
-        oPacket.Encode(0); //Number of summon inside the tab
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MONSTER_CARNIVAL_SUMMON.getValue());
+        oPacket.EncodeByte(0); //Tab
+        oPacket.EncodeByte(0); //Number of summon inside the tab
         oPacket.EncodeString(""); //Name of the player that summons
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet CPQDied() {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MONSTER_CARNIVAL_SUMMON.getValue());
-        oPacket.Encode(0); //Team
+    public static OutPacket CPQDied() {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MONSTER_CARNIVAL_SUMMON.getValue());
+        oPacket.EncodeByte(0); //Team
         oPacket.EncodeString(""); //Name of the player that died
-        oPacket.Encode(0); //Lost CP
-        return oPacket.ToPacket();
+        oPacket.EncodeByte(0); //Lost CP
+        return oPacket;
     }
 
     /**
@@ -163,19 +156,19 @@ public class MonsterCarnivalPacket {
      * @return
      *
      */
-    public static Packet CPQMessage(byte message) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MONSTER_CARNIVAL_MESSAGE.getValue());
-        oPacket.Encode(message); //Message
-        return oPacket.ToPacket();
+    public static OutPacket CPQMessage(byte message) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MONSTER_CARNIVAL_MESSAGE.getValue());
+        oPacket.EncodeByte(message); //Message
+        return oPacket;
     }
 
-    public static Packet leaveCPQ() {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MONSTER_CARNIVAL_LEAVE.getValue());
-        oPacket.Encode(0); //Something?
-        oPacket.Encode(0); //Team
+    public static OutPacket leaveCPQ() {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MONSTER_CARNIVAL_LEAVE.getValue());
+        oPacket.EncodeByte(0); //Something?
+        oPacket.EncodeByte(0); //Team
         oPacket.EncodeString(""); //Player name
-        return oPacket.ToPacket();
+        return oPacket;
     }
 }

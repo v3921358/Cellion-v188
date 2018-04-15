@@ -23,7 +23,7 @@ package handling.farm;
 
 import client.MapleClient;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class FarmBuildingPlacementHandler implements ProcessPacket<MapleClient> {
 
@@ -34,8 +34,8 @@ public final class FarmBuildingPlacementHandler implements ProcessPacket<MapleCl
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int position = iPacket.DecodeInteger();
-        int itemId = iPacket.DecodeInteger();
+        int position = iPacket.DecodeInt();
+        int itemId = iPacket.DecodeInt();
         iPacket.DecodeByte(); //idk
         if (itemId / 10000 < 112 || itemId / 10000 > 114) {
             return;

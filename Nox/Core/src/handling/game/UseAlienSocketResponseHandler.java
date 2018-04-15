@@ -3,7 +3,7 @@ package handling.game;
 import client.MapleClient;
 import net.InPacket;
 import tools.packet.CSPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -19,6 +19,6 @@ public class UseAlienSocketResponseHandler implements ProcessPacket<MapleClient>
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         iPacket.Skip(4); // all 0
-        c.write(CSPacket.useAlienSocket(false));
+        c.SendPacket(CSPacket.useAlienSocket(false));
     }
 }

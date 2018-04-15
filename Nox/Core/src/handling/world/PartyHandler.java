@@ -16,7 +16,7 @@ public class PartyHandler {
             c.getPlayer().dropMessage(5, "You may not do party search here.");
             return;
         }
-        c.write(CWvsContext.PartyPacket.showMemberSearch(c.getPlayer().getMap().getCharacters()));
+        c.SendPacket(CWvsContext.PartyPacket.showMemberSearch(c.getPlayer().getMap().getCharacters()));
     }
 
     public static final void PartySearch(InPacket iPacket, MapleClient c) {
@@ -32,6 +32,6 @@ public class PartyHandler {
             }
         }
 
-        c.write(CWvsContext.PartyPacket.showPartySearch(parties));
+        c.SendPacket(CWvsContext.PartyPacket.showPartySearch(parties));
     }
 }

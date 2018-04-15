@@ -9,7 +9,7 @@ import constants.skills.Global;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -30,7 +30,7 @@ public class ResetHyperStatHandler implements ProcessPacket<MapleClient> {
         if (chr == null) {
             return;
         }
-        chr.updateTick(iPacket.DecodeInteger());
+        chr.updateTick(iPacket.DecodeInt());
 
         if (chr.getMeso() >= RESET_HYPER_STAT_COST) {
             chr.gainMeso(-RESET_HYPER_STAT_COST, true, true);
@@ -41,6 +41,6 @@ public class ResetHyperStatHandler implements ProcessPacket<MapleClient> {
                 chr.changeSkillLevel(skill, (byte) 0, (byte) 0);
             }
         }
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 }

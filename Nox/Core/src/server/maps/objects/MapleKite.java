@@ -78,12 +78,12 @@ public class MapleKite extends MapleMapObject {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.write(CField.spawnKite(this));
+        client.SendPacket(CField.spawnKite(this));
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
         //Nothing here either
-        client.write(CField.destroyKite(getObjectId(), true));
+        client.SendPacket(CField.destroyKite(getObjectId(), true));
     }
 }

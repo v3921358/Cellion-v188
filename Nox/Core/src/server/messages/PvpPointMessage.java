@@ -21,9 +21,9 @@ public class PvpPointMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.PvpPoint.getType());
-        oPacket.EncodeInteger(battleEXP);
-        oPacket.EncodeInteger(battlePoints);
+        oPacket.EncodeByte(_MessageOpcodesType.PvpPoint.getType());
+        oPacket.EncodeInt(battleEXP);
+        oPacket.EncodeInt(battlePoints);
     }
 
 }

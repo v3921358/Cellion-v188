@@ -2,7 +2,7 @@ package handling.login;
 
 import client.MapleClient;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class CharSelectHandler implements ProcessPacket<MapleClient> {
 
@@ -13,7 +13,7 @@ public final class CharSelectHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int charId = iPacket.DecodeInteger();
+        int charId = iPacket.DecodeInt();
         String name = iPacket.DecodeString();
         // MapleCharacter character = c.loadCharacterById(charId);
 

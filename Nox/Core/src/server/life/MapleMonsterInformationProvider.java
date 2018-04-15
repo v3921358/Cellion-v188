@@ -14,12 +14,13 @@ import java.util.Map.Entry;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
-import database.DatabaseConnection;
+import database.Database;
 import java.util.Arrays;
 import server.MapleItemInformationProvider;
 import server.MapleFamiliar;
 import server.MapleStringInformationProvider;
 import server.Randomizer;
+import tools.LogHelper;
 import tools.Pair;
 
 public class MapleMonsterInformationProvider {
@@ -37,50 +38,44 @@ public class MapleMonsterInformationProvider {
     }
 
     public void load() {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM drop_data_global WHERE chance > 0")) {
+                ResultSet rs = ps.executeQuery();
 
-        try {
-            final Connection con = DatabaseConnection.getConnection();
-            ps = con.prepareStatement("SELECT * FROM drop_data_global WHERE chance > 0");
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                globaldrops.add(
-                        new MonsterGlobalDropEntry(
-                                rs.getInt("itemid"),
-                                rs.getInt("chance"),
-                                rs.getInt("continent"),
-                                rs.getByte("dropType"),
-                                rs.getInt("minimum_quantity"),
-                                rs.getInt("maximum_quantity"),
-                                rs.getInt("questid")));
-            }
-            rs.close();
-            ps.close();
-
-            ps = con.prepareStatement("SELECT dropperid FROM drop_data");
-            List<Integer> mobIds = new ArrayList<>();
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                if (!mobIds.contains(rs.getInt("dropperid"))) {
-                    loadDrop(rs.getInt("dropperid"));
-                    mobIds.add(rs.getInt("dropperid"));
+                while (rs.next()) {
+                    globaldrops.add(
+                            new MonsterGlobalDropEntry(
+                                    rs.getInt("itemid"),
+                                    rs.getInt("chance"),
+                                    rs.getInt("continent"),
+                                    rs.getByte("dropType"),
+                                    rs.getInt("minimum_quantity"),
+                                    rs.getInt("maximum_quantity"),
+                                    rs.getInt("questid")));
                 }
+                
+                rs.close();
+            } catch (SQLException e) {
+                LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
+            }
+
+            try (PreparedStatement ps = con.prepareStatement("SELECT dropperid FROM drop_data")) {
+                List<Integer> mobIds = new ArrayList<>();
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    if (!mobIds.contains(rs.getInt("dropperid"))) {
+                        loadDrop(rs.getInt("dropperid"));
+                        mobIds.add(rs.getInt("dropperid"));
+                    }
+                }
+                rs.close();
+            } catch (SQLException e) {
+                LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             }
         } catch (SQLException e) {
-            System.err.println("Error retrieving drop" + e);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (SQLException ignore) {
-            }
-        }
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
+        } 
         loadCustom();
         loadCustomLevelDrops();
         System.out.println(String.format("[Info] Loaded %d Drops.", drops.size()));
@@ -90,7 +85,7 @@ public class MapleMonsterInformationProvider {
         if (ServerConstants.EASTER_EVENT) {
             globaldrops.add(new MonsterGlobalDropEntry(4001689, (int) (25 * 10000), -1, (byte) 0, 1, 2, 0)); // Easter Egg
         }
-        
+
         //globaldrops.add(new MonsterGlobalDropEntry(4001126, (int) (5 * 10000), -1, (byte) 0, 1, 3, 0)); //Maple Leaf
         //globaldrops.add(new MonsterGlobalDropEntry(4310050, (int) (1 * 10000), -1, (byte) 0, 1, 1, 0)); //Old Maple Coin
         //globaldrops.add(new MonsterGlobalDropEntry(2290285, (int) (0.5 * 10000), -1, (byte) 0, 1, 1, 0)); //Mystery Mastery Book
@@ -107,12 +102,13 @@ public class MapleMonsterInformationProvider {
 
         PreparedStatement ps = null;
         ResultSet rs = null;
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             final MapleMonsterStats mons = MapleLifeFactory.getMonsterStats(monsterId);
             if (mons == null) {
                 return;
             }
-            ps = DatabaseConnection.getConnection().prepareStatement("SELECT * FROM drop_data WHERE dropperid = ?");
+            ps = con.prepareStatement("SELECT * FROM drop_data WHERE dropperid = ?");
             ps.setInt(1, monsterId);
             rs = ps.executeQuery();
             int itemid;
@@ -139,6 +135,7 @@ public class MapleMonsterInformationProvider {
             }
 
         } catch (SQLException e) {
+            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         } finally {
             try {
                 if (ps != null) {
@@ -147,7 +144,8 @@ public class MapleMonsterInformationProvider {
                 if (rs != null) {
                     rs.close();
                 }
-            } catch (SQLException ex) {
+            } catch (SQLException e) {
+                LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
                 return;
             }
         }

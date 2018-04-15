@@ -25,7 +25,7 @@ import client.MapleClient;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class MesoDrop implements ProcessPacket<MapleClient> {
 
@@ -37,10 +37,10 @@ public final class MesoDrop implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
-        chr.updateTick(iPacket.DecodeInteger());
-        int meso = iPacket.DecodeInteger();
+        chr.updateTick(iPacket.DecodeInt());
+        int meso = iPacket.DecodeInt();
         if ((!chr.isAlive()) || (meso < 10) || (meso > 50000) || (meso > chr.getMeso())) {
-            chr.getClient().write(CWvsContext.enableActions());
+            chr.getClient().SendPacket(CWvsContext.enableActions());
             return;
         }
         chr.gainMeso(-meso, false, true);

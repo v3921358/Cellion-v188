@@ -11,7 +11,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.life.Mob;
 import tools.packet.JobPacket;
 
@@ -29,24 +29,24 @@ public class CreatePsychicLockHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         List<KinesisPsychicLock> PsychicLock = new ArrayList<>();
-        int nSkillID = iPacket.DecodeInteger();
+        int nSkillID = iPacket.DecodeInt();
         short nSLV = iPacket.DecodeShort();
-        int nAction = iPacket.DecodeInteger();
-        int nActionSpeed = iPacket.DecodeInteger();
+        int nAction = iPacket.DecodeInt();
+        int nActionSpeed = iPacket.DecodeInt();
         long nMobCurHP = 100;
         long nMobMaxHP = 100;
         int count = c.getPlayer().getTotalSkillLevel(142120000) > 0 ? 5 : 3;
         for (int i = 0; i < count; i++) {
             byte bData = iPacket.DecodeByte();
             if (bData == 1) {
-                int nLocalPsychicLockKey = iPacket.DecodeInteger();
-                int nParentPsychicAreaKey = iPacket.DecodeInteger();
-                int dwMobID = iPacket.DecodeInteger(); // Object Id
+                int nLocalPsychicLockKey = iPacket.DecodeInt();
+                int nParentPsychicAreaKey = iPacket.DecodeInt();
+                int dwMobID = iPacket.DecodeInt(); // Object Id
                 int nStuffID = iPacket.DecodeShort();
                 int nUsableCount = iPacket.DecodeShort();
                 int posRelPosFirst = iPacket.DecodeByte();
-                Point posStart = new Point(iPacket.DecodeInteger(), iPacket.DecodeInteger());
-                Point posRelPosSecond = new Point(iPacket.DecodeInteger(), iPacket.DecodeInteger());
+                Point posStart = new Point(iPacket.DecodeInt(), iPacket.DecodeInt());
+                Point posRelPosSecond = new Point(iPacket.DecodeInt(), iPacket.DecodeInt());
                 if (dwMobID != 0) {
                     Mob monster = c.getPlayer().getMap().getMonsterByOid(dwMobID);
                     nMobCurHP = monster.getHp();
@@ -57,7 +57,7 @@ public class CreatePsychicLockHandler implements ProcessPacket<MapleClient> {
             }
         }
         byte end = iPacket.DecodeByte();
-        c.write(JobPacket.Kinesis.OnCreatePsychicLock(c.getPlayer().getId(), nSkillID, nSLV, nAction, nActionSpeed, PsychicLock));
+        c.SendPacket(JobPacket.Kinesis.OnCreatePsychicLock(c.getPlayer().getId(), nSkillID, nSLV, nAction, nActionSpeed, PsychicLock));
         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), JobPacket.Kinesis.OnCreatePsychicLock(c.getPlayer().getId(), nSkillID, nSLV, nAction, nActionSpeed, PsychicLock), false);
     }
 

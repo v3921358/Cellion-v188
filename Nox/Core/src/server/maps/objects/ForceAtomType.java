@@ -7,7 +7,7 @@ package server.maps.objects;
 
 /**
  *
- * @author 
+ * @author
  */
 public enum ForceAtomType {
     PHANTOM_CARD_1(1, 1), //Phantom - Carte Blanch (2nd Job)

@@ -27,7 +27,7 @@ import server.maps.objects.User;
 import server.quest.MapleQuest;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class CodexSetChangeHandler implements ProcessPacket<MapleClient> {
 
@@ -42,11 +42,11 @@ public final class CodexSetChangeHandler implements ProcessPacket<MapleClient> {
         if (chr == null || chr.getMap() == null) {
             return;
         }
-        final int set = iPacket.DecodeInteger();
+        final int set = iPacket.DecodeInt();
         if (chr.getMonsterBook().changeSet(set)) {
             chr.getMonsterBook().applyBook(chr, false);
             chr.getQuestNAdd(MapleQuest.getInstance(GameConstants.CURRENT_SET)).setCustomData(String.valueOf(set));
-            c.write(CWvsContext.changeCardSet(set));
+            c.SendPacket(CWvsContext.changeCardSet(set));
         }
     }
 

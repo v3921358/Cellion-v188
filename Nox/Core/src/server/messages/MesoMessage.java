@@ -24,9 +24,9 @@ public class MesoMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.Meso.getType());
-        oPacket.EncodeInteger(income);
-        oPacket.EncodeInteger(action);
+        oPacket.EncodeByte(_MessageOpcodesType.Meso.getType());
+        oPacket.EncodeInt(income);
+        oPacket.EncodeInt(action);
         if (action != -1 && action != 24) {
             oPacket.EncodeString(accountName);
         }

@@ -13,8 +13,8 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import netty.PacketDecoder;
-import netty.PacketEncoder;
+import net.PacketDecoder;
+import net.PacketEncoder;
 
 public class CashShopServer extends Thread {
 

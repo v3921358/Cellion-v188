@@ -14,7 +14,7 @@ import net.InPacket;
 import server.maps.objects.User.MapleCharacterConversationType;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import tools.LogHelper;
 
 /**
@@ -53,13 +53,13 @@ public class StorageHandler implements ProcessPacket<MapleClient> {
                         storage.sendTakenOut(c, GameConstants.getInventoryType(item.getItemId()));
                     }
                 } else {
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                 }
                 break;
             }
             case 5: {
                 byte slot = (byte) iPacket.DecodeShort();
-                int itemId = iPacket.DecodeInteger();
+                int itemId = iPacket.DecodeInt();
                 MapleInventoryType type = GameConstants.getInventoryType(itemId);
                 short quantity = iPacket.DecodeShort();
                 MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -67,11 +67,11 @@ public class StorageHandler implements ProcessPacket<MapleClient> {
                     return;
                 }
                 if (storage.isFull()) {
-                    c.write(CField.NPCPacket.getStorageFull());
+                    c.SendPacket(CField.NPCPacket.getStorageFull());
                     return;
                 }
                 if (chr.getInventory(type).getItem((short) slot) == null) {
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                     return;
                 }
 
@@ -81,12 +81,12 @@ public class StorageHandler implements ProcessPacket<MapleClient> {
                     Item item = chr.getInventory(type).getItem((short) slot).copy();
 
                     if (InventoryConstants.isPet(item.getItemId())) {
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                         return;
                     }
                     short flag = item.getFlag();
                     if ((ii.isPickupRestricted(item.getItemId())) && (storage.findById(item.getItemId()) != null)) {
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                         return;
                     }
                     if ((item.getItemId() == itemId) && ((item.getQuantity() >= quantity) || (GameConstants.isThrowingStar(itemId)) || (GameConstants.isBullet(itemId)))) {
@@ -123,7 +123,7 @@ public class StorageHandler implements ProcessPacket<MapleClient> {
                 storage.update(c);
                 break;
             case 7: {
-                long meso = iPacket.DecodeInteger();
+                long meso = iPacket.DecodeInt();
                 long storageMesos = storage.getMeso();
                 long playerMesos = chr.getMeso();
 

@@ -5,7 +5,7 @@ import static handling.world.MobHandler.checkShammos;
 import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -21,11 +21,11 @@ public class HypnotizeDmgHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
-        Mob mob_from = chr.getMap().getMonsterByOid(iPacket.DecodeInteger());
+        Mob mob_from = chr.getMap().getMonsterByOid(iPacket.DecodeInt());
         iPacket.Skip(4);
-        int to = iPacket.DecodeInteger();
+        int to = iPacket.DecodeInt();
         iPacket.Skip(1);
-        int damage = iPacket.DecodeInteger();
+        int damage = iPacket.DecodeInt();
 
         Mob mob_to = chr.getMap().getMonsterByOid(to);
 

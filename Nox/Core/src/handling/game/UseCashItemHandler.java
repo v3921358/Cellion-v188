@@ -68,7 +68,7 @@ import tools.packet.CSPacket;
 import tools.packet.CWvsContext;
 import tools.packet.MiracleCubePacket;
 import tools.packet.PetPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.maps.objects.Pet.PetFlag;
 
 /**
@@ -87,18 +87,18 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
         User pPlayer = c.getPlayer();
 
         if (pPlayer == null || pPlayer.getMap() == null || pPlayer.inPVP()) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         pPlayer.setScrolledPosition((short) 0);
 
-        pPlayer.updateTick(iPacket.DecodeInteger());
+        pPlayer.updateTick(iPacket.DecodeInt());
         final byte slot = (byte) iPacket.DecodeShort();
-        final int itemId = iPacket.DecodeInteger();
+        final int itemId = iPacket.DecodeInt();
         final Item toUse = pPlayer.getInventory(MapleInventoryType.CASH).getItem(slot);
 
         if (toUse == null || toUse.getItemId() != itemId || toUse.getQuantity() < 1 || pPlayer.hasBlockedInventory()) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
 
@@ -107,7 +107,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
         switch (itemId) {
             case ItemConstants.RED_CUBE: {
                 //c.getPlayer().sortInventory((byte) 1); // Sort equipment inventory to avoid the cube not finding the item.
-                final Item pItem = pPlayer.getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInteger());
+                final Item pItem = pPlayer.getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 final Equip pEquip = (Equip) pItem;
 
                 if (pItem != null && pPlayer.getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
@@ -128,7 +128,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                                         lastTierBeforeCube.toString(),
                                         pItem.getItemId(), toUse.getItemId())
                         );
-                        c.close();
+                        c.Close();
                         return;
                     }
 
@@ -144,17 +144,17 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                         // Update Inventory Equipment 
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, pItem));
-                        c.write(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
 
                         if (!bHidePotentialAfterReset) {
-                            c.write(MiracleCubePacket.onRedCubeResult(pPlayer.getId(), lastTierBeforeCube != pEquip.getPotentialTier(), pEquip.getPosition(), toUse.getItemId(), pEquip));
+                            c.SendPacket(MiracleCubePacket.onRedCubeResult(pPlayer.getId(), lastTierBeforeCube != pEquip.getPotentialTier(), pEquip.getPosition(), toUse.getItemId(), pEquip));
                         }
                     } else {
                         pPlayer.dropMessage(5, "This item's Potential cannot be reset.");
                     }
 
                     pPlayer.getMap().broadcastMessage(CField.showPotentialReset(pPlayer.getId(), bRenewedPotential, pItem.getItemId()));
-                    c.write(CField.enchantResult(bRenewedPotential ? 0 : 0));
+                    c.SendPacket(CField.enchantResult(bRenewedPotential ? 0 : 0));
 
                     if (pPlayer.isDeveloper()) {
                         pPlayer.yellowMessage("[Potential] First Line ID : " + pEquip.getPotential1());
@@ -166,7 +166,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             }
             case ItemConstants.BONUS_POTENTIAL_CUBE: {
                 //c.getPlayer().sortInventory((byte) 1); // Sort equipment inventory to avoid the cube not finding the item.
-                final Item pItem = pPlayer.getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInteger());
+                final Item pItem = pPlayer.getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 final Equip pEquip = (Equip) pItem;
 
                 if (pItem != null && pPlayer.getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
@@ -187,7 +187,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                                         lastTierBeforeCube.toString(),
                                         pItem.getItemId(), toUse.getItemId())
                         );
-                        c.close();
+                        c.Close();
                         return;
                     }
 
@@ -203,17 +203,17 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                         // Update Inventory Equipment 
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, pItem));
-                        c.write(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
 
                         if (!bHidePotentialAfterReset) {
-                            c.write(MiracleCubePacket.onBonusCubeResult(pPlayer.getId(), lastTierBeforeCube != pEquip.getPotentialBonusTier(), pEquip.getPosition(), toUse.getItemId(), pEquip));
+                            c.SendPacket(MiracleCubePacket.onBonusCubeResult(pPlayer.getId(), lastTierBeforeCube != pEquip.getPotentialBonusTier(), pEquip.getPosition(), toUse.getItemId(), pEquip));
                         }
                     } else {
                         pPlayer.dropMessage(5, "This item's Bonus Potential cannot be reset.");
                     }
 
                     pPlayer.getMap().broadcastMessage(CField.showPotentialReset(pPlayer.getId(), bRenewedPotential, pItem.getItemId()));
-                    c.write(CField.enchantResult(bRenewedPotential ? 0 : 0));
+                    c.SendPacket(CField.enchantResult(bRenewedPotential ? 0 : 0));
 
                     if (pPlayer.isDeveloper()) {
                         pPlayer.yellowMessage("[Bonus Potential] First Line ID : " + pEquip.getBonusPotential1());
@@ -238,7 +238,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                     bUsed = true;
                     c.getPlayer().getMap().spawnMapleKite(itemId, c.getPlayer().getName(), c.getPlayer().getMap(), kiteMessage, (byte) 0, c.getPlayer().getPosition());
                 } else {
-                    c.write(CField.spawnKiteError());
+                    c.SendPacket(CField.spawnKiteError());
 
                 }
                 break;
@@ -246,7 +246,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             case 5043001: // NPC Teleport Rock
             case 5043000: { // NPC Teleport Rock
                 final short questid = iPacket.DecodeShort();
-                final int npcid = iPacket.DecodeInteger();
+                final int npcid = iPacket.DecodeInt();
                 final MapleQuest quest = MapleQuest.getInstance(questid);
 
                 if (c.getPlayer().getQuest(quest).getStatus() == MapleQuestState.Started && quest.canComplete(c.getPlayer(), npcid)) {
@@ -447,7 +447,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                             statupdate.put(MapleStat.IndieMMP, (long) maxmp);
                             break;
                     }
-                    c.write(CWvsContext.updatePlayerStats(statupdate, true, c.getPlayer()));
+                    c.SendPacket(CWvsContext.updatePlayerStats(statupdate, true, c.getPlayer()));
                 }
                 break;
             }
@@ -471,7 +471,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                             mf = new MonsterFamiliar(c.getPlayer().getId(), f.getKey(), System.currentTimeMillis() + 30 * 24 * 60 * 60000L);
                             c.getPlayer().getFamiliars().put(f.getKey(), mf);
                         }
-                        c.write(CField.registerFamiliar(mf));
+                        c.SendPacket(CField.registerFamiliar(mf));
                     }
                 }
                 break;
@@ -501,9 +501,9 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                         break;
                     }
                 }
-                c.write(CSPacket.getBoosterPack(familiars[0], familiars[1], familiars[2]));
-                c.write(CSPacket.getBoosterPackClick());
-                c.write(CSPacket.getBoosterPackReveal());
+                c.SendPacket(CSPacket.getBoosterPack(familiars[0], familiars[1], familiars[2]));
+                c.SendPacket(CSPacket.getBoosterPackClick());
+                c.SendPacket(CSPacket.getBoosterPackReveal());
                 break;
             }
             case 5050001: // SP Reset (1st job)
@@ -523,8 +523,8 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                     c.getPlayer().dropMessage(1, "This reset is only for non-Evans.");
                     break;
                 } //well i dont really care other than this o.o
-                int skill1 = iPacket.DecodeInteger();
-                int skill2 = iPacket.DecodeInteger();
+                int skill1 = iPacket.DecodeInt();
+                int skill2 = iPacket.DecodeInt();
                 for (int i : GameConstants.blockedSkills) {
                     if (skill1 == i) {
                         c.getPlayer().dropMessage(1, "You may not add this skill.");
@@ -664,7 +664,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             case ItemConstants.SUPER_MIRACLE_CUBE: {
                 //c.getPlayer().sortInventory((byte) 1); // Sort equipment inventory to avoid the cube not finding the item.
 
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInteger());
+                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 final Equip equip = (Equip) item;
 
                 if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
@@ -697,7 +697,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                                         lastTierBeforeCube.toString(),
                                         item.getItemId(), toUse.getItemId())
                         );
-                        c.close();
+                        c.Close();
                         return;
                     }
 
@@ -712,10 +712,10 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                         // Update inventory equipment 
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.write(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
 
                         if (!hidePotentialAfterReset) {
-                            c.write(MiracleCubePacket.onRedCubeResult(pPlayer.getId(), lastTierBeforeCube != equip.getPotentialTier(), equip.getPosition(), toUse.getItemId(), equip));
+                            c.SendPacket(MiracleCubePacket.onRedCubeResult(pPlayer.getId(), lastTierBeforeCube != equip.getPotentialTier(), equip.getPosition(), toUse.getItemId(), equip));
                         }
                     } else {
                         pPlayer.dropMessage(5, "This item's Potential cannot be reset.");
@@ -723,7 +723,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
 
                     // Show to map
                     pPlayer.getMap().broadcastMessage(CField.showPotentialReset(pPlayer.getId(), renewedPotential, item.getItemId()));
-                    c.write(CField.enchantResult(renewedPotential ? 0 : 0));
+                    c.SendPacket(CField.enchantResult(renewedPotential ? 0 : 0));
                     pPlayer.yellowMessage("Potential ID (Line 1) : " + equip.getPotential1());
                     pPlayer.yellowMessage("Potential ID (Line 2) : " + equip.getPotential2());
                     pPlayer.yellowMessage("Potential ID (Line 3) : " + equip.getPotential3());
@@ -732,7 +732,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             }
 
             case ItemConstants.MIRACLE_CUBE: {
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInteger());
+                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 final Equip equip = (Equip) item;
 
                 if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
@@ -770,7 +770,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                                         lastTierBeforeCube.toString(),
                                         item.getItemId(), toUse.getItemId())
                         );
-                        c.close();
+                        c.Close();
                         return;
                     }
 
@@ -785,10 +785,10 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                         // Update inventory equipment 
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.write(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
 
                         if (!hidePotentialAfterReset) {
-                            c.write(MiracleCubePacket.onRedCubeResult(pPlayer.getId(), lastTierBeforeCube != equip.getPotentialTier(), equip.getPosition(), toUse.getItemId(), equip));
+                            c.SendPacket(MiracleCubePacket.onRedCubeResult(pPlayer.getId(), lastTierBeforeCube != equip.getPotentialTier(), equip.getPosition(), toUse.getItemId(), equip));
                         }
                     } else {
                         pPlayer.dropMessage(5, "This item's Potential cannot be reset.");
@@ -796,12 +796,12 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
 
                     // Show to map
                     pPlayer.getMap().broadcastMessage(CField.showPotentialReset(pPlayer.getId(), renewedPotential, item.getItemId()));
-                    c.write(CField.enchantResult(renewedPotential ? 0 : 0));
+                    c.SendPacket(CField.enchantResult(renewedPotential ? 0 : 0));
                 }
                 break;
             }
             case ItemConstants.MEMORY_CUBE: {
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInteger());
+                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 final Equip equip = (Equip) item;
 
                 if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
@@ -821,7 +821,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                                         lastTierBeforeCube.toString(),
                                         item.getItemId(), toUse.getItemId())
                         );
-                        c.close();
+                        c.Close();
                         return;
                     }
 
@@ -840,22 +840,22 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                         // Update inventory equipment 
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.write(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
 
-                        c.write(MiracleCubePacket.onMemorialCubeResult(CharacterTemporaryValues.KEY_MEMORIAL_CUBE, lastTierBeforeCube != equip_afterState.getPotentialTier(), equip.getPosition(), toUse.getItemId(), equip_afterState));
+                        c.SendPacket(MiracleCubePacket.onMemorialCubeResult(CharacterTemporaryValues.KEY_MEMORIAL_CUBE, lastTierBeforeCube != equip_afterState.getPotentialTier(), equip.getPosition(), toUse.getItemId(), equip_afterState));
                     } else {
                         pPlayer.dropMessage(5, "This item's Potential cannot be reset.");
                     }
 
                     // Show to map
                     pPlayer.getMap().broadcastMessage(CField.showPotentialReset(pPlayer.getId(), renewedPotential, item.getItemId()));
-                    c.write(CField.enchantResult(renewedPotential ? 0 : 0));
+                    c.SendPacket(CField.enchantResult(renewedPotential ? 0 : 0));
                 }
                 break;
             }
 
             case ItemConstants.BLACK_CUBE: {
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInteger());
+                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 final Equip equip = (Equip) item;
 
                 if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
@@ -875,7 +875,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                                         lastTierBeforeCube.toString(),
                                         item.getItemId(), toUse.getItemId())
                         );
-                        c.close();
+                        c.Close();
                         return;
                     }
 
@@ -893,26 +893,26 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                         // Update inventory equipment 
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.write(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
 
-                        c.write(MiracleCubePacket.onBlackCubeResult(CharacterTemporaryValues.KEY_BLACK_CUBE, lastTierBeforeCube != equip_afterState.getPotentialTier(), equip.getPosition(), toUse.getItemId(), equip_afterState));
+                        c.SendPacket(MiracleCubePacket.onBlackCubeResult(CharacterTemporaryValues.KEY_BLACK_CUBE, lastTierBeforeCube != equip_afterState.getPotentialTier(), equip.getPosition(), toUse.getItemId(), equip_afterState));
                     } else {
                         pPlayer.dropMessage(5, "This item's Potential cannot be reset.");
                     }
 
                     // Show to map
                     pPlayer.getMap().broadcastMessage(CField.showPotentialReset(pPlayer.getId(), renewedPotential, item.getItemId()));
-                    c.write(CField.enchantResult(renewedPotential ? 0 : 0));
+                    c.SendPacket(CField.enchantResult(renewedPotential ? 0 : 0));
                 }
                 break;
             }
             case 5062003: { //revolutionary cube
-                /*      final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.decodeInteger());
+                /*      final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
                     final Equip eq = (Equip) item;
                     if (eq.getState() >= 17) {
                         boolean potLock = c.getPlayer().getInventory(MapleInventoryType.CASH).findById(5067000) != null;
-                        int line = potLock ? iPacket.decodeInteger() : 0;
+                        int line = potLock ? iPacket.DecodeInt() : 0;
                         short toLock = potLock ? iPacket.decodeShort() : 0;
                         potLock = checkPotentialLock(c.getPlayer(), eq, line, toLock);
                         if (potLock) {
@@ -962,7 +962,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             }
             //case 5062500:
             case 5062005: { //enlightening cube
-                /*     final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.decodeInteger());
+                /*     final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
                     final Equip eq = (Equip) item;
                     if (eq.getState() >= 17) {
@@ -1009,7 +1009,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 break;
             }
             case 5062006: {
-                /*        final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.decodeInteger());
+                /*        final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
                     final Equip eq = (Equip) item;
                     if (eq.getState() >= 17) {
@@ -1056,7 +1056,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 break;
             }
             case ItemConstants.PERFECT_POTENTIAL_STAMP: {
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInteger());
+                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 if (item != null) {
                     final Equip eq = (Equip) item;
 
@@ -1065,7 +1065,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                     if (success) {
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.write(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
 
                         c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), true, toUse.getItemId()));
 
@@ -1078,8 +1078,8 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             case 5062401:
             case 5062402:
             case 5062403: {
-                short appearance = (short) iPacket.DecodeInteger();
-                short function = (short) iPacket.DecodeInteger();
+                short appearance = (short) iPacket.DecodeInt();
+                short function = (short) iPacket.DecodeInt();
                 Equip appear = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(appearance);
                 Equip equip = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(function);
                 if (equip.getFusionAnvil() != 0) {
@@ -1100,7 +1100,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 /*     if (c.getPlayer().getLevel() < 10) {
                     c.getPlayer().dropMessage(1, "You may not use this until level 10.");
                 } else {
-                    final Item item = c.getPlayer().getInventory(MapleInventoryType.SETUP).getItem((byte) iPacket.decodeInteger());
+                    final Item item = c.getPlayer().getInventory(MapleInventoryType.SETUP).getItem((byte) iPacket.DecodeInt());
                     if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1 && c.getPlayer().getInventory(MapleInventoryType.SETUP).getNumFreeSlot() >= 1) {
                         
                         NebuliteGrade currentGrade = GameConstants.getNebuliteGrade(item.getItemId());
@@ -1135,7 +1135,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 if (c.getPlayer().getLevel() < 10) {
                     c.getPlayer().dropMessage(1, "You may not use this until level 10.");
                 } else {
-                    final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInteger());
+                    final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                     if (item != null) {
                         final Equip eq = (Equip) item;
                         if (eq.getSocket1() > 0) { // first slot only.
@@ -1143,7 +1143,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
 
                             List<ModifyInventory> modifications = new ArrayList<>();
                             modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                            c.write(CWvsContext.inventoryOperation(true, modifications));
+                            c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
 
                             c.getPlayer().forceReAddItemNoUpdate(item, MapleInventoryType.EQUIP);
                             bUsed = true;
@@ -1157,8 +1157,8 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 break;
             }
             case 5521000: { // Karma
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInteger());
-                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInteger());
+                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
 
                 if (item != null && !ItemFlag.KARMA_ACC.check(item.getFlag())
                         && !ItemFlag.KARMA_ACC_USE.check(item.getFlag())
@@ -1181,7 +1181,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.Remove, item));
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.write(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
                         bUsed = true;
                     }
                 }
@@ -1189,8 +1189,8 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             }
             case 5520001: //p.karma
             case 5520000: { // Karma
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInteger());
-                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInteger());
+                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
 
                 if (item != null && !ItemFlag.KARMA_EQ.check(item.getFlag())
                         && !ItemFlag.KARMA_USE.check(item.getFlag())
@@ -1213,43 +1213,43 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.Remove, item));
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.write(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
                         bUsed = true;
                     }
                 }
                 break;
             }
             case 5570000: { // Vicious Hammer
-                iPacket.DecodeInteger(); // Inventory type, Hammered eq is always EQ.
-                final Equip item = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInteger());
+                iPacket.DecodeInt(); // Inventory type, Hammered eq is always EQ.
+                final Equip item = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 // another int here, D3 49 DC 00
                 if (item != null) {
                     if (GameConstants.canHammer(item.getItemId()) && MapleItemInformationProvider.getInstance().getSlots(item.getItemId()) > 0 && item.getViciousHammer() < 2) {
                         item.setViciousHammer((byte) (item.getViciousHammer() + 1));
                         item.setUpgradeSlots((byte) (item.getUpgradeSlots() + 1));
                         c.getPlayer().forceReAddItem(item, MapleInventoryType.EQUIP);
-                        c.write(CSPacket.ViciousHammer(true, item.getViciousHammer()));
+                        c.SendPacket(CSPacket.ViciousHammer(true, item.getViciousHammer()));
                         bUsed = true;
                     } else {
                         c.getPlayer().dropMessage(5, "You may not use it on this item.");
-                        c.write(CSPacket.ViciousHammer(true, (byte) 0));
+                        c.SendPacket(CSPacket.ViciousHammer(true, (byte) 0));
                     }
                 }
                 break;
             }
             case 5610001:
             case 5610000: { // Vega 30
-                iPacket.DecodeInteger(); // Inventory type, always eq
-                final short dst = (short) iPacket.DecodeInteger();
-                iPacket.DecodeInteger(); // Inventory type, always use
-                final short src = (short) iPacket.DecodeInteger();
+                iPacket.DecodeInt(); // Inventory type, always eq
+                final short dst = (short) iPacket.DecodeInt();
+                iPacket.DecodeInt(); // Inventory type, always use
+                final short src = (short) iPacket.DecodeInt();
                 bUsed = UseUpgradeScroll(src, dst, (short) 2, c, c.getPlayer(), itemId, false); //cannot use ws with vega but we dont care
                 cc = bUsed;
                 break;
             }
             case 5060001: { // Sealing Lock
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInteger());
-                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInteger());
+                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
                 // another int here, lock = 5A E5 F2 0A, 7 day = D2 30 F3 0A
                 if (item != null && item.getExpiration() == -1) {
                     short flag = item.getFlag();
@@ -1262,8 +1262,8 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 break;
             }
             case 5061000: { // Sealing Lock 7 days
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInteger());
-                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInteger());
+                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
                 // another int here, lock = 5A E5 F2 0A, 7 day = D2 30 F3 0A
                 if (item != null && item.getExpiration() == -1) {
                     short flag = item.getFlag();
@@ -1277,8 +1277,8 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 break;
             }
             case 5061001: { // Sealing Lock 30 days
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInteger());
-                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInteger());
+                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
                 // another int here, lock = 5A E5 F2 0A, 7 day = D2 30 F3 0A
                 if (item != null && item.getExpiration() == -1) {
                     short flag = item.getFlag();
@@ -1293,8 +1293,8 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 break;
             }
             case 5061002: { // Sealing Lock 90 days
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInteger());
-                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInteger());
+                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
                 // another int here, lock = 5A E5 F2 0A, 7 day = D2 30 F3 0A
                 if (item != null && item.getExpiration() == -1) {
                     short flag = item.getFlag();
@@ -1309,8 +1309,8 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 break;
             }
             case 5061003: { // Sealing Lock 365 days
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInteger());
-                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInteger());
+                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
                 // another int here, lock = 5A E5 F2 0A, 7 day = D2 30 F3 0A
                 if (item != null && item.getExpiration() == -1) {
                     short flag = item.getFlag();
@@ -1325,8 +1325,8 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 break;
             }
             case 5063000: {
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInteger());
-                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInteger());
+                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
                 // another int here, lock = 5A E5 F2 0A, 7 day = D2 30 F3 0A
                 if (item != null && item.getType() == ItemType.Equipment) { //equip
                     short flag = item.getFlag();
@@ -1339,8 +1339,8 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 break;
             }
             case 5064000: {
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInteger());
-                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInteger());
+                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
                 // another int here, lock = 5A E5 F2 0A, 7 day = D2 30 F3 0A
                 if (item != null && item.getType() == ItemType.Equipment) { //equip
                     if (((Equip) item).getEnhance() >= 12) {
@@ -1628,8 +1628,8 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
 
                     Item item = null;
                     if (iPacket.DecodeByte() == 1) { //item
-                        byte invType = (byte) iPacket.DecodeInteger();
-                        byte pos = (byte) iPacket.DecodeInteger();
+                        byte invType = (byte) iPacket.DecodeInt();
+                        byte pos = (byte) iPacket.DecodeInt();
                         if (pos <= 0) {
                             invType = -1;
                         }
@@ -1723,11 +1723,11 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 final String sendTo = iPacket.DecodeString();
                 final String msg = iPacket.DecodeString();
                 if (c.getChannelServer().getPlayerStorage().getCharacterByName(sendTo) != null) {
-                    c.write(CSPacket.OnMemoResult((byte) 5, (byte) 0));
+                    c.SendPacket(CSPacket.OnMemoResult((byte) 5, (byte) 0));
                     break;
                 }
                 c.getPlayer().sendNote(sendTo, msg);
-                c.write(CSPacket.OnMemoResult((byte) 4, (byte) 0));
+                c.SendPacket(CSPacket.OnMemoResult((byte) 4, (byte) 0));
                 bUsed = true;
                 break;
             }
@@ -1774,9 +1774,9 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 PetFlag zz = PetFlag.getByAddId(itemId);
                 if (zz != null && !zz.check(pet.getItem().getFlag())) {
                     pet.getItem().setFlag((short) (pet.getItem().getFlag() - zz.getValue()));
-                    c.write(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
-                    c.write(CWvsContext.enableActions());
-                    c.write(CSPacket.changePetFlag(uniqueid, true, zz.getValue()));
+                    c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(CSPacket.changePetFlag(uniqueid, true, zz.getValue()));
                     bUsed = true;
                 }
                 break;
@@ -1815,17 +1815,17 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 Pet.PetFlag zz = Pet.PetFlag.getByDelId(itemId);
                 if (zz != null && zz.check(pet.getItem().getFlag())) {
                     pet.getItem().setFlag((short) (pet.getItem().getFlag() - zz.getValue()));
-                    c.write(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
+                    c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
                     // c.getPlayer().forceUpdateItem(pet.getItem());
-                    c.write(CWvsContext.enableActions());
-                    c.write(CSPacket.changePetFlag(uniqueid, false, zz.getValue()));
+                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(CSPacket.changePetFlag(uniqueid, false, zz.getValue()));
                     bUsed = true;
                 }
                 break;
             }
             case 5501001:
             case 5501002: { //expiry mount
-                final Skill skil = SkillFactory.getSkill(iPacket.DecodeInteger());
+                final Skill skil = SkillFactory.getSkill(iPacket.DecodeInt());
                 if (skil == null || skil.getId() / 10000 != 8000 || c.getPlayer().getSkillLevel(skil) <= 0 || !skil.isTimeLimited()) {
                     break;
                 }
@@ -1868,9 +1868,9 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 String nName = iPacket.DecodeString();
                 if (MapleCharacterUtil.canChangePetName(nName)) {
                     pet.setName(nName);
-                    c.write(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
+                    c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
                     //c.getPlayer().forceUpdateItem(pet.getItem());
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                     c.getPlayer().getMap().broadcastMessage(CSPacket.changePetName(c.getPlayer(), nName, slo));
                     bUsed = true;
                 }
@@ -1891,10 +1891,10 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             }
             case 5230001:
             case 5230000: {// owl of minerva
-                final int itemSearch = iPacket.DecodeInteger();
+                final int itemSearch = iPacket.DecodeInt();
                 final List<HiredMerchant> hms = c.getChannelServer().searchMerchant(itemSearch);
                 if (hms.size() > 0) {
-                    c.write(CWvsContext.getOwlSearched(itemSearch, hms));
+                    c.SendPacket(CWvsContext.getOwlSearched(itemSearch, hms));
                     bUsed = true;
                 } else {
                     c.getPlayer().dropMessage(1, "Unable to find the item.");
@@ -1907,7 +1907,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 Rectangle bounds = new Rectangle((int) c.getPlayer().getPosition().getX(), (int) c.getPlayer().getPosition().getY(), 1, 1);
                 MapleMist mist = new MapleMist(bounds, c.getPlayer());
                 c.getPlayer().getMap().spawnMist(mist, 10000, true);
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 bUsed = true;
                 break;
             }
@@ -1919,7 +1919,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                         for (int i : e.getType().mapids) {
                             if (c.getPlayer().getMapId() == i) {
                                 c.getPlayer().dropMessage(5, "You may not use that here.");
-                                c.write(CWvsContext.enableActions());
+                                c.SendPacket(CWvsContext.enableActions());
                                 return;
                             }
                         }
@@ -1983,7 +1983,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 for (int i : GameConstants.blockedMaps) {
                     if (c.getPlayer().getMapId() == i) {
                         c.getPlayer().dropMessage(5, "You may not use this here.");
-                        c.write(CWvsContext.enableActions());
+                        c.SendPacket(CWvsContext.enableActions());
                         return;
                     }
                 }
@@ -2008,9 +2008,9 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 break;
             }
             case 5781000: { //pet color dye
-                iPacket.DecodeInteger();
-                iPacket.DecodeInteger();
-                int color = iPacket.DecodeInteger();
+                iPacket.DecodeInt();
+                iPacket.DecodeInt();
+                int color = iPacket.DecodeInt();
 
                 break;
             }
@@ -2059,9 +2059,9 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                         if (Math.random() > 0.1) {
                             final int gainmes = Randomizer.nextInt(mesars);
                             c.getPlayer().gainMeso(gainmes, false);
-                            c.write(CSPacket.sendMesobagSuccess(gainmes));
+                            c.SendPacket(CSPacket.sendMesobagSuccess(gainmes));
                         } else {
-                            c.write(CSPacket.sendMesobagFailed(false)); // not random
+                            c.SendPacket(CSPacket.sendMesobagFailed(false)); // not random
                         }
                     }
                 } else if (itemId / 10000 == 562) {
@@ -2079,7 +2079,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
         if (bUsed) {
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.CASH, slot, (short) 1, false, true);
         }
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
         if (cc) {
             if (!c.getPlayer().isAlive() || c.getPlayer().getEventInstance() != null || FieldLimitType.UnableToMigrate.check(c.getPlayer().getMap())) {
                 c.getPlayer().dropMessage(1, "Auto relog failed.");
@@ -2088,7 +2088,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             c.getPlayer().dropMessage(5, "Auto relogging. Please wait.");
             c.getPlayer().fakeRelog();
             if (c.getPlayer().getScrolledPosition() != 0) {
-                c.write(CWvsContext.pamSongUI());
+                c.SendPacket(CWvsContext.pamSongUI());
             }
         }
     }
@@ -2115,10 +2115,10 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
         while (!ii.itemExists(id2)) {
             id2 = RandomRewards.getPeanutReward();
         }
-        c.write(CWvsContext.getPeanutResult(id1, (short) 1, id2, (short) 1, itemId));
+        c.SendPacket(CWvsContext.getPeanutResult(id1, (short) 1, id2, (short) 1, itemId));
         MapleInventoryManipulator.addById(c, id1, (short) 1, ii.getName(itemId) + " on " + LocalDateTime.now());
         MapleInventoryManipulator.addById(c, id2, (short) 1, ii.getName(itemId) + " on " + LocalDateTime.now());
-        c.write(CField.NPCPacket.getNPCTalk(1090000, NPCChatType.OK, "You have obtained the following items:\r\n#i" + id1 + "##z" + id1 + "#\r\n#i" + id2 + "##z" + id2 + "#", NPCChatByType.NPC_Cancellable));
+        c.SendPacket(CField.NPCPacket.getNPCTalk(1090000, NPCChatType.OK, "You have obtained the following items:\r\n#i" + id1 + "##z" + id1 + "#\r\n#i" + id2 + "##z" + id2 + "#", NPCChatByType.NPC_Cancellable));
         return true;
     }
 

@@ -1,7 +1,7 @@
 package constants.skills;
 
 public class Kinesis {
-    
+
     public static boolean is_kinesis_psychiclock_skill(int nSkillID) {
         if (nSkillID > 142111002) {
             if (nSkillID < 142120000 || nSkillID > 142120002 && nSkillID != 142120014) {
@@ -12,7 +12,7 @@ public class Kinesis {
         }
         return true;
     }
-    
+
     public static final int ESP_BOOSTER = 142001003;
     public static final int KINETIC_CRASH = 142001001;
     public static final int KINETIC_STEP = 142001004;

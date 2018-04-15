@@ -3,7 +3,7 @@ package handling.login;
 import client.MapleClient;
 import net.InPacket;
 import tools.packet.CLogin;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class PicChangeHandler implements ProcessPacket<MapleClient> {
 
@@ -18,11 +18,11 @@ public final class PicChangeHandler implements ProcessPacket<MapleClient> {
             iPacket.DecodeString(); //old pic
             String newPic = iPacket.DecodeString();
             if (c.checkSecondPassword(newPic, false)) {
-                c.write(CLogin.changePic((byte) 0x14));
+                c.SendPacket(CLogin.changePic((byte) 0x14));
             } else {
                 c.setSecondPassword(newPic);
                 c.updateSecondPassword();
-                c.write(CLogin.changePic((byte) 0));
+                c.SendPacket(CLogin.changePic((byte) 0));
             }
         }
     }

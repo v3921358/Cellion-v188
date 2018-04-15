@@ -23,7 +23,7 @@ import server.maps.objects.User;
 import server.maps.objects.Pet;
 import server.movement.LifeMovementFragment;
 import tools.packet.PetPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  * @author Steven
@@ -42,13 +42,13 @@ public class PetMovement implements ProcessPacket<MapleClient> {
         if (chr == null) {
             return;
         }
-        int index = iPacket.DecodeInteger();
+        int index = iPacket.DecodeInt();
         iPacket.DecodeByte();
         Pet pet = chr.getPet(index);
         if (pet == null) {
             return;
         }
-        pet.settEncodedGatherDuration(iPacket.DecodeInteger());
+        pet.settEncodedGatherDuration(iPacket.DecodeInt());
         pet.setxCS(iPacket.DecodeShort());
         pet.setyCS(iPacket.DecodeShort());
         pet.setvYCS(iPacket.DecodeShort());

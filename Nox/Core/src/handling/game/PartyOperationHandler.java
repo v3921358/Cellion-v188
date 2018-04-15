@@ -15,7 +15,7 @@ import server.quest.MapleQuest;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import tools.packet.CWvsContext.PartyPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import tools.LogHelper;
 
 /**
@@ -49,14 +49,14 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
                 if (party == null) {
                     party = World.Party.createParty(partyplayer, partyName, isPrivate);
                     c.getPlayer().setParty(party);
-                    c.write(CWvsContext.PartyPacket.partyCreated(party));
+                    c.SendPacket(CWvsContext.PartyPacket.partyCreated(party));
                 } else {
                     if (party.getExpeditionId() > 0) {
                         c.getPlayer().dropMessage(5, "You may not do party operations while in a raid.");
                         return;
                     }
                     if ((partyplayer.equals(party.getLeader())) && (party.getMembers().size() == 1)) {
-                        c.write(CWvsContext.PartyPacket.partyCreated(party));
+                        c.SendPacket(CWvsContext.PartyPacket.partyCreated(party));
                     } else {
                         c.getPlayer().dropMessage(5, "You can't create a party as you are already in one");
                     }
@@ -112,12 +112,12 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
                     if (ch > 0) {
                         User chr = getStorage(ch).getCharacterByName(partyMember.getName());
                         if (chr != null) {
-                            chr.getClient().write(PartyPacket.changePartySettings(newName, isPrivate));
+                            chr.getClient().SendPacket(PartyPacket.changePartySettings(newName, isPrivate));
                         }
                     }
                 }
             case 3:
-                int partyid = iPacket.DecodeInteger();
+                int partyid = iPacket.DecodeInt();
                 if (party == null) {
                     party = World.Party.getParty(partyid);
                     if (party != null) {
@@ -131,7 +131,7 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
                             c.getPlayer().receivePartyMemberHP();
                             c.getPlayer().updatePartyMemberHP();
                         } else {
-                            c.write(CWvsContext.PartyPacket.partyStatusMessage(22, null));
+                            c.SendPacket(CWvsContext.PartyPacket.partyStatusMessage(22, null));
                         }
                     } else {
                         c.getPlayer().dropMessage(5, "The party you are trying to join does not exist");
@@ -145,7 +145,7 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
                 if (party == null) {
                     party = World.Party.createParty(partyplayer, theName, false);
                     c.getPlayer().setParty(party);
-                    c.write(CWvsContext.PartyPacket.partyCreated(party));
+                    c.SendPacket(CWvsContext.PartyPacket.partyCreated(party));
                 }
                 int theCh = World.Find.findChannel(theName);
                 if (theCh > 0) {
@@ -156,10 +156,10 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
                             return;
                         }
                         if (party.getMembers().size() < 6) {
-                            c.write(CWvsContext.PartyPacket.partyStatusMessage(34, invited.getName()));
-                            invited.getClient().write(CWvsContext.PartyPacket.partyInvite(c.getPlayer()));
+                            c.SendPacket(CWvsContext.PartyPacket.partyStatusMessage(34, invited.getName()));
+                            invited.getClient().SendPacket(CWvsContext.PartyPacket.partyInvite(c.getPlayer()));
                         } else {
-                            c.write(CWvsContext.PartyPacket.partyStatusMessage(26, null));
+                            c.SendPacket(CWvsContext.PartyPacket.partyStatusMessage(26, null));
                         }
                     } else {
                         c.getPlayer().dropMessage(6, "The person you are trying to invite is already in a party.");
@@ -177,7 +177,7 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
                     c.getPlayer().dropMessage(5, "You may not do party operations while in a raid.");
                     return;
                 }
-                MaplePartyCharacter expelled = party.getMemberById(iPacket.DecodeInteger());
+                MaplePartyCharacter expelled = party.getMemberById(iPacket.DecodeInt());
                 if (expelled != null) {
                     if ((GameConstants.isDojo(c.getPlayer().getMapId())) && (expelled.isOnline())) {
                         Event_DojoAgent.failed(c.getPlayer());
@@ -201,7 +201,7 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
                     c.getPlayer().dropMessage(5, "You may not do party operations while in a raid.");
                     return;
                 }
-                MaplePartyCharacter newleader = party.getMemberById(iPacket.DecodeInteger());
+                MaplePartyCharacter newleader = party.getMemberById(iPacket.DecodeInt());
                 if ((newleader != null) && (partyplayer.equals(party.getLeader()))) {
                     World.Party.updateParty(party.getId(), PartyOperation.CHANGE_LEADER, newleader);
                 }
@@ -219,7 +219,7 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
                     }
                     c.getPlayer().setParty(null);
                 }
-                int partyid_ = iPacket.DecodeInteger();
+                int partyid_ = iPacket.DecodeInt();
                 party = World.Party.getParty(partyid_);
                 if ((party == null) || (party.getMembers().size() >= 8)) {
                     break;
@@ -230,8 +230,8 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
                 }
                 User cfrom = c.getPlayer().getMap().getCharacterById(party.getLeader().getId());
                 if ((cfrom != null) && (cfrom.getQuestNoAdd(MapleQuest.getInstance(122900)) == null)) {
-                    c.write(CWvsContext.PartyPacket.partyStatusMessage(50, c.getPlayer().getName()));
-                    cfrom.getClient().write(CWvsContext.PartyPacket.partyRequestInvite(c.getPlayer()));
+                    c.SendPacket(CWvsContext.PartyPacket.partyStatusMessage(50, c.getPlayer().getName()));
+                    cfrom.getClient().SendPacket(CWvsContext.PartyPacket.partyRequestInvite(c.getPlayer()));
                 } else {
                     c.getPlayer().dropMessage(5, "Player was not found or player is not accepting party requests.");
                 }

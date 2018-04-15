@@ -25,27 +25,27 @@ import tools.packet.CSPacket;
 public class QuestPurchase {
 
     public static void buyItem(InPacket iPacket, MapleClient c, User chr) {
-        CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInteger());
+        CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInt());
         if (iteminfo == null || !MapleItemInformationProvider.getInstance().isQuestItem(iteminfo.getId())) {
-            c.write(CSPacket.sendCSFail(0));
+            c.SendPacket(CSPacket.sendCSFail(0));
             playerCashShopInfo(c);
             return;
         } else if (c.getPlayer().getMeso() < iteminfo.getPrice()) {
-            c.write(CSPacket.sendCSFail(0xB8));
+            c.SendPacket(CSPacket.sendCSFail(0xB8));
             playerCashShopInfo(c);
             return;
         } else if (c.getPlayer().getInventory(GameConstants.getInventoryType(iteminfo.getId())).getNextFreeSlot() < 0) {
-            c.write(CSPacket.sendCSFail(0xB1));
+            c.SendPacket(CSPacket.sendCSFail(0xB1));
             playerCashShopInfo(c);
             return;
         }
         byte pos = MapleInventoryManipulator.addId(c, iteminfo.getId(), (short) iteminfo.getCount(), null, "Cash shop: quest item" + " on " + LocalDateTime.now());
         if (pos < 0) {
-            c.write(CSPacket.sendCSFail(0xB1));
+            c.SendPacket(CSPacket.sendCSFail(0xB1));
             playerCashShopInfo(c);
             return;
         }
         chr.gainMeso(-iteminfo.getPrice(), false);
-        c.write(CSPacket.showBoughtCSQuestItem(iteminfo.getPrice(), (short) iteminfo.getCount(), pos, iteminfo.getId()));
+        c.SendPacket(CSPacket.showBoughtCSQuestItem(iteminfo.getPrice(), (short) iteminfo.getCount(), pos, iteminfo.getId()));
     }
 }

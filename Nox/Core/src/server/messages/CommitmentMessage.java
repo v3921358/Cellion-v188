@@ -16,9 +16,9 @@ public class CommitmentMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.Commitment.getType());
-        oPacket.EncodeInteger(0);
-        oPacket.Encode(0);
+        oPacket.EncodeByte(_MessageOpcodesType.Commitment.getType());
+        oPacket.EncodeInt(0);
+        oPacket.EncodeByte(0);
     }
 
 }

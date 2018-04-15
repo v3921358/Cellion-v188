@@ -21,10 +21,10 @@ public class ExpiredSkillMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.ExpiredSkill.getType());
-        oPacket.Encode(skills.size());
+        oPacket.EncodeByte(_MessageOpcodesType.ExpiredSkill.getType());
+        oPacket.EncodeByte(skills.size());
         for (Integer skill : skills) {
-            oPacket.EncodeInteger(skill);
+            oPacket.EncodeInt(skill);
         }
     }
 

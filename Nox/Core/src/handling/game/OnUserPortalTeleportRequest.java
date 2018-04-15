@@ -27,7 +27,7 @@ import java.awt.Point;
 import net.InPacket;
 import server.MaplePortal;
 import server.maps.objects.User;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class OnUserPortalTeleportRequest implements ProcessPacket<MapleClient> {
 

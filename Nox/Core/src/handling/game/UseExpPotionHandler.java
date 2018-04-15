@@ -7,7 +7,7 @@ import server.MapleInventoryManipulator;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -26,18 +26,18 @@ public class UseExpPotionHandler implements ProcessPacket<MapleClient> {
 
         //iPacket: [F5 4F D6 2E] [60 00] [F4 06 22 00]
         System.err.println("eror");
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         final byte slot = (byte) iPacket.DecodeShort();
-        int itemid = iPacket.DecodeInteger();
+        int itemid = iPacket.DecodeInt();
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
         if (toUse == null || toUse.getQuantity() < 1
                 || toUse.getItemId() != itemid || chr.getLevel() >= 250
                 || chr.hasBlockedInventory() || itemid / 10000 != 223) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         if (itemid != 2230004) { //for now
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         int level = chr.getLevel();
@@ -50,13 +50,13 @@ public class UseExpPotionHandler implements ProcessPacket<MapleClient> {
         } else if (chr.getInfoQuest(7985).equals("2230004=" + potionDstLevel + "#384")) {
             last = true;
         }
-        c.write(CWvsContext.updateExpPotion(last ? 0 : 2, chr.getId(), itemid, first, level, potionDstLevel));
+        c.SendPacket(CWvsContext.updateExpPotion(last ? 0 : 2, chr.getId(), itemid, first, level, potionDstLevel));
         if (first) {
             chr.updateInfoQuest(7985, "2230004=" + level + "#384");
         }
         if (last) {
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
         }
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 }

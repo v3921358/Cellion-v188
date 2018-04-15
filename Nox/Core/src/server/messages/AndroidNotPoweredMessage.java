@@ -16,7 +16,7 @@ public class AndroidNotPoweredMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.AndroidNotPowered.getType());
+        oPacket.EncodeByte(_MessageOpcodesType.AndroidNotPowered.getType());
     }
 
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 import service.SendPacketOpcode;
 import net.OutPacket;
-import net.Packet;
+
 import server.maps.objects.User;
 import server.maps.objects.Pet;
 import server.movement.LifeMovementFragment;
@@ -25,25 +25,25 @@ public class PetPacket {
      * @example PetPacket.OnActivated(MapleCharacter.id, getPetIndex(pet), true, pet, 0)
      *
      */
-    public static final Packet OnActivated(int dwCharacterID, int nIdx, boolean bOnInitialize, Pet pPet, int nRemoveReason) {
-        OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.PetActivated.getValue());
-        oPacket.EncodeInteger(dwCharacterID);
-        oPacket.EncodeInteger(nIdx);
+    public static final OutPacket OnActivated(int dwCharacterID, int nIdx, boolean bOnInitialize, Pet pPet, int nRemoveReason) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.PetActivated.getValue());
+        oPacket.EncodeInt(dwCharacterID);
+        oPacket.EncodeInt(nIdx);
         if (nIdx >= 0 && nIdx < 3) {
             oPacket.EncodeBool(pPet != null);
             if (pPet != null) {
                 oPacket.EncodeBool(bOnInitialize);
-                oPacket.EncodeInteger(pPet.getItem().getItemId());
+                oPacket.EncodeInt(pPet.getItem().getItemId());
                 oPacket.EncodeString(pPet.getName());
                 oPacket.EncodeLong(pPet.getItem().getUniqueId());
                 oPacket.EncodePosition(pPet.getPos());
-                oPacket.Encode(pPet.getStance());
+                oPacket.EncodeByte(pPet.getStance());
                 oPacket.EncodeShort(pPet.getFh());
-                oPacket.EncodeInteger(pPet.getColor());
+                oPacket.EncodeInt(pPet.getColor());
                 oPacket.EncodeShort(pPet.getGiant());
-                oPacket.Encode(pPet.getTransform());
-                oPacket.Encode(pPet.getReinforced());
+                oPacket.EncodeByte(pPet.getTransform());
+                oPacket.EncodeByte(pPet.getReinforced());
 
                 if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
                     System.err.println(String.format("[Debug] Pet Template [%d], Name [%s], SN [%d], Pos [%d:%d]", pPet.getItem().getItemId(), pPet.getName(), pPet.getItem().getUniqueId(), pPet.getPos().x, pPet.getPos().y));
@@ -52,7 +52,7 @@ public class PetPacket {
                 oPacket.EncodeByte((byte) nRemoveReason);
             }
         }
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -65,16 +65,15 @@ public class PetPacket {
      * @example PetPacket.OnActivated(MapleCharacter.id, getPetIndex(pet), pet)
      *
      */
-    public static final Packet OnDeactivated(int dwCharacterID, int nIdx, Pet pPet) {
-        OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket OnDeactivated(int dwCharacterID, int nIdx, Pet pPet) {
 
-        oPacket.EncodeShort(SendPacketOpcode.PetActivated.getValue());
-        oPacket.EncodeInteger(dwCharacterID);
-        oPacket.EncodeInteger(nIdx);
-        oPacket.Encode(0); //Remove = 0, Don't Remove = 1
-        oPacket.Encode(0); //Hunger Boolean
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.PetActivated.getValue());
+        oPacket.EncodeInt(dwCharacterID);
+        oPacket.EncodeInt(nIdx);
+        oPacket.EncodeByte(0); //Remove = 0, Don't Remove = 1
+        oPacket.EncodeByte(0); //Hunger Boolean
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -87,46 +86,27 @@ public class PetPacket {
      * @return OutPacket oPacket
      *
      */
-    public static final Packet updatePet(Pet pet, Item item, boolean active) { // what a fucking meme.. this is a hardcode invoperation
-        OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket updatePet(Pet pet, Item item, boolean active) { // what a fucking meme.. this is a hardcode invoperation
 
-        oPacket.EncodeShort(SendPacketOpcode.InventoryOperation.getValue());
-        oPacket.Encode(0);
-        oPacket.Encode(2);
-        oPacket.Encode(0);
-        oPacket.Encode(3);
-        oPacket.Encode(5);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.InventoryOperation.getValue());
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(2);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(3);
+        oPacket.EncodeByte(5);
         oPacket.EncodeShort(pet.getItem().getPosition());
-        oPacket.Encode(0);
-        oPacket.Encode(0);
-        oPacket.Encode(5);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(5);
         oPacket.EncodeShort(pet.getItem().getPosition());
-        oPacket.Encode(3);
-        oPacket.EncodeInteger(pet.getItem().getItemId());
-        oPacket.Encode(1);
+        oPacket.EncodeByte(3);
+        oPacket.EncodeInt(pet.getItem().getItemId());
+        oPacket.EncodeByte(1);
         oPacket.EncodeLong(pet.getItem().getUniqueId());
         PacketHelper.addPetItemInfo(oPacket, item, pet, active);
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
 
-        return oPacket.ToPacket();
-    }
-
-    public static final Packet addPetData(User chr, Pet pet) {
-        OutPacket oPacket = new OutPacket(80);
-
-        oPacket.EncodeInteger(pet.getItem().getItemId());
-        oPacket.EncodeString(pet.getName());
-        oPacket.EncodeLong(pet.getItem().getUniqueId());
-        oPacket.EncodeShort(pet.getPos().x);
-        oPacket.EncodeShort(pet.getPos().y - 20);
-        oPacket.Encode(pet.getStance());
-        oPacket.EncodeShort(pet.getFh());
-        oPacket.EncodeInteger(pet.getColor());
-        oPacket.EncodeShort(pet.getGiant());
-        oPacket.Encode(pet.getTransform());
-        oPacket.Encode(pet.getReinforced());
-
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -140,95 +120,88 @@ public class PetPacket {
      * @return OutPacket oPacket
      *
      */
-    public static Packet movePet(int cid, int index, Pet pet, List<LifeMovementFragment> moves) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket movePet(int cid, int index, Pet pet, List<LifeMovementFragment> moves) {
 
-        oPacket.EncodeShort(SendPacketOpcode.PetMove.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.EncodeInteger(index);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.PetMove.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeInt(index);
 
         PacketHelper.serializeMovementList(oPacket, pet, moves, 0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet petChat(int cid, int un, String text, byte slot) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket petChat(int cid, int un, String text, byte slot) {
 
-        oPacket.EncodeShort(SendPacketOpcode.PET_CHAT.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(slot);
-        oPacket.Encode(un);
-        oPacket.Encode(0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.PET_CHAT.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeByte(slot);
+        oPacket.EncodeByte(un);
+        oPacket.EncodeByte(0);
         oPacket.EncodeString(text);
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet petColor(int cid, byte slot, int color) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket petColor(int cid, byte slot, int color) {
 
-        oPacket.EncodeShort(SendPacketOpcode.PetHueChanged.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(slot);
-        oPacket.EncodeInteger(color);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.PetHueChanged.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeByte(slot);
+        oPacket.EncodeInt(color);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet commandResponse(int cid, byte command, byte slot, boolean success, boolean food) {
-        OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket commandResponse(int cid, byte command, byte slot, boolean success, boolean food) {
 
-        oPacket.EncodeShort(SendPacketOpcode.PetActionCommand.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.EncodeInteger(slot);
-        oPacket.Encode(command == 1 ? 2 : 1);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.PetActionCommand.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeInt(slot);
+        oPacket.EncodeByte(command == 1 ? 2 : 1);
         if (command != 1) {
-            oPacket.Encode(command);
-            oPacket.Encode(success ? 1 : 0);
-            oPacket.Encode(0);
+            oPacket.EncodeByte(command);
+            oPacket.EncodeByte(success ? 1 : 0);
+            oPacket.EncodeByte(0);
         } else {
-            oPacket.Encode(1);
-            oPacket.EncodeInteger(0);
+            oPacket.EncodeByte(1);
+            oPacket.EncodeInt(0);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet showPetLevelUp(User chr, byte index) {
-        OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket showPetLevelUp(User chr, byte index) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserEffectRemote.getValue());
-        oPacket.EncodeInteger(chr.getId());
-        oPacket.Encode(6);
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(index);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
+        oPacket.EncodeInt(chr.getId());
+        oPacket.EncodeByte(6);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(index);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet petSize(int cid, byte slot, short size) {
-        OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket petSize(int cid, byte slot, short size) {
 
-        oPacket.EncodeShort(SendPacketOpcode.PET_SIZE.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(slot);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.PET_SIZE.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeByte(slot);
         oPacket.EncodeShort(size);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet showPetUpdate(User chr, int uniqueId, byte index) {
-        OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket showPetUpdate(User chr, int uniqueId, byte index) {
 
-        oPacket.EncodeShort(SendPacketOpcode.PetLoadExceptionList.getValue());
-        oPacket.EncodeInteger(chr.getId());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.PetLoadExceptionList.getValue());
+        oPacket.EncodeInt(chr.getId());
 
-        oPacket.EncodeInteger(index);
+        oPacket.EncodeInt(index);
         oPacket.EncodeLong(uniqueId);
-        oPacket.Encode(0); // aExceptionList size for loop this size and print integer itemids
+        oPacket.EncodeByte(0); // aExceptionList size for loop this size and print integer itemids
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 }

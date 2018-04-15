@@ -7,7 +7,7 @@ package handling.game;
 
 import client.MapleClient;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import tools.packet.JobPacket;
 
 /**
@@ -23,9 +23,9 @@ public class ReleasePsychicAreaHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int nPsychicAreaKey = iPacket.DecodeInteger();
+        int nPsychicAreaKey = iPacket.DecodeInt();
 
-        c.write(JobPacket.Kinesis.OnReleasePsychicArea(c.getPlayer().getId(), nPsychicAreaKey));
+        c.SendPacket(JobPacket.Kinesis.OnReleasePsychicArea(c.getPlayer().getId(), nPsychicAreaKey));
         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), JobPacket.Kinesis.OnReleasePsychicArea(c.getPlayer().getId(), nPsychicAreaKey), false);
     }
 

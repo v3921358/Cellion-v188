@@ -6,7 +6,7 @@ import server.maps.objects.User;
 import server.maps.objects.MapleRuneStone;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -40,6 +40,6 @@ public class RuneStoneCompleteArrowHandler implements ProcessPacket<MapleClient>
         }
         // Fail
         //   LASTRUNETIME = System.currentTimeMillis() + 10000; // 10 sec
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 }

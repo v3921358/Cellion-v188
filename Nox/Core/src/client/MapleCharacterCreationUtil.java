@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 import constants.GameConstants;
-import database.DatabaseConnection;
+import static database.Database.GetConnection;
 import tools.LogHelper;
 
 /**
@@ -52,37 +52,40 @@ public class MapleCharacterCreationUtil {
         final boolean canMake = loadCharactersSize(worldId, accountId) < getCharacterSlots(accountId, worldId);
 
         if (canMake) {
-            Connection con = DatabaseConnection.getConnection();
-            //lastCharacterCreationTime
-            try (PreparedStatement ps = con.prepareStatement("SELECT lastCharacterCreationTime FROM accounts WHERE id = ? LIMIT 1")) {
-                ps.setInt(1, accountId);
+            try (Connection con = GetConnection()) {
+                System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+                //lastCharacterCreationTime
+                try (PreparedStatement ps = con.prepareStatement("SELECT lastCharacterCreationTime FROM accounts WHERE id = ? LIMIT 1")) {
+                    ps.setInt(1, accountId);
 
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        Timestamp lastCreationDate = rs.getTimestamp("lastCharacterCreationTime");
-                        long currentTime = new Date().getTime();
-                        if (lastCreationDate != null) {
-                            long difference = currentTime - lastCreationDate.getTime();
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            Timestamp lastCreationDate = rs.getTimestamp("lastCharacterCreationTime");
+                            long currentTime = new Date().getTime();
+                            if (lastCreationDate != null) {
+                                long difference = currentTime - lastCreationDate.getTime();
 
-                            if (difference < 20000) { // too fast!
-                                LogHelper.PACKET_EDIT_HACK.get().warn(String.format("[CharacterCreationUtil] Account id %d has tried to create a character within %d millis.", accountId, difference));
-                                return false;
+                                if (difference < 20000) { // too fast!
+                                    LogHelper.PACKET_EDIT_HACK.get().warn(String.format("[CharacterCreationUtil] Account id %d has tried to create a character within %d millis.", accountId, difference));
+                                    return false;
+                                }
                             }
                         }
                     }
+                } catch (SQLException exp) {
+                    LogHelper.SQL.get().info("[CharacterCreationUtil] Error retrieving last character creation time\n", exp);
                 }
-            } catch (SQLException exp) {
-                LogHelper.SQL.get().info("[CharacterCreationUtil] Error retrieving last character creation time\n", exp);
-            }
 
-            // everything's fine, try to update last creation time
-            try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET lastCharacterCreationTime = NOW() WHERE id = ? LIMIT 1")) {
-                ps.setInt(1, accountId);
+                // everything's fine, try to update last creation time
+                try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET lastCharacterCreationTime = NOW() WHERE id = ? LIMIT 1")) {
+                    ps.setInt(1, accountId);
+                    ps.execute();
 
-                ps.execute();
-
-            } catch (SQLException exp) {
-                LogHelper.SQL.get().info("[CharacterCreationUtil] Error updating last character creation time\n", exp);
+                } catch (SQLException exp) {
+                    LogHelper.SQL.get().info("[CharacterCreationUtil] Error updating last character creation time\n", exp);
+                }
+            } catch (SQLException ex) {
+                LogHelper.SQL.get().info("[CharacterCreationUtil] Error Connecting to DB.\n", ex);
             }
         }
 
@@ -92,17 +95,21 @@ public class MapleCharacterCreationUtil {
     private static int loadCharactersSize(int serverId, int accountId) {
         int chars = 0;
 
-        Connection con = DatabaseConnection.getConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT count(*) FROM characters WHERE accountid = ? AND world = ? AND deletedAt is null")) {
-            ps.setInt(1, accountId);
-            ps.setInt(2, serverId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    chars = rs.getInt(1);
+        try (Connection con = GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            try (PreparedStatement ps = con.prepareStatement("SELECT count(*) FROM characters WHERE accountid = ? AND world = ? AND deletedAt is null")) {
+                ps.setInt(1, accountId);
+                ps.setInt(2, serverId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        chars = rs.getInt(1);
+                    }
                 }
+            } catch (SQLException e) {
+                LogHelper.SQL.get().info("[CharacterCreationUtil] Error loading character size.\n", e);
             }
         } catch (SQLException e) {
-            LogHelper.SQL.get().info("[CharacterCreationUtil] Error loading character size.\n", e);
+            LogHelper.SQL.get().info("[CharacterCreationUtil] Error Connecting to DB.\n", e);
         }
         return chars;
     }
@@ -115,8 +122,8 @@ public class MapleCharacterCreationUtil {
      * @return The amount of slots. Returns 0 if database query fails.
      */
     public static int getCharacterSlots(int accountId, int worldId) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM character_slots WHERE accid = ? AND worldid = ? LIMIT 1;")) {
                 ps.setInt(1, accountId);
                 ps.setInt(2, worldId);
@@ -145,8 +152,8 @@ public class MapleCharacterCreationUtil {
             return false;
         }
         currentSlotAmount++;
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             try (PreparedStatement ps = con.prepareStatement("UPDATE character_slots SET charslots = ? WHERE worldid = ? AND accid = ?")) {
                 ps.setInt(1, Math.min(GameConstants.characterSlotMax, currentSlotAmount));
                 ps.setInt(2, worldId);

@@ -22,7 +22,7 @@ import server.potentials.ItemPotentialProvider;
 import server.potentials.ItemPotentialTierType;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -43,7 +43,7 @@ public class UsePotentialScrollHandler implements ProcessPacket<MapleClient> {
         //00
         User chr = c.getPlayer();
 
-        chr.updateTick(iPacket.DecodeInteger());
+        chr.updateTick(iPacket.DecodeInt());
         //iPacket.decode();
         short slot = iPacket.DecodeShort();
         short dst = iPacket.DecodeShort();
@@ -54,7 +54,7 @@ public class UsePotentialScrollHandler implements ProcessPacket<MapleClient> {
 
         if (scroll == null || scroll.getQuantity() <= 0 || toScroll == null
                 || !ItemConstants.isPotentialScroll(scroll.getItemId())) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
 
@@ -68,7 +68,7 @@ public class UsePotentialScrollHandler implements ProcessPacket<MapleClient> {
 
         if (totalUpgradeSlot == 0) {
             if (slotType != EquipSlotType.Shield_OrDualBlade && slotType != EquipSlotType.Si_Emblem) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
         }
@@ -140,9 +140,9 @@ public class UsePotentialScrollHandler implements ProcessPacket<MapleClient> {
         if (completed) {
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, scroll.getPosition(), (short) 1, false);
         }
-        c.write(CField.enchantResult(result == Equip.ScrollResult.SUCCESS ? 1 : result == ScrollResult.CURSE ? 2 : 0));
+        c.SendPacket(CField.enchantResult(result == Equip.ScrollResult.SUCCESS ? 1 : result == ScrollResult.CURSE ? 2 : 0));
         chr.getMap().broadcastMessage(chr, CField.getScrollEffect(c.getPlayer().getId(), result, false, toScroll.getItemId(), scroll.getItemId()), true);
 
-        c.write(CWvsContext.inventoryOperation(true, modifications));
+        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
     }
 }

@@ -29,7 +29,7 @@ import server.quest.MapleQuest;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class TitleEquipHandler implements ProcessPacket<MapleClient> {
 
@@ -41,7 +41,7 @@ public final class TitleEquipHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
-        int itemId = iPacket.DecodeInteger();
+        int itemId = iPacket.DecodeInt();
         if ((chr == null) || (chr.getMap() == null)) {
             return;
         }
@@ -55,7 +55,7 @@ public final class TitleEquipHandler implements ProcessPacket<MapleClient> {
             chr.getQuestNAdd(MapleQuest.getInstance(124000)).setCustomData(String.valueOf(itemId));
         }
         chr.getMap().broadcastMessage(chr, CField.showTitle(chr.getId(), itemId), false);
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 
 }

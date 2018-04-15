@@ -24,7 +24,7 @@ package handling.game;
 import client.MapleClient;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class OnSnowBallHit implements ProcessPacket<MapleClient> {
 
@@ -35,6 +35,6 @@ public final class OnSnowBallHit implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 }

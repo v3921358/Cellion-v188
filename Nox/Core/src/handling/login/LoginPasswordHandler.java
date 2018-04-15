@@ -9,7 +9,7 @@ import server.maps.objects.User;
 import tools.packet.CWvsContext;
 import tools.packet.CLogin;
 import tools.packet.PacketHelper;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class LoginPasswordHandler implements ProcessPacket<MapleClient> {
 
@@ -44,20 +44,20 @@ public final class LoginPasswordHandler implements ProcessPacket<MapleClient> {
             if (!loginFailCount(c)) {
                 c.clearInformation();
                 if (loginok == 3) {
-                    c.write(CWvsContext.broadcastMsg(1, c.showBanReason(login, true)));
-                    c.write(CLogin.getLoginFailed(1)); //Shows no message, used for unstuck the login button
+                    c.SendPacket(CWvsContext.broadcastMsg(1, c.showBanReason(login, true)));
+                    c.SendPacket(CLogin.getLoginFailed(1)); //Shows no message, used for unstuck the login button
                 } else {
-                    c.write(CLogin.getLoginFailed(loginok));
+                    c.SendPacket(CLogin.getLoginFailed(loginok));
                 }
             } else {
-                c.close();
+                c.Close();
             }
-        } else if (tempbannedTill.getTimeInMillis() != 0) {
+        } else if (tempbannedTill.getTimeInMillis() > Calendar.getInstance().getTimeInMillis()) {
             if (!loginFailCount(c)) {
                 c.clearInformation();
-                c.write(CLogin.getTempBan(PacketHelper.getTime(tempbannedTill.getTimeInMillis()), c.getBanReason()));
+                c.SendPacket(CLogin.getTempBan(PacketHelper.getTime(tempbannedTill.getTimeInMillis()), c.getBanReason()));
             } else {
-                c.close();
+                c.Close();
             }
         } else {
             c.loginAttempt = 0;

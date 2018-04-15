@@ -10,7 +10,7 @@ import server.commands.CommandProcessor;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -33,7 +33,7 @@ public class PartyChatHandler implements ProcessPacket<MapleClient> {
     public void Process(MapleClient c, InPacket iPacket) {
         User chr = c.getPlayer();
 
-        chr.updateTick(iPacket.DecodeInteger());
+        chr.updateTick(iPacket.DecodeInt());
         final int type = iPacket.DecodeByte();
         final byte numRecipients = iPacket.DecodeByte();
         if (numRecipients <= 0) {
@@ -42,11 +42,11 @@ public class PartyChatHandler implements ProcessPacket<MapleClient> {
         int recipients[] = new int[numRecipients];
 
         for (byte i = 0; i < numRecipients; i++) {
-            recipients[i] = iPacket.DecodeInteger();
+            recipients[i] = iPacket.DecodeInt();
         }
         final String chattext = iPacket.DecodeString();
         if (chr == null || !chr.getCanTalk()) {
-            c.write(CWvsContext.broadcastMsg(6, "You have been muted and are therefore unable to talk."));
+            c.SendPacket(CWvsContext.broadcastMsg(6, "You have been muted and are therefore unable to talk."));
             return;
         }
 
@@ -74,7 +74,7 @@ public class PartyChatHandler implements ProcessPacket<MapleClient> {
                                     chr.getName(), chr.getId(), c.getAccID(),
                                     type, chattext)
                     );
-                    c.close();
+                    c.Close();
                     break;
             }
             World.Broadcast.broadcastGMMessage(

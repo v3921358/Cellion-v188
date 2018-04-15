@@ -30,12 +30,12 @@ public class CSInventoryAction {
                     c.getPlayer().addPet(item_.getPet());
                 }
                 c.getPlayer().getCashInventory().removeFromInventory(changedItem);
-                c.write(CSPacket.confirmFromCSInventory(item_, pos));
+                c.SendPacket(CSPacket.confirmFromCSInventory(item_, pos));
             } else {
-                c.write(CSPacket.sendCSFail(0xB1));
+                c.SendPacket(CSPacket.sendCSFail(0xB1));
             }
         } else {
-            c.write(CSPacket.sendCSFail(0xB1));
+            c.SendPacket(CSPacket.sendCSFail(0xB1));
         }
     }
 
@@ -51,10 +51,10 @@ public class CSInventoryAction {
             }
             item_.setPosition((byte) 0);
             c.getPlayer().getCashInventory().addToInventory(item_);
-            c.write(CSPacket.showBoughtCSItem(changedItem, changedItem.getUniqueId(), c.getAccID())); // Meme, but updates the inventory right away.
+            c.SendPacket(CSPacket.showBoughtCSItem(changedItem, changedItem.getUniqueId(), c.getAccID())); // Meme, but updates the inventory right away.
             //c.write(CSPacket.confirmToCSInventory(changedItem, c.getAccID(), uniqueid)); // TODO: Fix the param
         } else {
-            c.write(CSPacket.sendCSFail(0xB1));
+            c.SendPacket(CSPacket.sendCSFail(0xB1));
         }
     }
 }

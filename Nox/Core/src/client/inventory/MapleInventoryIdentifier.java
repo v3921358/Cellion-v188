@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import database.DatabaseConnection;
+import database.Database;
 import tools.LogHelper;
 
 public class MapleInventoryIdentifier implements Serializable {
@@ -30,9 +30,9 @@ public class MapleInventoryIdentifier implements Serializable {
 
     public int initUID() {
         int ret = 0;
-        try {
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             int[] ids = new int[5];
-            Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT MAX(uniqueid) FROM inventoryitems WHERE uniqueid > 0");
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {

@@ -11,7 +11,7 @@ import server.maps.objects.User;
 import server.maps.objects.Pet;
 import tools.packet.CField;
 import tools.packet.PetPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -49,11 +49,11 @@ public class PetCommandHandler implements ProcessPacket<MapleClient> {
                 pet.setCloseness((int) newCloseness);
                 if (newCloseness >= GameConstants.getClosenessNeededForLevel(pet.getLevel() + 1)) {
                     pet.setLevel(pet.getLevel() + 1);
-                    c.write(CField.EffectPacket.showOwnPetLevelUp(null, petIndex));
+                    c.SendPacket(CField.EffectPacket.showOwnPetLevelUp(null, petIndex));
                     chr.getMap().broadcastMessage(PetPacket.showPetLevelUp(chr, petIndex));
                 }
                 //  chr.forceUpdateItem(pet.getItem());
-                c.write(PetPacket.updatePet(pet, chr.getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+                c.SendPacket(PetPacket.updatePet(pet, chr.getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
             }
         }
         chr.getMap().broadcastMessage(PetPacket.commandResponse(chr.getId(), (byte) petCommand.getSkillId(), petIndex, success, false));

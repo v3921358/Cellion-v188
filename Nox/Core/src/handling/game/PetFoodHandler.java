@@ -12,7 +12,7 @@ import server.maps.objects.Pet;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.PetPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -45,17 +45,17 @@ public class PetFoodHandler implements ProcessPacket<MapleClient> {
         }
         if (pet == null) {
             c.getPlayer().dropMessage(5, "Your pet is not hungry.");
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
 
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         short slot = iPacket.DecodeShort();
-        final int itemId = iPacket.DecodeInteger();
+        final int itemId = iPacket.DecodeInt();
         Item petFood = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
         if (petFood == null || petFood.getItemId() != itemId || petFood.getQuantity() <= 0 || itemId / 10000 != 212) {
             c.getPlayer().dropMessage(-1, "Wrong item" + itemId);
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         boolean gainCloseness = false;
@@ -79,12 +79,12 @@ public class PetFoodHandler implements ProcessPacket<MapleClient> {
                 pet.setCloseness(newCloseness);
                 if (newCloseness >= GameConstants.getClosenessNeededForLevel(pet.getLevel() + 1)) {
                     pet.setLevel(pet.getLevel() + 1);
-                    c.write(CField.EffectPacket.showOwnPetLevelUp(null, index));
+                    c.SendPacket(CField.EffectPacket.showOwnPetLevelUp(null, index));
                     c.getPlayer().dropMessage(6, "Your pet has leveled up! " + pet.getName() + " is now level " + pet.getLevel() + "." + " Pet Closeness: " + pet.getCloseness());
                     c.getPlayer().getMap().broadcastMessage(CField.EffectPacket.showOwnPetLevelUp(c.getPlayer(), index));
                 }
             }
-            c.write(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+            c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
             c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, index, true, true), true);
         } else {
             if (gainCloseness) {
@@ -97,11 +97,11 @@ public class PetFoodHandler implements ProcessPacket<MapleClient> {
                     pet.setLevel(pet.getLevel() - 1);
                 }
             }
-            c.write(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+            c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
             c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, c.getPlayer().getPetIndex(pet), false, true), true);
         }
         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, true, false);
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 
 }

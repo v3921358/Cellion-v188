@@ -376,7 +376,7 @@ public class Skill implements Comparator<Skill> {
         }
         int jobCode = getJobCode(jobid);
         if (GameConstants.isEvan(jobid)) {
-            if (id == Evan.HEROS_WILL_80_8 || id == Evan.HEROS_WILL_90_9 || jobCode != 9 && jobCode != 10 
+            if (id == Evan.HEROS_WILL_80_8 || id == Evan.HEROS_WILL_90_9 || jobCode != 9 && jobCode != 10
                     && id != Evan.MAGIC_RESISTANCE && id != Evan.MAGIC_BOOSTER_4 && id != Evan.CRITICAL_MAGIC) {
                 return false;
             }
@@ -508,7 +508,7 @@ public class Skill implements Comparator<Skill> {
     public int getMasterLevel() {
         return this.masterLevel;
     }
-    
+
     public void setMasterLevel(int nMasterLevel) {
         this.masterLevel = nMasterLevel;
     }

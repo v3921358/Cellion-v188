@@ -26,7 +26,7 @@ import handling.world.MaplePartyCharacter;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class EnterAzwanHandler implements ProcessPacket<MapleClient> {
 
@@ -38,13 +38,13 @@ public final class EnterAzwanHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         if (c.getPlayer() == null || c.getPlayer().getMap() == null || c.getPlayer().getMapId() != 262000300) {
-            c.write(CField.pvpBlocked(1));
-            c.write(CWvsContext.enableActions());
+            //c.SendPacket(CField.pvpBlocked(1));
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         if (c.getPlayer().getLevel() < 40) {
-            c.write(CField.pvpBlocked(1));
-            c.write(CWvsContext.enableActions());
+            //c.SendPacket(CField.pvpBlocked(1));
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         byte mode = iPacket.DecodeByte();
@@ -52,14 +52,14 @@ public final class EnterAzwanHandler implements ProcessPacket<MapleClient> {
         byte party = iPacket.DecodeByte();
         int mapid = 262020000 + (mode * 1000) + difficult; //Supply doesn't have difficult but it's always 0 so idc
         if (party == 1 && c.getPlayer().getParty() == null) {
-            c.write(CField.pvpBlocked(9));
-            c.write(CWvsContext.enableActions());
+            //c.SendPacket(CField.pvpBlocked(9));
+            c.SendPacket(CWvsContext.enableActions());
         }
         if (party == 1 && c.getPlayer().getParty() != null) {
             for (MaplePartyCharacter partymembers : c.getPlayer().getParty().getMembers()) {
                 if (c.getChannelServer().getPlayerStorage().getCharacterById(partymembers.getId()).getMapId() != 262000300) {
                     c.getPlayer().dropMessage(1, "Please make sure all of your party members are in the same map.");
-                    c.write(CWvsContext.enableActions());
+                    c.SendPacket(CWvsContext.enableActions());
                 }
             }
         }

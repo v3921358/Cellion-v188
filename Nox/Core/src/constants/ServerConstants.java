@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 /*
  * Nox Project
- * Rexion Development
+ * Cellion Development
 
  * MapleStory Server Emulator
  * GMS Version 1.80.2
@@ -22,14 +22,7 @@ import java.util.logging.Logger;
 public class ServerConstants {
 
     /*Server IP Address*/
-    public static final String HOST = "rexion.mywire.org";
-
-    /*Server Database Configuration*/
-    public static String SQL_HOST = "127.0.0.1";
-    public static String SQL_PORT = "3306";
-    public static String SQL_DATABASE = "nox";
-    public static String SQL_USER = "root";
-    public static String SQL_PASSWORD = "?r3xionism3me!";
+    public static final String HOST = "cellion.org";
 
     /*Server Debug*/
  /*These values will be overwritten by the configuration.ini file.*/
@@ -54,8 +47,8 @@ public class ServerConstants {
     public static int SAVE_INTERVAL = 15; //TODO: THIS, but maybe a bad idea?
 
     /*Anti-Cheat Configuration*/
-    public static boolean ANTI_CHEAT = true; // Enables Rexion Anti-Cheat.
-    
+    public static boolean ANTI_CHEAT = true; // Enables Cellion Anti-Cheat.
+
     /*Master Password Configuration*/
     public static final boolean ENABLE_MASTER = false; //Leave disabled to avoid potential security leaks, feature works though.
     public static final String MASTER_PASSWORD = "";
@@ -64,14 +57,14 @@ public class ServerConstants {
     /*Client Information*/
     public static final boolean TESPIA = false; // Used for activating GMST.
     public static final short MAPLE_VERSION = (short) 180;
-    public static final String SERVER_NAME = "REXION"; //Shorter reference of just the server name.
+    public static final String SERVER_NAME = "Cellion"; //Shorter reference of just the server name.
     public static final String MAPLE_PATCH = "2";
     public static final int MAPLE_LOCALE = 8;
-    
+
     /*Apply Hotfix*/
  /*In MapleStory GMS v.179 - v.183 the request for the ApplyHotFix packet does not always gets sent, good job Nexon.*/
     public static final boolean FORCE_HOTFIX = false; //Forces the server to send the Apply Hotfix packet regardless.
-    
+
     /*General Configuration*/
     public static final String SOURCE_REVISION = "0.9";
     public static final boolean OLD_MAPS = false; //example: it will use old maple event's henesys instead of current one
@@ -89,9 +82,9 @@ public class ServerConstants {
     public static final int LOGIN_ATTEMPTS = 5; //Amount of login attempts before game will close.
     public static final int FLAGS = 3;
     public static final int USER_LIMIT = 150;
-    public static final String EVENT_MESSAGE = "REXION MapleStory GMS 1.80 (Early Access)";
-    public static final String RANKING_URL = "https://playrexion.net/rankings";
-    public static final String CS_BANNER_URL = "http://mazenmassoud.com/rexion/CashShop.jpg";
+    public static final String EVENT_MESSAGE = "Cellion MapleStory GMS 1.80 (Early Access)";
+    public static final String RANKING_URL = "https://playCellion.net/rankings";
+    public static final String CS_BANNER_URL = "http://mazenmassoud.com/Cellion/CashShop.jpg";
     public static final byte[] NEXON_IP = new byte[]{(byte) 8, (byte) 31, (byte) 99, (byte) 141};//8.31.99.141
     public static final byte[] NEXON_CHAT_IP = new byte[]{(byte) 8, (byte) 31, (byte) 99, (byte) 133};
     public static final int CHARACTER_LIMIT = 16;
@@ -120,7 +113,7 @@ public class ServerConstants {
     public static final float SPAWN_RATE_MULTIPLIER = 1.30F; //Multipy the spawn rate globally by this variable.
     public static final boolean CUSTOM_MAP_BUFFED_SPAWN = true; // Enables custom spawn rate increase on some maps to improve player gameplay experience.
     public static final float CUSTOM_MAP_BUFFED_SPAWN_RATE = 1.45F; //Multiply the custom buffed maps spawn rate by this variable.
-    
+
     /*Tutorial Configuration*/
  /*NPCs used for the tutorial (9201095, 9270087, 9270082, 9270086)*/
  /*Maps used for the tutorial (552000010, 552000021, 552000022, 552000020)*/
@@ -171,9 +164,9 @@ public class ServerConstants {
         60000000000000L, // Paragon Level 10 Required Experience
         100000000000000L}; // Paragon Max Level Required Experience
 
-    /*Rexion Events*/
+    /*Cellion Events*/
     public static boolean EASTER_EVENT = true; // Enables Easter Egg global drops, and access to the Easter event npc!
-    
+
     /*Events*/
     public static boolean BURNING_CHARACTER_EVENT = false;
     public static boolean RED_EVENT_10 = false; //Makes cassandra popup when you login at lvl<10 (maple island)

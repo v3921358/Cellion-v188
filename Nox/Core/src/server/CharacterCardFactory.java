@@ -31,7 +31,7 @@ import java.util.Map.Entry;
 
 import client.CardData;
 import constants.GameConstants;
-import database.DatabaseConnection;
+import database.Database;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
@@ -109,33 +109,29 @@ public class CharacterCardFactory {
         return cardEffects.get(job / 10) != null;
     }
 
-    public final Map<Integer, CardData> loadCharacterCards(final int accId, final int serverId) {
+    public final Map<Integer, CardData> loadCharacterCards(final int accId, final int serverId, Connection con) {
         Map<Integer, CardData> cards = new LinkedHashMap<>(); // order
         Map<Integer, Pair<Short, Short>> inf = loadCharactersInfo(accId, serverId);
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM `character_cards` WHERE `accid` = ?")) {
-                ps.setInt(1, accId);
-                try (ResultSet rs = ps.executeQuery()) {
-                    int deck1 = 0, deck2 = 3;
-                    while (rs.next()) {
-                        final int cid = rs.getInt("characterid");
-                        final Pair<Short, Short> x = inf.get(cid);
-                        if (x == null || !canHaveCard(x.getLeft(), x.getRight())) { // we don't need to delete them as it'll be there till the user reupdate the char cards
-                            continue;
-                        }
-                        final int position = rs.getInt("position");
-                        if (position < 4) {
-                            deck1++;
-                            cards.put(deck1, new CardData(cid, x.getLeft(), x.getRight()));
-                        } else {
-                            deck2++;
-                            cards.put(deck2, new CardData(cid, x.getLeft(), x.getRight()));
-                        }
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM `character_cards` WHERE `accid` = ?")) {
+            ps.setInt(1, accId);
+            try (ResultSet rs = ps.executeQuery()) {
+                int deck1 = 0, deck2 = 3;
+                while (rs.next()) {
+                    final int cid = rs.getInt("characterid");
+                    final Pair<Short, Short> x = inf.get(cid);
+                    if (x == null || !canHaveCard(x.getLeft(), x.getRight())) { // we don't need to delete them as it'll be there till the user reupdate the char cards
+                        continue;
+                    }
+                    final int position = rs.getInt("position");
+                    if (position < 4) {
+                        deck1++;
+                        cards.put(deck1, new CardData(cid, x.getLeft(), x.getRight()));
+                    } else {
+                        deck2++;
+                        cards.put(deck2, new CardData(cid, x.getLeft(), x.getRight()));
                     }
                 }
             }
-
         } catch (SQLException e) {
             LogHelper.SQL.get().info("Failed to load character cards. ", e);
         }
@@ -149,8 +145,8 @@ public class CharacterCardFactory {
 
     public Map<Integer, Pair<Short, Short>> loadCharactersInfo(int accId, int serverId) {
         Map<Integer, Pair<Short, Short>> chars = new HashMap<>();
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = Database.GetConnection()) {
+            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
             try (PreparedStatement ps = con.prepareStatement("SELECT id, level, job FROM characters WHERE  deletedAt is null AND accountid = ? AND world = ?")) {
                 ps.setInt(1, accId);
                 ps.setInt(2, serverId);

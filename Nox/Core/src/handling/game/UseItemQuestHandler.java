@@ -11,7 +11,7 @@ import server.MapleItemInformationProvider;
 import server.quest.MapleQuest;
 import tools.Pair;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -27,9 +27,9 @@ public class UseItemQuestHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final short slot = iPacket.DecodeShort();
-        final int itemId = iPacket.DecodeInteger();
+        final int itemId = iPacket.DecodeInt();
         final Item item = c.getPlayer().getInventory(MapleInventoryType.ETC).getItem(slot);
-        final int qid = iPacket.DecodeInteger();
+        final int qid = iPacket.DecodeInt();
         final MapleQuest quest = MapleQuest.getInstance(qid);
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         Pair<Integer, List<Integer>> questItemInfo = null;
@@ -44,7 +44,7 @@ public class UseItemQuestHandler implements ProcessPacket<MapleClient> {
             }
         }
         if (quest != null && found && item != null && item.getQuantity() > 0 && item.getItemId() == itemId) {
-            final int newData = iPacket.DecodeInteger();
+            final int newData = iPacket.DecodeInt();
             final MapleQuestStatus stats = c.getPlayer().getQuestNoAdd(quest);
             if (stats != null && stats.getStatus() == MapleQuestState.Started) {
                 stats.setCustomData(String.valueOf(newData));

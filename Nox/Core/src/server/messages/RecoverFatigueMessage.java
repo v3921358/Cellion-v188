@@ -16,7 +16,7 @@ public class RecoverFatigueMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.RecoveredFatigue.getType());
+        oPacket.EncodeByte(_MessageOpcodesType.RecoveredFatigue.getType());
     }
 
 }

@@ -11,7 +11,7 @@ import server.shops.MapleShop;
 import net.InPacket;
 import scripting.provider.NPCScriptManager;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import server.MapleInventoryManipulator;
 import server.shops.MapleShopFactory;
 
@@ -70,7 +70,7 @@ public class NPCShopHandler implements ProcessPacket<MapleClient> {
                     return;
                 }
                 byte nSlot = (byte) iPacket.DecodeShort();
-                int nItem = iPacket.DecodeInteger();
+                int nItem = iPacket.DecodeInt();
                 short nQuantity = iPacket.DecodeShort();
 
                 if (nItem == 2000005) { // Hack fix for Power Elixer.
@@ -95,10 +95,10 @@ public class NPCShopHandler implements ProcessPacket<MapleClient> {
                     return;
                 }
                 byte slot = (byte) iPacket.DecodeShort();
-                int itemId = iPacket.DecodeInteger();
+                int itemId = iPacket.DecodeInt();
                 short quantity = iPacket.DecodeShort();
                 shop.sell(c, GameConstants.getInventoryType(itemId), slot, quantity);
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
 
                 if (pPlayer.isIntern()) {
                     pPlayer.dropMessage(5, "[Shop Debug] Item ID : " + itemId + " (Sold)");
@@ -112,21 +112,21 @@ public class NPCShopHandler implements ProcessPacket<MapleClient> {
                 }
                 byte slot = (byte) iPacket.DecodeShort();
                 shop.recharge(c, slot);
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 break;
             }
             case NPC_SHOP_ACTION_CLOSE: {
                 c.removeClickedNPC();
                 NPCScriptManager.getInstance().dispose(c);
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 break;
             }
             case NOT_FOUND:
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 break;
             default:
                 pPlayer.setConversation(User.MapleCharacterConversationType.None);
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 break;
         }
     }

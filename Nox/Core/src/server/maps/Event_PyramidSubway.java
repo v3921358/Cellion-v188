@@ -79,18 +79,18 @@ public class Event_PyramidSubway {
             for (MaplePartyCharacter mpc : c.getParty().getMembers()) {
                 final User chr = ourMap.getCharacterById(mpc.getId());
                 if (chr != null) {
-                    chr.getClient().write(CField.getClock(time));
-                    chr.getClient().write(CField.showEffect("killing/first/number/" + stage));
-                    chr.getClient().write(CField.showEffect("killing/first/stage"));
-                    chr.getClient().write(CField.showEffect("killing/first/start"));
+                    chr.getClient().SendPacket(CField.getClock(time));
+                    chr.getClient().SendPacket(CField.showEffect("killing/first/number/" + stage));
+                    chr.getClient().SendPacket(CField.showEffect("killing/first/stage"));
+                    chr.getClient().SendPacket(CField.showEffect("killing/first/start"));
                     fullUpdate(chr, stage);
                 }
             }
         } else {
-            c.getClient().write(CField.getClock(time));
-            c.getClient().write(CField.showEffect("killing/first/number/" + stage));
-            c.getClient().write(CField.showEffect("killing/first/stage"));
-            c.getClient().write(CField.showEffect("killing/first/start"));
+            c.getClient().SendPacket(CField.getClock(time));
+            c.getClient().SendPacket(CField.showEffect("killing/first/number/" + stage));
+            c.getClient().SendPacket(CField.showEffect("killing/first/stage"));
+            c.getClient().SendPacket(CField.showEffect("killing/first/start"));
             fullUpdate(c, stage);
         }
         if (type != -1 && (stage == 4 || stage == 5)) { //yetis. temporary
@@ -300,7 +300,7 @@ public class Event_PyramidSubway {
             c.gainExp((int) exp, true, false, false);
         }
         c.getTrait(MapleTraitType.will).addExp((type + 2) * 8, c);
-        c.getClient().write(CField.showEffect("killing/clear"));
+        c.getClient().SendPacket(CField.showEffect("killing/clear"));
         //c.getClient().write(CField.sendPyramidResult(rank, (int) exp));
         dispose(c);
     }
@@ -338,11 +338,11 @@ public class Event_PyramidSubway {
     }
 
     public final void broadcastEffect(final User c, final String effect) {
-        c.getClient().write(CField.showEffect(effect));
+        c.getClient().SendPacket(CField.showEffect(effect));
     }
 
     public final void broadcastEnergy(final User c, final String type, final int amount) {
-        c.getClient().write(CWvsContext.sendPyramidEnergy(type, String.valueOf(amount)));
+        c.getClient().SendPacket(CWvsContext.sendPyramidEnergy(type, String.valueOf(amount)));
     }
 
     public static boolean warpStartSubway(final User c) {
@@ -476,18 +476,18 @@ public class Event_PyramidSubway {
                 final User chr = oldMap.getCharacterById(mpc.getId());
                 if (chr != null && chr.getId() != c.getId() && chr.getLevel() >= minLevel && chr.getLevel() <= maxLevel) {
                     if (clear == 1) {
-                        chr.getClient().write(CField.showEffect("killing/clear"));
+                        chr.getClient().SendPacket(CField.showEffect("killing/clear"));
                     } else if (clear == 2) {
-                        chr.getClient().write(CField.showEffect("killing/fail"));
+                        chr.getClient().SendPacket(CField.showEffect("killing/fail"));
                     }
                     chr.changeMap(map, map.getPortal(0));
                 }
             }
         }
         if (clear == 1) {
-            c.getClient().write(CField.showEffect("killing/clear"));
+            c.getClient().SendPacket(CField.showEffect("killing/clear"));
         } else if (clear == 2) {
-            c.getClient().write(CField.showEffect("killing/fail"));
+            c.getClient().SendPacket(CField.showEffect("killing/fail"));
         }
         c.changeMap(map, map.getPortal(0));
     }

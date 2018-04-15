@@ -8,7 +8,7 @@ package handling.game;
 import client.MapleClient;
 import handling.world.MaplePartyCharacter;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import scripting.AbstractPlayerInteraction;
 import scripting.provider.NPCScriptManager;
 import server.maps.MapleMap;
@@ -25,15 +25,14 @@ public class BossMatchmakingHandler implements ProcessPacket<MapleClient> {
     public boolean ValidateState(MapleClient c) {
         return true;
     }
-    
+
     private static enum BossOperation {
         BALROG(1), // Requires Quest: 2241
         ZAKUM_EASY(2),
         ZAKUM(3),
         ZAKUM_CHAOS(4),
-        
         URSUS(999), // Requires Quest: 33565 // Not handled here apparently.
-        
+
         MAGNUS_EASY(21),
         MAGNUS(22), // Requires Quest: 31833
         MAGNUS_HARD(23),
@@ -41,26 +40,23 @@ public class BossMatchmakingHandler implements ProcessPacket<MapleClient> {
         HILLA_HARD(8),
         PIERRE(9), // Requires Quest: 30007
         PIERRE_CHAOS(10),
-        VONBON(11), 
+        VONBON(11),
         VONBON_CHAOS(12),
         CRIMSONQUEEN(13),
         CRIMSONQUEEN_CHAOS(14),
-        VELLUM(15), 
+        VELLUM(15),
         VELLUM_CHAOS(16),
-        
         VONLEON_EASY(999), // Requires Quest: 3157
         VONLEON(999),
-        
         HORNTAIL_EASY(27), // Requires Quest : 7313
         HORNTAIL(5),
         HORNTAIL_CHAOS(6),
         ARKARIUM_EASY(19), // Requires Quest : 31179
-        ARKARIUM(20), 
+        ARKARIUM(20),
         PINKBEAN(24), // Requires Quest: 3521
         PINKBEAN_CHAOS(25),
-        
         CYGNUS_EASY(999),// Not handled here apparently.
-        
+
         CYGNUS(26), // Requires Quest: 31152
         LOTUS(29), // Requires Quest: 33294
         LOTUS_HARD(28),
@@ -71,7 +67,7 @@ public class BossMatchmakingHandler implements ProcessPacket<MapleClient> {
         RANMARU_HARD(109),
         PRINCESSNO(105), // Requires Quest: 58955
         LUCID(34), // Requires Quest: 34330
-        
+
         NOT_FOUND(-2);
 
         private final int nValue;
@@ -93,18 +89,18 @@ public class BossMatchmakingHandler implements ProcessPacket<MapleClient> {
             return NOT_FOUND;
         }
     }
-    
+
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final User pPlayer = c.getPlayer();
-        pPlayer.updateTick(iPacket.DecodeInteger());
-        int nBossType = iPacket.DecodeInteger();
+        pPlayer.updateTick(iPacket.DecodeInt());
+        int nBossType = iPacket.DecodeInt();
         BossOperation nType = BossOperation.getFromValue(nBossType);
         int nDestination;
-        iPacket.DecodeInteger(); // Unknown
-        iPacket.DecodeInteger(); // Unknown
-        
-        switch(nType) {
+        iPacket.DecodeInt(); // Unknown
+        iPacket.DecodeInt(); // Unknown
+
+        switch (nType) {
             case BALROG:
                 nDestination = 0;
                 pPlayer.dropMessage(5, "Sorry, this boss is currently unavailable.");
@@ -140,43 +136,43 @@ public class BossMatchmakingHandler implements ProcessPacket<MapleClient> {
                 nDestination = 240050400;
                 break;
             case ARKARIUM_EASY:
-            case ARKARIUM:    
+            case ARKARIUM:
                 nDestination = 0;
                 pPlayer.dropMessage(5, "Sorry, this boss is currently unavailable.");
                 break;
-            case PINKBEAN: 
-            case PINKBEAN_CHAOS: 
+            case PINKBEAN:
+            case PINKBEAN_CHAOS:
                 nDestination = 0;
                 pPlayer.dropMessage(5, "Sorry, this boss is currently unavailable.");
                 break;
-            case CYGNUS: 
+            case CYGNUS:
                 nDestination = 0;
                 pPlayer.dropMessage(5, "Sorry, this boss is currently unavailable.");
                 break;
-            case LOTUS: 
-            case LOTUS_HARD: 
+            case LOTUS:
+            case LOTUS_HARD:
                 nDestination = 350060000;
                 break;
-            case DAMIEN: 
-            case DAMIEN_HARD: 
+            case DAMIEN:
+            case DAMIEN_HARD:
                 nDestination = 0;
                 pPlayer.dropMessage(5, "Sorry, this boss is currently unavailable.");
                 break;
-            case GOLLUX: 
+            case GOLLUX:
                 nDestination = 0;
                 pPlayer.dropMessage(5, "Sorry, this boss is currently unavailable.");
                 break;
-            case RANMARU: 
-                /*nDestination = 807300100;
+            case RANMARU:
+            /*nDestination = 807300100;
                 break;*/
-            case RANMARU_HARD: 
+            case RANMARU_HARD:
                 nDestination = 807300200;
                 break;
-            case PRINCESSNO: 
+            case PRINCESSNO:
                 nDestination = 0;
                 pPlayer.dropMessage(5, "Sorry, this boss is currently unavailable.");
                 break;
-            case LUCID: 
+            case LUCID:
                 nDestination = 0;
                 pPlayer.dropMessage(5, "Sorry, this boss is currently unavailable.");
                 break;
@@ -185,14 +181,14 @@ public class BossMatchmakingHandler implements ProcessPacket<MapleClient> {
                 System.out.println("[Debug] Boss Matchmaking Operation Found (" + nBossType + ")");
                 break;
         }
-        
+
         if (nDestination != 0) {
             pPlayer.changeMap(nDestination, 0);
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
         } else {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
         }
-        
+
         //Incase we want to handle it with parties, but it's a better quality of life without it.
         /*if (pPlayer.getParty() == null || pPlayer.getParty().getMembers().size() == 1) {
             pPlayer.changeMap(nDestination, 0);
@@ -216,5 +212,5 @@ public class BossMatchmakingHandler implements ProcessPacket<MapleClient> {
         }
         c.write(CWvsContext.enableActions());*/
     }
-    
+
 }

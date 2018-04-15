@@ -24,12 +24,12 @@ public class MapleDragon extends AnimatedMapleMapObject {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.write(CField.spawnDragon(this));
+        client.SendPacket(CField.spawnDragon(this));
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.write(CField.removeDragon(this.owner));
+        client.SendPacket(CField.removeDragon(this.owner));
     }
 
     public int getOwner() {

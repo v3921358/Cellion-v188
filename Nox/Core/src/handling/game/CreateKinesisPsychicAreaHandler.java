@@ -10,7 +10,7 @@ import constants.GameConstants;
 import static client.jobs.Kinesis.KinesisHandler.handlePsychicPoint;
 import java.awt.Point;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import tools.packet.JobPacket;
 
 /**
@@ -26,26 +26,26 @@ public class CreateKinesisPsychicAreaHandler implements ProcessPacket<MapleClien
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int nAction = iPacket.DecodeInteger();
-        int nActionSpeed = iPacket.DecodeInteger();
-        int unknown = iPacket.DecodeInteger();
-        int nParentPsychicAreaKey = iPacket.DecodeInteger();
+        int nAction = iPacket.DecodeInt();
+        int nActionSpeed = iPacket.DecodeInt();
+        int unknown = iPacket.DecodeInt();
+        int nParentPsychicAreaKey = iPacket.DecodeInt();
         int nPsychicAreaKey = Math.abs(nParentPsychicAreaKey);
-        int nSkillID = iPacket.DecodeInteger();
+        int nSkillID = iPacket.DecodeInt();
         short nSLV = iPacket.DecodeShort();
-        int unknown2 = iPacket.DecodeInteger();
+        int unknown2 = iPacket.DecodeInt();
         byte isLeft = iPacket.DecodeByte();
         short nSkeletonFilePathIdx = iPacket.DecodeShort();
         short nSkeletonAniIdx = iPacket.DecodeShort();
         short nSkeletonLoop = iPacket.DecodeShort();
-        Point posStart = new Point(iPacket.DecodeInteger(), iPacket.DecodeInteger());
+        Point posStart = new Point(iPacket.DecodeInt(), iPacket.DecodeInt());
         int nDurationTime = 14000; // Not in packet?
 
         if (GameConstants.isKinesis(c.getPlayer().getJob())) {
             handlePsychicPoint(c.getPlayer(), nSkillID);
         }
 
-        c.write(JobPacket.Kinesis.OnCreatePsychicArea(c.getPlayer().getId(), nAction, nActionSpeed, nParentPsychicAreaKey, nSkillID, nSLV, nPsychicAreaKey, nDurationTime, isLeft, nSkeletonFilePathIdx, nSkeletonAniIdx, nSkeletonLoop, posStart));
+        c.SendPacket(JobPacket.Kinesis.OnCreatePsychicArea(c.getPlayer().getId(), nAction, nActionSpeed, nParentPsychicAreaKey, nSkillID, nSLV, nPsychicAreaKey, nDurationTime, isLeft, nSkeletonFilePathIdx, nSkeletonAniIdx, nSkeletonLoop, posStart));
         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), JobPacket.Kinesis.OnCreatePsychicArea(c.getPlayer().getId(), nAction, nActionSpeed, nParentPsychicAreaKey, nSkillID, nSLV, nPsychicAreaKey, nDurationTime, isLeft, nSkeletonFilePathIdx, nSkeletonAniIdx, nSkeletonLoop, posStart), false);
     }
 }

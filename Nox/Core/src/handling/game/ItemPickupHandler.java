@@ -26,7 +26,7 @@ import server.maps.objects.Pet;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -46,7 +46,7 @@ public class ItemPickupHandler implements ProcessPacket<MapleClient> {
         if (chr == null || c.getPlayer().hasBlockedInventory()) { //hack
             return;
         }
-        chr.updateTick(iPacket.DecodeInteger());
+        chr.updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
         iPacket.Skip(1); // or is this before tick?
         final Point Client_Reportedpos = iPacket.DecodePosition();
@@ -54,10 +54,10 @@ public class ItemPickupHandler implements ProcessPacket<MapleClient> {
         if (chr.getMap() == null) {
             return;
         }
-        final MapleMapObject ob = chr.getMap().getMapObject(iPacket.DecodeInteger(), MapleMapObjectType.ITEM);
+        final MapleMapObject ob = chr.getMap().getMapObject(iPacket.DecodeInt(), MapleMapObjectType.ITEM);
 
         if (ob == null) {
-            c.write(CWvsContext.enableActions());
+            c.SendPacket(CWvsContext.enableActions());
             return;
         }
         final MapleMapItem mapitem = (MapleMapItem) ob;
@@ -65,20 +65,20 @@ public class ItemPickupHandler implements ProcessPacket<MapleClient> {
         lock.lock();
         try {
             if (mapitem.isPickedUp()) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             if (mapitem.getQuest() > 0 && chr.getQuestStatus(mapitem.getQuest()) != MapleQuestState.Started) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             if (mapitem.getOwner() != chr.getId() && ((!mapitem.isPlayerDrop() && mapitem.getDropType() == 0)
                     || (mapitem.isPlayerDrop() && chr.getMap().getSharedMapResources().everlast))) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
             if (!mapitem.isPlayerDrop() && mapitem.getDropType() == 1 && mapitem.getOwner() != chr.getId() && (chr.getParty() == null || chr.getParty().getMemberById(mapitem.getOwner()) == null)) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 return;
             }
 
@@ -121,11 +121,11 @@ public class ItemPickupHandler implements ProcessPacket<MapleClient> {
                 removeItem(chr, mapitem, ob);
 
             } else if (MapleItemInformationProvider.getInstance().isPickupBlocked(mapitem.getItemId())) {
-                c.write(CWvsContext.enableActions());
+                c.SendPacket(CWvsContext.enableActions());
                 c.getPlayer().dropMessage(5, "This item cannot be picked up.");
 
             } else if (c.getPlayer().inPVP() && Integer.parseInt(c.getPlayer().getEventInstance().getProperty("ice")) == c.getPlayer().getId()) {
-                c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
 
             } else if (useItem(c, mapitem.getItemId())) {
                 removeItem(c.getPlayer(), mapitem, ob);
@@ -150,15 +150,15 @@ public class ItemPickupHandler implements ProcessPacket<MapleClient> {
 
                 // Display
                 if (!mapitem.isPlayerDrop() && mapitem.getItem().getType() == ItemType.Equipment) {
-                    chr.getClient().write(CWvsContext.InfoPacket.showEquipmentPickedUp((Equip) mapitem.getItem()));
+                    chr.getClient().SendPacket(CWvsContext.InfoPacket.showEquipmentPickedUp((Equip) mapitem.getItem()));
                 }
             } else {
-                c.write(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
             }
         } finally {
             lock.unlock();
         }
-        
+
         chr.saveItemData(); // Duplication and rollback prevention.
     }
 

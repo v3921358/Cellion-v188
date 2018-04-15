@@ -6,7 +6,7 @@ import handling.world.MapleGuild;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.CWvsContext.GuildPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class CancelGuildJoinRequestHandler implements ProcessPacket<MapleClient> {
 
@@ -26,15 +26,15 @@ public final class CancelGuildJoinRequestHandler implements ProcessPacket<MapleC
         if (guild != null) {
             if (guild.getPendingMembers().contains(chr)) {
                 guild.removePendingGuildMember(chr);
-                c.write(GuildPacket.updateJoinRequestClientInfo(""));
-                chr.getClient().write(GuildPacket.findGuild_Done(chr, chr.getPendingGuildId()));
-                c.write(GuildPacket.joinGuildRequest(guild, chr, GuildPacket.GuildResult.JoinCancelRequest_Done));
+                c.SendPacket(GuildPacket.updateJoinRequestClientInfo(""));
+                chr.getClient().SendPacket(GuildPacket.findGuild_Done(chr, chr.getPendingGuildId()));
+                c.SendPacket(GuildPacket.joinGuildRequest(guild, chr, GuildPacket.GuildResult.JoinCancelRequest_Done));
                 chr.setPendingGuildId(0);
             }
         } else {
             chr.setPendingGuildId(0);
-            c.write(GuildPacket.updateJoinRequestClientInfo(""));
-            chr.getClient().write(GuildPacket.joinGuildRequest(guild, chr, GuildPacket.GuildResult.JoinGuild_Unknown));
+            c.SendPacket(GuildPacket.updateJoinRequestClientInfo(""));
+            chr.getClient().SendPacket(GuildPacket.joinGuildRequest(guild, chr, GuildPacket.GuildResult.JoinGuild_Unknown));
         }
     }
 }

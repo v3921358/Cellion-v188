@@ -19,7 +19,7 @@ public class SystemMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.Encode(_MessageOpcodesType.System.getType());
+        oPacket.EncodeByte(_MessageOpcodesType.System.getType());
         oPacket.EncodeString(systemMessage);
     }
 

@@ -16,47 +16,43 @@ import service.LoginServer;
 import service.SendPacketOpcode;
 import provider.data.HexTool;
 import net.OutPacket;
-import net.Packet;
+
 import server.maps.objects.User;
 import service.ChannelServer;
 
 public class CLogin {
 
-    public static Packet Handshake(int sendIv, int recvIv) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket Handshake(int sendIv, int recvIv) {
+        OutPacket oPacket = new OutPacket((short) 15);
 
-        oPacket.EncodeShort(15);
         oPacket.EncodeShort(ServerConstants.MAPLE_VERSION);
         oPacket.EncodeString(ServerConstants.MAPLE_PATCH);
-        oPacket.EncodeInteger(recvIv);
-        oPacket.EncodeInteger(sendIv);
-        oPacket.Encode(ServerConstants.MAPLE_LOCALE);
-        oPacket.Encode(0);
+        oPacket.EncodeInt(recvIv);
+        oPacket.EncodeInt(sendIv);
+        oPacket.EncodeByte(ServerConstants.MAPLE_LOCALE);
+        oPacket.EncodeByte(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet AliveReq() {
-        OutPacket oPacket = new OutPacket(2);
+    public static final OutPacket AliveReq() {
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.AliveReq.getValue());
 
-        oPacket.EncodeShort(SendPacketOpcode.AliveReq.getValue());
-
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet ApplyHotFix() {
-        OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket ApplyHotFix() {
 
-        oPacket.EncodeShort(SendPacketOpcode.ApplyHotfix.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ApplyHotfix.getValue());
         byte[] hotfix = ServerConstants.hotfix();
         if (ServerConstants.APPLY_HOTFIX && hotfix != null && hotfix.length > 0) {
-            oPacket.EncodeInteger(hotfix.length);
+            oPacket.EncodeInt(hotfix.length);
             oPacket.Encode(hotfix);
         } else {
-            oPacket.Encode(true);
+            oPacket.EncodeBool(true);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -64,36 +60,34 @@ public class CLogin {
      *
      * @return the packet that confirms to the client that the server is ready for the auth cycle
      */
-    public static final Packet NCMOResult(boolean useAuthServer) {
-        OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket NCMOResult(boolean useAuthServer) {
 
-        oPacket.EncodeShort(SendPacketOpcode.NMCOResult.getValue());
-        oPacket.Encode(useAuthServer ? 0 : 1);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.NMCOResult.getValue());
+        oPacket.EncodeByte(useAuthServer ? 0 : 1);
 
         if (ServerConstants.FORCE_HOTFIX) {
             CLogin.ApplyHotFix(); // Fixes Nexon client issue where this packet sometimes isn't requested.
         }
-        
-        return oPacket.ToPacket();
+
+        return oPacket;
     }
 
-    public static Packet CheckPasswordResult(MapleClient client) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket CheckPasswordResult(MapleClient client) {
 
-        oPacket.EncodeShort(SendPacketOpcode.CheckPasswordResult.getValue());
-        oPacket.Encode(0);//related to blocked account
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CheckPasswordResult.getValue());
+        oPacket.EncodeByte(0);//related to blocked account
         /**
          * If above is equal to two If we want to add block reasons: oPacket.encode() //nBlockReason oPacket.encodeLong(data)
          *
          */
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(0);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(0);
         oPacket.EncodeString(client.getAccountName());
-        oPacket.EncodeInteger(client.getAccID());
-        oPacket.Encode(client.getGender());
+        oPacket.EncodeInt(client.getAccID());
+        oPacket.EncodeByte(client.getGender());
 
         //Admin Byte
-        oPacket.Encode(0); //oPacket.encode(client.isGm());
+        oPacket.EncodeByte(0); //oPacket.encode(client.isGm());
         // Set all the bits for GM, so we can test out stuff
         int subcode = 0; // just a placeholder for now. It is gmLevel * 64 
 
@@ -101,34 +95,34 @@ public class CLogin {
     	v61 = (v59 >> 5) & 1;
     	pBlockReasonIter.m_pInterface = ((v59 >> 13) & 1);
     	For the int below*/
-        oPacket.EncodeInteger(subcode);
-        oPacket.EncodeInteger(0); // some time value. It is set to 0 for me from my sniffing session
+        oPacket.EncodeInt(subcode);
+        oPacket.EncodeInt(0); // some time value. It is set to 0 for me from my sniffing session
 
         //Admin Byte?
-        oPacket.Encode(0); //oPacket.encode(client.isGm());
+        oPacket.EncodeByte(0); //oPacket.encode(client.isGm());
 
         oPacket.EncodeString(client.getAccountName());
-        oPacket.Encode(3); // 3 on GMS
-        oPacket.Encode(0);
+        oPacket.EncodeByte(3); // 3 on GMS
+        oPacket.EncodeByte(0);
         oPacket.EncodeLong(0); // some time value. 0 on GMS
         oPacket.EncodeLong(PacketHelper.getTime(client.getCreated().getTime())); // creation time
-        oPacket.EncodeInteger(0x20); // unknown int
+        oPacket.EncodeInt(0x20); // unknown int
         getJobList(oPacket);
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(-1);
-        oPacket.Encode(1);
-        oPacket.Encode(1);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(-1);
+        oPacket.EncodeByte(1);
+        oPacket.EncodeByte(1);
         oPacket.EncodeLong(0); // Session ID
 
         // Pop Up Message
         if (ServerConstants.SHOW_LOADING_MESSAGE && !client.isGm()) {
-            client.write(CWvsContext.broadcastMsg(""));
-            client.write(CWvsContext.broadcastMsg(1, "Welcome " + client.getAccountName() + ", "
+            client.SendPacket(CWvsContext.broadcastMsg(""));
+            client.SendPacket(CWvsContext.broadcastMsg(1, "Welcome " + client.getAccountName() + ", "
                     + "\r\n\r\nPlease be patient while the game client is loading data during your character selection."
                     + "\r\n\r\nThis process may take a long time."));
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -138,10 +132,10 @@ public class CLogin {
      * @param oPacket
      */
     public static final void getJobList(OutPacket oPacket) {
-        oPacket.Encode(ServerConstants.HIDE_STAR_PLANET_WORLD_UI ? 1 : 0); //toggle star planet world UI
-        oPacket.Encode(4); // Doesn't appear to write job order anymore... (totes does tho ya cunt)
+        oPacket.EncodeByte(ServerConstants.HIDE_STAR_PLANET_WORLD_UI ? 1 : 0); //toggle star planet world UI
+        oPacket.EncodeByte(4); // Doesn't appear to write job order anymore... (totes does tho ya cunt)
         for (LoginJob j : LoginJob.values()) {
-            oPacket.Encode(j.getFlag());
+            oPacket.EncodeByte(j.getFlag());
             oPacket.EncodeShort(1);
         }
     }
@@ -153,13 +147,12 @@ public class CLogin {
      * @param
      * @return oPacket
      */
-    public static final Packet getJobListPacket() {
-        OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket getJobListPacket() {
 
-        oPacket.EncodeShort(SendPacketOpcode.SetCharacterCreation.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SetCharacterCreation.getValue());
         getJobList(oPacket);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /*
@@ -206,39 +199,36 @@ public class CLogin {
        [31 00] 
        [B3 03]
      */
-    public static final Packet getAccountSpecifications(MapleClient c) {
-        OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket getAccountSpecifications(MapleClient c) {
 
-        oPacket.EncodeShort(SendPacketOpcode.AccountInfoResult.getValue());
-        oPacket.Encode(0); //unk
-        oPacket.EncodeInteger(c.getAccID());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.AccountInfoResult.getValue());
+        oPacket.EncodeByte(0); //unk
+        oPacket.EncodeInt(c.getAccID());
         oPacket.Encode(new byte[11]);
         oPacket.EncodeString(c.getAccountName());
-        oPacket.Encode(0);
-        oPacket.Encode(0);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(0);
         oPacket.Encode(new byte[8]); // BUFFER	[0000000000000000] 
         oPacket.EncodeString(c.getAccountName());
         oPacket.EncodeLong(PacketHelper.getTime(c.getCreated().getTime()));
-        oPacket.EncodeInteger(0x24);
+        oPacket.EncodeInt(0x24);
         oPacket.Encode(new byte[10]); //unk
         getJobList(oPacket);
-        oPacket.Encode(1);
-        oPacket.Encode(1);
+        oPacket.EncodeByte(1);
+        oPacket.EncodeByte(1);
         oPacket.EncodeShort(0);
-        oPacket.EncodeInteger(-1);
+        oPacket.EncodeInt(-1);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet getLoginFailed(int reason) {
-        OutPacket oPacket = new OutPacket(16);
+    public static final OutPacket getLoginFailed(int reason) {
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CheckPasswordResult.getValue());
+        oPacket.EncodeByte(reason);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(0);
 
-        oPacket.EncodeShort(SendPacketOpcode.CheckPasswordResult.getValue());
-        oPacket.Encode(reason);
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(0);
-
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /*
@@ -252,49 +242,43 @@ public class CLogin {
      * 75-78 are cool for auto register
      
      */
-    public static Packet getPermBan(byte reason) {
-        OutPacket oPacket = new OutPacket(16);
+    public static OutPacket getPermBan(byte reason) {
 
-        oPacket.EncodeShort(SendPacketOpcode.CheckPasswordResult.getValue());
-        oPacket.Encode(2);
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CheckPasswordResult.getValue());
+        oPacket.EncodeByte(2);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(0);
         oPacket.EncodeShort(reason);
         oPacket.Encode(HexTool.getByteArrayFromHexString("01 01 01 01 00"));
-
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getTempBan(long timestampTill, byte reason) {
-        OutPacket oPacket = new OutPacket(17);
+    public static OutPacket getTempBan(long timestampTill, byte reason) {
 
-        oPacket.EncodeShort(SendPacketOpcode.CheckPasswordResult.getValue());
-        oPacket.Encode(2);
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(0);
-        oPacket.Encode(reason);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CheckPasswordResult.getValue());
+        oPacket.EncodeByte(2);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeByte(reason);
         oPacket.EncodeLong(timestampTill);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static final Packet deleteCharResponse(int cid, int state) {
-        OutPacket oPacket = new OutPacket(80);
+    public static final OutPacket deleteCharResponse(int cid, int state) {
 
-        oPacket.EncodeShort(SendPacketOpcode.DeleteCharacterResult.getValue());
-        oPacket.EncodeInteger(cid);
-        oPacket.Encode(state);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.DeleteCharacterResult.getValue());
+        oPacket.EncodeInt(cid);
+        oPacket.EncodeByte(state);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet secondPwError(byte mode) {
-        OutPacket oPacket = new OutPacket(3);
-
-        oPacket.EncodeShort(SendPacketOpcode.CheckSPWExistResult.getValue());
+    public static OutPacket secondPwError(byte mode) {
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CheckSPWExistResult.getValue());
         oPacket.EncodeShort(mode);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -304,8 +288,8 @@ public class CLogin {
      * @param clientCurrentThreadID
      * @return
      */
-    public static Packet sendAuthResponse(int clientCurrentThreadID) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket sendAuthResponse(int clientCurrentThreadID) {
+
         /*void __cdecl CClientSocket::OnPrivateServerAuth(CInPacket *iPacket) {
           unsigned int dwPrivateServerKey; // STA0_4@1
           struct _TEB *v2; // eax@7
@@ -333,52 +317,48 @@ public class CLogin {
           }
         }
          */
-
-        oPacket.EncodeShort(SendPacketOpcode.PrivateServerPacket.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.PrivateServerPacket.getValue());
         int response = clientCurrentThreadID ^ SendPacketOpcode.PrivateServerPacket.getValue();
-        oPacket.EncodeInteger(response);
+        oPacket.EncodeInt(response);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet enableRecommended(int world) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket enableRecommended(int world) {
 
-        oPacket.EncodeShort(SendPacketOpcode.LatestConnectedWorld.getValue());
-        oPacket.EncodeInteger(world);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.LatestConnectedWorld.getValue());
+        oPacket.EncodeInt(world);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet sendRecommended(int world, String message) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket sendRecommended(int world, String message) {
 
-        oPacket.EncodeShort(SendPacketOpcode.RecommendWorldMessage.getValue());
-        oPacket.Encode(message != null ? 1 : 0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.RecommendWorldMessage.getValue());
+        oPacket.EncodeByte(message != null ? 1 : 0);
         if (message != null) {
-            oPacket.EncodeInteger(world);
+            oPacket.EncodeInt(world);
             oPacket.EncodeString(message);
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getServerList(int serverId) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getServerList(int serverId) {
 
-        oPacket.EncodeShort(SendPacketOpcode.WorldInformation.getValue());
-        oPacket.Encode(serverId);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.WorldInformation.getValue());
+        oPacket.EncodeByte(serverId);
 
         final String worldName = LoginServer.getInstance().getTrueServerName();
         oPacket.EncodeString(worldName);
-        oPacket.Encode(WorldOption.getById(serverId).getFlag());
+        oPacket.EncodeByte(WorldOption.getById(serverId).getFlag());
         oPacket.EncodeString(ServerConstants.EVENT_MESSAGE);
         oPacket.EncodeShort(100); // event EXP
         oPacket.EncodeShort(100); // event drop
-        oPacket.Encode(0); // block char creation
+        oPacket.EncodeByte(0); // block char creation
 
         Set<Integer> channels = LoginServer.getInstance().getLoad().keySet();
-        oPacket.Encode(channels.size());
+        oPacket.EncodeByte(channels.size());
 
         int channelId = 0;
         for (Integer channel : channels) {
@@ -387,9 +367,9 @@ public class CLogin {
             oPacket.EncodeString(worldName + "-" + channelId);
 
             //Channel Load Bar Formula
-            oPacket.EncodeInteger(Math.max(2, ChannelServer.getChannelLoad().get(channel) * 64 / (ServerConstants.USER_LIMIT / ServerConstants.CHANNEL_COUNT)) + 3);
+            oPacket.EncodeInt(Math.max(2, ChannelServer.getChannelLoad().get(channel) * 64 / (ServerConstants.USER_LIMIT / ServerConstants.CHANNEL_COUNT)) + 3);
 
-            oPacket.Encode(serverId);
+            oPacket.EncodeByte(serverId);
             oPacket.EncodeShort(channelId - 1);
         }
 
@@ -399,31 +379,29 @@ public class CLogin {
             oPacket.EncodeShort(balloon.nY);
             oPacket.EncodeString(balloon.sMessage);
         }
-        oPacket.EncodeInteger(0);
-        oPacket.Encode(0);
+        oPacket.EncodeInt(0);
+        oPacket.EncodeByte(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getEndOfServerList() {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getEndOfServerList() {
 
-        oPacket.EncodeShort(SendPacketOpcode.WorldInformation.getValue());
-        oPacket.Encode(0xFF);
-        oPacket.Encode(0); // boolean disable cash shop and trade msg
-        oPacket.Encode(0); // 174.1
-        oPacket.Encode(0); // 174.1
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.WorldInformation.getValue());
+        oPacket.EncodeByte(0xFF);
+        oPacket.EncodeByte(0); // boolean disable cash shop and trade msg
+        oPacket.EncodeByte(0); // 174.1
+        oPacket.EncodeByte(0); // 174.1
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet getServerStatus(int status) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getServerStatus(int status) {
 
-        oPacket.EncodeShort(SendPacketOpcode.UserLimitResult.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserLimitResult.getValue());
         oPacket.EncodeShort(status);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -432,18 +410,17 @@ public class CLogin {
      *
      * @return oPacket
      */
-    public static Packet changeBackground() {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket changeBackground() {
 
-        oPacket.EncodeShort(SendPacketOpcode.BackgroundEffect.getValue());
-        oPacket.Encode(WorldServerBackgroundHandler.values().length);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.BackgroundEffect.getValue());
+        oPacket.EncodeByte(WorldServerBackgroundHandler.values().length);
 
         for (WorldServerBackgroundHandler backgrounds : WorldServerBackgroundHandler.values()) {
             oPacket.EncodeString(backgrounds.getImage());
-            oPacket.Encode(backgrounds.getFlag());
+            oPacket.EncodeBool(backgrounds.getFlag());
         }
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -456,22 +433,21 @@ public class CLogin {
      * Dummy pic 4 = Outdated pic
      * @return oPacket
      */
-    public static Packet getCharList(MapleClient c, String secondpw, List<User> chars, int charslots, boolean isRebootServer) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket getCharList(MapleClient c, String secondpw, List<User> chars, int charslots, boolean isRebootServer) {
 
-        oPacket.EncodeShort(SendPacketOpcode.SelectWorldResult.getValue());
-        oPacket.Encode(0); // mode
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SelectWorldResult.getValue());
+        oPacket.EncodeByte(0); // mode
         oPacket.EncodeString(isRebootServer ? "reboot" : " normal");
-        oPacket.EncodeInteger(4);
-        oPacket.Encode((c.isGm() || ServerConstants.BURNING_CHARACTER_EVENT) ? 0 : 1);//m_BurningEventBlock
-        oPacket.EncodeInteger(0); // if > 0, write int and long
+        oPacket.EncodeInt(4);
+        oPacket.EncodeByte((c.isGm() || ServerConstants.BURNING_CHARACTER_EVENT) ? 0 : 1);//m_BurningEventBlock
+        oPacket.EncodeInt(0); // if > 0, write int and long
         long currentTime = System.currentTimeMillis();
         oPacket.EncodeLong(PacketHelper.getTime(currentTime)); // I guess. All I know is it is some time value.
-        oPacket.Encode(0); // not sure what this is?
+        oPacket.EncodeByte(0); // not sure what this is?
 
         // Characters by order
         User[] characters = chars.toArray(new User[chars.size()]);
-        oPacket.EncodeInteger(characters.length); // the character reorganization packet
+        oPacket.EncodeInt(characters.length); // the character reorganization packet
         for (int i = 0; i < characters.length - 1; i++) {
             if (characters[i].getCharListPosition() > characters[i + 1].getCharListPosition()) {
                 User temp = characters[i];
@@ -482,40 +458,40 @@ public class CLogin {
             }
         }
         for (int i = 0; i < characters.length; i++) {
-            oPacket.EncodeInteger(characters[i].getId());
+            oPacket.EncodeInt(characters[i].getId());
         }
 
         // Characters information
-        oPacket.Encode(chars.size());
+        oPacket.EncodeByte(chars.size());
         for (User chr : chars) {
             addCharEntry(oPacket, chr);
-            oPacket.Encode(0);
+            oPacket.EncodeByte(0);
 
             boolean ranking = (!chr.isGM()) && (chr.getLevel() >= 30);
-            oPacket.Encode(ranking ? 1 : 0);
+            oPacket.EncodeByte(ranking ? 1 : 0);
             if (ranking) {
-                oPacket.EncodeInteger(chr.getRank());
-                oPacket.EncodeInteger(chr.getRankMove());
-                oPacket.EncodeInteger(chr.getJobRank());
-                oPacket.EncodeInteger(chr.getJobRankMove());
+                oPacket.EncodeInt(chr.getRank());
+                oPacket.EncodeInt(chr.getRankMove());
+                oPacket.EncodeInt(chr.getJobRank());
+                oPacket.EncodeInt(chr.getJobRankMove());
             }
         }
 
         if (ServerConstants.ENABLE_PIC) {
-            oPacket.Encode(secondpw == null || secondpw.length() == 0 ? 0 : 1);
+            oPacket.EncodeByte(secondpw == null || secondpw.length() == 0 ? 0 : 1);
         } else {
-            oPacket.Encode(2);
+            oPacket.EncodeByte(2);
         }
-        oPacket.Encode(0); //you can enable and disable character slots with this 
-        oPacket.EncodeInteger(charslots);
-        oPacket.EncodeInteger(0); //char slots bought with cs coupons
-        oPacket.EncodeInteger(-1);
+        oPacket.EncodeByte(0); //you can enable and disable character slots with this 
+        oPacket.EncodeInt(charslots);
+        oPacket.EncodeInt(0); //char slots bought with cs coupons
+        oPacket.EncodeInt(-1);
         oPacket.EncodeLong(PacketHelper.getTime(currentTime));
-        oPacket.Encode(0);//Enables Name Change UI. (click it to change charname :)
-        oPacket.Encode(0);
-        oPacket.EncodeInteger(0);
+        oPacket.EncodeByte(0);//Enables Name Change UI. (click it to change charname :)
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -527,25 +503,23 @@ public class CLogin {
      * @param result
      * @return
      */
-    public static Packet addNewCharEntry(User chr, int result) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket addNewCharEntry(User chr, int result) {
 
-        oPacket.EncodeShort(SendPacketOpcode.CreateNewCharacterResult.getValue());
-        oPacket.Encode(result); // this is an int, according to KMST
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CreateNewCharacterResult.getValue());
+        oPacket.EncodeByte(result); // this is an int, according to KMST
         if (result == 0) {
             addCharEntry(oPacket, chr);
         }
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
-    public static Packet charNameResponse(String charname, boolean nameUsed) {
-        OutPacket oPacket = new OutPacket(80);
+    public static OutPacket charNameResponse(String charname, boolean nameUsed) {
 
-        oPacket.EncodeShort(SendPacketOpcode.CheckDuplicatedIDResult.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.CheckDuplicatedIDResult.getValue());
         oPacket.EncodeString(charname);
-        oPacket.Encode(nameUsed ? 1 : 0);
+        oPacket.EncodeByte(nameUsed ? 1 : 0);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     private static void addCharEntry(OutPacket oPacket, User chr) {
@@ -556,7 +530,7 @@ public class CLogin {
         }
     }
 
-    public static Packet partTimeJob(int cid, short type, long time) {
+    public static OutPacket partTimeJob(int cid, short type, long time) {
         //1) 0A D2 CD 01 70 59 9F EA
         //2) 0B D2 CD 01 B0 6B 9C 18
         PartTimeJob job = new PartTimeJob(cid);
@@ -566,15 +540,14 @@ public class CLogin {
         return updatePartTimeJob(job);
     }
 
-    public static Packet updatePartTimeJob(PartTimeJob partTime) {
-        OutPacket oPacket = new OutPacket(21);
+    public static OutPacket updatePartTimeJob(PartTimeJob partTime) {
 
-        oPacket.EncodeShort(SendPacketOpcode.AlbaRequestResult.getValue());
-        oPacket.EncodeInteger(partTime.getCharacterId());
-        oPacket.Encode(0);
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.AlbaRequestResult.getValue());
+        oPacket.EncodeInt(partTime.getCharacterId());
+        oPacket.EncodeByte(0);
         PacketHelper.addPartTimeJob(oPacket, partTime);
 
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -582,13 +555,11 @@ public class CLogin {
      *
      * @return oPacket
      */
-    public static Packet changePic(byte result) {
-        final OutPacket oPacket = new OutPacket(80);
+    public static OutPacket changePic(byte result) {
+        final OutPacket oPacket = new OutPacket(SendPacketOpcode.ChangeSPWResult.getValue());
+        oPacket.EncodeByte(result);
 
-        oPacket.EncodeShort(SendPacketOpcode.ChangeSPWResult.getValue());
-        oPacket.Encode(result);
-
-        return oPacket.ToPacket();
+        return oPacket;
     }
 
     /**
@@ -596,19 +567,16 @@ public class CLogin {
      *
      * @param operation: 0 = Fire Effect 6 = A brokem message popup
      */
-    public static Packet burningEventEffect(byte operation, int characterId) {
-        final OutPacket oPacket = new OutPacket(80);
-
-        oPacket.EncodeShort(SendPacketOpcode.CharacterBurning.getValue());
-        oPacket.Encode(operation);
-        oPacket.EncodeInteger(characterId);
-        return oPacket.ToPacket();
+    public static OutPacket burningEventEffect(byte operation, int characterId) {
+        final OutPacket oPacket = new OutPacket(SendPacketOpcode.CharacterBurning.getValue());
+        oPacket.EncodeByte(operation);
+        oPacket.EncodeInt(characterId);
+        return oPacket;
     }
 
-    public static Packet OnMapLogin(String sMapLogin) {
-        final OutPacket oPacket = new OutPacket(80);
-        oPacket.EncodeShort(SendPacketOpcode.MapLogin.getValue());
+    public static OutPacket OnMapLogin(String sMapLogin) {
+        final OutPacket oPacket = new OutPacket(SendPacketOpcode.MapLogin.getValue());
         oPacket.EncodeString(sMapLogin);
-        return oPacket.ToPacket();
+        return oPacket;
     }
 }

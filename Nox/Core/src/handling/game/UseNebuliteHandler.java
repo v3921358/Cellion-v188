@@ -13,7 +13,7 @@ import net.InPacket;
 import server.potentials.ItemPotentialProvider;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 /**
  *
@@ -28,10 +28,10 @@ public class UseNebuliteHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        /*      c.getPlayer().updateTick(iPacket.decodeInteger());
+        /*      c.getPlayer().updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
         final Item nebulite = c.getPlayer().getInventory(MapleInventoryType.SETUP).getItem((byte) iPacket.decodeShort());
-        final int nebuliteId = iPacket.decodeInteger();
+        final int nebuliteId = iPacket.DecodeInt();
         final Item toMount = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.decodeShort());
         
         if (nebulite == null || nebuliteId != nebulite.getItemId() || toMount == null || c.getPlayer().hasBlockedInventory()) {
@@ -57,6 +57,6 @@ public class UseNebuliteHandler implements ProcessPacket<MapleClient> {
             }
         }
         c.getPlayer().getMap().broadcastMessage(CField.showNebuliteEffect(c.getPlayer().getId(), success));*/
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
     }
 }

@@ -25,7 +25,7 @@ import client.MapleClient;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class CharacterInfoRequestHandler implements ProcessPacket<MapleClient> {
 
@@ -36,15 +36,15 @@ public final class CharacterInfoRequestHandler implements ProcessPacket<MapleCli
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        c.getPlayer().updateTick(iPacket.DecodeInteger());
+        c.getPlayer().updateTick(iPacket.DecodeInt());
         if (c.getPlayer() == null || c.getPlayer().getMap() == null) {
             return;
         }
-        int objectid = iPacket.DecodeInteger();
+        int objectid = iPacket.DecodeInt();
         User player = c.getPlayer().getMap().getCharacterById(objectid);
-        c.write(CWvsContext.enableActions());
+        c.SendPacket(CWvsContext.enableActions());
         if (player != null) {
-            c.write(CWvsContext.charInfo(player, c.getPlayer().getId() == objectid));
+            c.SendPacket(CWvsContext.charInfo(player, c.getPlayer().getId() == objectid));
         }
     }
 

@@ -29,7 +29,7 @@ import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 
 public final class BuffCancel implements ProcessPacket<MapleClient> {
 
@@ -41,7 +41,7 @@ public final class BuffCancel implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         final User chr = c.getPlayer();
-        int sourceid = iPacket.DecodeInteger();
+        int sourceid = iPacket.DecodeInt();
         if ((chr == null) || (chr.getMap() == null)) {
             return;
         }
@@ -49,7 +49,7 @@ public final class BuffCancel implements ProcessPacket<MapleClient> {
         if (sourceid == 4341052) {
             chr.getStat().setHp(0, chr);
             chr.updateSingleStat(MapleStat.HP, 0);
-            chr.getClient().write(CWvsContext.enableActions());
+            chr.getClient().SendPacket(CWvsContext.enableActions());
         }
         if (skill.isChargeSkill()) {
             chr.setKeyDownSkillTime(0L);

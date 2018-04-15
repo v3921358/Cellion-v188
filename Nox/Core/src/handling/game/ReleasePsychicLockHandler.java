@@ -7,7 +7,7 @@ package handling.game;
 
 import client.MapleClient;
 import net.InPacket;
-import netty.ProcessPacket;
+import net.ProcessPacket;
 import tools.packet.JobPacket;
 
 /**
@@ -23,14 +23,14 @@ public class ReleasePsychicLockHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        int nSkillID = iPacket.DecodeInteger();
-        int nSLV = iPacket.DecodeInteger();
-        int nParentPsychicAreaKey = iPacket.DecodeInteger();
-        int unk = iPacket.DecodeInteger();
-        int nStuffID = iPacket.DecodeInteger();
+        int nSkillID = iPacket.DecodeInt();
+        int nSLV = iPacket.DecodeInt();
+        int nParentPsychicAreaKey = iPacket.DecodeInt();
+        int unk = iPacket.DecodeInt();
+        int nStuffID = iPacket.DecodeInt();
         // 8 bytes, pos?
 
-        c.write(JobPacket.Kinesis.OnReleasePsychicLock(c.getPlayer().getId(), nParentPsychicAreaKey));
+        c.SendPacket(JobPacket.Kinesis.OnReleasePsychicLock(c.getPlayer().getId(), nParentPsychicAreaKey));
         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), JobPacket.Kinesis.OnReleasePsychicLock(c.getPlayer().getId(), nParentPsychicAreaKey), false);
     }
 
