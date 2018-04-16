@@ -23,9 +23,9 @@ function end(mode, type, selection) {
 	}
 	qm.forceCompleteQuest();
     } else if (status == 2) {
-	qm.sendNextPrev("I have also expanded your inventory slot counts for your equipment and etc. inventory. Use those slots wisely and fill them up with items required for Resistance to carry.");
+	qm.sendNextPrev("I have also expanded your inventory slot counts for your equipment and etc. inventory. Use those slots wisely and fill them up with items required for Heroes to carry.");
     } else if (status == 3) {
-	qm.sendNextPrev("Now... I want you to go out there and show the world how the Resistance operate.");
+	qm.sendNextPrev("Now... I want you to go out there and show the world how the Heroes operate.");
 	qm.safeDispose();
     }
 }

@@ -19,7 +19,7 @@ function action(mode, type, selection) {
 			var sendString = "\r\nWelcome #h #, to the #bCave of Life#k!\r\n\tBefore you lays the almighty Horntail, a power-hungry\r\n\tdragon who distorts his surroundings with evil.\r\n\tWhat would you like to do?\r\n"
 							+ "#r#L0#(Solo Boss Fight) #dEnter the depths of Horntail's Lair alone!#k\r\n"
 							+ "#r#L1#(Party Boss Fight) #dTake on the mighty Horntail with your squad!#k\r\n"
-							+ "#r#L2#(Leave) #dRetreat to the Rexion Courtyard!#k\r\n";
+							+ "#r#L2#(Leave) #dRetreat to Henesys!#k\r\n";
 			
 			cm.sendSimple(sendString);
 		} else if (status == 1) {
@@ -59,7 +59,7 @@ function action(mode, type, selection) {
 					}
 					break;
 				case 2: // Home
-					cm.warp(101071300, 0);
+					cm.warp(100000000, 0);
 					cm.dispose();
 					break;
 				default:

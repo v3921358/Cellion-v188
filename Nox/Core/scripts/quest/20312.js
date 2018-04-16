@@ -14,7 +14,6 @@ function start(mode, type, selection) {
     } else {
 	status++;
     }
-
     if (status == 0) {
 	qm.sendNext("The jewel you brought back from the Transformer is the tear of the Divine Bird. It's the crystal of it's power. If the Black Wizard has his hands on this, then spells doom for all of us.");
     } else if (status == 1) {

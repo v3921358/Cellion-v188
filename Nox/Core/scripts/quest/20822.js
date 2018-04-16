@@ -11,7 +11,7 @@ function start(mode, type, selection) {
 	  qm.sendYesNo("I don't know if they told you during the orientation, but we're here to fight the Black Mage. Right now,you're not fit to fight a black mop. I'm gonna fix that.\r\nYou ready for some action? ");
 	} else if (status == 1) {
 	  qm.forceStartQuest();
-	  qm.showWZUOLEffect("Effect/OnUserEff.img/guideEffect/cygnusTutorial/1");
+	  qm.AranTutInstructionalBubble("Effect/OnUserEff.img/guideEffect/cygnusTutorial/1");
 	  qm.dispose();
     }
   }

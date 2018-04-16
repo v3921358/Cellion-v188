@@ -1,5 +1,6 @@
 /* RED 1st impact
     The New Explorer
+	Mai
     Made by Daenerys
 */
 var status = -1;
@@ -24,33 +25,13 @@ function start(mode, type, selection) {
 	} else if (status == 6) {	
 	    qm.sendNextPrevS("Or you can be teleported straight to town, but you'll miss out on my gifts... and I'll be super lonely and sad.",1);		
 	} else if (status == 7) {
-	    qm.sendSimpleS("What do you say?\r\n#b#L0# I'll be your friend, Mai! (Go through tutorial and get free equipment.)#l\r\n#L1# I don't need you, Mai! (Skip tutorial and teleport straight to town.)#l#k",1);		
-    } else if (status == 8) {
-        sel = selection;
-	  if (selection == 0) {		
-	    qm.sendNextS("REALLY?! I'll fill you in on everything you need to know, I promise!",1);	
-		qm.forceStartQuest();
+	    qm.sendNextS("What do you say?\r\n#b#L0# I'll be your friend, Mai! (Go through tutorial and get free equipment.)#l\r\n#L1# I don't need you, Mai! (Skip tutorial and teleport straight to town.)#l#k",1);		
+	} else if (status == 8) {
+	    qm.sendNextPrevS("REALLY?! I'll fill you in on everything you need to know, I promise!",1);	
+	} else if (status == 9) {
+	    qm.forceStartQuest();
 		qm.forceCompleteQuest();
 		qm.gainExp(20);
 		qm.dispose();
-     } else if (selection == 1) {
-		qm.sendNextS("I knew you'd pick that. Everyone always does... I'll send you to Amherst right away and hope that the next Explorer will want to be my friend.",1);
-		}
-	} else if (status == 9) {
-        if (sel == 1) {
-		qm.sendNextS("This is for you! You can check out the Recovery Potions I gave you in your Use tab.",1);
-		qm.gainItem(2000013,50)
-		qm.gainItem(2000014,50)
-		}
-    } else if (status == 10) {
-        if (sel == 1) {
-		qm.sendNextS("Make sure you talk to Chief #bLucas#k when you get to Amherst! He's really smart and will give you some great advice.",1);
-	   }
-    } else if (status == 11) {
-        if (sel == 1) {
-		qm.warp(4000020,0);
-		qm.forceStartQuest(32210);
-		}   
-	    qm.dispose();
-    }
+	}
 }

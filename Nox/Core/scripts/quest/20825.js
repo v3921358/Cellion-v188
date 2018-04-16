@@ -13,7 +13,7 @@ function start(mode, type, selection) {
       qm.sendNext("Press X in front of any chair to sit down. If you own one, its the same deal. X marks the butt.");
 	} else if (status == 2) {
 	  qm.forceStartQuest();
-	  qm.showWZUOLEffect("Effect/OnUserEff.img/guideEffect/cygnusTutorial/10");
+	  qm.AranTutInstructionalBubble("Effect/OnUserEff.img/guideEffect/cygnusTutorial/10");
 	  qm.dispose();
 	} else if (status == 3) {
 	  qm.dispose();

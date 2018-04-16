@@ -32,7 +32,7 @@ if (mode == -1) {
 	    qm.sendNextPrev("Skill attacks! They dish out the pain! Open your Skill windows by pressing the K key to access your skills.\r\nYou'll get more skills once you're more experienced, so never stop training!");
 	} else if (status == 2) {
 	    qm.forceCompleteQuest();
-	    qm.showWZUOLEffect("Effect/OnUserEff.img/guideEffect/cygnusTutorial/6");	
+	    qm.AranTutInstructionalBubble("Effect/OnUserEff.img/guideEffect/cygnusTutorial/6");	
 	    qm.dispose();		
 	}
   }

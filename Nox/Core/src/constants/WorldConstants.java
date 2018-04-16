@@ -29,7 +29,6 @@ public class WorldConstants {
         Legends(35, 1, 1, 1, 1, (byte) 0, false, false, 19),
         Titan(34, 1, 1, 1, 1, (byte) 0, false, false, 19), //Translation: Titan
         Chaos2(33, 1, 1, 1, 1, (byte) 0, false, false, 19), //Translation: Chaos
-
         Luna(30, ServerConstants.EXP_RATE, ServerConstants.MESO_RATE, ServerConstants.DROP_RATE, 1, (byte) 2, true, true, 19),
         Androa(23, 1, 1, 1, 1, (byte) 0, false, false, 19),
         Cosmo(22, 1, 1, 1, 1, (byte) 0, false, false, 19),

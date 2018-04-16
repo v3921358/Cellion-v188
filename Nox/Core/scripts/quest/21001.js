@@ -65,7 +65,6 @@ function end(mode, type, selection) {
 	if (qm.haveItem(4001271)) {
 	    qm.gainItem(4001271, -1);
 	}
-	qm.gainItem(1442079, -1);
 	qm.forceCompleteQuest();
 	qm.warp(140090000, 0);
 	qm.dispose();

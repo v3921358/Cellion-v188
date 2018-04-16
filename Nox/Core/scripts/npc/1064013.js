@@ -23,7 +23,7 @@ function action(mode, type, selection) {
 							+ "#r#L1#(Party Boss Fight) #dFight Von Bon with your squad!#l#k\r\n"
 							+ "\r\n\r\n\r\n \t\t\t\t\t\t\t\t\t\t #v03994442# \r\n#r#L2#(Solo Boss Fight) #dFace Chaos Von Bon alone!#l#k\r\n"
 							+ "#r#L3#(Party Boss Fight) #dFight Chaos Von Bon together!#l#k\r\n\r\n"
-							+ "\r\n#r#L4#(Leave) #dRetreat to the Rexion Courtyard!#l#k\r\n";
+							+ "\r\n#r#L4#(Leave) #dRetreat to Henesys.#l#k\r\n";
 			
 			cm.sendSimple(sendString);
 		} else if (status == 1) {
@@ -97,7 +97,7 @@ function action(mode, type, selection) {
 					}
 					break;
 				case 4: // Home
-					cm.warp(101071300, 0);
+					cm.warp(100000000, 0);
 					cm.dispose();
 					break;
 				default:

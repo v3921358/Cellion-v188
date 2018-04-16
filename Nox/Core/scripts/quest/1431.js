@@ -21,6 +21,7 @@ function start(mode, type, selection) {
 	    qm.sendNextPrev("There is an obelisk at Sharp Cliff I near El Nath. Behind it, there's a path to the Holy Ground at the Snowfield. Touch the Holy Stone there, and you'll be warped to another dimension. Your enemy is waiting for you there.");
 	} else if (status == 2) {
 	    qm.sendNextPrev("Bring me proof of your victory, and we'll see if you're ready.");
+	} else if (status == 3) {
 	    qm.forceStartQuest();
 	    qm.dispose();
 	}

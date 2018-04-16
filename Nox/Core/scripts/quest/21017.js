@@ -29,7 +29,7 @@ function start(mode, type, selection) {
     } else if (status == 7) {
 	qm.sendNextPrevS('Please go ahead and slay 20 #o0100133#s.', 8);
     } else if (status == 8) {
-	qm.showWZUOLEffect("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3");
+	qm.AranTutInstructionalBubble("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3");
 	qm.dispose();
     }
 }

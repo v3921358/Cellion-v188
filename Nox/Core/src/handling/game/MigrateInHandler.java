@@ -271,11 +271,6 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         pPlayer.updatePartyMemberHP();
         pPlayer.startFairySchedule(false);
 
-        // Bloodless Channel Notification
-        if (ServerConstants.BUFFED_SYSTEM && ServerConstants.BLOODLESS_EVENT && (pPlayer.getClient().getChannel() >= ServerConstants.START_RANGE && pPlayer.getClient().getChannel() <= ServerConstants.END_RANGE)) {
-            pPlayer.dropMessage(-1, "You have entered a Bloodless Channel (Hard Mode)!");
-        }
-
         // Developer Skill Cooldown Toggle
         if (ServerConstants.DEV_DEFAULT_CD && pPlayer.isDeveloper()) {
             pPlayer.toggleCooldown();

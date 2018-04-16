@@ -24,35 +24,26 @@ public class ServerConstants {
     /*Server IP Address*/
     public static final String HOST = "cellion.org";
 
-    /*Server Debug*/
- /*These values will be overwritten by the configuration.ini file.*/
+    /*Server Debug These values will be overwritten by the configuration.ini file.*/
+    public static boolean DEVMODE = false;
     public static boolean DEVELOPER_DEBUG_MODE = true;
     public static boolean DEVELOPER_PACKET_DEBUG_MODE = true;
-    /*This boolean filters out debug spam, not configured by the INI file.*/
     public static boolean REDUCED_DEBUG_SPAM = true;
 
-    /*Server Maintenance*/
- /*These values will be overwritten by the configuration.ini file.*/
+    /*Server Maintenance These values will be overwritten by the configuration.ini file.*/
     public static boolean MAINTENANCE = false; //If true, only specified gm accounts can login.
     public static int MAINTENANCE_LEVEL = 3; //GM level needed to access server during maintenance.
 
-    /*General Rate Configuration*/
- /*These values will be overwritten by the configuration.ini file.*/
-    public static float EXP_RATE = 1;
+    /*General Rate Configuration These values will be overwritten by the configuration.ini file.*/
+    public static float EXP_RATE = 12;
     public static float MESO_RATE = 1;
     public static float DROP_RATE = 1;
 
-    /*Server Save Intervals*/
- /*The server will automatically save all character data every n minutes.*/
+    /*Server Save Intervals The server will automatically save all character data every n minutes.*/
     public static int SAVE_INTERVAL = 15; //TODO: THIS, but maybe a bad idea?
 
     /*Anti-Cheat Configuration*/
     public static boolean ANTI_CHEAT = true; // Enables Cellion Anti-Cheat.
-
-    /*Master Password Configuration*/
-    public static final boolean ENABLE_MASTER = false; //Leave disabled to avoid potential security leaks, feature works though.
-    public static final String MASTER_PASSWORD = "";
-    public static final String MASTER_PIC = "";
 
     /*Client Information*/
     public static final boolean TESPIA = false; // Used for activating GMST.
@@ -61,8 +52,7 @@ public class ServerConstants {
     public static final String MAPLE_PATCH = "2";
     public static final int MAPLE_LOCALE = 8;
 
-    /*Apply Hotfix*/
- /*In MapleStory GMS v.179 - v.183 the request for the ApplyHotFix packet does not always gets sent, good job Nexon.*/
+    /*Apply Hotfix In MapleStory GMS v.179 - v.183 the request for the ApplyHotFix packet does not always gets sent, good job Nexon.*/
     public static final boolean FORCE_HOTFIX = false; //Forces the server to send the Apply Hotfix packet regardless.
 
     /*General Configuration*/
@@ -82,14 +72,14 @@ public class ServerConstants {
     public static final int LOGIN_ATTEMPTS = 5; //Amount of login attempts before game will close.
     public static final int FLAGS = 3;
     public static final int USER_LIMIT = 150;
-    public static final String EVENT_MESSAGE = "Cellion MapleStory GMS 1.80 (Early Access)";
-    public static final String RANKING_URL = "https://playCellion.net/rankings";
-    public static final String CS_BANNER_URL = "http://mazenmassoud.com/Cellion/CashShop.jpg";
+    public static final String EVENT_MESSAGE = "Cellion MapleStory ALPHA";
+    public static final String RANKING_URL = "https://cellion.org/rankings";
+    public static final String CS_BANNER_URL = "https://static.cellion.org/cellion/ingame/cs_banner/welcome.jpg";
     public static final byte[] NEXON_IP = new byte[]{(byte) 8, (byte) 31, (byte) 99, (byte) 141};//8.31.99.141
     public static final byte[] NEXON_CHAT_IP = new byte[]{(byte) 8, (byte) 31, (byte) 99, (byte) 133};
     public static final int CHARACTER_LIMIT = 16;
     public static final String SERVER_MESSAGE = "";
-    public static final int CHANNEL_COUNT = 15;
+    public static final int CHANNEL_COUNT = 5;
     public static final boolean ENABLE_PIC = true;
     public static final long MAX_MESOS = Long.MAX_VALUE;
     public static boolean FEVER_TIME = false;
@@ -115,57 +105,8 @@ public class ServerConstants {
     public static final float CUSTOM_MAP_BUFFED_SPAWN_RATE = 1.45F; //Multiply the custom buffed maps spawn rate by this variable.
 
     /*Tutorial Configuration*/
- /*NPCs used for the tutorial (9201095, 9270087, 9270082, 9270086)*/
- /*Maps used for the tutorial (552000010, 552000021, 552000022, 552000020)*/
-    public static final boolean UNIVERSAL_START = true; //If true, all classes start in the custom tutorial intro.
+    public static final boolean UNIVERSAL_START = false; //If true, all classes start in the custom tutorial intro.
     public static final int UNIVERSAL_START_MAP = 552000010; //All classes start on this map if the boolean above is true.
-
-    /*Buffed Channel System*/
-    public static final boolean BUFFED_SYSTEM = true; //Enables the buffed channel system.
-    public static final boolean BUFFED_NX_GAIN = true; //Enables the buffed NX gain formula in buffed channels.
-    public static final int START_RANGE = 8; //Buffed channel that the buffs the mobs and nx gain. (Starting range)
-    public static final int END_RANGE = 15; //Buffed channel that the buffs the mobs and nx gain. (Ending range)
-    public static final int BUFFED_EXP_PERCENTAGE = 70; //Percentage of bonus exp received in buffed channels.(ie. 50 = 50% bonus exp)
-    public static final double DAMAGE_DEALT_PERCENTAGE = 10; //Percentage of damage applied to monsters in buffed channels. (ie. 30 = 30% damage)
-    public static final double DAMAGE_TAKEN_MULTIPLIER = 3; //Multiplier of damage applied to players in buffed channels. (ie. 200 = 200% damage)
-
-    /*Buffed Channel Bloodless Event*/
- /*Description: Bloodless Event takes place in Buffed Channels and has a chance to level up twice or not level at all.*/
-    public static boolean BLOODLESS_EVENT = true; //Enables the Bloodless Event in the buffed channels.
-    public static boolean BLOODLESS_PARTY_BONUS = true; //Enables buffed party exp in bloodless channels.
-    public static int BLOODLESS_DOWNGRADE_CHANCE = 25; //Chance to have experience set to zero on level up. (ie. 20 = 1 in 20 chance)
-    public static int BLOODLESS_UPGRADE_CHANCE = 20; //Chance to level up twice instead of once. (ie. 20 = 1 in 20 chance)
-
-    /*Paragon System*/
- /*Level Bonus Index
-    1. +5% Damage Reduction
-    2. +5% Increased Damage
-    3. +10% Increased All Stats
-    4. +10% Increased Meso Gain
-    5. +10% Increased NX Gain
-    6. +1% Life Leech
-    7. +1% Mana Leech
-    8. +5% Maximum Mana
-    9. +5% Maximum Life
-    10. +5% Increased Damage
-    SS. Access to Additional Content*/
- /*Reworked approach on a rebirth system, the player obtains perks for reaching each next rank.*/
-    public static boolean PARAGON_SYSTEM = true; //Enables the skill rank system, levels accessed after Level 250.
-    public static int MAX_PARAGON = 11; //Maximum Paragon Level.
-    public static long PARAGON_NEEDED_EXP[] = {15000000000000L, // Paragon Level 1 Required Experience
-        20000000000000L, // Paragon Level 2 Required Experience
-        25000000000000L, // Paragon Level 3 Required Experience
-        30000000000000L, // Paragon Level 4 Required Experience
-        35000000000000L, // Paragon Level 5 Required Experience
-        40000000000000L, // Paragon Level 6 Required Experience
-        45000000000000L, // Paragon Level 7 Required Experience
-        50000000000000L, // Paragon Level 8 Required Experience
-        55000000000000L, // Paragon Level 9 Required Experience
-        60000000000000L, // Paragon Level 10 Required Experience
-        100000000000000L}; // Paragon Max Level Required Experience
-
-    /*Cellion Events*/
-    public static boolean EASTER_EVENT = true; // Enables Easter Egg global drops, and access to the Easter event npc!
 
     /*Events*/
     public static boolean BURNING_CHARACTER_EVENT = false;
@@ -173,19 +114,13 @@ public class ServerConstants {
     public static boolean RED_EVENT = false; //Makes red even notification popup (cassandra) When you login at level 11+
     public static boolean QUICKMOVE_EVERYWHERE = true;
 
-    /*Anti-Sniff*/
-    public static boolean USE_FIXED_IV = false;
-    public static final byte[] STATIC_LOCAL_IV = new byte[]{71, 113, 26, 44};
-    public static final byte[] STATIC_REMOTE_IV = new byte[]{70, 112, 25, 43};
-
     /*Experience Configuration*/
-    public static final int LEECH_LEVEL_RANGE = 5;
+    public static final int LEECH_LEVEL_RANGE = 10;
     public static final int EXP_WITHIN_MONSTER = 40;
     public static final float ATTACKER_EXP_RATIO = 0.8f;
     public static final float LEECHER_EXP_RATIO = 0.2f;
 
     public static final boolean APPLY_HOTFIX = false;
-    public static boolean DEVMODE = true;
 
     public static final byte[] hotfix() {
         if (APPLY_HOTFIX) {

@@ -233,25 +233,6 @@ public class GMCommand {
         }
     }
 
-    public static class ParagonLevelUp extends CommandExecute {
-
-        @Override
-        public int execute(MapleClient c, String[] splitted) {
-            c.getPlayer().paragonLevelUp();
-            return 1;
-        }
-    }
-
-    public static class SetParagon extends CommandExecute {
-
-        @Override
-        public int execute(MapleClient c, String[] splitted) {
-            int amount = Integer.valueOf(splitted[1]);
-            c.getPlayer().setReborns(amount);
-            return 1;
-        }
-    }
-
     public static class ClearDrops extends CommandExecute {
 
         @Override

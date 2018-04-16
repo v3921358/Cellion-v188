@@ -17,7 +17,7 @@ function start(mode, type, selection) {
 	qm.askAcceptDecline("We can't have you wipe out the entire population of #o0100134#s, since they aren't many of them out there. How about 5 of them? You're here to train, not to destroy the ecosystem.");
     } else if (status == 2) {
 	qm.forceStartQuest();
-	qm.showWZUOLEffect("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow1");
+	qm.AranTutInstructionalBubble("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow1");
 	qm.dispose();
     }
 }

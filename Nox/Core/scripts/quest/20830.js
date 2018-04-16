@@ -11,7 +11,7 @@ function start(mode, type, selection) {
 		qm.sendYesNo("Okay! You've earned a 30 second re-hydration break! Drink this, and don't faint on me!");
 	} else if (status == 1) {
 	    qm.forceStartQuest();
-		qm.showWZUOLEffect("Effect/OnUserEff.img/guideEffect/cygnusTutorial/2");
+		qm.AranTutInstructionalBubble("Effect/OnUserEff.img/guideEffect/cygnusTutorial/2");
 		qm.gainItem(2001555, 1);
 	    qm.dispose();
 	}

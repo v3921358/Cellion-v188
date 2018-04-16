@@ -84,45 +84,6 @@ public class GeneralChatHandler implements ProcessPacket<MapleClient> {
                 } else if (chr.isDonator()) {
                     chatColour = 4;
                 }
-
-                // Chat display for Paragon Levels.
-                if (ServerConstants.PARAGON_SYSTEM) {
-                    switch (chr.getReborns()) {
-                        case 1:
-                            chatPrefix = "(I) ";
-                            break;
-                        case 2:
-                            chatPrefix = "(II) ";
-                            break;
-                        case 3:
-                            chatPrefix = "(III) ";
-                            break;
-                        case 4:
-                            chatPrefix = "(IV) ";
-                            break;
-                        case 5:
-                            chatPrefix = "(V) ";
-                            break;
-                        case 6:
-                            chatPrefix = "(VI) ";
-                            break;
-                        case 7:
-                            chatPrefix = "(VII) ";
-                            break;
-                        case 8:
-                            chatPrefix = "(VIII) ";
-                            break;
-                        case 9:
-                            chatPrefix = "(IX) ";
-                            break;
-                        case 10:
-                            chatPrefix = "(X) ";
-                            break;
-                        case 11:
-                            chatPrefix = "(SS) ";
-                            break;
-                    }
-                }
             }
 
             if (chr.getCanTalk() || chr.isGM()) {

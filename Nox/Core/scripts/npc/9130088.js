@@ -27,7 +27,7 @@ function action(mode, type, selection) {
 							+ "Ahead lies Mori Ranmaru a former peer of Tsuchimikado Haruaki. Will you challenge him?\r\n"
 							+ "#r#L0#(Solo Boss Fight) #dFight Ranmaru by yourself!#l#k\r\n"
 							+ "#r#L1#(Party Boss Fight) #dDefeat Ranmaru together with friends!#l#k\r\n"
-							+ "#r#L2#(Leave) #dRetreat to the Rexion Courtyard!#l#k\r\n";
+							+ "#r#L2#(Leave) #dRetreat to Henesys!#l#k\r\n";
 			
 			cm.sendNextPrevS(sendString, 2);
 		} else if (status == 1) {
@@ -69,7 +69,7 @@ function action(mode, type, selection) {
 					}
 					break;
 				case 2: // Home
-					cm.warp(101071300, 0);
+					cm.warp(100000000, 0);
 					cm.dispose();
 					break;
 				default:

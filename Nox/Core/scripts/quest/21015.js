@@ -19,7 +19,7 @@ function start(mode, type, selection) {
 	qm.askAcceptDecline("Don''t you know that you must first master the fundamentals? So the wise thing to do is to begin with #bBasic Training#k. Oh, of course, I forgot that you lost your memory. Well, that''s why I''m here. You''ll just have to experience it yourself. Shall we begin?");
     } else if (status == 3) {
 	qm.forceStartQuest();
-	qm.showWZUOLEffect("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3");
+	qm.AranTutInstructionalBubble("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3");
 	qm.dispose();
     }
 }

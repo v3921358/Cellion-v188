@@ -78,7 +78,7 @@ var status = 0;
 function start() {
 	jobId = cm.getPlayer().getJob().getId();
 	level = cm.getLevel();
-	cm.sendNext("REXION Global Job Advancements!");
+	cm.sendNext("Job Advancements!");
     status = -1;  
  }
  

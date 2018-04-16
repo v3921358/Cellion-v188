@@ -10,11 +10,11 @@ function start(mode, type, selection) {
 	    status--;
 	
 	if (status == 0) {
-	    qm.sendNext("Looks like you're ready for your next job advancement!\r\nJob advancements are available upon reaching level 30, 60, and 100.");
+	    qm.sendNext("Wow. You have really growed alot since I last saw you. But have you heard of the new jobs? ");
 	} else if (status == 1) {
-	    qm.sendNextPrev("The Bowmaster job branch focuses on shooting arrows up close and afar. They specialize in Bows as primary weapons and Arrow Fletchings as secondary weapons. They have several skills to make use of their range, including Arrow Blaster, which fires arrows at a fast speed and can be installed. They also make use of Hurricane, which fires arrows like a storm at a single enemy.");
+	    qm.sendNextPrev("Oh my they are awesome! It's for all bowman lvl 30 or above!");
 	} else if (status == 2) {
-	    qm.askAcceptDecline("So, do you want to test your skills against strong enemies, and see if you have what it takes? All you need is 30 Dark Marbles from those monsters! Lets go.");
+	    qm.askAcceptDecline("So..... Do you want to test your skills against strong enemies, and see if you have what it takes? All you need is 30 Dark Marbles from those monsters! Lets go.");
 		qm.forceStartQuest();
 	} else if (status == 3) {
 	    if (!qm.haveItem(4031013, 30)) {
@@ -38,7 +38,7 @@ function end(mode, type, selection) {
 	if (status == 0) {
 	    if (qm.haveItem(4031013, 30) ) {
 			qm.removeAll(4031013);
-			qm.sendOk("Congratulations you're now an Hunter!");
+			qm.sendOk("Congratiulations you'r now an Hunter!");
             qm.changeJob(310);//hunter
 			//qm.gainSp(3);
 			qm.forceCompleteQuest();

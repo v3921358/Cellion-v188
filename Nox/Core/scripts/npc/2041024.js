@@ -19,7 +19,7 @@ function action(mode, type, selection) {
 			var sendString = "\r\nWelcome #h #, to the #bOrigin of Clocktower#k!\r\nThrough this gate lies Papulatus, a ghost plant that pilots a clock-like robot who manipulates time and intends to steal Ludibrium's power. What would you like to do?\r\n"
 							+ "#r#L0#(Solo Boss Fight) #dDefend Ludibrium's power all by yourself!#k\r\n"
 							+ "#r#L1#(Party Boss Fight) #dOvercome Papulatus' rule with your squad!#k\r\n"
-							+ "#r#L2#(Leave) #dRetreat to the Rexion Courtyard!#k\r\n";
+							+ "#r#L2#(Leave) #dRetreat to Henesys!#k\r\n";
 			
 			cm.sendNextPrevS(sendString, 2);
 		} else if (status == 1) {
@@ -59,7 +59,7 @@ function action(mode, type, selection) {
 					}
 					break;
 				case 2: // Home
-					cm.warp(101071300, 0);
+					cm.warp(100000000, 0);
 					cm.dispose();
 					break;
 				default:

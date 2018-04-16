@@ -8,7 +8,7 @@
  var bLv30Book; // 1 = Activate Mastery Book 20, 2 = Activate Mastery Book 30, 3 = Buy Mastery Book 20, 4 = Buy Mastery Book 30.
 
 function start() {
-	text = "Welcome to the #dREXION Mastery Book Manager#k!\r\n"
+	text = "Welcome to the Mastery Book Manager#k!\r\n"
 		+ "What would you like to do?\r\n";
 	
 	if (cm.haveItem(nMasteryBook20, 1)) {

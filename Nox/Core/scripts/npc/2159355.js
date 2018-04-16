@@ -19,7 +19,7 @@ function action(mode, type, selection) {
 			var sendString = "\r\nWelcome #h #, to the #bTyrant's Castle#k!\r\nMagnus is a former commander of the Black Mage, exiled from Pantheon for abusing his powers. What would you like to do?\r\n"
 							+ "#r#L0#(Solo Boss Fight) #dTest your fate against the tyrant alone!#k\r\n"
 							+ "#r#L1#(Party Boss Fight) #dFace the powerful Magnus with your squad!#k\r\n"
-							+ "#r#L2#(Leave) #dRetreat to the Rexion Courtyard!#k\r\n";
+							+ "#r#L2#(Leave) #dRetreat to Henesys!#k\r\n";
 			
 			cm.sendSimple(sendString);
 		} else if (status == 1) {
@@ -72,7 +72,7 @@ function action(mode, type, selection) {
 					}
 					break;
 				case 2: // Home
-					cm.warp(101071300, 0);
+					cm.warp(100000000, 0);
 					cm.dispose();
 					break;
 				default:

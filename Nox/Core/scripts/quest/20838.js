@@ -20,7 +20,7 @@ function start(mode, type, selection) {
 	    qm.sendNextPrev("Just use #bregular attacks to break the boxes#k! Then use #bskills to defeat the monsters#k! I need 3 Proof of Exam items!");	
 	} else if (status == 4) {	
         qm.forceStartQuest();
-		qm.showWZUOLEffect("Effect/OnUserEff.img/guideEffect/cygnusTutorial/9");		
+		qm.AranTutInstructionalBubble("Effect/OnUserEff.img/guideEffect/cygnusTutorial/9");		
 		qm.dispose();
 	}
 }

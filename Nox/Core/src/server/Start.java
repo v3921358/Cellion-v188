@@ -345,7 +345,7 @@ public class Start {
 
                 ApiFactory.getFactory().getServerAuthToken();
             } catch (IOException ex) {
-                LogHelper.CONSOLE.get().error("Error fetching token from Lumiere Network.", ex);
+                LogHelper.CONSOLE.get().error("Error fetching token from Cellion API.", ex);
                 System.exit(1);
             } catch (ApiRuntimeException apiex) {
                 LogHelper.CONSOLE.get().error("An error occured with the API.", apiex);

@@ -15,7 +15,7 @@ function start(mode, type, selection) {
 	qm.askAcceptDecline("Shall we continue with your Basic Training? Before accepting, please make sure you have properly equipped your sword and your skills and potions are readily accessible.");
     } else if (status == 1) {
 	qm.forceStartQuest();
-	qm.showWZUOLEffect("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3");
+	qm.AranTutInstructionalBubble("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3");
 	qm.dispose();
     }
 }

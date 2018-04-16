@@ -63,7 +63,7 @@ public final class LoginPasswordHandler implements ProcessPacket<MapleClient> {
             return;
         }
 
-        //login(c, data);
+        login(c, data);
     }
 
     public static void login(MapleClient c, UserInfo data) {

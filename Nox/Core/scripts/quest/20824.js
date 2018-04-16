@@ -11,7 +11,7 @@ function start(mode, type, selection) {
 	  qm.sendNext("I like to give all the new recruits a little gift when they come to Ereve. It's important that the recruits look up to snuff, you know? Hit the#e#b I key#k#n to open up your inventory when we're done talking. Double click on that hat I gave you!");
 	} else if (status == 1) {
 	  qm.forceStartQuest();
-	  qm.showWZUOLEffect("Effect/OnUserEff.img/guideEffect/cygnusTutorial/5");
+	  qm.AranTutInstructionalBubble("Effect/OnUserEff.img/guideEffect/cygnusTutorial/5");
 	  qm.gainItem(1003769, 1);
 	  qm.dispose();
 	} else if  (status == 2)  {

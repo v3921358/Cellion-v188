@@ -372,14 +372,6 @@ public final class MapleMap {
                     int mesos = Randomizer.nextInt(1 + Math.abs(de.Maximum - de.Minimum)) + de.Minimum;
                     if (mesos > 0) {
                         int calcMesoAmount = (int) (mesos * (chr.getStat().mesoBuff / 100.0) * chr.getDropMod() * cmServerrate);
-
-                        // Paragon Level Bonus
-                        if (ServerConstants.PARAGON_SYSTEM) {
-                            if (chr.getReborns() >= 4) { // Paragon Level 4+
-                                calcMesoAmount *= 1.10; // +10% Increased Meso Gain
-                            }
-                        }
-
                         spawnMesoDrop(calcMesoAmount, calcDropPos(pos, mob.getTruePosition()), mob, chr, false, droptype);
                         mesoDropped = true;
                     }

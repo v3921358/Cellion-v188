@@ -57,7 +57,7 @@ public class QueueWorker extends Thread {
             try {
                 getOnlineUsersForLumiere();
                 Request request = new Request.Builder()
-                        .url(ApiConstants.LUMIERE_MESSAGE_URL + "list")
+                        .url(ApiConstants.MESSAGE_URL + "list")
                         .header("Authorization", "Bearer " + ApiFactory.getFactory().getServerToken())
                         .build();
 
@@ -70,7 +70,7 @@ public class QueueWorker extends Thread {
                     for (QueueItem item : items) {
                         if (processCommand(item)) {
                             request = new Request.Builder()
-                                    .url(ApiConstants.LUMIERE_MESSAGE_URL + item.message_id + ApiConstants.LUMIERE_MESSAGE_PROCESS_URL)
+                                    .url(ApiConstants.MESSAGE_URL + item.message_id + ApiConstants.MESSAGE_PROCESS_URL)
                                     .header("Authorization", "Bearer " + ApiFactory.getFactory().getServerToken())
                                     .post(new FormBody.Builder().build()) // Just because the API requires a post type.
                                     .build();
@@ -79,7 +79,7 @@ public class QueueWorker extends Thread {
                             temp.body().close();
                         } else {// if return false; delay it. 
                             request = new Request.Builder()
-                                    .url(ApiConstants.LUMIERE_MESSAGE_URL + item.message_id + ApiConstants.LUMIERE_MESSAGE_DELAY_URL)
+                                    .url(ApiConstants.MESSAGE_URL + item.message_id + ApiConstants.MESSAGE_DELAY_URL)
                                     .header("Authorization", "Bearer " + ApiFactory.getFactory().getServerToken())
                                     .post(new FormBody.Builder().build()) // Just because the API requires a post type.
                                     .build();
@@ -214,7 +214,7 @@ public class QueueWorker extends Thread {
                 .add("server_time", Instant.now().toString())
                 .build();
         Request logOnlineUsers = new Request.Builder()
-                .url(String.format(ApiConstants.LUMIERE_HOOK_USER_ONLINE_URL, ApiConstants.PRODUCT_ID))
+                .url(String.format(ApiConstants.HOOK_USER_ONLINE_URL, ApiConstants.PRODUCT_ID))
                 .header("Authorization", "Bearer " + ApiFactory.getFactory().getServerToken())
                 .post(body) // Just because the API requires a post type.
                 .build();

@@ -342,17 +342,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return true;
     }
 
-    /**
-     * Server Events
-     */
-    public boolean isEasterEventActive() {
-        if (ServerConstants.EASTER_EVENT) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     /*
      *   Job Handler Variables
      */
@@ -650,7 +639,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
         ret.chalktext = ct.chalkboard;
         ret.gmLevel = ct.gmLevel;
-        ret.exp = ServerConstants.PARAGON_SYSTEM ? (ct.exp) : (ret.level >= GameConstants.maxLevel ? 0 : ct.exp); // ret.exp = ret.level >= GameConstants.maxLevel ? 0 : ct.exp;
+        ret.exp = ret.level >= GameConstants.maxLevel ? 0 : ct.exp;
         ret.hpApUsed = ct.hpApUsed;
         ret.remainingSp = ct.remainingSp;
         ret.remainingHSp = ct.remainingHSp;
@@ -858,7 +847,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 ret.stats.mp = rs.getInt("mp");
                 ret.job = rs.getShort("job");
                 ret.gmLevel = rs.getByte("gm");
-                ret.exp = ServerConstants.PARAGON_SYSTEM ? (rs.getLong("exp")) : (ret.level >= GameConstants.maxLevel ? 0 : rs.getLong("exp")); // ret.exp = ret.level >= GameConstants.maxLevel ? 0 : rs.getLong("exp");
+                ret.exp = ret.level >= GameConstants.maxLevel ? 0 : rs.getLong("exp");
                 ret.hpApUsed = rs.getShort("hpApUsed");
                 String[] sp = rs.getString("sp").split(",");
                 for (int i = 0; i < ret.remainingSp.length; i++) {
@@ -1810,7 +1799,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 ps.setInt(++index, stats.getDex());
                 ps.setInt(++index, stats.getLuk());
                 ps.setInt(++index, stats.getInt());
-                ps.setLong(++index, ServerConstants.PARAGON_SYSTEM ? (exp) : (level >= GameConstants.maxLevel ? 0 : exp)); // ps.setLong(++index, level >= GameConstants.maxLevel ? 0 : exp);
+                ps.setLong(++index, level >= GameConstants.maxLevel ? 0 : exp);
                 ps.setInt(++index, stats.getHp() < 1 ? 50 : stats.getHp());
                 ps.setInt(++index, stats.getMp());
                 ps.setInt(++index, stats.getMaxHp());
@@ -4590,60 +4579,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    /*
-    * Method for leveling up for the custom Paragon Level System.
-    * This system replaces the outdated rebirth idea with an alternate route. 
-    * Paragon Levels are levels earned after reaching the maximum level (Level 250).
-    *
-    * More settings and information regarding the Paragon System is location in ServerConstants.
-    * @author Mazen
-     */
-    public void paragonLevelUp() {
-        int newParagonLevel = getReborns() + 1;
-        setReborns(newParagonLevel);
-
-        // Conditional Rewards on Level Up.
-        // Other Paragon Bonuses are handled elsewhere.
-        // +10% All Stats
-        if (newParagonLevel == 3) { // Upon reaching Paragon Level 3.
-            stats.str *= 1.10;
-            stats.dex *= 1.10;
-            stats.int_ *= 1.10;
-            stats.luk *= 1.10;
-            updateSingleStat(MapleStat.STR, stats.str);
-            updateSingleStat(MapleStat.DEX, stats.dex);
-            updateSingleStat(MapleStat.INT, stats.int_);
-            updateSingleStat(MapleStat.LUK, stats.luk);
-            yellowMessage("Your character statistics have been increased by 10%.");
-        }
-
-        // +5% Maximum MP
-        if (newParagonLevel == 8) { // Upon reaching Paragon Level 8.
-            stats.maxmp *= 1.05;
-            updateSingleStat(MapleStat.IndieMMP, stats.maxmp);
-            yellowMessage("Your maximum MP has been increased by 5%.");
-        }
-
-        // +5% Maximum HP
-        if (newParagonLevel == 9) { // Upon reaching Paragon Level 9.
-            stats.maxhp *= 1.05;
-            updateSingleStat(MapleStat.MAXHP, stats.maxhp);
-            yellowMessage("Your maximum HP has been increased by 5%.");
-        }
-
-        // Notification Handling
-        String displayRank[] = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
-        if (newParagonLevel < ServerConstants.MAX_PARAGON) {
-            World.Broadcast.broadcastMessage(CField.getGameMessage("[" + ServerConstants.SERVER_NAME + "] " + getName() + " has reached Paragon " + displayRank[newParagonLevel - 1] + "!", (short) 7));
-            dropMessage(-1, "Paragon Level Up!");
-            yellowMessage("You have reached Paragon " + displayRank[newParagonLevel - 1] + "!");
-        } else {
-            World.Broadcast.broadcastMessage(CField.getGameMessage("[" + ServerConstants.SERVER_NAME + "] " + getName() + " has reached Maximum Paragon (SS)!", (short) 7));
-            dropMessage(-1, "Maximum Paragon Achieved!");
-            yellowMessage("You have reached Maximum Paragon (SS).");
-        }
-    }
-
     /**
      * Proxy method for obtaining EXP -- quests, etc
      *
@@ -4678,28 +4613,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
         long needed = getNeededExp();
         if (level >= GameConstants.maxLevel) {
-
-            // Custom Paragon Level System
-            if (ServerConstants.PARAGON_SYSTEM) {
-                long toGiveEXP = totalEXPGained + bonusEXPGained;
-
-                if (toGiveEXP > 0) {
-                    long newRemainingExpAmount = Math.min(ServerConstants.PARAGON_NEEDED_EXP[reborns], toGiveEXP);
-
-                    toGiveEXP -= newRemainingExpAmount;
-                    exp += newRemainingExpAmount;
-
-                    if (reborns >= ServerConstants.MAX_PARAGON) {
-                        setExp(0);
-                    } else if (exp >= ServerConstants.PARAGON_NEEDED_EXP[reborns]) {
-                        setExp(0);
-                        paragonLevelUp();
-                    }
-                }
-            } else {
-                setExp(0);
-            }
-
+            setExp(0);
         } else {
             boolean leveled = false;
 
@@ -4718,30 +4632,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                         int currLevel = level;
                         setExp(exp - getNeededExp());
 
-                        //Bloodless Event
-                        boolean levelFail = false;
-
-                        if (ServerConstants.BUFFED_SYSTEM && ServerConstants.BLOODLESS_EVENT && client.getChannel() >= ServerConstants.START_RANGE && client.getChannel() <= ServerConstants.END_RANGE) {
-                            boolean downgradeChance = new Random().nextInt(ServerConstants.BLOODLESS_DOWNGRADE_CHANCE) == 0;
-                            boolean upgradeChance = new Random().nextInt(ServerConstants.BLOODLESS_UPGRADE_CHANCE) == 0;
-                            if (downgradeChance) {
-                                setExp(0);
-                                dropMessage(6, "[" + ServerConstants.SERVER_NAME + " Bloodless] Your sacrifice has failed, an increase in level was not granted.");
-                                levelFail = true;
-                            } else if (upgradeChance) {
-                                levelUp();
-                                dropMessage(6, "[" + ServerConstants.SERVER_NAME + " Bloodless] Your sacrifice has paid in double, reap the rewards.");
-                            }
-                        }
-
                         if (this.isBurning && currLevel >= 10 && currLevel <= 150) {
                             levelUp();
                             levelUp();
-                        }
-
-                        if (!levelFail) {
-                            levelUp();
-                            leveled = true;
                         }
                     }
                 }
@@ -7203,7 +7096,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 return 0;
         }
     }
-    
+
     public void setMapleRewards(int nRewards) {
         this.maplerewards = nRewards;
     }
@@ -7357,6 +7250,18 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
         return nSkill;
 
+    }
+
+    public void incrementKillQuestAlpha() {
+        String quest = getInfoQuest(13337);
+        if (quest.isEmpty()) {
+            quest = "0";
+        }
+
+        int questkillnum = Integer.parseInt(quest);
+        questkillnum++;
+        
+        updateInfoQuest(13337, Integer.toString(questkillnum));
     }
 
     public static enum FameStatus {
@@ -9553,24 +9458,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             return ret;
         }
 
-        // Paragon Level Bonus
-        if (ServerConstants.PARAGON_SYSTEM) {
-            if (getReborns() >= 1) { // Paragon Level 1+
-                damage *= 0.95; // +5% Damage Reduction
-            }
-        }
-
-        //Buffed Channel Player Increased Damage Taken
-        if (ServerConstants.BUFFED_SYSTEM && (getClient().getChannel() >= ServerConstants.START_RANGE) && (getClient().getChannel() <= ServerConstants.END_RANGE)) {
-            if (getLevel() <= 30) {
-                damage *= (ServerConstants.DAMAGE_TAKEN_MULTIPLIER / 1.25);
-            } else if (getLevel() <= 100) {
-                damage *= ServerConstants.DAMAGE_TAKEN_MULTIPLIER;
-            } else {
-                damage *= (ServerConstants.DAMAGE_TAKEN_MULTIPLIER * 1.5);
-            }
-        }
-
         if (stats.ignoreTakenDAMr > 0 && Randomizer.nextInt(100) < stats.ignoreTakenDAMr_rate) {
             damage -= Math.floor((stats.ignoreTakenDAMr * damage) / 100.0f);
         }
@@ -10716,7 +10603,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (GameConstants.isExplorer(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
@@ -10821,7 +10708,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isCygnusKnight(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
@@ -10854,7 +10741,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isDemon(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
@@ -10878,7 +10765,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             switch (nLevel) {
                 case 15:
                     addReward(1, 1353000, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1353001, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
@@ -10905,7 +10792,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isResistance(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     if (GameConstants.isMechanic(job)) {
                         addReward(1, 1352700, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isBattleMage(job)) {
@@ -10965,7 +10852,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isLegend(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     if (GameConstants.isAran(job)) {
                         addReward(1, 1352930, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isEvan(job)) {
@@ -11051,7 +10938,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isJett(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1352820, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 30:
@@ -11079,7 +10966,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isKaiser(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
@@ -11103,7 +10990,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isAngelicBuster(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
@@ -11127,7 +11014,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isHayato(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1352800, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 30:
@@ -11155,7 +11042,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isKanna(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
@@ -11180,7 +11067,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isBeastTamer(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1352810, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 30:
@@ -11208,7 +11095,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isKinesis(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1353200, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 30:
@@ -11238,7 +11125,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 case 105:
                     givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
-                    addReward(300, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1190530, 0, 0, 0, "You have been rewarded with an Eternal Time Emblem for reaching Lv. " + level + "!");
                     break;
                 case 150:

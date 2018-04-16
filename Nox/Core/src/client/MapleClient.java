@@ -605,7 +605,7 @@ public class MapleClient extends Socket {
                         }
                     }
                 } else {
-                    try (PreparedStatement psi = con.prepareStatement("INSERT INTO accounts (name, authID) VALUES (?, ?)")) {
+                    try (PreparedStatement psi = con.prepareStatement("INSERT INTO accounts (name, authID, nxCredit) VALUES (?, ?, 20000)")) {
                         psi.setString(1, name);
                         psi.setInt(2, authID);
                         psi.executeUpdate();
@@ -654,7 +654,7 @@ public class MapleClient extends Socket {
         boolean allow = false;
         boolean updatePasswordHash = false;
 
-        if (crypto.BCrypt.checkpw(in, secondPassword) || (in.equals(ServerConstants.MASTER_PIC) && ServerConstants.ENABLE_MASTER)) {
+        if (crypto.BCrypt.checkpw(in, secondPassword)) {
             allow = true;
         }
         return allow;

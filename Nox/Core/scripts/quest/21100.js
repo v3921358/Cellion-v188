@@ -12,7 +12,7 @@ function start(mode, type, selection) {
 	status--;
     }
     if (status == 0) {
-	qm.sendNextS("There isn't much record left of the heores that fought against the Black Mage. Even in the Book of Prophecy, the only information available is that there were five of them. There is nothing about who they were or what they looked like. Is there anything you remember? Anything at all?", 8);
+	qm.sendNextS("There isn't much record left of the heroes that fought against the Black Mage. Even in the Book of Prophecy, the only information available is that there were five of them. There is nothing about who they were or what they looked like. Is there anything you remember? Anything at all?", 8);
     } else if (status == 1) {
 	qm.sendNextPrevS("I don't remember a thing...", 2);
     } else if (status == 2) {
@@ -30,7 +30,7 @@ function start(mode, type, selection) {
 	    qm.forceCompleteQuest();
 	}
 	qm.sendOkS("If the #p1201001# reacts to you, then we'll know that you're #bAran#k, the hero that wielded a #p1201001#.", 8);
-	qm.showReservedEffect_CutScene("Effect/Direction1.img/aranTutorial/ClickPoleArm");
+	qm.showWZEffect("Effect/Direction1.img/aranTutorial/ClickPoleArm");
 	qm.dispose();
     }
 }

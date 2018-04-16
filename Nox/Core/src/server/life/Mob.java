@@ -229,17 +229,6 @@ public class Mob extends AbstractLoadedMapleLife {
             damage /= 5;
         }
 
-        //Buffed Channel Monster Damage Reduction
-        if (ServerConstants.BUFFED_SYSTEM && (from.getClient().getChannel() >= ServerConstants.START_RANGE) && (from.getClient().getChannel() <= ServerConstants.END_RANGE)) {
-            if (from.getLevel() <= 30) {
-                damage *= ((ServerConstants.DAMAGE_DEALT_PERCENTAGE * 1.5) / 100.0f);
-            } else if (from.getLevel() <= 100) {
-                damage *= ((ServerConstants.DAMAGE_DEALT_PERCENTAGE) / 100.0f);
-            } else {
-                damage *= ((ServerConstants.DAMAGE_DEALT_PERCENTAGE / 1.5) / 100.0f);
-            }
-        }
-
         if (ServerConstants.DEVELOPER_DEBUG_MODE) {
             System.err.println("[Damage Operation] Mob Damage Received (" + damage + ")");
         }
@@ -416,51 +405,6 @@ public class Mob extends AbstractLoadedMapleLife {
         listener = null;
     }
 
-    /*
-     *  Monster NX Drop System
-     *  @author Mazen Massoud
-     *
-     *  @purpose Provide the player will NX upon killing a monster, 
-     *  with the value varrying based on multiple factors.
-     */
-    public void monsterNxGainResult(User pPlayer, boolean bKiller) {
-
-        long nMobHp = getMobMaxHp();
-        short nMobLv = stats.getLevel();
-
-        if (getMobMaxHp() > 175000000) { // Caps the the HP at this value for the calculation.
-            nMobHp = 175000000;
-        }
-
-        int nMinRange = (int) (nMobHp * 0.00000105) + (nMobLv / 3) + 1; // NX Gain Formula
-        int nMaxRange = (int) Math.round(nMinRange * 1.25); // Amount NX Gain can go up to.
-        int nResultNx = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1))); // Formula to produce a value between the specified range.
-
-        int nGainChance = 60; // Base NX Drop Chance %
-
-        // Paragon Level Bonus
-        if (ServerConstants.PARAGON_SYSTEM) {
-            if (pPlayer.getReborns() >= 5) { // Paragon Level 5+
-                nGainChance += 20;
-                nResultNx *= 1.20; // +10% Increased NX Gain
-            }
-        }
-
-        // (Buffed) Bloodless Channel Bonus
-        if ((ServerConstants.BUFFED_SYSTEM) && (ServerConstants.BUFFED_NX_GAIN) && (pPlayer.getClient().getChannel() >= ServerConstants.START_RANGE) && (pPlayer.getClient().getChannel() <= ServerConstants.END_RANGE)) {
-            nGainChance += 20;
-            nResultNx *= 2;
-        }
-
-        if (!bKiller) { // Leechers Gain
-            nResultNx *= 0.4; // Cap at 40%
-        }
-
-        if (Randomizer.nextInt(100) < nGainChance) {
-            pPlayer.modifyCSPoints(2, nResultNx, true);
-        }
-    }
-
     /**
      * Gives experience to a player after a monster has been killed. This also handles the additional EXP acquired through other variables
      * such as item buff, map, party bonus, etc
@@ -482,10 +426,6 @@ public class Mob extends AbstractLoadedMapleLife {
             int partybonusMultiplier, boolean highestDamage, int numExpSharers, byte partySize, int fieldPartyBonusPercentage,
             byte Class_Bonus_EXP_PERCENT, byte Premium_Bonus_EXP_PERCENT, int burningFieldBonusEXPRate,
             int lastskillID) {
-
-        if (ServerConstants.MONSTER_CASH_DROP) {
-            monsterNxGainResult(attacker, isKiller);
-        }
 
         if (highestDamage) {
             if (eventInstance != null) {
@@ -535,24 +475,6 @@ public class Mob extends AbstractLoadedMapleLife {
             if (ms != null) {
                 totalEXPGained += (int) (baseEXP * (ms.getX() / 100.0));
 
-            }
-
-            // Buffed Channel Bonus
-            if (ServerConstants.BUFFED_SYSTEM && (attacker.getClient().getChannel() >= ServerConstants.START_RANGE) && (attacker.getClient().getChannel() <= ServerConstants.END_RANGE)) {
-                int bonusAdditionalEXP = (int) (baseEXP * (ServerConstants.BUFFED_EXP_PERCENTAGE / 100.0f));
-                bonusEXPGained += bonusAdditionalEXP;
-
-                expIncreaseStats.put(ExpGainTypes.BaseAddExp, bonusAdditionalEXP);
-            }
-
-            // Bloodless Event - Party Exp Bonus
-            if (ServerConstants.BLOODLESS_EVENT && ServerConstants.BLOODLESS_PARTY_BONUS && ServerConstants.BUFFED_SYSTEM && (attacker.getClient().getChannel() >= ServerConstants.START_RANGE) && (attacker.getClient().getChannel() <= ServerConstants.END_RANGE)) {
-                if (bloodlessPartyBonus > 0) {
-                    int bloodlessPartyAdditionalEXP = (int) (baseEXP * (bloodlessPartyBonus / 100.0f));
-                    bonusEXPGained += bloodlessPartyAdditionalEXP;
-
-                    expIncreaseStats.put(ExpGainTypes.PartyBonus, bloodlessPartyAdditionalEXP);
-                }
             }
 
             // Party bonus
@@ -1869,15 +1791,6 @@ public class Mob extends AbstractLoadedMapleLife {
                     iexp += (int) Math.round(((attacker.getKey().getId() == expReceiver.getId() ? ServerConstants.LEECHER_EXP_RATIO : 0.0) + levelMod) * innerBaseExp);
 
                     expMap.put(expReceiver, new ExpMap(iexp, (byte) expApplicable.size(), classBonusExp, premiumBonusExp, fieldPartyMapBonusRate));
-                }
-            }
-
-            //Bloodless Channel Party EXP Bonus
-            if (ServerConstants.BLOODLESS_EVENT && ServerConstants.BLOODLESS_PARTY_BONUS) {
-                if (resolvedAttackers.size() >= 3) { //3 party members+
-                    bloodlessPartyBonus = 30; //percentage bonus exp
-                } else if (resolvedAttackers.size() >= 2) {
-                    bloodlessPartyBonus = 10; //percentage bonus exp
                 }
             }
 

@@ -21,7 +21,7 @@ function action(mode, type, selection) {
 							+ "Lotus is one of the commanders of the Black Mage and is Orchid's twin-brother. Ahead lies Lotus and his mirrored images.\r\n"
 							+ "#r#L0#(Solo Boss Fight) #dAttempt the Mirrored Lotus fight alone!#l#k\r\n"
 							+ "#r#L1#(Party Boss Fight) #dTake down the Mirrored Lotus together!#l#k\r\n"
-							+ "#r#L2#(Leave) #dRetreat to the Rexion Courtyard!#l#k\r\n";
+							+ "#r#L2#(Leave) #dRetreat to Henesys!#l#k\r\n";
 			
 			cm.sendNextPrevS(sendString, 2);
 		} else if (status == 1) {
@@ -68,7 +68,7 @@ function action(mode, type, selection) {
 					}
 					break;
 				case 2: // Home
-					cm.warp(101071300, 0);
+					cm.warp(100000000, 0);
 					cm.dispose();
 					break;
 				default:

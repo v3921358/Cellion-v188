@@ -97,7 +97,7 @@ public class ApiFactory {
                         StringBuffer buffer = new StringBuffer();
                         try {
                             try {
-                                URL url = new URL(ApiConstants.LUMIERE_FEATURED_URL);
+                                URL url = new URL(ApiConstants.FEATURED_URL);
                                 reader = new BufferedReader(new InputStreamReader(url.openStream()));
                                 int read;
                                 char[] chars = new char[1024];
@@ -137,7 +137,7 @@ public class ApiFactory {
      */
     public void ping(ApiCallback callback) throws ApiRuntimeException {
         Request request = new Request.Builder()
-                .url(String.format(ApiConstants.LUMIERE_PING_URL))
+                .url(String.format(ApiConstants.PING_URL))
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -152,7 +152,7 @@ public class ApiFactory {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     Ping data = gson.fromJson(response.body().string(), Ping.class);
-                    LogHelper.CONSOLE.get().info("Lumiere API version " + data.getPlatform().getVersion() + "-" + data.getPlatform().getEnvironment() + ". ");
+                    LogHelper.CONSOLE.get().info("Account API version " + data.getPlatform().getVersion() + "-" + data.getPlatform().getEnvironment() + ". ");
                     if (callback != null) {
                         callback.onSuccess();
                     }
@@ -176,13 +176,13 @@ public class ApiFactory {
     public void getServerAuthToken() throws IOException, ApiRuntimeException {
         RequestBody body = new FormBody.Builder()
                 .add("grant_type", "client_credentials")
-                .add("client_id", ApiConstants.LUMIERE_CLIENT_ID)
-                .add("client_secret", ApiConstants.LUMIERE_CLIENT_SECRET)
+                .add("client_id", ApiConstants.CLIENT_ID)
+                .add("client_secret", ApiConstants.CLIENT_SECRET)
                 .add("scope", "*")
                 .build();
 
         Request request = new Request.Builder()
-                .url(ApiConstants.LUMIERE_AUTH_URL)
+                .url(ApiConstants.AUTH_URL)
                 .post(body)
                 .build();
 
@@ -209,24 +209,26 @@ public class ApiFactory {
      * @throws java.io.ApiException If the request runs into an issue, pass through the ApiException.
      */
     public void getUserAuthToken(MapleClient c, String username, String password, ApiCallback callback) {
+        System.out.println("Resolving Auth Token.");
 
         RequestBody body = new FormBody.Builder()
                 .add("grant_type", "password")
-                .add("client_id", ApiConstants.LUMIERE_CLIENT_ID)
-                .add("client_secret", ApiConstants.LUMIERE_CLIENT_SECRET)
+                .add("client_id", ApiConstants.CLIENT_ID)
+                .add("client_secret", ApiConstants.CLIENT_SECRET)
                 .add("username", username)
                 .add("password", password)
                 .add("scope", "*")
                 .build();
 
         Request request = new Request.Builder()
-                .url(ApiConstants.LUMIERE_AUTH_URL)
+                .url(ApiConstants.AUTH_URL)
                 .post(body)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException throwable) {
+                System.out.println("Failed mate");
                 if (callback != null) {
                     callback.onFail();
                 }
@@ -238,6 +240,8 @@ public class ApiFactory {
                     c.SendPacket(CLogin.getLoginFailed(6));
                     return;
                 }
+                
+                System.out.println(response.code());
 
                 Token data = getGson().fromJson(response.body().string(), Token.class);
                 data.setSuccess(true);
@@ -249,7 +253,7 @@ public class ApiFactory {
     public void checkUserAccessLevel(int userid, ApiCallback callback) {
 
         Request request = new Request.Builder()
-                .url(String.format(ApiConstants.LUMIERE_USER_ACCESS_CHECK_URL, userid, ApiConstants.PRODUCT_ID))
+                .url(String.format(ApiConstants.USER_ACCESS_CHECK_URL, userid, ApiConstants.PRODUCT_ID))
                 .header("Accept", "application/json")
                 .header("Authorization", "Bearer " + this.getServerToken())
                 .build();
@@ -333,7 +337,7 @@ public class ApiFactory {
         Request request = new Request.Builder()
                 .header("Accept", "application/json")
                 .header("Authorization", data.getTokenType() + " " + data.getAccessToken())
-                .url(ApiConstants.LUMIERE_USER_INFO_URL)
+                .url(ApiConstants.USER_INFO_URL)
                 .build();
 
         ApiFactory.getFactory().getHttpClient().newCall(request).enqueue(new Callback() {
@@ -354,7 +358,7 @@ public class ApiFactory {
         RequestBody body = new FormBody.Builder().build();
 
         Request request = new Request.Builder()
-                .url(String.format(ApiConstants.LUMIERE_USER_INFO_EX_URL + ApiConstants.LUMIERE_USER_GRANT_LP_ACCESS, userid))
+                .url(String.format(ApiConstants.USER_INFO_EX_URL + ApiConstants.USER_GRANT_LP_ACCESS, userid))
                 .header("Authorization", "Bearer " + this.getServerToken())
                 .post(body)
                 .build();
@@ -385,7 +389,7 @@ public class ApiFactory {
                 .build();
 
         Request request = new Request.Builder()
-                .url(ApiConstants.LUMIERE_USER_ACCESS_LOG_URL)
+                .url(ApiConstants.USER_ACCESS_LOG_URL)
                 .header("Authorization", "Bearer " + this.getServerToken())
                 .post(body)
                 .build();
@@ -417,7 +421,7 @@ public class ApiFactory {
                 .build();
 
         Request request = new Request.Builder()
-                .url(ApiConstants.LUMIERE_USER_ACCESS_LOG_URL)
+                .url(ApiConstants.USER_ACCESS_LOG_URL)
                 .header("Authorization", "Bearer " + this.getServerToken())
                 .post(body)
                 .build();
@@ -565,7 +569,7 @@ public class ApiFactory {
 
     public void checkBirthday(User mc, int birthday, ApiCallback callback) {
         Request request = new Request.Builder()
-                .url(String.format(ApiConstants.LUMIERE_USER_INFO_EX_URL, mc.getClient().getAuthID()))
+                .url(String.format(ApiConstants.USER_INFO_EX_URL, mc.getClient().getAuthID()))
                 .header("Authorization", "Bearer " + this.getServerToken())
                 .build();
 
@@ -599,7 +603,7 @@ public class ApiFactory {
 
     public void getCellionPoints(User mc, ApiCallback callback) {
         Request request = new Request.Builder()
-                .url(String.format(ApiConstants.GET_LP_URL, mc.getClient().getAuthID()))
+                .url(String.format(ApiConstants.GET_CP_URL, mc.getClient().getAuthID()))
                 .header("Authorization", "Bearer " + this.getServerToken())
                 .build();
 
@@ -635,7 +639,7 @@ public class ApiFactory {
         RequestBody body = new FormBody.Builder().build();
 
         Request request = new Request.Builder()
-                .url(String.format(ApiConstants.PURCHASE_ITEM_LP_URL, "300", mc.getClient().getAuthID(), serialNumber))
+                .url(String.format(ApiConstants.PURCHASE_ITEM_CP_URL, "300", mc.getClient().getAuthID(), serialNumber))
                 .header("Authorization", "Bearer " + this.getServerToken())
                 .post(body)
                 .build();

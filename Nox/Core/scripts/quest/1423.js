@@ -10,11 +10,11 @@ function start(mode, type, selection) {
 	    status--;
 	
 	if (status == 0) {
-	    qm.sendNext("Looks like you're ready for your next job advancement!\r\nJob advancements are available upon reaching level 30, 60, and 100.");
+	    qm.sendNext("Wow. You have really growed alot since I last saw you. But have you heard of the new jobs? ");
 	} else if (status == 1) {
-	    qm.sendNextPrev("The Shadower job branch, unlike Night Lords, uses Daggers as their primary weapon, and Dagger Scabbards or Shields as secondary weapons. Instead of attacking from afar, Shadowers focus on fighting monsters up close. They have a variety of attacks for fighting multiple mobs, including Savage Blow, Phase Dash, and Boomerang Stab, as well as a few attacks for one-on-one combat, including Midnight Carnival and Assassinate. In 3rd job, they gain a skill called Shadow Partner, which mimics the player's attacks, dealing extra damage at a reduced rate. In 4th job, they gain a buff called Shadower Instinct, which increases their attack as well as giving a new method of gaining damage called Body Count; this system allows the player to deal extra damage with Assassinate as well as give the player additional attack power when their Body Count is full and the buff is used.");
+	    qm.sendNextPrev("Oh my they are awesome! It's for all thiefs lvl 30 or above!");
 	} else if (status == 2) {
-	    qm.askAcceptDecline("So, do you want to test your skills against strong enemies, and see if you have what it takes? All you need is 30 Dark Marbles from those monsters! Lets go.");
+	    qm.askAcceptDecline("So..... Do you want to test your skills against strong enemies, and see if you have what it takes? All you need is 30 Dark Marbles from those monsters! Lets go.");
 		qm.forceStartQuest();
 	} else if (status == 3) {
 	    if (!qm.haveItem(4031013, 30)) {

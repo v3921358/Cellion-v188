@@ -211,22 +211,6 @@ public class DamageParse {
                 }
                 totDamage += totDamageToOneMonster;
 
-                // Paragon Level Bonuses
-                if (ServerConstants.PARAGON_SYSTEM) {
-                    if (pPlayer.getReborns() >= 2) { // Paragon Level 2+
-                        totDamageToOneMonster *= 1.05; // +5% Increased Damage
-                    }
-                    if (pPlayer.getReborns() >= 10) { // Paragon Level 10+
-                        totDamageToOneMonster *= 1.05; // +5% Increased Damage
-                    }
-                    if (pPlayer.getReborns() >= 6) { // Paragon Level 6+
-                        pPlayer.addHP((int) (totDamageToOneMonster * 0.01)); // +1% Life Leech
-                    }
-                    if (pPlayer.getReborns() >= 6) { // Paragon Level 7+
-                        pPlayer.addMP((int) (totDamageToOneMonster * 0.01)); // +1% Mana Leech
-                    }
-                }
-
                 /*
                  *  Damage Correction Handler
                  *  @purpose 
@@ -1069,6 +1053,9 @@ public class DamageParse {
                     final long totalEXPGained = (long) (((long) (expRate_Server * monsterExp)) * (additionalExpPercentage * 0.01f));
 
                     player.gainExp(totalEXPGained, false, false, false);
+                    
+                    player.incrementKillQuestAlpha();
+                            
                     player.getClient().SendPacket(CWvsContext.messagePacket(new StylishKillMessage(StylishKillMessageType.MultiKill, totalEXPGained, numMultiKills)));
                 }
 

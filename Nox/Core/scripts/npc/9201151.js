@@ -35,7 +35,7 @@ function action(mode, type, selection)
 		} 
 		if (status == 0) 
 		{
-			cm.sendSimple("Welcome to Rexion minigames! What game would you like to play? \r\n#L0#Rock, Paper Scissors#l\r\n\#L1#Number Guesser#l");
+			cm.sendSimple("Welcome to minigames! What game would you like to play? \r\n#L0#Rock, Paper Scissors#l\r\n\#L1#Number Guesser#l");
 		}
 		else if(status == 1)
 		{

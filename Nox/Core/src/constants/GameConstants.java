@@ -440,7 +440,7 @@ public class GameConstants {
         exp[247] = 637563567519L;
         exp[248] = 643939203194L;
         exp[249] = 650378595225L;
-        exp[250] = ServerConstants.PARAGON_SYSTEM ? 1 : 0; // Non-zero required for experience gain toward paragon levels.
+        exp[250] = 0;
     }
 
     /*public static void LoadEXP() { // Version 176
