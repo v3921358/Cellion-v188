@@ -587,7 +587,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         ret.evoentry = 5;
         ret.charListPosition = 0;
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps;
             ps = con.prepareStatement("SELECT * FROM accounts WHERE id = ?");
@@ -611,7 +610,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return ret;
     }
@@ -825,7 +823,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         ret.id = charid;
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             //LOAD BASIC STUFF
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM characters WHERE id = ? AND deletedAt is null")) {
@@ -1489,14 +1486,12 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("Failed to load character:\n{}", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return ret;
     }
 
     public static int getQuestKillCount(User chr, final int mobid) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT queststatusid FROM queststatus WHERE characterid = ?")) {
                 ResultSet rse;
@@ -1517,14 +1512,12 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return -1;
     }
 
     public static void saveNewCharToDB(final User chr, final JobType type, short db) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO characters (level, str, dex, luk, `int`, hp, mp, maxhp, maxmp, sp, hsp, ap, skincolor, gender, job, hair, face, zeroBetaHair, zeroBetaFace, angelicDressupHair, angelicDressupFace, angelicDressupSuit, faceMarking, ears, tail, map, meso, party, buddyCapacity, pets, subcategory, elf, friendshippoints, gm, accountid, name, world, starterquest, starterquestid, evoentry, position, magnusTime)"
                     + "                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", RETURN_GENERATED_KEYS)) {
@@ -1740,7 +1733,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             con.commit();
         } catch (SQLException e) {
             LogHelper.SQL.get().info("Could not save character:\n{}", e);
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         }
     }
 
@@ -1770,7 +1763,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             deleteWhereCharacterId(con, "DELETE FROM inventoryslot WHERE characterid = ?");
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO inventoryslot (characterid, `equip`, `use`, `setup`, `etc`, `cash`) VALUES (?, ?, ?, ?, ?, ?)")) {
@@ -1791,8 +1783,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             LogHelper.SQL.get().info("Could not save character information:\n{}", e);
         }
 
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
-
         if (isDeveloper()) {
             dropMessage(5, "[SQL Debug] Item Data has been saved successfully.");
         }
@@ -1804,7 +1794,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, hsp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, zeroBetaHair = ?, zeroBetaFace = ?, angelicDressupHair = ?, angelicDressupFace = ?, angelicDressupSuit = ?, faceMarking = ?, ears = ?, tail = ?, map = ?, meso = ?, hpApUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, pets = ?, subcategory = ?, currentrep = ?, totalrep = ?, gachexp = ?, fatigue = ?, charm = ?, charisma = ?, craft = ?, insight = ?, sense = ?, will = ?, totalwins = ?, totallosses = ?, pvpExp = ?, pvpPoints = ?, reborns = ?, apstorage = ?, magnusTime = ?, elf = ?, honourExp = ?, honourLevel = ?, friendshippoints = ?, friendshiptoadd = ?, name = ?, starterquest = ?, starterquestid = ?, evoentry = ?, position = ?, isBurning = ? WHERE id = ?", RETURN_GENERATED_KEYS)) {
                 int index = 0;
@@ -2379,7 +2368,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException e) {
             LogHelper.SQL.get().info("Could not save character information:\n{}", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     private void deleteWhereCharacterId(Connection con, String sql) {
@@ -6275,7 +6264,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
         client.SendPacket(CWvsContext.GMPoliceMessage(true));
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps;
             if (IPMac) {
@@ -6298,7 +6286,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public int getMaxHp() {
@@ -6323,7 +6311,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
         client.SendPacket(CWvsContext.GMPoliceMessage(true));
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps = con.prepareStatement("UPDATE accounts SET banned = ?, banreason = ? WHERE id = ?");
             ps.setInt(1, autoban ? 2 : 1);
@@ -6343,14 +6330,13 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
             return false;
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         client.Close();
         return true;
     }
 
     public static boolean ban(String id, String reason, boolean accountId, int gmlevel, boolean hellban) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps;
             if (id.matches("/[0-9]{1,3}\\..*")) {
@@ -6407,7 +6393,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return false;
     }
 
@@ -6704,7 +6690,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         lastfametime = System.currentTimeMillis();
         lastmonthfameids.add(Integer.valueOf(to.getId()));
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO famelog (characterid, characterid_to) VALUES (?, ?)")) {
                 ps.setInt(1, getId());
@@ -6714,7 +6699,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException e) {
             System.err.println("ERROR writing famelog for char " + getName() + " to " + to.getName() + e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public boolean canBattle(User to) {
@@ -6724,7 +6709,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void hasBattled(User to) {
         lastmonthbattleids.add(Integer.valueOf(to.getAccountID()));
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO battlelog (accid, accid_to) VALUES (?, ?)")) {
                 ps.setInt(1, getAccountID());
@@ -6734,7 +6718,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException e) {
             System.err.println("ERROR writing battlelog for char " + getName() + " to " + to.getName() + e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public final MapleKeyLayout getKeyLayout() {
@@ -7027,7 +7011,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void saveFamilyStatus() {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET familyid = ?, seniorid = ?, junior1 = ?, junior2 = ? WHERE id = ?")) {
                 if (mfc == null) {
@@ -7047,7 +7030,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException se) {
             LogHelper.SQL.get().info("Error saving family status ", se);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         //MapleFamily.setOfflineFamilyStatus(familyid, seniorid, junior1, junior2, currentrep, totalrep, id);
     }
 
@@ -7157,7 +7140,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public static boolean tempban(String reason, Calendar duration, int greason, int accountid) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET tempban = ?, banreason = ?, greason = ? WHERE id = ?")) {
                 Timestamp TS = new Timestamp(duration.getTimeInMillis());
@@ -7171,7 +7153,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return false;
     }
 
@@ -7388,7 +7370,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             final List<Pair<Integer, Integer>> cooldowns_packet = new ArrayList<>();
 
             try (Connection con = Database.GetConnection()) {
-                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
                 ResultSet rs;
                 try (PreparedStatement ps = con.prepareStatement("SELECT SkillID,StartTime,length FROM skills_cooldowns WHERE charid = ?")) {
@@ -7414,7 +7395,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             } catch (SQLException e) {
                 LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             // Sent packet
             if (!cooldowns_packet.isEmpty()) {
@@ -7522,7 +7502,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void showNote() {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM notes WHERE `to`=?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
                 ps.setString(1, getName());
@@ -7536,12 +7515,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public void deleteNote(int id, int fame) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps = con.prepareStatement("SELECT gift FROM notes WHERE `id`=?");
             ps.setInt(1, id);
@@ -7563,7 +7541,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public int getMulungEnergy() {
@@ -10396,7 +10374,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public int getPQLog(String pqid) {
         try (Connection con1 = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             int ret_count = 0;
             PreparedStatement ps;
@@ -10411,7 +10388,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             }
             rs.close();
             ps.close();
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
             return ret_count;
         } catch (Exception Ex) {
             return -1;
@@ -10422,7 +10399,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     //setPQLog module
     public void setPQLog(String pqid) {
         try (Connection con1 = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps;
             ps = con1.prepareStatement("INSERT INTO pqlog (accid, charid, pqid) values (?,?,?)");
@@ -10434,7 +10410,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (Exception Ex) {
             Ex.printStackTrace();
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public void setKeyValue(String key, String values) {
@@ -10563,7 +10539,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void updateReward() {
         List<MapleReward> rewards = new LinkedList<>();
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM rewards WHERE `cid`=?")) {
                 ps.setInt(1, id);
@@ -10589,14 +10564,13 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         client.SendPacket(Reward.updateReward(0, (byte) 9, rewards, 9));
     }
 
     public MapleReward getReward(int id) {
         MapleReward reward = null;
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM rewards WHERE `id` = ?")) {
                 ps.setInt(1, id);
@@ -10609,7 +10583,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return reward;
     }
 
@@ -10619,7 +10593,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void addReward(long start, long end, int type, int item, int mp, int meso, int exp, String desc) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO rewards (`cid`, `start`, `end`, `type`, `itemId`, `mp`, `meso`, `exp`, `desc`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                 ps.setInt(1, id);
@@ -10636,12 +10609,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public void deleteReward(int id) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("DELETE FROM rewards WHERE `id` = ?")) {
                 ps.setInt(1, id);
@@ -10650,7 +10622,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         updateReward();
     }
 
@@ -11376,7 +11348,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public boolean canVote() {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM ipvotes WHERE `accid` = ?")) {
                 ps.setInt(1, getAccountID());
@@ -11392,13 +11363,12 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return false;
     }
 
     public void setVote() {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("DELETE FROM ipvotes WHERE `accid` = ?")) {
                 ps.setInt(1, getAccountID());
@@ -11407,9 +11377,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO ipvotes (`ip`, `accid`, `lastvote`) VALUES (?, ?, ?)")) {
                 ps.setString(1, getClient().GetIP().split(":")[0].replaceAll("/", ""));
@@ -11420,7 +11389,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public void removeBGLayers() {
@@ -11453,7 +11422,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void giveLinkSkill(User chr, int linkSkill, int accID, int charID, int sourceSkillLevel, int sourceSkillMaxLevel) {
         ResultSet rs = null;
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT accountid FROM characters where id = ?  AND deletedAt is null")) {
                 ps.setInt(1, charID);
@@ -11506,7 +11474,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public static void addLinkSkill(int cid, int skill) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO skills (characterid, skillid, skilllevel, masterlevel, expiration) VALUES (?, ?, ?, ?, ?)")) {
                 ps.setInt(1, cid);
@@ -11521,7 +11488,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public int getWheelItem() {
@@ -11534,7 +11501,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public static void removePartTime(int cid) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("DELETE FROM parttime where cid = ?")) {
                 ps.setInt(1, cid);
@@ -11543,7 +11509,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public static void addPartTime(PartTimeJob partTime) {
@@ -11555,7 +11521,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public static void addPartTime(int cid, byte job, long time, int reward) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO parttime (cid, job, time, reward) VALUES (?, ?, ?, ?)")) {
                 ps.setInt(1, cid);
@@ -11567,13 +11532,12 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public static PartTimeJob getPartTime(int cid) {
         PartTimeJob partTime = new PartTimeJob(cid);
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM parttime WHERE cid = ?")) {
                 ps.setInt(1, cid);
@@ -11588,7 +11552,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (Exception ex) {
             System.out.println("Failed to retrieve part time job: " + ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return partTime;
     }
 
@@ -12358,7 +12322,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public boolean updateBurning(int characterId, boolean burning) {
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET isBurning = ? WHERE id = ?", RETURN_GENERATED_KEYS)) {
                 ps.setBoolean(1, burning);
@@ -12370,7 +12333,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
             return false;
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         this.isBurning = burning;
         return true;
     }

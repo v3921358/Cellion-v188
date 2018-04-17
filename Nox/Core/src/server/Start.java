@@ -116,7 +116,6 @@ public class Start {
         System.setProperty("wzpath", "wz");
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin = 0")) {
                 ps.executeUpdate();
@@ -125,7 +124,6 @@ public class Start {
         } catch (SQLException ex) {
             throw new RuntimeException("Runtime Exception - Could not connect to MySql Server.");
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         System.out.println("\nLoading " + ServerConstants.SERVER_NAME + ": MAPLESTORY VERSION " + ServerConstants.MAPLE_VERSION);
 

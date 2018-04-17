@@ -38,7 +38,6 @@ public class MapleOxQuizFactory {
 
     private void initialize() {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM wz_oxdata");
                     ResultSet rs = ps.executeQuery()) {
@@ -49,7 +48,6 @@ public class MapleOxQuizFactory {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 

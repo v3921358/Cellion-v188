@@ -25,7 +25,6 @@ public class PackageHandler {
 
     public static boolean addMesoToDB(final int mesos, final String sName, final int recipientID, final boolean isOn) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO dueypackages (RecieverId, SenderName, Mesos, TimeStamp, Checked, Type) VALUES (?, ?, ?, ?, ?, ?)")) {
                 ps.setInt(1, recipientID);
@@ -37,11 +36,9 @@ public class PackageHandler {
 
                 ps.executeUpdate();
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             return true;
         } catch (SQLException se) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
             return false;
@@ -50,7 +47,6 @@ public class PackageHandler {
 
     public static boolean addItemToDB(final Item item, final int quantity, final int mesos, final String sName, final int recipientID, final boolean isOn) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO dueypackages (RecieverId, SenderName, Mesos, TimeStamp, Checked, Type) VALUES (?, ?, ?, ?, ?, ?)", RETURN_GENERATED_KEYS)) {
                 ps.setInt(1, recipientID);
@@ -67,11 +63,9 @@ public class PackageHandler {
                     }
                 }
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             return true;
         } catch (SQLException se) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
             return false;
@@ -81,7 +75,6 @@ public class PackageHandler {
     public static List<MaplePackageActions> loadItems(final User chr) {
         List<MaplePackageActions> packages = new LinkedList<>();
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM dueypackages WHERE RecieverId = ?")) {
                 ps.setInt(1, chr.getId());
@@ -95,11 +88,9 @@ public class PackageHandler {
                     }
                 }
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             return packages;
         } catch (SQLException se) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
             return null;
@@ -109,7 +100,6 @@ public class PackageHandler {
     public static MaplePackageActions loadSingleItem(final int packageid, final int charid) {
         List<MaplePackageActions> packages = new LinkedList<>();
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps = con.prepareStatement("SELECT * FROM dueypackages WHERE PackageId = ? and RecieverId = ?");
             ps.setInt(1, packageid);
@@ -124,18 +114,15 @@ public class PackageHandler {
                 packages.add(pack);
                 rs.close();
                 ps.close();
-                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
                 return pack;
             } else {
                 rs.close();
                 ps.close();
-                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
                 return null;
             }
         } catch (SQLException se) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
             return null;
@@ -144,7 +131,6 @@ public class PackageHandler {
 
     public static void reciveMsg(final MapleClient c, final int recipientId) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("UPDATE dueypackages SET Checked = 0 where RecieverId = ?")) {
                 ps.setInt(1, recipientId);
@@ -153,13 +139,11 @@ public class PackageHandler {
         } catch (SQLException se) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 
     public static void removeItemFromDB(final int packageid, final int charid) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("DELETE FROM dueypackages WHERE PackageId = ? and RecieverId = ?")) {
                 ps.setInt(1, packageid);
@@ -169,13 +153,11 @@ public class PackageHandler {
         } catch (SQLException se) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 
     public static MaplePackageActions getItemByPID(final int packageid) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             Map<Long, Pair<Item, MapleInventoryType>> iter = ItemLoader.PACKAGE.loadItems(false, packageid, con);
             if (iter != null && iter.size() > 0) {
@@ -186,7 +168,6 @@ public class PackageHandler {
         } catch (Exception se) {
             se.printStackTrace();
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return new MaplePackageActions(packageid);
     }

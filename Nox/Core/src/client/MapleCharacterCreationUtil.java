@@ -54,7 +54,7 @@ public class MapleCharacterCreationUtil {
 
         if (canMake) {
             try (Connection con = Database.GetConnection()) {
-                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
                 //lastCharacterCreationTime
                 try (PreparedStatement ps = con.prepareStatement("SELECT lastCharacterCreationTime FROM accounts WHERE id = ? LIMIT 1")) {
                     ps.setInt(1, accountId);
@@ -88,7 +88,7 @@ public class MapleCharacterCreationUtil {
             } catch (SQLException ex) {
                 LogHelper.SQL.get().info("[CharacterCreationUtil] Error Connecting to DB.\n", ex);
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         }
 
         return canMake;
@@ -98,7 +98,6 @@ public class MapleCharacterCreationUtil {
         int chars = 0;
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT count(*) FROM characters WHERE accountid = ? AND world = ? AND deletedAt is null")) {
                 ps.setInt(1, accountId);
@@ -114,7 +113,7 @@ public class MapleCharacterCreationUtil {
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[CharacterCreationUtil] Error Connecting to DB.\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return chars;
     }
 
@@ -127,7 +126,6 @@ public class MapleCharacterCreationUtil {
      */
     public static int getCharacterSlots(int accountId, int worldId) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM character_slots WHERE accid = ? AND worldid = ? LIMIT 1;")) {
                 ps.setInt(1, accountId);
@@ -148,7 +146,6 @@ public class MapleCharacterCreationUtil {
         } catch (SQLException sqlE) {
             LogHelper.SQL.get().info("[CharacterCreationUtil] Error getting the amount of character slots.\n", sqlE);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return 0;
     }
@@ -159,7 +156,6 @@ public class MapleCharacterCreationUtil {
         }
         currentSlotAmount++;
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("UPDATE character_slots SET charslots = ? WHERE worldid = ? AND accid = ?")) {
                 ps.setInt(1, Math.min(GameConstants.characterSlotMax, currentSlotAmount));
@@ -172,7 +168,7 @@ public class MapleCharacterCreationUtil {
             LogHelper.SQL.get().info("[CharacterCreationUtil] Error increasing character slots in SQL.\n", sqlE);
             return false;
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return true;
     }
 }

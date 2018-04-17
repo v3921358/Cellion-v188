@@ -37,7 +37,6 @@ public class MapleRing
 
     public static MapleRing loadFromDb(int ringId, boolean equipped) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             MapleRing ret;
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM rings WHERE ringId = ?")) {
@@ -55,14 +54,12 @@ public class MapleRing
         } catch (Exception e) {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return null;
     }
 
     public static void addToDB(int itemid, User chr, String player, int id, int[] ringId) throws SQLException {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps = con.prepareStatement("INSERT INTO rings (ringId, itemid, partnerChrId, partnerName, partnerRingId) VALUES (?, ?, ?, ?, ?)");
             ps.setInt(1, ringId[0]);
@@ -85,7 +82,6 @@ public class MapleRing
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
             throw ex;
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 
@@ -176,7 +172,6 @@ public class MapleRing
 
     public static void removeRingFromDb(User player) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps = con.prepareStatement("SELECT * FROM rings WHERE partnerChrId = ?");
             ps.setInt(1, player.getId());
@@ -198,7 +193,6 @@ public class MapleRing
         } catch (Exception e) {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 

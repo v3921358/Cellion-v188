@@ -33,7 +33,6 @@ public class MapleGuildAlliance implements java.io.Serializable {
         super();
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM alliances WHERE id = ?")) {
                 ps.setInt(1, id);
@@ -58,7 +57,6 @@ public class MapleGuildAlliance implements java.io.Serializable {
         } catch (SQLException se) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 
@@ -66,7 +64,6 @@ public class MapleGuildAlliance implements java.io.Serializable {
         final Collection<MapleGuildAlliance> ret = new ArrayList<>();
         MapleGuildAlliance g;
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT id FROM alliances"); ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -79,7 +76,6 @@ public class MapleGuildAlliance implements java.io.Serializable {
         } catch (SQLException se) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return ret;
     }
@@ -100,7 +96,6 @@ public class MapleGuildAlliance implements java.io.Serializable {
             return ret;
         }
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps = con.prepareStatement("SELECT id FROM alliances WHERE name = ?");
             ps.setString(1, name);
@@ -129,14 +124,12 @@ public class MapleGuildAlliance implements java.io.Serializable {
         } catch (SQLException se) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return ret;
     }
 
     public final boolean deleteAlliance() {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps;
             for (int i = 0; i < getNoGuilds(); i++) {
@@ -154,7 +147,6 @@ public class MapleGuildAlliance implements java.io.Serializable {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             return false;
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return true;
     }
@@ -188,7 +180,6 @@ public class MapleGuildAlliance implements java.io.Serializable {
 
     public final void saveToDb() {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("UPDATE alliances set guild1 = ?, guild2 = ?, guild3 = ?, guild4 = ?, guild5 = ?, rank1 = ?, rank2 = ?, rank3 = ?, rank4 = ?, rank5 = ?, capacity = ?, leaderid = ?, notice = ? where id = ?")) {
                 for (int i = 0; i < 5; i++) {
@@ -204,7 +195,6 @@ public class MapleGuildAlliance implements java.io.Serializable {
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 

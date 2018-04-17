@@ -131,7 +131,6 @@ public class MapleKeyLayout implements Serializable {
             return;
         }
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("DELETE FROM keymap WHERE characterid = ?")) {
                 ps.setInt(1, charid);
@@ -162,7 +161,6 @@ public class MapleKeyLayout implements Serializable {
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 }

@@ -46,7 +46,6 @@ public class MapleStorage implements Serializable {
     public static int create(int id) throws SQLException {
         ResultSet rs;
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO storages (accountid, slots, meso) VALUES (?, ?, ?)", RETURN_GENERATED_KEYS)) {
                 ps.setInt(1, id);
@@ -63,7 +62,6 @@ public class MapleStorage implements Serializable {
                 }
             }
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         rs.close();
         throw new SQLException("Inserting char failed.");
@@ -73,7 +71,6 @@ public class MapleStorage implements Serializable {
         MapleStorage ret = null;
         int storeId;
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps = con.prepareStatement("SELECT * FROM storages WHERE accountid = ?");
             ps.setInt(1, id);
@@ -97,7 +94,6 @@ public class MapleStorage implements Serializable {
         } catch (SQLException ex) {
             System.err.println("Error loading storage" + ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return ret;
     }

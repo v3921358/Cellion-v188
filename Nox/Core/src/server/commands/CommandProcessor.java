@@ -207,7 +207,6 @@ public class CommandProcessor {
 
     public static void logCommandToDB(User player, String command, String table) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO " + table + " (cid, command, mapid) VALUES (?, ?, ?)")) {
                 ps.setInt(1, player.getId());
@@ -218,7 +217,6 @@ public class CommandProcessor {
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("Logging Error:\n{}", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 

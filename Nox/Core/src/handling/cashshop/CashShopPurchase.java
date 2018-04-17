@@ -115,12 +115,11 @@ public final class CashShopPurchase implements ProcessPacket<MapleClient> {
                 break;
         }
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             c.getPlayer().getCashInventory().save(con);
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         playerCashShopInfo(c);
     }

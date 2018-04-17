@@ -66,7 +66,6 @@ public class HiredMerchantHandler {
 
     private static byte checkExistance(final int accid, final int cid) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * from hiredmerch where accountid = ? OR characterid = ?")) {
                 ps.setInt(1, accid);
@@ -79,11 +78,9 @@ public class HiredMerchantHandler {
                     }
                 }
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             return 0;
         } catch (SQLException se) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
             return -1;
@@ -287,7 +284,6 @@ public class HiredMerchantHandler {
 
     private static boolean deletePackage(final int accid, final int packageid, final int chrId) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("DELETE from hiredmerch where accountid = ? OR packageid = ? OR characterid = ?")) {
                 ps.setInt(1, accid);
@@ -296,11 +292,9 @@ public class HiredMerchantHandler {
                 ps.executeUpdate();
             }
             ItemLoader.HIRED_MERCHANT.saveItems(null, packageid, con);
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             return true;
         } catch (SQLException e) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             return false;
@@ -314,7 +308,6 @@ public class HiredMerchantHandler {
 
     private static MerchItemPackage loadItemFrom_Database(final int accountid) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             ResultSet rs;
 
@@ -344,11 +337,9 @@ public class HiredMerchantHandler {
                 }
                 pack.setItems(iters);
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             return pack;
         } catch (SQLException e) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             return null;

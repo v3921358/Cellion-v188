@@ -3104,7 +3104,7 @@ public final class MapleMap {
 
     public void getRankAndAdd(String leader, String time, ExpeditionType type, long timz, Collection<String> squad) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
+
             long lastTime = SpeedRunner.getSpeedRunData(type) == null ? 0 : SpeedRunner.getSpeedRunData(type).right;
             //if(timz > lastTime && lastTime > 0) {
             //return;
@@ -3141,7 +3141,7 @@ public final class MapleMap {
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public long getSpeedRunStart() {

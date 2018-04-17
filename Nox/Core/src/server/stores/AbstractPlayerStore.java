@@ -137,7 +137,6 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
             return false;
         }
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps = con.prepareStatement("DELETE FROM hiredmerch WHERE accountid = ? OR characterid = ?");
             ps.setInt(1, owneraccount);
@@ -179,7 +178,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
         } catch (SQLException se) {
             se.printStackTrace();
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return false;
     }
 

@@ -108,7 +108,7 @@ public class QueueWorker extends Thread {
         QueueCommand command = QueueCommand.valueOf(item.action);
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             switch (command) {
                 case GIVE_NX:
                     String payloadUnescape = item.payload.replaceAll("\\\\", "");
@@ -202,7 +202,6 @@ public class QueueWorker extends Thread {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return true;
     }

@@ -31,7 +31,6 @@ public class MapleInventoryIdentifier implements Serializable {
     public int initUID() {
         int ret = 0;
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             int[] ids = new int[5];
             PreparedStatement ps = con.prepareStatement("SELECT MAX(uniqueid) FROM inventoryitems WHERE uniqueid > 0");
@@ -82,7 +81,6 @@ public class MapleInventoryIdentifier implements Serializable {
         } catch (Exception e) {
             LogHelper.SQL.get().info(this.getClass().getName() + "\nThere was an issue with something from the database the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return ret;
     }

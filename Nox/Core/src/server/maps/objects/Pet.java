@@ -107,7 +107,6 @@ public class Pet extends MapleMapObject {
 
     public static final Pet loadFromDb(int itemid, int uId, short inventorypos, short flags) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             final Pet ret = new Pet(itemid, inventorypos, uId, flags);
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM pets WHERE petid = ?")) {
@@ -128,7 +127,6 @@ public class Pet extends MapleMapObject {
                     ret.changed = false;
                 }
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             return ret;
         } catch (SQLException ex) {
@@ -143,7 +141,6 @@ public class Pet extends MapleMapObject {
         }
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("UPDATE pets SET name = ?, level = ?, closeness = ?, fullness = ?, seconds = ?, flags = ? WHERE petid = ?")) {
                 ps.setInt(1, getItem().getUniqueId());
@@ -159,7 +156,6 @@ public class Pet extends MapleMapObject {
         } catch (Exception e) {
             LogHelper.SQL.get().info("There was an issue with saving pets to the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 
@@ -173,7 +169,6 @@ public class Pet extends MapleMapObject {
         }
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, seconds, flags) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
                 ps.setInt(1, uniqueid); //pse.setInt(1, uniqueid);
@@ -189,7 +184,6 @@ public class Pet extends MapleMapObject {
             LogHelper.SQL.get().info("There was an issue with loading a pet from the db\n", ex);
             return null;
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         final Pet pet = new Pet(itemid, (short) -1, uniqueid, flag);
         pet.setName(name);
@@ -364,7 +358,6 @@ public class Pet extends MapleMapObject {
 
     public static void clearPet() {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps = con.prepareStatement("SELECT * FROM pets");
             ResultSet rs = ps.executeQuery();
@@ -389,7 +382,6 @@ public class Pet extends MapleMapObject {
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 

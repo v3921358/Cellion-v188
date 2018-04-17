@@ -201,7 +201,6 @@ public class MapleClient extends Socket {
         final List<User> chars = new LinkedList<>();
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             final Map<Integer, CardData> cardss = CharacterCardFactory.getInstance().loadCharacterCards(accId, serverId, con);
             for (final CharNameAndId cni : loadCharactersInternal(serverId, con)) {
@@ -228,7 +227,6 @@ public class MapleClient extends Socket {
         }
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("DELETE FROM `character_cards` WHERE `accid` = ?")) {
                 ps.setInt(1, accId);
@@ -254,14 +252,12 @@ public class MapleClient extends Socket {
         } catch (Exception e) {
             LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 
     public List<String> loadCharacterNames(int serverId) {
         List<String> chars = new LinkedList<>();
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             for (CharNameAndId cni : loadCharactersInternal(serverId, con)) {
                 chars.add(cni.name);
@@ -269,7 +265,6 @@ public class MapleClient extends Socket {
         } catch (SQLException ex) {
             Logger.getLogger(MapleClient.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return chars;
     }
@@ -402,7 +397,6 @@ public class MapleClient extends Socket {
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[MapleClient] Error getting ban reasons \n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return ret;
     }
@@ -425,7 +419,6 @@ public class MapleClient extends Socket {
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[MapleClient] Error getting ban reasons \n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return ret;
     }
@@ -461,7 +454,6 @@ public class MapleClient extends Socket {
             } catch (SQLException ex) {
                 LogHelper.SQL.get().info("[MapleClient] Error getting ban reasons \n", ex);
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[MapleClient] Error checking mac bans \n", ex);
@@ -498,7 +490,6 @@ public class MapleClient extends Socket {
             } catch (SQLException ex) {
                 LogHelper.SQL.get().info("[MapleClient] Error getting ban reasons \n", ex);
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         }
     }
@@ -556,7 +547,6 @@ public class MapleClient extends Socket {
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[MapleClient] Error getting ban reasons \n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 
@@ -596,7 +586,6 @@ public class MapleClient extends Socket {
         int loginok = 5;
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM accounts WHERE authID = ?")) {
                 ps.setInt(1, authID);
@@ -659,7 +648,7 @@ public class MapleClient extends Socket {
         } catch (SQLException se) {
             LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", se);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return loginok;
     }
 
@@ -674,7 +663,7 @@ public class MapleClient extends Socket {
         if (fromChannelServer) {
             if (secondPassword == null) { // second password isn't loaded if this is called from a channel server... need to cleanup this somehow
                 try (Connection con = Database.GetConnection()) {
-                    System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
+
                     try (PreparedStatement ps = con.prepareStatement("SELECT * FROM accounts WHERE id = ? LIMIT 1;")) {
                         ps.setInt(1, accId);
                         ResultSet rs = ps.executeQuery();
@@ -691,7 +680,7 @@ public class MapleClient extends Socket {
                     LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", exp);
                     return false;
                 }
-                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
             }
         }
 
@@ -713,7 +702,7 @@ public class MapleClient extends Socket {
      */
     public static boolean banOfflineCharacter(String reason, String characterName) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
+
             try (PreparedStatement ps_get = con.prepareStatement("SELECT accountid FROM characters WHERE name = ? LIMIT 1")) {
                 ps_get.setString(1, characterName);
 
@@ -736,13 +725,12 @@ public class MapleClient extends Socket {
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[MapleClient] Error banning offline account\n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return false;
     }
 
     public void ban(String reason, boolean banMacs, boolean banIPs) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
 
             if (banIPs) {
                 try (PreparedStatement ps = con.prepareStatement("INSERT INTO ipbans VALUES (DEFAULT, ?)")) {
@@ -766,7 +754,6 @@ public class MapleClient extends Socket {
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[MapleClient] Error banning account\n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         if (banMacs) {
             banMacs();
@@ -775,7 +762,6 @@ public class MapleClient extends Socket {
 
     private void unban() {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
 
             try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET banned = 0, banreason = '' WHERE id = ?")) {
                 ps.setInt(1, accId);
@@ -786,13 +772,11 @@ public class MapleClient extends Socket {
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[MapleClient] Error banning account\n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 
     public static byte unban(String charname) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT accountid from characters where name = ? AND deletedAt is null")) {
                 ps.setString(1, charname);
@@ -823,7 +807,6 @@ public class MapleClient extends Socket {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             return -2;
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return 0;
     }
@@ -840,7 +823,7 @@ public class MapleClient extends Socket {
         }
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
+
             try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET macs = ? WHERE id = ?")) {
                 ps.setString(1, newMacData.toString());
                 ps.setInt(2, accId);
@@ -852,7 +835,7 @@ public class MapleClient extends Socket {
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[MapleClient] Error saving MACs\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public void setAccID(int id) {
@@ -865,7 +848,6 @@ public class MapleClient extends Socket {
 
     public final void updateLoginState(final MapleClientLoginState newstate, final String SessionID) { // TODO hide?
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
 
             try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin = ?, SessionIP = ?, lastlogin = CURRENT_TIMESTAMP() WHERE id = ?")) {
                 ps.setInt(1, newstate.getState());
@@ -886,13 +868,12 @@ public class MapleClient extends Socket {
                     || newstate == MapleClientLoginState.CHANGE_CHANNEL);
             loggedIn = !serverTransition;
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public final void updateSecondPassword() {
         try (Connection con = Database.GetConnection()) {
 
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
             try (PreparedStatement ps = con.prepareStatement("UPDATE `accounts` SET `2ndpassword` = ? WHERE id = ?")) {
                 ps.setString(1, crypto.BCrypt.hashpw(secondPassword, crypto.BCrypt.gensalt()));
                 ps.setInt(2, accId);
@@ -903,14 +884,13 @@ public class MapleClient extends Socket {
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[MapleClient] Error updating secondary password\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public final MapleClientLoginState getLoginState() { // TODO hide?
 
         try (Connection con = Database.GetConnection()) {
 
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
             try (PreparedStatement ps = con.prepareStatement("SELECT loggedin, lastlogin, banned, `birthday` + 0 AS `bday` FROM accounts WHERE id = ?")) {
                 ps.setInt(1, getAccID());
 
@@ -935,7 +915,7 @@ public class MapleClient extends Socket {
                 }
                 ps.close();
                 loggedIn = state == MapleClientLoginState.LOGIN_LOGGEDIN;
-                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
                 return state;
             } catch (SQLException e) {
                 LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
@@ -943,7 +923,7 @@ public class MapleClient extends Socket {
                 return MapleClientLoginState.NOT_FOUND;
             }
         } catch (SQLException e) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             loggedIn = false;
             return MapleClientLoginState.NOT_FOUND;
@@ -1233,7 +1213,7 @@ public class MapleClient extends Socket {
             return false;
         }
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
+
             boolean canlogin = false;
             try (PreparedStatement ps = con.prepareStatement("SELECT SessionIP, banned FROM accounts WHERE id = ?")) {
                 ps.setInt(1, this.accId);
@@ -1253,7 +1233,7 @@ public class MapleClient extends Socket {
         } catch (final SQLException e) {
             LogHelper.SQL.get().info("[MapleClient] Failed checking IP adress:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return true;
     }
 
@@ -1275,7 +1255,7 @@ public class MapleClient extends Socket {
 
     public final int deleteCharacter(final int cid) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
+
             try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET deletedAt = NOW() WHERE id = ? AND accountid = ? LIMIT 1")) {
                 ps.setInt(1, cid);
                 ps.setInt(2, accId);
@@ -1285,9 +1265,9 @@ public class MapleClient extends Socket {
                 LogHelper.SQL.get().info("There seems to be a issue deleting the character:\n{}", exp);
                 return 10;
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         } catch (SQLException exp) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
             LogHelper.SQL.get().info("There seems to be a issue deleting the character:\n{}", exp);
             return 10;
         }
@@ -1387,7 +1367,6 @@ public class MapleClient extends Socket {
     public static int findAccIdForCharacterName(final String charName) {
         int ret = -1;
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT accountid FROM characters WHERE name = ? AND deletedAt is null")) {
                 ps.setString(1, charName);
@@ -1403,7 +1382,7 @@ public class MapleClient extends Socket {
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return ret;
     }
 
@@ -1450,7 +1429,6 @@ public class MapleClient extends Socket {
 
     public static byte unbanIPMacs(String charname) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps = con.prepareStatement("SELECT accountid from characters where name = ? AND deletedAt is null");
             ps.setString(1, charname);
@@ -1498,12 +1476,10 @@ public class MapleClient extends Socket {
                 }
                 ret++;
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             return ret;
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             return -2;
         }
@@ -1539,7 +1515,6 @@ public class MapleClient extends Socket {
 
     public final Timestamp getCreated() { // TODO hide?
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps;
             ps = con.prepareStatement("SELECT createdat FROM accounts WHERE id = ?");
@@ -1554,11 +1529,9 @@ public class MapleClient extends Socket {
                 ret = rs.getTimestamp("createdat");
             }
             ps.close();
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             return ret;
         } catch (SQLException e) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             LogHelper.SQL.get().info("There seems to be a issue deleting the character:\n{}", e);
             return null;

@@ -1732,8 +1732,10 @@ public class DamageParse {
                 if (ret.skill == 142120001) {
                     iPacket.DecodeLong(); // haxfix?
                 }
-                final Mob monster = chr.getMap().getMonsterByOid(dwMobID);
-                ret.allDamage.add(new AttackMonster(monster, dwMobID, monster.getId(), dwMobCRC, ptHit, ptPosPrev, damageNumbers));
+                final Mob monster = chr.getMap().getMonsterByOid(dwMobID);//CHECK WHY THIS NULLS (no oid)
+                if (monster != null) {
+                    ret.allDamage.add(new AttackMonster(monster, dwMobID, monster.getId(), dwMobCRC, ptHit, ptPosPrev, damageNumbers));
+                }
             }
         }
         // TODO: See if can parse with just this.. the rest is so much and i dont think u use any of the vars

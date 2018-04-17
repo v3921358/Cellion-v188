@@ -47,7 +47,6 @@ public class MapleCharacterUtil {
     public static int getIdByName(final String name) {
         final int id;
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT id FROM characters WHERE name = ? AND deletedAt is null LIMIT 1")) {
                 ps.setString(1, name);
@@ -66,7 +65,7 @@ public class MapleCharacterUtil {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", exp);
             return -1;
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return id;
     }
 
@@ -77,7 +76,6 @@ public class MapleCharacterUtil {
     // 2 = Password Changed successfully
     public static int Change_SecondPassword(final int accid, final String password, final String newpassword) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * from accounts where id = ?")) {
                 ps.setInt(1, accid);
@@ -123,7 +121,6 @@ public class MapleCharacterUtil {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
             return -2;
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return -2;
     }
@@ -150,7 +147,7 @@ public class MapleCharacterUtil {
         } catch (Exception e) {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return id;
     }
 
@@ -167,7 +164,6 @@ public class MapleCharacterUtil {
         } catch (Exception e) {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 
@@ -187,7 +183,6 @@ public class MapleCharacterUtil {
         } catch (Exception e) {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 
@@ -208,7 +203,6 @@ public class MapleCharacterUtil {
         } catch (Exception e) {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return ret;
     }

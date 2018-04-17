@@ -2141,7 +2141,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         if (chz == -1) {
             //sql queries
             try (Connection con = Database.GetConnection()) {
-                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
                 PreparedStatement ps = con.prepareStatement("UPDATE queststatus SET customData = ? WHERE characterid = ? AND (quest = ? OR quest = ?)");
                 ps.setString(1, "0");
@@ -2160,7 +2159,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                 LogHelper.SQL.get().info("There was an issue with handling divorce:\n{}", e);
                 return;
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             setQuestRecord(getPlayer(), 160001, "0");
             setQuestRecord(getPlayer(), 160002, "0");
@@ -2201,7 +2199,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public Triple<Integer, Integer, Integer> getCompensation() {
         Triple<Integer, Integer, Integer> ret = null;
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM compensationlog_confirmed WHERE chrname LIKE ?")) {
                 ps.setString(1, getPlayer().getName());
@@ -2211,12 +2208,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                     }
                 }
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             return ret;
         } catch (SQLException e) {
             LogHelper.CONSOLE.get().info("Compensation:\n{}", e);
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             return ret;
         }
@@ -2224,7 +2219,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public boolean deleteCompensation(int taken) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             try (PreparedStatement ps = con.prepareStatement("UPDATE compensationlog_confirmed SET taken = ? WHERE chrname LIKE ?")) {
                 ps.setInt(1, taken);

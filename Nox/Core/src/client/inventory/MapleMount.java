@@ -66,7 +66,6 @@ public class MapleMount implements Serializable {
                 LogHelper.SQL.get().info(this.getClass().getName() + "\nThere was an issue with something from the database the database:\n", e);
             }
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
 

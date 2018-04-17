@@ -88,7 +88,6 @@ public class BuddyHandler {
                                 buddyAddResult = World.WorldBuddy.requestBuddyAdd(c.getPlayer(), accountFriend, otherChar);
                             } else {
                                 try (Connection con = Database.GetConnection()) {
-                                    System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
                                     PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) as buddyCount FROM buddies WHERE characterid = ? AND pending = 0");
                                     ps.setInt(1, charWithId.getId());
@@ -117,7 +116,6 @@ public class BuddyHandler {
                                     rs.close();
                                     ps.close();
                                 }
-                                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
                             }
                             if (buddyAddResult == BuddyOperation.BUDDYLIST_FULL) {
@@ -143,7 +141,6 @@ public class BuddyHandler {
                                             ps.executeUpdate();
                                         }
                                     }
-                                    System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
                                 }
                                 ble = new BuddylistEntry(charWithId.getName(), otherCid, group, displayChannel, true, memo, accountFriend, nick);
@@ -245,7 +242,6 @@ public class BuddyHandler {
     private static List<BuddylistEntry> getPendingAccountFriends(List<User> chrs) {
         List<BuddylistEntry> bl = new ArrayList<>();
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             for (User chr : chrs) {
                 PreparedStatement ps = con.prepareStatement("SELECT c.name as buddyname, b.characterid, b.buddyid, b.pending, b.groupname, b.memo, b.friend, b.nickname, b.flag FROM buddies as b, characters as c WHERE b.buddyid = c.id AND b.characterid = ? AND b.pending = 1 AND c.deletedAt is null AND b.friend = 1");
@@ -262,7 +258,6 @@ public class BuddyHandler {
         } catch (Exception e) {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return bl;
     }
@@ -270,7 +265,6 @@ public class BuddyHandler {
     private static CharacterIdNameBuddyCapacity getCharacterIdAndNameFromDatabase(String name) {
         CharacterIdNameBuddyCapacity ret = null;
         try (Connection con = Database.GetConnection()) {
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             PreparedStatement ps = con.prepareStatement("SELECT * FROM characters WHERE name LIKE ? AND deletedAt is null");
             ps.setString(1, name);
@@ -283,7 +277,6 @@ public class BuddyHandler {
         } catch (Exception e) {
             LogHelper.SQL.get().info(e);
         }
-        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return ret;
     }

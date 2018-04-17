@@ -207,7 +207,6 @@ public class World {
 
         static {
             try (Connection con = Database.GetConnection()) {
-                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
 
                 try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET party = -1, fatigue = 0")) {
                     ps.executeUpdate();
@@ -217,7 +216,6 @@ public class World {
             } catch (SQLException e) {
                 LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
             for (PartySearchType pst : PartySearchType.values()) {
                 searches.put(pst, new ArrayList<PartySearch>()); //according to client, max 10, even though theres page numbers ?!
@@ -1855,8 +1853,6 @@ public class World {
         if (getHour() == 0 && getMinute() >= 0 && getMinute() <= 1) { //not sure if put it here
             try (Connection con = Database.GetConnection()) {
 
-                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
-
                 try (PreparedStatement ps = con.prepareStatement("DELETE FROM `moonlightachievements` where achievementid > 0;")) {
                     ps.executeUpdate();
                     ps.close();
@@ -1866,7 +1862,6 @@ public class World {
             } catch (SQLException ex) {
                 LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
             }
-            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         }
         if (map.getAllMapObjectSize(MapleMapObjectType.ITEM) > 0) {
