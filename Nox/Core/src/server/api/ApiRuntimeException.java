@@ -9,13 +9,14 @@ import server.api.ApiErrorCode;
 
 /**
  * Handles API Exceptions.
+ *
  * @author William
  */
 public class ApiRuntimeException extends RuntimeException {
 
     private ApiErrorCode _code;
     private String _message;
-    
+
     @Override
     public String getMessage() {
         if (this._message != null) {
@@ -26,23 +27,23 @@ public class ApiRuntimeException extends RuntimeException {
         }
         return super.getMessage();
     }
-    
+
     public ApiErrorCode getApiErrorCode() {
         return this._code;
     }
-    
+
     public ApiRuntimeException(final ApiErrorCode code) {
-        this(code, (String)null);
+        this(code, (String) null);
     }
-    
+
     public ApiRuntimeException(final ApiErrorCode code, final Throwable cause) {
         this(code, null, cause);
     }
-    
+
     public ApiRuntimeException(final ApiErrorCode code, final String message) {
         this(code, message, null);
     }
-    
+
     public ApiRuntimeException(final ApiErrorCode code, final String message, final Throwable cause) {
         super(code.getMessage(), cause);
         this._code = code;

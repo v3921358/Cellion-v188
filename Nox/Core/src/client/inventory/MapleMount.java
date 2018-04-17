@@ -55,15 +55,19 @@ public class MapleMount implements Serializable {
         if (!changed) {
             return;
         }
-        try (PreparedStatement ps = Database.GetConnection().prepareStatement("UPDATE mountdata set `Level` = ?, `Exp` = ?, `Fatigue` = ? WHERE characterid = ?")) {
-            ps.setByte(1, level);
-            ps.setInt(2, exp);
-            ps.setByte(3, fatigue);
-            ps.setInt(4, charid);
-            ps.executeUpdate();
-        } catch (Exception e) {
-            LogHelper.SQL.get().info(this.getClass().getName() + "\nThere was an issue with something from the database the database:\n", e);
+        try (Connection con = Database.GetConnection()) {
+            try (PreparedStatement ps = con.prepareStatement("UPDATE mountdata set `Level` = ?, `Exp` = ?, `Fatigue` = ? WHERE characterid = ?")) {
+                ps.setByte(1, level);
+                ps.setInt(2, exp);
+                ps.setByte(3, fatigue);
+                ps.setInt(4, charid);
+                ps.executeUpdate();
+            } catch (Exception e) {
+                LogHelper.SQL.get().info(this.getClass().getName() + "\nThere was an issue with something from the database the database:\n", e);
+            }
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public int getItemId() {

@@ -2925,7 +2925,8 @@ public class GMCommand {
                 npc.setFh(fh);
 
                 try (Connection con = Database.GetConnection()) {
-                    System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+                    System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
                     try (PreparedStatement ps = con.prepareStatement("INSERT INTO wz_customlife (mid, idd, x, y, fh, cy, rx0, rx1, mobtime, f, team, type, hide) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                         ps.setInt(1, c.getPlayer().getMapId());
                         ps.setInt(2, npcId);
@@ -2946,6 +2947,8 @@ public class GMCommand {
                     LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
                     c.getPlayer().dropMessage(6, "Failed to save NPC to the database.");
                 }
+                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
                 c.getPlayer().getMap().addMapObject(npc);
                 c.getPlayer().getMap().broadcastMessage(NPCPacket.spawnNPC(npc, true));
                 c.getPlayer().dropMessage(6, "Please do not reload this map or else the NPC will disappear untill the next restart.");
@@ -2986,7 +2989,8 @@ public class GMCommand {
                 System.out.printf("The current map (%s) \r\n", c.getPlayer().getMapId());
 
                 try (Connection con = Database.GetConnection()) {
-                    System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+                    System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
                     try (PreparedStatement ps = con.prepareStatement("INSERT INTO wz_customlife (mid, idd, x, y, fh, cy, rx0, rx1, mobtime, f, team, type, hide) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                         ps.setInt(1, c.getPlayer().getMapId());
                         ps.setInt(2, mobid);
@@ -3007,6 +3011,8 @@ public class GMCommand {
                     LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
                     c.getPlayer().dropMessage(6, "Failed to save monster to the database.");
                 }
+                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
                 c.getPlayer().getMap().addMonsterSpawn(npc, mobTime, null);
                 c.getPlayer().dropMessage(6, "Please do not reload this map or else the monster will disappear till the next restart.");
             } else {

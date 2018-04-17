@@ -74,10 +74,13 @@ public class SlotIncrease {
             pPlayer.modifyCSPoints(itemPrice, -4000 * coupon, false);
             pPlayer.getStorage().increaseSlots((byte) (4 * coupon));
             try (Connection con = Database.GetConnection()) {
+                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
                 pPlayer.getStorage().saveToDB(con);
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
             pPlayer.dropMessage(1, "Your storage slots have been increased successfully.");
             //c.write(CField.getCharInfo(chr));
         } else {

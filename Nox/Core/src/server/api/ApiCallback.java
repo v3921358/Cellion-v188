@@ -6,11 +6,13 @@
 package server.api;
 
 /**
- * Used to make anonymous classes as call backs when the API classes return 
- * asynchronously.
+ * Used to make anonymous classes as call backs when the API classes return asynchronously.
+ *
  * @author Tyler
  */
 public interface ApiCallback {
-	public void onSuccess();
-	public void onFail();
+
+    public void onSuccess();
+
+    public void onFail();
 }

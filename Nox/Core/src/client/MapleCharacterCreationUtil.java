@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 import constants.GameConstants;
+import database.Database;
 import static database.Database.GetConnection;
 import tools.LogHelper;
 
@@ -52,8 +53,8 @@ public class MapleCharacterCreationUtil {
         final boolean canMake = loadCharactersSize(worldId, accountId) < getCharacterSlots(accountId, worldId);
 
         if (canMake) {
-            try (Connection con = GetConnection()) {
-                System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            try (Connection con = Database.GetConnection()) {
+                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
                 //lastCharacterCreationTime
                 try (PreparedStatement ps = con.prepareStatement("SELECT lastCharacterCreationTime FROM accounts WHERE id = ? LIMIT 1")) {
                     ps.setInt(1, accountId);
@@ -87,6 +88,7 @@ public class MapleCharacterCreationUtil {
             } catch (SQLException ex) {
                 LogHelper.SQL.get().info("[CharacterCreationUtil] Error Connecting to DB.\n", ex);
             }
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
         }
 
         return canMake;
@@ -95,8 +97,9 @@ public class MapleCharacterCreationUtil {
     private static int loadCharactersSize(int serverId, int accountId) {
         int chars = 0;
 
-        try (Connection con = GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+        try (Connection con = Database.GetConnection()) {
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             try (PreparedStatement ps = con.prepareStatement("SELECT count(*) FROM characters WHERE accountid = ? AND world = ? AND deletedAt is null")) {
                 ps.setInt(1, accountId);
                 ps.setInt(2, serverId);
@@ -111,6 +114,7 @@ public class MapleCharacterCreationUtil {
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[CharacterCreationUtil] Error Connecting to DB.\n", e);
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
         return chars;
     }
 
@@ -122,8 +126,9 @@ public class MapleCharacterCreationUtil {
      * @return The amount of slots. Returns 0 if database query fails.
      */
     public static int getCharacterSlots(int accountId, int worldId) {
-        try (Connection con = GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+        try (Connection con = Database.GetConnection()) {
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM character_slots WHERE accid = ? AND worldid = ? LIMIT 1;")) {
                 ps.setInt(1, accountId);
                 ps.setInt(2, worldId);
@@ -143,6 +148,7 @@ public class MapleCharacterCreationUtil {
         } catch (SQLException sqlE) {
             LogHelper.SQL.get().info("[CharacterCreationUtil] Error getting the amount of character slots.\n", sqlE);
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return 0;
     }
@@ -152,8 +158,9 @@ public class MapleCharacterCreationUtil {
             return false;
         }
         currentSlotAmount++;
-        try (Connection con = GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+        try (Connection con = Database.GetConnection()) {
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             try (PreparedStatement ps = con.prepareStatement("UPDATE character_slots SET charslots = ? WHERE worldid = ? AND accid = ?")) {
                 ps.setInt(1, Math.min(GameConstants.characterSlotMax, currentSlotAmount));
                 ps.setInt(2, worldId);
@@ -165,6 +172,7 @@ public class MapleCharacterCreationUtil {
             LogHelper.SQL.get().info("[CharacterCreationUtil] Error increasing character slots in SQL.\n", sqlE);
             return false;
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
         return true;
     }
 }

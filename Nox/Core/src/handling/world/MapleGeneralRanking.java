@@ -44,7 +44,8 @@ public class MapleGeneralRanking {
         ResultSet rs;
         short rank = 1;
         try (Connection con = Database.GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             ps = con.prepareStatement("SELECT * FROM characters WHERE  deletedAt is null ORDER BY `candies` DESC LIMIT " + max);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -57,6 +58,8 @@ public class MapleGeneralRanking {
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public static class CandyRankingInfo {

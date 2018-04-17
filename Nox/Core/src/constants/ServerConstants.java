@@ -1,11 +1,13 @@
 package constants;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import provider.data.HexTool;
 
 /*
  * Nox Project
@@ -26,8 +28,8 @@ public class ServerConstants {
 
     /*Server Debug These values will be overwritten by the configuration.ini file.*/
     public static boolean DEVMODE = false;
-    public static boolean DEVELOPER_DEBUG_MODE = true;
-    public static boolean DEVELOPER_PACKET_DEBUG_MODE = true;
+    public static boolean DEVELOPER_DEBUG_MODE = false;
+    public static boolean DEVELOPER_PACKET_DEBUG_MODE = false;
     public static boolean REDUCED_DEBUG_SPAM = true;
 
     /*Server Maintenance These values will be overwritten by the configuration.ini file.*/
@@ -74,7 +76,9 @@ public class ServerConstants {
     public static final int USER_LIMIT = 150;
     public static final String EVENT_MESSAGE = "Cellion MapleStory ALPHA";
     public static final String RANKING_URL = "https://cellion.org/rankings";
-    public static final String CS_BANNER_URL = "https://static.cellion.org/cellion/ingame/cs_banner/welcome.jpg";
+    private static final Charset ASCII = Charset.forName("US-ASCII");
+    //public static final String CS_BANNER_URL = HexTool.toString("https://static.cellion.org/cellion/ingame/cs_banner/welcome.jpg".getBytes(ASCII)).toUpperCase(); //needs length too
+    public static final String CS_BANNER_URL = "3F 00 68 74 74 70 73 3a 2f 2f 73 74 61 74 69 63 2e 63 65 6c 6c 69 6f 6e 2e 6f 72 67 2f 63 65 6c 6c 69 6f 6e 2f 69 6e 67 61 6d 65 2f 63 73 5f 62 61 6e 6e 65 72 2f 77 65 6c 63 6f 6d 65 2e 6a 70 67".toUpperCase();
     public static final byte[] NEXON_IP = new byte[]{(byte) 8, (byte) 31, (byte) 99, (byte) 141};//8.31.99.141
     public static final byte[] NEXON_CHAT_IP = new byte[]{(byte) 8, (byte) 31, (byte) 99, (byte) 133};
     public static final int CHARACTER_LIMIT = 16;
@@ -105,8 +109,8 @@ public class ServerConstants {
     public static final float CUSTOM_MAP_BUFFED_SPAWN_RATE = 1.45F; //Multiply the custom buffed maps spawn rate by this variable.
 
     /*Tutorial Configuration*/
-    public static final boolean UNIVERSAL_START = false; //If true, all classes start in the custom tutorial intro.
-    public static final int UNIVERSAL_START_MAP = 552000010; //All classes start on this map if the boolean above is true.
+    public static final boolean UNIVERSAL_START = true; //If true, all classes start in the custom tutorial intro.
+    public static final int UNIVERSAL_START_MAP = 100000000; //All classes start on this map if the boolean above is true.
 
     /*Events*/
     public static boolean BURNING_CHARACTER_EVENT = false;

@@ -10,9 +10,10 @@ package server.api;
  * @author William
  */
 public interface ApiReturnCode {
+
     int getValue();
-    
+
     String getMessage();
-    
+
     String getType();
 }

@@ -664,13 +664,6 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
             }
         }
 
-        // Broadcast effect to other players.
-        if (!GameConstants.nonForeignEffect(nSkill)) {
-            if (pEffect.statups.containsKey(CharacterTemporaryStat.RideVehicle) || pEffect.statups.containsKey(CharacterTemporaryStat.Morph)) {
-                pPlayer.getMap().broadcastMessage(c.getPlayer(), BuffPacket.giveForeignBuff(pPlayer), false);
-            }
-        }
-
         c.SendPacket(CWvsContext.enableActions());
     }
 }

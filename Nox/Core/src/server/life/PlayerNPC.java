@@ -66,16 +66,23 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
             }
         }
 
-        try (PreparedStatement ps = Database.GetConnection().prepareStatement("SELECT * FROM playernpcs_equip WHERE NpcId = ?")) {
-            ps.setInt(1, getId());
-            try (ResultSet rs2 = ps.executeQuery()) {
-                while (rs2.next()) {
-                    equips.put((short) rs2.getByte("equippos"), rs2.getInt("equipid"));
-                    secondEquips.put((short) rs2.getByte("equippos"), rs2.getInt("equipid"));
+        try (Connection con = Database.GetConnection()) {
+
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
+
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM playernpcs_equip WHERE NpcId = ?")) {
+                ps.setInt(1, getId());
+                try (ResultSet rs2 = ps.executeQuery()) {
+                    while (rs2.next()) {
+                        equips.put((short) rs2.getByte("equippos"), rs2.getInt("equipid"));
+                        secondEquips.put((short) rs2.getByte("equippos"), rs2.getInt("equipid"));
+                    }
                 }
+                ps.close();
             }
-            ps.close();
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public PlayerNPC(User cid, int npc, MapleMap map, User base) {
@@ -104,14 +111,18 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
     public static void loadAll() {
         List<PlayerNPC> toAdd = new ArrayList<>();
         try (Connection con = Database.GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM playernpcs"); ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     toAdd.add(new PlayerNPC(rs));
                 }
             }
         } catch (Exception se) {
+            se.printStackTrace();
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         for (PlayerNPC npc : toAdd) {
             npc.addToServer();
         }
@@ -182,7 +193,8 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
 
     public void destroy(boolean remove) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             PreparedStatement ps = con.prepareStatement("DELETE FROM playernpcs WHERE scriptid = ?");
             ps.setInt(1, getId());
             ps.executeUpdate();
@@ -198,11 +210,13 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public void saveToDB() {
         try (Connection con = Database.GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             if (getNPCFromWZ() == null) {
                 destroy(true);
@@ -250,6 +264,8 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
         } catch (SQLException se) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", se);
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     @Override

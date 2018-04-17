@@ -240,7 +240,7 @@ public class ApiFactory {
                     c.SendPacket(CLogin.getLoginFailed(6));
                     return;
                 }
-                
+
                 System.out.println(response.code());
 
                 Token data = getGson().fromJson(response.body().string(), Token.class);

@@ -146,7 +146,8 @@ public class CharacterCardFactory {
     public Map<Integer, Pair<Short, Short>> loadCharactersInfo(int accId, int serverId) {
         Map<Integer, Pair<Short, Short>> chars = new HashMap<>();
         try (Connection con = Database.GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             try (PreparedStatement ps = con.prepareStatement("SELECT id, level, job FROM characters WHERE  deletedAt is null AND accountid = ? AND world = ?")) {
                 ps.setInt(1, accId);
                 ps.setInt(2, serverId);
@@ -159,6 +160,8 @@ public class CharacterCardFactory {
         } catch (SQLException e) {
             System.err.println("error loading characters info. reason: " + e.toString());
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return chars;
     }
 }

@@ -116,7 +116,8 @@ public class Start {
         System.setProperty("wzpath", "wz");
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin = 0")) {
                 ps.executeUpdate();
                 System.out.println("Database Connection Established");
@@ -124,6 +125,7 @@ public class Start {
         } catch (SQLException ex) {
             throw new RuntimeException("Runtime Exception - Could not connect to MySql Server.");
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         System.out.println("\nLoading " + ServerConstants.SERVER_NAME + ": MAPLESTORY VERSION " + ServerConstants.MAPLE_VERSION);
 
@@ -329,18 +331,18 @@ public class Start {
         long now = System.currentTimeMillis() - start;
         long seconds = now / 1000;
         long ms = now % 1000;
-        
+
         if (!ServerConstants.DEVMODE) {
             try {
                 ApiFactory.getFactory().ping(new ApiCallback() {
-                   @Override
-                   public void onSuccess() {
-                       
-                   }
+                    @Override
+                    public void onSuccess() {
 
-                   @Override
-                   public void onFail() {
-                   }
+                    }
+
+                    @Override
+                    public void onFail() {
+                    }
                 });
 
                 ApiFactory.getFactory().getServerAuthToken();
@@ -353,8 +355,8 @@ public class Start {
             }
             LogHelper.CONSOLE.get().info("Cellion API initialized");
         }
- 
-        if(!ServerConstants.DEVMODE) {
+
+        if (!ServerConstants.DEVMODE) {
             queue = new QueueWorker();
             queue.start();
         }

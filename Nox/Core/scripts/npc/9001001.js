@@ -24,6 +24,7 @@ var lockedText2 = "";
 
 var fifthJobText = "";
 var eventText = "";
+var questText = "";
 
 function start() {
 	status = -1;
@@ -67,21 +68,22 @@ function action(mode, type, selection) {
 		if (status == 0) {
 			
 			if (cm.getPlayer().getLevel() >= 200 && !cm.isQuestFinished(1460)) {
-				fifthJobText += "#L99##fs13##dAdvance to Fifth Job & Obtain V:Matrix!#r#fs11##l\r\n\r\n" 
+				fifthJobText += "#L99##fs13##dAdvance to Fifth Job & Obtain V:Matrix!#r#fs11##l\r\n" 
 			}
 			
-			cm.sendNextPrevS("#rALPHA TESTER DEBUG MENU#b\r\n\r\n" 
+			questText += cm.getPlayer().getInfoQuest(13337) == "" ? 0 : cm.getPlayer().getInfoQuest(13337);
 			
-						+ "You've killed " 
-						+ cm.getPlayer().getInfoQuest(13337) == "" ? 0 : cm.getPlayer().getInfoQuest(13337) 
-						+ "/10000 mobs required to unluck the secret outfit upon release.\r\n\r\n"
+			
+			
+			cm.sendNext("#rALPHA TESTER DEBUG MENU\r\n\r\n#kYou've killed #b"
+						+ questText 
+						+ "/10000 mobs #krequired to unlock the secret outfit upon release.\r\n"
 						
 						+ fifthJobText
 						
-						+ "#L100#Warp to a location.#l\r\n" 
-						+ "#L101#Open general store.#l\r\n"
-						+ "#L105#Drop CASH/ETC Items#l\r\n"
-						, 2);
+						+ "#b#L100#Warp to a location.#l\r\n" 
+						+ "#b#L101#Open general store.#l\r\n"
+						+ "#b#L105#Drop CASH/ETC Items#l");
 						
 		} else if(status == 1) {
 			
@@ -94,11 +96,11 @@ function action(mode, type, selection) {
 						lockedText2 = " (Unlocked at Level " + bossMapReqLevel + ")";
 					}
 				
-					cm.sendNextPrevS("What type of area do you plan on visiting?\r\n"
+					cm.sendNextPrev("What type of area do you plan on visiting?\r\n"
 						+ "#b#L200#Towns#l\r\n"
-						+ "#r#L201#Monster Zones" + lockedText1 + "#l\r\n"
-						+ "#L202#Boss Arenas" + lockedText2 + "#l\r\n\r\n"
-						+ "#d#L203#Free - Return to Henesys", 2);
+						+ "#b#L201#Monster Zones" + lockedText1 + "#l\r\n"
+						+ "#b#L202#Boss Arenas" + lockedText2 + "#l\r\n\r\n"
+						+ "#r#L203#Return to Henesys#l");
 					break;
 				case 101:
 					cm.dispose();

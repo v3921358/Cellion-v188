@@ -10,8 +10,9 @@ package server.api.data;
  * @author Tyler
  */
 public class UserAccess {
-	public int user_id;
-	public int product_id;
-	public String access_code;
-	public String access_data;
+
+    public int user_id;
+    public int product_id;
+    public String access_code;
+    public String access_data;
 }

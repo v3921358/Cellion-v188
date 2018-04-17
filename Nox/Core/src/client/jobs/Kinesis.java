@@ -4,20 +4,11 @@
 package client.jobs;
 
 import client.CharacterTemporaryStat;
-import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
-import net.InPacket;
 import server.MapleStatEffect;
-import server.MapleStatInfo;
-import server.life.Mob;
 import server.maps.objects.User;
 import tools.packet.BuffPacket;
-import tools.packet.JobPacket;
-import constants.GameConstants;
 import tools.packet.JobPacket.KinesisPacket;
 
 /**

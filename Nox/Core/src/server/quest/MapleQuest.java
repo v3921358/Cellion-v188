@@ -157,7 +157,8 @@ public class MapleQuest implements Serializable {
 
     public static void initQuests() {
         try (Connection con = Database.GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             PreparedStatement psr;
             PreparedStatement psa;
             PreparedStatement pss;
@@ -197,6 +198,7 @@ public class MapleQuest implements Serializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
     }
 
     public static MapleQuest getInstance(int id) {

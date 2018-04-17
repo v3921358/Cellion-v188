@@ -15,8 +15,8 @@ import tools.packet.CLogin;
  *
  * @author Kaz Voeten
  */
-public class OnSelectWorld implements ProcessPacket<MapleClient>  {
-    
+public class OnSelectWorld implements ProcessPacket<MapleClient> {
+
     public static void checkLumiereAccount(MapleClient c, UserInfo data) {
         if (data.getError() == "unauthorized" || data.getId() == 0) { // The last should never ever be sent by the API since the endpoint is called directly from the database, but just in case.
             c.SendPacket(CLogin.getLoginFailed(8));
@@ -28,7 +28,7 @@ public class OnSelectWorld implements ProcessPacket<MapleClient>  {
             c.SendPacket(CLogin.getLoginFailed(16));
             return;
         }
-        
+
         //login(c, data);
     }
 
@@ -42,14 +42,12 @@ public class OnSelectWorld implements ProcessPacket<MapleClient>  {
         if (!iPacket.DecodeBool()) {
             return;
         }
-        
+
         pClient.sAccountToken = iPacket.DecodeString();
         iPacket.Skip(21);
-        
-        
-        
+
         pClient.setWorld(iPacket.Decode());
         pClient.setChannel(iPacket.Decode());
-        
+
     }
 }

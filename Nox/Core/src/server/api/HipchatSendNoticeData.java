@@ -7,12 +7,14 @@ package server.api;
 
 /**
  * Class to hold information about a HipChat notice to be sent.
+ *
  * @author Tyler
  */
 public class HipchatSendNoticeData {
-	public String content;
-	
-	public HipchatSendNoticeData(String message) {
-		this.content = message;
-	}
+
+    public String content;
+
+    public HipchatSendNoticeData(String message) {
+        this.content = message;
+    }
 }

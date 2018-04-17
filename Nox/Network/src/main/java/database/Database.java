@@ -64,4 +64,8 @@ public class Database {
     public static Connection GetConnection() throws SQLException {
         return ds.getConnection();
     }
+    
+    public static String GetPoolStats() {
+        return "Connections: " + ds.getHikariPoolMXBean().getActiveConnections() + " | " + ds.getHikariPoolMXBean().getIdleConnections();
+    }
 }

@@ -26,6 +26,8 @@ import database.Database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.InPacket;
 import tools.packet.CSPacket;
 import net.ProcessPacket;
@@ -49,20 +51,27 @@ public final class CashCategorySwitch implements ProcessPacket<MapleClient> {
             case 103:
                 iPacket.Skip(1);
                 int itemSn = iPacket.DecodeInt();
-                try (PreparedStatement ps = Database.GetConnection().prepareStatement("INSERT INTO `wishlist` VALUES (?, ?)")) {
-                    ps.setInt(1, c.getPlayer().getId());
-                    ps.setInt(2, itemSn);
-                    ps.executeUpdate();
-                    ps.close();
+                try (Connection con = Database.GetConnection()) {
+                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO `wishlist` VALUES (?, ?)")) {
+                        ps.setInt(1, c.getPlayer().getId());
+                        ps.setInt(2, itemSn);
+                        ps.executeUpdate();
+                        ps.close();
+                    } catch (SQLException ex) {
+                        LogHelper.SQL.get().info("[MapleClient] Failed altering wishlist:\n", ex);
+                    }
                 } catch (SQLException ex) {
-                    LogHelper.SQL.get().info("[MapleClient] Failed altering wishlist:\n", ex);
+                    Logger.getLogger(CashCategorySwitch.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
                 c.SendPacket(CSPacket.addFavorite(false, itemSn));
                 break;
             case 105:
                 int item = iPacket.DecodeInt();
                 try (Connection con = Database.GetConnection()) {
-                    System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+                    System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
                     try (PreparedStatement ps = con.prepareStatement("UPDATE cashshop_items SET likes = likes+" + 1 + " WHERE sn = ?")) {
                         ps.setInt(1, item);
                         ps.executeUpdate();
@@ -70,6 +79,8 @@ public final class CashCategorySwitch implements ProcessPacket<MapleClient> {
                 } catch (SQLException ex) {
                     LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
                 }
+                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
                 c.SendPacket(CSPacket.Like(item));
                 break;
             case 109:

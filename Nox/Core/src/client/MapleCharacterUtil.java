@@ -46,20 +46,27 @@ public class MapleCharacterUtil {
 
     public static int getIdByName(final String name) {
         final int id;
+        try (Connection con = Database.GetConnection()) {
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
-        try (PreparedStatement ps = Database.GetConnection().prepareStatement("SELECT id FROM characters WHERE name = ? AND deletedAt is null LIMIT 1")) {
-            ps.setString(1, name);
+            try (PreparedStatement ps = con.prepareStatement("SELECT id FROM characters WHERE name = ? AND deletedAt is null LIMIT 1")) {
+                ps.setString(1, name);
 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next()) {
-                    return -1;
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (!rs.next()) {
+                        return -1;
+                    }
+                    id = rs.getInt("id");
                 }
-                id = rs.getInt("id");
+            } catch (SQLException exp) {
+                LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", exp);
+                return -1;
             }
         } catch (SQLException exp) {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", exp);
             return -1;
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
         return id;
     }
 
@@ -70,7 +77,8 @@ public class MapleCharacterUtil {
     // 2 = Password Changed successfully
     public static int Change_SecondPassword(final int accid, final String password, final String newpassword) {
         try (Connection con = Database.GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             try (PreparedStatement ps = con.prepareStatement("SELECT * from accounts where id = ?")) {
                 ps.setInt(1, accid);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -115,6 +123,7 @@ public class MapleCharacterUtil {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
             return -2;
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
         return -2;
     }
@@ -123,61 +132,84 @@ public class MapleCharacterUtil {
     public static Triple<Integer, Integer, Integer> getInfoByName(String name, int world) {
 
         Triple<Integer, Integer, Integer> id = null;
-        try (PreparedStatement ps = Database.GetConnection().prepareStatement("SELECT * FROM characters WHERE name = ? AND world = ? AND deletedAt is null")) {
-            ps.setString(1, name);
-            ps.setInt(2, world);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next()) {
-                    rs.close();
-                    ps.close();
-                    return null;
+        try (Connection con = Database.GetConnection()) {
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM characters WHERE name = ? AND world = ? AND deletedAt is null")) {
+                ps.setString(1, name);
+                ps.setInt(2, world);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (!rs.next()) {
+                        rs.close();
+                        ps.close();
+                        return null;
+                    }
+                    id = new Triple<>(rs.getInt("id"), rs.getInt("accountid"), rs.getInt("gender"));
                 }
-                id = new Triple<>(rs.getInt("id"), rs.getInt("accountid"), rs.getInt("gender"));
+            } catch (Exception e) {
+                LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
             }
         } catch (Exception e) {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
         return id;
     }
 
     public static void setNXCodeUsed(String name, String code) throws SQLException {
+        try (Connection con = Database.GetConnection()) {
 
-        try (PreparedStatement ps = Database.GetConnection().prepareStatement("UPDATE nxcode SET `user` = ?, `valid` = 0 WHERE code = ?")) {
-            ps.setString(1, name);
-            ps.setString(2, code);
-            ps.execute();
-        } catch (Exception e) {
-            LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
-        }
-    }
-
-    public static void sendNote(String to, String name, String msg, int fame) {
-
-        try (PreparedStatement ps = Database.GetConnection().prepareStatement("INSERT INTO notes (`to`, `from`, `message`, `timestamp`, `gift`) VALUES (?, ?, ?, ?, ?)")) {
-            ps.setString(1, to);
-            ps.setString(2, name);
-            ps.setString(3, msg);
-            ps.setLong(4, System.currentTimeMillis());
-            ps.setInt(5, fame);
-            ps.executeUpdate();
-        } catch (Exception e) {
-            LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
-        }
-    }
-
-    public static Triple<Boolean, Integer, Integer> getNXCodeInfo(String code) throws SQLException {
-        Triple<Boolean, Integer, Integer> ret = null;
-
-        try (PreparedStatement ps = Database.GetConnection().prepareStatement("SELECT `valid`, `type`, `item` FROM nxcode WHERE code LIKE ?")) {
-            ps.setString(1, code);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    ret = new Triple<>(rs.getInt("valid") > 0, rs.getInt("type"), rs.getInt("item"));
-                }
+            try (PreparedStatement ps = con.prepareStatement("UPDATE nxcode SET `user` = ?, `valid` = 0 WHERE code = ?")) {
+                ps.setString(1, name);
+                ps.setString(2, code);
+                ps.execute();
+            } catch (Exception e) {
+                LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
             }
         } catch (Exception e) {
             LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
+    }
+
+    public static void sendNote(String to, String name, String msg, int fame) {
+        try (Connection con = Database.GetConnection()) {
+
+            try (PreparedStatement ps = con.prepareStatement("INSERT INTO notes (`to`, `from`, `message`, `timestamp`, `gift`) VALUES (?, ?, ?, ?, ?)")) {
+                ps.setString(1, to);
+                ps.setString(2, name);
+                ps.setString(3, msg);
+                ps.setLong(4, System.currentTimeMillis());
+                ps.setInt(5, fame);
+                ps.executeUpdate();
+            } catch (Exception e) {
+                LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
+            }
+        } catch (Exception e) {
+            LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
+        }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
+    }
+
+    public static Triple<Boolean, Integer, Integer> getNXCodeInfo(String code) throws SQLException {
+        Triple<Boolean, Integer, Integer> ret = null;
+        try (Connection con = Database.GetConnection()) {
+
+            try (PreparedStatement ps = con.prepareStatement("SELECT `valid`, `type`, `item` FROM nxcode WHERE code LIKE ?")) {
+                ps.setString(1, code);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        ret = new Triple<>(rs.getInt("valid") > 0, rs.getInt("type"), rs.getInt("item"));
+                    }
+                }
+            } catch (Exception e) {
+                LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
+            }
+        } catch (Exception e) {
+            LogHelper.SQL.get().info("There was an issue with something from the database the database:\n", e);
+        }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return ret;
     }
 }

@@ -334,7 +334,7 @@ public class PlayerCommand {
             c.getPlayer().yellowMessage("@support <message> : Send a message to availible staff members.");
             c.getPlayer().yellowMessage("@dispose : Enables your character's actions when stuck.");
             c.getPlayer().yellowMessage("@event : Quick travel to the current event, if available.");
-            c.getPlayer().yellowMessage("@alpha : Open the ALPHA debuf menu.");
+            c.getPlayer().yellowMessage("@alpha : Open the ALPHA debug menu.");
             c.getPlayer().yellowMessage("@online : Display the current online players.");
             c.getPlayer().yellowMessage("@mob : Display information on closest monster.");
             c.getPlayer().yellowMessage("@fm : Quick travel to the Free Market.");
@@ -347,7 +347,7 @@ public class PlayerCommand {
         }
     }
 
-    public static class Cellion extends CommandExecute {
+    public static class Alpha extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {

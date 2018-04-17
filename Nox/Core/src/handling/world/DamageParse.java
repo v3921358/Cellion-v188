@@ -1053,9 +1053,9 @@ public class DamageParse {
                     final long totalEXPGained = (long) (((long) (expRate_Server * monsterExp)) * (additionalExpPercentage * 0.01f));
 
                     player.gainExp(totalEXPGained, false, false, false);
-                    
+
                     player.incrementKillQuestAlpha();
-                            
+
                     player.getClient().SendPacket(CWvsContext.messagePacket(new StylishKillMessage(StylishKillMessageType.MultiKill, totalEXPGained, numMultiKills)));
                 }
 

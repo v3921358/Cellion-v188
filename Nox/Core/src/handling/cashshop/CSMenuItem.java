@@ -18,7 +18,8 @@ public class CSMenuItem {
 
     public static void loadFromDb() {
         try (Connection con = Database.GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             try (ResultSet rs = con.prepareStatement("SELECT * FROM cs_picture").executeQuery()) {
                 while (rs.next()) {
                     pictureItems.add(new CSMenuItem(
@@ -41,6 +42,7 @@ public class CSMenuItem {
         } catch (SQLException ex) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
 
     }
     private int c, sc, p, i, sn, id, op, sp, qty, dur, likes;

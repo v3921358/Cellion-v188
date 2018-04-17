@@ -103,102 +103,107 @@ public class QueueWorker extends Thread {
     }
 
     private boolean processCommand(QueueItem item) throws SQLException {
-        Connection con = Database.GetConnection();
         User chr = null;
 
         QueueCommand command = QueueCommand.valueOf(item.action);
 
-        switch (command) {
-            case GIVE_NX:
-                String payloadUnescape = item.payload.replaceAll("\\\\", "");
-                NXPayload payload = ApiFactory.getFactory().getGson().fromJson(payloadUnescape, NXPayload.class);
-                int accountId = payload.lumiere_id;
-                int amount = payload.nx_amount;
+        try (Connection con = Database.GetConnection()) {
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+            switch (command) {
+                case GIVE_NX:
+                    String payloadUnescape = item.payload.replaceAll("\\\\", "");
+                    NXPayload payload = ApiFactory.getFactory().getGson().fromJson(payloadUnescape, NXPayload.class);
+                    int accountId = payload.lumiere_id;
+                    int amount = payload.nx_amount;
 
-                int[] charIdList = new int[16];
+                    int[] charIdList = new int[16];
+                    try (PreparedStatement ps = con.prepareStatement("SELECT id FROM `accounts` WHERE `authID` = ?")) {
+                        ps.setInt(1, accountId);
+                        ResultSet rs = ps.executeQuery();
 
-                try (PreparedStatement ps = con.prepareStatement("SELECT id FROM `accounts` WHERE `authID` = ?")) {
-                    ps.setInt(1, accountId);
-                    ResultSet rs = ps.executeQuery();
-
-                    if (!rs.next()) // The account doesn't exist in the game database yet.
-                    {
-                        return false;
-                    }
-                    rs.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-
-                try (PreparedStatement ps = con.prepareStatement("SELECT `characters`.`id` FROM `characters` "
-                        + "LEFT JOIN `accounts` ON `accounts`.`id` = `characters`.`accountid` "
-                        + "WHERE `characters`.`deleted` = 0 AND `accounts`.`authID` = ?")) {
-                    ps.setInt(1, accountId);
-                    ResultSet rs = ps.executeQuery();
-
-                    int i = 0;
-                    while (rs.next()) {
-                        charIdList[i] = rs.getInt("id");
-                        i++;
-                        if (i > 15) {
-                            break;
+                        if (!rs.next()) // The account doesn't exist in the game database yet.
+                        {
+                            return false;
                         }
-                    }
-
-                    rs.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-
-                boolean online = false;
-
-                worldSearch:
-                { // TODO: Clean this up a bit..
-                    for (ChannelServer w : ChannelServer.getAllInstances()) {
-                        for (int id : charIdList) {
-                            if (id == 0) {
-                                break;
-                            }
-
-                            chr = w.getPlayerStorage().getCharacterById(id);
-
-                            if (chr != null) {
-                                break worldSearch;
-                            }
-                        }
-                    }
-                }
-                if (chr != null) {
-                    // Ok, so the player is online. Just give them the points and send them the message.
-                    chr.modifyCSPoints(1, amount);
-                    chr.dropMessage(5, "Thank you for voting for Rien. " + amount + " NX has been dispatched to your account.");
-                } else {
-                    // So the player is offline. Lets just update the database and give them the amount.
-                    String type = "nxCredit";
-
-                    try (PreparedStatement ps = con.prepareStatement("UPDATE `accounts` SET `" + type + "` = `" + type + "` + ? WHERE `authID` = ?;")) {
-                        ps.setInt(1, amount);
-                        ps.setInt(2, accountId);
-                        ps.execute();
+                        rs.close();
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     }
-                }
-                break;
-            case SEND_NOTICE: // Not implemented.
-                break;
-            case PIC_RESET:
-                String picPayloadStr = item.payload.replaceAll("\\\\", "");
-                Payload picPayload = ApiFactory.getFactory().getGson().fromJson(picPayloadStr, Payload.class);
-                try (PreparedStatement ps = con.prepareStatement("UPDATE `accounts` SET `pic` = NULL WHERE `authID` = ?")) {
-                    ps.setInt(1, picPayload.lumiere_id);
-                    ps.execute();
-                }
-                break;
-            case SET_EXP_MULTIPLIER:
-                //not implemented rn
-                break;
+
+                    try (PreparedStatement ps = con.prepareStatement("SELECT `characters`.`id` FROM `characters` "
+                            + "LEFT JOIN `accounts` ON `accounts`.`id` = `characters`.`accountid` "
+                            + "WHERE `accounts`.`authID` = ?")) {
+                        ps.setInt(1, accountId);
+                        ResultSet rs = ps.executeQuery();
+
+                        int i = 0;
+                        while (rs.next()) {
+                            charIdList[i] = rs.getInt("id");
+                            i++;
+                            if (i > 15) {
+                                break;
+                            }
+                        }
+
+                        rs.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    boolean online = false;
+
+                    worldSearch:
+                    { // TODO: Clean this up a bit..
+                        for (ChannelServer w : ChannelServer.getAllInstances()) {
+                            for (int id : charIdList) {
+                                if (id == 0) {
+                                    break;
+                                }
+
+                                chr = w.getPlayerStorage().getCharacterById(id);
+
+                                if (chr != null) {
+                                    break worldSearch;
+                                }
+                            }
+                        }
+                    }
+                    if (chr != null) {
+                        // Ok, so the player is online. Just give them the points and send them the message.
+                        chr.modifyCSPoints(1, amount);
+                        chr.dropMessage(5, "Thank you for voting for Rien. " + amount + " NX has been dispatched to your account.");
+                    } else {
+                        // So the player is offline. Lets just update the database and give them the amount.
+                        String type = "nxCredit";
+
+                        try (PreparedStatement ps = con.prepareStatement("UPDATE `accounts` SET `" + type + "` = `" + type + "` + ? WHERE `authID` = ?;")) {
+                            ps.setInt(1, amount);
+                            ps.setInt(2, accountId);
+                            ps.execute();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    break;
+                case SEND_NOTICE: // Not implemented.
+                    break;
+                case PIC_RESET:
+                    String picPayloadStr = item.payload.replaceAll("\\\\", "");
+                    Payload picPayload = ApiFactory.getFactory().getGson().fromJson(picPayloadStr, Payload.class);
+                    try (PreparedStatement ps = con.prepareStatement("UPDATE `accounts` SET `pic` = NULL WHERE `authID` = ?")) {
+                        ps.setInt(1, picPayload.lumiere_id);
+                        ps.execute();
+                    }
+                    break;
+                case SET_EXP_MULTIPLIER:
+                    //not implemented rn
+                    break;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         return true;
     }
 

@@ -372,7 +372,9 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
                                 break; // Doesn't display these packets, prevents major console spam.
                             }
                         default:
-                            System.out.printf("[Recv Operation] %s (%d) : %s%n", head, packetId, iPacket.toString());
+                            if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
+                                System.out.printf("[Recv Operation] %s (%d) : %s%n", head, packetId, iPacket.toString());
+                            }
                             break;
                     }
                     handler.Process(ClientSocket, iPacket);

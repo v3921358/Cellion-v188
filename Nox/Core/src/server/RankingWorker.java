@@ -34,11 +34,14 @@ public class RankingWorker {
         //long startTime = System.currentTimeMillis();
         loadJobCommands();
         try (Connection con = Database.GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             updateRanking(con);
         } catch (Exception ex) {
             LogHelper.SQL.get().info("Could not update rankings:\n{}", ex);
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     private static void updateRanking(Connection con) throws Exception {

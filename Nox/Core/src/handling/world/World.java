@@ -206,11 +206,19 @@ public class World {
         private static final AtomicInteger runningPartyId = new AtomicInteger(1), runningExpedId = new AtomicInteger(1);
 
         static {
-            try (PreparedStatement ps = Database.GetConnection().prepareStatement("UPDATE characters SET party = -1, fatigue = 0")) {
-                ps.executeUpdate();
+            try (Connection con = Database.GetConnection()) {
+                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
+
+                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET party = -1, fatigue = 0")) {
+                    ps.executeUpdate();
+                } catch (SQLException e) {
+                    LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
+                }
             } catch (SQLException e) {
                 LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             }
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
             for (PartySearchType pst : PartySearchType.values()) {
                 searches.put(pst, new ArrayList<PartySearch>()); //according to client, max 10, even though theres page numbers ?!
             }
@@ -1845,12 +1853,21 @@ public class World {
 
         //TODO: test the achievement reset
         if (getHour() == 0 && getMinute() >= 0 && getMinute() <= 1) { //not sure if put it here
-            try (PreparedStatement ps = Database.GetConnection().prepareStatement("DELETE FROM `moonlightachievements` where achievementid > 0;")) {
-                ps.executeUpdate();
-                ps.close();
+            try (Connection con = Database.GetConnection()) {
+
+                System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Open");
+
+                try (PreparedStatement ps = con.prepareStatement("DELETE FROM `moonlightachievements` where achievementid > 0;")) {
+                    ps.executeUpdate();
+                    ps.close();
+                } catch (SQLException ex) {
+                    LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
+                }
             } catch (SQLException ex) {
                 LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
             }
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
         }
         if (map.getAllMapObjectSize(MapleMapObjectType.ITEM) > 0) {
             for (MapleMapObject o : map.getAllMapObjects(MapleMapObjectType.ITEM)) {

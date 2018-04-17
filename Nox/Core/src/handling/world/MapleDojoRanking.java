@@ -54,7 +54,8 @@ public class MapleDojoRanking {
         PreparedStatement ps;
         ResultSet rs;
         try (Connection con = Database.GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             ps = con.prepareStatement("SELECT * FROM dojorankings ORDER BY `rank` DESC LIMIT 50");
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -66,6 +67,8 @@ public class MapleDojoRanking {
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public static class DojoRankingInfo {

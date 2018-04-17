@@ -77,7 +77,8 @@ public class ReactorScriptManager extends AbstractScriptManager {
         ResultSet rs = null;
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
+
             ps = con.prepareStatement("SELECT * FROM reactordrops WHERE reactorid = ?");
             ps.setInt(1, rid);
             rs = ps.executeQuery();
@@ -91,6 +92,8 @@ public class ReactorScriptManager extends AbstractScriptManager {
             System.err.println("Could not retrieve drops for reactor " + rid + e);
             return ret;
         } finally {
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
             try {
                 if (rs != null) {
                     rs.close();

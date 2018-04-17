@@ -10,94 +10,97 @@ package server.api;
  * @author Tyler
  */
 public class PurchaseResponseData {
-	private boolean success = false;
-	private String error;
-	private PurchaseInfo purchase_info;
-	private ItemDetails item_details;
-	
-	
-	public class PurchaseInfo {
-		private int product_id;
-		private int user_id;
-		private int previous_lp_total;
-		private int current_lp_total;
-		private String order_id;
-		
-		public int getProductId() {
-			return product_id;
-		}
 
-		public int getUserId() {
-			return user_id;
-		}
+    private boolean success = false;
+    private String error;
+    private PurchaseInfo purchase_info;
+    private ItemDetails item_details;
 
-		public int getPreviousLPTotal() {
-			return previous_lp_total;
-		}
+    public class PurchaseInfo {
 
-		public int getCurrentLPTotal() {
-			return current_lp_total;
-		}
+        private int product_id;
+        private int user_id;
+        private int previous_lp_total;
+        private int current_lp_total;
+        private String order_id;
 
-		public String getOrderId() {
-			return order_id;
-		}
-	}
-	
-	public class ItemDetails {
-		private Item[] items;
+        public int getProductId() {
+            return product_id;
+        }
 
-		public Item[] getItems() {
-			return items;
-		}
-		
-		public class Item {
-			private int item_id;
-			private String item_name;
-			private String item_description;
-			private int item_status;
-			private int item_price;
-			private int category_id;
+        public int getUserId() {
+            return user_id;
+        }
 
-			public int getItemId() {
-				return item_id;
-			}
+        public int getPreviousLPTotal() {
+            return previous_lp_total;
+        }
 
-			public String getItemName() {
-				return item_name;
-			}
+        public int getCurrentLPTotal() {
+            return current_lp_total;
+        }
 
-			public String getItemDescription() {
-				return item_description;
-			}
+        public String getOrderId() {
+            return order_id;
+        }
+    }
 
-			public int getItemStatus() {
-				return item_status;
-			}
+    public class ItemDetails {
 
-			public int getItemPrice() {
-				return item_price;
-			}
+        private Item[] items;
 
-			public int getCategoryId() {
-				return category_id;
-			}
-		}
-	}
-	
-	public boolean isSuccess() {
-		return success;
-	}
+        public Item[] getItems() {
+            return items;
+        }
 
-	public String getError() {
-		return error;
-	}
+        public class Item {
 
-	public PurchaseInfo getPurchaseInfo() {
-		return purchase_info;
-	}
+            private int item_id;
+            private String item_name;
+            private String item_description;
+            private int item_status;
+            private int item_price;
+            private int category_id;
 
-	public ItemDetails getItemDetails() {
-		return item_details;
-	}
+            public int getItemId() {
+                return item_id;
+            }
+
+            public String getItemName() {
+                return item_name;
+            }
+
+            public String getItemDescription() {
+                return item_description;
+            }
+
+            public int getItemStatus() {
+                return item_status;
+            }
+
+            public int getItemPrice() {
+                return item_price;
+            }
+
+            public int getCategoryId() {
+                return category_id;
+            }
+        }
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public PurchaseInfo getPurchaseInfo() {
+        return purchase_info;
+    }
+
+    public ItemDetails getItemDetails() {
+        return item_details;
+    }
 }

@@ -245,7 +245,7 @@ public class MapleItemInformationProvider {
         }
 
         try (Connection con = Database.GetConnection()) {
-            System.out.println(Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName());
+            System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Opening");
 
             // Load Item Data
             PreparedStatement ps = con.prepareStatement("SELECT * FROM wz_itemdata");
@@ -303,6 +303,8 @@ public class MapleItemInformationProvider {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        System.out.println("[" + Thread.currentThread().getStackTrace()[2].getClassName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName() + "] " + Database.GetPoolStats() + " Closing");
+
     }
 
     public void finalizeEquipData(ItemInformation item) {

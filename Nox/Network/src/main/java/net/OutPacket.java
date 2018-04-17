@@ -22,6 +22,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import util.HexUtils;
 
 /**
@@ -143,6 +144,7 @@ public class OutPacket {
         byte[] aData = new byte[pSendBuff.readableBytes()];
         int nReaderIndex = pSendBuff.readerIndex();
         pSendBuff.getBytes(nReaderIndex, aData);
+        pSendBuff.readerIndex(nReaderIndex);
         return HexUtils.ToHex(aData);
     }
 
@@ -153,6 +155,7 @@ public class OutPacket {
         return aData;
     }
     
+    //Might be broken~!
     public OutPacket Clone() {
         return (new OutPacket((short) nPacketID)).Encode(this.GetData());
     }
