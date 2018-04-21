@@ -40,6 +40,7 @@ import server.Timer.MapTimer;
 import server.Timer.PingTimer;
 import server.Timer.WorldTimer;
 import server.api.ApiCallback;
+import server.api.ApiConstants;
 import server.api.ApiFactory;
 import server.api.ApiRuntimeException;
 import server.skills.effects.manager.EffectManager;
@@ -83,6 +84,11 @@ public class Start {
         /*Setting Debug Configuration*/
         ServerConstants.DEVELOPER_DEBUG_MODE = Boolean.valueOf(config.getProperty("DEBUG"));
         ServerConstants.DEVELOPER_PACKET_DEBUG_MODE = Boolean.valueOf(config.getProperty("PACKET_DEBUG"));
+        
+        /*Setting API Configuration*/
+        ApiConstants.PRODUCT_ID = config.getProperty("CLIENT_ID");
+        ApiConstants.CLIENT_ID = config.getProperty("CLIENT_ID");
+        ApiConstants.CLIENT_SECRET = config.getProperty("CLIENT_SECRET");
 
         /*Setting Maintenance Configuration*/
         ServerConstants.MAINTENANCE = Boolean.valueOf(config.getProperty("MAINTENANCE"));

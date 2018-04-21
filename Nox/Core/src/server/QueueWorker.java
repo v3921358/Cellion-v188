@@ -171,7 +171,7 @@ public class QueueWorker extends Thread {
                     if (chr != null) {
                         // Ok, so the player is online. Just give them the points and send them the message.
                         chr.modifyCSPoints(1, amount);
-                        chr.dropMessage(5, "Thank you for voting for Rien. " + amount + " NX has been dispatched to your account.");
+                        chr.dropMessage(5, "Thank you for voting for Cellion. " + amount + " NX has been dispatched to your account.");
                     } else {
                         // So the player is offline. Lets just update the database and give them the amount.
                         String type = "nxCredit";

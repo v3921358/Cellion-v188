@@ -55,6 +55,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.logging.Logger;
 import net.OutPacket;
 import scripting.provider.MapScriptManager;
 import tools.LogHelper;
@@ -3838,6 +3839,8 @@ public final class MapleMap {
                         ret.add(mmo);
                     }
                 }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             } finally {
                 mapobjectlocks.get(type).readLock().unlock();
             }

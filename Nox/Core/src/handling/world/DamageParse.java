@@ -39,6 +39,7 @@ import server.life.mob.MobStatRequest;
 import server.maps.objects.ForceAtom;
 import server.maps.objects.ForceAtomType;
 import service.RecvPacketOpcode;
+import tools.LogHelper;
 import tools.Utility;
 import tools.packet.CField;
 import tools.packet.JobPacket;
@@ -1657,6 +1658,9 @@ public class DamageParse {
                     iPacket.DecodeInt();
                 }
                 final Mob monster = chr.getMap().getMonsterByOid(dwMobID);
+                if (monster == null) {
+                    LogHelper.BUGREPORT.get().info(String.format("[DamageParse] IMPROPER PARSING OF: skill: %s, tbyte: %s, mob: %s, hits: %s\r\n", ret.skill, ret.tbyte, ret.mobCount, ret.numberOfHits));
+                }
                 ret.allDamage.add(new AttackMonster(monster, dwMobID, monster.getId(), dwMobCRC, ptHit, ptPosPrev, null));
             }
         } else {
@@ -1733,15 +1737,16 @@ public class DamageParse {
                     iPacket.DecodeLong(); // haxfix?
                 }
                 final Mob monster = chr.getMap().getMonsterByOid(dwMobID);//CHECK WHY THIS NULLS (no oid)
-                if (monster != null) {
-                    ret.allDamage.add(new AttackMonster(monster, dwMobID, monster.getId(), dwMobCRC, ptHit, ptPosPrev, damageNumbers));
+                if (monster == null) {
+                    LogHelper.BUGREPORT.get().info(String.format("[DamageParse] IMPROPER PARSING OF: skill: %s, tbyte: %s, mob: %s, hits: %s\r\n", ret.skill, ret.tbyte, ret.mobCount, ret.numberOfHits));
                 }
+                ret.allDamage.add(new AttackMonster(monster, dwMobID, monster.getId(), dwMobCRC, ptHit, ptPosPrev, damageNumbers));
             }
         }
         // TODO: See if can parse with just this.. the rest is so much and i dont think u use any of the vars
 
         // Apply Monster Status, check if this is enough for now. -Mazen
-        if (ret != null && ret.skill != 0) {
+        if (ret.skill != 0) {
             MobStatRequest.apply(chr, ret, ((chr.getSkillLevel(ret.skill) > 0) ? SkillFactory.getSkill(ret.skill).getEffect(chr.getSkillLevel(ret.skill)) : SkillFactory.getSkill(ret.skill).getEffect(1)));
         }
 

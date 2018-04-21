@@ -87,6 +87,33 @@ public class GameConstants {
                 return false;
         }
     }
+    
+    public static boolean GetAdvancedAttackCountHyperSkill(int nSkillID) {
+        switch(nSkillID) {
+            case Shade.SPIRIT_CLAW:
+            case Evan.THUNDER_FLASH_1:
+            case Aran.COMBO_TEMPEST:
+            case Aran.FINAL_BLOW:
+            case ThunderBreaker.GALE:
+            case Mihile.RADIANT_BLAST:
+            case Mechanic.AP_SALVO_PLUS:
+            case Mihile.FOURPOINT_ASSAULT:
+            case AngelicBuster.TRINITY_2:
+            case Mihile.RADIANT_CROSS:
+            case Bowmaster.ARROW_STREAM:
+            case FirePoisonArchMage.PARALYZE:
+            case IceLightningArchMage.CHAIN_LIGHTNING:
+            case Paladin.HEAVENS_HAMMER:
+            case Hero.RAGING_BLOW:
+            case Hero.RAGING_BLOW_1:
+            case Paladin.BLAST:
+            case Bowmaster.HURRICANE_4:
+            case Marksman.PIERCING_ARROW_1:
+                return true;
+            default:
+                return false;
+        }
+    }
 
     // Non-Buff Stat Skills
     // This is just for skills we don't want spamming to console for missing buffstats.
