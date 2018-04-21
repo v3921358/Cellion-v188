@@ -427,6 +427,8 @@ public class Mob extends AbstractLoadedMapleLife {
             byte Class_Bonus_EXP_PERCENT, byte Premium_Bonus_EXP_PERCENT, int burningFieldBonusEXPRate,
             int lastskillID) {
 
+        monsterNxGainResult(attacker, isKiller);
+
         if (highestDamage) {
             if (eventInstance != null) {
                 eventInstance.monsterKilled(attacker, this);
@@ -1533,6 +1535,37 @@ public class Mob extends AbstractLoadedMapleLife {
 
     public MobTemporaryStat getTemporaryStat() {
         return temporaryStat;
+    }
+
+    /*
+     *  Monster NX Drop System
+     *  @author Mazen Massoud
+     *
+     *  @purpose Provide the player will NX upon killing a monster, 
+     *  with the value varrying based on multiple factors.
+     */
+    public void monsterNxGainResult(User pPlayer, boolean bKiller) {
+
+        long nMobHp = getMobMaxHp();
+        short nMobLv = stats.getLevel();
+
+        if (nMobHp > 175000000) { // Caps the the HP at this value for the calculation.
+            nMobHp = 175000000;
+        }
+
+        int nMinRange = (int) (nMobHp * 0.00000105) + (nMobLv / 3) + 1; // NX Gain Formula
+        int nMaxRange = (int) Math.round(nMinRange * 1.25); // Amount NX Gain can go up to.
+        int nResultNx = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1))); // Formula to produce a value between the specified range.
+
+        int nGainChance = 60; // Base NX Drop Chance %
+
+        if (!bKiller) { // Leechers Gain
+            nResultNx *= 0.4; // Cap at 40%
+        }
+
+        if (Randomizer.nextInt(100) < nGainChance) {
+            pPlayer.modifyCSPoints(2, nResultNx, true);
+        }
     }
 
     // <editor-fold defaultstate="visible" desc="Attacks & EXP Handling"> 

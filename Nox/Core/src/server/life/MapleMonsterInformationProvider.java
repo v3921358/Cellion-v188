@@ -84,7 +84,10 @@ public class MapleMonsterInformationProvider {
 
     public void loadCustom() {
         globaldrops.add(new MonsterGlobalDropEntry(2290285, (int) (0.2 * 10000), -1, (byte) 0, 1, 1, 0)); //Mystery Mastery Book
-        globaldrops.add(new MonsterGlobalDropEntry(2435902, (int) (0.05 * 10000), -1, (byte) 0, 1, 1, 0)); //Nodes
+        globaldrops.add(new MonsterGlobalDropEntry(2435902, (int) (0.1 * 10000), -1, (byte) 0, 1, 1, 0)); //Nodes
+        globaldrops.add(new MonsterGlobalDropEntry(5062009, (int) (0.4 * 10000), -1, (byte) 0, 1, 1, 0)); //Red cube
+        globaldrops.add(new MonsterGlobalDropEntry(4001832, (int) (0.4 * 10000), -1, (byte) 0, 1, 1, 0)); //Spell trace
+        globaldrops.add(new MonsterGlobalDropEntry(2049700, (int) (0.4 * 10000), -1, (byte) 0, 1, 1, 0)); //Epic potential scroll scroll
 
         //globaldrops.add(new MonsterGlobalDropEntry(4001126, (int) (5 * 10000), -1, (byte) 0, 1, 3, 0)); //Maple Leaf
         //globaldrops.add(new MonsterGlobalDropEntry(4310050, (int) (1 * 10000), -1, (byte) 0, 1, 1, 0)); //Old Maple Coin
