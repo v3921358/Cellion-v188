@@ -5147,22 +5147,27 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
         maxhp = Math.min(GameConstants.maxHP, Math.abs(maxhp));
         maxmp = Math.min(GameConstants.maxMP, Math.abs(maxmp));
+        int localhp = stats.getCurrentMaxHp();
+        int localmp = stats.getCurrentMaxMp(1);
+        
         if (GameConstants.isDemonSlayer(job)) { //TODO: use shield instead of df per job
             maxmp = GameConstants.getMPByJob(job);
+            localmp = GameConstants.getMPByJob(job);
         }
         if (GameConstants.isZero(job) || GameConstants.isKanna(job)) {
             maxmp = 100;
+            localmp = 100;
         }
         level++;
 
         // Update stats related stuff
         final Map<MapleStat, Long> statup = new EnumMap<>(MapleStat.class
         );
-
-        statup.put(MapleStat.MAXHP, (long) maxhp);
-        statup.put(MapleStat.IndieMMP, (long) maxmp);
-        statup.put(MapleStat.HP, (long) maxhp);
-        statup.put(MapleStat.MP, (long) maxmp);
+        
+        statup.put(MapleStat.MAXHP, (long) localhp);
+        statup.put(MapleStat.IndieMMP, (long) localmp);
+        statup.put(MapleStat.HP, (long) localhp);
+        statup.put(MapleStat.MP, (long) localmp);
         statup.put(MapleStat.EXP, exp);
         statup.put(MapleStat.LEVEL, (long) level);
 
@@ -5325,7 +5330,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
         // Packet + stats updates
         //     client.write(CField.getAndroidTalkStyle(2008, "Yay", 2));
-        stats.setInfo(maxhp, maxmp, maxhp, maxmp);
+        stats.setInfo(maxhp, maxmp, localhp, localmp);
         client.SendPacket(CWvsContext.updatePlayerStats(statup, this));
         //map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), UserEffectCodes.LevelUp), true); // lol this is buggy.
         client.SendPacket(EffectPacket.showForeignEffect(getId(), UserEffectCodes.LevelUp));
@@ -10630,7 +10635,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (GameConstants.isExplorer(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
@@ -10735,7 +10740,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isCygnusKnight(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
@@ -10768,7 +10773,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isDemon(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
@@ -10792,7 +10797,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             switch (nLevel) {
                 case 15:
                     addReward(1, 1353000, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1353001, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
@@ -10819,7 +10824,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isResistance(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     if (GameConstants.isMechanic(job)) {
                         addReward(1, 1352700, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isBattleMage(job)) {
@@ -10879,7 +10884,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isLegend(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     if (GameConstants.isAran(job)) {
                         addReward(1, 1352930, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isEvan(job)) {
@@ -10965,7 +10970,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isJett(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1352820, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 30:
@@ -10993,7 +10998,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isKaiser(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
@@ -11017,7 +11022,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isAngelicBuster(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
@@ -11041,7 +11046,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isHayato(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1352800, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 30:
@@ -11069,7 +11074,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isKanna(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
                     addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
@@ -11094,7 +11099,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isBeastTamer(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1352810, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 30:
@@ -11122,7 +11127,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isKinesis(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1353200, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     break;
                 case 30:
@@ -11152,7 +11157,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 case 105:
                     givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
-                    addReward(300, 2000019, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
+                    addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1190530, 0, 0, 0, "You have been rewarded with an Eternal Time Emblem for reaching Lv. " + level + "!");
                     break;
                 case 150:
