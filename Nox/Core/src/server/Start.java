@@ -58,7 +58,7 @@ public class Start {
 
     public static long startTime = System.currentTimeMillis();
     public static final Start instance = new Start();
-    private QueueWorker queue = null;
+    public static QueueWorker queue = null;
     public static AtomicInteger CompletedLoadingThreads = new AtomicInteger(0);
 
     public void run() throws InterruptedException, IOException {
