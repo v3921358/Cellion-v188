@@ -69,10 +69,12 @@ public class NPCShopHandler implements ProcessPacket<MapleClient> {
                 if (oShop == null) {
                     return;
                 }
-                byte nSlot = (byte) iPacket.DecodeShort();
+                short nSlot = iPacket.DecodeShort();
                 int nItem = iPacket.DecodeInt();
                 short nQuantity = iPacket.DecodeShort();
 
+                nSlot++; // Increase this by one to match the index of our shops.
+                
                 if (nItem == 2000005) { // Hack fix for Power Elixer.
                     pPlayer.gainItem(2000005, nQuantity);
                     pPlayer.gainMeso(-(5000 * nQuantity), false);
@@ -80,7 +82,6 @@ public class NPCShopHandler implements ProcessPacket<MapleClient> {
                     oShop.buy(c, nSlot, nItem, nQuantity);
                     pPlayer.sortInventory((byte) 2); // Sort players 'USE' inventory for ammo.
                 } else {
-                    nSlot++; // If item isn't ammo, increase slot value before continuing.
                     oShop.buy(c, nSlot, nItem, nQuantity);
                 }
 

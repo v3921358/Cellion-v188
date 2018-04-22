@@ -92,10 +92,15 @@ public class MapleStatEffect implements Serializable {
         }
 
         effect.info = new EnumMap<>(MapleStatInfo.class);
+        effect.statups = new EnumMap<>(CharacterTemporaryStat.class);
+        
         for (final MapleStatInfo i : MapleStatInfo.values()) {
             final String propertyName = i.name();
-            int value = parseEval(propertyName, source, i.getDefault(), variables, level, i.isSpecial());
-
+            int value = parseEval(propertyName, source, -1, variables, level, i.isSpecial());
+            if(i.getStat() != null && value != -1) {
+            	effect.statups.put(i.getStat(), value);
+            }
+            
             effect.info.put(i, value);
         }
 
@@ -304,7 +309,6 @@ public class MapleStatEffect implements Serializable {
         effect.info.put(MapleStatInfo.subTime, (effect.info.get(MapleStatInfo.subTime) * 1000));
         effect.overTime = effect.info.get(MapleStatInfo.time) > -1;
         effect.monsterStatus = new EnumMap<>(MonsterStatus.class);
-        effect.statups = new EnumMap<>(CharacterTemporaryStat.class);
 
         //Fetch effect handler
         boolean bHasEffect = EffectManager.SetEffect(effect, sourceid);
