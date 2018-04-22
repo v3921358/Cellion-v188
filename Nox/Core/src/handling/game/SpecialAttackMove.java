@@ -140,7 +140,9 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
             }
         }
 
-        pPlayer.dropMessage(5, "" + nSkill);
+        if (pPlayer.isDeveloper()) {
+        	pPlayer.dropMessage(5, "" + nSkill);
+        }
         if (GameConstants.isEventMap(pPlayer.getMapId())) {
             for (MapleEventType t : MapleEventType.values()) {
                 MapleEvent e = ChannelServer.getInstance(pPlayer.getClient().getChannel()).getEvent(t);
