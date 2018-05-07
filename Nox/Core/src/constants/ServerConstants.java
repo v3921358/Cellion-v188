@@ -23,6 +23,8 @@ import provider.data.HexTool;
  */
 public class ServerConstants {
 
+    public static boolean USE_API = true;
+
     /*Server IP Address*/
     public static final String HOST = "cellion.org";
 
@@ -104,9 +106,9 @@ public class ServerConstants {
 
     /*Spawn Rate Configuration*/
     public static final boolean MODIFY_SPAWN_RATE = true; //Enables spawn rate multiplier.
-    public static final float SPAWN_RATE_MULTIPLIER = 1.30F; //Multipy the spawn rate globally by this variable.
+    public static final float SPAWN_RATE_MULTIPLIER = 3.00F; //Multipy the spawn rate globally by this variable.
     public static final boolean CUSTOM_MAP_BUFFED_SPAWN = true; // Enables custom spawn rate increase on some maps to improve player gameplay experience.
-    public static final float CUSTOM_MAP_BUFFED_SPAWN_RATE = 1.45F; //Multiply the custom buffed maps spawn rate by this variable.
+    public static final float CUSTOM_MAP_BUFFED_SPAWN_RATE = 4.45F; //Multiply the custom buffed maps spawn rate by this variable.
 
     /*Tutorial Configuration*/
     public static final boolean UNIVERSAL_START = true; //If true, all classes start in the custom tutorial intro.
@@ -125,6 +127,11 @@ public class ServerConstants {
     public static final float LEECHER_EXP_RATIO = 0.2f;
 
     public static final boolean APPLY_HOTFIX = false;
+
+    /*Miracle Time Config*/
+    public static boolean DoubleMiracleTime = false;
+    public static boolean DoubleTime = false;
+    public static boolean HOT_TIME = true;
 
     public static final byte[] hotfix() {
         if (APPLY_HOTFIX) {

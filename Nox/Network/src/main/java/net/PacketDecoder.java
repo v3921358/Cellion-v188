@@ -21,7 +21,6 @@ import crypto.CIGCipher;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import java.nio.ByteOrder;
 import java.util.List;
 
 /**
@@ -38,7 +37,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
         }
 
         if (pSocket.nLastState == 0 && in.readableBytes() >= 4) {
-            ByteBuf pBuff = in.readBytes(4).order(ByteOrder.LITTLE_ENDIAN);
+            ByteBuf pBuff = in.readBytes(4);
             InPacket iPacket = new InPacket();
             try {
                 int nState = iPacket.AppendBuffer(pBuff, pSocket.bEncryptData);
@@ -60,7 +59,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
         if (pSocket.nLastState > 1) {
             if (in.readableBytes() >= pSocket.nLastState) {
                 InPacket iPacket = new InPacket(pSocket.nLastState);
-                ByteBuf pBuff = in.readBytes(iPacket.uDataLen).order(ByteOrder.LITTLE_ENDIAN);
+                ByteBuf pBuff = in.readBytes(iPacket.uDataLen);
                 try {
                     int nState = iPacket.AppendBuffer(pBuff, pSocket.bEncryptData);
                     if (nState == 2) {

@@ -582,7 +582,7 @@ public class MapleClient extends Socket {
         charInfo.clear();
     }
 
-    public int login(String name, int authID) {
+    public int AuthLogin(String name, int authID) {
         int loginok = 5;
 
         try (Connection con = Database.GetConnection()) {
@@ -638,6 +638,70 @@ public class MapleClient extends Socket {
                         loginok = 23;
                     } catch (SQLException e) {
                         LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", e);
+                    }
+                }
+                rs.close();
+                ps.close();
+            } catch (SQLException e) {
+                LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", e);
+            }
+        } catch (SQLException se) {
+            LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", se);
+        }
+
+        return loginok;
+    }
+
+    public int LoginPassword(String name, String password) {
+        int loginok = 5;
+
+        try (Connection con = Database.GetConnection()) {
+
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM accounts WHERE name = ?")) {
+                ps.setString(1, name);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    final int banned = rs.getInt("banned");
+                    final String oldSession = rs.getString("SessionIP");
+                    final String hashedPassword = rs.getString("password");
+
+                    accountName = name;
+                    accId = rs.getInt("id");
+                    secondPassword = rs.getString("2ndpassword");
+                    gm = rs.getInt("gm") > 1;
+                    greason = rs.getByte("greason");
+                    tempban = getTempBanCalendar(rs);
+                    gender = rs.getByte("gender");
+
+                    if (banned > 0 && gm) {
+                        loginok = 3;
+                    } else {
+                        if (banned == -1) {
+                            unban();
+                        }
+                        MapleClientLoginState loginstate = getLoginState();
+                        if (loginstate.getState() > MapleClientLoginState.LOGIN_NOTLOGGEDIN.getState()) { // already loggedin
+                            if (getSessionIPAddress().equals(oldSession) && oldSession != null && getPlayer() == null) {
+                                try (PreparedStatement ps2 = con.prepareStatement("UPDATE accounts SET loggedin = 0 WHERE name = ?")) {
+                                    ps2.setString(1, name);
+                                    ps2.executeUpdate();
+                                    ps2.close();
+                                    disconnect(true, false);
+                                    //write(CWvsContext.broadcastMsg(1, "Your " + ServerConstants.SERVER_REFERENCE + " account has been successfully unstuck! You may now login normally."));
+                                } catch (SQLException se) {
+                                    LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", se);
+                                }
+                                loginok = 0;
+                            } else {
+                                loggedIn = false;
+                                loginok = 7;
+                            }
+                        } else {
+                            if (crypto.BCrypt.checkpw(password, hashedPassword)) {
+                                loginok = 0;
+                            }
+                        }
                     }
                 }
                 rs.close();

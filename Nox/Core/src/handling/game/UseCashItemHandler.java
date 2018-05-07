@@ -69,7 +69,9 @@ import tools.packet.CWvsContext;
 import tools.packet.MiracleCubePacket;
 import tools.packet.PetPacket;
 import net.ProcessPacket;
+import server.NebuliteGrade;
 import server.maps.objects.Pet.PetFlag;
+import server.potentials.ItemPotentialOption;
 
 /**
  *
@@ -658,9 +660,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                     bUsed = true;
                 }
                 break;
-            }
-            //case 5062500:
-            //case ItemConstants.RED_CUBE:    
+            }  
             case ItemConstants.SUPER_MIRACLE_CUBE: {
                 //c.getPlayer().sortInventory((byte) 1); // Sort equipment inventory to avoid the cube not finding the item.
 
@@ -906,155 +906,6 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 }
                 break;
             }
-            case 5062003: { //revolutionary cube
-                /*      final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
-                if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
-                    final Equip eq = (Equip) item;
-                    if (eq.getState() >= 17) {
-                        boolean potLock = c.getPlayer().getInventory(MapleInventoryType.CASH).findById(5067000) != null;
-                        int line = potLock ? iPacket.DecodeInt() : 0;
-                        short toLock = potLock ? iPacket.decodeShort() : 0;
-                        potLock = checkPotentialLock(c.getPlayer(), eq, line, toLock);
-                        if (potLock) {
-                            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.CASH, c.getPlayer().getInventory(MapleInventoryType.CASH).findById(5067000).getPosition(), (short) 1, false);
-                        }
-                        eq.renewPotential(4, line, toLock, false);
-                        c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), true, itemId));
-
-                        List<ModifyInventory> modifications = new ArrayList<>();
-                        modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.write(CWvsContext.inventoryOperation(true, modifications));
-
-                        c.getPlayer().forceReAddItemNoUpdate(item, MapleInventoryType.EQUIP);
-                        MapleCharacter chr = c.getPlayer();
-                        int tofind = 0;
-                        if (chr.itemQuantity(2460003) > 0) {
-                            tofind = 2460003;
-                        } else if (chr.itemQuantity(2460002) > 0) {
-                            tofind = 2460002;
-                        } else if (chr.itemQuantity(2460001) > 0) {
-                            tofind = 2460001;
-                        } else if (chr.itemQuantity(2460000) > 0) {
-                            tofind = 2460000;
-                        }
-                        if (tofind != 0) {
-                            Item magnify = c.getPlayer().getInventory(MapleInventoryType.USE).findById(tofind);
-                            if (magnifyEquip(c, magnify, item, (byte) item.getPosition())) {
-                                MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, magnify.getPosition(), (short) 1, false);
-                                c.write(CField.getGameMessage("A Magnifying Glass (Premium) has been used.", (short) 7));
-                            } else {
-                                c.write(CField.getGameMessage("A Magnifying Glass was not found. The equipment will stay as Hidden Potential.", (short) 7));
-                            }
-                        } else {
-                            c.write(CField.getGameMessage("A Magnifying Glass was not found. The equipment will stay as Hidden Potential.", (short) 7));
-                        }
-                        MapleInventoryManipulator.addById(c, 2430481, (short) 1, "Cube" + " on " + LocalDateTime.now());
-                        c.write(CField.enchantResult(tofind == 0 ? 1 : 1));//3
-                        used = true;
-                    } else {
-                        c.getPlayer().dropMessage(5, "This item's Potential cannot be reset.");
-                    }
-                } else {
-                    c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), false, itemId));
-                    c.write(CField.enchantResult(0));
-                }*/
-                break;
-            }
-            //case 5062500:
-            case 5062005: { //enlightening cube
-                /*     final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
-                if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
-                    final Equip eq = (Equip) item;
-                    if (eq.getState() >= 17) {
-                        eq.renewPotential(5, 0, (short) 0, false);
-                        c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), true, itemId));
-
-                        List<ModifyInventory> modifications = new ArrayList<>();
-                        modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.write(CWvsContext.inventoryOperation(true, modifications));
-
-                        c.getPlayer().forceReAddItemNoUpdate(item, MapleInventoryType.EQUIP);
-                        MapleCharacter chr = c.getPlayer();
-                        int tofind = 0;
-                        if (chr.itemQuantity(2460003) > 0) {
-                            tofind = 2460003;
-                        } else if (chr.itemQuantity(2460002) > 0) {
-                            tofind = 2460002;
-                        } else if (chr.itemQuantity(2460001) > 0) {
-                            tofind = 2460001;
-                        } else if (chr.itemQuantity(2460000) > 0) {
-                            tofind = 2460000;
-                        }
-                        if (tofind != 0) {
-                            Item magnify = c.getPlayer().getInventory(MapleInventoryType.USE).findById(tofind);
-                            if (magnifyEquip(c, magnify, item, (byte) item.getPosition())) {
-                                MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, magnify.getPosition(), (short) 1, false);
-                                c.write(CField.getGameMessage("A Magnifying Glass (Premium) has been used.", (short) 7));
-                            } else {
-                                c.write(CField.getGameMessage("A Magnifying Glass was not found. The equipment will stay as Hidden Potential.", (short) 7));
-                            }
-                        } else {
-                            c.write(CField.getGameMessage("A Magnifying Glass was not found. The equipment will stay as Hidden Potential.", (short) 7));
-                        }
-                        MapleInventoryManipulator.addById(c, 2430759, (short) 1, "Cube" + " on " + LocalDateTime.now());
-                        c.write(CField.enchantResult(tofind == 0 ? 1 : 1));//3
-                        used = true;
-                    } else {
-                        c.getPlayer().dropMessage(5, "This item's Potential cannot be reset.");
-                    }
-                } else {
-                    c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), false, itemId));
-                    c.write(CField.enchantResult(0));
-                }*/
-                break;
-            }
-            case 5062006: {
-                /*        final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
-                if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
-                    final Equip eq = (Equip) item;
-                    if (eq.getState() >= 17) {
-                        eq.renewPotential(6, 0, (short) 0, false);
-                        c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), true, itemId));
-
-                        List<ModifyInventory> modifications = new ArrayList<>();
-                        modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.write(CWvsContext.inventoryOperation(true, modifications));
-
-                        c.getPlayer().forceReAddItemNoUpdate(item, MapleInventoryType.EQUIP);
-                        MapleCharacter chr = c.getPlayer();
-                        int tofind = 0;
-                        if (chr.itemQuantity(2460003) > 0) {
-                            tofind = 2460003;
-                        } else if (chr.itemQuantity(2460002) > 0) {
-                            tofind = 2460002;
-                        } else if (chr.itemQuantity(2460001) > 0) {
-                            tofind = 2460001;
-                        } else if (chr.itemQuantity(2460000) > 0) {
-                            tofind = 2460000;
-                        }
-                        if (tofind != 0) {
-                            Item magnify = c.getPlayer().getInventory(MapleInventoryType.USE).findById(tofind);
-                            if (magnifyEquip(c, magnify, item, (byte) item.getPosition())) {
-                                MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, magnify.getPosition(), (short) 1, false);
-                                c.write(CField.getGameMessage("A Magnifying Glass (Premium) has been used.", (short) 7));
-                            } else {
-                                c.write(CField.getGameMessage("A Magnifying Glass was not found. The equipment will stay as Hidden Potential.", (short) 7));
-                            }
-                        } else {
-                            c.write(CField.getGameMessage("A Magnifying Glass was not found. The equipment will stay as Hidden Potential.", (short) 7));
-                        }
-                        MapleInventoryManipulator.addById(c, 2430759, (short) 1, "Cube" + " on " + LocalDateTime.now());
-                        c.write(CField.enchantResult(tofind == 0 ? 1 : 1));//3
-                        used = true;
-                    } else {
-                        c.getPlayer().dropMessage(5, "This item's Potential cannot be reset.");
-                    }
-                } else {
-                    c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), false, itemId));
-                    c.write(CField.enchantResult(0));
-                }*/
-                break;
-            }
             case ItemConstants.PERFECT_POTENTIAL_STAMP: {
                 final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 if (item != null) {
@@ -1097,7 +948,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                 break;
             }
             case 5750000: { //alien cube
-                /*     if (c.getPlayer().getLevel() < 10) {
+                if (c.getPlayer().getLevel() < 10) {
                     c.getPlayer().dropMessage(1, "You may not use this until level 10.");
                 } else {
                     final Item item = c.getPlayer().getInventory(MapleInventoryType.SETUP).getItem((byte) iPacket.DecodeInt());
@@ -1118,9 +969,9 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                             if (newOption != null) {
                                 MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.SETUP, item.getPosition(), (short) 1, false);
                             
-                                MapleInventoryManipulator.addById(c, newOption.opID, (short) 1, "Upgraded from alien cube on " + LocalDateTime.now());
+                                MapleInventoryManipulator.addById(c, newOption.getOptionId(), (short) 1, "Upgraded from alien cube on " + LocalDateTime.now());
                                 MapleInventoryManipulator.addById(c, 2430691, (short) 1, "Alien Cube" + " on " + LocalDateTime.now());
-                                used = true;
+                                bUsed = true;
                             }
                         } else {
                             c.getPlayer().dropMessage(1, "Grade S Nebulite cannot be added.");
@@ -1128,7 +979,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                     } else {
                         c.getPlayer().dropMessage(5, "You do not have sufficient inventory slot.");
                     }
-                }*/
+                }
                 break;
             }
             case 5750001: { // socket diffuser

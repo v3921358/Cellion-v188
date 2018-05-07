@@ -158,8 +158,6 @@ public class ItemPickupHandler implements ProcessPacket<MapleClient> {
         } finally {
             lock.unlock();
         }
-
-        chr.saveItemData(); // Duplication and rollback prevention.
     }
 
     private static void removeItem(User chr, MapleMapItem mapitem, MapleMapObject ob) {

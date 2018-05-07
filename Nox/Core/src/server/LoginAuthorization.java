@@ -7,7 +7,7 @@ package server;
 
 /**
  *
- * @author kaz_v
+ * @author song_lin
  */
 public class LoginAuthorization {
 

@@ -23,6 +23,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -31,8 +33,8 @@ import java.sql.SQLException;
  */
 public class Database {
 
-    private static HikariConfig config; //Hikari database config.
-    private static HikariDataSource ds; //Hikari datasource based on config.
+    private static HikariConfig pConfig; //Hikari database config.
+    private static HikariDataSource pDataSource; //Hikari datasource based on config.
 
     public static void Initialize() {
         //Check if file exists, if not: create and use default file.
@@ -53,19 +55,24 @@ public class Database {
             }
             System.out.println("No database.properties file found. A default one has been generated.");
         }
-        config = new HikariConfig("database.properties");
-        ds = new HikariDataSource(config);
-    }
-
-    public static HikariDataSource GetDataSource() {
-        return ds;
+        pConfig = new HikariConfig("database.properties");
+        pDataSource = new HikariDataSource(pConfig);
     }
 
     public static Connection GetConnection() throws SQLException {
-        return ds.getConnection();
+        return pDataSource.getConnection();
     }
-    
+
     public static String GetPoolStats() {
-        return "Connections: " + ds.getHikariPoolMXBean().getActiveConnections() + " | " + ds.getHikariPoolMXBean().getIdleConnections();
+        return "Connections: " + pDataSource.getHikariPoolMXBean().getActiveConnections()
+                + " | " + pDataSource.getHikariPoolMXBean().getIdleConnections();
+    }
+
+    public static void Excecute(Connection con, PreparedStatement ps, Object... args) throws SQLException {
+        for (int i = 0; i < args.length; ++i) {
+            ps.setObject(i, args[i]);
+        }
+
+        ps.executeUpdate();
     }
 }

@@ -87,9 +87,9 @@ public class GameConstants {
                 return false;
         }
     }
-    
+
     public static boolean GetAdvancedAttackCountHyperSkill(int nSkillID) {
-        switch(nSkillID) {
+        switch (nSkillID) {
             case Shade.SPIRIT_CLAW:
             case Evan.THUNDER_FLASH_1:
             case Aran.COMBO_TEMPEST:
@@ -4918,29 +4918,55 @@ public class GameConstants {
             }
         }
     }
-
-    public static List<Integer> getSealedBoxItems(int itemId) {
-        List<Integer> list = new LinkedList();
-        int[] items = {};
-        switch (itemId) {
-            case 2028155:
-                items = new int[]{2510028, 1050104, 1052131, 1050106, 1050099,
-                    1050107, 1052072, 1050098, 1050096, 1052076, 1051101,
-                    1041122, 1052071, 2510035, 1061123, 1051106, 1050103,
-                    1040122, 2510023, 1052075, 2510022};
-                break;
-            case 2028156:
-                items = new int[]{1082151, 1082153, 1082213, 1072223, 1072272,
-                    1072269, 1072226, 1082168, 1082167, 1072222, 2510050,
-                    1082159, 2510072, 1082139, 1082154, 1082140, 1072321,
-                    1072273, 2510066, 1072215, 2510068};
-                break;
-        }
-        for (int i : items) {
-            list.add(i);
-        }
-        return list;
+    
+    public static int getHotTimeItem() {
+        int nLen = aHotTimeItems.length;
+        return aHotTimeItems[Randomizer.nextInt(nLen)];
     }
+
+    public static int[] aHotTimeItems = new int[]{
+        5062009,// - Red Cube
+        5220000,// - Gachapon Ticket
+        5220023,// - Gachapon Ticket
+        1142666,// - Beater
+        3015067,// - The Fall of Shiganshina
+        3015343,// - Snow Pepe Chair
+        3015504,// - Mercury Chair
+        3015505,// - Venus Chair
+        3015506,// - Earth Chair
+        3015507,// - Mars Chair
+        3015508,// - Jupiter Chair
+        3015509,// - Saturn Chair
+        3015510,// - Uranus Chair
+        3015511,// - Neptune Chair
+        3015512,// - Sun Chair
+        3015015,// - Aries Chair
+        3015016,// - Taurus Chair
+        3015017,// - Pisces Chair
+        3015018,// - Gemini Chair
+        3015019,// - Cancer Chair
+        3015020,// - Leo Chair
+        3015021,// - Libra Chair
+        3015022,// - Scorpio Chair
+        3015023,// - Virgo Chair
+        3015024,// - Sagittarius Chair
+        3015025,// - Capricorn Chair
+        3015026,// - Aquarius Chair
+        3015027,// - Andromeda Chair
+        3010836,// - [FROZEN CONTENT] Resort Olaf Chair
+        3010837,// - [FROZEN CONTENT] Hotspring Olaf Chair
+        3010838,// - [FROZEN CONTENT] Ice Castle Chair Coupon
+        3010416,// - Giant Yeti
+        3010417,// - Giant Pepe
+        3010424,// - Pimp Chair
+        3010425,// - The Aluminum Throne
+        3010442,// - Free Hug Cat Chair
+        3010519,// - Loyal Royal Yeti Chair
+        3010520,// - King Pepe Chair
+        3010522,// - Bunny Tornado Chair
+        3010523,// - Cloud Stroller Chair
+        3010571// - Shroom Buddy Chair
+    };
 
     public static List<Integer> getMasteryBook(int itemId) {
         List<Integer> list = new LinkedList();

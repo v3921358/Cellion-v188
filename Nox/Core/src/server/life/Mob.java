@@ -7,7 +7,7 @@ import client.MapleTrait.MapleTraitType;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
-import constants.EventConstants;
+import constants.ServerConstants;
 import constants.GameConstants;
 import constants.ServerConstants;
 import client.jobs.Explorer;
@@ -469,7 +469,7 @@ public class Mob extends AbstractLoadedMapleLife {
                 totalEXPGained *= attacker.getStat().expMod;
             }
             // Double time rate
-            if (EventConstants.DoubleTime) {
+            if (ServerConstants.DoubleTime) {
                 totalEXPGained *= 2.0;
             }
             // Showdown skill
@@ -1557,7 +1557,7 @@ public class Mob extends AbstractLoadedMapleLife {
         int nMaxRange = (int) Math.round(nMinRange * 1.25); // Amount NX Gain can go up to.
         int nResultNx = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1))); // Formula to produce a value between the specified range.
 
-        int nGainChance = 60; // Base NX Drop Chance %
+        int nGainChance = 40; // Base NX Drop Chance %
 
         if (!bKiller) { // Leechers Gain
             nResultNx *= 0.4; // Cap at 40%

@@ -309,6 +309,14 @@ public class GlobalEffect extends AbstractEffect {
             case Global.BUNNY_MOUNT:
                 pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1902060);
                 break;
+            case Global.DECENT_SPEED_INFUSION_5:
+                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(MapleStatInfo.jump));
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
+                break;
+            case Global.DECENT_HYPER_BODY_5:
+                pEffect.statups.put(CharacterTemporaryStat.MaxHP, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.MaxMP, pEffect.info.get(MapleStatInfo.x));
+                break;
         }
     }
 

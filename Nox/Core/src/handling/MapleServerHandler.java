@@ -282,13 +282,14 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable t) {
-        if (ServerConstants.DEVELOPER_DEBUG_MODE) {
-            t.printStackTrace();
+        Channel ch = ctx.channel();
+        try {
+            MapleClient c = (MapleClient) ch.attr(MapleClient.SESSION_KEY).get();
+            c.disconnect(true, false);
+            c.cancelPingTask();
+        } catch (Exception ex) {
+            LogHelper.GENERAL_EXCEPTION.get().error("Unable to save disconnected session.");
         }
-        if (ServerConstants.DEVELOPER_DEBUG_MODE) {
-            System.out.println("[Session] Exception Caught");
-        }
-        // XXX remove later, disconnect client after this point
     }
 
     @Override
@@ -323,14 +324,16 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
     public void channelInactive(ChannelHandlerContext ctx) {
         Channel ch = ctx.channel();
 
-        MapleClient c = (MapleClient) ch.attr(MapleClient.SESSION_KEY).get();
+        try {
+            MapleClient c = (MapleClient) ch.attr(MapleClient.SESSION_KEY).get();
+            c.cancelPingTask();
+            c.disconnect(true, false);
 
-        c.disconnect(true, false); // handle this is we don't soft disconnect through handler
-
-        c.cancelPingTask();
-
-        if (ServerConstants.DEVELOPER_DEBUG_MODE) {
-            System.out.println("[Session] Closed Session (" + c.GetIP() + ")");
+            if (ServerConstants.DEVELOPER_DEBUG_MODE) {
+                System.out.println("[Session] Closed Session (" + c.GetIP() + ")");
+            }
+        } catch (Exception ex) {
+            LogHelper.GENERAL_EXCEPTION.get().error("Unable to save inactive session.");
         }
     }
 

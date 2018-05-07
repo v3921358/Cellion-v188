@@ -57,6 +57,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
 import net.OutPacket;
+import provider.data.HexTool;
 import scripting.provider.MapScriptManager;
 import tools.LogHelper;
 
@@ -2510,14 +2511,16 @@ public final class MapleMap {
                             }
                             if (passed) {
                                 //are we still the same squad? are monsters still == 0?
-                                OutPacket packet;
+                                OutPacket oPacket;
                                 if (mode == 1 || mode == 2) { //chaoszakum
-                                    packet = CField.showChaosZakumShrine(spawned, 0);
+                                    oPacket = CField.showChaosZakumShrine(spawned, 0);
                                 } else {
-                                    packet = CField.showHorntailShrine(spawned, 0); //chaoshorntail message is weird
+                                    oPacket = CField.showHorntailShrine(spawned, 0); //chaoshorntail message is weird
                                 }
+                                short nPacketID = oPacket.nPacketID;
+                                byte[] aData = oPacket.CloneData();
                                 for (User chr : getCharacters()) { //warp all in map
-                                    chr.getClient().SendPacket(packet);
+                                    chr.getClient().SendPacket((new OutPacket(nPacketID).Encode(aData)));
                                     chr.changeMap(returnMapz, returnMapz.getPortal(0)); //hopefully event will still take care of everything once warp out
                                 }
                                 checkStates("");
@@ -2535,14 +2538,16 @@ public final class MapleMap {
                         //we dont need to stop clock here because they're getting warped out anyway
                         if (MapleMap.this.getCharactersSize() > 0 && sqnow != null && sqnow.getStatus() == 2 && sqnow.getLeaderName().equals(leaderName) && MapleMap.this.getEMByMap().getProperty("state").equals(state)) {
                             //are we still the same squad? monsters however don't count
-                            OutPacket packet;
+                            OutPacket oPacket;
                             if (mode == 1 || mode == 2) { //chaoszakum
-                                packet = CField.showChaosZakumShrine(spawned, 0);
+                                oPacket = CField.showChaosZakumShrine(spawned, 0);
                             } else {
-                                packet = CField.showHorntailShrine(spawned, 0); //chaoshorntail message is weird
+                                oPacket = CField.showHorntailShrine(spawned, 0); //chaoshorntail message is weird
                             }
+                            short nPacketID = oPacket.nPacketID;
+                            byte[] aData = oPacket.CloneData();
                             for (User chr : getCharacters()) { //warp all in map
-                                chr.getClient().SendPacket(packet);
+                                chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
                                 chr.changeMap(returnMapz, returnMapz.getPortal(0)); //hopefully event will still take care of everything once warp out
                             }
                             checkStates("");
@@ -2793,9 +2798,11 @@ public final class MapleMap {
         broadcastMessage(source, packet, GameConstants.maxViewRangeSq(), rangedFrom);
     }
 
-    public void broadcastMessage(final User source, final OutPacket packet, final double rangeSq, final Point rangedFrom) {
+    public void broadcastMessage(final User source, final OutPacket oPacket, final double rangeSq, final Point rangedFrom) {
         charactersLock.readLock().lock();
         try {
+            short nPacketID = oPacket.nPacketID;
+            byte[] aData = oPacket.CloneData();
             for (User chr : characters) {
                 if (chr != source) {
                     if (rangeSq < Double.POSITIVE_INFINITY) {
@@ -2803,13 +2810,13 @@ public final class MapleMap {
                             if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
                                 System.err.println("[Debug] Sending Ranged Broadcast Packet (" + chr.getName() + ")");
                             }
-                            chr.getClient().SendPacket(packet);
+                            chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
                         }
                     } else {
                         if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
                             System.err.println("[Debug] Sending Broadcast Packet (" + chr.getName() + ")");
                         }
-                        chr.getClient().SendPacket(packet);
+                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
                     }
                 }
             }
@@ -2822,16 +2829,18 @@ public final class MapleMap {
         broadcastGMMessage(repeatToSource ? null : source, packet);
     }
 
-    private void broadcastGMMessage(User source, OutPacket packet) {
+    private void broadcastGMMessage(User source, OutPacket oPacket) {
         charactersLock.readLock().lock();
         try {
+            short nPacketID = oPacket.nPacketID;
+            byte[] aData = oPacket.CloneData();
             if (source == null) {
                 for (User chr : characters) {
                     if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
                         System.err.println("[Debug] Sending GM Broadcast Packet to (" + chr.getName() + ")");
                     }
                     if (chr.isGM()) {
-                        chr.getClient().SendPacket(packet);
+                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
                     }
                 }
             } else {
@@ -2840,7 +2849,7 @@ public final class MapleMap {
                         System.err.println("[Debug] Sending GM Broadcast Packet to (" + chr.getName() + ")");
                     }
                     if (chr != source && (chr.isGM())) {
-                        chr.getClient().SendPacket(packet);
+                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
                     }
                 }
             }
@@ -2853,19 +2862,21 @@ public final class MapleMap {
         broadcastNONGMMessage(repeatToSource ? null : source, packet);
     }
 
-    private void broadcastNONGMMessage(User source, OutPacket packet) {
+    private void broadcastNONGMMessage(User source, OutPacket oPacket) {
         charactersLock.readLock().lock();
         try {
+            short nPacketID = oPacket.nPacketID;
+            byte[] aData = oPacket.CloneData();
             if (source == null) {
                 for (User chr : characters) {
                     if (!chr.isGM()) {
-                        chr.getClient().SendPacket(packet);
+                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
                     }
                 }
             } else {
                 for (User chr : characters) {
                     if (chr != source && (!chr.isGM())) {
-                        chr.getClient().SendPacket(packet);
+                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
                     }
                 }
             }
@@ -2884,16 +2895,18 @@ public final class MapleMap {
         broadcastWhisper(repeatToSource ? null : source, packet, msgDestination);
     }
 
-    private void broadcastWhisper(User source, OutPacket packet, String msgDestination) {
+    private void broadcastWhisper(User source, OutPacket oPacket, String msgDestination) {
         charactersLock.readLock().lock();
         try {
+            short nPacketID = oPacket.nPacketID;
+            byte[] aData = oPacket.CloneData();
             if (source == null) {
                 for (User chr : characters) {
                     if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
                         System.err.println("[Debug] Sending Whisper Broadcast Packet to (" + chr.getName() + ")");
                     }
                     if (chr == c.getChannelServer().getPlayerStorage().getCharacterByName(msgDestination)) {
-                        chr.getClient().SendPacket(packet);
+                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
                     }
                 }
             } else {
@@ -2902,7 +2915,7 @@ public final class MapleMap {
                         System.err.println("[Debug] Sending Whisper Broadcast Packet to (" + chr.getName() + ")");
                     }
                     if (chr != source && chr == c.getChannelServer().getPlayerStorage().getCharacterByName(msgDestination)) {
-                        chr.getClient().SendPacket(packet);
+                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
                     }
                 }
             }

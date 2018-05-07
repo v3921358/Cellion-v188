@@ -37,11 +37,11 @@ public class InPacket {
     private static Charset ASCII = Charset.forName("US-ASCII");
 
     public InPacket() {
-        this.pRecvBuff = Unpooled.buffer().order(ByteOrder.LITTLE_ENDIAN);
+        this.pRecvBuff = Unpooled.buffer();
     }
     
     public InPacket(int uDataLen) {
-        this.pRecvBuff = Unpooled.buffer().order(ByteOrder.LITTLE_ENDIAN);
+        this.pRecvBuff = Unpooled.buffer();
         this.uDataLen = uDataLen;
         this.nState = 1;
     }
@@ -60,8 +60,8 @@ public class InPacket {
         if (nState == 0) {
             if (uSize >= 4) {
                 nState = 1;
-                uRawSeq = pBuff.readShort();
-                uDataLen = pBuff.readShort();
+                uRawSeq = pBuff.readShortLE();
+                uDataLen = pBuff.readShortLE();
                 if (bEncrypt) {
                     uDataLen ^= uRawSeq;
                 }
@@ -117,7 +117,7 @@ public class InPacket {
     }
 
     public short DecodeShort() {
-        return pRecvBuff.readShort();
+        return pRecvBuff.readShortLE();
     }
 
     public char DecodeChar() {
@@ -125,7 +125,7 @@ public class InPacket {
     }
 
     public int DecodeInt() {
-        return pRecvBuff.readInt();
+        return pRecvBuff.readIntLE();
     }
 
     public float DecodeFloat() {
@@ -133,7 +133,7 @@ public class InPacket {
     }
 
     public long DecodeLong() {
-        return pRecvBuff.readLong();
+        return pRecvBuff.readLongLE();
     }
 
     public double DecodeDouble() {

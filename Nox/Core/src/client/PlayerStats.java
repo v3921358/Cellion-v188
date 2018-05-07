@@ -18,7 +18,7 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
 import client.inventory.ModifyInventory;
-import constants.EventConstants;
+import constants.ServerConstants;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import constants.skills.Global;
@@ -479,10 +479,10 @@ public class PlayerStats implements Serializable {
                     levelBonus += 5;
                 }
             }
-            if (dropMod > 0 && EventConstants.DoubleTime) {
+            if (dropMod > 0 && ServerConstants.DoubleTime) {
                 dropMod *= 2.0;
             }
-            if (expMod > 0 && EventConstants.DoubleTime) {
+            if (expMod > 0 && ServerConstants.DoubleTime) {
                 expMod *= 2.0;
             }
             for (Item item : chra.getInventory(MapleInventoryType.ETC).list()) {

@@ -7,7 +7,7 @@ package handling;
 
 /**
  *
- * @author kaz_v
+ * @author song_lin
  */
 public class CharacterDeleter {
 

@@ -26,6 +26,9 @@ import server.quest.MapleQuest;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;
+import server.NebuliteGrade;
+import server.potentials.ItemPotentialOption;
+import server.potentials.ItemPotentialProvider;
 import server.skills.VCore;
 import server.skills.VMatrixRecord;
 
@@ -192,36 +195,36 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
                     }
                     break;
                 case 2430692: // nebulite box
-                    /*        if (c.getPlayer().getInventory(MapleInventoryType.SETUP).getNumFreeSlot() >= 1) {
-                     if (c.getPlayer().getInventory(MapleInventoryType.USE).countById(2430692) >= 1) {
-                     NebuliteGrade nebuliteGrade;
-                     final int random = Randomizer.nextInt(100);
-                            
-                     if (random < 10) {
-                     nebuliteGrade = NebuliteGrade.GradeB;
-                     } else if (random < 30) {
-                     nebuliteGrade = NebuliteGrade.GradeC;
-                     } else {
-                     nebuliteGrade = NebuliteGrade.GradeD;
-                     }
-                     ItemPotentialOption potential = ItemPotentialProvider.getRandomNebulitePotential(nebuliteGrade);
-                            
-                     if (potential != null) {
-                     final int newId = potential.opID;
-                                
-                     if (MapleInventoryManipulator.checkSpace(c, newId, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 1, true, false)) {
-                     MapleInventoryManipulator.addById(c, newId, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
-                     c.write(CWvsContext.InfoPacket.getShowItemGain(newId, (short) 1, true));
-                     } else {
-                     c.getPlayer().dropMessage(5, "Please make some space.");
-                     }
-                     }
-                     } else {
-                     c.getPlayer().dropMessage(5, "You do not have a Nebulite Box.");
-                     }
-                     } else {
-                     c.getPlayer().dropMessage(5, "Please make some space.");
-                     }*/
+                    if (c.getPlayer().getInventory(MapleInventoryType.SETUP).getNumFreeSlot() >= 1) {
+                        if (c.getPlayer().getInventory(MapleInventoryType.USE).countById(2430692) >= 1) {
+                            NebuliteGrade nebuliteGrade;
+                            final int random = Randomizer.nextInt(100);
+
+                            if (random < 10) {
+                                nebuliteGrade = NebuliteGrade.GradeB;
+                            } else if (random < 30) {
+                                nebuliteGrade = NebuliteGrade.GradeC;
+                            } else {
+                                nebuliteGrade = NebuliteGrade.GradeD;
+                            }
+                            ItemPotentialOption potential = ItemPotentialProvider.getRandomNebulitePotential(nebuliteGrade);
+
+                            if (potential != null) {
+                                final int newId = potential.getOptionId();
+
+                                if (MapleInventoryManipulator.checkSpace(c, newId, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 1, true, false)) {
+                                    MapleInventoryManipulator.addById(c, newId, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
+                                    c.SendPacket(CWvsContext.InfoPacket.getShowItemGain(newId, (short) 1, true));
+                                } else {
+                                    c.getPlayer().dropMessage(5, "Please make some space.");
+                                }
+                            }
+                        } else {
+                            c.getPlayer().dropMessage(5, "You do not have a Nebulite Box.");
+                        }
+                    } else {
+                        c.getPlayer().dropMessage(5, "Please make some space.");
+                    }
                     break;
                 case 5680019: {//starling hair 
                     //if (c.getPlayer().getGender() == 1) {

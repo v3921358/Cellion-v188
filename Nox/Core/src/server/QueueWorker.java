@@ -198,6 +198,9 @@ public class QueueWorker extends Thread {
                 case SET_EXP_MULTIPLIER:
                     //not implemented rn
                     break;
+                case RELOAD_CS:
+                    CashItemFactory.reload();
+                    break;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -232,7 +235,7 @@ public class QueueWorker extends Thread {
     public enum QueueCommand {
 
         GIVE_NX, PIC_RESET, DISCONNECT_USER,
-        SEND_NOTICE, SET_EXP_MULTIPLIER
+        SEND_NOTICE, SET_EXP_MULTIPLIER, RELOAD_CS
     }
 
     private class QueueItem {

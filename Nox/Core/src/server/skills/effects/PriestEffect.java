@@ -43,6 +43,7 @@ public class PriestEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.HolySymbol, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Priest.MAGIC_BOOSTER_1:
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Priest.MYSTIC_DOOR:
                 break;

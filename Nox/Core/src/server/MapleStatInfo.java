@@ -185,7 +185,7 @@ public enum MapleStatInfo {
     luk(0, null);
     private final int def;
     private final boolean special;
-    private final CharacterTemporaryStat stat;	
+    private final CharacterTemporaryStat stat;
 
     private MapleStatInfo(final int def, final CharacterTemporaryStat stat) {
         this.def = def;
@@ -206,8 +206,8 @@ public enum MapleStatInfo {
     public final boolean isSpecial() {
         return special;
     }
-    
+
     public final CharacterTemporaryStat getStat() {
-    	return stat;
+        return stat;
     }
 }

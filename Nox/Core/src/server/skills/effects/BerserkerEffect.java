@@ -21,6 +21,7 @@ public class BerserkerEffect extends AbstractEffect {
     public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Berserker.CROSS_SURGE:
+                pEffect.statups.put(CharacterTemporaryStat.CrossOverChain, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Berserker.DRAGON_BUSTER:
                 break;

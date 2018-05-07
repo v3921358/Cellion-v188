@@ -74,7 +74,7 @@ public class NPCShopHandler implements ProcessPacket<MapleClient> {
                 short nQuantity = iPacket.DecodeShort();
 
                 nSlot++; // Increase this by one to match the index of our shops.
-                
+
                 if (nItem == 2000005) { // Hack fix for Power Elixer.
                     pPlayer.gainItem(2000005, nQuantity);
                     pPlayer.gainMeso(-(5000 * nQuantity), false);

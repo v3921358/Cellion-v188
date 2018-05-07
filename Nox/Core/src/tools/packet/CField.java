@@ -429,9 +429,6 @@ public class CField {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.SetField.getValue());
 
-        // Save character data upon entering a new map.
-        chr.saveToDB(false, false);
-
         // Prevent disconnects upon changing map with Shadow Partner active - Mazen.
         if (GameConstants.isNightWalkerCygnus(chr.getJob())) {
             chr.cancelEffectFromTemporaryStat(CharacterTemporaryStat.ShadowServant);

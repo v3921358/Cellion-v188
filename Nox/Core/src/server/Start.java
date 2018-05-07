@@ -11,7 +11,6 @@ import client.inventory.MapleInventoryIdentifier;
 import constants.GameConstants;
 import constants.JobConstants;
 import constants.ServerConstants;
-import constants.WorldConstants;
 import constants.WorldConstants.TespiaWorldOption;
 import constants.WorldConstants.WorldOption;
 import database.Database;
@@ -43,6 +42,7 @@ import server.api.ApiCallback;
 import server.api.ApiConstants;
 import server.api.ApiFactory;
 import server.api.ApiRuntimeException;
+import server.events.MapleHotTime;
 import server.skills.effects.manager.EffectManager;
 import server.events.MapleOxQuizFactory;
 import server.life.MapleLifeFactory;
@@ -71,6 +71,7 @@ public class Start {
             System.out.println("\nConfiguration Initialized");
         } catch (IOException ex) {
             System.out.println("\nFailed to load data from configuration.ini");
+            ex.printStackTrace();
             System.exit(0);
         }
 
@@ -80,11 +81,12 @@ public class Start {
         ServerConstants.EXP_RATE = Float.valueOf(config.getProperty("EXP_RATE"));
         ServerConstants.MESO_RATE = Float.valueOf(config.getProperty("MESO_RATE"));
         ServerConstants.DROP_RATE = Float.valueOf(config.getProperty("DROP_RATE"));
+        ServerConstants.DEVMODE = Boolean.valueOf(config.getProperty("DEVMODE"));
 
         /*Setting Debug Configuration*/
         ServerConstants.DEVELOPER_DEBUG_MODE = Boolean.valueOf(config.getProperty("DEBUG"));
         ServerConstants.DEVELOPER_PACKET_DEBUG_MODE = Boolean.valueOf(config.getProperty("PACKET_DEBUG"));
-        
+
         /*Setting API Configuration*/
         ApiConstants.PRODUCT_ID = config.getProperty("CLIENT_ID");
         ApiConstants.CLIENT_ID = config.getProperty("CLIENT_ID");
@@ -336,34 +338,37 @@ public class Start {
         long seconds = now / 1000;
         long ms = now % 1000;
 
-        if (!ServerConstants.DEVMODE) {
-            try {
-                ApiFactory.getFactory().ping(new ApiCallback() {
-                    @Override
-                    public void onSuccess() {
+        try {
+            ApiFactory.getFactory().ping(new ApiCallback() {
+                @Override
+                public void onSuccess() {
 
-                    }
+                }
 
-                    @Override
-                    public void onFail() {
-                    }
-                });
+                @Override
+                public void onFail() {
+                }
+            });
 
-                ApiFactory.getFactory().getServerAuthToken();
-            } catch (IOException ex) {
-                LogHelper.CONSOLE.get().error("Error fetching token from Cellion API.", ex);
-                System.exit(1);
-            } catch (ApiRuntimeException apiex) {
-                LogHelper.CONSOLE.get().error("An error occured with the API.", apiex);
-                System.exit(1);
-            }
-            LogHelper.CONSOLE.get().info("Cellion API initialized");
+            ApiFactory.getFactory().getServerAuthToken();
+            System.out.println("[Info] Cellion API initialized");
+        } catch (IOException ex) {
+            LogHelper.CONSOLE.get().error("Error fetching token from Cellion API.", ex);
+            System.exit(1);
+        } catch (ApiRuntimeException apiex) {
+            LogHelper.CONSOLE.get().error("An error occured with the API.", apiex);
+            System.exit(1);
         }
 
-        if (!ServerConstants.DEVMODE) {
+        if (!ServerConstants.DEVMODE && ServerConstants.USE_API) {
             queue = new QueueWorker();
             queue.start();
         }
+
+        if (ServerConstants.HOT_TIME) {
+            MapleHotTime.Schedule();
+        }
+
         System.out.println("\n" + ServerConstants.SERVER_NAME + " started successfully in " + seconds + " seconds and " + ms + " milliseconds.\n");
     }
 

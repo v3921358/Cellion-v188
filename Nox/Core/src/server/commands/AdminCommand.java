@@ -12,7 +12,6 @@ import client.SkillFactory;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
-import constants.EventConstants;
 import constants.GameConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
@@ -22,6 +21,7 @@ import service.ChannelServer;
 
 import scripting.provider.NPCChatByType;
 import scripting.provider.NPCChatType;
+import server.CashItemFactory;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MaplePortal;
@@ -80,6 +80,15 @@ public class AdminCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             c.getPlayer().cloneLook();
+            return 1;
+        }
+    }
+
+    public static class ReloadCS extends CommandExecute {
+
+        @Override
+        public int execute(MapleClient c, String[] splitted) {
+            CashItemFactory.reload();
             return 1;
         }
     }
@@ -224,13 +233,13 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            EventConstants.DoubleTime = !EventConstants.DoubleTime;
-            //if (EventConstants.DoubleMiracleTime) {
+            ServerConstants.DoubleTime = !ServerConstants.DoubleTime;
+            //if (ServerConstants.DoubleMiracleTime) {
             World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(4, "It's Miracle Time!  Between 2:00 PM and 4:00 PM (Pacific) today, Miracle, Premium, Revolutionary Miracle, Super Miracle, Enlightening Miracle and Carved Slot Miracle Cubes have increased chances to raise your item to the next potential tier!"));
             //}
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
-                    mch.dropMessage(0, "Double Time Event has " + (EventConstants.DoubleTime ? "began!" : "ended"));
+                    mch.dropMessage(0, "Double Time Event has " + (ServerConstants.DoubleTime ? "began!" : "ended"));
                 }
             }
             return 1;
@@ -241,10 +250,10 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            EventConstants.DoubleMiracleTime = !EventConstants.DoubleMiracleTime;
+            ServerConstants.DoubleMiracleTime = !ServerConstants.DoubleMiracleTime;
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
-                    mch.dropMessage(0, "Double Miracle Time Event has " + (EventConstants.DoubleMiracleTime ? "began!" : "ended"));
+                    mch.dropMessage(0, "Double Miracle Time Event has " + (ServerConstants.DoubleMiracleTime ? "began!" : "ended"));
                 }
             }
             return 1;

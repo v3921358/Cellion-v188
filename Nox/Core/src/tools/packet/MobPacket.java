@@ -341,13 +341,14 @@ public class MobPacket {
         oPacket.EncodeInt(life.getObjectId());
         oPacket.EncodeByte(1); //nCalcDamageIndex
         oPacket.EncodeInt(life.getId());
-        addMonsterStatus(oPacket, life);
-        addMonsterInformation(oPacket, life, spawnType, link, true, false);
+        SetMobStat(oPacket, life);
+        MobInit(oPacket, life, spawnType, link, true, false);
+        oPacket.Fill(0, 0x69);
 
         return oPacket;
     }
 
-    public static void addMonsterStatus(OutPacket oPacket, Mob life) {
+    public static void SetMobStat(OutPacket oPacket, Mob life) {
 
         // ForcedMobStat::Decode
         oPacket.EncodeBool(life.getChangedStats() != null);
@@ -368,14 +369,14 @@ public class MobPacket {
         }
 
         // CMob::SetTemporaryStat
-        oPacket.Fill(0, 12); //mask
+        life.getTemporaryStat().Encode(oPacket);
     }
 
-    public static void addMonsterInformation(OutPacket oPacket, Mob life, int spawnType, int link, boolean summon, boolean newSpawn) {
+    public static void MobInit(OutPacket oPacket, Mob life, int spawnType, int link, boolean summon, boolean newSpawn) {
         oPacket.EncodePosition(life.getTruePosition());
         oPacket.EncodeByte(life.getStance());
         if (life.getId() == 8910000 || life.getId() == 8910100) { // Von Bon
-            oPacket.EncodeByte(0);
+            oPacket.EncodeBool(false);//If true: random action
         }
         oPacket.EncodeShort(life.getFh()); // pfhCur
         oPacket.EncodeShort(life.getFh()); // nHomeFoothold
@@ -424,9 +425,9 @@ public class MobPacket {
         }
         oPacket.EncodeInt(life.getObjectId());
         oPacket.EncodeByte(1);// 1 = Control normal, 5 = Control none?
-        oPacket.EncodeInt(life.getId()); // idk?
-        addMonsterStatus(oPacket, life);
-        addMonsterInformation(oPacket, life, 0, 0, false, newSpawn);
+        oPacket.EncodeInt(life.getId());
+        SetMobStat(oPacket, life);
+        oPacket.Fill(0, 0x69);
 
         return oPacket;
     }
@@ -448,8 +449,8 @@ public class MobPacket {
             oPacket.EncodeByte(0);
             oPacket.EncodeInt(0);
             oPacket.EncodeByte(0);
-            addMonsterStatus(oPacket, life);
-            addMonsterInformation(oPacket, life, 0, 0, false, false);
+            SetMobStat(oPacket, life);
+            MobInit(oPacket, life, 0, 0, false, false);
         }
         return oPacket;
     }
@@ -512,7 +513,7 @@ public class MobPacket {
 
         oPacket.EncodeShort(0);
         oPacket.EncodeByte(2);//was 1
-        oPacket.Fill(0, 30);
+        oPacket.Fill(0, 0x69);
 
         return oPacket;
     }

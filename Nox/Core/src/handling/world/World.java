@@ -246,18 +246,21 @@ public class World {
             }
         }
 
-        public static void partyPacket(int partyid, OutPacket packet, MaplePartyCharacter exception) {
+        public static void partyPacket(int partyid, OutPacket oPacket, MaplePartyCharacter exception) {
             MapleParty party = getParty(partyid);
             if (party == null) {
                 return;
             }
+
+            short nPacketID = oPacket.nPacketID;
+            byte[] aData = oPacket.CloneData();
 
             for (MaplePartyCharacter partychar : party.getMembers()) {
                 int ch = Find.findChannel(partychar.getName());
                 if (ch > 0 && (exception == null || partychar.getId() != exception.getId())) {
                     User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(partychar.getName());
                     if (chr != null) { //Extra check just in case
-                        chr.getClient().SendPacket(packet);
+                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
                     }
                 }
             }
@@ -1282,59 +1285,35 @@ public class World {
             }
         }
 
-        public static void sendPacket(List<Integer> targetIds, OutPacket packet, int exception) {
-            User c;
-            for (int i : targetIds) {
-                if (i == exception) {
-                    continue;
-                }
-                int ch = Find.findChannel(i);
-                if (ch < 0) {
-                    continue;
-                }
-                c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(i);
-                if (c != null) {
-                    c.getClient().SendPacket(packet);
-                }
-            }
-        }
-
-        public static void sendPacket(int targetId, OutPacket packet) {
-            int ch = Find.findChannel(targetId);
-            if (ch < 0) {
-                return;
-            }
-            final User c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetId);
-            if (c != null) {
-                c.getClient().SendPacket(packet);
-            }
-        }
-
-        public static void sendGuildPacket(int targetIds, OutPacket packet, int exception, int guildid) {
+        public static void sendGuildPacket(int targetIds, OutPacket oPacket, int exception, int guildid) {
             if (targetIds == exception) {
                 return;
             }
+            short nPacketID = oPacket.nPacketID;
+            byte[] aData = oPacket.CloneData();
             int ch = Find.findChannel(targetIds);
             if (ch < 0) {
                 return;
             }
             final User c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetIds);
             if (c != null && c.getGuildId() == guildid) {
-                c.getClient().SendPacket(packet);
+                c.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
             }
         }
 
-        public static void sendFamilyPacket(int targetIds, OutPacket packet, int exception, int guildid) {
+        public static void sendFamilyPacket(int targetIds, OutPacket oPacket, int exception, int guildid) {
             if (targetIds == exception) {
                 return;
             }
+            short nPacketID = oPacket.nPacketID;
+            byte[] aData = oPacket.CloneData();
             int ch = Find.findChannel(targetIds);
             if (ch < 0) {
                 return;
             }
             final User c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetIds);
             if (c != null && c.getFamilyId() == guildid) {
-                c.getClient().SendPacket(packet);
+                c.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
             }
         }
     }

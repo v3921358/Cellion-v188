@@ -11,7 +11,7 @@ import net.ProcessPacket;
 
 /**
  *
- * @author kaz_v
+ * @author song_lin
  */
 public class ViewServerListHandler implements ProcessPacket<MapleClient> {
 

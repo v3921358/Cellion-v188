@@ -2039,7 +2039,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 }
             }
 
-            // Save VMatrix (KAZ SAYS THIS DOESNT LOOP RIGHT NIGGA)
+            // Save VMatrix (Song SAYS THIS DOESNT LOOP RIGHT NIGGA)
             deleteWhereCharacterId(con, "DELETE FROM vmatrix WHERE characterid = ?");
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO vmatrix (characterid, state, coreid, skillid, skillid2, skillid3, level, masterlevel, experience) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
@@ -5149,7 +5149,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         maxmp = Math.min(GameConstants.maxMP, Math.abs(maxmp));
         int localhp = stats.getCurrentMaxHp();
         int localmp = stats.getCurrentMaxMp(1);
-        
+
         if (GameConstants.isDemonSlayer(job)) { //TODO: use shield instead of df per job
             maxmp = GameConstants.getMPByJob(job);
             localmp = GameConstants.getMPByJob(job);
@@ -5163,7 +5163,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         // Update stats related stuff
         final Map<MapleStat, Long> statup = new EnumMap<>(MapleStat.class
         );
-        
+
         statup.put(MapleStat.MAXHP, (long) localhp);
         statup.put(MapleStat.IndieMMP, (long) localmp);
         statup.put(MapleStat.HP, (long) localhp);

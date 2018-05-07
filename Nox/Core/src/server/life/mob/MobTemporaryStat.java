@@ -101,234 +101,156 @@ public class MobTemporaryStat {
                 oPacket.EncodeInt(mask[i]);
             }
 
-            for (Map.Entry<MobStat, Option> entry : getNewStatVals().entrySet()) {
+            for (Map.Entry<MobStat, Option> entry : getCurrentStatVals().entrySet()) {
                 MobStat mobStat = entry.getKey();
                 Option option = entry.getValue();
-                switch (mobStat) {
-                    case PAD:
-                    case PDR:
-                    case MAD:
-                    case MDR:
-                    case ACC:
-                    case EVA:
-                    case Speed:
-                    case Stun:
-                    case Freeze:
-                    case Poison:
-                    case Seal:
-                    case Darkness:
-                    case PowerUp:
-                    case MagicUp:
-                    case PGuardUp:
-                    case MGuardUp:
-                    case PImmune:
-                    case MImmune:
-                    case Web:
-                    case HardSkin:
-                    case Ambush:
-                    case Venom:
-                    case Blind:
-                    case SealSkill:
-                    case Dazzle:
-                    case PCounter:
-                    case MCounter:
-                    case RiseByToss:
-                    case BodyPressure:
-                    case Weakness:
-                    case Showdown:
-                    case MagicCrash:
-                    case DamagedElemAttr:
-                    case Dark:
-                    case Mystery:
-                    case AddDamParty:
-                    case HitCriDamR:
-                    case Fatality:
-                    case Lifting:
-                    case DeadlyCharge:
-                    case Smite:
-                    case AddDamSkill:
-                    case Incizing:
-                    case DodgeBodyAttack:
-                    case DebuffHealing:
-                    case AddDamSkill2:
-                    case BodyAttack:
-                    case TempMoveAbility:
-                    case FixDamRBuff:
-                    case ElementDarkness:
-                    case AreaInstallByHit:
-                    case BMageDebuff:
-                    case JaguarProvoke:
-                    case JaguarBleeding:
-                    case DarkLightning:
-                    case PinkBeanFlowerPot:
-                    case BattlePvPHelenaMark:
-                    case PsychicLock:
-                    case PsychicLockCoolTime:
-                    case PsychicGroundMark:
-                    case PowerImmune:
-                    case PsychicForce:
-                    case MultiPMDR:
-                    case ElementResetBySummon:
-                    case BahamutLightElemAddDam:
-                    case BossPropPlus:
-                    case MultiDamSkill:
-                    case RWLiftPress:
-                    case RWChoppingHammer:
-                    case TimeBomb:
-                    case Treasure:
-                    case AddEffect:
-                    case Invincible:
-                    case Explosion:
-                    case HangOver:
-                        oPacket.EncodeInt(getNewOptionsByMobStat(mobStat).nOption);
-                        oPacket.EncodeInt(getNewOptionsByMobStat(mobStat).rOption);
-                        oPacket.EncodeShort(getNewOptionsByMobStat(mobStat).tOption / 500);
-                }
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(mobStat).nOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(mobStat).rOption);
+                oPacket.EncodeShort(getCurrentOptionsByMobStat(mobStat).tOption / 500);
             }
-            if (hasNewMobStat(PDR)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(PDR).cOption);
+            if (hasCurrentMobStat(PDR)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(PDR).cOption);
             }
-            if (hasNewMobStat(MDR)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(MDR).cOption);
+            if (hasCurrentMobStat(MDR)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(MDR).cOption);
             }
-            if (hasNewMobStat(PCounter)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(PCounter).wOption);
+            if (hasCurrentMobStat(PCounter)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(PCounter).wOption);
             }
-            if (hasNewMobStat(MCounter)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(MCounter).wOption);
+            if (hasCurrentMobStat(MCounter)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(MCounter).wOption);
             }
-            if (hasNewMobStat(PCounter)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(PCounter).mOption); // nCounterProb
-                oPacket.EncodeInt(getNewOptionsByMobStat(PCounter).bOption); // bCounterDelay
-                oPacket.EncodeInt(getNewOptionsByMobStat(PCounter).nReason); // nAggroRank
-            } else if (hasNewMobStat(MCounter)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(MCounter).mOption); // nCounterProb
-                oPacket.EncodeInt(getNewOptionsByMobStat(MCounter).bOption); // bCounterDelay
-                oPacket.EncodeInt(getNewOptionsByMobStat(MCounter).nReason); // nAggroRank
+            if (hasCurrentMobStat(PCounter)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(PCounter).mOption); // nCounterProb
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(PCounter).bOption); // bCounterDelay
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(PCounter).nReason); // nAggroRank
+            } else if (hasCurrentMobStat(MCounter)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(MCounter).mOption); // nCounterProb
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(MCounter).bOption); // bCounterDelay
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(MCounter).nReason); // nAggroRank
             }
-            if (hasNewMobStat(Fatality)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(Fatality).wOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(Fatality).uOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(Fatality).pOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(Fatality).yOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(Fatality).mOption);
+            if (hasCurrentMobStat(Fatality)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Fatality).wOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Fatality).uOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Fatality).pOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Fatality).yOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Fatality).mOption);
             }
-            if (hasNewMobStat(Explosion)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(Explosion).wOption);
+            if (hasCurrentMobStat(Explosion)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Explosion).wOption);
             }
-            if (hasNewMobStat(ExtraBuffStat)) {
-                List<Option> values = getNewOptionsByMobStat(ExtraBuffStat).extraOpts;
+            if (hasCurrentMobStat(ExtraBuffStat)) {
+                List<Option> values = getCurrentOptionsByMobStat(ExtraBuffStat).extraOpts;
                 oPacket.EncodeBool(values.size() > 0);
                 if (values.size() > 0) {
-                    oPacket.EncodeInt(getNewOptionsByMobStat(ExtraBuffStat).extraOpts.get(0).nOption); // nPAD
-                    oPacket.EncodeInt(getNewOptionsByMobStat(ExtraBuffStat).extraOpts.get(0).mOption); // nMAD
-                    oPacket.EncodeInt(getNewOptionsByMobStat(ExtraBuffStat).extraOpts.get(0).xOption); // nPDR
-                    oPacket.EncodeInt(getNewOptionsByMobStat(ExtraBuffStat).extraOpts.get(0).yOption); // nMDR
+                    oPacket.EncodeInt(getCurrentOptionsByMobStat(ExtraBuffStat).extraOpts.get(0).nOption); // nPAD
+                    oPacket.EncodeInt(getCurrentOptionsByMobStat(ExtraBuffStat).extraOpts.get(0).mOption); // nMAD
+                    oPacket.EncodeInt(getCurrentOptionsByMobStat(ExtraBuffStat).extraOpts.get(0).xOption); // nPDR
+                    oPacket.EncodeInt(getCurrentOptionsByMobStat(ExtraBuffStat).extraOpts.get(0).yOption); // nMDR
                 }
             }
-            if (hasNewMobStat(DeadlyCharge)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(DeadlyCharge).pOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(DeadlyCharge).pOption);
+            if (hasCurrentMobStat(DeadlyCharge)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(DeadlyCharge).pOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(DeadlyCharge).pOption);
             }
-            if (hasNewMobStat(Incizing)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(Incizing).wOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(Incizing).uOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(Incizing).pOption);
+            if (hasCurrentMobStat(Incizing)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Incizing).wOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Incizing).uOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Incizing).pOption);
             }
-            if (hasNewMobStat(Speed)) {
-                oPacket.EncodeByte(getNewOptionsByMobStat(Speed).mOption);
+            if (hasCurrentMobStat(Speed)) {
+                oPacket.EncodeByte(getCurrentOptionsByMobStat(Speed).mOption);
             }
-            if (hasNewMobStat(BMageDebuff)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(BMageDebuff).cOption);
+            if (hasCurrentMobStat(BMageDebuff)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(BMageDebuff).cOption);
             }
-            if (hasNewMobStat(DarkLightning)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(DarkLightning).cOption);
+            if (hasCurrentMobStat(DarkLightning)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(DarkLightning).cOption);
             }
-            if (hasNewMobStat(BattlePvPHelenaMark)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(BattlePvPHelenaMark).cOption);
+            if (hasCurrentMobStat(BattlePvPHelenaMark)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(BattlePvPHelenaMark).cOption);
             }
-            if (hasNewMobStat(MultiPMDR)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(MultiPMDR).cOption);
+            if (hasCurrentMobStat(MultiPMDR)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(MultiPMDR).cOption);
             }
-            if (hasNewMobStat(Freeze)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(Freeze).cOption);
+            if (hasCurrentMobStat(Freeze)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Freeze).cOption);
             }
-            if (hasNewMobStat(BurnedInfo)) {
+            if (hasCurrentMobStat(BurnedInfo)) {
                 oPacket.EncodeByte(getBurnedInfos().size());
                 for (BurnedInfo bi : getBurnedInfos()) {
                     bi.encode(oPacket);
                 }
             }
-            if (hasNewMobStat(InvincibleBalog)) {
-                oPacket.EncodeByte(getNewOptionsByMobStat(InvincibleBalog).nOption);
-                oPacket.EncodeByte(getNewOptionsByMobStat(InvincibleBalog).bOption);
+            if (hasCurrentMobStat(InvincibleBalog)) {
+                oPacket.EncodeByte(getCurrentOptionsByMobStat(InvincibleBalog).nOption);
+                oPacket.EncodeByte(getCurrentOptionsByMobStat(InvincibleBalog).bOption);
             }
-            if (hasNewMobStat(ExchangeAttack)) {
-                oPacket.EncodeByte(getNewOptionsByMobStat(ExchangeAttack).bOption);
+            if (hasCurrentMobStat(ExchangeAttack)) {
+                oPacket.EncodeByte(getCurrentOptionsByMobStat(ExchangeAttack).bOption);
             }
-            if (hasNewMobStat(AddDamParty)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(AddDamParty).wOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(AddDamParty).pOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(AddDamParty).cOption);
+            if (hasCurrentMobStat(AddDamParty)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(AddDamParty).wOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(AddDamParty).pOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(AddDamParty).cOption);
             }
-            if (hasNewMobStat(LinkTeam)) {
+            if (hasCurrentMobStat(LinkTeam)) {
                 oPacket.EncodeString(getLinkTeam());
             }
-            if (hasNewMobStat(SoulExplosion)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(SoulExplosion).nOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(SoulExplosion).rOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(SoulExplosion).wOption);
+            if (hasCurrentMobStat(SoulExplosion)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(SoulExplosion).nOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(SoulExplosion).rOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(SoulExplosion).wOption);
             }
-            if (hasNewMobStat(SeperateSoulP)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(SeperateSoulP).nOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(SeperateSoulP).rOption);
-                oPacket.EncodeShort(getNewOptionsByMobStat(SeperateSoulP).tOption / 500);
-                oPacket.EncodeInt(getNewOptionsByMobStat(SeperateSoulP).wOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(SeperateSoulP).uOption);
+            if (hasCurrentMobStat(SeperateSoulP)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(SeperateSoulP).nOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(SeperateSoulP).rOption);
+                oPacket.EncodeShort(getCurrentOptionsByMobStat(SeperateSoulP).tOption / 500);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(SeperateSoulP).wOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(SeperateSoulP).uOption);
             }
-            if (hasNewMobStat(SeperateSoulC)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(SeperateSoulC).nOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(SeperateSoulC).rOption);
-                oPacket.EncodeShort(getNewOptionsByMobStat(SeperateSoulC).tOption / 500);
-                oPacket.EncodeInt(getNewOptionsByMobStat(SeperateSoulC).wOption);
+            if (hasCurrentMobStat(SeperateSoulC)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(SeperateSoulC).nOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(SeperateSoulC).rOption);
+                oPacket.EncodeShort(getCurrentOptionsByMobStat(SeperateSoulC).tOption / 500);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(SeperateSoulC).wOption);
             }
-            if (hasNewMobStat(Ember)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(Ember).nOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(Ember).rOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(Ember).wOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(Ember).tOption / 500);
-                oPacket.EncodeInt(getNewOptionsByMobStat(Ember).uOption);
+            if (hasCurrentMobStat(Ember)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Ember).nOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Ember).rOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Ember).wOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Ember).tOption / 500);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Ember).uOption);
             }
-            if (hasNewMobStat(TrueSight)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(TrueSight).nOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(TrueSight).rOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(TrueSight).tOption / 500);
-                oPacket.EncodeInt(getNewOptionsByMobStat(TrueSight).cOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(TrueSight).pOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(TrueSight).uOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(TrueSight).wOption);
+            if (hasCurrentMobStat(TrueSight)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(TrueSight).nOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(TrueSight).rOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(TrueSight).tOption / 500);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(TrueSight).cOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(TrueSight).pOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(TrueSight).uOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(TrueSight).wOption);
             }
-            if (hasNewMobStat(MultiDamSkill)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(MultiDamSkill).cOption);
+            if (hasCurrentMobStat(MultiDamSkill)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(MultiDamSkill).cOption);
             }
-            if (hasNewMobStat(Laser)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(Laser).nOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(Laser).rOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(Laser).tOption / 500);
-                oPacket.EncodeInt(getNewOptionsByMobStat(Laser).wOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(Laser).uOption);
+            if (hasCurrentMobStat(Laser)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Laser).nOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Laser).rOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Laser).tOption / 500);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Laser).wOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(Laser).uOption);
             }
-            if (hasNewMobStat(ElementResetBySummon)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(ElementResetBySummon).cOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(ElementResetBySummon).pOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(ElementResetBySummon).uOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(ElementResetBySummon).wOption);
+            if (hasCurrentMobStat(ElementResetBySummon)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(ElementResetBySummon).cOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(ElementResetBySummon).pOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(ElementResetBySummon).uOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(ElementResetBySummon).wOption);
             }
-            if (hasNewMobStat(BahamutLightElemAddDam)) {
-                oPacket.EncodeInt(getNewOptionsByMobStat(BahamutLightElemAddDam).pOption);
-                oPacket.EncodeInt(getNewOptionsByMobStat(BahamutLightElemAddDam).cOption);
+            if (hasCurrentMobStat(BahamutLightElemAddDam)) {
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(BahamutLightElemAddDam).pOption);
+                oPacket.EncodeInt(getCurrentOptionsByMobStat(BahamutLightElemAddDam).cOption);
             }
-            getNewStatVals().clear();
         }
     }
 

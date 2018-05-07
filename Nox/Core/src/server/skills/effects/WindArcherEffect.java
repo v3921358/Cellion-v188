@@ -192,7 +192,9 @@ public class WindArcherEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.StormBringer, pEffect.info.get(MapleStatInfo.x));
                 break;
             case WindArcher.TOUCH_OF_THE_WIND:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DEXR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePADR, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, pEffect.info.get(MapleStatInfo.indieMhpR));
                 break;
             case WindArcher.TRIFLING_WIND_DOUBLE_CHANCE:

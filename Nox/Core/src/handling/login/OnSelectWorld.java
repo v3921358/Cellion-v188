@@ -13,7 +13,7 @@ import tools.packet.CLogin;
 
 /**
  *
- * @author Kaz Voeten
+ * @author Song Lin
  */
 public class OnSelectWorld implements ProcessPacket<MapleClient> {
 

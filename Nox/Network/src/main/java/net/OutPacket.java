@@ -36,9 +36,9 @@ public class OutPacket {
     private static final Charset ASCII = Charset.forName("US-ASCII");
 
     public OutPacket(short nPacketID) {
-        this.pSendBuff = Unpooled.buffer().order(ByteOrder.LITTLE_ENDIAN);
+        this.pSendBuff = Unpooled.buffer();
         this.nPacketID = nPacketID;
-        pSendBuff.writeShort(nPacketID);
+        pSendBuff.writeShortLE(nPacketID);
     }
     
     public final OutPacket EncodeByte(int nValue) {
@@ -66,12 +66,12 @@ public class OutPacket {
     }
 
     public final OutPacket EncodeShort(int nValue) {
-        pSendBuff.writeShort(nValue);
+        pSendBuff.writeShortLE(nValue);
         return this;
     }
 
     public final OutPacket EncodeShort(short nValue) {
-        pSendBuff.writeShort(nValue);
+        pSendBuff.writeShortLE(nValue);
         return this;
     }
 
@@ -81,22 +81,22 @@ public class OutPacket {
     }
 
     public final OutPacket EncodeInt(int nValue) {
-        pSendBuff.writeInt(nValue);
+        pSendBuff.writeIntLE(nValue);
         return this;
     }
 
     public final OutPacket EncodeFloat(float nValue) {
-        pSendBuff.writeFloat(nValue);
+        pSendBuff.writeFloatLE(nValue);
         return this;
     }
 
     public final OutPacket EncodeLong(long nValue) {
-        pSendBuff.writeLong(nValue);
+        pSendBuff.writeLongLE(nValue);
         return this;
     }
 
     public final OutPacket EncodeDouble(double nValue) {
-        pSendBuff.writeDouble(nValue);
+        pSendBuff.writeDoubleLE(nValue);
         return this;
     }
 

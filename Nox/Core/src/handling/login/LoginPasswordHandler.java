@@ -27,23 +27,26 @@ public final class LoginPasswordHandler implements ProcessPacket<MapleClient> {
         String pwd = iPacket.DecodeString();
         String login = iPacket.DecodeString().replace("NP12:auth06:5:0:", "");
 
-        ApiFactory.getFactory().getUserAuthToken(c, login, pwd, new ApiCallback() {
-            @Override
-            public void onSuccess() {
+        if (!ServerConstants.USE_API) {
+            PasswordLogin(c, login, pwd);
+        } else {
+            ApiFactory.getFactory().getUserAuthToken(c, login, pwd, new ApiCallback() {
+                @Override
+                public void onSuccess() {
 
-            }
-
-            @Override
-            public void onFail() {
-                //session.getRemoteAddress().toString()
-                c.SendPacket(CLogin.getLoginFailed(6));
-                loginFailCount(c);
-                if (loginFailCount(c)) {
-                    c.Close();
                 }
-            }
-        });
 
+                @Override
+                public void onFail() {
+                    //session.getRemoteAddress().toString()
+                    c.SendPacket(CLogin.getLoginFailed(6));
+                    loginFailCount(c);
+                    if (loginFailCount(c)) {
+                        c.Close();
+                    }
+                }
+            });
+        }
     }
 
     private static boolean loginFailCount(final MapleClient c) {
@@ -63,15 +66,15 @@ public final class LoginPasswordHandler implements ProcessPacket<MapleClient> {
             return;
         }
 
-        login(c, data);
+        APILogin(c, data);
     }
 
-    public static void login(MapleClient c, UserInfo data) {
+    public static void APILogin(MapleClient c, UserInfo data) {
 
         final boolean ipBan = c.hasBannedIP();
         final boolean macBan = c.hasBannedMac();
 
-        int loginok = c.login(data.getName(), data.getId());
+        int loginok = c.AuthLogin(data.getName(), data.getId());
 
         final Calendar tempbannedTill = c.getTempBanCalendar();
 
@@ -85,6 +88,42 @@ public final class LoginPasswordHandler implements ProcessPacket<MapleClient> {
         if (loginok != 0) {
             if (loginok == 3) {
                 c.SendPacket(CWvsContext.broadcastMsg(1, c.showBanReason(data.getName(), true)));
+                c.SendPacket(CLogin.getLoginFailed(1)); //Shows no message, used for unstuck the login button
+            } else {
+                c.SendPacket(CLogin.getLoginFailed(loginok));
+            }
+        } else if (tempbannedTill.getTimeInMillis() > Calendar.getInstance().getTimeInMillis()) {
+            if (!loginFailCount(c)) {
+                c.clearInformation();
+                c.SendPacket(CLogin.getTempBan(PacketHelper.getTime(tempbannedTill.getTimeInMillis()), c.getBanReason()));
+            } else {
+                c.Close();
+            }
+        } else {
+            c.loginAttempt = 0;
+            LoginWorker.registerClient(c);
+        }
+    }
+
+    public static void PasswordLogin(MapleClient c, String name, String password) {
+
+        final boolean ipBan = c.hasBannedIP();
+        final boolean macBan = c.hasBannedMac();
+
+        int loginok = c.LoginPassword(name, password);
+
+        final Calendar tempbannedTill = c.getTempBanCalendar();
+
+        if (loginok == 0 && (ipBan || macBan) && !c.isGm()) {
+            loginok = 3;
+            if (macBan) {
+                // this is only an ipban o.O" - maybe we should refactor this a bit so it's more readable
+                User.ban(c.GetIP().split(":")[0], "Enforcing account ban, account " + name, false, 4, false);
+            }
+        }
+        if (loginok != 0) {
+            if (loginok == 3) {
+                c.SendPacket(CWvsContext.broadcastMsg(1, c.showBanReason(name, true)));
                 c.SendPacket(CLogin.getLoginFailed(1)); //Shows no message, used for unstuck the login button
             } else {
                 c.SendPacket(CLogin.getLoginFailed(loginok));

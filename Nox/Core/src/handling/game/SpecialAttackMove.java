@@ -141,7 +141,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
         }
 
         if (pPlayer.isDeveloper()) {
-        	pPlayer.dropMessage(5, "" + nSkill);
+            pPlayer.dropMessage(5, "" + nSkill);
         }
         if (GameConstants.isEventMap(pPlayer.getMapId())) {
             for (MapleEventType t : MapleEventType.values()) {
@@ -666,6 +666,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
             }
         }
 
+        c.getPlayer().getStat().recalcLocalStats(c.getPlayer());
         c.SendPacket(CWvsContext.enableActions());
     }
 }

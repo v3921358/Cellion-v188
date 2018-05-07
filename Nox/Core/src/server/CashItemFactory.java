@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import database.Database;
+import java.util.concurrent.locks.ReentrantLock;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataTool;
@@ -21,6 +22,7 @@ import tools.LogHelper;
 
 public class CashItemFactory {
 
+    private ReentrantLock m_Lock = new ReentrantLock(true);
     private final static CashItemFactory instance = new CashItemFactory();
     private final static int[] bestItems = new int[]{10003055, 10003090, 10103464, 10002960, 10103363};
     private final Map<Integer, CashItemInfo> itemStats = new HashMap<>();
@@ -34,6 +36,22 @@ public class CashItemFactory {
 
     public static CashItemFactory getInstance() {
         return instance;
+    }
+
+    public static void reload() {
+        CashItemFactory pCashItemFactory = getInstance();
+        pCashItemFactory.m_Lock.lock();
+        try {
+            pCashItemFactory.itemStats.clear();
+            pCashItemFactory.itemPackage.clear();
+            pCashItemFactory.itemMods.clear();
+            pCashItemFactory.openBox.clear();
+            pCashItemFactory.categories.clear();
+            pCashItemFactory.menuItems.clear();
+            pCashItemFactory.categoryItems.clear();
+        } finally {
+            pCashItemFactory.m_Lock.unlock();
+        }
     }
 
     public void initialize() {

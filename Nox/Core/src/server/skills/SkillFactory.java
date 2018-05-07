@@ -12,7 +12,7 @@ import provider.wz.nox.NoxBinaryReader;
 
 /**
  *
- * @author kaz_v
+ * @author song_lin
  */
 public class SkillFactory {
 
