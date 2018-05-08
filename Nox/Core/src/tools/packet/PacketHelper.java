@@ -1434,7 +1434,7 @@ public class PacketHelper {
         final List<ShopRepurchase> shopRepurchases = c.getPlayer().getShopRepurchases();
 
         oPacket.EncodeShort(shop.getItems().size() + shopRepurchases.size());
-        System.err.println("Size: " + shop.getItems().size() + shopRepurchases.size());
+        //System.err.println("Size: " + shop.getItems().size() + shopRepurchases.size());
         for (MapleShopItem item : shop.getItems()) {
             addShopItemInfo(oPacket, item, shop, ii, null, c.getPlayer());
         }

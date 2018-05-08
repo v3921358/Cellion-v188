@@ -611,7 +611,7 @@ public class MapleClient extends Socket {
                         }
                         MapleClientLoginState loginstate = getLoginState();
                         if (loginstate.getState() > MapleClientLoginState.LOGIN_NOTLOGGEDIN.getState()) { // already loggedin
-                            if (getSessionIPAddress().equals(oldSession) && oldSession != null && getPlayer() == null) {
+                            if (getSessionIPAddress().equals(oldSession) && oldSession != null && getPlayer() == null && CashShopServer.getPlayerStorage().getCharacterById(accId) == null) {
                                 try (PreparedStatement ps2 = con.prepareStatement("UPDATE accounts SET loggedin = 0 WHERE name = ?")) {
                                     ps2.setString(1, name);
                                     ps2.executeUpdate();
@@ -682,7 +682,7 @@ public class MapleClient extends Socket {
                         }
                         MapleClientLoginState loginstate = getLoginState();
                         if (loginstate.getState() > MapleClientLoginState.LOGIN_NOTLOGGEDIN.getState()) { // already loggedin
-                            if (getSessionIPAddress().equals(oldSession) && oldSession != null && getPlayer() == null) {
+                            if (getSessionIPAddress().equals(oldSession) && oldSession != null && getPlayer() == null && CashShopServer.getPlayerStorage().getCharacterById(accId) == null) {
                                 try (PreparedStatement ps2 = con.prepareStatement("UPDATE accounts SET loggedin = 0 WHERE name = ?")) {
                                     ps2.setString(1, name);
                                     ps2.executeUpdate();

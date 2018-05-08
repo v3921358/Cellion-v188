@@ -46,7 +46,6 @@ import tools.packet.CField.SummonPacket;
 
 /**
  * UserSkillRequest
- *
  * @author Mazen Massoud
  */
 public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
@@ -140,9 +139,6 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
             }
         }
 
-        if (pPlayer.isDeveloper()) {
-            pPlayer.dropMessage(5, "" + nSkill);
-        }
         if (GameConstants.isEventMap(pPlayer.getMapId())) {
             for (MapleEventType t : MapleEventType.values()) {
                 MapleEvent e = ChannelServer.getInstance(pPlayer.getClient().getChannel()).getEvent(t);
@@ -179,9 +175,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 // These skills are currently broken, so we can return here for now.
                 return;
             default:
-                if (pPlayer.isDeveloper()) {
-                    pPlayer.dropMessage(5, "[SpecialAttackMove Debug] Skill ID : " + nSkill);
-                }
+                if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[SpecialAttackMove Debug] Skill ID : " + nSkill);
                 break;
         }
 
@@ -288,7 +282,28 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
             case WildHunter.JAGUAR_RIDER: {
                 pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932215 /*1932015*/);
                 pEffect.info.put(MapleStatInfo.time, 2100000000);
+                break;
             }
+            case DawnWarrior.SOUL_SPEED:{
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, 20);
+                break;
+            }
+            case DawnWarrior.FALLING_MOON:{
+                pPlayer.dispelBuff(DawnWarrior.RISING_SUN);
+                pEffect.statups.put(CharacterTemporaryStat.PoseType, 1);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                break;
+            }
+            case DawnWarrior.RISING_SUN: {
+                pPlayer.dispelBuff(DawnWarrior.FALLING_MOON);
+                pEffect.statups.put(CharacterTemporaryStat.PoseType, 2);
+                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                break;
+            }
+            case DawnWarrior.EQUINOX_CYCLE: {
+                pEffect.statups.put(CharacterTemporaryStat.GlimmeringTime, 1);
+                break;
+             }
             default: {
                 bApplyStats = false;
                 break;
@@ -302,7 +317,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
         }
 
         /*Summons Handler*/
- /*Define summon effects and spawn the object to the player.*/
+    /*Define summon effects and spawn the object to the player.*/
         boolean bSummon = true;
         SummonMovementType pMovement = SummonMovementType.FOLLOW;
         switch (nSkill) {
@@ -336,13 +351,13 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
         }
 
         /*Additional Effect Handler*/
- /*Extra functions that occur when the respected skill is cast.*/
+    /*Extra functions that occur when the respected skill is cast.*/
         switch (nSkill) {
             case Kaiser.FINAL_FORM:
             case Kaiser.FINAL_FORM_1:
             case Kaiser.FINAL_TRANCE: {
                 final EnumMap<CharacterTemporaryStat, Integer> mMorphStat = new EnumMap<>(CharacterTemporaryStat.class);
-                mMorphStat.put(CharacterTemporaryStat.Morph, nSkill == Kaiser.FINAL_TRANCE ? 1201 : 1200);
+                mMorphStat.put(CharacterTemporaryStat.Morph, 1201/*nSkill == Kaiser.FINAL_TRANCE ? 1201 : 1200*/);
                 final MapleStatEffect.CancelEffectAction pCancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), mMorphStat);
                 final ScheduledFuture<?> tBuffSchedule = Timer.BuffTimer.getInstance().schedule(pCancelAction, pEffect.info.get(MapleStatInfo.time));
                 pPlayer.registerEffect(pEffect, System.currentTimeMillis(), tBuffSchedule, mMorphStat, false, pEffect.info.get(MapleStatInfo.time), pPlayer.getId());

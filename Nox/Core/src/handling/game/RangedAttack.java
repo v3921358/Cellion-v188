@@ -46,23 +46,20 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
             return;
         }
 
-        //AttackInfo attack = DamageParse.parseRangedAttack(iPacket, chr);
-        AttackInfo attack = DamageParse.OnAttack(RecvPacketOpcode.UserShootAttack, iPacket, pPlayer);
-        if (attack == null) {
+        AttackInfo pAttack = DamageParse.OnAttack(RecvPacketOpcode.UserShootAttack, iPacket, pPlayer);
+        if (pAttack == null) {
             c.SendPacket(CWvsContext.enableActions());
             return;
         }
 
-        if (pPlayer.isDeveloper()) {
-            pPlayer.dropMessage(5, "[RangedAttack Debug] Skill ID : " + attack.skill);
-        }
+        if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[RangedAttack Debug] Skill ID : " + pAttack.skill);
 
-        int bulletCount = 1;
-        int skillLevel = 0;
-        MapleStatEffect effect = null;
-        Skill skill = null;
-        boolean AOE = attack.skill == 4111004;
-        boolean noBullet = (pPlayer.getJob() >= 3500 && pPlayer.getJob() <= 3512)
+        int nBulletCount = 1;
+        int nSLV = 0;
+        MapleStatEffect pEffect = null;
+        Skill pSkill = null;
+        boolean bAOE = pAttack.skill == 4111004;
+        boolean bNoBullet = (pPlayer.getJob() >= 3500 && pPlayer.getJob() <= 3512)
                 || (pPlayer.getJob() >= 510 && pPlayer.getJob() <= 512)
                 || GameConstants.isCannoneer(pPlayer.getJob())
                 || GameConstants.isXenon(pPlayer.getJob())
@@ -73,24 +70,24 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
                 || GameConstants.isZero(pPlayer.getJob())
                 || GameConstants.isBeastTamer(pPlayer.getJob())
                 || GameConstants.isLuminous(pPlayer.getJob())
-                || attack.skill == Outlaw.BLACKBOOT_BILL;
+                || pAttack.skill == Outlaw.BLACKBOOT_BILL;
 
-        if (attack.skill != 0 && attack.skill != 1 && attack.skill != 17) {
-            skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
-            if ((skill == null) || ((GameConstants.isAngel(attack.skill)) && (pPlayer.getStat().equippedSummon % 10000 != attack.skill % 10000))) {
+        if (pAttack.skill != 0 && pAttack.skill != 1 && pAttack.skill != 17) {
+            pSkill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(pAttack.skill));
+            if ((pSkill == null) || ((GameConstants.isAngel(pAttack.skill)) && (pPlayer.getStat().equippedSummon % 10000 != pAttack.skill % 10000))) {
                 c.SendPacket(CWvsContext.enableActions());
                 return;
             }
-            skillLevel = pPlayer.getTotalSkillLevel(skill);
-            effect = attack.getAttackEffect(pPlayer, skillLevel <= 0 ? attack.skillLevel : skillLevel, skill);
-            if (effect == null) {
+            nSLV = pPlayer.getTotalSkillLevel(pSkill);
+            pEffect = pAttack.getAttackEffect(pPlayer, nSLV <= 0 ? pAttack.skillLevel : nSLV, pSkill);
+            if (pEffect == null) {
                 return;
-            } else if ((effect.getCooldown(pPlayer) > 0) && ((attack.skill != 35111004 && attack.skill != 35121013) || pPlayer.getBuffSource(CharacterTemporaryStat.Mechanic) != attack.skill)) {
-                if (pPlayer.skillisCooling(attack.skill)) {
+            } else if ((pEffect.getCooldown(pPlayer) > 0) && ((pAttack.skill != 35111004 && pAttack.skill != 35121013) || pPlayer.getBuffSource(CharacterTemporaryStat.Mechanic) != pAttack.skill)) {
+                if (pPlayer.skillisCooling(pAttack.skill)) {
                     c.SendPacket(CWvsContext.enableActions());
                     return;
                 }
-                pPlayer.addCooldown(attack.skill, System.currentTimeMillis(), effect.getCooldown(pPlayer));
+                pPlayer.addCooldown(pAttack.skill, System.currentTimeMillis(), pEffect.getCooldown(pPlayer));
             }
 
             if (GameConstants.isEventMap(pPlayer.getMapId())) {
@@ -107,16 +104,16 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
                 }
             }
             if (GameConstants.isAngelicBuster(pPlayer.getJob())) {
-                int Recharge = effect.getOnActive();
+                int Recharge = pEffect.getOnActive();
                 if (Recharge > -1) {
                     if (Randomizer.isSuccess(Recharge)) {
                         c.SendPacket(JobPacket.AngelicPacket.unlockSkill());
                         c.SendPacket(JobPacket.AngelicPacket.showRechargeEffect());
                     } else {
-                        c.SendPacket(JobPacket.AngelicPacket.lockSkill(attack.skill));
+                        c.SendPacket(JobPacket.AngelicPacket.lockSkill(pAttack.skill));
                     }
                 } else {
-                    c.SendPacket(JobPacket.AngelicPacket.lockSkill(attack.skill));
+                    c.SendPacket(JobPacket.AngelicPacket.lockSkill(pAttack.skill));
                 }
             }
 
@@ -153,7 +150,7 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
                     count = Randomizer.rand(1, 3);
                     percent = 5;
                 }
-                for (AttackMonster at : attack.allDamage) {
+                for (AttackMonster at : pAttack.allDamage) {
                     Mob mob = pPlayer.getMap().getMonsterByOid(at.getObjectId());
                     if (Randomizer.nextInt(100) < percent) {
                         if (mob != null) {
@@ -163,7 +160,7 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
                     }
                 }
             }
-            switch (attack.skill) {
+            switch (pAttack.skill) {
                 case 21001009: // Aran Smash Wave
                 case 13101005:
                 case 21110004: // Ranged but uses attackcount instead
@@ -216,20 +213,20 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
                 case 65001100://Star Bubble
                 case 61001101: { //Flame Surge
                     // case 2321054:
-                    AOE = true;
-                    bulletCount = effect.getAttackCount();
+                    bAOE = true;
+                    nBulletCount = pEffect.getAttackCount();
                     break;
                 }
                 case 35121005:
                 case 35111004:
                 case 35121013: {
-                    AOE = true;
-                    bulletCount = 6;
+                    bAOE = true;
+                    nBulletCount = 6;
                     break;
                 }
                 case 5221017: {// Eight-Legs Easton
                     // Handle Bullet Consumtion for Corsair's Eight-Legs Easton skill. -Mazen
-                    Item pProjectilez = pPlayer.getInventory(MapleInventoryType.USE).getItem((short) attack.slot);
+                    Item pProjectilez = pPlayer.getInventory(MapleInventoryType.USE).getItem((short) pAttack.slot);
                     if ((pProjectilez == null) || (!MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, pProjectilez.getItemId(), 4, false, true))) {
                         pPlayer.dropMessage(5, "You do not have enough bullets to use this skill.");
                         return;
@@ -237,46 +234,46 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
                     break;
                 }
                 default:
-                    bulletCount = effect.getBulletCount();
+                    nBulletCount = pEffect.getBulletCount();
                     break;
             }
-            if (noBullet && effect.getBulletCount() < effect.getAttackCount()) {
-                bulletCount = effect.getAttackCount();
+            if (bNoBullet && pEffect.getBulletCount() < pEffect.getAttackCount()) {
+                nBulletCount = pEffect.getAttackCount();
             }
-            if ((noBullet) && (effect.getBulletCount() < effect.getAttackCount())) {
-                bulletCount = effect.getAttackCount();
+            if ((bNoBullet) && (pEffect.getBulletCount() < pEffect.getAttackCount())) {
+                nBulletCount = pEffect.getAttackCount();
             }
         }
-        DamageParse.modifyCriticalAttack(attack, pPlayer, 2, effect);
+        DamageParse.modifyCriticalAttack(pAttack, pPlayer, 2, pEffect);
         Integer ShadowPartner = pPlayer.getBuffedValue(CharacterTemporaryStat.ShadowPartner);
         boolean bMirror = pPlayer.hasBuff(CharacterTemporaryStat.ShadowPartner) || pPlayer.hasBuff(CharacterTemporaryStat.ShadowServant);
         if (bMirror) {
-            bulletCount *= 2;
+            nBulletCount *= 2;
         }
         int projectile = 0;
         int visProjectile = 0;
-        if ((!AOE) && (pPlayer.getBuffedValue(CharacterTemporaryStat.SoulArrow) == null) && (!noBullet)) {
-            Item ipp = pPlayer.getInventory(MapleInventoryType.USE).getItem((short) attack.slot);
+        if ((!bAOE) && (pPlayer.getBuffedValue(CharacterTemporaryStat.SoulArrow) == null) && (!bNoBullet)) {
+            Item ipp = pPlayer.getInventory(MapleInventoryType.USE).getItem((short) pAttack.slot);
             if (ipp == null) {
                 pPlayer.dropMessage(6, "Reaching Point 3");
                 return;
             }
             projectile = ipp.getItemId();
 
-            if (attack.csstar > 0) {
-                if (pPlayer.getInventory(MapleInventoryType.CASH).getItem((short) attack.csstar) == null) {
+            if (pAttack.csstar > 0) {
+                if (pPlayer.getInventory(MapleInventoryType.CASH).getItem((short) pAttack.csstar) == null) {
                     pPlayer.dropMessage(6, "Reaching Point 4");
                     return;
                 }
-                visProjectile = pPlayer.getInventory(MapleInventoryType.CASH).getItem((short) attack.csstar).getItemId();
+                visProjectile = pPlayer.getInventory(MapleInventoryType.CASH).getItem((short) pAttack.csstar).getItemId();
             } else {
                 visProjectile = projectile;
             }
 
             if (pPlayer.getBuffedValue(CharacterTemporaryStat.NoBulletConsume) == null) {
-                int bulletConsume = bulletCount;
-                if ((effect != null) && (effect.getBulletConsume() != 0)) {
-                    bulletConsume = effect.getBulletConsume() * (bMirror ? 2 : 1);
+                int bulletConsume = nBulletCount;
+                if ((pEffect != null) && (pEffect.getBulletConsume() != 0)) {
+                    bulletConsume = pEffect.getBulletConsume() * (bMirror ? 2 : 1);
                 }
                 if ((pPlayer.getJob() == 412) && (bulletConsume > 0) && (ipp.getQuantity() < MapleItemInformationProvider.getInstance().getSlotMax(projectile))) {
                     Skill expert = SkillFactory.getSkill(4120010);
@@ -336,7 +333,7 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
         }
         PlayerStats statst = pPlayer.getStat();
         double basedamage;
-        switch (attack.skill) {
+        switch (pAttack.skill) {
             case 4001344:
             case 4121007:
             case 14001004:
@@ -348,16 +345,16 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
                 break;
             default:
                 basedamage = statst.getCurrentMaxBaseDamage();
-                switch (attack.skill) {
+                switch (pAttack.skill) {
                     case 3101005:
-                        basedamage *= effect.getX() / 100.0D;
+                        basedamage *= pEffect.getX() / 100.0D;
                         break;
                 }
         }
-        if (effect != null) {
-            basedamage *= (effect.getDamage() + statst.getDamageIncrease(attack.skill)) / 100.0D;
+        if (pEffect != null) {
+            basedamage *= (pEffect.getDamage() + statst.getDamageIncrease(pAttack.skill)) / 100.0D;
 
-            long money = effect.getMoneyCon();
+            long money = pEffect.getMoneyCon();
             if (money != 0) {
                 if (money > pPlayer.getMeso()) {
                     money = pPlayer.getMeso();
@@ -367,19 +364,19 @@ public final class RangedAttack implements ProcessPacket<MapleClient> {
         }
         pPlayer.checkFollow();
         if (!pPlayer.isHidden()) {
-            if (attack.skill == 3211006) {
-                pPlayer.getMap().broadcastMessage(pPlayer, CField.strafeAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), attack.attackFlag, pPlayer.getTotalSkillLevel(3220010)), pPlayer.getTruePosition());
+            if (pAttack.skill == 3211006) {
+                pPlayer.getMap().broadcastMessage(pPlayer, CField.strafeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, visProjectile, pAttack.allDamage, pAttack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pPlayer.getTotalSkillLevel(3220010)), pPlayer.getTruePosition());
             } else {
-                pPlayer.getMap().broadcastMessage(pPlayer, CField.rangedAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), attack.attackFlag), pPlayer.getTruePosition());
+                pPlayer.getMap().broadcastMessage(pPlayer, CField.rangedAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, visProjectile, pAttack.allDamage, pAttack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag), pPlayer.getTruePosition());
             }
-        } else if (attack.skill == 3211006) {
-            pPlayer.getMap().broadcastGMMessage(pPlayer, CField.strafeAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), attack.attackFlag, pPlayer.getTotalSkillLevel(3220010)), false);
+        } else if (pAttack.skill == 3211006) {
+            pPlayer.getMap().broadcastGMMessage(pPlayer, CField.strafeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, visProjectile, pAttack.allDamage, pAttack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pPlayer.getTotalSkillLevel(3220010)), false);
         } else {
-            pPlayer.getMap().broadcastGMMessage(pPlayer, CField.rangedAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), attack.attackFlag), false);
+            pPlayer.getMap().broadcastGMMessage(pPlayer, CField.rangedAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, visProjectile, pAttack.allDamage, pAttack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag), false);
         }
 
-        DamageParse.applyAttack(attack, skill, pPlayer, bulletCount, basedamage, effect, bMirror ? AttackType.RANGED_WITH_ShadowPartner : AttackType.RANGED);
-        attack.cleanupMemory(); // Clean up memory references.
+        DamageParse.applyAttack(pAttack, pSkill, pPlayer, nBulletCount, basedamage, pEffect, bMirror ? AttackType.RANGED_WITH_ShadowPartner : AttackType.RANGED);
+        pAttack.cleanupMemory(); // Clean up memory references.
     }
 
 }

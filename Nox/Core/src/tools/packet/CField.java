@@ -421,19 +421,19 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket getCharInfo(User mc) {
-        return getWarpToMap(mc, null, 0, false);
+    public static OutPacket getCharInfo(User pPlayer) {
+        return getWarpToMap(pPlayer, null, 0, false);
     }
 
-    public static OutPacket getWarpToMap(User chr, MapleMap to, int spawnPoint, boolean bCharacterData) {
+    public static OutPacket getWarpToMap(User pPlayer, MapleMap pToMap, int nSpawnPoint, boolean bCharacterData) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.SetField.getValue());
 
         // Prevent disconnects upon changing map with Shadow Partner active - Mazen.
-        if (GameConstants.isNightWalkerCygnus(chr.getJob())) {
-            chr.cancelEffectFromTemporaryStat(CharacterTemporaryStat.ShadowServant);
-            chr.cancelEffectFromTemporaryStat(CharacterTemporaryStat.ShadowIllusion);
-            chr.cancelEffectFromTemporaryStat(CharacterTemporaryStat.ShadowPartner);
+        if (GameConstants.isNightWalkerCygnus(pPlayer.getJob())) {
+            pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.ShadowServant);
+            pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.ShadowIllusion);
+            pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.ShadowPartner);
         }
 
         //CClient::DecodeOptMan (Size)
@@ -458,7 +458,7 @@ public class CField {
             }
         }*/
         //Channel
-        oPacket.EncodeInt(chr.getClient().getChannel() - 1);
+        oPacket.EncodeInt(pPlayer.getClient().getChannel() - 1);
 
         //Admin Byte
         oPacket.EncodeByte(0);
@@ -487,9 +487,9 @@ public class CField {
 
         if (bCharacterData) {
             //3 randomized integers (For the critical damage calculation)
-            chr.CRand().connectData(oPacket);
+            pPlayer.CRand().connectData(oPacket);
 
-            PacketHelper.addCharacterInfo(oPacket, chr);
+            PacketHelper.addCharacterInfo(oPacket, pPlayer);
             //PacketHelper.addLuckyLogoutInfo(oPacket, false, null, null, null);
             oPacket.EncodeInt(0);
             oPacket.EncodeInt(0);
@@ -505,9 +505,9 @@ public class CField {
 		      v2->m_bUsingBuffProtector = 0;
 		    }
              */
-            oPacket.EncodeInt(to.getId());
-            oPacket.EncodeByte(spawnPoint);
-            oPacket.EncodeInt(chr.getStat().getHp());
+            oPacket.EncodeInt(pToMap.getId());
+            oPacket.EncodeByte(nSpawnPoint);
+            oPacket.EncodeInt(pPlayer.getStat().getHp());
 
             //Boolean (int + int)
             oPacket.EncodeByte(0);

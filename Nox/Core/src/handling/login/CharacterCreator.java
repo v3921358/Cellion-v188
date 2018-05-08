@@ -474,6 +474,17 @@ public final class CharacterCreator implements ProcessPacket<MapleClient> {
                     pNewCharacter.setRemainingAp(45);
                     pNewCharacter.setRemainingSp(5, 0);
                     break;
+                case Kaiser:
+                    pNewCharacter.setJob((short) 6100); 
+                    pNewCharacter.setLevel((short) 10);
+                    pNewCharacter.getStat().str = 4;
+                    pNewCharacter.getStat().int_ = 10;
+                    pNewCharacter.getStat().maxhp = 500;
+                    pNewCharacter.getStat().hp = 500;
+                    pNewCharacter.getStat().maxmp = 300;
+                    pNewCharacter.getStat().mp = 300;
+                    pNewCharacter.setRemainingSp(10);
+                    break;
                 default:
                     pNewCharacter.setLevel((short) 10);
                     pNewCharacter.setRemainingAp(40);

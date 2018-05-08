@@ -31,7 +31,7 @@ import util.HexUtils;
  */
 public class OutPacket {
 
-    public int nPacketID;
+    public short nPacketID;
     private final ByteBuf pSendBuff;
     private static final Charset ASCII = Charset.forName("US-ASCII");
 
@@ -150,13 +150,16 @@ public class OutPacket {
 
     public byte[] GetData() {
         byte[] aData = new byte[pSendBuff.readableBytes()];
-        int nReaderIndex = pSendBuff.readerIndex();
-        pSendBuff.getBytes(nReaderIndex, aData);
+        pSendBuff.readBytes(aData);
+        pSendBuff.release();
         return aData;
     }
     
-    //Might be broken~!
-    public OutPacket Clone() {
-        return (new OutPacket((short) nPacketID)).Encode(this.GetData());
+    public byte[] CloneData() {
+        pSendBuff.readShortLE();//Skip already encoded opcode.
+        byte[] aData = new byte[pSendBuff.readableBytes()];
+        pSendBuff.readBytes(aData);
+        pSendBuff.release();
+        return aData;
     }
 }

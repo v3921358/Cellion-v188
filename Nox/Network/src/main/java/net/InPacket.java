@@ -21,7 +21,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import util.HexUtils;
 

@@ -1486,7 +1486,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
                         }
                         item = c.getPlayer().getInventory(MapleInventoryType.getByType(invType)).getItem(pos);
                     }
-                    World.Broadcast.broadcastSmega(CWvsContext.itemMegaphone(sb.toString(), ear, c.getChannel(), item));
+                    World.Broadcast.broadcastSmega(CWvsContext.handleItemMegaphone(sb.toString(), ear, c.getChannel(), item));
                     bUsed = true;
                 } else {
                     c.getPlayer().dropMessage(5, "The usage of Megaphone is currently disabled.");

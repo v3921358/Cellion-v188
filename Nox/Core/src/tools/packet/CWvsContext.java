@@ -462,7 +462,7 @@ public class CWvsContext {
         }
 
         //oPacket.Encode(/*hyper ? 0x0C : */4); // hyperstat = 7 // original
-        oPacket.EncodeByte(hyper ? 0x0C : 4); // hmm?
+        oPacket.EncodeByte(hyper ? 0x0C : 4); // nMovementSerialNumber
 
         return oPacket;
     }
@@ -1081,17 +1081,19 @@ public class CWvsContext {
         return oPacket;
     }
 
-    public static OutPacket itemMegaphone(String msg, boolean whisper, int channel, Item item) {
+    public static OutPacket handleItemMegaphone(String sMessage, boolean bWhisper, int nChannelID, Item pItem) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.BrodcastMsg.getValue());
-        oPacket.EncodeByte(9);
-        oPacket.EncodeString(msg);
-        oPacket.EncodeByte(channel - 1);
-        oPacket.EncodeByte(whisper ? 1 : 0);
-        PacketHelper.addItemPosition(oPacket, item, true, false);
-        if (item != null) {
-            PacketHelper.addItemInfo(oPacket, item);
+        oPacket.EncodeByte(8);
+        oPacket.EncodeString(sMessage);
+        oPacket.EncodeByte(nChannelID - 1);
+        oPacket.EncodeBool(bWhisper);
+        PacketHelper.addItemPosition(oPacket, pItem, true, false);
+        if (pItem != null) {
+            PacketHelper.addItemInfo(oPacket, pItem);
         }
+ 
+        oPacket.Fill(0, 19);
 
         return oPacket;
     }

@@ -7,7 +7,7 @@ import client.CharacterTemporaryStat;
 import client.MapleClient;
 import client.SkillFactory;
 import constants.GameConstants;
-import constants.skills.Aran;
+import constants.skills.DawnWarrior;
 import constants.skills.NightWalker;
 import constants.skills.ThunderBreaker;
 import java.util.Random;
@@ -28,6 +28,41 @@ public class Cygnus {
 
     public static class DawnWarriorHandler {
 
+        public static void handleEquinox(User pPlayer) {
+            
+            if (pPlayer.hasBuff(CharacterTemporaryStat.GlimmeringTime)) {
+                
+                if (pPlayer.getBuffedValue(CharacterTemporaryStat.PoseType) == 1) { // Falling Moon
+                    pPlayer.dispelBuff(DawnWarrior.FALLING_MOON);
+                    final MapleStatEffect pEffect = SkillFactory.getSkill(DawnWarrior.RISING_SUN).getEffect(pPlayer.getTotalSkillLevel(DawnWarrior.RISING_SUN));
+                    
+                    pEffect.statups.put(CharacterTemporaryStat.PoseType, 2); // Rising Sun Stance
+                    /*pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                    pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
+                    pEffect.statups.put(CharacterTemporaryStat.IndieCr, pEffect.info.get(MapleStatInfo.indieCr));
+                    pEffect.statups.put(CharacterTemporaryStat.BuckShot, 1);*/
+                    
+                    final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
+                    final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, pEffect.info.get(MapleStatInfo.time));
+                    pPlayer.registerEffect(pEffect, System.currentTimeMillis(), buffSchedule, pEffect.statups, false, pEffect.info.get(MapleStatInfo.time), pPlayer.getId());
+                    pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, DawnWarrior.RISING_SUN, pEffect.info.get(MapleStatInfo.time), pEffect.statups, pEffect));
+                } else { // Rising Sun
+                    pPlayer.dispelBuff(DawnWarrior.RISING_SUN);
+                    final MapleStatEffect pEffect = SkillFactory.getSkill(DawnWarrior.FALLING_MOON).getEffect(pPlayer.getTotalSkillLevel(DawnWarrior.FALLING_MOON));
+                    
+                    pEffect.statups.put(CharacterTemporaryStat.PoseType, 1); // Falling Moon Stance
+                    /*pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                    pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
+                    pEffect.statups.put(CharacterTemporaryStat.IndieCr, pEffect.info.get(MapleStatInfo.indieCr));*/
+                    pEffect.statups.put(CharacterTemporaryStat.BuckShot, 1);
+                    
+                    final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
+                    final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, pEffect.info.get(MapleStatInfo.time));
+                    pPlayer.registerEffect(pEffect, System.currentTimeMillis(), buffSchedule, pEffect.statups, false, pEffect.info.get(MapleStatInfo.time), pPlayer.getId());
+                    pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, DawnWarrior.FALLING_MOON, pEffect.info.get(MapleStatInfo.time), pEffect.statups, pEffect));
+                }
+            }
+        }
     }
 
     public static class BlazeWizardHandler {

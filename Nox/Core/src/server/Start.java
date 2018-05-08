@@ -350,8 +350,10 @@ public class Start {
                 }
             });
 
-            ApiFactory.getFactory().getServerAuthToken();
-            System.out.println("[Info] Cellion API initialized");
+            if (ServerConstants.USE_API) {
+                ApiFactory.getFactory().getServerAuthToken();
+                System.out.println("[Info] Cellion API initialized.");
+            }
         } catch (IOException ex) {
             LogHelper.CONSOLE.get().error("Error fetching token from Cellion API.", ex);
             System.exit(1);

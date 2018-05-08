@@ -29,6 +29,7 @@ import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.InventoryConstants;
+import constants.ItemConstants;
 import tools.SearchGenerator;
 import database.Database;
 import handling.world.HiredMerchantHandler;
@@ -2236,6 +2237,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         c.getPlayer().changeJob(job);
     }
 
+    public void givePetVac(int tHours) {
+        long nDuration = tHours;
+        gainItem(ItemConstants.PET_VAC, (short) 1, false, nDuration, true, -1, "");
+    }
+    
     public int getJobId() {
         return getPlayer().getJob();
     }

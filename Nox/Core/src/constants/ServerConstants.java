@@ -23,7 +23,7 @@ import provider.data.HexTool;
  */
 public class ServerConstants {
 
-    public static boolean USE_API = true;
+    public static boolean USE_API = false;
 
     /*Server IP Address*/
     public static final String HOST = "cellion.org";
@@ -76,7 +76,7 @@ public class ServerConstants {
     public static final int LOGIN_ATTEMPTS = 5; //Amount of login attempts before game will close.
     public static final int FLAGS = 3;
     public static final int USER_LIMIT = 150;
-    public static final String EVENT_MESSAGE = "Cellion MapleStory ALPHA";
+    public static final String EVENT_MESSAGE = "Cellion MapleStory (Beta)";
     public static final String RANKING_URL = "https://cellion.org/rankings";
     private static final Charset ASCII = Charset.forName("US-ASCII");
     //public static final String CS_BANNER_URL = HexTool.toString("https://static.cellion.org/cellion/ingame/cs_banner/welcome.jpg".getBytes(ASCII)).toUpperCase(); //needs length too
@@ -112,7 +112,7 @@ public class ServerConstants {
 
     /*Tutorial Configuration*/
     public static final boolean UNIVERSAL_START = true; //If true, all classes start in the custom tutorial intro.
-    public static final int UNIVERSAL_START_MAP = 100000000; //All classes start on this map if the boolean above is true.
+    public static final int UNIVERSAL_START_MAP = 331003400; //All classes start on this map if the boolean above is true.
 
     /*Events*/
     public static boolean BURNING_CHARACTER_EVENT = false;

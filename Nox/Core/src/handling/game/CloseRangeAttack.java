@@ -6,6 +6,7 @@ import client.Skill;
 import client.SkillFactory;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
+import client.jobs.Cygnus.DawnWarriorHandler;
 import constants.GameConstants;
 import constants.skills.Aran;
 import constants.skills.Blaster;
@@ -37,12 +38,16 @@ import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.JobPacket;
 
+/**
+ * CloseRangeAttack
+ * @author Mazen
+ */
 public final class CloseRangeAttack {
 
-    public static void closeRangeAttack(InPacket iPacket, MapleClient c, User pPlayer, boolean passiveAttack) {
+    public static void closeRangeAttack(InPacket iPacket, MapleClient c, User pPlayer, boolean bPassiveAttack) {
 
-        if (pPlayer == null || pPlayer.hasBlockedInventory() || pPlayer.getMap() == null
-                || (passiveAttack
+        if (pPlayer == null || pPlayer.hasBlockedInventory() 
+                || pPlayer.getMap() == null || (bPassiveAttack
                 && (pPlayer.getBuffedValue(CharacterTemporaryStat.EnergyCharged) == null
                 && pPlayer.getBuffedValue(CharacterTemporaryStat.BodyPressure) == null
                 && pPlayer.getBuffedValue(CharacterTemporaryStat.BMageAura) == null
@@ -52,54 +57,48 @@ public final class CloseRangeAttack {
             return;
         }
 
-        //AttackInfo attack = DamageParse.parseCloseRangeAttack(iPacket, chr, passiveAttack);
-        AttackInfo attack = DamageParse.OnAttack(RecvPacketOpcode.UserMeleeAttack, iPacket, pPlayer);
+        AttackInfo pAttack = DamageParse.OnAttack(RecvPacketOpcode.UserMeleeAttack, iPacket, pPlayer);
+        
+        Skill pSkill = null;
+        int nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        MapleStatEffect pEffect = null;
+        Item pShield = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -10);
+        int nAttackCount = pShield != null && (pShield.getItemId() / 10000 == 134) ? 2 : 1;
+        double nMaxDamage = pPlayer.getStat().getCurrentMaxBaseDamage();
+        final boolean bMirror = (pPlayer.hasBuff(CharacterTemporaryStat.ShadowPartner) || pPlayer.hasBuff(CharacterTemporaryStat.ShadowServant));
+        
+        if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[CloseRangeAttack Debug] Skill ID : " + pAttack.skill);
 
-        /*if (passiveAttack) {
-            attack = DamageParse.OnAttack(RecvPacketOpcode.UserBodyAttack, iPacket, chr);
-        } else {
-            attack = DamageParse.OnAttack(RecvPacketOpcode.UserMeleeAttack, iPacket, chr);
-        }*/
-        if (pPlayer.isDeveloper()) {
-            c.getPlayer().dropMessage(5, "[CloseRangeAttack Debug] Skill ID : " + attack.skill);
-
-        }
-
-        final boolean mirror = (pPlayer.hasBuff(CharacterTemporaryStat.ShadowPartner) || pPlayer.hasBuff(CharacterTemporaryStat.ShadowServant));
-        double maxdamage = pPlayer.getStat().getCurrentMaxBaseDamage();
-
-        Item shield = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -10);
-        int attackCount = shield != null && (shield.getItemId() / 10000 == 134) ? 2 : 1;
-        int skillLevel = 0;
-        MapleStatEffect effect = null;
-        Skill skill = null;
-
-        if (attack.skill != 0) {
-            skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
-            if (skill == null || (GameConstants.isAngel(attack.skill) && pPlayer.getStat().equippedSummon % 10000 != attack.skill % 10000)) {
+        if (pAttack.skill != 0) {
+            
+            pSkill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(pAttack.skill));
+            
+            if (pSkill == null || (GameConstants.isAngel(pAttack.skill) && pPlayer.getStat().equippedSummon % 10000 != pAttack.skill % 10000)) {
                 c.SendPacket(CWvsContext.enableActions());
                 return;
             }
+            
+            pEffect = pAttack.getAttackEffect(pPlayer, nSLV <= 0 ? pAttack.skillLevel : nSLV, pSkill);
 
             if (GameConstants.isDemonAvenger(c.getPlayer().getJob())) {
 
-                // 1% of Maximum HP as Skill Cost.
-                int hpCost = (c.getPlayer().getMaxHP() / 150);
-                c.getPlayer().addHP(-hpCost);
+                int nHPCost = (c.getPlayer().getMaxHP() / 150); // 1% of Maximum HP as Skill Cost.
+                c.getPlayer().addHP(-nHPCost);
 
                 // Demon Avenger Overload Stacks
-                int exceedMax = c.getPlayer().getSkillLevel(31220044) > 0 ? 18 : 20;
-                if (c.getPlayer().getExceed() + 1 > exceedMax) {
-                    c.getPlayer().setExceed((short) exceedMax);
+                int nExceedMax = c.getPlayer().getSkillLevel(31220044) > 0 ? 18 : 20;
+                if (c.getPlayer().getExceed() + 1 > nExceedMax) {
+                    c.getPlayer().setExceed((short) nExceedMax);
                 } else {
                     c.getPlayer().gainExceed((short) 1);
                 }
-                if (GameConstants.isExceedAttack(skill.getId())) {
-                    pPlayer.handleExceedAttack(skill.getId());
+                if (GameConstants.isExceedAttack(pSkill.getId())) {
+                    pPlayer.handleExceedAttack(pSkill.getId());
                 }
+                
             } else if (GameConstants.isDemonSlayer(pPlayer.getJob()) && !pPlayer.hasBuff(CharacterTemporaryStat.InfinityForce)) {
 
-                switch (attack.skill) { // Hack fix for some Fury Costs.
+                switch (pAttack.skill) { // Hack fix for some Fury Costs.
                     case DemonSlayer.DEMON_CRY:
                         pPlayer.setMp(pPlayer.getStat().getMp() + 20);
                         break;
@@ -110,19 +109,27 @@ public final class CloseRangeAttack {
                         pPlayer.setMp(pPlayer.getStat().getMp() + 50);
                         break;
                 }
+                
             } else if (GameConstants.isWarriorHero(pPlayer.getJob())) {
+                
                 if (pPlayer.getStatForBuff(CharacterTemporaryStat.ComboCounter) != null) { // Combo Attack
                     Explorer.HeroHandler.handleComboAttack(pPlayer);
-                    Explorer.HeroHandler.handleComboOrbs(pPlayer, attack.skill);
+                    Explorer.HeroHandler.handleComboOrbs(pPlayer, pAttack.skill);
                 } else {
                     pPlayer.setPrimaryStack(0);
                 }
+                
             } else if (GameConstants.isBlaster(pPlayer.getJob())) {
-                switch (attack.skill) {
-                    case 37000011:
-                    case 37000012:
-                    case 37000013:
+                
+                switch (pAttack.skill) {
                     case Blaster.BUNKER_BUSTER_EXPLOSION:
+                    case Blaster.BUNKER_BUSTER_EXPLOSION_1:
+                    case Blaster.BUNKER_BUSTER_EXPLOSION_2:
+                    case Blaster.BUNKER_BUSTER_EXPLOSION_3:
+                    case Blaster.BUNKER_BUSTER_EXPLOSION_4:
+                    case Blaster.BUNKER_BUSTER_EXPLOSION_5:
+                    case Blaster.BUNKER_BUSTER_EXPLOSION_6:
+                    case Blaster.BUNKER_BUSTER_EXPLOSION_7:
                         Resistance.BlasterHandler.handleOverheat(pPlayer);
                         break;
                     case 37001004:
@@ -131,33 +138,55 @@ public final class CloseRangeAttack {
                     case Blaster.REVOLVING_CANNON_PLUS_III:
                         Resistance.BlasterHandler.handleAmmoCost(pPlayer);
                         Resistance.BlasterHandler.handleGaugeIncrease(pPlayer);
-                        c.SendPacket(JobPacket.BlasterPacket.onRWMultiChargeCancelRequest((byte) 1, attack.skill));
+                        c.SendPacket(JobPacket.BlasterPacket.onRWMultiChargeCancelRequest((byte) 1, pAttack.skill));
                         break;
                 }
-            } else if (GameConstants.isHayato(pPlayer.getJob()) && attack.skill == Hayato.SUMMER_RAIN) {
-                if (attack.skill == Hayato.SUMMER_RAIN) {
+                
+            } else if (GameConstants.isHayato(pPlayer.getJob())) {
+                
+                if (pAttack.skill == Hayato.SUMMER_RAIN) {
                     HayatoHandler.updateBladeStanceRequest(pPlayer, 0);
                 }
-            } else if (GameConstants.isPhantom(pPlayer.getJob())) {
+                
+            } else if (GameConstants.isDawnWarriorCygnus(pPlayer.getJob())) {
 
-            }
+                DawnWarriorHandler.handleEquinox(pPlayer);
+                
+            } else if (GameConstants.isZero(pPlayer.getJob())) {
 
-            switch (attack.skill) {
-                case Zero.RISING_SLASH_2:
-                case Zero.FLASH_CUT:
-                case Zero.SPIN_DRIVER:
-                case Zero.GIGA_CRASH:
-                    pPlayer.zeroChange(true);
-                    break;
-                case Zero.MOON_STRIKE_1:
-                case Zero.FLASH_ASSAULT:
-                case Zero.ROLLING_CROSS:
-                case Zero.WIND_CUTTER:
-                    pPlayer.zeroChange(false);
-                    break;
+                switch (pAttack.skill) {
+                    case Zero.RISING_SLASH_2:
+                    case Zero.FLASH_CUT:
+                    case Zero.SPIN_DRIVER:
+                    case Zero.GIGA_CRASH:
+                        pPlayer.zeroChange(true);
+                        break;
+                    case Zero.MOON_STRIKE_1:
+                    case Zero.FLASH_ASSAULT:
+                    case Zero.ROLLING_CROSS:
+                    case Zero.WIND_CUTTER:
+                        pPlayer.zeroChange(false);
+                        break;
+                }
+                
+            } else if (GameConstants.isAngelicBuster(pPlayer.getJob())) {
+                
+                if (pEffect != null) {
+                    int Recharge = pEffect.getOnActive();
+                    if (Recharge > -1) {
+                        if (Randomizer.isSuccess(Recharge)) {
+                            c.SendPacket(JobPacket.AngelicPacket.unlockSkill());
+                            c.SendPacket(JobPacket.AngelicPacket.showRechargeEffect());
+                        } else {
+                            c.SendPacket(JobPacket.AngelicPacket.lockSkill(pAttack.skill));
+                        }
+                    } else {
+                        c.SendPacket(JobPacket.AngelicPacket.lockSkill(pAttack.skill));
+                    }
+                }
+                
             }
-            skillLevel = pPlayer.getTotalSkillLevel(skill);
-            effect = attack.getAttackEffect(pPlayer, skillLevel <= 0 ? attack.skillLevel : skillLevel, skill);
+            
             if (GameConstants.isEventMap(pPlayer.getMapId())) {
                 for (MapleEventType t : MapleEventType.values()) {
                     MapleEvent e = ChannelServer.getInstance(pPlayer.getClient().getChannel()).getEvent(t);
@@ -172,85 +201,61 @@ public final class CloseRangeAttack {
                 }
             }
 
-            if (effect != null) {
-                if (GameConstants.isAngelicBuster(pPlayer.getJob())) {
-                    int Recharge = effect.getOnActive();
-                    if (Recharge > -1) {
-                        if (Randomizer.isSuccess(Recharge)) {
-                            c.SendPacket(JobPacket.AngelicPacket.unlockSkill());
-                            c.SendPacket(JobPacket.AngelicPacket.showRechargeEffect());
-                        } else {
-                            c.SendPacket(JobPacket.AngelicPacket.lockSkill(attack.skill));
-                        }
-                    } else {
-                        c.SendPacket(JobPacket.AngelicPacket.lockSkill(attack.skill));
-                    }
-                }
-            }
-            if (effect != null) {
-                maxdamage *= (effect.getDamage() + pPlayer.getStat().getDamageIncrease(attack.skill)) / 100.0D;
-                attackCount = effect.getAttackCount();
+            if (pEffect != null) {
+                nMaxDamage *= (pEffect.getDamage() + pPlayer.getStat().getDamageIncrease(pAttack.skill)) / 100.0D;
+                nAttackCount = pEffect.getAttackCount();
 
-                // Handle cooldown
-                if (effect.getCooldown(pPlayer) > 0 && !passiveAttack) {
-                    if (pPlayer.skillisCooling(attack.skill)) {
+                // Handle Cooldown
+                if (pEffect.getCooldown(pPlayer) > 0 && !bPassiveAttack) {
+                    if (pPlayer.skillisCooling(pAttack.skill)) {
                         c.SendPacket(CWvsContext.enableActions());
                         return;
                     }
-                    pPlayer.addCooldown(attack.skill, System.currentTimeMillis(), effect.getCooldown(pPlayer));
+                    pPlayer.addCooldown(pAttack.skill, System.currentTimeMillis(), pEffect.getCooldown(pPlayer));
                 }
             }
         }
 
-        DamageParse.modifyCriticalAttack(attack, pPlayer, 1, effect);
-
-        attackCount *= (mirror ? 2 : 1);
-        if (!passiveAttack) {
-            if ((pPlayer.getMapId() == 109060000 || pPlayer.getMapId() == 109060002 || pPlayer.getMapId() == 109060004) && attack.skill == 0) {
+        DamageParse.modifyCriticalAttack(pAttack, pPlayer, 1, pEffect);
+        if (bMirror) nAttackCount *= 2;
+        
+        if (!bPassiveAttack) {
+            if ((pPlayer.getMapId() == 109060000 || pPlayer.getMapId() == 109060002 || pPlayer.getMapId() == 109060004) && pAttack.skill == 0) {
                 MapleSnowball.MapleSnowballs.hitSnowball(pPlayer);
             }
 
-            int numFinisherOrbs = 0;
-            Integer comboBuff = pPlayer.getBuffedValue(CharacterTemporaryStat.ComboCounter);
+            int nFinisherOrbs = 0;
+            Integer nComboBuff = pPlayer.getBuffedValue(CharacterTemporaryStat.ComboCounter);
 
-            if (PlayerHandler.isFinisher(attack.skill) > 0) {
-                if (comboBuff != null) {
-                    numFinisherOrbs = comboBuff - 1;
+            if (PlayerHandler.isFinisher(pAttack.skill) > 0) {
+                if (nComboBuff != null) {
+                    nFinisherOrbs = nComboBuff - 1;
                 }
-                if (numFinisherOrbs <= 0) {
+                if (nFinisherOrbs <= 0) {
                     return;
                 }
-                pPlayer.handleOrbconsume(PlayerHandler.isFinisher(attack.skill));
+                pPlayer.handleOrbconsume(PlayerHandler.isFinisher(pAttack.skill));
             }
         }
+        
         pPlayer.checkFollow();
-
-        if (attack.skill != Aran.MAHAS_DOMAIN) {
-
-            if (!pPlayer.isHidden()) {
-                pPlayer.getMap().broadcastMessage(pPlayer, CField.closeRangeAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, passiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), attack.attackFlag, attack.charge), pPlayer.getTruePosition());
-            } else {
-                pPlayer.getMap().broadcastGMMessage(pPlayer, CField.closeRangeAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, passiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), attack.attackFlag, attack.charge), false);
+        
+        switch (pAttack.skill) {
+            case Aran.MAHAS_DOMAIN: {
+                pPlayer.write(CField.closeRangeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge));
+                break;
             }
-        } else {
-            pPlayer.write(CField.closeRangeAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, passiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), attack.attackFlag, attack.charge));
-        }
-
-        DamageParse.applyAttack(attack, skill, c.getPlayer(), attackCount, maxdamage, effect, mirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
-        int bulletCount = 1;
-        switch (attack.skill) {
-            case Page.FLAME_CHARGE_1:
-                bulletCount = effect.getAttackCount();
-                DamageParse.applyAttack(attack, skill, pPlayer, skillLevel, maxdamage, effect, AttackType.NON_RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
+            default: {
+                if (!pPlayer.isHidden()) {
+                    pPlayer.getMap().broadcastMessage(pPlayer, CField.closeRangeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge), pPlayer.getTruePosition());
+                } else {
+                    pPlayer.getMap().broadcastGMMessage(pPlayer, CField.closeRangeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge), false);
+                }
                 break;
-            default:
-                DamageParse.applyAttack(attack, skill, pPlayer, skillLevel, maxdamage, effect, AttackType.NON_RANGED);
-                //DamageParse.applyAttackMagic(attack, skill, chr, effect, maxdamage);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
-                break;
+            }
         }
-
-        // Cleanup memory refs
-        attack.cleanupMemory();
+        
+        DamageParse.applyAttack(pAttack, pSkill, c.getPlayer(), nAttackCount, nMaxDamage, pEffect, bMirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
+        pAttack.cleanupMemory(); // Clean up memory references.
     }
-
 }
