@@ -32,49 +32,36 @@ public class PacketDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext chc, ByteBuf in, List<Object> out) throws Exception {
         Socket pSocket = chc.channel().attr(Socket.SESSION_KEY).get();
-        if (pSocket == null) {
-            return;
-        }
+        if (pSocket != null) {
 
-        if (pSocket.nLastState == 0 && in.readableBytes() >= 4) {
-            ByteBuf pBuff = in.readBytes(4);
-            InPacket iPacket = new InPacket();
-            try {
-                int nState = iPacket.AppendBuffer(pBuff, pSocket.bEncryptData);
-                if (nState > 0) {
-                    if (iPacket.uDataLen > 0x50000) {
-                        System.out.println("Recv packet length overflow.");
-                        return;
-                    }
-                    pSocket.nLastState = iPacket.uDataLen;
-                    if (pSocket.bEncryptData && iPacket.DecodeSeqBase(pSocket.uSeqRcv) != AESCipher.nVersion) {
-                        System.out.println("Recv packet sequence mismatch.");
-                    }
+            if (pSocket.nDecodeLen == -1 && in.readableBytes() >= 4) {
+                int uRawSeq = in.readShortLE();
+                int uDataLen = in.readShortLE();
+                if (pSocket.bEncryptData) {
+                    uDataLen ^= uRawSeq;
                 }
-            } finally {
-                pBuff.release();
+
+                if (uDataLen > 0x50000) {
+                    System.out.println("Recv packet length overflow.");
+                    return;
+                }
+
+                if (pSocket.bEncryptData && (short) ((pSocket.uSeqRcv >> 16) ^ uRawSeq) != AESCipher.nVersion) {
+                    System.out.println("Recv packet sequence mismatch.");
+                    pSocket.Close();
+                    return;
+                }
+
+                pSocket.nDecodeLen = uDataLen;
             }
-        }
 
-        if (pSocket.nLastState > 1) {
-            if (in.readableBytes() >= pSocket.nLastState) {
-                InPacket iPacket = new InPacket(pSocket.nLastState);
-                ByteBuf pBuff = in.readBytes(iPacket.uDataLen);
-                try {
-                    int nState = iPacket.AppendBuffer(pBuff, pSocket.bEncryptData);
-                    if (nState == 2) {
-                        if (pSocket.bEncryptData && !iPacket.DecryptData(pSocket.uSeqRcv)) {
-                            System.out.println("Unable to decrypt data.");
-                            pSocket.uSeqRcv = CIGCipher.InnoHash(pSocket.uSeqRcv, 4, 0);
-                            return;
-                        }
-                        pSocket.uSeqRcv = CIGCipher.InnoHash(pSocket.uSeqRcv, 4, 0);
-                        pSocket.nLastState = 0;
-                        out.add(iPacket);
-                    }
-                } finally {
-                    pBuff.release();
-                }
+            if (in.readableBytes() >= pSocket.nDecodeLen) {
+                byte[] aData = new byte[pSocket.nDecodeLen];
+                in.readBytes(aData);
+                InPacket iPacket = new InPacket(aData, pSocket.uSeqRcv, pSocket.bEncryptData);
+                pSocket.uSeqRcv = CIGCipher.InnoHash(pSocket.uSeqRcv, 4, 0);
+                pSocket.nDecodeLen = -1;
+                out.add(iPacket);
             }
         }
     }

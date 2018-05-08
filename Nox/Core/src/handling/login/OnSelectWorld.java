@@ -46,8 +46,8 @@ public class OnSelectWorld implements ProcessPacket<MapleClient> {
         pClient.sAccountToken = iPacket.DecodeString();
         iPacket.Skip(21);
 
-        pClient.setWorld(iPacket.Decode());
-        pClient.setChannel(iPacket.Decode());
+        pClient.setWorld(iPacket.DecodeByte());
+        pClient.setChannel(iPacket.DecodeByte());
 
     }
 }

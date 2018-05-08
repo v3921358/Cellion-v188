@@ -40,14 +40,14 @@ public final class AESCipher {
         pCipher.setKey(aKey);
     }
 
-    public static byte[] Crypt(byte[] aData, int pSrc, boolean bOpcodeEnc) {
+    public static byte[] Crypt(byte[] aData, int pSrc) {
         byte[] pdwKey = new byte[]{
             (byte) (pSrc & 0xFF), (byte) ((pSrc >> 8) & 0xFF), (byte) ((pSrc >> 16) & 0xFF), (byte) ((pSrc >> 24) & 0xFF)
         };
-        return Crypt(aData, pdwKey, bOpcodeEnc);
+        return Crypt(aData, pdwKey);
     }
 
-    public static byte[] Crypt(byte[] delta, byte[] gamma, boolean bOpcodeEnc) {
+    public static byte[] Crypt(byte[] delta, byte[] gamma) {
         int a = delta.length;
         int b = 0x5B0;
         int c = 0;

@@ -27,7 +27,7 @@ public class SlotIncrease {
 
     public static void inventory(InPacket iPacket, MapleClient c, User pPlayer) {
         iPacket.Skip(7);
-        byte nType = (byte) iPacket.Decode();
+        byte nType = (byte) iPacket.DecodeByte();
         System.out.println(nType);
         if (pPlayer.getCSPoints(2) >= 6000 && pPlayer.getInventory(getInventoryType(nType)).getSlotLimit() < 89) {
             pPlayer.modifyCSPoints(2, -6000, false);

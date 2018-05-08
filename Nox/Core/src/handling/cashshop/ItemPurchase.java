@@ -30,9 +30,9 @@ import tools.packet.CWvsContext;
 public class ItemPurchase {
 
     public static void BuyNormalItem(InPacket iPacket, MapleClient c, User chr) {
-        iPacket.Decode(); // bByMaplePoint
+        iPacket.DecodeByte(); // bByMaplePoint
         int type = iPacket.DecodeInt(); // nPurchaseOption
-        iPacket.Decode(); // Unknown
+        iPacket.DecodeByte(); // Unknown
         int sn = iPacket.DecodeInt(); // nCommoditySN
         CashItem item = CashItemFactory.getInstance().getAllItem(sn);
         int itemPrice = iPacket.DecodeInt(); // nPrice

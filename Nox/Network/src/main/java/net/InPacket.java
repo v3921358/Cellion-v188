@@ -31,62 +31,14 @@ import util.HexUtils;
 public class InPacket {
 
     private final ByteBuf pRecvBuff;
-    private byte[] aRawData;
-    public int uRawSeq = 0, uDataLen = 0, nState = 0;
     private static Charset ASCII = Charset.forName("US-ASCII");
 
-    public InPacket() {
+    public InPacket(byte[] aData, int uSeqKey, boolean bEncrypt) {
         this.pRecvBuff = Unpooled.buffer();
-    }
-    
-    public InPacket(int uDataLen) {
-        this.pRecvBuff = Unpooled.buffer();
-        this.uDataLen = uDataLen;
-        this.nState = 1;
-    }
-
-    public boolean DecryptData(int uSeqKey) {
-        if (uDataLen > 0 && aRawData.length >= uDataLen) {
-            AESCipher.Crypt(aRawData, uSeqKey, false);
-            pRecvBuff.writeBytes(aRawData);
-            return true;
+        if (bEncrypt) {
+            AESCipher.Crypt(aData, uSeqKey);
         }
-        return false;
-    }
-
-    public int AppendBuffer(ByteBuf pBuff, boolean bEncrypt) {
-        int uSize = pBuff.readableBytes();
-        if (nState == 0) {
-            if (uSize >= 4) {
-                nState = 1;
-                uRawSeq = pBuff.readShortLE();
-                uDataLen = pBuff.readShortLE();
-                if (bEncrypt) {
-                    uDataLen ^= uRawSeq;
-                }
-            }
-            return nState;
-        }
-        if (nState == 1) {
-            if (uSize >= uDataLen) {
-                if (bEncrypt) {
-                    aRawData = new byte[uDataLen];
-                    pBuff.readBytes(aRawData);
-                } else {
-                    pRecvBuff.writeBytes(pBuff);
-                }
-                nState = 2;
-            }
-        }
-        return nState;
-    }
-
-    public short DecodeSeqBase(int uSeqKey) {
-        return (short) ((uSeqKey >> 16) ^ uRawSeq);
-    }
-
-    public int Decode() {
-        return pRecvBuff.readByte();
+        this.pRecvBuff.writeBytes(aData);
     }
 
     public void Decode(byte[] aData) {
@@ -112,7 +64,7 @@ public class InPacket {
     }
 
     public byte DecodeByte() {
-        return (byte) Decode();
+        return pRecvBuff.readByte();
     }
 
     public short DecodeShort() {
@@ -154,7 +106,7 @@ public class InPacket {
     public String DecodeNullTerminatedString() {
         int nOffset = pRecvBuff.readerIndex();
         int nLen = 0;
-        while (Decode() != 0) {
+        while (DecodeByte() != 0) {
             nLen++;
         }
         pRecvBuff.readerIndex(nOffset);

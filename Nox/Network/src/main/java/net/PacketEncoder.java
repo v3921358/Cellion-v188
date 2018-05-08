@@ -46,7 +46,7 @@ public class PacketEncoder extends MessageToByteEncoder<OutPacket> {
                 if (pSocket.bEncryptData) {
                     uDataLen ^= uRawSeq;
                     if (pSocket.nCryptoMode == 1) {
-                        AESCipher.Crypt(pBuffer, uSeqSend, false);
+                        AESCipher.Crypt(pBuffer, uSeqSend);
                     } else if (pSocket.nCryptoMode == 2) {
                         CIGCipher.Crypt(pBuffer, uSeqSend);
                     }
