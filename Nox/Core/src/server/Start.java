@@ -92,10 +92,6 @@ public class Start {
         ApiConstants.CLIENT_ID = config.getProperty("CLIENT_ID");
         ApiConstants.CLIENT_SECRET = config.getProperty("CLIENT_SECRET");
 
-        /*Setting Maintenance Configuration*/
-        ServerConstants.MAINTENANCE = Boolean.valueOf(config.getProperty("MAINTENANCE"));
-        ServerConstants.MAINTENANCE_LEVEL = Integer.valueOf(config.getProperty("LOGIN_REQUIRED_GM_LEVEL"));
-
         /*Charcter Creation Configuration*/
         JobConstants.enableResistance = Boolean.valueOf(config.getProperty("RESISTANCE"));
         JobConstants.enableAdventurer = Boolean.valueOf(config.getProperty("EXPLORERS"));
@@ -134,10 +130,6 @@ public class Start {
         }
 
         System.out.println("\nLoading " + ServerConstants.SERVER_NAME + ": MAPLESTORY VERSION " + ServerConstants.MAPLE_VERSION);
-
-        if (ServerConstants.MAINTENANCE) {
-            System.out.println("Server Maintenance Enabled: GM Level " + ServerConstants.MAINTENANCE_LEVEL + " Required");
-        }
 
         World.init();
         System.out.println("\nHost IP: " + ServerConstants.HOST);

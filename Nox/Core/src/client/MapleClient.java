@@ -598,7 +598,7 @@ public class MapleClient extends Socket {
                     accountName = name;
                     accId = rs.getInt("id");
                     secondPassword = rs.getString("2ndpassword");
-                    gm = rs.getInt("gm") >= ServerConstants.MAINTENANCE_LEVEL; //only considers account GM if level is higher than variable.
+                    gm = rs.getInt("gm") > 1; 
                     greason = rs.getByte("greason");
                     tempban = getTempBanCalendar(rs);
                     gender = rs.getByte("gender");
@@ -627,7 +627,11 @@ public class MapleClient extends Socket {
                                 loginok = 7;
                             }
                         } else {
-                            loginok = 0;
+                            if (ServerConstants.DEVMODE && !gm) {
+                                loginok = 5;
+                            } else {
+                                loginok = 0;
+                            }
                         }
                     }
                 } else {
@@ -698,7 +702,9 @@ public class MapleClient extends Socket {
                                 loginok = 7;
                             }
                         } else {
-                            if (crypto.BCrypt.checkpw(password, hashedPassword)) {
+                            if (ServerConstants.DEVMODE && !gm) {
+                                loginok = 5;
+                            } else if (crypto.BCrypt.checkpw(password, hashedPassword)) {
                                 loginok = 0;
                             }
                         }

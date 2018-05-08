@@ -65,7 +65,11 @@ public class ShutdownServer implements ShutdownServerMBean {
         if (mode == 0) {
             int ret = 0;
             World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(0, "The server is now shutting down."));
-            server.Start.queue.stop();
+            try {
+                server.Start.queue.stop();
+            } catch (Exception ex) {
+                //Queue wasn't assigned.
+            }
             for (ChannelServer cs : ChannelServer.getAllInstances()) {
                 cs.setShutdown();
                 cs.setServerMessage("The server is now shutting down.");

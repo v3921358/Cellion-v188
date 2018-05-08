@@ -29,7 +29,7 @@ public class Socket {
     public static final AttributeKey<Socket> SESSION_KEY = AttributeKey.valueOf("Session");
     public int uSeqSend, uSeqRcv;
     public int nCryptoMode = 1;
-    public int nDecodeLen = 0;
+    public int nDecodeLen = -1;
     public boolean bEncryptData = true;
     private final ReentrantLock Lock;
     protected final Channel channel;

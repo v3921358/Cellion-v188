@@ -40,19 +40,19 @@ public final class AESCipher {
         pCipher.setKey(aKey);
     }
 
-    public static byte[] Crypt(byte[] aData, int pSrc) {
+    public static void Crypt(byte[] aData, int pSrc) {
         byte[] pdwKey = new byte[]{
             (byte) (pSrc & 0xFF), (byte) ((pSrc >> 8) & 0xFF), (byte) ((pSrc >> 16) & 0xFF), (byte) ((pSrc >> 24) & 0xFF)
         };
-        return Crypt(aData, pdwKey);
+        Crypt(aData, pdwKey);
     }
 
-    public static byte[] Crypt(byte[] delta, byte[] gamma) {
-        int a = delta.length;
+    public static void Crypt(byte[] aData, byte[] aSeqKey) {
+        int a = aData.length;
         int b = 0x5B0;
         int c = 0;
         while (a > 0) {
-            byte[] d = multiplyBytes(gamma, 4, 4);
+            byte[] d = multiplyBytes(aSeqKey, 4, 4);
             if (a < b) {
                 b = a;
             }
@@ -60,13 +60,12 @@ public final class AESCipher {
                 if ((e - c) % d.length == 0) {
                     pCipher.encrypt(d);
                 }
-                delta[e] ^= d[(e - c) % d.length];
+                aData[e] ^= d[(e - c) % d.length];
             }
             c += b;
             a -= b;
             b = 0x5B4;
         }
-        return delta;
     }
 
     public static byte[] multiplyBytes(byte[] iv, int i, int i0) {

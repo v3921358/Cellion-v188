@@ -23,7 +23,7 @@ import provider.data.HexTool;
  */
 public class ServerConstants {
 
-    public static boolean USE_API = false;
+    public static boolean USE_API = true;
 
     /*Server IP Address*/
     public static final String HOST = "cellion.org";
@@ -33,10 +33,6 @@ public class ServerConstants {
     public static boolean DEVELOPER_DEBUG_MODE = false;
     public static boolean DEVELOPER_PACKET_DEBUG_MODE = false;
     public static boolean REDUCED_DEBUG_SPAM = true;
-
-    /*Server Maintenance These values will be overwritten by the configuration.ini file.*/
-    public static boolean MAINTENANCE = false; //If true, only specified gm accounts can login.
-    public static int MAINTENANCE_LEVEL = 3; //GM level needed to access server during maintenance.
 
     /*General Rate Configuration These values will be overwritten by the configuration.ini file.*/
     public static float EXP_RATE = 12;

@@ -33,8 +33,13 @@ public class PacketDecoder extends ByteToMessageDecoder {
     protected void decode(ChannelHandlerContext chc, ByteBuf in, List<Object> out) throws Exception {
         Socket pSocket = chc.channel().attr(Socket.SESSION_KEY).get();
         if (pSocket != null) {
+            int uSeqRcv = pSocket.uSeqRcv;
 
-            if (pSocket.nDecodeLen == -1 && in.readableBytes() >= 4) {
+            if (pSocket.nDecodeLen == -1) {
+                if (in.readableBytes() < 4) {
+                    return;
+                }
+
                 int uRawSeq = in.readShortLE();
                 int uDataLen = in.readShortLE();
                 if (pSocket.bEncryptData) {
@@ -46,7 +51,8 @@ public class PacketDecoder extends ByteToMessageDecoder {
                     return;
                 }
 
-                if (pSocket.bEncryptData && (short) ((pSocket.uSeqRcv >> 16) ^ uRawSeq) != AESCipher.nVersion) {
+                short uSeqBase = (short) ((uSeqRcv >> 16) ^ uRawSeq);
+                if (uSeqBase != AESCipher.nVersion) {
                     System.out.println("Recv packet sequence mismatch.");
                     pSocket.Close();
                     return;
@@ -58,10 +64,15 @@ public class PacketDecoder extends ByteToMessageDecoder {
             if (in.readableBytes() >= pSocket.nDecodeLen) {
                 byte[] aData = new byte[pSocket.nDecodeLen];
                 in.readBytes(aData);
-                InPacket iPacket = new InPacket(aData, pSocket.uSeqRcv, pSocket.bEncryptData);
-                pSocket.uSeqRcv = CIGCipher.InnoHash(pSocket.uSeqRcv, 4, 0);
+
+                if (pSocket.bEncryptData) {
+                    AESCipher.Crypt(aData, uSeqRcv);
+                }
+
+                pSocket.uSeqRcv = CIGCipher.InnoHash(uSeqRcv, 4, 0);
                 pSocket.nDecodeLen = -1;
-                out.add(iPacket);
+
+                out.add(new InPacket(aData));
             }
         }
     }

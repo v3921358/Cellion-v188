@@ -16,7 +16,6 @@
  */
 package net;
 
-import crypto.AESCipher;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import java.awt.Point;
@@ -31,31 +30,20 @@ import util.HexUtils;
 public class InPacket {
 
     private final ByteBuf pRecvBuff;
-    private static Charset ASCII = Charset.forName("US-ASCII");
+    private static final Charset ASCII = Charset.forName("US-ASCII");
 
-    public InPacket(byte[] aData, int uSeqKey, boolean bEncrypt) {
+    public InPacket(byte[] aData) {
         this.pRecvBuff = Unpooled.buffer();
-        if (bEncrypt) {
-            AESCipher.Crypt(aData, uSeqKey);
-        }
         this.pRecvBuff.writeBytes(aData);
     }
 
     public void Decode(byte[] aData) {
-        Decode(aData, 0, aData.length);
-    }
-
-    public void Decode(byte[] aData, int nOffset, int nLen) {
-        for (int i = nOffset; i < nLen; i++) {
-            aData[i] = DecodeByte();
-        }
+        pRecvBuff.readBytes(aData);
     }
 
     public byte[] Decode(int nLen) {
         byte[] aRet = new byte[nLen];
-        for (int i = 0; i < nLen; i++) {
-            aRet[i] = DecodeByte();
-        }
+        pRecvBuff.readBytes(aRet);
         return aRet;
     }
 
@@ -92,10 +80,7 @@ public class InPacket {
     }
 
     public String DecodeString(int nLen) {
-        byte[] aData = new byte[nLen];
-        for (int i = 0; i < nLen; i++) {
-            aData[i] = DecodeByte();
-        }
+        byte[] aData = Decode(nLen);
         return new String(aData, ASCII);
     }
 
@@ -122,7 +107,7 @@ public class InPacket {
     }
 
     public InPacket Skip(int nLen) {
-        pRecvBuff.readerIndex(pRecvBuff.readerIndex() + nLen);
+        Decode(nLen);
         return this;
     }
 
