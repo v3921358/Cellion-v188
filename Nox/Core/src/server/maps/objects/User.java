@@ -95,6 +95,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import server.skills.VMatrixRecord;
+import server.maps.objects.StopForceAtom;
 
 public class User extends AnimatedMapleMapObject implements Serializable, MapleCharacterLook {
 
@@ -350,6 +351,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private long nLastTimeReference; // General time reference that can be used for timers.
     private long nAdditionalLastTimeReference; // Secondary time reference that can be used for timers.
     private boolean bSwingStudies; // Check if Aran's Swing Studies is active.
+    private StopForceAtom pStopForceAtom; // Kaiser Tempest Blades StopForceAtom Info.
 
     public int getPrimaryStack() {
         return nPrimaryStack;
@@ -406,6 +408,14 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public boolean getSwingStudies() {
         return bSwingStudies;
+    }
+    
+    public StopForceAtom getStopForceAtom() {
+        return pStopForceAtom;
+    }
+
+    public void setStopForceAtom(StopForceAtom pNew) {
+        pStopForceAtom = pNew;
     }
 
     /**

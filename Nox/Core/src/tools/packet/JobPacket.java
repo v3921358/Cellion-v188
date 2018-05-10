@@ -345,7 +345,6 @@ public class JobPacket {
             }
             return oPacket;
         }
-
     }
 
     public static class PhantomPacket {

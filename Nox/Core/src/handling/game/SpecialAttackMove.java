@@ -1,12 +1,14 @@
 package handling.game;
 
 import client.*;
+import server.maps.objects.StopForceAtom;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.skills.*;
 import client.jobs.Explorer.*;
 import client.jobs.Hero.*;
 import client.jobs.Kinesis.KinesisHandler;
+import client.jobs.Nova;
 import client.jobs.Resistance.*;
 import net.InPacket;
 import net.ProcessPacket;
@@ -26,6 +28,7 @@ import tools.packet.*;
 import tools.packet.CField.EffectPacket.UserEffectCodes;
 
 import java.awt.*;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -33,9 +36,13 @@ import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import org.w3c.dom.css.Rect;
 import server.MapleStatInfo;
 import server.Timer;
 import server.Timer.MapTimer;
+import server.life.mob.MobStat;
+import server.life.mob.MobTemporaryStat;
 import server.maps.SummonMovementType;
 import server.maps.objects.Summon;
 import tools.packet.JobPacket.BeastTamerPacket;
@@ -183,6 +190,53 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
  /*Add Character Temporary Stats & Apply Buff.*/
         boolean bApplyStats = true;
         switch (nSkill) {
+            case Phantom.VOL_DAME: {
+                Mob pTarget;
+                MobStat pBuffFromMobStat = MobStat.Mystery; //Needs to be initialised
+                MobStat[] mobStats = new MobStat[]{ // Ordered from Weakest to Strongest, since  the for loop will save the last MobsStat
+                    MobStat.PCounter,   // Dmg Reflect 600%
+                    MobStat.MCounter,   // Dmg Reflect 600%
+                    MobStat.PImmune,    // Dmg Recv -40%
+                    MobStat.MImmune,    // Dmg Recv -40%
+                    MobStat.PowerUp,    // Attack +40
+                    MobStat.MagicUp,    // Attack +40
+                    MobStat.Invincible, // Invincible for short time
+                };
+                
+                for (MapleMapObject pMobs : pPlayer.getMap().getMapObjectsInRange(c.getPlayer().getPosition(), 5000, Arrays.asList(MapleMapObjectType.MONSTER))) {
+                    pTarget = (Mob) pMobs;
+                    MobTemporaryStat pStat = pTarget.getTemporaryStat();
+                    List<MobStat> currentMobStats = Arrays.stream(mobStats).filter(ms -> pStat.hasCurrentMobStat(ms)).collect(Collectors.toList());
+                    for (MobStat pCurrentMobStat : currentMobStats) {
+                        if (pStat.hasCurrentMobStat(pCurrentMobStat)) {
+                            pStat.removeMobStat(pCurrentMobStat, true);
+                            pBuffFromMobStat = pCurrentMobStat;
+                        }
+                    }
+                }
+                switch (pBuffFromMobStat) {
+                    case PCounter:
+                    case MCounter:
+                        pEffect.statups.put(CharacterTemporaryStat.PowerGuard, pEffect.info.get(MapleStatInfo.y));
+                        pEffect.info.put(MapleStatInfo.time, 30000);
+                        break;
+                    case PImmune:
+                    case MImmune:
+                        pEffect.statups.put(CharacterTemporaryStat.MagicGuard, pEffect.info.get(MapleStatInfo.x));
+                        pEffect.info.put(MapleStatInfo.time, 30000);
+                        break;
+                    case PowerUp:
+                    case MagicUp:
+                        pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.epad));
+                        pEffect.info.put(MapleStatInfo.time, 30000);
+                        break;
+                    case Invincible:
+                        pEffect.statups.put(CharacterTemporaryStat.NotDamaged, 1);
+                        pEffect.info.put(MapleStatInfo.time, 5000);
+                        break;
+                }
+                break;
+            }
             case Shade.SUMMON_OTHER_SPIRIT:
             case NightWalker.DARKNESS_ASCENDING: {
                 pEffect.statups.put(CharacterTemporaryStat.ReviveOnce, 1);
@@ -303,7 +357,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
             case DawnWarrior.EQUINOX_CYCLE: {
                 pEffect.statups.put(CharacterTemporaryStat.GlimmeringTime, 1);
                 break;
-             }
+            }
             default: {
                 bApplyStats = false;
                 break;
@@ -353,6 +407,48 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
         /*Additional Effect Handler*/
     /*Extra functions that occur when the respected skill is cast.*/
         switch (nSkill) {
+            case Kaiser.TEMPEST_BLADES_1: // Normal Tempest Blades
+            case Kaiser.TEMPEST_BLADES: // Normal Tempest Blades in Morph
+            case Kaiser.ADVANCED_TEMPEST_BLADES_1: // Advanced Tempest Blades
+            case Kaiser.ADVANCED_TEMPEST_BLADES: { // Advanced Tempest Blades in Morph
+                final MapleStatEffect pTempestBlades = SkillFactory.getSkill(Kaiser.TEMPEST_BLADES_1).getEffect(1);
+                StopForceAtom pAtom = new StopForceAtom();
+                List<Integer> aThree = Arrays.asList(0, 0, 0);
+                List<Integer> aFive = Arrays.asList(0, 0, 0, 0, 0);
+                int nCount = 3;
+                int nID = 0;
+
+                switch (nSkill) {
+                    case Kaiser.TEMPEST_BLADES_1: // Normal Tempest Blades
+                        nID = 2;
+                        break;
+                    case Kaiser.TEMPEST_BLADES: // Normal Tempest Blades in Morph
+                        nID = 2;
+                        break;
+                    case Kaiser.ADVANCED_TEMPEST_BLADES_1: // Advanced Tempest Blades
+                        nCount = 5;
+                        nID = 2;
+                        break;
+                    case Kaiser.ADVANCED_TEMPEST_BLADES: // Advanced Tempest Blades in Morph
+                        nCount = 5;
+                        nID = 4;
+                        break;
+                }
+                pAtom.setCount(nCount); // nAmount of Swords
+                pAtom.setIdx(nID); // nID
+                pAtom.setAngleInfo(nCount == 5 ? aFive : aThree); // Zeros
+                pPlayer.setStopForceAtom(pAtom); // Set the Atom Info
+                
+                if (!pPlayer.hasBuff(CharacterTemporaryStat.StopForceAtomInfo)) {
+                    pTempestBlades.statups.put(CharacterTemporaryStat.StopForceAtomInfo, nID);
+                    pTempestBlades.info.put(MapleStatInfo.time, 30000);
+                    final MapleStatEffect.CancelEffectAction pCancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pTempestBlades, System.currentTimeMillis(), pTempestBlades.statups);
+                    final ScheduledFuture<?> tBuffSchedule = Timer.BuffTimer.getInstance().schedule(pCancelAction, pTempestBlades.info.get(MapleStatInfo.time));
+                    pPlayer.registerEffect(pTempestBlades, System.currentTimeMillis(), tBuffSchedule, pTempestBlades.statups, false, pTempestBlades.info.get(MapleStatInfo.time), pPlayer.getId());
+                    pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, pTempestBlades.info.get(MapleStatInfo.time), pTempestBlades.statups, pTempestBlades));
+                }
+                break;
+            }
             case Kaiser.FINAL_FORM:
             case Kaiser.FINAL_FORM_1:
             case Kaiser.FINAL_TRANCE: {
