@@ -329,12 +329,12 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getPlayer().yellowMessage("----------------- Cellion PLAYER COMMANDS -----------------");
+            c.getPlayer().yellowMessage("----------------- PLAYER COMMANDS -----------------");
             c.getPlayer().yellowMessage("@str, @dex, @int, @luk <amount> : Place ability points in specified statistic.");
             c.getPlayer().yellowMessage("@support <message> : Send a message to availible staff members.");
             c.getPlayer().yellowMessage("@dispose : Enables your character's actions when stuck.");
             c.getPlayer().yellowMessage("@event : Quick travel to the current event, if available.");
-            c.getPlayer().yellowMessage("@alpha : Open the ALPHA debug menu.");
+            c.getPlayer().yellowMessage("@menu : Open the ALPHA debug menu.");
             c.getPlayer().yellowMessage("@online : Display the current online players.");
             c.getPlayer().yellowMessage("@mob : Display information on closest monster.");
             c.getPlayer().yellowMessage("@fm : Quick travel to the Free Market.");
@@ -347,7 +347,7 @@ public class PlayerCommand {
         }
     }
 
-    public static class Alpha extends CommandExecute {
+    public static class Menu extends CommandExecute {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
@@ -400,7 +400,7 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            World.Broadcast.broadcastGMMessage(CWvsContext.broadcastMsg(c.getPlayer().isGM() ? 6 : 5, "[Cellion Support] " + c.getPlayer().getName() + ": " + StringUtil.joinStringFrom(splitted, 1)));
+            World.Broadcast.broadcastGMMessage(CWvsContext.broadcastMsg(c.getPlayer().isGM() ? 6 : 5, "[" + ServerConstants.SERVER_NAME + " Support] " + c.getPlayer().getName() + ": " + StringUtil.joinStringFrom(splitted, 1)));
             c.getPlayer().dropMessage(5, "Your message has been sent successfully.");
             return 1;
         }

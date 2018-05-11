@@ -119,7 +119,7 @@ public class CommandProcessor {
             sAccessRank = "Intern";
         }
 
-        final StringBuilder sMessage = new StringBuilder("#dCellion Administrative Command List\r\n"
+        final StringBuilder sMessage = new StringBuilder("#d" + ServerConstants.SERVER_NAME + " Administrative Command List\r\n"
                 + "Access Level (#b" + sAccessRank + "#k)\r\n\r\n#r");
 
         for (int i = 2; i <= c.getPlayer().getGMLevel(); i++) {

@@ -33,6 +33,7 @@ import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CWvsContext;
 import tools.Utility;
+import static tools.packet.CWvsContext.OnLoadAccountIDOfCharacterFriendResult;
 
 /**
  *
@@ -159,7 +160,6 @@ public class BuddyHandler {
                     buddy.setResult(BuddyResult.LOAD_FRIENDS);
                     buddy.setEntries(new ArrayList<>(buddylist.getBuddies()));
                     c.SendPacket(CWvsContext.buddylistMessage(buddy));
-
                 }
                 break;
             }
@@ -184,6 +184,7 @@ public class BuddyHandler {
                 } else {
                     c.SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_ME)));
                 }
+                c.getPlayer().OnlineBuddyListRequest(); //c.getPlayer().fakeRelog2();
                 break;
             }
             case DELETE_FRIEND:
@@ -220,6 +221,7 @@ public class BuddyHandler {
                     } else {
                         c.SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_ME)));
                     }
+                    c.getPlayer().OnlineBuddyListRequest(); //c.getPlayer().fakeRelog2();
                 }
                 break;
             }

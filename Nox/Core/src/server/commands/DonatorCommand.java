@@ -22,6 +22,7 @@ import client.inventory.ModifyInventory;
 import client.inventory.ModifyInventoryOperation;
 import constants.GameConstants;
 import constants.InventoryConstants;
+import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
 import handling.world.CheaterData;
 import handling.world.World;
@@ -55,7 +56,7 @@ import tools.packet.MobPacket;
 
 /**
  *
- * @Mazen
+ * @author Mazen Massoud
  */
 public class DonatorCommand {
 
@@ -69,7 +70,7 @@ public class DonatorCommand {
         public int execute(MapleClient c, String[] splitted) {
             c.getPlayer().dropMessage(6, "$donorhelp - Display availible donator commands.");
             c.getPlayer().dropMessage(6, "$togglesmega - Enable or disable player Super Megaphones.");
-            c.getPlayer().dropMessage(6, "The availible Cellion donator commands have been listed above.");
+            c.getPlayer().dropMessage(6, "The availible " + ServerConstants.SERVER_NAME + " donator commands have been listed above.");
             return 1;
         }
     }

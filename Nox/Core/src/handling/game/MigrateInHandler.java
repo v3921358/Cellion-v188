@@ -54,6 +54,11 @@ import tools.packet.JobPacket.AvengerPacket;
 import net.ProcessPacket;
 import static tools.packet.CWvsContext.OnLoadAccountIDOfCharacterFriendResult;
 
+/**
+ * MigrateIn 
+ * @author Mazen
+ * @author Kaz
+ */
 public final class MigrateInHandler implements ProcessPacket<MapleClient> {
 
     @Override
@@ -146,45 +151,8 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         // Such as clones, pets which may not really affect the player if should an exception occur should be placed last.
         // Or stuff that may not possibility cause exception could be placed on top with higher priority too
         try {
-            World.WorldBuddy.loggedOn(pPlayer.getName(), pPlayer.getId(), c.getChannel(), pPlayer.getBuddylist().getBuddyIds());
-
-            final MapleParty party = pPlayer.getParty();
-            if (party != null) {
-                World.Party.updateParty(party.getId(), PartyOperation.LOG_ONOFF, new MaplePartyCharacter(pPlayer));
-
-                if (party.getExpeditionId() > 0) {
-                    final MapleExpedition me = World.Party.getExped(party.getExpeditionId());
-                    if (me != null) {
-                        c.SendPacket(CWvsContext.ExpeditionPacket.expeditionStatus(me, false, true));
-                    }
-                }
-            }
-
-            pPlayer.getBuddylist().getBuddies().forEach((pBuddy) -> {
-                if (pBuddy.isAccountFriend()) {
-                    pBuddy.setFlag(BuddyFlags.AccountFriendOffline.getFlag());
-                } else {
-                    pBuddy.setFlag(BuddyFlags.FriendOffline.getFlag());
-                }
-            });
-
-            final CharacterIdChannelPair[] onlineBuddies = World.Find.multiBuddyFind(pPlayer.getId(), pPlayer.getBuddylist().getBuddyIds());
-            for (CharacterIdChannelPair onlineBuddy : onlineBuddies) {
-                BuddylistEntry pBuddy = pPlayer.getBuddylist().get(onlineBuddy.getCharacterId());
-                pBuddy.setChannel(onlineBuddy.getChannel());
-                if (pBuddy.isAccountFriend()) {
-                    pBuddy.setFlag(BuddyFlags.AccountFriendOnline.getFlag());
-                } else {
-                    pBuddy.setFlag(BuddyFlags.FriendOnline.getFlag());
-                }
-            }
-
-            //Load buddies
-            Buddy buddy = new Buddy(BuddyResult.LOAD_FRIENDS);
-            buddy.setEntries(new ArrayList<>(pPlayer.getBuddylist().getBuddies()));
-            c.SendPacket(CWvsContext.buddylistMessage(buddy));
-            c.SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_MESSENGER_MODE)));
-            pPlayer.getClient().SendPacket(OnLoadAccountIDOfCharacterFriendResult(pPlayer.getBuddylist()));
+            // Load Buddy List
+            pPlayer.OnlineBuddyListRequest();
             
             // Start of Messenger
             final MapleMessenger messenger = pPlayer.getMessenger();

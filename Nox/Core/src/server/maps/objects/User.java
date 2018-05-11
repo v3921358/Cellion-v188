@@ -7,6 +7,7 @@ import client.MapleTrait.MapleTraitType;
 import client.anticheat.CheatTracker;
 import client.anticheat.ReportType;
 import client.buddy.Buddy;
+import client.buddy.BuddyFlags;
 import client.buddy.BuddyList;
 import client.buddy.BuddyResult;
 import client.buddy.BuddylistEntry;
@@ -96,6 +97,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import server.skills.VMatrixRecord;
 import server.maps.objects.StopForceAtom;
+import static tools.packet.CWvsContext.OnLoadAccountIDOfCharacterFriendResult;
 
 public class User extends AnimatedMapleMapObject implements Serializable, MapleCharacterLook {
 
@@ -5408,6 +5410,47 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         changeSkillsLevel(skillMap);
     }
 
+    public void OnlineBuddyListRequest() {
+        World.WorldBuddy.loggedOn(getName(), getId(), getChannel(getId()), getBuddylist().getBuddyIds());
+
+        final MapleParty party = getParty();
+        if (party != null) {
+            World.Party.updateParty(party.getId(), PartyOperation.LOG_ONOFF, new MaplePartyCharacter(this));
+
+            if (party.getExpeditionId() > 0) {
+                final MapleExpedition me = World.Party.getExped(party.getExpeditionId());
+                if (me != null) {
+                    SendPacket(CWvsContext.ExpeditionPacket.expeditionStatus(me, false, true));
+                }
+            }
+        }
+
+        getBuddylist().getBuddies().forEach((pBuddy) -> {
+            if (pBuddy.isAccountFriend()) {
+                pBuddy.setFlag(BuddyFlags.AccountFriendOffline.getFlag());
+            } else {
+                pBuddy.setFlag(BuddyFlags.FriendOffline.getFlag());
+            }
+        });
+
+        final CharacterIdChannelPair[] onlineBuddies = World.Find.multiBuddyFind(getId(), getBuddylist().getBuddyIds());
+        for (CharacterIdChannelPair onlineBuddy : onlineBuddies) {
+            BuddylistEntry pBuddy = getBuddylist().get(onlineBuddy.getCharacterId());
+            pBuddy.setChannel(onlineBuddy.getChannel());
+            if (pBuddy.isAccountFriend()) {
+                pBuddy.setFlag(BuddyFlags.AccountFriendOnline.getFlag());
+            } else {
+                pBuddy.setFlag(BuddyFlags.FriendOnline.getFlag());
+            }
+        }
+
+        Buddy buddy = new Buddy(BuddyResult.LOAD_FRIENDS);
+        buddy.setEntries(new ArrayList<>(getBuddylist().getBuddies()));
+        SendPacket(CWvsContext.buddylistMessage(buddy));
+        SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_MESSENGER_MODE)));
+        SendPacket(OnLoadAccountIDOfCharacterFriendResult(getBuddylist()));
+    }
+    
     /*
      *  Mastery Book Handling
      *  @author Mazen Massoud
@@ -7061,7 +7104,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     
     public void gainNX(int nAmount, boolean bNotification) {
         maplepoints += nAmount;
-        if (bNotification) dropMessage(1, "You have " + ((nAmount > 0) ? " gained " : " lost ") + nAmount + " NX!");
+        if (bNotification) dropMessage(-1, "You have" + ((nAmount > 0) ? " gained " : " lost ") + nAmount + " NX!");
     }
     
     public void modifyCSPoints(int type, int quantity) {
