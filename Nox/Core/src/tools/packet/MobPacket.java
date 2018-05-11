@@ -11,7 +11,7 @@ import service.SendPacketOpcode;
 import net.OutPacket;
 
 import server.life.mob.BurnedInfo;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.Mob;
 import server.life.MobSkill;
 import server.life.mob.MobStat;
@@ -266,7 +266,7 @@ public class MobPacket {
     }
 
     public static OutPacket showBossHP(int monsterId, long currentHp, long maxHp) {
-        Mob mob = MapleLifeFactory.getMonster(monsterId);
+        Mob mob = LifeFactory.getMonster(monsterId);
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.BossEnvironment.getValue());
         oPacket.EncodeByte(6);

@@ -5,13 +5,13 @@ package server.life;
  *
  * @author Lloyd Korn
  */
-public enum MapleLifeType {
+public enum LifeType {
     Monster("m"),
     Npcs("n"),
     Unknown(""),;
     private final String data;
 
-    private MapleLifeType(String data) {
+    private LifeType(String data) {
         this.data = data;
     }
 
@@ -19,12 +19,12 @@ public enum MapleLifeType {
         return data;
     }
 
-    public static MapleLifeType getLifeByData(String data) {
-        for (MapleLifeType type : MapleLifeType.values()) {
+    public static LifeType getLifeByData(String data) {
+        for (LifeType type : LifeType.values()) {
             if (type.getData().contains(data)) {
                 return type;
             }
         }
-        return MapleLifeType.Unknown;
+        return LifeType.Unknown;
     }
 }

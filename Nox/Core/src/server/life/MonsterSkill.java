@@ -4,12 +4,12 @@ package server.life;
  *
  * @author Lloyd Korn
  */
-public class MapleMonsterSkill {
+public class MonsterSkill {
 
     private final int skillid, action, level, skillAfter, effectAfter, preSkillIndex, preSkillCount;
     private final boolean onlyFsm;
 
-    public MapleMonsterSkill(int skillid, int action, int level, int skillAfter, int effectAfter, int preSkillIndex, int preSkillCount,
+    public MonsterSkill(int skillid, int action, int level, int skillAfter, int effectAfter, int preSkillIndex, int preSkillCount,
             boolean onlyFsm) {
         this.skillid = skillid;
         this.action = action;

@@ -6,7 +6,7 @@ import server.maps.MapleMap;
 
 public abstract class Spawns {
 
-    public abstract MapleMonsterStats getMonster();
+    public abstract MonsterStats getMonster();
 
     public abstract byte getCarnivalTeam();
 

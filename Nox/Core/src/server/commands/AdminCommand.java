@@ -63,8 +63,8 @@ import server.Timer.EventTimer;
 import server.Timer.WorldTimer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
-import server.life.MapleLifeFactory;
-import server.life.MapleMonsterInformationProvider;
+import server.life.LifeFactory;
+import server.life.MonsterInformationProvider;
 import server.life.Mob;
 import server.life.PlayerNPC;
 import server.maps.MapleMap;
@@ -72,7 +72,7 @@ import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.MapleReactorFactory;
-import server.maps.objects.MapleNPC;
+import server.life.NPCLife;
 import server.maps.objects.MapleReactor;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
@@ -1472,7 +1472,7 @@ public class AdminCommand {
         @Override
         public int execute(ClientSocket c, String[] splitted) {
             for (MapleMapObject reactor1l : c.getPlayer().getMap().getAllMapObjects(MapleMapObjectType.NPC)) {
-                MapleNPC reactor2l = (MapleNPC) reactor1l;
+                NPCLife reactor2l = (NPCLife) reactor1l;
 
                 c.getPlayer().dropMessage(5, "NPC: oID: " + reactor2l.getObjectId() + " npcID: " + reactor2l.getId() + " Position: " + reactor2l.getPosition().toString() + " Name: " + reactor2l.getName());
             }
@@ -1578,7 +1578,7 @@ public class AdminCommand {
             final String mname = splitted[2];
             final int num = Integer.parseInt(splitted[1]);
             int mid = 0;
-            for (Pair<Integer, String> mob : MapleMonsterInformationProvider.getInstance().getAllMonsters()) {
+            for (Pair<Integer, String> mob : MonsterInformationProvider.getInstance().getAllMonsters()) {
                 if (mob.getRight().toLowerCase().equals(mname.toLowerCase())) {
                     mid = mob.getLeft();
                     break;
@@ -1587,7 +1587,7 @@ public class AdminCommand {
 
             Mob onemob;
             try {
-                onemob = MapleLifeFactory.getMonster(mid);
+                onemob = LifeFactory.getMonster(mid);
             } catch (RuntimeException e) {
                 c.getPlayer().dropMessage(5, "Error: " + e.getMessage());
                 return 0;
@@ -1597,7 +1597,7 @@ public class AdminCommand {
                 return 0;
             }
             for (int i = 0; i < num; i++) {
-                Mob mob = MapleLifeFactory.getMonster(mid);
+                Mob mob = LifeFactory.getMonster(mid);
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(mob, c.getPlayer().getPosition());
             }
             return 1;
@@ -1627,7 +1627,7 @@ public class AdminCommand {
         @Override
         public int execute(ClientSocket c, String[] splitted) {
             int clock = 1;
-            MapleMonster mob = MapleLifeFactory.getMonster(891000);
+            MapleMonster mob = LifeFactory.getMonster(891000);
             c.write(CField.spawnClockMist(this));
             return 0;
         }
@@ -2183,7 +2183,7 @@ public class AdminCommand {
         @Override
         public int execute(ClientSocket c, String[] splitted) {
             int npcId = Integer.parseInt(splitted[1]);
-            MapleNPC npc = MapleLifeFactory.getNPC(npcId);
+            NPCLife npc = LifeFactory.getNPC(npcId);
             if (npc != null && !npc.getName().equals("MISSINGNO")) {
                 npc.setPosition(c.getPlayer().getPosition());
                 npc.setCy(c.getPlayer().getPosition().y);
@@ -2209,7 +2209,7 @@ public class AdminCommand {
                 return 0;
             }
             int npcId = Integer.parseInt(splitted[1]);
-            MapleNPC npc = MapleLifeFactory.getNPC(npcId);
+            NPCLife npc = LifeFactory.getNPC(npcId);
             if (npc != null && !npc.getName().equals("MISSINGNO")) {
                 final int xpos = c.getPlayer().getPosition().x;
                 final int ypos = c.getPlayer().getPosition().y;
@@ -2266,7 +2266,7 @@ public class AdminCommand {
             int mobTime = Integer.parseInt(splitted[2]);
             Mob npc;
             try {
-                npc = MapleLifeFactory.getMonster(mobid);
+                npc = LifeFactory.getMonster(mobid);
             } catch (RuntimeException e) {
                 c.getPlayer().dropMessage(5, "Error: " + e.getMessage());
                 return 0;
@@ -2343,7 +2343,7 @@ public class AdminCommand {
         public int execute(ClientSocket c, String[] splitted) {
             try {
                 c.getPlayer().dropMessage(6, "Destroying playerNPC...");
-                final MapleNPC npc = c.getPlayer().getMap().getNPCByOid(Integer.parseInt(splitted[1]));
+                final NPCLife npc = c.getPlayer().getMap().getNPCByOid(Integer.parseInt(splitted[1]));
                 if (npc instanceof PlayerNPC) {
                     ((PlayerNPC) npc).destroy(true);
                     c.getPlayer().dropMessage(6, "Done");
@@ -2628,7 +2628,7 @@ public class AdminCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            MapleMonsterInformationProvider.getInstance().clearDrops();
+            MonsterInformationProvider.getInstance().clearDrops();
             ReactorScriptManager.getInstance().clearDrops();
             c.getPlayer().dropMessage(5, "Drops have been reloaded.");
             return 1;

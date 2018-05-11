@@ -17,7 +17,7 @@ import server.MapleCarnivalFactory;
 import server.MapleCarnivalFactory.MCSkill;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.Mob;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -171,7 +171,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     // handler for all spawnFakeMonster
     private void spawnFakeMonster(int id, int qty, Point pos) {
         for (int i = 0; i < qty; i++) {
-            reactor.getMap().spawnFakeMonsterOnGroundBelow(MapleLifeFactory.getMonster(id), pos);
+            reactor.getMap().spawnFakeMonsterOnGroundBelow(LifeFactory.getMonster(id), pos);
         }
     }
 

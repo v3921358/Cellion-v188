@@ -72,15 +72,15 @@ import server.SpeedRunner;
 import server.potentials.ItemPotentialOption;
 import server.potentials.ItemPotentialProvider;
 import server.Timer.CloneTimer;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.Mob;
-import server.life.MapleMonsterInformationProvider;
+import server.life.MonsterInformationProvider;
 import server.life.MonsterDropEntry;
 import server.maps.Event_DojoAgent;
 import server.maps.Event_PyramidSubway;
 import server.maps.MapleMap;
 import server.maps.objects.User;
-import server.maps.objects.MapleNPC;
+import server.life.NPCLife;
 import server.quest.Quest;
 import server.shops.MapleShopFactory;
 import tools.LogHelper;
@@ -1946,7 +1946,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void cleardrops() {
-        MapleMonsterInformationProvider.getInstance().clearDrops();
+        MonsterInformationProvider.getInstance().clearDrops();
     }
 
     public final boolean dropItem(int slot, int invType, int quantity) {
@@ -2096,7 +2096,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public String checkDrop(User chr, int mobId) {
-        final List<MonsterDropEntry> ranks = MapleMonsterInformationProvider.getInstance().retrieveDrop(mobId);
+        final List<MonsterDropEntry> ranks = MonsterInformationProvider.getInstance().retrieveDrop(mobId);
         if (ranks != null && ranks.size() > 0) {
             int num = 0;
             int itemId;
@@ -2416,7 +2416,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         try {
             c.SendPacket(CField.MapEff("phantom/hillah"));
 
-            MapleNPC hilla = new MapleNPC(1402400);
+            NPCLife hilla = new NPCLife(1402400);
             hilla.setOverrideName("Hilla");
             hilla.setPosition(new Point(-131, -2));
             hilla.setCy(-7);
@@ -2425,7 +2425,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             hilla.setRx0(-181);
             hilla.setRx1(-81);
 
-            MapleNPC guard1 = new MapleNPC(1402401);
+            NPCLife guard1 = new NPCLife(1402401);
             guard1.setOverrideName("Hilla's Guard");
             guard1.setPosition(new Point(-209, -2));
             guard1.setCy(-7);
@@ -2434,7 +2434,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             guard1.setRx0(-259);
             guard1.setRx1(-159);
 
-            MapleNPC guard2 = new MapleNPC(1402401);
+            NPCLife guard2 = new NPCLife(1402401);
             guard2.setOverrideName("Hilla's Guard");
             guard2.setPosition(new Point(-282, -2));
             guard2.setCy(-7);
@@ -2443,7 +2443,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             guard2.setRx0(-332);
             guard2.setRx1(-232);
 
-            MapleNPC guard3 = new MapleNPC(1402401);
+            NPCLife guard3 = new NPCLife(1402401);
             guard3.setOverrideName("Hilla's Guard");
             guard3.setPosition(new Point(-59, -2));
             guard3.setCy(-7);
@@ -2563,7 +2563,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public void mihileAssailantSummon() {
         for (int i = 0; i < 10; i++) {
-            c.getPlayer().getMap().spawnMonster_sSack(MapleLifeFactory.getMonster(9001050), new Point(240, 65), 0);
+            c.getPlayer().getMap().spawnMonster_sSack(LifeFactory.getMonster(9001050), new Point(240, 65), 0);
         }
         c.SendPacket(WvsContext.enableActions());
     }
@@ -2826,7 +2826,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public static String getMobImg(int mob) {
-        Mob monster = MapleLifeFactory.getMonster(mob);
+        Mob monster = LifeFactory.getMonster(mob);
         if (monster.getStats().getLinkId() != 0) {
             mob = monster.getStats().getLinkId();
         }

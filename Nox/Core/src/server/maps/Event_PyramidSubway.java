@@ -10,7 +10,7 @@ import handling.world.PartySearch;
 import service.ChannelServer;
 import server.Randomizer;
 import server.Timer.MapTimer;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.maps.objects.User;
 import server.quest.Quest;
 import tools.packet.CField;
@@ -97,7 +97,7 @@ public class Event_PyramidSubway {
             for (int i = 0; i < (stage == 4 ? 1 : 2); i++) {
                 //9700023 = 90 secs removeAfter -> real yeti
                 //real yeti -> 9700022 when killed -> 15 secs removeAfter -> real yeti
-                ourMap.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9700023), c.getPosition());
+                ourMap.spawnMonsterOnGroundBelow(LifeFactory.getMonster(9700023), c.getPosition());
             }
         }
         timerSchedule = MapTimer.getInstance().schedule(new Runnable() {

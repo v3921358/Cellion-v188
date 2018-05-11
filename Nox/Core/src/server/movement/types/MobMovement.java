@@ -11,7 +11,7 @@ import java.util.Random;
 import net.InPacket;
 import server.Randomizer;
 import server.life.Mob;
-import server.life.MapleMonsterSkill;
+import server.life.MonsterSkill;
 import server.life.MobSkill;
 import server.life.MultiTarget;
 import server.maps.MapleMap;
@@ -19,8 +19,8 @@ import server.maps.objects.User;
 import server.movement.LifeMovementFragment;
 import tools.packet.MobPacket;
 import net.ProcessPacket;
-import server.life.MapleLifeFactory;
-import server.life.MapleMonsterStats;
+import server.life.LifeFactory;
+import server.life.MonsterStats;
 
 /**
  * @author Steven
@@ -83,7 +83,7 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
                 if (pMob.getHPPercent() < 99 && rand.nextInt(100) < 15) {
                     int nTemplateID = 8920000 + rand.nextInt(4);
                     if (nTemplateID != pMob.getId()) {
-                        Mob pNewMob = MapleLifeFactory.getMonster(nTemplateID);
+                        Mob pNewMob = LifeFactory.getMonster(nTemplateID);
                         pNewMob.setHp(pMob.getHp());
                         pMob.getMap().replaceQueen(c.getPlayer(), pMob, pNewMob);
                     }
@@ -96,10 +96,10 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
         }
 
         if (bNextAcctackPossible) {
-            List<MapleMonsterSkill> skills = pMob.getStats().getSkills();
+            List<MonsterSkill> skills = pMob.getStats().getSkills();
             int size = skills.size();
             if (size > 0) {
-                MapleMonsterSkill nextSkill = skills.get(nForcedSkillIdx > 0 ? nForcedSkillIdx : Randomizer.nextInt(size));
+                MonsterSkill nextSkill = skills.get(nForcedSkillIdx > 0 ? nForcedSkillIdx : Randomizer.nextInt(size));
 
                 if (chr.isAdmin()) {
                     chr.yellowMessage(String.format("[Mob Movement Debug] nSkill: %s", nextSkill.getSkillId()));

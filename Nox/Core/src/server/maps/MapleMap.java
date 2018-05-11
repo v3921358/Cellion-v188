@@ -1,5 +1,6 @@
 package server.maps;
 
+import server.life.NPCLife;
 import client.CharacterTemporaryStat;
 import client.ClientSocket;
 import client.QuestStatus.QuestState;
@@ -325,7 +326,7 @@ public final class MapleMap {
         final float cmServerrate = ChannelServer.getInstance(channel).getMesoRate(chr.getWorld());
         final float chServerrate = ChannelServer.getInstance(channel).getDropRate(chr.getWorld());
         final float caServerrate = ChannelServer.getInstance(channel).getCashRate();
-        final int cashz = (int) ((mob.getStats().isBoss() && mob.getStats().getHPDisplayType() == MapleMonsterHpDisplayType.BossHP ? 20 : 1) * caServerrate);
+        final int cashz = (int) ((mob.getStats().isBoss() && mob.getStats().getHPDisplayType() == MonsterHpDisplayType.BossHP ? 20 : 1) * caServerrate);
         final int cashModifier = (int) ((mob.getStats().isBoss() ? (mob.getStats().isPartyBonus() ? (mob.getMobExp() / 1000) : 0) : (mob.getMobExp() / 1000 + mob.getMobMaxHp() / 20000))); //no rate
 
         Item idrop;
@@ -337,7 +338,7 @@ public final class MapleMap {
             showdown += mse.getX();
         }
 
-        final MapleMonsterInformationProvider mi = MapleMonsterInformationProvider.getInstance();
+        final MonsterInformationProvider mi = MonsterInformationProvider.getInstance();
         final List<MonsterDropEntry> drops = mi.retrieveDrop(mob.getId());
         if (drops == null) { //if no drops, no global drops either
             return;
@@ -906,7 +907,7 @@ public final class MapleMap {
              if (mons.getId() == 9400900) {
              final Point pos = mons.getTruePosition();
              this.killAllMonsters(true);
-             spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9400900), pos);
+             spawnMonsterOnGroundBelow(LifeFactory.getMonster(9400900), pos);
              break;
              }
              }
@@ -929,7 +930,7 @@ public final class MapleMap {
                     if (mons.getId() == 8800000) {
                         final Point pos = mons.getTruePosition();
                         this.killAllMonsters(true);
-                        spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8800000), pos);
+                        spawnMonsterOnGroundBelow(LifeFactory.getMonster(8800000), pos);
                         break;
                     }
                 }
@@ -953,7 +954,7 @@ public final class MapleMap {
                     if (mons.getId() == 8800100) {
                         final Point pos = mons.getTruePosition();
                         this.killAllMonsters(true);
-                        spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8800100), pos);
+                        spawnMonsterOnGroundBelow(LifeFactory.getMonster(8800100), pos);
                         break;
                     }
                 }
@@ -977,7 +978,7 @@ public final class MapleMap {
                     if (mons.getId() == 8800020) {
                         final Point pos = mons.getTruePosition();
                         this.killAllMonsters(true);
-                        spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8800020), pos);
+                        spawnMonsterOnGroundBelow(LifeFactory.getMonster(8800020), pos);
                         break;
                     }
                 }
@@ -1000,7 +1001,7 @@ public final class MapleMap {
                     if (mons.getId() == 9400900) {
                         final Point pos = mons.getTruePosition();
                         this.killAllMonsters(true);
-                        spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9400900), pos);
+                        spawnMonsterOnGroundBelow(LifeFactory.getMonster(9400900), pos);
                         break;
                     }
                 }
@@ -1336,7 +1337,7 @@ public final class MapleMap {
     }
 
     public void spawnNpc(final int id, final Point pos) {
-        final MapleNPC npc = MapleLifeFactory.getNPC(id);
+        final NPCLife npc = LifeFactory.getNPC(id);
         npc.setPosition(pos);
         npc.setCy(pos.y);
         npc.setRx0(pos.x + 50);
@@ -1348,7 +1349,7 @@ public final class MapleMap {
     }
 
     public void spawnNpcForPlayer(ClientSocket c, final int id, final Point pos) {
-        final MapleNPC npc = MapleLifeFactory.getNPC(id);
+        final NPCLife npc = LifeFactory.getNPC(id);
         npc.setPosition(pos);
         npc.setCy(pos.y);
         npc.setRx0(pos.x + 50);
@@ -1359,7 +1360,7 @@ public final class MapleMap {
         c.SendPacket(NPCPacket.spawnNPC(npc, true));
     }
 
-    public void spawnNpcOnMapLoad(MapleNPC life) {
+    public void spawnNpcOnMapLoad(NPCLife life) {
         spawnAndAddRangedMapObject(life, (ClientSocket c1) -> {
             life.sendSpawnData(c1);
         });
@@ -1370,7 +1371,7 @@ public final class MapleMap {
         try {
             Iterator<MapleMapObject> itr = mapobjects.get(MapleMapObjectType.NPC).values().iterator();
             while (itr.hasNext()) {
-                MapleNPC npc = (MapleNPC) itr.next();
+                NPCLife npc = (NPCLife) itr.next();
                 if (npc.isCustom() && (npcid == -1 || npc.getId() == npcid)) {
                     broadcastMessage(NPCPacket.removeNPCController(npc.getObjectId()));
                     broadcastMessage(NPCPacket.removeNPC(npc.getObjectId()));
@@ -1384,7 +1385,7 @@ public final class MapleMap {
 
     // Original Methods
     /*public void spawnNpc(final int id, final Point pos) {
-        final MapleNPC npc = MapleLifeFactory.getNPC(id);
+        final MapleNPC npc = LifeFactory.getNPC(id);
         npc.setPosition(pos);
         npc.setCy(pos.y);
         npc.setRx0(pos.x + 50);
@@ -1395,7 +1396,7 @@ public final class MapleMap {
     }
 
     public void spawnNpcForPlayer(ClientSocket c, final int id, final Point pos) {
-        final MapleNPC npc = MapleLifeFactory.getNPC(id);
+        final MapleNPC npc = LifeFactory.getNPC(id);
         npc.setPosition(pos);
         npc.setCy(pos.y);
         npc.setRx0(pos.x + 50);
@@ -1432,7 +1433,7 @@ public final class MapleMap {
         try {
             Iterator<MapleMapObject> itr = mapobjects.get(MapleMapObjectType.NPC).values().iterator();
             while (itr.hasNext()) {
-                MapleNPC npc = (MapleNPC) itr.next();
+                NPCLife npc = (NPCLife) itr.next();
                 if (npcid == -1 || npc.getId() == npcid) {
                     broadcastMessage(NPCPacket.removeNPCController(npc.getObjectId()));
                     broadcastMessage(NPCPacket.removeNPC(npc.getObjectId()));
@@ -1448,7 +1449,7 @@ public final class MapleMap {
         try {
             Iterator<MapleMapObject> itr = mapobjects.get(MapleMapObjectType.NPC).values().iterator();
             while (itr.hasNext()) {
-                MapleNPC npc = (MapleNPC) itr.next();
+                NPCLife npc = (NPCLife) itr.next();
                 if (npcid == -1 || npc.getId() == npcid) {
                     c.SendPacket(NPCPacket.removeNPCController(npc.getObjectId()));
                     c.SendPacket(NPCPacket.removeNPC(npc.getObjectId()));
@@ -1501,7 +1502,7 @@ public final class MapleMap {
 
     public void spawnZakum(final int x, final int y) {
         final Point pos = new Point(x, y);
-        final Mob mainb = MapleLifeFactory.getMonster(8800000);
+        final Mob mainb = LifeFactory.getMonster(8800000);
         final Point spos = calcPointBelow(new Point(pos.x, pos.y - 1));
         mainb.setPosition(spos);
         mainb.setFake(true);
@@ -1513,7 +1514,7 @@ public final class MapleMap {
             8800008, 8800009, 8800010};
 
         for (final int i : zakpart) {
-            final Mob part = MapleLifeFactory.getMonster(i);
+            final Mob part = LifeFactory.getMonster(i);
             part.setPosition(spos);
 
             spawnMonster(part, -2);
@@ -1525,7 +1526,7 @@ public final class MapleMap {
 
     public final void spawnPinkZakum(final int x, final int y) {
         final Point pos = new Point(x, y);
-        final Mob mainb = MapleLifeFactory.getMonster(9400900);
+        final Mob mainb = LifeFactory.getMonster(9400900);
         final Point spos = calcPointBelow(new Point(pos.x, pos.y - 1));
         mainb.setPosition(spos);
         mainb.setFake(true);
@@ -1537,7 +1538,7 @@ public final class MapleMap {
             9400908, 9400909, 9400910};
 
         for (final int i : zakpart) {
-            final Mob part = MapleLifeFactory.getMonster(i);
+            final Mob part = LifeFactory.getMonster(i);
             part.setPosition(spos);
 
             spawnMonster(part, -2);
@@ -1549,7 +1550,7 @@ public final class MapleMap {
 
     public final void spawnEasyZakum(final int x, final int y) {
         final Point pos = new Point(x, y);
-        final Mob mainb = MapleLifeFactory.getMonster(8800020);
+        final Mob mainb = LifeFactory.getMonster(8800020);
         final Point spos = calcPointBelow(new Point(pos.x, pos.y - 1));
         mainb.setPosition(spos);
         mainb.setFake(true);
@@ -1561,7 +1562,7 @@ public final class MapleMap {
             8800028, 8800029, 8800030};
 
         for (final int i : zakpart) {
-            final Mob part = MapleLifeFactory.getMonster(i);
+            final Mob part = LifeFactory.getMonster(i);
             part.setPosition(spos);
 
             spawnMonster(part, -2);
@@ -1573,7 +1574,7 @@ public final class MapleMap {
 
     public final void spawnChaosZakum(final int x, final int y) {
         final Point pos = new Point(x, y);
-        final Mob mainb = MapleLifeFactory.getMonster(8800100);
+        final Mob mainb = LifeFactory.getMonster(8800100);
         final Point spos = calcPointBelow(new Point(pos.x, pos.y - 1));
         mainb.setPosition(spos);
         mainb.setFake(true);
@@ -1585,7 +1586,7 @@ public final class MapleMap {
             8800108, 8800109, 8800110};
 
         for (final int i : zakpart) {
-            final Mob part = MapleLifeFactory.getMonster(i);
+            final Mob part = LifeFactory.getMonster(i);
             part.setPosition(spos);
 
             spawnMonster(part, -2);
@@ -1680,7 +1681,7 @@ public final class MapleMap {
             }, this.getId() == 109010100 ? 1500 /*Bomberman*/ : this.getId() == 910025200 ? 200 /*The Dragon's Shout*/ : 3000);
         }
         /*if (MoonlightRevamp.MoonlightRevamp) {
-         MapleMonsterStats stats = MapleLifeFactory.getMonsterStats(monster.getId());
+         MonsterStats stats = LifeFactory.getMonsterStats(monster.getId());
          OverrideMonsterStats overrideStats = new OverrideMonsterStats(monster.getHp() / MoonlightRevamp.monsterHpDivision, monster.getMp(), stats.getExp());
          monster.setOverrideStats(overrideStats);
          //monster.setHp(monster.getHp() / MoonlightRevamp.monsterHpDivision); //Isn't needed because of override stats
@@ -3602,18 +3603,18 @@ public final class MapleMap {
     public final boolean containsNPC(int npcid) {
         mapobjectlocks.get(MapleMapObjectType.NPC).readLock().lock();
         try {
-            return mapobjects.get(MapleMapObjectType.NPC).values().stream().filter(obj -> ((MapleNPC) obj).getId() == npcid).count() > 0;
+            return mapobjects.get(MapleMapObjectType.NPC).values().stream().filter(obj -> ((NPCLife) obj).getId() == npcid).count() > 0;
         } finally {
             mapobjectlocks.get(MapleMapObjectType.NPC).readLock().unlock();
         }
     }
 
-    public MapleNPC getNPCById(int id) {
+    public NPCLife getNPCById(int id) {
         mapobjectlocks.get(MapleMapObjectType.NPC).readLock().lock();
         try {
-            Optional<MapleMapObject> foundNPC = mapobjects.get(MapleMapObjectType.NPC).values().stream().filter(obj -> ((MapleNPC) obj).getId() == id).findFirst();
+            Optional<MapleMapObject> foundNPC = mapobjects.get(MapleMapObjectType.NPC).values().stream().filter(obj -> ((NPCLife) obj).getId() == id).findFirst();
             if (foundNPC.isPresent()) {
-                return (MapleNPC) foundNPC.get();
+                return (NPCLife) foundNPC.get();
             }
         } finally {
             mapobjectlocks.get(MapleMapObjectType.NPC).readLock().unlock();
@@ -3670,12 +3671,12 @@ public final class MapleMap {
         return (Mob) mmo;
     }
 
-    public MapleNPC getNPCByOid(final int oid) {
+    public NPCLife getNPCByOid(final int oid) {
         MapleMapObject mmo = getMapObject(oid, MapleMapObjectType.NPC);
         if (mmo == null) {
             return null;
         }
-        return (MapleNPC) mmo;
+        return (NPCLife) mmo;
     }
 
     public MapleReactor getReactorByOid(final int oid) {
@@ -3778,13 +3779,13 @@ public final class MapleMap {
     /**
      * Gets the lowest level monster [non boss] from the spawnpoints of this map
      *
-     * @return MapleMonsterStats
+     * @return MonsterStats
      */
-    public MapleMonsterStats getLowestLevelMonster() {
-        MapleMonsterStats lowestStats = null;
+    public MonsterStats getLowestLevelMonster() {
+        MonsterStats lowestStats = null;
         for (Spawns sp : monsterSpawn) {
             if (!sp.isBossSpawnPoint()) {
-                final MapleMonsterStats stats = sp.getMonster();
+                final MonsterStats stats = sp.getMonster();
 
                 if (lowestStats == null || stats.getLevel() < lowestStats.getLevel()) {
                     lowestStats = stats;

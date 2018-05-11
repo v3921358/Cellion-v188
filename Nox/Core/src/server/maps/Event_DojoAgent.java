@@ -8,7 +8,7 @@ import handling.world.MaplePartyCharacter;
 import service.ChannelServer;
 import server.Randomizer;
 import server.Timer.MapTimer;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.maps.objects.User;
 import server.quest.Quest;
 import tools.LogHelper;
@@ -569,7 +569,7 @@ public class Event_DojoAgent {
             MapTimer.getInstance().schedule(new Runnable() {
                 @Override
                 public void run() {
-                    map.spawnMonsterWithEffect(MapleLifeFactory.getMonster(mobid), 15, rand == 0 ? point1 : rand == 1 ? point2 : point3);
+                    map.spawnMonsterWithEffect(LifeFactory.getMonster(mobid), 15, rand == 0 ? point1 : rand == 1 ? point2 : point3);
                 }
             }, 3000);
         }

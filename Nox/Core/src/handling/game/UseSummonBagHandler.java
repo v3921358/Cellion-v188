@@ -7,7 +7,7 @@ import java.util.Map;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
@@ -49,7 +49,7 @@ public class UseSummonBagHandler implements ProcessPacket<ClientSocket> {
             int type = 0;
             for (Map.Entry<String, Integer> i : toSpawn.entrySet()) {
                 if (i.getKey().startsWith("mob") && Randomizer.nextInt(99) <= i.getValue()) {
-                    ht = MapleLifeFactory.getMonster(Integer.parseInt(i.getKey().substring(3)));
+                    ht = LifeFactory.getMonster(Integer.parseInt(i.getKey().substring(3)));
                     chr.getMap().spawnMonster_sSack(ht, chr.getPosition(), type);
                 }
             }

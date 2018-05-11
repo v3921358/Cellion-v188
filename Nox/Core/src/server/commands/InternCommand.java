@@ -37,7 +37,7 @@ import server.MapleInventoryManipulator;
 import server.MaplePortal;
 import server.MapleSquad.MapleSquadType;
 import server.MapleStringInformationProvider;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.Mob;
 import server.life.MobSkillFactory;
 import server.maps.MapleMap;
@@ -1000,7 +1000,7 @@ public class InternCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            Mob mob = MapleLifeFactory.getMonster(9400551);
+            Mob mob = LifeFactory.getMonster(9400551);
             for (int i = 0; i < 10; i++) {
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(mob, c.getPlayer().getPosition());
             }

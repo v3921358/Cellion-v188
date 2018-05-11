@@ -4,7 +4,7 @@ package server.life;
  *
  * @author Lloyd Korn
  */
-public enum MapleMonsterCategory {
+public enum MonsterCategory {
     Normal(0),
     WorldTour(6),
     Event(8),
@@ -12,7 +12,7 @@ public enum MapleMonsterCategory {
 
     private int val;
 
-    private MapleMonsterCategory(int val) {
+    private MonsterCategory(int val) {
         this.val = val;
     }
 
@@ -20,12 +20,12 @@ public enum MapleMonsterCategory {
         return val;
     }
 
-    public static MapleMonsterCategory getFromInt(int val) {
-        for (MapleMonsterCategory cat : MapleMonsterCategory.values()) {
+    public static MonsterCategory getFromInt(int val) {
+        for (MonsterCategory cat : MonsterCategory.values()) {
             if (cat.getVal() == val) {
                 return cat;
             }
         }
-        return MapleMonsterCategory.Unknown;
+        return MonsterCategory.Unknown;
     }
 }

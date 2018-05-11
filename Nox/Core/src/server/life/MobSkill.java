@@ -310,7 +310,7 @@ public class MobSkill {
                 for (Integer mobId : getSummons()) {
                     Mob toSpawn = null;
                     try {
-                        toSpawn = MapleLifeFactory.getMonster(GameConstants.getCustomSpawnID(monster.getId(), mobId));
+                        toSpawn = LifeFactory.getMonster(GameConstants.getCustomSpawnID(monster.getId(), mobId));
                     } catch (RuntimeException e) { //monster doesn't exist
                         continue;
                     }

@@ -50,7 +50,7 @@ public class ChangeableStats extends OverrideMonsterStats {
 
     public int watk, matk, acc, eva, PDRate, MDRate, pushed, speed, level;
 
-    public ChangeableStats(MapleMonsterStats stats, double newLevel, int hpBuff, int bossHpBuff) {
+    public ChangeableStats(MonsterStats stats, double newLevel, int hpBuff, int bossHpBuff) {
         final double mod = newLevel / (double) stats.getLevel();
         final double hpRatio = (double) stats.getHp() / (double) stats.getExp();
         hp = (long) Math.round((!stats.isBoss() ? GameConstants.getMonsterHP(stats.getLevel()) * hpBuff : (stats.getHp() * bossHpBuff)));

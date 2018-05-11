@@ -6,7 +6,7 @@ import handling.world.World;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.Timer.EventTimer;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.maps.objects.User;
 import server.maps.objects.MapleReactor;
 import tools.packet.CField;
@@ -77,7 +77,7 @@ public class AramiaFireWorks {
 
         for (int i = 0; i < arrayMob.length; i++) {
             pos = new Point(arrayX[i], arrayY[i]);
-            map.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(arrayMob[i]), pos);
+            map.spawnMonsterOnGroundBelow(LifeFactory.getMonster(arrayMob[i]), pos);
         }
     }
 

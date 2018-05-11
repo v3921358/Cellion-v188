@@ -12,7 +12,7 @@ import provider.wz.nox.NoxBinaryReader;
 
 import server.MapleStringInformationProvider;
 
-public class MapleMonsterStats {
+public class MonsterStats {
 
     /*
     public enum MobStat {
@@ -117,9 +117,9 @@ public class MapleMonsterStats {
     }
 }
      */
-    private final MapleMonsterHpDisplayType HPDisplayType;
+    private final MonsterHpDisplayType HPDisplayType;
     private final byte cp, rareItemDropLevel, summonType;
-    private final MapleMonsterCategory category;
+    private final MonsterCategory category;
     private short level,
             tagColor, tagBgColor,
             selfDestruction_action;
@@ -142,7 +142,7 @@ public class MapleMonsterStats {
     private final int fs;
 
     // Skills
-    private final List<MapleMonsterSkill> skills = new ArrayList();
+    private final List<MonsterSkill> skills = new ArrayList();
     private final Map<Byte, MobAttackInfo> mobAttacks = new HashMap();
 
     // Self destruction
@@ -155,13 +155,13 @@ public class MapleMonsterStats {
     // ETC
     private boolean enableSpawnTimeTrack = false; // Reduces memory, since int64 is required to track the spawn time per mob
 
-    public MapleMonsterStats(int Mobid, NoxBinaryReader data) throws IOException {
+    public MonsterStats(int Mobid, NoxBinaryReader data) throws IOException {
         this.id = Mobid;
 
         this.wzDirectoryCRC = data.readInt(); // crc , unk. TODO
 
         this.level = (short) data.readByte();
-        this.category = MapleMonsterCategory.getFromInt(data.readByte());
+        this.category = MonsterCategory.getFromInt(data.readByte());
         this.rareItemDropLevel = (byte) data.readByte();
         this.ignoreFieldOut = data.readBoolean();
         this.onlyNormalAttack = data.readBoolean();
@@ -243,7 +243,7 @@ public class MapleMonsterStats {
             byte Skill_preskillcount = (byte) data.readByte();
             boolean onlyFsm = data.readBoolean();
 
-            final MapleMonsterSkill stab = new MapleMonsterSkill(Skill_Skill, Skill_Action, Skill_Level, Skill_SkillAfter, Skill_EffectAfter, Skill_preskillindex, Skill_preskillcount,
+            final MonsterSkill stab = new MonsterSkill(Skill_Skill, Skill_Action, Skill_Level, Skill_SkillAfter, Skill_EffectAfter, Skill_preskillindex, Skill_preskillcount,
                     onlyFsm);
             skills.add(stab);
 
@@ -314,7 +314,7 @@ public class MapleMonsterStats {
 
         data.readShort(); // Movement speed, not handled for now
 
-        this.HPDisplayType = MapleMonsterHpDisplayType.getFromInt((byte) data.readByte());
+        this.HPDisplayType = MonsterHpDisplayType.getFromInt((byte) data.readByte());
     }
 
     public void setChange(boolean invin) {
@@ -461,7 +461,7 @@ public class MapleMonsterStats {
         return summonType;
     }
 
-    public MapleMonsterCategory getCategory() {
+    public MonsterCategory getCategory() {
         return category;
     }
 
@@ -509,7 +509,7 @@ public class MapleMonsterStats {
         return tagBgColor;
     }
 
-    public List<MapleMonsterSkill> getSkills() {
+    public List<MonsterSkill> getSkills() {
         return Collections.unmodifiableList(skills);
     }
 
@@ -552,7 +552,7 @@ public class MapleMonsterStats {
         return buffToGive;
     }
 
-    public MapleMonsterHpDisplayType getHPDisplayType() {
+    public MonsterHpDisplayType getHPDisplayType() {
         return HPDisplayType;
     }
 

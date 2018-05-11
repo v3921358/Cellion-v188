@@ -46,7 +46,7 @@ import server.RandomRewards;
 import server.Randomizer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.maps.FieldLimitType;
 import server.maps.MapleMap;
 import server.maps.MapleMapObjectType;
@@ -252,7 +252,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 final Quest quest = Quest.getInstance(questid);
 
                 if (c.getPlayer().getQuest(quest).getStatus() == QuestState.Started && quest.canComplete(c.getPlayer(), npcid)) {
-                    final int mapId = MapleLifeFactory.getNPCLocation(npcid);
+                    final int mapId = LifeFactory.getNPCLocation(npcid);
                     if (mapId != -1) {
                         final MapleMap map = c.getChannelServer().getMapFactory().getMap(mapId);
                         if (map.containsNPC(npcid) && !FieldLimitType.VipRock.checkFlag(c.getPlayer().getMap()) && !FieldLimitType.VipRock.checkFlag(map) && !c.getPlayer().isInBlockedMap()) {

@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import scripting.provider.NPCScriptManager;
 import server.maps.objects.User;
-import server.maps.objects.MapleNPC;
+import server.life.NPCLife;
 import net.InPacket;
 import tools.packet.WvsContext;
 import net.ProcessPacket;
@@ -25,7 +25,7 @@ public class NPCTalkHandler implements ProcessPacket<ClientSocket> {
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
-        final MapleNPC pNpc = pPlayer.getMap().getNPCByOid(iPacket.DecodeInt());
+        final NPCLife pNpc = pPlayer.getMap().getNPCByOid(iPacket.DecodeInt());
 
         if (pPlayer == null || pPlayer.getMap() == null || pNpc == null || pPlayer.hasBlockedInventory()) {
             return;

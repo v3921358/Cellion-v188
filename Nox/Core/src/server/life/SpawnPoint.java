@@ -20,7 +20,7 @@ import tools.packet.WvsContext;
 
 public class SpawnPoint extends Spawns {
 
-    private final MapleMonsterStats monster;
+    private final MonsterStats monster;
     private final Point pos;
     private long nextPossibleSpawn;
     private final int mobTime, fh, f, id;
@@ -81,7 +81,7 @@ public class SpawnPoint extends Spawns {
     }
 
     @Override
-    public final MapleMonsterStats getMonster() {
+    public final MonsterStats getMonster() {
         return monster;
     }
 

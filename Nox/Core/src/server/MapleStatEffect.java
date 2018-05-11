@@ -17,9 +17,9 @@ import provider.wz.MapleDataType;
 import server.MapleCarnivalFactory.MCSkill;
 import server.Timer.BuffTimer;
 import server.skills.effects.manager.EffectManager;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.Mob;
-import server.life.MapleMonsterStats;
+import server.life.MonsterStats;
 import server.life.MobSkill;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
@@ -498,7 +498,7 @@ public class MapleStatEffect implements Serializable {
             final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
             final int mobid = ii.getCardMobId(sourceid);
             if (mobid > 0) {
-                final boolean done = applyto.getMonsterBook().monsterCaught(applyto.getClient(), mobid, MapleLifeFactory.getMonsterStats(mobid).getName());
+                final boolean done = applyto.getMonsterBook().monsterCaught(applyto.getClient(), mobid, LifeFactory.getMonsterStats(mobid).getName());
                 applyto.getClient().SendPacket(WvsContext.getCard(done ? sourceid : 0, 1));
             }
         } else if (isReturnScroll()) {
@@ -682,7 +682,7 @@ public class MapleStatEffect implements Serializable {
                 baseBonusPercentage *= comboKillBlessingSkill.getEffect(comboKillLevel).getX() / 100f;
             }
 
-            final MapleMonsterStats lowestLevelMonster = applyto.getMap().getLowestLevelMonster();
+            final MonsterStats lowestLevelMonster = applyto.getMap().getLowestLevelMonster();
             if (lowestLevelMonster != null) {
                 double expRate_Server = applyto.getClient().getChannelServer().getExpRate(applyto.getWorld());
                 final long totalEXPGained = (long) (((long) (expRate_Server * lowestLevelMonster.getExp())) * (baseBonusPercentage * 0.01f));

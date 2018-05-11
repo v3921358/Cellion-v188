@@ -45,8 +45,8 @@ import server.api.ApiRuntimeException;
 import server.events.MapleHotTime;
 import server.skills.effects.manager.EffectManager;
 import server.events.MapleOxQuizFactory;
-import server.life.MapleLifeFactory;
-import server.life.MapleMonsterInformationProvider;
+import server.life.LifeFactory;
+import server.life.MonsterInformationProvider;
 import server.life.PlayerNPC;
 import server.maps.MapleMapFactory;
 import server.maps.objects.Pet;
@@ -267,8 +267,8 @@ public class Start {
 
         r = new ServerStartupRunnable(atomicInteger, ()
                 -> {
-            MapleLifeFactory.initialize();
-            MapleMonsterInformationProvider.getInstance().load();
+            LifeFactory.initialize();
+            MonsterInformationProvider.getInstance().load();
         }, "Maple NPCs & Mobs");
         es.submit(r);
 

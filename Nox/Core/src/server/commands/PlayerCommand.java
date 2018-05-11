@@ -23,7 +23,7 @@ import scripting.provider.NPCChatType;
 import scripting.provider.NPCScriptManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
@@ -392,7 +392,7 @@ public class PlayerCommand {
                 c.getPlayer().dropMessage(5, "You may not spawn bombs yet.");
                 return 0;
             }
-            c.getPlayer().getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(9300166), c.getPlayer().getPosition());
+            c.getPlayer().getMap().spawnMonsterOnGroudBelow(LifeFactory.getMonster(9300166), c.getPlayer().getPosition());
             return 1;
         }
     }

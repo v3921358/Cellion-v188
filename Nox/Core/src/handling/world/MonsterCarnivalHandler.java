@@ -8,7 +8,7 @@ import java.util.Map;
 import server.MapleCarnivalFactory;
 import server.MapleCarnivalFactory.MCSkill;
 import server.Randomizer;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.Mob;
 import server.life.MobSkill;
 import server.maps.objects.User;
@@ -36,7 +36,7 @@ public class MonsterCarnivalHandler {
                     c.SendPacket(WvsContext.enableActions());
                     return;
                 }
-                final Mob mons = MapleLifeFactory.getMonster(mobs.get(num));
+                final Mob mons = LifeFactory.getMonster(mobs.get(num));
                 if (mons != null && c.getPlayer().getMap().makeCarnivalSpawn(c.getPlayer().getCarnivalParty().getTeam(), mons, num)) {
                     c.getPlayer().getCarnivalParty().useCP(c.getPlayer(), mobs.get(num));
                     c.getPlayer().CPUpdate(false, c.getPlayer().getAvailableCP(), c.getPlayer().getTotalCP(), 0);

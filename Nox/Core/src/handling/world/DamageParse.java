@@ -136,7 +136,7 @@ public class DamageParse {
             if (monster.getLinkCID() < 1) {
                 totDamageToOneMonster = 0;
                 hpMob = monster.getMobMaxHp();
-                MapleMonsterStats monsterstats = monster.getStats();
+                MonsterStats monsterstats = monster.getStats();
                 int fixeddmg = monsterstats.getFixedDamage();
                 boolean Tempest = monster.getStatusSourceID(MonsterStatus.FREEZE) == Paladin.HEAVENS_HAMMER;
 
@@ -892,7 +892,7 @@ public class DamageParse {
             if (monster.getLinkCID() <= 0) {
                 boolean Tempest = (monster.getStatusSourceID(MonsterStatus.FREEZE) == 21120006) && (!monster.getStats().isBoss());
                 int totDamageToOneMonster = 0;
-                MapleMonsterStats monsterstats = monster.getStats();
+                MonsterStats monsterstats = monster.getStats();
                 int fixeddmg = monsterstats.getFixedDamage();
 
                 if (!Tempest && !pPlayer.isGM()) {
@@ -1045,7 +1045,7 @@ public class DamageParse {
             if (attack.after_NumMobsKilled > 2) {
                 int numMultiKills = Math.min(10, attack.after_NumMobsKilled);
 
-                MapleMonsterStats stats = MapleLifeFactory.getMonsterStats(mob.get().getMonsterId());
+                MonsterStats stats = LifeFactory.getMonsterStats(mob.get().getMonsterId());
                 if (stats != null) {
                     final long monsterExp = stats.getExp();
                     final int additionalExpPercentage = 5 * (numMultiKills - 2);
@@ -1103,7 +1103,7 @@ public class DamageParse {
         }
     }
 
-    private static double calculateMaxMagicDamagePerHit(User chr, Skill skill, Mob monster, MapleMonsterStats mobstats, PlayerStats stats, Element elem, Integer sharpEye, double maxDamagePerMonster, MapleStatEffect attackEffect) {
+    private static double calculateMaxMagicDamagePerHit(User chr, Skill skill, Mob monster, MonsterStats mobstats, PlayerStats stats, Element elem, Integer sharpEye, double maxDamagePerMonster, MapleStatEffect attackEffect) {
         int dLevel = Math.max(mobstats.getLevel() - chr.getLevel(), 0) * 2;
         int HitRate = Math.min((int) Math.floor(Math.sqrt(stats.getAccuracy())) - (int) Math.floor(Math.sqrt(mobstats.getEva())) + 100, 100);
         if (dLevel > HitRate) {

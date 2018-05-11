@@ -5,7 +5,7 @@ import java.util.List;
 
 import client.ClientSocket;
 import server.MapleItemInformationProvider;
-import server.life.MapleMonsterInformationProvider;
+import server.life.MonsterInformationProvider;
 import server.life.MonsterDropEntry;
 import server.life.MonsterGlobalDropEntry;
 import server.maps.objects.User;
@@ -33,7 +33,7 @@ public final class MonsterBookDropsRequest implements ProcessPacket<ClientSocket
             c.SendPacket(WvsContext.getCardDrops(cardid, null));
             return;
         }
-        final MapleMonsterInformationProvider ii = MapleMonsterInformationProvider.getInstance();
+        final MonsterInformationProvider ii = MonsterInformationProvider.getInstance();
         final List<Integer> newDrops = new ArrayList<>();
         for (final MonsterDropEntry de : ii.retrieveDrop(mobid)) {
             if (de.itemId > 0 && de.questid <= 0 && !newDrops.contains(de.itemId)) {

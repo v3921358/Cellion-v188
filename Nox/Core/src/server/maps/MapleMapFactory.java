@@ -18,11 +18,11 @@ import provider.wz.nox.NoxBinaryReader;
 import provider.wz.cache.WzDataStorage;
 import server.MaplePortalFactory;
 import server.life.AbstractLoadedMapleLife;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.Mob;
-import server.life.MapleLifeType;
+import server.life.LifeType;
 import server.maps.SharedMapResources.DirectionInfo;
-import server.maps.objects.MapleNPC;
+import server.life.NPCLife;
 import server.maps.objects.MapleReactor;
 import server.maps.objects.MapleRuneStone;
 import tools.LogHelper;
@@ -719,12 +719,12 @@ public class MapleMapFactory {
         int highestLifeLevel = 0;
 
         for (SharedMapResources.TemporaryStorage_Life l : map.getSharedMapResources().LifeStorage) {
-            if (l.type == MapleLifeType.Unknown) {
+            if (l.type == LifeType.Unknown) {
                 LogHelper.UNCODED.get().info(String.format("[MapleMapFactory] New life type in mapid: %d", map.getId()));
                 continue;
             }
-            if (loadNPC && l.type == MapleLifeType.Npcs || respawns && l.type == MapleLifeType.Monster) {
-                final AbstractLoadedMapleLife myLife = MapleLifeFactory.getLife(l.id, l.type);
+            if (loadNPC && l.type == LifeType.Npcs || respawns && l.type == LifeType.Monster) {
+                final AbstractLoadedMapleLife myLife = LifeFactory.getLife(l.id, l.type);
                 if (myLife == null) {
                     continue;
                 }
@@ -770,7 +770,7 @@ public class MapleMapFactory {
                                 continue;
                             }
                         }
-                        final MapleNPC npc = (MapleNPC) myLife;
+                        final NPCLife npc = (NPCLife) myLife;
                         final String name = npc.getName();
 
                         if (name != null && name.contains("Maple TV")) {//thank god lol.
@@ -782,7 +782,7 @@ public class MapleMapFactory {
                             continue;
                         }
 
-                        map.spawnNpcOnMapLoad((MapleNPC) myLife);
+                        map.spawnNpcOnMapLoad((NPCLife) myLife);
                         break;
                     }
                 }
@@ -792,7 +792,7 @@ public class MapleMapFactory {
         final List<Integer> playernpcs = NPCConstants.possiblePlayerNPCLocation(map.getId());
         if (playernpcs != null) {
             for (final int i : playernpcs) {
-                final MapleNPC npc = MapleLifeFactory.getNPC(i);
+                final NPCLife npc = LifeFactory.getNPC(i);
                 map.spawnNpcOnMapLoad(npc);
             }
         }
@@ -1189,7 +1189,7 @@ public class MapleMapFactory {
                 break;
         }
         if (monsterid > 0) {
-            map.addAreaMonsterSpawn(MapleLifeFactory.getMonster(monsterid), pos1, pos2, pos3, mobtime, msg, shouldSpawn);
+            map.addAreaMonsterSpawn(LifeFactory.getMonster(monsterid), pos1, pos2, pos3, mobtime, msg, shouldSpawn);
         }
     }
 }

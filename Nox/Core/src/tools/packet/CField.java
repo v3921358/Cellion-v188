@@ -50,7 +50,7 @@ import server.maps.objects.MapleDragon;
 import server.maps.objects.MapleHaku;
 import server.maps.objects.MapleKite;
 import server.maps.objects.MapleMist;
-import server.maps.objects.MapleNPC;
+import server.life.NPCLife;
 import server.maps.objects.MapleReactor;
 import server.maps.objects.MapleRuneStone;
 import server.maps.objects.Summon;
@@ -3301,7 +3301,7 @@ public class CField {
 
     public static class NPCPacket {
 
-        public static OutPacket spawnNPC(MapleNPC life, boolean minimap) {
+        public static OutPacket spawnNPC(NPCLife life, boolean minimap) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.NpcEnterField.getValue());
 
@@ -3310,7 +3310,7 @@ public class CField {
             return oPacket;
         }
 
-        public static OutPacket spawnNPCRequestController(MapleNPC life, boolean minimap) {
+        public static OutPacket spawnNPCRequestController(NPCLife life, boolean minimap) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.NpcChangeController.getValue());
             oPacket.EncodeByte(1);
@@ -3320,7 +3320,7 @@ public class CField {
             return oPacket;
         }
 
-        private static void encodeSpawnNPCData(OutPacket oPacket, MapleNPC life, boolean minimap) {
+        private static void encodeSpawnNPCData(OutPacket oPacket, NPCLife life, boolean minimap) {
             oPacket.EncodeInt(life.getObjectId());
             oPacket.EncodeInt(life.getId());
             oPacket.EncodeShort(life.getPosition().x);

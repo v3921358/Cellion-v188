@@ -19,7 +19,7 @@ import scripting.provider.NPCScriptManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
 import server.quest.Quest;
@@ -118,7 +118,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                 }
 
                 case 2430121: {
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300166), c.getPlayer().getPosition());
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300166), c.getPlayer().getPosition());
                     MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
                     break;
                 }

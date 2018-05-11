@@ -27,7 +27,7 @@ import server.Randomizer;
 import server.Timer.EventTimer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.Mob;
 import server.maps.Event_DojoAgent;
 import server.maps.MapleMap;
@@ -251,7 +251,7 @@ public abstract class AbstractPlayerInteraction {
 
     public final void spawnMobOnMap(final int id, final int qty, final int x, final int y, final int map) {
         for (int i = 0; i < qty; i++) {
-            getMap(map).spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(id), new Point(x, y));
+            getMap(map).spawnMonsterOnGroundBelow(LifeFactory.getMonster(id), new Point(x, y));
         }
     }
 
@@ -265,7 +265,7 @@ public abstract class AbstractPlayerInteraction {
 
     private void spawnMob(final int id, final int qty, final Point pos) {
         for (int i = 0; i < qty; i++) {
-            c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(id), pos);
+            c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(id), pos);
         }
     }
 
@@ -1027,12 +1027,12 @@ public abstract class AbstractPlayerInteraction {
     *   @param (Map ID, Mob ID, X-Coordinate, Y-Coordinate).
     **/
     public void spawnMonsterInMap(final int nMapId, final int nMobId, int posX, int posY) {
-        Mob pMob = MapleLifeFactory.getMonster(nMobId);
+        Mob pMob = LifeFactory.getMonster(nMobId);
         c.getChannelServer().getMapFactory().getMap(nMapId).spawnMonsterOnGroundBelow(pMob, new Point(posX, posY));
     }
 
     public void spawnModifiedMonsterInMap(final int nMapId, final int nMobId, int posX, int posY, long nNewHp) {
-        Mob pMob = MapleLifeFactory.getMonster(nMobId);
+        Mob pMob = LifeFactory.getMonster(nMobId);
         pMob.setHp(nNewHp);
         pMob.getStats().setHp(nNewHp);
         c.getChannelServer().getMapFactory().getMap(nMapId).spawnMonsterOnGroundBelow(pMob, new Point(posX, posY));
@@ -1276,7 +1276,7 @@ public abstract class AbstractPlayerInteraction {
     // handler for all spawnMonster
     public void spawnMonster(int id, int qty, Point pos) {
         for (int i = 0; i < qty; i++) {
-            getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(id), pos);
+            getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(id), pos);
         }
     }
 

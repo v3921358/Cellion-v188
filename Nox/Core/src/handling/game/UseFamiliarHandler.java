@@ -27,7 +27,7 @@ import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MapleFamiliar;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.maps.objects.User;
 import server.maps.objects.MonsterFamiliar;
 import net.InPacket;
@@ -58,7 +58,7 @@ public final class UseFamiliarHandler implements ProcessPacket<ClientSocket> {
             return;
         }
         MapleFamiliar f = MapleItemInformationProvider.getInstance().getFamiliarByItem(itemId);
-        if (MapleLifeFactory.getMonsterStats(f.getMob()).getLevel() <= c.getPlayer().getLevel()) {
+        if (LifeFactory.getMonsterStats(f.getMob()).getLevel() <= c.getPlayer().getLevel()) {
             MonsterFamiliar mf = (MonsterFamiliar) c.getPlayer().getFamiliars().get(f.getFamiliar());
             if (mf != null) {
                 if (mf.getVitality() >= 3) {

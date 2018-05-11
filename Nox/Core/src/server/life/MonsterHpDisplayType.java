@@ -4,7 +4,7 @@ package server.life;
  *
  * @author Lloyd Korn
  */
-public enum MapleMonsterHpDisplayType {
+public enum MonsterHpDisplayType {
 
     BossHP((byte) 1),
     FriendlyMonsterHP((byte) 2),
@@ -14,12 +14,12 @@ public enum MapleMonsterHpDisplayType {
 
     private final byte hpdisplaytype;
 
-    private MapleMonsterHpDisplayType(byte hpdisplaytype) {
+    private MonsterHpDisplayType(byte hpdisplaytype) {
         this.hpdisplaytype = hpdisplaytype;
     }
 
-    public static MapleMonsterHpDisplayType getFromInt(byte hpdisplaytype) {
-        for (MapleMonsterHpDisplayType val : values()) {
+    public static MonsterHpDisplayType getFromInt(byte hpdisplaytype) {
+        for (MonsterHpDisplayType val : values()) {
             if (val.getHPDisplayType() == hpdisplaytype) {
                 return val;
             }

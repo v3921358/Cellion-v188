@@ -6,8 +6,8 @@ import client.ClientSocket;
 import net.OutPacket;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
-import server.life.MapleLifeFactory;
-import server.life.MapleMonsterStats;
+import server.life.LifeFactory;
+import server.life.MonsterStats;
 import server.maps.AnimatedMapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.packet.CField;
@@ -50,8 +50,8 @@ public final class MonsterFamiliar extends AnimatedMapleMapObject {
         return getStats().getName();
     }
 
-    public MapleMonsterStats getStats() {
-        return MapleLifeFactory.getMonsterStats(MapleItemInformationProvider.getInstance().getFamiliar(familiar).getMob());
+    public MonsterStats getStats() {
+        return LifeFactory.getMonsterStats(MapleItemInformationProvider.getInstance().getFamiliar(familiar).getMob());
     }
 
     public void addFatigue(User owner) {

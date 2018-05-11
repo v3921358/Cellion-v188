@@ -8,7 +8,6 @@ import provider.MapleDataTool;
 import provider.wz.cache.WzDataStorage;
 import provider.wz.nox.NoxBinaryReader;
 import server.maps.SharedMapResources;
-import server.maps.objects.MapleNPC;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,15 +19,15 @@ import java.util.List;
 import java.util.Map;
 import tools.LogHelper;
 
-public class MapleLifeFactory {
+public class LifeFactory {
 
     private static final MapleDataProvider etcDataWZ = WzDataStorage.getEtcWZ();
     private static final MapleData npclocData = etcDataWZ.getData("NpcLocation.img");
 
-    private static final Map<Integer, MapleMonsterStats> MONSTER_STATS = new HashMap<>();
+    private static final Map<Integer, MonsterStats> MONSTER_STATS = new HashMap<>();
     private static final Map<Integer, List<Integer>> QUEST_COUNT_GROUP = new HashMap<>();
 
-    private static final Map<Integer, MapleNPCStats> NPC_STATS = new HashMap<>();
+    private static final Map<Integer, NPCStats> NPC_STATS = new HashMap<>();
     private static final Map<Integer, Integer> NPC_LOCATION = new HashMap<>();
 
     public static void initialize() {
@@ -59,7 +58,7 @@ public class MapleLifeFactory {
                 boolean jsonLoad = data.readBoolean();
                 boolean forceMove = data.readBoolean();
 
-                MapleNPCStats npcStats = new MapleNPCStats();
+                NPCStats npcStats = new NPCStats();
                 npcStats.setNpcid(npcid);
                 npcStats.setQuest(quest);
                 npcStats.setFloating(floating);
@@ -106,7 +105,7 @@ public class MapleLifeFactory {
                 final int MobCount = data.readInt();
                 for (int i = 0; i < MobCount; i++) {
                     final int MobId = data.readInt();
-                    MapleMonsterStats stats = new MapleMonsterStats(MobId, data);
+                    MonsterStats stats = new MonsterStats(MobId, data);
 
                     MONSTER_STATS.put(MobId, stats);
                 }
@@ -169,14 +168,14 @@ public class MapleLifeFactory {
      * @param npcid
      * @return MapleNPCStats (null if not found)
      */
-    public static MapleNPCStats getNPCStats(int npcid) {
+    public static NPCStats getNPCStats(int npcid) {
         if (NPC_STATS.containsKey(npcid)) {
             return NPC_STATS.get(npcid);
         }
         return null;
     }
 
-    public static AbstractLoadedMapleLife getLife(int id, MapleLifeType type) {
+    public static AbstractLoadedMapleLife getLife(int id, LifeType type) {
         switch (type) {
             case Npcs:
                 return getNPC(id);
@@ -202,19 +201,19 @@ public class MapleLifeFactory {
     }
 
     public static Mob getMonster(int mid) {
-        MapleMonsterStats stats = getMonsterStats(mid);
+        MonsterStats stats = getMonsterStats(mid);
         if (stats == null) {
             return null;
         }
         return new Mob(mid, stats);
     }
 
-    public static MapleNPC getNPC(final int nid) {
-        return new MapleNPC(nid);
+    public static NPCLife getNPC(final int nid) {
+        return new NPCLife(nid);
     }
 
-    public static MapleMonsterStats getMonsterStats(int mid) {
-        MapleMonsterStats stats = MONSTER_STATS.get(mid);
+    public static MonsterStats getMonsterStats(int mid) {
+        MonsterStats stats = MONSTER_STATS.get(mid);
         return stats;
 
         /*  for (int i = 0; true; i++) { // TODO: Check and reprint all available values again..doing like below is a ridiculous way

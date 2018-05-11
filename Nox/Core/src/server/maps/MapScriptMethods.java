@@ -19,7 +19,7 @@ import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.Timer.EventTimer;
 import server.Timer.MapTimer;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.Mob;
 import server.maps.SharedMapResources.DirectionInfo;
 import server.maps.objects.User;
@@ -457,7 +457,7 @@ public class MapScriptMethods {
             case mapFU_910028360:
                 c.getPlayer().getMap().resetFully();
                 c.getPlayer().getMap().startMapEffect("Get rid of the Whipped Cream Wight.", 5120079);
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9500579), new Point(733, 146));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9500579), new Point(733, 146));
                 break;
             case mapFU_910028330:
                 c.getPlayer().getMap().resetFully();
@@ -517,13 +517,13 @@ public class MapScriptMethods {
 
             case Ranmaru_Before: {
                 if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0) {
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9421581), new Point(109, 123));
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9421581), new Point(109, 123));
                     break;
                 }
             }
             case pierre_Summon: {
                 if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0) {
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8900000), new Point(497, 551));
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8900000), new Point(497, 551));
                     c.getPlayer().getMap().startMapEffect("From the bottom of my heart, welcome to the tea party!", 5120098);
                     c.SendPacket(CField.showEffect("rootabyss/firework"));
                     c.SendPacket(CField.playSound("rootabyss/firework"));
@@ -533,7 +533,7 @@ public class MapScriptMethods {
             }
             case pierre_Summon1: {
                 if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0) {
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8900000), new Point(497, 551));
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8900000), new Point(497, 551));
                     c.getPlayer().getMap().startMapEffect("From the bottom of my heart, welcome to the tea party!", 5120098);
                     c.SendPacket(CField.showEffect("rootabyss/firework"));
                     c.SendPacket(CField.playSound("rootabyss/firework"));
@@ -546,20 +546,20 @@ public class MapScriptMethods {
                 if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0) {
                     c.getPlayer().getMap().startMapEffect("Attempt to wake the Crimson Queen", 5120107);
                     c.SendPacket(CUserLocal.updateDeathCount(6));
-                    //       c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8920000), new Point(4, 135));
+                    //       c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8920000), new Point(4, 135));
                     break;
                 }
             }
             case abysscave_ent: {
                 if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0) {
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8930000), new Point(256, 443));
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8930000), new Point(256, 443));
                     c.SendPacket(CUserLocal.updateDeathCount(6));
                     break;
                 }
             }
             case banban_Summon: {
                 if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0) {
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8910000), new Point(256, 443));
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8910000), new Point(256, 443));
                     c.SendPacket(CUserLocal.updateDeathCount(6));
                     break;
                 }
@@ -567,11 +567,11 @@ public class MapScriptMethods {
             case sao_enterF01: {
                 //   c.write(CField.showEffect("Sao/Start1"));
                 c.getPlayer().getMap().resetFully();
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390706), new Point(-615, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390706), new Point(-364, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390706), new Point(78, 336));
-                //   c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(2600208), new Point(736, 336));
-                Mob theMob = MapleLifeFactory.getMonster(2600208);
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390706), new Point(-615, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390706), new Point(-364, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390706), new Point(78, 336));
+                //   c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(2600208), new Point(736, 336));
+                Mob theMob = LifeFactory.getMonster(2600208);
                 /*   OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -584,13 +584,13 @@ public class MapScriptMethods {
                 //   c.write(CField.showEffect("Sao/Start1"));
                 c.getPlayer().getMap().resetFully();
                 //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(-454, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(-119, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(563, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(995, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(527, 28));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(842, 28));
-                Mob theMob = MapleLifeFactory.getMonster(2600209);
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390700), new Point(-454, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390700), new Point(-119, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390700), new Point(563, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390700), new Point(995, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390700), new Point(527, 28));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390700), new Point(842, 28));
+                Mob theMob = LifeFactory.getMonster(2600209);
                 /*    OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -603,15 +603,15 @@ public class MapScriptMethods {
                 //   c.write(CField.showEffect("Sao/Start1"));
                 c.getPlayer().getMap().resetFully();
                 //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(-593, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(-205, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(207, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(614, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(1017, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(842, 28));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(1218, -84));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(768, -84));
-                Mob theMob = MapleLifeFactory.getMonster(2600015);
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(-593, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(-205, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(207, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(614, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(1017, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(842, 28));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(1218, -84));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(768, -84));
+                Mob theMob = LifeFactory.getMonster(2600015);
                 /* OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -624,11 +624,11 @@ public class MapScriptMethods {
                 //   c.write(CField.showEffect("Sao/Start1"));
                 c.getPlayer().getMap().resetFully();
                 //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(-631, -204));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(-14, -204));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(505, -204));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(748, -204));
-                Mob theMob = MapleLifeFactory.getMonster(2600030);
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390702), new Point(-631, -204));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390702), new Point(-14, -204));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390702), new Point(505, -204));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390702), new Point(748, -204));
+                Mob theMob = LifeFactory.getMonster(2600030);
                 /*  OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -641,7 +641,7 @@ public class MapScriptMethods {
                 //   c.write(CField.showEffect("Sao/Start1"));
                 c.getPlayer().getMap().resetFully();
                 //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
-                Mob theMob = MapleLifeFactory.getMonster(9300003);
+                Mob theMob = LifeFactory.getMonster(9300003);
                 /*  OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -653,11 +653,11 @@ public class MapScriptMethods {
             case sao_enterF06: {
                 //   c.write(CField.showEffect("Sao/Start1"));
                 c.getPlayer().getMap().resetFully();
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390706), new Point(-615, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390706), new Point(-364, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390706), new Point(78, 336));
-                //   c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(2600208), new Point(736, 336));
-                Mob theMob = MapleLifeFactory.getMonster(6220001);
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390706), new Point(-615, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390706), new Point(-364, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390706), new Point(78, 336));
+                //   c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(2600208), new Point(736, 336));
+                Mob theMob = LifeFactory.getMonster(6220001);
                 /*  OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -670,13 +670,13 @@ public class MapScriptMethods {
                 //   c.write(CField.showEffect("Sao/Start1"));
                 c.getPlayer().getMap().resetFully();
                 //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(-454, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(-119, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(563, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(995, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(527, 28));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(842, 28));
-                Mob theMob = MapleLifeFactory.getMonster(8210013);
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390700), new Point(-454, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390700), new Point(-119, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390700), new Point(563, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390700), new Point(995, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390700), new Point(527, 28));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390700), new Point(842, 28));
+                Mob theMob = LifeFactory.getMonster(8210013);
                 /* OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -689,15 +689,15 @@ public class MapScriptMethods {
                 //   c.write(CField.showEffect("Sao/Start1"));
                 c.getPlayer().getMap().resetFully();
                 //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(-593, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(-205, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(207, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(614, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(1017, 336));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(842, 28));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(1218, -84));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(768, -84));
-                Mob theMob = MapleLifeFactory.getMonster(8220006);
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(-593, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(-205, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(207, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(614, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(1017, 336));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(842, 28));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(1218, -84));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390701), new Point(768, -84));
+                Mob theMob = LifeFactory.getMonster(8220006);
                 /*   OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -710,11 +710,11 @@ public class MapScriptMethods {
                 //   c.write(CField.showEffect("Sao/Start1"));
                 c.getPlayer().getMap().resetFully();
                 //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(-631, -204));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(-14, -204));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(505, -204));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(748, -204));
-                Mob theMob = MapleLifeFactory.getMonster(8620009);
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390702), new Point(-631, -204));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390702), new Point(-14, -204));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390702), new Point(505, -204));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390702), new Point(748, -204));
+                Mob theMob = LifeFactory.getMonster(8620009);
                 /*  OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -727,7 +727,7 @@ public class MapScriptMethods {
                 //   c.write(CField.showEffect("Sao/Start1"));
                 c.getPlayer().getMap().resetFully();
                 //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
-                Mob theMob = MapleLifeFactory.getMonster(8620011);
+                Mob theMob = LifeFactory.getMonster(8620011);
                 /* OverrideMonsterStats oms = new OverrideMonsterStats();
                                     oms.setOMp(theMob.getMobMaxMp());
                                     oms.setOExp(theMob.getMobExp() * 0);
@@ -740,7 +740,7 @@ public class MapScriptMethods {
                 //c.getPlayer().getMap().resetFully();
                 if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0) {
                     c.getPlayer().getMap().startMapEffect("Vellum is nowhere to be seen. Take a look around the altar", 5120107);
-                    //     c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8930000), new Point(256, 443));
+                    //     c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8930000), new Point(256, 443));
                     break;
                 }
             }
@@ -748,7 +748,7 @@ public class MapScriptMethods {
                 //c.getPlayer().getMap().resetFully();
                 if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0) {
                     c.getPlayer().getMap().startMapEffect("Summon Von Bon in the Dimensional Schism", 5120107);
-                    //        c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8910000), new Point(256, 443));
+                    //        c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8910000), new Point(256, 443));
                     break;
                 }
             }*/
@@ -951,7 +951,7 @@ public class MapScriptMethods {
                             mobId = Randomizer.nextBoolean() ? 9300106 : 9300105; //enraged
                             break;
                     }
-                    final Mob shammos = MapleLifeFactory.getMonster(mobId);
+                    final Mob shammos = LifeFactory.getMonster(mobId);
                     if (c.getPlayer().getEventInstance() != null) {
                         c.getPlayer().getEventInstance().registerMonster(shammos);
                     }
@@ -961,7 +961,7 @@ public class MapScriptMethods {
             }
             case astaroth_summon: {
                 c.getPlayer().getMap().resetFully();
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9400633), new Point(600, -26)); //rough estimate
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9400633), new Point(600, -26)); //rough estimate
                 break;
             }
             case boss_Ravana_mirror:
@@ -1018,9 +1018,9 @@ public class MapScriptMethods {
                     break;
                 }
                 for (int i = 0; i < spawnPer; i++) {
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), new Point(pos1));
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), new Point(pos2));
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), new Point(pos3));
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(mobId), new Point(pos1));
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(mobId), new Point(pos2));
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(mobId), new Point(pos3));
                 }
                 c.getPlayer().startMapTimeLimitTask(120, c.getPlayer().getMap().getReturnMap());
                 break;
@@ -1029,7 +1029,7 @@ public class MapScriptMethods {
             case mPark_summonBoss: {
                 if (c.getPlayer().getEventInstance() != null && c.getPlayer().getEventInstance().getProperty("boss") != null && c.getPlayer().getEventInstance().getProperty("boss").equals("0")) {
                     for (int i = 9800119; i < 9800125; i++) {
-                        final Mob boss = MapleLifeFactory.getMonster(i);
+                        final Mob boss = LifeFactory.getMonster(i);
                         c.getPlayer().getEventInstance().registerMonster(boss);
                         c.getPlayer().getMap().spawnMonsterOnGroundBelow(boss, new Point(c.getPlayer().getMap().getPortal(2).getPosition()));
                     }
@@ -1038,7 +1038,7 @@ public class MapScriptMethods {
             }
             case shammos_Fenter: {
                 if (c.getPlayer().getMapId() >= 921120100 && c.getPlayer().getMapId() < 921120300) {
-                    final Mob shammos = MapleLifeFactory.getMonster(9300275);
+                    final Mob shammos = LifeFactory.getMonster(9300275);
                     if (c.getPlayer().getEventInstance() != null) {
                         int averageLevel = 0, size = 0;
                         for (User pl : c.getPlayer().getEventInstance().getPlayers()) {
@@ -1061,7 +1061,7 @@ public class MapScriptMethods {
                     c.SendPacket(MobPacket.getNodeProperties(shammos, c.getPlayer().getMap()));
 
                     /*} else if (c.getPlayer().getMapId() == (GameConstants.GMS ? 921120300 : 921120500) && c.getPlayer().getMap().getAllMonstersThreadsafe().size() == 0) {
-                     final MapleMonster shammos = MapleLifeFactory.getMonster(9300281);
+                     final MapleMonster shammos = LifeFactory.getMonster(9300281);
                      if (c.getPlayer().getEventInstance() != null) {
                      int averageLevel = 0, size = 0;
                      for (MapleCharacter pl : c.getPlayer().getEventInstance().getPlayers()) {
@@ -1081,7 +1081,7 @@ public class MapScriptMethods {
             //5120038 =  dr bing. 5120039 = visitor lady. 5120041 = unknown dr bing.
             case iceman_FEnter: {
                 if (c.getPlayer().getMapId() >= 932000100 && c.getPlayer().getMapId() < 932000300) {
-                    final Mob shammos = MapleLifeFactory.getMonster(9300438);
+                    final Mob shammos = LifeFactory.getMonster(9300438);
                     if (c.getPlayer().getEventInstance() != null) {
                         int averageLevel = 0, size = 0;
                         for (User pl : c.getPlayer().getEventInstance().getPlayers()) {
@@ -1141,12 +1141,12 @@ public class MapScriptMethods {
                 } else {
                     mob_ToSpawn = 3300005;
                 }
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mob_ToSpawn), c.getPlayer().getPosition());
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(mob_ToSpawn), c.getPlayer().getPosition());
                 break;
             }
             case Xerxes_summon: {
                 c.getPlayer().getMap().resetFully();
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(6160003), c.getPlayer().getPosition());
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(6160003), c.getPlayer().getPosition());
                 break;
             }
             case shammos_FStart:
@@ -1238,7 +1238,7 @@ public class MapScriptMethods {
             case magnus_summon: {
                 c.getPlayer().getMap().spawnObtacleAtom();
                 c.getPlayer().getMap().resetFully();
-                //  c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8880000), c.getPlayer().getPosition());
+                //  c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8880000), c.getPlayer().getPosition());
                 break;
             }
 
@@ -1408,7 +1408,7 @@ public class MapScriptMethods {
             case Advanture_tuto33: {
                 c.getPlayer().getMap().resetFully();
                 c.SendPacket(WvsContext.getTopMsg("Eliminate Mano."));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300815), new Point(0, 0));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300815), new Point(0, 0));
                 NPCScriptManager.getInstance().dispose(c);
                 c.removeClickedNPC();
                 break;
@@ -1502,16 +1502,16 @@ public class MapScriptMethods {
                 if (c.getPlayer().getQuestStatus(32123) == QuestState.Started) {
                     Quest.getInstance(32123).forceComplete(c.getPlayer(), 0);
                 }
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-187, 245));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-187, 245));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-187, 245));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-187, 245));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-187, 245));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-53, 185));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-53, 185));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-53, 185));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-53, 185));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-53, 185));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(3501006), new Point(-187, 245));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(3501006), new Point(-187, 245));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(3501006), new Point(-187, 245));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(3501006), new Point(-187, 245));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(3501006), new Point(-187, 245));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(3501006), new Point(-53, 185));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(3501006), new Point(-53, 185));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(3501006), new Point(-53, 185));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(3501006), new Point(-53, 185));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(3501006), new Point(-53, 185));
                 c.SendPacket(CField.getClock(10 * 60));
                 NPCScriptManager.getInstance().dispose(c);
                 c.removeClickedNPC();
@@ -2177,7 +2177,7 @@ public class MapScriptMethods {
                 break;
 
             case enter_23214: {
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9001038), new Point(816, -14));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9001038), new Point(816, -14));
                 break;
             }
 
@@ -2209,18 +2209,18 @@ public class MapScriptMethods {
             }
 
             case dublTuto21: {
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300522), new Point(-578, 152));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300521), new Point(-358, 152));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300522), new Point(-138, 152));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300522), new Point(-82, 152));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300522), new Point(-302, 152));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300522), new Point(-522, 152));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300522), new Point(-578, 152));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300521), new Point(-358, 152));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300522), new Point(-138, 152));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300522), new Point(-82, 152));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300522), new Point(-302, 152));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300522), new Point(-522, 152));
                 break;
             }
 
             case dublTuto23: {
                 c.getPlayer().getMap().resetFully();
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300523), new Point(-283, 152));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300523), new Point(-283, 152));
                 break;
             }
 
@@ -2323,7 +2323,7 @@ public class MapScriptMethods {
             case map_913070020: {
                 c.SendPacket(WvsContext.getTopMsg("Mr.Limbert's General Store"));
                 //bigby spawn is not gms like yet
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9001051), new Point(185, 65));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9001051), new Point(185, 65));
                 c.SendPacket(CField.getClock(5 * 60));
                 MapTimer.getInstance().schedule(new Runnable() {
                     @Override
@@ -2511,7 +2511,7 @@ public class MapScriptMethods {
             case PTjob2M: {
                 c.getPlayer().setQuestAdd(Quest.getInstance(25102), QuestState.Started, "1");
                 if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) < 1) {
-                    c.getPlayer().getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(9001045), new Point(171, 182));
+                    c.getPlayer().getMap().spawnMonsterOnGroudBelow(LifeFactory.getMonster(9001045), new Point(171, 182));
                 }
                 break;
             }
@@ -3279,7 +3279,7 @@ public class MapScriptMethods {
             }
             case magnus_enter_HP: {
                 if (c.getPlayer().getMapId() >= 401060100 && c.getPlayer().getMapId() < 401060100) {
-                    final Mob shammos = MapleLifeFactory.getMonster(8880000);
+                    final Mob shammos = LifeFactory.getMonster(8880000);
                     if (c.getPlayer().getEventInstance() != null) {
                         int averageLevel = 0, size = 0;
                         for (User pl : c.getPlayer().getEventInstance().getPlayers()) {
@@ -3307,15 +3307,31 @@ public class MapScriptMethods {
 
             case DI_Hillah:
                 c.getPlayer().getMap().resetFully();
-                final Mob boss1 = MapleLifeFactory.getMonster(9300627);
+                final Mob boss1 = LifeFactory.getMonster(9300627);
                 c.getPlayer().getMap().spawnMonsterOnGroudBelow(boss1, new Point(2630, 29));
                 break;
             case DI_HvsM:
                 c.getPlayer().getMap().resetFully();
-                final Mob boss = MapleLifeFactory.getMonster(9300627);
+                final Mob boss = LifeFactory.getMonster(9300627);
                 c.getPlayer().getMap().spawnMonsterOnGroudBelow(boss, new Point(2630, 29));
                 break;
 //            case DI_.Magnus:
+//                if (c.getPlayer().getMap().getMobsSize() < 1) {
+//                    final MapleMonster boss = LifeFactory.getMonster(9300627);
+//                    boss.changeLevel(c.getPlayer().getLevel());
+////                    boss.setHp(stage);
+//                    c.getPlayer().getEventInstance().registerMonster(boss);
+//                    c.getPlayer().getMap().spawnMonsterOnGroudBelow(boss, new Point(2630, 0));
+//                }
+//                break;//            case DI_.Magnus:
+//                if (c.getPlayer().getMap().getMobsSize() < 1) {
+//                    final MapleMonster boss = LifeFactory.getMonster(9300627);
+//                    boss.changeLevel(c.getPlayer().getLevel());
+////                    boss.setHp(stage);
+//                    c.getPlayer().getEventInstance().registerMonster(boss);
+//                    c.getPlayer().getMap().spawnMonsterOnGroudBelow(boss, new Point(2630, 0));
+//                }
+//                break;//            case DI_.Magnus:
 //                if (c.getPlayer().getMap().getMobsSize() < 1) {
 //                    final MapleMonster boss = MapleLifeFactory.getMonster(9300627);
 //                    boss.changeLevel(c.getPlayer().getLevel());
@@ -3447,7 +3463,7 @@ public class MapScriptMethods {
 
             case enter_866033000: {
                 c.getPlayer().getMap().resetFully();
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390915), new Point(-153, 49));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390915), new Point(-153, 49));
                 break;
             }
 
@@ -3529,11 +3545,11 @@ public class MapScriptMethods {
                 try {
                     c.getPlayer().getMap().resetFully();
                     if (c.getPlayer().getQuestStatus(59005) == QuestState.Started) {
-                        c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390931), new Point(661, 246));
-                        c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390931), new Point(761, 246));
-                        c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390931), new Point(861, 246));
-                        c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390931), new Point(961, 246));
-                        c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390931), new Point(1061, 246));
+                        c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390931), new Point(661, 246));
+                        c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390931), new Point(761, 246));
+                        c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390931), new Point(861, 246));
+                        c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390931), new Point(961, 246));
+                        c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390931), new Point(1061, 246));
                     }
                     NPCScriptManager.getInstance().dispose(c);
                     c.removeClickedNPC();
@@ -3571,7 +3587,7 @@ public class MapScriptMethods {
 
             case onUserEnter_866105000: {
                 c.SendPacket(UIPacket.IntroEnableUI(false));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390936), new Point(515, 77));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390936), new Point(515, 77));
                 break;
             }
 
@@ -3594,8 +3610,8 @@ public class MapScriptMethods {
             }
 
             case onUserEnter_866103000: {
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390937), new Point(515, 77));
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390935), new Point(278, 70));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390937), new Point(515, 77));
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390935), new Point(278, 70));
                 c.SendPacket(UIPacket.getDirectionStatus(true));
                 c.SendPacket(UIPacket.UserInGameDirectionEvent(3, 0));
                 c.SendPacket(CField.UIPacket.IntroEnableUI(true));
@@ -3864,7 +3880,7 @@ public class MapScriptMethods {
         } else {
             mob = 9300377;
         }
-        Mob theMob = MapleLifeFactory.getMonster(mob);
+        Mob theMob = LifeFactory.getMonster(mob);
         /*  OverrideMonsterStats oms = new OverrideMonsterStats();
         oms.setOMp(theMob.getMobMaxMp());
         oms.setOExp(theMob.getMobExp());

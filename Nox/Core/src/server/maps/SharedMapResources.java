@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import server.MaplePortal;
 import server.Randomizer;
-import server.life.MapleLifeType;
+import server.life.LifeType;
 
 /**
  *
@@ -291,7 +291,7 @@ public class SharedMapResources {
         public byte f, team;
         public String limitedname;
         public boolean hide;
-        public MapleLifeType type;
+        public LifeType type;
 
         public TemporaryStorage_Life(int id, int x, int y, int fh, int cy, int rx0, int rx1, int mobtime, int f, int team, String type, String limitedname, boolean hide) {
             this.id = id;
@@ -304,7 +304,7 @@ public class SharedMapResources {
             this.mobtime = mobtime;
             this.f = (byte) f;
             this.team = (byte) team;
-            this.type = MapleLifeType.getLifeByData(type);
+            this.type = LifeType.getLifeByData(type);
             this.limitedname = limitedname;
             this.hide = hide;
         }

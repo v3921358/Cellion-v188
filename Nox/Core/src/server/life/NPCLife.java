@@ -1,18 +1,17 @@
-package server.maps.objects;
+package server.life;
 
 import client.ClientSocket;
 import server.MapleStringInformationProvider;
-import server.life.AbstractLoadedMapleLife;
 import server.maps.MapleMapObjectType;
 import server.shops.MapleShopFactory;
 import tools.packet.CField.NPCPacket;
 
-public class MapleNPC extends AbstractLoadedMapleLife {
+public class NPCLife extends AbstractLoadedMapleLife {
 
     private String overrideName = null;
     private boolean custom = false;
 
-    public MapleNPC(final int id) {
+    public NPCLife(final int id) {
         super(id);
     }
 

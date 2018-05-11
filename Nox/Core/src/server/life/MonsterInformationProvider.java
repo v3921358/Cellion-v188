@@ -23,13 +23,13 @@ import server.Randomizer;
 import tools.LogHelper;
 import tools.Pair;
 
-public class MapleMonsterInformationProvider {
+public class MonsterInformationProvider {
 
-    private static final MapleMonsterInformationProvider instance = new MapleMonsterInformationProvider();
+    private static final MonsterInformationProvider instance = new MonsterInformationProvider();
     private final Map<Integer, ArrayList<MonsterDropEntry>> drops = new HashMap<>();
     private final List<MonsterGlobalDropEntry> globaldrops = new ArrayList<>();
 
-    public static MapleMonsterInformationProvider getInstance() {
+    public static MonsterInformationProvider getInstance() {
         return instance;
     }
 
@@ -92,7 +92,7 @@ public class MapleMonsterInformationProvider {
         //globaldrops.add(new MonsterGlobalDropEntry(4001126, (int) (5 * 10000), -1, (byte) 0, 1, 3, 0)); //Maple Leaf
         //globaldrops.add(new MonsterGlobalDropEntry(4310050, (int) (1 * 10000), -1, (byte) 0, 1, 1, 0)); //Old Maple Coin
         //globaldrops.add(new MonsterGlobalDropEntry(4000524, (int) (5 * 10000), -1, (byte) 0, 1, 1, 0));
-        //MapleMonsterStats mons = MapleLifeFactory.getMonsterStats(f.mob);
+        //MapleMonsterStats mons = LifeFactory.getMonsterStats(f.mob);
     }
 
     public List<MonsterDropEntry> retrieveDrop(int monsterId) {
@@ -106,7 +106,7 @@ public class MapleMonsterInformationProvider {
         ResultSet rs = null;
         try (Connection con = Database.GetConnection()) {
 
-            final MapleMonsterStats mons = MapleLifeFactory.getMonsterStats(monsterId);
+            final MonsterStats mons = LifeFactory.getMonsterStats(monsterId);
             if (mons == null) {
                 return;
             }
@@ -158,7 +158,7 @@ public class MapleMonsterInformationProvider {
     public void addExtra() {
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         for (Entry<Integer, ArrayList<MonsterDropEntry>> e : drops.entrySet()) {
-            final MapleMonsterStats mons = MapleLifeFactory.getMonsterStats(e.getKey());
+            final MonsterStats mons = LifeFactory.getMonsterStats(e.getKey());
             Integer item = ii.getItemIdByMob(e.getKey());
             if (item != null && item > 0) {
                 e.getValue().add(new MonsterDropEntry(item, mons.isBoss() ? 1000000 : 10000, 1, 1, 0));
@@ -170,7 +170,7 @@ public class MapleMonsterInformationProvider {
         }
         for (Entry<Integer, Integer> i : ii.getMonsterBook().entrySet()) {
             if (!drops.containsKey(i.getKey())) {
-                final MapleMonsterStats mons = MapleLifeFactory.getMonsterStats(i.getKey());
+                final MonsterStats mons = LifeFactory.getMonsterStats(i.getKey());
                 ArrayList<MonsterDropEntry> e = new ArrayList<>();
                 e.add(new MonsterDropEntry(i.getValue(), mons.isBoss() ? 1000000 : 10000, 1, 1, 0));
                 MapleFamiliar f = ii.getFamiliarByMob(i.getKey());
@@ -183,7 +183,7 @@ public class MapleMonsterInformationProvider {
         }
         for (MapleFamiliar f : ii.getFamiliars().values()) {
             if (!drops.containsKey(f.getMob())) {
-                MapleMonsterStats mons = MapleLifeFactory.getMonsterStats(f.getMob());
+                MonsterStats mons = LifeFactory.getMonsterStats(f.getMob());
                 ArrayList<MonsterDropEntry> e = new ArrayList<>();
                 e.add(new MonsterDropEntry(f.getItemid(), mons.isBoss() ? 10000 : 100, 1, 1, 0));
                 addMeso(mons, e);
@@ -192,7 +192,7 @@ public class MapleMonsterInformationProvider {
         }
     }
 
-    public void addMeso(MapleMonsterStats mons, ArrayList<MonsterDropEntry> ret) {
+    public void addMeso(MonsterStats mons, ArrayList<MonsterDropEntry> ret) {
         final double divided = (mons.getLevel() < 100 ? (mons.getLevel() < 10 ? (double) mons.getLevel() : 10.0) : (mons.getLevel() / 10.0));
         final int max = mons.isBoss() && !mons.isPartyBonus() ? (mons.getLevel() * mons.getLevel()) : (mons.getLevel() * (int) Math.ceil(mons.getLevel() / divided));
         for (int i = 0; i < mons.dropsMeso(); i++) {
@@ -262,7 +262,7 @@ public class MapleMonsterInformationProvider {
     // Item Drops based off level
     public void loadCustomLevelDrops() {
         for (Entry<Integer, ArrayList<MonsterDropEntry>> e : drops.entrySet()) {
-            final MapleMonsterStats mons = MapleLifeFactory.getMonsterStats(e.getKey());
+            final MonsterStats mons = LifeFactory.getMonsterStats(e.getKey());
             //for (Entry<Integer, ArrayList<MonsterDropEntry>> e : drops.entrySet()) {//???????
 
             if (mons.getLevel() > 1 && mons.getLevel() < 86) {

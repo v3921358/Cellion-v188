@@ -12,7 +12,7 @@ import client.SkillFactory.FamiliarEntry;
 import client.anticheat.CheatingOffense;
 import constants.GameConstants;
 import server.life.Mob;
-import server.life.MapleMonsterStats;
+import server.life.MonsterStats;
 import server.maps.objects.User;
 import tools.Triple;
 import net.InPacket;
@@ -56,7 +56,7 @@ public final class FamiliarAttack implements ProcessPacket<ClientSocket> {
         if ((attackPair.isEmpty()) || (!chr.getCheatTracker().checkFamiliarAttack(chr)) || (attackPair.size() > f.targetCount)) {
             return;
         }
-        MapleMonsterStats oStats = chr.getSummonedFamiliar().getStats();
+        MonsterStats oStats = chr.getSummonedFamiliar().getStats();
         chr.getMap().broadcastMessage(chr, CField.familiarAttack(chr.getId(), unk, attackPair), chr.getTruePosition());
         for (Triple attack : attackPair) {
             Mob mons = chr.getMap().getMonsterByOid(((Integer) attack.left).intValue());

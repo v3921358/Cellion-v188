@@ -4,7 +4,7 @@ package server.life;
  *
  * @author Lloyd Korn
  */
-public class MapleNPCStats {
+public class NPCStats {
 
     private int npcid;
 
@@ -24,7 +24,7 @@ public class MapleNPCStats {
     private boolean skeleton = false;
     private boolean jsonLoad = false;
 
-    public MapleNPCStats() {
+    public NPCStats() {
     }
 
     /**

@@ -46,7 +46,7 @@ import server.Randomizer;
 import server.Timer.EventTimer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.MapleMapFactory;
@@ -390,7 +390,7 @@ public class EventManager {
     }
 
     public Mob getMonster(final int id) {
-        return MapleLifeFactory.getMonster(id);
+        return LifeFactory.getMonster(id);
     }
 
     public MapleReactor getReactor(final int id) {

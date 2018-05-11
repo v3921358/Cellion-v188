@@ -20,13 +20,12 @@ import handling.world.World;
 import service.ChannelServer;
 import server.maps.MapleMap;
 import server.maps.objects.User;
-import server.maps.objects.MapleNPC;
 import server.maps.objects.Pet;
 import tools.LogHelper;
 import tools.packet.CField.NPCPacket;
 import tools.packet.WvsContext;
 
-public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
+public class PlayerNPC extends NPCLife implements MapleCharacterLook {
 
     public static final boolean Auto_Update = false;
     private String name;
@@ -423,8 +422,8 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
         client.SendPacket(NPCPacket.spawnNPCRequestController(this, true));
     }
 
-    public MapleNPC getNPCFromWZ() {
-        MapleNPC npc = MapleLifeFactory.getNPC(getId());
+    public NPCLife getNPCFromWZ() {
+        NPCLife npc = LifeFactory.getNPC(getId());
         if (npc != null) {
             this.name = getName();
         }

@@ -41,7 +41,7 @@ import net.OutPacket;
 
 public class Mob extends AbstractLoadedMapleLife {
 
-    private MapleMonsterStats stats;
+    private MonsterStats stats;
     private ForcedMonsterStats forcedStats = null;
 
     private ForcedMobStat forcedMobStat;
@@ -68,7 +68,7 @@ public class Mob extends AbstractLoadedMapleLife {
     private ChangeableStats ostats = null;
     private int bloodlessPartyBonus = 0;
 
-    public Mob(int id, MapleMonsterStats stats) {
+    public Mob(int id, MonsterStats stats) {
         super(id);
         initWithStats(stats);
 
@@ -84,7 +84,7 @@ public class Mob extends AbstractLoadedMapleLife {
         temporaryStat = new MobTemporaryStat(this);
     }
 
-    private void initWithStats(MapleMonsterStats stats) {
+    private void initWithStats(MonsterStats stats) {
         setStance(5);
         this.stats = stats;
         hp = stats.getHp();
@@ -112,7 +112,7 @@ public class Mob extends AbstractLoadedMapleLife {
         return ret;
     }
 
-    public MapleMonsterStats getStats() {
+    public MonsterStats getStats() {
         return stats;
     }
 
@@ -359,7 +359,7 @@ public class Mob extends AbstractLoadedMapleLife {
                 }
 
                 if (hp <= 0) {
-                    if (stats.getHPDisplayType() == MapleMonsterHpDisplayType.BossHP) {
+                    if (stats.getHPDisplayType() == MonsterHpDisplayType.BossHP) {
                         map.broadcastMessage(MobPacket.showBossHP(getId(), -1, getMobMaxHp()), this.getTruePosition());
                     }
                     // Spawn revives - This must be called before broadcasting killMonster, otherwise the position will be incorrectly spawned
@@ -716,7 +716,7 @@ public class Mob extends AbstractLoadedMapleLife {
             case 8810120:
             case 8810121: //must update sponges
                 for (int i : toSpawn) {
-                    Mob mob = MapleLifeFactory.getMonster(i);
+                    Mob mob = LifeFactory.getMonster(i);
 
                     mob.setPosition(getTruePosition());
                     if (eventInstance != null) {
@@ -755,7 +755,7 @@ public class Mob extends AbstractLoadedMapleLife {
                 List<Mob> mobs = new ArrayList<>();
 
                 for (int i : toSpawn) {
-                    Mob mob = MapleLifeFactory.getMonster(i);
+                    Mob mob = LifeFactory.getMonster(i);
 
                     mob.setPosition(getTruePosition());
                     if (eventInstance != null) {
@@ -792,7 +792,7 @@ public class Mob extends AbstractLoadedMapleLife {
             }
             case 8820014: {
                 for (int i : toSpawn) {
-                    Mob mob = MapleLifeFactory.getMonster(i);
+                    Mob mob = LifeFactory.getMonster(i);
 
                     if (eventInstance != null) {
                         eventInstance.registerMonster(mob);
@@ -807,7 +807,7 @@ public class Mob extends AbstractLoadedMapleLife {
             }
             default: {
                 for (int i : toSpawn) {
-                    Mob mob = MapleLifeFactory.getMonster(i);
+                    Mob mob = LifeFactory.getMonster(i);
 
                     if (eventInstance != null) {
                         eventInstance.registerMonster(mob);
@@ -1370,7 +1370,7 @@ public class Mob extends AbstractLoadedMapleLife {
         final int level = chr.getTotalSkillLevel(steal);
         float chServerrate = ChannelServer.getInstance(chr.getClient().getChannel()).getDropRate(chr.getWorld());
         if (level > 0 && !getStats().isBoss() && stolen == -1 && steal.getEffect(level).makeChanceResult()) {
-            MapleMonsterInformationProvider mi = MapleMonsterInformationProvider.getInstance();
+            MonsterInformationProvider mi = MonsterInformationProvider.getInstance();
             List<MonsterDropEntry> de = mi.retrieveDrop(getId());
             if (de == null) {
                 stolen = 0;

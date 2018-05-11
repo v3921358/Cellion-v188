@@ -7,7 +7,7 @@ public class ForcedMonsterStats {
     private int exp, watk, matk, acc, eva, PDRate, MDRate, pushed, speed, level, nUserCount;
     private long hp, mp;
 
-    public ForcedMonsterStats(MapleMonsterStats stats) {
+    public ForcedMonsterStats(MonsterStats stats) {
         hp = stats.getHp();
         exp = stats.getExp();
         mp = stats.getMp();
@@ -22,7 +22,7 @@ public class ForcedMonsterStats {
         level = stats.getLevel();
     }
 
-    public ForcedMonsterStats(MapleMonsterStats stats, int newLevel, boolean pqMob) { // here we go i think
+    public ForcedMonsterStats(MonsterStats stats, int newLevel, boolean pqMob) { // here we go i think
         final double mod = (double) newLevel / (double) stats.getLevel();
         final double hpRatio = (double) stats.getHp() / (double) stats.getExp();
         final double pqMod = (pqMob ? 1.5 : 1.0); // god damn

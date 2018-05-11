@@ -17,7 +17,7 @@ import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MaplePortal;
 import server.Randomizer;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.Mob;
 import server.maps.FieldLimitType;
 import server.maps.MapleMapObject;
@@ -243,7 +243,7 @@ public class PlayerHandler {
                 int[][] toSpawn = MapleItemInformationProvider.getInstance().getSummonMobs(iPacket.DecodeInt());
                 for (int[] toSpawnChild : toSpawn) {
                     if (Randomizer.nextInt(101) <= toSpawnChild[1]) {
-                        c.getPlayer().getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());
+                        c.getPlayer().getMap().spawnMonsterOnGroudBelow(LifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());
                     }
                 }
                 c.SendPacket(WvsContext.enableActions());
@@ -351,7 +351,7 @@ public class PlayerHandler {
                 int mobId = iPacket.DecodeInt();
                 int quantity = iPacket.DecodeInt();
                 for (int i = 0; i < quantity; i++) {
-                    c.getPlayer().getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(mobId), c.getPlayer().getPosition());
+                    c.getPlayer().getMap().spawnMonsterOnGroudBelow(LifeFactory.getMonster(mobId), c.getPlayer().getPosition());
                 }
                 break;
             case 0x18: // Maple & Mobhp

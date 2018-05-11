@@ -22,13 +22,13 @@ import server.Timer;
 import server.Timer.*;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.Mob;
-import server.life.MapleMonsterInformationProvider;
+import server.life.MonsterInformationProvider;
 import server.life.PlayerNPC;
 import server.maps.*;
 import server.maps.objects.User;
-import server.maps.objects.MapleNPC;
+import server.life.NPCLife;
 import server.maps.objects.Pet;
 import server.maps.objects.MapleReactor;
 import server.quest.Quest;
@@ -941,7 +941,7 @@ public class GMCommand {
 
             Mob onemob;
             try {
-                onemob = MapleLifeFactory.getMonster(mid);
+                onemob = LifeFactory.getMonster(mid);
             } catch (RuntimeException e) {
                 c.getPlayer().dropMessage(5, "Error: " + e.getMessage());
                 return 0;
@@ -972,7 +972,7 @@ public class GMCommand {
 
             // final OverrideMonsterStats overrideStats = new OverrideMonsterStats(newhp, onemob.getMobMaxMp(), newexp, false);
             for (int i = 0; i < num; i++) {
-                Mob mob = MapleLifeFactory.getMonster(mid);
+                Mob mob = LifeFactory.getMonster(mid);
                 mob.setHp(newhp);
                 if (level != null) {
                     mob.changeLevel(level.intValue(), false);

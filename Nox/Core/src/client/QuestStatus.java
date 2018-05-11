@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.quest.Quest;
 
 public class QuestStatus implements Serializable {
@@ -146,8 +146,8 @@ public class QuestStatus implements Serializable {
     }
 
     private boolean questCount(final int mo, final int id) {
-        if (MapleLifeFactory.getQuestCount(mo) != null) {
-            for (int i : MapleLifeFactory.getQuestCount(mo)) {
+        if (LifeFactory.getQuestCount(mo) != null) {
+            for (int i : LifeFactory.getQuestCount(mo)) {
                 if (i == id) {
                     return true;
                 }
