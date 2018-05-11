@@ -415,6 +415,7 @@ public class KaiserEffect extends AbstractEffect {
             case Kaiser.SWORD_MASTERY_2:
                 break;
             case Kaiser.TEMPEST_BLADES_1:
+                pEffect.statups.put(CharacterTemporaryStat.StopForceAtomInfo, 1);
                 break;
             case Kaiser.ADVANCED_INNER_BLAZE:
                 break;
@@ -463,6 +464,7 @@ public class KaiserEffect extends AbstractEffect {
             case Kaiser.STONE_DRAGON_1:
                 break;
             case Kaiser.TEMPEST_BLADES:
+                pEffect.statups.put(CharacterTemporaryStat.StopForceAtomInfo, 3);
                 break;
             case Kaiser.TRANSFIGURATION_TELEPORT:
                 break;
@@ -475,8 +477,10 @@ public class KaiserEffect extends AbstractEffect {
             case Kaiser.WING_BEAT_TRANSFIGURATION:
                 break;
             case Kaiser.ADVANCED_TEMPEST_BLADES:
+                pEffect.statups.put(CharacterTemporaryStat.StopForceAtomInfo, 4);
                 break;
             case Kaiser.ADVANCED_TEMPEST_BLADES_1:
+                pEffect.statups.put(CharacterTemporaryStat.StopForceAtomInfo, 2);
                 break;
             case Kaiser.ANCESTRAL_PROMINENCE:
                 break;

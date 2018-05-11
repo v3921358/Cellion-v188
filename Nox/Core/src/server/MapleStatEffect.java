@@ -887,8 +887,7 @@ public class MapleStatEffect implements Serializable {
             }
         }
         if (applyto.getJob() == 132) {
-            if (applyto.getBuffedValue(CharacterTemporaryStat.IgnoreTargetDEF) != 1);
-            { //Sacrifice is the only skill Dark Knights have that give Ignore Def hacky but works
+            if (applyto.getBuffedValue(CharacterTemporaryStat.IgnoreTargetDEF) != 1) { //Sacrifice is the only skill Dark Knights have that give Ignore Def hacky but works
                 applyto.cancelTemporaryStats(CharacterTemporaryStat.Beholder);
                 applyto.addCooldown(1321013, System.currentTimeMillis(), getCooldown(applyfrom));
                 applyto.removeCooldown(1321013);

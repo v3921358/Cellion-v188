@@ -263,7 +263,7 @@ public class PhantomEffect extends AbstractEffect {
             case Phantom.TRANSFORMED_ROBOT_5:
                 break;
             case Phantom.VOL_DAME:
-                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.x));
+                //pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.x));
                 break;
             case Phantom.WHITE_ANGELIC_BLESSING_50_5:
                 break;

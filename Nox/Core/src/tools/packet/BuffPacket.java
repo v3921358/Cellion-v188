@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import server.maps.objects.StopForceAtom;
 import client.CharacterTemporaryStat;
 import client.MapleDisease;
 import constants.GameConstants;
@@ -28,7 +29,7 @@ import tools.Pair;
  *
  */
 public class BuffPacket {
-
+    
     public static OutPacket giveDice(int buffid, int skillid, int duration, Map<CharacterTemporaryStat, Integer> statups) {
         if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
             System.out.println("[Debug] Call Location (" + new java.lang.Throwable().getStackTrace()[0] + ")");
@@ -62,14 +63,6 @@ public class BuffPacket {
                 break;
         }
 
-        /*
-         * 2 : 30
-         * 3 : 20, 20
-         * 4 : 15
-         * 5 : 20
-         * 6 : 30
-         *
-         */
         oPacket.EncodeInt(buffid == 3 ? 30 : 0); //MAX HP
         oPacket.EncodeInt(buffid == 3 ? 30 : 0); //MAX MP
         oPacket.EncodeInt(buffid == 4 ? 15 : 0); //CRITICAL RATE
@@ -98,11 +91,6 @@ public class BuffPacket {
         oPacket.EncodeInt(0);
         return oPacket;
     }
-
-    /*public static OutPacket giveDice(int diceId, int skillid, int duration, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect) {
-        int diceVal = (Math.max(diceId / 100, Math.max(diceId / 10, diceId % 10))); // 1-6
-        return giveBuff(null, skillid, duration, statups, effect, diceId, diceVal, 0, 0);
-    }*/
     public static OutPacket giveEnergyCharged(User chr, int bar, int skillid, int bufflength) {
         final EnumMap<CharacterTemporaryStat, Integer> stat = new EnumMap<>(CharacterTemporaryStat.class);
         stat.put(CharacterTemporaryStat.EnergyCharged, bar);
@@ -322,38 +310,9 @@ public class BuffPacket {
             oPacket.EncodeInt(1); // Originally oPacket.EncodeInt(0);
         }
 
-        //TEMPEST_BLADES are ProjectileAtoms like the above StopForceAtom. 
-        //I'm unsure if they share this buffstat among jobs, since only kaiser actualy writes the weapons too.
-        //For stuff like xenon it might be the ID of the sprite though..
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.StopForceAtomInfo)) {
-            List<Integer> ss = new ArrayList<>();
-            int type = 1;
-            switch (pEffect.getSourceId()) {
-                case 61101002:
-                    type = 1;
-                    break;
-                case 61120007:
-                    type = 2;
-                    break;
-                case 61111008:
-                    type = 3;
-                    break;
-                case 61120008:
-                    type = 4;
-                    break;
-            }
-            int count = pEffect.getSourceId() == 61101002 ? 3 : 5;
-            for (int j = 0; j < count; j++) {
-                ss.add(0);
-            }
-
-            oPacket.EncodeInt(type);
-            oPacket.EncodeInt(count);
-            oPacket.EncodeInt(pEffect.getWeapon());
-            oPacket.EncodeInt(ss.size()); // Size
-            for (int i = 0; i < ss.size(); i++) {
-                oPacket.EncodeInt(ss.get(i));
-            }
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.StopForceAtomInfo)) { //StopForceAtomInfo
+            StopForceAtom pStopForceInfo = pPlayer.getStopForceAtom();
+            pStopForceInfo.encode(oPacket); // Tempest Blades
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.SmashStack)) {//SmashStack

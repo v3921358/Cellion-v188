@@ -21,16 +21,23 @@
  */
 package handling.game;
 
+import client.CharacterTemporaryStat;
 import client.MapleClient;
 import client.MapleStat;
 import client.Skill;
 import client.SkillFactory;
+import constants.skills.DualBlade;
+import constants.skills.WildHunter;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;
 
+/**
+ * UserSkillCancelRequest
+ * @author Mazen Massoud
+ */
 public final class BuffCancel implements ProcessPacket<MapleClient> {
 
     @Override
@@ -40,22 +47,43 @@ public final class BuffCancel implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final User chr = c.getPlayer();
-        int sourceid = iPacket.DecodeInt();
-        if ((chr == null) || (chr.getMap() == null)) {
+        final User pPlayer = c.getPlayer();
+        int nSourceID = iPacket.DecodeInt();
+        Skill pSkill = SkillFactory.getSkill(nSourceID);
+        
+        if ((pPlayer == null) || (pPlayer.getMap() == null)) {
             return;
         }
-        Skill skill = SkillFactory.getSkill(sourceid);
-        if (sourceid == 4341052) {
-            chr.getStat().setHp(0, chr);
-            chr.updateSingleStat(MapleStat.HP, 0);
-            chr.getClient().SendPacket(CWvsContext.enableActions());
+        
+        if (nSourceID == DualBlade.ASURAS_ANGER) {
+            pPlayer.getStat().setHp(0, pPlayer);
+            pPlayer.updateSingleStat(MapleStat.HP, 0);
+            pPlayer.getClient().SendPacket(CWvsContext.enableActions());
         }
-        if (skill.isChargeSkill()) {
-            chr.setKeyDownSkillTime(0L);
-            chr.getMap().broadcastMessage(chr, CField.skillCancel(chr, sourceid), false);
+        
+        if (pSkill.isChargeSkill()) {
+            pPlayer.setKeyDownSkillTime(0L);
+            pPlayer.getMap().broadcastMessage(pPlayer, CField.skillCancel(pPlayer, nSourceID), false);
         } else {
-            chr.cancelEffect(skill.getEffect(1), false, -1L);
+            if (pPlayer.hasBuff(CharacterTemporaryStat.RideVehicle)) {
+                pPlayer.setUnmountState(true); // Allows for unmounting.
+                switch (pSkill.getId()) {
+                    case WildHunter.SUMMON_JAGUAR:
+                    case WildHunter.SUMMON_JAGUAR_1:
+                    case WildHunter.SUMMON_JAGUAR_2:
+                    case WildHunter.SUMMON_JAGUAR_3:
+                    case WildHunter.SUMMON_JAGUAR_4:
+                    case WildHunter.SUMMON_JAGUAR_5:
+                    case WildHunter.SUMMON_JAGUAR_6:
+                    case WildHunter.SUMMON_JAGUAR_7:
+                    case WildHunter.SUMMON_JAGUAR_8:
+                    case WildHunter.SUMMON_JAGUAR_9:
+                    case WildHunter.SUMMON_JAGUAR_10:
+                        pSkill = SkillFactory.getSkill(WildHunter.JAGUAR_RIDER); // Unmount Jaguar for Summon
+                        break;
+                }
+            }
+            pPlayer.cancelEffect(pSkill.getEffect(1), false, -1L);
         }
     }
 }
