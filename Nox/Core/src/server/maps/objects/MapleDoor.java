@@ -7,14 +7,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import server.MaplePortal;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
-import tools.packet.CWvsContext.PartyPacket;
+import tools.packet.WvsContext;
+import tools.packet.WvsContext.PartyPacket;
 
 public class MapleDoor extends MapleMapObject {
 
@@ -96,7 +96,7 @@ public class MapleDoor extends MapleMapObject {
     }
 
     @Override
-    public final void sendSpawnData(final Client client) {
+    public final void sendSpawnData(final ClientSocket client) {
         if (getOwner() == null || target == null || client.getPlayer() == null) {
             return;
         }
@@ -105,12 +105,12 @@ public class MapleDoor extends MapleMapObject {
             if (getOwner() != null && getOwner().getParty() != null && client.getPlayer().getParty() != null && (getOwnerId() == client.getPlayer().getId() || getOwner().getParty().getId() == client.getPlayer().getParty().getId())) {
                 client.SendPacket(PartyPacket.partyPortal(town.getId(), target.getId(), skillId, target.getId() == client.getPlayer().getMapId() ? targetPosition : townPortal.getPosition(), true));
             }
-            client.SendPacket(CWvsContext.spawnPortal(town.getId(), target.getId(), skillId, target.getId() == client.getPlayer().getMapId() ? targetPosition : townPortal.getPosition()));
+            client.SendPacket(WvsContext.spawnPortal(town.getId(), target.getId(), skillId, target.getId() == client.getPlayer().getMapId() ? targetPosition : townPortal.getPosition()));
         }
     }
 
     @Override
-    public final void sendDestroyData(final Client client) {
+    public final void sendDestroyData(final ClientSocket client) {
         if (client.getPlayer() == null || getOwner() == null || target == null) {
             return;
         }
@@ -119,7 +119,7 @@ public class MapleDoor extends MapleMapObject {
             if (getOwner() != null && getOwner().getParty() != null && client.getPlayer().getParty() != null && (getOwnerId() == client.getPlayer().getId() || getOwner().getParty().getId() == client.getPlayer().getParty().getId())) {
                 client.SendPacket(PartyPacket.partyPortal(999999999, 999999999, 0, new Point(-1, -1), false));
             }
-            client.SendPacket(CWvsContext.spawnPortal(999999999, 999999999, 0, null));
+            client.SendPacket(WvsContext.spawnPortal(999999999, 999999999, 0, null));
         }
     }
 
@@ -131,7 +131,7 @@ public class MapleDoor extends MapleMapObject {
                 chr.changeMap(town, townPortal);
             }
         } else {
-            chr.getClient().SendPacket(CWvsContext.enableActions());
+            chr.getClient().SendPacket(WvsContext.enableActions());
         }
     }
 

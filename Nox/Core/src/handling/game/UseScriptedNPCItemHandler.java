@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.QuestStatus;
 import client.QuestStatus.QuestState;
 import client.MapleStat;
@@ -24,7 +24,7 @@ import server.maps.objects.User;
 import server.maps.objects.Pet;
 import server.quest.Quest;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 import server.NebuliteGrade;
 import server.potentials.ItemPotentialOption;
@@ -36,15 +36,15 @@ import server.skills.VMatrixRecord;
  *
  * @author
  */
-public class UseScriptedNPCItemHandler implements ProcessPacket<Client> {
+public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         c.getPlayer().updateTick(iPacket.DecodeInt());
@@ -214,7 +214,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<Client> {
 
                                 if (MapleInventoryManipulator.checkSpace(c, newId, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 1, true, false)) {
                                     MapleInventoryManipulator.addById(c, newId, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
-                                    c.SendPacket(CWvsContext.InfoPacket.getShowItemGain(newId, (short) 1, true));
+                                    c.SendPacket(WvsContext.InfoPacket.getShowItemGain(newId, (short) 1, true));
                                 } else {
                                     c.getPlayer().dropMessage(5, "Please make some space.");
                                 }
@@ -1197,15 +1197,15 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<Client> {
                         String skinString = String.valueOf(skinnum);
                         queststatus.setCustomData(skinString == null ? "0" : skinString);
                         c.getPlayer().updateQuest(queststatus);
-                        c.SendPacket(CWvsContext.showQuestMsg("Damage skin has been changed!"));
-                        chr.getMap().broadcastMessage(chr, CWvsContext.showForeignDamageSkin(chr, skinnum), false);
+                        c.SendPacket(WvsContext.showQuestMsg("Damage skin has been changed!"));
+                        chr.getMap().broadcastMessage(chr, WvsContext.showForeignDamageSkin(chr, skinnum), false);
                         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
                     } else {
-                        c.SendPacket(CWvsContext.showQuestMsg("Zero can't used skins!"));
+                        c.SendPacket(WvsContext.showQuestMsg("Zero can't used skins!"));
                     }
                     break;
                 }
-                //                //                //                //                //                //                //                //
+                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //
 
                 case 5680021:
                     int expiration;
@@ -1339,8 +1339,8 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<Client> {
                         }
                         //c.getPlayer().pUserInventory.SendInventoryOperation(Request.Excl, aChangeLog);
                         c.getPlayer().aVMatrixRecord.add(pRecord);
-                        c.getPlayer().write(CWvsContext.OnVMatrixUpdate(c.getPlayer().aVMatrixRecord, false, 0, 0));
-                        c.getPlayer().write(CWvsContext.OnNodeStoneResult(pRecord.nCoreID, pRecord.nSkillID, pRecord.nSkillID2, pRecord.nSkillID3));
+                        c.getPlayer().write(WvsContext.OnVMatrixUpdate(c.getPlayer().aVMatrixRecord, false, 0, 0));
+                        c.getPlayer().write(WvsContext.OnNodeStoneResult(pRecord.nCoreID, pRecord.nSkillID, pRecord.nSkillID2, pRecord.nSkillID3));
                         c.getPlayer().dropMessage(5, "You used the Nodestone and got a Node.");
                         //c.getPlayer().usCharacterDataModFlag |= DBChar.ItemSlotConsume.Get() | DBChar.WildHunterInfo.Get();
                     }
@@ -1362,6 +1362,6 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<Client> {
                 c.getPlayer().dropMessage(5, "The skill has been attained.");
             }
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 }

@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import client.MapleCharacterUtil;
-import client.Client;
+import client.ClientSocket;
 import client.SkillFactory;
 import constants.GameConstants;
 import database.Database;
@@ -31,9 +31,9 @@ import server.MapleStatEffect;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
-import tools.packet.CWvsContext.AlliancePacket;
-import tools.packet.CWvsContext.GuildPacket;
+import tools.packet.WvsContext;
+import tools.packet.WvsContext.AlliancePacket;
+import tools.packet.WvsContext.GuildPacket;
 
 public class MapleGuild implements java.io.Serializable {
 
@@ -431,7 +431,7 @@ public class MapleGuild implements java.io.Serializable {
         return leader;
     }
 
-    public final User getLeader(final Client c) {
+    public final User getLeader(final ClientSocket c) {
         return c.getChannelServer().getPlayerStorage().getCharacterById(leader);
     }
 
@@ -891,10 +891,10 @@ public class MapleGuild implements java.io.Serializable {
                     //aftershock: formula changes (below 100 = 40, above 100 = 80) (12000 max) but i prefer level (21100 max), add guildContribution, do setGuildAndRank or just get the MapleCharacter object
                 }
                 if (old_level != mgc.getLevel()) {
-                    this.broadcast(CWvsContext.sendLevelup(false, mgc.getLevel(), mgc.getName()), mgc.getId());
+                    this.broadcast(WvsContext.sendLevelup(false, mgc.getLevel(), mgc.getName()), mgc.getId());
                 }
                 if (old_job != mgc.getJobId()) {
-                    this.broadcast(CWvsContext.sendJobup(false, mgc.getJobId(), mgc.getName()), mgc.getId());
+                    this.broadcast(WvsContext.sendJobup(false, mgc.getJobId(), mgc.getName()), mgc.getId());
                 }
                 broadcast(GuildPacket.guildMemberLevelJobUpdate(mgc));
                 if (allianceid > 0) {
@@ -1097,7 +1097,7 @@ public class MapleGuild implements java.io.Serializable {
     // keep in mind that this will be called by a handler most of the time
     // so this will be running mostly on a channel server, unlike the rest
     // of the class
-    public static final MapleGuildResponse sendInvite(final Client c, final String targetName) {
+    public static final MapleGuildResponse sendInvite(final ClientSocket c, final String targetName) {
         final User mc = c.getChannelServer().getPlayerStorage().getCharacterByName(targetName);
         if (mc == null) {
             return MapleGuildResponse.NOT_IN_CHANNEL;

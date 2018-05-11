@@ -1,6 +1,6 @@
 package server.maps.objects;
 
-import client.Client;
+import client.ClientSocket;
 import java.awt.Point;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ScheduledFuture;
@@ -77,12 +77,12 @@ public class MapleKite extends MapleMapObject {
     }
 
     @Override
-    public void sendSpawnData(Client client) {
+    public void sendSpawnData(ClientSocket client) {
         client.SendPacket(CField.spawnKite(this));
     }
 
     @Override
-    public void sendDestroyData(Client client) {
+    public void sendDestroyData(ClientSocket client) {
         //Nothing here either
         client.SendPacket(CField.destroyKite(getObjectId(), true));
     }

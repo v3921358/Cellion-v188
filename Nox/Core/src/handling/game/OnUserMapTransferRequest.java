@@ -21,22 +21,22 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import server.maps.FieldLimitType;
 import server.maps.objects.User;
 import tools.packet.CSPacket;
 import net.ProcessPacket;
 
-public final class OnUserMapTransferRequest implements ProcessPacket<Client> {
+public final class OnUserMapTransferRequest implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         byte addrem = iPacket.DecodeByte();

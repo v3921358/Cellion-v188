@@ -21,24 +21,24 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class LeaveAzwanHandler implements ProcessPacket<Client> {
+public final class LeaveAzwanHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if (c.getPlayer() == null || c.getPlayer().getMap() == null || !c.getPlayer().inAzwan()) {
             //c.SendPacket(CField.pvpBlocked(6));
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         //c.getPlayer().cancelAllBuffs();

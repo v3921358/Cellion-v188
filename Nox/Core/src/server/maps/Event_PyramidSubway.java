@@ -14,7 +14,7 @@ import server.life.MapleLifeFactory;
 import server.maps.objects.User;
 import server.quest.Quest;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class Event_PyramidSubway {
 
@@ -342,7 +342,7 @@ public class Event_PyramidSubway {
     }
 
     public final void broadcastEnergy(final User c, final String type, final int amount) {
-        c.getClient().SendPacket(CWvsContext.sendPyramidEnergy(type, String.valueOf(amount)));
+        c.getClient().SendPacket(WvsContext.sendPyramidEnergy(type, String.valueOf(amount)));
     }
 
     public static boolean warpStartSubway(final User c) {

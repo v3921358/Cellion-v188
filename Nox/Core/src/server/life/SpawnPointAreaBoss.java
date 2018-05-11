@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import server.Randomizer;
 import server.maps.MapleMap;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class SpawnPointAreaBoss extends Spawns {
 
@@ -106,7 +106,7 @@ public class SpawnPointAreaBoss extends Spawns {
         map.spawnMonster(mob, -2);
 
         if (msg != null) {
-            map.broadcastMessage(CWvsContext.broadcastMsg(6, msg));
+            map.broadcastMessage(WvsContext.broadcastMsg(6, msg));
         }
         return mob;
     }

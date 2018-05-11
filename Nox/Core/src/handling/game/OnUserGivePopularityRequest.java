@@ -21,22 +21,22 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.MapleStat;
 import net.InPacket;
 import server.maps.objects.User;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class OnUserGivePopularityRequest implements ProcessPacket<Client> {
+public final class OnUserGivePopularityRequest implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         final int who = iPacket.DecodeInt();
         final int mode = iPacket.DecodeByte();
@@ -45,10 +45,10 @@ public final class OnUserGivePopularityRequest implements ProcessPacket<Client> 
         final User target = chr.getMap().getCharacterById(who);
 
         if (target == null || target == chr) { // faming self
-            c.SendPacket(CWvsContext.giveFameErrorResponse(1));
+            c.SendPacket(WvsContext.giveFameErrorResponse(1));
             return;
         } else if (chr.getLevel() < 15) {
-            c.SendPacket(CWvsContext.giveFameErrorResponse(2));
+            c.SendPacket(WvsContext.giveFameErrorResponse(2));
             return;
         }
         switch (chr.canGiveFame(target)) {
@@ -60,14 +60,14 @@ public final class OnUserGivePopularityRequest implements ProcessPacket<Client> 
                 if (!chr.isGM()) {
                     chr.hasGivenFame(target);
                 }
-                c.SendPacket(CWvsContext.OnFameResult(0, target.getName(), famechange == 1, target.getFame()));
-                target.getClient().SendPacket(CWvsContext.OnFameResult(5, chr.getName(), famechange == 1, 0));
+                c.SendPacket(WvsContext.OnFameResult(0, target.getName(), famechange == 1, target.getFame()));
+                target.getClient().SendPacket(WvsContext.OnFameResult(5, chr.getName(), famechange == 1, 0));
                 break;
             case NOT_TODAY:
-                c.SendPacket(CWvsContext.giveFameErrorResponse(3));
+                c.SendPacket(WvsContext.giveFameErrorResponse(3));
                 break;
             case NOT_THIS_MONTH:
-                c.SendPacket(CWvsContext.giveFameErrorResponse(4));
+                c.SendPacket(WvsContext.giveFameErrorResponse(4));
                 break;
         }
     }

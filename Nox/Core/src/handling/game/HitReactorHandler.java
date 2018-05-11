@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.maps.objects.MapleReactor;
 import net.InPacket;
 import net.ProcessPacket;
@@ -9,15 +9,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class HitReactorHandler implements ProcessPacket<Client> {
+public class HitReactorHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final int oid = iPacket.DecodeInt();
         final int charPos = iPacket.DecodeInt();
         final short stance = iPacket.DecodeShort();

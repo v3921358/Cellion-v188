@@ -5,7 +5,7 @@ import java.io.Serializable;
 import constants.GameConstants;
 import server.maps.objects.User;
 import server.messages.TraitMessage;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class MapleTrait {
 
@@ -76,7 +76,7 @@ public class MapleTrait {
             this.localTotalExp += e;
             c.updateSingleStat(type.stat, totalExp);
             TraitMessage t = new TraitMessage(type.getStat().getValue(), e);
-            c.write(CWvsContext.messagePacket(t));
+            c.write(WvsContext.messagePacket(t));
             recalcLevel();
         }
     }

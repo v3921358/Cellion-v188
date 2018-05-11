@@ -6,7 +6,7 @@ import java.util.List;
 import server.Timer.EventTimer;
 import server.maps.objects.User;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class MapleCoconut extends MapleEvent {
 
@@ -120,7 +120,7 @@ public class MapleCoconut extends MapleEvent {
     public void startEvent() {
         reset();
         setHittable(true);
-        getMap(0).broadcastMessage(CWvsContext.broadcastMsg(5, "The event has started!!"));
+        getMap(0).broadcastMessage(WvsContext.broadcastMsg(5, "The event has started!!"));
         getMap(0).broadcastMessage(CField.hitCoconut(true, 0, 0));
         getMap(0).broadcastMessage(CField.getClock(300));
 

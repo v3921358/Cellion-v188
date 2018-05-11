@@ -1,6 +1,6 @@
 package handling.common;
 
-import client.Client;
+import client.ClientSocket;
 import handling.PacketThrottleLimits;
 import handling.PacketThrottleLimits.PacketThrottleBanType;
 import provider.data.HexTool;
@@ -15,15 +15,15 @@ import net.ProcessPacket;
         FunctionName = "ClientErrorDumper",
         BanType = PacketThrottleBanType.PermanentBan)
 
-public final class ClientErrorDumper implements ProcessPacket<Client> {
+public final class ClientErrorDumper implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if (iPacket.GetRemainder() < 8) {
             System.out.println(iPacket.toString());
             return;

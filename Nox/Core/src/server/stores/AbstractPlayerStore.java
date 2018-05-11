@@ -30,7 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.ItemLoader;
 import client.inventory.MapleInventoryType;
@@ -346,11 +346,11 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     }
 
     @Override
-    public void sendDestroyData(Client client) {
+    public void sendDestroyData(ClientSocket client) {
     }
 
     @Override
-    public void sendSpawnData(Client client) {
+    public void sendSpawnData(ClientSocket client) {
     }
 
     @Override

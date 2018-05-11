@@ -31,7 +31,7 @@ import database.Database;
 import server.Randomizer;
 import server.maps.objects.User;
 import tools.LogHelper;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class MapleMount implements Serializable {
 
@@ -151,7 +151,7 @@ public class MapleMount implements Serializable {
         final User chr = owner.get();
         if (chr != null) {
 //	    cancelSchedule();
-            chr.getMap().broadcastMessage(CWvsContext.updateMount(chr, false));
+            chr.getMap().broadcastMessage(WvsContext.updateMount(chr, false));
         }
     }
 }

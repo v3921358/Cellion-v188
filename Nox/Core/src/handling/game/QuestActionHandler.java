@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import constants.GameConstants;
 import constants.ServerConstants;
 import net.ProcessPacket;
@@ -10,16 +10,16 @@ import server.quest.Quest;
 import net.InPacket;
 import tools.LogHelper;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 /**
  *
  * @author
  */
-public class QuestActionHandler implements ProcessPacket<Client> {
+public class QuestActionHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
@@ -63,11 +63,11 @@ enum QuestRes
 };
      */
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final byte action = iPacket.DecodeByte();
         int quest = iPacket.DecodeInt();
         if (quest == 20734) {
-            c.SendPacket(CWvsContext.ultimateExplorer());
+            c.SendPacket(WvsContext.ultimateExplorer());
             return;
         }
         User chr = c.getPlayer();

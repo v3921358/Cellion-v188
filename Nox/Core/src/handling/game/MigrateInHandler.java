@@ -2,8 +2,8 @@ package handling.game;
 
 import java.util.List;
 
-import client.Client;
-import client.Client.MapleClientLoginState;
+import client.ClientSocket;
+import client.ClientSocket.MapleClientLoginState;
 import client.QuestStatus;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -30,8 +30,8 @@ import server.maps.objects.User;
 import server.quest.Quest;
 import tools.LogHelper;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
-import tools.packet.CWvsContext.GuildPacket;
+import tools.packet.WvsContext;
+import tools.packet.WvsContext.GuildPacket;
 import tools.packet.JobPacket.AvengerPacket;
 import client.jobs.Hero.PhantomHandler;
 import net.ProcessPacket;
@@ -41,15 +41,15 @@ import net.ProcessPacket;
  * @author Mazen Massoud
  * @author Novak
  */
-public final class MigrateInHandler implements ProcessPacket<Client> {
+public final class MigrateInHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         iPacket.DecodeInt();
         final int nPlayerID = iPacket.DecodeInt();
         iPacket.Skip(18); // Reference: 00 00 00 00 00 00 45 9A 4E C8 00 00 00 00 C0 17 00 00 00 00 00 00 00 00 00 00
@@ -120,7 +120,7 @@ public final class MigrateInHandler implements ProcessPacket<Client> {
             return;
         }
 
-        c.updateLoginState(Client.MapleClientLoginState.Login_LoggedIn, c.getSessionIPAddress());
+        c.updateLoginState(ClientSocket.MapleClientLoginState.Login_LoggedIn, c.getSessionIPAddress());
         pChannelServer.addPlayer(pPlayer);
 
         // Writes the wrap to map packet first.
@@ -185,17 +185,17 @@ public final class MigrateInHandler implements ProcessPacket<Client> {
         c.SendPacket(CField.getKeymap(pPlayer.getKeyLayout(), pPlayer.getJob()));
 
         // Server Message
-        pPlayer.getClient().SendPacket(CWvsContext.broadcastMsg(pChannelServer.getServerMessage()));
+        pPlayer.getClient().SendPacket(WvsContext.broadcastMsg(pChannelServer.getServerMessage()));
 
         // Skills
         pPlayer.baseSkills(); //fix people who've lost skills.
         pPlayer.updateHyperSPAmount();
-        c.SendPacket(CWvsContext.updateSkills(c.getPlayer().getSkills(), false));//skill to 0 "fix"
+        c.SendPacket(WvsContext.updateSkills(c.getPlayer().getSkills(), false));//skill to 0 "fix"
         //c.write(JobPacket.addStolenSkill());
 
         // Pendant Slot Expansion
         QuestStatus pPendantSlot = pPlayer.getQuestNoAdd(Quest.getInstance(GameConstants.PENDANT_SLOT));
-        c.SendPacket(CWvsContext.pendantExpansionAvailable(pPendantSlot != null && pPendantSlot.getCustomData() != null && Long.parseLong(pPendantSlot.getCustomData()) > System.currentTimeMillis()));
+        c.SendPacket(WvsContext.pendantExpansionAvailable(pPendantSlot != null && pPendantSlot.getCustomData() != null && Long.parseLong(pPendantSlot.getCustomData()) > System.currentTimeMillis()));
 
         pPlayer.expirationTask(true, pCashShopTransfer == null);
 
@@ -228,9 +228,9 @@ public final class MigrateInHandler implements ProcessPacket<Client> {
         pPlayer.updateReward();
         pPlayer.updatePartyMemberHP();
         pPlayer.startFairySchedule(false);
-        c.SendPacket(CWvsContext.updateCrowns(new int[]{-1, -1, -1, -1, -1}));
-        c.SendPacket(CWvsContext.getFamiliarInfo(pPlayer));
-        c.SendPacket(CWvsContext.shopDiscount(ServerConstants.SHOP_DISCOUNT));
+        c.SendPacket(WvsContext.updateCrowns(new int[]{-1, -1, -1, -1, -1}));
+        c.SendPacket(WvsContext.getFamiliarInfo(pPlayer));
+        c.SendPacket(WvsContext.shopDiscount(ServerConstants.SHOP_DISCOUNT));
         
         // Developer Skill Cooldown Toggle
         if (ServerConstants.DEV_DEFAULT_CD && pPlayer.isDeveloper()) {

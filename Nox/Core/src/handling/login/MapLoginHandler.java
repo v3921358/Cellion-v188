@@ -5,7 +5,7 @@
  */
 package handling.login;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import net.ProcessPacket;
 import tools.packet.CLogin;
@@ -14,15 +14,15 @@ import tools.packet.CLogin;
  *
  * @author Mazen Massoud
  */
-public final class MapLoginHandler implements ProcessPacket<Client> {
+public final class MapLoginHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int nMapLogin = (int) (Math.random() % 5);
         String sMapLogin = "MapLogin";
         if (nMapLogin > 0) {

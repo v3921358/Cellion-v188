@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.SkillMacro;
 import net.InPacket;
 import net.ProcessPacket;
@@ -9,15 +9,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class SkillMacroHandler implements ProcessPacket<Client> {
+public class SkillMacroHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int num = iPacket.DecodeByte();
 
         for (int i = 0; i < num; i++) {

@@ -1,27 +1,27 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class RecipeHandler implements ProcessPacket<Client> {
+public final class RecipeHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr == null || !chr.isAlive() || chr.getMap() == null || chr.hasBlockedInventory()) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         c.getPlayer().updateTick(iPacket.DecodeInt());
@@ -30,7 +30,7 @@ public final class RecipeHandler implements ProcessPacket<Client> {
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
 
         if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId || itemId / 10000 != 251) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         if (MapleItemInformationProvider.getInstance().getItemEffect(toUse.getItemId()).applyTo(chr)) {

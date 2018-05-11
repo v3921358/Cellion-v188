@@ -22,7 +22,7 @@
 package handling.game;
 
 import client.MapleCharacterUtil;
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import client.inventory.MapleInventoryType;
@@ -39,19 +39,19 @@ import server.MaplePackageActions;
 import server.maps.objects.User;
 import service.ChannelServer;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 import tools.LogHelper;
 
-public final class OnUserParcelRequest implements ProcessPacket<Client> {
+public final class OnUserParcelRequest implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final byte operation = iPacket.DecodeByte();
 
         switch (operation) {
@@ -83,7 +83,7 @@ public final class OnUserParcelRequest implements ProcessPacket<Client> {
                     if (accid != -1) {
                         if (accid != c.getAccID()) {
                             boolean recipientOn = false;
-                            Client rClient = null;
+                            ClientSocket rClient = null;
                             try {
                                 //int channel = c.getChannelServer().getWorldInterface().find(recipient);
                                 int channel = c.getChannelServer().getPlayerStorage().getCharacterByName(recipient).getClient().getChannel();
@@ -105,7 +105,7 @@ public final class OnUserParcelRequest implements ProcessPacket<Client> {
                                 }
                                 final short flag = item.getFlag();
                                 if (ItemFlag.UNTRADABLE.check(flag) || ItemFlag.LOCK.check(flag)) {
-                                    c.SendPacket(CWvsContext.enableActions());
+                                    c.SendPacket(WvsContext.enableActions());
                                     return;
                                 }
                                 if (c.getPlayer().getItemQuantity(item.getItemId(), false) >= amount) {

@@ -18,7 +18,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import constants.ServerConstants;
 import constants.WorldConstants.WorldOption;
-import handling.MapleServerHandler;
+import handling.ServerHandler;
 import handling.game.PlayerStorage;
 import handling.world.CheaterData;
 import io.netty.bootstrap.ServerBootstrap;
@@ -52,7 +52,7 @@ import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
 import server.stores.HiredMerchant;
 import tools.ConcurrentEnumMap;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class ChannelServer extends Thread {
 
@@ -134,7 +134,7 @@ public class ChannelServer extends Thread {
 
             @Override
             protected void initChannel(SocketChannel c) throws Exception {
-                c.pipeline().addLast(new PacketDecoder(), new MapleServerHandler(ServerMode.MapleServerMode.GAME), new PacketEncoder());
+                c.pipeline().addLast(new PacketDecoder(), new ServerHandler(ServerMode.MapleServerMode.GAME), new PacketEncoder());
             }
         });
 
@@ -162,7 +162,7 @@ public class ChannelServer extends Thread {
         if (finishedShutdown) {
             return;
         }
-        broadcastPacket(CWvsContext.broadcastMsg(0, "This channel will now shut down."));
+        broadcastPacket(WvsContext.broadcastMsg(0, "This channel will now shut down."));
         // dc all clients by hand so we get sessionClosed...
         shutdown = true;
 
@@ -221,7 +221,7 @@ public class ChannelServer extends Thread {
 
     public final void setServerMessage(final String newMessage) {
         serverMessage = newMessage;
-        broadcastPacket(CWvsContext.broadcastMsg(serverMessage));
+        broadcastPacket(WvsContext.broadcastMsg(serverMessage));
     }
 
     public final void broadcastPacket(final OutPacket data) {

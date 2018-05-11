@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.locks.ReentrantLock;
 
-import client.Client;
+import client.ClientSocket;
 
 public class AutobanManager implements Runnable {
 
@@ -48,7 +48,7 @@ public class AutobanManager implements Runnable {
         return instance;
     }
 
-    public final void autoban(final Client c, final String reason) {
+    public final void autoban(final ClientSocket c, final String reason) {
         /*if (c.getPlayer() == null) {
          return;
          }
@@ -59,7 +59,7 @@ public class AutobanManager implements Runnable {
          addPoints(c, AUTOBAN_POINTS, 0, reason);*/
     }
 
-    public final void addPoints(final Client c, final int points, final long expiration, final String reason) {
+    public final void addPoints(final ClientSocket c, final int points, final long expiration, final String reason) {
         /*lock.lock();
          try {
          List<String> reasonList;

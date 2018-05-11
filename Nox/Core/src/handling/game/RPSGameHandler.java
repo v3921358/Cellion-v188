@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.RockPaperScissors;
 import net.InPacket;
 import tools.packet.CField;
@@ -10,15 +10,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class RPSGameHandler implements ProcessPacket<Client> {
+public class RPSGameHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if ((iPacket.GetRemainder() == 0L) || (c.getPlayer() == null) || (c.getPlayer().getMap() == null) || (!c.getPlayer().getMap().containsNPC(9000019))) {
             if ((c.getPlayer() != null) && (c.getPlayer().getRPS() != null)) {
                 c.getPlayer().getRPS().dispose(c);

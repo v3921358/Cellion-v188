@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.MapleTrait;
 import client.inventory.Equip;
 import client.inventory.Item;
@@ -16,17 +16,17 @@ import server.MapleInventoryManipulator;
 import server.maps.objects.User;
 import server.potentials.ItemPotentialProvider;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class UseMagnifyingGlassHandler implements ProcessPacket<Client> {
+public class UseMagnifyingGlassHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
@@ -127,7 +127,7 @@ public class UseMagnifyingGlassHandler implements ProcessPacket<Client> {
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         chr.setScrolledPosition((short) 0);
@@ -139,14 +139,14 @@ public class UseMagnifyingGlassHandler implements ProcessPacket<Client> {
         if (magnifyingItem != null) { // If this item is not null, it means the player is using magnifying glass USE item instead of the inventory UI
             //      System.out.println(magnifyingItem.getItemId());
             if (magnifyingItem.getItemId() < 2460000 || magnifyingItem.getItemId() > 2460005) { // Check itemid
-                c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                c.SendPacket(WvsContext.inventoryOperation(true, new ArrayList<>()));
                 return;
             }
         }
         final short eqSlot = iPacket.DecodeShort();
         final Equip equipment = (Equip) chr.getInventory(eqSlot < 0 ? MapleInventoryType.EQUIPPED : MapleInventoryType.EQUIP).getItem(eqSlot);
         if (equipment == null || chr.hasBlockedInventory()) {
-            c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+            c.SendPacket(WvsContext.inventoryOperation(true, new ArrayList<>()));
             return;
         }
 
@@ -156,7 +156,7 @@ public class UseMagnifyingGlassHandler implements ProcessPacket<Client> {
         if (ii.getEquipStats(equipment.getItemId()).containsKey("reqLevel")) {
             reqLevel = ii.getEquipStats(equipment.getItemId()).get("reqLevel");
         } else {
-            c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+            c.SendPacket(WvsContext.inventoryOperation(true, new ArrayList<>()));
             throw new RuntimeException("No 'reqLevel' property available for the equipment id " + equipment.getItemId());
         }
 
@@ -180,7 +180,7 @@ public class UseMagnifyingGlassHandler implements ProcessPacket<Client> {
                     break;
             }
             if (reqLevel > cutoffLevel) {
-                c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                c.SendPacket(WvsContext.inventoryOperation(true, new ArrayList<>()));
                 return;
             }
         }
@@ -206,11 +206,11 @@ public class UseMagnifyingGlassHandler implements ProcessPacket<Client> {
 
                 modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, equipment));
 
-                c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+                c.SendPacket(WvsContext.inventoryOperation(true, modifications));
             }
         } else {
             // dont warn by dropping a message, client checks for meso anyway... 
         }
-        c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+        c.SendPacket(WvsContext.inventoryOperation(true, new ArrayList<>()));
     }
 }

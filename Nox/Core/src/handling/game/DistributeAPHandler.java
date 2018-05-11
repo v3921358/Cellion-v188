@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.MapleStat;
 import client.PlayerStats;
 import constants.GameConstants;
@@ -9,22 +9,22 @@ import java.util.Map;
 import server.Randomizer;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class DistributeAPHandler implements ProcessPacket<Client> {
+public class DistributeAPHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         Map<MapleStat, Long> statupdate = new EnumMap<>(MapleStat.class);
@@ -105,7 +105,7 @@ public class DistributeAPHandler implements ProcessPacket<Client> {
             }
             chr.setRemainingAp((short) (chr.getRemainingAp() - 1));
             statupdate.put(MapleStat.AVAILABLEAP, (long) chr.getRemainingAp());
-            c.SendPacket(CWvsContext.updatePlayerStats(statupdate, true, chr));
+            c.SendPacket(WvsContext.updatePlayerStats(statupdate, true, chr));
         }
 
     }

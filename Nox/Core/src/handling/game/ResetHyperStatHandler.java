@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.MapleSpecialStats;
 import client.MapleSpecialStats.MapleHyperStats;
 import client.Skill;
@@ -8,24 +8,24 @@ import client.SkillFactory;
 import constants.skills.Global;
 import net.InPacket;
 import server.maps.objects.User;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author Lloyd Korn
  */
-public class ResetHyperStatHandler implements ProcessPacket<Client> {
+public class ResetHyperStatHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     private static final int RESET_HYPER_STAT_COST = 10_000_000;
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         if (chr == null) {
             return;
@@ -41,6 +41,6 @@ public class ResetHyperStatHandler implements ProcessPacket<Client> {
                 chr.changeSkillLevel(skill, (byte) 0, (byte) 0);
             }
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 }

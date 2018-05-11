@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.concurrent.ScheduledFuture;
 
-import client.Client;
+import client.ClientSocket;
 import client.Skill;
 import client.SkillFactory;
 import net.OutPacket;
@@ -225,12 +225,12 @@ public class MapleMist extends MapleMapObject {
     }
 
     @Override
-    public void sendSpawnData(final Client c) {
+    public void sendSpawnData(final ClientSocket c) {
         c.SendPacket(getClockType() > 0 ? CField.spawnClockMist(this) : CField.spawnMist(this));
     }
 
     @Override
-    public void sendDestroyData(final Client c) {
+    public void sendDestroyData(final ClientSocket c) {
         c.SendPacket(CField.removeMist(getObjectId(), false));
     }
 

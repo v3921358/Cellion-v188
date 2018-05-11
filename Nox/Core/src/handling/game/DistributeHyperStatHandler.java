@@ -1,27 +1,27 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.MapleSpecialStats.MapleHyperStats;
 import client.Skill;
 import client.SkillFactory;
 import net.InPacket;
 import server.maps.objects.User;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author Lloyd Korn
  */
-public class DistributeHyperStatHandler implements ProcessPacket<Client> {
+public class DistributeHyperStatHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         if (chr == null) {
             return;
@@ -47,6 +47,6 @@ public class DistributeHyperStatHandler implements ProcessPacket<Client> {
             }
 
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 }

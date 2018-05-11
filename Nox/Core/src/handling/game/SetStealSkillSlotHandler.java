@@ -1,24 +1,24 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import constants.GameConstants;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author Five
  */
-public class SetStealSkillSlotHandler implements ProcessPacket<Client> {
+public class SetStealSkillSlotHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int nSlotSkillID = iPacket.DecodeInt();
         int nStealSkillID = iPacket.DecodeInt();
         boolean bSet = false;
@@ -28,6 +28,6 @@ public class SetStealSkillSlotHandler implements ProcessPacket<Client> {
             bSet = true;
             c.getPlayer().mStealSkillInfo.put(nSlotSkillID, nStealSkillID);
         }
-        c.SendPacket(CWvsContext.OnResultSetStealSkill(1, bSet, nSlotSkillID, nStealSkillID));
+        c.SendPacket(WvsContext.OnResultSetStealSkill(1, bSet, nSlotSkillID, nStealSkillID));
     }
 }

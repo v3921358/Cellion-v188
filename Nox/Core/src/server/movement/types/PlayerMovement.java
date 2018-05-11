@@ -4,7 +4,7 @@ import client.CharacterTemporaryStat;
 import java.awt.Point;
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import constants.ServerConstants;
 import constants.skills.BattleMage;
 import handling.world.MovementParse;
@@ -27,15 +27,15 @@ import tools.Utility;
  * @author Steven
  *
  */
-public class PlayerMovement implements ProcessPacket<Client> {
+public class PlayerMovement implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return c.isLoggedIn();
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
         if (pPlayer == null) {
             return;

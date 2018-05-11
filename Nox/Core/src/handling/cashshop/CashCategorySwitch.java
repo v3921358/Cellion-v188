@@ -21,7 +21,7 @@
  */
 package handling.cashshop;
 
-import client.Client;
+import client.ClientSocket;
 import database.Database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,15 +37,15 @@ import tools.LogHelper;
  *
  * @author Novak
  */
-public final class CashCategorySwitch implements ProcessPacket<Client> {
+public final class CashCategorySwitch implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int cat = iPacket.DecodeByte();
         switch (cat) {
             case 103:

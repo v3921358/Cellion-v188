@@ -1,21 +1,21 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.maps.objects.User;
 import net.InPacket;
 import server.maps.MapleMapObjectType;
 import tools.packet.CField;
 import net.ProcessPacket;
 
-public final class CraftCreation implements ProcessPacket<Client> {
+public final class CraftCreation implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr.getMapId() != 910001000 && chr.getMap().getAllMapObjectSize(MapleMapObjectType.EXTRACTOR) <= 0) {
             return; //ardent mill

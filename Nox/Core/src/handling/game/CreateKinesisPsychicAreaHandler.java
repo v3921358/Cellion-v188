@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import constants.GameConstants;
 import static client.jobs.Kinesis.KinesisHandler.handlePsychicPoint;
 import java.awt.Point;
@@ -14,18 +14,18 @@ import net.ProcessPacket;
 import tools.packet.JobPacket;
 
 /**
- *
+ * CreateKinesisPsychicArea
  * @author Mazen Massoud
  */
-public class CreateKinesisPsychicAreaHandler implements ProcessPacket<Client> {
+public class CreateKinesisPsychicAreaHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int nAction = iPacket.DecodeInt();
         int nActionSpeed = iPacket.DecodeInt();
         int unknown = iPacket.DecodeInt();

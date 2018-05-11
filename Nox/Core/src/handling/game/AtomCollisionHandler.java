@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -40,17 +40,17 @@ import server.events.MapleEventType;
 import service.ChannelServer;
 import service.RecvPacketOpcode;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
-public final class AtomCollisionHandler implements ProcessPacket<Client> {
+public final class AtomCollisionHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User pPlayer = c.getPlayer();
         if (pPlayer == null || pPlayer.hasBlockedInventory() || pPlayer.getMap() == null) {
             return;
@@ -62,7 +62,7 @@ public final class AtomCollisionHandler implements ProcessPacket<Client> {
             if (pPlayer.isDeveloper()) {
                 pPlayer.dropMessage(5, "[AtomCollision Debug] Atom ID : " + attack.skill);
             }
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         Skill skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
@@ -70,7 +70,7 @@ public final class AtomCollisionHandler implements ProcessPacket<Client> {
             if (pPlayer.isDeveloper()) {
                 pPlayer.dropMessage(5, "[AtomCollision Debug] Returning Early 1 / Atom ID : " + attack.skill);
             }
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         int skillLevel = pPlayer.getTotalSkillLevel(skill);
@@ -82,7 +82,7 @@ public final class AtomCollisionHandler implements ProcessPacket<Client> {
             return;
         } else if (effect.getCooldown(pPlayer) > 0) {  // Handle cooldowns
             if (pPlayer.skillisCooling(attack.skill)) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
             pPlayer.addCooldown(attack.skill, System.currentTimeMillis(), effect.getCooldown(pPlayer));

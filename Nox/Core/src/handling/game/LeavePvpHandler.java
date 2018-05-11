@@ -21,24 +21,24 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class LeavePvpHandler implements ProcessPacket<Client> {
+public final class LeavePvpHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if (c.getPlayer() == null || c.getPlayer().getMap() == null || !c.getPlayer().inPVP()) {
             //c.SendPacket(CField.pvpBlocked(6));
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         int x = Integer.parseInt(c.getPlayer().getEventInstance().getProperty(String.valueOf(c.getPlayer().getId())));
@@ -53,7 +53,7 @@ public final class LeavePvpHandler implements ProcessPacket<Client> {
         c.getPlayer().dispelDebuffs();
         c.getPlayer().clearAllCooldowns();
         c.getPlayer().updateTick(iPacket.DecodeInt());
-        c.SendPacket(CWvsContext.clearMidMsg());
+        c.SendPacket(WvsContext.clearMidMsg());
         c.getPlayer().changeMap(c.getChannelServer().getMapFactory().getMap(960000000));
         c.getPlayer().getStat().recalcLocalStats(c.getPlayer());
         c.getPlayer().getStat().heal(c.getPlayer());

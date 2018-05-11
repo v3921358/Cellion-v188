@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.ItemLoader;
 import client.inventory.MapleInventoryType;
@@ -26,12 +26,12 @@ import net.InPacket;
 import server.maps.objects.User.MapleCharacterConversationType;
 import tools.LogHelper;
 import tools.packet.CField.NPCPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.PlayerShopPacket;
 
 public class HiredMerchantHandler {
 
-    public static final boolean UseHiredMerchant(final Client c, final boolean packet) {
+    public static final boolean UseHiredMerchant(final ClientSocket c, final boolean packet) {
         if (c.getPlayer().getMap() != null && c.getPlayer().getMap().getSharedMapResources().personalShop) {
             final byte state = checkExistance(c.getPlayer().getAccountID(), c.getPlayer().getId());
 
@@ -87,7 +87,7 @@ public class HiredMerchantHandler {
         }
     }
 
-    public static void displayMerch(Client c) {
+    public static void displayMerch(ClientSocket c) {
         final MapleCharacterConversationType conv = c.getPlayer().getConversation();
 
         boolean merch = World.hasMerchant(c.getPlayer().getAccountID(), c.getPlayer().getId());
@@ -137,10 +137,10 @@ public class HiredMerchantHandler {
 
             }
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 
-    public static void displayMerch2(Client c) {
+    public static void displayMerch2(ClientSocket c) {
         final MapleCharacterConversationType conv = c.getPlayer().getConversation();
         boolean merch = World.hasMerchant(c.getPlayer().getAccountID(), c.getPlayer().getId());
 
@@ -190,10 +190,10 @@ public class HiredMerchantHandler {
 
             }
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 
-    public static final void MerchantItemStore(final InPacket iPacket, final Client c) {
+    public static final void MerchantItemStore(final InPacket iPacket, final ClientSocket c) {
         if (c.getPlayer() == null) {
             return;
         }
@@ -205,7 +205,7 @@ public class HiredMerchantHandler {
         }
     }
 
-    private static void requestItems(final Client c, final boolean request) {
+    private static void requestItems(final ClientSocket c, final boolean request) {
         if (c.getPlayer().getConversation() != MapleCharacterConversationType.HiredMerchant) {
             return;
         }
@@ -301,7 +301,7 @@ public class HiredMerchantHandler {
         }
     }
 
-    public static final void showFredrick(Client c) {
+    public static final void showFredrick(ClientSocket c) {
         final MerchItemPackage pack = HiredMerchantHandler.loadItemFrom_Database(c.getPlayer().getAccountID());
         c.SendPacket(PlayerShopPacket.merchItemStore_ItemData(pack));
     }

@@ -21,22 +21,22 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import constants.GameConstants;
 import server.maps.objects.User;
 import server.quest.Quest;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class PetBuff implements ProcessPacket<Client> {
+public final class PetBuff implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         iPacket.DecodeInt(); //0
         int skill = iPacket.DecodeInt();

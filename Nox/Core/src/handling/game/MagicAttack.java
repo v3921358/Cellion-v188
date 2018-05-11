@@ -2,7 +2,7 @@ package handling.game;
 
 import java.lang.ref.WeakReference;
 
-import client.Client;
+import client.ClientSocket;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -20,21 +20,21 @@ import server.events.MapleEventType;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.JobPacket;
 import net.ProcessPacket;
 import server.life.mob.MobStatRequest;
 import service.RecvPacketOpcode;
 
-public final class MagicAttack implements ProcessPacket<Client> {
+public final class MagicAttack implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User pPlayer = c.getPlayer();
         if (pPlayer == null || pPlayer.hasBlockedInventory() || pPlayer.getMap() == null) {
             return;
@@ -48,12 +48,12 @@ public final class MagicAttack implements ProcessPacket<Client> {
         }
 
         if (pAttack == null) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         Skill pSkill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(pAttack.skill));
         if (pSkill == null || (GameConstants.isAngel(pAttack.skill) && (pPlayer.getStat().equippedSummon % 10000 != pAttack.skill % 10000))) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         int nSkillLevel = pPlayer.getTotalSkillLevel(pSkill);
@@ -63,7 +63,7 @@ public final class MagicAttack implements ProcessPacket<Client> {
             //return;
         } else if (pEffect.getCooldown(pPlayer) > 0) {  // Handle cooldowns
             if (pPlayer.skillisCooling(pAttack.skill)) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
             pPlayer.addCooldown(pAttack.skill, System.currentTimeMillis(), pEffect.getCooldown(pPlayer));

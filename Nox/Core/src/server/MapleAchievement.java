@@ -22,7 +22,7 @@ package server;
 
 import handling.world.World;
 import server.maps.objects.User;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 /**
  *
@@ -70,9 +70,9 @@ public class MapleAchievement {
         chr.modifyCSPoints(1, reward, false);
         chr.setAchievementFinished(MapleAchievements.getInstance().getByMapleAchievement(this));
         if (notice && !chr.isGM()) {
-            World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(6, "[Achievement] Congratulations to " + chr.getName() + " on " + name + " and rewarded with " + (reward / 2) + " cash!"));
+            World.Broadcast.broadcastMessage(WvsContext.broadcastMsg(6, "[Achievement] Congratulations to " + chr.getName() + " on " + name + " and rewarded with " + (reward / 2) + " cash!"));
         } else {
-            chr.getClient().SendPacket(CWvsContext.broadcastMsg(5, "[Achievement] You've gained " + (reward / 2) + " Cash as you " + name + "."));
+            chr.getClient().SendPacket(WvsContext.broadcastMsg(5, "[Achievement] You've gained " + (reward / 2) + " Cash as you " + name + "."));
         }
     }
 }

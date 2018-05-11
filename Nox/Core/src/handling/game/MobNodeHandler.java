@@ -1,26 +1,26 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
 import server.maps.SharedMapResources.MapleNodeInfo;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class MobNodeHandler implements ProcessPacket<Client> {
+public class MobNodeHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         Mob mob_from = chr.getMap().getMonsterByOid(iPacket.DecodeInt());
         int newNode = iPacket.DecodeInt();
@@ -58,7 +58,7 @@ public class MobNodeHandler implements ProcessPacket<Client> {
                     case 9320001:
                     case 9320002:
                     case 9320003:
-                        chr.getMap().broadcastMessage(CWvsContext.broadcastMsg(5, "Proceed to the next stage."));
+                        chr.getMap().broadcastMessage(WvsContext.broadcastMsg(5, "Proceed to the next stage."));
                         chr.getMap().removeMonster(mob_from);
                 }
             }

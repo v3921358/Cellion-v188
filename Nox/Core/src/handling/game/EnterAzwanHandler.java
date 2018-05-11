@@ -21,30 +21,30 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import handling.world.MaplePartyCharacter;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class EnterAzwanHandler implements ProcessPacket<Client> {
+public final class EnterAzwanHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if (c.getPlayer() == null || c.getPlayer().getMap() == null || c.getPlayer().getMapId() != 262000300) {
             //c.SendPacket(CField.pvpBlocked(1));
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         if (c.getPlayer().getLevel() < 40) {
             //c.SendPacket(CField.pvpBlocked(1));
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         byte mode = iPacket.DecodeByte();
@@ -53,13 +53,13 @@ public final class EnterAzwanHandler implements ProcessPacket<Client> {
         int mapid = 262020000 + (mode * 1000) + difficult; //Supply doesn't have difficult but it's always 0 so idc
         if (party == 1 && c.getPlayer().getParty() == null) {
             //c.SendPacket(CField.pvpBlocked(9));
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
         }
         if (party == 1 && c.getPlayer().getParty() != null) {
             for (MaplePartyCharacter partymembers : c.getPlayer().getParty().getMembers()) {
                 if (c.getChannelServer().getPlayerStorage().getCharacterById(partymembers.getId()).getMapId() != 262000300) {
                     c.getPlayer().dropMessage(1, "Please make sure all of your party members are in the same map.");
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                 }
             }
         }

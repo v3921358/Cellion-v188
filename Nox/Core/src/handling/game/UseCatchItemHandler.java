@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import java.time.LocalDateTime;
@@ -10,7 +10,7 @@ import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.MobPacket;
 import net.ProcessPacket;
 
@@ -18,15 +18,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseCatchItemHandler implements ProcessPacket<Client> {
+public class UseCatchItemHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         c.getPlayer().updateTick(iPacket.DecodeInt());
@@ -47,9 +47,9 @@ public class UseCatchItemHandler implements ProcessPacket<Client> {
                 }
             } else {
                 map.broadcastMessage(MobPacket.catchMonster(mob.getObjectId(), itemid, (byte) 0));
-                c.SendPacket(CWvsContext.catchMob(mob.getId(), itemid, (byte) 0));
+                c.SendPacket(WvsContext.catchMob(mob.getId(), itemid, (byte) 0));
             }
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 }

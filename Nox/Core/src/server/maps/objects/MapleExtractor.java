@@ -1,6 +1,6 @@
 package server.maps.objects;
 
-import client.Client;
+import client.ClientSocket;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.packet.CField;
@@ -27,12 +27,12 @@ public class MapleExtractor extends MapleMapObject {
     }
 
     @Override
-    public void sendSpawnData(Client client) {
+    public void sendSpawnData(ClientSocket client) {
         client.SendPacket(CField.makeExtractor(owner, ownerName, getTruePosition(), getTimeLeft(), itemId, fee));
     }
 
     @Override
-    public void sendDestroyData(Client client) {
+    public void sendDestroyData(ClientSocket client) {
         client.SendPacket(CField.removeExtractor(this.owner));
     }
 

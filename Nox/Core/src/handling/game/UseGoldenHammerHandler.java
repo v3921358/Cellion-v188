@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -8,22 +8,22 @@ import server.MapleInventoryManipulator;
 import server.Randomizer;
 import net.InPacket;
 import tools.packet.CSPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class UseGoldenHammerHandler implements ProcessPacket<Client> {
+public class UseGoldenHammerHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         //[21 D5 10 04] [16 00 00 00] [7B B0 25 00] [01 00 00 00] [03 00 00 00]
         c.getPlayer().updateTick(iPacket.DecodeInt());
         byte slot = (byte) iPacket.DecodeInt();
@@ -34,7 +34,7 @@ public class UseGoldenHammerHandler implements ProcessPacket<Client> {
         Equip equip = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(equipslot);
 
         if (toUse == null || toUse.getItemId() != itemId || toUse.getQuantity() < 1) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         int success;

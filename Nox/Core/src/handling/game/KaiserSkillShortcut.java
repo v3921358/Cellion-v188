@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import handling.world.PlayerHandler;
 import server.maps.objects.User;
 import net.InPacket;
@@ -31,15 +31,15 @@ import net.ProcessPacket;
  *
  * @author Mazen Massoud
  */
-public final class KaiserSkillShortcut implements ProcessPacket<Client> {
+public final class KaiserSkillShortcut implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if ((chr == null) || (chr.getMap() == null)) {
             return;

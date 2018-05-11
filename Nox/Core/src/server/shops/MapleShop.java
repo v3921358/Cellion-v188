@@ -1,6 +1,6 @@
 package server.shops;
 
-import client.Client;
+import client.ClientSocket;
 import client.SkillFactory;
 import client.inventory.*;
 import constants.GameConstants;
@@ -14,7 +14,7 @@ import server.maps.objects.Pet;
 import tools.LogHelper;
 import tools.Pair;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -70,20 +70,20 @@ public class MapleShop {
         return this.items;
     }
 
-    public void sendShop(Client c) {
+    public void sendShop(ClientSocket c) {
         c.getPlayer().setShop(this);
         c.SendPacket(CField.NPCPacket.getNPCShop(getNpcId(), this, c));
     }
 
-    public void sendShop(Client c, int customNpc) {
+    public void sendShop(ClientSocket c, int customNpc) {
         c.getPlayer().setShop(this);
         c.SendPacket(CField.NPCPacket.getNPCShop(customNpc, this, c));
     }
 
-    public void buy(Client c, short slot, int itemId, short quantity) {
+    public void buy(ClientSocket c, short slot, int itemId, short quantity) {
         if (itemId / 10000 == 190 && !GameConstants.isMountItemAvailable(itemId, c.getPlayer().getJob())) {
             c.getPlayer().dropMessage(1, "You may not buy this item.");
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
 
@@ -97,7 +97,7 @@ public class MapleShop {
                 LogHelper.PACKET_EDIT_HACK.get().info(String.format("%s is attempting to buy [%d] shop item of itemid '%d' by sending an itemid of '%d' at map [%d] from NPC: %d",
                         c.getPlayer().getName(), quantity, shopitem.getItemId(), itemId, c.getPlayer().getMapId(), npcId));
 
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
 
@@ -109,7 +109,7 @@ public class MapleShop {
                 LogHelper.PACKET_EDIT_HACK.get().info(String.format("%s attempting to buy item %d of negative quantity '%d' from NPC shop id '%d' at map ['%d'] from NPC: %d",
                         c.getPlayer().getName(), shopitem.getReqItem(), totalQuantity, id, c.getPlayer().getMapId(), npcId));
 
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
 
@@ -147,7 +147,7 @@ public class MapleShop {
                     LogHelper.PACKET_EDIT_HACK.get().info(String.format("%s attempting to buy item %d of quantity %d from NPC shop id '%d' at map ['%d'] from NPC: %d, without having the required items of [%d X %d]",
                             c.getPlayer().getName(), shopitem.getReqItem(), totalQuantity, id, c.getPlayer().getMapId(), npcId, shopitem.getReqItem(), shopitem.getReqItemQ()));
 
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                     return;
                 }
 
@@ -226,7 +226,7 @@ public class MapleShop {
             }
         }
         // nothing is being re-bought, sent enableaction
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 
     private boolean checkRankEligibility(final User chr, final MapleShopItem shopitem) {
@@ -248,7 +248,7 @@ public class MapleShop {
         return true;
     }
 
-    public void sell(Client c, MapleInventoryType type, byte slot, short quantity) {
+    public void sell(ClientSocket c, MapleInventoryType type, byte slot, short quantity) {
         switch (type) {
             case UNDEFINED:
             case EQUIPPED:
@@ -258,7 +258,7 @@ public class MapleShop {
         }
         final Item item_fromInventory = c.getPlayer().getInventory(type).getItem((short) slot);
         if (item_fromInventory == null) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
 
@@ -277,7 +277,7 @@ public class MapleShop {
         // Item information
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if ((ii.cantSell(item_fromInventory.getItemId())) || (InventoryConstants.isPet(item_fromInventory.getItemId()))) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
 
@@ -285,12 +285,12 @@ public class MapleShop {
         if (quantity > quantity_inventory || quantity_inventory <= 0) {
             LogHelper.ANTI_HACK.get().info(String.format("%s attempting to sell item %d of quantity %d to NPC shop id '%d' at map ['%d'] from NPC: %d",
                     c.getPlayer().getName(), item_fromInventory.getItemId(), quantity, id, c.getPlayer().getMapId(), npcId));
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
 
         MapleInventoryManipulator.removeFromSlot(c, type, (short) slot, quantity, false);
-        c.SendPacket(CWvsContext.enableActions()); // Just incase, to prevent players from getting stuck inbetween selling items.
+        c.SendPacket(WvsContext.enableActions()); // Just incase, to prevent players from getting stuck inbetween selling items.
 
         double price;
         if ((GameConstants.isThrowingStar(item_fromInventory.getItemId())) || (GameConstants.isBullet(item_fromInventory.getItemId()))) {
@@ -320,7 +320,7 @@ public class MapleShop {
      * @param quantity_sold
      * @param recvMesos
      */
-    private static void addShopRepurchaseItem(Client c, Item item_fromInventory, short quantity_sold, int recvMesos) {
+    private static void addShopRepurchaseItem(ClientSocket c, Item item_fromInventory, short quantity_sold, int recvMesos) {
         final Item item_cpy = item_fromInventory.copy(); // The reference that will be used for storing repurchase info. 
         if (item_fromInventory.getType() == ItemType.Equipment) {
             item_cpy.setQuantity(((short) 1));
@@ -334,7 +334,7 @@ public class MapleShop {
         c.getPlayer().addShopRepurchase(repurchase);
     }
 
-    public void recharge(Client c, byte slot) {
+    public void recharge(ClientSocket c, byte slot) {
         Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem((short) slot);
 
         if (item == null || (!GameConstants.isThrowingStar(item.getItemId()) && !GameConstants.isBullet(item.getItemId()))) {
@@ -355,7 +355,7 @@ public class MapleShop {
 
                 List<ModifyInventory> mod = new ArrayList<>();
                 mod.add(new ModifyInventory(ModifyInventoryOperation.UpdateQuantity, item));
-                c.SendPacket(CWvsContext.inventoryOperation(true, mod));
+                c.SendPacket(WvsContext.inventoryOperation(true, mod));
 
                 c.SendPacket(CField.NPCPacket.confirmShopTransaction(ShopOperationType.Buy, this, c, -1));
             }

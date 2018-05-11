@@ -1,7 +1,7 @@
 package handling.cashshop;
 
 import client.MapleCharacterCreationUtil;
-import client.Client;
+import client.ClientSocket;
 import client.QuestStatus;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -25,7 +25,7 @@ import tools.packet.CSPacket;
  */
 public class SlotIncrease {
 
-    public static void inventory(InPacket iPacket, Client c, User pPlayer) {
+    public static void inventory(InPacket iPacket, ClientSocket c, User pPlayer) {
         iPacket.Skip(7);
         byte nType = (byte) iPacket.DecodeByte();
         System.out.println(nType);
@@ -39,7 +39,7 @@ public class SlotIncrease {
         }
     }
 
-    /*public static void inventory(InPacket iPacket, Client c, MapleCharacter chr) {
+    /*public static void inventory(InPacket iPacket, ClientSocket c, MapleCharacter chr) {
         iPacket.Skip(1);
         int itemPrice = iPacket.DecodeInt();
         boolean cameFromCoupon = iPacket.DecodeByte() > 0;
@@ -66,7 +66,7 @@ public class SlotIncrease {
             }
         }
     }*/
-    public static void storage(InPacket iPacket, Client c, User pPlayer) {
+    public static void storage(InPacket iPacket, ClientSocket c, User pPlayer) {
         iPacket.Skip(1);
         int itemPrice = iPacket.DecodeInt();
         int coupon = iPacket.DecodeByte() > 0 ? 2 : 1;
@@ -87,7 +87,7 @@ public class SlotIncrease {
         }
     }
 
-    public static void charSlots(InPacket iPacket, Client c, User pPlayer) {
+    public static void charSlots(InPacket iPacket, ClientSocket c, User pPlayer) {
         int nSlots = MapleCharacterCreationUtil.getCharacterSlots(c.getAccID(), pPlayer.getWorld());
 
         if (nSlots == 0 || c.getPlayer().getCSPoints(2) < 6900 || nSlots >= GameConstants.characterSlotMax) {
@@ -103,7 +103,7 @@ public class SlotIncrease {
         }
     }
 
-    /*public static void charSlots(InPacket iPacket, Client c, MapleCharacter chr) {
+    /*public static void charSlots(InPacket iPacket, ClientSocket c, MapleCharacter chr) {
         iPacket.Skip(1);
         final int itemPrice = iPacket.DecodeInt();
         CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInt());
@@ -127,7 +127,7 @@ public class SlotIncrease {
             c.write(CSPacket.sendCSFail(0));
         }
     }*/
-    public static void pendantSlots(InPacket iPacket, Client c, User pPlayer) {
+    public static void pendantSlots(InPacket iPacket, ClientSocket c, User pPlayer) {
 
         QuestStatus pPendantStatus = c.getPlayer().getQuestNoAdd(Quest.getInstance(GameConstants.PENDANT_SLOT));
 
@@ -147,7 +147,7 @@ public class SlotIncrease {
         }
     }
 
-    /*public static void pendantSlots(InPacket iPacket, Client c, MapleCharacter chr) {
+    /*public static void pendantSlots(InPacket iPacket, ClientSocket c, MapleCharacter chr) {
         iPacket.DecodeByte(); //Action is short?
         iPacket.DecodeInt(); //always 1 - No Idea
         int sn = iPacket.DecodeInt();

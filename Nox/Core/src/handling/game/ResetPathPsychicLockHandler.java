@@ -5,25 +5,25 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import constants.GameConstants;
 import static client.jobs.Kinesis.KinesisHandler.handlePsychicPoint;
 import net.InPacket;
 import net.ProcessPacket;
 
 /**
- *
+ * ResetPathPsychicLock
  * @author Mazen Massoud
  */
-public class ResetPathPsychicLockHandler implements ProcessPacket<Client> {
+public class ResetPathPsychicLockHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int nSkillID = iPacket.DecodeInt();
         int nSLV = iPacket.DecodeShort();
         int nAction = iPacket.DecodeInt();

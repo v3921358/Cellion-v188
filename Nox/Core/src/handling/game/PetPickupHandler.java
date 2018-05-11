@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.anticheat.CheatingOffense;
 import client.inventory.Equip;
 import client.inventory.ItemType;
@@ -23,22 +23,22 @@ import server.maps.objects.User;
 import server.maps.objects.Pet;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class PetPickupHandler implements ProcessPacket<Client> {
+public class PetPickupHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         if (chr == null) {
             return;
@@ -66,19 +66,19 @@ public class PetPickupHandler implements ProcessPacket<Client> {
         lock.lock();
         try {
             if (mapitem.isPickedUp()) {
-                c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));
-                c.SendPacket(CWvsContext.getInventoryFull());
+                c.SendPacket(WvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));
+                c.SendPacket(WvsContext.getInventoryFull());
                 return;
             }
             if (mapitem.getOwner() != chr.getId() && mapitem.isPlayerDrop()) {
                 return;
             }
             if (mapitem.getOwner() != chr.getId() && ((!mapitem.isPlayerDrop() && mapitem.getDropType() == 0) || (mapitem.isPlayerDrop() && chr.getMap().getSharedMapResources().everlast))) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
             if (!mapitem.isPlayerDrop() && mapitem.getDropType() == 1 && mapitem.getOwner() != chr.getId() && (chr.getParty() == null || chr.getParty().getMemberById(mapitem.getOwner()) == null)) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
 
@@ -109,7 +109,7 @@ public class PetPickupHandler implements ProcessPacket<Client> {
                 }
                 removeItem_Pet(chr, mapitem, petz);
             } else if (MapleItemInformationProvider.getInstance().isPickupBlocked(mapitem.getItemId()) || mapitem.getItemId() / 10000 == 291) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
             } else if (useItem(c, mapitem.getItemId())) {
                 removeItem_Pet(chr, mapitem, petz);
             } else if (mapitem.getItemId() / 10000 != 291 && MapleInventoryManipulator.checkSpace(c, mapitem.getItemId(), mapitem.getItem().getQuantity(), mapitem.getItem().getOwner())) {
@@ -119,7 +119,7 @@ public class PetPickupHandler implements ProcessPacket<Client> {
 
                 // Display
                 if (!mapitem.isPlayerDrop() && mapitem.getItem().getType() == ItemType.Equipment) {
-                    chr.getClient().SendPacket(CWvsContext.InfoPacket.showEquipmentPickedUp((Equip) mapitem.getItem()));
+                    chr.getClient().SendPacket(WvsContext.InfoPacket.showEquipmentPickedUp((Equip) mapitem.getItem()));
                 }
             }
         } finally {

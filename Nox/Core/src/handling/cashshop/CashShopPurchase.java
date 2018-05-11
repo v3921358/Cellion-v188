@@ -21,7 +21,7 @@
  */
 package handling.cashshop;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import database.Database;
 import static handling.cashshop.CashShopOperation.playerCashShopInfo;
@@ -39,15 +39,15 @@ import tools.LogHelper;
  *
  * @author Novak
  */
-public final class CashShopPurchase implements ProcessPacket<Client> {
+public final class CashShopPurchase implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         final int action = iPacket.DecodeByte();
         purchaseType actionType = purchaseType.UNK;

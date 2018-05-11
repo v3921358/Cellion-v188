@@ -39,8 +39,8 @@ import net.OutPacket;
 
 import server.maps.objects.User;
 import tools.LogHelper;
-import tools.packet.CWvsContext;
-import tools.packet.CWvsContext.FamilyPacket;
+import tools.packet.WvsContext;
+import tools.packet.WvsContext.FamilyPacket;
 
 public final class MapleFamily implements java.io.Serializable {
 
@@ -442,10 +442,10 @@ public final class MapleFamily implements java.io.Serializable {
             member.setJobId(mgc.getJob());
             member.setLevel((short) mgc.getLevel());
             if (old_level != mgc.getLevel()) {
-                this.broadcast(CWvsContext.sendLevelup(true, mgc.getLevel(), mgc.getName()), mgc.getId(), mgc.getId() == leaderid ? null : member.getPedigree());
+                this.broadcast(WvsContext.sendLevelup(true, mgc.getLevel(), mgc.getName()), mgc.getId(), mgc.getId() == leaderid ? null : member.getPedigree());
             }
             if (old_job != mgc.getJob()) {
-                this.broadcast(CWvsContext.sendJobup(true, mgc.getJob(), mgc.getName()), mgc.getId(), mgc.getId() == leaderid ? null : member.getPedigree());
+                this.broadcast(WvsContext.sendJobup(true, mgc.getJob(), mgc.getName()), mgc.getId(), mgc.getId() == leaderid ? null : member.getPedigree());
             }
         }
     }

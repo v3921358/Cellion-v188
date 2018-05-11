@@ -21,26 +21,26 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class MesoDrop implements ProcessPacket<Client> {
+public final class MesoDrop implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         chr.updateTick(iPacket.DecodeInt());
         int meso = iPacket.DecodeInt();
         if ((!chr.isAlive()) || (meso < 10) || (meso > 50000) || (meso > chr.getMeso())) {
-            chr.getClient().SendPacket(CWvsContext.enableActions());
+            chr.getClient().SendPacket(WvsContext.enableActions());
             return;
         }
         chr.gainMeso(-meso, false, true);

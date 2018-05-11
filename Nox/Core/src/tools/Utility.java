@@ -21,7 +21,7 @@ import server.maps.objects.User;
 import server.maps.objects.Pet;
 import service.ChannelServer;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 /**
  * Utility Tools/Functions
@@ -158,20 +158,20 @@ public class Utility {
                     pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
                 } else { // Item Drops
                     if (pMapLoot.isPickedUp()) {
-                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(WvsContext.enableActions());
                         continue;
                     }
                     if (pMapLoot.getQuest() > 0 && pPlayer.getQuestStatus(pMapLoot.getQuest()) != QuestStatus.QuestState.Started) {
-                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(WvsContext.enableActions());
                         continue;
                     }
                     if (pMapLoot.getOwner() != pPlayer.getId() && ((!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 0)
                             || (pMapLoot.isPlayerDrop() && pPlayer.getMap().getSharedMapResources().everlast))) {
-                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(WvsContext.enableActions());
                         continue;
                     }
                     if (!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 1 && pMapLoot.getOwner() != pPlayer.getId() && (pPlayer.getParty() == null || pPlayer.getParty().getMemberById(pMapLoot.getOwner()) == null)) {
-                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(WvsContext.enableActions());
                         continue;
                     }
 
@@ -241,20 +241,20 @@ public class Utility {
                     pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
                 } else { // Item Drops
                     if (pMapLoot.isPickedUp()) {
-                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(WvsContext.enableActions());
                         continue;
                     }
                     if (pMapLoot.getQuest() > 0 && pPlayer.getQuestStatus(pMapLoot.getQuest()) != QuestStatus.QuestState.Started) {
-                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(WvsContext.enableActions());
                         continue;
                     }
                     if (pMapLoot.getOwner() != pPlayer.getId() && ((!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 0)
                             || (pMapLoot.isPlayerDrop() && pPlayer.getMap().getSharedMapResources().everlast))) {
-                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(WvsContext.enableActions());
                         continue;
                     }
                     if (!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 1 && pMapLoot.getOwner() != pPlayer.getId() && (pPlayer.getParty() == null || pPlayer.getParty().getMemberById(pMapLoot.getOwner()) == null)) {
-                        pPlayer.getClient().SendPacket(CWvsContext.enableActions());
+                        pPlayer.getClient().SendPacket(WvsContext.enableActions());
                         continue;
                     }
 

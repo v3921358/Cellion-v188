@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import client.MapleCharacterUtil;
-import client.Client;
+import client.ClientSocket;
 import client.QuestStatus.QuestState;
 import client.MapleStat;
 import client.PlayerStats;
@@ -65,7 +65,7 @@ import tools.LogHelper;
 import tools.Pair;
 import tools.packet.CField;
 import tools.packet.CSPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.MiracleCubePacket;
 import tools.packet.PetPacket;
 import net.ProcessPacket;
@@ -77,19 +77,19 @@ import server.potentials.ItemPotentialOption;
  *
  * @author
  */
-public class UseCashItemHandler implements ProcessPacket<Client> {
+public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
 
         if (pPlayer == null || pPlayer.getMap() == null || pPlayer.inPVP()) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         pPlayer.setScrolledPosition((short) 0);
@@ -100,7 +100,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
         final Item toUse = pPlayer.getInventory(MapleInventoryType.CASH).getItem(slot);
 
         if (toUse == null || toUse.getItemId() != itemId || toUse.getQuantity() < 1 || pPlayer.hasBlockedInventory()) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
 
@@ -146,7 +146,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                         // Update Inventory Equipment 
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, pItem));
-                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
                         if (!bHidePotentialAfterReset) {
                             c.SendPacket(MiracleCubePacket.onRedCubeResult(pPlayer.getId(), lastTierBeforeCube != pEquip.getPotentialTier(), pEquip.getPosition(), toUse.getItemId(), pEquip));
@@ -205,7 +205,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                         // Update Inventory Equipment 
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, pItem));
-                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
                         if (!bHidePotentialAfterReset) {
                             c.SendPacket(MiracleCubePacket.onBonusCubeResult(pPlayer.getId(), lastTierBeforeCube != pEquip.getPotentialBonusTier(), pEquip.getPosition(), toUse.getItemId(), pEquip));
@@ -449,7 +449,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                             statupdate.put(MapleStat.IndieMMP, (long) maxmp);
                             break;
                     }
-                    c.SendPacket(CWvsContext.updatePlayerStats(statupdate, true, c.getPlayer()));
+                    c.SendPacket(WvsContext.updatePlayerStats(statupdate, true, c.getPlayer()));
                 }
                 break;
             }
@@ -712,7 +712,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                         // Update inventory equipment 
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
                         if (!hidePotentialAfterReset) {
                             c.SendPacket(MiracleCubePacket.onRedCubeResult(pPlayer.getId(), lastTierBeforeCube != equip.getPotentialTier(), equip.getPosition(), toUse.getItemId(), equip));
@@ -785,7 +785,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                         // Update inventory equipment 
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
                         if (!hidePotentialAfterReset) {
                             c.SendPacket(MiracleCubePacket.onRedCubeResult(pPlayer.getId(), lastTierBeforeCube != equip.getPotentialTier(), equip.getPosition(), toUse.getItemId(), equip));
@@ -840,7 +840,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                         // Update inventory equipment 
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
                         c.SendPacket(MiracleCubePacket.onMemorialCubeResult(CharacterTemporaryValues.KEY_MEMORIAL_CUBE, lastTierBeforeCube != equip_afterState.getPotentialTier(), equip.getPosition(), toUse.getItemId(), equip_afterState));
                     } else {
@@ -893,7 +893,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                         // Update inventory equipment 
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
                         c.SendPacket(MiracleCubePacket.onBlackCubeResult(CharacterTemporaryValues.KEY_BLACK_CUBE, lastTierBeforeCube != equip_afterState.getPotentialTier(), equip.getPosition(), toUse.getItemId(), equip_afterState));
                     } else {
@@ -916,7 +916,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                     if (success) {
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
                         c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), true, toUse.getItemId()));
 
@@ -994,7 +994,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
 
                             List<ModifyInventory> modifications = new ArrayList<>();
                             modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                            c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+                            c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
                             c.getPlayer().forceReAddItemNoUpdate(item, MapleInventoryType.EQUIP);
                             bUsed = true;
@@ -1032,7 +1032,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.Remove, item));
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(WvsContext.inventoryOperation(true, modifications));
                         bUsed = true;
                     }
                 }
@@ -1064,7 +1064,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                         List<ModifyInventory> modifications = new ArrayList<>();
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.Remove, item));
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+                        c.SendPacket(WvsContext.inventoryOperation(true, modifications));
                         bUsed = true;
                     }
                 }
@@ -1248,7 +1248,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                     sb.append(" : ");
                     sb.append(message);
 
-                    c.getPlayer().getMap().broadcastMessage(CWvsContext.broadcastMsg(2, sb.toString()));
+                    c.getPlayer().getMap().broadcastMessage(WvsContext.broadcastMsg(2, sb.toString()));
                     bUsed = true;
                 } else {
                     c.getPlayer().dropMessage(5, "The usage of Megaphone is currently disabled.");
@@ -1280,7 +1280,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                     sb.append(" : ");
                     sb.append(message);
 
-                    c.getChannelServer().broadcastSmegaPacket(CWvsContext.broadcastMsg(2, sb.toString()));
+                    c.getChannelServer().broadcastSmegaPacket(WvsContext.broadcastMsg(2, sb.toString()));
                     bUsed = true;
                 } else {
                     c.getPlayer().dropMessage(5, "The usage of Megaphone is currently disabled.");
@@ -1316,7 +1316,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                     }
                     final boolean ear = iPacket.DecodeByte() > 0;
 
-                    World.Broadcast.broadcastSmega(CWvsContext.tripleSmega(messages, ear, c.getChannel()));
+                    World.Broadcast.broadcastSmega(WvsContext.tripleSmega(messages, ear, c.getChannel()));
                     bUsed = true;
                 } else {
                     c.getPlayer().dropMessage(5, "The usage of Megaphone is currently disabled.");
@@ -1342,7 +1342,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                     if (message.length() > 65) {
                         break;
                     }
-                    World.Broadcast.broadcastSmega(CWvsContext.echoMegaphone(c.getPlayer().getName(), message));
+                    World.Broadcast.broadcastSmega(WvsContext.echoMegaphone(c.getPlayer().getName(), message));
                     bUsed = true;
                 } else {
                     c.getPlayer().dropMessage(5, "The usage of Megaphone is currently disabled.");
@@ -1375,7 +1375,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                     sb.append(message);
 
                     final boolean ear = iPacket.DecodeByte() != 0;
-                    World.Broadcast.broadcastSmega(CWvsContext.broadcastMsg(9, c.getChannel(), sb.toString(), ear));
+                    World.Broadcast.broadcastSmega(WvsContext.broadcastMsg(9, c.getChannel(), sb.toString(), ear));
                     bUsed = true;
                 } else {
                     c.getPlayer().dropMessage(5, "The usage of Megaphone is currently disabled.");
@@ -1409,7 +1409,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
 
                     final boolean ear = iPacket.DecodeByte() != 0;
 
-                    World.Broadcast.broadcastSmega(CWvsContext.broadcastMsg(22, c.getChannel(), sb.toString(), ear));
+                    World.Broadcast.broadcastSmega(WvsContext.broadcastMsg(22, c.getChannel(), sb.toString(), ear));
                     bUsed = true;
                 } else {
                     c.getPlayer().dropMessage(5, "The usage of Megaphone is currently disabled.");
@@ -1443,7 +1443,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
 
                     final boolean ear = iPacket.DecodeByte() != 0;
 
-                    World.Broadcast.broadcastSmega(CWvsContext.broadcastMsg(3, c.getChannel(), sb.toString(), ear));
+                    World.Broadcast.broadcastSmega(WvsContext.broadcastMsg(3, c.getChannel(), sb.toString(), ear));
                     bUsed = true;
                 } else {
                     c.getPlayer().dropMessage(5, "The usage of Megaphone is currently disabled.");
@@ -1486,7 +1486,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                         }
                         item = c.getPlayer().getInventory(MapleInventoryType.getByType(invType)).getItem(pos);
                     }
-                    World.Broadcast.broadcastSmega(CWvsContext.handleItemMegaphone(sb.toString(), ear, c.getChannel(), item));
+                    World.Broadcast.broadcastSmega(WvsContext.handleItemMegaphone(sb.toString(), ear, c.getChannel(), item));
                     bUsed = true;
                 } else {
                     c.getPlayer().dropMessage(5, "The usage of Megaphone is currently disabled.");
@@ -1524,7 +1524,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
 
                     final boolean ear = iPacket.DecodeByte() != 0;
 
-                    World.Broadcast.broadcastSmega(CWvsContext.broadcastMsg(24 + itemId % 10, c.getChannel(), sb.toString(), ear));
+                    World.Broadcast.broadcastSmega(WvsContext.broadcastMsg(24 + itemId % 10, c.getChannel(), sb.toString(), ear));
                     bUsed = true;
                 } else {
                     c.getPlayer().dropMessage(5, "The usage of Megaphone is currently disabled.");
@@ -1565,7 +1565,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                     break;
                 }
                 String message = iPacket.DecodeString();
-                World.Broadcast.broadcastSmega(CWvsContext.broadcastMsg(3, c.getChannel(), c.getPlayer().getName() + " : " + message, ear));
+                World.Broadcast.broadcastSmega(WvsContext.broadcastMsg(3, c.getChannel(), c.getPlayer().getName() + " : " + message, ear));
                 bUsed = true;
                 break;
             }
@@ -1626,7 +1626,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                 if (zz != null && !zz.check(pet.getItem().getFlag())) {
                     pet.getItem().setFlag((short) (pet.getItem().getFlag() - zz.getValue()));
                     c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                     c.SendPacket(CSPacket.changePetFlag(uniqueid, true, zz.getValue()));
                     bUsed = true;
                 }
@@ -1668,7 +1668,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                     pet.getItem().setFlag((short) (pet.getItem().getFlag() - zz.getValue()));
                     c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
                     // c.getPlayer().forceUpdateItem(pet.getItem());
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                     c.SendPacket(CSPacket.changePetFlag(uniqueid, false, zz.getValue()));
                     bUsed = true;
                 }
@@ -1721,7 +1721,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                     pet.setName(nName);
                     c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
                     //c.getPlayer().forceUpdateItem(pet.getItem());
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                     c.getPlayer().getMap().broadcastMessage(CSPacket.changePetName(c.getPlayer(), nName, slo));
                     bUsed = true;
                 }
@@ -1745,7 +1745,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                 final int itemSearch = iPacket.DecodeInt();
                 final List<HiredMerchant> hms = c.getChannelServer().searchMerchant(itemSearch);
                 if (hms.size() > 0) {
-                    c.SendPacket(CWvsContext.getOwlSearched(itemSearch, hms));
+                    c.SendPacket(WvsContext.getOwlSearched(itemSearch, hms));
                     bUsed = true;
                 } else {
                     c.getPlayer().dropMessage(1, "Unable to find the item.");
@@ -1758,7 +1758,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                 Rectangle bounds = new Rectangle((int) c.getPlayer().getPosition().getX(), (int) c.getPlayer().getPosition().getY(), 1, 1);
                 MapleMist mist = new MapleMist(bounds, c.getPlayer());
                 c.getPlayer().getMap().spawnMist(mist, 10000, true);
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 bUsed = true;
                 break;
             }
@@ -1770,7 +1770,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                         for (int i : e.getType().mapids) {
                             if (c.getPlayer().getMapId() == i) {
                                 c.getPlayer().dropMessage(5, "You may not use that here.");
-                                c.SendPacket(CWvsContext.enableActions());
+                                c.SendPacket(WvsContext.enableActions());
                                 return;
                             }
                         }
@@ -1834,7 +1834,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
                 for (int i : GameConstants.blockedMaps) {
                     if (c.getPlayer().getMapId() == i) {
                         c.getPlayer().dropMessage(5, "You may not use this here.");
-                        c.SendPacket(CWvsContext.enableActions());
+                        c.SendPacket(WvsContext.enableActions());
                         return;
                     }
                 }
@@ -1930,7 +1930,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
         if (bUsed) {
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.CASH, slot, (short) 1, false, true);
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
         if (cc) {
             if (!c.getPlayer().isAlive() || c.getPlayer().getEventInstance() != null || FieldLimitType.UnableToMigrate.check(c.getPlayer().getMap())) {
                 c.getPlayer().dropMessage(1, "Auto relog failed.");
@@ -1939,7 +1939,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
             c.getPlayer().dropMessage(5, "Auto relogging. Please wait.");
             c.getPlayer().fakeRelog();
             if (c.getPlayer().getScrolledPosition() != 0) {
-                c.SendPacket(CWvsContext.pamSongUI());
+                c.SendPacket(WvsContext.pamSongUI());
             }
         }
     }
@@ -1953,7 +1953,7 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
         sb.append("> ");
     }
 
-    private static boolean getIncubatedItems(Client c, int itemId) {
+    private static boolean getIncubatedItems(ClientSocket c, int itemId) {
         if (c.getPlayer().getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() < 2 || c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() < 2 || c.getPlayer().getInventory(MapleInventoryType.SETUP).getNumFreeSlot() < 2) {
             c.getPlayer().dropMessage(5, "Please make room in your inventory.");
             return false;
@@ -1966,14 +1966,14 @@ public class UseCashItemHandler implements ProcessPacket<Client> {
         while (!ii.itemExists(id2)) {
             id2 = RandomRewards.getPeanutReward();
         }
-        c.SendPacket(CWvsContext.getPeanutResult(id1, (short) 1, id2, (short) 1, itemId));
+        c.SendPacket(WvsContext.getPeanutResult(id1, (short) 1, id2, (short) 1, itemId));
         MapleInventoryManipulator.addById(c, id1, (short) 1, ii.getName(itemId) + " on " + LocalDateTime.now());
         MapleInventoryManipulator.addById(c, id2, (short) 1, ii.getName(itemId) + " on " + LocalDateTime.now());
         c.SendPacket(CField.NPCPacket.getNPCTalk(1090000, NPCChatType.OK, "You have obtained the following items:\r\n#i" + id1 + "##z" + id1 + "#\r\n#i" + id2 + "##z" + id2 + "#", NPCChatByType.NPC_Cancellable));
         return true;
     }
 
-    private static boolean magnifyEquip(final Client c, Item magnify, Item toReveal, byte eqSlot) {
+    private static boolean magnifyEquip(final ClientSocket c, Item magnify, Item toReveal, byte eqSlot) {
         /*      final boolean insight = c.getPlayer().getTrait(MapleTrait.MapleTraitType.sense).getLevel() >= 30;
         final Equip eqq = (Equip) toReveal;
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();

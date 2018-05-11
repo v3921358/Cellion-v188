@@ -21,20 +21,20 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import handling.world.InterServerHandler;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class ChannelChangeHandler implements ProcessPacket<Client> {
+public final class ChannelChangeHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         InterServerHandler.changeChannel(iPacket, c, c.getPlayer(), false);
     }
 

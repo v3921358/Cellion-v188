@@ -21,25 +21,25 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import server.maps.objects.User;
 import server.quest.Quest;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class TitleEquipHandler implements ProcessPacket<Client> {
+public final class TitleEquipHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         int itemId = iPacket.DecodeInt();
         if ((chr == null) || (chr.getMap() == null)) {
@@ -55,7 +55,7 @@ public final class TitleEquipHandler implements ProcessPacket<Client> {
             chr.getQuestNAdd(Quest.getInstance(124000)).setCustomData(String.valueOf(itemId));
         }
         chr.getMap().broadcastMessage(chr, CField.showTitle(chr.getId(), itemId), false);
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 
 }

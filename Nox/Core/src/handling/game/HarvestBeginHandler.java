@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.QuestStatus;
 import client.inventory.Equip;
 import client.inventory.Item;
@@ -13,15 +13,15 @@ import net.InPacket;
 import tools.packet.CField;
 import net.ProcessPacket;
 
-public final class HarvestBeginHandler implements ProcessPacket<Client> {
+public final class HarvestBeginHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         //its ok if a hacker bypasses this as we do everything in the reactor anyway
         final MapleReactor reactor = c.getPlayer().getMap().getReactorByOid(iPacket.DecodeInt());

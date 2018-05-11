@@ -2,7 +2,7 @@ package handling.game;
 
 import java.lang.ref.WeakReference;
 
-import client.Client;
+import client.ClientSocket;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -19,21 +19,21 @@ import server.events.MapleEventType;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.JobPacket;
 import net.ProcessPacket;
 import server.life.MobAttackInfo;
 import service.RecvPacketOpcode;
 
-public final class NonTargetAtomAttackHandler implements ProcessPacket<Client> {
+public final class NonTargetAtomAttackHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr == null || chr.hasBlockedInventory() || chr.getMap() == null) {
             return;
@@ -42,12 +42,12 @@ public final class NonTargetAtomAttackHandler implements ProcessPacket<Client> {
         //AttackInfo attack = DamageParse.parseDmgMa(iPacket, chr);
         AttackInfo attack = DamageParse.OnAttack(RecvPacketOpcode.UserNonTargetForceAtomAttack, iPacket, chr); // Not sure if parse will work on this
         if (attack == null) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         Skill skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
         if (skill == null || (GameConstants.isAngel(attack.skill) && (chr.getStat().equippedSummon % 10000 != attack.skill % 10000))) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         int skillLevel = chr.getTotalSkillLevel(skill);
@@ -56,7 +56,7 @@ public final class NonTargetAtomAttackHandler implements ProcessPacket<Client> {
             return;
         } else if (effect.getCooldown(chr) > 0) {  // Handle cooldowns
             if (chr.skillisCooling(attack.skill)) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
             chr.addCooldown(attack.skill, System.currentTimeMillis(), effect.getCooldown(chr));

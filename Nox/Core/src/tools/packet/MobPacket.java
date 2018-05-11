@@ -557,7 +557,7 @@ public class MobPacket {
 
     public static OutPacket applyMonsterStatus(Mob mons, List<MonsterStatusEffect> mse) { // WHY MY VERSION forces me into adding this funtion "EncodeTemporary" into the spawnmonster/controlmonstrer packets.. It handles "Monster Buffs" there hmmm
         if ((mse.size() <= 0) || (mse.get(0) == null)) {
-            return CWvsContext.enableActions();
+            return WvsContext.enableActions();
         }
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.MobStatSet.getValue());
@@ -632,7 +632,7 @@ public class MobPacket {
 
     public static OutPacket applyPoison(Mob mons, List<MonsterStatusEffect> mse) {
         if ((mse.size() <= 0) || (mse.get(0) == null)) {
-            return CWvsContext.enableActions();
+            return WvsContext.enableActions();
         }
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.MobStatSet.getValue());

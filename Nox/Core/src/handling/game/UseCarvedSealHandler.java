@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -14,22 +14,22 @@ import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.potentials.ItemPotentialProvider;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class UseCarvedSealHandler implements ProcessPacket<Client> {
+public class UseCarvedSealHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         //iPacket: [90 64 C8 14] [04 00] [0F 00]
         c.getPlayer().updateTick(iPacket.DecodeInt());
         final Item toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(iPacket.DecodeShort());
@@ -40,7 +40,7 @@ public class UseCarvedSealHandler implements ProcessPacket<Client> {
         if (toUse == null || itemEq == null
                 || toUse.getItemId() / 100 != 20495
                 || !ii.getEquipStats(toUse.getItemId()).containsKey("success")) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
 
@@ -55,7 +55,7 @@ public class UseCarvedSealHandler implements ProcessPacket<Client> {
 
                 List<ModifyInventory> modifications = new ArrayList<>();
                 modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, itemEq));
-                c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+                c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
                 c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), true, toUse.getItemId()));
             }
@@ -68,7 +68,7 @@ public class UseCarvedSealHandler implements ProcessPacket<Client> {
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, toUse.getPosition(), (short) 1, false);
         }
 
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 
 }

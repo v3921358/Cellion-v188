@@ -1,28 +1,28 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import java.util.List;
 import server.MapleInventoryManipulator;
 import server.stores.HiredMerchant;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class UseOwlMinervaHandler implements ProcessPacket<Client> {
+public class UseOwlMinervaHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final byte slot = (byte) iPacket.DecodeShort();
         final int itemid = iPacket.DecodeInt();
         final Item toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
@@ -30,13 +30,13 @@ public class UseOwlMinervaHandler implements ProcessPacket<Client> {
             final int itemSearch = iPacket.DecodeInt();
             final List<HiredMerchant> hms = c.getChannelServer().searchMerchant(itemSearch);
             if (hms.size() > 0) {
-                c.SendPacket(CWvsContext.getOwlSearched(itemSearch, hms));
+                c.SendPacket(WvsContext.getOwlSearched(itemSearch, hms));
                 MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, itemid, 1, true, false);
             } else {
                 c.getPlayer().dropMessage(1, "Unable to find the item.");
             }
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 
 }

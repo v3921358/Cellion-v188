@@ -10,14 +10,14 @@ public class RockPaperScissors {
     private boolean ableAnswer = true;
     private boolean win = false;
 
-    public RockPaperScissors(final Client c, final byte mode) {
+    public RockPaperScissors(final ClientSocket c, final byte mode) {
         c.SendPacket(CField.getRPSMode((byte) (0x09 + mode), -1, -1, -1));
         if (mode == 0) {
             c.getPlayer().gainMeso(-1000, true, true);
         }
     }
 
-    public final boolean answer(final Client c, final int answer) {
+    public final boolean answer(final ClientSocket c, final int answer) {
         if (ableAnswer && !win && answer >= 0 && answer <= 2) {
             final int response = Randomizer.nextInt(3);
             if (response == answer) {
@@ -37,7 +37,7 @@ public class RockPaperScissors {
         return false;
     }
 
-    public final boolean timeOut(final Client c) {
+    public final boolean timeOut(final ClientSocket c) {
         if (ableAnswer && !win) {
             ableAnswer = false;
             c.SendPacket(CField.getRPSMode((byte) 0x0A, -1, -1, -1));
@@ -47,7 +47,7 @@ public class RockPaperScissors {
         return false;
     }
 
-    public final boolean nextRound(final Client c) {
+    public final boolean nextRound(final ClientSocket c) {
         if (win) {
             round++;
             if (round < 10) {
@@ -61,7 +61,7 @@ public class RockPaperScissors {
         return false;
     }
 
-    public final void reward(final Client c) {
+    public final void reward(final ClientSocket c) {
         if (win) {
             MapleInventoryManipulator.addById(c, 4031332 + round, (short) 1, "", null, 0, false, "Obtained from rock, paper, scissors");
         } else if (round == 0) {
@@ -70,7 +70,7 @@ public class RockPaperScissors {
         c.getPlayer().setRPS(null);
     }
 
-    public final void dispose(final Client c) {
+    public final void dispose(final ClientSocket c) {
         reward(c);
         c.SendPacket(CField.getRPSMode((byte) 0x0D, -1, -1, -1));
     }

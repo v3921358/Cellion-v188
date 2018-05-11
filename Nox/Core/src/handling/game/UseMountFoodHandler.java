@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.MapleMount;
@@ -8,22 +8,22 @@ import constants.GameConstants;
 import server.MapleInventoryManipulator;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class UseMountFoodHandler implements ProcessPacket<Client> {
+public class UseMountFoodHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         c.getPlayer().updateTick(iPacket.DecodeInt());
@@ -46,9 +46,9 @@ public class UseMountFoodHandler implements ProcessPacket<Client> {
                     levelup = true;
                 }
             }
-            chr.getMap().broadcastMessage(CWvsContext.updateMount(chr, levelup));
+            chr.getMap().broadcastMessage(WvsContext.updateMount(chr, levelup));
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 }

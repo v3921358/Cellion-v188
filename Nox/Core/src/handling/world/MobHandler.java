@@ -5,7 +5,7 @@ import server.MapleInventoryManipulator;
 import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.objects.User;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class MobHandler {
 
@@ -24,7 +24,7 @@ public class MobHandler {
 
             }
 
-            map.broadcastMessage(CWvsContext.broadcastMsg(6, "Your party has failed to protect the monster."));
+            map.broadcastMessage(WvsContext.broadcastMsg(6, "Your party has failed to protect the monster."));
             mapp = chr.getMap().getForcedReturnMap();
             for (User chrz : map.getCharacters()) {
                 chrz.changeMap(mapp, mapp.getPortal(0));

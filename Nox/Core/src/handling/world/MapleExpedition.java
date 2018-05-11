@@ -3,7 +3,7 @@ package handling.world;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
 import handling.world.World;
@@ -51,7 +51,7 @@ public class MapleExpedition {
         return ret;
     }
 
-    public final ArrayList<User> getExpeditionMembers(final Client c) {
+    public final ArrayList<User> getExpeditionMembers(final ClientSocket c) {
         ArrayList<User> chars = new ArrayList<>();
         for (int i = 0; i < parties.size(); i++) {
             MapleParty pp = World.Party.getParty(parties.get(i));

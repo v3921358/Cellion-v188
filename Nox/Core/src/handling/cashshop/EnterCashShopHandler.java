@@ -21,8 +21,8 @@
  */
 package handling.cashshop;
 
-import client.Client;
-import client.Client.MapleClientLoginState;
+import client.ClientSocket;
+import client.ClientSocket.MapleClientLoginState;
 import handling.world.CharacterTransfer;
 import handling.world.MapleMessengerCharacter;
 import handling.world.PlayerBuffStorage;
@@ -34,28 +34,28 @@ import service.LoginServer;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.FarmPacket;
 import net.ProcessPacket;
 
-public final class EnterCashShopHandler implements ProcessPacket<Client> {
+public final class EnterCashShopHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         if (chr.hasBlockedInventory() || chr.getEventInstance() != null) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         CharacterTransfer farmtransfer = FarmServer.getPlayerStorage().getPendingCharacter(chr.getId());
         if (farmtransfer != null) {
             c.SendPacket(FarmPacket.farmMessage("You cannot move into Cash Shop while visiting your farm."));
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         ChannelServer ch = ChannelServer.getInstance(c.getChannel());

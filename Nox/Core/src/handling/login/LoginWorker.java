@@ -23,7 +23,7 @@ package handling.login;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import client.Client;
+import client.ClientSocket;
 import service.ChannelServer;
 import service.LoginServer;
 import server.Timer.PingTimer;
@@ -33,7 +33,7 @@ public class LoginWorker {
 
     private static long lastUpdate = 0;
 
-    public static void registerClient(final Client c) {
+    public static void registerClient(final ClientSocket c) {
         if (System.currentTimeMillis() - lastUpdate > 600000) { // Update once every 10 minutes
             lastUpdate = System.currentTimeMillis();
             final Map<Integer, Integer> load = ChannelServer.getChannelLoad();

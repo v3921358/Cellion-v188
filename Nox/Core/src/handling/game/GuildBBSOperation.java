@@ -1,26 +1,26 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import handling.world.World;
 import handling.world.MapleBBSThread;
 import java.util.List;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class GuildBBSOperation implements ProcessPacket<Client> {
+public class GuildBBSOperation implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if (c.getPlayer().getGuildId() <= 0) {
             return; // expelled while viewing bbs or hax
         }
@@ -82,7 +82,7 @@ public class GuildBBSOperation implements ProcessPacket<Client> {
         }
     }
 
-    private static void newBBSReply(final Client c, final int localthreadid, final String text) {
+    private static void newBBSReply(final ClientSocket c, final int localthreadid, final String text) {
         if (c.getPlayer().getGuildId() <= 0) {
             return;
         }
@@ -90,7 +90,7 @@ public class GuildBBSOperation implements ProcessPacket<Client> {
         displayThread(c, localthreadid);
     }
 
-    private static void editBBSThread(final Client c, final String title, final String text, final int icon, final int localthreadid) {
+    private static void editBBSThread(final ClientSocket c, final String title, final String text, final int icon, final int localthreadid) {
         if (c.getPlayer().getGuildId() <= 0) {
             return; // expelled while viewing?
         }
@@ -98,7 +98,7 @@ public class GuildBBSOperation implements ProcessPacket<Client> {
         displayThread(c, localthreadid);
     }
 
-    private static void newBBSThread(final Client c, final String title, final String text, final int icon, final boolean bNotice) {
+    private static void newBBSThread(final ClientSocket c, final String title, final String text, final int icon, final boolean bNotice) {
         if (c.getPlayer().getGuildId() <= 0) {
             return; // expelled while viewing?
         }
@@ -106,14 +106,14 @@ public class GuildBBSOperation implements ProcessPacket<Client> {
         listBBSThreads(c, 0);
     }
 
-    private static void deleteBBSThread(final Client c, final int localthreadid) {
+    private static void deleteBBSThread(final ClientSocket c, final int localthreadid) {
         if (c.getPlayer().getGuildId() <= 0) {
             return;
         }
         World.Guild.deleteBBSThread(c.getPlayer().getGuildId(), localthreadid, c.getPlayer().getId(), (int) c.getPlayer().getGuildRank());
     }
 
-    private static void deleteBBSReply(final Client c, final int localthreadid, final int replyid) {
+    private static void deleteBBSReply(final ClientSocket c, final int localthreadid, final int replyid) {
         if (c.getPlayer().getGuildId() <= 0) {
             return;
         }
@@ -129,14 +129,14 @@ public class GuildBBSOperation implements ProcessPacket<Client> {
         return in;
     }
 
-    private static void listBBSThreads(Client c, int start) {
+    private static void listBBSThreads(ClientSocket c, int start) {
         if (c.getPlayer().getGuildId() <= 0) {
             return;
         }
-        c.SendPacket(CWvsContext.GuildPacket.BBSThreadList(World.Guild.getBBS(c.getPlayer().getGuildId()), start));
+        c.SendPacket(WvsContext.GuildPacket.BBSThreadList(World.Guild.getBBS(c.getPlayer().getGuildId()), start));
     }
 
-    private static void displayThread(final Client c, final int localthreadid) {
+    private static void displayThread(final ClientSocket c, final int localthreadid) {
         if (c.getPlayer().getGuildId() <= 0) {
             return;
         }
@@ -144,7 +144,7 @@ public class GuildBBSOperation implements ProcessPacket<Client> {
         if (bbsList != null) {
             for (MapleBBSThread t : bbsList) {
                 if (t != null && t.localthreadID == localthreadid) {
-                    c.SendPacket(CWvsContext.GuildPacket.showThread(t));
+                    c.SendPacket(WvsContext.GuildPacket.showThread(t));
                 }
             }
         }

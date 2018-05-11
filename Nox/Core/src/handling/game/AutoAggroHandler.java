@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
@@ -10,15 +10,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class AutoAggroHandler implements ProcessPacket<Client> {
+public class AutoAggroHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         if ((chr == null) || (chr.getMap() == null) || (chr.isHidden())) {
             return;

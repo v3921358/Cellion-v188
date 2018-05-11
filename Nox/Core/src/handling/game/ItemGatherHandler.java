@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
@@ -10,29 +10,29 @@ import java.util.LinkedList;
 import java.util.List;
 import server.MapleInventoryManipulator;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class ItemGatherHandler implements ProcessPacket<Client> {
+public class ItemGatherHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         // [41 00] [E5 1D 55 00] [01]
         // [32 00] [01] [01] // Sent after
 
         c.getPlayer().updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
         if (c.getPlayer().hasBlockedInventory()) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         final byte mode = iPacket.DecodeByte();
@@ -51,8 +51,8 @@ public class ItemGatherHandler implements ProcessPacket<Client> {
         for (Item item : sortedItems) {
             MapleInventoryManipulator.addFromDrop(c, item, false);
         }
-        c.SendPacket(CWvsContext.finishedGather(mode));
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.finishedGather(mode));
+        c.SendPacket(WvsContext.enableActions());
         itemMap.clear();
         sortedItems.clear();
     }

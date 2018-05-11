@@ -5,24 +5,24 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import java.awt.Point;
 import net.InPacket;
 import net.ProcessPacket;
 
 /**
- *
+ * DebuffPsychicArea
  * @author Mazen Massoud
  */
-public class DebuffPsychicAreaHandler implements ProcessPacket<Client> {
+public class DebuffPsychicAreaHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int nSkillID = iPacket.DecodeInt();
         int nSLV = iPacket.DecodeShort();
         int nPsychicAreaKey = iPacket.DecodeInt(); // 04 00 00 00

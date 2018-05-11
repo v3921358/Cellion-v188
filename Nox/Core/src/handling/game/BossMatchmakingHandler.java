@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import handling.world.MaplePartyCharacter;
 import net.InPacket;
 import net.ProcessPacket;
@@ -13,16 +13,16 @@ import scripting.AbstractPlayerInteraction;
 import scripting.provider.NPCScriptManager;
 import server.maps.MapleMap;
 import server.maps.objects.User;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 /**
  *
  * @author Mazen Massoud
  */
-public class BossMatchmakingHandler implements ProcessPacket<Client> {
+public class BossMatchmakingHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
@@ -91,7 +91,7 @@ public class BossMatchmakingHandler implements ProcessPacket<Client> {
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User pPlayer = c.getPlayer();
         pPlayer.updateTick(iPacket.DecodeInt());
         int nBossType = iPacket.DecodeInt();
@@ -184,9 +184,9 @@ public class BossMatchmakingHandler implements ProcessPacket<Client> {
 
         if (nDestination != 0) {
             pPlayer.changeMap(nDestination, 0);
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
         } else {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
         }
 
         //Incase we want to handle it with parties, but it's a better quality of life without it.

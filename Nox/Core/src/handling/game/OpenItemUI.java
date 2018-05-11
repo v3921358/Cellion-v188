@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.maps.objects.User;
 import net.InPacket;
 import net.ProcessPacket;
@@ -10,15 +10,15 @@ import net.ProcessPacket;
  * @author Steven
  *
  */
-public class OpenItemUI implements ProcessPacket<Client> {
+public class OpenItemUI implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         chr.updateTick(iPacket.DecodeInt());
         short pos = iPacket.DecodeShort();

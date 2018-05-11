@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import java.util.Map;
@@ -11,26 +11,26 @@ import server.life.MapleLifeFactory;
 import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class UseSummonBagHandler implements ProcessPacket<Client> {
+public class UseSummonBagHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         if (!chr.isAlive() || chr.hasBlockedInventory() || chr.inPVP()) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         c.getPlayer().updateTick(iPacket.DecodeInt());
@@ -42,7 +42,7 @@ public class UseSummonBagHandler implements ProcessPacket<Client> {
             final Map<String, Integer> toSpawn = MapleItemInformationProvider.getInstance().getEquipStats(itemId);
 
             if (toSpawn == null) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
             Mob ht = null;
@@ -54,13 +54,13 @@ public class UseSummonBagHandler implements ProcessPacket<Client> {
                 }
             }
             if (ht == null) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
 
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 
 }

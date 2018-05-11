@@ -21,22 +21,22 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.PlayerStats;
 import constants.GameConstants;
 import server.maps.objects.User;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class PlayerHealAction implements ProcessPacket<Client> {
+public final class PlayerHealAction implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr == null) {
             return;

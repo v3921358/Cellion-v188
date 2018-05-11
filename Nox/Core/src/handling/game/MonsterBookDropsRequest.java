@@ -3,25 +3,25 @@ package handling.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import server.MapleItemInformationProvider;
 import server.life.MapleMonsterInformationProvider;
 import server.life.MonsterDropEntry;
 import server.life.MonsterGlobalDropEntry;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class MonsterBookDropsRequest implements ProcessPacket<Client> {
+public final class MonsterBookDropsRequest implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (c.getPlayer() == null || c.getPlayer().getMap() == null) {
             return;
@@ -30,7 +30,7 @@ public final class MonsterBookDropsRequest implements ProcessPacket<Client> {
         final int cardid = iPacket.DecodeInt();
         final int mobid = MapleItemInformationProvider.getInstance().getCardMobId(cardid);
         if (mobid <= 0 || !chr.getMonsterBook().hasCard(cardid)) {
-            c.SendPacket(CWvsContext.getCardDrops(cardid, null));
+            c.SendPacket(WvsContext.getCardDrops(cardid, null));
             return;
         }
         final MapleMonsterInformationProvider ii = MapleMonsterInformationProvider.getInstance();
@@ -45,7 +45,7 @@ public final class MonsterBookDropsRequest implements ProcessPacket<Client> {
                 newDrops.add(de.itemId);
             }
         }
-        c.SendPacket(CWvsContext.getCardDrops(cardid, newDrops));
+        c.SendPacket(WvsContext.getCardDrops(cardid, newDrops));
     }
 
 }

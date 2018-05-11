@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.ItemLoader;
 import client.inventory.MapleInventoryType;
@@ -186,7 +186,7 @@ public class MapleStorage implements Serializable {
         return -1;
     }
 
-    public void sendStorage(Client c, int npcId) {
+    public void sendStorage(ClientSocket c, int npcId) {
         // sort by inventorytype to avoid confusion
         setLastNPC(npcId);
         Collections.sort(items, new Comparator<Item>() {
@@ -208,15 +208,15 @@ public class MapleStorage implements Serializable {
         c.SendPacket(NPCPacket.getStorage(npcId, slots, items, meso));
     }
 
-    public void update(Client c) {
+    public void update(ClientSocket c) {
         c.SendPacket(NPCPacket.arrangeStorage(slots, items, true));
     }
 
-    public void sendStored(Client c, MapleInventoryType type) {
+    public void sendStored(ClientSocket c, MapleInventoryType type) {
         c.SendPacket(NPCPacket.storeStorage(slots, type, typeItems.get(type)));
     }
 
-    public void sendTakenOut(Client c, MapleInventoryType type) {
+    public void sendTakenOut(ClientSocket c, MapleInventoryType type) {
         c.SendPacket(NPCPacket.takeOutStorage(slots, type, typeItems.get(type)));
     }
 
@@ -241,7 +241,7 @@ public class MapleStorage implements Serializable {
         this.meso = meso;
     }
 
-    public void sendMeso(Client c) {
+    public void sendMeso(ClientSocket c) {
         c.SendPacket(NPCPacket.mesoStorage(slots, meso));
     }
 

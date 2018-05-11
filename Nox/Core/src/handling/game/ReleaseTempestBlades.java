@@ -5,11 +5,11 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.SkillFactory;
 import handling.world.PlayerHandler;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.InPacket;
 import net.ProcessPacket;
 import client.CharacterTemporaryStat;
@@ -31,15 +31,15 @@ import server.maps.objects.User;
  * 
  * @author Mazen Massoud
  */
-public final class ReleaseTempestBlades implements ProcessPacket<Client> {
+public final class ReleaseTempestBlades implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
         int nMaxCount = 3;
         if (KaiserHandler.getTempestBladeSkill(pPlayer) == Kaiser.ADVANCED_TEMPEST_BLADES_1 || KaiserHandler.getTempestBladeSkill(pPlayer) == Kaiser.ADVANCED_TEMPEST_BLADES) {

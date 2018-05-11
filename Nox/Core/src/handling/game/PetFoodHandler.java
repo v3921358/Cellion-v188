@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -10,7 +10,7 @@ import server.Randomizer;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.PetPacket;
 import net.ProcessPacket;
 
@@ -18,15 +18,15 @@ import net.ProcessPacket;
  *
  * @author Lloyd Korn
  */
-public class PetFoodHandler implements ProcessPacket<Client> {
+public class PetFoodHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int previousFullness = 100;
         Pet pet = null;
         //  MapleCharacter chr = chr;
@@ -45,7 +45,7 @@ public class PetFoodHandler implements ProcessPacket<Client> {
         }
         if (pet == null) {
             c.getPlayer().dropMessage(5, "Your pet is not hungry.");
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
 
@@ -55,7 +55,7 @@ public class PetFoodHandler implements ProcessPacket<Client> {
         Item petFood = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
         if (petFood == null || petFood.getItemId() != itemId || petFood.getQuantity() <= 0 || itemId / 10000 != 212) {
             c.getPlayer().dropMessage(-1, "Wrong item" + itemId);
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         boolean gainCloseness = false;
@@ -101,7 +101,7 @@ public class PetFoodHandler implements ProcessPacket<Client> {
             c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, c.getPlayer().getPetIndex(pet), false, true), true);
         }
         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, true, false);
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 
 }

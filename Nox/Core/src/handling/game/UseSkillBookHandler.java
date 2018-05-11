@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.Skill;
 import client.SkillFactory;
 import client.inventory.Item;
@@ -11,22 +11,22 @@ import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class UseSkillBookHandler implements ProcessPacket<Client> {
+public class UseSkillBookHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         short slot = iPacket.DecodeShort();
         int itemId = iPacket.DecodeInt();
@@ -34,7 +34,7 @@ public class UseSkillBookHandler implements ProcessPacket<Client> {
         UseSkillBook(c, slot, itemId);
     }
 
-    public static boolean UseSkillBook(Client c, short slot, int itemId) {
+    public static boolean UseSkillBook(ClientSocket c, short slot, int itemId) {
         User chr = c.getPlayer();
 
         final Item toUse = chr.getInventory(GameConstants.getInventoryType(itemId)).getItem(slot);
@@ -75,8 +75,8 @@ public class UseSkillBookHandler implements ProcessPacket<Client> {
             }
         }
 
-        c.getPlayer().getMap().broadcastMessage(CWvsContext.useSkillBook(chr, skill, maxlevel, canuse, success));
-        c.SendPacket(CWvsContext.enableActions());
+        c.getPlayer().getMap().broadcastMessage(WvsContext.useSkillBook(chr, skill, maxlevel, canuse, success));
+        c.SendPacket(WvsContext.enableActions());
         return true;
     }
 }

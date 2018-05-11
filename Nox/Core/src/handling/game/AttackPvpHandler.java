@@ -11,7 +11,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import client.CharacterTemporaryStat;
-import client.Client;
+import client.ClientSocket;
 import client.MapleDisease;
 import client.MonsterStatus;
 import client.PlayerStats;
@@ -34,24 +34,24 @@ import tools.Triple;
 import net.InPacket;
 import server.maps.Map_MCarnival;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class AttackPvpHandler implements ProcessPacket<Client> {
+public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final Lock ThreadLock = new ReentrantLock();
         final User chr = c.getPlayer();
         final int trueSkill = iPacket.DecodeInt();
         int skillid = trueSkill;
         if (chr == null || chr.isHidden() || !chr.isAlive() || chr.hasBlockedInventory() || chr.getMap() == null || !chr.inPVP() || !chr.getEventInstance().getProperty("started").equals("1") || skillid >= 90000000) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         final int lvl = Integer.parseInt(chr.getEventInstance().getProperty("lvl"));
@@ -84,7 +84,7 @@ public final class AttackPvpHandler implements ProcessPacket<Client> {
             }
             final Skill skil = SkillFactory.getSkill(skillid);
             if (skil == null || skil.isPVPDisabled()) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
             magic = skil.isMagic();
@@ -143,7 +143,7 @@ public final class AttackPvpHandler implements ProcessPacket<Client> {
 
             if (effect.getCooldown(chr) > 0) {
                 if (chr.skillisCooling(skillid)) {
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                     return;
                 }
                 if ((skillid != 35111004 && skillid != 35121013) || chr.getBuffSource(CharacterTemporaryStat.Mechanic) != skillid) { // Battleship
@@ -422,7 +422,7 @@ public final class AttackPvpHandler implements ProcessPacket<Client> {
             }
         }
         if (chr.getEventInstance() == null) { //if the PVP ends 
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
 
@@ -436,13 +436,13 @@ public final class AttackPvpHandler implements ProcessPacket<Client> {
             if (skillid > 0 && (ourAttacks.size() > 0 || (skillid != 4331003 && skillid != 4341002)) && !GameConstants.isNoDelaySkill(skillid)) {
                 boolean applyTo = effect.applyTo(chr, chr.getTruePosition());
             } else {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
             }
         } else {
             move = false;
             pull = false;
             push = false;
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
         }
         chr.getMap().broadcastMessage(CField.pvpAttack(chr.getId(), chr.getLevel(), trueSkill, trueSkillLevel, speed, fakeMastery, visProjectile, attackCount, chargeTime, animation, facingLeft ? 1 : 0, chr.getStat().defRange, skillid, skillLevel, move, push, pull, ourAttacks));
         if (addedScore > 0 && GameConstants.getAttackDelay(skillid, SkillFactory.getSkill(skillid)) >= 100) {

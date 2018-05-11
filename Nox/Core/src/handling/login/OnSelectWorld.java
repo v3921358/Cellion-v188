@@ -5,7 +5,7 @@
  */
 package handling.login;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import net.ProcessPacket;
 import server.api.data.UserInfo;
@@ -15,9 +15,9 @@ import tools.packet.CLogin;
  *
  * @author Song Lin
  */
-public class OnSelectWorld implements ProcessPacket<Client> {
+public class OnSelectWorld implements ProcessPacket<ClientSocket> {
 
-    public static void checkLumiereAccount(Client c, UserInfo data) {
+    public static void checkLumiereAccount(ClientSocket c, UserInfo data) {
         if (data.getError() == "unauthorized" || data.getId() == 0) { // The last should never ever be sent by the API since the endpoint is called directly from the database, but just in case.
             c.SendPacket(CLogin.getLoginFailed(8));
             return;
@@ -33,12 +33,12 @@ public class OnSelectWorld implements ProcessPacket<Client> {
     }
 
     @Override
-    public boolean ValidateState(Client ClientSocket) {
+    public boolean ValidateState(ClientSocket ClientSocket) {
         return true;
     }
 
     @Override
-    public void Process(Client pClient, InPacket iPacket) {
+    public void Process(ClientSocket pClient, InPacket iPacket) {
         if (!iPacket.DecodeBool()) {
             return;
         }

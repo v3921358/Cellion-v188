@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import constants.*;
 import client.CharacterTemporaryStat;
-import client.Client;
+import client.ClientSocket;
 import client.MapleCoolDownValueHolder;
 import client.MapleDiseaseValueHolder;
 import client.MapleStat;
@@ -53,12 +53,12 @@ import tools.CollectionUtil;
 import tools.LogHelper;
 import tools.Pair;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
-import tools.packet.CWvsContext.AlliancePacket;
-import tools.packet.CWvsContext.ExpeditionPacket;
-import tools.packet.CWvsContext.FriendPacket;
-import tools.packet.CWvsContext.GuildPacket;
-import tools.packet.CWvsContext.PartyPacket;
+import tools.packet.WvsContext;
+import tools.packet.WvsContext.AlliancePacket;
+import tools.packet.WvsContext.ExpeditionPacket;
+import tools.packet.WvsContext.FriendPacket;
+import tools.packet.WvsContext.GuildPacket;
+import tools.packet.WvsContext.PartyPacket;
 import tools.packet.PetPacket;
 
 public class World {
@@ -279,7 +279,7 @@ public class World {
                     if (chr != null && !chr.getName().equalsIgnoreCase(namefrom)) { //Extra check just in case
                         //chr.getClient().write(CField.multiChat(namefrom, chattext, mode));
                         if (chr.getClient().isMonitored()) {
-                            World.Broadcast.broadcastGMMessage(CWvsContext.broadcastMsg(6, "[GM Message] " + namefrom + " said to " + chr.getName() + " (Party): " + chattext));
+                            World.Broadcast.broadcastGMMessage(WvsContext.broadcastMsg(6, "[GM Message] " + namefrom + " said to " + chr.getName() + " (Party): " + chattext));
                         }
                     }
                 }
@@ -573,7 +573,7 @@ public class World {
                     if (chr != null && chr.getBuddylist().containsVisible(cidFrom)) {
                         //chr.getClient().write(CField.multiChat(nameFrom, chattext, 0));
                         if (chr.getClient().isMonitored()) {
-                            World.Broadcast.broadcastGMMessage(CWvsContext.broadcastMsg(6, "[GM Message] " + nameFrom + " said to " + chr.getName() + " (Buddy): " + chattext));
+                            World.Broadcast.broadcastGMMessage(WvsContext.broadcastMsg(6, "[GM Message] " + nameFrom + " said to " + chr.getName() + " (Buddy): " + chattext));
                         }
                     }
                 }
@@ -596,7 +596,7 @@ public class World {
                             ble.setFlag(BuddyFlags.AccountFriendOnline.getFlag(ble));
                             Buddy bud = new Buddy(BuddyResult.NOTIFY);
                             bud.setEntry(ble);
-                            chr.getClient().SendPacket(CWvsContext.buddylistMessage(bud));
+                            chr.getClient().SendPacket(WvsContext.buddylistMessage(bud));
                         }
                     }
                 }
@@ -618,7 +618,7 @@ public class World {
                                 entry.setFlag(BuddyFlags.AccountFriendOnline.getFlag(entry));
                                 buddylist.put(entry);
                                 b.setEntry(entry);
-                                addChar.getClient().SendPacket(CWvsContext.buddylistMessage(b));
+                                addChar.getClient().SendPacket(WvsContext.buddylistMessage(b));
                             }
                             break;
                         case DELETE:
@@ -627,7 +627,7 @@ public class World {
                                 entry.setFlag(BuddyFlags.FriendOffline.getFlag());
                                 buddylist.put(entry);
                                 b.setEntry(entry);
-                                addChar.getClient().SendPacket(CWvsContext.buddylistMessage(b));
+                                addChar.getClient().SendPacket(WvsContext.buddylistMessage(b));
                             }
                             break;
                         default:
@@ -635,7 +635,7 @@ public class World {
                     }
                     b.setResult(BuddyResult.LOAD_FRIENDS);
                     b.setEntries(new ArrayList<>(buddylist.getBuddies()));
-                    addChar.getClient().SendPacket(CWvsContext.buddylistMessage(b));
+                    addChar.getClient().SendPacket(WvsContext.buddylistMessage(b));
                 }
             }
         }
@@ -915,7 +915,7 @@ public class World {
             }
         }
 
-        public static Map<Integer, MapleGuild> getGuildByOwnerSearch(Client c, String guildMasterName, boolean exactWord) {
+        public static Map<Integer, MapleGuild> getGuildByOwnerSearch(ClientSocket c, String guildMasterName, boolean exactWord) {
             Map<Integer, MapleGuild> acceptableGuilds = new LinkedHashMap<>();
             lock.readLock().lock();
             try {
@@ -937,7 +937,7 @@ public class World {
             }
         }
 
-        public static Map<Integer, MapleGuild> getGuildByNameSearch(Client c, String guildName, boolean exactWord) {
+        public static Map<Integer, MapleGuild> getGuildByNameSearch(ClientSocket c, String guildName, boolean exactWord) {
             Map<Integer, MapleGuild> acceptableGuilds = new LinkedHashMap<>();
             lock.readLock().lock();
             try {
@@ -1631,7 +1631,7 @@ public class World {
                         guild.setAllianceId(0);
                         guild.broadcast(AlliancePacket.disbandAlliance(allianceid));
                     } else if (g_ != null) {
-                        guild.broadcast(CWvsContext.broadcastMsg(5, "[" + g_.getName() + "] Guild has left the alliance."));
+                        guild.broadcast(WvsContext.broadcastMsg(5, "[" + g_.getName() + "] Guild has left the alliance."));
                         guild.broadcast(AlliancePacket.changeGuildInAlliance(alliance, g_, false));
                         guild.broadcast(AlliancePacket.removeGuildFromAlliance(alliance, g_, expelled));
                     }

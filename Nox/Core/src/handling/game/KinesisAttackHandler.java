@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import net.OutPacket;
 import net.ProcessPacket;
@@ -16,15 +16,15 @@ import service.SendPacketOpcode;
  *
  * @author Mazen Massoud
  */
-public final class KinesisAttackHandler implements ProcessPacket<Client> {
+public final class KinesisAttackHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEnterFieldPsychicInfo.getValue());
         oPacket.EncodeInt(c.getPlayer().getId());

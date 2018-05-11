@@ -10,7 +10,7 @@ import server.life.MapleLifeFactory;
 import server.maps.objects.User;
 import server.maps.objects.MapleReactor;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class AramiaFireWorks {
 
@@ -41,7 +41,7 @@ public class AramiaFireWorks {
     }
 
     private void broadcastServer(final User c, final int itemid) {
-        World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(6, itemid, "<Channel " + c.getClient().getChannel() + "> " + c.getMap().getMapName() + " : The amount of {" + MapleItemInformationProvider.getInstance().getName(itemid) + "} has reached the limit!"));
+        World.Broadcast.broadcastMessage(WvsContext.broadcastMsg(6, itemid, "<Channel " + c.getClient().getChannel() + "> " + c.getMap().getMapName() + " : The amount of {" + MapleItemInformationProvider.getInstance().getName(itemid) + "} has reached the limit!"));
     }
 
     public final short getKegsPercentage() {

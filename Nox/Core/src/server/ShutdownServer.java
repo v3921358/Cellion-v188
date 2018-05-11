@@ -1,6 +1,6 @@
 package server;
 
-import client.Client;
+import client.ClientSocket;
 import java.lang.management.ManagementFactory;
 import java.sql.SQLException;
 
@@ -24,7 +24,7 @@ import server.Timer.MapTimer;
 import server.Timer.PingTimer;
 import server.Timer.WorldTimer;
 import server.maps.objects.User;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class ShutdownServer implements ShutdownServerMBean {
 
@@ -64,7 +64,7 @@ public class ShutdownServer implements ShutdownServerMBean {
     public void run() {
         if (mode == 0) {
             int ret = 0;
-            World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(0, "The server is now shutting down."));
+            World.Broadcast.broadcastMessage(WvsContext.broadcastMsg(0, "The server is now shutting down."));
             try {
                 server.Start.queue.stop();
             } catch (Exception ex) {
@@ -102,7 +102,7 @@ public class ShutdownServer implements ShutdownServerMBean {
         } else if (mode == 1) {
             mode++;
             System.out.println("Shutdown 2 commencing...");
-            World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(0, "The world is going to shutdown now. Please log off safely."));
+            World.Broadcast.broadcastMessage(WvsContext.broadcastMsg(0, "The world is going to shutdown now. Please log off safely."));
             Integer[] chs = ChannelServer.getAllInstance().toArray(new Integer[0]);
 
             for (int i : chs) {

@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.jobs.Kinesis;
 import client.jobs.Kinesis.KinesisHandler;
 import net.InPacket;
@@ -19,15 +19,15 @@ import service.SendPacketOpcode;
  *
  * @author Mazen Massoud
  */
-public final class KinesisPsychicHandler implements ProcessPacket<Client> {
+public final class KinesisPsychicHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         //KinesisHandler.handlePsychicPoint(c.getPlayer(), 0);
         /*
         OutPacket oPacket = new OutPacket(SendPacketOpcode.UserCreatePsychicArea.getValue());

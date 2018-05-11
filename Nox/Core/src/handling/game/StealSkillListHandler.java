@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.Skill;
 import constants.GameConstants;
 import java.util.ArrayList;
@@ -9,21 +9,21 @@ import net.InPacket;
 import tools.packet.CField;
 import net.ProcessPacket;
 import server.maps.objects.User;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 /**
  *
  * @author Five
  */
-public class StealSkillListHandler implements ProcessPacket<Client> {
+public class StealSkillListHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final int NoTarget = 0, NotAdventurer = 1, NoSkill = 2, Unknown = 3, Success = 4;
         int dwCharacterID = iPacket.DecodeInt();
         User pUser = c.getChannelServer().getPlayerStorage().getCharacterById(dwCharacterID);
@@ -48,6 +48,6 @@ public class StealSkillListHandler implements ProcessPacket<Client> {
         } else {
             nPhantomStealResult = NoTarget;
         }
-        c.SendPacket(CWvsContext.OnResultStealSkillList(1, dwCharacterID, nPhantomStealResult, nJob, aSkill));
+        c.SendPacket(WvsContext.OnResultStealSkillList(1, dwCharacterID, nPhantomStealResult, nJob, aSkill));
     }
 }

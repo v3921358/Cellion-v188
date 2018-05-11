@@ -5,7 +5,7 @@ import java.util.concurrent.ScheduledFuture;
 import server.Timer.EventTimer;
 import server.maps.objects.User;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class MapleSurvival extends MapleEvent {
 
@@ -50,8 +50,8 @@ public class MapleSurvival extends MapleEvent {
             }
         }, this.time);
 
-        broadcast(CWvsContext.broadcastMsg(0, "The portal has now opened. Press the up arrow key at the portal to enter."));
-        broadcast(CWvsContext.broadcastMsg(0, "Fall down once, and never get back up again! Get to the top without falling down!"));
+        broadcast(WvsContext.broadcastMsg(0, "The portal has now opened. Press the up arrow key at the portal to enter."));
+        broadcast(WvsContext.broadcastMsg(0, "Fall down once, and never get back up again! Get to the top without falling down!"));
     }
 
     public boolean isTimerStarted() {

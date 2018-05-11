@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -14,7 +14,7 @@ import server.maps.objects.User;
 import server.maps.objects.Pet;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.PetPacket;
 
 /**
@@ -282,7 +282,7 @@ public class _CommonPlayerOperationHandler {
         return opID < 60000;
     }
 
-    public static final boolean UseTeleRock(InPacket iPacket, Client c, int itemId) {
+    public static final boolean UseTeleRock(InPacket iPacket, ClientSocket c, int itemId) {
         boolean used = false;
         if (itemId == 5040004) {
             iPacket.DecodeByte();
@@ -326,7 +326,7 @@ public class _CommonPlayerOperationHandler {
         return used;
     }
 
-    public static final boolean useItem(final Client c, final int id) {
+    public static final boolean useItem(final ClientSocket c, final int id) {
         if (GameConstants.isUse(id)) { // TO prevent caching of everything, waste of mem
             final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
             final MapleStatEffect eff = ii.getItemEffect(id);
@@ -351,14 +351,14 @@ public class _CommonPlayerOperationHandler {
             if (consumeval > 0) {
                 consumeItem(c, eff);
                 consumeItem(c, ii.getItemEffectEX(id));
-                c.SendPacket(CWvsContext.InfoPacket.getShowItemGain(id, (byte) 1));
+                c.SendPacket(WvsContext.InfoPacket.getShowItemGain(id, (byte) 1));
                 return true;
             }
         }
         return false;
     }
 
-    public static final void consumeItem(final Client c, final MapleStatEffect eff) {
+    public static final void consumeItem(final ClientSocket c, final MapleStatEffect eff) {
         if (eff == null) {
             return;
         }
@@ -378,7 +378,7 @@ public class _CommonPlayerOperationHandler {
         }
     }
 
-    public static final boolean UsePetFood(Client c, int itemId) {
+    public static final boolean UsePetFood(ClientSocket c, int itemId) {
         Pet pet = c.getPlayer().getPet(0);
         if (pet == null) {
             return false;

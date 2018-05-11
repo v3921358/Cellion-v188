@@ -2,8 +2,8 @@ package handling.cashshop;
 
 import java.util.ArrayList;
 
-import client.Client;
-import client.Client.MapleClientLoginState;
+import client.ClientSocket;
+import client.ClientSocket.MapleClientLoginState;
 import client.buddy.Buddy;
 import client.buddy.BuddyResult;
 import client.inventory.Item;
@@ -20,13 +20,13 @@ import service.LoginServer;
 import server.maps.objects.User;
 import tools.packet.CField;
 import tools.packet.CSPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class CashShopOperation {
 
-    public static void LeaveCS(final Client c, final User chr) {
+    public static void LeaveCS(final ClientSocket c, final User chr) {
         CashShopServer.getPlayerStorage().deregisterPlayer(chr);
-        c.updateLoginState(Client.MapleClientLoginState.Login_ServerTransition, c.getSessionIPAddress());
+        c.updateLoginState(ClientSocket.MapleClientLoginState.Login_ServerTransition, c.getSessionIPAddress());
         try {
             World.changeChannelData(new CharacterTransfer(chr), chr.getId(), c.getChannel());
         } catch (Exception ex) {
@@ -39,7 +39,7 @@ public class CashShopOperation {
         }
     }
 
-    public static void EnterCS(final CharacterTransfer transfer, final Client c) {
+    public static void EnterCS(final CharacterTransfer transfer, final ClientSocket c) {
         if (transfer == null) {
             c.Close();
             return;
@@ -111,13 +111,13 @@ public class CashShopOperation {
         }
     }
 
-    public static void playerCashShopInfo(Client c) {
+    public static void playerCashShopInfo(ClientSocket c) {
         c.SendPacket(CSPacket.getCSInventory(c));
         c.SendPacket(CSPacket.doCSMagic());
         c.SendPacket(CSPacket.getCSGifts(c));
         Buddy buddy = new Buddy(BuddyResult.LOAD_FRIENDS);
         buddy.setEntries(new ArrayList<>(c.getPlayer().getBuddylist().getBuddies()));
-        c.SendPacket(CWvsContext.buddylistMessage(buddy));
+        c.SendPacket(WvsContext.buddylistMessage(buddy));
         c.SendPacket(CSPacket.showNXMapleTokens(c.getPlayer()));
         //c.write(CSPacket.sendWishList(c.getPlayer(), false));
         //c.write(CSPacket.showNXMapleTokens(c.getPlayer()));

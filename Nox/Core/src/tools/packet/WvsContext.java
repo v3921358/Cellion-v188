@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import server.skills.VMatrixRecord;
 
-public class CWvsContext {
+public class WvsContext {
 
     /**
      *
@@ -1896,7 +1896,7 @@ public class CWvsContext {
         return oPacket;
     }
 
-    public static OutPacket getCandyRanking(Client c, List<CandyRankingInfo> all) {
+    public static OutPacket getCandyRanking(ClientSocket c, List<CandyRankingInfo> all) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.HalloweenCandyRankingResult.getValue());
         oPacket.EncodeInt(all.size());
@@ -1955,12 +1955,12 @@ public class CWvsContext {
             for (int i = 0; i < alliance.getNoGuilds(); i++) {
                 g[i] = World.Guild.getGuild(alliance.getGuildId(i));
                 if (g[i] == null) {
-                    return CWvsContext.enableActions();
+                    return WvsContext.enableActions();
                 }
             }
             oPacket.EncodeInt(noGuilds);
             for (MapleGuild gg : g) {
-                CWvsContext.GuildPacket.getGuildInfo(oPacket, gg);
+                WvsContext.GuildPacket.getGuildInfo(oPacket, gg);
             }
             return oPacket;
         }
@@ -1982,7 +1982,7 @@ public class CWvsContext {
             OutPacket oPacket = new OutPacket(SendPacketOpcode.AllianceResult.getValue());
             oPacket.EncodeByte(16);
             addAllianceInfo(oPacket, alliance);
-            CWvsContext.GuildPacket.getGuildInfo(oPacket, expelledGuild);
+            WvsContext.GuildPacket.getGuildInfo(oPacket, expelledGuild);
             oPacket.EncodeByte(expelled ? 1 : 0);
 
             return oPacket;
@@ -1994,7 +1994,7 @@ public class CWvsContext {
             oPacket.EncodeByte(18);
             addAllianceInfo(oPacket, alliance);
             oPacket.EncodeInt(newGuild.getId());
-            CWvsContext.GuildPacket.getGuildInfo(oPacket, newGuild);
+            WvsContext.GuildPacket.getGuildInfo(oPacket, newGuild);
             oPacket.EncodeByte(0);
 
             return oPacket;
@@ -2030,11 +2030,11 @@ public class CWvsContext {
             for (int i = 0; i < alliance.getNoGuilds(); i++) {
                 g[i] = World.Guild.getGuild(alliance.getGuildId(i));
                 if (g[i] == null) {
-                    return CWvsContext.enableActions();
+                    return WvsContext.enableActions();
                 }
             }
             for (MapleGuild gg : g) {
-                CWvsContext.GuildPacket.getGuildInfo(oPacket, gg);
+                WvsContext.GuildPacket.getGuildInfo(oPacket, gg);
             }
             return oPacket;
         }
@@ -2115,7 +2115,7 @@ public class CWvsContext {
             for (int i = 0; i < noGuilds; i++) {
                 g[i] = World.Guild.getGuild(alliance.getGuildId(i));
                 if (g[i] == null) {
-                    return CWvsContext.enableActions();
+                    return WvsContext.enableActions();
                 }
             }
             oPacket.EncodeByte(noGuilds);
@@ -2610,9 +2610,9 @@ public class CWvsContext {
                 if (i < me.getParties().size()) {
                     MapleParty party = World.Party.getParty((me.getParties().get(i)).intValue());
 
-                    CWvsContext.PartyPacket.addPartyStatus(-1, party, oPacket, false, true);
+                    WvsContext.PartyPacket.addPartyStatus(-1, party, oPacket, false, true);
                 } else {
-                    CWvsContext.PartyPacket.addPartyStatus(-1, null, oPacket, false, true);
+                    WvsContext.PartyPacket.addPartyStatus(-1, null, oPacket, false, true);
                 }
 
             }
@@ -2672,7 +2672,7 @@ public class CWvsContext {
             oPacket.EncodeInt(0);
             oPacket.EncodeInt(partyIndex);
 
-            CWvsContext.PartyPacket.addPartyStatus(-1, party, oPacket, false, true);
+            WvsContext.PartyPacket.addPartyStatus(-1, party, oPacket, false, true);
 
             return oPacket;
         }
@@ -3446,7 +3446,7 @@ public class CWvsContext {
             return oPacket;
         }
 
-        public static OutPacket guildSearchResult(Client c, Map<Integer, MapleGuild> guilds) {
+        public static OutPacket guildSearchResult(ClientSocket c, Map<Integer, MapleGuild> guilds) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.GuildSearchResult.getValue());
             oPacket.EncodeInt(guilds.size());

@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import client.Client;
+import client.ClientSocket;
 import database.Database;
 import server.maps.objects.User;
 import tools.LogHelper;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class BuddyList {
 
@@ -109,7 +109,7 @@ public class BuddyList {
         }
     }
 
-    public void addBuddyRequest(Client c, int channelFrom, User chr, boolean accountFriend) {
+    public void addBuddyRequest(ClientSocket c, int channelFrom, User chr, boolean accountFriend) {
         Buddy buddy = new Buddy(BuddyResult.INVITE);
         BuddylistEntry ble = new BuddylistEntry(chr.getName(), chr.getId(), "Default Group", channelFrom, true, "", accountFriend, chr.getName());
         if (accountFriend) {
@@ -122,7 +122,7 @@ public class BuddyList {
         buddy.setJob(chr.getJob());
         buddy.setSubJob(chr.getSubcategory());
         put(buddy.getEntry());
-        c.SendPacket(CWvsContext.buddylistMessage(buddy));
+        c.SendPacket(WvsContext.buddylistMessage(buddy));
     }
 
     public void setChanged(boolean v) {

@@ -1,11 +1,11 @@
 package handling;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 
 public interface MaplePacketHandler {
 
-    void handlePacket(InPacket iPacket, Client c);
+    void handlePacket(InPacket iPacket, ClientSocket c);
 
-    boolean validateState(Client c);
+    boolean validateState(ClientSocket c);
 }

@@ -1,20 +1,20 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.MapleSpecialStats.MapleSpecialStatUpdateType;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class ProfessionInfo implements ProcessPacket<Client> {
+public final class ProfessionInfo implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         /*    String typeStr = iPacket.decodeString();
         MapleSpecialStatUpdateType type = MapleSpecialStatUpdateType.getFromString(typeStr);
         int level1 = iPacket.DecodeInt();

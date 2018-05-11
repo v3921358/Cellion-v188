@@ -2,7 +2,7 @@ package handling.login;
 
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import constants.ServerConstants;
 import constants.WorldConstants;
 import net.InPacket;
@@ -10,19 +10,19 @@ import server.maps.objects.User;
 import tools.packet.CLogin;
 import net.ProcessPacket;
 
-public final class WorldInfoRequestHandler implements ProcessPacket<Client> {
+public final class WorldInfoRequestHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         sendServerList(iPacket, c);
     }
 
-    public static void sendServerList(InPacket iPacket, Client c) {
+    public static void sendServerList(InPacket iPacket, ClientSocket c) {
         //c.write(LoginPacket.changeBackground());
         if (ServerConstants.TESPIA) {
             for (WorldConstants.TespiaWorldOption tespiaservers : WorldConstants.TespiaWorldOption.values()) {

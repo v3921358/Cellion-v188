@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
@@ -10,15 +10,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class MonsterBombHandler implements ProcessPacket<Client> {
+public class MonsterBombHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         final int oid = iPacket.DecodeInt();

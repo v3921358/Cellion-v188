@@ -1,6 +1,6 @@
 package handling.common;
 
-import client.Client;
+import client.ClientSocket;
 import handling.PacketThrottleLimits;
 import net.InPacket;
 import net.ProcessPacket;
@@ -11,15 +11,15 @@ import net.ProcessPacket;
         MinTimeMillisBetweenPackets = 3000,
         FunctionName = "KeepAliveHandler",
         BanType = PacketThrottleLimits.PacketThrottleBanType.Disconnect)
-public final class KeepAliveHandler implements ProcessPacket<Client> {
+public final class KeepAliveHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int GetTickCount = iPacket.DecodeInt(); // Win32 API for the time in millis since the computer started
 
         c.pongReceived();

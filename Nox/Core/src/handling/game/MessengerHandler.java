@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleCharacterUtil;
-import client.Client;
+import client.ClientSocket;
 import handling.PacketThrottleLimits;
 import handling.world.MapleMessenger;
 import handling.world.MapleMessengerCharacter;
@@ -9,7 +9,7 @@ import handling.world.World;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
@@ -22,15 +22,15 @@ import net.ProcessPacket;
         MinTimeMillisBetweenPackets = 500,
         FunctionName = "MessengerHandler",
         BanType = PacketThrottleLimits.PacketThrottleBanType.Disconnect)
-public class MessengerHandler implements ProcessPacket<Client> {
+public class MessengerHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         String input;
         MapleMessenger messenger = c.getPlayer().getMessenger();
 
@@ -112,8 +112,7 @@ public class MessengerHandler implements ProcessPacket<Client> {
                     final String chattext = charname + "" + text;
                     World.Messenger.messengerChat(messenger.getId(), charname, text, c.getPlayer().getName());
                     if (messenger.isMonitored() && chattext.length() > c.getPlayer().getName().length() + 3) { //name : NOT name0 or name1
-                        World.Broadcast.broadcastGMMessage(
-                                CWvsContext.broadcastMsg(
+                        World.Broadcast.broadcastGMMessage(WvsContext.broadcastMsg(
                                         6, "[GM Message] " + MapleCharacterUtil.makeMapleReadable(c.getPlayer().getName()) + "(Messenger: "
                                         + messenger.getMemberNamesDEBUG() + ") said: " + chattext));
                     }

@@ -21,20 +21,20 @@
  */
 package handling.farm;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import tools.packet.FarmPacket;
 import net.ProcessPacket;
 
-public final class FarmMonsterRenamer implements ProcessPacket<Client> {
+public final class FarmMonsterRenamer implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int monsterIndex = iPacket.DecodeInt();
         String name = iPacket.DecodeString();
         //c.getFarm().getMonster(monsterIndex).setName(name);

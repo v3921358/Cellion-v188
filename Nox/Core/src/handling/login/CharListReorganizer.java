@@ -1,19 +1,19 @@
 package handling.login;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import server.maps.objects.User;
 import net.ProcessPacket;
 
-public final class CharListReorganizer implements ProcessPacket<Client> {
+public final class CharListReorganizer implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int accountId = iPacket.DecodeInt();
         if (c == null || accountId != c.getAccID()) {
             return;

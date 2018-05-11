@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.CharacterTemporaryStat;
-import client.Client;
+import client.ClientSocket;
 import java.util.Iterator;
 import net.InPacket;
 import server.maps.objects.User;
@@ -13,15 +13,15 @@ import net.ProcessPacket;
  *
  * @author Lloyd Korn
  */
-public class SummonsDamageHandler implements ProcessPacket<Client> {
+public class SummonsDamageHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         iPacket.Skip(4);
         final int unkByte = iPacket.DecodeByte();
         final int damage = iPacket.DecodeInt();

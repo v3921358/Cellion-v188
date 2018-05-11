@@ -22,7 +22,7 @@ package handling.world;
 
 import java.time.LocalDateTime;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleImp;
 import client.inventory.MapleImp.ImpFlag;
@@ -32,7 +32,7 @@ import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class ItemMakerHandler {
 
@@ -49,18 +49,18 @@ public class ItemMakerHandler {
         }
     }
 
-    public static final void UsePot(final InPacket iPacket, final Client c) {
+    public static final void UsePot(final InPacket iPacket, final ClientSocket c) {
         final int itemid = iPacket.DecodeInt();
         final Item slot = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(iPacket.DecodeShort());
         if (slot == null || slot.getQuantity() <= 0 || slot.getItemId() != itemid || itemid / 10000 != 244 || MapleItemInformationProvider.getInstance().getPot(itemid) == null) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
         for (int i = 0; i < c.getPlayer().getImps().length; i++) {
             if (c.getPlayer().getImps()[i] == null) {
                 c.getPlayer().getImps()[i] = new MapleImp(itemid);
-                c.SendPacket(CWvsContext.updateImp(c.getPlayer().getImps()[i], ImpFlag.SUMMONED.getValue(), i, false));
+                c.SendPacket(WvsContext.updateImp(c.getPlayer().getImps()[i], ImpFlag.SUMMONED.getValue(), i, false));
                 MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot.getPosition(), (short) 1, false, false);
                 return;
             }
@@ -68,32 +68,32 @@ public class ItemMakerHandler {
 
     }
 
-    public static final void ClearPot(final InPacket iPacket, final Client c) {
+    public static final void ClearPot(final InPacket iPacket, final ClientSocket c) {
         final int index = iPacket.DecodeInt() - 1;
         if (index < 0 || index >= c.getPlayer().getImps().length || c.getPlayer().getImps()[index] == null) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
-        c.SendPacket(CWvsContext.updateImp(c.getPlayer().getImps()[index], ImpFlag.REMOVED.getValue(), index, false));
+        c.SendPacket(WvsContext.updateImp(c.getPlayer().getImps()[index], ImpFlag.REMOVED.getValue(), index, false));
         c.getPlayer().getImps()[index] = null;
     }
 
-    public static final void FeedPot(final InPacket iPacket, final Client c) {
+    public static final void FeedPot(final InPacket iPacket, final ClientSocket c) {
         final int itemid = iPacket.DecodeInt();
         final Item slot = c.getPlayer().getInventory(GameConstants.getInventoryType(itemid)).getItem((short) iPacket.DecodeInt());
         if (slot == null || slot.getQuantity() <= 0 || slot.getItemId() != itemid) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         final int level = GameConstants.getInventoryType(itemid) == MapleInventoryType.ETC ? MapleItemInformationProvider.getInstance().getItemMakeLevel(itemid) : MapleItemInformationProvider.getInstance().getReqLevel(itemid);
         if (level <= 0 || level < (Math.min(120, c.getPlayer().getLevel()) - 50) || (GameConstants.getInventoryType(itemid) != MapleInventoryType.ETC && GameConstants.getInventoryType(itemid) != MapleInventoryType.EQUIP)) {
             c.getPlayer().dropMessage(1, "The item must be within 50 levels of you.");
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         final int index = iPacket.DecodeInt() - 1;
         if (index < 0 || index >= c.getPlayer().getImps().length || c.getPlayer().getImps()[index] == null || c.getPlayer().getImps()[index].getLevel() >= (MapleItemInformationProvider.getInstance().getPot(c.getPlayer().getImps()[index].getItemId()).right - 1) || c.getPlayer().getImps()[index].getState() != 1) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         int mask = ImpFlag.FULLNESS.getValue();
@@ -119,40 +119,40 @@ public class ItemMakerHandler {
             }
         }
         MapleInventoryManipulator.removeFromSlot(c, GameConstants.getInventoryType(itemid), slot.getPosition(), (short) 1, false, false);
-        c.SendPacket(CWvsContext.updateImp(c.getPlayer().getImps()[index], mask, index, false));
+        c.SendPacket(WvsContext.updateImp(c.getPlayer().getImps()[index], mask, index, false));
     }
 
-    public static final void CurePot(final InPacket iPacket, final Client c) {
+    public static final void CurePot(final InPacket iPacket, final ClientSocket c) {
         final int itemid = iPacket.DecodeInt();
         final Item slot = c.getPlayer().getInventory(MapleInventoryType.ETC).getItem((short) iPacket.DecodeInt());
         if (slot == null || slot.getQuantity() <= 0 || slot.getItemId() != itemid || itemid / 10000 != 434) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         final int index = iPacket.DecodeInt() - 1;
         if (index < 0 || index >= c.getPlayer().getImps().length || c.getPlayer().getImps()[index] == null || c.getPlayer().getImps()[index].getState() != 4) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         c.getPlayer().getImps()[index].setState(1);
-        c.SendPacket(CWvsContext.updateImp(c.getPlayer().getImps()[index], ImpFlag.STATE.getValue(), index, false));
+        c.SendPacket(WvsContext.updateImp(c.getPlayer().getImps()[index], ImpFlag.STATE.getValue(), index, false));
         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.ETC, slot.getPosition(), (short) 1, false, false);
     }
 
-    public static final void RewardPot(final InPacket iPacket, final Client c) {
+    public static final void RewardPot(final InPacket iPacket, final ClientSocket c) {
         final int index = iPacket.DecodeInt() - 1;
         if (index < 0 || index >= c.getPlayer().getImps().length || c.getPlayer().getImps()[index] == null || c.getPlayer().getImps()[index].getLevel() < (MapleItemInformationProvider.getInstance().getPot(c.getPlayer().getImps()[index].getItemId()).right - 1)) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         final int itemid = GameConstants.getRewardPot(c.getPlayer().getImps()[index].getItemId(), c.getPlayer().getImps()[index].getCloseness());
         if (itemid <= 0 || !MapleInventoryManipulator.checkSpace(c, itemid, (short) 1, "")) {
             c.getPlayer().dropMessage(1, "Please make some space.");
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         MapleInventoryManipulator.addById(c, itemid, (short) 1, "Item Pot from " + c.getPlayer().getImps()[index].getItemId() + " on " + LocalDateTime.now());
-        c.SendPacket(CWvsContext.updateImp(c.getPlayer().getImps()[index], ImpFlag.REMOVED.getValue(), index, false));
+        c.SendPacket(WvsContext.updateImp(c.getPlayer().getImps()[index], ImpFlag.REMOVED.getValue(), index, false));
         c.getPlayer().getImps()[index] = null;
     }
 }

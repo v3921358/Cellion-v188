@@ -23,7 +23,7 @@ package server.stores;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import server.MapleInventoryManipulator;
@@ -40,7 +40,7 @@ public class MaplePlayerShop extends AbstractPlayerStore {
     }
 
     @Override
-    public void buy(Client c, int item, short quantity) {
+    public void buy(ClientSocket c, int item, short quantity) {
         MaplePlayerShopItem pItem = items.get(item);
         if (pItem.bundles > 0) {
             Item newItem = pItem.item.copy();

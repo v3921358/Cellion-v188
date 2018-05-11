@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Enchant;
 import client.inventory.EnchantmentActions;
 import client.inventory.EnchantmentScroll;
@@ -15,17 +15,17 @@ import client.inventory.MapleInventoryType;
 import net.InPacket;
 import server.MapleInventoryManipulator;
 import server.maps.objects.User;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  * @author Steven
  *
  */
-public class EnchantmentHandler implements ProcessPacket<Client> {
+public class EnchantmentHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
@@ -35,7 +35,7 @@ public class EnchantmentHandler implements ProcessPacket<Client> {
      * @see handling.MaplePacketHandler#handlePancket(tools.data.input.InPacket, client.Client)
      */
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         byte type = iPacket.DecodeByte();
         Enchant enchant = new Enchant(type);
@@ -51,7 +51,7 @@ public class EnchantmentHandler implements ProcessPacket<Client> {
                 enchant.setScrolls(scrolls);
                 scroll = scrolls.get(iPacket.DecodeInt());
                 if (scroll == null) {
-                    chr.write(CWvsContext.enableActions());
+                    chr.write(WvsContext.enableActions());
                     return;
                 }
                 enchant.setAction(EnchantmentActions.SCROLL_RESULT);
@@ -95,7 +95,7 @@ public class EnchantmentHandler implements ProcessPacket<Client> {
             switch (enchant.getAction()) {
                 case SCROLLLIST:
                     if (equip.getUpgradeSlots() < 1) {
-                        c.SendPacket(CWvsContext.enableActions());
+                        c.SendPacket(WvsContext.enableActions());
                         return;
                     }
                     loadScrolls(scrolls); //hard-coded for now
@@ -103,14 +103,14 @@ public class EnchantmentHandler implements ProcessPacket<Client> {
                     break;
                 case SCROLL_RESULT:
                     if (equip.getUpgradeSlots() < 1) {
-                        c.SendPacket(CWvsContext.enableActions());
+                        c.SendPacket(WvsContext.enableActions());
                         return;
                     }
                     int cost = scroll.getCost();
                     if (chr.haveItem(4001832, cost)) {
                         chr.removeItem(4001832, cost);
                     } else {
-                        c.SendPacket(CWvsContext.enableActions());
+                        c.SendPacket(WvsContext.enableActions());
                         return;
                     }
                     int probability = 0;
@@ -154,7 +154,7 @@ public class EnchantmentHandler implements ProcessPacket<Client> {
                 case STARFORCE_RESULT:
                     enchant.setRates(equip);
                     if (chr.getMeso() < enchant.getCost()) {
-                        chr.write(CWvsContext.enableActions());
+                        chr.write(WvsContext.enableActions());
                         return;
                     } else {
                         chr.gainMeso(-enchant.getCost(), false);
@@ -219,7 +219,7 @@ public class EnchantmentHandler implements ProcessPacket<Client> {
             }
         }
         //chr.fakeRelog2();
-        c.SendPacket(CWvsContext.enchantmentSystem(enchant));
+        c.SendPacket(WvsContext.enchantmentSystem(enchant));
     }
 
     /*

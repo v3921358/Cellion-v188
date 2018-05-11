@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.QuestStatus;
 import client.Skill;
 import client.SkillEntry;
@@ -22,21 +22,21 @@ import server.quest.Quest;
 import server.skills.VCore;
 import server.skills.VCore.EnforceOption;
 import server.skills.VMatrixRecord;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 /**
  *
  * @author Five
  */
-public final class UpdateMatrixHandler implements ProcessPacket<Client> {
+public final class UpdateMatrixHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int nUpdateType = iPacket.DecodeInt(); // 0 = Enable, 1 = Disable, 3 = Enhance, 4 = DisassembleSingle, 5 = DisassembleMultiple, 6 = CraftNode, 8 = CraftNodestone
         if (nUpdateType == VMatrixRecord.Enable || nUpdateType == VMatrixRecord.Disable) {
             int nSlot = iPacket.DecodeInt(); // VMatrix Record
@@ -50,7 +50,7 @@ public final class UpdateMatrixHandler implements ProcessPacket<Client> {
                 }
             }
             UpdateMatrixRecord(c);
-            c.SendPacket(CWvsContext.OnVMatrixUpdate(c.getPlayer().aVMatrixRecord, true, nUpdateType, nSlot));
+            c.SendPacket(WvsContext.OnVMatrixUpdate(c.getPlayer().aVMatrixRecord, true, nUpdateType, nSlot));
         } else if (nUpdateType == VMatrixRecord.DisassembleSingle) {
             int nSlot = iPacket.DecodeInt();
             iPacket.DecodeInt(); // Always -1
@@ -77,10 +77,10 @@ public final class UpdateMatrixHandler implements ProcessPacket<Client> {
                     //int nTotalShard = Integer.valueOf(pStr.GetValue("count")) + nShard;
                     //pStr.SetValue("count", Integer.toString(nTotalShard));
                     //SendPacket(CWvsContext.OnMessage(new Message(MessageResult.QuestRecordExMessage, QuestRecordEx.NodeShard, pStr.GetRawString())));
-                    c.SendPacket(CWvsContext.messagePacket(new UpdateQuestMessage(1477, pQuest.getCustomData())));
+                    c.SendPacket(WvsContext.messagePacket(new UpdateQuestMessage(1477, pQuest.getCustomData())));
                     UpdateMatrixRecord(c);
-                    c.SendPacket(CWvsContext.OnVMatrixUpdate(c.getPlayer().aVMatrixRecord, true, nUpdateType, nSlot));
-                    c.SendPacket(CWvsContext.OnNodeShardResult(nShard));
+                    c.SendPacket(WvsContext.OnVMatrixUpdate(c.getPlayer().aVMatrixRecord, true, nUpdateType, nSlot));
+                    c.SendPacket(WvsContext.OnNodeShardResult(nShard));
                     //usCharacterDataModFlag |= DBChar.QuestRecordEx.Get();
                 }
             }
@@ -126,11 +126,11 @@ public final class UpdateMatrixHandler implements ProcessPacket<Client> {
                 pQuest.setCustomData("count=" + Integer.toString(nTotalShard));
 
                 //SendPacket(CWvsContext.OnMessage(new Message(MessageResult.QuestRecordExMessage, QuestRecordEx.NodeShard, pStr.GetRawString())));
-                c.SendPacket(CWvsContext.messagePacket(new UpdateQuestMessage(1477, pQuest.getCustomData())));
+                c.SendPacket(WvsContext.messagePacket(new UpdateQuestMessage(1477, pQuest.getCustomData())));
 
                 UpdateMatrixRecord(c);
-                c.SendPacket(CWvsContext.OnVMatrixUpdate(c.getPlayer().aVMatrixRecord, true, nUpdateType, 0));
-                c.SendPacket(CWvsContext.OnNodeShardResult(nGainShard));
+                c.SendPacket(WvsContext.OnVMatrixUpdate(c.getPlayer().aVMatrixRecord, true, nUpdateType, 0));
+                c.SendPacket(WvsContext.OnNodeShardResult(nGainShard));
                 //usCharacterDataModFlag |= DBChar.QuestRecordEx.Get();
             }
         } else if (nUpdateType == VMatrixRecord.Enhance) {
@@ -173,8 +173,8 @@ public final class UpdateMatrixHandler implements ProcessPacket<Client> {
                     }
                 }
                 UpdateMatrixRecord(c);
-                c.SendPacket(CWvsContext.OnVMatrixUpdate(c.getPlayer().aVMatrixRecord, true, nUpdateType, 0));
-                c.SendPacket(CWvsContext.OnNodeEnhanceResult(c.getPlayer().aVMatrixRecord.indexOf(pRecord), nGainExpBackup, nCurSLV, pRecord.nSLV));
+                c.SendPacket(WvsContext.OnVMatrixUpdate(c.getPlayer().aVMatrixRecord, true, nUpdateType, 0));
+                c.SendPacket(WvsContext.OnNodeEnhanceResult(c.getPlayer().aVMatrixRecord.indexOf(pRecord), nGainExpBackup, nCurSLV, pRecord.nSLV));
             }
         } else if (nUpdateType == VMatrixRecord.CraftNode) {
             int nCoreID = iPacket.DecodeInt();
@@ -203,7 +203,7 @@ public final class UpdateMatrixHandler implements ProcessPacket<Client> {
                         //pStr.SetValue("count", Integer.toString(nShardCount - nPrice));
                         pQuest.setCustomData("count=" + Integer.toString(nShardCount - nPrice));
                         //SendPacket(WvsContext.OnMessage(new Message(MessageResult.QuestRecordExMessage, QuestRecordEx.NodeShard, pStr.GetRawString())));
-                        c.SendPacket(CWvsContext.messagePacket(new UpdateQuestMessage(1477, pQuest.getCustomData())));
+                        c.SendPacket(WvsContext.messagePacket(new UpdateQuestMessage(1477, pQuest.getCustomData())));
                         //usCharacterDataModFlag |= DBChar.QuestRecordEx.Get();
                         VMatrixRecord pRecord = new VMatrixRecord();
                         pRecord.nCoreID = pCore.nCoreID;
@@ -238,15 +238,15 @@ public final class UpdateMatrixHandler implements ProcessPacket<Client> {
                         }
                         c.getPlayer().aVMatrixRecord.add(pRecord);
                         UpdateMatrixRecord(c);
-                        c.SendPacket(CWvsContext.OnVMatrixUpdate(c.getPlayer().aVMatrixRecord, true, nUpdateType, 0));
-                        c.SendPacket(CWvsContext.OnNodeCraftResult(nCoreID, pRecord.nSkillID, pRecord.nSkillID2, pRecord.nSkillID3));
+                        c.SendPacket(WvsContext.OnVMatrixUpdate(c.getPlayer().aVMatrixRecord, true, nUpdateType, 0));
+                        c.SendPacket(WvsContext.OnNodeCraftResult(nCoreID, pRecord.nSkillID, pRecord.nSkillID2, pRecord.nSkillID3));
                     }
                 }
             }
         }
     }
 
-    public void UpdateMatrixRecord(Client c) {
+    public void UpdateMatrixRecord(ClientSocket c) {
         // Neckson seriously removes all then re-adds and sends two skillrecord packets
         //List<SkillRecord> aChange = new ArrayList<>();
         //SkillRecord pSkillRecord;
@@ -308,7 +308,7 @@ public final class UpdateMatrixHandler implements ProcessPacket<Client> {
         }
         //pUserSkillRecord.SendCharacterSkillRecord(Request.Excl, aChange);
         //aChange.clear();
-        c.SendPacket(CWvsContext.updateSkills(mChange, false));
+        c.SendPacket(WvsContext.updateSkills(mChange, false));
         mChange.clear();
 
         for (VMatrixRecord pMatrixRecord : c.getPlayer().aVMatrixRecord) {
@@ -388,7 +388,7 @@ public final class UpdateMatrixHandler implements ProcessPacket<Client> {
         }
         //pUserSkillRecord.SendCharacterSkillRecord(Request.Excl, aChange);
         //aChange.clear();
-        c.SendPacket(CWvsContext.updateSkills(mChange, false));
+        c.SendPacket(WvsContext.updateSkills(mChange, false));
         mChange.clear();
 
         //usCharacterDataModFlag |= DBChar.SkillRecord.Get() | DBChar.WildHunterInfo.Get();

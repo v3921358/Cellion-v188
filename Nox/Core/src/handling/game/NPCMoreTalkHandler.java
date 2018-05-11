@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import scripting.NPCConversationManager;
 import scripting.provider.NPCChatType;
 import scripting.provider.NPCScriptManager;
@@ -8,22 +8,22 @@ import server.AutobanManager;
 import server.maps.MapScriptMethods;
 import net.InPacket;
 import server.maps.objects.User.MapleCharacterConversationType;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class NPCMoreTalkHandler implements ProcessPacket<Client> {
+public class NPCMoreTalkHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final NPCChatType lastMsgType = NPCChatType.fromInt(iPacket.DecodeByte()); // 00 (last msg type I think)
         if (lastMsgType == NPCChatType.OnAskAvater && iPacket.GetRemainder() >= 4) {
             iPacket.DecodeShort();
@@ -34,10 +34,10 @@ public class NPCMoreTalkHandler implements ProcessPacket<Client> {
                 || (lastMsgType == NPCChatType.OnAskSlideMenu && c.getPlayer().getDirection() == -1)) && action == 1) {
             byte lastbyte = iPacket.DecodeByte(); // 00 = end chat, 01 == follow
             if (lastbyte == 0) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
             } else {
                 MapScriptMethods.startDirectionInfo(c.getPlayer(), lastMsgType == NPCChatType.OnAskUserDirection);
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
             }
             return;
         }

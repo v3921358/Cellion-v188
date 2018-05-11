@@ -21,21 +21,21 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.maps.objects.MonsterFamiliar;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class SpawnFamiliarHandler implements ProcessPacket<Client> {
+public final class SpawnFamiliarHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         int mId = iPacket.DecodeInt();
         c.getPlayer().removeFamiliar();
@@ -47,7 +47,7 @@ public final class SpawnFamiliarHandler implements ProcessPacket<Client> {
                 c.getPlayer().spawnFamiliar(mf, false);
             }
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 
 }

@@ -2,7 +2,7 @@ package server.maps.objects;
 
 import java.awt.Point;
 
-import client.Client;
+import client.ClientSocket;
 import net.OutPacket;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
@@ -119,12 +119,12 @@ public final class MonsterFamiliar extends AnimatedMapleMapObject {
     }
 
     @Override
-    public void sendSpawnData(Client client) {
+    public void sendSpawnData(ClientSocket client) {
         client.SendPacket(CField.spawnFamiliar(this, true, false));
     }
 
     @Override
-    public void sendDestroyData(Client client) {
+    public void sendDestroyData(ClientSocket client) {
         client.SendPacket(CField.spawnFamiliar(this, false, false));
     }
 

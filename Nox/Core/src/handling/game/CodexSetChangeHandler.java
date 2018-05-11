@@ -21,23 +21,23 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import constants.GameConstants;
 import server.maps.objects.User;
 import server.quest.Quest;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class CodexSetChangeHandler implements ProcessPacket<Client> {
+public final class CodexSetChangeHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr == null || chr.getMap() == null) {
             return;
@@ -46,7 +46,7 @@ public final class CodexSetChangeHandler implements ProcessPacket<Client> {
         if (chr.getMonsterBook().changeSet(set)) {
             chr.getMonsterBook().applyBook(chr, false);
             chr.getQuestNAdd(Quest.getInstance(GameConstants.CURRENT_SET)).setCustomData(String.valueOf(set));
-            c.SendPacket(CWvsContext.changeCardSet(set));
+            c.SendPacket(WvsContext.changeCardSet(set));
         }
     }
 

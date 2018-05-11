@@ -1,6 +1,6 @@
 package handling.login;
 
-import client.Client;
+import client.ClientSocket;
 import constants.WorldConstants;
 import service.ChannelServer;
 import service.LoginServer;
@@ -14,12 +14,12 @@ import tools.packet.CLogin;
  */
 public class PicHandling {
 
-    private static boolean loginFailCount(final Client c) {
+    private static boolean loginFailCount(final ClientSocket c) {
         c.loginAttempt++;
         return c.loginAttempt > 3;
     }
 
-    public static void CharLogin(InPacket iPacket, Client c, boolean view, boolean haspic) {
+    public static void CharLogin(InPacket iPacket, ClientSocket c, boolean view, boolean haspic) {
         iPacket.DecodeByte(); // 1?
         iPacket.DecodeByte(); // 1?
         final int charId = iPacket.DecodeInt();
@@ -55,7 +55,7 @@ public class PicHandling {
         final String s = c.getSessionIPAddress();
         LoginServer.putLoginAuth(charId, s.substring(s.indexOf('/') + 1, s.length()), c.getTempIP(), c.getChannel(), 0);
 
-        c.updateLoginState(Client.MapleClientLoginState.Login_ServerTransition, s);
+        c.updateLoginState(ClientSocket.MapleClientLoginState.Login_ServerTransition, s);
         c.SendPacket(CField.getServerIP(c, Integer.parseInt(ChannelServer.getInstance(c.getChannel()).getIP().split(":")[1]), charId));
     }
 }

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import client.buddy.Buddy;
 import client.buddy.BuddyFlags;
 import client.buddy.BuddyHandler;
@@ -23,22 +23,22 @@ import service.ChannelServer;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.LogHelper;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class BuddylistModifyHandler implements ProcessPacket<Client> {
+public class BuddylistModifyHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         BuddyHandler.handleOperation(c, iPacket);
     }
 
@@ -84,7 +84,7 @@ public class BuddylistModifyHandler implements ProcessPacket<Client> {
         return ret;
     }
 
-    private static void notifyRemoteChannel(Client c, int remoteChannel, int otherCid, BuddyOperation operation, boolean accountFriend, String nickname) {
+    private static void notifyRemoteChannel(ClientSocket c, int remoteChannel, int otherCid, BuddyOperation operation, boolean accountFriend, String nickname) {
         User player = c.getPlayer();
         if (remoteChannel > 0) {
             World.WorldBuddy.buddyChanged(otherCid, player.getId(), player.getName(), c.getChannel(), operation, accountFriend, nickname);

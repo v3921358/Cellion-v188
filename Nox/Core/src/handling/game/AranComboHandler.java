@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.jobs.Hero;
 import client.jobs.Hero.AranHandler;
 import handling.world.PlayerHandler;
@@ -29,15 +29,15 @@ import server.maps.objects.User;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class AranComboHandler implements ProcessPacket<Client> {
+public final class AranComboHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         //PlayerHandler.aranCombo(c, chr, 1);
 

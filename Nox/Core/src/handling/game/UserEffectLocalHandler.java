@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -16,15 +16,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UserEffectLocalHandler implements ProcessPacket<Client> {
+public class UserEffectLocalHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         int skillId = iPacket.DecodeInt();

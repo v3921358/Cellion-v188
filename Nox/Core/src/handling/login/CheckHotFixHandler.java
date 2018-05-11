@@ -1,6 +1,6 @@
 package handling.login;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import tools.packet.CLogin;
 import net.ProcessPacket;
@@ -9,15 +9,15 @@ import net.ProcessPacket;
  *
  * @author Lloyd Korn
  */
-public class CheckHotFixHandler implements ProcessPacket<Client> {
+public class CheckHotFixHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         c.SendPacket(CLogin.ApplyHotFix());
     }
 }

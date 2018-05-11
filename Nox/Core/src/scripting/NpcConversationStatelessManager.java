@@ -1,6 +1,6 @@
 package scripting;
 
-import client.Client;
+import client.ClientSocket;
 import javax.script.Invocable;
 
 /**
@@ -13,7 +13,7 @@ public class NpcConversationStatelessManager extends AbstractPlayerInteraction {
     private final NpcConversationType type; // -1 = NPC, 0 = start quest, 1 = end quest
     private final Invocable iv;
 
-    public NpcConversationStatelessManager(Client c, int npc, int questid, String npcscript, NpcConversationType type, Invocable iv) {
+    public NpcConversationStatelessManager(ClientSocket c, int npc, int questid, String npcscript, NpcConversationType type, Invocable iv) {
         super(c, npc, questid, npcscript);
         this.type = type;
         this.iv = iv;

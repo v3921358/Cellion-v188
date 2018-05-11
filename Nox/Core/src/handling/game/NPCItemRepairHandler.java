@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -13,15 +13,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class NPCItemRepairHandler implements ProcessPacket<Client> {
+public class NPCItemRepairHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if (iPacket.GetRemainder() < 4) { //leafre for now
             return;
         }

@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.CharacterTemporaryStat;
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -13,15 +13,15 @@ import net.ProcessPacket;
  *
  * @author Lloyd Korn
  */
-public class RemoveSummonHandler implements ProcessPacket<Client> {
+public class RemoveSummonHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final MapleMapObject obj = c.getPlayer().getMap().getMapObject(iPacket.DecodeInt(), MapleMapObjectType.SUMMON);
         if (obj == null || !(obj instanceof Summon)) {
             return;

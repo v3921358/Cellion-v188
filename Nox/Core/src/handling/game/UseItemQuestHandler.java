@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.QuestStatus;
 import client.QuestStatus.QuestState;
 import client.inventory.Item;
@@ -17,15 +17,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseItemQuestHandler implements ProcessPacket<Client> {
+public class UseItemQuestHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final short slot = iPacket.DecodeShort();
         final int itemId = iPacket.DecodeInt();
         final Item item = c.getPlayer().getInventory(MapleInventoryType.ETC).getItem(slot);

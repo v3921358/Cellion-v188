@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -16,22 +16,22 @@ import server.maps.objects.User;
 import tools.Pair;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class UseRewardItemHandler implements ProcessPacket<Client> {
+public class UseRewardItemHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         //System.out.println("[Reward Item] " + iPacket.toString());
         final byte slot = (byte) iPacket.DecodeShort();
         final int itemId = iPacket.DecodeInt();
@@ -40,9 +40,9 @@ public class UseRewardItemHandler implements ProcessPacket<Client> {
         UseRewardItem(slot, itemId, unseal, c, c.getPlayer());
     }
 
-    public static boolean UseRewardItem(byte slot, int itemId, final boolean unseal, final Client c, final User chr) {
+    public static boolean UseRewardItem(byte slot, int itemId, final boolean unseal, final ClientSocket c, final User chr) {
         final Item toUse = c.getPlayer().getInventory(GameConstants.getInventoryType(itemId)).getItem(slot);
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
         if (toUse != null && toUse.getQuantity() >= 1 && toUse.getItemId() == itemId && !chr.hasBlockedInventory()) {
             if (chr.getInventory(MapleInventoryType.EQUIP).getNextFreeSlot() > -1 && chr.getInventory(MapleInventoryType.USE).getNextFreeSlot() > -1 && chr.getInventory(MapleInventoryType.SETUP).getNextFreeSlot() > -1 && chr.getInventory(MapleInventoryType.ETC).getNextFreeSlot() > -1) {
                 final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();

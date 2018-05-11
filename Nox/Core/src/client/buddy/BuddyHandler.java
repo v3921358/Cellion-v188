@@ -5,7 +5,7 @@
  */
 package client.buddy;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 
 import java.sql.Connection;
@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import client.buddy.Buddy;
 import client.buddy.BuddyFlags;
 import client.buddy.BuddyHandler;
@@ -31,9 +31,9 @@ import service.ChannelServer;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.LogHelper;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.Utility;
-import static tools.packet.CWvsContext.OnLoadAccountIDOfCharacterFriendResult;
+import static tools.packet.WvsContext.OnLoadAccountIDOfCharacterFriendResult;
 
 /**
  *
@@ -41,7 +41,7 @@ import static tools.packet.CWvsContext.OnLoadAccountIDOfCharacterFriendResult;
  */
 public class BuddyHandler {
 
-    public static void handleOperation(Client c, InPacket iPacket) {
+    public static void handleOperation(ClientSocket c, InPacket iPacket) {
         BuddyRequest mode = BuddyRequest.UNKNOWN.getRequest(iPacket.DecodeByte());
         BuddyList buddylist = c.getPlayer().getBuddylist();
         Buddy buddy = new Buddy();
@@ -60,10 +60,10 @@ public class BuddyHandler {
                 }
                 if (ble != null && (ble.getGroup().equals(group) || !ble.isPending())) {
                     buddy.setResult(BuddyResult.SET_FRIEND_DONE);
-                    c.SendPacket(CWvsContext.buddylistMessage(buddy));
+                    c.SendPacket(WvsContext.buddylistMessage(buddy));
                 } else if (buddylist.isFull()) {
                     buddy.setResult(BuddyResult.SET_FRIEND_FULL_ME);
-                    c.SendPacket(CWvsContext.buddylistMessage(buddy));
+                    c.SendPacket(WvsContext.buddylistMessage(buddy));
                 } else if (ble == null) {
                     try {
                         CharacterIdNameBuddyCapacity charWithId = null;
@@ -117,7 +117,7 @@ public class BuddyHandler {
 
                             }
                             if (buddyAddResult == BuddyOperation.BUDDYLIST_FULL) {
-                                c.SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_OTHER)));
+                                c.SendPacket(WvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_OTHER)));
                             } else {
                                 int displayChannel = -1;
                                 int otherCid = charWithId.getId();
@@ -146,10 +146,10 @@ public class BuddyHandler {
                                 buddylist.put(ble);
                                 buddy.setResult(BuddyResult.LOAD_FRIENDS);
                                 buddy.setEntries(new ArrayList<>(buddylist.getBuddies()));
-                                c.SendPacket(CWvsContext.buddylistMessage(buddy));
+                                c.SendPacket(WvsContext.buddylistMessage(buddy));
                             }
                         } else {
-                            c.SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_OTHER)));
+                            c.SendPacket(WvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_OTHER)));
                         }
                     } catch (SQLException e) {
                         LogHelper.SQL.get().info("There was an issue with adding buddies:\r\n", e);
@@ -159,7 +159,7 @@ public class BuddyHandler {
                     ble.setFlag(flag);
                     buddy.setResult(BuddyResult.LOAD_FRIENDS);
                     buddy.setEntries(new ArrayList<>(buddylist.getBuddies()));
-                    c.SendPacket(CWvsContext.buddylistMessage(buddy));
+                    c.SendPacket(WvsContext.buddylistMessage(buddy));
                 }
                 break;
             }
@@ -179,10 +179,10 @@ public class BuddyHandler {
                     buddylist.put(entry);
                     buddy.setResult(BuddyResult.LOAD_FRIENDS);
                     buddy.setEntries(new ArrayList<>(buddylist.getBuddies()));
-                    c.SendPacket(CWvsContext.buddylistMessage(buddy));
+                    c.SendPacket(WvsContext.buddylistMessage(buddy));
                     notifyRemoteChannel(c, channel, otherCid, BuddyOperation.ADD, false, "");
                 } else {
-                    c.SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_ME)));
+                    c.SendPacket(WvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_ME)));
                 }
                 c.getPlayer().OnlineBuddyListRequest(); //c.getPlayer().fakeRelog2();
                 break;
@@ -196,7 +196,7 @@ public class BuddyHandler {
                 buddylist.remove(otherCid);
                 buddy.setResult(BuddyResult.DELETE_FRIEND_DONE);
                 buddy.setEntry(ble);
-                c.SendPacket(CWvsContext.buddylistMessage(buddy));
+                c.SendPacket(WvsContext.buddylistMessage(buddy));
                 break;
             case ACCEPT_ACCOUNT_FRIEND: {
                 int index = iPacket.DecodeInt();
@@ -216,10 +216,10 @@ public class BuddyHandler {
                         buddylist.put(entry);
                         buddy.setResult(BuddyResult.LOAD_FRIENDS);
                         buddy.setEntries(new ArrayList<>(buddylist.getBuddies()));
-                        c.SendPacket(CWvsContext.buddylistMessage(buddy));
+                        c.SendPacket(WvsContext.buddylistMessage(buddy));
                         notifyRemoteChannel(c, channel, ble.getCharacterId(), BuddyOperation.ADD, true, ble.getNickname());
                     } else {
-                        c.SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_ME)));
+                        c.SendPacket(WvsContext.buddylistMessage(new Buddy(BuddyResult.SET_FRIEND_FULL_ME)));
                     }
                     c.getPlayer().OnlineBuddyListRequest(); //c.getPlayer().fakeRelog2();
                 }
@@ -280,7 +280,7 @@ public class BuddyHandler {
         return ret;
     }
 
-    private static void notifyRemoteChannel(Client c, int remoteChannel, int otherCid, BuddyOperation operation, boolean accountFriend, String nickname) {
+    private static void notifyRemoteChannel(ClientSocket c, int remoteChannel, int otherCid, BuddyOperation operation, boolean accountFriend, String nickname) {
         User player = c.getPlayer();
         if (remoteChannel > 0) {
             World.WorldBuddy.buddyChanged(otherCid, player.getId(), player.getName(), c.getChannel(), operation, accountFriend, nickname);

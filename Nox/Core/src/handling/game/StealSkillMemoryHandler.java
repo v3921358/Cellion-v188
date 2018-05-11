@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.SkillFactory;
 import constants.GameConstants;
 import java.util.ArrayList;
@@ -8,22 +8,22 @@ import java.util.List;
 import java.util.Map;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author Five
  */
-public class StealSkillMemoryHandler implements ProcessPacket<Client> {
+public class StealSkillMemoryHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int nStealSkillID = iPacket.DecodeInt();
         int dwCharacterID = iPacket.DecodeInt();
         boolean bRemove = iPacket.DecodeBool();
@@ -87,6 +87,6 @@ public class StealSkillMemoryHandler implements ProcessPacket<Client> {
                 nResult = 1; // NoTarget
             }
         }
-        c.SendPacket(CWvsContext.OnChangeStealMemoryResult(1, nResult, nSlotID, nPOS, nStealSkillID, nStealSLV, nStealSMLV));
+        c.SendPacket(WvsContext.OnChangeStealMemoryResult(1, nResult, nSlotID, nPOS, nStealSkillID, nStealSLV, nStealSMLV));
     }
 }

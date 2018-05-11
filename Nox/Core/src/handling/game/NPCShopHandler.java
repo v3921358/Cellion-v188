@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.MapleInventoryType;
 import client.inventory.ModifyInventory;
 import constants.GameConstants;
@@ -10,7 +10,7 @@ import server.maps.objects.User;
 import server.shops.MapleShop;
 import net.InPacket;
 import scripting.provider.NPCScriptManager;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 import server.MapleInventoryManipulator;
 import server.shops.MapleShopFactory;
@@ -19,10 +19,10 @@ import server.shops.MapleShopFactory;
  *
  * @author Mazen Massoud
  */
-public class NPCShopHandler implements ProcessPacket<Client> {
+public class NPCShopHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
@@ -54,7 +54,7 @@ public class NPCShopHandler implements ProcessPacket<Client> {
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
 
         NPCShopOperation bmode = NPCShopOperation.getFromValue(iPacket.DecodeByte());
@@ -84,7 +84,7 @@ public class NPCShopHandler implements ProcessPacket<Client> {
                     nSlot++; // Increase this by one to match the index of our shops.
                     oShop.buy(c, nSlot, nItem, nQuantity);
                 }
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 if (pPlayer.isIntern()) {
                     pPlayer.dropMessage(5, "[Shop Debug] Item ID : " + nItem + " (Purchased)");
                 }
@@ -99,7 +99,7 @@ public class NPCShopHandler implements ProcessPacket<Client> {
                 int itemId = iPacket.DecodeInt();
                 short quantity = iPacket.DecodeShort();
                 shop.sell(c, GameConstants.getInventoryType(itemId), slot, quantity);
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
 
                 if (pPlayer.isIntern()) {
                     pPlayer.dropMessage(5, "[Shop Debug] Item ID : " + itemId + " (Sold)");
@@ -113,21 +113,21 @@ public class NPCShopHandler implements ProcessPacket<Client> {
                 }
                 byte slot = (byte) iPacket.DecodeShort();
                 shop.recharge(c, slot);
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 break;
             }
             case NPC_SHOP_ACTION_CLOSE: {
                 c.removeClickedNPC();
                 NPCScriptManager.getInstance().dispose(c);
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 break;
             }
             case NOT_FOUND:
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 break;
             default:
                 pPlayer.setConversation(User.MapleCharacterConversationType.None);
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 break;
         }
     }

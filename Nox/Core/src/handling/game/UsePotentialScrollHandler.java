@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Equip.ScrollResult;
 import client.inventory.EquipSlotType;
@@ -21,22 +21,22 @@ import server.maps.objects.User;
 import server.potentials.ItemPotentialProvider;
 import server.potentials.ItemPotentialTierType;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author Lloyd Korn
  */
-public class UsePotentialScrollHandler implements ProcessPacket<Client> {
+public class UsePotentialScrollHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         //A2 C5 41 30 
         //03 00 
         //01 00 
@@ -54,7 +54,7 @@ public class UsePotentialScrollHandler implements ProcessPacket<Client> {
 
         if (scroll == null || scroll.getQuantity() <= 0 || toScroll == null
                 || !ItemConstants.isPotentialScroll(scroll.getItemId())) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
 
@@ -68,7 +68,7 @@ public class UsePotentialScrollHandler implements ProcessPacket<Client> {
 
         if (totalUpgradeSlot == 0) {
             if (slotType != EquipSlotType.Shield_OrDualBlade && slotType != EquipSlotType.Si_Emblem) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
         }
@@ -143,6 +143,6 @@ public class UsePotentialScrollHandler implements ProcessPacket<Client> {
         c.SendPacket(CField.enchantResult(result == Equip.ScrollResult.SUCCESS ? 1 : result == ScrollResult.CURSE ? 2 : 0));
         chr.getMap().broadcastMessage(chr, CField.getScrollEffect(c.getPlayer().getId(), result, false, toScroll.getItemId(), scroll.getItemId()), true);
 
-        c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+        c.SendPacket(WvsContext.inventoryOperation(true, modifications));
     }
 }

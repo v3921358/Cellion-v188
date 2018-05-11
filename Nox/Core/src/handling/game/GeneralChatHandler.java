@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import constants.ServerConstants;
 import handling.PacketThrottleLimits;
 import net.InPacket;
@@ -9,7 +9,7 @@ import server.commands.CommandProcessor;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
@@ -23,15 +23,15 @@ import net.ProcessPacket;
         MinTimeMillisBetweenPackets = 100,
         FunctionName = "GeneralChatHandler",
         BanType = PacketThrottleLimits.PacketThrottleBanType.Disconnect)
-public class GeneralChatHandler implements ProcessPacket<Client> {
+public class GeneralChatHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
 
         if (chr == null) {
@@ -103,7 +103,7 @@ public class GeneralChatHandler implements ProcessPacket<Client> {
                     }
                 }
             } else {
-                c.SendPacket(CWvsContext.broadcastMsg(6, "You have been muted and are unable to talk."));
+                c.SendPacket(WvsContext.broadcastMsg(6, "You have been muted and are unable to talk."));
             }
         }
     }

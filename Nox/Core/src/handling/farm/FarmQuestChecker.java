@@ -21,19 +21,19 @@
  */
 package handling.farm;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class FarmQuestChecker implements ProcessPacket<Client> {
+public final class FarmQuestChecker implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int farmId = iPacket.DecodeInt();
         //TODO code farm quests
         if (c.getFarm().getName().equals("Creating...")) {

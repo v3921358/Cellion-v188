@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import constants.GameConstants;
@@ -34,7 +34,7 @@ import server.MapleItemInformationProvider;
 import server.Timer.EtcTimer;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.PlayerShopPacket;
 
 public class HiredMerchant extends AbstractPlayerStore {
@@ -81,7 +81,7 @@ public class HiredMerchant extends AbstractPlayerStore {
     }
 
     @Override
-    public void buy(Client c, int item, short quantity) {
+    public void buy(ClientSocket c, int item, short quantity) {
         final MaplePlayerShopItem pItem = items.get(item);
         final Item shopItem = pItem.item;
         final Item newItem = shopItem.copy();
@@ -112,11 +112,11 @@ public class HiredMerchant extends AbstractPlayerStore {
                 }
             } else {
                 c.getPlayer().dropMessage(1, "The seller has too many mesos.");
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
             }
         } else {
             c.getPlayer().dropMessage(1, "Your inventory is full.");
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
         }
     }
 
@@ -151,14 +151,14 @@ public class HiredMerchant extends AbstractPlayerStore {
     }
 
     @Override
-    public void sendDestroyData(Client client) {
+    public void sendDestroyData(ClientSocket client) {
         if (isAvailable()) {
             client.SendPacket(PlayerShopPacket.destroyHiredMerchant(getOwnerId()));
         }
     }
 
     @Override
-    public void sendSpawnData(Client client) {
+    public void sendSpawnData(ClientSocket client) {
         if (isAvailable()) {
             client.SendPacket(PlayerShopPacket.spawnHiredMerchant(this));
         }
@@ -176,11 +176,11 @@ public class HiredMerchant extends AbstractPlayerStore {
         blacklist.remove(bl);
     }
 
-    public final void sendBlackList(final Client c) {
+    public final void sendBlackList(final ClientSocket c) {
         c.SendPacket(PlayerShopPacket.MerchantBlackListView(blacklist));
     }
 
-    public final void sendVisitor(final Client c) {
+    public final void sendVisitor(final ClientSocket c) {
         c.SendPacket(PlayerShopPacket.MerchantVisitorView(visitors));
     }
 }

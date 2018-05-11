@@ -35,7 +35,7 @@ import tools.packet.BuffPacket;
 import tools.packet.CField;
 import tools.packet.CField.EffectPacket;
 import tools.packet.CField.EffectPacket.UserEffectCodes;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.JobPacket;
 import tools.packet.JobPacket.PhantomPacket;
 
@@ -406,20 +406,20 @@ public class MapleStatEffect implements Serializable {
 
     public final boolean applyTo(final User applyfrom, final User applyto, final boolean primary, final Point pos, int newDuration) {
         if (isHeal() && (applyfrom.getMapId() == 749040100 || applyto.getMapId() == 749040100)) {
-            applyfrom.getClient().SendPacket(CWvsContext.enableActions());
+            applyfrom.getClient().SendPacket(WvsContext.enableActions());
             return false; //z
         } else if ((isSoaring_Mount() && applyfrom.getBuffedValue(CharacterTemporaryStat.RideVehicle) == null) || (isSoaring_Normal() && !applyfrom.getMap().getSharedMapResources().needSkillForFly)) {
-            applyfrom.getClient().SendPacket(CWvsContext.enableActions());
+            applyfrom.getClient().SendPacket(WvsContext.enableActions());
             return false;
         } else if (sourceid == 4341006 && applyfrom.getBuffedValue(CharacterTemporaryStat.ShadowPartner) == null) {
-            applyfrom.getClient().SendPacket(CWvsContext.enableActions());
+            applyfrom.getClient().SendPacket(WvsContext.enableActions());
             return false;
         } else if (isShadow() && applyfrom.getJob() / 100 % 10 != 4) { //pirate/shadow = dc
-            applyfrom.getClient().SendPacket(CWvsContext.enableActions());
+            applyfrom.getClient().SendPacket(WvsContext.enableActions());
             return false;
         } else if (sourceid == 33101004 && applyfrom.getMap().getSharedMapResources().town) {
             applyfrom.dropMessage(5, "You may not use this skill in towns.");
-            applyfrom.getClient().SendPacket(CWvsContext.enableActions());
+            applyfrom.getClient().SendPacket(WvsContext.enableActions());
             return false;
         }
 
@@ -437,7 +437,7 @@ public class MapleStatEffect implements Serializable {
         if (primary) {
             if (info.get(MapleStatInfo.itemConNo) != 0 && !applyto.inPVP()) {
                 if (!applyto.haveItem(info.get(MapleStatInfo.itemCon), info.get(MapleStatInfo.itemConNo), false, true)) {
-                    applyto.getClient().SendPacket(CWvsContext.enableActions());
+                    applyto.getClient().SendPacket(WvsContext.enableActions());
                     return false;
                 }
                 MapleInventoryManipulator.removeById(applyto.getClient(), GameConstants.getInventoryType(info.get(MapleStatInfo.itemCon)), info.get(MapleStatInfo.itemCon), info.get(MapleStatInfo.itemConNo), false, true);
@@ -466,14 +466,14 @@ public class MapleStatEffect implements Serializable {
         final Map<MapleStat, Long> hpmpupdate = new EnumMap<>(MapleStat.class);
         if (hpchange != 0) {
             if (hpchange < 0 && (-hpchange) > stat.getHp() && !applyto.hasDisease(MapleDisease.ZOMBIFY)) {
-                applyto.getClient().SendPacket(CWvsContext.enableActions());
+                applyto.getClient().SendPacket(WvsContext.enableActions());
                 return false;
             }
             stat.setHp(stat.getHp() + hpchange, applyto);
         }
         if (mpchange != 0) {
             if (mpchange < 0 && (-mpchange) > stat.getMp()) {
-                applyto.getClient().SendPacket(CWvsContext.enableActions());
+                applyto.getClient().SendPacket(WvsContext.enableActions());
                 return false;
             }
             //short converting needs math.min cuz of overflow
@@ -484,7 +484,7 @@ public class MapleStatEffect implements Serializable {
         }
         hpmpupdate.put(MapleStat.HP, Long.valueOf(stat.getHp()));
 
-        applyto.getClient().SendPacket(CWvsContext.updatePlayerStats(hpmpupdate, true, applyto));
+        applyto.getClient().SendPacket(WvsContext.updatePlayerStats(hpmpupdate, true, applyto));
         if (powerchange != 0) {
             if (applyto.getXenonSurplus() - powerchange < 0) {
                 return false;
@@ -499,7 +499,7 @@ public class MapleStatEffect implements Serializable {
             final int mobid = ii.getCardMobId(sourceid);
             if (mobid > 0) {
                 final boolean done = applyto.getMonsterBook().monsterCaught(applyto.getClient(), mobid, MapleLifeFactory.getMonsterStats(mobid).getName());
-                applyto.getClient().SendPacket(CWvsContext.getCard(done ? sourceid : 0, 1));
+                applyto.getClient().SendPacket(WvsContext.getCard(done ? sourceid : 0, 1));
             }
         } else if (isReturnScroll()) {
             applyReturnScroll(applyto);
@@ -828,7 +828,7 @@ public class MapleStatEffect implements Serializable {
             final MechDoor door = new MechDoor(applyto, new Point(pos == null ? applyto.getTruePosition() : pos), newId);
             applyto.getMap().spawnMechDoor(door);
             applyto.addMechDoor(door);
-            applyto.getClient().SendPacket(CWvsContext.mechPortal(door.getTruePosition()));
+            applyto.getClient().SendPacket(WvsContext.mechPortal(door.getTruePosition()));
             if (!applyBuff) {
                 return true; //do not apply buff until 2 doors spawned
             }
@@ -836,7 +836,7 @@ public class MapleStatEffect implements Serializable {
         if (primary && availableMap != null) {
             for (Pair<Integer, Integer> e : availableMap) {
                 if (applyto.getMapId() < e.left || applyto.getMapId() > e.right) {
-                    applyto.getClient().SendPacket(CWvsContext.enableActions());
+                    applyto.getClient().SendPacket(WvsContext.enableActions());
                     return true;
                 }
             }
@@ -1341,7 +1341,7 @@ public class MapleStatEffect implements Serializable {
             case Xenon.EMERGENCY_RESUPPLY: ///xenon emergency by @Mally
             {
                 applyto.gainXenonSurplus((short) 10);
-                applyfrom.getClient().SendPacket(CWvsContext.enableActions());
+                applyfrom.getClient().SendPacket(WvsContext.enableActions());
                 break;
             }
             case Luminous.CHANGE_LIGHTDARK_MODE:
@@ -1419,7 +1419,7 @@ public class MapleStatEffect implements Serializable {
                 effects = new EnumMap(CharacterTemporaryStat.class);
                 effects.put(CharacterTemporaryStat.Judgement, zz);
                 if (zz == 5) {
-                    applyfrom.getClient().SendPacket(CWvsContext.enableActions());
+                    applyfrom.getClient().SendPacket(WvsContext.enableActions());
                 }
                 break;
             case WhiteKnight.LIGHTNING_CHARGE_1:
@@ -1448,7 +1448,7 @@ public class MapleStatEffect implements Serializable {
             case DemonAvenger.OVERLOAD_RELEASE: {
                 applyto.setExceed((short) 0);
                 applyto.addHP((int) ((applyto.getStat().getCurrentMaxHp() * (level / 100.0D)) * (getX() / 100.0D)));
-                applyfrom.getClient().SendPacket(CWvsContext.enableActions());
+                applyfrom.getClient().SendPacket(WvsContext.enableActions());
                 applyto.getClient().SendPacket(JobPacket.AvengerPacket.cancelExceed()); //Set Exceed to 0
                 break;
             }
@@ -1457,7 +1457,7 @@ public class MapleStatEffect implements Serializable {
                 effects.put(CharacterTemporaryStat.IgnoreTargetDEF, info.get(MapleStatInfo.ignoreMobpdpR));
                 effects.put(CharacterTemporaryStat.BdR, info.get(MapleStatInfo.indieBDR));
                 applyto.addHP((int) ((applyto.getStat().getCurrentMaxHp() * (level / 100.0D)) * (getX() / 100.0D)));
-                applyfrom.getClient().SendPacket(CWvsContext.enableActions());
+                applyfrom.getClient().SendPacket(WvsContext.enableActions());
                 break;
             }
         }

@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.MapleStat;
 import client.PlayerStats;
 import constants.GameConstants;
@@ -8,7 +8,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 import server.Randomizer;
 
@@ -16,15 +16,15 @@ import server.Randomizer;
  *
  * @author
  */
-public class AutoDistributeAPHandler implements ProcessPacket<Client> {
+public class AutoDistributeAPHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         chr.updateTick(iPacket.DecodeInt());
@@ -57,7 +57,7 @@ public class AutoDistributeAPHandler implements ProcessPacket<Client> {
                 chr.setRemainingAp((short) (chr.getRemainingAp() - (amount)));
                 statupdate.put(MapleStat.AVAILABLEAP, (long) chr.getRemainingAp());
 
-                c.SendPacket(CWvsContext.updatePlayerStats(statupdate, true, chr));
+                c.SendPacket(WvsContext.updatePlayerStats(statupdate, true, chr));
             }
         }
 
@@ -114,7 +114,7 @@ public class AutoDistributeAPHandler implements ProcessPacket<Client> {
             }
             chr.setRemainingAp((short) (chr.getRemainingAp() - (amount + amount2)));
             statupdate.put(MapleStat.AVAILABLEAP, (long) chr.getRemainingAp());
-            c.SendPacket(CWvsContext.updatePlayerStats(statupdate, true, chr));
+            c.SendPacket(WvsContext.updatePlayerStats(statupdate, true, chr));
         }
     }
 

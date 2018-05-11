@@ -1,28 +1,28 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
 import java.util.HashMap;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class ResetHyperHandler implements ProcessPacket<Client> {
+public class ResetHyperHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         chr.updateTick(iPacket.DecodeInt());
@@ -33,7 +33,7 @@ public class ResetHyperHandler implements ProcessPacket<Client> {
         long price = 10000L * (long) Math.pow(10, times);
         if (chr.getMeso() < price) {
             chr.dropMessage(1, "You do not have enough mesos for that.");
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         int ssp = 0;

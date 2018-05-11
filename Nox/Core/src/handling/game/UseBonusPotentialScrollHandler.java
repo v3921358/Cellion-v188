@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -24,21 +24,21 @@ import server.potentials.ItemPotentialProvider;
 import static server.potentials.ItemPotentialProvider.generateBonusPotential;
 import server.potentials.ItemPotentialTierType;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 /**
  *
  * @author Mazen Massoud
  */
-public class UseBonusPotentialScrollHandler implements ProcessPacket<Client> {
+public class UseBonusPotentialScrollHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
         pPlayer.updateTick(iPacket.DecodeInt());
         short nSlot = iPacket.DecodeShort();
@@ -50,7 +50,7 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<Client> {
         ItemPotentialTierType pTier = pEquip.getPotentialBonusTier();
 
         if (pScroll == null || pScroll.getQuantity() <= 0 || pEquip == null/* || !ItemConstants.isPotentialScroll(pScroll.getItemId())*/) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         Equip.ScrollResult pResult;
@@ -71,7 +71,7 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<Client> {
         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, pScroll.getPosition(), (short) 1, false);
         c.SendPacket(CField.enchantResult(pResult == Equip.ScrollResult.SUCCESS ? 1 : pResult == Equip.ScrollResult.CURSE ? 2 : 0));
         pPlayer.getMap().broadcastMessage(pPlayer, CField.getScrollEffect(c.getPlayer().getId(), pResult, false, pEquip.getItemId(), pScroll.getItemId()), true);
-        c.SendPacket(CWvsContext.inventoryOperation(true, aModifications));
+        c.SendPacket(WvsContext.inventoryOperation(true, aModifications));
         //}
     }
 }

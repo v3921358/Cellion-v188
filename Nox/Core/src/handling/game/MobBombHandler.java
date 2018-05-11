@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.MonsterStatus;
 import server.life.Mob;
 import server.maps.MapleMap;
@@ -12,15 +12,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class MobBombHandler implements ProcessPacket<Client> {
+public class MobBombHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         MapleMap map = chr.getMap();
         if (map == null) {

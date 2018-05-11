@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.anticheat.CheatingOffense;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -29,18 +29,18 @@ import constants.GameConstants;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class OnUserPortableChairSitRequest implements ProcessPacket<Client> {
+public final class OnUserPortableChairSitRequest implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr == null || chr.getMap() == null) {
             return;
@@ -56,6 +56,6 @@ public final class OnUserPortableChairSitRequest implements ProcessPacket<Client
         }
         chr.setChair(chairItem);
         chr.getMap().broadcastMessage(chr, CField.showChair(chr.getId(), chairItem), false);
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 }

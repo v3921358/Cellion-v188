@@ -1,6 +1,6 @@
 package server.commands;
 
-import client.Client;
+import client.ClientSocket;
 import constants.ServerConstants.CommandType;
 import server.maps.objects.User;
 
@@ -26,13 +26,13 @@ public class MapleCommand {
     }
 
     /**
-     * Call this to apply this command to the specified {@link Client} with the specified arguments.
+     * Call this to apply this command to the specified {@link ClientSocket} with the specified arguments.
      *
      * @param c the Client to apply this to
      * @param splitted the arguments
      * @return See {@link CommandExecute#execute}
      */
-    public int execute(Client c, String[] splitted) {
+    public int execute(ClientSocket c, String[] splitted) {
         return exe.execute(c, splitted);
     }
 

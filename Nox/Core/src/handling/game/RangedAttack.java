@@ -25,22 +25,22 @@ import server.life.Mob;
 import server.maps.objects.User;
 import service.ChannelServer;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.JobPacket;
 
 import java.util.ArrayList;
 import java.util.List;
 import service.RecvPacketOpcode;
 
-public final class RangedAttack implements ProcessPacket<Client> {
+public final class RangedAttack implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User pPlayer = c.getPlayer();
         if (pPlayer == null || pPlayer.hasBlockedInventory() || pPlayer.getMap() == null) {
             return;
@@ -48,7 +48,7 @@ public final class RangedAttack implements ProcessPacket<Client> {
 
         AttackInfo pAttack = DamageParse.OnAttack(RecvPacketOpcode.UserShootAttack, iPacket, pPlayer);
         if (pAttack == null) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
 
@@ -75,7 +75,7 @@ public final class RangedAttack implements ProcessPacket<Client> {
         if (pAttack.skill != 0 && pAttack.skill != 1 && pAttack.skill != 17) {
             pSkill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(pAttack.skill));
             if ((pSkill == null) || ((GameConstants.isAngel(pAttack.skill)) && (pPlayer.getStat().equippedSummon % 10000 != pAttack.skill % 10000))) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
             nSLV = pPlayer.getTotalSkillLevel(pSkill);
@@ -84,7 +84,7 @@ public final class RangedAttack implements ProcessPacket<Client> {
                 return;
             } else if ((pEffect.getCooldown(pPlayer) > 0) && ((pAttack.skill != 35111004 && pAttack.skill != 35121013) || pPlayer.getBuffSource(CharacterTemporaryStat.Mechanic) != pAttack.skill)) {
                 if (pPlayer.skillisCooling(pAttack.skill)) {
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                     return;
                 }
                 pPlayer.addCooldown(pAttack.skill, System.currentTimeMillis(), pEffect.getCooldown(pPlayer));
@@ -286,7 +286,7 @@ public final class RangedAttack implements ProcessPacket<Client> {
 
                             //if (chr.getBuffedValue(CharacterTemporaryStat.NoBulletConsume) == null) {
                             mod.add(new ModifyInventory(ModifyInventoryOperation.UpdateQuantity, ipp));
-                            c.SendPacket(CWvsContext.inventoryOperation(true, mod));
+                            c.SendPacket(WvsContext.inventoryOperation(true, mod));
                             //}
 
                             bulletConsume = 0;

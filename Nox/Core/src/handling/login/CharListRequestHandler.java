@@ -3,7 +3,7 @@ package handling.login;
 import client.MapleCharacterCreationUtil;
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import constants.ServerConstants;
 import constants.WorldConstants;
 import constants.WorldConstants.WorldOption;
@@ -11,19 +11,19 @@ import handling.world.World;
 import service.ChannelServer;
 import net.InPacket;
 import server.maps.objects.User;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.CLogin;
 import net.ProcessPacket;
 
-public final class CharListRequestHandler implements ProcessPacket<Client> {
+public final class CharListRequestHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if (!c.isLoggedIn()) {
             c.Close();
             return;
@@ -40,7 +40,7 @@ public final class CharListRequestHandler implements ProcessPacket<Client> {
         WorldOption world = WorldConstants.WorldOption.getById(server);
 
         if (!world.isAvailable() && !(c.isGm() && server == WorldConstants.gmserver)) {
-            c.SendPacket(CWvsContext.broadcastMsg(1, "We are sorry, but " + WorldConstants.getNameById(server) + " is currently not available. \r\nPlease try another world."));
+            c.SendPacket(WvsContext.broadcastMsg(1, "We are sorry, but " + WorldConstants.getNameById(server) + " is currently not available. \r\nPlease try another world."));
             c.SendPacket(CLogin.getLoginFailed(1)); //Shows no message, but it is used to unstuck
             return;
         }
@@ -59,7 +59,7 @@ public final class CharListRequestHandler implements ProcessPacket<Client> {
         c.SendPacket(CLogin.getJobListPacket());
     }
 
-    private void handleBurningEvent(Client c, List<User> chars) {
+    private void handleBurningEvent(ClientSocket c, List<User> chars) {
         User[] characters = chars.toArray(new User[chars.size()]);
         boolean hasBurningCharacter = false;
         int burningCharacterId = 0;

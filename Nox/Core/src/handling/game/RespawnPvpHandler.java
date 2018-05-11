@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import client.Client;
+import client.ClientSocket;
 import client.MapleStat;
 import server.maps.objects.User;
 import tools.Pair;
@@ -34,15 +34,15 @@ import net.InPacket;
 import tools.packet.CField;
 import net.ProcessPacket;
 
-public final class RespawnPvpHandler implements ProcessPacket<Client> {
+public final class RespawnPvpHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final Lock ThreadLock = new ReentrantLock();
         /*if (c.getPlayer() == null || c.getPlayer().getMap() == null || !c.getPlayer().inPVP() || c.getPlayer().isAlive()) {
          c.write(CWvsContext.enableActions());

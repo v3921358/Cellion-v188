@@ -21,20 +21,20 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import server.maps.objects.User;
 import net.ProcessPacket;
 
-public final class OnZeroTag implements ProcessPacket<Client> {
+public final class OnZeroTag implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
 
         iPacket.Skip(6);//Might wanna check kms to see what we can get outta these bytes.
         User player = c.getPlayer();

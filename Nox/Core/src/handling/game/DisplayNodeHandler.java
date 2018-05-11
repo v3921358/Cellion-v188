@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
@@ -11,15 +11,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class DisplayNodeHandler implements ProcessPacket<Client> {
+public class DisplayNodeHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         Mob mob_from = chr.getMap().getMonsterByOid(iPacket.DecodeInt());
         if (mob_from != null) {

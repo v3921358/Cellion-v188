@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.CharacterTemporaryStat;
-import client.Client;
+import client.ClientSocket;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
 import client.Skill;
@@ -30,15 +30,15 @@ import net.ProcessPacket;
  *
  * @author Lloyd Korn
  */
-public class SummonAttackHandler implements ProcessPacket<Client> {
+public class SummonAttackHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         /**
          * Damage 13 5A 02 2D A1 07 00 C1 D0 2C 2E 00 00 00 00 84 11 EA 03 9A 00 A8 03 99 00 00 00 00 00 *
          *

@@ -1,13 +1,13 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import handling.world.World;
 import handling.world.MapleGuild;
 import server.maps.objects.User;
 import net.InPacket;
 import net.OutPacket;
 
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 import tools.LogHelper;
 
@@ -15,14 +15,14 @@ import tools.LogHelper;
  *
  * @author
  */
-public class AllianceOperationHandler implements ProcessPacket<Client> {
+public class AllianceOperationHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
-    private static void DenyInvite(Client c, MapleGuild gs) {
+    private static void DenyInvite(ClientSocket c, MapleGuild gs) {
         final int inviteid = World.Guild.getInvitedId(c.getPlayer().getGuildId());
         if (inviteid > 0) {
             final int newAlliance = World.Alliance.getAllianceLeader(inviteid);
@@ -37,14 +37,14 @@ public class AllianceOperationHandler implements ProcessPacket<Client> {
         //c.write(CWvsContext.enableActions());
     }
 
-    public static void handleAllianceRequest(InPacket iPacket, Client c, boolean denied) {
+    public static void handleAllianceRequest(InPacket iPacket, ClientSocket c, boolean denied) {
         if (c.getPlayer().getGuildId() <= 0) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         final MapleGuild gs = World.Guild.getGuild(c.getPlayer().getGuildId());
         if (gs == null) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         byte op = iPacket.DecodeByte();
@@ -86,7 +86,7 @@ public class AllianceOperationHandler implements ProcessPacket<Client> {
                 if (newGuild > 0 && c.getPlayer().getAllianceRank() == 1 && leaderid == c.getPlayer().getId()) {
                     chr = c.getChannelServer().getPlayerStorage().getCharacterById(newGuild);
                     if (chr != null && chr.getGuildId() > 0 && World.Alliance.canInvite(gs.getAllianceId())) {
-                        chr.getClient().SendPacket(CWvsContext.AlliancePacket.sendAllianceInvite(World.Alliance.getAlliance(gs.getAllianceId()).getName(), c.getPlayer()));
+                        chr.getClient().SendPacket(WvsContext.AlliancePacket.sendAllianceInvite(World.Alliance.getAlliance(gs.getAllianceId()).getName(), c.getPlayer()));
                         World.Guild.setInvitedId(chr.getGuildId(), gs.getAllianceId());
                     } else {
                         c.getPlayer().dropMessage(1, "Make sure the leader of the guild is online and in your channel.");
@@ -161,7 +161,7 @@ public class AllianceOperationHandler implements ProcessPacket<Client> {
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         handleAllianceRequest(iPacket, c, false);
     }
 

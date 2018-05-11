@@ -2,7 +2,7 @@ package server.movement.types;
 
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import handling.AbstractMaplePacketHandler;
 import handling.world.MovementParse;
 import net.InPacket;
@@ -16,15 +16,15 @@ import net.ProcessPacket;
  * @author Steven
  *
  */
-public class SummonMovement implements ProcessPacket<Client> {
+public class SummonMovement implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return c.isLoggedIn();
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         int oid = iPacket.DecodeInt();
         Summon sum = null;

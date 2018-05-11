@@ -1,28 +1,28 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
 import constants.ServerConstants;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class DistributeHyperHandler implements ProcessPacket<Client> {
+public class DistributeHyperHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         chr.updateTick(iPacket.DecodeInt());
@@ -35,7 +35,7 @@ public class DistributeHyperHandler implements ProcessPacket<Client> {
 
         if (skill.isInvisible() && chr.getSkillLevel(skill) == 0) {
             if (maxlevel <= 0) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 //AutobanManager.getInstance().addPoints(c, 1000, 0, "Illegal distribution of SP to invisible skills (" + skillid + ")");
                 return;
             }
@@ -43,7 +43,7 @@ public class DistributeHyperHandler implements ProcessPacket<Client> {
 
         for (int i : GameConstants.blockedSkills) {
             if (skill.getId() == i) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 chr.dropMessage(1, "This skill has been blocked and may not be added.");
                 return;
             }
@@ -55,7 +55,7 @@ public class DistributeHyperHandler implements ProcessPacket<Client> {
 
             chr.changeSingleSkillLevel(skill, (byte) 1, (byte) 1, SkillFactory.getDefaultSExpiry(skill), true);
         } else {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
         }
     }
 

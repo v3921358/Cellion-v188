@@ -5,26 +5,26 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import net.ProcessPacket;
 import server.maps.objects.User;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 /**
  *
  * @author Mazen Massoud
  */
-public class FriendRequestAccIdHandler implements ProcessPacket<Client> {
+public class FriendRequestAccIdHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
-        c.SendPacket(CWvsContext.OnLoadAccountIDOfCharacterFriendResult(c.getPlayer().getBuddylist()));
+    public void Process(ClientSocket c, InPacket iPacket) {
+        c.SendPacket(WvsContext.OnLoadAccountIDOfCharacterFriendResult(c.getPlayer().getBuddylist()));
     }
 }

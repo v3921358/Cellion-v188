@@ -1,11 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Cellion Development
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.jobs.KinesisPsychicLock;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -16,18 +14,18 @@ import server.life.Mob;
 import tools.packet.JobPacket;
 
 /**
- *
+ * CreatePsychicLock
  * @author Mazen Massoud
  */
-public class CreatePsychicLockHandler implements ProcessPacket<Client> {
+public class CreatePsychicLockHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         List<KinesisPsychicLock> PsychicLock = new ArrayList<>();
         int nSkillID = iPacket.DecodeInt();
         short nSLV = iPacket.DecodeShort();

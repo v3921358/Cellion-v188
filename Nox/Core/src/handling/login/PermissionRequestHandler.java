@@ -1,18 +1,18 @@
 package handling.login;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class PermissionRequestHandler implements ProcessPacket<Client> {
+public final class PermissionRequestHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         // dont print anything here, someone could just prank us and spam this packet
         // use mina sessionCreated if you want to print xxx connected 
 

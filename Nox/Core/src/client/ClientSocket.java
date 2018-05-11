@@ -57,7 +57,7 @@ import tools.Pair;
 import tools.packet.CField;
 import tools.packet.CLogin;
 
-public class Client extends Socket {
+public class ClientSocket extends Socket {
 
     public static enum MapleClientLoginState {
         Login_NotLoggedIn(0),
@@ -116,7 +116,7 @@ public class Client extends Socket {
     private int authID = 0;
     public String sAccountToken = "";
 
-    public Client(Channel c, int uSendSeq, int uRcvSeq) {
+    public ClientSocket(Channel c, int uSendSeq, int uRcvSeq) {
         super(c, uSendSeq, uRcvSeq);
     }
 
@@ -209,7 +209,7 @@ public class Client extends Socket {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientSocket.class.getName()).log(Level.SEVERE, null, ex);
         }
         return chars;
     }
@@ -260,7 +260,7 @@ public class Client extends Socket {
                 chars.add(cni.name);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientSocket.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return chars;
@@ -1394,7 +1394,7 @@ public class Client extends Socket {
         lastPong = System.currentTimeMillis();
     }
 
-    public static String getLogMessage(final Client cfor, final String message) {
+    public static String getLogMessage(final ClientSocket cfor, final String message) {
         return getLogMessage(cfor, message, new Object[0]);
     }
 
@@ -1406,7 +1406,7 @@ public class Client extends Socket {
         return getLogMessage(cfor == null ? null : cfor.getClient(), message, parms);
     }
 
-    public static String getLogMessage(final Client cfor, final String message, final Object... parms) {
+    public static String getLogMessage(final ClientSocket cfor, final String message, final Object... parms) {
         final StringBuilder builder = new StringBuilder();
         if (cfor != null) {
             if (cfor.getPlayer() != null) {

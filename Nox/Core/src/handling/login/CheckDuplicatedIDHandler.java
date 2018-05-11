@@ -1,20 +1,20 @@
 package handling.login;
 
 import client.MapleCharacterCreationUtil;
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import tools.packet.CLogin;
 import net.ProcessPacket;
 
-public final class CheckDuplicatedIDHandler implements ProcessPacket<Client> {
+public final class CheckDuplicatedIDHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         LoginInformationProvider li = LoginInformationProvider.getInstance();
         String name = iPacket.DecodeString();
         boolean nameUsed = true;

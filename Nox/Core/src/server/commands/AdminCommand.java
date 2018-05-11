@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
-import client.Client;
+import client.ClientSocket;
 import client.MapleCharacterUtil;
 import client.MapleStat;
 import client.Skill;
@@ -88,7 +88,7 @@ import tools.Utility;
 import tools.packet.BuffPacket;
 import tools.packet.CField;
 import tools.packet.CField.NPCPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.MobPacket;
 import tools.packet.PetPacket;
 
@@ -101,7 +101,7 @@ public class AdminCommand {
     public static class GiveDP extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 3) {
                 c.getPlayer().dropMessage(6, "Need playername and amount.");
                 return 0;
@@ -120,7 +120,7 @@ public class AdminCommand {
     public static class GiveVP extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 3) {
                 c.getPlayer().dropMessage(6, "Need playername and amount.");
                 return 0;
@@ -139,7 +139,7 @@ public class AdminCommand {
     public static class GiveMeso extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User pTarget = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (splitted.length < 3) {
                 c.getPlayer().dropMessage(5, "Syntax: !givemeso <character> <amount>");
@@ -154,7 +154,7 @@ public class AdminCommand {
     public static class GiveNX extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User pTarget = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (splitted.length < 3) {
                 c.getPlayer().dropMessage(5, "!givenx <player> <amount>");
@@ -169,7 +169,7 @@ public class AdminCommand {
     public static class SetLevel extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             switch (splitted.length) {
                 case 2:
                     c.getPlayer().setLevel((short) Integer.parseInt(splitted[1]));
@@ -195,7 +195,7 @@ public class AdminCommand {
     public static class LevelPersonTo extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User pUser = Utility.requestCharacter(splitted[1]);
             if (pUser == null) {
                 c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") could not be found.");
@@ -214,7 +214,7 @@ public class AdminCommand {
     public static class UpdatePet extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             Pet pet = c.getPlayer().getPet(0);
             if (pet == null) {
                 return 0;
@@ -227,7 +227,7 @@ public class AdminCommand {
     public static class CloneMe extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().cloneLook();
             return 1;
         }
@@ -236,7 +236,7 @@ public class AdminCommand {
     public static class ReloadCS extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             CashItemFactory.reload();
             return 1;
         }
@@ -245,7 +245,7 @@ public class AdminCommand {
     public static class DisposeClones extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().dropMessage(6, c.getPlayer().getCloneSize() + " clones disposed.");
             c.getPlayer().disposeClones();
             return 1;
@@ -255,7 +255,7 @@ public class AdminCommand {
     public static class DamageBuff extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             SkillFactory.getSkill(9101003).getEffect(1).applyTo(c.getPlayer());
             return 1;
         }
@@ -264,7 +264,7 @@ public class AdminCommand {
     public static class MagicWheel extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             List<Integer> items = new LinkedList<>();
             for (int i = 1; i <= 10; i++) {
                 try {
@@ -276,7 +276,7 @@ public class AdminCommand {
             int end = Randomizer.nextInt(10);
             String data = "Magic Wheel";
             c.getPlayer().setWheelItem(items.get(end));
-            c.SendPacket(CWvsContext.magicWheel((byte) 3, items, data, end));
+            c.SendPacket(WvsContext.magicWheel((byte) 3, items, data, end));
             return 1;
         }
     }
@@ -284,7 +284,7 @@ public class AdminCommand {
     public static class UnsealItem extends CommandExecute {
 
         @Override
-        public int execute(final Client c, String[] splitted) {
+        public int execute(final ClientSocket c, String[] splitted) {
             short slot = Short.parseShort(splitted[1]);
             Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
             if (item == null) {
@@ -314,7 +314,7 @@ public class AdminCommand {
     public static class CutScene extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             //c.write(NPCPacket.getCutSceneSkip());
             return 1;
         }
@@ -323,7 +323,7 @@ public class AdminCommand {
     public static class DemonJob extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.SendPacket(NPCPacket.getDemonSelection());
             return 1;
         }
@@ -332,7 +332,7 @@ public class AdminCommand {
     public static class NearestPortal extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MaplePortal portal = c.getPlayer().getMap().findClosestPortal(c.getPlayer().getTruePosition());
             c.getPlayer().dropMessage(6, portal.getName() + " id: " + portal.getId() + " script: " + portal.getScriptName());
 
@@ -343,7 +343,7 @@ public class AdminCommand {
     public static class Uptime extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().dropMessage(6, "Server has been up for " + StringUtil.getReadableMillis(ChannelServer.serverStartTime, System.currentTimeMillis()));
             return 1;
         }
@@ -352,7 +352,7 @@ public class AdminCommand {
     public static class Reward extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User chr = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             chr.addReward(Integer.parseInt(splitted[2]), Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5]), Integer.parseInt(splitted[6]), StringUtil.joinStringFrom(splitted, 7));
             chr.updateReward();
@@ -363,7 +363,7 @@ public class AdminCommand {
     public static class GMPerson extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]).setGM(Byte.parseByte(splitted[2]));
             return 1;
         }
@@ -372,7 +372,7 @@ public class AdminCommand {
     public static class ToggleMultiLevel extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             ServerConstants.MULTI_LEVEL = !ServerConstants.MULTI_LEVEL;
             return 1;
         }
@@ -381,10 +381,10 @@ public class AdminCommand {
     public static class DoubleTime extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             ServerConstants.DoubleTime = !ServerConstants.DoubleTime;
             //if (ServerConstants.DoubleMiracleTime) {
-            World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(4, "It's Miracle Time!  Between 2:00 PM and 4:00 PM (Pacific) today, Miracle, Premium, Revolutionary Miracle, Super Miracle, Enlightening Miracle and Carved Slot Miracle Cubes have increased chances to raise your item to the next potential tier!"));
+            World.Broadcast.broadcastMessage(WvsContext.broadcastMsg(4, "It's Miracle Time!  Between 2:00 PM and 4:00 PM (Pacific) today, Miracle, Premium, Revolutionary Miracle, Super Miracle, Enlightening Miracle and Carved Slot Miracle Cubes have increased chances to raise your item to the next potential tier!"));
             //}
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
@@ -398,7 +398,7 @@ public class AdminCommand {
     public static class DoubleMiracleTime extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             ServerConstants.DoubleMiracleTime = !ServerConstants.DoubleMiracleTime;
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
@@ -412,7 +412,7 @@ public class AdminCommand {
     public static class TestDirection extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.SendPacket(CField.UIPacket.UserInGameDirectionEvent(StringUtil.joinStringFrom(splitted, 5), Integer.parseInt(splitted[1]), Integer.parseInt(splitted[2]), Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5])));
             return 1;
         }
@@ -421,7 +421,7 @@ public class AdminCommand {
     public static class MakePacket extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             byte[] aData = StringUtil.joinStringFrom(splitted, 1).getBytes();
             byte[] aDataTrim = new byte[aData.length - 2];
             System.arraycopy(aData, 2, aDataTrim, 0, aDataTrim.length);
@@ -433,7 +433,7 @@ public class AdminCommand {
     public static class StripEveryone extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             ChannelServer cs = c.getChannelServer();
             for (User mchr : cs.getPlayerStorage().getAllCharacters()) {
                 if (c.getPlayer().isGM()) {
@@ -456,7 +456,7 @@ public class AdminCommand {
     public static class Strip extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             MapleInventory equipped = victim.getInventory(MapleInventoryType.EQUIPPED);
             MapleInventory equip = victim.getInventory(MapleInventoryType.EQUIP);
@@ -472,7 +472,7 @@ public class AdminCommand {
                 notice = true;
             }
             if (notice) {
-                World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(0, victim.getName() + " has been stripped by " + c.getPlayer().getName()));
+                World.Broadcast.broadcastMessage(WvsContext.broadcastMsg(0, victim.getName() + " has been stripped by " + c.getPlayer().getName()));
             }
             return 1;
         }
@@ -481,7 +481,7 @@ public class AdminCommand {
     public static class MesoEveryone extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
                     mch.gainMeso(Long.parseLong(splitted[1]), true);
@@ -494,7 +494,7 @@ public class AdminCommand {
     public static class ScheduleHotTime extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 1) {
                 c.getPlayer().dropMessage(0, "!ScheduleHotTime <Item Id>");
                 return 0;
@@ -519,7 +519,7 @@ public class AdminCommand {
     public static class WarpAllHere extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (User mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 if (mch.getMapId() != c.getPlayer().getMapId()) {
                     mch.changeMap(c.getPlayer().getMap(), c.getPlayer().getPosition());
@@ -532,7 +532,7 @@ public class AdminCommand {
     public static class DCAll extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             int range = -1;
             switch (splitted[1]) {
                 case "m":
@@ -572,7 +572,7 @@ public class AdminCommand {
         protected static Thread t = null;
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().dropMessage(6, "Shutting down...");
             if (t == null || !t.isAlive()) {
                 t = new Thread(ShutdownServer.getInstance());
@@ -591,7 +591,7 @@ public class AdminCommand {
         private int minutesLeft = 0;
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             minutesLeft = Integer.parseInt(splitted[1]);
             c.getPlayer().dropMessage(6, "Shutting down... in " + minutesLeft + " minutes");
             if (ts == null && (t == null || !t.isAlive())) {
@@ -605,7 +605,7 @@ public class AdminCommand {
                             ts.cancel(false);
                             return;
                         }
-                        World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(0, "The server will shutdown in " + minutesLeft + " minutes. Please log off safely."));
+                        World.Broadcast.broadcastMessage(WvsContext.broadcastMsg(0, "The server will shutdown in " + minutesLeft + " minutes. Please log off safely."));
                         minutesLeft--;
                     }
                 }, 60000);
@@ -619,7 +619,7 @@ public class AdminCommand {
     public static class Morph extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User pPlayer = c.getPlayer();
             int nMorphID = Integer.valueOf(splitted[1]);
 
@@ -639,7 +639,7 @@ public class AdminCommand {
     public static class Mount extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User pPlayer = c.getPlayer();
             int nMountID = Integer.valueOf(splitted[1]);
 
@@ -659,7 +659,7 @@ public class AdminCommand {
     public static class ItemVac extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final List<MapleMapObject> items = c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), GameConstants.maxViewRangeSq(), Arrays.asList(MapleMapObjectType.ITEM));
             MapleMapItem mapitem;
             for (MapleMapObject item : items) {
@@ -681,7 +681,7 @@ public class AdminCommand {
     public static class Find extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             switch (splitted.length) {
                 case 1:
                     c.getPlayer().dropMessage(6, splitted[0] + ": <NPC> <MOB> <ITEM> <MAP> <SKILL> <QUEST> <HEADER/OPCODE>");
@@ -871,7 +871,7 @@ public class AdminCommand {
     public static class KillAllDrops extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleMap map = c.getPlayer().getMap();
             double range = Double.POSITIVE_INFINITY;
 
@@ -901,7 +901,7 @@ public class AdminCommand {
     public static class Position extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             Point position = c.getPlayer().getPosition();
 
             c.getPlayer().dropMessage(6, "Your position is: " + position + ".");
@@ -912,7 +912,7 @@ public class AdminCommand {
     public static class GivePet extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 6) {
                 c.getPlayer().dropMessage(0, splitted[0] + " <character name> <petid> <petname> <petlevel> <petcloseness> <petfullness>");
                 return 0;
@@ -958,7 +958,7 @@ public class AdminCommand {
     public static class OpenNpc extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             NPCScriptManager.getInstance().start(c, Integer.parseInt(splitted[1]), splitted.length > 2 ? StringUtil.joinStringFrom(splitted, 2) : splitted[1]);
             return 1;
         }
@@ -967,7 +967,7 @@ public class AdminCommand {
     public static class OpenShop extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleShopFactory.getInstance().getShop(Integer.parseInt(splitted[1]));
             return 1;
         }
@@ -976,7 +976,7 @@ public class AdminCommand {
     public static class GetSkill extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             Skill skill = SkillFactory.getSkill(Integer.parseInt(splitted[1]));
             byte level = (byte) CommandProcessorUtil.getOptionalIntArg(splitted, 2, 1);
             byte masterlevel = (byte) CommandProcessorUtil.getOptionalIntArg(splitted, 3, 1);
@@ -995,7 +995,7 @@ public class AdminCommand {
     public static class Shop extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleShopFactory shop = MapleShopFactory.getInstance();
             int shopId = Integer.parseInt(splitted[1]);
             if (shop.getShop(shopId) != null) {
@@ -1008,7 +1008,7 @@ public class AdminCommand {
     public static class StartAutoEvent extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final EventManager em = c.getChannelServer().getEventSM().getEventManager("AutomatedEvent");
             if (em != null) {
                 em.setWorldEvent();
@@ -1024,7 +1024,7 @@ public class AdminCommand {
     public static class AutoEvent extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleEvent.onStartEvent(c.getPlayer());
             return 1;
         }
@@ -1033,7 +1033,7 @@ public class AdminCommand {
     public static class StartEvent extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (c.getChannelServer().getEvent() == c.getPlayer().getMapId()) {
                 MapleEvent.setEvent(c.getChannelServer(), false);
                 c.getPlayer().dropMessage(5, "Started the event and closed off");
@@ -1048,7 +1048,7 @@ public class AdminCommand {
     public static class Event extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final MapleEventType type = MapleEventType.getByString(splitted[1]);
             if (type == null) {
                 final StringBuilder sb = new StringBuilder("Wrong syntax: ");
@@ -1070,13 +1070,13 @@ public class AdminCommand {
     public static class SpeakMega extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (victim == null) {
                 c.getPlayer().dropMessage(0, "The person isn't login, or doesn't exists.");
                 return 0;
             }
-            World.Broadcast.broadcastSmega(CWvsContext.broadcastMsg(3, victim.getClient().getChannel(), victim.getName() + " : " + StringUtil.joinStringFrom(splitted, 2), true));
+            World.Broadcast.broadcastSmega(WvsContext.broadcastMsg(3, victim.getClient().getChannel(), victim.getName() + " : " + StringUtil.joinStringFrom(splitted, 2), true));
             return 1;
         }
     }
@@ -1084,7 +1084,7 @@ public class AdminCommand {
     public static class SpeakAll extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (User mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 if (mch == null) {
                     return 0;
@@ -1099,7 +1099,7 @@ public class AdminCommand {
     public static class Speak extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (victim == null) {
                 c.getPlayer().dropMessage(5, "unable to find '" + splitted[1]);
@@ -1114,7 +1114,7 @@ public class AdminCommand {
     public static class DiseaseMap extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 3) {
                 c.getPlayer().dropMessage(6, "!disease <type> <level> where type = SEAL/DARKNESS/WEAKEN/STUN/CURSE/POISON/SLOW/SEDUCE/REVERSE/ZOMBIFY/POTION/SHADOW/BLIND/FREEZE/POTENTIAL");
                 return 0;
@@ -1176,7 +1176,7 @@ public class AdminCommand {
     public static class Disease extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 3) {
                 c.getPlayer().dropMessage(6, "!disease <type> [charname] <level> where type = SEAL/DARKNESS/WEAKEN/STUN/CURSE/POISON/SLOW/SEDUCE/REVERSE/ZOMBIFY/POTION/SHADOW/BLIND/FREEZE/POTENTIAL");
                 return 0;
@@ -1241,7 +1241,7 @@ public class AdminCommand {
     public static class SetInstanceProperty extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             EventManager em = c.getChannelServer().getEventSM().getEventManager(splitted[1]);
             if (em == null || em.getInstances().size() <= 0) {
                 c.getPlayer().dropMessage(5, "none");
@@ -1258,7 +1258,7 @@ public class AdminCommand {
     public static class ListInstanceProperty extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             EventManager em = c.getChannelServer().getEventSM().getEventManager(splitted[1]);
             if (em == null || em.getInstances().size() <= 0) {
                 c.getPlayer().dropMessage(5, "none");
@@ -1274,7 +1274,7 @@ public class AdminCommand {
     public static class LeaveInstance extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (c.getPlayer().getEventInstance() == null) {
                 c.getPlayer().dropMessage(5, "You are not in one");
             } else {
@@ -1287,7 +1287,7 @@ public class AdminCommand {
     public static class StartInstance extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (c.getPlayer().getEventInstance() != null) {
                 c.getPlayer().dropMessage(5, "You are in one");
             } else if (splitted.length > 2) {
@@ -1308,7 +1308,7 @@ public class AdminCommand {
     public static class ResetMobs extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().getMap().killAllMonsters(false);
             return 1;
         }
@@ -1317,7 +1317,7 @@ public class AdminCommand {
     public static class KillMonsterByOID extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleMap map = c.getPlayer().getMap();
             int targetId = Integer.parseInt(splitted[1]);
             Mob monster = map.getMonsterByOid(targetId);
@@ -1331,7 +1331,7 @@ public class AdminCommand {
     public static class RemoveNPCs extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().getMap().resetNPCs();
             return 1;
         }
@@ -1340,7 +1340,7 @@ public class AdminCommand {
     public static class GMChatNotice extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (User all : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 all.dropMessage(-6, StringUtil.joinStringFrom(splitted, 1));
             }
@@ -1385,7 +1385,7 @@ public class AdminCommand {
         }
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             int joinmod = 1;
             int range = -1;
             switch (splitted[1]) {
@@ -1418,7 +1418,7 @@ public class AdminCommand {
             joinmod += tfrom;
             sb.append(StringUtil.joinStringFrom(splitted, joinmod));
 
-            OutPacket packet = CWvsContext.broadcastMsg(type, sb.toString());
+            OutPacket packet = WvsContext.broadcastMsg(type, sb.toString());
             if (range == 0) {
                 c.getPlayer().getMap().broadcastMessage(packet);
             } else if (range == 1) {
@@ -1433,7 +1433,7 @@ public class AdminCommand {
     public static class Yellow extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             int range = -1;
             switch (splitted[1]) {
                 case "m":
@@ -1449,7 +1449,7 @@ public class AdminCommand {
             if (range == -1) {
                 range = 2;
             }
-            OutPacket packet = CWvsContext.yellowChat((splitted[0].equals("!y") ? ("[" + c.getPlayer().getName() + "] ") : "") + StringUtil.joinStringFrom(splitted, 2));
+            OutPacket packet = WvsContext.yellowChat((splitted[0].equals("!y") ? ("[" + c.getPlayer().getName() + "] ") : "") + StringUtil.joinStringFrom(splitted, 2));
             switch (range) {
                 case 0:
                     c.getPlayer().getMap().broadcastMessage(packet);
@@ -1470,7 +1470,7 @@ public class AdminCommand {
     public static class LookNPC extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (MapleMapObject reactor1l : c.getPlayer().getMap().getAllMapObjects(MapleMapObjectType.NPC)) {
                 MapleNPC reactor2l = (MapleNPC) reactor1l;
 
@@ -1483,7 +1483,7 @@ public class AdminCommand {
     public static class LookReactor extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (MapleMapObject reactor1l : c.getPlayer().getMap().getAllMapObjects(MapleMapObjectType.REACTOR)) {
                 MapleReactor reactor2l = (MapleReactor) reactor1l;
                 c.getPlayer().dropMessage(5, "Reactor: oID: " + reactor2l.getObjectId() + " reactorID: " + reactor2l.getReactorId() + " Position: " + reactor2l.getPosition().toString() + " State: " + reactor2l.getState() + " Name: " + reactor2l.getName());
@@ -1495,7 +1495,7 @@ public class AdminCommand {
     public static class LookPortals extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (MaplePortal portal : c.getPlayer().getMap().getPortals()) {
                 c.getPlayer().dropMessage(5, "Portal: ID: " + portal.getId() + " script: " + portal.getScriptName() + " name: " + portal.getName() + " pos: " + portal.getPosition().x + "," + portal.getPosition().y + " target: " + portal.getTargetMapId() + " / " + portal.getTarget());
             }
@@ -1506,7 +1506,7 @@ public class AdminCommand {
     public static class MyNPCPos extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             Point pos = c.getPlayer().getPosition();
             c.getPlayer().dropMessage(6, "X: " + pos.x + " | Y: " + pos.y + " | RX0: " + (pos.x + 50) + " | RX1: " + (pos.x - 50) + " | FH: " + c.getPlayer().getFh());
             return 1;
@@ -1516,7 +1516,7 @@ public class AdminCommand {
     public static class Letter extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 3) {
                 c.getPlayer().dropMessage(6, "syntax: !letter <color (green/red)> <word>");
                 return 0;
@@ -1574,7 +1574,7 @@ public class AdminCommand {
     public static class SpawnMob extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final String mname = splitted[2];
             final int num = Integer.parseInt(splitted[1]);
             int mid = 0;
@@ -1607,7 +1607,7 @@ public class AdminCommand {
     public static class VacMob extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (c.getPlayer().getLastGMMovement() != null) {
 
                 for (MapleMapObject mmo : c.getPlayer().getMap().getAllMapObjects(MapleMapObjectType.MONSTER)) {
@@ -1625,7 +1625,7 @@ public class AdminCommand {
     /*public static class SpawnMist extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             int clock = 1;
             MapleMonster mob = MapleLifeFactory.getMonster(891000);
             c.write(CField.spawnClockMist(this));
@@ -1636,7 +1636,7 @@ public class AdminCommand {
     public static class ItemSearch extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             String search = StringUtil.joinStringFrom(splitted, 1);
             String result = "";
 
@@ -1671,9 +1671,9 @@ public class AdminCommand {
     public static class ServerNotice extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (User all : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                all.getClient().getChannelServer().broadcastMessage(CWvsContext.broadcastMsg(Integer.parseInt(splitted[1]), Integer.parseInt(splitted[2]), StringUtil.joinStringFrom(splitted, 3)));
+                all.getClient().getChannelServer().broadcastMessage(WvsContext.broadcastMsg(Integer.parseInt(splitted[1]), Integer.parseInt(splitted[2]), StringUtil.joinStringFrom(splitted, 3)));
             }
             return 1;
         }
@@ -1682,12 +1682,12 @@ public class AdminCommand {
     public static class SpecialMessage extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             String message = StringUtil.joinStringFrom(splitted, 2);
             int type = Integer.parseInt(splitted[1]);
 
             for (User all : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                all.getClient().getChannelServer().broadcastMessage(CWvsContext.getSpecialMsg(message, type, true, 10000));
+                all.getClient().getChannelServer().broadcastMessage(WvsContext.getSpecialMsg(message, type, true, 10000));
             }
             return 1;
         }
@@ -1696,9 +1696,9 @@ public class AdminCommand {
     public static class HideSpecialMessage extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (User all : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                all.getClient().getChannelServer().broadcastMessage(CWvsContext.getSpecialMsg("", 0, false, 0));
+                all.getClient().getChannelServer().broadcastMessage(WvsContext.getSpecialMsg("", 0, false, 0));
             }
             return 1;
         }
@@ -1707,7 +1707,7 @@ public class AdminCommand {
     public static class SetName extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(6, "Syntax: setname <player> <new name>");
@@ -1731,7 +1731,7 @@ public class AdminCommand {
     public static class Popup extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (User mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 if (splitted.length > 1) {
                     StringBuilder sb = new StringBuilder();
@@ -1749,7 +1749,7 @@ public class AdminCommand {
     public static class SaveAndroids extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (User mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 mch.getAndroid().saveToDb();
                 mch.dropMessage(0, "Androids successfully saved!");
@@ -1761,7 +1761,7 @@ public class AdminCommand {
     public static class GiveSkill extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             Skill skill = SkillFactory.getSkill(Integer.parseInt(splitted[2]));
             byte level = (byte) CommandProcessorUtil.getOptionalIntArg(splitted, 3, 1);
@@ -1781,7 +1781,7 @@ public class AdminCommand {
     public static class Drop extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final int itemId = Integer.parseInt(splitted[1]);
             final short quantity = (short) CommandProcessorUtil.getOptionalIntArg(splitted, 2, 1);
             MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -1808,7 +1808,7 @@ public class AdminCommand {
     public static class DropItem extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final String itemName = StringUtil.joinStringFrom(splitted, 2);
             final short quantity = (short) CommandProcessorUtil.getOptionalIntArg(splitted, 1, 1);
             int itemId = 0;
@@ -1845,7 +1845,7 @@ public class AdminCommand {
     /*public static class Drop extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final int itemId = Integer.parseInt(splitted[1]);
             final short quantity = (short) CommandProcessorUtil.getOptionalIntArg(splitted, 2, 1);
             MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -1872,7 +1872,7 @@ public class AdminCommand {
     public static class DropItem extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final String itemName = StringUtil.joinStringFrom(splitted, 2);
             final short quantity = (short) CommandProcessorUtil.getOptionalIntArg(splitted, 1, 1);
             int itemId = 0;
@@ -1909,7 +1909,7 @@ public class AdminCommand {
     public static class Marry extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 3) {
                 c.getPlayer().dropMessage(6, "Need <name> <itemid>");
                 return 0;
@@ -1947,7 +1947,7 @@ public class AdminCommand {
     public static class SpeakMap extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (User victim : c.getPlayer().getMap().getCharacters()) {
                 if (victim.getId() != c.getPlayer().getId()) {
                     victim.getMap().broadcastMessage(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), true));
@@ -1960,7 +1960,7 @@ public class AdminCommand {
     public static class SpeakChn extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (User victim : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 if (victim.getId() != c.getPlayer().getId()) {
                     victim.getMap().broadcastMessage(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), true));
@@ -1973,7 +1973,7 @@ public class AdminCommand {
     public static class SpeakWorld extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (User victim : cserv.getPlayerStorage().getAllCharacters()) {
                     if (victim.getId() != c.getPlayer().getId()) {
@@ -1988,7 +1988,7 @@ public class AdminCommand {
     public static class ResetOther extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             Quest.getInstance(Integer.parseInt(splitted[2])).forfeit(c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]));
             return 1;
         }
@@ -1997,7 +1997,7 @@ public class AdminCommand {
     public static class FStartOther extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             Quest.getInstance(Integer.parseInt(splitted[2])).forceStart(c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]), Integer.parseInt(splitted[3]), splitted.length > 4 ? splitted[4] : null);
             return 1;
         }
@@ -2006,7 +2006,7 @@ public class AdminCommand {
     public static class FCompleteOther extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             Quest.getInstance(Integer.parseInt(splitted[2])).forceComplete(c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]), Integer.parseInt(splitted[3]));
             return 1;
         }
@@ -2015,7 +2015,7 @@ public class AdminCommand {
     public static class Threads extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             Thread[] threads = new Thread[Thread.activeCount()];
             Thread.enumerate(threads);
             String filter = "";
@@ -2035,7 +2035,7 @@ public class AdminCommand {
     public static class ShowTrace extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 2) {
                 throw new IllegalArgumentException();
             }
@@ -2053,7 +2053,7 @@ public class AdminCommand {
     public static class ToggleOffense extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             try {
                 CheatingOffense co = CheatingOffense.valueOf(splitted[1]);
                 co.setEnabled(!co.isEnabled());
@@ -2067,7 +2067,7 @@ public class AdminCommand {
     public static class TMegaphone extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             World.toggleMegaphoneMuteState();
             c.getPlayer().dropMessage(6, "Megaphone state : " + (c.getChannelServer().getMegaphoneMuteState() ? "Enabled" : "Disabled"));
             return 1;
@@ -2077,7 +2077,7 @@ public class AdminCommand {
     public static class SReactor extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleReactor reactor = new MapleReactor(MapleReactorFactory.getReactor(Integer.parseInt(splitted[1])), Integer.parseInt(splitted[1]));
             reactor.setDelay(-1);
             c.getPlayer().getMap().spawnReactorOnGroundBelow(reactor, new Point(c.getPlayer().getTruePosition().x, c.getPlayer().getTruePosition().y - 20));
@@ -2088,7 +2088,7 @@ public class AdminCommand {
     public static class ClearSquads extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final Collection<MapleSquad> squadz = new ArrayList<>(c.getChannelServer().getAllSquads().values());
             for (MapleSquad squads : squadz) {
                 squads.clear();
@@ -2100,7 +2100,7 @@ public class AdminCommand {
     public static class HitMonsterByOID extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleMap map = c.getPlayer().getMap();
             int targetId = Integer.parseInt(splitted[1]);
             int damage = Integer.parseInt(splitted[2]);
@@ -2116,7 +2116,7 @@ public class AdminCommand {
     public static class HitAll extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleMap map = c.getPlayer().getMap();
             double range = Double.POSITIVE_INFINITY;
             if (splitted.length > 1) {
@@ -2145,7 +2145,7 @@ public class AdminCommand {
     public static class HitMonster extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleMap map = c.getPlayer().getMap();
             double range = Double.POSITIVE_INFINITY;
             int damage = Integer.parseInt(splitted[1]);
@@ -2164,7 +2164,7 @@ public class AdminCommand {
     public static class KillMonster extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleMap map = c.getPlayer().getMap();
             double range = Double.POSITIVE_INFINITY;
             Mob mob;
@@ -2181,7 +2181,7 @@ public class AdminCommand {
     public static class NPC extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             int npcId = Integer.parseInt(splitted[1]);
             MapleNPC npc = MapleLifeFactory.getNPC(npcId);
             if (npc != null && !npc.getName().equals("MISSINGNO")) {
@@ -2203,7 +2203,7 @@ public class AdminCommand {
     public static class PNPC extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 1) {
                 c.getPlayer().dropMessage(6, "!pnpc <npcid>");
                 return 0;
@@ -2257,7 +2257,7 @@ public class AdminCommand {
     public static class PMOB extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(6, "!pmob <mobid> <mob respawn time in seconds>");
                 return 0;
@@ -2318,10 +2318,10 @@ public class AdminCommand {
     public static class PlayerNpc extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             try {
                 c.getPlayer().dropMessage(6, "Making playerNPC...");
-                Client cs = new Client(null, 0, 0);
+                ClientSocket cs = new ClientSocket(null, 0, 0);
                 User chhr = User.loadCharFromDB(MapleCharacterUtil.getIdByName(splitted[1]), cs, false);
                 if (chhr == null) {
                     c.getPlayer().dropMessage(6, splitted[1] + " does not exist");
@@ -2340,7 +2340,7 @@ public class AdminCommand {
     public static class DestroyPlayerNPC extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             try {
                 c.getPlayer().dropMessage(6, "Destroying playerNPC...");
                 final MapleNPC npc = c.getPlayer().getMap().getNPCByOid(Integer.parseInt(splitted[1]));
@@ -2360,7 +2360,7 @@ public class AdminCommand {
     public static class ServerMessage extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             String outputMessage = StringUtil.joinStringFrom(splitted, 1);
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 cserv.setServerMessage(outputMessage);
@@ -2372,7 +2372,7 @@ public class AdminCommand {
     public static class ReloadMap extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final int mapId = Integer.parseInt(splitted[1]);
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 if (cserv.getMapFactory().isMapLoaded(mapId) && cserv.getMapFactory().getMap(mapId).getCharactersSize() > 0) {
@@ -2393,7 +2393,7 @@ public class AdminCommand {
     public static class Respawn extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().getMap().respawn(true, System.currentTimeMillis());
             c.getPlayer().dropMessage(5, "Monster on the current map have been respawned.");
             return 1;
@@ -2405,7 +2405,7 @@ public class AdminCommand {
         protected Timer toTest = null;
 
         @Override
-        public int execute(final Client c, String[] splitted) {
+        public int execute(final ClientSocket c, String[] splitted) {
             final int sec = Integer.parseInt(splitted[1]);
             c.getPlayer().dropMessage(5, "Message will pop up in " + sec + " seconds.");
             c.getPlayer().dropMessage(5, "Active: " + toTest.getSES().getActiveCount() + " Core: " + toTest.getSES().getCorePoolSize() + " Largest: " + toTest.getSES().getLargestPoolSize() + " Max: " + toTest.getSES().getMaximumPoolSize() + " Current: " + toTest.getSES().getPoolSize() + " Status: " + toTest.getSES().isShutdown() + toTest.getSES().isTerminated() + toTest.getSES().isTerminating());
@@ -2466,7 +2466,7 @@ public class AdminCommand {
     public static class Crash extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (victim != null && c.getPlayer().getGMLevel() >= victim.getGMLevel()) {
                 victim.getClient().Close();
@@ -2504,7 +2504,7 @@ public class AdminCommand {
         }
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User player = c.getPlayer();
             if (getRevision() != -1) {
                 c.getPlayer().dropMessage(5, "Revision: " + ServerConstants.SOURCE_REVISION);
@@ -2518,7 +2518,7 @@ public class AdminCommand {
     public static class FillBook extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (int e : MapleItemInformationProvider.getInstance().getMonsterBook().keySet()) {
                 c.getPlayer().getMonsterBook().getCards().put(e, 2);
             }
@@ -2531,7 +2531,7 @@ public class AdminCommand {
     public static class ListBook extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final List<Map.Entry<Integer, Integer>> mbList = new ArrayList<>(MapleItemInformationProvider.getInstance().getMonsterBook().entrySet());
             Collections.sort(mbList, new BookComparator());
             final int page = Integer.parseInt(splitted[1]);
@@ -2560,7 +2560,7 @@ public class AdminCommand {
     public static class Subcategory extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().setSubcategory(Byte.parseByte(splitted[1]));
             return 1;
         }
@@ -2569,7 +2569,7 @@ public class AdminCommand {
     public static class GainMP extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(5, "Need amount.");
                 return 0;
@@ -2582,7 +2582,7 @@ public class AdminCommand {
     public static class GainP extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(5, "Need amount.");
                 return 0;
@@ -2595,7 +2595,7 @@ public class AdminCommand {
     public static class GainVP extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(5, "Need amount.");
                 return 0;
@@ -2608,7 +2608,7 @@ public class AdminCommand {
     public static class SetSendOp extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             SendPacketOpcode.valueOf(splitted[1]).setValue(Short.parseShort(splitted[2]));
             return 1;
         }
@@ -2617,7 +2617,7 @@ public class AdminCommand {
     public static class ReloadSkills extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             SkillFactory.reload();
             c.getPlayer().dropMessage(5, "Skills have been reloaded.");
             return 1;
@@ -2627,7 +2627,7 @@ public class AdminCommand {
     public static class ReloadDrops extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleMonsterInformationProvider.getInstance().clearDrops();
             ReactorScriptManager.getInstance().clearDrops();
             c.getPlayer().dropMessage(5, "Drops have been reloaded.");
@@ -2638,7 +2638,7 @@ public class AdminCommand {
     public static class ReloadMapScript extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             AbstractScriptManager.reloadCachedScript(ScriptType.Maps);
             c.getPlayer().dropMessage(5, "Map scripts have been reloaded.");
             return 1;
@@ -2648,7 +2648,7 @@ public class AdminCommand {
     public static class ReloadReactor extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             AbstractScriptManager.reloadCachedScript(ScriptType.Reactor);
             c.getPlayer().dropMessage(5, "Reactor scripts have been reloaded.");
             return 1;
@@ -2658,7 +2658,7 @@ public class AdminCommand {
     public static class ReloadQuest extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             AbstractScriptManager.reloadCachedScript(ScriptType.Quest);
             c.getPlayer().dropMessage(5, "Quest scripts have been reloaded.");
             return 1;
@@ -2668,7 +2668,7 @@ public class AdminCommand {
     public static class ReloadNPC extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             AbstractScriptManager.reloadCachedScript(ScriptType.NPC);
             c.getPlayer().dropMessage(5, "NPC scripts have been reloaded.");
             return 1;
@@ -2678,7 +2678,7 @@ public class AdminCommand {
     public static class ReloadPortal extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             AbstractScriptManager.reloadCachedScript(ScriptType.Portal);
             return 1;
         }
@@ -2687,7 +2687,7 @@ public class AdminCommand {
     public static class ReloadShops extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleShopFactory.getInstance().clear();
             return 1;
         }
@@ -2696,7 +2696,7 @@ public class AdminCommand {
     public static class ReloadEvents extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             AbstractScriptManager.reloadCachedScript(ScriptType.Event);
             for (ChannelServer instance : ChannelServer.getAllInstances()) {
                 instance.reloadEvents();
@@ -2708,7 +2708,7 @@ public class AdminCommand {
     public static class ResetMap extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().getMap().resetFully();
             return 1;
         }
@@ -2717,7 +2717,7 @@ public class AdminCommand {
     public static class ResetQuest extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             Quest.getInstance(Integer.parseInt(splitted[1])).forfeit(c.getPlayer());
             return 1;
         }
@@ -2726,7 +2726,7 @@ public class AdminCommand {
     public static class StartQuest extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             Quest.getInstance(Integer.parseInt(splitted[1])).start(c.getPlayer(), Integer.parseInt(splitted[2]));
             return 1;
         }
@@ -2735,7 +2735,7 @@ public class AdminCommand {
     public static class CompleteQuest extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             Quest.getInstance(Integer.parseInt(splitted[1])).complete(c.getPlayer(), Integer.parseInt(splitted[2]), Integer.parseInt(splitted[3]));
             return 1;
         }
@@ -2744,7 +2744,7 @@ public class AdminCommand {
     public static class FStartQuest extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             Quest.getInstance(Integer.parseInt(splitted[1])).forceStart(c.getPlayer(), Integer.parseInt(splitted[2]), splitted.length >= 4 ? splitted[3] : null);
             return 1;
         }
@@ -2753,7 +2753,7 @@ public class AdminCommand {
     public static class FCompleteQuest extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             Quest.getInstance(Integer.parseInt(splitted[1])).forceComplete(c.getPlayer(), Integer.parseInt(splitted[2]));
             return 1;
         }
@@ -2762,7 +2762,7 @@ public class AdminCommand {
     public static class HReactor extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().getMap().getReactorByOid(Integer.parseInt(splitted[1])).hitReactor(c);
             return 1;
         }
@@ -2771,7 +2771,7 @@ public class AdminCommand {
     public static class FHReactor extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().getMap().getReactorByOid(Integer.parseInt(splitted[1])).forceHitReactor(Byte.parseByte(splitted[2]));
             return 1;
         }
@@ -2780,7 +2780,7 @@ public class AdminCommand {
     public static class DReactor extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleMap map = c.getPlayer().getMap();
             List<MapleMapObject> reactors = map.getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.REACTOR));
             if (splitted[1].equals("all")) {
@@ -2798,7 +2798,7 @@ public class AdminCommand {
     public static class SetReactor extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().getMap().setReactorState(Byte.parseByte(splitted[1]));
             return 1;
         }
@@ -2807,7 +2807,7 @@ public class AdminCommand {
     public static class ResetReactor extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().getMap().resetReactors();
             return 1;
         }
@@ -2816,7 +2816,7 @@ public class AdminCommand {
     public static class SendNote extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (splitted.length >= 2) {
                 String text = StringUtil.joinStringFrom(splitted, 1);
@@ -2832,7 +2832,7 @@ public class AdminCommand {
     public static class SendAllNote extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
 
             if (splitted.length >= 1) {
                 String text = StringUtil.joinStringFrom(splitted, 1);
@@ -2850,7 +2850,7 @@ public class AdminCommand {
     public static class BuffSkill extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             SkillFactory.getSkill(Integer.parseInt(splitted[1])).getEffect(Integer.parseInt(splitted[2])).applyTo(c.getPlayer());
             return 0;
         }
@@ -2859,7 +2859,7 @@ public class AdminCommand {
     public static class BuffItem extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleItemInformationProvider.getInstance().getItemEffect(Integer.parseInt(splitted[1])).applyTo(c.getPlayer());
             return 0;
         }
@@ -2868,7 +2868,7 @@ public class AdminCommand {
     public static class BuffItemEX extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleItemInformationProvider.getInstance().getItemEffectEX(Integer.parseInt(splitted[1])).applyTo(c.getPlayer());
             return 0;
         }
@@ -2877,7 +2877,7 @@ public class AdminCommand {
     public static class cancelSkill extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().dispelBuff(Integer.parseInt(splitted[1]));
             return 1;
         }
@@ -2886,7 +2886,7 @@ public class AdminCommand {
     public static class MapBuffSkill extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (User mch : c.getPlayer().getMap().getCharacters()) {
                 SkillFactory.getSkill(Integer.parseInt(splitted[1])).getEffect(Integer.parseInt(splitted[2])).applyTo(mch);
             }
@@ -2897,7 +2897,7 @@ public class AdminCommand {
     public static class MapBuffItem extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (User mch : c.getPlayer().getMap().getCharacters()) {
                 MapleItemInformationProvider.getInstance().getItemEffect(Integer.parseInt(splitted[1])).applyTo(mch);
             }
@@ -2908,7 +2908,7 @@ public class AdminCommand {
     public static class MapBuffItemEX extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (User mch : c.getPlayer().getMap().getCharacters()) {
                 MapleItemInformationProvider.getInstance().getItemEffectEX(Integer.parseInt(splitted[1])).applyTo(mch);
             }
@@ -2919,7 +2919,7 @@ public class AdminCommand {
     public static class MapItemSize extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().dropMessage(6, "Number of items: " + MapleItemInformationProvider.getInstance().getAllItems().size());
             return 0;
         }
@@ -2928,7 +2928,7 @@ public class AdminCommand {
     public static class openUIOption extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.SendPacket(CField.UIPacket.openUIOption(Integer.parseInt(splitted[1]), 9010000));
             return 1;
         }
@@ -2937,7 +2937,7 @@ public class AdminCommand {
     public static class openUIWindow extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.SendPacket(CField.UIPacket.openUI(Integer.parseInt(splitted[1])));
             return 1;
         }

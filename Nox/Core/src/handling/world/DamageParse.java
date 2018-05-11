@@ -30,7 +30,7 @@ import server.maps.objects.User;
 import server.messages.StylishKillMessage;
 import server.messages.StylishKillMessage.StylishKillMessageType;
 import tools.Pair;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 import java.awt.*;
 import java.util.*;
@@ -780,14 +780,14 @@ public class DamageParse {
                         }
                     }
                     if (monsters.size() <= 0) {
-                        CWvsContext.enableActions();
+                        WvsContext.enableActions();
                         return;
                     }
                     final List<Point> points = new ArrayList<>();
                     for (Mob mob : monsters) {
                         points.add(mob.getPosition());
                     }
-                    pPlayer.getMap().broadcastMessage(CWvsContext.giveMarkOfTheif(pPlayer.getId(), source.getObjectId(),
+                    pPlayer.getMap().broadcastMessage(WvsContext.giveMarkOfTheif(pPlayer.getId(), source.getObjectId(),
                             4100012, monsters, pPlayer.getPosition(), monsters.get(0).getPosition(), 2070005));
                 }
             }
@@ -801,7 +801,7 @@ public class DamageParse {
 
                 final List<Mob> monsters = new ArrayList<>();
 
-                pPlayer.getMap().broadcastMessage(CWvsContext.giveMarkOfTheif(pPlayer.getId(), ap.getObjectId(),
+                pPlayer.getMap().broadcastMessage(WvsContext.giveMarkOfTheif(pPlayer.getId(), ap.getObjectId(),
                         4100012, monsters, pPlayer.getPosition(), ap.getPosition(), 2070005));
             }
         }
@@ -1057,7 +1057,7 @@ public class DamageParse {
 
                     player.incrementKillQuestAlpha();
 
-                    player.getClient().SendPacket(CWvsContext.messagePacket(new StylishKillMessage(StylishKillMessageType.MultiKill, totalEXPGained, numMultiKills)));
+                    player.getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessageType.MultiKill, totalEXPGained, numMultiKills)));
                 }
 
             }
@@ -1099,7 +1099,7 @@ public class DamageParse {
             player.setLastCombo(cTime);
             player.setCombo(combo);
 
-            player.getClient().SendPacket(CWvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, combo, mob.get().getObjectId())));
+            player.getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, combo, mob.get().getObjectId())));
         }
     }
 

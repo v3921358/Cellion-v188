@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -8,22 +8,22 @@ import scripting.provider.NPCScriptManager;
 import server.maps.objects.User;
 import server.maps.objects.MapleNPC;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author Mazen Massoud
  */
-public class NPCTalkHandler implements ProcessPacket<Client> {
+public class NPCTalkHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
         final MapleNPC pNpc = pPlayer.getMap().getNPCByOid(iPacket.DecodeInt());
 
@@ -38,7 +38,7 @@ public class NPCTalkHandler implements ProcessPacket<Client> {
         if (NPCScriptManager.getInstance().getCM(c) != null) { // Meme auto dispose when clicking an NPC.
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
         }
 
         ReentrantLock safetyLock = new ReentrantLock(); // Lock to avoid running the script twice and receiving a runtime error.

@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.CharacterTemporaryStat;
-import client.Client;
+import client.ClientSocket;
 import client.Skill;
 import client.SkillFactory;
 import client.inventory.Item;
@@ -35,7 +35,7 @@ import server.maps.objects.User;
 import service.ChannelServer;
 import service.RecvPacketOpcode;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.JobPacket;
 
 /**
@@ -44,7 +44,7 @@ import tools.packet.JobPacket;
  */
 public final class CloseRangeAttack {
 
-    public static void closeRangeAttack(InPacket iPacket, Client c, User pPlayer, boolean bPassiveAttack) {
+    public static void closeRangeAttack(InPacket iPacket, ClientSocket c, User pPlayer, boolean bPassiveAttack) {
 
         if (pPlayer == null || pPlayer.hasBlockedInventory() 
                 || pPlayer.getMap() == null || (bPassiveAttack
@@ -74,7 +74,7 @@ public final class CloseRangeAttack {
             pSkill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(pAttack.skill));
             
             if (pSkill == null || (GameConstants.isAngel(pAttack.skill) && pPlayer.getStat().equippedSummon % 10000 != pAttack.skill % 10000)) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
             
@@ -208,7 +208,7 @@ public final class CloseRangeAttack {
                 // Handle Cooldown
                 if (pEffect.getCooldown(pPlayer) > 0 && !bPassiveAttack) {
                     if (pPlayer.skillisCooling(pAttack.skill)) {
-                        c.SendPacket(CWvsContext.enableActions());
+                        c.SendPacket(WvsContext.enableActions());
                         return;
                     }
                     pPlayer.addCooldown(pAttack.skill, System.currentTimeMillis(), pEffect.getCooldown(pPlayer));

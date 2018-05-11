@@ -20,7 +20,7 @@
  */
 package scripting;
 
-import client.Client;
+import client.ClientSocket;
 import server.MaplePortal;
 import server.life.MapleLifeFactory;
 import server.life.Mob;
@@ -29,7 +29,7 @@ public class PortalPlayerInteraction extends AbstractPlayerInteraction {
 
     private final MaplePortal portal;
 
-    public PortalPlayerInteraction(final Client c, final MaplePortal portal) {
+    public PortalPlayerInteraction(final ClientSocket c, final MaplePortal portal) {
         super(c, portal.getId(), c.getPlayer().getMapId(), "");
         this.portal = portal;
     }

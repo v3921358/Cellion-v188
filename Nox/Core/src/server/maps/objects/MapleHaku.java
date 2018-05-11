@@ -3,7 +3,7 @@ package server.maps.objects;
 import java.awt.Point;
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import client.MapleJob;
 import server.maps.AnimatedMapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -39,12 +39,12 @@ public class MapleHaku extends AnimatedMapleMapObject {
     }
 
     @Override
-    public void sendSpawnData(Client client) {
+    public void sendSpawnData(ClientSocket client) {
         client.SendPacket(CField.spawnHaku(this, false));
     }
 
     @Override
-    public void sendDestroyData(Client client) {
+    public void sendDestroyData(ClientSocket client) {
         client.SendPacket(CField.destroyHaku(owner));
     }
 

@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import client.QuestStatus.QuestState;
 import client.SkillFactory;
 import client.anticheat.CheatingOffense;
@@ -29,7 +29,7 @@ import server.MapleStatEffect;
 import server.maps.objects.MapleRuneStone;
 import tools.packet.CField;
 import tools.packet.CSPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.JobPacket;
 import tools.packet.JobPacket.KaiserPacket;
 
@@ -57,13 +57,13 @@ public class PlayerHandler {
         if (rune != null) {
             if (chr.getKeyValue("LastTouchedRune") != null && chr.getRuneTimeStamp() > System.currentTimeMillis()) {
                 chr.getClient().SendPacket(CField.RunePacket.RuneAction(2, (int) (chr.getRuneTimeStamp() - System.currentTimeMillis())));
-                chr.getClient().SendPacket(CWvsContext.enableActions());
+                chr.getClient().SendPacket(WvsContext.enableActions());
                 return;
             }
             chr.setTouchedRune(type);
             chr.getClient().SendPacket(CField.RunePacket.RuneAction(5, 0));
         }
-        chr.getClient().SendPacket(CWvsContext.enableActions());
+        chr.getClient().SendPacket(WvsContext.enableActions());
     }
 
     public static final void UseRune(final InPacket iPacket, final User chr) {
@@ -131,7 +131,7 @@ public class PlayerHandler {
         }
     }
 
-    public static void OrbitalFlame(final InPacket iPacket, final Client c) {
+    public static void OrbitalFlame(final InPacket iPacket, final ClientSocket c) {
         User chr = c.getPlayer();
 
         int tempskill = iPacket.DecodeInt();
@@ -175,7 +175,7 @@ public class PlayerHandler {
         chr.getMap().broadcastMessage(CField.OrbitalFlame(chr.getId(), skillid, effect, direction, flame.getRange()));
     }
 
-    public static void absorbingDF(InPacket iPacket, final Client c) {
+    public static void absorbingDF(InPacket iPacket, final ClientSocket c) {
         int size = iPacket.DecodeInt();
         int room = 0;
         byte unk = 0;
@@ -212,7 +212,7 @@ public class PlayerHandler {
         }
     }
 
-    public static void LinkSkill(final InPacket iPacket, final Client c, final User chr) {
+    public static void LinkSkill(final InPacket iPacket, final ClientSocket c, final User chr) {
         //iPacket: [76 7F 31 01] [35 00 00 00]
         c.getPlayer().dropMessage(1, "Beginning link skill.");
         int skill = iPacket.DecodeInt();
@@ -225,13 +225,13 @@ public class PlayerHandler {
         }
         if (GameConstants.getLinkSkillByJob(chr.getJob()) != skill || !found || chr.getLevel() > 70) {
             c.getPlayer().dropMessage(1, "An error has occured.");
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         User.addLinkSkill(cid, skill);
     }
 
-    public static void AdminCommand(InPacket iPacket, Client c, User chr) {
+    public static void AdminCommand(InPacket iPacket, ClientSocket c, User chr) {
         if (!c.getPlayer().isGM()) {
             return;
         }
@@ -246,7 +246,7 @@ public class PlayerHandler {
                         c.getPlayer().getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());
                     }
                 }
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 break;
             case 0x01: { // /d (inv)
                 byte type = iPacket.DecodeByte();
@@ -275,7 +275,7 @@ public class PlayerHandler {
                     target.sendPolice();
 
                     c.SendPacket(CField.getGMEffect(4, (byte) 0));
-                } else if (Client.banOfflineCharacter(reason, victim)) {
+                } else if (ClientSocket.banOfflineCharacter(reason, victim)) {
                     c.SendPacket(CField.getGMEffect(4, (byte) 0));
                 } else {
                     c.SendPacket(CField.getGMEffect(6, (byte) 1));
@@ -301,7 +301,7 @@ public class PlayerHandler {
                         target.sendPolice();
                     }
                     c.SendPacket(CField.getGMEffect(4, (byte) 0));
-                } else if (Client.banOfflineCharacter(reason, victim)) {
+                } else if (ClientSocket.banOfflineCharacter(reason, victim)) {
                     c.SendPacket(CField.getGMEffect(4, (byte) 0));
                 } else {
                     c.SendPacket(CField.getGMEffect(6, (byte) 1));
@@ -370,7 +370,7 @@ public class PlayerHandler {
                 String message = iPacket.DecodeString();
                 target = c.getChannelServer().getPlayerStorage().getCharacterByName(victim);
                 if (target != null) {
-                    target.getClient().SendPacket(CWvsContext.broadcastMsg(1, message));
+                    target.getClient().SendPacket(WvsContext.broadcastMsg(1, message));
                     c.SendPacket(CField.getGMEffect(0x1E, (byte) 1));
                 } else {
                     c.SendPacket(CField.getGMEffect(0x1E, (byte) 0));
@@ -386,7 +386,7 @@ public class PlayerHandler {
         }
     }
 
-    public static void aranCombo(Client c, User chr, int toAdd) {
+    public static void aranCombo(ClientSocket c, User chr, int toAdd) {
         if ((chr != null) && (chr.getJob() >= 2000) && (chr.getJob() <= 2112)) {
             short combo = chr.getCombo();
             long curr = System.currentTimeMillis();
@@ -420,7 +420,7 @@ public class PlayerHandler {
         }
     }
 
-    public static void ChangeHaku(InPacket iPacket, Client c, User chr) {
+    public static void ChangeHaku(InPacket iPacket, ClientSocket c, User chr) {
         int oid = iPacket.DecodeInt();
         if (chr.getHaku() != null) {
             chr.getHaku().sendStats();
@@ -430,14 +430,14 @@ public class PlayerHandler {
         }
     }
 
-    public static void leftKnockBack(InPacket iPacket, Client c) {
+    public static void leftKnockBack(InPacket iPacket, ClientSocket c) {
         if (c.getPlayer().getMapId() / 10000 == 10906) {
             c.SendPacket(CField.leftKnockBack());
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
         }
     }
 
-    public static void MessengerRanking(InPacket iPacket, Client c, User chr) {
+    public static void MessengerRanking(InPacket iPacket, ClientSocket c, User chr) {
         if (chr == null) {
             return;
         }

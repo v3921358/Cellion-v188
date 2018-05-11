@@ -16,7 +16,7 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.MapleReactor;
 import server.maps.objects.Summon;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class SpawnPoint extends Spawns {
 
@@ -154,7 +154,7 @@ public class SpawnPoint extends Spawns {
             }
         }
         if (msg != null) {
-            map.broadcastMessage(CWvsContext.broadcastMsg(6, msg));
+            map.broadcastMessage(WvsContext.broadcastMsg(6, msg));
         }
         return mob;
     }

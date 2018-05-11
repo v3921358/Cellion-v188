@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.MapleStat;
 import client.Skill;
 import client.SkillFactory;
@@ -14,22 +14,22 @@ import server.AutobanManager;
 import server.maps.objects.User;
 import tools.Pair;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class DistributeSPHandler implements ProcessPacket<Client> {
+public class DistributeSPHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         c.getPlayer().updateTick(iPacket.DecodeInt());
@@ -71,14 +71,14 @@ public class DistributeSPHandler implements ProcessPacket<Client> {
 
         if (skill.isInvisible() && chr.getSkillLevel(skill) == 0 && !chr.isGM()) {
             if ((skill.isFourthJob() && chr.getMasterLevel(skill) == 0) || (!skill.isFourthJob() && maxlevel < 10 && !GameConstants.isDualBlade(chr.getJob()) && !isBeginnerSkill && chr.getMasterLevel(skill) <= 0)) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 AutobanManager.getInstance().addPoints(c, 1000, 0, "Illegal distribution of SP to invisible skills (" + skillid + ")");
                 return;
             }
         }
         for (int i : GameConstants.blockedSkills) {
             if (skill.getId() == i) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 chr.dropMessage(1, "This skill has been blocked and may not be added.");
                 return;
             }
@@ -96,7 +96,7 @@ public class DistributeSPHandler implements ProcessPacket<Client> {
         } else if (!skill.canBeLearnedBy(chr.getJob()) && !chr.isGM()) {
             AutobanManager.getInstance().addPoints(c, 1000, 0, "Trying to learn a skill for a different job (" + skillid + ")");
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 
 }

@@ -1,6 +1,6 @@
 package server.maps.objects;
 
-import client.Client;
+import client.ClientSocket;
 import constants.skills.Global;
 import java.awt.Point;
 import server.Randomizer;
@@ -144,14 +144,14 @@ public class MapleRuneStone extends AnimatedMapleMapObject {
     }
 
     @Override
-    public void sendSpawnData(Client client) {
+    public void sendSpawnData(ClientSocket client) {
         if (nextRuneSpawnTime == 0) {
             client.SendPacket(CField.RunePacket.spawnRune(this));
         }
     }
 
     @Override
-    public void sendDestroyData(Client client) {
+    public void sendDestroyData(ClientSocket client) {
         if (nextRuneSpawnTime == 0) {
             client.SendPacket(CField.RunePacket.removeAllRune());
             //client.write(CField.RunePacket.removeRune());

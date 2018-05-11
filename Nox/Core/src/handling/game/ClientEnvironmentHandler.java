@@ -5,29 +5,29 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import constants.GameConstants;
 import net.InPacket;
 import scripting.provider.NPCScriptManager;
 import server.maps.objects.User;
 import server.quest.Quest;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class ClientEnvironmentHandler implements ProcessPacket<Client> {
+public class ClientEnvironmentHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
 
     }
 }

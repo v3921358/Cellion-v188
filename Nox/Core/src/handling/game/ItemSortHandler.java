@@ -1,32 +1,32 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class ItemSortHandler implements ProcessPacket<Client> {
+public class ItemSortHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
         final MapleInventoryType pInvType = MapleInventoryType.getByType(iPacket.DecodeByte());
 
         if (pInvType == MapleInventoryType.UNDEFINED || c.getPlayer().hasBlockedInventory()) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         final MapleInventory pInv = c.getPlayer().getInventory(pInvType); //Mode should correspond with MapleInventoryType
@@ -51,7 +51,7 @@ public class ItemSortHandler implements ProcessPacket<Client> {
                 sorted = true;
             }
         }
-        c.SendPacket(CWvsContext.finishedSort(pInvType.getType()));
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.finishedSort(pInvType.getType()));
+        c.SendPacket(WvsContext.enableActions());
     }
 }

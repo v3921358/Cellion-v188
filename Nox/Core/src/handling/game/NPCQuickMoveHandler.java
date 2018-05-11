@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import constants.QuickMove;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,15 +12,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class NPCQuickMoveHandler implements ProcessPacket<Client> {
+public class NPCQuickMoveHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final int npcid = iPacket.DecodeInt();
         if (c.getPlayer().hasBlockedInventory() || c.getPlayer().isInBlockedMap() || c.getPlayer().getLevel() < 10) {
             return;

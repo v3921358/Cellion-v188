@@ -21,20 +21,20 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class OnSnowBallHit implements ProcessPacket<Client> {
+public final class OnSnowBallHit implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
-        c.SendPacket(CWvsContext.enableActions());
+    public void Process(ClientSocket c, InPacket iPacket) {
+        c.SendPacket(WvsContext.enableActions());
     }
 }

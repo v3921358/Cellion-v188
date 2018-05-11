@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.maps.objects.User;
 import server.maps.objects.MapleRuneStone;
 import server.maps.objects.MapleRuneStone.MapleRuneStoneType;
@@ -12,15 +12,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class RuneStoneStartHandler implements ProcessPacket<Client> {
+public class RuneStoneStartHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         iPacket.DecodeInt();
         MapleRuneStoneType type = MapleRuneStoneType.getFromInt(iPacket.DecodeInt());
 

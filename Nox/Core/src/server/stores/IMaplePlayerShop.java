@@ -2,7 +2,7 @@ package server.stores;
 
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import net.OutPacket;
 
 import server.maps.objects.User;
@@ -60,7 +60,7 @@ public interface IMaplePlayerShop {
 
     public void removeAllVisitors(int error, int type);
 
-    public void buy(Client c, int item, short quantity);
+    public void buy(ClientSocket c, int item, short quantity);
 
     public void closeShop(boolean saveItems, boolean remove);
 

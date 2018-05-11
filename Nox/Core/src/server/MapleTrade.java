@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import client.inventory.MapleInventoryType;
@@ -17,7 +17,7 @@ import handling.world.World;
 import server.commands.CommandProcessor;
 import server.maps.objects.User;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.PlayerShopPacket;
 
 public class MapleTrade {
@@ -59,11 +59,11 @@ public class MapleTrade {
         chr.getClient().SendPacket(CField.InteractionPacket.TradeMessage(tradingslot, (byte) 7));
     }
 
-    public void cancel(Client c, User chr) {
+    public void cancel(ClientSocket c, User chr) {
         cancel(c, chr, true);
     }
 
-    public void cancel(Client c, User chr, boolean unsuccessful) {
+    public void cancel(ClientSocket c, User chr, boolean unsuccessful) {
         if (items != null) {
             List<Item> itemz = new LinkedList<>(items);
             for (Item item : itemz) {
@@ -116,9 +116,9 @@ public class MapleTrade {
             }
         }
         if (chr.getClient().isMonitored()) {
-            World.Broadcast.broadcastGMMessage(CWvsContext.broadcastMsg(6, chr.getName() + " said in trade with " + partner.getCharacter().getName() + ": " + message));
+            World.Broadcast.broadcastGMMessage(WvsContext.broadcastMsg(6, chr.getName() + " said in trade with " + partner.getCharacter().getName() + ": " + message));
         } else if (partner != null && partner.getCharacter() != null && partner.getCharacter().getClient().isMonitored()) {
-            World.Broadcast.broadcastGMMessage(CWvsContext.broadcastMsg(6, chr.getName() + " said in trade with " + partner.getCharacter().getName() + ": " + message));
+            World.Broadcast.broadcastGMMessage(WvsContext.broadcastMsg(6, chr.getName() + " said in trade with " + partner.getCharacter().getName() + ": " + message));
         }
     }
 
@@ -128,9 +128,9 @@ public class MapleTrade {
             partner.getCharacter().getClient().SendPacket(PlayerShopPacket.shopChat(message, 1));
         }
         if (chr.getClient().isMonitored()) {
-            World.Broadcast.broadcastGMMessage(CWvsContext.broadcastMsg(6, chr.getName() + " said in trade [Automated] with " + partner.getCharacter().getName() + ": " + message));
+            World.Broadcast.broadcastGMMessage(WvsContext.broadcastMsg(6, chr.getName() + " said in trade [Automated] with " + partner.getCharacter().getName() + ": " + message));
         } else if (partner != null && partner.getCharacter() != null && partner.getCharacter().getClient().isMonitored()) {
-            World.Broadcast.broadcastGMMessage(CWvsContext.broadcastMsg(6, chr.getName() + " said in trade [Automated] with " + partner.getCharacter().getName() + ": " + message));
+            World.Broadcast.broadcastGMMessage(WvsContext.broadcastMsg(6, chr.getName() + " said in trade [Automated] with " + partner.getCharacter().getName() + ": " + message));
         }
     }
 
@@ -166,7 +166,7 @@ public class MapleTrade {
         return inTrade;
     }
 
-    public boolean setItems(Client c, Item item, byte targetSlot, int quantity) {
+    public boolean setItems(ClientSocket c, Item item, byte targetSlot, int quantity) {
         int target = getNextTargetSlot();
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if (partner == null || target == -1 || InventoryConstants.isPet(item.getItemId()) || isLocked() || (GameConstants.getInventoryType(item.getItemId()) == MapleInventoryType.EQUIP) && (quantity != 1)) {
@@ -174,12 +174,12 @@ public class MapleTrade {
         }
         short flag = item.getFlag();
         if (ItemFlag.UNTRADABLE.check(flag) || ItemFlag.LOCK.check(flag)) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return false;
         }
         if ((ii.isDropRestricted(item.getItemId()) || ii.isAccountShared(item.getItemId()))
                 && !ItemFlag.KARMA_EQ.check(flag) && !ItemFlag.KARMA_USE.check(flag)) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return false;
         }
 
@@ -255,7 +255,7 @@ public class MapleTrade {
         }
     }
 
-    public static void cancelTrade(MapleTrade trade, Client c, User chr) {
+    public static void cancelTrade(MapleTrade trade, ClientSocket c, User chr) {
         trade.cancel(c, chr);
 
         MapleTrade partner = trade.getPartner();
@@ -268,7 +268,7 @@ public class MapleTrade {
 
     public static void startTrade(User c) {
         if (GameConstants.isZero(c.getJob())) {
-            c.getClient().SendPacket(CWvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
+            c.getClient().SendPacket(WvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
             return;
         }
 
@@ -276,13 +276,13 @@ public class MapleTrade {
             c.setTrade(new MapleTrade((byte) 0, c));
             c.getClient().SendPacket(CField.InteractionPacket.getTradeStart(c.getClient(), c.getTrade(), (byte) 0));
         } else {
-            c.getClient().SendPacket(CWvsContext.broadcastMsg(5, "You are already in a trade window."));
+            c.getClient().SendPacket(WvsContext.broadcastMsg(5, "You are already in a trade window."));
         }
     }
 
     public static void inviteTrade(User c1, User c2) {
         if (GameConstants.isZero(c2.getJob())) {
-            c1.getClient().SendPacket(CWvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
+            c1.getClient().SendPacket(WvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
             c1.getTrade().cancel(c1.getClient(), c1);
             return;
         }
@@ -296,14 +296,14 @@ public class MapleTrade {
             c1.getTrade().setPartner(c2.getTrade());
             c2.getClient().SendPacket(CField.InteractionPacket.getTradeInvite(c1));
         } else {
-            c1.getClient().SendPacket(CWvsContext.broadcastMsg(5, "The other player is already trading with someone else."));
+            c1.getClient().SendPacket(WvsContext.broadcastMsg(5, "The other player is already trading with someone else."));
             cancelTrade(c1.getTrade(), c1.getClient(), c1);
         }
     }
 
     public static void visitTrade(User c1, User c2) {
         if (GameConstants.isZero(c2.getJob())) {
-            c1.getClient().SendPacket(CWvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
+            c1.getClient().SendPacket(WvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
             return;
         }
 
@@ -312,7 +312,7 @@ public class MapleTrade {
             c2.getClient().SendPacket(PlayerShopPacket.shopVisitorAdd(c1, 1));
             c1.getClient().SendPacket(CField.InteractionPacket.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 1));
         } else {
-            c1.getClient().SendPacket(CWvsContext.broadcastMsg(5, "The other player has already closed the trade"));
+            c1.getClient().SendPacket(WvsContext.broadcastMsg(5, "The other player has already closed the trade"));
         }
     }
 

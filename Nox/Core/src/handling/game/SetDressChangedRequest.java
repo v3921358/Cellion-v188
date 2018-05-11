@@ -1,20 +1,20 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import constants.GameConstants;
 import net.InPacket;
 import net.ProcessPacket;
 import tools.packet.CField;
 
-public class SetDressChangedRequest implements ProcessPacket<Client> {
+public class SetDressChangedRequest implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         byte bDressChanged = iPacket.DecodeByte();
 
         System.out.printf("Dress Changed (%s) \r\n", bDressChanged);

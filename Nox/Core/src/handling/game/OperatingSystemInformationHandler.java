@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import handling.PacketThrottleLimits;
 import net.InPacket;
 import net.ProcessPacket;
@@ -15,15 +15,15 @@ import net.ProcessPacket;
         MinTimeMillisBetweenPackets = 30000,
         FunctionName = "OperatingSystemInformationHandler",
         BanType = PacketThrottleLimits.PacketThrottleBanType.PermanentBan)
-public class OperatingSystemInformationHandler implements ProcessPacket<Client> {
+public class OperatingSystemInformationHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
     }
 
 }

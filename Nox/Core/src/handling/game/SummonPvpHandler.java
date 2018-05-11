@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import client.CharacterTemporaryStat;
-import client.Client;
+import client.ClientSocket;
 import client.MapleDisease;
 import client.MonsterStatus;
 import client.PlayerStats;
@@ -29,15 +29,15 @@ import net.InPacket;
 import tools.packet.CField;
 import net.ProcessPacket;
 
-public final class SummonPvpHandler implements ProcessPacket<Client> {
+public final class SummonPvpHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr == null || chr.isHidden() || !chr.isAlive() || chr.hasBlockedInventory() || chr.getMap() == null || !chr.inPVP() || !chr.getEventInstance().getProperty("started").equals("1")) {
             return;

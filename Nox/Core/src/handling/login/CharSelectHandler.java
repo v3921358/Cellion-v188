@@ -1,18 +1,18 @@
 package handling.login;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class CharSelectHandler implements ProcessPacket<Client> {
+public final class CharSelectHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int charId = iPacket.DecodeInt();
         String name = iPacket.DecodeString();
         // MapleCharacter character = c.loadCharacterById(charId);

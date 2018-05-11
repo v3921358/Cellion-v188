@@ -2,7 +2,7 @@ package handling.game;
 
 import java.util.Collections;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.MapleInventoryType;
 import client.inventory.ModifyInventory;
@@ -10,17 +10,17 @@ import client.inventory.ModifyInventoryOperation;
 import constants.GameConstants;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  * @author Steven
  *
  */
-public class ZeroCashItemShare implements ProcessPacket<Client> {
+public class ZeroCashItemShare implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
@@ -30,7 +30,7 @@ public class ZeroCashItemShare implements ProcessPacket<Client> {
      * @see handling.MaplePacketHandler#handlePacket(tools.data.input.InPacket, client.Client)
      */
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         if (chr == null) {
             return;
@@ -45,7 +45,7 @@ public class ZeroCashItemShare implements ProcessPacket<Client> {
         if (isShared) {
             Equip beta = (Equip) alpha.copy();
             beta.setPosition(GameConstants.getBetaCashPosition(alpha.getPosition()));
-            c.SendPacket(CWvsContext.inventoryOperation(true, Collections.singletonList(new ModifyInventory(ModifyInventoryOperation.AddItem, beta, (short) 0)), true));
+            c.SendPacket(WvsContext.inventoryOperation(true, Collections.singletonList(new ModifyInventory(ModifyInventoryOperation.AddItem, beta, (short) 0)), true));
         }
     }
 

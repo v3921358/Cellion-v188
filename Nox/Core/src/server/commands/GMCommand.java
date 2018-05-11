@@ -41,7 +41,7 @@ import tools.StringUtil;
 import tools.Tuple;
 import tools.packet.CField;
 import tools.packet.CField.NPCPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.MobPacket;
 
 import java.awt.*;
@@ -74,7 +74,7 @@ public class GMCommand {
     public static class ReloadScript extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (ScriptType type : ScriptType.values()) {
                 AbstractScriptManager.reloadCachedScript(type);
             }
@@ -86,7 +86,7 @@ public class GMCommand {
     public static class SetPlayer extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().setGM((byte) 0);
             c.getPlayer().dropMessage(6, "You have removed the GameMaster privileges from your current character.");
             return 1;
@@ -96,7 +96,7 @@ public class GMCommand {
     public static class GodMode extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User pPlayer = c.getPlayer();
 
             if (pPlayer.hasGodMode()) {
@@ -108,7 +108,7 @@ public class GMCommand {
             }
 
             pPlayer.getQuestNAdd(Quest.getInstance(GameConstants.JAGUAR)).setCustomData(String.valueOf((9304004 - 9303999) * 10));
-            c.SendPacket(CWvsContext.updateJaguar(pPlayer));
+            c.SendPacket(WvsContext.updateJaguar(pPlayer));
             return 0;
         }
     }
@@ -116,7 +116,7 @@ public class GMCommand {
     public static class Info extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User pUser = null;
             int nOnline = 0;
 
@@ -166,7 +166,7 @@ public class GMCommand {
     public static class Reports extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             List<CheaterData> cheaters = World.getReports();
             for (int x = cheaters.size() - 1; x >= 0; x--) {
                 CheaterData cheater = cheaters.get(x);
@@ -179,7 +179,7 @@ public class GMCommand {
     public static class ClearReport extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 3) {
                 StringBuilder ret = new StringBuilder("report [ign] [all/");
                 for (ReportType type : ReportType.values()) {
@@ -208,7 +208,7 @@ public class GMCommand {
     public static class ClearDrops extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().getMap().removeDrops();
             return 1;
         }
@@ -217,7 +217,7 @@ public class GMCommand {
     public static class Job extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User oPlayer;
             int nJob;
             if (splitted.length == 3) {
@@ -246,7 +246,7 @@ public class GMCommand {
     public static class KillNear extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleMap map = c.getPlayer().getMap();
             List<MapleMapObject> players = map.getMapObjectsInRange(c.getPlayer().getPosition(), (double) 25000, Arrays.asList(MapleMapObjectType.PLAYER));
             for (MapleMapObject closeplayers : players) {
@@ -264,7 +264,7 @@ public class GMCommand {
     public static class Heal extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().getStat().heal(c.getPlayer());
             c.getPlayer().dispelDebuffs();
             return 0;
@@ -274,7 +274,7 @@ public class GMCommand {
     public static class HealMap extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User player = c.getPlayer();
             for (User mch : player.getMap().getCharacters()) {
                 if (mch != null) {
@@ -292,7 +292,7 @@ public class GMCommand {
     public static class ClearInv extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User player = c.getPlayer();
             if (splitted.length < 2 || player.hasBlockedInventory()) {
                 c.getPlayer().dropMessage(5, "!clearinv <eq / use / setup / etc / cash / all >");
@@ -374,7 +374,7 @@ public class GMCommand {
     public static class WarpMap extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             try {
                 final MapleMap target = c.getChannelServer().getMapFactory().getMap(Integer.parseInt(splitted[1]));
                 if (target == null) {
@@ -396,7 +396,7 @@ public class GMCommand {
     public static class KillAll extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleMap map = c.getPlayer().getMap();
             double range = Double.POSITIVE_INFINITY;
 
@@ -426,7 +426,7 @@ public class GMCommand {
     public static class WarpHere extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (victim != null) {
                 if (c.getPlayer().inPVP() || (!c.getPlayer().isGM() && (victim.isInBlockedMap() || victim.isGM()))) {
@@ -460,7 +460,7 @@ public class GMCommand {
     public static class Warp extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (victim != null && c.getPlayer().getGMLevel() >= victim.getGMLevel() && !victim.inPVP() && !c.getPlayer().inPVP()) {
                 if (splitted.length == 2) {
@@ -542,7 +542,7 @@ public class GMCommand {
         }
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 3) {
                 c.getPlayer().dropMessage(5, "[Syntax] !" + getCommand() + " <IGN> <Reason>");
                 c.getPlayer().dropMessage(5, "If you want to consider this ban as an autoban, set the reason \"AutoBan\"");
@@ -582,7 +582,7 @@ public class GMCommand {
     public static class DC extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[splitted.length - 1]);
             if (victim != null && c.getPlayer().getGMLevel() >= victim.getGMLevel()) {
                 victim.getClient().Close();
@@ -598,7 +598,7 @@ public class GMCommand {
     public static class Kill extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User player = c.getPlayer();
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(6, "Syntax: !kill <list player names>");
@@ -628,7 +628,7 @@ public class GMCommand {
     public static class Fame extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User player = c.getPlayer();
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(6, "Syntax: !fame <player> <amount>");
@@ -653,7 +653,7 @@ public class GMCommand {
     public static class GiveEP extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 3) {
                 c.getPlayer().dropMessage(6, "Need playername and amount.");
                 return 0;
@@ -672,7 +672,7 @@ public class GMCommand {
     public static class GiveSP extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 2) {
                 c.getPlayer().setRemainingSp(CommandProcessorUtil.getOptionalIntArg(splitted, 1, 1));
                 c.getPlayer().updateSingleStat(MapleStat.AVAILABLESP, 0);
@@ -694,7 +694,7 @@ public class GMCommand {
     public static class KillMap extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (User map : c.getPlayer().getMap().getCharacters()) {
                 if (map != null && !map.isIntern()) {
                     map.getStat().setHp((short) 0, map);
@@ -710,7 +710,7 @@ public class GMCommand {
     public static class LevelTo extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             while (c.getPlayer().getLevel() < Integer.parseInt(splitted[1])) {
                 if (c.getPlayer().getLevel() < 255) {
                     c.getPlayer().levelUp();
@@ -723,7 +723,7 @@ public class GMCommand {
     public static class HyperSkills extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User oPlayer;
             if (splitted.length > 1) {
                 oPlayer = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
@@ -740,7 +740,7 @@ public class GMCommand {
     public static class MaxSkills extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User oPlayer;
             if (splitted.length > 1 && c.getPlayer().isAdmin()) {
                 oPlayer = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
@@ -764,7 +764,7 @@ public class GMCommand {
     public static class ITEM extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final int itemId = Integer.parseInt(splitted[1]);
             final short quantity = (short) CommandProcessorUtil.getOptionalIntArg(splitted, 2, 1);
 
@@ -806,16 +806,16 @@ public class GMCommand {
     public static class ToggleEvent extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
 
             if (!c.getPlayer().getClient().getChannelServer().eventOn) {
                 int mapid = getOptionalIntArg(splitted, 1, c.getPlayer().getMapId());
                 c.getPlayer().getClient().getChannelServer().eventOn = true;
                 c.getPlayer().getClient().getChannelServer().eventMap = mapid;
-                World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(6, "[" + ServerConstants.SERVER_NAME + " Event] An event has started in Channel " + c.getChannel() + ", type @event to join now!"));
+                World.Broadcast.broadcastMessage(WvsContext.broadcastMsg(6, "[" + ServerConstants.SERVER_NAME + " Event] An event has started in Channel " + c.getChannel() + ", type @event to join now!"));
             } else {
                 c.getPlayer().getClient().getChannelServer().eventOn = false;
-                World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(6, "[" + ServerConstants.SERVER_NAME + " Event] The event has ended, thank you for your participation!"));
+                World.Broadcast.broadcastMessage(WvsContext.broadcastMsg(6, "[" + ServerConstants.SERVER_NAME + " Event] The event has ended, thank you for your participation!"));
             }
 
             return 1;
@@ -825,7 +825,7 @@ public class GMCommand {
     public static class RemoveItem extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 3) {
                 c.getPlayer().dropMessage(6, "Syntax: !removeitem <character> <itemid>");
                 return 0;
@@ -848,7 +848,7 @@ public class GMCommand {
     public static class LockItem extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 3) {
                 c.getPlayer().dropMessage(6, "Need <name> <itemid>");
                 return 0;
@@ -866,7 +866,7 @@ public class GMCommand {
                 List<ModifyInventory> mod = new ArrayList<>();
                 mod.add(new ModifyInventory(ModifyInventoryOperation.Remove, item));
                 mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-                c.SendPacket(CWvsContext.inventoryOperation(true, mod));
+                c.SendPacket(WvsContext.inventoryOperation(true, mod));
             }
             if (type == MapleInventoryType.EQUIP) {
                 type = MapleInventoryType.EQUIPPED;
@@ -883,8 +883,8 @@ public class GMCommand {
     public static class Smega extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
-            World.Broadcast.broadcastSmega(CWvsContext.broadcastMsg(3, c.getPlayer() == null ? c.getChannel() : c.getPlayer().getClient().getChannel(), c.getPlayer() == null ? c.getPlayer().getName() : c.getPlayer().getName() + " : " + StringUtil.joinStringFrom(splitted, 1), true));
+        public int execute(ClientSocket c, String[] splitted) {
+            World.Broadcast.broadcastSmega(WvsContext.broadcastMsg(3, c.getPlayer() == null ? c.getChannel() : c.getPlayer().getClient().getChannel(), c.getPlayer() == null ? c.getPlayer().getName() : c.getPlayer().getName() + " : " + StringUtil.joinStringFrom(splitted, 1), true));
             return 1;
         }
     }
@@ -892,7 +892,7 @@ public class GMCommand {
     public static class WhosThere extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             StringBuilder builder = new StringBuilder("The players on the current map are : ").append(c.getPlayer().getMap().getCharactersSize()).append(", ");
             for (User chr : c.getPlayer().getMap().getCharacters()) {
                 if (!chr.isAdmin()) {
@@ -921,7 +921,7 @@ public class GMCommand {
     public static class ToggleDrops extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().getMap().toggleDrops();
             return 1;
         }
@@ -930,7 +930,7 @@ public class GMCommand {
     public static class Spawn extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final int mid = Integer.parseInt(splitted[1]);
             final int num = Math.min(CommandProcessorUtil.getOptionalIntArg(splitted, 2, 1), 500);
             Integer level = CommandProcessorUtil.getNamedIntArg(splitted, 1, "lvl");
@@ -988,7 +988,7 @@ public class GMCommand {
     public static class Mute extends CommandExecute {
 
         @Override
-        public int execute(Client c, String splitted[]) {
+        public int execute(ClientSocket c, String splitted[]) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             victim.canTalk(false);
             return 1;
@@ -998,7 +998,7 @@ public class GMCommand {
     public static class UnMute extends CommandExecute {
 
         @Override
-        public int execute(Client c, String splitted[]) {
+        public int execute(ClientSocket c, String splitted[]) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             victim.canTalk(true);
             return 1;
@@ -1008,7 +1008,7 @@ public class GMCommand {
     public static class MuteMap extends CommandExecute {
 
         @Override
-        public int execute(Client c, String splitted[]) {
+        public int execute(ClientSocket c, String splitted[]) {
             for (User chr : c.getPlayer().getMap().getCharacters()) {
                 chr.canTalk(false);
             }
@@ -1019,7 +1019,7 @@ public class GMCommand {
     public static class UnMuteMap extends CommandExecute {
 
         @Override
-        public int execute(Client c, String splitted[]) {
+        public int execute(ClientSocket c, String splitted[]) {
             for (User chr : c.getPlayer().getMap().getCharacters()) {
                 chr.canTalk(true);
             }
@@ -1030,7 +1030,7 @@ public class GMCommand {
     public static class MapChangeTimer extends CommandExecute {
 
         @Override
-        public int execute(final Client c, String splitted[]) {
+        public int execute(final ClientSocket c, String splitted[]) {
             final int map = Integer.parseInt(splitted[1]);
             final int nextmap = Integer.parseInt(splitted[2]);
             final int time = Integer.parseInt(splitted[3]);
@@ -1088,13 +1088,13 @@ public class GMCommand {
         }
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(6, "[Syntax] !" + getCommand() + " <IGN>");
                 return 0;
             }
             byte ret;
-            ret = Client.unban(splitted[1]);
+            ret = ClientSocket.unban(splitted[1]);
             if (ret == -2) {
                 c.getPlayer().dropMessage(6, "[" + getCommand() + "] SQL error.");
                 return 0;
@@ -1105,7 +1105,7 @@ public class GMCommand {
                 c.getPlayer().dropMessage(6, "[" + getCommand() + "] Successfully unbanned!");
 
             }
-            byte ret_ = Client.unbanIPMacs(splitted[1]);
+            byte ret_ = ClientSocket.unbanIPMacs(splitted[1]);
             if (ret_ == -2) {
                 c.getPlayer().dropMessage(6, "[UnbanIP] SQL error.");
             } else if (ret_ == -1) {
@@ -1124,12 +1124,12 @@ public class GMCommand {
     public static class UnbanIP extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(6, "[Syntax] !unbanip <IGN>");
                 return 0;
             }
-            byte ret = Client.unbanIPMacs(splitted[1]);
+            byte ret = ClientSocket.unbanIPMacs(splitted[1]);
             if (ret == -2) {
                 c.getPlayer().dropMessage(6, "[UnbanIP] SQL error.");
             } else if (ret == -1) {
@@ -1151,7 +1151,7 @@ public class GMCommand {
     public static class UnlockInv extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             java.util.Map<Item, MapleInventoryType> eqs = new HashMap<>();
             boolean add = false;
             if (splitted.length < 2 || splitted[1].equals("all")) {
@@ -1289,7 +1289,7 @@ public class GMCommand {
     public static class Drop extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final int itemId = Integer.parseInt(splitted[1]);
             final short quantity = (short) CommandProcessorUtil.getOptionalIntArg(splitted, 2, 1);
             MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -1316,7 +1316,7 @@ public class GMCommand {
     public static class DropItem extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final String itemName = StringUtil.joinStringFrom(splitted, 2);
             final short quantity = (short) CommandProcessorUtil.getOptionalIntArg(splitted, 1, 1);
             int itemId = 0;
@@ -1353,7 +1353,7 @@ public class GMCommand {
     public static class Monitor extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             User target = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (target != null) {
                 if (target.getClient().isMonitored()) {
@@ -1374,7 +1374,7 @@ public class GMCommand {
     public static class KillAllExp extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             MapleMap map = c.getPlayer().getMap();
             double range = Double.POSITIVE_INFINITY;
 

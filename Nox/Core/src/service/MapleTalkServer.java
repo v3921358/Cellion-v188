@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import constants.ServerConstants;
-import handling.MapleServerHandler;
+import handling.ServerHandler;
 import handling.game.PlayerStorage;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -65,7 +65,7 @@ public class MapleTalkServer extends Thread {
 
             @Override
             protected void initChannel(SocketChannel c) throws Exception {
-                c.pipeline().addLast(new PacketDecoder(), new MapleServerHandler(ServerMode.MapleServerMode.MAPLETALK), new PacketEncoder());
+                c.pipeline().addLast(new PacketDecoder(), new ServerHandler(ServerMode.MapleServerMode.MAPLETALK), new PacketEncoder());
             }
         });
 

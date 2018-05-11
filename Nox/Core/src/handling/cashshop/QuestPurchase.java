@@ -5,7 +5,7 @@
  */
 package handling.cashshop;
 
-import client.Client;
+import client.ClientSocket;
 import constants.GameConstants;
 
 import static handling.cashshop.CashShopOperation.playerCashShopInfo;
@@ -24,7 +24,7 @@ import tools.packet.CSPacket;
  */
 public class QuestPurchase {
 
-    public static void buyItem(InPacket iPacket, Client c, User chr) {
+    public static void buyItem(InPacket iPacket, ClientSocket c, User chr) {
         CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInt());
         if (iteminfo == null || !MapleItemInformationProvider.getInstance().isQuestItem(iteminfo.getId())) {
             c.SendPacket(CSPacket.sendCSFail(0));

@@ -3,7 +3,7 @@ package tools.packet;
 import java.util.List;
 import java.util.Set;
 
-import client.Client;
+import client.ClientSocket;
 import client.PartTimeJob;
 import constants.GameConstants;
 import constants.JobConstants;
@@ -72,7 +72,7 @@ public class CLogin {
         return oPacket;
     }
 
-    public static OutPacket CheckPasswordResult(Client client) {
+    public static OutPacket CheckPasswordResult(ClientSocket client) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.CheckPasswordResult.getValue());
         oPacket.EncodeByte(0);//related to blocked account
@@ -116,8 +116,8 @@ public class CLogin {
 
         // Pop Up Message
         if (ServerConstants.SHOW_LOADING_MESSAGE && !client.isGm()) {
-            client.SendPacket(CWvsContext.broadcastMsg(""));
-            client.SendPacket(CWvsContext.broadcastMsg(1, "Welcome " + client.getAccountName() + ", "
+            client.SendPacket(WvsContext.broadcastMsg(""));
+            client.SendPacket(WvsContext.broadcastMsg(1, "Welcome " + client.getAccountName() + ", "
                     + "\r\n\r\nPlease be patient while the game client is loading data during your character selection."
                     + "\r\n\r\nThis process may take a long time."));
         }
@@ -199,7 +199,7 @@ public class CLogin {
        [31 00] 
        [B3 03]
      */
-    public static final OutPacket getAccountSpecifications(Client c) {
+    public static final OutPacket getAccountSpecifications(ClientSocket c) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.AccountInfoResult.getValue());
         oPacket.EncodeByte(0); //unk
@@ -433,7 +433,7 @@ public class CLogin {
      * Dummy pic 4 = Outdated pic
      * @return oPacket
      */
-    public static OutPacket getCharList(Client c, String secondpw, List<User> chars, int charslots, boolean isRebootServer) {
+    public static OutPacket getCharList(ClientSocket c, String secondpw, List<User> chars, int charslots, boolean isRebootServer) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.SelectWorldResult.getValue());
         oPacket.EncodeByte(0); // mode

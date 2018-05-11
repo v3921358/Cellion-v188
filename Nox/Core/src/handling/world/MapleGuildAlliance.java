@@ -13,8 +13,8 @@ import handling.world.World;
 import net.OutPacket;
 import tools.LogHelper;
 
-import tools.packet.CWvsContext;
-import tools.packet.CWvsContext.AlliancePacket;
+import tools.packet.WvsContext;
+import tools.packet.WvsContext.AlliancePacket;
 
 public class MapleGuildAlliance implements java.io.Serializable {
 
@@ -333,7 +333,7 @@ public class MapleGuildAlliance implements java.io.Serializable {
         guilds[g] = guilds[0];
         guilds[0] = oldGuild;
         if (leaderName != null) {
-            broadcast(CWvsContext.broadcastMsg(5, leaderName + " has become the leader of the alliance."));
+            broadcast(WvsContext.broadcastMsg(5, leaderName + " has become the leader of the alliance."));
         }
         broadcast(AlliancePacket.changeAllianceLeader(allianceid, leaderid, c));
         broadcast(AlliancePacket.updateAllianceLeader(allianceid, leaderid, c));

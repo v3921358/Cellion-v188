@@ -21,30 +21,30 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class MonsterBookInfoRequest implements ProcessPacket<Client> {
+public final class MonsterBookInfoRequest implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if (c.getPlayer() == null || c.getPlayer().getMap() == null) {
             return;
         }
         iPacket.DecodeInt(); // tick
         final User player = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInt());
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
         if (player != null) {
             if (!player.isGM() || c.getPlayer().isGM()) {
-                c.SendPacket(CWvsContext.getMonsterBookInfo(player));
+                c.SendPacket(WvsContext.getMonsterBookInfo(player));
             }
         }
     }

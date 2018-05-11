@@ -10,7 +10,7 @@ import server.maps.MapleMap;
 import server.maps.objects.User;
 import tools.Pair;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class MapleOxQuiz extends MapleEvent {
 
@@ -87,7 +87,7 @@ public class MapleOxQuiz extends MapleEvent {
                     }
                 }
                 if (toSend.getCharactersSize() - number <= 1 || timesAsked == 10) {
-                    toSend.broadcastMessage(CWvsContext.broadcastMsg(6, "The event has ended"));
+                    toSend.broadcastMessage(WvsContext.broadcastMsg(6, "The event has ended"));
                     unreset();
                     for (User chr : toSend.getCharacters()) {
                         if (chr != null && !chr.isGM() && chr.isAlive()) {

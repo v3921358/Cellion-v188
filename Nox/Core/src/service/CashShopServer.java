@@ -3,7 +3,7 @@ package service;
 import java.net.InetSocketAddress;
 
 import constants.ServerConstants;
-import handling.MapleServerHandler;
+import handling.ServerHandler;
 import handling.game.PlayerStorage;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -42,7 +42,7 @@ public class CashShopServer extends Thread {
 
             @Override
             protected void initChannel(SocketChannel c) throws Exception {
-                c.pipeline().addLast(new PacketDecoder(), new MapleServerHandler(ServerMode.MapleServerMode.CS), new PacketEncoder());
+                c.pipeline().addLast(new PacketDecoder(), new ServerHandler(ServerMode.MapleServerMode.CS), new PacketEncoder());
             }
         });
 

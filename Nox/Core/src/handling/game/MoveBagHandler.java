@@ -1,25 +1,25 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class MoveBagHandler implements ProcessPacket<Client> {
+public class MoveBagHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if (c.getPlayer().hasBlockedInventory()) { //hack
             return;
         }
@@ -28,7 +28,7 @@ public class MoveBagHandler implements ProcessPacket<Client> {
         final boolean srcFirst = iPacket.DecodeInt() > 0;
         short dst = (short) iPacket.DecodeInt();                                       //01 00
         if (iPacket.DecodeByte() != 4) { //must be etc
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         short src = iPacket.DecodeShort();                                             //00 00

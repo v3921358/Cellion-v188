@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import java.util.List;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
@@ -8,7 +8,7 @@ import server.maps.MapleMapObjectType;
 import server.stores.HiredMerchant;
 import server.stores.IMaplePlayerShop;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.PlayerShopPacket;
 import net.ProcessPacket;
 
@@ -16,29 +16,29 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseOwlWarpHandler implements ProcessPacket<Client> {
+public class UseOwlWarpHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     public static final int OWL_ID = 2; //don't change. 0 = owner ID, 1 = store ID, 2 = object ID
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if (!c.getPlayer().isAlive()) {
-            c.SendPacket(CWvsContext.getOwlMessage(4));
+            c.SendPacket(WvsContext.getOwlMessage(4));
             return;
         } else if (c.getPlayer().getTrade() != null) {
-            c.SendPacket(CWvsContext.getOwlMessage(7));
+            c.SendPacket(WvsContext.getOwlMessage(7));
             return;
         }
         if (c.getPlayer().getMapId() >= 910000000 && c.getPlayer().getMapId() <= 910000022 && !c.getPlayer().hasBlockedInventory()) {
             final int id = iPacket.DecodeInt();
             final int map = iPacket.DecodeInt();
             if (map >= 910000001 && map <= 910000022) {
-                c.SendPacket(CWvsContext.getOwlMessage(0));
+                c.SendPacket(WvsContext.getOwlMessage(0));
                 final MapleMap mapp = c.getChannelServer().getMapFactory().getMap(map);
                 c.getPlayer().changeMap(mapp, mapp.getPortal(0));
                 HiredMerchant merchant = null;
@@ -105,10 +105,10 @@ public class UseOwlWarpHandler implements ProcessPacket<Client> {
                     c.getPlayer().dropMessage(1, "The room is already closed.");
                 }
             } else {
-                c.SendPacket(CWvsContext.getOwlMessage(23));
+                c.SendPacket(WvsContext.getOwlMessage(23));
             }
         } else {
-            c.SendPacket(CWvsContext.getOwlMessage(23));
+            c.SendPacket(WvsContext.getOwlMessage(23));
         }
     }
 

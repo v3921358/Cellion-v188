@@ -5,24 +5,24 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import net.ProcessPacket;
 import tools.packet.JobPacket;
 
 /**
- *
+ * ReleasePsychicLock
  * @author Mazen Massoud
  */
-public class ReleasePsychicLockHandler implements ProcessPacket<Client> {
+public class ReleasePsychicLockHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int nSkillID = iPacket.DecodeInt();
         int nSLV = iPacket.DecodeInt();
         int nParentPsychicAreaKey = iPacket.DecodeInt();

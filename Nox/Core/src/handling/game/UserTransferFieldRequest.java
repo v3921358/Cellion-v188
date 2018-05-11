@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import handling.cashshop.CashShopOperation;
@@ -11,19 +11,19 @@ import server.maps.MapleMap;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 import tools.packet.CField.SummonPacket;
 
-public final class UserTransferFieldRequest implements ProcessPacket<Client> {
+public final class UserTransferFieldRequest implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr == null) {
             return;
@@ -151,7 +151,7 @@ public final class UserTransferFieldRequest implements ProcessPacket<Client> {
                     if (unlock) {
                         c.SendPacket(CField.UIPacket.IntroEnableUI(false));
                         c.SendPacket(CField.UIPacket.IntroLock(false));
-                        c.SendPacket(CWvsContext.enableActions());
+                        c.SendPacket(WvsContext.enableActions());
                     }
                     if (warp) {
                         MapleMap to = ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(targetid);
@@ -160,7 +160,7 @@ public final class UserTransferFieldRequest implements ProcessPacket<Client> {
                 } else if ((portal != null) && (!chr.hasBlockedInventory())) {
                     portal.enterPortal(c);
                 } else {
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                 }
             }
         }

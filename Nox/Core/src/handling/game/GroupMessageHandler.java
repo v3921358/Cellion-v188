@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import java.util.ArrayList;
 import java.util.List;
 import net.InPacket;
@@ -17,14 +17,14 @@ import tools.packet.CField;
  *
  * @author Five
  */
-public class GroupMessageHandler implements ProcessPacket<Client> {
+public class GroupMessageHandler implements ProcessPacket<ClientSocket> {
 
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int nType = iPacket.DecodeByte();
         int nCount = iPacket.DecodeByte();
         List<Integer> aCharacterID = new ArrayList<>(nCount);

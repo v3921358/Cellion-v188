@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -15,22 +15,22 @@ import net.InPacket;
 import server.potentials.ItemPotentialProvider;
 import server.NebuliteGrade;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class UseNebuliteFusionHandler implements ProcessPacket<Client> {
+public class UseNebuliteFusionHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         /*   c.getPlayer().updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
 

@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import client.inventory.MapleInventoryType;
@@ -21,7 +21,7 @@ import server.stores.MapleMiniGame;
 import server.stores.MaplePlayerShop;
 import server.stores.MaplePlayerShopItem;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.PlayerShopPacket;
 import net.ProcessPacket;
 
@@ -29,10 +29,10 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class PlayerInteractionHandler implements ProcessPacket<Client> {
+public class PlayerInteractionHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
@@ -159,7 +159,7 @@ public class PlayerInteractionHandler implements ProcessPacket<Client> {
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         //        System.err.println(iPacket.toString());
@@ -173,7 +173,7 @@ public class PlayerInteractionHandler implements ProcessPacket<Client> {
             case CREATE: {
                 if (chr.getPlayerShop() != null || c.getChannelServer().isShutdown() || chr.hasBlockedInventory()) {
                     //System.err.println("amq");
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                     return;
                 }
                 final byte createType = iPacket.DecodeByte();
@@ -186,12 +186,12 @@ public class PlayerInteractionHandler implements ProcessPacket<Client> {
                     //}
                     if (!chr.getMap().getMapObjectsInRange(chr.getTruePosition(), 20000, Arrays.asList(MapleMapObjectType.SHOP, MapleMapObjectType.HIRED_MERCHANT)).isEmpty() || !chr.getMap().getPortalsInRange(chr.getTruePosition(), 20000).isEmpty()) {
                         chr.dropMessage(1, "You may not establish a store here.");
-                        c.SendPacket(CWvsContext.enableActions());
+                        c.SendPacket(WvsContext.enableActions());
                         return;
                     } else if (createType == 1 || createType == 2) {
                         if (FieldLimitType.UnableToOpenMiniGame.check(chr.getMap()) || chr.getMap().getSharedMapResources().personalShop) {
                             chr.dropMessage(1, "You may not use minigames here.");
-                            c.SendPacket(CWvsContext.enableActions());
+                            c.SendPacket(WvsContext.enableActions());
                             return;
                         }
                     }
@@ -240,7 +240,7 @@ public class PlayerInteractionHandler implements ProcessPacket<Client> {
                 }
                 User chrr = chr.getMap().getCharacterById(iPacket.DecodeInt());
                 if (chrr == null || c.getChannelServer().isShutdown() || chrr.hasBlockedInventory()) {
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                     return;
                 }
                 MapleTrade.inviteTrade(chr, chrr);
@@ -252,7 +252,7 @@ public class PlayerInteractionHandler implements ProcessPacket<Client> {
             }
             case VISIT: {
                 if (c.getChannelServer().isShutdown()) {
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                     return;
                 }
                 if (chr.getTrade() != null && chr.getTrade().getPartner() != null && !chr.getTrade().inTrade()) {
@@ -316,7 +316,7 @@ public class PlayerInteractionHandler implements ProcessPacket<Client> {
             }
             case HIRED_MERCHANT_MAINTENANCE: {
                 if (c.getChannelServer().isShutdown() || chr.getMap() == null || chr.getTrade() != null) {
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                     return;
                 }
                 /*[RECV] PLAYER_INTERACTION 0x196:
@@ -332,13 +332,13 @@ public class PlayerInteractionHandler implements ProcessPacket<Client> {
                 final String password = iPacket.DecodeString();
                 if (!c.checkSecondPassword(password, true) || password.length() < 6 || password.length() > 16) {
                     chr.dropMessage(5, "Please enter a valid PIC.");
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                     return;
                 }
                 final int obid = iPacket.DecodeInt();
                 MapleMapObject ob = chr.getMap().getMapObject(obid, MapleMapObjectType.HIRED_MERCHANT);
                 if (ob == null || chr.getPlayerShop() != null) {
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                     return;
                 }
                 if (ob instanceof IMaplePlayerShop && ob instanceof HiredMerchant) {
@@ -350,7 +350,7 @@ public class PlayerInteractionHandler implements ProcessPacket<Client> {
                         chr.setPlayerShop(ips);
                         c.SendPacket(PlayerShopPacket.getHiredMerch(chr, merchant, false));
                     } else {
-                        c.SendPacket(CWvsContext.enableActions());
+                        c.SendPacket(WvsContext.enableActions());
                     }
                 }
                 break;
@@ -368,7 +368,7 @@ public class PlayerInteractionHandler implements ProcessPacket<Client> {
                     final IMaplePlayerShop ips = chr.getPlayerShop();
                     ips.broadcastToVisitors(PlayerShopPacket.shopChat(chr.getName() + " : " + message, ips.getVisitorSlot(chr)));
                     if (chr.getClient().isMonitored()) { //Broadcast info even if it was a command.
-                        World.Broadcast.broadcastGMMessage(CWvsContext.broadcastMsg(6, chr.getName() + " said in " + ips.getOwnerName() + " shop : " + message));
+                        World.Broadcast.broadcastGMMessage(WvsContext.broadcastMsg(6, chr.getName() + " said in " + ips.getOwnerName() + " shop : " + message));
                     }
                 }
                 break;
@@ -399,7 +399,7 @@ public class PlayerInteractionHandler implements ProcessPacket<Client> {
                     if (chr.getMap().getSharedMapResources().personalShop) {
                         if (c.getChannelServer().isShutdown()) {
                             chr.dropMessage(1, "The server is about to shut down.");
-                            c.SendPacket(CWvsContext.enableActions());
+                            c.SendPacket(WvsContext.enableActions());
                             shop.closeShop(shop.getShopType() == 1, false);
                             return;
                         }
@@ -490,18 +490,18 @@ public class PlayerInteractionHandler implements ProcessPacket<Client> {
                     if (ivItem.getQuantity() >= bundles_perbundle) {
                         final short flag = ivItem.getFlag();
                         if (ItemFlag.UNTRADABLE.check(flag) || ItemFlag.LOCK.check(flag)) {
-                            c.SendPacket(CWvsContext.enableActions());
+                            c.SendPacket(WvsContext.enableActions());
                             return;
                         }
                         if (ii.isDropRestricted(ivItem.getItemId()) || ii.isAccountShared(ivItem.getItemId())) {
                             if (!(ItemFlag.KARMA_EQ.check(flag) || ItemFlag.KARMA_USE.check(flag))) {
-                                c.SendPacket(CWvsContext.enableActions());
+                                c.SendPacket(WvsContext.enableActions());
                                 return;
                             }
                         }
                         if (GameConstants.getLowestPrice(ivItem.getItemId()) > price) {
                             c.getPlayer().dropMessage(1, "The lowest you can sell this for is " + GameConstants.getLowestPrice(ivItem.getItemId()));
-                            c.SendPacket(CWvsContext.enableActions());
+                            c.SendPacket(WvsContext.enableActions());
                             return;
 
                         }
@@ -628,8 +628,8 @@ public class PlayerInteractionHandler implements ProcessPacket<Client> {
                     merchant.removeAllVisitors(-1, -1);
                     chr.setPlayerShop(null);
                     merchant.closeShop(true, true);
-                    c.SendPacket(CWvsContext.broadcastMsg(1, "Please visit Fredrick for your items."));
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.broadcastMsg(1, "Please visit Fredrick for your items."));
+                    c.SendPacket(WvsContext.enableActions());
                 }
                 break;
             }

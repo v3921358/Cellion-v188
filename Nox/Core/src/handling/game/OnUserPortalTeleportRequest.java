@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.anticheat.CheatingOffense;
 import java.awt.Point;
 import net.InPacket;
@@ -29,15 +29,15 @@ import server.MaplePortal;
 import server.maps.objects.User;
 import net.ProcessPacket;
 
-public final class OnUserPortalTeleportRequest implements ProcessPacket<Client> {
+public final class OnUserPortalTeleportRequest implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         iPacket.Skip(1);
         User chr = c.getPlayer();
 

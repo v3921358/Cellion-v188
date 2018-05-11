@@ -70,8 +70,8 @@ import tools.packet.CField.EffectPacket.UserEffectCodes;
 import tools.packet.CField.NPCPacket;
 import tools.packet.CField.SummonPacket;
 import tools.packet.CUserLocal.DeadUIStats;
-import tools.packet.CWvsContext.InfoPacket;
-import tools.packet.CWvsContext.Reward;
+import tools.packet.WvsContext.InfoPacket;
+import tools.packet.WvsContext.Reward;
 import tools.packet.JobPacket.AvengerPacket;
 import tools.packet.JobPacket.LuminousPacket;
 import tools.packet.JobPacket.PhantomPacket;
@@ -97,7 +97,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import server.skills.VMatrixRecord;
 import server.maps.objects.StopForceAtom;
-import static tools.packet.CWvsContext.OnLoadAccountIDOfCharacterFriendResult;
+import static tools.packet.WvsContext.OnLoadAccountIDOfCharacterFriendResult;
 
 public class User extends AnimatedMapleMapObject implements Serializable, MapleCharacterLook {
 
@@ -153,7 +153,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private BuddyList buddylist;
     private MonsterBook monsterbook;
     private transient CheatTracker anticheat;
-    private Client client;
+    private ClientSocket client;
     private transient MapleParty party;
     private PlayerStats stats;
     private final MapleCharacterCards characterCard;
@@ -563,7 +563,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    public static User getDefault(final Client client, final JobType type) {
+    public static User getDefault(final ClientSocket client, final JobType type) {
         User ret = new User(false);
         ret.client = client;
         ret.map = null;
@@ -622,7 +622,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return ret;
     }
 
-    public static User reconstructCharacter(final CharacterTransfer ct, final Client client, final boolean isChannel) {
+    public static User reconstructCharacter(final CharacterTransfer ct, final ClientSocket client, final boolean isChannel) {
         final User ret = new User(true); // Always true, it's change channel
         ret.client = client;
         if (!isChannel) {
@@ -821,11 +821,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return ret;
     }
 
-    public static User loadCharFromDB(int charid, Client client, boolean channelserver) {
+    public static User loadCharFromDB(int charid, ClientSocket client, boolean channelserver) {
         return loadCharFromDB(charid, client, channelserver, null);
     }
 
-    public static User loadCharFromDB(int charid, Client client, boolean channelserver, final Map<Integer, CardData> cads) {
+    public static User loadCharFromDB(int charid, ClientSocket client, boolean channelserver, final Map<Integer, CardData> cads) {
         final User ret = new User(channelserver);
         ret.client = client;
         ret.id = charid;
@@ -2429,7 +2429,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         questinfo.put(questId, data);
         changedQuestInfo = true;
         UpdateQuestMessage quest = new UpdateQuestMessage(questId, data);
-        write(CWvsContext.messagePacket(quest));
+        write(WvsContext.messagePacket(quest));
     }
 
     public final String getInfoQuest(final int questid) {
@@ -2494,7 +2494,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         quests.put(quest.getQuest(), quest);
         QuestStatusMessage questMessage = new QuestStatusMessage(quest);
 
-        client.SendPacket(CWvsContext.messagePacket(questMessage));
+        client.SendPacket(WvsContext.messagePacket(questMessage));
         if (quest.getStatus() == QuestState.Started && !update) {
             client.SendPacket(CField.updateQuestInfo(this, quest.getQuest().getId(), quest.getNpc(), (byte) 11));//was10
         }
@@ -2738,7 +2738,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
         if ((effect.getSourceId() == WildHunter.JAGUAR_RIDER) && (bUnmount == false)) {
             if (isDeveloper()) dropMessage(5, "[Debug] Unmount State Disabled");
-            SendPacket(CWvsContext.enableActions());
+            SendPacket(WvsContext.enableActions());
             return;
         }
         cancelEffect(effect, overwrite, startTime, effect.getStatups());
@@ -3335,7 +3335,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             statups.put(MapleStat.HP, Long.valueOf(stats.getHp()));
         }
         if (statups.size() > 0) {
-            client.SendPacket(CWvsContext.updatePlayerStats(statups, this));
+            client.SendPacket(WvsContext.updatePlayerStats(statups, this));
         }
     }
 
@@ -3414,11 +3414,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return fallcounter;
     }
 
-    public final Client getClient() {
+    public final ClientSocket getClient() {
         return client;
     }
 
-    public final void setClient(final Client client) {
+    public final void setClient(final ClientSocket client) {
         this.client = client;
     }
 
@@ -3812,7 +3812,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void spMessage(int sp, int jobId) {
         IncreaseSpMessage spm = new IncreaseSpMessage(sp, jobId);
-        client.SendPacket(CWvsContext.messagePacket(spm));
+        client.SendPacket(WvsContext.messagePacket(spm));
     }
 
     public void changeJob(short newJob) {
@@ -3931,7 +3931,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
             characterCard.recalcLocalStats(this);
             stats.recalcLocalStats(this);
-            client.SendPacket(CWvsContext.updatePlayerStats(statup, this));
+            client.SendPacket(WvsContext.updatePlayerStats(statup, this));
             //map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), UserEffectCodes.JobChanged), false); // Bugged, displays for all players.
             client.SendPacket(EffectPacket.showForeignEffect(getId(), UserEffectCodes.JobChanged));
             silentPartyUpdate();
@@ -4107,14 +4107,14 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void gainHyperSP(int mode, int hsp) {
         this.remainingHSp[mode] += hsp;
 
-        client.SendPacket(CWvsContext.updateSpecialStat(
+        client.SendPacket(WvsContext.updateSpecialStat(
                 MapleSpecialStatUpdateType.UpdateHyperSkills, 0x1C,
                 mode, hsp));
     }
 
     public void updateHyperSPAmount() {
         for (int i = 0; i < 3; i++) {
-            client.SendPacket(CWvsContext.updateSpecialStat(
+            client.SendPacket(WvsContext.updateSpecialStat(
                     MapleSpecialStatUpdateType.UpdateHyperSkills, 0x1C,
                     i, remainingHSp[i]));
         }
@@ -4232,7 +4232,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (list.isEmpty()) { // nothing is changed
             return;
         }
-        client.SendPacket(CWvsContext.updateSkills(list, false));
+        client.SendPacket(WvsContext.updateSkills(list, false));
         reUpdateStat(hasRecovery, recalculate);
     }
 
@@ -4251,7 +4251,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (list.isEmpty()) { // nothing is changed
             return;
         }
-        client.SendPacket(CWvsContext.updateSkills(list, hyper));
+        client.SendPacket(WvsContext.updateSkills(list, hyper));
         reUpdateStat(hasRecovery, recalculate);
     }
 
@@ -4279,7 +4279,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (list.isEmpty()) { // nothing is changed
             return;
         }
-        client.SendPacket(CWvsContext.updateSkills(list, hyper));
+        client.SendPacket(WvsContext.updateSkills(list, hyper));
         reUpdateStat(hasRecovery, recalculate);
     }
 
@@ -4344,7 +4344,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             }
         }
         if (write && !newL.isEmpty()) {
-            client.SendPacket(CWvsContext.updateSkills(newL, false));
+            client.SendPacket(WvsContext.updateSkills(newL, false));
         }
     }
 
@@ -4552,7 +4552,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             }
         }
         if (statups.size() > 0) {
-            client.SendPacket(CWvsContext.updatePlayerStats(statups, this));
+            client.SendPacket(WvsContext.updatePlayerStats(statups, this));
         }
     }
 
@@ -4572,7 +4572,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         Map<MapleStat, Long> statup = new EnumMap<>(MapleStat.class
         );
         statup.put(stat, newval);
-        client.SendPacket(CWvsContext.updatePlayerStats(statup, itemReaction, this));
+        client.SendPacket(WvsContext.updatePlayerStats(statup, itemReaction, this));
     }
 
     public void setGmLevel(byte level) {
@@ -4694,7 +4694,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             List<ModifyInventory> mod = new ArrayList<>();
             mod.add(new ModifyInventory(ModifyInventoryOperation.Remove, item));
             mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-            client.SendPacket(CWvsContext.inventoryOperation(true, mod));
+            client.SendPacket(WvsContext.inventoryOperation(true, mod));
         }
     }
 
@@ -4705,14 +4705,14 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             List<ModifyInventory> mod = new ArrayList<>();
             mod.add(new ModifyInventory(ModifyInventoryOperation.Remove, item));
             mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-            client.SendPacket(CWvsContext.inventoryOperation(true, mod));
+            client.SendPacket(WvsContext.inventoryOperation(true, mod));
         }
     }
 
     public void forceReAddItemBook(Item item, MapleInventoryType type) { //used for mbook
         forceReAddItemNoUpdate(item, type);
         if (type != MapleInventoryType.UNDEFINED) {
-            client.SendPacket(CWvsContext.upgradeBook(item, this));
+            client.SendPacket(WvsContext.upgradeBook(item, this));
         }
     }
 
@@ -4771,7 +4771,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     } else {
                         expire = new ExpiredCashItemMessage(z);
                     }
-                    client.SendPacket(CWvsContext.messagePacket(expire));
+                    client.SendPacket(WvsContext.messagePacket(expire));
                     if (!firstLoad) {
                         final Pair<Integer, String> replace = ii.replaceItemInfo(z);
                         if (replace != null && replace.left > 0 && replace.right.length() > 0) {
@@ -4782,9 +4782,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             }
             pendingExpiration = null;
             if (pendingSkills != null) {
-                client.SendPacket(CWvsContext.updateSkills(pendingSkills, false));
+                client.SendPacket(WvsContext.updateSkills(pendingSkills, false));
                 for (Skill z : pendingSkills.keySet()) {
-                    client.SendPacket(CWvsContext.broadcastMsg(5, "[" + SkillFactory.getSkillName(z.getId()) + "] skill has expired and will not be available for use."));
+                    client.SendPacket(WvsContext.broadcastMsg(5, "[" + SkillFactory.getSkillName(z.getId()) + "] skill has expired and will not be available for use."));
                 }
             } //not real msg
             pendingSkills = null;
@@ -4867,7 +4867,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void refreshBattleshipHP() {
         if (getJob() == 592) {
-            client.SendPacket(CWvsContext.giveKilling(currentBattleshipHP()));
+            client.SendPacket(WvsContext.giveKilling(currentBattleshipHP()));
         }
     }
 
@@ -4912,12 +4912,12 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void gainMeso(long gain, boolean show, boolean inChat) {
         if (meso + gain < 0 || meso + gain > ServerConstants.MAX_MESOS) {
-            client.SendPacket(CWvsContext.enableActions());
+            client.SendPacket(WvsContext.enableActions());
             return;
         }
         meso += gain;
         updateSingleStat(MapleStat.MESO, meso, false);
-        client.SendPacket(CWvsContext.enableActions());
+        client.SendPacket(WvsContext.enableActions());
         if (show) {
             client.SendPacket(InfoPacket.showMesoGain(gain, inChat));
         }
@@ -4984,7 +4984,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 client.SendPacket(InfoPacket.updateQuestMobKills(q));
                 dropMessage(-7, String.format("%s %s / %s", name, q.getMobKills(id), q.getQuest().getRelevantMobs().get(id)));
                 if (q.getQuest().canComplete(this, null)) {
-                    client.SendPacket(CWvsContext.showQuestCompletion(q.getQuest().getId()));
+                    client.SendPacket(WvsContext.showQuestCompletion(q.getQuest().getId()));
                 }
             }
         }
@@ -5339,7 +5339,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         // Packet + stats updates
         // client.write(CField.getAndroidTalkStyle(2008, "Yay", 2));
         stats.setInfo(maxhp, maxmp, localhp, localmp);
-        client.SendPacket(CWvsContext.updatePlayerStats(statup, this));
+        client.SendPacket(WvsContext.updatePlayerStats(statup, this));
         //map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), UserEffectCodes.LevelUp), true); // lol this is buggy.
         client.SendPacket(EffectPacket.showForeignEffect(getId(), UserEffectCodes.LevelUp));
         characterCard.recalcLocalStats(this);
@@ -5417,7 +5417,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             if (party.getExpeditionId() > 0) {
                 final MapleExpedition me = World.Party.getExped(party.getExpeditionId());
                 if (me != null) {
-                    SendPacket(CWvsContext.ExpeditionPacket.expeditionStatus(me, false, true));
+                    SendPacket(WvsContext.ExpeditionPacket.expeditionStatus(me, false, true));
                 }
             }
         }
@@ -5443,8 +5443,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
         Buddy buddy = new Buddy(BuddyResult.LOAD_FRIENDS);
         buddy.setEntries(new ArrayList<>(getBuddylist().getBuddies()));
-        SendPacket(CWvsContext.buddylistMessage(buddy));
-        SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_MESSENGER_MODE)));
+        SendPacket(WvsContext.buddylistMessage(buddy));
+        SendPacket(WvsContext.buddylistMessage(new Buddy(BuddyResult.SET_MESSENGER_MODE)));
         SendPacket(OnLoadAccountIDOfCharacterFriendResult(getBuddylist()));
     }
     
@@ -5497,7 +5497,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (pSkill == null) {
             return;
         }
-        write(CWvsContext.useSkillBook(this, nSkill, nMasterLevel, true, true));
+        write(WvsContext.useSkillBook(this, nSkill, nMasterLevel, true, true));
         changeSingleSkillLevel(pSkill, getSkillLevel(pSkill), (byte) (int) nMasterLevel);
         pSkill.setMasterLevel(nMasterLevel);
 
@@ -6162,7 +6162,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         for (Item item : sortedItems) {
             MapleInventoryManipulator.addFromDrop(client, item, false);
         }
-        client.SendPacket(CWvsContext.finishedGather(nType));
+        client.SendPacket(WvsContext.finishedGather(nType));
         itemMap.clear();
         sortedItems.clear();
 
@@ -6192,8 +6192,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 sorted = true;
             }
         }
-        client.SendPacket(CWvsContext.finishedSort(pInvType.getType()));
-        client.SendPacket(CWvsContext.enableActions());
+        client.SendPacket(WvsContext.finishedSort(pInvType.getType()));
+        client.SendPacket(WvsContext.enableActions());
     }
 
     private static List<Item> sortItemList(final List<Item> passedMap) {
@@ -6218,7 +6218,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void sendPolice() {
-        client.SendPacket(CWvsContext.broadcastMsg("You have been banned by a #b" + ServerConstants.SERVER_NAME + " GM#k for hacking."));
+        client.SendPacket(WvsContext.broadcastMsg("You have been banned by a #b" + ServerConstants.SERVER_NAME + " GM#k for hacking."));
 
         WorldTimer.getInstance().schedule(new Runnable() {
             @Override
@@ -6320,7 +6320,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (IPMac) {
             client.banMacs();
         }
-        client.SendPacket(CWvsContext.GMPoliceMessage(true));
+        client.SendPacket(WvsContext.GMPoliceMessage(true));
         try (Connection con = Database.GetConnection()) {
 
             PreparedStatement ps;
@@ -6367,7 +6367,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (lastmonthfameids == null) {
             throw new RuntimeException("Trying to ban a non-loaded character (testhack)");
         }
-        client.SendPacket(CWvsContext.GMPoliceMessage(true));
+        client.SendPacket(WvsContext.GMPoliceMessage(true));
         try (Connection con = Database.GetConnection()) {
 
             PreparedStatement ps = con.prepareStatement("UPDATE accounts SET banned = ?, banreason = ? WHERE id = ?");
@@ -6436,7 +6436,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                                     if (rsa.getString("macs") != null) {
                                         String[] macData = rsa.getString("macs").split(", ");
                                         if (macData.length > 0) {
-                                            Client.banMacs(macData);
+                                            ClientSocket.banMacs(macData);
                                         }
                                     }
                                 }
@@ -6528,7 +6528,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     @Override
-    public void sendDestroyData(Client client) {
+    public void sendDestroyData(ClientSocket client) {
         client.SendPacket(CField.removePlayerFromMap(this.getObjectId()));
         for (final WeakReference<User> chr : clones) {
             if (chr.get() != null) {
@@ -6551,7 +6551,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     @Override
-    public void sendSpawnData(Client client) {
+    public void sendSpawnData(ClientSocket client) {
         if (client.getPlayer().allowedToTarget(this)) {
             //if (client.getPlayer() != this)
             client.SendPacket(CField.spawnPlayerMapObject(this));
@@ -6715,7 +6715,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             }
 
             removePet(pet, shiftLeft);
-            client.SendPacket(CWvsContext.enableActions());
+            client.SendPacket(WvsContext.enableActions());
         }
     }
 
@@ -7127,7 +7127,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     return;
                 }
                 maplepoints += quantity;
-                client.SendPacket(CWvsContext.updateMaplePoint(maplepoints));
+                client.SendPacket(WvsContext.updateMaplePoint(maplepoints));
                 break;
             case 3:
                 if (maplerewards + quantity < 0) {
@@ -7353,7 +7353,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         buddylist.setCapacity(capacity);
         Buddy buddy = new Buddy(BuddyResult.CAPACITY);
         buddy.setCapacity(capacity);
-        client.SendPacket(CWvsContext.buddylistMessage(buddy));
+        client.SendPacket(WvsContext.buddylistMessage(buddy));
     }
 
     public MapleMessenger getMessenger() {
@@ -7590,7 +7590,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     addFame(fame);
                     updateSingleStat(MapleStat.FAME, getFame());
                     FameMessage fameMessage = new FameMessage(fame);
-                    write(CWvsContext.messagePacket(fameMessage));
+                    write(WvsContext.messagePacket(fameMessage));
                 }
             }
             rs.close();
@@ -7619,23 +7619,23 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else {
             mulung_energy = 0;
         }
-        client.SendPacket(CWvsContext.MulungEnergy(mulung_energy));
+        client.SendPacket(WvsContext.MulungEnergy(mulung_energy));
     }
 
     public void writeMulungEnergy() {
-        client.SendPacket(CWvsContext.MulungEnergy(mulung_energy));
+        client.SendPacket(WvsContext.MulungEnergy(mulung_energy));
     }
 
     public void writeEnergy(String type, String inc) {
-        client.SendPacket(CWvsContext.sendPyramidEnergy(type, inc));
+        client.SendPacket(WvsContext.sendPyramidEnergy(type, inc));
     }
 
     public void writeStatus(String type, String inc) {
-        client.SendPacket(CWvsContext.sendGhostStatus(type, inc));
+        client.SendPacket(WvsContext.sendGhostStatus(type, inc));
     }
 
     public void writePoint(String type, String inc) {
-        client.SendPacket(CWvsContext.sendGhostPoint(type, inc));
+        client.SendPacket(WvsContext.sendGhostPoint(type, inc));
     }
 
     // <editor-fold defaultstate="visible" desc="Attack combos"> 
@@ -7848,7 +7848,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void dropMessage(int type, String message) {
         switch (type) {
             case -1:
-                client.SendPacket(CWvsContext.getTopMsg(message));
+                client.SendPacket(WvsContext.getTopMsg(message));
                 break;
             case -2:
                 client.SendPacket(PlayerShopPacket.shopChat(message, 0)); //0 or what
@@ -7866,12 +7866,12 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 client.SendPacket(CField.getGameMessage(message, (short) 11)); //white bg
                 break;
             case -7:
-                client.SendPacket(CWvsContext.getMidMsg(message, false, 0));
+                client.SendPacket(WvsContext.getMidMsg(message, false, 0));
                 break;
             case -8:
-                client.SendPacket(CWvsContext.getMidMsg(message, true, 0));
+                client.SendPacket(WvsContext.getMidMsg(message, true, 0));
             default:
-                client.SendPacket(CWvsContext.broadcastMsg(type, message));
+                client.SendPacket(WvsContext.broadcastMsg(type, message));
         }
     }
 
@@ -8261,7 +8261,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (getGuildId() > 0) {
             World.Guild.gainGP(getGuildId(), 20, id);
             GuildPointMessage gp = new GuildPointMessage(20);
-            client.SendPacket(CWvsContext.messagePacket(gp));
+            client.SendPacket(WvsContext.messagePacket(gp));
         }
         traits.get(MapleTraitType.will).addExp(5, this); //willpower every hour
         startFairySchedule(false, true);
@@ -8368,7 +8368,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 break;
             }
         }
-        client.SendPacket(CWvsContext.enableActions());
+        client.SendPacket(WvsContext.enableActions());
     }
 
     public void clearLinkMid() {
@@ -8462,7 +8462,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         stat.put(MapleStat.INT, (long) int_);
         stat.put(MapleStat.LUK, (long) luk);
         stat.put(MapleStat.AVAILABLEAP, (long) total);
-        client.SendPacket(CWvsContext.updatePlayerStats(stat, false, this));
+        client.SendPacket(WvsContext.updatePlayerStats(stat, false, this));
     }
 
     public Event_PyramidSubway getPyramidSubway() {
@@ -8547,7 +8547,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         final ChannelServer toch = ChannelServer.getInstance(channel);
 
         if (channel == client.getChannel() || toch == null || toch.isShutdown()) {
-            client.SendPacket(CWvsContext.broadcastMsg("Channel unavailable."));
+            client.SendPacket(WvsContext.broadcastMsg("Channel unavailable."));
             return;
         }
         final ChannelServer ch = ChannelServer.getInstance(client.getChannel());
@@ -8561,7 +8561,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         World.changeChannelData(new CharacterTransfer(this), getId(), channel);
         ch.removePlayer(this);
         String s = client.getSessionIPAddress();
-        client.updateLoginState(Client.MapleClientLoginState.ChangeChannel, s);
+        client.updateLoginState(ClientSocket.MapleClientLoginState.ChangeChannel, s);
         LoginServer.addIPAuth(s.substring(s.indexOf('/') + 1, s.length()));
         client.SendPacket(CField.getChannelChange(client, Integer.parseInt(toch.getIP().split(":")[1])));
         saveToDB(false, false);
@@ -8583,7 +8583,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
         World.changeChannelData(new CharacterTransfer(this), getId(), channel);
         ch.removePlayer(this);
-        client.updateLoginState(Client.MapleClientLoginState.ChangeChannel, client.getSessionIPAddress());
+        client.updateLoginState(ClientSocket.MapleClientLoginState.ChangeChannel, client.getSessionIPAddress());
 
         final String s = client.getSessionIPAddress();
         LoginServer.addIPAuth(s.substring(s.indexOf('/') + 1, s.length()));
@@ -8598,7 +8598,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void expandInventory(byte type, int amount) {
         final MapleInventory inv = getInventory(MapleInventoryType.getByType(type));
         inv.addSlot((byte) amount);
-        client.SendPacket(CWvsContext.getSlotUpdate(type, (byte) inv.getSlotLimit()));
+        client.SendPacket(WvsContext.getSlotUpdate(type, (byte) inv.getSlotLimit()));
     }
 
     public boolean allowedToTarget(User other) {
@@ -9196,7 +9196,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         final MapleMap mapp = getMap();
         mapp.setCheckStates(false);
         saveToDB(false, false);
-        client.SendPacket(CWvsContext.getFamiliarInfo(this));
+        client.SendPacket(WvsContext.getFamiliarInfo(this));
         client.SendPacket(CField.getCharInfo(this));
         mapp.removePlayer(this);
         mapp.addPlayer(this);
@@ -9466,7 +9466,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void sendImp() {
         for (int i = 0; i < imps.length; i++) {
             if (imps[i] != null) {
-                client.SendPacket(CWvsContext.updateImp(imps[i], ImpFlag.SUMMONED.getValue(), i, true));
+                client.SendPacket(WvsContext.updateImp(imps[i], ImpFlag.SUMMONED.getValue(), i, true));
             }
         }
     }
@@ -9482,7 +9482,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void setBattlePoints(int p) {
         if (p != pvpPoints) {
             PvpPointMessage pvp = new PvpPointMessage(0, p - pvpPoints);
-            write(CWvsContext.messagePacket(pvp));
+            write(WvsContext.messagePacket(pvp));
             updateSingleStat(MapleStat.BATTLE_POINTS, p);
         }
         this.pvpPoints = p;
@@ -10359,8 +10359,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             return;
         }
         setHonourExp(getHonourExp() + amount);
-        client.SendPacket(CWvsContext.updateAzwanFame(getHonorLevel(), getHonourExp(), true));
-        client.SendPacket(CWvsContext.updateSpecialStat(MapleSpecialStatUpdateType.UpdateHonor, 0, getHonorLevel(), getHonourNextExp()));
+        client.SendPacket(WvsContext.updateAzwanFame(getHonorLevel(), getHonourExp(), true));
+        client.SendPacket(WvsContext.updateSpecialStat(MapleSpecialStatUpdateType.UpdateHonor, 0, getHonorLevel(), getHonourNextExp()));
         if (show) {
             dropMessage(5, "You obtained " + amount + " Honor EXP.");
         }
@@ -10418,13 +10418,13 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         addHonorExp(honor, false);
         if (show) {
             SystemMessage message = new SystemMessage(honor + " Honor EXP obtained.");
-            write(CWvsContext.messagePacket(message));
+            write(WvsContext.messagePacket(message));
         }
     }
 
     public void azwanReward(final int map, final int portal) {
         client.SendPacket(CField.UIPacket.sendAzwanResult());
-        client.SendPacket(CWvsContext.enableActions());
+        client.SendPacket(WvsContext.enableActions());
         MapTimer.getInstance().schedule(new Runnable() {
             @Override
             public void run() {
@@ -12136,7 +12136,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             MapleItemInformationProvider.getInstance().getItemEffect(2023055).applyTo(chr);
         }
         getMap().broadcastMessage(CField.startMapEffect(name + " has received Double Miracle Time's Mysterious Blessing. Congratulations!", 2023055, true));
-        World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(0x19, 0, name + " has received [Double Miracle Time's Miraculous Blessing]. Congratulations!", false));
+        World.Broadcast.broadcastMessage(WvsContext.broadcastMsg(0x19, 0, name + " has received [Double Miracle Time's Miraculous Blessing]. Congratulations!", false));
     }
 
     /* 
@@ -12225,7 +12225,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
             List<ModifyInventory> mod = new ArrayList<>();
             mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, equip));
-            client.SendPacket(CWvsContext.inventoryOperation(true, mod));
+            client.SendPacket(WvsContext.inventoryOperation(true, mod));
             equipChanged();
         }
     }
@@ -12251,7 +12251,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
             List<ModifyInventory> mod = new ArrayList<>();
             mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, equip));
-            client.SendPacket(CWvsContext.inventoryOperation(true, mod));
+            client.SendPacket(WvsContext.inventoryOperation(true, mod));
         }
         equipChanged();
     }
@@ -12323,7 +12323,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
             List<ModifyInventory> mod = new ArrayList<>();
             mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, equip));
-            client.SendPacket(CWvsContext.inventoryOperation(true, mod));
+            client.SendPacket(WvsContext.inventoryOperation(true, mod));
         }
         updateSingleStat(MapleStat.FACE, this.face);
         updateSingleStat(MapleStat.HAIR, this.hair);
@@ -12334,7 +12334,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         final List<ModifyInventory> mods = new LinkedList<>();
         mods.add(new ModifyInventory(ModifyInventoryOperation.Remove, item));
         mods.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-        client.SendPacket(CWvsContext.inventoryOperation(true, mods));
+        client.SendPacket(WvsContext.inventoryOperation(true, mods));
     }
 
     public int getCharListPosition() {
@@ -12428,7 +12428,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public User cloneLooks() {
-        Client cloneclient = client; //needs to create a new Client for this to work properly. Can't figure that out yet.
+        ClientSocket cloneclient = client; //needs to create a new Client for this to work properly. Can't figure that out yet.
 
         final int minus = (getId() + Randomizer.nextInt(Integer.MAX_VALUE - getId())); // really randomize it, dont want it to fail
 

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import constants.ServerConstants;
-import handling.MapleServerHandler;
+import handling.ServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -84,7 +84,7 @@ public class LoginServer extends Thread {
 
             @Override
             protected void initChannel(SocketChannel c) throws Exception {
-                c.pipeline().addLast(new PacketDecoder(), new MapleServerHandler(MapleServerMode.LOGIN), new PacketEncoder());
+                c.pipeline().addLast(new PacketDecoder(), new ServerHandler(MapleServerMode.LOGIN), new PacketEncoder());
             }
         });
 

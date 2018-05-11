@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.Skill;
 import client.SkillFactory;
 import handling.world.World;
@@ -17,18 +17,18 @@ import net.InPacket;
 import net.OutPacket;
 
 import tools.LogHelper;
-import tools.packet.CWvsContext;
-import tools.packet.CWvsContext.GuildPacket;
+import tools.packet.WvsContext;
+import tools.packet.WvsContext.GuildPacket;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class GuildOperationHandler implements ProcessPacket<Client> {
+public class GuildOperationHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
@@ -65,7 +65,7 @@ public class GuildOperationHandler implements ProcessPacket<Client> {
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final long currentTime = System.currentTimeMillis();
         if (currentTime >= nextPruneTime) {
             Iterator<Map.Entry<String, Pair<Integer, Long>>> itr = invited.entrySet().iterator();
@@ -113,7 +113,7 @@ public class GuildOperationHandler implements ProcessPacket<Client> {
                 c.getPlayer().saveGuildStatus();
                 c.getPlayer().finishAchievement(35);
                 World.Guild.setGuildMemberOnline(c.getPlayer().getMGC(), true, c.getChannel());
-                c.SendPacket(CWvsContext.GuildPacket.createNewGuild(c.getPlayer()));
+                c.SendPacket(WvsContext.GuildPacket.createNewGuild(c.getPlayer()));
                 World.Guild.gainGP(c.getPlayer().getGuildId(), 500, c.getPlayer().getId());
                 c.getPlayer().dropMessage(1, "You have successfully created a Guild.");
                 break;
@@ -154,7 +154,7 @@ public class GuildOperationHandler implements ProcessPacket<Client> {
                         c.getPlayer().setGuildId(0);
                         return;
                     }
-                    c.SendPacket(CWvsContext.GuildPacket.loadGuild_Done(c.getPlayer()));
+                    c.SendPacket(WvsContext.GuildPacket.loadGuild_Done(c.getPlayer()));
                     final MapleGuild gs = World.Guild.getGuild(guildId);
                     for (OutPacket pack : World.Alliance.getAllianceInfo(gs.getAllianceId(), true)) {
                         if (pack != null) {
@@ -333,7 +333,7 @@ public class GuildOperationHandler implements ProcessPacket<Client> {
         if (mc.getMap() == null) {
             return;
         }
-        mc.getMap().broadcastMessage(CWvsContext.GuildPacket.sendSetGuildNameMsg(mc));
-        mc.getMap().broadcastMessage(CWvsContext.GuildPacket.sendSetGuildMarkMsg(mc));
+        mc.getMap().broadcastMessage(WvsContext.GuildPacket.sendSetGuildNameMsg(mc));
+        mc.getMap().broadcastMessage(WvsContext.GuildPacket.sendSetGuildMarkMsg(mc));
     }
 }

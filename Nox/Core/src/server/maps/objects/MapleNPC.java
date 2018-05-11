@@ -1,6 +1,6 @@
 package server.maps.objects;
 
-import client.Client;
+import client.ClientSocket;
 import server.MapleStringInformationProvider;
 import server.life.AbstractLoadedMapleLife;
 import server.maps.MapleMapObjectType;
@@ -24,7 +24,7 @@ public class MapleNPC extends AbstractLoadedMapleLife {
         return MapleShopFactory.getInstance().getShopForNPC(getId()) != null;
     }
 
-    public final void sendShop(final Client c) {
+    public final void sendShop(final ClientSocket c) {
         MapleShopFactory.getInstance().getShopForNPC(getId()).sendShop(c);
     }
 
@@ -38,7 +38,7 @@ public class MapleNPC extends AbstractLoadedMapleLife {
     }
 
     @Override
-    public void sendSpawnData(final Client client) {
+    public void sendSpawnData(final ClientSocket client) {
         if (getId() >= 9901000) {
         } else {
             client.SendPacket(NPCPacket.spawnNPC(this, true));
@@ -47,7 +47,7 @@ public class MapleNPC extends AbstractLoadedMapleLife {
     }
 
     @Override
-    public final void sendDestroyData(final Client client) {
+    public final void sendDestroyData(final ClientSocket client) {
         client.SendPacket(NPCPacket.removeNPCController(getObjectId()));
         client.SendPacket(NPCPacket.removeNPC(getObjectId()));
     }

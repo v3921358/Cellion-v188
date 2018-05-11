@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -18,7 +18,7 @@ import server.potentials.ItemPotentialProvider;
 import server.potentials.ItemPotentialTierType;
 import tools.LogHelper;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.MiracleCubePacket;
 import net.ProcessPacket;
 
@@ -26,15 +26,15 @@ import net.ProcessPacket;
  *
  * @author Lloyd Korn
  */
-public class UseCraftedCubeHandler implements ProcessPacket<Client> {
+public class UseCraftedCubeHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         chr.updateTick(iPacket.DecodeInt());
@@ -120,7 +120,7 @@ public class UseCraftedCubeHandler implements ProcessPacket<Client> {
             // Update inventory equipment 
             List<ModifyInventory> modifications = new ArrayList<>();
             modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
-            c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+            c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
             c.SendPacket(MiracleCubePacket.onInGameCubeResult(chr.getId(), lastTierBeforeCube != item.getPotentialTier(), item.getPosition(), toUse.getItemId(), item));
         } else {

@@ -5,13 +5,13 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import handling.PacketThrottleLimits;
 import handling.world.World;
 import net.InPacket;
 import net.OutPacket;
 
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
@@ -24,22 +24,22 @@ import net.ProcessPacket;
         MinTimeMillisBetweenPackets = 500,
         FunctionName = "AdminChatHandler",
         BanType = PacketThrottleLimits.PacketThrottleBanType.Disconnect)
-public class AdminChatHandler implements ProcessPacket<Client> {
+public class AdminChatHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if (!c.getPlayer().isGM()) {//if ( (signed int)CWvsContext::GetAdminLevel((void *)v294) > 2 )
             c.Close();
             return;
         }
         byte mode = iPacket.DecodeByte();
         //not saving slides...
-        OutPacket packet = CWvsContext.broadcastMsg(iPacket.DecodeByte(), iPacket.DecodeString());//maybe I should make a check for the iPacket.decodeByte()... but I just hope gm's don't fuck things up :)
+        OutPacket packet = WvsContext.broadcastMsg(iPacket.DecodeByte(), iPacket.DecodeString());//maybe I should make a check for the iPacket.decodeByte()... but I just hope gm's don't fuck things up :)
         switch (mode) {
             case 0:// /alertall, /noticeall, /slideall
                 World.Broadcast.broadcastMessage(packet);

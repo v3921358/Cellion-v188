@@ -3,23 +3,23 @@ package handling.world;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import server.maps.FieldLimitType;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class PartyHandler {
 
-    public static void MemberSearch(InPacket iPacket, Client c) {
+    public static void MemberSearch(InPacket iPacket, ClientSocket c) {
         if ((c.getPlayer().isInBlockedMap()) || (FieldLimitType.VipRock.checkFlag(c.getPlayer().getMap()))) {
             c.getPlayer().dropMessage(5, "You may not do party search here.");
             return;
         }
-        c.SendPacket(CWvsContext.PartyPacket.showMemberSearch(c.getPlayer().getMap().getCharacters()));
+        c.SendPacket(WvsContext.PartyPacket.showMemberSearch(c.getPlayer().getMap().getCharacters()));
     }
 
-    public static final void PartySearch(InPacket iPacket, Client c) {
+    public static final void PartySearch(InPacket iPacket, ClientSocket c) {
         if ((c.getPlayer().isInBlockedMap()) || (FieldLimitType.VipRock.checkFlag(c.getPlayer().getMap()))) {
             c.getPlayer().dropMessage(5, "You may not do party search here.");
             return;
@@ -32,6 +32,6 @@ public class PartyHandler {
             }
         }
 
-        c.SendPacket(CWvsContext.PartyPacket.showPartySearch(parties));
+        c.SendPacket(WvsContext.PartyPacket.showPartySearch(parties));
     }
 }

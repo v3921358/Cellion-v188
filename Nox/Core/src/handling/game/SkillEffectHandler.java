@@ -21,29 +21,29 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class SkillEffectHandler implements ProcessPacket<Client> {
+public final class SkillEffectHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         int skillId = iPacket.DecodeInt();
         if (skillId >= 91000000 && skillId < 100000000) {
-            chr.getClient().SendPacket(CWvsContext.enableActions());
+            chr.getClient().SendPacket(WvsContext.enableActions());
             return;
         }
         byte level = iPacket.DecodeByte();

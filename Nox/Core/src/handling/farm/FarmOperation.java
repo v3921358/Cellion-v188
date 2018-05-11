@@ -10,8 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
-import client.Client;
-import client.Client.MapleClientLoginState;
+import client.ClientSocket;
+import client.ClientSocket.MapleClientLoginState;
 import constants.WorldConstants.WorldOption;
 import handling.world.CharacterTransfer;
 import handling.world.World;
@@ -31,7 +31,7 @@ import tools.packet.FarmPacket;
  */
 public class FarmOperation {
 
-    public static void EnterFarm(final CharacterTransfer transfer, final Client c) {
+    public static void EnterFarm(final CharacterTransfer transfer, final ClientSocket c) {
         if (transfer == null) {
             c.Close();
             return;
@@ -96,7 +96,7 @@ public class FarmOperation {
         }
     }
 
-    public static void LeaveFarm(final InPacket iPacket, final Client c, final User chr) {
+    public static void LeaveFarm(final InPacket iPacket, final ClientSocket c, final User chr) {
         FarmServer.getPlayerStorage().deregisterPlayer(chr);
 
         c.updateLoginState(MapleClientLoginState.Login_ServerTransition, c.getSessionIPAddress());

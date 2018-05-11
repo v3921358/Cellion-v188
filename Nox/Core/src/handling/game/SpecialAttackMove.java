@@ -55,21 +55,21 @@ import tools.packet.CField.SummonPacket;
  * UserSkillRequest
  * @author Mazen Massoud
  */
-public final class SpecialAttackMove implements ProcessPacket<Client> {
+public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
         pPlayer.updateTick(iPacket.DecodeInt());
         int nSkill = iPacket.DecodeInt();
 
         if (nSkill >= 91000000 && nSkill < 100000000) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         if (nSkill == Mercedes.ELEMENTAL_KNIGHTS_2) {
@@ -92,7 +92,7 @@ public final class SpecialAttackMove implements ProcessPacket<Client> {
             c.SendPacket(JobPacket.AngelicPacket.SoulSeeker(pPlayer, nSkill, soulnum, scheck, scheck2));
             c.SendPacket(JobPacket.AngelicPacket.unlockSkill());
             c.SendPacket(JobPacket.AngelicPacket.showRechargeEffect());
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         if (nSkill >= 100000000) {
@@ -107,7 +107,7 @@ public final class SpecialAttackMove implements ProcessPacket<Client> {
         Mob pMob;
 
         if (((GameConstants.isAngel(nSkill)) && (pPlayer.getStat().equippedSummon % 10000 != nSkill % 10000)) || ((pPlayer.inPVP()) && (pSkill.isPVPDisabled()))) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         int levelCheckSkill = 0;
@@ -126,7 +126,7 @@ public final class SpecialAttackMove implements ProcessPacket<Client> {
         if ((levelCheckSkill == 0) && ((pPlayer.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(nSkill)) <= 0) || (pPlayer.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(nSkill)) != nSkillLevel))) {
             if ((!GameConstants.isMulungSkill(nSkill)) && (!GameConstants.isPyramidSkill(nSkill)) && (pPlayer.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(nSkill)) <= 0)
                     && !GameConstants.isAngel(nSkill) && !GameConstants.isJaguarSkill(nSkill) && !GameConstants.bypassLinkedAttackCheck(nSkill)) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 if (pPlayer.isDeveloper()) {
                     pPlayer.dropMessage(5, "[SpecialAttackMove] Returning Early / Skill ID : " + nSkill);
                 }
@@ -161,12 +161,12 @@ public final class SpecialAttackMove implements ProcessPacket<Client> {
         }
         if ((pEffect.isMPRecovery()) && (pPlayer.getStat().getHp() < pPlayer.getStat().getMaxHp() / 100 * 10)) {
             c.getPlayer().dropMessage(5, "You do not have the HP to use this skill.");
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         if (pEffect.getCooldown(pPlayer) > 0 && nSkill != Phantom.TEMPEST) {
             if (pPlayer.skillisCooling(nSkill)) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
             if ((nSkill != Corsair.BATTLESHIP_2) && (nSkill != Mechanic.ROCK_N_SHOCK)) {
@@ -178,7 +178,7 @@ public final class SpecialAttackMove implements ProcessPacket<Client> {
  /*Return early for broken skills and display debug output for other skills cast.*/
         switch (nSkill) {
             case Mechanic.OPEN_PORTAL_GX9:
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 // These skills are currently broken, so we can return here for now.
                 return;
             default:
@@ -584,7 +584,7 @@ public final class SpecialAttackMove implements ProcessPacket<Client> {
                 } catch (Exception ex) {
                     Logger.getLogger(SpecialAttackMove.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 break;
             }
             case Citizen.CAPTURE_4:
@@ -597,7 +597,7 @@ public final class SpecialAttackMove implements ProcessPacket<Client> {
                         pPlayer.getQuestNAdd(Quest.getInstance(GameConstants.JAGUAR)).setCustomData(String.valueOf((pMob.getId() - 9303999) * 10));
                         pPlayer.getMap().killMonster(pMob, pPlayer, true, false, (byte) 1);
                         pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.RideVehicle);
-                        c.SendPacket(CWvsContext.updateJaguar(pPlayer));
+                        c.SendPacket(WvsContext.updateJaguar(pPlayer));
                     } else {
                         pPlayer.dropMessage(5, "The monster has too much physical strength, so you cannot catch it.");
                     }
@@ -653,7 +653,7 @@ public final class SpecialAttackMove implements ProcessPacket<Client> {
             case Luminous.EQUILIBRIUM_1:
             case Luminous.CHANGE_LIGHTDARK_MODE:
                 pPlayer.changeLuminousMode();
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 break;
             case DawnWarrior.FALLING_MOON:
             case DawnWarrior.RISING_SUN:
@@ -779,6 +779,6 @@ public final class SpecialAttackMove implements ProcessPacket<Client> {
         }
 
         c.getPlayer().getStat().recalcLocalStats(c.getPlayer());
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 }

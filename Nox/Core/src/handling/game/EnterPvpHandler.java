@@ -24,32 +24,32 @@ package handling.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import scripting.EventInstanceManager;
 import scripting.EventManager;
 import server.Randomizer;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class EnterPvpHandler implements ProcessPacket<Client> {
+public final class EnterPvpHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if (c.getPlayer() == null || c.getPlayer().getMap() == null || c.getPlayer().getMapId() != 960000000) {
             //c.SendPacket(CField.pvpBlocked(1));
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         if (c.getPlayer().getParty() != null) {
             //c.SendPacket(CField.pvpBlocked(9));
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         c.getPlayer().updateTick(iPacket.DecodeInt());
@@ -73,7 +73,7 @@ public final class EnterPvpHandler implements ProcessPacket<Client> {
         final EventManager em = c.getChannelServer().getEventSM().getEventManager("PVP");
         if (!passed || em == null) {
             //c.SendPacket(CField.pvpBlocked(1));
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         final List<Integer> maps = new ArrayList<>();
@@ -102,7 +102,7 @@ public final class EnterPvpHandler implements ProcessPacket<Client> {
         }
         if (!passed) {
             //c.SendPacket(CField.pvpBlocked(1));
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         c.getPlayer().getStat().heal(c.getPlayer());

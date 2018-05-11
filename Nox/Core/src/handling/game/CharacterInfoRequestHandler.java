@@ -21,30 +21,30 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class CharacterInfoRequestHandler implements ProcessPacket<Client> {
+public final class CharacterInfoRequestHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         if (c.getPlayer() == null || c.getPlayer().getMap() == null) {
             return;
         }
         int objectid = iPacket.DecodeInt();
         User player = c.getPlayer().getMap().getCharacterById(objectid);
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
         if (player != null) {
-            c.SendPacket(CWvsContext.charInfo(player, c.getPlayer().getId() == objectid));
+            c.SendPacket(WvsContext.charInfo(player, c.getPlayer().getId() == objectid));
         }
     }
 

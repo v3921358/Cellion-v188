@@ -6,7 +6,7 @@
 package handling.cashshop;
 
 import client.MapleCharacterUtil;
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryIdentifier;
 import constants.GameConstants;
@@ -28,7 +28,7 @@ import tools.packet.CSPacket;
  */
 public class PurchasePackage {
 
-    public static void BuyGiftPackage(InPacket iPacket, Client c, User chr) {
+    public static void BuyGiftPackage(InPacket iPacket, ClientSocket c, User chr) {
         iPacket.Skip(1);
         iPacket.DecodeString(); // pic - Has to be CHECKED!
         CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInt());
@@ -54,7 +54,7 @@ public class PurchasePackage {
         }
     }
 
-    public static void Regular(InPacket iPacket, Client c, User chr) {
+    public static void Regular(InPacket iPacket, ClientSocket c, User chr) {
         iPacket.Skip(1);
         int unk = iPacket.DecodeInt();//is1
         CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInt());

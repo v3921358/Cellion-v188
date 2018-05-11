@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.SkillMacro;
 import net.InPacket;
 import net.OutPacket;
@@ -16,15 +16,15 @@ import service.SendPacketOpcode;
  *
  * @author Mazen Massoud
  */
-public class SaveDamageSkinRequest implements ProcessPacket<Client> {// like this?
+public class SaveDamageSkinRequest implements ProcessPacket<ClientSocket> {// like this?
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override // we need to decode the damage skin from the inpacket, to receive the ID
-    public void Process(Client c, InPacket iPacket) { // I know, there is probably something similar we can look at, yeh tbh only thing left is
+    public void Process(ClientSocket c, InPacket iPacket) { // I know, there is probably something similar we can look at, yeh tbh only thing left is
 
         int num = iPacket.DecodeByte();
 

@@ -1,21 +1,21 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import net.ProcessPacket;
 
-public final class TouchFamiliarHandler implements ProcessPacket<Client> {
+public final class TouchFamiliarHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr.getSummonedFamiliar() == null) {
             return;

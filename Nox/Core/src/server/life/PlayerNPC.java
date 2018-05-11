@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import database.Database;
@@ -24,7 +24,7 @@ import server.maps.objects.MapleNPC;
 import server.maps.objects.Pet;
 import tools.LogHelper;
 import tools.packet.CField.NPCPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
 
@@ -417,9 +417,9 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
     }
 
     @Override
-    public void sendSpawnData(Client client) {
+    public void sendSpawnData(ClientSocket client) {
         client.SendPacket(NPCPacket.spawnNPC(this, true));
-        client.SendPacket(CWvsContext.spawnPlayerNPC(this));
+        client.SendPacket(WvsContext.spawnPlayerNPC(this));
         client.SendPacket(NPCPacket.spawnNPCRequestController(this, true));
     }
 

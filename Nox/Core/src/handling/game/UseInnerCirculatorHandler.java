@@ -2,7 +2,7 @@ package handling.game;
 
 import client.InnerAbillity;
 import client.InnerSkillValueHolder;
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import java.util.LinkedList;
@@ -10,22 +10,22 @@ import java.util.List;
 import server.MapleInventoryManipulator;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class UseInnerCirculatorHandler implements ProcessPacket<Client> {
+public class UseInnerCirculatorHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int itemid = iPacket.DecodeInt();
         short slot = (short) iPacket.DecodeInt();
         Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
@@ -58,6 +58,6 @@ public class UseInnerCirculatorHandler implements ProcessPacket<Client> {
             //c.write(CField.gameMsg("Inner Potential has been reconfigured.")); //not sure if it's working
             c.getPlayer().dropMessage(5, "Inner Potential has been reconfigured.");
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 }

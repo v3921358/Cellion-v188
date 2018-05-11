@@ -22,7 +22,7 @@
 package handling.game;
 
 import client.CharacterTemporaryStat;
-import client.Client;
+import client.ClientSocket;
 import client.MapleStat;
 import client.Skill;
 import client.SkillFactory;
@@ -31,22 +31,22 @@ import constants.skills.WildHunter;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  * UserSkillCancelRequest
  * @author Mazen Massoud
  */
-public final class BuffCancel implements ProcessPacket<Client> {
+public final class BuffCancel implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User pPlayer = c.getPlayer();
         int nSourceID = iPacket.DecodeInt();
         Skill pSkill = SkillFactory.getSkill(nSourceID);
@@ -58,7 +58,7 @@ public final class BuffCancel implements ProcessPacket<Client> {
         if (nSourceID == DualBlade.ASURAS_ANGER) {
             pPlayer.getStat().setHp(0, pPlayer);
             pPlayer.updateSingleStat(MapleStat.HP, 0);
-            pPlayer.getClient().SendPacket(CWvsContext.enableActions());
+            pPlayer.getClient().SendPacket(WvsContext.enableActions());
         }
         
         if (pSkill.isChargeSkill()) {

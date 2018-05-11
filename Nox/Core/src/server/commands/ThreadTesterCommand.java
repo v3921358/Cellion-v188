@@ -1,6 +1,6 @@
 package server.commands;
 
-import client.Client;
+import client.ClientSocket;
 import constants.ServerConstants;
 import java.util.concurrent.ScheduledFuture;
 import service.ChannelServer;
@@ -27,7 +27,7 @@ public class ThreadTesterCommand {
     public static class StartTestBuffRacingCondition extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (schedule != null) {
                 schedule.cancel(false);
                 schedule = null;
@@ -106,7 +106,7 @@ public class ThreadTesterCommand {
     public static class StopTestBuffRacingCondition extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (schedule != null) {
                 schedule.cancel(false);
                 schedule = null;

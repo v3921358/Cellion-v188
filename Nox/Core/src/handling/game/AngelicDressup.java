@@ -21,22 +21,22 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class AngelicDressup implements ProcessPacket<Client> {
+public final class AngelicDressup implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if ((chr == null) || (chr.getMap() == null)) {
             return;
@@ -48,14 +48,14 @@ public final class AngelicDressup implements ProcessPacket<Client> {
             chr.getMap().broadcastMessage(chr, CField.showAngelicBusterTransformation(chr.getId(), transformationId), false);
             chr.getMap().broadcastMessage(chr, CField.updateCharLook(chr, isAngelic), false);
             chr.setAngelicDressupState(isAngelic);
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
         } else {
             //change back?
             isAngelic = false;
             chr.getMap().broadcastMessage(chr, CField.showAngelicBusterTransformation(chr.getId(), transformationId), false);
             chr.getMap().broadcastMessage(chr, CField.updateCharLook(chr, isAngelic), false);
             chr.setAngelicDressupState(isAngelic);
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
         }
     }
 }

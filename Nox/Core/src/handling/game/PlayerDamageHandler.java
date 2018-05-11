@@ -3,7 +3,7 @@ package handling.game;
 import java.awt.Point;
 
 import client.CharacterTemporaryStat;
-import client.Client;
+import client.ClientSocket;
 import client.MapleStat;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
@@ -29,15 +29,15 @@ import server.maps.objects.User;
 import tools.Pair;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.JobPacket;
 import net.ProcessPacket;
 import server.maps.objects.User;
 
-public final class PlayerDamageHandler implements ProcessPacket<Client> {
+public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
@@ -68,7 +68,7 @@ public final class PlayerDamageHandler implements ProcessPacket<Client> {
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User pPlayer = c.getPlayer();
         if (pPlayer.hasGodMode()) {
             return; // Godmode
@@ -122,7 +122,7 @@ public final class PlayerDamageHandler implements ProcessPacket<Client> {
             pPlayer.applyLifeTidal();
         }
         if (pPlayer.isHidden() || pPlayer.getMap() == null || (pPlayer.isGM() && pPlayer.isInvincible())) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
 
@@ -219,7 +219,7 @@ public final class PlayerDamageHandler implements ProcessPacket<Client> {
                 return;
             }
         } else if ((damage < -1) || (damage > 200000)) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         // Resist is handled by the client! 

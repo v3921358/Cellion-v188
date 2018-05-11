@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -9,22 +9,22 @@ import java.util.ArrayList;
 import server.MapleInventoryManipulator;
 import net.InPacket;
 import tools.packet.CSPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class UseAlienSocketHandler implements ProcessPacket<Client> {
+public class UseAlienSocketHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
         final Item alienSocket = c.getPlayer().getInventory(MapleInventoryType.USE).getItem((byte) iPacket.DecodeShort());
@@ -32,7 +32,7 @@ public class UseAlienSocketHandler implements ProcessPacket<Client> {
         final Item toMount = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeShort());
 
         if (alienSocket == null || alienSocketId != alienSocket.getItemId() || toMount == null || c.getPlayer().hasBlockedInventory()) {
-            c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+            c.SendPacket(WvsContext.inventoryOperation(true, new ArrayList<>()));
             return;
         }
         final Equip eqq = (Equip) toMount;

@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -21,15 +21,15 @@ import net.ProcessPacket;
  *
  * @author Lloyd Korn
  */
-public class SubSummonHandler implements ProcessPacket<Client> {
+public class SubSummonHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         final MapleMapObject obj = chr.getMap().getMapObject(iPacket.DecodeInt(), MapleMapObjectType.SUMMON);
         if (obj == null || !(obj instanceof Summon)) {

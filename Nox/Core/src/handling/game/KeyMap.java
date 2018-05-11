@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -30,15 +30,15 @@ import server.quest.Quest;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class KeyMap implements ProcessPacket<Client> { // oh here it is
+public final class KeyMap implements ProcessPacket<ClientSocket> { // oh here it is
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr == null) {
             return;

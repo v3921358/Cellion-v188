@@ -21,24 +21,24 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import constants.GameConstants;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.JobPacket;
 import net.ProcessPacket;
 
-public final class AngelicTransformation implements ProcessPacket<Client> {
+public final class AngelicTransformation implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         byte type = iPacket.DecodeByte();
         if (type == 1) {
@@ -47,7 +47,7 @@ public final class AngelicTransformation implements ProcessPacket<Client> {
                 c.SendPacket(JobPacket.AngelicPacket.updateDress(chr.getAngelicDressupSuit(), c.getPlayer()));//default = 5010094
                 chr.getMap().broadcastMessage(chr, CField.updateCharLook(chr, true), false);//PLZ TEST ANGELIC CHANGE! <-- tells me these handlers might be fucked
             } else {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
             }
         }
     }

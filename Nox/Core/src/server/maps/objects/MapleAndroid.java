@@ -1,6 +1,6 @@
 package server.maps.objects;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import java.awt.Point;
 import java.sql.Connection;
@@ -234,12 +234,12 @@ public class MapleAndroid extends MapleMapObject {
     }
 
     @Override
-    public void sendSpawnData(final Client client) {
+    public void sendSpawnData(final ClientSocket client) {
         // does nothing for now, not handled here
     }
 
     @Override
-    public void sendDestroyData(final Client client) {
+    public void sendDestroyData(final ClientSocket client) {
         // does nothing for now, not handled here
     }
 

@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.ModifyInventory;
 import client.inventory.ModifyInventoryOperation;
@@ -10,7 +10,7 @@ import java.util.List;
 import net.InPacket;
 import server.maps.objects.User.CharacterTemporaryValues;
 import tools.Pair;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.MiracleCubePacket;
 import net.ProcessPacket;
 
@@ -18,15 +18,15 @@ import net.ProcessPacket;
  *
  * @author Lloyd Korn
  */
-public class UseSelectBlackCubeOptionHandler implements ProcessPacket<Client> {
+public class UseSelectBlackCubeOptionHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         final short option = iPacket.DecodeShort();
         final long temporaryKeyValue = iPacket.DecodeLong(); // or also the equipment's uniqueid which Nexon uses
@@ -51,7 +51,7 @@ public class UseSelectBlackCubeOptionHandler implements ProcessPacket<Client> {
                 // Update inventory equipment 
                 List<ModifyInventory> modifications = new ArrayList<>();
                 modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, eq_originalRef));
-                c.SendPacket(CWvsContext.inventoryOperation(true, modifications));
+                c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
                 if (temporaryKeyValue == CharacterTemporaryValues.KEY_MEMORIAL_CUBE) {
                     c.SendPacket(MiracleCubePacket.memorialCubeModified(false, eq_originalRef.getPosition(), ItemConstants.MEMORY_CUBE, eq_originalRef));

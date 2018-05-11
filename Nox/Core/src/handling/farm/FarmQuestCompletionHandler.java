@@ -25,20 +25,20 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import tools.packet.FarmPacket;
 import net.ProcessPacket;
 
-public final class FarmQuestCompletionHandler implements ProcessPacket<Client> {
+public final class FarmQuestCompletionHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int questId = iPacket.DecodeInt();
         if (questId == 1111) {
             c.SendPacket(FarmPacket.updateQuestInfo(1111, 1, ""));

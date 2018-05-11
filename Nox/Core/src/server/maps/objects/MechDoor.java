@@ -2,7 +2,7 @@ package server.maps.objects;
 
 import java.awt.Point;
 
-import client.Client;
+import client.ClientSocket;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.packet.CField;
@@ -20,12 +20,12 @@ public class MechDoor extends MapleMapObject {
     }
 
     @Override
-    public void sendSpawnData(Client client) {
+    public void sendSpawnData(ClientSocket client) {
         client.SendPacket(CField.spawnMechDoor(this, false));
     }
 
     @Override
-    public void sendDestroyData(Client client) {
+    public void sendDestroyData(ClientSocket client) {
         client.SendPacket(CField.removeMechDoor(this, false));
     }
 

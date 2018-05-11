@@ -21,19 +21,19 @@
  */
 package handling.farm;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class FarmShopPurchase implements ProcessPacket<Client> {
+public final class FarmShopPurchase implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int itemId = iPacket.DecodeInt();
         //c.getFarm().getFarmInventory().gainWaru(-price);
         //c.getFarm().getFarmInventory().updateItemQuantity(itemId, 1);

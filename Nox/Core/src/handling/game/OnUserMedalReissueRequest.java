@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.QuestStatus;
 import java.time.LocalDateTime;
 import net.InPacket;
@@ -31,15 +31,15 @@ import server.quest.Quest;
 import tools.packet.CField;
 import net.ProcessPacket;
 
-public final class OnUserMedalReissueRequest implements ProcessPacket<Client> {
+public final class OnUserMedalReissueRequest implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         Quest q = Quest.getInstance(iPacket.DecodeShort());
         User chr = c.getPlayer();
         if (q == null) {

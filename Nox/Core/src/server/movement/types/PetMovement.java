@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
-import client.Client;
+import client.ClientSocket;
 import client.QuestStatus.QuestState;
 import handling.AbstractMaplePacketHandler;
 import handling.world.MovementParse;
@@ -29,15 +29,15 @@ import net.ProcessPacket;
  * @author Steven
  *
  */
-public class PetMovement implements ProcessPacket<Client> {
+public class PetMovement implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return c.isLoggedIn();
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         if (chr == null) {
             return;

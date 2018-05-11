@@ -3,7 +3,7 @@ package tools.packet;
 import java.util.LinkedList;
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import constants.WorldConstants;
 import constants.WorldConstants.WorldOption;
 import service.SendPacketOpcode;
@@ -19,7 +19,7 @@ import tools.Pair;
  */
 public class FarmPacket {
 
-    public static OutPacket enterFarm(Client c) {
+    public static OutPacket enterFarm(ClientSocket c) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.SetFarmField.getValue());
         PacketHelper.addCharacterInfo(oPacket, c.getPlayer());
@@ -190,7 +190,7 @@ public class FarmPacket {
         return oPacket;
     }
 
-    public static OutPacket spawnFarmMonster(Client c, int id) {
+    public static OutPacket spawnFarmMonster(ClientSocket c, int id) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.SPAWN_FARM_MONSTER2.getValue());
         oPacket.EncodeInt(0);
@@ -271,11 +271,11 @@ public class FarmPacket {
         return oPacket;
     }
 
-    public static OutPacket updateFarmInfo(Client c) {
+    public static OutPacket updateFarmInfo(ClientSocket c) {
         return updateFarmInfo(c, false);
     }
 
-    public static OutPacket updateFarmInfo(Client c, boolean newname) {
+    public static OutPacket updateFarmInfo(ClientSocket c, boolean newname) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.FARM_INFO.getValue());
         oPacket.EncodeInt(c.getFarm().getId()); //Farm ID

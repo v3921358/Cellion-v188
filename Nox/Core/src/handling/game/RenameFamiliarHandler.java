@@ -22,27 +22,27 @@
 package handling.game;
 
 import client.MapleCharacterUtil;
-import client.Client;
+import client.ClientSocket;
 import server.maps.objects.User;
 import server.maps.objects.MonsterFamiliar;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class RenameFamiliarHandler implements ProcessPacket<Client> {
+public final class RenameFamiliarHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         MonsterFamiliar mf = (MonsterFamiliar) c.getPlayer().getFamiliars().get(iPacket.DecodeInt());
         if (mf == null) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         String newName = iPacket.DecodeString();
@@ -52,7 +52,7 @@ public final class RenameFamiliarHandler implements ProcessPacket<Client> {
         } else {
             chr.dropMessage(1, "This name cannot be used.");
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 
 }

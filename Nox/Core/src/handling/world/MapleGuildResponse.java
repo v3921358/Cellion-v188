@@ -21,7 +21,7 @@
 package handling.world;
 
 import net.OutPacket;
-import tools.packet.CWvsContext.GuildPacket;
+import tools.packet.WvsContext.GuildPacket;
 
 public enum MapleGuildResponse {
 

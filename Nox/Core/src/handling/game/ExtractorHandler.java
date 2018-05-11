@@ -1,26 +1,26 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import net.InPacket;
 import server.maps.objects.User;
 import server.maps.objects.MapleExtractor;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class ExtractorHandler implements ProcessPacket<Client> {
+public final class ExtractorHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr == null || !chr.isAlive() || chr.getMap() == null || chr.hasBlockedInventory()) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
 
@@ -32,7 +32,7 @@ public final class ExtractorHandler implements ProcessPacket<Client> {
                 || itemId / 10000 != 304
                 || fee <= 0 || fee > 1_000_000
                 || chr.getExtractor() != null || !chr.getMap().getSharedMapResources().town) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         chr.setExtractor(new MapleExtractor(chr, itemId, fee, chr.getFh())); //no clue about time left

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import client.Client;
+import client.ClientSocket;
 import client.QuestStatus;
 import constants.GameConstants;
 import server.maps.objects.User;
@@ -132,7 +132,7 @@ public final class MapleMiniGame extends AbstractPlayerStore {
         return loser;
     }
 
-    public void send(Client c) {
+    public void send(ClientSocket c) {
         if (getMCOwner() == null) {
             closeShop(false, false);
             return;
@@ -348,6 +348,6 @@ public final class MapleMiniGame extends AbstractPlayerStore {
     }
 
     @Override
-    public void buy(Client c, int z, short i) {
+    public void buy(ClientSocket c, int z, short i) {
     }
 }

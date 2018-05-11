@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import client.Client;
+import client.ClientSocket;
 import client.PlayerStats;
 import client.SkillFactory;
 import client.inventory.Equip;
@@ -26,15 +26,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class ItemMakerHandler implements ProcessPacket<Client> {
+public class ItemMakerHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final int makerType = iPacket.DecodeInt();
 
         switch (makerType) {
@@ -335,7 +335,7 @@ public class ItemMakerHandler implements ProcessPacket<Client> {
         return items.get(Randomizer.nextInt(items.size()));
     }
 
-    private static int checkRequiredNRemove(final Client c, final List<Pair<Integer, Integer>> recipe) {
+    private static int checkRequiredNRemove(final ClientSocket c, final List<Pair<Integer, Integer>> recipe) {
         int itemid = 0;
         for (final Pair<Integer, Integer> p : recipe) {
             if (!c.getPlayer().haveItem(p.getLeft(), p.getRight(), false, true)) {
@@ -349,7 +349,7 @@ public class ItemMakerHandler implements ProcessPacket<Client> {
         return itemid;
     }
 
-    private static boolean hasSkill(final Client c, final int reqlvl) {
+    private static boolean hasSkill(final ClientSocket c, final int reqlvl) {
         return c.getPlayer().getSkillLevel(SkillFactory.getSkill(PlayerStats.getSkillByJob(1007, c.getPlayer().getJob()))) >= reqlvl;
     }
 }

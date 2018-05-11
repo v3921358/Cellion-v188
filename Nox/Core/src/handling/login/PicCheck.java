@@ -1,6 +1,6 @@
 package handling.login;
 
-import client.Client;
+import client.ClientSocket;
 import constants.WorldConstants;
 import service.ChannelServer;
 import service.LoginServer;
@@ -9,20 +9,20 @@ import tools.packet.CField;
 import tools.packet.CLogin;
 import net.ProcessPacket;
 
-public final class PicCheck implements ProcessPacket<Client> {
+public final class PicCheck implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
-    private static boolean loginFailCount(final Client c) {
+    private static boolean loginFailCount(final ClientSocket c) {
         c.loginAttempt++;
         return c.loginAttempt > 3;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         //boolean view = c.getChannel() == 1;
         final String password = iPacket.DecodeString();
         final int charId = iPacket.DecodeInt();
@@ -41,7 +41,7 @@ public final class PicCheck implements ProcessPacket<Client> {
             }
             String s = c.getSessionIPAddress();
             LoginServer.putLoginAuth(charId, s.substring(s.indexOf('/') + 1, s.length()), c.getTempIP(), c.getChannel(), 0);
-            c.updateLoginState(Client.MapleClientLoginState.Login_ServerTransition, s);
+            c.updateLoginState(ClientSocket.MapleClientLoginState.Login_ServerTransition, s);
 
             c.SendPacket(CField.getServerIP(c, Integer.parseInt(ChannelServer.getInstance(c.getChannel()).getIP().split(":")[1]), charId));
         } else {

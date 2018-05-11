@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
 import handling.world.PartyOperation;
@@ -8,22 +8,22 @@ import handling.world.World;
 import server.maps.objects.User;
 import server.quest.Quest;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class DenyPartyRequestHandler implements ProcessPacket<Client> {
+public class DenyPartyRequestHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int action = iPacket.DecodeByte();
         System.out.println("[Debug] Party Result Operation: " + action);
         if ((action == 50)) {
@@ -52,13 +52,13 @@ public class DenyPartyRequestHandler implements ProcessPacket<Client> {
                             c.getPlayer().receivePartyMemberHP();
                             c.getPlayer().updatePartyMemberHP();
                         } else {
-                            c.SendPacket(CWvsContext.PartyPacket.partyStatusMessage(22, null));
+                            c.SendPacket(WvsContext.PartyPacket.partyStatusMessage(22, null));
                         }
                         break;
                     case 33:
                         User cfrom = c.getChannelServer().getPlayerStorage().getCharacterById(party.getLeader().getId());
                         if (cfrom != null) { //Currently giving "Your request for a party didn't work due to an unexpected error"
-                            cfrom.getClient().SendPacket(CWvsContext.PartyPacket.partyStatusMessage(23, c.getPlayer().getName()));
+                            cfrom.getClient().SendPacket(WvsContext.PartyPacket.partyStatusMessage(23, c.getPlayer().getName()));
                         }
                         break;
                     case 37: //Decline invite

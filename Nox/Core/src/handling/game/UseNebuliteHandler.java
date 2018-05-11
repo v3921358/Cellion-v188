@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -12,22 +12,22 @@ import server.potentials.ItemPotentialOption;
 import net.InPacket;
 import server.potentials.ItemPotentialProvider;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class UseNebuliteHandler implements ProcessPacket<Client> {
+public class UseNebuliteHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         /*      c.getPlayer().updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
         final Item nebulite = c.getPlayer().getInventory(MapleInventoryType.SETUP).getItem((byte) iPacket.decodeShort());
@@ -57,6 +57,6 @@ public class UseNebuliteHandler implements ProcessPacket<Client> {
             }
         }
         c.getPlayer().getMap().broadcastMessage(CField.showNebuliteEffect(c.getPlayer().getId(), success));*/
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 }

@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
 import net.InPacket;
@@ -10,15 +10,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class ItemMoveHandler implements ProcessPacket<Client> {
+public class ItemMoveHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if (c.getPlayer().hasBlockedInventory()) { //hack
             return;
         }

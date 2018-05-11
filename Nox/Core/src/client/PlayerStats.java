@@ -56,7 +56,7 @@ import tools.Pair;
 import tools.Triple;
 import tools.Tuple;
 import tools.packet.CField.EffectPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.JobPacket;
 
 /**
@@ -3295,7 +3295,7 @@ public class PlayerStats implements Serializable {
             if (eqq != null && eqq.getDurability() == 0 && eqq.getPosition() < 0) { //> 0 went to negative
                 if (chr.getInventory(MapleInventoryType.EQUIP).isFull()) {
                     List<ModifyInventory> mod = new ArrayList<>();
-                    chr.getClient().SendPacket(CWvsContext.inventoryOperation(true, mod));
+                    chr.getClient().SendPacket(WvsContext.inventoryOperation(true, mod));
                     return false;
                 }
                 durabilityHandling.remove(eqq);

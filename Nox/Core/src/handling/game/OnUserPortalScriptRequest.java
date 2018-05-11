@@ -21,22 +21,22 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import server.MaplePortal;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class OnUserPortalScriptRequest implements ProcessPacket<Client> {
+public final class OnUserPortalScriptRequest implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         iPacket.DecodeByte();
         if ((chr == null) || (chr.getMap() == null)) {
@@ -52,7 +52,7 @@ public final class OnUserPortalScriptRequest implements ProcessPacket<Client> {
             }
             portal.enterPortal(c);
         } else {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
         }
     }
 }

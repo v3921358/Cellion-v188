@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -9,22 +9,22 @@ import server.MapleInventoryManipulator;
 import server.RandomRewards;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class UseTreasureChestHandler implements ProcessPacket<Client> {
+public class UseTreasureChestHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final short slot = iPacket.DecodeShort();
         final int itemid = iPacket.DecodeInt();
 
@@ -32,7 +32,7 @@ public class UseTreasureChestHandler implements ProcessPacket<Client> {
 
         final Item toUse = chr.getInventory(MapleInventoryType.ETC).getItem((byte) slot);
         if (toUse == null || toUse.getQuantity() <= 0 || toUse.getItemId() != itemid || chr.hasBlockedInventory()) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         int reward;
@@ -69,19 +69,19 @@ public class UseTreasureChestHandler implements ProcessPacket<Client> {
 
             if (item == null) {
                 chr.dropMessage(5, "Please check your item inventory and see if you have a Master Key, or if the inventory is full.");
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.ETC, (byte) slot, (short) 1, true);
             MapleInventoryManipulator.removeById(c, MapleInventoryType.CASH, keyIDforRemoval, 1, true, false);
-            c.SendPacket(CWvsContext.InfoPacket.getShowItemGain(reward, (short) amount, true));
+            c.SendPacket(WvsContext.InfoPacket.getShowItemGain(reward, (short) amount, true));
 
             if (GameConstants.gachaponRareItem(item.getItemId()) > 0) {
-                World.Broadcast.broadcastMessage(CWvsContext.getGachaponMega(c.getPlayer().getName(), " : got a(n)", item, (byte) 2, "from a chest!"));
+                World.Broadcast.broadcastMessage(WvsContext.getGachaponMega(c.getPlayer().getName(), " : got a(n)", item, (byte) 2, "from a chest!"));
             }
         } else {
             chr.dropMessage(5, "Please check your item inventory and see if you have a Master Key, or if the inventory is full.");
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
         }
     }
 }

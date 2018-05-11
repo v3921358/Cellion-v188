@@ -21,22 +21,22 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import server.events.MapleCoconut;
 import server.events.MapleEventType;
 import tools.packet.CField;
 import net.ProcessPacket;
 
-public final class OnCoconutHit implements ProcessPacket<Client> {
+public final class OnCoconutHit implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         /*CB 00 A6 00 06 01
          * A6 00 = coconut id
          * 06 01 = ?

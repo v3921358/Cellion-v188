@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import client.inventory.MapleInventoryType;
@@ -13,7 +13,7 @@ import server.maps.objects.User;
 import net.InPacket;
 import server.maps.objects.User.MapleCharacterConversationType;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 import tools.LogHelper;
 
@@ -21,15 +21,15 @@ import tools.LogHelper;
  *
  * @author
  */
-public class StorageHandler implements ProcessPacket<Client> {
+public class StorageHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         byte mode = iPacket.DecodeByte();
 
         User chr = c.getPlayer();
@@ -53,7 +53,7 @@ public class StorageHandler implements ProcessPacket<Client> {
                         storage.sendTakenOut(c, GameConstants.getInventoryType(item.getItemId()));
                     }
                 } else {
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                 }
                 break;
             }
@@ -71,7 +71,7 @@ public class StorageHandler implements ProcessPacket<Client> {
                     return;
                 }
                 if (chr.getInventory(type).getItem((short) slot) == null) {
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                     return;
                 }
 
@@ -81,12 +81,12 @@ public class StorageHandler implements ProcessPacket<Client> {
                     Item item = chr.getInventory(type).getItem((short) slot).copy();
 
                     if (InventoryConstants.isPet(item.getItemId())) {
-                        c.SendPacket(CWvsContext.enableActions());
+                        c.SendPacket(WvsContext.enableActions());
                         return;
                     }
                     short flag = item.getFlag();
                     if ((ii.isPickupRestricted(item.getItemId())) && (storage.findById(item.getItemId()) != null)) {
-                        c.SendPacket(CWvsContext.enableActions());
+                        c.SendPacket(WvsContext.enableActions());
                         return;
                     }
                     if ((item.getItemId() == itemId) && ((item.getQuantity() >= quantity) || (GameConstants.isThrowingStar(itemId)) || (GameConstants.isBullet(itemId)))) {

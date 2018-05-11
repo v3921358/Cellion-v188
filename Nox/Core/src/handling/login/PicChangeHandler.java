@@ -1,19 +1,19 @@
 package handling.login;
 
-import client.Client;
+import client.ClientSocket;
 import net.InPacket;
 import tools.packet.CLogin;
 import net.ProcessPacket;
 
-public final class PicChangeHandler implements ProcessPacket<Client> {
+public final class PicChangeHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         if (c.getSecondPassword().length() > 0 || c.getSecondPassword() != null) {
             iPacket.DecodeString(); //old pic
             String newPic = iPacket.DecodeString();

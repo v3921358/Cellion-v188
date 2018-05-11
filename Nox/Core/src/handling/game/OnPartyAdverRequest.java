@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import handling.world.MapleExpedition;
 import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
@@ -30,19 +30,19 @@ import handling.world.PartySearch;
 import handling.world.PartySearchType;
 import handling.world.World;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 import tools.LogHelper;
 
-public final class OnPartyAdverRequest implements ProcessPacket<Client> {
+public final class OnPartyAdverRequest implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int mode = iPacket.DecodeByte();
         PartySearchType pst;
         switch (mode) {
@@ -57,13 +57,13 @@ public final class OnPartyAdverRequest implements ProcessPacket<Client> {
                 if ((c.getPlayer().getParty() == null) && (World.Party.searchParty(pst).size() < 10)) {
                     MapleParty party = World.Party.createParty(new MaplePartyCharacter(c.getPlayer()), pst.id);
                     c.getPlayer().setParty(party);
-                    c.SendPacket(CWvsContext.PartyPacket.partyCreated(party));
+                    c.SendPacket(WvsContext.PartyPacket.partyCreated(party));
                     PartySearch ps = new PartySearch(iPacket.DecodeString(), pst.exped ? party.getExpeditionId() : party.getId(), pst);
                     World.Party.addSearch(ps);
                     if (pst.exped) {
-                        c.SendPacket(CWvsContext.ExpeditionPacket.expeditionStatus(World.Party.getExped(party.getExpeditionId()), true, false));
+                        c.SendPacket(WvsContext.ExpeditionPacket.expeditionStatus(World.Party.getExped(party.getExpeditionId()), true, false));
                     }
-                    c.SendPacket(CWvsContext.PartyPacket.partyListingAdded(ps));
+                    c.SendPacket(WvsContext.PartyPacket.partyListingAdded(ps));
                 } else {
                     c.getPlayer().dropMessage(1, "Unable to create. Please leave the party.");
                 }
@@ -76,7 +76,7 @@ public final class OnPartyAdverRequest implements ProcessPacket<Client> {
                 if ((pst == null) || (c.getPlayer().getLevel() > pst.maxLevel) || (c.getPlayer().getLevel() < pst.minLevel)) {
                     return;
                 }
-                c.SendPacket(CWvsContext.PartyPacket.getPartyListing(pst));
+                c.SendPacket(WvsContext.PartyPacket.getPartyListing(pst));
                 break;
             case -102:
             case -94:
@@ -102,7 +102,7 @@ public final class OnPartyAdverRequest implements ProcessPacket<Client> {
                         c.getPlayer().receivePartyMemberHP();
                         c.getPlayer().updatePartyMemberHP();
                     } else {
-                        c.SendPacket(CWvsContext.PartyPacket.partyStatusMessage(21, null));
+                        c.SendPacket(WvsContext.PartyPacket.partyStatusMessage(21, null));
                     }
                 } else {
                     MapleExpedition exped = World.Party.getExped(theId);
@@ -111,24 +111,24 @@ public final class OnPartyAdverRequest implements ProcessPacket<Client> {
                         if ((ps != null) && (c.getPlayer().getLevel() <= ps.getType().maxLevel) && (c.getPlayer().getLevel() >= ps.getType().minLevel) && (exped.getAllMembers() < exped.getType().maxMembers)) {
                             int partyId = exped.getFreeParty();
                             if (partyId < 0) {
-                                c.SendPacket(CWvsContext.PartyPacket.partyStatusMessage(21, null));
+                                c.SendPacket(WvsContext.PartyPacket.partyStatusMessage(21, null));
                             } else if (partyId == 0) {
                                 party = World.Party.createPartyAndAdd(partyplayer, exped.getId());
                                 c.getPlayer().setParty(party);
-                                c.SendPacket(CWvsContext.PartyPacket.partyCreated(party));
-                                c.SendPacket(CWvsContext.ExpeditionPacket.expeditionStatus(exped, true, false));
-                                World.Party.expedPacket(exped.getId(), CWvsContext.ExpeditionPacket.expeditionJoined(c.getPlayer().getName()), null);
-                                World.Party.expedPacket(exped.getId(), CWvsContext.ExpeditionPacket.expeditionUpdate(exped.getIndex(party.getId()), party), null);
+                                c.SendPacket(WvsContext.PartyPacket.partyCreated(party));
+                                c.SendPacket(WvsContext.ExpeditionPacket.expeditionStatus(exped, true, false));
+                                World.Party.expedPacket(exped.getId(), WvsContext.ExpeditionPacket.expeditionJoined(c.getPlayer().getName()), null);
+                                World.Party.expedPacket(exped.getId(), WvsContext.ExpeditionPacket.expeditionUpdate(exped.getIndex(party.getId()), party), null);
                             } else {
                                 c.getPlayer().setParty(World.Party.getParty(partyId));
                                 World.Party.updateParty(partyId, PartyOperation.JOIN, partyplayer);
                                 c.getPlayer().receivePartyMemberHP();
                                 c.getPlayer().updatePartyMemberHP();
-                                c.SendPacket(CWvsContext.ExpeditionPacket.expeditionStatus(exped, true, false));
-                                World.Party.expedPacket(exped.getId(), CWvsContext.ExpeditionPacket.expeditionJoined(c.getPlayer().getName()), null);
+                                c.SendPacket(WvsContext.ExpeditionPacket.expeditionStatus(exped, true, false));
+                                World.Party.expedPacket(exped.getId(), WvsContext.ExpeditionPacket.expeditionJoined(c.getPlayer().getName()), null);
                             }
                         } else {
-                            c.SendPacket(CWvsContext.ExpeditionPacket.expeditionError(0, c.getPlayer().getName()));
+                            c.SendPacket(WvsContext.ExpeditionPacket.expeditionError(0, c.getPlayer().getName()));
                         }
                     }
                 }

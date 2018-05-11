@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import client.Client;
+import client.ClientSocket;
 import constants.ServerConstants;
 import constants.ServerConstants.CommandType;
 import constants.ServerConstants.PlayerGMRank;
@@ -93,7 +93,7 @@ public class CommandProcessor {
         }
     }
 
-    private static void sendDisplayMessage(Client c, String msg, CommandType type) {
+    private static void sendDisplayMessage(ClientSocket c, String msg, CommandType type) {
         if (c.getPlayer() == null) {
             return;
         }
@@ -107,7 +107,7 @@ public class CommandProcessor {
         }
     }
 
-    public static void dropHelp(Client c) {
+    public static void dropHelp(ClientSocket c) {
         String sAccessRank = "Unknown";
         if (c.getPlayer().isDeveloper()) {
             sAccessRank = "Developer";
@@ -133,7 +133,7 @@ public class CommandProcessor {
         c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage.toString(), NPCChatByType.NPC_Cancellable));
     }
 
-    public static boolean processCommand(Client c, String line, CommandType type) {
+    public static boolean processCommand(ClientSocket c, String line, CommandType type) {
         for (PlayerGMRank prefix : PlayerGMRank.values()) {
             if (line.startsWith(prefix.getCommandPrefix() + prefix.getCommandPrefix())) {
                 return false;

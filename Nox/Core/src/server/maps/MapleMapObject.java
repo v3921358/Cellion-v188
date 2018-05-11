@@ -22,7 +22,7 @@ package server.maps;
 
 import java.awt.Point;
 
-import client.Client;
+import client.ClientSocket;
 import constants.GameConstants;
 
 public abstract class MapleMapObject {
@@ -132,7 +132,7 @@ public abstract class MapleMapObject {
 
     public abstract MapleMapObjectType getType();
 
-    public abstract void sendSpawnData(final Client client);
+    public abstract void sendSpawnData(final ClientSocket client);
 
-    public abstract void sendDestroyData(final Client client);
+    public abstract void sendDestroyData(final ClientSocket client);
 }

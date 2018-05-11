@@ -1,10 +1,10 @@
 package server.commands;
 
-import client.Client;
+import client.ClientSocket;
 import constants.ServerConstants;
 
 /**
- *
+ * Developer Debug Commands
  * @author
  */
 public class DebugCommands {
@@ -16,7 +16,7 @@ public class DebugCommands {
     public static class ToggleCooldown extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().dropMessage(6, "Cooldown " + (c.getPlayer().toggleCooldown() ? "removed." : "restored."));
             return 1;
         }
@@ -25,7 +25,7 @@ public class DebugCommands {
     public static class SetBurningField extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             int fieldLevel = 1;
             if (splitted.length > 1) {
                 try {
@@ -42,7 +42,7 @@ public class DebugCommands {
     public static class RespawnRune extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().getMap().respawnRune(true);
 
             return 1;
@@ -52,7 +52,7 @@ public class DebugCommands {
     public static class SetCombo extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             int comboAmount = 49;
             if (splitted.length > 1) {
                 try {

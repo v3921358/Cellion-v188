@@ -1,26 +1,26 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.SkillFactory;
 import server.maps.objects.User;
 import server.maps.objects.MapleRuneStone;
 import net.InPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class RuneStoneCompleteArrowHandler implements ProcessPacket<Client> {
+public class RuneStoneCompleteArrowHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         // 58 03 01
         boolean sucess = iPacket.DecodeByte() > 0;
 
@@ -40,6 +40,6 @@ public class RuneStoneCompleteArrowHandler implements ProcessPacket<Client> {
         }
         // Fail
         //   LASTRUNETIME = System.currentTimeMillis() + 10000; // 10 sec
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 }

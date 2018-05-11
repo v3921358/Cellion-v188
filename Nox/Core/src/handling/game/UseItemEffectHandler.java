@@ -21,24 +21,24 @@
  */
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class UseItemEffectHandler implements ProcessPacket<Client> {
+public final class UseItemEffectHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         int itemId = iPacket.DecodeInt();
         if (chr == null) {
@@ -52,7 +52,7 @@ public final class UseItemEffectHandler implements ProcessPacket<Client> {
         }
         Item toUse = chr.getInventory(type).findById(itemId);
         if (toUse == null || toUse.getItemId() != itemId || toUse.getQuantity() < 1) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         if (itemId != 5510000) {

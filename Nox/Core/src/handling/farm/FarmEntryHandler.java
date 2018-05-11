@@ -21,26 +21,26 @@
  */
 package handling.farm;
 
-import client.Client;
+import client.ClientSocket;
 import constants.ServerConstants;
 import handling.world.InterServerHandler;
 import net.InPacket;
 import scripting.provider.NPCScriptManager;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
-public final class FarmEntryHandler implements ProcessPacket<Client> {
+public final class FarmEntryHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
 
         if (!ServerConstants.FARM) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             NPCScriptManager.getInstance().getCM(c).dispose();
             NPCScriptManager.getInstance().dispose(c);
             return;

@@ -21,21 +21,21 @@
  */
 package handling.login;
 
-import client.Client;
+import client.ClientSocket;
 import service.LoginServer;
 import net.InPacket;
 import tools.packet.CLogin;
 import net.ProcessPacket;
 
-public final class UserLimitRequestHandler implements ProcessPacket<Client> {
+public final class UserLimitRequestHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         // 0 = Select world normally
         // 1 = "Since there are many users, you may encounter some..."
         // 2 = "The concurrent users in this world have reached the max"

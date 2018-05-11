@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleCharacterUtil;
-import client.Client;
+import client.ClientSocket;
 import constants.ServerConstants;
 import handling.PacketThrottleLimits;
 import handling.world.World;
@@ -9,7 +9,7 @@ import net.InPacket;
 import server.commands.CommandProcessor;
 import server.maps.objects.User;
 import tools.LogHelper;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
@@ -22,15 +22,15 @@ import net.ProcessPacket;
         MinTimeMillisBetweenPackets = 500,
         FunctionName = "PartyChatHandler",
         BanType = PacketThrottleLimits.PacketThrottleBanType.Disconnect)
-public class PartyChatHandler implements ProcessPacket<Client> {
+public class PartyChatHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         chr.updateTick(iPacket.DecodeInt());
@@ -46,7 +46,7 @@ public class PartyChatHandler implements ProcessPacket<Client> {
         }
         final String chattext = iPacket.DecodeString();
         if (chr == null || !chr.getCanTalk()) {
-            c.SendPacket(CWvsContext.broadcastMsg(6, "You have been muted and are therefore unable to talk."));
+            c.SendPacket(WvsContext.broadcastMsg(6, "You have been muted and are therefore unable to talk."));
             return;
         }
 
@@ -77,8 +77,7 @@ public class PartyChatHandler implements ProcessPacket<Client> {
                     c.Close();
                     break;
             }
-            World.Broadcast.broadcastGMMessage(
-                    CWvsContext.broadcastMsg(6, "[GM Message] " + MapleCharacterUtil.makeMapleReadable(chr.getName())
+            World.Broadcast.broadcastGMMessage(WvsContext.broadcastMsg(6, "[GM Message] " + MapleCharacterUtil.makeMapleReadable(chr.getName())
                             + " said (" + chattype + "): " + chattext));
 
         }

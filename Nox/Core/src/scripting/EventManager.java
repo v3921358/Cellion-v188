@@ -32,7 +32,7 @@ import java.util.concurrent.ScheduledFuture;
 import javax.script.Invocable;
 import javax.script.ScriptException;
 
-import client.Client;
+import client.ClientSocket;
 import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
 import handling.world.MapleExpedition;
@@ -56,7 +56,7 @@ import server.maps.objects.User;
 import server.maps.objects.MapleReactor;
 import tools.LogHelper;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class EventManager {
 
@@ -285,7 +285,7 @@ public class EventManager {
         }
     }
 
-    public void startInstance(Client c, MapleExpedition exped, MapleMap map, int maxLevel) {
+    public void startInstance(ClientSocket c, MapleExpedition exped, MapleMap map, int maxLevel) {
         try {
             int averageLevel = 0, size = 0;
             for (User mpc : exped.getExpeditionMembers(c)) {
@@ -321,7 +321,7 @@ public class EventManager {
         }
     }
 
-    public void startInstance_NoID(Client c, MapleExpedition exped, MapleMap map, final Exception old) {
+    public void startInstance_NoID(ClientSocket c, MapleExpedition exped, MapleMap map, final Exception old) {
         try {
             EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", (Object) null));
             eim.registerExpedition(c, exped, map);
@@ -402,12 +402,12 @@ public class EventManager {
     }
 
     public void broadcastYellowMsg(final String msg) {
-        getChannelServer().broadcastPacket(CWvsContext.yellowChat(msg));
+        getChannelServer().broadcastPacket(WvsContext.yellowChat(msg));
     }
 
     public void broadcastServerMsg(final int type, final String msg, final boolean weather) {
         if (!weather) {
-            getChannelServer().broadcastPacket(CWvsContext.broadcastMsg(type, msg));
+            getChannelServer().broadcastPacket(WvsContext.broadcastMsg(type, msg));
         } else {
             for (MapleMap load : getMapFactory().getAllMaps()) {
                 if (load.getCharactersSize() > 0) {

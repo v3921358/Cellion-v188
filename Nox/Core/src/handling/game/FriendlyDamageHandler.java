@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import static handling.world.MobHandler.checkShammos;
 import server.Randomizer;
 import server.life.Mob;
@@ -13,15 +13,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class FriendlyDamageHandler implements ProcessPacket<Client> {
+public class FriendlyDamageHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         MapleMap map = chr.getMap();
         if (map == null) {

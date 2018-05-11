@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
-import client.Client;
+import client.ClientSocket;
 import client.QuestStatus.QuestState;
 import client.anticheat.CheatingOffense;
 import client.inventory.Equip;
@@ -25,22 +25,22 @@ import server.maps.objects.User;
 import server.maps.objects.Pet;
 import net.InPacket;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
  *
  * @author
  */
-public class ItemPickupHandler implements ProcessPacket<Client> {
+public class ItemPickupHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         if (chr == null || c.getPlayer().hasBlockedInventory()) { //hack
@@ -57,7 +57,7 @@ public class ItemPickupHandler implements ProcessPacket<Client> {
         final MapleMapObject ob = chr.getMap().getMapObject(iPacket.DecodeInt(), MapleMapObjectType.ITEM);
 
         if (ob == null) {
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return;
         }
         final MapleMapItem mapitem = (MapleMapItem) ob;
@@ -65,20 +65,20 @@ public class ItemPickupHandler implements ProcessPacket<Client> {
         lock.lock();
         try {
             if (mapitem.isPickedUp()) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
             if (mapitem.getQuest() > 0 && chr.getQuestStatus(mapitem.getQuest()) != QuestState.Started) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
             if (mapitem.getOwner() != chr.getId() && ((!mapitem.isPlayerDrop() && mapitem.getDropType() == 0)
                     || (mapitem.isPlayerDrop() && chr.getMap().getSharedMapResources().everlast))) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
             if (!mapitem.isPlayerDrop() && mapitem.getDropType() == 1 && mapitem.getOwner() != chr.getId() && (chr.getParty() == null || chr.getParty().getMemberById(mapitem.getOwner()) == null)) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 return;
             }
 
@@ -121,11 +121,11 @@ public class ItemPickupHandler implements ProcessPacket<Client> {
                 removeItem(chr, mapitem, ob);
 
             } else if (MapleItemInformationProvider.getInstance().isPickupBlocked(mapitem.getItemId())) {
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 c.getPlayer().dropMessage(5, "This item cannot be picked up.");
 
             } else if (c.getPlayer().inPVP() && Integer.parseInt(c.getPlayer().getEventInstance().getProperty("ice")) == c.getPlayer().getId()) {
-                c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                c.SendPacket(WvsContext.inventoryOperation(true, new ArrayList<>()));
 
             } else if (useItem(c, mapitem.getItemId())) {
                 removeItem(c.getPlayer(), mapitem, ob);
@@ -150,10 +150,10 @@ public class ItemPickupHandler implements ProcessPacket<Client> {
 
                 // Display
                 if (!mapitem.isPlayerDrop() && mapitem.getItem().getType() == ItemType.Equipment) {
-                    chr.getClient().SendPacket(CWvsContext.InfoPacket.showEquipmentPickedUp((Equip) mapitem.getItem()));
+                    chr.getClient().SendPacket(WvsContext.InfoPacket.showEquipmentPickedUp((Equip) mapitem.getItem()));
                 }
             } else {
-                c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<>()));
+                c.SendPacket(WvsContext.inventoryOperation(true, new ArrayList<>()));
             }
         } finally {
             lock.unlock();

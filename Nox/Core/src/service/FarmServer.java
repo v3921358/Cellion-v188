@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import constants.ServerConstants;
-import handling.MapleServerHandler;
+import handling.ServerHandler;
 import handling.game.PlayerStorage;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -49,7 +49,7 @@ public class FarmServer extends Thread {
 
             @Override
             protected void initChannel(SocketChannel c) throws Exception {
-                c.pipeline().addLast(new PacketDecoder(), new MapleServerHandler(ServerMode.MapleServerMode.FARM), new PacketEncoder());
+                c.pipeline().addLast(new PacketDecoder(), new ServerHandler(ServerMode.MapleServerMode.FARM), new PacketEncoder());
             }
         });
 

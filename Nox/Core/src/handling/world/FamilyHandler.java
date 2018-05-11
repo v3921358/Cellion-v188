@@ -3,27 +3,27 @@ package handling.world;
 import java.util.List;
 
 import client.MapleCharacterUtil;
-import client.Client;
+import client.ClientSocket;
 import server.maps.FieldLimitType;
 import server.maps.objects.User;
 import net.InPacket;
-import tools.packet.CWvsContext;
-import tools.packet.CWvsContext.FamilyPacket;
+import tools.packet.WvsContext;
+import tools.packet.WvsContext.FamilyPacket;
 
 public class FamilyHandler {
 
-    public static final void RequestFamily(final InPacket iPacket, Client c) {
+    public static final void RequestFamily(final InPacket iPacket, ClientSocket c) {
         User chr = c.getChannelServer().getPlayerStorage().getCharacterByName(iPacket.DecodeString());
         if (chr != null) {
             c.SendPacket(FamilyPacket.getFamilyPedigree(chr));
         }
     }
 
-    public static final void OpenFamily(final InPacket iPacket, Client c) {
+    public static final void OpenFamily(final InPacket iPacket, ClientSocket c) {
         c.SendPacket(FamilyPacket.getFamilyInfo(c.getPlayer()));
     }
 
-    public static final void UseFamily(final InPacket iPacket, Client c) {
+    public static final void UseFamily(final InPacket iPacket, ClientSocket c) {
         int type = iPacket.DecodeInt();
         if (MapleFamilyBuff.values().length <= type) {
             return;
@@ -134,7 +134,7 @@ public class FamilyHandler {
         }
     }
 
-    public static final void FamilyOperation(final InPacket iPacket, Client c) {
+    public static final void FamilyOperation(final InPacket iPacket, ClientSocket c) {
         if (c.getPlayer() == null) {
             return;
         }
@@ -160,10 +160,10 @@ public class FamilyHandler {
         } else if (c.getPlayer().isGM() || !addChr.isGM()) {
             addChr.getClient().SendPacket(FamilyPacket.sendFamilyInvite(c.getPlayer().getId(), c.getPlayer().getLevel(), c.getPlayer().getJob(), c.getPlayer().getName()));
         }
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 
-    public static final void FamilyPrecept(final InPacket iPacket, Client c) {
+    public static final void FamilyPrecept(final InPacket iPacket, ClientSocket c) {
         MapleFamily fam = World.Family.getFamily(c.getPlayer().getFamilyId());
         if (fam == null || fam.getLeaderId() != c.getPlayer().getId()) {
             return;
@@ -171,7 +171,7 @@ public class FamilyHandler {
         fam.setNotice(iPacket.DecodeString());
     }
 
-    public static final void FamilySummon(final InPacket iPacket, Client c) {
+    public static final void FamilySummon(final InPacket iPacket, ClientSocket c) {
         MapleFamilyBuff cost = MapleFamilyBuff.Summon;
         User tt = c.getChannelServer().getPlayerStorage().getCharacterByName(iPacket.DecodeString());
         if (c.getPlayer().getFamilyId() > 0 && tt != null && tt.getFamilyId() == c.getPlayer().getFamilyId() && !FieldLimitType.VipRock.checkFlag(tt.getMap())
@@ -193,7 +193,7 @@ public class FamilyHandler {
         c.getPlayer().setTeleportName("");
     }
 
-    public static final void DeleteJunior(final InPacket iPacket, Client c) {
+    public static final void DeleteJunior(final InPacket iPacket, ClientSocket c) {
         int juniorid = iPacket.DecodeInt();
         if (c.getPlayer().getFamilyId() <= 0 || juniorid <= 0 || (c.getPlayer().getJunior1() != juniorid && c.getPlayer().getJunior2() != juniorid)) {
             return;
@@ -224,10 +224,10 @@ public class FamilyHandler {
             fam.resetPedigree();
         }
         c.getPlayer().dropMessage(1, "Broke up with (" + other.getName() + ").\r\nFamily relationship has ended.");
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 
-    public static final void DeleteSenior(final InPacket iPacket, Client c) {
+    public static final void DeleteSenior(final InPacket iPacket, ClientSocket c) {
         if (c.getPlayer().getFamilyId() <= 0 || c.getPlayer().getSeniorId() <= 0) {
             return;
         }
@@ -254,10 +254,10 @@ public class FamilyHandler {
             fam.resetPedigree();
         }
         c.getPlayer().dropMessage(1, "Broke up with (" + mgc.getName() + ").\r\nFamily relationship has ended.");
-        c.SendPacket(CWvsContext.enableActions());
+        c.SendPacket(WvsContext.enableActions());
     }
 
-    public static final void AcceptFamily(InPacket iPacket, Client c) {
+    public static final void AcceptFamily(InPacket iPacket, ClientSocket c) {
         User inviter = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInt());
         if (inviter != null && c.getPlayer().getSeniorId() == 0 && (c.getPlayer().isGM() || !inviter.isHidden()) && inviter.getLevel() - 20 <= c.getPlayer().getLevel() && inviter.getLevel() >= 10 && inviter.getName().equals(iPacket.DecodeString()) && inviter.getNoJuniors() < 2 /*&& inviter.getFamily().getGens() < 1000*/ && c.getPlayer().getLevel() >= 10) {
             boolean accepted = iPacket.DecodeByte() > 0;

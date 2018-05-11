@@ -2,7 +2,7 @@ package server.commands;
 
 import java.util.Arrays;
 
-import client.Client;
+import client.ClientSocket;
 import client.MapleStat;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
@@ -33,7 +33,7 @@ import server.maps.objects.User;
 import tools.LogHelper;
 import tools.StringUtil;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 /*
  * Cellion Player Commands
@@ -50,10 +50,10 @@ public class PlayerCommand {
     public static class Dispose extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             c.getPlayer().dropMessage(5, "Your characters actions have been enabled.");
             return 1;
         }
@@ -62,7 +62,7 @@ public class PlayerCommand {
     public static class PinkZak extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             final EventManager eem = c.getChannelServer().getEventSM().getEventManager("PinkZakumEntrance");
             final EventInstanceManager eim = eem.getInstance(("PinkZakumEntrance"));
             if (eem.getProperty("entryPossible").equals("true")) {
@@ -78,7 +78,7 @@ public class PlayerCommand {
     public static class ExpFix extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().setExp(c.getPlayer().getExp() - GameConstants.getExpNeededForLevel(c.getPlayer().getLevel()) >= 0 ? GameConstants.getExpNeededForLevel(c.getPlayer().getLevel()) : 0);
             return 1;
         }
@@ -87,7 +87,7 @@ public class PlayerCommand {
     public static class ResetExp extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().setExp(0);
             return 1;
         }
@@ -191,7 +191,7 @@ public class PlayerCommand {
         }
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(5, "Invalid number entered.");
                 return 0;
@@ -245,7 +245,7 @@ public class PlayerCommand {
     public static class Monster extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             Mob pMob = null;
             for (final MapleMapObject monstermo : c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), 100000, Arrays.asList(MapleMapObjectType.MONSTER))) {
                 pMob = (Mob) monstermo;
@@ -264,7 +264,7 @@ public class PlayerCommand {
     public static class Save extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().setExp(c.getPlayer().getExp() - GameConstants.getExpNeededForLevel(c.getPlayer().getLevel()) >= 0 ? GameConstants.getExpNeededForLevel(c.getPlayer().getLevel()) : 0);
             c.getPlayer().saveToDB(false, false);
             return 1;
@@ -274,7 +274,7 @@ public class PlayerCommand {
     public static class Online extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             int nSize = 0;
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
                 nSize += ChannelServer.getInstance(i).getPlayerStorage().getAllCharacters().size();
@@ -295,7 +295,7 @@ public class PlayerCommand {
     public static class FM extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             for (int i : GameConstants.blockedMaps) {
                 if (c.getPlayer().getMapId() == i) {
                     c.getPlayer().dropMessage(5, "You may not use this command here.");
@@ -329,7 +329,7 @@ public class PlayerCommand {
     public static class Help extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().yellowMessage("----------------- PLAYER COMMANDS -----------------");
             c.getPlayer().yellowMessage("@str, @dex, @int, @luk <amount> : Place ability points in specified statistic.");
             c.getPlayer().yellowMessage("@support <message> : Send a message to availible staff members.");
@@ -343,7 +343,7 @@ public class PlayerCommand {
 
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
             return 1;
         }
     }
@@ -351,10 +351,10 @@ public class PlayerCommand {
     public static class Menu extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
-            c.SendPacket(CWvsContext.enableActions());
+            c.SendPacket(WvsContext.enableActions());
 
             if (c.getPlayer().isInBlockedMap()) {
                 c.getPlayer().dropMessage(5, "This command may not be used here.");
@@ -369,7 +369,7 @@ public class PlayerCommand {
     public static class Event extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (c.getPlayer().getClient().getChannelServer().eventOn) {
                 c.getPlayer().changeMap(c.getPlayer().getClient().getChannelServer().eventMap, 0);
                 c.getPlayer().dropMessage(5, "Welcome to the " + ServerConstants.SERVER_NAME + " event, have fun!");
@@ -383,7 +383,7 @@ public class PlayerCommand {
     public static class SpawnBomb extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
+        public int execute(ClientSocket c, String[] splitted) {
             if (c.getPlayer().getMapId() != 109010100) {
                 c.getPlayer().dropMessage(5, "You may only spawn bomb in the event map.");
                 return 0;
@@ -400,8 +400,8 @@ public class PlayerCommand {
     public static class Support extends CommandExecute {
 
         @Override
-        public int execute(Client c, String[] splitted) {
-            World.Broadcast.broadcastGMMessage(CWvsContext.broadcastMsg(c.getPlayer().isGM() ? 6 : 5, "[" + ServerConstants.SERVER_NAME + " Support] " + c.getPlayer().getName() + ": " + StringUtil.joinStringFrom(splitted, 1)));
+        public int execute(ClientSocket c, String[] splitted) {
+            World.Broadcast.broadcastGMMessage(WvsContext.broadcastMsg(c.getPlayer().isGM() ? 6 : 5, "[" + ServerConstants.SERVER_NAME + " Support] " + c.getPlayer().getName() + ": " + StringUtil.joinStringFrom(splitted, 1)));
             c.getPlayer().dropMessage(5, "Your message has been sent successfully.");
             return 1;
         }

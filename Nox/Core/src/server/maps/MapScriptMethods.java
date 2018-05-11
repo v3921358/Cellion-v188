@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 
-import client.Client;
+import client.ClientSocket;
 import client.QuestStatus;
 import client.QuestStatus.QuestState;
 import client.Skill;
@@ -32,7 +32,7 @@ import tools.packet.CField.EffectPacket;
 import tools.packet.CField.NPCPacket;
 import tools.packet.CField.UIPacket;
 import tools.packet.CUserLocal;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import tools.packet.MobPacket;
 
 public class MapScriptMethods {
@@ -440,7 +440,7 @@ public class MapScriptMethods {
      * @param scriptName
      * @return true if executed, false if not available
      */
-    public static boolean startScript_FirstUser(final Client c, String scriptName) {
+    public static boolean startScript_FirstUser(final ClientSocket c, String scriptName) {
         if (c.getPlayer() == null) {
             return true;
         }
@@ -966,7 +966,7 @@ public class MapScriptMethods {
             }
             case boss_Ravana_mirror:
             case boss_Ravana: { //event handles this so nothing for now until i find out something to do with it
-                c.getPlayer().getMap().broadcastMessage(CWvsContext.broadcastMsg(5, "Ravana has appeared!"));
+                c.getPlayer().getMap().broadcastMessage(WvsContext.broadcastMsg(5, "Ravana has appeared!"));
                 break;
             }
             case killing_BonusSetting: { //spawns monsters according to mapid
@@ -1250,7 +1250,7 @@ public class MapScriptMethods {
         return true;
     }
 
-    public static boolean startScript_User(final Client c, String scriptName) {
+    public static boolean startScript_User(final ClientSocket c, String scriptName) {
         if (c.getPlayer() == null) {
             return true;
         }
@@ -1295,10 +1295,10 @@ public class MapScriptMethods {
                     c.SendPacket(UIPacket.UserInGameDirectionEvent("Effect/Direction3.img/effect/tuto/BalloonMsg0/2", 2100, 0, -120, 0, 0));
                     c.SendPacket(UIPacket.UserInGameDirectionEvent(1, 2100));
                     Thread.sleep(2800);
-                    c.SendPacket(CWvsContext.getTopMsg("Press the left and right keys to move."));
+                    c.SendPacket(WvsContext.getTopMsg("Press the left and right keys to move."));
                     c.SendPacket(UIPacket.UserInGameDirectionEvent(1, 3000));
                     Thread.sleep(3000);
-                    c.SendPacket(CWvsContext.getTopMsg("Go to where the portal is and press the up key to move to the next map."));
+                    c.SendPacket(WvsContext.getTopMsg("Go to where the portal is and press the up key to move to the next map."));
 
 //                    MapleQuest.getInstance(32200).forceStart(c.getPlayer(), 0, null);
 //                    MapleQuest.getInstance(32200).forceComplete(c.getPlayer(), 0);
@@ -1313,7 +1313,7 @@ public class MapScriptMethods {
                 try {
                     c.SendPacket(UIPacket.getDirectionStatus(true));
                     c.SendPacket(UIPacket.IntroEnableUI(true));
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                     c.getPlayer().getMap().resetFully();
                     final MapleReactor chain = new MapleReactor(MapleReactorFactory.getReactor(1008010), 1008010);
                     //String name = MapleDataTool.getString("info/link",MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Reactor.wz")).getData(StringUtil.getLeftPaddedStr(Integer.toString(1008010) + ".img", '0', 11)));
@@ -1326,7 +1326,7 @@ public class MapScriptMethods {
                     c.SendPacket(UIPacket.UserInGameDirectionEvent("Effect/Direction3.img/effect/tuto/BalloonMsg0/3", 2100, 0, -120, 0, 0));
                     c.SendPacket(UIPacket.UserInGameDirectionEvent(1, 1800));
                     Thread.sleep(1800);
-                    c.SendPacket(CWvsContext.getTopMsg("Press the Ctrl key to use normal attacks."));//Use @check before pressing the Ctrl key to use normal attacks on the chain."));
+                    c.SendPacket(WvsContext.getTopMsg("Press the Ctrl key to use normal attacks."));//Use @check before pressing the Ctrl key to use normal attacks on the chain."));
                     NPCScriptManager.getInstance().dispose(c);
                     c.removeClickedNPC();
                 } catch (InterruptedException e) {
@@ -1363,13 +1363,13 @@ public class MapScriptMethods {
                     c.SendPacket(UIPacket.UserInGameDirectionEvent(1, 2100));
                     Thread.sleep(2100);
                     c.SendPacket(UIPacket.UserInGameDirectionEvent("Effect/Direction3.img/effect/tuto/key/2", 3000000, -520, -740));
-                    c.SendPacket(CWvsContext.getTopMsg("Press the down key and Alt at the same time to go down."));
+                    c.SendPacket(WvsContext.getTopMsg("Press the down key and Alt at the same time to go down."));
                 } catch (InterruptedException e) {
                 }
                 c.SendPacket(UIPacket.IntroEnableUI(false));
                 c.removeClickedNPC();
                 NPCScriptManager.getInstance().dispose(c);
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 NPCScriptManager.getInstance().start(c, 10310, "ExplorerTut00");
                 break;
             }
@@ -1407,7 +1407,7 @@ public class MapScriptMethods {
 
             case Advanture_tuto33: {
                 c.getPlayer().getMap().resetFully();
-                c.SendPacket(CWvsContext.getTopMsg("Eliminate Mano."));
+                c.SendPacket(WvsContext.getTopMsg("Eliminate Mano."));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300815), new Point(0, 0));
                 NPCScriptManager.getInstance().dispose(c);
                 c.removeClickedNPC();
@@ -1521,7 +1521,7 @@ public class MapScriptMethods {
 
             case enter_101070000: {
                 try {
-                    c.SendPacket(CWvsContext.getTopMsg("The forest of fairies seems to materialize from nowhere as you exit the passage."));
+                    c.SendPacket(WvsContext.getTopMsg("The forest of fairies seems to materialize from nowhere as you exit the passage."));
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                 }
@@ -1659,13 +1659,13 @@ public class MapScriptMethods {
                 break;
             }
             case PRaid_W_Enter: {
-                c.SendPacket(CWvsContext.sendPyramidEnergy("PRaid_expPenalty", "0"));
-                c.SendPacket(CWvsContext.sendPyramidEnergy("PRaid_ElapssedTimeAtField", "0"));
-                c.SendPacket(CWvsContext.sendPyramidEnergy("PRaid_Point", "-1"));
-                c.SendPacket(CWvsContext.sendPyramidEnergy("PRaid_Bonus", "-1"));
-                c.SendPacket(CWvsContext.sendPyramidEnergy("PRaid_Total", "-1"));
-                c.SendPacket(CWvsContext.sendPyramidEnergy("PRaid_Team", ""));
-                c.SendPacket(CWvsContext.sendPyramidEnergy("PRaid_IsRevive", "0"));
+                c.SendPacket(WvsContext.sendPyramidEnergy("PRaid_expPenalty", "0"));
+                c.SendPacket(WvsContext.sendPyramidEnergy("PRaid_ElapssedTimeAtField", "0"));
+                c.SendPacket(WvsContext.sendPyramidEnergy("PRaid_Point", "-1"));
+                c.SendPacket(WvsContext.sendPyramidEnergy("PRaid_Bonus", "-1"));
+                c.SendPacket(WvsContext.sendPyramidEnergy("PRaid_Total", "-1"));
+                c.SendPacket(WvsContext.sendPyramidEnergy("PRaid_Team", ""));
+                c.SendPacket(WvsContext.sendPyramidEnergy("PRaid_IsRevive", "0"));
                 c.getPlayer().writePoint("PRaid_Point", "-1");
                 c.getPlayer().writeStatus("Red_Stage", "1");
                 c.getPlayer().writeStatus("Blue_Stage", "1");
@@ -1726,7 +1726,7 @@ public class MapScriptMethods {
             case check_q20833:
                 if (c.getPlayer().getQuestStatus(20833) == QuestState.Started) {
                     Quest.getInstance(20833).forceComplete(c.getPlayer(), 0);
-                    c.SendPacket(CWvsContext.getTopMsg("Who's that on the right of the map?"));
+                    c.SendPacket(WvsContext.getTopMsg("Who's that on the right of the map?"));
                 }
                 break;
             case q2614M:
@@ -1748,7 +1748,7 @@ public class MapScriptMethods {
             case Resi_tutor50:
                 c.SendPacket(UIPacket.getDirectionStatus(false));
                 c.SendPacket(UIPacket.IntroLock(false));
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 NPCScriptManager.getInstance().dispose(c);
                 c.removeClickedNPC();
                 NPCScriptManager.getInstance().start(c, 2159006, null);
@@ -1805,7 +1805,7 @@ public class MapScriptMethods {
             case EntereurelTW:
             case aranTutorAlone:
             case evanAlone: { //evan intro
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 break;
             }
             case merOutStandAlone: {
@@ -1951,7 +1951,7 @@ public class MapScriptMethods {
             case evanleaveD: {
                 c.SendPacket(UIPacket.getDirectionStatus(false));
                 c.SendPacket(UIPacket.IntroLock(false));
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 break;
             }
             case dojang_Msg: {
@@ -2000,7 +2000,7 @@ public class MapScriptMethods {
                     case 900090004:
                         c.SendPacket(UIPacket.getDirectionStatus(false));
                         c.SendPacket(UIPacket.IntroLock(false));
-                        c.SendPacket(CWvsContext.enableActions());
+                        c.SendPacket(WvsContext.enableActions());
                         final MapleMap mapto = c.getChannelServer().getMapFactory().getMap(900010000);
                         c.getPlayer().changeMap(mapto, mapto.getPortal(0));
                         return true;
@@ -2046,7 +2046,7 @@ public class MapScriptMethods {
             case TD_MC_title: {
                 c.SendPacket(UIPacket.getDirectionStatus(false));
                 c.SendPacket(UIPacket.IntroLock(false));
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 c.SendPacket(CField.MapEff("temaD/enter/mushCatle"));
                 break;
             }
@@ -2076,7 +2076,7 @@ public class MapScriptMethods {
                     c.SendPacket(CField.environmentChange("maplemap/enter/104000000", 12, 0));
                     c.SendPacket(UIPacket.getDirectionStatus(false));
                     c.SendPacket(UIPacket.IntroLock(false));
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.enableActions());
                 }
                 MedalQuest m = null;
                 for (MedalQuest mq : MedalQuest.values()) {
@@ -2135,7 +2135,7 @@ public class MapScriptMethods {
                         Quest.getInstance(m.questid - 1995).forceStart(c.getPlayer(), 0, String.valueOf(number));
                         c.getPlayer().dropMessage(-1, "Visited " + number + "/" + m.maps.length + " regions.");
                         c.getPlayer().dropMessage(-1, "Title " + String.valueOf(m) + " Explorer currently in progress");
-                        c.SendPacket(CWvsContext.showQuestMsg("Title " + String.valueOf(m) + " Explorer currently in progress " + number + "/" + m.maps.length + " completed"));
+                        c.SendPacket(WvsContext.showQuestMsg("Title " + String.valueOf(m) + " Explorer currently in progress " + number + "/" + m.maps.length + " completed"));
                     }
                 }
                 break;
@@ -2183,8 +2183,8 @@ public class MapScriptMethods {
 
             case dubl2Tuto0: {
                 try {
-                    c.SendPacket(CWvsContext.getTopMsg("The Secret Garden Depths"));
-                    c.SendPacket(CWvsContext.getTopMsg("On a rainy day..."));
+                    c.SendPacket(WvsContext.getTopMsg("The Secret Garden Depths"));
+                    c.SendPacket(WvsContext.getTopMsg("On a rainy day..."));
                     c.SendPacket(UIPacket.getDirectionStatus(true));
                     c.SendPacket(UIPacket.IntroEnableUI(true));
                     c.SendPacket(UIPacket.DublStart(true));
@@ -2203,8 +2203,8 @@ public class MapScriptMethods {
                 break;
             }
             case dubl2Tuto10: {
-                c.SendPacket(CWvsContext.getTopMsg("The Secret Garden Depths"));
-                c.SendPacket(CWvsContext.getTopMsg("On a rainy day..."));
+                c.SendPacket(WvsContext.getTopMsg("The Secret Garden Depths"));
+                c.SendPacket(WvsContext.getTopMsg("On a rainy day..."));
                 break;
             }
 
@@ -2274,10 +2274,10 @@ public class MapScriptMethods {
                 try {
                     c.SendPacket(CField.UIPacket.IntroEnableUI(true));
                     c.SendPacket(CField.UIPacket.getDirectionStatus(true));
-                    c.SendPacket(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
+                    c.SendPacket(WvsContext.getTopMsg("Mr.Limbert's General Store"));
                     c.SendPacket(CField.UIPacket.UserInGameDirectionEvent((byte) 1, 500));
                     Thread.sleep(500);
-                    c.SendPacket(CWvsContext.getTopMsg("Month 3, Day 4"));
+                    c.SendPacket(WvsContext.getTopMsg("Month 3, Day 4"));
                     c.SendPacket(CField.UIPacket.UserInGameDirectionEvent((byte) 1, 1000));
                     Thread.sleep(1000);
                     c.SendPacket(UIPacket.UserInGameDirectionEvent("Effect/Direction7.img/effect/tuto/step0/0", 2000, 0, -100, 1, 0));
@@ -2311,17 +2311,17 @@ public class MapScriptMethods {
                 break;
             }
             case map_913070001: {
-                c.SendPacket(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
-                c.SendPacket(CWvsContext.getTopMsg("Month 3, Day 4"));
+                c.SendPacket(WvsContext.getTopMsg("Mr.Limbert's General Store"));
+                c.SendPacket(WvsContext.getTopMsg("Month 3, Day 4"));
                 break;
             }
             case map_913070002: {
-                c.SendPacket(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
-                c.SendPacket(CWvsContext.getTopMsg("Month 3, Day 8"));
+                c.SendPacket(WvsContext.getTopMsg("Mr.Limbert's General Store"));
+                c.SendPacket(WvsContext.getTopMsg("Month 3, Day 8"));
                 break;
             }
             case map_913070020: {
-                c.SendPacket(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
+                c.SendPacket(WvsContext.getTopMsg("Mr.Limbert's General Store"));
                 //bigby spawn is not gms like yet
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9001051), new Point(185, 65));
                 c.SendPacket(CField.getClock(5 * 60));
@@ -2339,8 +2339,8 @@ public class MapScriptMethods {
                 try {
                     c.SendPacket(CField.UIPacket.IntroEnableUI(true));
                     c.SendPacket(CField.UIPacket.getDirectionStatus(true));
-                    c.SendPacket(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
-                    c.SendPacket(CWvsContext.getTopMsg("Month 3, Day 11"));
+                    c.SendPacket(WvsContext.getTopMsg("Mr.Limbert's General Store"));
+                    c.SendPacket(WvsContext.getTopMsg("Month 3, Day 11"));
                     Thread.sleep(500);
                     c.SendPacket(CField.UIPacket.UserInGameDirectionEvent((byte) 3, 2));
                     c.SendPacket(CField.UIPacket.UserInGameDirectionEvent((byte) 1, 1000));
@@ -2367,12 +2367,12 @@ public class MapScriptMethods {
                     c.SendPacket(UIPacket.UserInGameDirectionEvent("Effect/Direction7.img/effect/tuto/step0/8", 2000, 0, -100, 1, 0));
                     c.SendPacket(CField.UIPacket.UserInGameDirectionEvent((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.SendPacket(CWvsContext.getTopMsg("Someone suspicious is in the back yard..."));
+                    c.SendPacket(WvsContext.getTopMsg("Someone suspicious is in the back yard..."));
                 } catch (InterruptedException ex) {
                 }
                 c.SendPacket(CField.UIPacket.IntroEnableUI(false));
                 c.SendPacket(CField.UIPacket.getDirectionStatus(false));
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 break;
             }
             case map_913070050: {
@@ -2380,7 +2380,7 @@ public class MapScriptMethods {
                     Quest.getInstance(20034).forceStart(c.getPlayer(), 1106000, null);
                     c.SendPacket(CField.UIPacket.IntroEnableUI(true));
                     c.SendPacket(CField.UIPacket.getDirectionStatus(true));
-                    c.SendPacket(CWvsContext.getTopMsg("General Store Yard"));
+                    c.SendPacket(WvsContext.getTopMsg("General Store Yard"));
                     c.SendPacket(CField.getClock(10 * 60));
                     MapTimer.getInstance().schedule(new Runnable() {
                         @Override
@@ -2560,7 +2560,7 @@ public class MapScriptMethods {
                 c.SendPacket(CField.environmentChange("maplemap/enter/1020000", 12, 0));
                 c.SendPacket(UIPacket.getDirectionStatus(false));
                 c.SendPacket(UIPacket.IntroLock(false));
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 break;
             case go2000000:
                 c.SendPacket(CField.environmentChange("maplemap/enter/2000000", 12, 0));
@@ -2691,7 +2691,7 @@ public class MapScriptMethods {
                             c.SendPacket(UIPacket.IntroEnableUI(false));
                             c.removeClickedNPC();
                             NPCScriptManager.getInstance().dispose(c);
-                            c.SendPacket(CWvsContext.enableActions());
+                            c.SendPacket(WvsContext.enableActions());
                             Quest.getInstance(29969).forceComplete(c.getPlayer(), 0);
                             try {
                                 Thread.sleep(2000);
@@ -2705,7 +2705,7 @@ public class MapScriptMethods {
                             c.SendPacket(CField.showEffect("phantom/suu"));
                             c.removeClickedNPC();
                             NPCScriptManager.getInstance().dispose(c);
-                            c.SendPacket(CWvsContext.enableActions());
+                            c.SendPacket(WvsContext.enableActions());
                             break;
                         }
                         try {
@@ -2774,7 +2774,7 @@ public class MapScriptMethods {
                             c.SendPacket(UIPacket.IntroEnableUI(false));
                             c.removeClickedNPC();
                             NPCScriptManager.getInstance().dispose(c);
-                            c.SendPacket(CWvsContext.enableActions());
+                            c.SendPacket(WvsContext.enableActions());
                         }
                     }, 6500);
 
@@ -2897,7 +2897,7 @@ public class MapScriptMethods {
                     public void run() {
                         c.SendPacket(UIPacket.getDirectionStatus(false));
                         c.SendPacket(UIPacket.IntroLock(false));
-                        c.SendPacket(CWvsContext.enableActions());
+                        c.SendPacket(WvsContext.enableActions());
                         final MapleMap mapto = c.getChannelServer().getMapFactory().getMap(927000000);
                         c.getPlayer().changeMap(mapto, mapto.getPortal(0));
                     }
@@ -3246,7 +3246,7 @@ public class MapScriptMethods {
                 c.SendPacket(EffectPacket.showReservedEffect_CutScene("Effect/Direction1.img/aranTutorial/ClickLirin"));
                 c.SendPacket(UIPacket.getDirectionStatus(false));
                 c.SendPacket(UIPacket.IntroLock(false));
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.enableActions());
                 break;
             }
             case rienArrow: {
@@ -3423,7 +3423,7 @@ public class MapScriptMethods {
                     if (c.getPlayer().getQuestStatus(59063) == QuestState.Started) {
                         Quest.getInstance(59063).forceComplete(c.getPlayer(), 0);
                     }
-                    c.SendPacket(CWvsContext.getTopMsg("On voyage to Nautilus."));
+                    c.SendPacket(WvsContext.getTopMsg("On voyage to Nautilus."));
                     c.SendPacket(CField.getClock(1 * 30));
                     Thread.sleep(30000);
                     MapleMap mapto = c.getChannelServer().getMapFactory().getMap(866000240);
@@ -3625,7 +3625,7 @@ public class MapScriptMethods {
                     NPCScriptManager.getInstance().start(c, 1103005, "TotInfoBT");
                     Quest.getInstance(28862).forceStart(c.getPlayer(), 0, null);
                     Quest.getInstance(28862).forceComplete(c.getPlayer(), 0);
-                    c.SendPacket(CWvsContext.getTopMsg("Earned Forever Single title!"));
+                    c.SendPacket(WvsContext.getTopMsg("Earned Forever Single title!"));
                 } catch (InterruptedException e) {
                 }
                 break;
@@ -3806,17 +3806,17 @@ public class MapScriptMethods {
         return 0;
     }
 
-    private static void showIntro(final Client c, final String data) {
+    private static void showIntro(final ClientSocket c, final String data) {
         c.SendPacket(UIPacket.IntroEnableUI(true));
         c.SendPacket(UIPacket.IntroLock(true));
         c.SendPacket(EffectPacket.showReservedEffect_CutScene(data));
     }
 
-    private static void sendDojoClock(Client c, int time) {
+    private static void sendDojoClock(ClientSocket c, int time) {
         c.SendPacket(CField.getClock(time));
     }
 
-    private static void sendDojoStart(Client c, int stage) {
+    private static void sendDojoStart(ClientSocket c, int stage) {
         for (int i = 0; i < 3; i++) {
             c.getPlayer().updateInfoQuest(1213, "try=3");
         }
@@ -3826,7 +3826,7 @@ public class MapScriptMethods {
         c.SendPacket(CField.trembleEffect(0, 1));
     }
 
-    private static void handlePinkBeanStart(Client c) {
+    private static void handlePinkBeanStart(ClientSocket c) {
         final MapleMap map = c.getPlayer().getMap();
         map.resetFully();
 
@@ -3835,7 +3835,7 @@ public class MapScriptMethods {
         }
     }
 
-    private static void reloadWitchTower(Client c) {
+    private static void reloadWitchTower(ClientSocket c) {
         final MapleMap map = c.getPlayer().getMap();
         map.killAllMonsters(false);
 
@@ -3874,7 +3874,7 @@ public class MapScriptMethods {
     }
 
     public static void startDirectionInfo(User chr, boolean start) {
-        final Client c = chr.getClient();
+        final ClientSocket c = chr.getClient();
         DirectionInfo di = chr.getMap().getSharedMapResources().getDirection(start ? 0 : chr.getDirection());
         if (di != null && di.eventQ.size() > 0) {
             if (start) {
@@ -3915,7 +3915,7 @@ public class MapScriptMethods {
                                 @Override
                                 public void run() {
                                     c.SendPacket(UIPacket.IntroEnableUI(false));
-                                    c.SendPacket(CWvsContext.enableActions());
+                                    c.SendPacket(WvsContext.enableActions());
                                 }
                             }, 4000);
                             break;
@@ -4005,11 +4005,11 @@ public class MapScriptMethods {
         }
     }
 
-    private static void sendRedLeafClock(Client c, int time) {
+    private static void sendRedLeafClock(ClientSocket c, int time) {
         c.SendPacket(CField.getClock(time));
     }
 
-    private static void sendRedLeafStart(Client c, int stage, int stage1, boolean over) {
+    private static void sendRedLeafStart(ClientSocket c, int stage, int stage1, boolean over) {
         if (stage == 2 && stage1 == 1) {
             c.SendPacket(CField.environmentChange("MapleHighSchool/stageEff/final", 12, 0));
         } else {

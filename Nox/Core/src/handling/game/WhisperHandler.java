@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleCharacterUtil;
-import client.Client;
+import client.ClientSocket;
 import constants.ServerConstants;
 import handling.PacketThrottleLimits;
 import handling.world.World;
@@ -9,7 +9,7 @@ import net.InPacket;
 import server.commands.CommandProcessor;
 import server.maps.objects.User;
 import tools.LogHelper;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 import net.ProcessPacket;
 import tools.Utility;
 import tools.packet.CField;
@@ -18,15 +18,15 @@ import tools.packet.CField;
  *
  * @author Mazen Massoud
  */
-public class WhisperHandler implements ProcessPacket<Client> {
+public class WhisperHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         int dwFlag = iPacket.DecodeByte();
         c.getPlayer().updateTick(iPacket.DecodeInt()); // tRequestTime
         if (dwFlag == WhisperFlag.ReplyRequest || dwFlag == WhisperFlag.FindRequest || dwFlag == WhisperFlag.BlockedResult || dwFlag == WhisperFlag.LocationRequest) {

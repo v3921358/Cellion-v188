@@ -29,8 +29,8 @@ import server.messages.FameMessage;
 import tools.Pair;
 import tools.Triple;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
-import tools.packet.CWvsContext.InfoPacket;
+import tools.packet.WvsContext;
+import tools.packet.WvsContext.InfoPacket;
 
 public class QuestAction implements Serializable {
 
@@ -251,7 +251,7 @@ public class QuestAction implements Serializable {
                 c.addFame(fameGain);
                 c.updateSingleStat(MapleStat.FAME, c.getFame());
                 FameMessage fame = new FameMessage(c.getFame());
-                c.write(CWvsContext.messagePacket(fame));
+                c.write(WvsContext.messagePacket(fame));
                 break;
             case buffItemID:
                 status = c.getQuest(quest);
@@ -499,7 +499,7 @@ public class QuestAction implements Serializable {
                 c.addFame(fameGain);
                 c.updateSingleStat(MapleStat.FAME, c.getFame());
                 FameMessage fame = new FameMessage(c.getFame());
-                c.write(CWvsContext.messagePacket(fame));
+                c.write(WvsContext.messagePacket(fame));
                 break;
             }
             case buffItemID: {

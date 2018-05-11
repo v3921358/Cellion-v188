@@ -6,7 +6,7 @@
 package handling.cashshop;
 
 import client.MapleCharacterUtil;
-import client.Client;
+import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleRing;
 import constants.GameConstants;
@@ -21,7 +21,7 @@ import tools.Triple;
 import net.InPacket;
 import server.CashShop;
 import tools.packet.CSPacket;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 /**
  *
@@ -29,7 +29,7 @@ import tools.packet.CWvsContext;
  */
 public class ItemPurchase {
 
-    public static void BuyNormalItem(InPacket iPacket, Client c, User chr) {
+    public static void BuyNormalItem(InPacket iPacket, ClientSocket c, User chr) {
         iPacket.DecodeByte(); // bByMaplePoint
         int type = iPacket.DecodeInt(); // nPurchaseOption
         iPacket.DecodeByte(); // Unknown
@@ -68,7 +68,7 @@ public class ItemPurchase {
         }
     }
 
-    public static void BuyEquipItem(InPacket iPacket, Client c, User chr) {
+    public static void BuyEquipItem(InPacket iPacket, ClientSocket c, User chr) {
         iPacket.Skip(1);
         int itemPrice = iPacket.DecodeInt();
         CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInt());
@@ -79,8 +79,8 @@ public class ItemPurchase {
                 playerCashShopInfo(c);
                 return;
             } else if (iteminfo.getId() == 5211046 || iteminfo.getId() == 5211047 || iteminfo.getId() == 5211048 || iteminfo.getId() == 5050100 || iteminfo.getId() == 5051001) {
-                c.SendPacket(CWvsContext.broadcastMsg(1, "You cannot purchase this item through cash shop."));
-                c.SendPacket(CWvsContext.enableActions());
+                c.SendPacket(WvsContext.broadcastMsg(1, "You cannot purchase this item through cash shop."));
+                c.SendPacket(WvsContext.enableActions());
                 playerCashShopInfo(c);
                 return;
             } else if (c.getPlayer().getCashInventory().getItemsSize() >= 100) {
@@ -90,8 +90,8 @@ public class ItemPurchase {
             }
             for (int id : GameConstants.cashBlock) {
                 if (iteminfo.getId() == id) {
-                    c.SendPacket(CWvsContext.broadcastMsg(1, "You cannot purchase this item through cash shop."));
-                    c.SendPacket(CWvsContext.enableActions());
+                    c.SendPacket(WvsContext.broadcastMsg(1, "You cannot purchase this item through cash shop."));
+                    c.SendPacket(WvsContext.enableActions());
                     playerCashShopInfo(c);
                     return;
                 }
@@ -109,7 +109,7 @@ public class ItemPurchase {
         }
     }
 
-    public static void BuyRings(InPacket iPacket, Client c, User chr, int type) {
+    public static void BuyRings(InPacket iPacket, ClientSocket c, User chr, int type) {
         iPacket.DecodeString();
         int itemPrice = iPacket.DecodeInt();
         CashItemInfo iteminfo = CashItemFactory.getInstance().getItem(iPacket.DecodeInt());

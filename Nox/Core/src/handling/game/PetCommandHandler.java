@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.Client;
+import client.ClientSocket;
 import client.inventory.MapleInventoryType;
 import client.inventory.PetCommand;
 import client.inventory.PetDataFactory;
@@ -17,15 +17,15 @@ import net.ProcessPacket;
  *
  * @author Lloyd Korn
  */
-public class PetCommandHandler implements ProcessPacket<Client> {
+public class PetCommandHandler implements ProcessPacket<ClientSocket> {
 
     @Override
-    public boolean ValidateState(Client c) {
+    public boolean ValidateState(ClientSocket c) {
         return true;
     }
 
     @Override
-    public void Process(Client c, InPacket iPacket) {
+    public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
         Pet pet = chr.getPet(c.getPlayer().getPetIndex((int) iPacket.DecodeLong()));
         iPacket.DecodeByte(); //always 0?

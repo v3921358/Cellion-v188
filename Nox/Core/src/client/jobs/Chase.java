@@ -4,7 +4,7 @@
 package client.jobs;
 
 import client.CharacterTemporaryStat;
-import client.Client;
+import client.ClientSocket;
 import client.SkillFactory;
 import constants.GameConstants;
 import constants.skills.*;

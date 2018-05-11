@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.script.ScriptException;
 
-import client.Client;
+import client.ClientSocket;
 import client.QuestStatus;
 import client.MapleTrait.MapleTraitType;
 import constants.GameConstants;
@@ -40,7 +40,7 @@ import server.quest.Quest;
 import tools.LogHelper;
 import tools.Pair;
 import tools.packet.CField;
-import tools.packet.CWvsContext;
+import tools.packet.WvsContext;
 
 public class EventInstanceManager {
 
@@ -175,7 +175,7 @@ public class EventInstanceManager {
         }
     }
 
-    public void registerExpedition(Client c, MapleExpedition exped, MapleMap map) {
+    public void registerExpedition(ClientSocket c, MapleExpedition exped, MapleMap map) {
         if (disposed) {
             return;
         }
@@ -868,7 +868,7 @@ public class EventInstanceManager {
     public void applyBuff(final User chr, final int id) {
         MapleItemInformationProvider.getInstance().getItemEffect(id).applyTo(chr);
         GiveBuffMessage buff = new GiveBuffMessage(id);
-        chr.write(CWvsContext.messagePacket(buff));
+        chr.write(WvsContext.messagePacket(buff));
     }
 
     public void applySkill(final User chr, final int id) {
