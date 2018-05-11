@@ -153,6 +153,7 @@ public class MapScriptMethods {
         Advanture_tuto33,
         Ranmaru_ExitCheck,
         root_camera,
+        root_secret,
         root_ereb00,
         enter_101072002,
         enter_101073300,
@@ -1255,6 +1256,9 @@ public class MapScriptMethods {
         }
         String data = "";
         switch (onUserEnter.fromString(scriptName)) {
+            case root_secret: {
+                c.getPlayer().changeMap(105200000, 0);
+            }
             case Advanture_tuto00: {
                 try {
                     c.SendPacket(UIPacket.getDirectionStatus(true));

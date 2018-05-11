@@ -480,6 +480,16 @@ public class MobPacket {
 
         return oPacket;
     }
+    
+    public static OutPacket SmartMobNotice(int nMessageType, int nMobID, int nMessageOpt, int nKey, String sMessage) {
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SmartMobNoticeMsg.getValue());
+        oPacket.EncodeInt(nMessageType); //0: white (Normal), 1: yellow (Aggro), 2: blue (Warning)
+        oPacket.EncodeInt(nMobID);
+        oPacket.EncodeInt(nMessageOpt);//1:attack, 2:skill, 3:change controller, 5:mobzone?
+        oPacket.EncodeInt(nKey); //0: skill, 1: attack
+        oPacket.EncodeString(sMessage);
+        return oPacket;
+    }
 
     public static OutPacket getMonsterSkill(int objectid) {
 

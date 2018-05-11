@@ -85,7 +85,6 @@ public class MaplePortal {
         if (!c.getPlayer().hasBlockedInventory() && (portalState || c.getPlayer().isGM())) {
             if (getScriptName() != null) {
                 c.getPlayer().checkFollow();
-
                 PortalScriptManager.getInstance().executePortalScript(this, c);
             } else if (getTargetMapId() != 999999999) {
                 final MapleMap oldto = ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(getTargetMapId());

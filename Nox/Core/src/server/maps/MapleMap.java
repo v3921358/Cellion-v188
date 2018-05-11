@@ -327,7 +327,7 @@ public final class MapleMap {
         final float caServerrate = ChannelServer.getInstance(channel).getCashRate();
         final int cashz = (int) ((mob.getStats().isBoss() && mob.getStats().getHPDisplayType() == MapleMonsterHpDisplayType.BossHP ? 20 : 1) * caServerrate);
         final int cashModifier = (int) ((mob.getStats().isBoss() ? (mob.getStats().isPartyBonus() ? (mob.getMobExp() / 1000) : 0) : (mob.getMobExp() / 1000 + mob.getMobMaxHp() / 20000))); //no rate
-        
+
         Item idrop;
         byte d = 1;
         Point pos = new Point(0, mob.getTruePosition().y);
@@ -454,6 +454,14 @@ public final class MapleMap {
 
     public final void killMonster(Mob monster, User chr, boolean withDrops, boolean second, short animation) {
         killMonster(monster, chr, withDrops, second, animation, 0);
+    }
+
+    public final void replaceQueen(User chr, Mob pOldQueen, Mob pNewQueen) {
+        killMonster(pOldQueen, chr, false, true, (byte) 2);
+        final Point pPos = new Point(pOldQueen.getPosition());
+        MapTimer.getInstance().schedule(() -> {
+            spawnMonsterOnGroudBelow(pNewQueen, pPos);
+        }, 2000);
     }
 
     public final void killMonster(Mob monster, User chr, boolean withDrops, boolean second, short animation, int lastSkill) {

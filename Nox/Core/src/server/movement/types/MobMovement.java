@@ -6,6 +6,8 @@ import java.util.List;
 import client.MapleClient;
 import handling.AbstractMaplePacketHandler;
 import handling.world.MovementParse;
+import java.awt.Point;
+import java.util.Random;
 import net.InPacket;
 import server.Randomizer;
 import server.life.Mob;
@@ -17,12 +19,16 @@ import server.maps.objects.User;
 import server.movement.LifeMovementFragment;
 import tools.packet.MobPacket;
 import net.ProcessPacket;
+import server.life.MapleLifeFactory;
+import server.life.MapleMonsterStats;
 
 /**
  * @author Steven
  *
  */
 public class MobMovement implements ProcessPacket<MapleClient> {
+
+    private static Random rand = new Random();
 
     @Override
     public boolean ValidateState(MapleClient c) {
@@ -36,56 +42,85 @@ public class MobMovement implements ProcessPacket<MapleClient> {
         if (chr == null) {
             return;
         }
-        Mob monster = chr.getMap().getMonsterByOid(oid);
-        if (monster == null) {
+        Mob pMob = chr.getMap().getMonsterByOid(oid);
+        if (pMob == null) {
             return;
         }
         iPacket.DecodeByte(); //v122 = CMobTemplate::_ZtlSecureGet_dwTemplateID(v121) / 10000 == 250 || CMobTemplate::_ZtlSecureGet_dwTemplateID(v121) / 10000 == 251;
 
-        short moveid = iPacket.DecodeShort();
-        boolean useSkill = iPacket.DecodeByte() == 1;
-        byte teleportEnd = iPacket.DecodeByte(); //bTeleportEnd
+        short nMobControlSN = iPacket.DecodeShort();
+        boolean bNextAcctackPossible = iPacket.DecodeBool();
+        byte nSkillID = iPacket.DecodeByte(); //bTeleportEnd
 
         // lol this is an int all 3 of these combined
-        int skillId = iPacket.DecodeByte() & 0xFF;//skill_1
-        int skillLv = iPacket.DecodeByte() & 0xFF;//skill_2
-        short option = iPacket.DecodeShort();//skill_3,skill_4  
+        int nSkill1 = iPacket.DecodeByte() & 0xFF;//skill_1
+        int nSkill2 = iPacket.DecodeByte() & 0xFF;//skill_2
+        short nSkillOpt = iPacket.DecodeShort();//skill_3,skill_4  
 
-        int nAction = teleportEnd >> 1;//or also called 'action'
-        int skillIdx = nAction - 30;
-        int forceAttack = 0;
+        int nAction = nSkillID >> 1;//or also called 'action'
+        int nAttackIdx = nAction - 13; //this number might be different per version
+        int nForcedAttackIdx = 0, nForcedSkillIdx = 0;
 
-        if (useSkill) {
-            List<MapleMonsterSkill> skills = monster.getStats().getSkills();
+        boolean bSmartMob = false;
+        String sMobNotice = "";
+        switch (pMob.getId()) {
+            case 8880000: //magnus
+            case 8881000: //ursus
+            case 8930000: //chaos vellum
+                bSmartMob = true;
+                nForcedSkillIdx = 0;
+                nForcedAttackIdx = rand.nextInt(13);
+                if (nForcedAttackIdx == nAttackIdx) {
+                    nForcedAttackIdx = 0;
+                }
+                sMobNotice = "Magnus is preparing a dangerous move!";
+                break;
+            case 8920000: //chaos queen
+            case 8920001: //chaos queen
+            case 8920002: //chaos queen
+            case 8920003: //chaos queen
+                bSmartMob = true;
+                if (pMob.getHPPercent() < 99 && rand.nextInt(100) < 15) {
+                    int nTemplateID = 8920000 + rand.nextInt(4);
+                    if (nTemplateID != pMob.getId()) {
+                        Mob pNewMob = MapleLifeFactory.getMonster(nTemplateID);
+                        pNewMob.setHp(pMob.getHp());
+                        pMob.getMap().replaceQueen(c.getPlayer(), pMob, pNewMob);
+                    }
+                }
+                break;
+        }
+
+        if (chr.isAdmin()) {
+            chr.yellowMessage(String.format("[Mob Movement Debug] nAction: %s | BaseNum: %s | nForcedAttackIdx: %s", nAttackIdx, nSkillID, nForcedAttackIdx));
+        }
+
+        if (bNextAcctackPossible) {
+            List<MapleMonsterSkill> skills = pMob.getStats().getSkills();
             int size = skills.size();
             if (size > 0) {
-                MapleMonsterSkill nextSkill = skills.get(Randomizer.nextInt(size));
+                MapleMonsterSkill nextSkill = skills.get(nForcedSkillIdx > 0 ? nForcedSkillIdx : Randomizer.nextInt(size));
 
-                final long now = System.currentTimeMillis();
-                long ls = monster.getLastSkillUsed(skillId);
+                if (chr.isAdmin()) {
+                    chr.yellowMessage(String.format("[Mob Movement Debug] nSkill: %s", nextSkill.getSkillId()));
+                }
+
+                if (bSmartMob) {
+                    c.SendPacket(MobPacket.SmartMobNotice(1, oid, 2, nextSkill.getSkillId(), sMobNotice));
+                    c.getPlayer().getMap().broadcastMessage(MobPacket.SmartMobNotice(2, oid, 2, nextSkill.getSkillId(), sMobNotice));
+                }
+
+                final long tNow = System.currentTimeMillis();
+                long tLastUsed = pMob.getLastSkillUsed(nSkill1);
                 MobSkill skill = nextSkill.getSkill();
 
-                if (ls == 0 || ((now - ls) > skill.getCoolTime())) {
-                    monster.setLastSkillUsed(skillId, now, skill.getCoolTime());
+                if (tLastUsed == 0 || ((tNow - tLastUsed) > skill.getCoolTime())) {
+                    pMob.setLastSkillUsed(nSkill1, tNow, skill.getCoolTime());
 
-                    int reqHp = (int) (((float) monster.getHp() / monster.getMobMaxHp()) * 100); // In case this monster have 2.1b and above HP
+                    int reqHp = (int) (((float) pMob.getHp() / pMob.getMobMaxHp()) * 100); // In case this monster have 2.1b and above HP
                     if (reqHp <= skill.getHP()) {
                         if (skill.getCoolTime() == 0) {
-                            skill.applyEffect(chr, monster, true);
-                        } else if (skillIdx >= 0 && skillIdx <= 16) {
-
-                            MapleMonsterSkill msi = monster.getStats().getSkills().get(skillIdx);
-                            if (msi != null) {
-                                //     if (msi.getAfterAttack() != -1) {
-                                //monster.getMap().broadcastMessage(MobPacket.setAfterAttack(monster.getObjectId(), msi.getAfterAttack(), nAction, (skill & 1) != 0));
-                                //     }
-                                /* if (msi.getNextSkill() > 0) {
-                                    msi.getSkill().setDelay(c.getPlayer(), monster, msi.getNextSkill(), option);
-                                    return;
-                                }*/
-                                //monster.resetSkillCommand();
-                                msi.getSkill().applyEffect(c.getPlayer(), monster, true, option);
-                            }
+                            skill.applyEffect(chr, pMob, true);
                         }
                     }
                 }
@@ -114,16 +149,16 @@ public class MobMovement implements ProcessPacket<MapleClient> {
         iPacket.DecodeLong(); // Padding 20 bytes
         iPacket.DecodeInt(); // Padding 20 bytes
 
-        monster.settEncodedGatherDuration(iPacket.DecodeInt());
-        monster.setxCS(iPacket.DecodeShort());
-        monster.setyCS(iPacket.DecodeShort());
-        monster.setvXCS(iPacket.DecodeShort());
-        monster.setvYCS(iPacket.DecodeShort());
+        pMob.settEncodedGatherDuration(iPacket.DecodeInt());
+        pMob.setxCS(iPacket.DecodeShort());
+        pMob.setyCS(iPacket.DecodeShort());
+        pMob.setvXCS(iPacket.DecodeShort());
+        pMob.setvYCS(iPacket.DecodeShort());
         List<LifeMovementFragment> res = MovementParse.parseMovement(iPacket);
-        c.SendPacket(MobPacket.moveMonsterResponse(oid, moveid, (int) monster.getMp(), monster.isControllerHasAggro(), skillId, skillLv, forceAttack));
+        c.SendPacket(MobPacket.moveMonsterResponse(oid, nMobControlSN, (int) pMob.getMp(), pMob.isControllerHasAggro(), nSkill1, nSkill2, nForcedAttackIdx));
         MapleMap map = c.getPlayer().getMap();
-        MovementParse.updatePosition(res, monster);
-        map.moveMonster(monster, monster.getPosition());
-        map.broadcastMessage(chr, MobPacket.moveMonster(monster, useSkill, teleportEnd, skillId, skillLv, option, oid, res, multiTarget, randomTime), monster.getPosition());
+        MovementParse.updatePosition(res, pMob);
+        map.moveMonster(pMob, pMob.getPosition());
+        map.broadcastMessage(chr, MobPacket.moveMonster(pMob, bNextAcctackPossible, nSkillID, nSkill1, nSkill2, nSkillOpt, oid, res, multiTarget, randomTime), pMob.getPosition());
     }
 }

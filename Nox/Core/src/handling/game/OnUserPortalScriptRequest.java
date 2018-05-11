@@ -28,7 +28,7 @@ import net.InPacket;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;
 
-public final class MapChangeSpecialHandler implements ProcessPacket<MapleClient> {
+public final class OnUserPortalScriptRequest implements ProcessPacket<MapleClient> {
 
     @Override
     public boolean ValidateState(MapleClient c) {
@@ -37,14 +37,19 @@ public final class MapChangeSpecialHandler implements ProcessPacket<MapleClient>
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final User chr = c.getPlayer();
-        iPacket.Skip(1);
+        User chr = c.getPlayer();
+        iPacket.DecodeByte();
         if ((chr == null) || (chr.getMap() == null)) {
             return;
         }
         String portal_name = iPacket.DecodeString();
+        if (chr.isAdmin()) {
+            chr.yellowMessage("[OnUserPortalScriptRequest] " + portal_name);
+        }
         MaplePortal portal = chr.getMap().getPortal(portal_name);
         if ((portal != null) && (!chr.hasBlockedInventory())) {
+            if (chr.isAdmin()) {
+            }
             portal.enterPortal(c);
         } else {
             c.SendPacket(CWvsContext.enableActions());

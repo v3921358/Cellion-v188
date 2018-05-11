@@ -136,7 +136,7 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserPortableChairSitRequest.getValue()] = new OnUserPortableChairSitRequest();
         handlers[RecvPacketOpcode.UserSitRequest.getValue()] = new OnUserSitRequest();
         handlers[RecvPacketOpcode.UserDropMoneyRequest.getValue()] = new MesoDrop();
-        handlers[RecvPacketOpcode.UserPortalScriptRequest.getValue()] = new MapChangeSpecialHandler();
+        handlers[RecvPacketOpcode.UserPortalScriptRequest.getValue()] = new OnUserPortalScriptRequest();
         handlers[RecvPacketOpcode.DropPickUpRequest.getValue()] = new ItemPickupHandler();
         handlers[RecvPacketOpcode.UserEffectLocal.getValue()] = new UserEffectLocalHandler();
         handlers[RecvPacketOpcode.RuneStoneSkillReq.getValue()] = new RuneStoneCompleteArrowHandler();

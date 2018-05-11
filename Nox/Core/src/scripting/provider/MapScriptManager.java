@@ -50,6 +50,9 @@ public class MapScriptManager extends AbstractScriptManager {
         }
         if (!ishardcodedScriptExecuted) {
             LogHelper.UNCODED.get().info("Unhandled (" + (isFirstUserEnter ? "onFirstUserEnter" : "onUserEnter") + ") map script " + scriptName + " on map " + c.getPlayer().getMapId());
+            if (c.getPlayer().isAdmin()) {
+                c.getPlayer().yellowMessage("Unhandled (" + (isFirstUserEnter ? "onFirstUserEnter" : "onUserEnter") + ") map script " + scriptName + " on map " + c.getPlayer().getMapId());
+            }
         }
         return false;
     }

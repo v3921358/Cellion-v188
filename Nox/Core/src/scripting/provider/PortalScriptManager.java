@@ -44,6 +44,9 @@ public class PortalScriptManager extends AbstractScriptManager {
             return true;
         }
         LogHelper.UNCODED.get().info("Unhandled portal script " + portal.getScriptName() + " on map " + c.getPlayer().getMapId());
+        if (c.getPlayer().isAdmin()) {
+            c.getPlayer().yellowMessage("Unhandled portal script: " + portal.getScriptName());
+        }
         return false;
     }
 }
