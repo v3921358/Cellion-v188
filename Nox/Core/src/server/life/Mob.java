@@ -888,7 +888,7 @@ public class Mob extends AbstractLoadedMapleLife {
         this.controllerHasAggro = controllerHasAggro;
     }
 
-    public void sendStatus(MapleClient client) {
+    public void sendStatus(Client client) {
         if (reflectpack != null) {
             client.SendPacket(reflectpack);
         }
@@ -911,7 +911,7 @@ public class Mob extends AbstractLoadedMapleLife {
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         if (!isAlive()) {
             return;
         }
@@ -927,7 +927,7 @@ public class Mob extends AbstractLoadedMapleLife {
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         if (stats.isEscort() && getEventInstance() != null && lastNode >= 0) { //shammos
             map.resetShammos(client);
         } else {

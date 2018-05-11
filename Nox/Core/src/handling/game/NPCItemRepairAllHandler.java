@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -14,15 +14,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class NPCItemRepairAllHandler implements ProcessPacket<MapleClient> {
+public class NPCItemRepairAllHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         Equip eq;
         double rPercentage;
         int price = 0;

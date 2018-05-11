@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
@@ -13,15 +13,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseExpPotionHandler implements ProcessPacket<MapleClient> {
+public class UseExpPotionHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         //iPacket: [F5 4F D6 2E] [60 00] [F4 06 22 00]

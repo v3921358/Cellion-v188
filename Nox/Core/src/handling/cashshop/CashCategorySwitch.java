@@ -21,7 +21,7 @@
  */
 package handling.cashshop;
 
-import client.MapleClient;
+import client.Client;
 import database.Database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,15 +37,15 @@ import tools.LogHelper;
  *
  * @author Novak
  */
-public final class CashCategorySwitch implements ProcessPacket<MapleClient> {
+public final class CashCategorySwitch implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int cat = iPacket.DecodeByte();
         switch (cat) {
             case 103:
@@ -58,7 +58,7 @@ public final class CashCategorySwitch implements ProcessPacket<MapleClient> {
                         ps.executeUpdate();
                         ps.close();
                     } catch (SQLException ex) {
-                        LogHelper.SQL.get().info("[MapleClient] Failed altering wishlist:\n", ex);
+                        LogHelper.SQL.get().info("[Client] Failed altering wishlist:\n", ex);
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(CashCategorySwitch.class.getName()).log(Level.SEVERE, null, ex);

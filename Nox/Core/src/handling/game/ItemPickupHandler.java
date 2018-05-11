@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
-import client.MapleClient;
+import client.Client;
 import client.QuestStatus.QuestState;
 import client.anticheat.CheatingOffense;
 import client.inventory.Equip;
@@ -32,15 +32,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class ItemPickupHandler implements ProcessPacket<MapleClient> {
+public class ItemPickupHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         if (chr == null || c.getPlayer().hasBlockedInventory()) { //hack

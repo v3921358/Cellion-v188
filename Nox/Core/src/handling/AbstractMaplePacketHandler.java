@@ -1,11 +1,11 @@
 package handling;
 
-import client.MapleClient;
+import client.Client;
 
 public abstract class AbstractMaplePacketHandler implements MaplePacketHandler {
 
     @Override
-    public boolean validateState(MapleClient c) {
+    public boolean validateState(Client c) {
         return c.isLoggedIn();
     }
 }

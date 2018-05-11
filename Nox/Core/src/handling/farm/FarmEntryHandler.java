@@ -21,7 +21,7 @@
  */
 package handling.farm;
 
-import client.MapleClient;
+import client.Client;
 import constants.ServerConstants;
 import handling.world.InterServerHandler;
 import net.InPacket;
@@ -29,15 +29,15 @@ import scripting.provider.NPCScriptManager;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;
 
-public final class FarmEntryHandler implements ProcessPacket<MapleClient> {
+public final class FarmEntryHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
 
         if (!ServerConstants.FARM) {
             c.SendPacket(CWvsContext.enableActions());

@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import static handling.game._CommonPlayerOperationHandler.UseTeleRock;
@@ -13,15 +13,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseTeleRockHandler implements ProcessPacket<MapleClient> {
+public class UseTeleRockHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final byte slot = (byte) iPacket.DecodeShort();
         final int itemId = iPacket.DecodeInt();
         final Item toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);

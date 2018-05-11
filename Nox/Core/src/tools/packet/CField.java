@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import client.MapleClient;
+import client.Client;
 import client.MapleKeyLayout;
 import client.QuestStatus;
 import client.Skill;
@@ -87,12 +87,12 @@ public class CField {
     /**
      * Gets a packet telling the client the IP of the channel server.
      *
-     * @param MapleClient the client object
+     * @param Client the client object
      * @param port The port the channel is on.
      * @param clientId The ID of the client.
      * @return The server IP packet.
      */
-    public static OutPacket getServerIP(MapleClient c, int port, int clientId) {
+    public static OutPacket getServerIP(Client c, int port, int clientId) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.SelectCharacterResult.getValue());
         oPacket.EncodeByte(0);
@@ -123,11 +123,11 @@ public class CField {
     /**
      * Gets a packet telling the client the IP of the new channel.
      *
-     * @param MapleClient the client object
+     * @param Client the client object
      * @param port The port the channel is on.
      * @return The server IP packet.
      */
-    public static OutPacket getChannelChange(MapleClient c, int port) {
+    public static OutPacket getChannelChange(Client c, int port) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.MigrateCommand.getValue());
         oPacket.EncodeByte(1);
@@ -3237,7 +3237,7 @@ public class CField {
             return oPacket;
         }
 
-        public static OutPacket getTradeStart(MapleClient c, MapleTrade trade, byte number) {
+        public static OutPacket getTradeStart(Client c, MapleTrade trade, byte number) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
 //            oPacket.encode(PlayerInteractionHandler.Interaction.START_TRADE.action);
@@ -3718,7 +3718,7 @@ public class CField {
             return oPacket;
         }
 
-        public static OutPacket getNPCShop(int shopNPCId, MapleShop shop, MapleClient c) {
+        public static OutPacket getNPCShop(int shopNPCId, MapleShop shop, Client c) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.OpenShopDlg.getValue());
             oPacket.EncodeByte(0); //if this is true then send a int with m_dwPetTemplateID (pet item id)
@@ -3727,7 +3727,7 @@ public class CField {
             return oPacket;
         }
 
-        public static OutPacket confirmShopTransaction(ShopOperationType code, MapleShop shop, MapleClient c, int indexBought) {
+        public static OutPacket confirmShopTransaction(ShopOperationType code, MapleShop shop, Client c, int indexBought) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.ShopResult.getValue());
             oPacket.EncodeByte(code.getOp());

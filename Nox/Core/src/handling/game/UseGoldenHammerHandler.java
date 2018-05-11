@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -15,15 +15,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseGoldenHammerHandler implements ProcessPacket<MapleClient> {
+public class UseGoldenHammerHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         //[21 D5 10 04] [16 00 00 00] [7B B0 25 00] [01 00 00 00] [03 00 00 00]
         c.getPlayer().updateTick(iPacket.DecodeInt());
         byte slot = (byte) iPacket.DecodeInt();

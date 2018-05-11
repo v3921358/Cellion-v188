@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import database.Database;
@@ -417,7 +417,7 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         client.SendPacket(NPCPacket.spawnNPC(this, true));
         client.SendPacket(CWvsContext.spawnPlayerNPC(this));
         client.SendPacket(NPCPacket.spawnNPCRequestController(this, true));

@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.MapleMount;
@@ -15,15 +15,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseMountFoodHandler implements ProcessPacket<MapleClient> {
+public class UseMountFoodHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         c.getPlayer().updateTick(iPacket.DecodeInt());

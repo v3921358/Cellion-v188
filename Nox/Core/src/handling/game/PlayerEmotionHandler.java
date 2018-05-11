@@ -23,7 +23,7 @@ package handling.game;
 
 import java.lang.ref.WeakReference;
 
-import client.MapleClient;
+import client.Client;
 import client.anticheat.CheatingOffense;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -33,15 +33,15 @@ import net.InPacket;
 import tools.packet.CField;
 import net.ProcessPacket;
 
-public final class PlayerEmotionHandler implements ProcessPacket<MapleClient> {
+public final class PlayerEmotionHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         int emote = iPacket.DecodeInt();
         if (emote > 7) {

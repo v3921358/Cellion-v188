@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import client.MapleClient;
+import client.Client;
 import handling.login.LoginPasswordHandler;
 import server.api.FeatureList.FeatureAPI;
 import server.api.data.BestCashShopItems;
@@ -208,7 +208,7 @@ public class ApiFactory {
      *
      * @throws java.io.ApiException If the request runs into an issue, pass through the ApiException.
      */
-    public void getUserAuthToken(MapleClient c, String username, String password, ApiCallback callback) {
+    public void getUserAuthToken(Client c, String username, String password, ApiCallback callback) {
         System.out.println("Resolving Auth Token.");
 
         RequestBody body = new FormBody.Builder()
@@ -319,7 +319,7 @@ public class ApiFactory {
 
     }
 
-    public void getUserDetailsFromToken(MapleClient c, String username, Token data) {
+    public void getUserDetailsFromToken(Client c, String username, Token data) {
         if (!data.getSuccess() || data.getAccessToken() == null) {
             if (data.getError().equals("invalid_credentials")) { // Bad user credentials
                 if (c != null) {

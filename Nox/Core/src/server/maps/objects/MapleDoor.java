@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import server.MaplePortal;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
@@ -96,7 +96,7 @@ public class MapleDoor extends MapleMapObject {
     }
 
     @Override
-    public final void sendSpawnData(final MapleClient client) {
+    public final void sendSpawnData(final Client client) {
         if (getOwner() == null || target == null || client.getPlayer() == null) {
             return;
         }
@@ -110,7 +110,7 @@ public class MapleDoor extends MapleMapObject {
     }
 
     @Override
-    public final void sendDestroyData(final MapleClient client) {
+    public final void sendDestroyData(final Client client) {
         if (client.getPlayer() == null || getOwner() == null || target == null) {
             return;
         }

@@ -8,7 +8,7 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
-import client.MapleClient;
+import client.Client;
 import scripting.AbstractPlayerInteraction;
 import scripting.NPCConversationManager;
 import scripting.NpcConversationStatelessManager;
@@ -19,14 +19,14 @@ import tools.LogHelper;
 
 public class NPCScriptManager extends AbstractScriptManager {
 
-    private final Map<MapleClient, NPCConversationManager> CMS = new WeakHashMap<>();
+    private final Map<Client, NPCConversationManager> CMS = new WeakHashMap<>();
     private static final NPCScriptManager INSTANCE = new NPCScriptManager();
 
     public static final NPCScriptManager getInstance() {
         return INSTANCE;
     }
 
-    public boolean hasScript(final MapleClient c, final int npc, String script) {
+    public boolean hasScript(final Client c, final int npc, String script) {
         Invocable iv = getInvocable("npc/" + npc + ".js", true, ScriptType.NPC);
         if (script != null && !script.isEmpty()) {
             iv = getInvocable("npc/" + script + ".js", true, ScriptType.NPC);
@@ -34,7 +34,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         return iv != null;
     }
 
-    public void start(MapleClient c, int npc, String script) {
+    public void start(Client c, int npc, String script) {
         if (!CMS.containsKey(c)) {//Incase an npc is opened without the player being disposed.
             dispose(c);
         }
@@ -101,7 +101,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
-    public void action(MapleClient c, byte mode, byte type, int selection) {
+    public void action(Client c, byte mode, byte type, int selection) {
         if (mode != -1) {
             final NPCConversationManager cm = CMS.get(c);
             if (cm == null || cm.getLastChatType() != NPCChatType.NULL) {
@@ -128,7 +128,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
-    public final void startQuest(MapleClient c, int npc, int quest) {
+    public final void startQuest(Client c, int npc, int quest) {
         if (!Quest.getInstance(quest).canStart(c.getPlayer(), null)) {
             return;
         }
@@ -158,7 +158,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
-    public void startQuest(MapleClient c, byte mode, byte type, int selection) {
+    public void startQuest(Client c, byte mode, byte type, int selection) {
         final Lock lock = c.getNPCLock();
         final NPCConversationManager cm = CMS.get(c);
         if (cm == null || cm.getLastChatType() != NPCChatType.NULL) {
@@ -180,7 +180,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
-    public void endQuest(MapleClient c, int npc, int quest, boolean customEnd) {
+    public void endQuest(Client c, int npc, int quest, boolean customEnd) {
         if (!customEnd && !Quest.getInstance(quest).canComplete(c.getPlayer(), null)) {
             return;
         }
@@ -210,7 +210,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
-    public void endQuest(MapleClient c, byte mode, byte type, int selection) {
+    public void endQuest(Client c, byte mode, byte type, int selection) {
         final Lock lock = c.getNPCLock();
         final NPCConversationManager cm = CMS.get(c);
         if (cm == null || cm.getLastChatType() != NPCChatType.NULL) {
@@ -232,7 +232,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
-    public void startItemScript(MapleClient c, int npc, String script) {
+    public void startItemScript(Client c, int npc, String script) {
         final Lock lock = c.getNPCLock();
         lock.lock();
         try {
@@ -259,7 +259,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
-    public void dispose(MapleClient c) {
+    public void dispose(Client c) {
         final NPCConversationManager npccm = CMS.get(c);
         if (npccm != null) {
             CMS.remove(c);
@@ -278,7 +278,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
-    public NPCConversationManager getCM(MapleClient c) {
+    public NPCConversationManager getCM(Client c) {
         return CMS.get(c);
     }
 }

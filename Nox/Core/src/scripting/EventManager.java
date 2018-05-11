@@ -32,7 +32,7 @@ import java.util.concurrent.ScheduledFuture;
 import javax.script.Invocable;
 import javax.script.ScriptException;
 
-import client.MapleClient;
+import client.Client;
 import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
 import handling.world.MapleExpedition;
@@ -285,7 +285,7 @@ public class EventManager {
         }
     }
 
-    public void startInstance(MapleClient c, MapleExpedition exped, MapleMap map, int maxLevel) {
+    public void startInstance(Client c, MapleExpedition exped, MapleMap map, int maxLevel) {
         try {
             int averageLevel = 0, size = 0;
             for (User mpc : exped.getExpeditionMembers(c)) {
@@ -321,7 +321,7 @@ public class EventManager {
         }
     }
 
-    public void startInstance_NoID(MapleClient c, MapleExpedition exped, MapleMap map, final Exception old) {
+    public void startInstance_NoID(Client c, MapleExpedition exped, MapleMap map, final Exception old) {
         try {
             EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", (Object) null));
             eim.registerExpedition(c, exped, map);

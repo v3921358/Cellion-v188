@@ -5,7 +5,7 @@
  */
 package handling.cashshop;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import server.CashItem;
 import server.CashItemFactory;
@@ -19,7 +19,7 @@ import tools.packet.CSPacket;
  */
 public class FarmItemPurchase {
 
-    public static void gems(InPacket iPacket, MapleClient c, User chr) {
+    public static void gems(InPacket iPacket, Client c, User chr) {
         iPacket.Skip(1);
         int type = iPacket.DecodeInt();//type again? #astral?
         int sn = iPacket.DecodeInt();

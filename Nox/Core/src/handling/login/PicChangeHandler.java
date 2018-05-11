@@ -1,19 +1,19 @@
 package handling.login;
 
-import client.MapleClient;
+import client.Client;
 import net.InPacket;
 import tools.packet.CLogin;
 import net.ProcessPacket;
 
-public final class PicChangeHandler implements ProcessPacket<MapleClient> {
+public final class PicChangeHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         if (c.getSecondPassword().length() > 0 || c.getSecondPassword() != null) {
             iPacket.DecodeString(); //old pic
             String newPic = iPacket.DecodeString();

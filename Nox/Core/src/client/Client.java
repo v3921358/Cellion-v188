@@ -35,8 +35,6 @@ import handling.world.World;
 import handling.world.MapleFamilyCharacter;
 import handling.world.MapleGuildCharacter;
 import io.netty.channel.Channel;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,16 +56,15 @@ import tools.LogHelper;
 import tools.Pair;
 import tools.packet.CField;
 import tools.packet.CLogin;
-import tools.packet.CWvsContext;
 
-public class MapleClient extends Socket {
+public class Client extends Socket {
 
     public static enum MapleClientLoginState {
-        LOGIN_NOTLOGGEDIN(0),
-        LOGIN_SERVER_TRANSITION(1),
-        LOGIN_LOGGEDIN(2),
-        CHANGE_CHANNEL(3),
-        NOT_FOUND(-1),;
+        Login_NotLoggedIn(0),
+        Login_ServerTransition(1),
+        Login_LoggedIn(2),
+        ChangeChannel(3),
+        NotFound(-1);
 
         private final int state;
 
@@ -85,7 +82,7 @@ public class MapleClient extends Socket {
                     return value;
                 }
             }
-            return MapleClientLoginState.NOT_FOUND;
+            return MapleClientLoginState.NotFound;
         }
     }
 
@@ -119,7 +116,7 @@ public class MapleClient extends Socket {
     private int authID = 0;
     public String sAccountToken = "";
 
-    public MapleClient(Channel c, int uSendSeq, int uRcvSeq) {
+    public Client(Channel c, int uSendSeq, int uRcvSeq) {
         super(c, uSendSeq, uRcvSeq);
     }
 
@@ -151,8 +148,8 @@ public class MapleClient extends Socket {
             }
         }
 
-        //Have to write the packet after checking for debug
-        //Just incase the pipeline encodes it before the log printed lol. (that happens)
+        // Have to write the packet after checking for debug
+        // Just incase the pipeline encodes it before the log printed lol. (that happens)
         super.SendPacket(oPacket);
     }
 
@@ -212,7 +209,7 @@ public class MapleClient extends Socket {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(MapleClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
         return chars;
     }
@@ -247,10 +244,10 @@ public class MapleClient extends Socket {
                     psu.executeUpdate();
                 }
             } catch (Exception e) {
-                LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", e);
+                LogHelper.SQL.get().info("[Client] There was an issue with something from the database:\n", e);
             }
         } catch (Exception e) {
-            LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", e);
+            LogHelper.SQL.get().info("[Client] There was an issue with something from the database:\n", e);
         }
 
     }
@@ -263,7 +260,7 @@ public class MapleClient extends Socket {
                 chars.add(cni.name);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(MapleClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return chars;
@@ -282,7 +279,7 @@ public class MapleClient extends Socket {
                 }
             }
         } catch (SQLException e) {
-            LogHelper.SQL.get().info("[MapleClient] Error loading characters from database \n", e);
+            LogHelper.SQL.get().info("[Client] Error loading characters from database \n", e);
         }
         return chars;
     }
@@ -392,10 +389,10 @@ public class MapleClient extends Socket {
                     }
                 }
             } catch (SQLException ex) {
-                LogHelper.SQL.get().info("[MapleClient] Error getting ban reasons \n", ex);
+                LogHelper.SQL.get().info("[Client] Error getting ban reasons \n", ex);
             }
         } catch (SQLException ex) {
-            LogHelper.SQL.get().info("[MapleClient] Error getting ban reasons \n", ex);
+            LogHelper.SQL.get().info("[Client] Error getting ban reasons \n", ex);
         }
 
         return ret;
@@ -414,10 +411,10 @@ public class MapleClient extends Socket {
                     }
                 }
             } catch (SQLException ex) {
-                LogHelper.SQL.get().info("[MapleClient] Error checking IP bans \n", ex);
+                LogHelper.SQL.get().info("[Client] Error checking IP bans \n", ex);
             }
         } catch (SQLException ex) {
-            LogHelper.SQL.get().info("[MapleClient] Error getting ban reasons \n", ex);
+            LogHelper.SQL.get().info("[Client] Error getting ban reasons \n", ex);
         }
 
         return ret;
@@ -452,11 +449,11 @@ public class MapleClient extends Socket {
                     }
                 }
             } catch (SQLException ex) {
-                LogHelper.SQL.get().info("[MapleClient] Error getting ban reasons \n", ex);
+                LogHelper.SQL.get().info("[Client] Error getting ban reasons \n", ex);
             }
 
         } catch (SQLException ex) {
-            LogHelper.SQL.get().info("[MapleClient] Error checking mac bans \n", ex);
+            LogHelper.SQL.get().info("[Client] Error checking mac bans \n", ex);
         }
         return ret;
     }
@@ -485,10 +482,10 @@ public class MapleClient extends Socket {
                         }
                     }
                 } catch (SQLException exp) {
-                    LogHelper.SQL.get().info("[MapleClient] Error loading macs from accounts\n", exp);
+                    LogHelper.SQL.get().info("[Client] Error loading macs from accounts\n", exp);
                 }
             } catch (SQLException ex) {
-                LogHelper.SQL.get().info("[MapleClient] Error getting ban reasons \n", ex);
+                LogHelper.SQL.get().info("[Client] Error getting ban reasons \n", ex);
             }
 
         }
@@ -545,7 +542,7 @@ public class MapleClient extends Socket {
                 LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", ex);
             }
         } catch (SQLException ex) {
-            LogHelper.SQL.get().info("[MapleClient] Error getting ban reasons \n", ex);
+            LogHelper.SQL.get().info("[Client] Error getting ban reasons \n", ex);
         }
 
     }
@@ -559,11 +556,11 @@ public class MapleClient extends Socket {
         login_mutex.lock();
         try {
             final MapleClientLoginState state = getLoginState();
-            if (state.getState() > MapleClientLoginState.LOGIN_LOGGEDIN.getState()) { // already loggedin
+            if (state.getState() > MapleClientLoginState.Login_LoggedIn.getState()) { // already loggedin
                 loggedIn = false;
                 return 7;
             }
-            updateLoginState(MapleClientLoginState.LOGIN_LOGGEDIN, getSessionIPAddress());
+            updateLoginState(MapleClientLoginState.Login_LoggedIn, getSessionIPAddress());
         } finally {
             login_mutex.unlock();
         }
@@ -610,7 +607,7 @@ public class MapleClient extends Socket {
                             unban();
                         }
                         MapleClientLoginState loginstate = getLoginState();
-                        if (loginstate.getState() > MapleClientLoginState.LOGIN_NOTLOGGEDIN.getState()) { // already loggedin
+                        if (loginstate.getState() > MapleClientLoginState.Login_NotLoggedIn.getState()) { // already loggedin
                             if (getSessionIPAddress().equals(oldSession) && oldSession != null && getPlayer() == null && CashShopServer.getPlayerStorage().getCharacterById(accId) == null) {
                                 try (PreparedStatement ps2 = con.prepareStatement("UPDATE accounts SET loggedin = 0 WHERE name = ?")) {
                                     ps2.setString(1, name);
@@ -619,7 +616,7 @@ public class MapleClient extends Socket {
                                     disconnect(true, false);
                                     //write(CWvsContext.broadcastMsg(1, "Your " + ServerConstants.SERVER_REFERENCE + " account has been successfully unstuck! You may now login normally."));
                                 } catch (SQLException se) {
-                                    LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", se);
+                                    LogHelper.SQL.get().info("[Client] There was an issue with something from the database:\n", se);
                                 }
                                 loginok = 0;
                             } else {
@@ -641,16 +638,16 @@ public class MapleClient extends Socket {
                         psi.executeUpdate();
                         loginok = 23;
                     } catch (SQLException e) {
-                        LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", e);
+                        LogHelper.SQL.get().info("[Client] There was an issue with something from the database:\n", e);
                     }
                 }
                 rs.close();
                 ps.close();
             } catch (SQLException e) {
-                LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", e);
+                LogHelper.SQL.get().info("[Client] There was an issue with something from the database:\n", e);
             }
         } catch (SQLException se) {
-            LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", se);
+            LogHelper.SQL.get().info("[Client] There was an issue with something from the database:\n", se);
         }
 
         return loginok;
@@ -685,7 +682,7 @@ public class MapleClient extends Socket {
                             unban();
                         }
                         MapleClientLoginState loginstate = getLoginState();
-                        if (loginstate.getState() > MapleClientLoginState.LOGIN_NOTLOGGEDIN.getState()) { // already loggedin
+                        if (loginstate.getState() > MapleClientLoginState.Login_NotLoggedIn.getState()) { // already loggedin
                             if (getSessionIPAddress().equals(oldSession) && oldSession != null && getPlayer() == null && CashShopServer.getPlayerStorage().getCharacterById(accId) == null) {
                                 try (PreparedStatement ps2 = con.prepareStatement("UPDATE accounts SET loggedin = 0 WHERE name = ?")) {
                                     ps2.setString(1, name);
@@ -694,7 +691,7 @@ public class MapleClient extends Socket {
                                     disconnect(true, false);
                                     //write(CWvsContext.broadcastMsg(1, "Your " + ServerConstants.SERVER_REFERENCE + " account has been successfully unstuck! You may now login normally."));
                                 } catch (SQLException se) {
-                                    LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", se);
+                                    LogHelper.SQL.get().info("[Client] There was an issue with something from the database:\n", se);
                                 }
                                 loginok = 0;
                             } else {
@@ -713,10 +710,10 @@ public class MapleClient extends Socket {
                 rs.close();
                 ps.close();
             } catch (SQLException e) {
-                LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", e);
+                LogHelper.SQL.get().info("[Client] There was an issue with something from the database:\n", e);
             }
         } catch (SQLException se) {
-            LogHelper.SQL.get().info("[MapleClient] There was an issue with something from the database:\n", se);
+            LogHelper.SQL.get().info("[Client] There was an issue with something from the database:\n", se);
         }
 
         return loginok;
@@ -786,14 +783,14 @@ public class MapleClient extends Socket {
 
                         return true;
                     } catch (SQLException ex) {
-                        LogHelper.SQL.get().info("[MapleClient] Error banning account\n", ex);
+                        LogHelper.SQL.get().info("[Client] Error banning account\n", ex);
                     }
                 }
             } catch (SQLException ex) {
-                LogHelper.SQL.get().info("[MapleClient] Error banning offline account\n", ex);
+                LogHelper.SQL.get().info("[Client] Error banning offline account\n", ex);
             }
         } catch (SQLException ex) {
-            LogHelper.SQL.get().info("[MapleClient] Error banning offline account\n", ex);
+            LogHelper.SQL.get().info("[Client] Error banning offline account\n", ex);
         }
 
         return false;
@@ -809,7 +806,7 @@ public class MapleClient extends Socket {
                     ps.executeUpdate();
                     ps.close();
                 } catch (SQLException ex) {
-                    LogHelper.SQL.get().info("[MapleClient] Error banning account\n", ex);
+                    LogHelper.SQL.get().info("[Client] Error banning account\n", ex);
                 }
             }
 
@@ -819,10 +816,10 @@ public class MapleClient extends Socket {
                 ps.setInt(3, this.accId);
                 ps.executeUpdate();
             } catch (SQLException ex) {
-                LogHelper.SQL.get().info("[MapleClient] Error banning account\n", ex);
+                LogHelper.SQL.get().info("[Client] Error banning account\n", ex);
             }
         } catch (SQLException ex) {
-            LogHelper.SQL.get().info("[MapleClient] Error banning account\n", ex);
+            LogHelper.SQL.get().info("[Client] Error banning account\n", ex);
         }
 
         if (banMacs) {
@@ -837,10 +834,10 @@ public class MapleClient extends Socket {
                 ps.setInt(1, accId);
                 ps.executeUpdate();
             } catch (SQLException e) {
-                LogHelper.SQL.get().info("[MapleClient] Error unbanning character\n", e);
+                LogHelper.SQL.get().info("[Client] Error unbanning character\n", e);
             }
         } catch (SQLException ex) {
-            LogHelper.SQL.get().info("[MapleClient] Error banning account\n", ex);
+            LogHelper.SQL.get().info("[Client] Error banning account\n", ex);
         }
 
     }
@@ -899,11 +896,11 @@ public class MapleClient extends Socket {
                 ps.setInt(2, accId);
                 ps.executeUpdate();
             } catch (SQLException e) {
-                LogHelper.SQL.get().info("[MapleClient] Error saving MACs\n", e);
+                LogHelper.SQL.get().info("[Client] Error saving MACs\n", e);
             }
 
         } catch (SQLException e) {
-            LogHelper.SQL.get().info("[MapleClient] Error saving MACs\n", e);
+            LogHelper.SQL.get().info("[Client] Error saving MACs\n", e);
         }
 
     }
@@ -925,17 +922,17 @@ public class MapleClient extends Socket {
                 ps.setInt(3, getAccID());
                 ps.executeUpdate();
             } catch (SQLException sexp) {
-                LogHelper.SQL.get().info("[MapleClient]  error updating login state\n", sexp);
+                LogHelper.SQL.get().info("[Client]  error updating login state\n", sexp);
             }
         } catch (SQLException sexp) {
-            LogHelper.SQL.get().info("[MapleClient]  error updating login state\n", sexp);
+            LogHelper.SQL.get().info("[Client]  error updating login state\n", sexp);
         }
-        if (newstate == MapleClientLoginState.LOGIN_NOTLOGGEDIN) {
+        if (newstate == MapleClientLoginState.Login_NotLoggedIn) {
             loggedIn = false;
             serverTransition = false;
         } else {
-            serverTransition = (newstate == MapleClientLoginState.LOGIN_SERVER_TRANSITION
-                    || newstate == MapleClientLoginState.CHANGE_CHANNEL);
+            serverTransition = (newstate == MapleClientLoginState.Login_ServerTransition
+                    || newstate == MapleClientLoginState.ChangeChannel);
             loggedIn = !serverTransition;
         }
 
@@ -949,10 +946,10 @@ public class MapleClient extends Socket {
                 ps.setInt(2, accId);
                 ps.executeUpdate();
             } catch (SQLException e) {
-                LogHelper.SQL.get().info("[MapleClient] Error updating secondary password\n", e);
+                LogHelper.SQL.get().info("[Client] Error updating secondary password\n", e);
             }
         } catch (SQLException e) {
-            LogHelper.SQL.get().info("[MapleClient] Error updating secondary password\n", e);
+            LogHelper.SQL.get().info("[Client] Error updating secondary password\n", e);
         }
 
     }
@@ -974,29 +971,29 @@ public class MapleClient extends Socket {
                     birthday = rs.getInt("bday");
                     state = MapleClientLoginState.getStateByInt(rs.getByte("loggedin"));
 
-                    if (state == MapleClientLoginState.LOGIN_SERVER_TRANSITION
-                            || state == MapleClientLoginState.CHANGE_CHANNEL) {
+                    if (state == MapleClientLoginState.Login_ServerTransition
+                            || state == MapleClientLoginState.ChangeChannel) {
 
                         if (rs.getTimestamp("lastlogin").getTime() + 20000 < System.currentTimeMillis()) { // connecting to chanserver timeout
-                            state = MapleClientLoginState.LOGIN_NOTLOGGEDIN;
+                            state = MapleClientLoginState.Login_NotLoggedIn;
                             updateLoginState(state, getSessionIPAddress());
                         }
                     }
                 }
                 ps.close();
-                loggedIn = state == MapleClientLoginState.LOGIN_LOGGEDIN;
+                loggedIn = state == MapleClientLoginState.Login_LoggedIn;
 
                 return state;
             } catch (SQLException e) {
                 LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
                 loggedIn = false;
-                return MapleClientLoginState.NOT_FOUND;
+                return MapleClientLoginState.NotFound;
             }
         } catch (SQLException e) {
 
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             loggedIn = false;
-            return MapleClientLoginState.NOT_FOUND;
+            return MapleClientLoginState.NotFound;
         }
     }
 
@@ -1269,7 +1266,7 @@ public class MapleClient extends Socket {
             }
         }
         if (!serverTransition && isLoggedIn()) {
-            updateLoginState(MapleClientLoginState.LOGIN_NOTLOGGEDIN, getSessionIPAddress());
+            updateLoginState(MapleClientLoginState.Login_NotLoggedIn, getSessionIPAddress());
         }
         engines.clear();
     }
@@ -1301,7 +1298,7 @@ public class MapleClient extends Socket {
             }
             return canlogin;
         } catch (final SQLException e) {
-            LogHelper.SQL.get().info("[MapleClient] Failed checking IP adress:\n", e);
+            LogHelper.SQL.get().info("[Client] Failed checking IP adress:\n", e);
         }
 
         return true;
@@ -1397,7 +1394,7 @@ public class MapleClient extends Socket {
         lastPong = System.currentTimeMillis();
     }
 
-    public static String getLogMessage(final MapleClient cfor, final String message) {
+    public static String getLogMessage(final Client cfor, final String message) {
         return getLogMessage(cfor, message, new Object[0]);
     }
 
@@ -1409,7 +1406,7 @@ public class MapleClient extends Socket {
         return getLogMessage(cfor == null ? null : cfor.getClient(), message, parms);
     }
 
-    public static String getLogMessage(final MapleClient cfor, final String message, final Object... parms) {
+    public static String getLogMessage(final Client cfor, final String message, final Object... parms) {
         final StringBuilder builder = new StringBuilder();
         if (cfor != null) {
             if (cfor.getPlayer() != null) {

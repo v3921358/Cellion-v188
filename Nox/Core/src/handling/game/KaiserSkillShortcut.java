@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import handling.world.PlayerHandler;
 import server.maps.objects.User;
 import net.InPacket;
@@ -29,17 +29,17 @@ import net.ProcessPacket;
 
 /**
  *
- * @author Mazen
+ * @author Mazen Massoud
  */
-public final class KaiserSkillShortcut implements ProcessPacket<MapleClient> {
+public final class KaiserSkillShortcut implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if ((chr == null) || (chr.getMap() == null)) {
             return;

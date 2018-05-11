@@ -2,7 +2,7 @@ package handling;
 
 import handling.game.GroupMessageHandler;
 import handling.game.BossMatchmakingHandler;
-import client.MapleClient;
+import client.Client;
 import constants.ServerConstants;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -284,7 +284,7 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable t) {
         Channel ch = ctx.channel();
         try {
-            MapleClient c = (MapleClient) ch.attr(MapleClient.SESSION_KEY).get();
+            Client c = (Client) ch.attr(Client.SESSION_KEY).get();
             c.disconnect(true, false);
             c.cancelPingTask();
         } catch (Exception ex) {
@@ -299,7 +299,7 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
         int SendSeq = (int) (Math.random() * Integer.MAX_VALUE);
         int RecvSeq = (int) (Math.random() * Integer.MAX_VALUE);
 
-        MapleClient client = new MapleClient(ch, SendSeq, RecvSeq);
+        Client client = new Client(ch, SendSeq, RecvSeq);
 
         if (ServerConstants.DEVELOPER_DEBUG_MODE) {
             System.out.println("[Session] Opened Session (" + client.getSessionIPAddress() + ")");
@@ -315,7 +315,7 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
         client.setReceiving(true);
 
         client.SendPacket(CLogin.Handshake(SendSeq, RecvSeq));
-        ch.attr(MapleClient.SESSION_KEY).set(client);
+        ch.attr(Client.SESSION_KEY).set(client);
 
         client.startPing(ch);
     }
@@ -325,7 +325,7 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
         Channel ch = ctx.channel();
 
         try {
-            MapleClient c = (MapleClient) ch.attr(MapleClient.SESSION_KEY).get();
+            Client c = (Client) ch.attr(Client.SESSION_KEY).get();
             c.cancelPingTask();
             c.disconnect(true, false);
 
@@ -342,7 +342,7 @@ public class MapleServerHandler extends ChannelInboundHandlerAdapter {
         InPacket iPacket = (InPacket) msg;
         Channel ch = ctx.channel();
 
-        MapleClient ClientSocket = (MapleClient) ch.attr(MapleClient.SESSION_KEY).get();
+        Client ClientSocket = (Client) ch.attr(Client.SESSION_KEY).get();
 
         if (!ClientSocket.isReceiving() || msg == null) {
             return;

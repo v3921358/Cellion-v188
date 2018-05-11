@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -30,15 +30,15 @@ import server.quest.Quest;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class KeyMap implements ProcessPacket<MapleClient> { // oh here it is
+public final class KeyMap implements ProcessPacket<Client> { // oh here it is
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr == null) {
             return;

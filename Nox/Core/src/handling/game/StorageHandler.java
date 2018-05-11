@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import client.inventory.MapleInventoryType;
@@ -21,15 +21,15 @@ import tools.LogHelper;
  *
  * @author
  */
-public class StorageHandler implements ProcessPacket<MapleClient> {
+public class StorageHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         byte mode = iPacket.DecodeByte();
 
         User chr = c.getPlayer();

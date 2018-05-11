@@ -451,7 +451,7 @@ public class ItemPotentialProvider {
     /**
      * Cube Bonus Potential Line Generator
      *
-     * @author Mazen
+     * @author Mazen Massoud
      *
      * @purpose Generate a bonus Potential Line based on fully customizable Potential tables based upon the Item Potential Tier and
      */
@@ -722,7 +722,7 @@ public class ItemPotentialProvider {
     /**
      * Cube Potential Line Generator
      *
-     * @author Mazen
+     * @author Mazen Massoud
      *
      * @purpose Generate a Potential Line based on fully customizable Potential tables based upon the Item Potential Tier and
      */

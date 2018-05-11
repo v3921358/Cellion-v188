@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.MapleStat;
 import client.Skill;
 import client.SkillFactory;
@@ -21,15 +21,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class DistributeSPHandler implements ProcessPacket<MapleClient> {
+public class DistributeSPHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         c.getPlayer().updateTick(iPacket.DecodeInt());

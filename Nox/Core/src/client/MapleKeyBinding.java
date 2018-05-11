@@ -1,5 +1,5 @@
 /*
- * @author Mazen;
+ * @author Mazen Massoud;
  * @author MrPie :)
  * ���ֿ� sch2307@naver.com
  * ���� junny_adm@naver.com

@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.MapleTrait;
 import client.inventory.Equip;
 import client.inventory.Item;
@@ -23,10 +23,10 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseMagnifyingGlassHandler implements ProcessPacket<MapleClient> {
+public class UseMagnifyingGlassHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
@@ -127,7 +127,7 @@ public class UseMagnifyingGlassHandler implements ProcessPacket<MapleClient> {
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         chr.setScrolledPosition((short) 0);

@@ -3,7 +3,7 @@ package handling.world;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import server.maps.FieldLimitType;
 import server.maps.objects.User;
 import net.InPacket;
@@ -11,7 +11,7 @@ import tools.packet.CWvsContext;
 
 public class PartyHandler {
 
-    public static void MemberSearch(InPacket iPacket, MapleClient c) {
+    public static void MemberSearch(InPacket iPacket, Client c) {
         if ((c.getPlayer().isInBlockedMap()) || (FieldLimitType.VipRock.checkFlag(c.getPlayer().getMap()))) {
             c.getPlayer().dropMessage(5, "You may not do party search here.");
             return;
@@ -19,7 +19,7 @@ public class PartyHandler {
         c.SendPacket(CWvsContext.PartyPacket.showMemberSearch(c.getPlayer().getMap().getCharacters()));
     }
 
-    public static final void PartySearch(InPacket iPacket, MapleClient c) {
+    public static final void PartySearch(InPacket iPacket, Client c) {
         if ((c.getPlayer().isInBlockedMap()) || (FieldLimitType.VipRock.checkFlag(c.getPlayer().getMap()))) {
             c.getPlayer().dropMessage(5, "You may not do party search here.");
             return;

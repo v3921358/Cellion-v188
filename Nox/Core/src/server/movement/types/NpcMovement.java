@@ -2,7 +2,7 @@ package server.movement.types;
 
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import handling.AbstractMaplePacketHandler;
 import handling.world.MovementParse;
 import service.SendPacketOpcode;
@@ -16,15 +16,15 @@ import net.ProcessPacket;
  * @author Steven
  *
  */
-public class NpcMovement implements ProcessPacket<MapleClient> {
+public class NpcMovement implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return c.isLoggedIn();
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.NpcMove.getValue());
         int length = (int) iPacket.GetRemainder();

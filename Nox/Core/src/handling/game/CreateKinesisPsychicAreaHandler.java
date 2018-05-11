@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import constants.GameConstants;
 import static client.jobs.Kinesis.KinesisHandler.handlePsychicPoint;
 import java.awt.Point;
@@ -15,17 +15,17 @@ import tools.packet.JobPacket;
 
 /**
  *
- * @author Mazen
+ * @author Mazen Massoud
  */
-public class CreateKinesisPsychicAreaHandler implements ProcessPacket<MapleClient> {
+public class CreateKinesisPsychicAreaHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int nAction = iPacket.DecodeInt();
         int nActionSpeed = iPacket.DecodeInt();
         int unknown = iPacket.DecodeInt();

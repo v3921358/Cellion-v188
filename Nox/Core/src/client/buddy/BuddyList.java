@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import client.MapleClient;
+import client.Client;
 import database.Database;
 import server.maps.objects.User;
 import tools.LogHelper;
@@ -109,7 +109,7 @@ public class BuddyList {
         }
     }
 
-    public void addBuddyRequest(MapleClient c, int channelFrom, User chr, boolean accountFriend) {
+    public void addBuddyRequest(Client c, int channelFrom, User chr, boolean accountFriend) {
         Buddy buddy = new Buddy(BuddyResult.INVITE);
         BuddylistEntry ble = new BuddylistEntry(chr.getName(), chr.getId(), "Default Group", channelFrom, true, "", accountFriend, chr.getName());
         if (accountFriend) {

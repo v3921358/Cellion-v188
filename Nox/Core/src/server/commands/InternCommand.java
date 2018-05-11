@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 import client.MapleCharacterUtil;
-import client.MapleClient;
+import client.Client;
 import client.MapleDisease;
 import client.MapleStat;
 import client.SkillFactory;
@@ -67,7 +67,7 @@ public class InternCommand {
     public static class Hide extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             if (c.getPlayer().isHidden()) {
                 c.getPlayer().dropMessage(5, "[Visibility] Your character is no longer hidden.");
                 c.getPlayer().dispelBuff(9101004);
@@ -84,7 +84,7 @@ public class InternCommand {
     public static class ToggleChatType extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             User oPlayer = c.getPlayer();
 
             if (oPlayer.usingStaffChat()) {
@@ -106,7 +106,7 @@ public class InternCommand {
     public static class WhereAmI extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             Point pos = c.getPlayer().getPosition();
 
             c.getPlayer().dropMessage(6, "[" + ServerConstants.SERVER_NAME + "] Character Position: X (" + pos.x + "), Y (" + pos.y + "), RX0 (" + (pos.x + 50) + "), RX1 (" + (pos.x - 50) + "), FH (" + c.getPlayer().getFh() + ")");
@@ -118,7 +118,7 @@ public class InternCommand {
     public static class Online extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             int nSize = 0;
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
                 nSize += ChannelServer.getInstance(i).getPlayerStorage().getAllCharacters().size();
@@ -143,7 +143,7 @@ public class InternCommand {
     public static class CharInfo extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             final StringBuilder builder = new StringBuilder();
             final User other = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             if (other == null) {
@@ -154,7 +154,7 @@ public class InternCommand {
             //if (other.getClient().getLastPing() <= 0) {
             //    other.getClient().sendPing();
             //}
-            builder.append(MapleClient.getLogMessage(other, ""));
+            builder.append(Client.getLogMessage(other, ""));
             builder.append(" at (").append(other.getPosition().x);
             builder.append(", ").append(other.getPosition().y);
             builder.append(")");
@@ -239,7 +239,7 @@ public class InternCommand {
     public static class Cheaters extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             List<CheaterData> cheaters = World.getCheaters();
             for (int x = cheaters.size() - 1; x >= 0; x--) {
                 CheaterData cheater = cheaters.get(x);
@@ -363,7 +363,7 @@ public class InternCommand {
         }
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(6, "Syntax: !goto <mapname>");
                 return 0;
@@ -407,7 +407,7 @@ public class InternCommand {
     public static class FakeRelog extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             c.getPlayer().fakeRelog2();
             return 1;
         }
@@ -416,7 +416,7 @@ public class InternCommand {
     public static class Clock extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             c.getPlayer().getMap().broadcastMessage(CField.getClock(CommandProcessorUtil.getOptionalIntArg(splitted, 1, 60)));
             return 1;
         }
@@ -425,7 +425,7 @@ public class InternCommand {
     public static class DC extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[splitted.length - 1]);
             if (victim != null && c.getPlayer().getGMLevel() >= victim.getGMLevel()) {
                 victim.getClient().Close();
@@ -444,7 +444,7 @@ public class InternCommand {
         private final String[] types = {"HACK", "BOT", "AD", "HARASS", "CURSE", "SCAM", "MISCONDUCT", "SELL", "ICASH", "TEMP", "GM", "IPROGRAM", "MEGAPHONE"};
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             if (splitted.length < 4) {
                 c.getPlayer().dropMessage(6, "Tempban [name] [REASON] [hours]");
                 StringBuilder s = new StringBuilder("Tempban reasons: ");
@@ -475,7 +475,7 @@ public class InternCommand {
     public static class Jail extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             if (splitted.length < 3) {
                 c.getPlayer().dropMessage(6, "Syntax: !jail <name> <minutes, 0 = forever>");
                 return 0;
@@ -504,7 +504,7 @@ public class InternCommand {
     public static class Map extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             try {
                 User victim;
                 int ch = World.Find.findChannel(splitted[1]);
@@ -549,7 +549,7 @@ public class InternCommand {
     public static class Say extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             if (splitted.length > 1) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("[");
@@ -577,7 +577,7 @@ public class InternCommand {
     public static class Find extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             switch (splitted.length) {
                 case 1:
                     c.getPlayer().dropMessage(6, splitted[0] + ": <NPC> <MOB> <ITEM> <MAP> <SKILL> <QUEST> <HEADER/OPCODE>");
@@ -751,7 +751,7 @@ public class InternCommand {
     public static class WhosFirst extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             //probably bad way to do it
             final long currentTime = System.currentTimeMillis();
             List<Pair<String, Long>> players = new ArrayList<>();
@@ -787,7 +787,7 @@ public class InternCommand {
     public static class WhosLast extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             if (splitted.length < 2) {
                 StringBuilder sb = new StringBuilder("whoslast [type] where type can be:  ");
                 for (MapleSquadType t : MapleSquadType.values()) {
@@ -822,7 +822,7 @@ public class InternCommand {
     public static class WhosNext extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             if (splitted.length < 2) {
                 StringBuilder sb = new StringBuilder("whosnext [type] where type can be:  ");
                 for (MapleSquadType t : MapleSquadType.values()) {
@@ -858,7 +858,7 @@ public class InternCommand {
     public static class CancelBuffs extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             c.getPlayer().cancelAllBuffs();
             return 1;
         }
@@ -867,7 +867,7 @@ public class InternCommand {
     public static class CC extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             c.getPlayer().changeChannel(Integer.parseInt(splitted[1]));
             return 1;
         }
@@ -876,7 +876,7 @@ public class InternCommand {
     public static class FakeRelog2 extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             c.getPlayer().fakeRelog();
             return 1;
         }
@@ -885,7 +885,7 @@ public class InternCommand {
     public static class OpenNpc extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             NPCScriptManager.getInstance().start(c, Integer.parseInt(splitted[1]), splitted.length > 2 ? StringUtil.joinStringFrom(splitted, 2) : splitted[1]);
             return 1;
         }
@@ -894,7 +894,7 @@ public class InternCommand {
     public static class OpenShop extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             MapleShopFactory.getInstance().getShop(Integer.parseInt(splitted[1]));
             return 1;
         }
@@ -903,7 +903,7 @@ public class InternCommand {
     public static class Shop extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             MapleShopFactory shop = MapleShopFactory.getInstance();
             int shopId = Integer.parseInt(splitted[1]);
             if (shop.getShop(shopId) != null) {
@@ -916,7 +916,7 @@ public class InternCommand {
     public static class SaveAll extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
                 for (User mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                     mch.saveToDB(false, false);
@@ -930,7 +930,7 @@ public class InternCommand {
     public static class ActiveBomberman extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             User player = c.getPlayer();
             if (player.getMapId() != 109010100) {
                 player.dropMessage(5, "This command is only usable in map 109010100.");
@@ -961,7 +961,7 @@ public class InternCommand {
     public static class Song extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             c.getPlayer().getMap().broadcastMessage(CField.musicChange(splitted[1]));
             return 1;
         }
@@ -970,7 +970,7 @@ public class InternCommand {
     public static class DeactiveBomberman extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             User player = c.getPlayer();
             if (player.getMapId() != 109010100) {
                 player.dropMessage(5, "This command is only usable in map 109010100.");
@@ -999,7 +999,7 @@ public class InternCommand {
     public static class Bob extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             Mob mob = MapleLifeFactory.getMonster(9400551);
             for (int i = 0; i < 10; i++) {
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(mob, c.getPlayer().getPosition());
@@ -1011,7 +1011,7 @@ public class InternCommand {
     public static class StartAutoEvent extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             final EventManager em = c.getChannelServer().getEventSM().getEventManager("AutomatedEvent");
             if (em != null) {
                 em.setWorldEvent();

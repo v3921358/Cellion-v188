@@ -2,7 +2,7 @@ package server.maps.objects;
 
 import java.awt.Point;
 
-import client.MapleClient;
+import client.Client;
 import client.SkillFactory;
 import client.anticheat.CheatingOffense;
 import constants.GameConstants;
@@ -54,11 +54,11 @@ public class Summon extends AnimatedMapleMapObject {
     }
 
     @Override
-    public final void sendSpawnData(final MapleClient client) {
+    public final void sendSpawnData(final Client client) {
     }
 
     @Override
-    public final void sendDestroyData(final MapleClient client) {
+    public final void sendDestroyData(final Client client) {
         client.getPlayer().getMap().broadcastMessage(SummonPacket.removeSummon(this, false));
         client.SendPacket(SummonPacket.removeSummon(this, false));
     }

@@ -1,20 +1,20 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import constants.GameConstants;
 import net.InPacket;
 import net.ProcessPacket;
 import tools.packet.CField;
 
-public class SetDressChangedRequest implements ProcessPacket<MapleClient> {
+public class SetDressChangedRequest implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         byte bDressChanged = iPacket.DecodeByte();
 
         System.out.printf("Dress Changed (%s) \r\n", bDressChanged);

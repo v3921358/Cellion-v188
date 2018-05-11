@@ -5,7 +5,7 @@
  */
 package handling.cashshop;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
@@ -19,7 +19,7 @@ import tools.packet.CSPacket;
  */
 public class CSInventoryAction {
 
-    public static void RetrieveItem(InPacket iPacket, MapleClient c, User chr) {
+    public static void RetrieveItem(InPacket iPacket, Client c, User chr) {
         Item changedItem = c.getPlayer().getCashInventory().findByCashId((int) iPacket.DecodeLong());
         if (changedItem != null && changedItem.getQuantity() > 0 && MapleInventoryManipulator.checkSpace(c, changedItem.getItemId(), changedItem.getQuantity(), changedItem.getOwner())) {
             Item item_ = changedItem.copy();
@@ -39,7 +39,7 @@ public class CSInventoryAction {
         }
     }
 
-    public static void AddItem(InPacket iPacket, MapleClient c, User chr) {
+    public static void AddItem(InPacket iPacket, Client c, User chr) {
         int uniqueid = (int) iPacket.DecodeLong();
         MapleInventoryType inventoryType = MapleInventoryType.getByType(iPacket.DecodeByte());
         Item changedItem = c.getPlayer().getInventory(inventoryType).findByUniqueId(uniqueid);

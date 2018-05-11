@@ -55,15 +55,15 @@ import tools.packet.CField.SummonPacket;
  * UserSkillRequest
  * @author Mazen Massoud
  */
-public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
+public final class SpecialAttackMove implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
         pPlayer.updateTick(iPacket.DecodeInt());
         int nSkill = iPacket.DecodeInt();

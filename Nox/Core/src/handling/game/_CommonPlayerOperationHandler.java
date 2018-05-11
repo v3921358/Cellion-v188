@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Equip;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -282,7 +282,7 @@ public class _CommonPlayerOperationHandler {
         return opID < 60000;
     }
 
-    public static final boolean UseTeleRock(InPacket iPacket, MapleClient c, int itemId) {
+    public static final boolean UseTeleRock(InPacket iPacket, Client c, int itemId) {
         boolean used = false;
         if (itemId == 5040004) {
             iPacket.DecodeByte();
@@ -326,7 +326,7 @@ public class _CommonPlayerOperationHandler {
         return used;
     }
 
-    public static final boolean useItem(final MapleClient c, final int id) {
+    public static final boolean useItem(final Client c, final int id) {
         if (GameConstants.isUse(id)) { // TO prevent caching of everything, waste of mem
             final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
             final MapleStatEffect eff = ii.getItemEffect(id);
@@ -358,7 +358,7 @@ public class _CommonPlayerOperationHandler {
         return false;
     }
 
-    public static final void consumeItem(final MapleClient c, final MapleStatEffect eff) {
+    public static final void consumeItem(final Client c, final MapleStatEffect eff) {
         if (eff == null) {
             return;
         }
@@ -378,7 +378,7 @@ public class _CommonPlayerOperationHandler {
         }
     }
 
-    public static final boolean UsePetFood(MapleClient c, int itemId) {
+    public static final boolean UsePetFood(Client c, int itemId) {
         Pet pet = c.getPlayer().getPet(0);
         if (pet == null) {
             return false;

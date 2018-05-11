@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
 import handling.world.PartyOperation;
@@ -15,15 +15,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class DenyPartyRequestHandler implements ProcessPacket<MapleClient> {
+public class DenyPartyRequestHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int action = iPacket.DecodeByte();
         System.out.println("[Debug] Party Result Operation: " + action);
         if ((action == 50)) {

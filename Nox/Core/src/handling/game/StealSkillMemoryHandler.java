@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.SkillFactory;
 import constants.GameConstants;
 import java.util.ArrayList;
@@ -15,15 +15,15 @@ import net.ProcessPacket;
  *
  * @author Five
  */
-public class StealSkillMemoryHandler implements ProcessPacket<MapleClient> {
+public class StealSkillMemoryHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int nStealSkillID = iPacket.DecodeInt();
         int dwCharacterID = iPacket.DecodeInt();
         boolean bRemove = iPacket.DecodeBool();

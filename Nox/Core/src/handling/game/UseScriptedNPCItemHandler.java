@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.QuestStatus;
 import client.QuestStatus.QuestState;
 import client.MapleStat;
@@ -36,15 +36,15 @@ import server.skills.VMatrixRecord;
  *
  * @author
  */
-public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
+public class UseScriptedNPCItemHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         c.getPlayer().updateTick(iPacket.DecodeInt());

@@ -1,6 +1,6 @@
 package server.shops;
 
-import client.MapleClient;
+import client.Client;
 import client.SkillFactory;
 import client.inventory.*;
 import constants.GameConstants;
@@ -70,17 +70,17 @@ public class MapleShop {
         return this.items;
     }
 
-    public void sendShop(MapleClient c) {
+    public void sendShop(Client c) {
         c.getPlayer().setShop(this);
         c.SendPacket(CField.NPCPacket.getNPCShop(getNpcId(), this, c));
     }
 
-    public void sendShop(MapleClient c, int customNpc) {
+    public void sendShop(Client c, int customNpc) {
         c.getPlayer().setShop(this);
         c.SendPacket(CField.NPCPacket.getNPCShop(customNpc, this, c));
     }
 
-    public void buy(MapleClient c, short slot, int itemId, short quantity) {
+    public void buy(Client c, short slot, int itemId, short quantity) {
         if (itemId / 10000 == 190 && !GameConstants.isMountItemAvailable(itemId, c.getPlayer().getJob())) {
             c.getPlayer().dropMessage(1, "You may not buy this item.");
             c.SendPacket(CWvsContext.enableActions());
@@ -248,7 +248,7 @@ public class MapleShop {
         return true;
     }
 
-    public void sell(MapleClient c, MapleInventoryType type, byte slot, short quantity) {
+    public void sell(Client c, MapleInventoryType type, byte slot, short quantity) {
         switch (type) {
             case UNDEFINED:
             case EQUIPPED:
@@ -320,7 +320,7 @@ public class MapleShop {
      * @param quantity_sold
      * @param recvMesos
      */
-    private static void addShopRepurchaseItem(MapleClient c, Item item_fromInventory, short quantity_sold, int recvMesos) {
+    private static void addShopRepurchaseItem(Client c, Item item_fromInventory, short quantity_sold, int recvMesos) {
         final Item item_cpy = item_fromInventory.copy(); // The reference that will be used for storing repurchase info. 
         if (item_fromInventory.getType() == ItemType.Equipment) {
             item_cpy.setQuantity(((short) 1));
@@ -334,7 +334,7 @@ public class MapleShop {
         c.getPlayer().addShopRepurchase(repurchase);
     }
 
-    public void recharge(MapleClient c, byte slot) {
+    public void recharge(Client c, byte slot) {
         Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem((short) slot);
 
         if (item == null || (!GameConstants.isThrowingStar(item.getItemId()) && !GameConstants.isBullet(item.getItemId()))) {

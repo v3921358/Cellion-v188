@@ -3,17 +3,17 @@ package handling.game;
 import java.util.HashMap;
 import java.util.Map;
 
-import client.MapleClient;
+import client.Client;
 import server.maps.objects.User;
 import net.InPacket;
 import server.maps.MapleMapObjectType;
 import tools.packet.CField;
 import net.ProcessPacket;
 
-public final class CraftEffect implements ProcessPacket<MapleClient> {
+public final class CraftEffect implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
@@ -31,7 +31,7 @@ public final class CraftEffect implements ProcessPacket<MapleClient> {
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr.getMapId() != 910001000 && chr.getMap().getAllMapObjectSize(MapleMapObjectType.EXTRACTOR) <= 0) {
             return; //ardent mill

@@ -1,12 +1,12 @@
 package handling.world;
 
-import client.MapleClient;
+import client.Client;
 import net.InPacket;
 import scripting.provider.NPCScriptManager;
 
 public class UserInterfaceHandler {
 
-    public static final void CygnusSummon_NPCRequest(final MapleClient c) {
+    public static final void CygnusSummon_NPCRequest(final Client c) {
         if (c.getPlayer().getJob() == 2000) {
             NPCScriptManager.getInstance().start(c, 1202000, null);
         } else if (c.getPlayer().getJob() == 1000) {
@@ -14,7 +14,7 @@ public class UserInterfaceHandler {
         }
     }
 
-    public static final void InGame_Poll(final InPacket iPacket, final MapleClient c) {
+    public static final void InGame_Poll(final InPacket iPacket, final Client c) {
         final boolean PollEnabled = false;
         final String Poll_Question = "Are you mudkiz?";
         final String[] Poll_Answers = {"test1", "test2", "test3"};

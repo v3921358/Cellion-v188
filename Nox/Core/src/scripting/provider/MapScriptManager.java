@@ -1,6 +1,6 @@
 package scripting.provider;
 
-import client.MapleClient;
+import client.Client;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import scripting.MapEnterInteraction;
@@ -34,7 +34,7 @@ public class MapScriptManager extends AbstractScriptManager {
         return script;
     }
 
-    public static boolean executeMapScript(final MapleClient c, String scriptName, boolean isFirstUserEnter, int LastMapId) {
+    public static boolean executeMapScript(final Client c, String scriptName, boolean isFirstUserEnter, int LastMapId) {
         final MapScript script = getMapScript(scriptName, isFirstUserEnter, false);
 
         if (script != null) {
@@ -57,7 +57,7 @@ public class MapScriptManager extends AbstractScriptManager {
         return false;
     }
 
-    public static boolean executeMapScript_FieldSet(final MapleClient c, String scriptName, int LastMapId) {
+    public static boolean executeMapScript_FieldSet(final Client c, String scriptName, int LastMapId) {
         final MapScript script = getMapScript(scriptName, false, true);
 
         if (script != null) {

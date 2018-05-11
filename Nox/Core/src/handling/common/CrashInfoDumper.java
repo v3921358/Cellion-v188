@@ -1,6 +1,6 @@
 package handling.common;
 
-import client.MapleClient;
+import client.Client;
 import handling.PacketThrottleLimits;
 import tools.LogHelper;
 import net.InPacket;
@@ -12,15 +12,15 @@ import net.ProcessPacket;
         MinTimeMillisBetweenPackets = 60000,
         FunctionName = "ClientErrorDumper",
         BanType = PacketThrottleLimits.PacketThrottleBanType.PermanentBan)
-public final class CrashInfoDumper implements ProcessPacket<MapleClient> {
+public final class CrashInfoDumper implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         LogHelper.GENERAL_EXCEPTION.get().info(iPacket.DecodeString());
     }
 

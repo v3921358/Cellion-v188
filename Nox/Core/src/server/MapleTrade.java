@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import client.inventory.MapleInventoryType;
@@ -59,11 +59,11 @@ public class MapleTrade {
         chr.getClient().SendPacket(CField.InteractionPacket.TradeMessage(tradingslot, (byte) 7));
     }
 
-    public void cancel(MapleClient c, User chr) {
+    public void cancel(Client c, User chr) {
         cancel(c, chr, true);
     }
 
-    public void cancel(MapleClient c, User chr, boolean unsuccessful) {
+    public void cancel(Client c, User chr, boolean unsuccessful) {
         if (items != null) {
             List<Item> itemz = new LinkedList<>(items);
             for (Item item : itemz) {
@@ -166,7 +166,7 @@ public class MapleTrade {
         return inTrade;
     }
 
-    public boolean setItems(MapleClient c, Item item, byte targetSlot, int quantity) {
+    public boolean setItems(Client c, Item item, byte targetSlot, int quantity) {
         int target = getNextTargetSlot();
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if (partner == null || target == -1 || InventoryConstants.isPet(item.getItemId()) || isLocked() || (GameConstants.getInventoryType(item.getItemId()) == MapleInventoryType.EQUIP) && (quantity != 1)) {
@@ -255,7 +255,7 @@ public class MapleTrade {
         }
     }
 
-    public static void cancelTrade(MapleTrade trade, MapleClient c, User chr) {
+    public static void cancelTrade(MapleTrade trade, Client c, User chr) {
         trade.cancel(c, chr);
 
         MapleTrade partner = trade.getPartner();

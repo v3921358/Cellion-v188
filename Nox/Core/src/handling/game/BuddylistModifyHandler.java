@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import client.buddy.Buddy;
 import client.buddy.BuddyFlags;
 import client.buddy.BuddyHandler;
@@ -30,15 +30,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class BuddylistModifyHandler implements ProcessPacket<MapleClient> {
+public class BuddylistModifyHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         BuddyHandler.handleOperation(c, iPacket);
     }
 
@@ -84,7 +84,7 @@ public class BuddylistModifyHandler implements ProcessPacket<MapleClient> {
         return ret;
     }
 
-    private static void notifyRemoteChannel(MapleClient c, int remoteChannel, int otherCid, BuddyOperation operation, boolean accountFriend, String nickname) {
+    private static void notifyRemoteChannel(Client c, int remoteChannel, int otherCid, BuddyOperation operation, boolean accountFriend, String nickname) {
         User player = c.getPlayer();
         if (remoteChannel > 0) {
             World.WorldBuddy.buddyChanged(otherCid, player.getId(), player.getName(), c.getChannel(), operation, accountFriend, nickname);

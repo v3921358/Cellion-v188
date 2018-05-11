@@ -21,19 +21,19 @@
  */
 package handling.farm;
 
-import client.MapleClient;
+import client.Client;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class FarmMonsterNurtureHandler implements ProcessPacket<MapleClient> {
+public final class FarmMonsterNurtureHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int monsterIndex = iPacket.DecodeInt();
     }
 

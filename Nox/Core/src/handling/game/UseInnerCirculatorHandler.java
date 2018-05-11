@@ -2,7 +2,7 @@ package handling.game;
 
 import client.InnerAbillity;
 import client.InnerSkillValueHolder;
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import java.util.LinkedList;
@@ -17,15 +17,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseInnerCirculatorHandler implements ProcessPacket<MapleClient> {
+public class UseInnerCirculatorHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int itemid = iPacket.DecodeInt();
         short slot = (short) iPacket.DecodeInt();
         Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);

@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import client.MapleCharacterUtil;
-import client.MapleClient;
+import client.Client;
 import client.MapleJob;
 import client.MapleStat;
 import client.Skill;
@@ -67,7 +67,7 @@ public class DonatorCommand {
     public static class DonorHelp extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             c.getPlayer().dropMessage(6, "$donorhelp - Display availible donator commands.");
             c.getPlayer().dropMessage(6, "$togglesmega - Enable or disable player Super Megaphones.");
             c.getPlayer().dropMessage(6, "The availible " + ServerConstants.SERVER_NAME + " donator commands have been listed above.");
@@ -78,7 +78,7 @@ public class DonatorCommand {
     public static class ToggleSmega extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             c.getPlayer().setSmega();
             return 1;
         }

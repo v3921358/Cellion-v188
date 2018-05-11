@@ -11,7 +11,7 @@ import service.SendPacketOpcode;
 /**
  * Anti-Cheat
  *
- * @author Mazen
+ * @author Mazen Massoud
  */
 public class AntiCheat {
 

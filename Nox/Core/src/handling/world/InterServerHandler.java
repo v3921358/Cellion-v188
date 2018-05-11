@@ -1,7 +1,7 @@
 package handling.world;
 
-import client.MapleClient;
-import client.MapleClient.MapleClientLoginState;
+import client.Client;
+import client.Client.MapleClientLoginState;
 import service.ChannelServer;
 import service.FarmServer;
 import server.maps.FieldLimitType;
@@ -13,7 +13,7 @@ import tools.packet.CWvsContext;
 
 public class InterServerHandler {
 
-    public static void enterFarm(final MapleClient c, final User chr) {
+    public static void enterFarm(final Client c, final User chr) {
         if (chr.hasBlockedInventory() || chr.getMap() == null || chr.getEventInstance() != null || c.getChannelServer() == null
                 || FieldLimitType.UnableToMigrate.check(chr.getMap())) {
             c.SendPacket(CWvsContext.enableActions());
@@ -32,7 +32,7 @@ public class InterServerHandler {
         World.changeChannelData(new CharacterTransfer(chr), chr.getId(), -30);
 
         ch.removePlayer(chr);
-        c.updateLoginState(MapleClientLoginState.CHANGE_CHANNEL, c.getSessionIPAddress());
+        c.updateLoginState(MapleClientLoginState.ChangeChannel, c.getSessionIPAddress());
 
         chr.saveToDB(false, false);
         chr.getMap().removePlayer(chr);
@@ -41,7 +41,7 @@ public class InterServerHandler {
         c.setReceiving(false);
     }
 
-    public static final void changeChannel(final InPacket iPacket, final MapleClient c, final User chr, final boolean room) {
+    public static final void changeChannel(final InPacket iPacket, final Client c, final User chr, final boolean room) {
         if (chr == null || chr.hasBlockedInventory() || chr.getEventInstance() != null || chr.getMap() == null || chr.isInBlockedMap()
                 || FieldLimitType.UnableToMigrate.check(chr.getMap())) {
             c.SendPacket(CWvsContext.enableActions());

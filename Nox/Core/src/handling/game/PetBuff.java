@@ -21,22 +21,22 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import constants.GameConstants;
 import server.maps.objects.User;
 import server.quest.Quest;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class PetBuff implements ProcessPacket<MapleClient> {
+public final class PetBuff implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         iPacket.DecodeInt(); //0
         int skill = iPacket.DecodeInt();

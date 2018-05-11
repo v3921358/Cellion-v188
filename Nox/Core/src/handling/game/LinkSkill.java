@@ -21,20 +21,20 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import server.maps.objects.User;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class LinkSkill implements ProcessPacket<MapleClient> {
+public final class LinkSkill implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         int sourceSkill = iPacket.DecodeInt();
         int linkSkill = 0;

@@ -10,8 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
-import client.MapleClient;
-import client.MapleClient.MapleClientLoginState;
+import client.Client;
+import client.Client.MapleClientLoginState;
 import constants.WorldConstants.WorldOption;
 import handling.world.CharacterTransfer;
 import handling.world.World;
@@ -31,7 +31,7 @@ import tools.packet.FarmPacket;
  */
 public class FarmOperation {
 
-    public static void EnterFarm(final CharacterTransfer transfer, final MapleClient c) {
+    public static void EnterFarm(final CharacterTransfer transfer, final Client c) {
         if (transfer == null) {
             c.Close();
             return;
@@ -50,8 +50,8 @@ public class FarmOperation {
         boolean allowLogin = false;
 
         switch (state) {
-            case LOGIN_SERVER_TRANSITION:
-            case CHANGE_CHANNEL:
+            case Login_ServerTransition:
+            case ChangeChannel:
                 if (!World.isCharacterListConnected(c.loadCharacterNames(c.getWorld()))) {
                     allowLogin = true;
                 }
@@ -63,7 +63,7 @@ public class FarmOperation {
             c.Close();
             return;
         }
-        c.updateLoginState(MapleClientLoginState.LOGIN_LOGGEDIN, c.getSessionIPAddress());
+        c.updateLoginState(MapleClientLoginState.Login_LoggedIn, c.getSessionIPAddress());
 
         FarmServer.getPlayerStorage().registerPlayer(chr);
 
@@ -96,10 +96,10 @@ public class FarmOperation {
         }
     }
 
-    public static void LeaveFarm(final InPacket iPacket, final MapleClient c, final User chr) {
+    public static void LeaveFarm(final InPacket iPacket, final Client c, final User chr) {
         FarmServer.getPlayerStorage().deregisterPlayer(chr);
 
-        c.updateLoginState(MapleClientLoginState.LOGIN_SERVER_TRANSITION, c.getSessionIPAddress());
+        c.updateLoginState(MapleClientLoginState.Login_ServerTransition, c.getSessionIPAddress());
 
         try {
             World.changeChannelData(new CharacterTransfer(chr), chr.getId(), c.getChannel());

@@ -11,7 +11,7 @@ import net.OutPacket;
 
 /**
  *
- * @author Mazen
+ * @author Mazen Massoud
  */
 public class StopForceAtom {
     private int idx;

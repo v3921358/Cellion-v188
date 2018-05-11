@@ -2,8 +2,8 @@ package handling.cashshop;
 
 import java.util.ArrayList;
 
-import client.MapleClient;
-import client.MapleClient.MapleClientLoginState;
+import client.Client;
+import client.Client.MapleClientLoginState;
 import client.buddy.Buddy;
 import client.buddy.BuddyResult;
 import client.inventory.Item;
@@ -24,9 +24,9 @@ import tools.packet.CWvsContext;
 
 public class CashShopOperation {
 
-    public static void LeaveCS(final MapleClient c, final User chr) {
+    public static void LeaveCS(final Client c, final User chr) {
         CashShopServer.getPlayerStorage().deregisterPlayer(chr);
-        c.updateLoginState(MapleClient.MapleClientLoginState.LOGIN_SERVER_TRANSITION, c.getSessionIPAddress());
+        c.updateLoginState(Client.MapleClientLoginState.Login_ServerTransition, c.getSessionIPAddress());
         try {
             World.changeChannelData(new CharacterTransfer(chr), chr.getId(), c.getChannel());
         } catch (Exception ex) {
@@ -39,7 +39,7 @@ public class CashShopOperation {
         }
     }
 
-    public static void EnterCS(final CharacterTransfer transfer, final MapleClient c) {
+    public static void EnterCS(final CharacterTransfer transfer, final Client c) {
         if (transfer == null) {
             c.Close();
             return;
@@ -58,8 +58,8 @@ public class CashShopOperation {
         boolean allowLogin = false;
 
         switch (state) {
-            case LOGIN_SERVER_TRANSITION:
-            case CHANGE_CHANNEL:
+            case Login_ServerTransition:
+            case ChangeChannel:
                 if (!World.isCharacterListConnected(c.loadCharacterNames(c.getWorld()))) {
                     allowLogin = true;
                 }
@@ -78,7 +78,7 @@ public class CashShopOperation {
             c.getPlayer().modifyCSPoints(1, -c.getPlayer().getCSPoints(1));
         }
 
-        c.updateLoginState(MapleClientLoginState.LOGIN_LOGGEDIN, c.getSessionIPAddress());
+        c.updateLoginState(MapleClientLoginState.Login_LoggedIn, c.getSessionIPAddress());
         CashShopServer.getPlayerStorage().registerPlayer(chr);
         c.SendPacket(CSPacket.warpCS(c));
         c.SendPacket(CSPacket.loadCategories());
@@ -111,7 +111,7 @@ public class CashShopOperation {
         }
     }
 
-    public static void playerCashShopInfo(MapleClient c) {
+    public static void playerCashShopInfo(Client c) {
         c.SendPacket(CSPacket.getCSInventory(c));
         c.SendPacket(CSPacket.doCSMagic());
         c.SendPacket(CSPacket.getCSGifts(c));

@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import scripting.NPCConversationManager;
 import scripting.provider.NPCChatType;
 import scripting.provider.NPCScriptManager;
@@ -15,15 +15,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class NPCMoreTalkHandler implements ProcessPacket<MapleClient> {
+public class NPCMoreTalkHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final NPCChatType lastMsgType = NPCChatType.fromInt(iPacket.DecodeByte()); // 00 (last msg type I think)
         if (lastMsgType == NPCChatType.OnAskAvater && iPacket.GetRemainder() >= 4) {
             iPacket.DecodeShort();

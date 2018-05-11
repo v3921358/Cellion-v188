@@ -32,15 +32,15 @@ import java.util.ArrayList;
 import java.util.List;
 import service.RecvPacketOpcode;
 
-public final class RangedAttack implements ProcessPacket<MapleClient> {
+public final class RangedAttack implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User pPlayer = c.getPlayer();
         if (pPlayer == null || pPlayer.hasBlockedInventory() || pPlayer.getMap() == null) {
             return;

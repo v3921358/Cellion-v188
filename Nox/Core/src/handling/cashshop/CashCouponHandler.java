@@ -22,7 +22,7 @@
 package handling.cashshop;
 
 import client.MapleCharacterUtil;
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import static handling.cashshop.CashShopOperation.playerCashShopInfo;
 import java.sql.SQLException;
@@ -39,24 +39,24 @@ import tools.LogHelper;
  *
  * @author Novak
  */
-public final class CashCouponHandler implements ProcessPacket<MapleClient> {
+public final class CashCouponHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
-    private static boolean CouponCodeAttempt(final MapleClient c) {
+    private static boolean CouponCodeAttempt(final Client c) {
         c.couponAttempt++;
         return c.couponAttempt > 5;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         useCoupon(iPacket, c);
     }
 
-    public static void useCoupon(InPacket iPacket, MapleClient c) {
+    public static void useCoupon(InPacket iPacket, Client c) {
         iPacket.Skip(2);
         String code = iPacket.DecodeString();
 

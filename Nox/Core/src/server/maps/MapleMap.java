@@ -1,7 +1,7 @@
 package server.maps;
 
 import client.CharacterTemporaryStat;
-import client.MapleClient;
+import client.Client;
 import client.QuestStatus.QuestState;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
@@ -69,7 +69,7 @@ public final class MapleMap {
      * The MapObjectType Maps themselves do not need to synchronized in any way since they should never be modified.
     
      */
-    protected MapleClient c;
+    protected Client c;
     private final Map<MapleMapObjectType, LinkedHashMap<Integer, MapleMapObject>> mapobjects;
     private final Map<MapleMapObjectType, ReentrantReadWriteLock> mapobjectlocks;
     private final List<User> characters = new ArrayList<>();
@@ -138,7 +138,7 @@ public final class MapleMap {
         eliteBoss_KillCount = new AtomicInteger(0); // for every 1,000 kills, increase eliteBossCount by 1
     }
 
-    public final void MapleClient(MapleClient c) {
+    public final void Client(Client c) {
         this.c = c;
     }
 
@@ -1347,7 +1347,7 @@ public final class MapleMap {
         broadcastMessage(NPCPacket.spawnNPC(npc, true));
     }
 
-    public void spawnNpcForPlayer(MapleClient c, final int id, final Point pos) {
+    public void spawnNpcForPlayer(Client c, final int id, final Point pos) {
         final MapleNPC npc = MapleLifeFactory.getNPC(id);
         npc.setPosition(pos);
         npc.setCy(pos.y);
@@ -1360,7 +1360,7 @@ public final class MapleMap {
     }
 
     public void spawnNpcOnMapLoad(MapleNPC life) {
-        spawnAndAddRangedMapObject(life, (MapleClient c1) -> {
+        spawnAndAddRangedMapObject(life, (Client c1) -> {
             life.sendSpawnData(c1);
         });
     }
@@ -1394,7 +1394,7 @@ public final class MapleMap {
         broadcastMessage(NPCPacket.spawnNPC(npc, true));
     }
 
-    public void spawnNpcForPlayer(MapleClient c, final int id, final Point pos) {
+    public void spawnNpcForPlayer(Client c, final int id, final Point pos) {
         final MapleNPC npc = MapleLifeFactory.getNPC(id);
         npc.setPosition(pos);
         npc.setCy(pos.y);
@@ -1406,7 +1406,7 @@ public final class MapleMap {
     }
 
     public void spawnNpcOnMapLoad(MapleNPC life) {
-        spawnAndAddRangedMapObject(life, (MapleClient c1) -> {
+        spawnAndAddRangedMapObject(life, (Client c1) -> {
             life.sendSpawnData(c1);
         });
     }
@@ -1443,7 +1443,7 @@ public final class MapleMap {
         }
     }
 
-    public final void hideNpc(MapleClient c, final int npcid) {
+    public final void hideNpc(Client c, final int npcid) {
         mapobjectlocks.get(MapleMapObjectType.NPC).readLock().lock();
         try {
             Iterator<MapleMapObject> itr = mapobjects.get(MapleMapObjectType.NPC).values().iterator();
@@ -1486,7 +1486,7 @@ public final class MapleMap {
     public void spawnClockMist(final MapleMist clock) {
         spawnAndAddRangedMapObject(clock, new DelayedPacketCreation() {
             @Override
-            public void sendPackets(MapleClient c) {
+            public void sendPackets(Client c) {
                 c.SendPacket(CField.spawnClockMist(clock));
             }
         });
@@ -1616,7 +1616,7 @@ public final class MapleMap {
         monster.setLinkOid(oid);
         spawnAndAddRangedMapObject(monster, new DelayedPacketCreation() {
             @Override
-            public final void sendPackets(MapleClient c) {
+            public final void sendPackets(Client c) {
                 if (GameConstants.isAzwanMap(c.getPlayer().getMapId())) {
                     c.SendPacket(MobPacket.spawnMonster(monster, monster.getStats().getSummonType() <= 1 ? -3 : monster.getStats().getSummonType(), oid, true)); // TODO effect
                 } else {
@@ -1639,7 +1639,7 @@ public final class MapleMap {
 
      spawnAndAddRangedMapObject(monster, new DelayedPacketCreation() {
 
-     public final void sendPackets(MapleClient c) {
+     public final void sendPackets(Client c) {
      c.write(MobPacket.spawnMonster(monster, monster.getStats().getSummonType() <= 1 || monster.getStats().getSummonType() == 27 || overwrite ? spawnType : monster.getStats().getSummonType(), 0));
      }
      });
@@ -1657,7 +1657,7 @@ public final class MapleMap {
         return getLevel();
     }*/
     public final void spawnMonster(final Mob monster, final int spawnType, final boolean overwrite, final User chr) {
-        //  MapleClient c;
+        //  Client c;
         //  MapleCharacter chr = (MapleCharacter);
         if (this.getId() == 109010100 && monster.getId() != 9300166) {
             return;
@@ -1689,7 +1689,7 @@ public final class MapleMap {
          }*/
         spawnAndAddRangedMapObject(monster, new DelayedPacketCreation() {
             @Override
-            public final void sendPackets(MapleClient c) {
+            public final void sendPackets(Client c) {
                 if (GameConstants.isAzwanMap(c.getPlayer().getMapId())) {
                     c.SendPacket(MobPacket.spawnMonster(monster, monster.getStats().getSummonType() <= 1 || monster.getStats().getSummonType() == 27 || overwrite ? spawnType : monster.getStats().getSummonType(), 0, true));
                 } else if (GameConstants.isChangeable(monster.getId())) {
@@ -1711,7 +1711,7 @@ public final class MapleMap {
 
             spawnAndAddRangedMapObject(monster, new DelayedPacketCreation() {
                 @Override
-                public final void sendPackets(MapleClient c) {
+                public final void sendPackets(Client c) {
                     if (GameConstants.isAzwanMap(c.getPlayer().getMapId())) {
                         c.SendPacket(MobPacket.spawnMonster(monster, effect, 0, true));
                     } else {
@@ -1734,7 +1734,7 @@ public final class MapleMap {
 
         spawnAndAddRangedMapObject(monster, new DelayedPacketCreation() {
             @Override
-            public final void sendPackets(MapleClient c) {
+            public final void sendPackets(Client c) {
                 if (GameConstants.isAzwanMap(c.getPlayer().getMapId())) {
                     c.SendPacket(MobPacket.spawnMonster(monster, -4, 0, true));
                 } else {
@@ -1768,7 +1768,7 @@ public final class MapleMap {
 
         spawnAndAddRangedMapObject(reactor, new DelayedPacketCreation() {
             @Override
-            public final void sendPackets(MapleClient c) {
+            public final void sendPackets(Client c) {
                 c.SendPacket(CField.spawnReactor(reactor));
             }
         });
@@ -1783,7 +1783,7 @@ public final class MapleMap {
     public final void spawnDoor(final MapleDoor door) {
         spawnAndAddRangedMapObject(door, new DelayedPacketCreation() {
             @Override
-            public final void sendPackets(MapleClient c) {
+            public final void sendPackets(Client c) {
                 door.sendSpawnData(c);
                 c.SendPacket(CWvsContext.enableActions());
             }
@@ -1793,7 +1793,7 @@ public final class MapleMap {
     public final void spawnMechDoor(final MechDoor door) {
         spawnAndAddRangedMapObject(door, new DelayedPacketCreation() {
             @Override
-            public final void sendPackets(MapleClient c) {
+            public final void sendPackets(Client c) {
                 c.SendPacket(CField.spawnMechDoor(door, true));
                 c.SendPacket(CWvsContext.enableActions());
             }
@@ -1804,7 +1804,7 @@ public final class MapleMap {
         summon.updateMap(this);
         spawnAndAddRangedMapObject(summon, new DelayedPacketCreation() {
             @Override
-            public void sendPackets(MapleClient c) {
+            public void sendPackets(Client c) {
                 if (summon != null && c.getPlayer() != null && (!summon.isChangedMap() || summon.getOwnerId() == c.getPlayer().getId())) {
                     c.SendPacket(SummonPacket.spawnSummon(summon, true));
                 }
@@ -1813,7 +1813,7 @@ public final class MapleMap {
     }
 
     public final void spawnFamiliar(final MonsterFamiliar familiar, final boolean respawn) {
-        spawnAndAddRangedMapObject(familiar, (MapleClient c1) -> {
+        spawnAndAddRangedMapObject(familiar, (Client c1) -> {
             if (familiar != null && c1.getPlayer() != null) {
                 c1.SendPacket(CField.spawnFamiliar(familiar, true, respawn));
             }
@@ -1821,7 +1821,7 @@ public final class MapleMap {
     }
 
     public final void spawnExtractor(final MapleExtractor ex) {
-        spawnAndAddRangedMapObject(ex, (MapleClient c1) -> {
+        spawnAndAddRangedMapObject(ex, (Client c1) -> {
             ex.sendSpawnData(c1);
         });
     }
@@ -1829,13 +1829,13 @@ public final class MapleMap {
     public final void spawnMapleKite(int ItemID, String PlayerName, MapleMap Map, String Message, byte KiteType, Point position) {
         final MapleKite kite = new MapleKite(ItemID, this.getId(), PlayerName, this, Message, KiteType, position);
 
-        spawnAndAddRangedMapObject(kite, (MapleClient c1) -> {
+        spawnAndAddRangedMapObject(kite, (Client c1) -> {
             kite.sendSpawnData(c1);
         });
     }
 
     public final void spawnMist(final MapleMist mist, final int duration, boolean fake) {
-        spawnAndAddRangedMapObject(mist, (MapleClient c1) -> {
+        spawnAndAddRangedMapObject(mist, (Client c1) -> {
             mist.sendSpawnData(c1);
         });
 
@@ -1926,7 +1926,7 @@ public final class MapleMap {
                 mdrop.setProperties(MapleMapItemProperties.IsPickpocketDrop);
             }
         }
-        spawnAndAddRangedMapObject(mdrop, (MapleClient c1) -> {
+        spawnAndAddRangedMapObject(mdrop, (Client c1) -> {
             c1.SendPacket(CField.dropItemFromMapObject(mdrop, dropper.getTruePosition(), droppos, (byte) 1));
         });
         if (!smr.everlast) {
@@ -1959,7 +1959,7 @@ public final class MapleMap {
         // if mob is elite boss
         // mdrop.setProperties(MapleMapItemProperties.IsEliteBossDrop);
 
-        spawnAndAddRangedMapObject(mdrop, (MapleClient c1) -> {
+        spawnAndAddRangedMapObject(mdrop, (Client c1) -> {
             if (c1 != null && c1.getPlayer() != null && (questid <= 0 || c1.getPlayer().getQuestStatus(questid) == QuestState.Started) && (idrop.getItemId() / 10000 != 238 || c1.getPlayer().getMonsterBook().getLevelByCard(idrop.getItemId()) >= 2) && mob != null && dropPos != null) {
                 c1.SendPacket(CField.dropItemFromMapObject(mdrop, mob, mob.getTruePosition(), dropPos, (byte) 1));
             }
@@ -1999,7 +1999,7 @@ public final class MapleMap {
             drop.setProperties(MapleMapItemProperties.IsCollisionPickUp);
         }
 
-        spawnAndAddRangedMapObject(drop, (MapleClient c1) -> {
+        spawnAndAddRangedMapObject(drop, (Client c1) -> {
             if ((showToOwnerOnly && owner != null && owner.getId() == c1.getPlayer().getId())
                     || !showToOwnerOnly) {
                 c1.SendPacket(CField.dropItemFromMapObject(drop, dropper.getTruePosition(), droppos, (byte) 1));
@@ -2059,7 +2059,7 @@ public final class MapleMap {
         idrop.setGMLog("Dropped from auto " + " on " + smr.mapid);
 
         final MapleMapItem mdrop = new MapleMapItem(pos, idrop);
-        spawnAndAddRangedMapObject(mdrop, (MapleClient c1) -> {
+        spawnAndAddRangedMapObject(mdrop, (Client c1) -> {
             c1.SendPacket(CField.dropItemFromMapObject(mdrop, pos, pos, (byte) 1));
         });
         broadcastMessage(CField.dropItemFromMapObject(mdrop, pos, pos, (byte) 0));
@@ -2068,7 +2068,7 @@ public final class MapleMap {
         }
     }
 
-    private void activateItemReactors(final MapleMapItem drop, final MapleClient c) {
+    private void activateItemReactors(final MapleMapItem drop, final Client c) {
         final Item item = drop.getItem();
 
         mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().lock();
@@ -3028,9 +3028,9 @@ public final class MapleMap {
 
         private final MapleMapItem mapitem;
         private final MapleReactor reactor;
-        private final MapleClient c;
+        private final Client c;
 
-        public ActivateItemReactor(MapleMapItem mapitem, MapleReactor reactor, MapleClient c) {
+        public ActivateItemReactor(MapleMapItem mapitem, MapleReactor reactor, Client c) {
             this.mapitem = mapitem;
             this.reactor = reactor;
             this.c = c;
@@ -3059,7 +3059,7 @@ public final class MapleMap {
 
     private static interface DelayedPacketCreation {
 
-        void sendPackets(MapleClient c);
+        void sendPackets(Client c);
     }
 
     public String getSnowballPortal() {
@@ -3478,7 +3478,7 @@ public final class MapleMap {
         }
         this.rune = m;
 
-        spawnAndAddRangedMapObject(m, (MapleClient c1) -> {
+        spawnAndAddRangedMapObject(m, (Client c1) -> {
             c1.SendPacket(CField.RunePacket.spawnRune(rune));
         });
     }
@@ -4207,7 +4207,7 @@ public final class MapleMap {
         return false;
     }
 
-    public final void resetShammos(final MapleClient c) {
+    public final void resetShammos(final Client c) {
         killAllMonsters(true);
         broadcastMessage(CWvsContext.broadcastMsg(5, "A player has moved too far from Shammos. Shammos is going back to the start."));
         EtcTimer.getInstance().schedule(new Runnable() {

@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import java.util.List;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
@@ -16,17 +16,17 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseOwlWarpHandler implements ProcessPacket<MapleClient> {
+public class UseOwlWarpHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     public static final int OWL_ID = 2; //don't change. 0 = owner ID, 1 = store ID, 2 = object ID
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         if (!c.getPlayer().isAlive()) {
             c.SendPacket(CWvsContext.getOwlMessage(4));
             return;

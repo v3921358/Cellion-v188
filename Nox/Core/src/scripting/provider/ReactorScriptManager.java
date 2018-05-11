@@ -33,7 +33,7 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
-import client.MapleClient;
+import client.Client;
 import database.Database;
 import scripting.ReactorActionManager;
 import server.maps.ReactorDropEntry;
@@ -49,7 +49,7 @@ public class ReactorScriptManager extends AbstractScriptManager {
         return instance;
     }
 
-    public final void act(final MapleClient c, final MapleReactor reactor) {
+    public final void act(final Client c, final MapleReactor reactor) {
         try {
             final Invocable iv = getInvocable("reactor/" + reactor.getReactorId() + ".js", true, ScriptType.Reactor);
 

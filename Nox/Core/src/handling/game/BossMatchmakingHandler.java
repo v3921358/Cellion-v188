@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import handling.world.MaplePartyCharacter;
 import net.InPacket;
 import net.ProcessPacket;
@@ -19,10 +19,10 @@ import tools.packet.CWvsContext;
  *
  * @author Mazen Massoud
  */
-public class BossMatchmakingHandler implements ProcessPacket<MapleClient> {
+public class BossMatchmakingHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
@@ -91,7 +91,7 @@ public class BossMatchmakingHandler implements ProcessPacket<MapleClient> {
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User pPlayer = c.getPlayer();
         pPlayer.updateTick(iPacket.DecodeInt());
         int nBossType = iPacket.DecodeInt();

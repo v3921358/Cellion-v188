@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.MapleSpecialStats;
 import client.MapleSpecialStats.MapleHyperStats;
 import client.Skill;
@@ -15,17 +15,17 @@ import net.ProcessPacket;
  *
  * @author Lloyd Korn
  */
-public class ResetHyperStatHandler implements ProcessPacket<MapleClient> {
+public class ResetHyperStatHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     private static final int RESET_HYPER_STAT_COST = 10_000_000;
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
         if (chr == null) {
             return;

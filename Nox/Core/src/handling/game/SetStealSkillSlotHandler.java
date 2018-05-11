@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import constants.GameConstants;
 import net.InPacket;
 import tools.packet.CWvsContext;
@@ -10,15 +10,15 @@ import net.ProcessPacket;
  *
  * @author Five
  */
-public class SetStealSkillSlotHandler implements ProcessPacket<MapleClient> {
+public class SetStealSkillSlotHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int nSlotSkillID = iPacket.DecodeInt();
         int nStealSkillID = iPacket.DecodeInt();
         boolean bSet = false;

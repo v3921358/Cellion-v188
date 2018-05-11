@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import handling.world.World;
@@ -25,10 +25,10 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class GuildOperationHandler implements ProcessPacket<MapleClient> {
+public class GuildOperationHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
@@ -65,7 +65,7 @@ public class GuildOperationHandler implements ProcessPacket<MapleClient> {
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final long currentTime = System.currentTimeMillis();
         if (currentTime >= nextPruneTime) {
             Iterator<Map.Entry<String, Pair<Integer, Long>>> itr = invited.entrySet().iterator();

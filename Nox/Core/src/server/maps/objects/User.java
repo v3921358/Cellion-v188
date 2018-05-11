@@ -153,7 +153,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private BuddyList buddylist;
     private MonsterBook monsterbook;
     private transient CheatTracker anticheat;
-    private MapleClient client;
+    private Client client;
     private transient MapleParty party;
     private PlayerStats stats;
     private final MapleCharacterCards characterCard;
@@ -267,7 +267,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public boolean bUnmount;
     
     public void setUnmountState(boolean bValue) {
-        if (isDeveloper()) dropMessage(5, "[Debug] Unmount State : " + bUnmount);
         bUnmount = bValue;
         if (isDeveloper()) dropMessage(5, "[Debug] Unmount State : " + bUnmount);
     }
@@ -564,7 +563,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    public static User getDefault(final MapleClient client, final JobType type) {
+    public static User getDefault(final Client client, final JobType type) {
         User ret = new User(false);
         ret.client = client;
         ret.map = null;
@@ -623,7 +622,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return ret;
     }
 
-    public static User reconstructCharacter(final CharacterTransfer ct, final MapleClient client, final boolean isChannel) {
+    public static User reconstructCharacter(final CharacterTransfer ct, final Client client, final boolean isChannel) {
         final User ret = new User(true); // Always true, it's change channel
         ret.client = client;
         if (!isChannel) {
@@ -822,11 +821,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return ret;
     }
 
-    public static User loadCharFromDB(int charid, MapleClient client, boolean channelserver) {
+    public static User loadCharFromDB(int charid, Client client, boolean channelserver) {
         return loadCharFromDB(charid, client, channelserver, null);
     }
 
-    public static User loadCharFromDB(int charid, MapleClient client, boolean channelserver, final Map<Integer, CardData> cads) {
+    public static User loadCharFromDB(int charid, Client client, boolean channelserver, final Map<Integer, CardData> cads) {
         final User ret = new User(channelserver);
         ret.client = client;
         ret.id = charid;
@@ -3415,11 +3414,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return fallcounter;
     }
 
-    public final MapleClient getClient() {
+    public final Client getClient() {
         return client;
     }
 
-    public final void setClient(final MapleClient client) {
+    public final void setClient(final Client client) {
         this.client = client;
     }
 
@@ -5310,12 +5309,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         // Handle Resolution Time (Skill Level Up)
         if (GameConstants.isZero(job)) {
             switch (level) {
-                case 101:
-                    //for (int i = 40000; i <= 40055; i++) {
-                    QuestStatus pZeroTutorial = getQuestNoAdd(Quest.getInstance(40054));
-                    pZeroTutorial.setCompletionTime(System.currentTimeMillis());
-                    pZeroTutorial.getQuest().complete(this, 0);
-                //}
                 case 120:
                     changeSkillLevel(SkillFactory.getSkill(Zero.RESOLUTION_TIME), (byte) 1, (byte) 5);
                     break;
@@ -5344,7 +5337,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         statup.put(MapleStat.AVAILABLESP, (long) remainingSp[GameConstants.getSkillBook(job, level)]);
 
         // Packet + stats updates
-        //     client.write(CField.getAndroidTalkStyle(2008, "Yay", 2));
+        // client.write(CField.getAndroidTalkStyle(2008, "Yay", 2));
         stats.setInfo(maxhp, maxmp, localhp, localmp);
         client.SendPacket(CWvsContext.updatePlayerStats(statup, this));
         //map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), UserEffectCodes.LevelUp), true); // lol this is buggy.
@@ -5375,9 +5368,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         //checkCustomReward(level);
     }
 
-    /*
+    /**
      *  Hyper Skill Distribution Hander
-     *  @author Mazen
+     *  @author Mazen Massoud
      *  @author Arca
      *
      *  @purpose Gives the player hyper skills if they have reached the required levels for each skill.
@@ -5410,6 +5403,10 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         changeSkillsLevel(skillMap);
     }
 
+    /**
+     * Update Buddy List
+     * @purpose Update all Buddy List information to load online friends.
+     */
     public void OnlineBuddyListRequest() {
         World.WorldBuddy.loggedOn(getName(), getId(), getChannel(getId()), getBuddylist().getBuddyIds());
 
@@ -6143,7 +6140,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     /*
      *  Inventory Sort/Consolidate Items
-     *  @author Mazen
+     *  @author Mazen Massoud
      *
      *  @purpose Sort the characters inventory to fully reload items, this can be used to fix issues related to items not showing up.
      *  @method Emulate the functions that occur when a player sorts their inventory, this includes both sortInventory and sortItems functions.
@@ -6439,7 +6436,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                                     if (rsa.getString("macs") != null) {
                                         String[] macData = rsa.getString("macs").split(", ");
                                         if (macData.length > 0) {
-                                            MapleClient.banMacs(macData);
+                                            Client.banMacs(macData);
                                         }
                                     }
                                 }
@@ -6531,7 +6528,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         client.SendPacket(CField.removePlayerFromMap(this.getObjectId()));
         for (final WeakReference<User> chr : clones) {
             if (chr.get() != null) {
@@ -6554,7 +6551,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         if (client.getPlayer().allowedToTarget(this)) {
             //if (client.getPlayer() != this)
             client.SendPacket(CField.spawnPlayerMapObject(this));
@@ -8564,7 +8561,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         World.changeChannelData(new CharacterTransfer(this), getId(), channel);
         ch.removePlayer(this);
         String s = client.getSessionIPAddress();
-        client.updateLoginState(MapleClient.MapleClientLoginState.CHANGE_CHANNEL, s);
+        client.updateLoginState(Client.MapleClientLoginState.ChangeChannel, s);
         LoginServer.addIPAuth(s.substring(s.indexOf('/') + 1, s.length()));
         client.SendPacket(CField.getChannelChange(client, Integer.parseInt(toch.getIP().split(":")[1])));
         saveToDB(false, false);
@@ -8586,7 +8583,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
         World.changeChannelData(new CharacterTransfer(this), getId(), channel);
         ch.removePlayer(this);
-        client.updateLoginState(MapleClient.MapleClientLoginState.CHANGE_CHANNEL, client.getSessionIPAddress());
+        client.updateLoginState(Client.MapleClientLoginState.ChangeChannel, client.getSessionIPAddress());
 
         final String s = client.getSessionIPAddress();
         LoginServer.addIPAuth(s.substring(s.indexOf('/') + 1, s.length()));
@@ -11623,7 +11620,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     /**
      * Kinesis: Psychic Point Handlers
      *
-     * @author Mazen
+     * @author Mazen Massoud
      *
      * @purpose Handle gaining Psychic Points.
      */
@@ -11704,7 +11701,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     /**
      * Night Walker: Shadow Bat Spawn Handler
      *
-     * @author Mazen
+     * @author Mazen Massoud
      *
      * @purpose Spawn up to two Shadow Bats, one bat is spawned after getting a combo of three.
      * @method Handled Shadow Bat as a passive rather than toggle, used kaiserCombo variable to keep track of combo.
@@ -11742,7 +11739,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     /**
      * Night Walker: Dark Elemental Handler
      *
-     * @author Mazen
+     * @author Mazen Massoud
      *
      * @purpose Handle Mark of Darkness provided from Dark Elemental.
      * @method
@@ -11780,7 +11777,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     /**
      * Amaranth Generator Simulator
      *
-     * @author Mazen
+     * @author Mazen Massoud
      *
      * @purpose Imitate the Generator Hyper Skill's effect.
      * @method Sets Xenon's Surplus to 20 every second, for 10 seconds.
@@ -11809,7 +11806,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     /**
      * Fighter: Combo Attack
      *
-     * @author Mazen
+     * @author Mazen Massoud
      *
      * @purpose Handle Combo Attack ability.
      * @method Uses the kaiserCombo variable (again) to apply the combo buff to the player.
@@ -12431,7 +12428,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public User cloneLooks() {
-        MapleClient cloneclient = client; //needs to create a new MapleClient for this to work properly. Can't figure that out yet.
+        Client cloneclient = client; //needs to create a new Client for this to work properly. Can't figure that out yet.
 
         final int minus = (getId() + Randomizer.nextInt(Integer.MAX_VALUE - getId())); // really randomize it, dont want it to fail
 

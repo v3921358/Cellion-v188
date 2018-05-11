@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.MapleSpecialStats.MapleHyperStats;
 import client.MapleSpecialStats.MapleSpecialStatUpdateType;
 import constants.ServerConstants;
@@ -14,15 +14,15 @@ import net.ProcessPacket;
  *
  * @author Lloyd Korn (LaiLaiNoob/LightPepsi is a faggot)
  */
-public class UpdateHyperStatHandler implements ProcessPacket<MapleClient> {
+public class UpdateHyperStatHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         String statStr = iPacket.DecodeString();
         int requestType = iPacket.DecodeInt();
         int requestValue = iPacket.DecodeInt();

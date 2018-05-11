@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import client.CharacterTemporaryStat;
-import client.MapleClient;
+import client.Client;
 import client.QuestStatus;
 import client.MapleTrait.MapleTraitType;
 import client.PlayerStats;
@@ -61,11 +61,11 @@ public class MapleInventoryManipulator {
         chr.getClient().SendPacket(CSPacket.sendBoughtRings(GameConstants.isCrushRing(itemId), ring, sn, chr.getClient().getAccID(), partner));
     }
 
-    public static boolean addbyItem(final MapleClient c, final Item item) {
+    public static boolean addbyItem(final Client c, final Item item) {
         return addbyItem(c, item, false) >= 0;
     }
 
-    public static short addbyItem(final MapleClient c, final Item item, final boolean fromcs) {
+    public static short addbyItem(final Client c, final Item item, final boolean fromcs) {
         final MapleInventoryType type = GameConstants.getInventoryType(item.getItemId());
         final short newSlot = c.getPlayer().getInventory(type).addItem(item);
         if (newSlot == -1) {
@@ -100,27 +100,27 @@ public class MapleInventoryManipulator {
         return uniqueid;
     }
 
-    public static boolean addById(MapleClient c, int itemId, short quantity, String gmLog) {
+    public static boolean addById(Client c, int itemId, short quantity, String gmLog) {
         return addById(c, itemId, quantity, null, null, 0, false, gmLog);
     }
 
-    public static boolean addById(MapleClient c, int itemId, short quantity, String owner, String gmLog) {
+    public static boolean addById(Client c, int itemId, short quantity, String owner, String gmLog) {
         return addById(c, itemId, quantity, owner, null, 0, false, gmLog);
     }
 
-    public static byte addId(MapleClient c, int itemId, short quantity, String owner, String gmLog) {
+    public static byte addId(Client c, int itemId, short quantity, String owner, String gmLog) {
         return addId(c, itemId, quantity, owner, null, 0, false, gmLog);
     }
 
-    public static boolean addById(MapleClient c, int itemId, short quantity, String owner, Pet pet, String gmLog) {
+    public static boolean addById(Client c, int itemId, short quantity, String owner, Pet pet, String gmLog) {
         return addById(c, itemId, quantity, owner, pet, 0, false, gmLog);
     }
 
-    public static boolean addById(MapleClient c, int itemId, short quantity, String owner, Pet pet, long period, boolean hours, String gmLog) {
+    public static boolean addById(Client c, int itemId, short quantity, String owner, Pet pet, long period, boolean hours, String gmLog) {
         return addId(c, itemId, quantity, owner, pet, period, hours, gmLog) >= 0;
     }
 
-    public static byte addId(MapleClient c, int itemId, short quantity, String owner, Pet pet, long period, boolean hours, String gmLog) {
+    public static byte addId(Client c, int itemId, short quantity, String owner, Pet pet, long period, boolean hours, String gmLog) {
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if (ii.isPickupRestricted(itemId) && c.getPlayer().haveItem(itemId, 1, true, false) || !ii.itemExists(itemId)) {
             c.SendPacket(CWvsContext.inventoryOperation(true, new ArrayList<ModifyInventory>()));
@@ -232,7 +232,7 @@ public class MapleInventoryManipulator {
         return (byte) newSlot;
     }
 
-    public static Item addbyIdGachapon(final MapleClient c, final int itemId, short quantity) {
+    public static Item addbyIdGachapon(final Client c, final int itemId, short quantity) {
         if (c.getPlayer().getInventory(MapleInventoryType.EQUIP).getNextFreeSlot() == -1 || c.getPlayer().getInventory(MapleInventoryType.USE).getNextFreeSlot() == -1 || c.getPlayer().getInventory(MapleInventoryType.ETC).getNextFreeSlot() == -1 || c.getPlayer().getInventory(MapleInventoryType.SETUP).getNextFreeSlot() == -1) {
             return null;
         }
@@ -343,7 +343,7 @@ public class MapleInventoryManipulator {
      * @param show
      * @return
      */
-    public static boolean addFromDrop(MapleClient c, final Item item, boolean show) {
+    public static boolean addFromDrop(Client c, final Item item, boolean show) {
         return addFromDrop(c, item, show, null);
     }
 
@@ -356,7 +356,7 @@ public class MapleInventoryManipulator {
      * @param mItem
      * @return
      */
-    public static boolean addFromDrop(MapleClient c, Item item, boolean show, MapleMapItem mItem) {
+    public static boolean addFromDrop(Client c, Item item, boolean show, MapleMapItem mItem) {
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
 
         if (c.getPlayer() == null || (ii.isPickupRestricted(item.getItemId()) && c.getPlayer().haveItem(item.getItemId(), 1, true, false)) || (!ii.itemExists(item.getItemId()))) {
@@ -461,7 +461,7 @@ public class MapleInventoryManipulator {
         return true;
     }
 
-    public static boolean checkSpace(final MapleClient c, final int itemid, int quantity, final String owner) {
+    public static boolean checkSpace(final Client c, final int itemid, int quantity, final String owner) {
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if (c == null || c.getPlayer() == null || (ii.isPickupRestricted(itemid) && c.getPlayer().haveItem(itemid, 1, true, false)) || (!ii.itemExists(itemid))) {
             c.SendPacket(CWvsContext.enableActions());
@@ -504,11 +504,11 @@ public class MapleInventoryManipulator {
         }
     }
 
-    public static boolean removeFromSlot(final MapleClient c, final MapleInventoryType type, final short slot, final short quantity, final boolean fromDrop) {
+    public static boolean removeFromSlot(final Client c, final MapleInventoryType type, final short slot, final short quantity, final boolean fromDrop) {
         return removeFromSlot(c, type, slot, quantity, fromDrop, false);
     }
 
-    public static boolean removeFromSlot(final MapleClient c, final MapleInventoryType type, final short slot, short quantity, final boolean fromDrop, final boolean consume) {
+    public static boolean removeFromSlot(final Client c, final MapleInventoryType type, final short slot, short quantity, final boolean fromDrop, final boolean consume) {
         if (c.getPlayer() == null || c.getPlayer().getInventory(type) == null) {
             return false;
         }
@@ -533,7 +533,7 @@ public class MapleInventoryManipulator {
         return false;
     }
 
-    public static boolean removeById(final MapleClient c, final MapleInventoryType type, final int itemId, final int quantity, final boolean fromDrop, final boolean consume) {
+    public static boolean removeById(final Client c, final MapleInventoryType type, final int itemId, final int quantity, final boolean fromDrop, final boolean consume) {
         int remremove = quantity;
         if (c.getPlayer() == null || c.getPlayer().getInventory(type) == null) {
             return false;
@@ -550,7 +550,7 @@ public class MapleInventoryManipulator {
         return remremove <= 0;
     }
 
-    public static boolean removeFromSlot_Lock(final MapleClient c, final MapleInventoryType type, final short slot, short quantity, final boolean fromDrop, final boolean consume) {
+    public static boolean removeFromSlot_Lock(final Client c, final MapleInventoryType type, final short slot, short quantity, final boolean fromDrop, final boolean consume) {
         if (c.getPlayer() == null || c.getPlayer().getInventory(type) == null) {
             return false;
         }
@@ -564,7 +564,7 @@ public class MapleInventoryManipulator {
         return false;
     }
 
-    public static boolean removeById_Lock(final MapleClient c, final MapleInventoryType type, final int itemId) {
+    public static boolean removeById_Lock(final Client c, final MapleInventoryType type, final int itemId) {
         for (Item item : c.getPlayer().getInventory(type).listById(itemId)) {
             if (removeFromSlot_Lock(c, type, item.getPosition(), (short) 1, false, false)) {
                 return true;
@@ -573,7 +573,7 @@ public class MapleInventoryManipulator {
         return false;
     }
 
-    public static void move(final MapleClient c, final MapleInventoryType type, final short src, final short dst) {
+    public static void move(final Client c, final MapleInventoryType type, final short src, final short dst) {
         if (src == dst) {
             return;
         }
@@ -654,7 +654,7 @@ public class MapleInventoryManipulator {
         c.SendPacket(CWvsContext.inventoryOperation(true, mod));
     }
 
-    public static void equip(final MapleClient c, final short src, short dst) {
+    public static void equip(final Client c, final short src, short dst) {
         final User chr = c.getPlayer();
         if (chr.isDeveloper()) {
             chr.dropMessage(5, "[Equip Debug] Slot Type : " + dst);
@@ -783,7 +783,7 @@ public class MapleInventoryManipulator {
         chr.equipChanged(); // this code also update the character's stats
     }
 
-    public static void unequip(final MapleClient c, short src, short dst) {
+    public static void unequip(final Client c, short src, short dst) {
         Equip source = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem(src);
         Equip target = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(dst);
         if (dst < 0 || src == EquipSlotType.MonsterBook.getSlot()) {
@@ -864,11 +864,11 @@ public class MapleInventoryManipulator {
         }
     }
 
-    public static boolean drop(final MapleClient c, MapleInventoryType type, final short src, final short quantity) {
+    public static boolean drop(final Client c, MapleInventoryType type, final short src, final short quantity) {
         return drop(c, type, src, quantity, false);
     }
 
-    public static boolean drop(final MapleClient c, MapleInventoryType type, final short src, short quantity, final boolean npcInduced) {
+    public static boolean drop(final Client c, MapleInventoryType type, final short src, short quantity, final boolean npcInduced) {
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if (src < 0) {
             type = MapleInventoryType.EQUIPPED;

@@ -1414,7 +1414,7 @@ public class PacketHelper {
         oPacket.EncodeShort(pet.getGiant()); //nGiantRate_CS
     }
 
-    public static void addShopInfo(OutPacket oPacket, MapleShop shop, MapleClient c) {
+    public static void addShopInfo(OutPacket oPacket, MapleShop shop, Client c) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         oPacket.EncodeInt(0);
         oPacket.EncodeInt(shop.getNpcId()); //m_nSelectNpcItemID
@@ -1611,7 +1611,7 @@ public class PacketHelper {
         oPacket.Encode(HexTool.getByteArrayFromHexString("40 47 2F 00 63 6F 75 6E 74 3D 30 3B 64 6F 31 3D 30 3B 64 6F 32 3D 30 3B 64 61 69 6C 79 46 50 3D 30 3B 6C 61 73 74 44 61 74 65 3D 32 30 31 34 30 33 32 39 10 47 06 00 76 61 6C 32 3D 30 B9 46 1B 00 64 3D 32 30 31 34 30 32 31 39 3B 69 3D 31 32 31 31 32 31 30 30 30 30 30 30 30 30 9A 46 1A 00 63 6F 75 6E 74 30 3D 31 3B 63 6F 75 6E 74 31 3D 31 3B 63 6F 75 6E 74 32 3D 31 22 47 17 00 63 6F 6D 70 3D 31 3B 69 3D 32 33 30 30 30 30 30 30 30 30 30 30 30 30 0A 47 03 00 45 3D 31 12 47 40 00 4D 4C 3D 30 3B 4D 4D 3D 30 3B 4D 41 3D 30 3B 4D 42 3D 30 3B 4D 43 3D 30 3B 4D 44 3D 30 3B 4D 45 3D 30 3B 4D 46 3D 30 3B 4D 47 3D 30 3B 4D 48 3D 30 3B 4D 49 3D 30 3B 4D 4A 3D 30 3B 4D 4B 3D 30 FA 46 20 00 63 6F 75 6E 74 3D 35 3B 74 69 6D 65 3D 32 30 31 33 2F 31 32 2F 31 31 20 31 31 3A 35 34 3A 30 30 23 47 09 00 62 41 74 74 65 6E 64 3D 30 B4 46 07 00 63 6F 75 6E 74 3D 30 85 46 17 00 31 3D 30 3B 32 3D 30 3B 33 3D 30 3B 34 3D 30 3B 35 3D 30 3B 36 3D 30 2C 47 07 00 4C 6F 67 69 6E 3D 31 64 47 04 00 41 51 3D 30 B5 46 07 00 63 6F 75 6E 74 3D 30"));
     }
 
-    public static void addFarmInfo(OutPacket oPacket, MapleClient c, int gender) {
+    public static void addFarmInfo(OutPacket oPacket, Client c, int gender) {
         oPacket.EncodeString(c.getFarm().getName());
         oPacket.EncodeInt(c.getFarm().getWaru());
         oPacket.EncodeInt(c.getFarm().getLevel());

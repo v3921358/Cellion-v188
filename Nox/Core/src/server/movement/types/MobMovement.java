@@ -3,7 +3,7 @@ package server.movement.types;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import handling.AbstractMaplePacketHandler;
 import handling.world.MovementParse;
 import java.awt.Point;
@@ -26,17 +26,17 @@ import server.life.MapleMonsterStats;
  * @author Steven
  *
  */
-public class MobMovement implements ProcessPacket<MapleClient> {
+public class MobMovement implements ProcessPacket<Client> {
 
     private static Random rand = new Random();
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return c.isLoggedIn();
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int oid = iPacket.DecodeInt();
         User chr = c.getPlayer();
         if (chr == null) {

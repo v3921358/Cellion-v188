@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.ItemLoader;
 import client.inventory.MapleInventoryType;
@@ -129,7 +129,7 @@ public class PackageHandler {
         }
     }
 
-    public static void reciveMsg(final MapleClient c, final int recipientId) {
+    public static void reciveMsg(final Client c, final int recipientId) {
         try (Connection con = Database.GetConnection()) {
 
             try (PreparedStatement ps = con.prepareStatement("UPDATE dueypackages SET Checked = 0 where RecieverId = ?")) {

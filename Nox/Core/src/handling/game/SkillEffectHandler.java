@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -31,15 +31,15 @@ import tools.packet.CField;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;
 
-public final class SkillEffectHandler implements ProcessPacket<MapleClient> {
+public final class SkillEffectHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         int skillId = iPacket.DecodeInt();
         if (skillId >= 91000000 && skillId < 100000000) {

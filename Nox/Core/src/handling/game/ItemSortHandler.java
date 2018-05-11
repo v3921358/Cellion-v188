@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import server.MapleInventoryManipulator;
@@ -12,15 +12,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class ItemSortHandler implements ProcessPacket<MapleClient> {
+public class ItemSortHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
         final MapleInventoryType pInvType = MapleInventoryType.getByType(iPacket.DecodeByte());

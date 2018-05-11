@@ -3,7 +3,7 @@ package scripting.provider;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 
-import client.MapleClient;
+import client.Client;
 import scripting.PortalPlayerInteraction;
 import scripting.PortalScript;
 import server.MaplePortal;
@@ -30,7 +30,7 @@ public class PortalScriptManager extends AbstractScriptManager {
         return script;
     }
 
-    public boolean executePortalScript(final MaplePortal portal, final MapleClient c) {
+    public boolean executePortalScript(final MaplePortal portal, final Client c) {
         int playerMapId = c.getPlayer().getMapId(); // player's map id before portal teleportation
 
         final PortalScript script = getPortalScript(portal.getScriptName());

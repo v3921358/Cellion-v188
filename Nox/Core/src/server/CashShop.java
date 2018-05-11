@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.ItemLoader;
@@ -57,7 +57,7 @@ public class CashShop implements Serializable {
         return null;
     }
 
-    public void checkExpire(MapleClient c) {
+    public void checkExpire(Client c) {
         List<Item> toberemove = new ArrayList<>();
         for (Item item : inventory) {
             if (item != null && !InventoryConstants.isPet(item.getItemId()) && item.getExpiration() > 0 && item.getExpiration() < System.currentTimeMillis()) {

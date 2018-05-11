@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import client.QuestStatus.QuestState;
 import client.inventory.Equip;
 import client.inventory.Item;
@@ -29,7 +29,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
 
     private final MapleReactor reactor;
 
-    public ReactorActionManager(MapleClient c, MapleReactor reactor) {
+    public ReactorActionManager(Client c, MapleReactor reactor) {
         super(c, reactor.getReactorId(), c.getPlayer().getMapId(), null);
         this.reactor = reactor;
     }

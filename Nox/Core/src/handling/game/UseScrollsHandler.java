@@ -3,7 +3,7 @@ package handling.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import client.PlayerStats;
 import client.SkillFactory;
 import client.inventory.Equip;
@@ -28,15 +28,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseScrollsHandler implements ProcessPacket<MapleClient> {
+public class UseScrollsHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         short slot = iPacket.DecodeShort();
         short dst = iPacket.DecodeShort();
@@ -47,7 +47,7 @@ public class UseScrollsHandler implements ProcessPacket<MapleClient> {
 
     }
 
-    public static boolean UseUpgradeScroll(final short slot, final short dst, final short ws, final MapleClient c, final User chr, final int vegas, final boolean legendarySpirit) {
+    public static boolean UseUpgradeScroll(final short slot, final short dst, final short ws, final Client c, final User chr, final int vegas, final boolean legendarySpirit) {
         boolean whiteScroll = false;
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         chr.setScrolledPosition((short) 0);

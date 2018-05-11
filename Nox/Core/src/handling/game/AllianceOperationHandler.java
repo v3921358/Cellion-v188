@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import handling.world.World;
 import handling.world.MapleGuild;
 import server.maps.objects.User;
@@ -15,14 +15,14 @@ import tools.LogHelper;
  *
  * @author
  */
-public class AllianceOperationHandler implements ProcessPacket<MapleClient> {
+public class AllianceOperationHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
-    private static void DenyInvite(MapleClient c, MapleGuild gs) {
+    private static void DenyInvite(Client c, MapleGuild gs) {
         final int inviteid = World.Guild.getInvitedId(c.getPlayer().getGuildId());
         if (inviteid > 0) {
             final int newAlliance = World.Alliance.getAllianceLeader(inviteid);
@@ -37,7 +37,7 @@ public class AllianceOperationHandler implements ProcessPacket<MapleClient> {
         //c.write(CWvsContext.enableActions());
     }
 
-    public static void handleAllianceRequest(InPacket iPacket, MapleClient c, boolean denied) {
+    public static void handleAllianceRequest(InPacket iPacket, Client c, boolean denied) {
         if (c.getPlayer().getGuildId() <= 0) {
             c.SendPacket(CWvsContext.enableActions());
             return;
@@ -161,7 +161,7 @@ public class AllianceOperationHandler implements ProcessPacket<MapleClient> {
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         handleAllianceRequest(iPacket, c, false);
     }
 

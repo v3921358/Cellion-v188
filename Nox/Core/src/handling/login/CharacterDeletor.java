@@ -2,7 +2,7 @@ package handling.login;
 
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import handling.PacketThrottleLimits;
 import net.InPacket;
 import server.maps.objects.User;
@@ -15,20 +15,20 @@ import net.ProcessPacket;
         MinTimeMillisBetweenPackets = 5000,
         FunctionName = "CharacterDeletor",
         BanType = PacketThrottleLimits.PacketThrottleBanType.PermanentBan)
-public final class CharacterDeletor implements ProcessPacket<MapleClient> {
+public final class CharacterDeletor implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
-    private static boolean loginFailCount(final MapleClient c) {
+    private static boolean loginFailCount(final Client c) {
         c.loginAttempt++;
         return c.loginAttempt > 3;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         String secondPW = iPacket.DecodeString();
         if (secondPW == null) {
             if (iPacket.DecodeByte() > 0) { // Specific if user have second password or not

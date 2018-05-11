@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import client.inventory.MapleInventoryType;
@@ -29,10 +29,10 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
+public class PlayerInteractionHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
@@ -159,7 +159,7 @@ public class PlayerInteractionHandler implements ProcessPacket<MapleClient> {
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         //        System.err.println(iPacket.toString());

@@ -21,22 +21,22 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.PlayerStats;
 import constants.GameConstants;
 import server.maps.objects.User;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class PlayerHealAction implements ProcessPacket<MapleClient> {
+public final class PlayerHealAction implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr == null) {
             return;

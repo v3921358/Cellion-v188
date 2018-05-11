@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 
-import client.MapleClient;
+import client.Client;
 import client.QuestStatus;
 import client.QuestStatus.QuestState;
 import client.Skill;
@@ -440,7 +440,7 @@ public class MapScriptMethods {
      * @param scriptName
      * @return true if executed, false if not available
      */
-    public static boolean startScript_FirstUser(final MapleClient c, String scriptName) {
+    public static boolean startScript_FirstUser(final Client c, String scriptName) {
         if (c.getPlayer() == null) {
             return true;
         }
@@ -1250,7 +1250,7 @@ public class MapScriptMethods {
         return true;
     }
 
-    public static boolean startScript_User(final MapleClient c, String scriptName) {
+    public static boolean startScript_User(final Client c, String scriptName) {
         if (c.getPlayer() == null) {
             return true;
         }
@@ -3806,17 +3806,17 @@ public class MapScriptMethods {
         return 0;
     }
 
-    private static void showIntro(final MapleClient c, final String data) {
+    private static void showIntro(final Client c, final String data) {
         c.SendPacket(UIPacket.IntroEnableUI(true));
         c.SendPacket(UIPacket.IntroLock(true));
         c.SendPacket(EffectPacket.showReservedEffect_CutScene(data));
     }
 
-    private static void sendDojoClock(MapleClient c, int time) {
+    private static void sendDojoClock(Client c, int time) {
         c.SendPacket(CField.getClock(time));
     }
 
-    private static void sendDojoStart(MapleClient c, int stage) {
+    private static void sendDojoStart(Client c, int stage) {
         for (int i = 0; i < 3; i++) {
             c.getPlayer().updateInfoQuest(1213, "try=3");
         }
@@ -3826,7 +3826,7 @@ public class MapScriptMethods {
         c.SendPacket(CField.trembleEffect(0, 1));
     }
 
-    private static void handlePinkBeanStart(MapleClient c) {
+    private static void handlePinkBeanStart(Client c) {
         final MapleMap map = c.getPlayer().getMap();
         map.resetFully();
 
@@ -3835,7 +3835,7 @@ public class MapScriptMethods {
         }
     }
 
-    private static void reloadWitchTower(MapleClient c) {
+    private static void reloadWitchTower(Client c) {
         final MapleMap map = c.getPlayer().getMap();
         map.killAllMonsters(false);
 
@@ -3874,7 +3874,7 @@ public class MapScriptMethods {
     }
 
     public static void startDirectionInfo(User chr, boolean start) {
-        final MapleClient c = chr.getClient();
+        final Client c = chr.getClient();
         DirectionInfo di = chr.getMap().getSharedMapResources().getDirection(start ? 0 : chr.getDirection());
         if (di != null && di.eventQ.size() > 0) {
             if (start) {
@@ -4005,11 +4005,11 @@ public class MapScriptMethods {
         }
     }
 
-    private static void sendRedLeafClock(MapleClient c, int time) {
+    private static void sendRedLeafClock(Client c, int time) {
         c.SendPacket(CField.getClock(time));
     }
 
-    private static void sendRedLeafStart(MapleClient c, int stage, int stage1, boolean over) {
+    private static void sendRedLeafStart(Client c, int stage, int stage1, boolean over) {
         if (stage == 2 && stage1 == 1) {
             c.SendPacket(CField.environmentChange("MapleHighSchool/stageEff/final", 12, 0));
         } else {

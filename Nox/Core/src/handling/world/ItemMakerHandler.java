@@ -22,7 +22,7 @@ package handling.world;
 
 import java.time.LocalDateTime;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.MapleImp;
 import client.inventory.MapleImp.ImpFlag;
@@ -49,7 +49,7 @@ public class ItemMakerHandler {
         }
     }
 
-    public static final void UsePot(final InPacket iPacket, final MapleClient c) {
+    public static final void UsePot(final InPacket iPacket, final Client c) {
         final int itemid = iPacket.DecodeInt();
         final Item slot = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(iPacket.DecodeShort());
         if (slot == null || slot.getQuantity() <= 0 || slot.getItemId() != itemid || itemid / 10000 != 244 || MapleItemInformationProvider.getInstance().getPot(itemid) == null) {
@@ -68,7 +68,7 @@ public class ItemMakerHandler {
 
     }
 
-    public static final void ClearPot(final InPacket iPacket, final MapleClient c) {
+    public static final void ClearPot(final InPacket iPacket, final Client c) {
         final int index = iPacket.DecodeInt() - 1;
         if (index < 0 || index >= c.getPlayer().getImps().length || c.getPlayer().getImps()[index] == null) {
             c.SendPacket(CWvsContext.enableActions());
@@ -78,7 +78,7 @@ public class ItemMakerHandler {
         c.getPlayer().getImps()[index] = null;
     }
 
-    public static final void FeedPot(final InPacket iPacket, final MapleClient c) {
+    public static final void FeedPot(final InPacket iPacket, final Client c) {
         final int itemid = iPacket.DecodeInt();
         final Item slot = c.getPlayer().getInventory(GameConstants.getInventoryType(itemid)).getItem((short) iPacket.DecodeInt());
         if (slot == null || slot.getQuantity() <= 0 || slot.getItemId() != itemid) {
@@ -122,7 +122,7 @@ public class ItemMakerHandler {
         c.SendPacket(CWvsContext.updateImp(c.getPlayer().getImps()[index], mask, index, false));
     }
 
-    public static final void CurePot(final InPacket iPacket, final MapleClient c) {
+    public static final void CurePot(final InPacket iPacket, final Client c) {
         final int itemid = iPacket.DecodeInt();
         final Item slot = c.getPlayer().getInventory(MapleInventoryType.ETC).getItem((short) iPacket.DecodeInt());
         if (slot == null || slot.getQuantity() <= 0 || slot.getItemId() != itemid || itemid / 10000 != 434) {
@@ -139,7 +139,7 @@ public class ItemMakerHandler {
         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.ETC, slot.getPosition(), (short) 1, false, false);
     }
 
-    public static final void RewardPot(final InPacket iPacket, final MapleClient c) {
+    public static final void RewardPot(final InPacket iPacket, final Client c) {
         final int index = iPacket.DecodeInt() - 1;
         if (index < 0 || index >= c.getPlayer().getImps().length || c.getPlayer().getImps()[index] == null || c.getPlayer().getImps()[index].getLevel() < (MapleItemInformationProvider.getInstance().getPot(c.getPlayer().getImps()[index].getItemId()).right - 1)) {
             c.SendPacket(CWvsContext.enableActions());

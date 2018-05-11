@@ -1,6 +1,6 @@
 package handling.login;
 
-import client.MapleClient;
+import client.Client;
 import client.PartTimeJob;
 import constants.ServerConstants;
 import net.InPacket;
@@ -8,15 +8,15 @@ import server.maps.objects.User;
 import tools.packet.CLogin;
 import net.ProcessPacket;
 
-public final class PartTimeJobHandler implements ProcessPacket<MapleClient> {
+public final class PartTimeJobHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         if (!ServerConstants.PART_TIME_JOB) { // Disables Part Time Jobs
             return;
         }

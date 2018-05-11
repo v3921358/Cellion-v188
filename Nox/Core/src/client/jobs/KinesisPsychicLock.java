@@ -9,7 +9,7 @@ import java.awt.Point;
 
 /**
  *
- * @author Mazen
+ * @author Mazen Massoud
  */
 public class KinesisPsychicLock {
 

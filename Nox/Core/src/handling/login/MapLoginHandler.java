@@ -5,24 +5,24 @@
  */
 package handling.login;
 
-import client.MapleClient;
+import client.Client;
 import net.InPacket;
 import net.ProcessPacket;
 import tools.packet.CLogin;
 
 /**
  *
- * @author Mazen
+ * @author Mazen Massoud
  */
-public final class MapLoginHandler implements ProcessPacket<MapleClient> {
+public final class MapLoginHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int nMapLogin = (int) (Math.random() % 5);
         String sMapLogin = "MapLogin";
         if (nMapLogin > 0) {
