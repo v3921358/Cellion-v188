@@ -593,7 +593,7 @@ public class World {
                             } else {
                                 ble.setChannel(-1);
                             }
-                            ble.setFlag(BuddyFlags.ACCOUNT_FRIEND.getFlag(ble));
+                            ble.setFlag(BuddyFlags.AccountFriendOnline.getFlag(ble));
                             Buddy bud = new Buddy(BuddyResult.NOTIFY);
                             bud.setEntry(ble);
                             chr.getClient().SendPacket(CWvsContext.buddylistMessage(bud));
@@ -615,7 +615,7 @@ public class World {
                         case ADD:
                             if (buddylist.contains(cidFrom)) {
                                 entry = new BuddylistEntry(name, cidFrom, "Default Group", channel, false, "", accountFriend, nickname);
-                                entry.setFlag(BuddyFlags.ACCOUNT_FRIEND.getFlag(entry));
+                                entry.setFlag(BuddyFlags.AccountFriendOnline.getFlag(entry));
                                 buddylist.put(entry);
                                 b.setEntry(entry);
                                 addChar.getClient().SendPacket(CWvsContext.buddylistMessage(b));
@@ -624,7 +624,7 @@ public class World {
                         case DELETE:
                             if (buddylist.contains(cidFrom)) {
                                 entry = new BuddylistEntry(name, cidFrom, "Default Group", channel, false, "", accountFriend, "");
-                                entry.setFlag(BuddyFlags.OFFLINE.getFlag());
+                                entry.setFlag(BuddyFlags.FriendOffline.getFlag());
                                 buddylist.put(entry);
                                 b.setEntry(entry);
                                 addChar.getClient().SendPacket(CWvsContext.buddylistMessage(b));

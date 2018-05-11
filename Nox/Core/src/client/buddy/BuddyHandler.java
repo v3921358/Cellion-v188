@@ -52,10 +52,7 @@ public class BuddyHandler {
                 String memo = iPacket.DecodeString();
                 boolean accountFriend = iPacket.DecodeByte() > 0;
                 byte flag = 0;
-                String nick = "";
-                if (accountFriend) {
-                    nick = iPacket.DecodeString();
-                }
+                String nick = iPacket.DecodeString();
                 ble = buddylist.get(name);
                 if (name.length() < 4 || name.length() > 13 || group.length() > 16) {
                     return;
@@ -127,7 +124,7 @@ public class BuddyHandler {
                                     displayChannel = channel;
                                     notifyRemoteChannel(c, channel, otherCid, BuddyOperation.ADD, accountFriend, "");
                                 } else if (buddyAddResult != BuddyOperation.ALREADY_ON_LIST) {
-                                    if (nick.isEmpty()) {
+                                    if (nick.equals("")) {
                                         nick = charWithId.getName();
                                     }
                                     try (Connection con = Database.GetConnection()) {
@@ -174,9 +171,9 @@ public class BuddyHandler {
                     BuddylistEntry entry = new BuddylistEntry(ble.getName(), otherCid, "Default Group", channel, false, "", false, "");
                     byte flag = 0;
                     if (ble.isOnline()) {
-                        flag = BuddyFlags.ONLINE.getFlag();
+                        flag = BuddyFlags.FriendOnline.getFlag();
                     } else {
-                        flag = BuddyFlags.OFFLINE.getFlag();
+                        flag = BuddyFlags.FriendOffline.getFlag();
                     }
                     entry.setFlag(flag);
                     buddylist.put(entry);
@@ -210,9 +207,9 @@ public class BuddyHandler {
                         BuddylistEntry entry = new BuddylistEntry(ble.getName(), ble.getCharacterId(), "Default Group", channel, false, "", true, ble.getName());
                         byte flag = 0;
                         if (ble.isOnline()) {
-                            flag = BuddyFlags.ACCOUNT_FRIEND.getFlag();
+                            flag = BuddyFlags.AccountFriendOnline.getFlag();
                         } else {
-                            flag = BuddyFlags.ACCOUNT_FRIEND_OFFLINE.getFlag();
+                            flag = BuddyFlags.AccountFriendOffline.getFlag();
                         }
                         entry.setFlag(flag);
                         buddylist.put(entry);

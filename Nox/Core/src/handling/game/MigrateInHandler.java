@@ -10,7 +10,9 @@ import client.MapleSpecialStats;
 import client.MapleSpecialStats.MapleSpecialStatUpdateType;
 import client.SkillFactory;
 import client.buddy.Buddy;
+import client.buddy.BuddyFlags;
 import client.buddy.BuddyResult;
+import client.buddy.BuddylistEntry;
 import client.inventory.Equip;
 import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
@@ -50,6 +52,7 @@ import tools.packet.CWvsContext;
 import tools.packet.CWvsContext.GuildPacket;
 import tools.packet.JobPacket.AvengerPacket;
 import net.ProcessPacket;
+import static tools.packet.CWvsContext.OnLoadAccountIDOfCharacterFriendResult;
 
 public final class MigrateInHandler implements ProcessPacket<MapleClient> {
 
@@ -156,14 +159,33 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
                     }
                 }
             }
+
+            pPlayer.getBuddylist().getBuddies().forEach((pBuddy) -> {
+                if (pBuddy.isAccountFriend()) {
+                    pBuddy.setFlag(BuddyFlags.AccountFriendOffline.getFlag());
+                } else {
+                    pBuddy.setFlag(BuddyFlags.FriendOffline.getFlag());
+                }
+            });
+
             final CharacterIdChannelPair[] onlineBuddies = World.Find.multiBuddyFind(pPlayer.getId(), pPlayer.getBuddylist().getBuddyIds());
             for (CharacterIdChannelPair onlineBuddy : onlineBuddies) {
-                pPlayer.getBuddylist().get(onlineBuddy.getCharacterId()).setChannel(onlineBuddy.getChannel());
+                BuddylistEntry pBuddy = pPlayer.getBuddylist().get(onlineBuddy.getCharacterId());
+                pBuddy.setChannel(onlineBuddy.getChannel());
+                if (pBuddy.isAccountFriend()) {
+                    pBuddy.setFlag(BuddyFlags.AccountFriendOnline.getFlag());
+                } else {
+                    pBuddy.setFlag(BuddyFlags.FriendOnline.getFlag());
+                }
             }
+
+            //Load buddies
             Buddy buddy = new Buddy(BuddyResult.LOAD_FRIENDS);
             buddy.setEntries(new ArrayList<>(pPlayer.getBuddylist().getBuddies()));
             c.SendPacket(CWvsContext.buddylistMessage(buddy));
             c.SendPacket(CWvsContext.buddylistMessage(new Buddy(BuddyResult.SET_MESSENGER_MODE)));
+            pPlayer.getClient().SendPacket(OnLoadAccountIDOfCharacterFriendResult(pPlayer.getBuddylist()));
+            
             // Start of Messenger
             final MapleMessenger messenger = pPlayer.getMessenger();
             if (messenger != null) {
