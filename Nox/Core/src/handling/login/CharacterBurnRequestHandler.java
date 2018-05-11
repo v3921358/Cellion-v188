@@ -1,6 +1,6 @@
 package handling.login;
 
-import client.MapleClient;
+import client.Client;
 import constants.ServerConstants;
 import java.util.List;
 import net.InPacket;
@@ -13,15 +13,15 @@ import net.ProcessPacket;
  * @Author Novak
  *
  */
-public final class CharacterBurnRequestHandler implements ProcessPacket<MapleClient> {
+public final class CharacterBurnRequestHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         String errormsg = "The Character Burning Event is currently unavailable. Check our website to see when your characters can burn again.";
         if (!ServerConstants.BURNING_CHARACTER_EVENT || iPacket.DecodeByte() != 0) {
             c.SendPacket(CWvsContext.broadcastMsg(errormsg));
@@ -45,7 +45,7 @@ public final class CharacterBurnRequestHandler implements ProcessPacket<MapleCli
         c.SendPacket(CLogin.burningEventEffect((byte) 1, characterId));
     }
 
-    private boolean canBurn(MapleClient c) {
+    private boolean canBurn(Client c) {
         final List<User> chars = c.loadCharacters(c.getWorld());
         User[] characters = chars.toArray(new User[chars.size()]);
         for (int i = 0; i < characters.length; i++) {

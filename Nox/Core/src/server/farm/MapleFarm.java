@@ -3,7 +3,7 @@ package server.farm;
 import java.util.LinkedList;
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import server.farm.inventory.FarmBuilding;
 
 /**
@@ -13,7 +13,7 @@ import server.farm.inventory.FarmBuilding;
 public class MapleFarm {
 
     private int id;
-    private MapleClient owner;
+    private Client owner;
     private String name;
     private int waru = 0;
     private int level = 0;
@@ -22,13 +22,13 @@ public class MapleFarm {
     private List<FarmBuilding> buildings;
     private FarmAestheticStats aestheticStats;
 
-    private MapleFarm(int id, MapleClient owner, String name) {
+    private MapleFarm(int id, Client owner, String name) {
         this.id = id;
         this.owner = owner;
         this.name = name;
     }
 
-    public static MapleFarm getDefault(int id, MapleClient owner, String name) {
+    public static MapleFarm getDefault(int id, Client owner, String name) {
         MapleFarm farm = new MapleFarm(id, owner, name);
         farm.setLevel(0);
         farm.setWaru(0);
@@ -46,7 +46,7 @@ public class MapleFarm {
         this.id = id;
     }
 
-    public void setOwner(MapleClient owner) {
+    public void setOwner(Client owner) {
         this.owner = owner;
     }
 
@@ -78,7 +78,7 @@ public class MapleFarm {
         return id;
     }
 
-    public MapleClient getOwner() {
+    public Client getOwner() {
         return owner;
     }
 

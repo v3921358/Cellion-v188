@@ -5,7 +5,7 @@
  */
 package client.buddy;
 
-import client.MapleClient;
+import client.Client;
 import net.InPacket;
 
 import java.sql.Connection;
@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import client.buddy.Buddy;
 import client.buddy.BuddyFlags;
 import client.buddy.BuddyHandler;
@@ -37,11 +37,11 @@ import static tools.packet.CWvsContext.OnLoadAccountIDOfCharacterFriendResult;
 
 /**
  *
- * @author Mazen
+ * @author Mazen Massoud
  */
 public class BuddyHandler {
 
-    public static void handleOperation(MapleClient c, InPacket iPacket) {
+    public static void handleOperation(Client c, InPacket iPacket) {
         BuddyRequest mode = BuddyRequest.UNKNOWN.getRequest(iPacket.DecodeByte());
         BuddyList buddylist = c.getPlayer().getBuddylist();
         Buddy buddy = new Buddy();
@@ -280,7 +280,7 @@ public class BuddyHandler {
         return ret;
     }
 
-    private static void notifyRemoteChannel(MapleClient c, int remoteChannel, int otherCid, BuddyOperation operation, boolean accountFriend, String nickname) {
+    private static void notifyRemoteChannel(Client c, int remoteChannel, int otherCid, BuddyOperation operation, boolean accountFriend, String nickname) {
         User player = c.getPlayer();
         if (remoteChannel > 0) {
             World.WorldBuddy.buddyChanged(otherCid, player.getId(), player.getName(), c.getChannel(), operation, accountFriend, nickname);

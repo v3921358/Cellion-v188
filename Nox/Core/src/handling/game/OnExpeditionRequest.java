@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import constants.GameConstants;
 import handling.world.ExpeditionType;
 import handling.world.MapleExpedition;
@@ -38,15 +38,15 @@ import tools.packet.CWvsContext;
 import net.ProcessPacket;
 import tools.LogHelper;
 
-public final class OnExpeditionRequest implements ProcessPacket<MapleClient> {
+public final class OnExpeditionRequest implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         if ((c.getPlayer() == null) || (c.getPlayer().getMap() == null)) {
             return;
         }

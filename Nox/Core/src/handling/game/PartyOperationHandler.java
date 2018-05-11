@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import constants.GameConstants;
 import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
@@ -22,10 +22,10 @@ import tools.LogHelper;
  *
  * @author
  */
-public class PartyOperationHandler implements ProcessPacket<MapleClient> {
+public class PartyOperationHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
@@ -37,7 +37,7 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int operation = iPacket.DecodeByte();
         MapleParty party = c.getPlayer().getParty();
         MaplePartyCharacter partyplayer = new MaplePartyCharacter(c.getPlayer());

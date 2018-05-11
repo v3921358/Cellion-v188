@@ -2,7 +2,7 @@ package server.movement.types;
 
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import handling.AbstractMaplePacketHandler;
 import handling.world.MovementParse;
 import net.InPacket;
@@ -15,15 +15,15 @@ import net.ProcessPacket;
  * @author Steven
  *
  */
-public class AndroidMovement implements ProcessPacket<MapleClient> {
+public class AndroidMovement implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return c.isLoggedIn();
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
         if (chr == null || chr.getAndroid() == null) {
             return;

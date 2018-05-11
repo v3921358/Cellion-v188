@@ -1,6 +1,6 @@
 package server;
 
-import client.MapleClient;
+import client.Client;
 import java.lang.management.ManagementFactory;
 import java.sql.SQLException;
 

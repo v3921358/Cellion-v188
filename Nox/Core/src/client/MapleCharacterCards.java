@@ -100,7 +100,7 @@ public class MapleCharacterCards {
         calculateEffects(); // recalculate, just incase 
     }
 
-    public final void loadCards(final MapleClient c, final boolean channelserver, Connection con) throws SQLException {
+    public final void loadCards(final Client c, final boolean channelserver, Connection con) throws SQLException {
         cards = CharacterCardFactory.getInstance().loadCharacterCards(c.getAccID(), c.getWorld(), con);
         if (channelserver) {
             calculateEffects();

@@ -2,7 +2,7 @@ package tools.packet;
 
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import handling.game.PlayerInteractionHandler;
 import service.SendPacketOpcode;
@@ -318,7 +318,7 @@ public class PlayerShopPacket {
         return oPacket;
     }
 
-    public static OutPacket getMiniGame(MapleClient c, MapleMiniGame minigame) {
+    public static OutPacket getMiniGame(Client c, MapleMiniGame minigame) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
         oPacket.EncodeByte(10);

@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.ItemConstants;
@@ -16,15 +16,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseReturnScrollHandler implements ProcessPacket<MapleClient> {
+public class UseReturnScrollHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
 
         if (!chr.isAlive() || chr.getMapId() == 749040100 || chr.hasBlockedInventory() || chr.isInBlockedMap() || chr.inPVP()) {

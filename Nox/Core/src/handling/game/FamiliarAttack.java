@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
 import client.SkillFactory;
@@ -19,15 +19,15 @@ import net.InPacket;
 import tools.packet.CField;
 import net.ProcessPacket;
 
-public final class FamiliarAttack implements ProcessPacket<MapleClient> {
+public final class FamiliarAttack implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr.getSummonedFamiliar() == null) {
             return;

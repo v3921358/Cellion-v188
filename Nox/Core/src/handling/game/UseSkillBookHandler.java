@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import client.inventory.Item;
@@ -18,15 +18,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseSkillBookHandler implements ProcessPacket<MapleClient> {
+public class UseSkillBookHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         short slot = iPacket.DecodeShort();
         int itemId = iPacket.DecodeInt();
@@ -34,7 +34,7 @@ public class UseSkillBookHandler implements ProcessPacket<MapleClient> {
         UseSkillBook(c, slot, itemId);
     }
 
-    public static boolean UseSkillBook(MapleClient c, short slot, int itemId) {
+    public static boolean UseSkillBook(Client c, short slot, int itemId) {
         User chr = c.getPlayer();
 
         final Item toUse = chr.getInventory(GameConstants.getInventoryType(itemId)).getItem(slot);

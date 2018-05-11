@@ -61,7 +61,7 @@ import tools.packet.JobPacket;
 
 /**
  * PlayerStat Handler
- * @author Mazen
+ * @author Mazen Massoud
  */
 public class PlayerStats implements Serializable {
 

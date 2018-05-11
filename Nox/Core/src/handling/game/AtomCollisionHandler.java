@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -42,15 +42,15 @@ import service.RecvPacketOpcode;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 
-public final class AtomCollisionHandler implements ProcessPacket<MapleClient> {
+public final class AtomCollisionHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User pPlayer = c.getPlayer();
         if (pPlayer == null || pPlayer.hasBlockedInventory() || pPlayer.getMap() == null) {
             return;

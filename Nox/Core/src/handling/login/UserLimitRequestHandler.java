@@ -21,21 +21,21 @@
  */
 package handling.login;
 
-import client.MapleClient;
+import client.Client;
 import service.LoginServer;
 import net.InPacket;
 import tools.packet.CLogin;
 import net.ProcessPacket;
 
-public final class UserLimitRequestHandler implements ProcessPacket<MapleClient> {
+public final class UserLimitRequestHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         // 0 = Select world normally
         // 1 = "Since there are many users, you may encounter some..."
         // 2 = "The concurrent users in this world have reached the max"

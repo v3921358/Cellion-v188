@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import server.maps.objects.User;
 import net.InPacket;
 import net.ProcessPacket;
@@ -9,15 +9,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseResetCoreAuraHandler implements ProcessPacket<MapleClient> {
+public class UseResetCoreAuraHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
         /*    Item starDust = chr.getInventory(MapleInventoryType.USE).getItem((byte) slot);
         if ((starDust == null) || (c.getPlayer().hasBlockedInventory())) {

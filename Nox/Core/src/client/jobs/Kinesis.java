@@ -14,7 +14,7 @@ import tools.packet.JobPacket.KinesisPacket;
 /**
  * Kinesis Class Handlers
  *
- * @author Mazen
+ * @author Mazen Massoud
  */
 public class Kinesis {
 

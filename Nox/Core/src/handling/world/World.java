@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import constants.*;
 import client.CharacterTemporaryStat;
-import client.MapleClient;
+import client.Client;
 import client.MapleCoolDownValueHolder;
 import client.MapleDiseaseValueHolder;
 import client.MapleStat;
@@ -915,7 +915,7 @@ public class World {
             }
         }
 
-        public static Map<Integer, MapleGuild> getGuildByOwnerSearch(MapleClient c, String guildMasterName, boolean exactWord) {
+        public static Map<Integer, MapleGuild> getGuildByOwnerSearch(Client c, String guildMasterName, boolean exactWord) {
             Map<Integer, MapleGuild> acceptableGuilds = new LinkedHashMap<>();
             lock.readLock().lock();
             try {
@@ -937,7 +937,7 @@ public class World {
             }
         }
 
-        public static Map<Integer, MapleGuild> getGuildByNameSearch(MapleClient c, String guildName, boolean exactWord) {
+        public static Map<Integer, MapleGuild> getGuildByNameSearch(Client c, String guildName, boolean exactWord) {
             Map<Integer, MapleGuild> acceptableGuilds = new LinkedHashMap<>();
             lock.readLock().lock();
             try {

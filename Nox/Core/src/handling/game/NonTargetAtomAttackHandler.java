@@ -2,7 +2,7 @@ package handling.game;
 
 import java.lang.ref.WeakReference;
 
-import client.MapleClient;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -25,15 +25,15 @@ import net.ProcessPacket;
 import server.life.MobAttackInfo;
 import service.RecvPacketOpcode;
 
-public final class NonTargetAtomAttackHandler implements ProcessPacket<MapleClient> {
+public final class NonTargetAtomAttackHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr == null || chr.hasBlockedInventory() || chr.getMap() == null) {
             return;

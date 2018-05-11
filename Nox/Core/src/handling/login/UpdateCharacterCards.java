@@ -24,21 +24,21 @@ package handling.login;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import client.MapleClient;
+import client.Client;
 import constants.WorldConstants;
 import service.ChannelServer;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class UpdateCharacterCards implements ProcessPacket<MapleClient> {
+public final class UpdateCharacterCards implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         if (iPacket.GetRemainder() != 36 || !c.isLoggedIn()) {
             c.Close();
             return;

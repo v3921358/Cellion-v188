@@ -257,7 +257,7 @@ public class DamageParse {
 
                 /*
                  *  Final Attack Handling
-                 *  @author Mazen
+                 *  @author Mazen Massoud
                  * 
                  *  @purpose Handle Final Attack system without the need for the packet. 
                  */

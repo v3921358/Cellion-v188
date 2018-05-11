@@ -1,6 +1,6 @@
 package scripting;
 
-import client.MapleClient;
+import client.Client;
 
 /**
  *
@@ -10,7 +10,7 @@ public class MapEnterInteraction extends AbstractPlayerInteraction {
 
     private final int LastMapId;
 
-    public MapEnterInteraction(final MapleClient c, int LastMapId) {
+    public MapEnterInteraction(final Client c, int LastMapId) {
         super(c, LastMapId, 0, null);
         this.LastMapId = LastMapId;
     }

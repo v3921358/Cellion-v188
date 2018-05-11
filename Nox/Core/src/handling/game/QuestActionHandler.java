@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import constants.GameConstants;
 import constants.ServerConstants;
 import net.ProcessPacket;
@@ -16,10 +16,10 @@ import tools.packet.CWvsContext;
  *
  * @author
  */
-public class QuestActionHandler implements ProcessPacket<MapleClient> {
+public class QuestActionHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
@@ -63,7 +63,7 @@ enum QuestRes
 };
      */
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final byte action = iPacket.DecodeByte();
         int quest = iPacket.DecodeInt();
         if (quest == 20734) {

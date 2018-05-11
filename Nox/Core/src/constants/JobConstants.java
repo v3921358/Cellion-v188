@@ -3,7 +3,7 @@ package constants;
 /**
  *
  * @author Itzik
- * @author Mazen
+ * @author Mazen Massoud
  */
 public class JobConstants {
 

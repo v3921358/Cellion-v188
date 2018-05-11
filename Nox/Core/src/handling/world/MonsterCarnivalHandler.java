@@ -2,7 +2,7 @@ package handling.world;
 
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import client.MapleDisease;
 import java.util.Map;
 import server.MapleCarnivalFactory;
@@ -18,7 +18,7 @@ import tools.packet.MonsterCarnivalPacket;
 
 public class MonsterCarnivalHandler {
 
-    public static final void MonsterCarnival(final InPacket iPacket, final MapleClient c) {
+    public static final void MonsterCarnival(final InPacket iPacket, final Client c) {
         if (c.getPlayer().getCarnivalParty() == null) {
             c.SendPacket(CWvsContext.enableActions());
             return;

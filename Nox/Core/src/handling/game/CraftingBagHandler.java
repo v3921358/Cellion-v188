@@ -3,7 +3,7 @@ package handling.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import client.inventory.MapleInventoryType;
@@ -17,15 +17,15 @@ import tools.packet.CField;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;
 
-public final class CraftingBagHandler implements ProcessPacket<MapleClient> {
+public final class CraftingBagHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
 
         c.getPlayer().updateTick(iPacket.DecodeInt());

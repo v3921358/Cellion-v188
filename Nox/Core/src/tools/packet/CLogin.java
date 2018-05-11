@@ -3,7 +3,7 @@ package tools.packet;
 import java.util.List;
 import java.util.Set;
 
-import client.MapleClient;
+import client.Client;
 import client.PartTimeJob;
 import constants.GameConstants;
 import constants.JobConstants;
@@ -72,7 +72,7 @@ public class CLogin {
         return oPacket;
     }
 
-    public static OutPacket CheckPasswordResult(MapleClient client) {
+    public static OutPacket CheckPasswordResult(Client client) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.CheckPasswordResult.getValue());
         oPacket.EncodeByte(0);//related to blocked account
@@ -199,7 +199,7 @@ public class CLogin {
        [31 00] 
        [B3 03]
      */
-    public static final OutPacket getAccountSpecifications(MapleClient c) {
+    public static final OutPacket getAccountSpecifications(Client c) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.AccountInfoResult.getValue());
         oPacket.EncodeByte(0); //unk
@@ -433,7 +433,7 @@ public class CLogin {
      * Dummy pic 4 = Outdated pic
      * @return oPacket
      */
-    public static OutPacket getCharList(MapleClient c, String secondpw, List<User> chars, int charslots, boolean isRebootServer) {
+    public static OutPacket getCharList(Client c, String secondpw, List<User> chars, int charslots, boolean isRebootServer) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.SelectWorldResult.getValue());
         oPacket.EncodeByte(0); // mode

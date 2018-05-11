@@ -20,7 +20,7 @@
  */
 package server.maps;
 
-import client.MapleClient;
+import client.Client;
 import net.OutPacket;
 
 import tools.packet.CField;
@@ -58,7 +58,7 @@ public class MapleMapEffect {
         return jukebox ? CSPacket.playCashSong(itemId, msg) : CField.startMapEffect(msg, itemId, active);
     }
 
-    public void sendStartData(MapleClient c) {
+    public void sendStartData(Client c) {
         c.SendPacket(makeStartData());
     }
 }

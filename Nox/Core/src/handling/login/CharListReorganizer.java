@@ -1,19 +1,19 @@
 package handling.login;
 
-import client.MapleClient;
+import client.Client;
 import net.InPacket;
 import server.maps.objects.User;
 import net.ProcessPacket;
 
-public final class CharListReorganizer implements ProcessPacket<MapleClient> {
+public final class CharListReorganizer implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int accountId = iPacket.DecodeInt();
         if (c == null || accountId != c.getAccID()) {
             return;

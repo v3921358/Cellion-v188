@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import client.MapleClient;
+import client.Client;
 import client.PlayerStats;
 import client.SkillFactory;
 import client.inventory.Equip;
@@ -26,15 +26,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class ItemMakerHandler implements ProcessPacket<MapleClient> {
+public class ItemMakerHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final int makerType = iPacket.DecodeInt();
 
         switch (makerType) {
@@ -335,7 +335,7 @@ public class ItemMakerHandler implements ProcessPacket<MapleClient> {
         return items.get(Randomizer.nextInt(items.size()));
     }
 
-    private static int checkRequiredNRemove(final MapleClient c, final List<Pair<Integer, Integer>> recipe) {
+    private static int checkRequiredNRemove(final Client c, final List<Pair<Integer, Integer>> recipe) {
         int itemid = 0;
         for (final Pair<Integer, Integer> p : recipe) {
             if (!c.getPlayer().haveItem(p.getLeft(), p.getRight(), false, true)) {
@@ -349,7 +349,7 @@ public class ItemMakerHandler implements ProcessPacket<MapleClient> {
         return itemid;
     }
 
-    private static boolean hasSkill(final MapleClient c, final int reqlvl) {
+    private static boolean hasSkill(final Client c, final int reqlvl) {
         return c.getPlayer().getSkillLevel(SkillFactory.getSkill(PlayerStats.getSkillByJob(1007, c.getPlayer().getJob()))) >= reqlvl;
     }
 }

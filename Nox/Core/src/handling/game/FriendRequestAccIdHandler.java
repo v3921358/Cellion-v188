@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import net.InPacket;
 import net.ProcessPacket;
 import server.maps.objects.User;
@@ -14,17 +14,17 @@ import tools.packet.CWvsContext;
 
 /**
  *
- * @author Mazen
+ * @author Mazen Massoud
  */
-public class FriendRequestAccIdHandler implements ProcessPacket<MapleClient> {
+public class FriendRequestAccIdHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         c.SendPacket(CWvsContext.OnLoadAccountIDOfCharacterFriendResult(c.getPlayer().getBuddylist()));
     }
 }

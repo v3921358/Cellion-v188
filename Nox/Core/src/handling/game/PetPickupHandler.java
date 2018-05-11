@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.anticheat.CheatingOffense;
 import client.inventory.Equip;
 import client.inventory.ItemType;
@@ -30,15 +30,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class PetPickupHandler implements ProcessPacket<MapleClient> {
+public class PetPickupHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
         if (chr == null) {
             return;

@@ -1,6 +1,6 @@
 package handling.login;
 
-import client.MapleClient;
+import client.Client;
 import handling.PacketThrottleLimits;
 import net.InPacket;
 import tools.packet.CLogin;
@@ -13,15 +13,15 @@ import net.ProcessPacket;
 
         FunctionName = "AuthRequestHandler",
         BanType = PacketThrottleLimits.PacketThrottleBanType.PermanentBan)
-public final class PrivateServerPacketHandler implements ProcessPacket<MapleClient> {
+public final class PrivateServerPacketHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         /*
         Client sending packet:
         ?Run@CWvsApp@@QAE?AUtagMSG@@PAH@Z

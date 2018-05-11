@@ -21,20 +21,20 @@
  */
 package handling.farm;
 
-import client.MapleClient;
+import client.Client;
 import net.InPacket;
 import tools.packet.FarmPacket;
 import net.ProcessPacket;
 
-public final class FirstFarmEntryHandler implements ProcessPacket<MapleClient> {
+public final class FirstFarmEntryHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         //give random waru consume item
         c.SendPacket(FarmPacket.farmMessage("Find your reward for logging in today \r\nin your inventory."));
     }

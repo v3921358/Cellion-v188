@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleCharacterUtil;
-import client.MapleClient;
+import client.Client;
 import handling.PacketThrottleLimits;
 import handling.world.MapleMessenger;
 import handling.world.MapleMessengerCharacter;
@@ -22,15 +22,15 @@ import net.ProcessPacket;
         MinTimeMillisBetweenPackets = 500,
         FunctionName = "MessengerHandler",
         BanType = PacketThrottleLimits.PacketThrottleBanType.Disconnect)
-public class MessengerHandler implements ProcessPacket<MapleClient> {
+public class MessengerHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         String input;
         MapleMessenger messenger = c.getPlayer().getMessenger();
 

@@ -2,7 +2,7 @@ package server.commands;
 
 import javax.activation.CommandObject;
 
-import client.MapleClient;
+import client.Client;
 import constants.ServerConstants.CommandType;
 
 /**
@@ -20,7 +20,7 @@ public abstract class CommandExecute {
      *
      * @return 1 if you want to log the command, 0 if not. TODO: USE {@link #ReturnValue}
      */
-    public abstract int execute(MapleClient c, String[] splitted);
+    public abstract int execute(Client c, String[] splitted);
     //1 = Success
     //0 = Something Went Wrong
 

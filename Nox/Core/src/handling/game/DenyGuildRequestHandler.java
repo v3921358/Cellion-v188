@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
@@ -10,15 +10,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class DenyGuildRequestHandler implements ProcessPacket<MapleClient> {
+public class DenyGuildRequestHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         iPacket.Skip(1);
         String from = iPacket.DecodeString();
 

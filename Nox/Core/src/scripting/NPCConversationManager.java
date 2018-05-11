@@ -17,7 +17,7 @@ import javax.script.Invocable;
 import client.InnerAbillity;
 import client.InnerSkillValueHolder;
 import client.MapleCharacterCreationUtil;
-import client.MapleClient;
+import client.Client;
 import client.MapleStat;
 import client.Skill;
 import client.SkillEntry;
@@ -106,7 +106,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public int min_range, max_range;
     public int state = -1;
 
-    public NPCConversationManager(MapleClient c, int npc, int questid, String npcscript, NpcConversationType type, Invocable iv) {
+    public NPCConversationManager(Client c, int npc, int questid, String npcscript, NpcConversationType type, Invocable iv) {
         super(c, npc, questid, npcscript);
         this.type = type;
         this.iv = iv;
@@ -2275,7 +2275,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return etc.getItem(slot).getItemId();
     }
 
-    public String EquipList(MapleClient c) {
+    public String EquipList(Client c) {
         StringBuilder str = new StringBuilder();
         MapleInventory equip = c.getPlayer().getInventory(MapleInventoryType.EQUIP);
         List<String> stra = new LinkedList<>();
@@ -2288,7 +2288,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return str.toString();
     }
 
-    public String UseList(MapleClient c) {
+    public String UseList(Client c) {
         StringBuilder str = new StringBuilder();
         MapleInventory use = c.getPlayer().getInventory(MapleInventoryType.USE);
         List<String> stra = new LinkedList<>();
@@ -2301,7 +2301,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return str.toString();
     }
 
-    public String CashList(MapleClient c) {
+    public String CashList(Client c) {
         StringBuilder str = new StringBuilder();
         MapleInventory cash = c.getPlayer().getInventory(MapleInventoryType.CASH);
         List<String> stra = new LinkedList<>();
@@ -2314,7 +2314,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return str.toString();
     }
 
-    public String ETCList(MapleClient c) {
+    public String ETCList(Client c) {
         StringBuilder str = new StringBuilder();
         MapleInventory etc = c.getPlayer().getInventory(MapleInventoryType.ETC);
         List<String> stra = new LinkedList<>();
@@ -2327,7 +2327,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return str.toString();
     }
 
-    public String SetupList(MapleClient c) {
+    public String SetupList(Client c) {
         StringBuilder str = new StringBuilder();
         MapleInventory setup = c.getPlayer().getInventory(MapleInventoryType.SETUP);
         List<String> stra = new LinkedList<>();
@@ -2340,7 +2340,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return str.toString();
     }
 
-    public String PotentialedEquipList(MapleClient c) {
+    public String PotentialedEquipList(Client c) {
         StringBuilder str = new StringBuilder();
         MapleInventory equip = c.getPlayer().getInventory(MapleInventoryType.EQUIP);
         List<String> stra = new LinkedList<>();

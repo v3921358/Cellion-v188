@@ -21,21 +21,21 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;
 
-public final class MesoDrop implements ProcessPacket<MapleClient> {
+public final class MesoDrop implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         chr.updateTick(iPacket.DecodeInt());
         int meso = iPacket.DecodeInt();

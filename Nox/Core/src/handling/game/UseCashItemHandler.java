@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import client.MapleCharacterUtil;
-import client.MapleClient;
+import client.Client;
 import client.QuestStatus.QuestState;
 import client.MapleStat;
 import client.PlayerStats;
@@ -77,15 +77,15 @@ import server.potentials.ItemPotentialOption;
  *
  * @author
  */
-public class UseCashItemHandler implements ProcessPacket<MapleClient> {
+public class UseCashItemHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
 
         if (pPlayer == null || pPlayer.getMap() == null || pPlayer.inPVP()) {
@@ -1953,7 +1953,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
         sb.append("> ");
     }
 
-    private static boolean getIncubatedItems(MapleClient c, int itemId) {
+    private static boolean getIncubatedItems(Client c, int itemId) {
         if (c.getPlayer().getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() < 2 || c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() < 2 || c.getPlayer().getInventory(MapleInventoryType.SETUP).getNumFreeSlot() < 2) {
             c.getPlayer().dropMessage(5, "Please make room in your inventory.");
             return false;
@@ -1973,7 +1973,7 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
         return true;
     }
 
-    private static boolean magnifyEquip(final MapleClient c, Item magnify, Item toReveal, byte eqSlot) {
+    private static boolean magnifyEquip(final Client c, Item magnify, Item toReveal, byte eqSlot) {
         /*      final boolean insight = c.getPlayer().getTrait(MapleTrait.MapleTraitType.sense).getLevel() >= 30;
         final Equip eqq = (Equip) toReveal;
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();

@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.jobs.Kinesis.KinesisHandler;
 import net.InPacket;
 import net.ProcessPacket;
@@ -14,17 +14,17 @@ import tools.packet.JobPacket;
 
 /**
  *
- * @author Mazen
+ * @author Mazen Massoud
  */
-public class DoActivePsychicAreaHandler implements ProcessPacket<MapleClient> {
+public class DoActivePsychicAreaHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
         int nKey = iPacket.DecodeInt();
 
@@ -47,7 +47,7 @@ public class DoActivePsychicAreaHandler implements ProcessPacket<MapleClient> {
     }
 
     /*@Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         MapleCharacter pPlayer = c.getPlayer();
         int nKey = iPacket.DecodeInt();
         c.write(JobPacket.Kinesis.OnDoActivePsychicArea(nKey, 1));

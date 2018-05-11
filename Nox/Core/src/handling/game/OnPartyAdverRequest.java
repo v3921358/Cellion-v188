@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import handling.world.MapleExpedition;
 import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
@@ -34,15 +34,15 @@ import tools.packet.CWvsContext;
 import net.ProcessPacket;
 import tools.LogHelper;
 
-public final class OnPartyAdverRequest implements ProcessPacket<MapleClient> {
+public final class OnPartyAdverRequest implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int mode = iPacket.DecodeByte();
         PartySearchType pst;
         switch (mode) {

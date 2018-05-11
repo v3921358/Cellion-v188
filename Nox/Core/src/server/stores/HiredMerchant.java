@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import constants.GameConstants;
@@ -81,7 +81,7 @@ public class HiredMerchant extends AbstractPlayerStore {
     }
 
     @Override
-    public void buy(MapleClient c, int item, short quantity) {
+    public void buy(Client c, int item, short quantity) {
         final MaplePlayerShopItem pItem = items.get(item);
         final Item shopItem = pItem.item;
         final Item newItem = shopItem.copy();
@@ -151,14 +151,14 @@ public class HiredMerchant extends AbstractPlayerStore {
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         if (isAvailable()) {
             client.SendPacket(PlayerShopPacket.destroyHiredMerchant(getOwnerId()));
         }
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         if (isAvailable()) {
             client.SendPacket(PlayerShopPacket.spawnHiredMerchant(this));
         }
@@ -176,11 +176,11 @@ public class HiredMerchant extends AbstractPlayerStore {
         blacklist.remove(bl);
     }
 
-    public final void sendBlackList(final MapleClient c) {
+    public final void sendBlackList(final Client c) {
         c.SendPacket(PlayerShopPacket.MerchantBlackListView(blacklist));
     }
 
-    public final void sendVisitor(final MapleClient c) {
+    public final void sendVisitor(final Client c) {
         c.SendPacket(PlayerShopPacket.MerchantVisitorView(visitors));
     }
 }

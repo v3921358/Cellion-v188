@@ -1,6 +1,6 @@
 package server.commands;
 
-import client.MapleClient;
+import client.Client;
 import constants.ServerConstants;
 import java.util.concurrent.ScheduledFuture;
 import service.ChannelServer;
@@ -27,7 +27,7 @@ public class ThreadTesterCommand {
     public static class StartTestBuffRacingCondition extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             if (schedule != null) {
                 schedule.cancel(false);
                 schedule = null;
@@ -106,7 +106,7 @@ public class ThreadTesterCommand {
     public static class StopTestBuffRacingCondition extends CommandExecute {
 
         @Override
-        public int execute(MapleClient c, String[] splitted) {
+        public int execute(Client c, String[] splitted) {
             if (schedule != null) {
                 schedule.cancel(false);
                 schedule = null;

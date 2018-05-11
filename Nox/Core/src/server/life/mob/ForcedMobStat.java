@@ -9,7 +9,7 @@ import net.OutPacket;
 
 /**
  *
- * @author Mazen
+ * @author Mazen Massoud
  */
 public class ForcedMobStat {
 

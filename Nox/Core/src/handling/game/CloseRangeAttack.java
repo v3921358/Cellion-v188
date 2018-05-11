@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.CharacterTemporaryStat;
-import client.MapleClient;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import client.inventory.Item;
@@ -40,11 +40,11 @@ import tools.packet.JobPacket;
 
 /**
  * CloseRangeAttack
- * @author Mazen
+ * @author Mazen Massoud
  */
 public final class CloseRangeAttack {
 
-    public static void closeRangeAttack(InPacket iPacket, MapleClient c, User pPlayer, boolean bPassiveAttack) {
+    public static void closeRangeAttack(InPacket iPacket, Client c, User pPlayer, boolean bPassiveAttack) {
 
         if (pPlayer == null || pPlayer.hasBlockedInventory() 
                 || pPlayer.getMap() == null || (bPassiveAttack

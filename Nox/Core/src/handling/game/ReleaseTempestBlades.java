@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.SkillFactory;
 import handling.world.PlayerHandler;
 import tools.packet.CField;
@@ -29,17 +29,17 @@ import server.maps.objects.User;
 
 /**
  * 
- * @author Mazen
+ * @author Mazen Massoud
  */
-public final class ReleaseTempestBlades implements ProcessPacket<MapleClient> {
+public final class ReleaseTempestBlades implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
         int nMaxCount = 3;
         if (KaiserHandler.getTempestBladeSkill(pPlayer) == Kaiser.ADVANCED_TEMPEST_BLADES_1 || KaiserHandler.getTempestBladeSkill(pPlayer) == Kaiser.ADVANCED_TEMPEST_BLADES) {

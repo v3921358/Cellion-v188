@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.MapleReward;
 import constants.GameConstants;
 import net.InPacket;
@@ -9,15 +9,15 @@ import tools.packet.CWvsContext;
 import net.ProcessPacket;
 import tools.LogHelper;
 
-public final class OnUserRewardClaimRequest implements ProcessPacket<MapleClient> {
+public final class OnUserRewardClaimRequest implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int id = iPacket.DecodeInt();
         int type = iPacket.DecodeInt();
         int itemId = iPacket.DecodeInt();

@@ -1,21 +1,21 @@
 package handling.farm;
 
 import client.MapleCharacterCreationUtil;
-import client.MapleClient;
+import client.Client;
 import server.farm.MapleFarm;
 import net.InPacket;
 import tools.packet.FarmPacket;
 import net.ProcessPacket;
 
-public final class FarmCreator implements ProcessPacket<MapleClient> {
+public final class FarmCreator implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         String name = iPacket.DecodeString();
         if (!MapleCharacterCreationUtil.canCreateChar(name, c.isGm())) {
             return;

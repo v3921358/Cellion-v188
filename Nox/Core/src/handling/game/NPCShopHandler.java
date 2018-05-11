@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.MapleInventoryType;
 import client.inventory.ModifyInventory;
 import constants.GameConstants;
@@ -19,10 +19,10 @@ import server.shops.MapleShopFactory;
  *
  * @author Mazen Massoud
  */
-public class NPCShopHandler implements ProcessPacket<MapleClient> {
+public class NPCShopHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
@@ -54,7 +54,7 @@ public class NPCShopHandler implements ProcessPacket<MapleClient> {
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
 
         NPCShopOperation bmode = NPCShopOperation.getFromValue(iPacket.DecodeByte());

@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.QuestStatus;
 import client.Skill;
 import client.SkillEntry;
@@ -28,15 +28,15 @@ import tools.packet.CWvsContext;
  *
  * @author Five
  */
-public final class UpdateMatrixHandler implements ProcessPacket<MapleClient> {
+public final class UpdateMatrixHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int nUpdateType = iPacket.DecodeInt(); // 0 = Enable, 1 = Disable, 3 = Enhance, 4 = DisassembleSingle, 5 = DisassembleMultiple, 6 = CraftNode, 8 = CraftNodestone
         if (nUpdateType == VMatrixRecord.Enable || nUpdateType == VMatrixRecord.Disable) {
             int nSlot = iPacket.DecodeInt(); // VMatrix Record
@@ -246,7 +246,7 @@ public final class UpdateMatrixHandler implements ProcessPacket<MapleClient> {
         }
     }
 
-    public void UpdateMatrixRecord(MapleClient c) {
+    public void UpdateMatrixRecord(Client c) {
         // Neckson seriously removes all then re-adds and sends two skillrecord packets
         //List<SkillRecord> aChange = new ArrayList<>();
         //SkillRecord pSkillRecord;

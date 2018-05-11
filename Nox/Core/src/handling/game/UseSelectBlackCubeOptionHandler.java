@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Equip;
 import client.inventory.ModifyInventory;
 import client.inventory.ModifyInventoryOperation;
@@ -18,15 +18,15 @@ import net.ProcessPacket;
  *
  * @author Lloyd Korn
  */
-public class UseSelectBlackCubeOptionHandler implements ProcessPacket<MapleClient> {
+public class UseSelectBlackCubeOptionHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         final short option = iPacket.DecodeShort();
         final long temporaryKeyValue = iPacket.DecodeLong(); // or also the equipment's uniqueid which Nexon uses

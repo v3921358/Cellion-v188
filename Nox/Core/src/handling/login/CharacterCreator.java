@@ -36,15 +36,15 @@ import java.util.Map;
         MinTimeMillisBetweenPackets = 5000,
         FunctionName = "CharacterCreator",
         BanType = PacketThrottleLimits.PacketThrottleBanType.PermanentBan)
-public final class CharacterCreator implements ProcessPacket<MapleClient> {
+public final class CharacterCreator implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         String name = iPacket.DecodeString();
         iPacket.DecodeInt(); // 0
         iPacket.DecodeInt(); // -1

@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -23,15 +23,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class UseRewardItemHandler implements ProcessPacket<MapleClient> {
+public class UseRewardItemHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         //System.out.println("[Reward Item] " + iPacket.toString());
         final byte slot = (byte) iPacket.DecodeShort();
         final int itemId = iPacket.DecodeInt();
@@ -40,7 +40,7 @@ public class UseRewardItemHandler implements ProcessPacket<MapleClient> {
         UseRewardItem(slot, itemId, unseal, c, c.getPlayer());
     }
 
-    public static boolean UseRewardItem(byte slot, int itemId, final boolean unseal, final MapleClient c, final User chr) {
+    public static boolean UseRewardItem(byte slot, int itemId, final boolean unseal, final Client c, final User chr) {
         final Item toUse = c.getPlayer().getInventory(GameConstants.getInventoryType(itemId)).getItem(slot);
         c.SendPacket(CWvsContext.enableActions());
         if (toUse != null && toUse.getQuantity() >= 1 && toUse.getItemId() == itemId && !chr.hasBlockedInventory()) {

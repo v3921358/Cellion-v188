@@ -5,7 +5,7 @@ import scripting.provider.NPCScriptManager;
 import java.awt.Point;
 import java.time.LocalDateTime;
 import java.util.List;
-import client.MapleClient;
+import client.Client;
 import client.QuestStatus;
 import client.MapleTrait.MapleTraitType;
 import client.Skill;
@@ -51,22 +51,22 @@ import tools.packet.PetPacket;
 
 public abstract class AbstractPlayerInteraction {
 
-    protected MapleClient c;
+    protected Client c;
     protected int id, id2;
     protected String script;
 
-    public AbstractPlayerInteraction(final MapleClient c, final int id, final int id2, final String script) {
+    public AbstractPlayerInteraction(final Client c, final int id, final int id2, final String script) {
         this.c = c;
         this.id = id;
         this.id2 = id2;
         this.script = script;
     }
 
-    public final MapleClient getClient() {
+    public final Client getClient() {
         return c;
     }
 
-    public final MapleClient getC() {
+    public final Client getC() {
         return c;
     }
 
@@ -102,7 +102,7 @@ public abstract class AbstractPlayerInteraction {
         NPCScriptManager.getInstance().start(c, npc, filename);
     }
 
-    public final void openNpc(MapleClient client, int npc, String filename) {
+    public final void openNpc(Client client, int npc, String filename) {
         NPCScriptManager.getInstance().start(client, npc, filename);
     }
 
@@ -554,14 +554,14 @@ public abstract class AbstractPlayerInteraction {
         gainItem(id, quantity, randomStats, period, hours, slots, owner, c);
     }
 
-    public final void gainItem(final int id, final short quantity, final boolean randomStats, final long period, boolean hours, final int slots, final String owner, final MapleClient cg) {
+    public final void gainItem(final int id, final short quantity, final boolean randomStats, final long period, boolean hours, final int slots, final String owner, final Client cg) {
         gainItem(id, quantity, randomStats, period, hours, slots, owner, cg, true);
     }
 
 //    public final void gainItem(final int id, final short quantity, final boolean randomStats, final long period, boolean hours, final int slots, boolean potential, final String owner) {
 //        gainItem(id, quantity, randomStats, period, hours, slots, potential, owner, c);
 //    }
-    public final void gainItem(final int id, final short quantity, final boolean randomStats, final long period, boolean hours, final int slots, final String owner, final MapleClient cg, final boolean show) {
+    public final void gainItem(final int id, final short quantity, final boolean randomStats, final long period, boolean hours, final int slots, final String owner, final Client cg, final boolean show) {
         if (quantity >= 0) {
             final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
             final MapleInventoryType type = GameConstants.getInventoryType(id);
@@ -976,7 +976,7 @@ public abstract class AbstractPlayerInteraction {
         NPCScriptManager.getInstance().start(getClient(), id, null);
     }
 
-    public final void openNpc(final MapleClient cg, final int id) {
+    public final void openNpc(final Client cg, final int id) {
         cg.removeClickedNPC();
         NPCScriptManager.getInstance().start(cg, id, null);
     }
@@ -1021,7 +1021,7 @@ public abstract class AbstractPlayerInteraction {
 
     /*  
     *   spawnMonsterInMap
-    *   @author Mazen
+    *   @author Mazen Massoud
     *
     *   @purpose Spawns a monster to a set x/y coordinate on a specific map.
     *   @param (Map ID, Mob ID, X-Coordinate, Y-Coordinate).

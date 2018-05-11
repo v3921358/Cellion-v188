@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Enchant;
 import client.inventory.EnchantmentActions;
 import client.inventory.EnchantmentScroll;
@@ -22,20 +22,20 @@ import net.ProcessPacket;
  * @author Steven
  *
  */
-public class EnchantmentHandler implements ProcessPacket<MapleClient> {
+public class EnchantmentHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     /**
      * This handles the enchantment system for items
      *
-     * @see handling.MaplePacketHandler#handlePancket(tools.data.input.InPacket, client.MapleClient)
+     * @see handling.MaplePacketHandler#handlePancket(tools.data.input.InPacket, client.Client)
      */
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
         byte type = iPacket.DecodeByte();
         Enchant enchant = new Enchant(type);

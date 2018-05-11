@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
-import client.MapleClient;
+import client.Client;
 import client.QuestStatus;
 import client.QuestStatus.QuestState;
 import client.MapleReward;
@@ -130,7 +130,7 @@ public class PlayersHandler {
         }
     }
 
-    public static void TransformPlayer(final InPacket iPacket, final MapleClient c, final User chr) {
+    public static void TransformPlayer(final InPacket iPacket, final Client c, final User chr) {
         // D9 A4 FD 00
         // 11 00
         // A0 C0 21 00
@@ -158,7 +158,7 @@ public class PlayersHandler {
         }
     }
 
-    public static void startEvo(InPacket iPacket, User player, MapleClient c) {
+    public static void startEvo(InPacket iPacket, User player, Client c) {
 
         /*     final List<Integer> maps = new ArrayList<>();
         switch (mapid) {
@@ -196,7 +196,7 @@ public class PlayersHandler {
         c.getPlayer().getMap().startMapEffect("Work together and defeat Pink Zakum!.", 5120039);
     }
 
-    public static void HOLLY(MapleClient c, InPacket iPacket) {
+    public static void HOLLY(Client c, InPacket iPacket) {
         final Summon obj = (Summon) c.getPlayer().getMap().getMapObject(iPacket.DecodeInt(), MapleMapObjectType.SUMMON);
         if (obj == null) {
             return;
@@ -221,7 +221,7 @@ public class PlayersHandler {
         c.getPlayer().addHP(hp);
     }
 
-    public static void FollowRequest(final InPacket iPacket, final MapleClient c) {
+    public static void FollowRequest(final InPacket iPacket, final Client c) {
         User tt = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInt());
         if (iPacket.DecodeByte() > 0) {
             //1 when changing map
@@ -253,7 +253,7 @@ public class PlayersHandler {
         }
     }
 
-    public static void FollowReply(final InPacket iPacket, final MapleClient c) {
+    public static void FollowReply(final InPacket iPacket, final Client c) {
         if (c.getPlayer().getFollowId() > 0 && c.getPlayer().getFollowId() == iPacket.DecodeInt()) {
             User tt = c.getPlayer().getMap().getCharacterById(c.getPlayer().getFollowId());
             if (tt != null && tt.getPosition().distanceSq(c.getPlayer().getPosition()) < 10000 && tt.getFollowId() == 0 && tt.getId() != c.getPlayer().getId()) { //estimate, should less
@@ -282,7 +282,7 @@ public class PlayersHandler {
         }
     }
 
-    //   public static void HOLLY(MapleClient c,  InPacket iPacket) {
+    //   public static void HOLLY(Client c,  InPacket iPacket) {
     //     int skillid = iPacket.DecodeInt();
     //     if (skillid == 3121013) {
     //        Point poss = c.getPlayer().getPosition();
@@ -292,7 +292,7 @@ public class PlayersHandler {
     //        return;
     //    }
     //     }
-    public static void DoRing(final MapleClient c, final String name, final int itemid) {
+    public static void DoRing(final Client c, final String name, final int itemid) {
         final int newItemId = itemid == 2240000 ? 1112803 : (itemid == 2240001 ? 1112806 : (itemid == 2240002 ? 1112807 : (itemid == 2240003 ? 1112809 : (1112300 + (itemid - 2240004)))));
         final User chr = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
         int errcode = 0;
@@ -320,7 +320,7 @@ public class PlayersHandler {
         chr.getClient().SendPacket(CWvsContext.sendEngagementRequest(c.getPlayer().getName(), c.getPlayer().getId()));
     }
 
-    public static void RingAction(final InPacket iPacket, final MapleClient c) {
+    public static void RingAction(final InPacket iPacket, final Client c) {
         final byte mode = iPacket.DecodeByte();
         switch (mode) {
             case 0:
@@ -398,7 +398,7 @@ public class PlayersHandler {
         }
     }
 
-    public static void Solomon(final InPacket iPacket, final MapleClient c) {
+    public static void Solomon(final InPacket iPacket, final Client c) {
         c.SendPacket(CWvsContext.enableActions());
         c.getPlayer().updateTick(iPacket.DecodeInt());
         Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(iPacket.DecodeShort());
@@ -410,7 +410,7 @@ public class PlayersHandler {
         c.getPlayer().updateSingleStat(MapleStat.GACHAPONEXP, c.getPlayer().getGachExp());
     }
 
-    public static void GachExp(final InPacket iPacket, final MapleClient c) {
+    public static void GachExp(final InPacket iPacket, final Client c) {
         c.SendPacket(CWvsContext.enableActions());
         c.getPlayer().updateTick(iPacket.DecodeInt());
         if (c.getPlayer().getGachExp() <= 0) {
@@ -421,7 +421,7 @@ public class PlayersHandler {
         c.getPlayer().updateSingleStat(MapleStat.GACHAPONEXP, 0);
     }
 
-    public static void Report(final InPacket iPacket, final MapleClient c) {
+    public static void Report(final InPacket iPacket, final Client c) {
         //0 = success 1 = unable to locate 2 = once a day 3 = you've been reported 4+ = unknown reason
         User other;
         ReportType type;
@@ -448,11 +448,11 @@ public class PlayersHandler {
         }
     }
 
-    public static void exitSilentCrusadeUI(final InPacket iPacket, final MapleClient c) {
+    public static void exitSilentCrusadeUI(final InPacket iPacket, final Client c) {
         c.getPlayer().updateInfoQuest(1652, "alert=-1"); //Hide Silent Crusade icon
     }
 
-    public static void claimSilentCrusadeReward(final InPacket iPacket, final MapleClient c) {
+    public static void claimSilentCrusadeReward(final InPacket iPacket, final Client c) {
         short chapter = iPacket.DecodeShort();
         if (c.getPlayer() == null || !c.getPlayer().getInfoQuest(1648 + chapter).equals("m0=2;m1=2;m2=2;m3=2;m4=2")) {
             c.SendPacket(CWvsContext.enableActions());
@@ -496,7 +496,7 @@ public class PlayersHandler {
         c.SendPacket(CWvsContext.enableActions());
     }
 
-    public static void buySilentCrusade(final InPacket iPacket, final MapleClient c) {
+    public static void buySilentCrusade(final InPacket iPacket, final Client c) {
         //ui window is 0x49
         //iPacket: [00 00] [4F 46 11 00] [01 00]
         short slot = iPacket.DecodeShort(); //slot of item in the silent crusade window
@@ -572,7 +572,7 @@ public class PlayersHandler {
         }
     }
 
-    public static void UpdatePlayerInformation(final InPacket iPacket, final MapleClient c) {
+    public static void UpdatePlayerInformation(final InPacket iPacket, final Client c) {
         byte mode = iPacket.DecodeByte(); //01 open ui 03 save info
         if (mode == 1) {
             if (c.getPlayer().getQuestStatus(GameConstants.PLAYER_INFORMATION) != QuestState.NotStarted) {
@@ -599,7 +599,7 @@ public class PlayersHandler {
         c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.PLAYER_INFORMATION)).setCustomData("location=" + country + ";birthday=" + birthday + ";favoriteaction=" + favoriteAction + ";favoritelocation=" + favoriteLocation);
     }
 
-    public static void FindFriends(final InPacket iPacket, final MapleClient c) {
+    public static void FindFriends(final InPacket iPacket, final Client c) {
         byte mode = iPacket.DecodeByte();
         switch (mode) {
             case 5:
@@ -635,7 +635,7 @@ public class PlayersHandler {
         }
     }
 
-    public static void LinkSkill(final InPacket iPacket, final MapleClient c, final User chr) {
+    public static void LinkSkill(final InPacket iPacket, final Client c, final User chr) {
         //iPacket: [76 7F 31 01] [35 00 00 00]
         c.getPlayer().dropMessage(1, "Beginning link skill.");
         int skill = iPacket.DecodeInt();
@@ -654,7 +654,7 @@ public class PlayersHandler {
         User.addLinkSkill(cid, skill);
     }
 
-    public static void reviveAzwan(InPacket iPacket, MapleClient c) {
+    public static void reviveAzwan(InPacket iPacket, Client c) {
         if (c.getPlayer() == null) {
             c.SendPacket(CWvsContext.enableActions());
             return;
@@ -668,7 +668,7 @@ public class PlayersHandler {
         c.getPlayer().getStat().heal(c.getPlayer());
     }
 
-    public static void magicWheel(InPacket iPacket, MapleClient c) {
+    public static void magicWheel(InPacket iPacket, Client c) {
         final byte mode = iPacket.DecodeByte(); // 0 = open 2 = start 4 = receive reward
         if (mode == 2) {
             iPacket.DecodeInt(); //4
@@ -718,14 +718,14 @@ public class PlayersHandler {
         }
     }
 
-    public static void blackFriday(InPacket iPacket, MapleClient c) {
+    public static void blackFriday(InPacket iPacket, Client c) {
         SimpleDateFormat sdfGMT = new SimpleDateFormat("yyyy-MM-dd");
         sdfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
         c.getPlayer().updateInfoQuest(5604, sdfGMT.format(Calendar.getInstance().getTime()).replaceAll("-", ""));
         System.out.println(sdfGMT.format(Calendar.getInstance().getTime()).replaceAll("-", ""));
     }
 
-    public static void updateRedLeafHigh(InPacket iPacket, MapleClient c) { //not finished yet
+    public static void updateRedLeafHigh(InPacket iPacket, Client c) { //not finished yet
         //TODO: load and set red leaf high in sql
         iPacket.DecodeInt(); //questid or something
         iPacket.DecodeInt(); //joe joe quest
@@ -757,7 +757,7 @@ public class PlayersHandler {
         return false;
     }
 
-    public static void CassandrasCollection(InPacket iPacket, MapleClient c) {
+    public static void CassandrasCollection(InPacket iPacket, Client c) {
         c.SendPacket(CField.getCassandrasCollection());
     }
 }

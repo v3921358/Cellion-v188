@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -28,17 +28,17 @@ import tools.packet.CWvsContext;
 
 /**
  *
- * @author Mazen
+ * @author Mazen Massoud
  */
-public class UseBonusPotentialScrollHandler implements ProcessPacket<MapleClient> {
+public class UseBonusPotentialScrollHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
         pPlayer.updateTick(iPacket.DecodeInt());
         short nSlot = iPacket.DecodeShort();

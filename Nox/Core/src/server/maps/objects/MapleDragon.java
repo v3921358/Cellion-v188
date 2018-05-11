@@ -1,6 +1,6 @@
 package server.maps.objects;
 
-import client.MapleClient;
+import client.Client;
 import client.MapleJob;
 import server.maps.AnimatedMapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -23,12 +23,12 @@ public class MapleDragon extends AnimatedMapleMapObject {
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         client.SendPacket(CField.spawnDragon(this));
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         client.SendPacket(CField.removeDragon(this.owner));
     }
 

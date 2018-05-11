@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import client.MapleClient;
+import client.Client;
 import client.MapleTrait;
 import client.Skill;
 import client.SkillEntry;
@@ -29,15 +29,15 @@ import server.maps.MapleMapObjectType;
 import tools.packet.CField;
 import net.ProcessPacket;
 
-public final class CraftCompletion implements ProcessPacket<MapleClient> {
+public final class CraftCompletion implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         final int craftID = iPacket.DecodeInt();
         final SkillFactory.CraftingEntry ce = SkillFactory.getCraft(craftID);

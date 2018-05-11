@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -168,7 +168,7 @@ public class CSPacket {
         }
     }
 
-    public static OutPacket warpCS(MapleClient c) {
+    public static OutPacket warpCS(Client c) {
         final OutPacket oPacket = new OutPacket(SendPacketOpcode.SetCashShop.getValue());
         int[][][] packages = {
             {{5533004}, {20800281, 20800258, 20800261, 20800262, 20800266, 20800268}},
@@ -319,7 +319,7 @@ public class CSPacket {
         return oPacket;
     }
 
-    public static OutPacket getCSInventory(MapleClient c) {
+    public static OutPacket getCSInventory(Client c) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.CS_OPERATION.getValue());
         oPacket.EncodeByte(2); // 5 = Failed + transfer //was3
@@ -345,7 +345,7 @@ public class CSPacket {
         return oPacket;
     }
 
-    public static OutPacket getCSGifts(MapleClient c) {
+    public static OutPacket getCSGifts(Client c) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.CS_OPERATION.getValue());
         oPacket.EncodeByte(5); // 7 = Failed + transfer//was8
@@ -461,7 +461,7 @@ public class CSPacket {
         return oPacket;
     }
 
-    public static OutPacket showCouponRedeemedItem(Map<Integer, Item> items, int mesos, int maplePoints, MapleClient c) {
+    public static OutPacket showCouponRedeemedItem(Map<Integer, Item> items, int mesos, int maplePoints, Client c) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.CS_OPERATION.getValue());
         oPacket.EncodeByte(Operation_Code + 19);
@@ -480,7 +480,7 @@ public class CSPacket {
         return oPacket;
     }
 
-    public static OutPacket showCouponGifted(Map<Integer, Item> items, String receiver, MapleClient c) {
+    public static OutPacket showCouponGifted(Map<Integer, Item> items, String receiver, Client c) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.CS_OPERATION.getValue());
         oPacket.EncodeByte(Operation_Code + 21); // 22 = Failed. [Mode - 0/2 = transfer, 15 = invalid 3 times]

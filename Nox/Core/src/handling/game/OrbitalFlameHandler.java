@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import constants.skills.BlazeWizard;
@@ -41,15 +41,15 @@ import server.maps.objects.ForceAtom;
 import server.maps.objects.ForceAtomType;
 import tools.packet.CField;
 
-public final class OrbitalFlameHandler implements ProcessPacket<MapleClient> {
+public final class OrbitalFlameHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
         int nSkillID = iPacket.DecodeInt();
         byte nSLV = iPacket.DecodeByte();

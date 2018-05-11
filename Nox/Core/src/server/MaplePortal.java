@@ -2,7 +2,7 @@ package server;
 
 import java.awt.Point;
 
-import client.MapleClient;
+import client.Client;
 import client.anticheat.CheatingOffense;
 import constants.GameConstants;
 import service.ChannelServer;
@@ -75,7 +75,7 @@ public class MaplePortal {
         this.scriptName = scriptName;
     }
 
-    public final void enterPortal(final MapleClient c) {
+    public final void enterPortal(final Client c) {
         if (getPosition().distanceSq(c.getPlayer().getPosition()) > 40000 && !c.getPlayer().isGM()) {
             c.SendPacket(CWvsContext.enableActions());
             c.getPlayer().getCheatTracker().registerOffense(CheatingOffense.USING_FARAWAY_PORTAL);

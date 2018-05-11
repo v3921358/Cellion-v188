@@ -5,24 +5,24 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import java.awt.Point;
 import net.InPacket;
 import net.ProcessPacket;
 
 /**
  *
- * @author Mazen
+ * @author Mazen Massoud
  */
-public class DebuffPsychicAreaHandler implements ProcessPacket<MapleClient> {
+public class DebuffPsychicAreaHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int nSkillID = iPacket.DecodeInt();
         int nSLV = iPacket.DecodeShort();
         int nPsychicAreaKey = iPacket.DecodeInt(); // 04 00 00 00

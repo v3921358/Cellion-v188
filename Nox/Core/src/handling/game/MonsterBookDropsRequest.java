@@ -3,7 +3,7 @@ package handling.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import server.MapleItemInformationProvider;
 import server.life.MapleMonsterInformationProvider;
 import server.life.MonsterDropEntry;
@@ -13,15 +13,15 @@ import net.InPacket;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;
 
-public final class MonsterBookDropsRequest implements ProcessPacket<MapleClient> {
+public final class MonsterBookDropsRequest implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (c.getPlayer() == null || c.getPlayer().getMap() == null) {
             return;

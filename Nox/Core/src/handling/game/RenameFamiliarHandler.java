@@ -22,7 +22,7 @@
 package handling.game;
 
 import client.MapleCharacterUtil;
-import client.MapleClient;
+import client.Client;
 import server.maps.objects.User;
 import server.maps.objects.MonsterFamiliar;
 import net.InPacket;
@@ -30,15 +30,15 @@ import tools.packet.CField;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;
 
-public final class RenameFamiliarHandler implements ProcessPacket<MapleClient> {
+public final class RenameFamiliarHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         MonsterFamiliar mf = (MonsterFamiliar) c.getPlayer().getFamiliars().get(iPacket.DecodeInt());
         if (mf == null) {

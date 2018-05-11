@@ -1896,7 +1896,7 @@ public class CWvsContext {
         return oPacket;
     }
 
-    public static OutPacket getCandyRanking(MapleClient c, List<CandyRankingInfo> all) {
+    public static OutPacket getCandyRanking(Client c, List<CandyRankingInfo> all) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.HalloweenCandyRankingResult.getValue());
         oPacket.EncodeInt(all.size());
@@ -3446,7 +3446,7 @@ public class CWvsContext {
             return oPacket;
         }
 
-        public static OutPacket guildSearchResult(MapleClient c, Map<Integer, MapleGuild> guilds) {
+        public static OutPacket guildSearchResult(Client c, Map<Integer, MapleGuild> guilds) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.GuildSearchResult.getValue());
             oPacket.EncodeInt(guilds.size());

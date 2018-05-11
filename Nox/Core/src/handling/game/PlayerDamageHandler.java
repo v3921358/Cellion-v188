@@ -3,7 +3,7 @@ package handling.game;
 import java.awt.Point;
 
 import client.CharacterTemporaryStat;
-import client.MapleClient;
+import client.Client;
 import client.MapleStat;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
@@ -34,10 +34,10 @@ import tools.packet.JobPacket;
 import net.ProcessPacket;
 import server.maps.objects.User;
 
-public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
+public final class PlayerDamageHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
@@ -68,7 +68,7 @@ public final class PlayerDamageHandler implements ProcessPacket<MapleClient> {
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User pPlayer = c.getPlayer();
         if (pPlayer.hasGodMode()) {
             return; // Godmode

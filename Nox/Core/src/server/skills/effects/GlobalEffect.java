@@ -11,7 +11,7 @@ import server.skills.effects.manager.Effect;
 
 /**
  *
- * @author Mazen
+ * @author Mazen Massoud
  *
  */
 @Effect

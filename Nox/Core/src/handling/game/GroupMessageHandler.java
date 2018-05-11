@@ -5,7 +5,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import java.util.ArrayList;
 import java.util.List;
 import net.InPacket;
@@ -17,14 +17,14 @@ import tools.packet.CField;
  *
  * @author Five
  */
-public class GroupMessageHandler implements ProcessPacket<MapleClient> {
+public class GroupMessageHandler implements ProcessPacket<Client> {
 
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         int nType = iPacket.DecodeByte();
         int nCount = iPacket.DecodeByte();
         List<Integer> aCharacterID = new ArrayList<>(nCount);

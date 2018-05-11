@@ -2,7 +2,7 @@ package server.maps.objects;
 
 import java.awt.Rectangle;
 
-import client.MapleClient;
+import client.Client;
 import scripting.provider.ReactorScriptManager;
 import server.Timer.MapTimer;
 import server.maps.AnimatedMapleMapObject;
@@ -107,16 +107,16 @@ public class MapleReactor extends AnimatedMapleMapObject {
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         client.SendPacket(CField.destroyReactor(this));
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         client.SendPacket(CField.spawnReactor(this));
     }
 
-    public void forceStartReactor(MapleClient c) {
+    public void forceStartReactor(Client c) {
         ReactorScriptManager.getInstance().act(c, this);
     }
 
@@ -127,7 +127,7 @@ public class MapleReactor extends AnimatedMapleMapObject {
     }
 
     //hitReactor command for item-triggered reactors
-    public void hitReactor(MapleClient c) {
+    public void hitReactor(Client c) {
         hitReactor(0, (short) 0, c);
     }
 
@@ -144,7 +144,7 @@ public class MapleReactor extends AnimatedMapleMapObject {
         }, delay);
     }
 
-    public void hitReactor(int charPos, short stance, MapleClient c) {
+    public void hitReactor(int charPos, short stance, Client c) {
         if (stats.getType(state) < 999 && stats.getType(state) != -1) {
             //type 2 = only hit from right (kerning swamp plants), 00 is air left 02 is ground left
             final byte oldState = state;
@@ -202,7 +202,7 @@ public class MapleReactor extends AnimatedMapleMapObject {
         return "Reactor " + getObjectId() + " of id " + rid + " at position " + getPosition().toString() + " state" + state + " type " + stats.getType(state);
     }
 
-    public void delayedHitReactor(final MapleClient c, long delay) {
+    public void delayedHitReactor(final Client c, long delay) {
         MapTimer.getInstance().schedule(new Runnable() {
             @Override
             public void run() {

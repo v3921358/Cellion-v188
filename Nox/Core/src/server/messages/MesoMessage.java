@@ -1,6 +1,6 @@
 package server.messages;
 
-import client.MapleClient;
+import client.Client;
 import net.OutPacket;
 
 /**
@@ -13,7 +13,7 @@ public class MesoMessage implements MessageInterface {
     private final int action;
     private final String accountName;
 
-    public MesoMessage(int income, int action, MapleClient c) {
+    public MesoMessage(int income, int action, Client c) {
         this.income = income;
         this.action = action;
         accountName = c.getAccountName();

@@ -3,7 +3,7 @@ package handling.login;
 import client.MapleCharacterCreationUtil;
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import constants.ServerConstants;
 import constants.WorldConstants;
 import constants.WorldConstants.WorldOption;
@@ -15,15 +15,15 @@ import tools.packet.CWvsContext;
 import tools.packet.CLogin;
 import net.ProcessPacket;
 
-public final class CharListRequestHandler implements ProcessPacket<MapleClient> {
+public final class CharListRequestHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         if (!c.isLoggedIn()) {
             c.Close();
             return;
@@ -59,7 +59,7 @@ public final class CharListRequestHandler implements ProcessPacket<MapleClient> 
         c.SendPacket(CLogin.getJobListPacket());
     }
 
-    private void handleBurningEvent(MapleClient c, List<User> chars) {
+    private void handleBurningEvent(Client c, List<User> chars) {
         User[] characters = chars.toArray(new User[chars.size()]);
         boolean hasBurningCharacter = false;
         int burningCharacterId = 0;

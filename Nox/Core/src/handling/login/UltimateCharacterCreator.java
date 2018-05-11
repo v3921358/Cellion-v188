@@ -4,7 +4,7 @@ import client.MapleCharacterCreationUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-import client.MapleClient;
+import client.Client;
 import client.QuestStatus.QuestState;
 import client.Skill;
 import client.SkillEntry;
@@ -19,15 +19,15 @@ import net.InPacket;
 import tools.packet.CField;
 import net.ProcessPacket;
 
-public final class UltimateCharacterCreator implements ProcessPacket<MapleClient> {
+public final class UltimateCharacterCreator implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         if (!c.getPlayer().isGM()
                 && (!c.isLoggedIn() || c.getPlayer() == null || c.getPlayer().getLevel() < 120 || c.getPlayer().getMapId() != 130000000
                 || c.getPlayer().getQuestStatus(20734) != QuestState.NotStarted || c.getPlayer().getQuestStatus(20616) != QuestState.Completed || !GameConstants.isCygnusKnight(c.getPlayer().getJob()) || !MapleCharacterCreationUtil.canMakeCharacter(c.getWorld(), c.getAccID()))) {

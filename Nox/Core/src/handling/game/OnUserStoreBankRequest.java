@@ -21,20 +21,20 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import handling.world.HiredMerchantHandler;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class OnUserStoreBankRequest implements ProcessPacket<MapleClient> {
+public final class OnUserStoreBankRequest implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         HiredMerchantHandler.MerchantItemStore(iPacket, c);
     }
 }

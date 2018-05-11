@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,15 +15,15 @@ import net.ProcessPacket;
  *
  * @author Mazen Massoud
  */
-public class NPCTalkHandler implements ProcessPacket<MapleClient> {
+public class NPCTalkHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
         final MapleNPC pNpc = pPlayer.getMap().getNPCByOid(iPacket.DecodeInt());
 

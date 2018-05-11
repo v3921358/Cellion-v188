@@ -4,7 +4,7 @@ import client.CharacterTemporaryStat;
 import java.awt.Point;
 import java.util.List;
 
-import client.MapleClient;
+import client.Client;
 import constants.ServerConstants;
 import constants.skills.BattleMage;
 import handling.world.MovementParse;
@@ -27,15 +27,15 @@ import tools.Utility;
  * @author Steven
  *
  */
-public class PlayerMovement implements ProcessPacket<MapleClient> {
+public class PlayerMovement implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return c.isLoggedIn();
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
         if (pPlayer == null) {
             return;

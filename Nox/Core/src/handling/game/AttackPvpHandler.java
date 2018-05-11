@@ -11,7 +11,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import client.CharacterTemporaryStat;
-import client.MapleClient;
+import client.Client;
 import client.MapleDisease;
 import client.MonsterStatus;
 import client.PlayerStats;
@@ -37,15 +37,15 @@ import tools.packet.CField;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;
 
-public final class AttackPvpHandler implements ProcessPacket<MapleClient> {
+public final class AttackPvpHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final Lock ThreadLock = new ReentrantLock();
         final User chr = c.getPlayer();
         final int trueSkill = iPacket.DecodeInt();

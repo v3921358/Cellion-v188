@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import static handling.world.MobHandler.checkShammos;
 import server.life.Mob;
 import server.maps.objects.User;
@@ -11,15 +11,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class HypnotizeDmgHandler implements ProcessPacket<MapleClient> {
+public class HypnotizeDmgHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
         Mob mob_from = chr.getMap().getMonsterByOid(iPacket.DecodeInt());
         iPacket.Skip(4);

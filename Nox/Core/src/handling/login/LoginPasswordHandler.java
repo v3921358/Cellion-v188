@@ -2,7 +2,7 @@ package handling.login;
 
 import java.util.Calendar;
 
-import client.MapleClient;
+import client.Client;
 import constants.ServerConstants;
 import net.InPacket;
 import server.maps.objects.User;
@@ -14,15 +14,15 @@ import server.api.ApiCallback;
 import server.api.ApiFactory;
 import server.api.data.UserInfo;
 
-public final class LoginPasswordHandler implements ProcessPacket<MapleClient> {
+public final class LoginPasswordHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return !c.isLoggedIn();
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         byte unk = iPacket.DecodeByte();
         String pwd = iPacket.DecodeString();
         String login = iPacket.DecodeString().replace("NP12:auth06:5:0:", "");
@@ -49,12 +49,12 @@ public final class LoginPasswordHandler implements ProcessPacket<MapleClient> {
         }
     }
 
-    private static boolean loginFailCount(final MapleClient c) {
+    private static boolean loginFailCount(final Client c) {
         c.loginAttempt++;
         return c.loginAttempt > ServerConstants.LOGIN_ATTEMPTS;
     }
 
-    public static void checkLumiereAccount(MapleClient c, UserInfo data) {
+    public static void checkLumiereAccount(Client c, UserInfo data) {
         if (data.getError() == "unauthorized" || data.getId() == 0) { // The last should never ever be sent by the API since the endpoint is called directly from the database, but just in case.
             c.SendPacket(CLogin.getLoginFailed(8));
             return;
@@ -69,7 +69,7 @@ public final class LoginPasswordHandler implements ProcessPacket<MapleClient> {
         APILogin(c, data);
     }
 
-    public static void APILogin(MapleClient c, UserInfo data) {
+    public static void APILogin(Client c, UserInfo data) {
 
         final boolean ipBan = c.hasBannedIP();
         final boolean macBan = c.hasBannedMac();
@@ -105,7 +105,7 @@ public final class LoginPasswordHandler implements ProcessPacket<MapleClient> {
         }
     }
 
-    public static void PasswordLogin(MapleClient c, String name, String password) {
+    public static void PasswordLogin(Client c, String name, String password) {
 
         final boolean ipBan = c.hasBannedIP();
         final boolean macBan = c.hasBannedMac();

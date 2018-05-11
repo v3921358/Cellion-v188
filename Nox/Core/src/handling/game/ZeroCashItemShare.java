@@ -2,7 +2,7 @@ package handling.game;
 
 import java.util.Collections;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Equip;
 import client.inventory.MapleInventoryType;
 import client.inventory.ModifyInventory;
@@ -17,20 +17,20 @@ import net.ProcessPacket;
  * @author Steven
  *
  */
-public class ZeroCashItemShare implements ProcessPacket<MapleClient> {
+public class ZeroCashItemShare implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     /**
      * This handler handles if the cash item is going to be shared between alpha and beta
      *
-     * @see handling.MaplePacketHandler#handlePacket(tools.data.input.InPacket, client.MapleClient)
+     * @see handling.MaplePacketHandler#handlePacket(tools.data.input.InPacket, client.Client)
      */
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
         if (chr == null) {
             return;

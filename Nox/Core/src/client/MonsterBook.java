@@ -332,7 +332,7 @@ public final class MonsterBook
 
     }
 
-    public final boolean monsterCaught(MapleClient c, int cardid, String cardname) {
+    public final boolean monsterCaught(Client c, int cardid, String cardname) {
         if ((!this.cards.containsKey(cardid)) || (this.cards.get(cardid) < 2)) {
             this.changed = true;
             c.getPlayer().dropMessage(-6, new StringBuilder().append("Book entry updated - ").append(cardname).toString());
@@ -356,7 +356,6 @@ public final class MonsterBook
                     applyBook(c.getPlayer(), false);
                 }
             }
-
             return true;
         }
         return false;
@@ -366,7 +365,7 @@ public final class MonsterBook
         return this.cardItems == null ? false : this.cardItems.contains(cardid);
     }
 
-    public final void monsterSeen(MapleClient c, int cardid, String cardname) {
+    public final void monsterSeen(Client c, int cardid, String cardname) {
         if (this.cards.containsKey(cardid)) {
             return;
         }

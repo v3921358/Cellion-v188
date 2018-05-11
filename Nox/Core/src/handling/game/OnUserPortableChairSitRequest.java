@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import client.anticheat.CheatingOffense;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -32,15 +32,15 @@ import tools.packet.CField;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;
 
-public final class OnUserPortableChairSitRequest implements ProcessPacket<MapleClient> {
+public final class OnUserPortableChairSitRequest implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final User chr = c.getPlayer();
         if (chr == null || chr.getMap() == null) {
             return;

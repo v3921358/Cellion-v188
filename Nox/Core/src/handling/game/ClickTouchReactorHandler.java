@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import constants.GameConstants;
 import scripting.provider.ReactorScriptManager;
 import server.MapleInventoryManipulator;
@@ -12,15 +12,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class ClickTouchReactorHandler implements ProcessPacket<MapleClient> {
+public class ClickTouchReactorHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         final int oid = iPacket.DecodeInt();
         final boolean touched = iPacket.GetRemainder() == 0 || iPacket.DecodeByte() > 0; //the byte is probably the state to set it to
         final MapleReactor reactor = c.getPlayer().getMap().getReactorByOid(oid);

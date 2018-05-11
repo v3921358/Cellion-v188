@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import handling.world.World;
 import handling.world.MapleBBSThread;
 import java.util.List;
@@ -12,15 +12,15 @@ import net.ProcessPacket;
  *
  * @author
  */
-public class GuildBBSOperation implements ProcessPacket<MapleClient> {
+public class GuildBBSOperation implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         if (c.getPlayer().getGuildId() <= 0) {
             return; // expelled while viewing bbs or hax
         }
@@ -82,7 +82,7 @@ public class GuildBBSOperation implements ProcessPacket<MapleClient> {
         }
     }
 
-    private static void newBBSReply(final MapleClient c, final int localthreadid, final String text) {
+    private static void newBBSReply(final Client c, final int localthreadid, final String text) {
         if (c.getPlayer().getGuildId() <= 0) {
             return;
         }
@@ -90,7 +90,7 @@ public class GuildBBSOperation implements ProcessPacket<MapleClient> {
         displayThread(c, localthreadid);
     }
 
-    private static void editBBSThread(final MapleClient c, final String title, final String text, final int icon, final int localthreadid) {
+    private static void editBBSThread(final Client c, final String title, final String text, final int icon, final int localthreadid) {
         if (c.getPlayer().getGuildId() <= 0) {
             return; // expelled while viewing?
         }
@@ -98,7 +98,7 @@ public class GuildBBSOperation implements ProcessPacket<MapleClient> {
         displayThread(c, localthreadid);
     }
 
-    private static void newBBSThread(final MapleClient c, final String title, final String text, final int icon, final boolean bNotice) {
+    private static void newBBSThread(final Client c, final String title, final String text, final int icon, final boolean bNotice) {
         if (c.getPlayer().getGuildId() <= 0) {
             return; // expelled while viewing?
         }
@@ -106,14 +106,14 @@ public class GuildBBSOperation implements ProcessPacket<MapleClient> {
         listBBSThreads(c, 0);
     }
 
-    private static void deleteBBSThread(final MapleClient c, final int localthreadid) {
+    private static void deleteBBSThread(final Client c, final int localthreadid) {
         if (c.getPlayer().getGuildId() <= 0) {
             return;
         }
         World.Guild.deleteBBSThread(c.getPlayer().getGuildId(), localthreadid, c.getPlayer().getId(), (int) c.getPlayer().getGuildRank());
     }
 
-    private static void deleteBBSReply(final MapleClient c, final int localthreadid, final int replyid) {
+    private static void deleteBBSReply(final Client c, final int localthreadid, final int replyid) {
         if (c.getPlayer().getGuildId() <= 0) {
             return;
         }
@@ -129,14 +129,14 @@ public class GuildBBSOperation implements ProcessPacket<MapleClient> {
         return in;
     }
 
-    private static void listBBSThreads(MapleClient c, int start) {
+    private static void listBBSThreads(Client c, int start) {
         if (c.getPlayer().getGuildId() <= 0) {
             return;
         }
         c.SendPacket(CWvsContext.GuildPacket.BBSThreadList(World.Guild.getBBS(c.getPlayer().getGuildId()), start));
     }
 
-    private static void displayThread(final MapleClient c, final int localthreadid) {
+    private static void displayThread(final Client c, final int localthreadid) {
         if (c.getPlayer().getGuildId() <= 0) {
             return;
         }

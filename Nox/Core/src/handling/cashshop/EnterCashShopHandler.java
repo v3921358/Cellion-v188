@@ -21,8 +21,8 @@
  */
 package handling.cashshop;
 
-import client.MapleClient;
-import client.MapleClient.MapleClientLoginState;
+import client.Client;
+import client.Client.MapleClientLoginState;
 import handling.world.CharacterTransfer;
 import handling.world.MapleMessengerCharacter;
 import handling.world.PlayerBuffStorage;
@@ -38,15 +38,15 @@ import tools.packet.CWvsContext;
 import tools.packet.FarmPacket;
 import net.ProcessPacket;
 
-public final class EnterCashShopHandler implements ProcessPacket<MapleClient> {
+public final class EnterCashShopHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         User chr = c.getPlayer();
         if (chr.hasBlockedInventory() || chr.getEventInstance() != null) {
             c.SendPacket(CWvsContext.enableActions());
@@ -69,7 +69,7 @@ public final class EnterCashShopHandler implements ProcessPacket<MapleClient> {
         World.changeChannelData(new CharacterTransfer(chr), chr.getId(), -10);
         ch.removePlayer(chr);
         String s = c.getSessionIPAddress();
-        c.updateLoginState(MapleClientLoginState.CHANGE_CHANNEL, s);
+        c.updateLoginState(MapleClientLoginState.ChangeChannel, s);
 
         LoginServer.addIPAuth(s.substring(s.indexOf('/') + 1, s.length()));
         c.SendPacket(CField.getChannelChange(c, Integer.parseInt(CashShopServer.getIP().split(":")[1])));

@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.script.ScriptException;
 
-import client.MapleClient;
+import client.Client;
 import client.QuestStatus;
 import client.MapleTrait.MapleTraitType;
 import constants.GameConstants;
@@ -175,7 +175,7 @@ public class EventInstanceManager {
         }
     }
 
-    public void registerExpedition(MapleClient c, MapleExpedition exped, MapleMap map) {
+    public void registerExpedition(Client c, MapleExpedition exped, MapleMap map) {
         if (disposed) {
             return;
         }

@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleClient;
+import client.Client;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.PetPacket;
@@ -10,15 +10,15 @@ import net.ProcessPacket;
  *
  * @author Lloyd Korn
  */
-public class PetChatHandler implements ProcessPacket<MapleClient> {
+public class PetChatHandler implements ProcessPacket<Client> {
 
     @Override
-    public boolean ValidateState(MapleClient c) {
+    public boolean ValidateState(Client c) {
         return true;
     }
 
     @Override
-    public void Process(MapleClient c, InPacket iPacket) {
+    public void Process(Client c, InPacket iPacket) {
         //System.out.println("Pet chat: " + iPacket.toString());
         if (iPacket.GetRemainder() < 12) {
             return;
