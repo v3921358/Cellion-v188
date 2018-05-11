@@ -1,19 +1,15 @@
 package scripting;
 
+import client.inventory.*;
 import scripting.provider.NPCScriptManager;
 import java.awt.Point;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import client.MapleClient;
 import client.QuestStatus;
 import client.MapleTrait.MapleTraitType;
 import client.Skill;
 import client.SkillFactory;
-import client.inventory.Equip;
-import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryIdentifier;
-import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import handling.world.MapleExpedition;
 import handling.world.MapleGuild;
@@ -477,6 +473,33 @@ public abstract class AbstractPlayerInteraction {
                 break;
             }
         }
+    }
+
+    public String getInventoryItems(String type) {
+        MapleInventory inv = null;
+        switch (type) {
+            case "EQUIP":
+                inv = c.getPlayer().getInventory(MapleInventoryType.EQUIP);
+                break;
+            case "USE":
+                inv = c.getPlayer().getInventory(MapleInventoryType.USE);
+                break;
+            case "ETC":
+                inv = c.getPlayer().getInventory(MapleInventoryType.SETUP);
+                break;
+            case "SETUP":
+                inv = c.getPlayer().getInventory(MapleInventoryType.SETUP);
+                break;
+            case "CASH":
+                inv = c.getPlayer().getInventory(MapleInventoryType.CASH);
+                break;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Item item : inv.list()) {
+            sb.append("#L" + item.getPosition() + "##v" + item.getItemId() + "##t" + item.getItemId() + "##l \r\n");
+        }
+        String items = sb.toString();
+        return items;
     }
 
     public final int getJob() {
