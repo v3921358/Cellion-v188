@@ -1,13 +1,13 @@
 package server.farm;
 
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus.QuestState;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import server.maps.objects.User;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestRequirementType;
+import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 /**
  *
@@ -16,7 +16,7 @@ import server.quest.MapleQuestRequirementType;
 public class MapleFarmQuestRequirement implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
-    private MapleQuest quest;
+    private Quest quest;
     private int intStore;
     private int reqCompleted;
     private int installObjectID;
@@ -39,7 +39,7 @@ public class MapleFarmQuestRequirement implements Serializable {
      * @param rse
      * @throws java.sql.SQLException
      */
-    public MapleFarmQuestRequirement(MapleQuest quest, boolean repeatable, ResultSet rse) throws SQLException {
+    public MapleFarmQuestRequirement(Quest quest, boolean repeatable, ResultSet rse) throws SQLException {
         this.quest = quest;
         if (repeatable) {
             intStore = Integer.parseInt(rse.getString("stringStore"));
@@ -59,14 +59,14 @@ public class MapleFarmQuestRequirement implements Serializable {
     }
 
     public boolean check(User c, boolean repeatable) { //getQuest into getFarmQuest
-        if (repeatable && (c.getQuest(quest).getStatus() != MapleQuestState.Completed || c.getQuest(quest).getCompletionTime() <= System.currentTimeMillis() - intStore * 60 * 1000L)) {
+        if (repeatable && (c.getQuest(quest).getStatus() != QuestState.Completed || c.getQuest(quest).getCompletionTime() <= System.currentTimeMillis() - intStore * 60 * 1000L)) {
             return true;
         }
         return false;
     }
 
-    public MapleQuestRequirementType getType() {
-        return MapleQuestRequirementType.interval;
+    public QuestRequirementType getType() {
+        return QuestRequirementType.interval;
     }
 
     @Override

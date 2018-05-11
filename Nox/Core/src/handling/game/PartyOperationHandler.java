@@ -11,7 +11,7 @@ import static handling.world.World.getStorage;
 import service.ChannelServer;
 import server.maps.Event_DojoAgent;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import tools.packet.CWvsContext.PartyPacket;
@@ -125,7 +125,7 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
                             c.getPlayer().dropMessage(5, "You may not do party operations while in a raid.");
                             return;
                         }
-                        if ((party.getMembers().size() < 8) && (c.getPlayer().getQuestNoAdd(MapleQuest.getInstance(122901)) == null)) {
+                        if ((party.getMembers().size() < 8) && (c.getPlayer().getQuestNoAdd(Quest.getInstance(122901)) == null)) {
                             c.getPlayer().setParty(party);
                             World.Party.updateParty(party.getId(), PartyOperation.JOIN, partyplayer);
                             c.getPlayer().receivePartyMemberHP();
@@ -150,7 +150,7 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
                 int theCh = World.Find.findChannel(theName);
                 if (theCh > 0) {
                     User invited = ChannelServer.getInstance(theCh).getPlayerStorage().getCharacterByName(theName);
-                    if ((invited != null) && (invited.getParty() == null) && (invited.getQuestNoAdd(MapleQuest.getInstance(122901)) == null)) {
+                    if ((invited != null) && (invited.getParty() == null) && (invited.getQuestNoAdd(Quest.getInstance(122901)) == null)) {
                         if (party.getExpeditionId() > 0) {
                             c.getPlayer().dropMessage(5, "You may not do party operations while in a raid.");
                             return;
@@ -229,7 +229,7 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
                     return;
                 }
                 User cfrom = c.getPlayer().getMap().getCharacterById(party.getLeader().getId());
-                if ((cfrom != null) && (cfrom.getQuestNoAdd(MapleQuest.getInstance(122900)) == null)) {
+                if ((cfrom != null) && (cfrom.getQuestNoAdd(Quest.getInstance(122900)) == null)) {
                     c.SendPacket(CWvsContext.PartyPacket.partyStatusMessage(50, c.getPlayer().getName()));
                     cfrom.getClient().SendPacket(CWvsContext.PartyPacket.partyRequestInvite(c.getPlayer()));
                 } else {
@@ -238,9 +238,9 @@ public class PartyOperationHandler implements ProcessPacket<MapleClient> {
                 break;
             case 8:
                 if (iPacket.DecodeByte() > 0) {
-                    c.getPlayer().getQuestRemove(MapleQuest.getInstance(122900));
+                    c.getPlayer().getQuestRemove(Quest.getInstance(122900));
                 } else {
-                    c.getPlayer().getQuestNAdd(MapleQuest.getInstance(122900));
+                    c.getPlayer().getQuestNAdd(Quest.getInstance(122900));
                 }
                 break;
             default:

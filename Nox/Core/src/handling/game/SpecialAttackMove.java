@@ -22,7 +22,7 @@ import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import service.ChannelServer;
 import tools.packet.*;
 import tools.packet.CField.EffectPacket.UserEffectCodes;
@@ -594,7 +594,7 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                     boolean success = true; // (pMob.getHp() <= pMob.getMobMaxHp() / 2L) && (pMob.getId() >= 9304000) && (pMob.getId() < 9305000);
                     pPlayer.getMap().broadcastMessage(pPlayer, CField.EffectPacket.showBuffeffect(pPlayer.getId(), nSkill, UserEffectCodes.SkillUse, pPlayer.getLevel(), nSkillLevel, (byte) (success ? 1 : 0)), pPlayer.getTruePosition());
                     if (success) {
-                        pPlayer.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAGUAR)).setCustomData(String.valueOf((pMob.getId() - 9303999) * 10));
+                        pPlayer.getQuestNAdd(Quest.getInstance(GameConstants.JAGUAR)).setCustomData(String.valueOf((pMob.getId() - 9303999) * 10));
                         pPlayer.getMap().killMonster(pMob, pPlayer, true, false, (byte) 1);
                         pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.RideVehicle);
                         c.SendPacket(CWvsContext.updateJaguar(pPlayer));

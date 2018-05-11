@@ -52,7 +52,7 @@ import server.Randomizer;
 import server.farm.MapleFarm;
 import server.maps.MapleMap;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import server.stores.IMaplePlayerShop;
 import tools.LogHelper;
 import tools.Pair;
@@ -1009,8 +1009,8 @@ public class MapleClient extends Socket {
             player.cancelBuffs();
             player.cancelAllDebuffs();
             if (player.getMarriageId() > 0) {
-                final MapleQuestStatus stat1 = player.getQuestNoAdd(MapleQuest.getInstance(160001));
-                final MapleQuestStatus stat2 = player.getQuestNoAdd(MapleQuest.getInstance(160002));
+                final QuestStatus stat1 = player.getQuestNoAdd(Quest.getInstance(160001));
+                final QuestStatus stat2 = player.getQuestNoAdd(Quest.getInstance(160002));
                 if (stat1 != null && stat1.getCustomData() != null && (stat1.getCustomData().equals("2_") || stat1.getCustomData().equals("2"))) {
                     //dc in process of marriage
                     if (stat2 != null && stat2.getCustomData() != null) {
@@ -1020,8 +1020,8 @@ public class MapleClient extends Socket {
                 }
             }
             if (player.getMapId() == GameConstants.JAIL) {
-                final MapleQuestStatus stat1 = player.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_TIME));
-                final MapleQuestStatus stat2 = player.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_QUEST));
+                final QuestStatus stat1 = player.getQuestNAdd(Quest.getInstance(GameConstants.JAIL_TIME));
+                final QuestStatus stat2 = player.getQuestNAdd(Quest.getInstance(GameConstants.JAIL_QUEST));
                 if (stat1.getCustomData() == null) {
                     stat1.setCustomData(String.valueOf(System.currentTimeMillis()));
                 } else if (stat2.getCustomData() == null) {
@@ -1139,7 +1139,7 @@ public class MapleClient extends Socket {
                             break;
                     }
                     if (questID > 0) {
-                        player.getQuestNAdd(MapleQuest.getInstance(questID)).setCustomData("0"); //reset the time.
+                        player.getQuestNAdd(Quest.getInstance(questID)).setCustomData("0"); //reset the time.
                     }
                 } else if (player.isAlive()) {
                     switch (player.getMapId()) {

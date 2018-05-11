@@ -1,7 +1,7 @@
 package server.maps.objects;
 
 import client.*;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus.QuestState;
 import client.MapleSpecialStats.MapleSpecialStatUpdateType;
 import client.MapleTrait.MapleTraitType;
 import client.anticheat.CheatTracker;
@@ -55,7 +55,7 @@ import server.messages.*;
 import server.movement.LifeMovementFragment;
 import server.potentials.ItemPotentialProvider;
 import server.potentials.ItemPotentialTierType;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import server.shops.MapleShop;
 import server.shops.MapleShopFactory;
 import server.shops.MapleShopItem;
@@ -135,7 +135,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private transient ReentrantReadWriteLock summonsLock;
     private transient ReentrantReadWriteLock controlledLock;
     private transient MapleAndroid android;
-    private final Map<MapleQuest, MapleQuestStatus> quests;
+    private final Map<Quest, QuestStatus> quests;
     private Map<Integer, String> questinfo;
     private final Map<Skill, SkillEntry> skills;
     private transient Map<CharacterTemporaryStat, CharacterTemporaryStatValueHolder> effects;
@@ -279,10 +279,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * Pet Features
      */
     public boolean hasPetVacuum() {
-        if (haveItem(ItemConstants.PET_VAC)) {
-            return true;
-        }
-        return false;
+        return haveItem(ItemConstants.PET_VAC);
     }
 
     /*
@@ -292,10 +289,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private boolean bGodMode;
 
     public boolean usingStaffChat() {
-        if (bDisableStaffChat) {
-            return false;
-        }
-        return true;
+        return !bDisableStaffChat;
     }
 
     public void toggleStaffChat(boolean bDisable) {
@@ -332,10 +326,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public boolean canFightMagnus() {
-        if (System.currentTimeMillis() > nMagnusTime + 86400000) {
-            return true;
-        }
-        return false;
+        return (System.currentTimeMillis() > nMagnusTime + 86400000);
     }
 
     public boolean canPartyFightMagnus() {
@@ -383,7 +374,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public boolean checkTimeout() {
-        long nDuration = 0;
+        long nDuration;
         if (getBuffedValue(CharacterTemporaryStat.NextAttackEnhance) != null) { // Aran: Swing Studies
             nDuration = 4000;
             if (nLastTimeReference + nDuration < System.currentTimeMillis()) {
@@ -426,6 +417,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     /**
      * Channel ID
      *
+     * @param nCharacterID
      * @return The channel ID that the MapleCharacter object is currently on.
      */
     public static int getChannel(int nCharacterID) {
@@ -716,7 +708,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
          * End of Custom Feature
          */
 
- /*Start of Boss Features*/
+        /*Start of Boss Features*/
         ret.nMagnusTime = ct.magnusTime;
         /*End of Boss Features*/
 
@@ -767,9 +759,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             }
         }
 
-        MapleQuestStatus queststatus_from;
+        QuestStatus queststatus_from;
         for (final Map.Entry<Integer, Object> qs : ct.Quest.entrySet()) {
-            queststatus_from = (MapleQuestStatus) qs.getValue();
+            queststatus_from = (QuestStatus) qs.getValue();
             queststatus_from.setQuest(qs.getKey());
             ret.quests.put(queststatus_from.getQuest(), queststatus_from);
         }
@@ -1074,7 +1066,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
                 while (rs.next()) {
                     final int id = rs.getInt("quest");
-                    final MapleQuest q = MapleQuest.getInstance(id);
+                    final Quest q = Quest.getInstance(id);
                     final byte stat = rs.getByte("status");
                     if ((stat == 1 || stat == 2) && channelserver && (q == null || q.isBlocked())) { //bigbang
                         continue;
@@ -1082,7 +1074,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     if (stat == 1 && channelserver && !q.canStart(ret, null)) { //bigbang
                         continue;
                     }
-                    final MapleQuestStatus status = new MapleQuestStatus(q, MapleQuestState.getFromValue(stat));
+                    final QuestStatus status = new QuestStatus(q, QuestState.getFromValue(stat));
                     final long cTime = rs.getLong("time");
                     if (cTime > -1) {
                         status.setCompletionTime(cTime * 1000);
@@ -1628,7 +1620,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO queststatus (`queststatusid`, `characterid`, `quest`, `status`, `time`, `forfeited`, `customData`) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?)", RETURN_GENERATED_KEYS)) {
                 try (PreparedStatement pse = con.prepareStatement("INSERT INTO queststatusmobs VALUES (DEFAULT, ?, ?, ?)")) {
                     ps.setInt(1, chr.id);
-                    for (final MapleQuestStatus q : chr.quests.values()) {
+                    for (final QuestStatus q : chr.quests.values()) {
                         ps.setInt(2, q.getQuest().getId());
                         ps.setInt(3, q.getStatus().getValue());
                         ps.setInt(4, (int) (q.getCompletionTime() / 1000));
@@ -2009,7 +2001,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO queststatus (`queststatusid`, `characterid`, `quest`, `status`, `time`, `forfeited`, `customData`) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?)", RETURN_GENERATED_KEYS)) {
                 try (PreparedStatement pse = con.prepareStatement("INSERT INTO queststatusmobs VALUES (DEFAULT, ?, ?, ?)")) {
                     ps.setInt(1, id);
-                    for (final MapleQuestStatus q : quests.values()) {
+                    for (final QuestStatus q : quests.values()) {
                         ps.setInt(2, q.getQuest().getId());
                         ps.setInt(3, q.getStatus().getValue());
                         ps.setInt(4, (int) (q.getCompletionTime() / 1000));
@@ -2447,61 +2439,61 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public final int getNumQuest() {
         int i = 0;
-        i = quests.values().stream().filter((q) -> (q.getStatus() == MapleQuestState.Completed)).map((_item) -> 1).reduce(i, Integer::sum);
+        i = quests.values().stream().filter((q) -> (q.getStatus() == QuestState.Completed)).map((_item) -> 1).reduce(i, Integer::sum);
 
         return i;
     }
 
-    public final MapleQuestState getQuestStatus(final int quest) {
-        final MapleQuest qq = MapleQuest.getInstance(quest);
+    public final QuestState getQuestStatus(final int quest) {
+        final Quest qq = Quest.getInstance(quest);
         if (getQuestNoAdd(qq) == null) {
-            return MapleQuestState.NotStarted;
+            return QuestState.NotStarted;
         }
         return getQuestNoAdd(qq).getStatus();
     }
 
-    public final MapleQuestStatus getQuest(final MapleQuest quest) {
+    public final QuestStatus getQuest(final Quest quest) {
         if (!quests.containsKey(quest)) {
-            return new MapleQuestStatus(quest, MapleQuestState.NotStarted);
+            return new QuestStatus(quest, QuestState.NotStarted);
         }
         return quests.get(quest);
     }
 
-    public final void setQuestAdd(final MapleQuest quest, final MapleQuestState status, final String customData) {
+    public final void setQuestAdd(final Quest quest, final QuestState status, final String customData) {
         if (!quests.containsKey(quest)) {
-            final MapleQuestStatus stat = new MapleQuestStatus(quest, status);
+            final QuestStatus stat = new QuestStatus(quest, status);
             stat.setCustomData(customData);
             quests.put(quest, stat);
         }
     }
 
-    public final MapleQuestStatus getQuestNAdd(final MapleQuest quest) {
+    public final QuestStatus getQuestNAdd(final Quest quest) {
         if (!quests.containsKey(quest)) {
-            final MapleQuestStatus status = new MapleQuestStatus(quest, MapleQuestState.NotStarted);
+            final QuestStatus status = new QuestStatus(quest, QuestState.NotStarted);
             quests.put(quest, status);
             return status;
         }
         return quests.get(quest);
     }
 
-    public final MapleQuestStatus getQuestNoAdd(final MapleQuest quest) {
+    public final QuestStatus getQuestNoAdd(final Quest quest) {
         return quests.get(quest);
     }
 
-    public final MapleQuestStatus getQuestRemove(final MapleQuest quest) {
+    public final QuestStatus getQuestRemove(final Quest quest) {
         return quests.remove(quest);
     }
 
-    public final void updateQuest(final MapleQuestStatus quest) {
+    public final void updateQuest(final QuestStatus quest) {
         updateQuest(quest, false);
     }
 
-    public final void updateQuest(final MapleQuestStatus quest, final boolean update) {
+    public final void updateQuest(final QuestStatus quest, final boolean update) {
         quests.put(quest.getQuest(), quest);
         QuestStatusMessage questMessage = new QuestStatusMessage(quest);
 
         client.SendPacket(CWvsContext.messagePacket(questMessage));
-        if (quest.getStatus() == MapleQuestState.Started && !update) {
+        if (quest.getStatus() == QuestState.Started && !update) {
             client.SendPacket(CField.updateQuestInfo(this, quest.getQuest().getId(), quest.getNpc(), (byte) 11));//was10
         }
     }
@@ -2510,7 +2502,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return questinfo;
     }
 
-    public final Map<MapleQuest, MapleQuestStatus> getQuestMap() {
+    public final Map<Quest, QuestStatus> getQuestMap() {
         return quests;
     }
 
@@ -3081,8 +3073,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             @Override
             public void run() {
                 if (ourMap.getId() == GameConstants.JAIL) {
-                    getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_TIME)).setCustomData(String.valueOf(System.currentTimeMillis()));
-                    getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_QUEST)).setCustomData("0"); //release them!
+                    getQuestNAdd(Quest.getInstance(GameConstants.JAIL_TIME)).setCustomData(String.valueOf(System.currentTimeMillis()));
+                    getQuestNAdd(Quest.getInstance(GameConstants.JAIL_QUEST)).setCustomData("0"); //release them!
                 }
                 changeMap(to, to.getPortal(0));
             }
@@ -3972,8 +3964,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 resetRunningStack();
             }
             if (newJob == 2200) {
-                MapleQuest.getInstance(22100).forceStart(this, 0, null);
-                MapleQuest.getInstance(22100).forceComplete(this, 0);
+                Quest.getInstance(22100).forceStart(this, 0, null);
+                Quest.getInstance(22100).forceComplete(this, 0);
                 expandInventory((byte) 1, 4);
                 expandInventory((byte) 2, 4);
                 expandInventory((byte) 3, 4);
@@ -4796,7 +4788,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             pendingSkills = null;
             return;
         }
-        final MapleQuestStatus stat = getQuestNoAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT));
+        final QuestStatus stat = getQuestNoAdd(Quest.getInstance(GameConstants.PENDANT_SLOT));
         long expiration;
         final List<Integer> ret = new ArrayList<>();
         final long currenttime = System.currentTimeMillis();
@@ -4866,8 +4858,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
         this.pendingSkills = skilz;
         if (stat != null && stat.getCustomData() != null && Long.parseLong(stat.getCustomData()) < currenttime) { //expired bro
-            quests.remove(MapleQuest.getInstance(7830));
-            quests.remove(MapleQuest.getInstance(GameConstants.PENDANT_SLOT));
+            quests.remove(Quest.getInstance(7830));
+            quests.remove(Quest.getInstance(GameConstants.PENDANT_SLOT));
         }
     }
 
@@ -4981,8 +4973,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     // <editor-fold defaultstate="visible" desc="Quests"> 
     public void mobKilled(String name, int id, int lastSkillIdUsed) {
 
-        for (MapleQuestStatus q : quests.values()) {
-            if (q.getStatus() != MapleQuestState.Started || !q.hasMobKills()) {
+        for (QuestStatus q : quests.values()) {
+            if (q.getStatus() != QuestState.Started || !q.hasMobKills()) {
                 continue;
             }
 
@@ -4996,17 +4988,17 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    public final List<MapleQuestStatus> getStartedQuests() {
-        List<MapleQuestStatus> ret = new LinkedList<>();
-        quests.values().stream().filter((q) -> (q.getStatus() == MapleQuestState.Started && !q.getQuest().isBlocked())).forEach((q) -> {
+    public final List<QuestStatus> getStartedQuests() {
+        List<QuestStatus> ret = new LinkedList<>();
+        quests.values().stream().filter((q) -> (q.getStatus() == QuestState.Started && !q.getQuest().isBlocked())).forEach((q) -> {
             ret.add(q);
         });
         return ret;
     }
 
-    public final List<MapleQuestStatus> getCompletedQuests() {
-        List<MapleQuestStatus> ret = new LinkedList<>();
-        quests.values().stream().filter((q) -> (q.getStatus() == MapleQuestState.Completed && !q.getQuest().isBlocked())).forEach((q) -> {
+    public final List<QuestStatus> getCompletedQuests() {
+        List<QuestStatus> ret = new LinkedList<>();
+        quests.values().stream().filter((q) -> (q.getStatus() == QuestState.Completed && !q.getQuest().isBlocked())).forEach((q) -> {
             ret.add(q);
         });
         return ret;
@@ -5014,7 +5006,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public final List<Pair<Integer, Long>> getCompletedMedals() {
         List<Pair<Integer, Long>> ret = new ArrayList<>();
-        quests.values().stream().filter((q) -> (q.getStatus() == MapleQuestState.Completed && !q.getQuest().isBlocked() && q.getQuest().getMedalItem() > 0 && GameConstants.getInventoryType(q.getQuest().getMedalItem()) == MapleInventoryType.EQUIP)).forEach((q) -> {
+        quests.values().stream().filter((q) -> (q.getStatus() == QuestState.Completed && !q.getQuest().isBlocked() && q.getQuest().getMedalItem() > 0 && GameConstants.getInventoryType(q.getQuest().getMedalItem()) == MapleInventoryType.EQUIP)).forEach((q) -> {
             ret.add(new Pair<>(q.getQuest().getId(), q.getCompletionTime()));
         });
         return ret;
@@ -5317,7 +5309,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             switch (level) {
                 case 101:
                     //for (int i = 40000; i <= 40055; i++) {
-                    MapleQuestStatus pZeroTutorial = getQuestNoAdd(MapleQuest.getInstance(40054));
+                    QuestStatus pZeroTutorial = getQuestNoAdd(Quest.getInstance(40054));
                     pZeroTutorial.setCompletionTime(System.currentTimeMillis());
                     pZeroTutorial.getQuest().complete(this, 0);
                 //}
@@ -7055,10 +7047,22 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } catch (SQLException se) {
             LogHelper.SQL.get().info("Error saving family status ", se);
         }
-
         //MapleFamily.setOfflineFamilyStatus(familyid, seniorid, junior1, junior2, currentrep, totalrep, id);
     }
 
+    public long getNX() {
+        return maplepoints;
+    }
+    
+    public void setNX(int nAmount) {
+        maplepoints = nAmount;
+    }
+    
+    public void gainNX(int nAmount, boolean bNotification) {
+        maplepoints += nAmount;
+        if (bNotification) dropMessage(1, "You have " + ((nAmount > 0) ? " gained " : " lost ") + nAmount + " NX!");
+    }
+    
     public void modifyCSPoints(int type, int quantity) {
         modifyCSPoints(type, quantity, false);
     }
@@ -7072,9 +7076,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     }
                     return;
                 }
-                ///if (quantity > 0) {
-                //    quantity = (quantity / 2); //stuff is cheaper lol
-                //}
                 nxcredit += quantity;
                 break;
             case 2:
@@ -7094,9 +7095,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     }
                     return;
                 }
-                ///if (quantity > 0) {
-                //    quantity = (quantity / 2); //stuff is cheaper lol
-                //}
                 maplerewards += quantity;
                 break;
             case 4:
@@ -7106,9 +7104,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     }
                     return;
                 }
-                //if (quantity > 0) {
-                //    quantity = (quantity / 2); //stuff is cheaper lol
-                //}
                 acash += quantity;
                 break;
             default:
@@ -8615,9 +8610,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public int getDamageSkin() {
-        final List<MapleQuestStatus> started = getStartedQuests();
+        final List<QuestStatus> started = getStartedQuests();
         String customdata = "0";
-        for (final MapleQuestStatus q : started) {
+        for (final QuestStatus q : started) {
             if (q.getQuest().getId() == 7291 && q.getCustomData() != null) {
                 customdata = q.getCustomData();
             }
@@ -8652,13 +8647,13 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     // TODO: gvup, vic, lose, draw, VR
     public boolean startPartyQuest(final int questid) {
         boolean ret = false;
-        MapleQuest q = MapleQuest.getInstance(questid);
+        Quest q = Quest.getInstance(questid);
         if (q == null || !q.isPartyQuest()) {
             return false;
         }
         if (!quests.containsKey(q) || !questinfo.containsKey(questid)) {
-            final MapleQuestStatus status = getQuestNAdd(q);
-            status.setStatus(MapleQuestState.Started);
+            final QuestStatus status = getQuestNAdd(q);
+            status.setStatus(QuestState.Started);
             updateQuest(status);
 
             switch (questid) {
@@ -8686,7 +8681,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public String getOneInfo(final int questid, final String key) {
-        if (!questinfo.containsKey(questid) || key == null || MapleQuest.getInstance(questid) == null || !MapleQuest.getInstance(questid).isPartyQuest()) {
+        if (!questinfo.containsKey(questid) || key == null || Quest.getInstance(questid) == null || !Quest.getInstance(questid).isPartyQuest()) {
             return null;
         }
         final String[] split = questinfo.get(questid).split(";");
@@ -8700,7 +8695,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void updateOneInfo(final int questid, final String key, final String value) {
-        if (!questinfo.containsKey(questid) || key == null || value == null || MapleQuest.getInstance(questid) == null || !MapleQuest.getInstance(questid).isPartyQuest()) {
+        if (!questinfo.containsKey(questid) || key == null || value == null || Quest.getInstance(questid) == null || !Quest.getInstance(questid).isPartyQuest()) {
             return;
         }
         final String[] split = questinfo.get(questid).split(";");
@@ -8724,7 +8719,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void recalcPartyQuestRank(final int questid) {
-        if (MapleQuest.getInstance(questid) == null || !MapleQuest.getInstance(questid).isPartyQuest()) {
+        if (Quest.getInstance(questid) == null || !Quest.getInstance(questid).isPartyQuest()) {
             return;
         }
         if (!startPartyQuest(questid)) {
@@ -8752,7 +8747,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 default:
                     return;
             }
-            final List<Pair<String, Pair<String, Integer>>> questInfo = MapleQuest.getInstance(questid).getInfoByRank(newRank);
+            final List<Pair<String, Pair<String, Integer>>> questInfo = Quest.getInstance(questid).getInfoByRank(newRank);
             if (questInfo == null) {
                 return;
             }
@@ -8789,7 +8784,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void tryPartyQuest(final int questid) {
-        if (MapleQuest.getInstance(questid) == null || !MapleQuest.getInstance(questid).isPartyQuest()) {
+        if (Quest.getInstance(questid) == null || !Quest.getInstance(questid).isPartyQuest()) {
             return;
         }
         try {
@@ -8802,7 +8797,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void endPartyQuest(final int questid) {
-        if (MapleQuest.getInstance(questid) == null || !MapleQuest.getInstance(questid).isPartyQuest()) {
+        if (Quest.getInstance(questid) == null || !Quest.getInstance(questid).isPartyQuest()) {
             return;
         }
         try {
@@ -8877,7 +8872,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             default:
                 return;
         }
-        if (MapleQuest.getInstance(questid) == null || !MapleQuest.getInstance(questid).isPartyQuest()) {
+        if (Quest.getInstance(questid) == null || !Quest.getInstance(questid).isPartyQuest()) {
             return;
         }
         startPartyQuest(questid);
@@ -8886,7 +8881,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void resetStatsByJob(boolean beginnerJob) {
         int baseJob = (beginnerJob ? (job % 1000) : (((job % 1000) / 100) * 100)); //1112 -> 112 -> 1 -> 100
-        boolean UA = getQuestNoAdd(MapleQuest.getInstance(GameConstants.ULT_EXPLORER)) != null;
+        boolean UA = getQuestNoAdd(Quest.getInstance(GameConstants.ULT_EXPLORER)) != null;
         switch (baseJob) {
             case 100:
                 //first job = warrior
@@ -8983,7 +8978,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public boolean canUseFamilyBuff(MapleFamilyBuff buff) {
-        final MapleQuestStatus stat = getQuestNoAdd(MapleQuest.getInstance(buff.questID));
+        final QuestStatus stat = getQuestNoAdd(Quest.getInstance(buff.questID));
         if (stat == null) {
             return true;
         }
@@ -8994,7 +8989,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void useFamilyBuff(MapleFamilyBuff buff) {
-        final MapleQuestStatus stat = getQuestNAdd(MapleQuest.getInstance(buff.questID));
+        final QuestStatus stat = getQuestNAdd(Quest.getInstance(buff.questID));
         stat.setCustomData(String.valueOf(System.currentTimeMillis()));
     }
 
@@ -9190,7 +9185,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public int getIntNoRecord(int questID) {
-        final MapleQuestStatus stat = getQuestNoAdd(MapleQuest.getInstance(questID));
+        final QuestStatus stat = getQuestNoAdd(Quest.getInstance(questID));
         if (stat == null || stat.getCustomData() == null) {
             return 0;
         }
@@ -9198,7 +9193,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public long getLongNoRecord(int questID) {
-        final MapleQuestStatus stat = getQuestNoAdd(MapleQuest.getInstance(questID));
+        final QuestStatus stat = getQuestNoAdd(Quest.getInstance(questID));
         if (stat == null || stat.getCustomData() == null) {
             return 0;
         }
@@ -9206,7 +9201,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public int getIntRecord(int questID) {
-        final MapleQuestStatus stat = getQuestNAdd(MapleQuest.getInstance(questID));
+        final QuestStatus stat = getQuestNAdd(Quest.getInstance(questID));
         if (stat.getCustomData() == null) {
             stat.setCustomData("0");
         }
@@ -9214,7 +9209,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public long getLongRecord(int questID) {
-        final MapleQuestStatus stat = getQuestNAdd(MapleQuest.getInstance(questID));
+        final QuestStatus stat = getQuestNAdd(Quest.getInstance(questID));
         if (stat.getCustomData() == null) {
             stat.setCustomData("0");
         }
@@ -9309,11 +9304,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void forceCompleteQuest(int id) {
-        MapleQuest.getInstance(id).forceComplete(this, 9270035); //troll
+        Quest.getInstance(id).forceComplete(this, 9270035); //troll
     }
 
     public void fCompleteQuest(int nQuestId) {
-        MapleQuest.getInstance(nQuestId).forceComplete(this, 0);
+        Quest.getInstance(nQuestId).forceComplete(this, 0);
     }
 
     public List<Integer> getExtendedSlots() {
@@ -10547,7 +10542,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (medal != null) { // Medal
             sb.append("<");
             if (medal.getItemId() == 1142257 && GameConstants.isExplorer(c.getJob())) {
-                MapleQuestStatus stat = c.getQuestNoAdd(MapleQuest.getInstance(GameConstants.ULT_EXPLORER));
+                QuestStatus stat = c.getQuestNoAdd(Quest.getInstance(GameConstants.ULT_EXPLORER));
                 if (stat != null && stat.getCustomData() != null) {
                     sb.append(stat.getCustomData());
                     sb.append("'s Successor");
@@ -11437,7 +11432,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void toggleCustomBGState() {
-        getQuestNAdd(MapleQuest.getInstance(CUSTOM_BG)).setCustomData(String.valueOf(getCustomBGState() == 1 ? 0 : 1));
+        getQuestNAdd(Quest.getInstance(CUSTOM_BG)).setCustomData(String.valueOf(getCustomBGState() == 1 ? 0 : 1));
         //  for (byte i = 0; i < 127; i++) {
         //WriteFuture write = client.write(CField.removeBGLayer((getCustomBGState() == 1), 0, i, 0));
         //duration 0 = forever map 0 = current map

@@ -6,7 +6,7 @@
 package handling.game;
 
 import client.MapleClient;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
@@ -18,7 +18,7 @@ import java.util.Map;
 import net.InPacket;
 import net.ProcessPacket;
 import server.messages.UpdateQuestMessage;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import server.skills.VCore;
 import server.skills.VCore.EnforceOption;
 import server.skills.VMatrixRecord;
@@ -65,7 +65,7 @@ public final class UpdateMatrixHandler implements ProcessPacket<MapleClient> {
                     nShard = VCore.mSpecialEnforce.get(pRecord.nSLV).nExtract;
                 }
                 if (c.getPlayer().aVMatrixRecord.remove(nSlot) != null) {
-                    final MapleQuestStatus pQuest = c.getPlayer().getQuestNAdd(MapleQuest.getInstance(1477));
+                    final QuestStatus pQuest = c.getPlayer().getQuestNAdd(Quest.getInstance(1477));
                     String sVal = pQuest.getCustomData();
                     if (sVal != null && !sVal.isEmpty()) {
                         String sNum = sVal.substring(6);
@@ -86,7 +86,7 @@ public final class UpdateMatrixHandler implements ProcessPacket<MapleClient> {
             }
         } else if (nUpdateType == VMatrixRecord.DisassembleMultiple) {
             int nCount = iPacket.DecodeInt();
-            final MapleQuestStatus pQuest = c.getPlayer().getQuestNAdd(MapleQuest.getInstance(1477));
+            final QuestStatus pQuest = c.getPlayer().getQuestNAdd(Quest.getInstance(1477));
             String sVal = pQuest.getCustomData();
             int nOldShard = 0;
             int nTotalShard = 0;
@@ -189,7 +189,7 @@ public final class UpdateMatrixHandler implements ProcessPacket<MapleClient> {
                     nPrice = 250;
                 }
                 if (nPrice > 0) {
-                    final MapleQuestStatus pQuest = c.getPlayer().getQuestNAdd(MapleQuest.getInstance(1477));
+                    final QuestStatus pQuest = c.getPlayer().getQuestNAdd(Quest.getInstance(1477));
                     String sVal = pQuest.getCustomData();
                     int nShardCount = 0;
                     if (sVal != null && !sVal.isEmpty()) {

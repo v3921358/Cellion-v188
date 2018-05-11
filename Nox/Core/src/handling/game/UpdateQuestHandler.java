@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import net.ProcessPacket;
 
@@ -18,7 +18,7 @@ public class UpdateQuestHandler implements ProcessPacket<MapleClient> {
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        final MapleQuest quest = MapleQuest.getInstance(iPacket.DecodeShort());
+        final Quest quest = Quest.getInstance(iPacket.DecodeShort());
         if (quest != null) {
             c.getPlayer().updateQuest(c.getPlayer().getQuest(quest), true);
         }

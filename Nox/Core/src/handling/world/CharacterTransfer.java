@@ -13,7 +13,7 @@ import java.util.Map.Entry;
 
 import client.CardData;
 import client.MapleMarriage;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import client.MapleTrait.MapleTraitType;
 import client.Skill;
 import client.SkillEntry;
@@ -29,7 +29,7 @@ import java.util.HashMap;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
 import server.maps.objects.MonsterFamiliar;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import server.skills.VMatrixRecord;
 import tools.Pair;
 
@@ -221,7 +221,7 @@ public class CharacterTransfer {
         this.finishedAchievements = chr.getFinishedAchievements();
         this.InfoQuest = chr.getInfoQuestMap();
 
-        for (Entry<MapleQuest, MapleQuestStatus> qs : chr.getQuestMap().entrySet()) {
+        for (Entry<Quest, QuestStatus> qs : chr.getQuestMap().entrySet()) {
             this.Quest.put(qs.getKey().getId(), qs.getValue());
         }
 

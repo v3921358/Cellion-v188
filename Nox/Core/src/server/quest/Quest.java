@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import client.MapleQuestStatus;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus;
+import client.QuestStatus.QuestState;
 import constants.GameConstants;
 import database.Database;
 import scripting.provider.NPCScriptManager;
@@ -26,30 +26,30 @@ import tools.packet.CField;
 import tools.packet.CField.EffectPacket;
 import tools.packet.CField.EffectPacket.UserEffectCodes;
 
-public class MapleQuest implements Serializable {
+public class Quest implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
-    private static final Map<Integer, MapleQuest> quests = new LinkedHashMap<>();
-    private static final Map<Integer, MapleQuest> farmQuests = new LinkedHashMap<>();
+    private static final Map<Integer, Quest> quests = new LinkedHashMap<>();
+    private static final Map<Integer, Quest> farmQuests = new LinkedHashMap<>();
     protected int id;
-    protected final List<MapleQuestRequirement> startReqs = new LinkedList<>();
-    protected final List<MapleQuestRequirement> completeReqs = new LinkedList<>();
+    protected final List<QuestRequirement> startReqs = new LinkedList<>();
+    protected final List<QuestRequirement> completeReqs = new LinkedList<>();
     protected final List<MapleFarmQuestRequirement> farmStartReqs = new LinkedList<>();
     protected final List<MapleFarmQuestRequirement> farmCompleteReqs = new LinkedList<>();
-    protected final List<MapleQuestAction> startActs = new LinkedList<>();
-    protected final List<MapleQuestAction> completeActs = new LinkedList<>();
+    protected final List<QuestAction> startActs = new LinkedList<>();
+    protected final List<QuestAction> completeActs = new LinkedList<>();
     protected final Map<String, List<Pair<String, Pair<String, Integer>>>> partyQuestInfo = new LinkedHashMap<>(); //[rank, [more/less/equal, [property, value]]]
     protected final Map<Integer, Integer> relevantMobs = new LinkedHashMap<>();
     private boolean autoStart = false, autoPreComplete = false, repeatable = false, customend = false, blocked = false, autoAccept = false, autoComplete = false, scriptedStart = false;
     private int viewMedalItem = 0, selectedSkillID = 0;
     protected String name = "";
 
-    protected MapleQuest(final int id) {
+    protected Quest(final int id) {
         this.id = id;
     }
 
-    private static MapleQuest loadQuest(ResultSet rs, PreparedStatement psr, PreparedStatement psa, PreparedStatement pss, PreparedStatement psq, PreparedStatement psi, PreparedStatement psp) throws SQLException {
-        final MapleQuest ret = new MapleQuest(rs.getInt("questid"));
+    private static Quest loadQuest(ResultSet rs, PreparedStatement psr, PreparedStatement psa, PreparedStatement pss, PreparedStatement psq, PreparedStatement psi, PreparedStatement psp) throws SQLException {
+        final Quest ret = new Quest(rs.getInt("questid"));
         ret.name = rs.getString("name");
         ret.autoStart = rs.getInt("autoStart") > 0;
         ret.autoPreComplete = rs.getInt("autoPreComplete") > 0;
@@ -62,18 +62,18 @@ public class MapleQuest implements Serializable {
         psr.setInt(1, ret.id);
         ResultSet rse = psr.executeQuery();
         while (rse.next()) {
-            final MapleQuestRequirementType type = MapleQuestRequirementType.getByWZName(rse.getString("name"));
-            final MapleQuestRequirement req = new MapleQuestRequirement(ret, type, rse);
-            if (type.equals(MapleQuestRequirementType.interval)) {
+            final QuestRequirementType type = QuestRequirementType.getByWZName(rse.getString("name"));
+            final QuestRequirement req = new QuestRequirement(ret, type, rse);
+            if (type.equals(QuestRequirementType.interval)) {
                 ret.repeatable = true;
-            } else if (type.equals(MapleQuestRequirementType.normalAutoStart)) {
+            } else if (type.equals(QuestRequirementType.normalAutoStart)) {
                 ret.repeatable = true;
                 ret.autoStart = true;
-            } else if (type.equals(MapleQuestRequirementType.startscript)) {
+            } else if (type.equals(QuestRequirementType.startscript)) {
                 ret.scriptedStart = true;
-            } else if (type.equals(MapleQuestRequirementType.endscript)) {
+            } else if (type.equals(QuestRequirementType.endscript)) {
                 ret.customend = true;
-            } else if (type.equals(MapleQuestRequirementType.mob)) {
+            } else if (type.equals(QuestRequirementType.mob)) {
                 for (Pair<Integer, Integer> mob : req.getDataStore()) {
                     ret.relevantMobs.put(mob.left, mob.right);
                 }
@@ -89,17 +89,17 @@ public class MapleQuest implements Serializable {
         psa.setInt(1, ret.id);
         rse = psa.executeQuery();
         while (rse.next()) {
-            final MapleQuestActionType ty = MapleQuestActionType.getByWZName(rse.getString("name"));
+            final QuestActionType ty = QuestActionType.getByWZName(rse.getString("name"));
             if (rse.getInt("type") == 0) { //pass it over so it will set ID + type once done
-                if (ty == MapleQuestActionType.item && ret.id == 7103) { //pap glitch
+                if (ty == QuestActionType.item && ret.id == 7103) { //pap glitch
                     continue;
                 }
-                ret.startActs.add(new MapleQuestAction(ty, rse, ret, pss, psq, psi));
+                ret.startActs.add(new QuestAction(ty, rse, ret, pss, psq, psi));
             } else {
-                if (ty == MapleQuestActionType.item && ret.id == 7102) { //pap glitch
+                if (ty == QuestActionType.item && ret.id == 7102) { //pap glitch
                     continue;
                 }
-                ret.completeActs.add(new MapleQuestAction(ty, rse, ret, pss, psq, psi));
+                ret.completeActs.add(new QuestAction(ty, rse, ret, pss, psq, psi));
             }
         }
         rse.close();
@@ -116,8 +116,8 @@ public class MapleQuest implements Serializable {
         return ret;
     }
 
-    private static MapleQuest loadFarmQuest(ResultSet rs, PreparedStatement psr) throws SQLException {
-        final MapleQuest ret = new MapleQuest(rs.getInt("questid"));
+    private static Quest loadFarmQuest(ResultSet rs, PreparedStatement psr) throws SQLException {
+        final Quest ret = new Quest(rs.getInt("questid"));
         ret.name = rs.getString("name");
         ret.repeatable = rs.getInt("repeatable") > 0;
 
@@ -151,7 +151,7 @@ public class MapleQuest implements Serializable {
         return name;
     }
 
-    public final List<MapleQuestAction> getCompleteActs() {
+    public final List<QuestAction> getCompleteActs() {
         return completeActs;
     }
 
@@ -200,34 +200,34 @@ public class MapleQuest implements Serializable {
 
     }
 
-    public static MapleQuest getInstance(int id) {
-        MapleQuest ret = quests.get(id);
+    public static Quest getInstance(int id) {
+        Quest ret = quests.get(id);
         if (ret == null) {
-            ret = new MapleQuest(id);
+            ret = new Quest(id);
             quests.put(id, ret); //by this time we have already initialized
         }
         return ret;
     }
 
-    public static MapleQuest getFarmInstance(int id) {
-        MapleQuest ret = farmQuests.get(id);
+    public static Quest getFarmInstance(int id) {
+        Quest ret = farmQuests.get(id);
         if (ret == null) {
-            ret = new MapleQuest(id);
+            ret = new Quest(id);
             farmQuests.put(id, ret); //by this time we have already initialized
         }
         return ret;
     }
 
-    public static Collection<MapleQuest> getAllInstances() {
+    public static Collection<Quest> getAllInstances() {
         return quests.values();
     }
 
-    public static Collection<MapleQuest> getAllFarmInstances() {
+    public static Collection<Quest> getAllFarmInstances() {
         return farmQuests.values();
     }
 
     public boolean canStart(User c, Integer npcid) {
-        if (c.getQuest(this).getStatus() != MapleQuestState.NotStarted && !(c.getQuest(this).getStatus() == MapleQuestState.Completed && repeatable)) {
+        if (c.getQuest(this).getStatus() != QuestState.NotStarted && !(c.getQuest(this).getStatus() == QuestState.Completed && repeatable)) {
             return false;
         }
         //if (blocked && !c.isGM()) {
@@ -236,8 +236,8 @@ public class MapleQuest implements Serializable {
         //if (autoAccept) {
         //    return true; //need script
         //}
-        for (MapleQuestRequirement r : startReqs) {
-            if (r.getType() == MapleQuestRequirementType.dayByDay && npcid != null) { //everyday. we don't want ok
+        for (QuestRequirement r : startReqs) {
+            if (r.getType() == QuestRequirementType.dayByDay && npcid != null) { //everyday. we don't want ok
                 forceComplete(c, npcid);
                 return false;
             }
@@ -249,7 +249,7 @@ public class MapleQuest implements Serializable {
     }
 
     public boolean canComplete(User c, Integer npcid) {
-        if (c.getQuest(this).getStatus() != MapleQuestState.Started) {
+        if (c.getQuest(this).getStatus() != QuestState.Started) {
             return false;
         }
         //if (blocked && !c.isGM()) {
@@ -259,7 +259,7 @@ public class MapleQuest implements Serializable {
             forceComplete(c, npcid);
             return false; //skip script
         }
-        for (MapleQuestRequirement r : completeReqs) {
+        for (QuestRequirement r : completeReqs) {
             if (!r.check(c, npcid)) {
                 return false;
             }
@@ -268,7 +268,7 @@ public class MapleQuest implements Serializable {
     }
 
     public boolean canCompleteFarm(User c) {
-        if (c.getQuest(this).getStatus() != MapleQuestState.Started) {
+        if (c.getQuest(this).getStatus() != QuestState.Started) {
             return false;
         }
         for (MapleFarmQuestRequirement r : farmCompleteReqs) {
@@ -283,7 +283,7 @@ public class MapleQuest implements Serializable {
         //if (blocked && !c.isGM()) {
         //    return;
         //}
-        for (final MapleQuestAction a : startActs) {
+        for (final QuestAction a : startActs) {
             if (a.RestoreLostItem(c, itemid)) {
                 break;
             }
@@ -292,12 +292,12 @@ public class MapleQuest implements Serializable {
 
     public void start(User c, int npc) {
         if ((autoStart || checkNPCOnMap(c, npc)) && canStart(c, npc)) {
-            for (MapleQuestAction a : startActs) {
+            for (QuestAction a : startActs) {
                 if (!a.checkEnd(c, null)) { //just in case
                     return;
                 }
             }
-            for (MapleQuestAction a : startActs) {
+            for (QuestAction a : startActs) {
                 a.runStart(c, null);
             }
             if (!customend) {
@@ -314,13 +314,13 @@ public class MapleQuest implements Serializable {
 
     public void complete(User c, int npc, Integer selection) {
         if (c.getMap() != null && (autoPreComplete || checkNPCOnMap(c, npc)) && canComplete(c, npc)) {
-            for (MapleQuestAction a : completeActs) {
+            for (QuestAction a : completeActs) {
                 if (!a.checkEnd(c, selection)) {
                     return;
                 }
             }
             forceComplete(c, npc);
-            for (MapleQuestAction a : completeActs) {
+            for (QuestAction a : completeActs) {
                 a.runEnd(c, selection);
             }
             // we save forfeits only for logging purposes, they shouldn't matter anymore
@@ -332,18 +332,18 @@ public class MapleQuest implements Serializable {
     }
 
     public void forfeit(User c) {
-        if (c.getQuest(this).getStatus() != MapleQuestState.Started) {
+        if (c.getQuest(this).getStatus() != QuestState.Started) {
             return;
         }
-        final MapleQuestStatus oldStatus = c.getQuest(this);
-        final MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestState.NotStarted);
+        final QuestStatus oldStatus = c.getQuest(this);
+        final QuestStatus newStatus = new QuestStatus(this, QuestState.NotStarted);
         newStatus.setForfeited(oldStatus.getForfeited() + 1);
         newStatus.setCompletionTime(oldStatus.getCompletionTime());
         c.updateQuest(newStatus);
     }
 
     public void forceStart(User c, int npc, String customData) {
-        final MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestState.Started, npc);
+        final QuestStatus newStatus = new QuestStatus(this, QuestState.Started, npc);
         newStatus.setForfeited(c.getQuest(this).getForfeited());
         newStatus.setCompletionTime(c.getQuest(this).getCompletionTime());
         newStatus.setCustomData(customData);
@@ -352,7 +352,7 @@ public class MapleQuest implements Serializable {
 
     public void forceStartHillaGang(List<User> party, int npc, String customData) {
         for (User chr : party) {
-            final MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestState.Started, npc);
+            final QuestStatus newStatus = new QuestStatus(this, QuestState.Started, npc);
             newStatus.setForfeited(chr.getQuest(this).getForfeited());
             newStatus.setCompletionTime(chr.getQuest(this).getCompletionTime());
             newStatus.setCustomData(customData);
@@ -361,7 +361,7 @@ public class MapleQuest implements Serializable {
     }
 
     public void forceComplete(User c, int npc) {
-        final MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestState.Completed, npc);
+        final QuestStatus newStatus = new QuestStatus(this, QuestState.Completed, npc);
         newStatus.setForfeited(c.getQuest(this).getForfeited());
         c.updateQuest(newStatus);
     }
@@ -388,13 +388,13 @@ public class MapleQuest implements Serializable {
     }
 
     public void socomplete(User c, int npc) {
-        for (MapleQuestAction a : this.completeActs) {
+        for (QuestAction a : this.completeActs) {
             if (!a.checkEnd(c, null)) {
                 return;
             }
         }
         forceComplete(c, npc);
-        for (MapleQuestAction a : this.completeActs) {
+        for (QuestAction a : this.completeActs) {
             a.runEnd(c, null);
         }
         c.getClient().SendPacket(CField.EffectPacket.showForeignEffect(UserEffectCodes.QuestComplete));

@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 import client.MapleClient;
-import client.MapleQuestStatus;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus;
+import client.QuestStatus.QuestState;
 import client.MapleReward;
 import client.MapleStat;
 import client.SkillFactory;
@@ -43,7 +43,7 @@ import server.maps.objects.MapleDoor;
 import server.maps.objects.MapleMist;
 import server.maps.objects.Summon;
 import server.maps.objects.MechDoor;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.LogHelper;
 import net.InPacket;
 import tools.packet.CField;
@@ -432,7 +432,7 @@ public class PlayersHandler {
             c.SendPacket(CWvsContext.report(4));
             return;
         }
-        final MapleQuestStatus stat = c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.REPORT_QUEST));
+        final QuestStatus stat = c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.REPORT_QUEST));
         if (stat.getCustomData() == null) {
             stat.setCustomData("0");
         }
@@ -575,9 +575,9 @@ public class PlayersHandler {
     public static void UpdatePlayerInformation(final InPacket iPacket, final MapleClient c) {
         byte mode = iPacket.DecodeByte(); //01 open ui 03 save info
         if (mode == 1) {
-            if (c.getPlayer().getQuestStatus(GameConstants.PLAYER_INFORMATION) != MapleQuestState.NotStarted) {
+            if (c.getPlayer().getQuestStatus(GameConstants.PLAYER_INFORMATION) != QuestState.NotStarted) {
                 try {
-                    String[] info = c.getPlayer().getQuest(MapleQuest.getInstance(GameConstants.PLAYER_INFORMATION)).getCustomData().split(";");
+                    String[] info = c.getPlayer().getQuest(Quest.getInstance(GameConstants.PLAYER_INFORMATION)).getCustomData().split(";");
                     c.SendPacket(CWvsContext.loadInformation((byte) 2, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), Integer.parseInt(info[3]), true));
                 } catch (NumberFormatException ex) {
                     c.SendPacket(CWvsContext.loadInformation((byte) 4, 0, 0, 0, 0, false));
@@ -596,14 +596,14 @@ public class PlayersHandler {
         int birthday = iPacket.DecodeInt();
         int favoriteAction = iPacket.DecodeInt(); //kind of mask
         int favoriteLocation = iPacket.DecodeInt(); //kind of mask
-        c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.PLAYER_INFORMATION)).setCustomData("location=" + country + ";birthday=" + birthday + ";favoriteaction=" + favoriteAction + ";favoritelocation=" + favoriteLocation);
+        c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.PLAYER_INFORMATION)).setCustomData("location=" + country + ";birthday=" + birthday + ";favoriteaction=" + favoriteAction + ";favoritelocation=" + favoriteLocation);
     }
 
     public static void FindFriends(final InPacket iPacket, final MapleClient c) {
         byte mode = iPacket.DecodeByte();
         switch (mode) {
             case 5:
-                if (c.getPlayer().getQuestStatus(GameConstants.PLAYER_INFORMATION) == MapleQuestState.NotStarted) {
+                if (c.getPlayer().getQuestStatus(GameConstants.PLAYER_INFORMATION) == QuestState.NotStarted) {
                     c.SendPacket(CWvsContext.findFriendResult((byte) 6, null, 0, null));
                     c.SendPacket(CWvsContext.enableActions());
                     return;
@@ -612,14 +612,14 @@ public class PlayersHandler {
                 List<User> characters = new LinkedList();
                 for (User chr : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                     if (chr != c.getPlayer()) {
-                        if (c.getPlayer().getQuestStatus(GameConstants.PLAYER_INFORMATION) == MapleQuestState.NotStarted || characters.isEmpty()) {
+                        if (c.getPlayer().getQuestStatus(GameConstants.PLAYER_INFORMATION) == QuestState.NotStarted || characters.isEmpty()) {
                             characters.add(chr);
                         } else {
-                            if (chr.getQuestStatus(GameConstants.PLAYER_INFORMATION) == MapleQuestState.NotStarted && characters.isEmpty()) {
+                            if (chr.getQuestStatus(GameConstants.PLAYER_INFORMATION) == QuestState.NotStarted && characters.isEmpty()) {
                                 continue;
                             }
-                            String[] info = c.getPlayer().getQuest(MapleQuest.getInstance(GameConstants.PLAYER_INFORMATION)).getCustomData().split(";");
-                            String[] info2 = chr.getQuest(MapleQuest.getInstance(GameConstants.PLAYER_INFORMATION)).getCustomData().split(";");
+                            String[] info = c.getPlayer().getQuest(Quest.getInstance(GameConstants.PLAYER_INFORMATION)).getCustomData().split(";");
+                            String[] info2 = chr.getQuest(Quest.getInstance(GameConstants.PLAYER_INFORMATION)).getCustomData().split(";");
                             if (info[0].equals(info2[0]) || info[1].equals(info2[1]) || info[2].equals(info2[2]) || info[3].equals(info2[3])) {
                                 characters.add(chr);
                             }

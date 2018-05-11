@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 
 import client.MapleClient;
 import client.MapleKeyLayout;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import client.Skill;
 import client.SkillFactory;
 import client.SkillMacro;
@@ -57,7 +57,7 @@ import server.maps.objects.Summon;
 import server.maps.objects.MechDoor;
 import server.maps.objects.MonsterFamiliar;
 import server.movement.LifeMovementFragment;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import server.shops.MapleShop;
 import server.shops.ShopOperationType;
 import handling.world.AttackMonster;
@@ -1089,7 +1089,7 @@ public class CField {
         oPacket.EncodeInt(chr.getId());
         oPacket.EncodeByte(chr.getLevel());
         oPacket.EncodeString(chr.getName());
-        MapleQuestStatus ultExplorer = chr.getQuestNoAdd(MapleQuest.getInstance(111111));
+        QuestStatus ultExplorer = chr.getQuestNoAdd(Quest.getInstance(111111));
         if (ultExplorer != null && ultExplorer.getCustomData() != null) {
             oPacket.EncodeString(ultExplorer.getCustomData());
         } else {

@@ -50,7 +50,7 @@ import server.life.MapleMonsterInformationProvider;
 import server.life.PlayerNPC;
 import server.maps.MapleMapFactory;
 import server.maps.objects.Pet;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import server.skills.VCore;
 import tools.LogHelper;
 
@@ -208,7 +208,7 @@ public class Start {
 
         r = new ServerStartupRunnable(atomicInteger, ()
                 -> {
-            MapleQuest.initQuests();
+            Quest.initQuests();
             MapleItemInformationProvider.getInstance().runEtc();
 
         }, "Quests");

@@ -45,7 +45,7 @@ import server.maps.objects.User;
 import server.maps.objects.MapleNPC;
 import server.maps.objects.Pet;
 import server.maps.objects.MapleReactor;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import server.shops.MapleShopFactory;
 import tools.Pair;
 import tools.StringUtil;

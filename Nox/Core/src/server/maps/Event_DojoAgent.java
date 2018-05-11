@@ -10,7 +10,7 @@ import server.Randomizer;
 import server.Timer.MapTimer;
 import server.life.MapleLifeFactory;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.LogHelper;
 import tools.packet.CField;
 
@@ -177,7 +177,7 @@ public class Event_DojoAgent {
                             c.getTrait(MapleTraitType.will).addExp(points, c);
                             chr.modifyCSPoints(1, point * 4, true);
                             final int dojo = chr.getIntRecord(GameConstants.DOJO) + point;
-                            chr.getQuestNAdd(MapleQuest.getInstance(GameConstants.DOJO)).setCustomData(String.valueOf(dojo));
+                            chr.getQuestNAdd(Quest.getInstance(GameConstants.DOJO)).setCustomData(String.valueOf(dojo));
                             //chr.getClient().write(WvsContext.Mulung_Pts(point, dojo));
                         }
                     }
@@ -186,7 +186,7 @@ public class Event_DojoAgent {
                     c.getTrait(MapleTraitType.will).addExp(points, c);
                     c.modifyCSPoints(1, point * 4, true);
                     final int dojo = c.getIntRecord(GameConstants.DOJO) + point;
-                    c.getQuestNAdd(MapleQuest.getInstance(GameConstants.DOJO)).setCustomData(String.valueOf(dojo));
+                    c.getQuestNAdd(Quest.getInstance(GameConstants.DOJO)).setCustomData(String.valueOf(dojo));
                     //c.getClient().write(WvsContext.Mulung_Pts(point, dojo));
                 }
 
@@ -205,7 +205,7 @@ public class Event_DojoAgent {
                             final int point = (points * 3);
                             c.getTrait(MapleTraitType.will).addExp(points, c);
                             final int dojo = chr.getIntRecord(GameConstants.DOJO) + point;
-                            chr.getQuestNAdd(MapleQuest.getInstance(GameConstants.DOJO)).setCustomData(String.valueOf(dojo));
+                            chr.getQuestNAdd(Quest.getInstance(GameConstants.DOJO)).setCustomData(String.valueOf(dojo));
                             //chr.getClient().write(WvsContext.Mulung_Pts(point, dojo));
                             chr.modifyCSPoints(1, 5000, true);
                         }
@@ -215,7 +215,7 @@ public class Event_DojoAgent {
                     final int point = (points * 4);
                     c.getTrait(MapleTraitType.will).addExp(points, c);
                     final int dojo = c.getIntRecord(GameConstants.DOJO) + point;
-                    c.getQuestNAdd(MapleQuest.getInstance(GameConstants.DOJO)).setCustomData(String.valueOf(dojo));
+                    c.getQuestNAdd(Quest.getInstance(GameConstants.DOJO)).setCustomData(String.valueOf(dojo));
                     //c.getClient().write(WvsContext.Mulung_Pts(point, dojo));
                     c.modifyCSPoints(1, currentmap.getCharactersSize() > 1 ? 5000 : 7500, true);
                 }

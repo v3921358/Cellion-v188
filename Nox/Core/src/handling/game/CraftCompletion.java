@@ -22,7 +22,7 @@ import server.MapleStatEffect;
 import server.Randomizer;
 import server.maps.objects.User;
 import server.maps.objects.MapleExtractor;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.Triple;
 import net.InPacket;
 import server.maps.MapleMapObjectType;
@@ -266,7 +266,7 @@ public final class CraftCompletion implements ProcessPacket<MapleClient> {
         } else {
             expGain = 0;
         }
-        MapleQuest.getInstance(2550).forceStart(c.getPlayer(), 9031000, "1"); //removes tutorial stuff
+        Quest.getInstance(2550).forceStart(c.getPlayer(), 9031000, "1"); //removes tutorial stuff
         chr.setFatigue((byte) (chr.getFatigue() + fatigue));
         chr.getMap().broadcastMessage(CField.craftFinished(chr.getId(), craftID, cr.i, toGet, quantity, expGain));
     }

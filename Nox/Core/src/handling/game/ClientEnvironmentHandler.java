@@ -10,7 +10,7 @@ import constants.GameConstants;
 import net.InPacket;
 import scripting.provider.NPCScriptManager;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;

@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import client.MapleClient;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus.QuestState;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -59,7 +59,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         // for (DropEntry d : chances){
         while (iter.hasNext()) {
             ReactorDropEntry d = (ReactorDropEntry) iter.next();
-            if (Math.random() < (1 / (double) d.chance) && (d.questid <= 0 || getPlayer().getQuestStatus(d.questid) == MapleQuestState.Started)) {
+            if (Math.random() < (1 / (double) d.chance) && (d.questid <= 0 || getPlayer().getQuestStatus(d.questid) == QuestState.Started)) {
                 numItems++;
                 items.add(d);
             }

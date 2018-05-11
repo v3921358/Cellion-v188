@@ -22,12 +22,12 @@
 package handling.game;
 
 import client.MapleClient;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import java.time.LocalDateTime;
 import net.InPacket;
 import server.MapleInventoryManipulator;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.packet.CField;
 import net.ProcessPacket;
 
@@ -40,14 +40,14 @@ public final class OnUserMedalReissueRequest implements ProcessPacket<MapleClien
 
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
-        MapleQuest q = MapleQuest.getInstance(iPacket.DecodeShort());
+        Quest q = Quest.getInstance(iPacket.DecodeShort());
         User chr = c.getPlayer();
         if (q == null) {
             return;
         }
 
         int itemid = q.getMedalItem();
-        if ((itemid != iPacket.DecodeInt()) || (itemid <= 0) || (chr.getQuestStatus(q.getId()) != MapleQuestStatus.MapleQuestState.Completed)) {
+        if ((itemid != iPacket.DecodeInt()) || (itemid <= 0) || (chr.getQuestStatus(q.getId()) != QuestStatus.QuestState.Completed)) {
             c.SendPacket(CField.UIPacket.reissueMedal(itemid, 4));
             return;
         }

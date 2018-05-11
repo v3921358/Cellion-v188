@@ -81,7 +81,7 @@ import server.maps.Event_PyramidSubway;
 import server.maps.MapleMap;
 import server.maps.objects.User;
 import server.maps.objects.MapleNPC;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import server.shops.MapleShopFactory;
 import tools.LogHelper;
 import tools.Pair;
@@ -834,49 +834,49 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void startQuest(int idd) {
-        MapleQuest.getInstance(idd).start(getPlayer(), id);
+        Quest.getInstance(idd).start(getPlayer(), id);
     }
 
     public void completeQuest(int idd) {
-        MapleQuest.getInstance(idd).complete(getPlayer(), id);
+        Quest.getInstance(idd).complete(getPlayer(), id);
     }
 
     public void forfeitQuest(int idd) {
-        MapleQuest.getInstance(idd).forfeit(getPlayer());
+        Quest.getInstance(idd).forfeit(getPlayer());
     }
 
     public void forceStartQuest() {
-        MapleQuest.getInstance(id2).forceStart(getPlayer(), getNpc(), null);
+        Quest.getInstance(id2).forceStart(getPlayer(), getNpc(), null);
     }
 
     @Override
     public void forceStartQuest(int idd) {
-        MapleQuest.getInstance(idd).forceStart(getPlayer(), getNpc(), null);
+        Quest.getInstance(idd).forceStart(getPlayer(), getNpc(), null);
     }
 
     public void forceStartQuest(String customData) {
-        MapleQuest.getInstance(id2).forceStart(getPlayer(), getNpc(), customData);
+        Quest.getInstance(id2).forceStart(getPlayer(), getNpc(), customData);
     }
 
     public void forceCompleteQuest() {
-        MapleQuest.getInstance(id2).forceComplete(getPlayer(), getNpc());
+        Quest.getInstance(id2).forceComplete(getPlayer(), getNpc());
     }
 
     @Override
     public void forceCompleteQuest(final int idd) {
-        MapleQuest.getInstance(idd).forceComplete(getPlayer(), getNpc());
+        Quest.getInstance(idd).forceComplete(getPlayer(), getNpc());
     }
 
     public String getQuestCustomData() {
-        return c.getPlayer().getQuestNAdd(MapleQuest.getInstance(id2)).getCustomData();
+        return c.getPlayer().getQuestNAdd(Quest.getInstance(id2)).getCustomData();
     }
 
     public String getQuestCustomData(int quest) {
-        return c.getPlayer().getQuestNAdd(MapleQuest.getInstance(quest)).getCustomData();
+        return c.getPlayer().getQuestNAdd(Quest.getInstance(quest)).getCustomData();
     }
 
     public void setQuestCustomData(String customData) {
-        getPlayer().getQuestNAdd(MapleQuest.getInstance(id2)).setCustomData(customData);
+        getPlayer().getQuestNAdd(Quest.getInstance(id2)).setCustomData(customData);
     }
 
     public long getMeso() {
@@ -1375,13 +1375,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public void setDojoRecord(final boolean reset, final boolean take, int amount) {
         if (reset) {
-            c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.DOJO_RECORD)).setCustomData("0");
-            c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.DOJO)).setCustomData("0");
+            c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.DOJO_RECORD)).setCustomData("0");
+            c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.DOJO)).setCustomData("0");
         } else if (take) {
-            c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.DOJO_RECORD)).setCustomData(String.valueOf(c.getPlayer().getIntRecord(GameConstants.DOJO_RECORD) - amount));
-            c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.DOJO)).setCustomData(String.valueOf(c.getPlayer().getIntRecord(GameConstants.DOJO_RECORD) - amount));
+            c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.DOJO_RECORD)).setCustomData(String.valueOf(c.getPlayer().getIntRecord(GameConstants.DOJO_RECORD) - amount));
+            c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.DOJO)).setCustomData(String.valueOf(c.getPlayer().getIntRecord(GameConstants.DOJO_RECORD) - amount));
         } else {
-            c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.DOJO_RECORD)).setCustomData(String.valueOf(c.getPlayer().getIntRecord(GameConstants.DOJO_RECORD) + 1));
+            c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.DOJO_RECORD)).setCustomData(String.valueOf(c.getPlayer().getIntRecord(GameConstants.DOJO_RECORD) + 1));
         }
     }
 
@@ -2022,7 +2022,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public final void setQuestRecord(Object ch, final int questid, final String data) {
-        ((User) ch).getQuestNAdd(MapleQuest.getInstance(questid)).setCustomData(data);
+        ((User) ch).getQuestNAdd(Quest.getInstance(questid)).setCustomData(data);
     }
 
     public final void doWeddingEffect(final Object ch) {
@@ -2105,7 +2105,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             StringBuilder name = new StringBuilder();
             for (int i = 0; i < ranks.size(); i++) {
                 de = ranks.get(i);
-                if (de.chance > 0 && (de.questid <= 0 || (de.questid > 0 && MapleQuest.getInstance(de.questid).getName().length() > 0))) {
+                if (de.chance > 0 && (de.questid <= 0 || (de.questid > 0 && Quest.getInstance(de.questid).getName().length() > 0))) {
                     itemId = de.itemId;
                     if (num == 0) {
                         name.append("Drops for #o").append(mobId).append("#\r\n");
@@ -2117,7 +2117,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                         namez = (de.Minimum * getClient().getChannelServer().getMesoRate(chr.getWorld())) + " to " + (de.Maximum * getClient().getChannelServer().getMesoRate(chr.getWorld())) + " meso";
                     }
                     double chance = de.chance * getClient().getChannelServer().getDropRate(chr.getWorld());
-                    name.append(num + 1).append(") #v").append(itemId).append("#").append(namez).append(" - ").append((chance >= 999999 ? 1000000 : chance) / 10000.0).append("% chance. ").append(de.questid > 0 && MapleQuest.getInstance(de.questid).getName().length() > 0 ? ("Requires quest " + MapleQuest.getInstance(de.questid).getName() + " to be started.") : "").append("\r\n");
+                    name.append(num + 1).append(") #v").append(itemId).append("#").append(namez).append(" - ").append((chance >= 999999 ? 1000000 : chance) / 10000.0).append("% chance. ").append(de.questid > 0 && Quest.getInstance(de.questid).getName().length() > 0 ? ("Requires quest " + Quest.getInstance(de.questid).getName() + " to be started.") : "").append("\r\n");
                     num++;
                 }
             }
@@ -2498,7 +2498,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             Thread.sleep(4 * 60 * 1000); //4 minutes
         } catch (InterruptedException e) {
         }
-        MapleQuest.getInstance(25000).forceComplete(c.getPlayer(), 1402000);
+        Quest.getInstance(25000).forceComplete(c.getPlayer(), 1402000);
         c.SendPacket(CField.UIPacket.getDirectionStatus(false));
         c.SendPacket(CField.UIPacket.IntroEnableUI(false));
     }
@@ -2693,8 +2693,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      c.getPlayer().getQuestNAdd(MapleQuest.getInstance(WEAPON_RENTAL)).setCustomData("" + System.currentTimeMillis() / (60 * 1000));
      }
      */
-    public MapleQuest getQuestById(int questId) {
-        return MapleQuest.getInstance(questId);
+    public Quest getQuestById(int questId) {
+        return Quest.getInstance(questId);
     }
 
     public int getEquipLevelById(int itemId) {
@@ -2703,7 +2703,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void addPendantSlot(int days) {
-        c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT)).setCustomData(String.valueOf(System.currentTimeMillis() + ((long) days * 24 * 60 * 60 * 1000)));
+        c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.PENDANT_SLOT)).setCustomData(String.valueOf(System.currentTimeMillis() + ((long) days * 24 * 60 * 60 * 1000)));
     }
 
     public long getCustomMeso() {
@@ -2711,7 +2711,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void setCustomMeso(long meso) {
-        c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.CUSTOM_BANK)).setCustomData(meso + "");
+        c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.CUSTOM_BANK)).setCustomData(meso + "");
     }
 
     public void enter_931060110() {

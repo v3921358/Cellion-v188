@@ -1,14 +1,14 @@
 package handling.game;
 
 import client.MapleClient;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import server.maps.objects.User;
 import server.maps.objects.MapleReactor;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import tools.packet.CField;
 import net.ProcessPacket;
@@ -33,7 +33,7 @@ public final class HarvestBeginHandler implements ProcessPacket<MapleClient> {
             c.getPlayer().getStat().handleProfessionTool(c.getPlayer());
             return;
         }
-        MapleQuestStatus marr = c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.HARVEST_TIME));
+        QuestStatus marr = c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.HARVEST_TIME));
         if (marr.getCustomData() == null) {
             marr.setCustomData("0");
         } else {

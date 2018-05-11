@@ -6,7 +6,7 @@ import java.util.List;
 import server.ItemInformation;
 import server.MapleItemInformationProvider;
 import server.MapleStringInformationProvider;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.Pair;
 import tools.Tuple;
 
@@ -56,7 +56,7 @@ public class SearchGenerator {
                 }
                 break;
             case 5:
-                for (MapleQuest pair : MapleQuest.getAllInstances()) {
+                for (Quest pair : Quest.getAllInstances()) {
                     if (pair.getName().length() > 0 && pair.getName().toLowerCase().contains(search.toLowerCase())) {
                         ret.add("\r\n#L" + pair.getId() + "#" + pair.getId() + " - " + pair.getName());
                     }

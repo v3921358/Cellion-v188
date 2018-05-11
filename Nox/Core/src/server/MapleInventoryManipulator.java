@@ -9,7 +9,7 @@ import java.util.Map;
 
 import client.CharacterTemporaryStat;
 import client.MapleClient;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import client.MapleTrait.MapleTraitType;
 import client.PlayerStats;
 import client.Skill;
@@ -38,7 +38,7 @@ import server.maps.objects.Pet;
 import server.potentials.ItemPotentialOption;
 import server.potentials.ItemPotentialProvider;
 import server.potentials.ItemPotentialTierType;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.LogHelper;
 import tools.Pair;
 import tools.StringUtil;

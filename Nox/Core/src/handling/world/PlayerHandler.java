@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import client.MapleClient;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus.QuestState;
 import client.SkillFactory;
 import client.anticheat.CheatingOffense;
 import client.inventory.MapleInventory;
@@ -23,7 +23,7 @@ import server.maps.FieldLimitType;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import server.MapleStatEffect;
 import server.maps.objects.MapleRuneStone;
@@ -345,7 +345,7 @@ public class PlayerHandler {
                 }
                 break;
             case 0x16: // Questreset
-                MapleQuest.getInstance(iPacket.DecodeShort()).forfeit(c.getPlayer());
+                Quest.getInstance(iPacket.DecodeShort()).forfeit(c.getPlayer());
                 break;
             case 0x17: // Summon
                 int mobId = iPacket.DecodeInt();

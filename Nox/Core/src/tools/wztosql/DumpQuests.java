@@ -11,8 +11,8 @@ import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataTool;
 import provider.wz.cache.WzDataStorage;
-import server.quest.MapleQuestActionType;
-import server.quest.MapleQuestRequirementType;
+import server.quest.QuestActionType;
+import server.quest.QuestRequirementType;
 import tools.Pair;
 
 public class DumpQuests {
@@ -115,7 +115,7 @@ public class DumpQuests {
                     psr.setInt(1, id);
                     psr.setInt(2, i); //0 = start
                     for (MapleData req : reqData.getChildren()) {
-                        if (MapleQuestRequirementType.getByWZName(req.getName()) == MapleQuestRequirementType.UNDEFINED) {
+                        if (QuestRequirementType.getByWZName(req.getName()) == QuestRequirementType.UNDEFINED) {
                             continue; //un-needed
                         }
                         psr.setString(3, req.getName());
@@ -198,7 +198,7 @@ public class DumpQuests {
                     psa.setInt(1, id);
                     psa.setInt(2, i); //0 = start
                     for (MapleData act : actData.getChildren()) {
-                        if (MapleQuestActionType.getByWZName(act.getName()) == MapleQuestActionType.UNDEFINED) {
+                        if (QuestActionType.getByWZName(act.getName()) == QuestActionType.UNDEFINED) {
                             continue; //un-needed
                         }
                         psa.setString(3, act.getName());

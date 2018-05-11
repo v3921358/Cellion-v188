@@ -13,7 +13,7 @@ import java.util.Map;
 
 import client.MapleCharacterUtil;
 import client.MapleClient;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus.QuestState;
 import client.MapleStat;
 import client.PlayerStats;
 import client.Skill;
@@ -54,7 +54,7 @@ import server.maps.objects.User;
 import server.maps.objects.MapleMist;
 import server.maps.objects.Pet;
 import server.maps.objects.MonsterFamiliar;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import server.shops.MapleShopFactory;
 import server.stores.HiredMerchant;
 import net.InPacket;
@@ -249,9 +249,9 @@ public class UseCashItemHandler implements ProcessPacket<MapleClient> {
             case 5043000: { // NPC Teleport Rock
                 final short questid = iPacket.DecodeShort();
                 final int npcid = iPacket.DecodeInt();
-                final MapleQuest quest = MapleQuest.getInstance(questid);
+                final Quest quest = Quest.getInstance(questid);
 
-                if (c.getPlayer().getQuest(quest).getStatus() == MapleQuestState.Started && quest.canComplete(c.getPlayer(), npcid)) {
+                if (c.getPlayer().getQuest(quest).getStatus() == QuestState.Started && quest.canComplete(c.getPlayer(), npcid)) {
                     final int mapId = MapleLifeFactory.getNPCLocation(npcid);
                     if (mapId != -1) {
                         final MapleMap map = c.getChannelServer().getMapFactory().getMap(mapId);

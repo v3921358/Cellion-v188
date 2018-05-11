@@ -45,7 +45,7 @@ import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import server.shops.MapleShopFactory;
 import tools.Pair;
 import tools.StringUtil;
@@ -69,12 +69,12 @@ public class InternCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             if (c.getPlayer().isHidden()) {
-                c.getPlayer().dropMessage(5, "[" + ServerConstants.SERVER_NAME + " Stealth] Your character is no longer hidden.");
+                c.getPlayer().dropMessage(5, "[Visibility] Your character is no longer hidden.");
                 c.getPlayer().dispelBuff(9101004);
                 //MapleItemInformationProvider.getInstance().getItemEffect(2100069).applyTo(c.getPlayer());
                 //c.write(CWvsContext.InfoPacket.getStatusMsg(2100069));
             } else {
-                c.getPlayer().dropMessage(5, "[" + ServerConstants.SERVER_NAME + " Stealth] Your character is now hidden.");
+                c.getPlayer().dropMessage(5, "[Visibility] Your character is now hidden.");
                 SkillFactory.getSkill(9101004).getEffect(1).applyTo(c.getPlayer());
             }
             return 0;
@@ -484,7 +484,7 @@ public class InternCommand {
             final int minutes = Math.max(0, Integer.parseInt(splitted[2]));
             if (victim != null && c.getPlayer().getGMLevel() >= victim.getGMLevel()) {
                 MapleMap target = ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(GameConstants.JAIL);
-                victim.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_QUEST)).setCustomData(String.valueOf(minutes * 60));
+                victim.getQuestNAdd(Quest.getInstance(GameConstants.JAIL_QUEST)).setCustomData(String.valueOf(minutes * 60));
                 victim.changeMap(target, target.getPortal(0));
             } else {
                 c.getPlayer().dropMessage(6, "Please go to the same channel as the targeted character.");
@@ -686,7 +686,7 @@ public class InternCommand {
                             break;
                         case "QUEST":
                             List<String> retQuests = new ArrayList<>();
-                            for (MapleQuest questPair : MapleQuest.getAllInstances()) {
+                            for (Quest questPair : Quest.getAllInstances()) {
                                 if (questPair.getName().length() > 0 && questPair.getName().toLowerCase().contains(search.toLowerCase())) {
                                     retQuests.add("\r\n" + questPair.getId() + " - " + questPair.getName());
                                 }

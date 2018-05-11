@@ -6,7 +6,7 @@ import handling.world.MaplePartyCharacter;
 import handling.world.PartyOperation;
 import handling.world.World;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;
@@ -28,7 +28,7 @@ public class DenyPartyRequestHandler implements ProcessPacket<MapleClient> {
         System.out.println("[Debug] Party Result Operation: " + action);
         if ((action == 50)) {
             User chr = c.getPlayer().getMap().getCharacterById(iPacket.DecodeInt());
-            if ((chr != null) && (chr.getParty() == null) && (c.getPlayer().getParty() != null) && (c.getPlayer().getParty().getLeader().getId() == c.getPlayer().getId()) && (c.getPlayer().getParty().getMembers().size() < 6) && (c.getPlayer().getParty().getExpeditionId() <= 0) && (chr.getQuestNoAdd(MapleQuest.getInstance(122901)) == null) && (c.getPlayer().getQuestNoAdd(MapleQuest.getInstance(122900)) == null)) {
+            if ((chr != null) && (chr.getParty() == null) && (c.getPlayer().getParty() != null) && (c.getPlayer().getParty().getLeader().getId() == c.getPlayer().getId()) && (c.getPlayer().getParty().getMembers().size() < 6) && (c.getPlayer().getParty().getExpeditionId() <= 0) && (chr.getQuestNoAdd(Quest.getInstance(122901)) == null) && (c.getPlayer().getQuestNoAdd(Quest.getInstance(122900)) == null)) {
                 chr.setParty(c.getPlayer().getParty());
                 World.Party.updateParty(c.getPlayer().getParty().getId(), PartyOperation.JOIN, new MaplePartyCharacter(chr));
                 chr.receivePartyMemberHP();
@@ -37,7 +37,7 @@ public class DenyPartyRequestHandler implements ProcessPacket<MapleClient> {
             return;
         }
         int partyid = iPacket.DecodeInt();
-        if ((c.getPlayer().getParty() == null) && (c.getPlayer().getQuestNoAdd(MapleQuest.getInstance(122901)) == null)) {
+        if ((c.getPlayer().getParty() == null) && (c.getPlayer().getQuestNoAdd(Quest.getInstance(122901)) == null)) {
             MapleParty party = World.Party.getParty(partyid);
             if (party != null) {
                 if (party.getExpeditionId() > 0) {

@@ -31,7 +31,7 @@ import server.maps.objects.User;
 import server.maps.objects.MapleNPC;
 import server.maps.objects.Pet;
 import server.maps.objects.MapleReactor;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import server.shops.MapleShopFactory;
 import service.ChannelServer;
 import service.RecvPacketOpcode;
@@ -135,7 +135,7 @@ public class GMCommand {
                 pPlayer.dropMessage(5, "God mode is now enabled.");
             }
 
-            pPlayer.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAGUAR)).setCustomData(String.valueOf((9304004 - 9303999) * 10));
+            pPlayer.getQuestNAdd(Quest.getInstance(GameConstants.JAGUAR)).setCustomData(String.valueOf((9304004 - 9303999) * 10));
             c.SendPacket(CWvsContext.updateJaguar(pPlayer));
             return 0;
         }
@@ -533,7 +533,7 @@ public class GMCommand {
                             break;
                         case "QUEST":
                             List<String> retQuests = new ArrayList<>();
-                            for (MapleQuest questPair : MapleQuest.getAllInstances()) {
+                            for (Quest questPair : Quest.getAllInstances()) {
                                 if (questPair.getName().length() > 0 && questPair.getName().toLowerCase().contains(search.toLowerCase())) {
                                     retQuests.add("\r\n" + questPair.getId() + " - " + questPair.getName());
                                 }
@@ -2664,7 +2664,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleQuest.getInstance(Integer.parseInt(splitted[2])).forfeit(c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]));
+            Quest.getInstance(Integer.parseInt(splitted[2])).forfeit(c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]));
             return 1;
         }
     }
@@ -2673,7 +2673,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleQuest.getInstance(Integer.parseInt(splitted[2])).forceStart(c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]), Integer.parseInt(splitted[3]), splitted.length > 4 ? splitted[4] : null);
+            Quest.getInstance(Integer.parseInt(splitted[2])).forceStart(c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]), Integer.parseInt(splitted[3]), splitted.length > 4 ? splitted[4] : null);
             return 1;
         }
     }
@@ -2682,7 +2682,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleQuest.getInstance(Integer.parseInt(splitted[2])).forceComplete(c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]), Integer.parseInt(splitted[3]));
+            Quest.getInstance(Integer.parseInt(splitted[2])).forceComplete(c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]), Integer.parseInt(splitted[3]));
             return 1;
         }
     }
@@ -3478,7 +3478,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleQuest.getInstance(Integer.parseInt(splitted[1])).forfeit(c.getPlayer());
+            Quest.getInstance(Integer.parseInt(splitted[1])).forfeit(c.getPlayer());
             return 1;
         }
     }
@@ -3487,7 +3487,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleQuest.getInstance(Integer.parseInt(splitted[1])).start(c.getPlayer(), Integer.parseInt(splitted[2]));
+            Quest.getInstance(Integer.parseInt(splitted[1])).start(c.getPlayer(), Integer.parseInt(splitted[2]));
             return 1;
         }
     }
@@ -3496,7 +3496,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleQuest.getInstance(Integer.parseInt(splitted[1])).complete(c.getPlayer(), Integer.parseInt(splitted[2]), Integer.parseInt(splitted[3]));
+            Quest.getInstance(Integer.parseInt(splitted[1])).complete(c.getPlayer(), Integer.parseInt(splitted[2]), Integer.parseInt(splitted[3]));
             return 1;
         }
     }
@@ -3505,7 +3505,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleQuest.getInstance(Integer.parseInt(splitted[1])).forceStart(c.getPlayer(), Integer.parseInt(splitted[2]), splitted.length >= 4 ? splitted[3] : null);
+            Quest.getInstance(Integer.parseInt(splitted[1])).forceStart(c.getPlayer(), Integer.parseInt(splitted[2]), splitted.length >= 4 ? splitted[3] : null);
             return 1;
         }
     }
@@ -3514,7 +3514,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MapleQuest.getInstance(Integer.parseInt(splitted[1])).forceComplete(c.getPlayer(), Integer.parseInt(splitted[2]));
+            Quest.getInstance(Integer.parseInt(splitted[1])).forceComplete(c.getPlayer(), Integer.parseInt(splitted[2]));
             return 1;
         }
     }

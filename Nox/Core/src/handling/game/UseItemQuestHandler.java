@@ -1,14 +1,14 @@
 package handling.game;
 
 import client.MapleClient;
-import client.MapleQuestStatus;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus;
+import client.QuestStatus.QuestState;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import java.util.List;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.Pair;
 import net.InPacket;
 import net.ProcessPacket;
@@ -30,7 +30,7 @@ public class UseItemQuestHandler implements ProcessPacket<MapleClient> {
         final int itemId = iPacket.DecodeInt();
         final Item item = c.getPlayer().getInventory(MapleInventoryType.ETC).getItem(slot);
         final int qid = iPacket.DecodeInt();
-        final MapleQuest quest = MapleQuest.getInstance(qid);
+        final Quest quest = Quest.getInstance(qid);
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         Pair<Integer, List<Integer>> questItemInfo = null;
         boolean found = false;
@@ -45,8 +45,8 @@ public class UseItemQuestHandler implements ProcessPacket<MapleClient> {
         }
         if (quest != null && found && item != null && item.getQuantity() > 0 && item.getItemId() == itemId) {
             final int newData = iPacket.DecodeInt();
-            final MapleQuestStatus stats = c.getPlayer().getQuestNoAdd(quest);
-            if (stats != null && stats.getStatus() == MapleQuestState.Started) {
+            final QuestStatus stats = c.getPlayer().getQuestNoAdd(quest);
+            if (stats != null && stats.getStatus() == QuestState.Started) {
                 stats.setCustomData(String.valueOf(newData));
                 c.getPlayer().updateQuest(stats, true);
                 MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.ETC, slot, (short) 1, false);

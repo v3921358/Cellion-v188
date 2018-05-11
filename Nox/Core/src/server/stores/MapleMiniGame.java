@@ -5,10 +5,10 @@ import java.util.Collections;
 import java.util.List;
 
 import client.MapleClient;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import constants.GameConstants;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.packet.PlayerShopPacket;
 
 public final class MapleMiniGame extends AbstractPlayerStore {
@@ -302,13 +302,13 @@ public final class MapleMiniGame extends AbstractPlayerStore {
                 newData.append(",");
             }
             String newDat = newData.toString();
-            z.getQuestNAdd(MapleQuest.getInstance(GameType == 1 ? GameConstants.OMOK_SCORE : GameConstants.MATCH_SCORE)).setCustomData(newDat.substring(0, newDat.length() - 1));
+            z.getQuestNAdd(Quest.getInstance(GameType == 1 ? GameConstants.OMOK_SCORE : GameConstants.MATCH_SCORE)).setCustomData(newDat.substring(0, newDat.length() - 1));
         }
     }
 
     public String getData(User chr) {
-        MapleQuest quest = MapleQuest.getInstance(GameType == 1 ? GameConstants.OMOK_SCORE : GameConstants.MATCH_SCORE);
-        MapleQuestStatus record;
+        Quest quest = Quest.getInstance(GameType == 1 ? GameConstants.OMOK_SCORE : GameConstants.MATCH_SCORE);
+        QuestStatus record;
         if (chr.getQuestNoAdd(quest) == null) {
             record = chr.getQuestNAdd(quest);
             record.setCustomData("0,0,0");

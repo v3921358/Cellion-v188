@@ -2,7 +2,7 @@ package server.maps;
 
 import java.util.concurrent.ScheduledFuture;
 
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import client.MapleTrait.MapleTraitType;
 import handling.world.MaplePartyCharacter;
 import handling.world.World;
@@ -12,7 +12,7 @@ import server.Randomizer;
 import server.Timer.MapTimer;
 import server.life.MapleLifeFactory;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 
@@ -179,7 +179,7 @@ public class Event_PyramidSubway {
     }
 
     public final void succeed(final User c) {
-        final MapleQuestStatus record = c.getQuestNAdd(MapleQuest.getInstance(type == -1 ? 7662 : 7760));
+        final QuestStatus record = c.getQuestNAdd(Quest.getInstance(type == -1 ? 7662 : 7760));
         String data = record.getCustomData();
         if (data == null) {
             record.setCustomData("0");

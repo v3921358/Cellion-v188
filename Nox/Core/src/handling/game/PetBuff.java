@@ -24,7 +24,7 @@ package handling.game;
 import client.MapleClient;
 import constants.GameConstants;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import net.ProcessPacket;
 
@@ -42,9 +42,9 @@ public final class PetBuff implements ProcessPacket<MapleClient> {
         int skill = iPacket.DecodeInt();
         iPacket.DecodeByte(); //0
         if (skill <= 0) {
-            chr.getQuestRemove(MapleQuest.getInstance(GameConstants.BUFF_ITEM));
+            chr.getQuestRemove(Quest.getInstance(GameConstants.BUFF_ITEM));
         } else {
-            chr.getQuestNAdd(MapleQuest.getInstance(GameConstants.BUFF_ITEM)).setCustomData(String.valueOf(skill));
+            chr.getQuestNAdd(Quest.getInstance(GameConstants.BUFF_ITEM)).setCustomData(String.valueOf(skill));
         }
     }
 

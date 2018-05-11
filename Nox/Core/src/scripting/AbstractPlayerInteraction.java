@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import client.MapleClient;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import client.MapleTrait.MapleTraitType;
 import client.Skill;
 import client.SkillFactory;
@@ -42,7 +42,7 @@ import server.maps.objects.User;
 import server.maps.objects.Pet;
 import server.maps.objects.MapleReactor;
 import server.messages.GiveBuffMessage;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.Pair;
 import tools.packet.CField;
 import tools.packet.CField.EffectPacket;
@@ -371,12 +371,12 @@ public abstract class AbstractPlayerInteraction {
         return MapleInventoryManipulator.checkSpace(c, itemid, quantity, "");
     }
 
-    public final MapleQuestStatus getQuestRecord(final int id) {
-        return c.getPlayer().getQuestNAdd(MapleQuest.getInstance(id));
+    public final QuestStatus getQuestRecord(final int id) {
+        return c.getPlayer().getQuestNAdd(Quest.getInstance(id));
     }
 
-    public final MapleQuestStatus getQuestNoRecord(final int id) {
-        return c.getPlayer().getQuestNoAdd(MapleQuest.getInstance(id));
+    public final QuestStatus getQuestNoRecord(final int id) {
+        return c.getPlayer().getQuestNoAdd(Quest.getInstance(id));
     }
 
     public final byte getQuestStatus(final int id) {
@@ -396,19 +396,19 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final void forceStartQuest(final int id, final String data) {
-        MapleQuest.getInstance(id).forceStart(c.getPlayer(), 0, data);
+        Quest.getInstance(id).forceStart(c.getPlayer(), 0, data);
     }
 
     public final void forceStartQuest(final int id, final int data, final boolean filler) {
-        MapleQuest.getInstance(id).forceStart(c.getPlayer(), 0, filler ? String.valueOf(data) : null);
+        Quest.getInstance(id).forceStart(c.getPlayer(), 0, filler ? String.valueOf(data) : null);
     }
 
     public void forceStartQuest(final int id) {
-        MapleQuest.getInstance(id).forceStart(c.getPlayer(), 0, null);
+        Quest.getInstance(id).forceStart(c.getPlayer(), 0, null);
     }
 
     public void forceCompleteQuest(final int id) {
-        MapleQuest.getInstance(id).forceComplete(getPlayer(), 0);
+        Quest.getInstance(id).forceComplete(getPlayer(), 0);
     }
 
     public void spawnNpc(final int npcId) {
@@ -483,8 +483,8 @@ public abstract class AbstractPlayerInteraction {
         return c.getPlayer().getJob();
     }
 
-    public final void gainNX(final int amount) {
-        c.getPlayer().modifyCSPoints(4, amount, true); //theremk you can change it to prepaid yae since cspoiint is xncredit so make it prepaid
+    public final void gainNX(final int nAmount) {
+        c.getPlayer().gainNX(nAmount, true);
     }
 
     public final void gainItemPeriod(final int id, final short quantity, final int period) { //period is in days
@@ -1281,8 +1281,8 @@ public abstract class AbstractPlayerInteraction {
         return Randomizer.nextInt(arg0);
     }
 
-    public MapleQuest getQuest(int arg0) {
-        return MapleQuest.getInstance(arg0);
+    public Quest getQuest(int arg0) {
+        return Quest.getInstance(arg0);
     }
 
     public void achievement(int a) {

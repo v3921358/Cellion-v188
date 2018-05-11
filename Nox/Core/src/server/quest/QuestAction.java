@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import client.MapleQuestStatus;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus;
+import client.QuestStatus.QuestState;
 import client.MapleStat;
 import client.MapleTrait.MapleTraitType;
 import client.Skill;
@@ -32,11 +32,11 @@ import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.CWvsContext.InfoPacket;
 
-public class MapleQuestAction implements Serializable {
+public class QuestAction implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
-    private MapleQuestActionType type;
-    private MapleQuest quest;
+    private QuestActionType type;
+    private Quest quest;
     private int intStore = 0;
     private List<Integer> applicableJobs = new ArrayList<>();
     private List<QuestItem> items = null;
@@ -54,7 +54,7 @@ public class MapleQuestAction implements Serializable {
      * @param psi
      * @throws java.sql.SQLException
      */
-    public MapleQuestAction(MapleQuestActionType type, ResultSet rse, MapleQuest quest, PreparedStatement pss, PreparedStatement psq, PreparedStatement psi) throws SQLException {
+    public QuestAction(QuestActionType type, ResultSet rse, Quest quest, PreparedStatement pss, PreparedStatement psq, PreparedStatement psi) throws SQLException {
         this.type = type;
         this.quest = quest;
 
@@ -128,7 +128,7 @@ public class MapleQuestAction implements Serializable {
     }
 
     public final boolean RestoreLostItem(final User c, final int itemid) {
-        if (type == MapleQuestActionType.item) {
+        if (type == QuestActionType.item) {
 
             for (QuestItem item : items) {
                 if (item.itemid == itemid) {
@@ -143,7 +143,7 @@ public class MapleQuestAction implements Serializable {
     }
 
     public void runStart(User c, Integer extSelection) {
-        MapleQuestStatus status;
+        QuestStatus status;
         switch (type) {
             case exp:
                 status = c.getQuest(quest);
@@ -219,7 +219,7 @@ public class MapleQuestAction implements Serializable {
                 break;
             case quest:
                 for (Pair<Integer, Integer> q : state) {
-                    c.updateQuest(new MapleQuestStatus(MapleQuest.getInstance(q.left), MapleQuestState.getFromValue(q.right)));
+                    c.updateQuest(new QuestStatus(Quest.getInstance(q.left), QuestState.getFromValue(q.right)));
                 }
                 break;
             case skill:
@@ -470,7 +470,7 @@ public class MapleQuestAction implements Serializable {
             }
             case quest: {
                 for (Pair<Integer, Integer> q : state) {
-                    c.updateQuest(new MapleQuestStatus(MapleQuest.getInstance(q.left), MapleQuestState.getFromValue(q.right)));
+                    c.updateQuest(new QuestStatus(Quest.getInstance(q.left), QuestState.getFromValue(q.right)));
                 }
                 break;
             }
@@ -628,7 +628,7 @@ public class MapleQuestAction implements Serializable {
         return ret;
     }
 
-    public MapleQuestActionType getType() {
+    public QuestActionType getType() {
         return type;
     }
 

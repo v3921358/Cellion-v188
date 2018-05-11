@@ -1,6 +1,6 @@
 package client;
 
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus.QuestState;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,7 +24,7 @@ import database.Database;
 import net.OutPacket;
 import server.MapleItemInformationProvider;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.LogHelper;
 import tools.Pair;
 import tools.Triple;
@@ -49,7 +49,7 @@ public final class MonsterBook
         calculateItem();
         calculateScore();
 
-        MapleQuestStatus stat = chr.getQuestNoAdd(MapleQuest.getInstance(122800));
+        QuestStatus stat = chr.getQuestNoAdd(Quest.getInstance(122800));
         if ((stat != null) && (stat.getCustomData() != null)) {
             this.currentSet = Integer.parseInt(stat.getCustomData());
             if ((!this.sets.containsKey(this.currentSet)) || (!((Boolean) this.sets.get(this.currentSet).right).booleanValue())) {
@@ -339,17 +339,17 @@ public final class MonsterBook
             c.SendPacket(CField.EffectPacket.showForeignEffect(UserEffectCodes.MonsterBookCardGet));
             this.cards.put(cardid, 2);
 
-            if (c.getPlayer().getQuestStatus(50195) != MapleQuestState.Started) {
-                MapleQuest.getInstance(50195).forceStart(c.getPlayer(), 9010000, "1");
+            if (c.getPlayer().getQuestStatus(50195) != QuestState.Started) {
+                Quest.getInstance(50195).forceStart(c.getPlayer(), 9010000, "1");
             }
-            if (c.getPlayer().getQuestStatus(50196) != MapleQuestState.Started) {
-                MapleQuest.getInstance(50196).forceStart(c.getPlayer(), 9010000, "1");
+            if (c.getPlayer().getQuestStatus(50196) != QuestState.Started) {
+                Quest.getInstance(50196).forceStart(c.getPlayer(), 9010000, "1");
             }
             addCardItem(cardid, 2);
             byte rr = calculateScore();
             if (rr > 0) {
-                if (c.getPlayer().getQuestStatus(50197) != MapleQuestState.Started) {
-                    MapleQuest.getInstance(50197).forceStart(c.getPlayer(), 9010000, "1");
+                if (c.getPlayer().getQuestStatus(50197) != QuestState.Started) {
+                    Quest.getInstance(50197).forceStart(c.getPlayer(), 9010000, "1");
                 }
                 c.SendPacket(CField.EffectPacket.showForeignEffect(UserEffectCodes.BiteAttack_ReceiveSuccess));//was43
                 if (rr > 1) {

@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.script.ScriptException;
 
 import client.MapleClient;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import client.MapleTrait.MapleTraitType;
 import constants.GameConstants;
 import client.SkillFactory;
@@ -36,7 +36,7 @@ import server.maps.MapleMap;
 import server.maps.MapleMapFactory;
 import server.maps.objects.User;
 import server.messages.GiveBuffMessage;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.LogHelper;
 import tools.Pair;
 import tools.packet.CField;
@@ -282,7 +282,7 @@ public class EventInstanceManager {
             return;
         }
         for (User chr : getPlayers()) {
-            final MapleQuestStatus record = chr.getQuestNAdd(MapleQuest.getInstance(GameConstants.BOSS_PQ));
+            final QuestStatus record = chr.getQuestNAdd(Quest.getInstance(GameConstants.BOSS_PQ));
 
             if (record.getCustomData() != null) {
                 record.setCustomData(String.valueOf(points + Integer.parseInt(record.getCustomData())));
@@ -832,7 +832,7 @@ public class EventInstanceManager {
             User player = squad.getChar(chr);
             if (player != null && player.getMapId() == mapid) {
                 if (questID > 0) {
-                    player.getQuestNAdd(MapleQuest.getInstance(questID)).setCustomData(String.valueOf(System.currentTimeMillis()));
+                    player.getQuestNAdd(Quest.getInstance(questID)).setCustomData(String.valueOf(System.currentTimeMillis()));
                 }
                 registerPlayer(player);
                 if (player.getParty() != null) {

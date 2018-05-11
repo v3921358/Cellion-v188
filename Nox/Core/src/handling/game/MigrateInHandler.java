@@ -5,7 +5,7 @@ import java.util.List;
 
 import client.MapleClient;
 import client.MapleClient.MapleClientLoginState;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import client.MapleSpecialStats;
 import client.MapleSpecialStats.MapleSpecialStatUpdateType;
 import client.SkillFactory;
@@ -43,7 +43,7 @@ import net.OutPacket;
 import scripting.provider.NPCScriptManager;
 import server.LoginAuthorization;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.LogHelper;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -220,7 +220,7 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         //c.write(JobPacket.addStolenSkill());
 
         // Pendant expansion
-        MapleQuestStatus quest_pendant = pPlayer.getQuestNoAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT));
+        QuestStatus quest_pendant = pPlayer.getQuestNoAdd(Quest.getInstance(GameConstants.PENDANT_SLOT));
         c.SendPacket(CWvsContext.pendantExpansionAvailable(
                 quest_pendant != null && quest_pendant.getCustomData() != null && Long.parseLong(quest_pendant.getCustomData()) > System.currentTimeMillis()));
 
@@ -257,7 +257,7 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
         }
 
         // Quickslots
-        MapleQuestStatus quest_quickSlot = pPlayer.getQuestNoAdd(MapleQuest.getInstance(GameConstants.QUICK_SLOT));
+        QuestStatus quest_quickSlot = pPlayer.getQuestNoAdd(Quest.getInstance(GameConstants.QUICK_SLOT));
         c.SendPacket(CField.quickSlot(quest_quickSlot != null && quest_quickSlot.getCustomData() != null ? quest_quickSlot.getCustomData() : null));
 
         // Pets
@@ -280,10 +280,11 @@ public final class MigrateInHandler implements ProcessPacket<MapleClient> {
 
         // Game Master Quality of Life Features
         if (pPlayer.isGM()) {
-            pPlayer.gainMeso(2100000000, true);
+            pPlayer.gainMeso((9999999999L - pPlayer.getMeso()), false);
+            pPlayer.setNX(99999999);
             pPlayer.toggleGodMode(true);
             pPlayer.dropMessage(6, "[Reminder] God mode has been enabled by default.");
-            pPlayer.dropMessage(5, "[" + ServerConstants.SERVER_NAME + " Stealth] Your character is currently hidden.");
+            pPlayer.dropMessage(5, "[Visibility] Your character is currently hidden.");
             SkillFactory.getSkill(9101004).getEffect(1).applyTo(c.getPlayer());
         }
 

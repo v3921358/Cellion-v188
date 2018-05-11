@@ -1564,7 +1564,7 @@ public class Mob extends AbstractLoadedMapleLife {
         }
 
         if (Randomizer.nextInt(100) < nGainChance) {
-            pPlayer.modifyCSPoints(2, nResultNx, true);
+            pPlayer.gainNX(nResultNx, true);
         }
     }
 

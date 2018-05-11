@@ -26,7 +26,7 @@ import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import net.ProcessPacket;
 
@@ -67,16 +67,16 @@ public final class KeyMap implements ProcessPacket<MapleClient> { // oh here it 
             switch (type) {
                 case 1:
                     if (data <= 0) {
-                        chr.getQuestRemove(MapleQuest.getInstance(GameConstants.HP_ITEM));
+                        chr.getQuestRemove(Quest.getInstance(GameConstants.HP_ITEM));
                     } else {
-                        chr.getQuestNAdd(MapleQuest.getInstance(GameConstants.HP_ITEM)).setCustomData(String.valueOf(data));
+                        chr.getQuestNAdd(Quest.getInstance(GameConstants.HP_ITEM)).setCustomData(String.valueOf(data));
                     }
                     break;
                 case 2:
                     if (data <= 0) {
-                        chr.getQuestRemove(MapleQuest.getInstance(GameConstants.MP_ITEM));
+                        chr.getQuestRemove(Quest.getInstance(GameConstants.MP_ITEM));
                     } else {
-                        chr.getQuestNAdd(MapleQuest.getInstance(GameConstants.MP_ITEM)).setCustomData(String.valueOf(data));
+                        chr.getQuestNAdd(Quest.getInstance(GameConstants.MP_ITEM)).setCustomData(String.valueOf(data));
                     }
                     break;
             }

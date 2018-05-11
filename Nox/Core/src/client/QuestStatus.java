@@ -6,22 +6,22 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import server.life.MapleLifeFactory;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 
-public class MapleQuestStatus implements Serializable {
+public class QuestStatus implements Serializable {
 
     /**
      *
      * @author Lloyd Korn
      */
-    public static enum MapleQuestState {
+    public static enum QuestState {
         NotStarted((byte) 0),
         Started((byte) 1),
         Completed((byte) 2),;
 
         private final byte state;
 
-        private MapleQuestState(byte state) {
+        private QuestState(byte state) {
             this.state = state;
         }
 
@@ -29,19 +29,19 @@ public class MapleQuestStatus implements Serializable {
             return state;
         }
 
-        public static MapleQuestState getFromValue(int value) {
-            for (MapleQuestState val : values()) {
+        public static QuestState getFromValue(int value) {
+            for (QuestState val : values()) {
                 if (val.getValue() == value) {
                     return val;
                 }
             }
-            return MapleQuestState.NotStarted;
+            return QuestState.NotStarted;
         }
     }
 
     private static final long serialVersionUID = 91795419934134L;
-    private transient MapleQuest quest;
-    private MapleQuestState status;
+    private transient Quest quest;
+    private QuestState status;
     private Map<Integer, Integer> killedMobs = null;
     private int npc;
     private long completionTime;
@@ -54,23 +54,23 @@ public class MapleQuestStatus implements Serializable {
      * @param quest
      * @param status
      */
-    public MapleQuestStatus(final MapleQuest quest, MapleQuestState status) {
+    public QuestStatus(final Quest quest, QuestState status) {
         this.quest = quest;
         this.setStatus(status);
         this.completionTime = System.currentTimeMillis();
-        if (status == MapleQuestState.Started) { // Started
+        if (status == QuestState.Started) { // Started
             if (!quest.getRelevantMobs().isEmpty()) {
                 registerMobs();
             }
         }
     }
 
-    public MapleQuestStatus(final MapleQuest quest, MapleQuestState status, final int npc) {
+    public QuestStatus(final Quest quest, QuestState status, final int npc) {
         this.quest = quest;
         this.setStatus(status);
         this.setNpc(npc);
         this.completionTime = System.currentTimeMillis();
-        if (status == MapleQuestState.Started) { // Started
+        if (status == QuestState.Started) { // Started
             if (!quest.getRelevantMobs().isEmpty()) {
                 registerMobs();
             }
@@ -78,18 +78,18 @@ public class MapleQuestStatus implements Serializable {
     }
 
     public final void setQuest(int qid) {
-        this.quest = MapleQuest.getInstance(qid);
+        this.quest = Quest.getInstance(qid);
     }
 
-    public final MapleQuest getQuest() {
+    public final Quest getQuest() {
         return quest;
     }
 
-    public final MapleQuestState getStatus() {
+    public final QuestState getStatus() {
         return status;
     }
 
-    public final void setStatus(final MapleQuestState status) {
+    public final void setStatus(final QuestState status) {
         this.status = status;
     }
 

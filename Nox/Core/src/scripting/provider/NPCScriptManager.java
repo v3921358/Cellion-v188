@@ -14,7 +14,7 @@ import scripting.NPCConversationManager;
 import scripting.NpcConversationStatelessManager;
 import scripting.NpcConversationType;
 import server.maps.objects.User.MapleCharacterConversationType;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.LogHelper;
 
 public class NPCScriptManager extends AbstractScriptManager {
@@ -129,7 +129,7 @@ public class NPCScriptManager extends AbstractScriptManager {
     }
 
     public final void startQuest(MapleClient c, int npc, int quest) {
-        if (!MapleQuest.getInstance(quest).canStart(c.getPlayer(), null)) {
+        if (!Quest.getInstance(quest).canStart(c.getPlayer(), null)) {
             return;
         }
         final Lock lock = c.getNPCLock();
@@ -181,7 +181,7 @@ public class NPCScriptManager extends AbstractScriptManager {
     }
 
     public void endQuest(MapleClient c, int npc, int quest, boolean customEnd) {
-        if (!customEnd && !MapleQuest.getInstance(quest).canComplete(c.getPlayer(), null)) {
+        if (!customEnd && !Quest.getInstance(quest).canComplete(c.getPlayer(), null)) {
             return;
         }
         final Lock lock = c.getNPCLock();

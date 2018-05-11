@@ -5,7 +5,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import client.MapleClient;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus.QuestState;
 import client.inventory.Item;
 import server.maps.objects.User;
 import tools.packet.CField;
@@ -136,7 +136,7 @@ public class MapleMapItem extends MapleMapObject {
 
     @Override
     public void sendSpawnData(final MapleClient client) {
-        if (questid <= 0 || client.getPlayer().getQuestStatus(questid) == MapleQuestState.Started) {
+        if (questid <= 0 || client.getPlayer().getQuestStatus(questid) == QuestState.Started) {
             client.SendPacket(CField.dropItemFromMapObject(this, null, getTruePosition(), (byte) 2));
         }
     }

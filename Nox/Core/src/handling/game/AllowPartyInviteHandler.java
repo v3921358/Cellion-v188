@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.MapleClient;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import net.ProcessPacket;
 
@@ -19,9 +19,9 @@ public class AllowPartyInviteHandler implements ProcessPacket<MapleClient> {
     @Override
     public void Process(MapleClient c, InPacket iPacket) {
         if (iPacket.DecodeByte() > 0) {
-            c.getPlayer().getQuestRemove(MapleQuest.getInstance(122901));
+            c.getPlayer().getQuestRemove(Quest.getInstance(122901));
         } else {
-            c.getPlayer().getQuestNAdd(MapleQuest.getInstance(122901));
+            c.getPlayer().getQuestNAdd(Quest.getInstance(122901));
         }
     }
 }

@@ -24,7 +24,7 @@ package handling.game;
 import client.MapleClient;
 import constants.GameConstants;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;
@@ -45,7 +45,7 @@ public final class CodexSetChangeHandler implements ProcessPacket<MapleClient> {
         final int set = iPacket.DecodeInt();
         if (chr.getMonsterBook().changeSet(set)) {
             chr.getMonsterBook().applyBook(chr, false);
-            chr.getQuestNAdd(MapleQuest.getInstance(GameConstants.CURRENT_SET)).setCustomData(String.valueOf(set));
+            chr.getQuestNAdd(Quest.getInstance(GameConstants.CURRENT_SET)).setCustomData(String.valueOf(set));
             c.SendPacket(CWvsContext.changeCardSet(set));
         }
     }

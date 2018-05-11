@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 
 import client.MapleClient;
-import client.MapleQuestStatus;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus;
+import client.QuestStatus.QuestState;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
@@ -24,8 +24,8 @@ import server.life.Mob;
 import server.maps.SharedMapResources.DirectionInfo;
 import server.maps.objects.User;
 import server.maps.objects.MapleReactor;
-import server.quest.MapleQuest;
-import server.quest.MapleQuest.MedalQuest;
+import server.quest.Quest;
+import server.quest.Quest.MedalQuest;
 import tools.LogHelper;
 import tools.packet.CField;
 import tools.packet.CField.EffectPacket;
@@ -1422,7 +1422,7 @@ public class MapScriptMethods {
             }
 
             case root_camera: {
-                if (c.getPlayer().getQuestStatus(30000) == MapleQuestState.Started) {
+                if (c.getPlayer().getQuestStatus(30000) == QuestState.Started) {
                     NPCScriptManager.getInstance().dispose(c);
                     c.removeClickedNPC();
                     NPCScriptManager.getInstance().start(c, 1064026, "AbyssTut01");
@@ -1453,8 +1453,8 @@ public class MapScriptMethods {
             }
             case enter_101073300: {
                 c.getPlayer().getMap().resetFully();
-                if (c.getPlayer().getQuestStatus(32128) == MapleQuestState.Started) {
-                    MapleQuest.getInstance(32128).forceComplete(c.getPlayer(), 0);
+                if (c.getPlayer().getQuestStatus(32128) == QuestState.Started) {
+                    Quest.getInstance(32128).forceComplete(c.getPlayer(), 0);
                 }
                 NPCScriptManager.getInstance().dispose(c);
                 c.removeClickedNPC();
@@ -1483,8 +1483,8 @@ public class MapScriptMethods {
 
             case enter_101073110: {
                 c.getPlayer().getMap().resetFully();
-                if (c.getPlayer().getQuestStatus(32126) == MapleQuestState.Started) {
-                    MapleQuest.getInstance(32126).forceComplete(c.getPlayer(), 0);
+                if (c.getPlayer().getQuestStatus(32126) == QuestState.Started) {
+                    Quest.getInstance(32126).forceComplete(c.getPlayer(), 0);
                 }
                 c.SendPacket(CField.getClock(10 * 60));
                 NPCScriptManager.getInstance().dispose(c);
@@ -1495,8 +1495,8 @@ public class MapScriptMethods {
 
             case enter_101073010: {
                 c.getPlayer().getMap().resetFully();
-                if (c.getPlayer().getQuestStatus(32123) == MapleQuestState.Started) {
-                    MapleQuest.getInstance(32123).forceComplete(c.getPlayer(), 0);
+                if (c.getPlayer().getQuestStatus(32123) == QuestState.Started) {
+                    Quest.getInstance(32123).forceComplete(c.getPlayer(), 0);
                 }
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-187, 245));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-187, 245));
@@ -1527,7 +1527,7 @@ public class MapScriptMethods {
 
             case evolvingDirection1: {
                 try {
-                    MapleQuest.getInstance(1801).forceStart(c.getPlayer(), 9075005, null);
+                    Quest.getInstance(1801).forceStart(c.getPlayer(), 9075005, null);
                     c.SendPacket(CField.UIPacket.IntroEnableUI(true));
                     c.SendPacket(CField.UIPacket.getDirectionStatus(true));
                     c.SendPacket(CField.MapEff("evolving/mapname"));
@@ -1542,7 +1542,7 @@ public class MapScriptMethods {
 
             case evolvingDirection2: {
                 try {
-                    MapleQuest.getInstance(1801).forceComplete(c.getPlayer(), 0);
+                    Quest.getInstance(1801).forceComplete(c.getPlayer(), 0);
                     c.getPlayer().getMap().resetFully();
                     c.SendPacket(CField.UIPacket.IntroEnableUI(true));
                     c.SendPacket(CField.UIPacket.getDirectionStatus(true));
@@ -1671,8 +1671,8 @@ public class MapScriptMethods {
             }
             case jail: {
                 if (!c.getPlayer().isIntern()) {
-                    c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_TIME)).setCustomData(String.valueOf(System.currentTimeMillis()));
-                    final MapleQuestStatus stat = c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_QUEST));
+                    c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.JAIL_TIME)).setCustomData(String.valueOf(System.currentTimeMillis()));
+                    final QuestStatus stat = c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.JAIL_QUEST));
                     if (stat.getCustomData() != null) {
                         final int seconds = Integer.parseInt(stat.getCustomData());
                         if (seconds > 0) {
@@ -1707,27 +1707,27 @@ public class MapScriptMethods {
                 }
                 break;
             case q31102e:
-                if (c.getPlayer().getQuestStatus(31102) == MapleQuestState.Started) {
-                    MapleQuest.getInstance(31102).forceComplete(c.getPlayer(), 2140000);
+                if (c.getPlayer().getQuestStatus(31102) == QuestState.Started) {
+                    Quest.getInstance(31102).forceComplete(c.getPlayer(), 2140000);
                 }
                 break;
             case q31103s:
-                if (c.getPlayer().getQuestStatus(31103) == MapleQuestState.NotStarted) {
-                    MapleQuest.getInstance(31103).forceComplete(c.getPlayer(), 2142003);
+                if (c.getPlayer().getQuestStatus(31103) == QuestState.NotStarted) {
+                    Quest.getInstance(31103).forceComplete(c.getPlayer(), 2142003);
                 }
                 break;
             case cygnus_Minimap:
                 c.SendPacket(EffectPacket.showReservedEffect_CutScene("Effect/OnUserEff.img/guideEffect/cygnusTutorial/0"));
                 break;
             case check_q20833:
-                if (c.getPlayer().getQuestStatus(20833) == MapleQuestState.Started) {
-                    MapleQuest.getInstance(20833).forceComplete(c.getPlayer(), 0);
+                if (c.getPlayer().getQuestStatus(20833) == QuestState.Started) {
+                    Quest.getInstance(20833).forceComplete(c.getPlayer(), 0);
                     c.SendPacket(CWvsContext.getTopMsg("Who's that on the right of the map?"));
                 }
                 break;
             case q2614M:
-                if (c.getPlayer().getQuestStatus(2614) == MapleQuestState.Started) {
-                    MapleQuest.getInstance(2614).forceComplete(c.getPlayer(), 0);
+                if (c.getPlayer().getQuestStatus(2614) == QuestState.Started) {
+                    Quest.getInstance(2614).forceComplete(c.getPlayer(), 0);
                 }
                 break;
             case Resi_tutor20:
@@ -1805,8 +1805,8 @@ public class MapScriptMethods {
                 break;
             }
             case merOutStandAlone: {
-                if (c.getPlayer().getQuestStatus(24001) == MapleQuestState.Started) {
-                    MapleQuest.getInstance(24001).forceComplete(c.getPlayer(), 0);
+                if (c.getPlayer().getQuestStatus(24001) == QuestState.Started) {
+                    Quest.getInstance(24001).forceComplete(c.getPlayer(), 0);
                     c.getPlayer().dropMessage(5, "Quest complete.");
                 }
                 break;
@@ -2063,8 +2063,8 @@ public class MapScriptMethods {
                 break;
             }
             case resetEvolvingSystem:
-                if (c.getPlayer().getQuestStatus(1802) == MapleQuestState.Started) {
-                    MapleQuest.getInstance(1802).forceComplete(c.getPlayer(), 0);
+                if (c.getPlayer().getQuestStatus(1802) == QuestState.Started) {
+                    Quest.getInstance(1802).forceComplete(c.getPlayer(), 0);
                 }
                 break;
             case explorationPoint: {
@@ -2083,18 +2083,18 @@ public class MapScriptMethods {
                         }
                     }
                 }
-                if (m != null && c.getPlayer().getLevel() >= m.level && c.getPlayer().getQuestStatus(m.questid) != MapleQuestState.Completed) {
-                    if (c.getPlayer().getQuestStatus(m.lquestid) != MapleQuestState.Started) {
-                        MapleQuest.getInstance(m.lquestid).forceStart(c.getPlayer(), 0, "0");
+                if (m != null && c.getPlayer().getLevel() >= m.level && c.getPlayer().getQuestStatus(m.questid) != QuestState.Completed) {
+                    if (c.getPlayer().getQuestStatus(m.lquestid) != QuestState.Started) {
+                        Quest.getInstance(m.lquestid).forceStart(c.getPlayer(), 0, "0");
                     }
-                    if (c.getPlayer().getQuestStatus(m.questid) != MapleQuestState.Started) {
-                        MapleQuest.getInstance(m.questid).forceStart(c.getPlayer(), 0, null);
+                    if (c.getPlayer().getQuestStatus(m.questid) != QuestState.Started) {
+                        Quest.getInstance(m.questid).forceStart(c.getPlayer(), 0, null);
                         final StringBuilder sb = new StringBuilder("enter=");
                         for (int i = 0; i < m.maps.length; i++) {
                             sb.append("0");
                         }
                         c.getPlayer().updateInfoQuest(m.questid - 2005, sb.toString());
-                        MapleQuest.getInstance(m.questid - 1995).forceStart(c.getPlayer(), 0, "0");
+                        Quest.getInstance(m.questid - 1995).forceStart(c.getPlayer(), 0, "0");
                     }
                     String quest = c.getPlayer().getInfoQuest(m.questid - 2005);
                     if (quest.length() != m.maps.length + 6) { //enter= is 6
@@ -2105,7 +2105,7 @@ public class MapScriptMethods {
                         quest = sb.toString();
                         c.getPlayer().updateInfoQuest(m.questid - 2005, quest);
                     }
-                    final MapleQuestStatus stat = c.getPlayer().getQuestNAdd(MapleQuest.getInstance(m.questid - 1995));
+                    final QuestStatus stat = c.getPlayer().getQuestNAdd(Quest.getInstance(m.questid - 1995));
                     if (stat.getCustomData() == null) { //just a check.
                         stat.setCustomData("0");
                     }
@@ -2128,7 +2128,7 @@ public class MapScriptMethods {
                     if (changedd) {
                         number++;
                         c.getPlayer().updateInfoQuest(m.questid - 2005, sb.toString());
-                        MapleQuest.getInstance(m.questid - 1995).forceStart(c.getPlayer(), 0, String.valueOf(number));
+                        Quest.getInstance(m.questid - 1995).forceStart(c.getPlayer(), 0, String.valueOf(number));
                         c.getPlayer().dropMessage(-1, "Visited " + number + "/" + m.maps.length + " regions.");
                         c.getPlayer().dropMessage(-1, "Title " + String.valueOf(m) + " Explorer currently in progress");
                         c.SendPacket(CWvsContext.showQuestMsg("Title " + String.valueOf(m) + " Explorer currently in progress " + number + "/" + m.maps.length + " completed"));
@@ -2138,12 +2138,12 @@ public class MapScriptMethods {
             }
 
             case enter_masRoom: {
-                if (c.getPlayer().getQuestStatus(23213) == MapleQuestState.Started
-                        && c.getPlayer().getQuestStatus(23214) != MapleQuestState.Started
-                        && c.getPlayer().getQuestStatus(23214) != MapleQuestState.Completed) {;
+                if (c.getPlayer().getQuestStatus(23213) == QuestState.Started
+                        && c.getPlayer().getQuestStatus(23214) != QuestState.Started
+                        && c.getPlayer().getQuestStatus(23214) != QuestState.Completed) {;
 
-                    MapleQuest.getInstance(23213).forceComplete(c.getPlayer(), 0);
-                    MapleQuest.getInstance(23214).forceStart(c.getPlayer(), 0, "1");
+                    Quest.getInstance(23213).forceComplete(c.getPlayer(), 0);
+                    Quest.getInstance(23214).forceStart(c.getPlayer(), 0, "1");
                     final MapleMap mapp = c.getChannelServer().getMapFactory().getMap(931050120); //exit Map
                     c.getPlayer().changeMap(mapp, mapp.getPortal(0));
                 }
@@ -2373,7 +2373,7 @@ public class MapScriptMethods {
             }
             case map_913070050: {
                 try {
-                    MapleQuest.getInstance(20034).forceStart(c.getPlayer(), 1106000, null);
+                    Quest.getInstance(20034).forceStart(c.getPlayer(), 1106000, null);
                     c.SendPacket(CField.UIPacket.IntroEnableUI(true));
                     c.SendPacket(CField.UIPacket.getDirectionStatus(true));
                     c.SendPacket(CWvsContext.getTopMsg("General Store Yard"));
@@ -2505,7 +2505,7 @@ public class MapScriptMethods {
                 break;
             }
             case PTjob2M: {
-                c.getPlayer().setQuestAdd(MapleQuest.getInstance(25102), MapleQuestState.Started, "1");
+                c.getPlayer().setQuestAdd(Quest.getInstance(25102), QuestState.Started, "1");
                 if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) < 1) {
                     c.getPlayer().getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(9001045), new Point(171, 182));
                 }
@@ -2516,13 +2516,13 @@ public class MapScriptMethods {
                 break;*/
             case go20000:
                 c.SendPacket(CField.environmentChange("maplemap/enter/20000", 12, 0));
-                if (c.getPlayer().getQuestStatus(32200) == MapleQuestState.NotStarted) {
-                    MapleQuest.getInstance(32200).forceStart(c.getPlayer(), 0, null);
-                    MapleQuest.getInstance(32200).forceComplete(c.getPlayer(), 0);
-                    MapleQuest.getInstance(32201).forceStart(c.getPlayer(), 0, null);
-                    MapleQuest.getInstance(32201).forceComplete(c.getPlayer(), 0);
-                    MapleQuest.getInstance(32202).forceStart(c.getPlayer(), 0, null);
-                    MapleQuest.getInstance(32202).forceComplete(c.getPlayer(), 0);
+                if (c.getPlayer().getQuestStatus(32200) == QuestState.NotStarted) {
+                    Quest.getInstance(32200).forceStart(c.getPlayer(), 0, null);
+                    Quest.getInstance(32200).forceComplete(c.getPlayer(), 0);
+                    Quest.getInstance(32201).forceStart(c.getPlayer(), 0, null);
+                    Quest.getInstance(32201).forceComplete(c.getPlayer(), 0);
+                    Quest.getInstance(32202).forceStart(c.getPlayer(), 0, null);
+                    Quest.getInstance(32202).forceComplete(c.getPlayer(), 0);
                 }
                 break;
             case go30000:
@@ -2663,7 +2663,7 @@ public class MapScriptMethods {
                 break;
             }
             case PTjob3M2: {
-                if (c.getPlayer().getQuestStatus(25111) == MapleQuestState.Started) {
+                if (c.getPlayer().getQuestStatus(25111) == QuestState.Started) {
                     c.SendPacket(UIPacket.IntroEnableUI(true));
                     c.SendPacket(UIPacket.UserInGameDirectionEvent(3, 2));
                     c.SendPacket(UIPacket.getDirectionStatus(true));
@@ -2673,7 +2673,7 @@ public class MapScriptMethods {
                             c.SendPacket(UIPacket.UserInGameDirectionEvent(3, 0));
                         }
                     }, 2500);
-                    MapleQuest.getInstance(25111).forceComplete(c.getPlayer(), 0);
+                    Quest.getInstance(25111).forceComplete(c.getPlayer(), 0);
                     try {
                         Thread.sleep(3000);
                     } catch (InterruptedException e) {
@@ -2688,7 +2688,7 @@ public class MapScriptMethods {
                             c.removeClickedNPC();
                             NPCScriptManager.getInstance().dispose(c);
                             c.SendPacket(CWvsContext.enableActions());
-                            MapleQuest.getInstance(29969).forceComplete(c.getPlayer(), 0);
+                            Quest.getInstance(29969).forceComplete(c.getPlayer(), 0);
                             try {
                                 Thread.sleep(2000);
                             } catch (InterruptedException e) {
@@ -2717,8 +2717,8 @@ public class MapScriptMethods {
             }
 
             case PTjob4M: {
-                if (c.getPlayer().getQuestStatus(25120) == MapleQuestState.Started) {// && c.getPlayer().getQuestStatus(25101)!=1 && c.getPlayer().getQuestStatus(25101)!=2)
-                    MapleQuest.getInstance(25120).forceComplete(c.getPlayer(), 0);
+                if (c.getPlayer().getQuestStatus(25120) == QuestState.Started) {// && c.getPlayer().getQuestStatus(25101)!=1 && c.getPlayer().getQuestStatus(25101)!=2)
+                    Quest.getInstance(25120).forceComplete(c.getPlayer(), 0);
                 } else {
                     c.getPlayer().dropMessage(5, "Or move out and proof your strength!");
                 }
@@ -2743,7 +2743,7 @@ public class MapScriptMethods {
             case PTjob4M2: {
                 //c.write(UIPacket.getDirectionInfo(4, 2159310));
 
-                if (c.getPlayer().getQuestStatus(25122) == MapleQuestState.Completed && c.getPlayer().getJob() == 2411) {
+                if (c.getPlayer().getQuestStatus(25122) == QuestState.Completed && c.getPlayer().getJob() == 2411) {
                     c.SendPacket(UIPacket.IntroEnableUI(true));
                     c.SendPacket(UIPacket.UserInGameDirectionEvent(3, 2));
                     c.SendPacket(UIPacket.UserInGameDirectionEvent(1, 30));
@@ -3027,8 +3027,8 @@ public class MapScriptMethods {
                         final MapleMap mapto = c.getChannelServer().getMapFactory().getMap(927000020);
                         c.getPlayer().changeMap(mapto, mapto.getPortal(0));
                         c.SendPacket(UIPacket.IntroEnableUI(false));
-                        MapleQuest.getInstance(23204).forceStart(c.getPlayer(), 0, null);
-                        MapleQuest.getInstance(23205).forceComplete(c.getPlayer(), 0);
+                        Quest.getInstance(23204).forceStart(c.getPlayer(), 0, null);
+                        Quest.getInstance(23205).forceComplete(c.getPlayer(), 0);
                         final Map<Skill, SkillEntry> sa = new HashMap<>();
                         sa.put(SkillFactory.getSkill(30011170), new SkillEntry((byte) 1, (byte) 1, -1));
                         sa.put(SkillFactory.getSkill(30011169), new SkillEntry((byte) 1, (byte) 1, -1));
@@ -3253,7 +3253,7 @@ public class MapScriptMethods {
                 break;
             }
             case rien: {
-                if (c.getPlayer().getQuestStatus(21101) == MapleQuestState.Completed && c.getPlayer().getInfoQuest(21019).equals("miss=o;arr=o;helper=clear")) {
+                if (c.getPlayer().getQuestStatus(21101) == QuestState.Completed && c.getPlayer().getInfoQuest(21019).equals("miss=o;arr=o;helper=clear")) {
                     c.getPlayer().updateInfoQuest(21019, "miss=o;arr=o;ck=1;helper=clear");
                 }
                 c.SendPacket(UIPacket.getDirectionStatus(false));
@@ -3370,8 +3370,8 @@ public class MapScriptMethods {
                             c.getPlayer().levelUp();
                         }
                         c.getPlayer().setExp(0);
-                        if (c.getPlayer().getQuestStatus(28862) == MapleQuestState.Started) {
-                            MapleQuest.getInstance(28862).forceComplete(c.getPlayer(), 0);
+                        if (c.getPlayer().getQuestStatus(28862) == QuestState.Started) {
+                            Quest.getInstance(28862).forceComplete(c.getPlayer(), 0);
                         }
                     }
                 } else if (c.getPlayer().getJob() == 4002 && c.getPlayer().getLevel() == 1) {
@@ -3384,8 +3384,8 @@ public class MapScriptMethods {
                             c.getPlayer().levelUp();
                         }
                         c.getPlayer().setExp(0);
-                        if (c.getPlayer().getQuestStatus(28862) == MapleQuestState.Started) {
-                            MapleQuest.getInstance(28862).forceComplete(c.getPlayer(), 0);
+                        if (c.getPlayer().getQuestStatus(28862) == QuestState.Started) {
+                            Quest.getInstance(28862).forceComplete(c.getPlayer(), 0);
                         }
                     }
                 }
@@ -3416,8 +3416,8 @@ public class MapScriptMethods {
 
             case direction_59063: {
                 try {
-                    if (c.getPlayer().getQuestStatus(59063) == MapleQuestState.Started) {
-                        MapleQuest.getInstance(59063).forceComplete(c.getPlayer(), 0);
+                    if (c.getPlayer().getQuestStatus(59063) == QuestState.Started) {
+                        Quest.getInstance(59063).forceComplete(c.getPlayer(), 0);
                     }
                     c.SendPacket(CWvsContext.getTopMsg("On voyage to Nautilus."));
                     c.SendPacket(CField.getClock(1 * 30));
@@ -3430,8 +3430,8 @@ public class MapScriptMethods {
             }
 
             case direction_59061: {
-                if (c.getPlayer().getQuestStatus(59061) == MapleQuestState.Started) {
-                    MapleQuest.getInstance(59061).forceComplete(c.getPlayer(), 0);
+                if (c.getPlayer().getQuestStatus(59061) == QuestState.Started) {
+                    Quest.getInstance(59061).forceComplete(c.getPlayer(), 0);
                     //MapleQuest.getInstance(59063).forceStart(c.getPlayer(), 0, null);
                     //MapleMap mapto = c.getChannelServer().getMapFactory().getMap(866000230);
                     //c.getPlayer().changeMap(mapto, mapto.getPortal(0));
@@ -3505,17 +3505,17 @@ public class MapScriptMethods {
             }
 
             case onUserEnter_866109000: {
-                MapleQuest.getInstance(59008).forceComplete(c.getPlayer(), 0);
-                MapleQuest.getInstance(59009).forceStart(c.getPlayer(), 0, null);
-                MapleQuest.getInstance(59009).forceComplete(c.getPlayer(), 0);
-                MapleQuest.getInstance(59011).forceStart(c.getPlayer(), 0, null);
-                MapleQuest.getInstance(59011).forceComplete(c.getPlayer(), 0);
-                MapleQuest.getInstance(59013).forceStart(c.getPlayer(), 0, null);
-                MapleQuest.getInstance(59013).forceComplete(c.getPlayer(), 0);
-                MapleQuest.getInstance(59015).forceStart(c.getPlayer(), 0, null);
-                MapleQuest.getInstance(59015).forceComplete(c.getPlayer(), 0);
-                MapleQuest.getInstance(59016).forceStart(c.getPlayer(), 0, null);
-                MapleQuest.getInstance(59016).forceComplete(c.getPlayer(), 0);
+                Quest.getInstance(59008).forceComplete(c.getPlayer(), 0);
+                Quest.getInstance(59009).forceStart(c.getPlayer(), 0, null);
+                Quest.getInstance(59009).forceComplete(c.getPlayer(), 0);
+                Quest.getInstance(59011).forceStart(c.getPlayer(), 0, null);
+                Quest.getInstance(59011).forceComplete(c.getPlayer(), 0);
+                Quest.getInstance(59013).forceStart(c.getPlayer(), 0, null);
+                Quest.getInstance(59013).forceComplete(c.getPlayer(), 0);
+                Quest.getInstance(59015).forceStart(c.getPlayer(), 0, null);
+                Quest.getInstance(59015).forceComplete(c.getPlayer(), 0);
+                Quest.getInstance(59016).forceStart(c.getPlayer(), 0, null);
+                Quest.getInstance(59016).forceComplete(c.getPlayer(), 0);
                 MapleMap mapto = c.getChannelServer().getMapFactory().getMap(866135000);
                 c.getPlayer().changeMap(mapto, mapto.getPortal(0));
                 break;
@@ -3524,7 +3524,7 @@ public class MapScriptMethods {
             case onUserEnter_866107000: {
                 try {
                     c.getPlayer().getMap().resetFully();
-                    if (c.getPlayer().getQuestStatus(59005) == MapleQuestState.Started) {
+                    if (c.getPlayer().getQuestStatus(59005) == QuestState.Started) {
                         c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390931), new Point(661, 246));
                         c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390931), new Point(761, 246));
                         c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390931), new Point(861, 246));
@@ -3535,7 +3535,7 @@ public class MapScriptMethods {
                     c.removeClickedNPC();
                     NPCScriptManager.getInstance().start(c, 9390300, "BeastTamerTut06");
                     Thread.sleep(1000);
-                    MapleQuest.getInstance(59005).forceComplete(c.getPlayer(), 0);
+                    Quest.getInstance(59005).forceComplete(c.getPlayer(), 0);
                 } catch (InterruptedException ex) {
                 }
                 break;
@@ -3619,8 +3619,8 @@ public class MapScriptMethods {
                     NPCScriptManager.getInstance().dispose(c);
                     c.removeClickedNPC();
                     NPCScriptManager.getInstance().start(c, 1103005, "TotInfoBT");
-                    MapleQuest.getInstance(28862).forceStart(c.getPlayer(), 0, null);
-                    MapleQuest.getInstance(28862).forceComplete(c.getPlayer(), 0);
+                    Quest.getInstance(28862).forceStart(c.getPlayer(), 0, null);
+                    Quest.getInstance(28862).forceComplete(c.getPlayer(), 0);
                     c.SendPacket(CWvsContext.getTopMsg("Earned Forever Single title!"));
                 } catch (InterruptedException e) {
                 }
@@ -3753,7 +3753,7 @@ public class MapScriptMethods {
 
             case evolvingDirection3: {
                 try {
-                    MapleQuest.getInstance(1801).forceComplete(c.getPlayer(), 0);
+                    Quest.getInstance(1801).forceComplete(c.getPlayer(), 0);
                     c.getPlayer().getMap().resetFully();
                     //   c.write(CField.UIPacket.IntroEnableUI(true));
                     //    c.write(CField.UIPacket.getDirectionStatus(true));

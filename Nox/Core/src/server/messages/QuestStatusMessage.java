@@ -1,6 +1,6 @@
 package server.messages;
 
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import net.OutPacket;
 import tools.packet.PacketHelper;
 
@@ -10,9 +10,9 @@ import tools.packet.PacketHelper;
  */
 public class QuestStatusMessage implements MessageInterface {
 
-    private final MapleQuestStatus quest;
+    private final QuestStatus quest;
 
-    public QuestStatusMessage(MapleQuestStatus quest) {
+    public QuestStatusMessage(QuestStatus quest) {
         this.quest = quest;
     }
 

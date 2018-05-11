@@ -25,7 +25,7 @@ import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -50,9 +50,9 @@ public final class TitleEquipHandler implements ProcessPacket<MapleClient> {
             return;
         }
         if (itemId <= 0) {
-            chr.getQuestRemove(MapleQuest.getInstance(124000));
+            chr.getQuestRemove(Quest.getInstance(124000));
         } else {
-            chr.getQuestNAdd(MapleQuest.getInstance(124000)).setCustomData(String.valueOf(itemId));
+            chr.getQuestNAdd(Quest.getInstance(124000)).setCustomData(String.valueOf(itemId));
         }
         chr.getMap().broadcastMessage(chr, CField.showTitle(chr.getId(), itemId), false);
         c.SendPacket(CWvsContext.enableActions());

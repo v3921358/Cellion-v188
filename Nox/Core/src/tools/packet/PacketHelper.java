@@ -16,7 +16,7 @@ import server.maps.MapleMapObject;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
 import server.movement.LifeMovementFragment;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import server.shops.MapleShop;
 import server.shops.MapleShopItem;
 import server.stores.AbstractPlayerStore;
@@ -89,9 +89,9 @@ public class PacketHelper {
 
     public static void addStartedQuestInfo(OutPacket oPacket, User chr) {
         oPacket.EncodeByte(1);
-        final List<MapleQuestStatus> started = chr.getStartedQuests();
+        final List<QuestStatus> started = chr.getStartedQuests();
         oPacket.EncodeShort(started.size());
-        for (MapleQuestStatus q : started) {
+        for (QuestStatus q : started) {
             oPacket.EncodeInt(q.getQuest().getId()); // Version 174, this is an integer 
 
             if (q.hasMobKills()) {
@@ -130,9 +130,9 @@ public class PacketHelper {
 
     public static void addCompletedQuestInfo(OutPacket oPacket, User chr) {
         oPacket.EncodeByte(1);
-        final List<MapleQuestStatus> completed = chr.getCompletedQuests();
+        final List<QuestStatus> completed = chr.getCompletedQuests();
         oPacket.EncodeShort(completed.size());
-        for (MapleQuestStatus q : completed) {
+        for (QuestStatus q : completed) {
             oPacket.EncodeInt(q.getQuest().getId()); // Version 174, this is an integer 
 
             oPacket.EncodeInt(KoreanDateUtil.getQuestTimestamp(q.getCompletionTime()));
@@ -280,7 +280,7 @@ public class PacketHelper {
         oPacket.EncodeByte(chr.getInventory(MapleInventoryType.ETC).getSlotLimit());
         oPacket.EncodeByte(chr.getInventory(MapleInventoryType.CASH).getSlotLimit());
 
-        MapleQuestStatus stat = chr.getQuestNoAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT));
+        QuestStatus stat = chr.getQuestNoAdd(Quest.getInstance(GameConstants.PENDANT_SLOT));
         if ((stat != null) && (stat.getCustomData() != null) && (Long.parseLong(stat.getCustomData()) > System.currentTimeMillis())) {
             oPacket.EncodeLong(getTime(Long.parseLong(stat.getCustomData())));
         } else {
@@ -991,7 +991,7 @@ public class PacketHelper {
                 oPacket.EncodeString(chr.getBlessOfEmpressOrigin());
             }
 
-            MapleQuestStatus ultExplorer = chr.getQuestNoAdd(MapleQuest.getInstance(GameConstants.ULT_EXPLORER));
+            QuestStatus ultExplorer = chr.getQuestNoAdd(Quest.getInstance(GameConstants.ULT_EXPLORER));
             oPacket.EncodeBool((ultExplorer != null) && (ultExplorer.getCustomData() != null));//correct
             if ((ultExplorer != null) && (ultExplorer.getCustomData() != null)) {
                 oPacket.EncodeString(ultExplorer.getCustomData());

@@ -2,7 +2,7 @@ package handling.cashshop;
 
 import client.MapleCharacterCreationUtil;
 import client.MapleClient;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import database.Database;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import server.CashItemFactory;
 import server.CashItemInfo;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import tools.packet.CField;
 import tools.packet.CSPacket;
@@ -129,7 +129,7 @@ public class SlotIncrease {
     }*/
     public static void pendantSlots(InPacket iPacket, MapleClient c, User pPlayer) {
 
-        MapleQuestStatus pPendantStatus = c.getPlayer().getQuestNoAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT));
+        QuestStatus pPendantStatus = c.getPlayer().getQuestNoAdd(Quest.getInstance(GameConstants.PENDANT_SLOT));
 
         if (pPlayer.getCSPoints(2) < 30000) {
             c.SendPacket(CSPacket.sendCSFail(0));
@@ -140,7 +140,7 @@ public class SlotIncrease {
             pPlayer.dropMessage(1, "You already have access to an additional pendant slot.");
             c.SendPacket(CSPacket.sendCSFail(0));
         } else {
-            pPlayer.getQuestNAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT)).setCustomData(String.valueOf(System.currentTimeMillis() + ((long) 7 * 24 * 60 * 60000)));
+            pPlayer.getQuestNAdd(Quest.getInstance(GameConstants.PENDANT_SLOT)).setCustomData(String.valueOf(System.currentTimeMillis() + ((long) 7 * 24 * 60 * 60000)));
             pPlayer.modifyCSPoints(1, -30000, false);
             pPlayer.dropMessage(1, "You have unlocked access to an additional pendant slot.");
             pPlayer.saveToDB(false, false);

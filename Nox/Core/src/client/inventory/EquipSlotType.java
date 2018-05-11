@@ -1,12 +1,12 @@
 package client.inventory;
 
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import constants.GameConstants;
 import java.util.ArrayList;
 import java.util.List;
 import server.MapleInventoryManipulator;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 
 /**
  *
@@ -175,7 +175,7 @@ public enum EquipSlotType {
                         throw new RuntimeException("[EquipSlotType] Expected at least 2 pendant slot! Did you change something? :( ");
                     }
                     if (dst == possibleSlotNumber.get(0)) { // expension slot number
-                        final MapleQuestStatus quest_pendant = chr.getQuestNoAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT));
+                        final QuestStatus quest_pendant = chr.getQuestNoAdd(Quest.getInstance(GameConstants.PENDANT_SLOT));
                         if (Long.parseLong(quest_pendant.getCustomData()) < System.currentTimeMillis()) {
                             return 0;
                         }

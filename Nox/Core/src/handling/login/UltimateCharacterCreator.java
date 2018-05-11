@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import client.MapleClient;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus.QuestState;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
@@ -14,7 +14,7 @@ import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import server.MapleItemInformationProvider;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import tools.packet.CField;
 import net.ProcessPacket;
@@ -30,7 +30,7 @@ public final class UltimateCharacterCreator implements ProcessPacket<MapleClient
     public void Process(MapleClient c, InPacket iPacket) {
         if (!c.getPlayer().isGM()
                 && (!c.isLoggedIn() || c.getPlayer() == null || c.getPlayer().getLevel() < 120 || c.getPlayer().getMapId() != 130000000
-                || c.getPlayer().getQuestStatus(20734) != MapleQuestState.NotStarted || c.getPlayer().getQuestStatus(20616) != MapleQuestState.Completed || !GameConstants.isCygnusKnight(c.getPlayer().getJob()) || !MapleCharacterCreationUtil.canMakeCharacter(c.getWorld(), c.getAccID()))) {
+                || c.getPlayer().getQuestStatus(20734) != QuestState.NotStarted || c.getPlayer().getQuestStatus(20616) != QuestState.Completed || !GameConstants.isCygnusKnight(c.getPlayer().getJob()) || !MapleCharacterCreationUtil.canMakeCharacter(c.getWorld(), c.getAccID()))) {
             c.SendPacket(CField.createUltimate(2));
             //Character slots are full. Please purchase another slot from the Cash Shop.
             return;
@@ -115,10 +115,10 @@ public final class UltimateCharacterCreator implements ProcessPacket<MapleClient
         }
         //TODO: Make this GMS - Like
         for (int i = 2490; i < 2507; i++) {
-            newchar.setQuestAdd(MapleQuest.getInstance(i), MapleQuestState.Completed, null);
+            newchar.setQuestAdd(Quest.getInstance(i), QuestState.Completed, null);
         }
-        newchar.setQuestAdd(MapleQuest.getInstance(29947), MapleQuestState.Completed, null);
-        newchar.setQuestAdd(MapleQuest.getInstance(GameConstants.ULT_EXPLORER), MapleQuestState.NotStarted, c.getPlayer().getName());
+        newchar.setQuestAdd(Quest.getInstance(29947), QuestState.Completed, null);
+        newchar.setQuestAdd(Quest.getInstance(GameConstants.ULT_EXPLORER), QuestState.NotStarted, c.getPlayer().getName());
 
         final Map<Skill, SkillEntry> ss = new HashMap<>();
         ss.put(SkillFactory.getSkill(1074 + (job / 100)), new SkillEntry((byte) 5, (byte) 5, -1));
@@ -137,7 +137,7 @@ public final class UltimateCharacterCreator implements ProcessPacket<MapleClient
         newchar.getInventory(MapleInventoryType.USE).addItem(new Item(2000004, (byte) 0, (short) 200, (byte) 0));
         if (MapleCharacterCreationUtil.canCreateChar(name, c.isGm()) && (!LoginInformationProvider.getInstance().isForbiddenName(name) || c.isGm())) {
             User.saveNewCharToDB(newchar, jobType, (short) 0);
-            MapleQuest.getInstance(20734).forceComplete(c.getPlayer(), 1101000);
+            Quest.getInstance(20734).forceComplete(c.getPlayer(), 1101000);
             c.SendPacket(CField.createUltimate(0));
         } else if (!LoginInformationProvider.getInstance().isForbiddenName(name) || c.isGm()) {
             c.SendPacket(CField.createUltimate(3)); //"You cannot use this name."

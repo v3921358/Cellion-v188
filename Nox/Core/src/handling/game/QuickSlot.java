@@ -23,7 +23,7 @@ package handling.game;
 
 import client.MapleClient;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import net.ProcessPacket;
 
@@ -43,7 +43,7 @@ public final class QuickSlot implements ProcessPacket<MapleClient> {
                 ret.append(iPacket.DecodeInt()).append(",");
             }
             ret.deleteCharAt(ret.length() - 1);
-            chr.getQuestNAdd(MapleQuest.getInstance(123000)).setCustomData(ret.toString());
+            chr.getQuestNAdd(Quest.getInstance(123000)).setCustomData(ret.toString());
         }
     }
 }

@@ -4,7 +4,7 @@
 package tools;
 
 import client.CharacterTemporaryStat;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
@@ -161,7 +161,7 @@ public class Utility {
                         pPlayer.getClient().SendPacket(CWvsContext.enableActions());
                         continue;
                     }
-                    if (pMapLoot.getQuest() > 0 && pPlayer.getQuestStatus(pMapLoot.getQuest()) != MapleQuestStatus.MapleQuestState.Started) {
+                    if (pMapLoot.getQuest() > 0 && pPlayer.getQuestStatus(pMapLoot.getQuest()) != QuestStatus.QuestState.Started) {
                         pPlayer.getClient().SendPacket(CWvsContext.enableActions());
                         continue;
                     }
@@ -244,7 +244,7 @@ public class Utility {
                         pPlayer.getClient().SendPacket(CWvsContext.enableActions());
                         continue;
                     }
-                    if (pMapLoot.getQuest() > 0 && pPlayer.getQuestStatus(pMapLoot.getQuest()) != MapleQuestStatus.MapleQuestState.Started) {
+                    if (pMapLoot.getQuest() > 0 && pPlayer.getQuestStatus(pMapLoot.getQuest()) != QuestStatus.QuestState.Started) {
                         pPlayer.getClient().SendPacket(CWvsContext.enableActions());
                         continue;
                     }

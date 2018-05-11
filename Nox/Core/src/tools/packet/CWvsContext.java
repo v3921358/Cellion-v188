@@ -3702,7 +3702,7 @@ public class CWvsContext {
             return oPacket;
         }
 
-        public static OutPacket updateQuestMobKills(MapleQuestStatus status) {
+        public static OutPacket updateQuestMobKills(QuestStatus status) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.Message.getValue());
             oPacket.EncodeByte(1);

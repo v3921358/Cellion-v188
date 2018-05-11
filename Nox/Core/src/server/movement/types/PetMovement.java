@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 
 import client.MapleClient;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus.QuestState;
 import handling.AbstractMaplePacketHandler;
 import handling.world.MovementParse;
 import static handling.game.ItemPickupHandler.removeItem_Pet;
@@ -74,7 +74,7 @@ public class PetMovement implements ProcessPacket<MapleClient> {
                             if (mapitem.isPickedUp()) {
                                 continue;
                             }
-                            if (mapitem.getQuest() > 0 && chr.getQuestStatus(mapitem.getQuest()) != MapleQuestState.Started) {
+                            if (mapitem.getQuest() > 0 && chr.getQuestStatus(mapitem.getQuest()) != QuestState.Started) {
                                 continue;
                             }
                             if (mapitem.getOwner() != chr.getId() && mapitem.isPlayerDrop()) {

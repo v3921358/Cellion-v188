@@ -44,7 +44,7 @@ import constants.GameConstants;
 import static java.lang.Math.exp;
 import static server.MapleStatInfo.hp;
 import static server.MapleStatInfo.mp;
-import static server.quest.MapleQuestActionType.exp;
+import static server.quest.QuestActionType.exp;
 
 public class ChangeableStats extends OverrideMonsterStats {
 

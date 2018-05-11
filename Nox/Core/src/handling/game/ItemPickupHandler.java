@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 
 import client.MapleClient;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus.QuestState;
 import client.anticheat.CheatingOffense;
 import client.inventory.Equip;
 import client.inventory.ItemType;
@@ -68,7 +68,7 @@ public class ItemPickupHandler implements ProcessPacket<MapleClient> {
                 c.SendPacket(CWvsContext.enableActions());
                 return;
             }
-            if (mapitem.getQuest() > 0 && chr.getQuestStatus(mapitem.getQuest()) != MapleQuestState.Started) {
+            if (mapitem.getQuest() > 0 && chr.getQuestStatus(mapitem.getQuest()) != QuestState.Started) {
                 c.SendPacket(CWvsContext.enableActions());
                 return;
             }

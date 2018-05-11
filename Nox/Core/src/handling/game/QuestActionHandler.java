@@ -6,7 +6,7 @@ import constants.ServerConstants;
 import net.ProcessPacket;
 import scripting.provider.NPCScriptManager;
 import server.maps.objects.User;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import tools.LogHelper;
 import tools.packet.CField;
@@ -101,7 +101,7 @@ enum QuestRes
             System.out.println(String.format("[Debug] Requesting Quest ID (%s), Action (%s)", quest, debugAction));
         }
 
-        final MapleQuest q = MapleQuest.getInstance(quest);
+        final Quest q = Quest.getInstance(quest);
         switch (action) {
             case 0: { // Restore lost item
                 //chr.updateTick(iPacket.DecodeInt());

@@ -2,7 +2,7 @@ package server.maps;
 
 import client.CharacterTemporaryStat;
 import client.MapleClient;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus.QuestState;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
 import client.anticheat.AntiCheat;
@@ -28,7 +28,7 @@ import server.events.MapleEvent;
 import server.life.*;
 import server.maps.Map_MCarnival.MCGuardian;
 import server.maps.objects.*;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import service.ChannelServer;
 import tools.StringUtil;
 import tools.packet.CField;
@@ -327,9 +327,7 @@ public final class MapleMap {
         final float caServerrate = ChannelServer.getInstance(channel).getCashRate();
         final int cashz = (int) ((mob.getStats().isBoss() && mob.getStats().getHPDisplayType() == MapleMonsterHpDisplayType.BossHP ? 20 : 1) * caServerrate);
         final int cashModifier = (int) ((mob.getStats().isBoss() ? (mob.getStats().isPartyBonus() ? (mob.getMobExp() / 1000) : 0) : (mob.getMobExp() / 1000 + mob.getMobMaxHp() / 20000))); //no rate
-        //if (Randomizer.nextInt(100) < 50) {
-        //    chr.modifyCSPoints(1, (int) ((Randomizer.nextInt(cashz) + cashz + cashModifier) * (chr.getStat().cashBuff / 100.0) * chr.getCashMod()), true);
-        //}
+        
         Item idrop;
         byte d = 1;
         Point pos = new Point(0, mob.getTruePosition().y);
@@ -359,7 +357,7 @@ public final class MapleMap {
                 if (mesoDropped && droptype != 3 && de.itemId == 0) { //not more than 1 sack of meso
                     continue;
                 }
-                if (de.questid > 0 && chr.getQuestStatus(de.questid) != MapleQuestState.Started) {
+                if (de.questid > 0 && chr.getQuestStatus(de.questid) != QuestState.Started) {
                     continue;
                 }
                 if (de.itemId / 10000 == 238 && !mob.getStats().isBoss() && chr.getMonsterBook().getLevelByCard(ii.getCardMobId(de.itemId)) >= 2) {
@@ -395,7 +393,7 @@ public final class MapleMap {
         // Global Drops
         for (MonsterGlobalDropEntry de : globalEntry) {
             if (Randomizer.nextInt(999999) < de.chance && (de.continent < 0 || (de.continent < 10 && smr.mapid / 100000000 == de.continent) || (de.continent < 100 && smr.mapid / 10000000 == de.continent) || (de.continent < 1000 && smr.mapid / 1000000 == de.continent))) {
-                if (de.questid > 0 && chr.getQuestStatus(de.questid) != MapleQuestState.Started) {
+                if (de.questid > 0 && chr.getQuestStatus(de.questid) != QuestState.Started) {
                     continue;
                 }
                 if (de.itemId == 0) {
@@ -463,11 +461,11 @@ public final class MapleMap {
             spawnNpcForPlayer(chr.getClient(), 9073000, new Point(-595, 215));
         }
         if (monster.getId() == 9001045) {
-            chr.setQuestAdd(MapleQuest.getInstance(25103), MapleQuestState.Started, "1");
+            chr.setQuestAdd(Quest.getInstance(25103), QuestState.Started, "1");
         }
         if (monster.getId() == 9001050) {
             if (chr.getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) < 2) { //should be 1 left
-                MapleQuest.getInstance(20035).forceComplete(chr, 1106000);
+                Quest.getInstance(20035).forceComplete(chr, 1106000);
             }
         }
         if (monster.getId() == 9400902) {
@@ -1954,7 +1952,7 @@ public final class MapleMap {
         // mdrop.setProperties(MapleMapItemProperties.IsEliteBossDrop);
 
         spawnAndAddRangedMapObject(mdrop, (MapleClient c1) -> {
-            if (c1 != null && c1.getPlayer() != null && (questid <= 0 || c1.getPlayer().getQuestStatus(questid) == MapleQuestState.Started) && (idrop.getItemId() / 10000 != 238 || c1.getPlayer().getMonsterBook().getLevelByCard(idrop.getItemId()) >= 2) && mob != null && dropPos != null) {
+            if (c1 != null && c1.getPlayer() != null && (questid <= 0 || c1.getPlayer().getQuestStatus(questid) == QuestState.Started) && (idrop.getItemId() / 10000 != 238 || c1.getPlayer().getMonsterBook().getLevelByCard(idrop.getItemId()) >= 2) && mob != null && dropPos != null) {
                 c1.SendPacket(CField.dropItemFromMapObject(mdrop, mob, mob.getTruePosition(), dropPos, (byte) 1));
             }
         });

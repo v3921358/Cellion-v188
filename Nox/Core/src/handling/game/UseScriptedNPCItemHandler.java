@@ -1,8 +1,8 @@
 package handling.game;
 
 import client.MapleClient;
-import client.MapleQuestStatus;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus;
+import client.QuestStatus.QuestState;
 import client.MapleStat;
 import client.PlayerRandomStream;
 import client.PlayerStats;
@@ -22,7 +22,7 @@ import server.Randomizer;
 import server.life.MapleLifeFactory;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import net.InPacket;
 import tools.packet.CWvsContext;
 import net.ProcessPacket;
@@ -248,7 +248,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
                     c.getPlayer().dropMessage(5, "Please bring this item to the NPC.");
                     break;
                 case 2430212: //energy drink
-                    MapleQuestStatus marr = c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.ENERGY_DRINK));
+                    QuestStatus marr = c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.ENERGY_DRINK));
                     if (marr.getCustomData() == null) {
                         marr.setCustomData("0");
                     }
@@ -261,7 +261,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
                     }
                     break;
                 case 2430213: //energy drink
-                    marr = c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.ENERGY_DRINK));
+                    marr = c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.ENERGY_DRINK));
                     if (marr.getCustomData() == null) {
                         marr.setCustomData("0");
                     }
@@ -287,7 +287,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
                     }
                     break;
                 case 2430231: //energy drink
-                    marr = c.getPlayer().getQuestNAdd(MapleQuest.getInstance(GameConstants.ENERGY_DRINK));
+                    marr = c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.ENERGY_DRINK));
                     if (marr.getCustomData() == null) {
                         marr.setCustomData("0");
                     }
@@ -334,11 +334,11 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
                     }
                     break;
                 case 2430159:
-                    MapleQuest.getInstance(3182).forceComplete(c.getPlayer(), 2161004);
+                    Quest.getInstance(3182).forceComplete(c.getPlayer(), 2161004);
                     MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
                     break;
                 case 2430200: //thunder stone
-                    if (c.getPlayer().getQuestStatus(31152) != MapleQuestState.Completed) {
+                    if (c.getPlayer().getQuestStatus(31152) != QuestState.Completed) {
                         c.getPlayer().dropMessage(5, "You have no idea how to use it.");
                     } else if (c.getPlayer().getInventory(MapleInventoryType.ETC).getNumFreeSlot() >= 1) {
                         if (c.getPlayer().getInventory(MapleInventoryType.ETC).countById(4000660) >= 1 && c.getPlayer().getInventory(MapleInventoryType.ETC).countById(4000661) >= 1 && c.getPlayer().getInventory(MapleInventoryType.ETC).countById(4000662) >= 1 && c.getPlayer().getInventory(MapleInventoryType.ETC).countById(4000663) >= 1) {
@@ -1039,7 +1039,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
                     break;
                 }
                 case 2432251: {//Kobold Musk
-                    MapleQuest.getInstance(59051).forceComplete(c.getPlayer(), 0);
+                    Quest.getInstance(59051).forceComplete(c.getPlayer(), 0);
                     NPCScriptManager.getInstance().start(c, 9390315, "BeastTamerQuestLine2");
                     break;
                 }
@@ -1191,8 +1191,8 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
                 {
                     if (!GameConstants.isZero(chr.getJob())) {
                         int itemidd = toUse.getItemId();
-                        MapleQuest quest = MapleQuest.getInstance(7291);
-                        MapleQuestStatus queststatus = new MapleQuestStatus(quest, MapleQuestState.Started);
+                        Quest quest = Quest.getInstance(7291);
+                        QuestStatus queststatus = new QuestStatus(quest, QuestState.Started);
                         int skinnum = GameConstants.getDamageSkinNumberByItem(itemidd);
                         String skinString = String.valueOf(skinnum);
                         queststatus.setCustomData(skinString == null ? "0" : skinString);
@@ -1205,7 +1205,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<MapleClient> {
                     }
                     break;
                 }
-                //
+                //                //                //                //                //                //                //                //
 
                 case 5680021:
                     int expiration;

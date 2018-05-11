@@ -7,8 +7,8 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import client.MapleQuestStatus;
-import client.MapleQuestStatus.MapleQuestState;
+import client.QuestStatus;
+import client.QuestStatus.QuestState;
 import client.MapleTrait.MapleTraitType;
 import client.Skill;
 import client.SkillFactory;
@@ -19,11 +19,11 @@ import server.maps.objects.User;
 import server.maps.objects.Pet;
 import tools.Pair;
 
-public class MapleQuestRequirement implements Serializable {
+public class QuestRequirement implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
-    private MapleQuest quest;
-    private MapleQuestRequirementType type;
+    private Quest quest;
+    private QuestRequirementType type;
     private int intStore;
     private String stringStore;
     private List<Pair<Integer, Integer>> dataStore;
@@ -36,7 +36,7 @@ public class MapleQuestRequirement implements Serializable {
      * @param rse
      * @throws java.sql.SQLException
      */
-    public MapleQuestRequirement(MapleQuest quest, MapleQuestRequirementType type, ResultSet rse) throws SQLException {
+    public QuestRequirement(Quest quest, QuestRequirementType type, ResultSet rse) throws SQLException {
         this.type = type;
         this.quest = quest;
 
@@ -118,13 +118,13 @@ public class MapleQuestRequirement implements Serializable {
             }
             case quest:
                 for (Pair<Integer, Integer> a : dataStore) {
-                    final MapleQuestStatus q = c.getQuest(MapleQuest.getInstance(a.getLeft()));
+                    final QuestStatus q = c.getQuest(Quest.getInstance(a.getLeft()));
                     final int state = a.getRight();
                     if (state != 0) {
                         if (q == null && state == 0) {
                             continue;
                         }
-                        if (q == null || q.getStatus() != MapleQuestState.getFromValue(state)) {
+                        if (q == null || q.getStatus() != QuestState.getFromValue(state)) {
                             return false;
                         }
                     }
@@ -192,7 +192,7 @@ public class MapleQuestRequirement implements Serializable {
             case questComplete:
                 return c.getNumQuest() >= intStore;
             case interval:
-                return c.getQuest(quest).getStatus() != MapleQuestState.Completed || c.getQuest(quest).getCompletionTime() <= System.currentTimeMillis() - intStore * 60 * 1000L;
+                return c.getQuest(quest).getStatus() != QuestState.Completed || c.getQuest(quest).getCompletionTime() <= System.currentTimeMillis() - intStore * 60 * 1000L;
             case pet:
                 for (Pair<Integer, Integer> a : dataStore) {
                     if (c.getPetById(a.getRight()) != -1) {
@@ -231,7 +231,7 @@ public class MapleQuestRequirement implements Serializable {
         }
     }
 
-    public MapleQuestRequirementType getType() {
+    public QuestRequirementType getType() {
         return type;
     }
 
