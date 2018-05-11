@@ -6,14 +6,15 @@ package client.buddy;
  */
 public enum BuddyFlags {
 
-    REGULAR_FRIEND(0x0),
-    REGULAR_INVITE(0x1),
-    OFFLINE(0x2),
-    ONLINE(0x3),
-    MOBILE_SYMBOL(0x4),
-    ACCOUNT_FRIEND_OFFLINE(0x5),
-    ACOUNT_FRIEND_INVITE(0x6),
-    ACCOUNT_FRIEND(0x7);
+    Friend(0),
+    FriendRequest(1),
+    FriendOffline(2),
+    FriendOnline(3),
+    MobileOnline(4),
+    MobileOffline(5),
+    AccountFriendRequest(6),
+    AccountFriendOnline(7),
+    AccountFriendOffline(8);
 
     private int flag;
 
@@ -29,15 +30,15 @@ public enum BuddyFlags {
         byte flag = 0;
         if (entry.isAccountFriend()) {
             if (entry.isOnline() && !entry.isPending()) {
-                flag = ACCOUNT_FRIEND.getFlag();
+                flag = AccountFriendOnline.getFlag();
             } else {
-                flag = ACCOUNT_FRIEND_OFFLINE.getFlag();
+                flag = MobileOffline.getFlag();
             }
         } else {
             if (entry.isOnline() && !entry.isPending()) {
-                flag = ONLINE.getFlag();
+                flag = FriendOnline.getFlag();
             } else {
-                flag = OFFLINE.getFlag();
+                flag = FriendOffline.getFlag();
             }
         }
         return flag;

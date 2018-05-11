@@ -2470,6 +2470,7 @@ public class CWvsContext {
      * This packet handles all of the functions for buddies
      *
      * @param buddy
+     * @return 
      */
     public static OutPacket buddylistMessage(Buddy buddy) {
 
@@ -2481,6 +2482,9 @@ public class CWvsContext {
                 for (BuddylistEntry entry : buddy.getEntries()) {
                     buddyListEntry(oPacket, entry);
                 }
+                break;
+            case SET_FRIEND_FULL_OTHER:
+                
                 break;
             case NOTIFY_CHANGE_FRIEND_INFO: //update blocked friends
                 oPacket.EncodeInt(buddy.getEntry().getCharacterId()); //dwFriendID

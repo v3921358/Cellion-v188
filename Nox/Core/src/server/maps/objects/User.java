@@ -2215,15 +2215,16 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
             if (buddylist.changed()) {
                 deleteWhereCharacterId(con, "DELETE FROM buddies WHERE characterid = ?");
-                try (PreparedStatement ps = con.prepareStatement("INSERT INTO buddies (characterid, `buddyid`, `pending`, `groupname`, `memo`, `flag`, `friend`) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
+                try (PreparedStatement ps = con.prepareStatement("INSERT INTO buddies (characterid, `buddyid`, `pending`, `groupname`, `memo`, `friend`, `flag`, `nickname`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
                     ps.setInt(1, id);
                     for (BuddylistEntry entry : buddylist.getBuddies()) {
                         ps.setInt(2, entry.getCharacterId());
                         ps.setBoolean(3, entry.isPending());
                         ps.setString(4, entry.getGroup());
                         ps.setString(5, entry.getMemo());
-                        ps.setInt(6, entry.getFlag());
-                        ps.setBoolean(7, entry.isAccountFriend());
+                        ps.setBoolean(6, entry.isAccountFriend());
+                        ps.setInt(7, entry.getFlag());
+                        ps.setString(8, entry.getNickname());
                         ps.execute();
                     }
                 } catch (SQLException ex) {

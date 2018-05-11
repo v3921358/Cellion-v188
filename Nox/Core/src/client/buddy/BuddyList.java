@@ -113,9 +113,9 @@ public class BuddyList {
         Buddy buddy = new Buddy(BuddyResult.INVITE);
         BuddylistEntry ble = new BuddylistEntry(chr.getName(), chr.getId(), "Default Group", channelFrom, true, "", accountFriend, chr.getName());
         if (accountFriend) {
-            ble.setFlag(BuddyFlags.ACOUNT_FRIEND_INVITE.getFlag());
+            ble.setFlag(BuddyFlags.AccountFriendRequest.getFlag());
         } else {
-            ble.setFlag(BuddyFlags.REGULAR_INVITE.getFlag());
+            ble.setFlag(BuddyFlags.FriendRequest.getFlag());
         }
         buddy.setEntry(ble);
         buddy.setLevel(chr.getLevel());
