@@ -8,7 +8,7 @@ import server.Randomizer;
 import server.Timer.EventTimer;
 import server.life.LifeFactory;
 import server.maps.objects.User;
-import server.maps.objects.MapleReactor;
+import server.maps.objects.Reactor;
 import tools.packet.CField;
 import tools.packet.WvsContext;
 
@@ -85,7 +85,7 @@ public class AramiaFireWorks {
         this.sunshines += kegs;
         //have to broadcast a Reactor?
         final MapleMap map = c.getClient().getChannelServer().getMapFactory().getMap(970010000);
-        final MapleReactor reactor = map.getReactorByName("mapleTree");
+        final Reactor reactor = map.getReactorByName("mapleTree");
         for (int gogo = kegs + (MAX_SUN / 6); gogo > 0; gogo -= (MAX_SUN / 6)) {
             switch (reactor.getState()) {
                 case 0: //first state
@@ -168,7 +168,7 @@ public class AramiaFireWorks {
         this.decorations += kegs;
         //have to broadcast a Reactor?
         final MapleMap map = c.getClient().getChannelServer().getMapFactory().getMap(555000000);
-        final MapleReactor reactor = map.getReactorByName("XmasTree");
+        final Reactor reactor = map.getReactorByName("XmasTree");
         for (int gogo = kegs + (MAX_DEC / 6); gogo > 0; gogo -= (MAX_DEC / 6)) {
             switch (reactor.getState()) {
                 case 0: //first state

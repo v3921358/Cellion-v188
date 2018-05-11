@@ -37,7 +37,7 @@ import client.ClientSocket;
 import database.Database;
 import scripting.ReactorActionManager;
 import server.maps.ReactorDropEntry;
-import server.maps.objects.MapleReactor;
+import server.maps.objects.Reactor;
 import tools.LogHelper;
 
 public class ReactorScriptManager extends AbstractScriptManager {
@@ -49,7 +49,7 @@ public class ReactorScriptManager extends AbstractScriptManager {
         return instance;
     }
 
-    public final void act(final ClientSocket c, final MapleReactor reactor) {
+    public final void act(final ClientSocket c, final Reactor reactor) {
         try {
             final Invocable iv = getInvocable("reactor/" + reactor.getReactorId() + ".js", true, ScriptType.Reactor);
 

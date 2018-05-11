@@ -22,14 +22,14 @@ import server.life.Mob;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.ReactorDropEntry;
-import server.maps.objects.MapleReactor;
+import server.maps.objects.Reactor;
 import tools.packet.CField;
 
 public class ReactorActionManager extends AbstractPlayerInteraction {
 
-    private final MapleReactor reactor;
+    private final Reactor reactor;
 
-    public ReactorActionManager(ClientSocket c, MapleReactor reactor) {
+    public ReactorActionManager(ClientSocket c, Reactor reactor) {
         super(c, reactor.getReactorId(), c.getPlayer().getMapId(), null);
         this.reactor = reactor;
     }
@@ -119,14 +119,14 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         return pos;
     }
 
-    public MapleReactor getReactor() {
+    public Reactor getReactor() {
         return reactor;
     }
 
     public int hitBigby() {
-        MapleReactor bigby = null;
+        Reactor bigby = null;
         for (MapleMapObject o : getMap().getAllMapObjects(MapleMapObjectType.REACTOR)) {
-            MapleReactor r = (MapleReactor) o;
+            Reactor r = (Reactor) o;
             if (r.getReactorId() == 1301000) {
                 bigby = r;
             }

@@ -16,7 +16,7 @@ import tools.packet.CField;
  *
  * @author Itzik
  */
-public class MapleHaku extends AnimatedMapleMapObject {
+public class KannaHaku extends AnimatedMapleMapObject {
 
     private final int owner;
     private final int jobid;
@@ -25,7 +25,7 @@ public class MapleHaku extends AnimatedMapleMapObject {
     private boolean stats;
     private Point pos = new Point(0, 0);
 
-    public MapleHaku(User owner) {
+    public KannaHaku(User owner) {
         this.owner = owner.getId();
         this.jobid = owner.getJob();
         this.fh = owner.getFh();

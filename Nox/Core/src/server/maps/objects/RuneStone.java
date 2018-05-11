@@ -18,7 +18,7 @@ import tools.packet.CField;
  *
  * @author
  */
-public class MapleRuneStone extends AnimatedMapleMapObject {
+public class RuneStone extends AnimatedMapleMapObject {
 
     public static enum MapleRuneStoneType {
         RuneofSwiftness(0, Global.LIBERATE_THE_SWIFT_RUNE, Global.LIBERATE_THE_RUNE_OF_THUNDER),
@@ -66,7 +66,7 @@ public class MapleRuneStone extends AnimatedMapleMapObject {
 
     private long nextRuneSpawnTime; // time in millis for the rune to respawn itself, 0 means the rune is still active
 
-    public MapleRuneStone(int fieldMonsterMinLevel, int fieldMonsterMaxLevel) {
+    public RuneStone(int fieldMonsterMinLevel, int fieldMonsterMaxLevel) {
         this.nextRuneSpawnTime = System.currentTimeMillis() + (1000L * 60L * (long) (Randomizer.nextInt(10))); // randomize first rune spawn time, if the map was recently loaded
         this.fieldMonsterMinLevel = fieldMonsterMinLevel;
         this.fieldMonsterMaxLevel = fieldMonsterMaxLevel;

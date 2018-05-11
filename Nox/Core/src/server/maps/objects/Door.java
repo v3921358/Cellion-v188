@@ -16,7 +16,7 @@ import tools.packet.CField;
 import tools.packet.WvsContext;
 import tools.packet.WvsContext.PartyPacket;
 
-public class MapleDoor extends MapleMapObject {
+public class Door extends MapleMapObject {
 
     private final WeakReference<User> owner;
     private final MapleMap town;
@@ -26,7 +26,7 @@ public class MapleDoor extends MapleMapObject {
     private final Point targetPosition;
     private final Point originalCharacterPosition;
 
-    public MapleDoor(final User owner, final Point targetPosition, final int skillId) {
+    public Door(final User owner, final Point targetPosition, final int skillId) {
         super();
         this.owner = new WeakReference<>(owner);
         this.ownerId = owner.getId();
@@ -39,7 +39,7 @@ public class MapleDoor extends MapleMapObject {
         this.skillId = skillId; // May be from bishop or beast tamer EKA_EXPRESS
     }
 
-    public MapleDoor(final MapleDoor origDoor) {
+    public Door(final Door origDoor) {
         super();
         this.owner = new WeakReference<>(origDoor.owner.get());
         this.town = origDoor.town;
@@ -82,7 +82,7 @@ public class MapleDoor extends MapleMapObject {
             }
         });
         for (MapleMapObject obj : town.getAllMapObjects(MapleMapObjectType.DOOR)) {
-            final MapleDoor door = (MapleDoor) obj;
+            final Door door = (Door) obj;
             /// hmm
             if (door.getOwner() != null && door.getOwner().getParty() != null && getOwner() != null && getOwner().getParty() != null && getOwner().getParty().getId() == door.getOwner().getParty().getId()) {
                 return null; //one per

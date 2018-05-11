@@ -18,7 +18,7 @@ import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
-import server.maps.objects.MapleMist;
+import server.maps.objects.Mist;
 import tools.packet.CField;
 import tools.packet.MobPacket;
 
@@ -253,7 +253,7 @@ public class MobSkill {
                 break;
             case 131: // Mist
                 if (monster != null) {
-                    monster.getMap().spawnMist(new MapleMist(calculateBoundingBox(monster.getTruePosition(), true), monster, this), x * 10, false);
+                    monster.getMap().spawnMist(new Mist(calculateBoundingBox(monster.getTruePosition(), true), monster, this), x * 10, false);
                 }
                 break;
             case 140:
@@ -297,7 +297,7 @@ public class MobSkill {
                 Point myrb = new Point(rb.x + posFrom.x, rb.y + posFrom.y);
                 Rectangle box = new Rectangle(posFrom.x, posFrom.y, myrb.x - mylt.x, myrb.y - mylt.y);
                 //System.out.println(box.toString());
-                MapleMist clock = new MapleMist(box, monster, this);
+                Mist clock = new Mist(box, monster, this);
                 clock.setClockType(Randomizer.rand(1, 2));
                 monster.getMap().spawnClockMist(clock);
                 //player.send(MainPacketCreator.spawnClockMist(clock));

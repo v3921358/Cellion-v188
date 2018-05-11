@@ -21,7 +21,7 @@ import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.Randomizer;
 import server.maps.objects.User;
-import server.maps.objects.MapleExtractor;
+import server.maps.objects.Extractor;
 import server.quest.Quest;
 import tools.Triple;
 import net.InPacket;
@@ -71,7 +71,7 @@ public final class CraftCompletion implements ProcessPacket<ClientSocket> {
                     if (extract == null || extract.getExtractor() == null) {
                         return;
                     }
-                    final MapleExtractor extractor = extract.getExtractor();
+                    final Extractor extractor = extract.getExtractor();
                     if (extractor.owner != chr.getId()) { //fee
                         if (chr.getMeso() < extractor.fee) {
                             return;

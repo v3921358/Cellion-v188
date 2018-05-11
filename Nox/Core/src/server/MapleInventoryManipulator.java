@@ -32,7 +32,7 @@ import provider.MapleDataProvider;
 import provider.MapleDataTool;
 import provider.wz.cache.WzDataStorage;
 import server.maps.MapleMapItem;
-import server.maps.objects.MapleAndroid;
+import server.maps.objects.Android;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
 import server.potentials.ItemPotentialOption;
@@ -725,7 +725,7 @@ public class MapleInventoryManipulator {
             if (source.getAndroid() == null) {
                 int uid = MapleInventoryIdentifier.getInstance();
                 source.setUniqueId(uid);
-                source.setAndroid(MapleAndroid.createAndroid(source.getItemId(), uid));
+                source.setAndroid(Android.createAndroid(source.getItemId(), uid));
                 flag = (short) (flag | ItemFlag.LOCK.getValue());
                 flag = (short) (flag | ItemFlag.UNTRADABLE.getValue());
                 flag = (short) (flag | ItemFlag.ANDROID_ACTIVATED.getValue());

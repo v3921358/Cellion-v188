@@ -7,7 +7,7 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import server.maps.objects.User;
-import server.maps.objects.MapleReactor;
+import server.maps.objects.Reactor;
 import server.quest.Quest;
 import net.InPacket;
 import tools.packet.CField;
@@ -24,7 +24,7 @@ public final class HarvestBeginHandler implements ProcessPacket<ClientSocket> {
     public void Process(ClientSocket c, InPacket iPacket) {
         final User chr = c.getPlayer();
         //its ok if a hacker bypasses this as we do everything in the reactor anyway
-        final MapleReactor reactor = c.getPlayer().getMap().getReactorByOid(iPacket.DecodeInt());
+        final Reactor reactor = c.getPlayer().getMap().getReactorByOid(iPacket.DecodeInt());
         if (reactor == null || !reactor.isAlive() || reactor.getReactorId() > 200011 || chr.getStat().harvestingTool <= 0 || reactor.getTruePosition().distanceSq(chr.getTruePosition()) > 10000 || c.getPlayer().getFatigue() >= 200) {
             return;
         }

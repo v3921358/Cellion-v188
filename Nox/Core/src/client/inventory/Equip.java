@@ -3,7 +3,7 @@ package client.inventory;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import server.MapleItemInformationProvider;
-import server.maps.objects.MapleAndroid;
+import server.maps.objects.Android;
 import server.potentials.ItemPotentialTierType;
 
 public class Equip extends Item {
@@ -38,7 +38,7 @@ public class Equip extends Item {
     private long itemEXP = 0;
     private boolean finalStrike = false;
     private MapleRing ring = null;
-    private MapleAndroid android = null;
+    private Android android = null;
 
     private boolean betaShare;
     private byte enchantFail = 0;
@@ -660,17 +660,17 @@ public class Equip extends Item {
         this.ring = ring;
     }
 
-    public MapleAndroid getAndroid() {
+    public Android getAndroid() {
         if (getItemId() / 10000 != 166 || getUniqueId() <= 0) {
             return null;
         }
         if (android == null) {
-            android = MapleAndroid.loadFromDb(getItemId(), getUniqueId());
+            android = Android.loadFromDb(getItemId(), getUniqueId());
         }
         return android;
     }
 
-    public void setAndroid(MapleAndroid ring) {
+    public void setAndroid(Android ring) {
         android = ring;
     }
 

@@ -123,7 +123,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private transient AtomicInteger insd;
     private transient MapleCharacterConversationType conversationType; // // 1 = NPC/ Quest, 2 = Donald, 3 = Hired Merch store, 4 = Storage
     private List<Integer> lastmonthfameids, lastmonthbattleids, extendedSlots;
-    private List<MapleDoor> doors;
+    private List<Door> doors;
     private List<MechDoor> mechDoors;
     private List<Pet> pets;
     private List<ShopRepurchase> shopRepurchases;
@@ -136,7 +136,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private transient ReentrantReadWriteLock visibleMapObjectsLock;
     private transient ReentrantReadWriteLock summonsLock;
     private transient ReentrantReadWriteLock controlledLock;
-    private transient MapleAndroid android;
+    private transient Android android;
     private final Map<Quest, QuestStatus> quests;
     private Map<Integer, String> questinfo;
     private final Map<Skill, SkillEntry> skills;
@@ -159,9 +159,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private final MapleCharacterCards characterCard;
     private transient MapleMap map;
     private transient MapleShop shop;
-    private transient MapleDragon dragon;
-    private transient MapleHaku haku;
-    private transient MapleExtractor extractor;
+    private transient EvanDragon dragon;
+    private transient KannaHaku haku;
+    private transient Extractor extractor;
     private transient RockPaperScissors rps;
     private Map<Integer, MonsterFamiliar> familiars;
     private MapleStorage storage;
@@ -4070,20 +4070,20 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void makeDragon() {
-        dragon = new MapleDragon(this);
+        dragon = new EvanDragon(this);
         map.broadcastMessage(CField.spawnDragon(dragon));
     }
 
-    public MapleDragon getDragon() {
+    public EvanDragon getDragon() {
         return dragon;
     }
 
     public void makeHaku() {
-        haku = new MapleHaku(this);
+        haku = new KannaHaku(this);
         map.broadcastMessage(CField.spawnHaku(haku, false));
     }
 
-    public MapleHaku getHaku() {
+    public KannaHaku getHaku() {
         return haku;
     }
 
@@ -6820,7 +6820,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         this.eventInstance = eventInstance;
     }
 
-    public void addDoor(MapleDoor door) {
+    public void addDoor(Door door) {
         doors.add(door);
     }
 
@@ -6828,7 +6828,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         doors.clear();
     }
 
-    public List<MapleDoor> getDoors() {
+    public List<Door> getDoors() {
         return new ArrayList<>(doors);
     }
 
@@ -8399,19 +8399,19 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return 0;
     }
 
-    public void setDragon(MapleDragon d) {
+    public void setDragon(EvanDragon d) {
         this.dragon = d;
     }
 
-    public void setHaku(MapleHaku h) {
+    public void setHaku(KannaHaku h) {
         this.haku = h;
     }
 
-    public MapleExtractor getExtractor() {
+    public Extractor getExtractor() {
         return extractor;
     }
 
-    public void setExtractor(MapleExtractor me) {
+    public void setExtractor(Extractor me) {
         removeExtractor();
         this.extractor = me;
     }
@@ -8955,14 +8955,14 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void removeDoor() {
-        final MapleDoor door = getDoors().iterator().next();
+        final Door door = getDoors().iterator().next();
         for (final User chr : door.getTarget().getCharacters()) {
             door.sendDestroyData(chr.getClient());
         }
         for (final User chr : door.getTown().getCharacters()) {
             door.sendDestroyData(chr.getClient());
         }
-        for (final MapleDoor destroyDoor : getDoors()) {
+        for (final Door destroyDoor : getDoors()) {
             door.getTarget().removeMapObject(destroyDoor);
             door.getTown().removeMapObject(destroyDoor);
         }
@@ -9367,7 +9367,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         changed_extendedSlots = true;
     }
 
-    public MapleAndroid getAndroid() {
+    public Android getAndroid() {
         return android;
     }
 
@@ -9378,7 +9378,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         android = null;
     }
 
-    public void setAndroid(MapleAndroid a) {
+    public void setAndroid(Android a) {
         this.android = a;
         if ((this.map != null) && (a != null)) {
             MapleFoothold foot = getMap().getSharedMapResources().footholds.findBelow(getPosition());

@@ -25,7 +25,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import server.maps.objects.User;
-import server.maps.objects.MapleDoor;
+import server.maps.objects.Door;
 
 public class MaplePartyCharacter implements Serializable {
 
@@ -51,9 +51,9 @@ public class MaplePartyCharacter implements Serializable {
         this.mapid = maplechar.getMapId();
         this.online = true;
 
-        final List<MapleDoor> doors = maplechar.getDoors();
+        final List<Door> doors = maplechar.getDoors();
         if (doors.size() > 0) {
-            final MapleDoor door = doors.get(0);
+            final Door door = doors.get(0);
 
             this.doorTown = door.getTown().getId();
             this.doorTarget = door.getTarget().getId();

@@ -12,7 +12,7 @@ import server.maps.MapleReactorStats;
 import tools.Pair;
 import tools.packet.CField;
 
-public class MapleReactor extends AnimatedMapleMapObject {
+public class Reactor extends AnimatedMapleMapObject {
 
     private final int rid;
     private final MapleReactorStats stats;
@@ -23,7 +23,7 @@ public class MapleReactor extends AnimatedMapleMapObject {
     private boolean timerActive = false, alive = true, custom = false;
     private boolean isProfessions; // defines if this is a herb or vien
 
-    public MapleReactor(MapleReactorStats stats, int rid) {
+    public Reactor(MapleReactorStats stats, int rid) {
         this.stats = stats;
         this.rid = rid;
         this.isProfessions = false;
@@ -215,7 +215,7 @@ public class MapleReactor extends AnimatedMapleMapObject {
         MapTimer.getInstance().schedule(new Runnable() {
             @Override
             public void run() {
-                if (MapleReactor.this.state == oldState) {
+                if (Reactor.this.state == oldState) {
                     forceHitReactor(newState);
                 }
             }

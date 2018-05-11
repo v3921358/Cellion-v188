@@ -6,11 +6,11 @@ import server.maps.AnimatedMapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.packet.CField;
 
-public class MapleDragon extends AnimatedMapleMapObject {
+public class EvanDragon extends AnimatedMapleMapObject {
 
     private final int owner, jobid;
 
-    public MapleDragon(User owner) {
+    public EvanDragon(User owner) {
         super();
         this.owner = owner.getId();
         this.jobid = owner.getJob();

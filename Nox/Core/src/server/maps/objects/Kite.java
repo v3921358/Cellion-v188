@@ -10,7 +10,7 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.packet.CField;
 
-public class MapleKite extends MapleMapObject {
+public class Kite extends MapleMapObject {
 
     private final int ItemID;
     private final int MapID;
@@ -20,7 +20,7 @@ public class MapleKite extends MapleMapObject {
     private WeakReference<MapleMap> Map_ref;
     private ScheduledFuture schedule; // TODO : Do something about this in future if should we have other ways of cancelling kite other than timer
 
-    public MapleKite(int ItemID, int MapId, String PlayerName, MapleMap Map, String Message, byte KiteType, Point position) {
+    public Kite(int ItemID, int MapId, String PlayerName, MapleMap Map, String Message, byte KiteType, Point position) {
         this.ItemID = ItemID;
         this.MapID = MapId;
         this.KiteType = KiteType;

@@ -504,11 +504,11 @@ public class MapleStatEffect implements Serializable {
         } else if (isReturnScroll()) {
             applyReturnScroll(applyto);
         } else if (useLevel > 0) {
-            applyto.setExtractor(new MapleExtractor(applyto, sourceid, useLevel * 50, 1440)); //no clue about time left
+            applyto.setExtractor(new Extractor(applyto, sourceid, useLevel * 50, 1440)); //no clue about time left
             applyto.getMap().spawnExtractor(applyto.getExtractor());
         } else if (isMistEruption()) {
             int i = info.get(MapleStatInfo.y);
-            for (MapleMist m : applyto.getMap().getAllMists()) {
+            for (Mist m : applyto.getMap().getAllMists()) {
                 if (m.getOwnerId() == applyto.getId() && m.getSourceSkill().getId() == 2111003) {
                     if (m.getSchedule() != null) {
                         m.getSchedule().cancel(false);
@@ -857,13 +857,13 @@ public class MapleStatEffect implements Serializable {
             }
         }
         if (isMagicDoor()) { // Magic Door
-            MapleDoor door = new MapleDoor(applyto, new Point(pos == null ? applyto.getTruePosition() : pos), sourceid); // Current Map door
+            Door door = new Door(applyto, new Point(pos == null ? applyto.getTruePosition() : pos), sourceid); // Current Map door
             if (door.getTownPortal() != null) {
 
                 applyto.getMap().spawnDoor(door);
                 applyto.addDoor(door);
 
-                MapleDoor townDoor = new MapleDoor(door); // Town door
+                Door townDoor = new Door(door); // Town door
                 applyto.addDoor(townDoor);
                 door.getTown().spawnDoor(townDoor);
 
@@ -875,7 +875,7 @@ public class MapleStatEffect implements Serializable {
             }
         } else if (isMist()) {
             final Rectangle bounds = calculateBoundingBox(pos != null ? pos : applyfrom.getPosition(), applyfrom.isFacingLeft());
-            final MapleMist mist = new MapleMist(bounds, applyfrom, this);
+            final Mist mist = new Mist(bounds, applyfrom, this);
             applyfrom.getMap().spawnMist(mist, getDuration(), false);
 
         } else if (isTimeLeap()) { // Time Leap

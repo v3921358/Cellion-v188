@@ -39,8 +39,8 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.SummonMovementType;
 import server.maps.objects.User;
-import server.maps.objects.MapleDoor;
-import server.maps.objects.MapleMist;
+import server.maps.objects.Door;
+import server.maps.objects.Mist;
 import server.maps.objects.Summon;
 import server.maps.objects.MechDoor;
 import server.quest.Quest;
@@ -93,7 +93,7 @@ public class PlayersHandler {
         final boolean mode = iPacket.DecodeByte() == 0; // specifies if backwarp or not, 1 town to target, 0 target to town
 
         for (MapleMapObject obj : chr.getMap().getAllDoors()) {
-            final MapleDoor door = (MapleDoor) obj;
+            final Door door = (Door) obj;
             if (door.getOwnerId() == oid) {
                 door.warp(chr, mode);
                 break;
@@ -749,7 +749,7 @@ public class PlayersHandler {
                 return true;
             }
         }
-        for (MapleMist mist : chr.getMap().getAllMists()) {
+        for (Mist mist : chr.getMap().getAllMists()) {
             if (mist.getOwnerId() == chr.getId() && mist.isPoisonMist() == 2 && mist.getBox().contains(chr.getTruePosition())) {
                 return true;
             }

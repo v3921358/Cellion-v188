@@ -2,8 +2,8 @@ package handling.game;
 
 import client.ClientSocket;
 import server.maps.objects.User;
-import server.maps.objects.MapleRuneStone;
-import server.maps.objects.MapleRuneStone.MapleRuneStoneType;
+import server.maps.objects.RuneStone;
+import server.maps.objects.RuneStone.MapleRuneStoneType;
 import net.InPacket;
 import tools.packet.CField;
 import net.ProcessPacket;
@@ -25,7 +25,7 @@ public class RuneStoneStartHandler implements ProcessPacket<ClientSocket> {
         MapleRuneStoneType type = MapleRuneStoneType.getFromInt(iPacket.DecodeInt());
 
         User chr = c.getPlayer();
-        MapleRuneStone runeInMap = c.getPlayer().getMap().getRuneStone();
+        RuneStone runeInMap = c.getPlayer().getMap().getRuneStone();
 
         if (type != null && runeInMap != null/*
                 && runeInMap.getRuneType() == type // check if what the client reported is the same as what we have on the server

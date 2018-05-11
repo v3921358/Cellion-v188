@@ -5,13 +5,13 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.packet.CField;
 
-public class MapleExtractor extends MapleMapObject {
+public class Extractor extends MapleMapObject {
 
     public int owner, timeLeft, itemId, fee;
     public long startTime;
     public String ownerName;
 
-    public MapleExtractor(User owner, int itemId, int fee, int timeLeft) {
+    public Extractor(User owner, int itemId, int fee, int timeLeft) {
         super();
         this.owner = owner.getId();
         this.itemId = itemId;

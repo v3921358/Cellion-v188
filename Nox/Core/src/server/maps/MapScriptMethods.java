@@ -23,7 +23,7 @@ import server.life.LifeFactory;
 import server.life.Mob;
 import server.maps.SharedMapResources.DirectionInfo;
 import server.maps.objects.User;
-import server.maps.objects.MapleReactor;
+import server.maps.objects.Reactor;
 import server.quest.Quest;
 import server.quest.Quest.MedalQuest;
 import tools.LogHelper;
@@ -1315,7 +1315,7 @@ public class MapScriptMethods {
                     c.SendPacket(UIPacket.IntroEnableUI(true));
                     c.SendPacket(WvsContext.enableActions());
                     c.getPlayer().getMap().resetFully();
-                    final MapleReactor chain = new MapleReactor(MapleReactorFactory.getReactor(1008010), 1008010);
+                    final Reactor chain = new Reactor(MapleReactorFactory.getReactor(1008010), 1008010);
                     //String name = MapleDataTool.getString("info/link",MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Reactor.wz")).getData(StringUtil.getLeftPaddedStr(Integer.toString(1008010) + ".img", '0', 11)));
                     //System.out.println(name);
                     //chain.setName(name);

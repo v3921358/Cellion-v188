@@ -26,7 +26,7 @@ import server.maps.objects.User;
 import server.quest.Quest;
 import net.InPacket;
 import server.MapleStatEffect;
-import server.maps.objects.MapleRuneStone;
+import server.maps.objects.RuneStone;
 import tools.packet.CField;
 import tools.packet.CSPacket;
 import tools.packet.WvsContext;
@@ -52,8 +52,8 @@ public class PlayerHandler {
     public static final void TouchRune(final InPacket iPacket, final User chr) {
         chr.updateTick(iPacket.DecodeInt());
         int type = iPacket.DecodeInt();
-        List<MapleRuneStone> runes = chr.getMap().getAllRune();
-        MapleRuneStone rune = chr.getMap().getAllRune().get(0);
+        List<RuneStone> runes = chr.getMap().getAllRune();
+        RuneStone rune = chr.getMap().getAllRune().get(0);
         if (rune != null) {
             if (chr.getKeyValue("LastTouchedRune") != null && chr.getRuneTimeStamp() > System.currentTimeMillis()) {
                 chr.getClient().SendPacket(CField.RunePacket.RuneAction(2, (int) (chr.getRuneTimeStamp() - System.currentTimeMillis())));
@@ -68,7 +68,7 @@ public class PlayerHandler {
 
     public static final void UseRune(final InPacket iPacket, final User chr) {
         final byte result = iPacket.DecodeByte();
-        final MapleRuneStone rune = chr.getMap().getAllRune().get(0);
+        final RuneStone rune = chr.getMap().getAllRune().get(0);
         MapleStatEffect effect;
         if (result == 1) {
             switch (chr.getTouchedRune()) {

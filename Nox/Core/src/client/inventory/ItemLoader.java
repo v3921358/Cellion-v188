@@ -16,7 +16,7 @@ import constants.GameConstants;
 import constants.InventoryConstants;
 import database.Database;
 import server.MapleItemInformationProvider;
-import server.maps.objects.MapleAndroid;
+import server.maps.objects.Android;
 import server.maps.objects.Pet;
 import server.potentials.ItemPotentialTierType;
 import tools.LogHelper;
@@ -171,7 +171,7 @@ public enum ItemLoader {
                                         equip.setRing(ring);
                                     }
                                 } else if (equip.getItemId() / 10000 == 166) {
-                                    MapleAndroid ring = MapleAndroid.loadFromDb(equip.getItemId(), equip.getUniqueId());
+                                    Android ring = Android.loadFromDb(equip.getItemId(), equip.getUniqueId());
                                     if (ring != null) {
                                         equip.setAndroid(ring);
                                     }

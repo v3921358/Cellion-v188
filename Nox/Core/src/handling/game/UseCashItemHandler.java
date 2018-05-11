@@ -51,7 +51,7 @@ import server.maps.FieldLimitType;
 import server.maps.MapleMap;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
-import server.maps.objects.MapleMist;
+import server.maps.objects.Mist;
 import server.maps.objects.Pet;
 import server.maps.objects.MonsterFamiliar;
 import server.quest.Quest;
@@ -1756,7 +1756,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
             case 5280001: // Gas Skill
             case 5281000: { // Passed gas
                 Rectangle bounds = new Rectangle((int) c.getPlayer().getPosition().getX(), (int) c.getPlayer().getPosition().getY(), 1, 1);
-                MapleMist mist = new MapleMist(bounds, c.getPlayer());
+                Mist mist = new Mist(bounds, c.getPlayer());
                 c.getPlayer().getMap().spawnMist(mist, 10000, true);
                 c.SendPacket(WvsContext.enableActions());
                 bUsed = true;

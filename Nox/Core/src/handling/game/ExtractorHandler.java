@@ -5,7 +5,7 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import net.InPacket;
 import server.maps.objects.User;
-import server.maps.objects.MapleExtractor;
+import server.maps.objects.Extractor;
 import tools.packet.WvsContext;
 import net.ProcessPacket;
 
@@ -35,7 +35,7 @@ public final class ExtractorHandler implements ProcessPacket<ClientSocket> {
             c.SendPacket(WvsContext.enableActions());
             return;
         }
-        chr.setExtractor(new MapleExtractor(chr, itemId, fee, chr.getFh())); //no clue about time left
+        chr.setExtractor(new Extractor(chr, itemId, fee, chr.getFh())); //no clue about time left
         chr.getMap().spawnExtractor(chr.getExtractor());
 
         //expiry date ..

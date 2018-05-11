@@ -88,7 +88,7 @@ public final class MapleMap {
     private ScheduledFuture<?> squadSchedule;
     private long speedRunStart = 0, lastHurtTime = 0;
     private MapleSquadType squad;
-    private MapleRuneStone rune;
+    private RuneStone rune;
     private final Map<String, Integer> environment = new LinkedHashMap<>();
     private WeakReference<User> changeMobOrigin = null;
 
@@ -583,7 +583,7 @@ public final class MapleMap {
             doShrine(true);
             //INSERT HERE: 2095_tokyo
         } else if (mobid == 8920100 && smr.mapid == 105200310) {
-            final MapleReactor my = new MapleReactor(MapleReactorFactory.getReactor(1052006), 1052006);
+            final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052006), 1052006);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(56, 135));
         } else if (mobid == 8830000 && smr.mapid == 105100300) {
@@ -634,26 +634,26 @@ public final class MapleMap {
             }
             doShrine(true);
         } else if (mobid == 8920000 && smr.mapid == 105200710) {  // Root Abyss Reactors
-            final MapleReactor my = new MapleReactor(MapleReactorFactory.getReactor(1052009), 1052009);
+            final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052009), 1052009);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(124, 135));
         } else if (mobid == 8900000 && smr.mapid == 105200210) {
-            final MapleReactor my = new MapleReactor(MapleReactorFactory.getReactor(1052009), 1052009);
+            final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052009), 1052009);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(497, 551));
 
         } else if (mobid == 8910000 && smr.mapid == 105200510) {
-            final MapleReactor my = new MapleReactor(MapleReactorFactory.getReactor(1052009), 1052009);
+            final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052009), 1052009);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(-195, 455));
 
         } else if (mobid == 8910100 && smr.mapid == 105200110) {
-            final MapleReactor my = new MapleReactor(MapleReactorFactory.getReactor(1052006), 1052006);
+            final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052006), 1052006);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(-195, 455));
 
         } else if (mobid == 8930100 && smr.mapid == 105200410) {
-            final MapleReactor my = new MapleReactor(MapleReactorFactory.getReactor(1052006), 1052006);
+            final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052006), 1052006);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(-78, 442));
 
@@ -1087,16 +1087,16 @@ public final class MapleMap {
         }
     }
 
-    public List<MapleRuneStone> getAllRune() {
+    public List<RuneStone> getAllRune() {
         return getAllRuneThreadsafe();
     }
 
-    public List<MapleRuneStone> getAllRuneThreadsafe() {
-        ArrayList<MapleRuneStone> ret = new ArrayList<>();
+    public List<RuneStone> getAllRuneThreadsafe() {
+        ArrayList<RuneStone> ret = new ArrayList<>();
         mapobjectlocks.get(MapleMapObjectType.RUNE).readLock().lock();
         try {
             for (MapleMapObject mmo : mapobjects.get(MapleMapObjectType.RUNE).values()) {
-                ret.add((MapleRuneStone) mmo);
+                ret.add((RuneStone) mmo);
             }
         } finally {
             mapobjectlocks.get(MapleMapObjectType.RUNE).readLock().unlock();
@@ -1157,12 +1157,12 @@ public final class MapleMap {
     }
 
     public final void limitReactor(final int rid, final int num) {
-        List<MapleReactor> toDestroy = new ArrayList<>();
+        List<Reactor> toDestroy = new ArrayList<>();
         Map<Integer, Integer> contained = new LinkedHashMap<>();
 
         mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().lock();
         try {
-            mapobjects.get(MapleMapObjectType.REACTOR).values().stream().map((obj) -> (MapleReactor) obj).forEach((mr) -> {
+            mapobjects.get(MapleMapObjectType.REACTOR).values().stream().map((obj) -> (Reactor) obj).forEach((mr) -> {
                 if (contained.containsKey(mr.getReactorId())) {
                     if (contained.get(mr.getReactorId()) >= num) {
                         toDestroy.add(mr);
@@ -1176,21 +1176,21 @@ public final class MapleMap {
         } finally {
             mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().unlock();
         }
-        for (MapleReactor mr : toDestroy) {
+        for (Reactor mr : toDestroy) {
             destroyReactor(mr.getObjectId());
         }
     }
 
     public void destroyReactors(final int first, final int last) {
         for (MapleMapObject o : this.getAllMapObjects(MapleMapObjectType.REACTOR)) {
-            MapleReactor mr = (MapleReactor) o;
+            Reactor mr = (Reactor) o;
 
             destroyReactor(mr.getObjectId());
         }
     }
 
     public void destroyReactor(final int oid) {
-        final MapleReactor reactor = getReactorByOid(oid);
+        final Reactor reactor = getReactorByOid(oid);
         if (reactor == null) {
             return;
         }
@@ -1210,11 +1210,11 @@ public final class MapleMap {
     }
 
     public final void reloadReactors() {
-        List<MapleReactor> toSpawn = new ArrayList<>();
+        List<Reactor> toSpawn = new ArrayList<>();
         mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().lock();
         try {
             for (MapleMapObject obj : mapobjects.get(MapleMapObjectType.REACTOR).values()) {
-                final MapleReactor reactor = (MapleReactor) obj;
+                final Reactor reactor = (Reactor) obj;
                 broadcastMessage(CField.destroyReactor(reactor));
                 reactor.setAlive(false);
                 reactor.setTimerActive(false);
@@ -1223,7 +1223,7 @@ public final class MapleMap {
         } finally {
             mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().unlock();
         }
-        for (MapleReactor r : toSpawn) {
+        for (Reactor r : toSpawn) {
             removeMapObject(r);
             if (!r.isCustom()) { //guardians cpq
                 respawnReactor(r);
@@ -1247,7 +1247,7 @@ public final class MapleMap {
         mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().lock();
         try {
             mapobjects.get(MapleMapObjectType.REACTOR).values().stream().forEach((obj) -> {
-                ((MapleReactor) obj).forceHitReactor((byte) state);
+                ((Reactor) obj).forceHitReactor((byte) state);
             });
         } finally {
             mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().unlock();
@@ -1258,7 +1258,7 @@ public final class MapleMap {
         mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().lock();
         try {
             mapobjects.get(MapleMapObjectType.REACTOR).values().stream().forEach((obj) -> {
-                ((MapleReactor) obj).setDelay(state);
+                ((Reactor) obj).setDelay(state);
             });
         } finally {
             mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().unlock();
@@ -1276,7 +1276,7 @@ public final class MapleMap {
         List<Point> points = new ArrayList<>();
         mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().lock();
         try {
-            mapobjects.get(MapleMapObjectType.REACTOR).values().stream().map((obj) -> (MapleReactor) obj).filter((mr) -> (mr.getReactorId() >= first && mr.getReactorId() <= last)).forEach((mr) -> {
+            mapobjects.get(MapleMapObjectType.REACTOR).values().stream().map((obj) -> (Reactor) obj).filter((mr) -> (mr.getReactorId() >= first && mr.getReactorId() <= last)).forEach((mr) -> {
                 points.add(mr.getPosition());
             });
         } finally {
@@ -1285,7 +1285,7 @@ public final class MapleMap {
         Collections.shuffle(points);
         mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().lock();
         try {
-            mapobjects.get(MapleMapObjectType.REACTOR).values().stream().map((obj) -> (MapleReactor) obj).filter((mr) -> (mr.getReactorId() >= first && mr.getReactorId() <= last)).forEach((mr) -> {
+            mapobjects.get(MapleMapObjectType.REACTOR).values().stream().map((obj) -> (Reactor) obj).filter((mr) -> (mr.getReactorId() >= first && mr.getReactorId() <= last)).forEach((mr) -> {
                 mr.setPosition(points.remove(points.size() - 1));
             });
         } finally {
@@ -1460,7 +1460,7 @@ public final class MapleMap {
         }
     }
 
-    public void spawnReactorOnGroundBelow(final MapleReactor mob, final Point pos) {
+    public void spawnReactorOnGroundBelow(final Reactor mob, final Point pos) {
         mob.setPosition(pos); //reactors dont need FH lol
         mob.setCustom(true);
         spawnReactor(mob);
@@ -1484,7 +1484,7 @@ public final class MapleMap {
         return spawnMonsterWithEffect(mob, effect, spos);
     }
 
-    public void spawnClockMist(final MapleMist clock) {
+    public void spawnClockMist(final Mist clock) {
         spawnAndAddRangedMapObject(clock, new DelayedPacketCreation() {
             @Override
             public void sendPackets(ClientSocket c) {
@@ -1752,7 +1752,7 @@ public final class MapleMap {
         final int Id = smr.getRandomherbsAndViens();
 
         final MapleReactorStats stats = MapleReactorFactory.getReactor(Id);
-        final MapleReactor myReactor = new MapleReactor(stats, Id);
+        final Reactor myReactor = new Reactor(stats, Id);
 
         myReactor.setFacingLeft(Randomizer.nextInt(1) == 0);
         myReactor.setisProfessions(true);
@@ -1764,7 +1764,7 @@ public final class MapleMap {
         spawnReactor(myReactor);
     }
 
-    public final void spawnReactor(final MapleReactor reactor) {
+    public final void spawnReactor(final Reactor reactor) {
         reactor.setMap(this);
 
         spawnAndAddRangedMapObject(reactor, new DelayedPacketCreation() {
@@ -1775,13 +1775,13 @@ public final class MapleMap {
         });
     }
 
-    private void respawnReactor(final MapleReactor reactor) {
+    private void respawnReactor(final Reactor reactor) {
         reactor.setState((byte) 0);
         reactor.setAlive(true);
         spawnReactor(reactor);
     }
 
-    public final void spawnDoor(final MapleDoor door) {
+    public final void spawnDoor(final Door door) {
         spawnAndAddRangedMapObject(door, new DelayedPacketCreation() {
             @Override
             public final void sendPackets(ClientSocket c) {
@@ -1821,21 +1821,21 @@ public final class MapleMap {
         });
     }
 
-    public final void spawnExtractor(final MapleExtractor ex) {
+    public final void spawnExtractor(final Extractor ex) {
         spawnAndAddRangedMapObject(ex, (ClientSocket c1) -> {
             ex.sendSpawnData(c1);
         });
     }
 
     public final void spawnMapleKite(int ItemID, String PlayerName, MapleMap Map, String Message, byte KiteType, Point position) {
-        final MapleKite kite = new MapleKite(ItemID, this.getId(), PlayerName, this, Message, KiteType, position);
+        final Kite kite = new Kite(ItemID, this.getId(), PlayerName, this, Message, KiteType, position);
 
         spawnAndAddRangedMapObject(kite, (ClientSocket c1) -> {
             kite.sendSpawnData(c1);
         });
     }
 
-    public final void spawnMist(final MapleMist mist, final int duration, boolean fake) {
+    public final void spawnMist(final Mist mist, final int duration, boolean fake) {
         spawnAndAddRangedMapObject(mist, (ClientSocket c1) -> {
             mist.sendSpawnData(c1);
         });
@@ -2075,7 +2075,7 @@ public final class MapleMap {
         mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().lock();
         try {
             for (MapleMapObject o : mapobjects.get(MapleMapObjectType.REACTOR).values()) {
-                final MapleReactor react = (MapleReactor) o;
+                final Reactor react = (Reactor) o;
 
                 if (react.getReactorType() == 100) {
                     if (item.getItemId() == react.getReactItem().getLeft() && react.getReactItem().getRight() == item.getQuantity()) {
@@ -2122,12 +2122,12 @@ public final class MapleMap {
         return null;
     }
 
-    public List<MapleMist> getAllMists() {
-        ArrayList<MapleMist> ret = new ArrayList<>();
+    public List<Mist> getAllMists() {
+        ArrayList<Mist> ret = new ArrayList<>();
         mapobjectlocks.get(MapleMapObjectType.MIST).readLock().lock();
         try {
             mapobjects.get(MapleMapObjectType.MIST).values().stream().forEach((mmo) -> {
-                ret.add((MapleMist) mmo);
+                ret.add((Mist) mmo);
             });
         } finally {
             mapobjectlocks.get(MapleMapObjectType.MIST).readLock().unlock();
@@ -2937,7 +2937,7 @@ public final class MapleMap {
         }
         for (final MapleMapObject o : getMapObjectsInRange(c.getTruePosition(), c.getRange(), GameConstants.rangedMapobjectTypes)) {
             if (o.getType() == MapleMapObjectType.REACTOR) {
-                if (!((MapleReactor) o).isAlive()) {
+                if (!((Reactor) o).isAlive()) {
                     continue;
                 }
             }
@@ -3028,10 +3028,10 @@ public final class MapleMap {
     private class ActivateItemReactor implements Runnable {
 
         private final MapleMapItem mapitem;
-        private final MapleReactor reactor;
+        private final Reactor reactor;
         private final ClientSocket c;
 
-        public ActivateItemReactor(MapleMapItem mapitem, MapleReactor reactor, ClientSocket c) {
+        public ActivateItemReactor(MapleMapItem mapitem, Reactor reactor, ClientSocket c) {
             this.mapitem = mapitem;
             this.reactor = reactor;
             this.c = c;
@@ -3270,7 +3270,7 @@ public final class MapleMap {
     }
 
     public final boolean makeCarnivalReactor(final int team, final int num) {
-        final MapleReactor old = getReactorByName(team + "" + num);
+        final Reactor old = getReactorByName(team + "" + num);
         if (old != null && old.getState() < 5 || smr.mcarnival == null) { //already exists
             return false;
         }
@@ -3281,7 +3281,7 @@ public final class MapleMap {
             if (guard.team == team || guard.team == -1) {
                 boolean found = false;
                 for (MapleMapObject o : react) {
-                    final MapleReactor r = (MapleReactor) o;
+                    final Reactor r = (Reactor) o;
 
                     if (r.getTruePosition().x == guard.pos.x && r.getTruePosition().y == guard.pos.y && r.getState() < 5) {
                         found = true;
@@ -3295,7 +3295,7 @@ public final class MapleMap {
             }
         }
         if (guardz != null) {
-            final MapleReactor my = new MapleReactor(MapleReactorFactory.getReactor(9980000 + team), 9980000 + team);
+            final Reactor my = new Reactor(MapleReactorFactory.getReactor(9980000 + team), 9980000 + team);
             my.setState((byte) 1);
             my.setName(team + "" + num); //lol
             //with num. -> guardians in factory
@@ -3473,7 +3473,7 @@ public final class MapleMap {
      *
      * @param m
      */
-    public void setRune(MapleRuneStone m) {
+    public void setRune(RuneStone m) {
         if (this.rune != null) {
             return;
         }
@@ -3496,7 +3496,7 @@ public final class MapleMap {
         rune.respawnRuneInMap(this, false);
     }
 
-    public MapleRuneStone getRuneStone() {
+    public RuneStone getRuneStone() {
         return rune;
     }
 
@@ -3542,7 +3542,7 @@ public final class MapleMap {
         ArrayList<MapleMapObject> ret = new ArrayList<>();
         mapobjectlocks.get(MapleMapObjectType.DOOR).readLock().lock();
         try {
-            mapobjects.get(MapleMapObjectType.DOOR).values().stream().filter((mmo) -> (mmo instanceof MapleDoor)).forEach((mmo) -> {
+            mapobjects.get(MapleMapObjectType.DOOR).values().stream().filter((mmo) -> (mmo instanceof Door)).forEach((mmo) -> {
                 ret.add(mmo);
             });
         } finally {
@@ -3644,12 +3644,12 @@ public final class MapleMap {
         }
     }
 
-    public MapleReactor getReactorById(int id) {
+    public Reactor getReactorById(int id) {
         mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().lock();
         try {
-            Optional<MapleMapObject> foundReactor = mapobjects.get(MapleMapObjectType.REACTOR).values().stream().filter(obj -> ((MapleReactor) obj).getReactorId() == id).findFirst();
+            Optional<MapleMapObject> foundReactor = mapobjects.get(MapleMapObjectType.REACTOR).values().stream().filter(obj -> ((Reactor) obj).getReactorId() == id).findFirst();
             if (foundReactor.isPresent()) {
-                return (MapleReactor) foundReactor.get();
+                return (Reactor) foundReactor.get();
             }
         } finally {
             mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().unlock();
@@ -3679,12 +3679,12 @@ public final class MapleMap {
         return (NPCLife) mmo;
     }
 
-    public MapleReactor getReactorByOid(final int oid) {
+    public Reactor getReactorByOid(final int oid) {
         MapleMapObject mmo = getMapObject(oid, MapleMapObjectType.REACTOR);
         if (mmo == null) {
             return null;
         }
-        return (MapleReactor) mmo;
+        return (Reactor) mmo;
     }
 
     public MonsterFamiliar getFamiliarByOid(final int oid) {
@@ -3695,12 +3695,12 @@ public final class MapleMap {
         return (MonsterFamiliar) mmo;
     }
 
-    public MapleReactor getReactorByName(final String name) {
+    public Reactor getReactorByName(final String name) {
         mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().lock();
         try {
-            Optional<MapleMapObject> foundReactor = mapobjects.get(MapleMapObjectType.REACTOR).values().stream().filter(obj -> ((MapleReactor) obj).getName().equalsIgnoreCase(name)).findFirst();
+            Optional<MapleMapObject> foundReactor = mapobjects.get(MapleMapObjectType.REACTOR).values().stream().filter(obj -> ((Reactor) obj).getName().equalsIgnoreCase(name)).findFirst();
             if (foundReactor.isPresent()) {
-                return (MapleReactor) foundReactor.get();
+                return (Reactor) foundReactor.get();
             }
         } finally {
             mapobjectlocks.get(MapleMapObjectType.REACTOR).readLock().unlock();

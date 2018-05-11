@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import server.maps.objects.MapleReactor;
+import server.maps.objects.Reactor;
 import net.InPacket;
 import net.ProcessPacket;
 
@@ -22,7 +22,7 @@ public class HitReactorHandler implements ProcessPacket<ClientSocket> {
         final int charPos = iPacket.DecodeInt();
         final short stance = iPacket.DecodeShort();
         iPacket.DecodeInt(); // new int v169. Seems to be always zero?
-        final MapleReactor reactor = c.getPlayer().getMap().getReactorByOid(oid);
+        final Reactor reactor = c.getPlayer().getMap().getReactorByOid(oid);
 
         // System.out.println("Hit Reactor:  " + reactor);
         if (reactor == null || !reactor.isAlive()) {

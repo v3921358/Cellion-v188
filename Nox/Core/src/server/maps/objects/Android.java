@@ -25,7 +25,7 @@ import server.movement.LifeMovementFragment;
 import server.movement.MovementTypeA;
 import tools.LogHelper;
 
-public class MapleAndroid extends MapleMapObject {
+public class Android extends MapleMapObject {
 
     private final Item androidItem;
     private int stance = 0, fh = 0;
@@ -36,7 +36,7 @@ public class MapleAndroid extends MapleMapObject {
     private Point pos = new Point(0, 0);
     private boolean changed = false;
 
-    private MapleAndroid(int itemid, int uniqueid) {
+    private Android(int itemid, int uniqueid) {
         androidItem = new Item(itemid, (byte) -1, (short) 1);
         androidItem.setUniqueId(uniqueid);
     }
@@ -45,10 +45,10 @@ public class MapleAndroid extends MapleMapObject {
         return androidItem;
     }
 
-    public static MapleAndroid loadFromDb(int itemid, int uid) {
+    public static Android loadFromDb(int itemid, int uid) {
         try (Connection con = Database.GetConnection()) {
 
-            MapleAndroid ret = new MapleAndroid(itemid, uid);
+            Android ret = new Android(itemid, uid);
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM androids WHERE uniqueid = ?")) {
                 ps.setInt(1, uid);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -97,7 +97,7 @@ public class MapleAndroid extends MapleMapObject {
 
     }
 
-    public static MapleAndroid createAndroid(int itemid, int uniqueid) {
+    public static Android createAndroid(int itemid, int uniqueid) {
         int androidId = getAndroidTemplateId(itemid);
         Random r = new Random();
         MapleAndroidBuilder builder = MapleItemInformationProvider.getInstance().getAndroidInfo().stream()
@@ -115,7 +115,7 @@ public class MapleAndroid extends MapleMapObject {
         return MapleDataTool.getInt(data.getChildByPath("info/android"));
     }
 
-    public static MapleAndroid saveAndroid(int itemid, int uniqueid, int skin, int hair, int face) {
+    public static Android saveAndroid(int itemid, int uniqueid, int skin, int hair, int face) {
         if (uniqueid < 0) {
             uniqueid = MapleInventoryIdentifier.getInstance();
         }
@@ -137,7 +137,7 @@ public class MapleAndroid extends MapleMapObject {
             return null;
         }
 
-        MapleAndroid pet = new MapleAndroid(itemid, uniqueid);
+        Android pet = new Android(itemid, uniqueid);
         pet.setHair(hair);
         pet.setFace(face);
         pet.setSkin(skin);

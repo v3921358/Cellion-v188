@@ -14,7 +14,7 @@ import server.Randomizer;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.MapleReactor;
+import server.maps.objects.Reactor;
 import server.maps.objects.Summon;
 import tools.packet.WvsContext;
 
@@ -133,7 +133,7 @@ public class SpawnPoint extends Spawns {
         map.spawnMonster(mob, -2);
         if (carnivalTeam > -1) {
             for (MapleMapObject o : map.getAllMapObjects(MapleMapObjectType.REACTOR)) { //parsing through everytime a monster is spawned? not good idea
-                final MapleReactor r = (MapleReactor) o;
+                final Reactor r = (Reactor) o;
 
                 if (r.getName().startsWith(String.valueOf(carnivalTeam)) && r.getReactorId() == (9980000 + carnivalTeam) && r.getState() < 5) {
                     final int num = Integer.parseInt(r.getName().substring(1, 2)); //00, 01, etc

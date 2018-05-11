@@ -36,7 +36,7 @@ import server.maps.MapleMapObjectType;
 import server.maps.SavedLocationType;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
-import server.maps.objects.MapleReactor;
+import server.maps.objects.Reactor;
 import server.messages.GiveBuffMessage;
 import server.quest.Quest;
 import tools.Pair;
@@ -443,7 +443,7 @@ public abstract class AbstractPlayerInteraction {
         MapleMap map = c.getChannelServer().getMapFactory().getMap(mapid);
 
         for (MapleMapObject remo : map.getAllMapObjects(MapleMapObjectType.REACTOR)) {
-            MapleReactor react = (MapleReactor) remo;
+            Reactor react = (Reactor) remo;
             if (react.getReactorId() == id) {
                 react.forceStartReactor(c);
                 break;
@@ -455,7 +455,7 @@ public abstract class AbstractPlayerInteraction {
         MapleMap map = c.getChannelServer().getMapFactory().getMap(mapid);
 
         for (MapleMapObject remo : map.getAllMapObjects(MapleMapObjectType.REACTOR)) {
-            MapleReactor react = (MapleReactor) remo;
+            Reactor react = (Reactor) remo;
             if (react.getReactorId() == id) {
                 react.hitReactor(c);
                 break;
@@ -467,7 +467,7 @@ public abstract class AbstractPlayerInteraction {
         MapleMap map = c.getChannelServer().getMapFactory().getMap(mapid);
 
         for (MapleMapObject remo : map.getAllMapObjects(MapleMapObjectType.REACTOR)) {
-            final MapleReactor react = (MapleReactor) remo;
+            final Reactor react = (Reactor) remo;
             if (react.getReactorId() == id) {
                 react.hitReactor(c);
                 break;
@@ -1246,7 +1246,7 @@ public abstract class AbstractPlayerInteraction {
     public boolean isAllReactorState(final int reactorId, final int state) {
         boolean ret = false;
         for (MapleMapObject o : getMap().getAllMapObjects(MapleMapObjectType.REACTOR)) {
-            final MapleReactor r = (MapleReactor) o;
+            final Reactor r = (Reactor) o;
 
             if (r.getReactorId() == reactorId) {
                 ret = r.getState() == state;

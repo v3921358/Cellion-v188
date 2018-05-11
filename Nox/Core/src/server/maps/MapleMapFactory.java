@@ -23,8 +23,8 @@ import server.life.Mob;
 import server.life.LifeType;
 import server.maps.SharedMapResources.DirectionInfo;
 import server.life.NPCLife;
-import server.maps.objects.MapleReactor;
-import server.maps.objects.MapleRuneStone;
+import server.maps.objects.Reactor;
+import server.maps.objects.RuneStone;
 import tools.LogHelper;
 import tools.Pair;
 
@@ -801,7 +801,7 @@ public class MapleMapFactory {
 
         // Load runes
         if (!runeExcludingMap.contains(map.getId()) && highestLifeLevel >= 30) {
-            MapleRuneStone rune = new MapleRuneStone(lowestLifeLevel, highestLifeLevel);
+            RuneStone rune = new RuneStone(lowestLifeLevel, highestLifeLevel);
             rune.respawnRuneInMap(map, true);
 
             map.setRune(rune);
@@ -811,7 +811,7 @@ public class MapleMapFactory {
     public static void loadReactors(final MapleMap map) {
         for (SharedMapResources.TemporaryStorage_Reactor r : map.getSharedMapResources().ReactorStorage) {
             final MapleReactorStats stats = MapleReactorFactory.getReactor(r.id);
-            final MapleReactor myReactor = new MapleReactor(stats, r.id);
+            final Reactor myReactor = new Reactor(stats, r.id);
 
             myReactor.setFacingLeft(r.f == 0);
 

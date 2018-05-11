@@ -44,15 +44,15 @@ import server.events.MapleSnowball;
 import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.MapleMapItem;
-import server.maps.objects.MapleAndroid;
+import server.maps.objects.Android;
 import server.maps.objects.User;
-import server.maps.objects.MapleDragon;
-import server.maps.objects.MapleHaku;
-import server.maps.objects.MapleKite;
-import server.maps.objects.MapleMist;
+import server.maps.objects.EvanDragon;
+import server.maps.objects.KannaHaku;
+import server.maps.objects.Kite;
+import server.maps.objects.Mist;
 import server.life.NPCLife;
-import server.maps.objects.MapleReactor;
-import server.maps.objects.MapleRuneStone;
+import server.maps.objects.Reactor;
+import server.maps.objects.RuneStone;
 import server.maps.objects.Summon;
 import server.maps.objects.MechDoor;
 import server.maps.objects.MonsterFamiliar;
@@ -1587,14 +1587,14 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket enableHaku(MapleHaku haku) {
+    public static OutPacket enableHaku(KannaHaku haku) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.FoxManExclResult.getValue());
         oPacket.EncodeInt(haku.getOwner());
         return oPacket;
     }
 
-    public static OutPacket changeHakuEquip(MapleHaku haku, boolean change, boolean enableActions) {
+    public static OutPacket changeHakuEquip(KannaHaku haku, boolean change, boolean enableActions) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.FoxManModified.getValue());
         oPacket.EncodeInt(haku.getOwner());
@@ -1623,7 +1623,7 @@ public class CField {
      * @return oPacket
      *
      */
-    public static OutPacket spawnHaku(MapleHaku h, boolean oldForm) {
+    public static OutPacket spawnHaku(KannaHaku h, boolean oldForm) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.FoxManEnterField.getValue());
         oPacket.EncodeInt(h.getOwner());
@@ -1636,7 +1636,7 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket moveHaku(MapleHaku h, Point pos, List<LifeMovementFragment> res) {
+    public static OutPacket moveHaku(KannaHaku h, Point pos, List<LifeMovementFragment> res) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.FoxManMove.getValue());
         oPacket.EncodeInt(h.getOwner());
@@ -1652,7 +1652,7 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket spawnDragon(MapleDragon d) {
+    public static OutPacket spawnDragon(EvanDragon d) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.DragonEnterField.getValue());
         oPacket.EncodeInt(d.getOwner());
@@ -1671,7 +1671,7 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket moveDragon(MapleDragon d, Point startPos, List<LifeMovementFragment> moves) {
+    public static OutPacket moveDragon(EvanDragon d, Point startPos, List<LifeMovementFragment> moves) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.DragonMove.getValue());
         oPacket.EncodeInt(d.getOwner());
@@ -1681,11 +1681,11 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket spawnAndroid(User chr, MapleAndroid android) {
+    public static OutPacket spawnAndroid(User chr, Android android) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.AndroidEnterField.getValue());
         oPacket.EncodeInt(chr.getId());
-        oPacket.EncodeByte(MapleAndroid.getAndroidTemplateId(android.getItem().getItemId()));
+        oPacket.EncodeByte(Android.getAndroidTemplateId(android.getItem().getItemId()));
         oPacket.EncodeShort(android.getPos().x);
         oPacket.EncodeShort(android.getPos().y - 20);
         oPacket.EncodeByte(android.getStance());
@@ -1704,7 +1704,7 @@ public class CField {
 
     public static OutPacket moveAndroid(User chr, List<LifeMovementFragment> res) {
 
-        MapleAndroid android = chr.getAndroid();
+        Android android = chr.getAndroid();
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.AndroidMove.getValue());
         oPacket.EncodeInt(chr.getId());
@@ -1723,7 +1723,7 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket updateAndroidLook(boolean itemOnly, User cid, MapleAndroid android, boolean enableActions) {
+    public static OutPacket updateAndroidLook(boolean itemOnly, User cid, Android android, boolean enableActions) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.AndroidModified.getValue());
         oPacket.EncodeInt(cid.getId());
@@ -2569,7 +2569,7 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket spawnClockMist(final MapleMist clock) {
+    public static OutPacket spawnClockMist(final Mist clock) {
         OutPacket oPacket = new OutPacket(SendPacketOpcode.AffectedAreaCreated.getValue());
 
         oPacket.EncodeInt(clock.getObjectId());
@@ -2633,7 +2633,7 @@ public class CField {
      * @param mist
      * @return
      */
-    public static OutPacket spawnMist(MapleMist mist) {
+    public static OutPacket spawnMist(Mist mist) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.AffectedAreaCreated.getValue());
         oPacket.EncodeInt(mist.getObjectId());
@@ -2721,7 +2721,7 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket spawnKite(MapleKite kite) {
+    public static OutPacket spawnKite(Kite kite) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.MessageBoxEnterField.getValue());
         oPacket.EncodeInt(kite.getObjectId());
@@ -2763,7 +2763,7 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket triggerReactor(MapleReactor reactor, int stance) {
+    public static OutPacket triggerReactor(Reactor reactor, int stance) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.ReactorChangeState.getValue());
         oPacket.EncodeInt(reactor.getObjectId());
@@ -2776,7 +2776,7 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket spawnReactor(MapleReactor reactor) {
+    public static OutPacket spawnReactor(Reactor reactor) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.ReactorEnterField.getValue());
         oPacket.EncodeInt(reactor.getObjectId());
@@ -2789,7 +2789,7 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket destroyReactor(MapleReactor reactor) {
+    public static OutPacket destroyReactor(Reactor reactor) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.ReactorStateReset.getValue());
         oPacket.EncodeInt(reactor.getObjectId());
@@ -4954,7 +4954,7 @@ DC 05 00 00  // floating value
             return oPacket;
         }
 
-        public static OutPacket spawnRune(MapleRuneStone rune) {
+        public static OutPacket spawnRune(RuneStone rune) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.RuneEnterField.getValue());
             oPacket.EncodeInt(0);
@@ -4966,7 +4966,7 @@ DC 05 00 00  // floating value
             return oPacket;
         }
 
-        public static OutPacket removeRune(MapleRuneStone rune, User chr) {
+        public static OutPacket removeRune(RuneStone rune, User chr) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.RuneActSuccess.getValue());
             oPacket.EncodeInt(0);

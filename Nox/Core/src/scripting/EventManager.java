@@ -53,7 +53,7 @@ import server.maps.MapleMapFactory;
 import server.maps.MapleMapObject;
 import server.maps.MapleReactorFactory;
 import server.maps.objects.User;
-import server.maps.objects.MapleReactor;
+import server.maps.objects.Reactor;
 import tools.LogHelper;
 import tools.packet.CField;
 import tools.packet.WvsContext;
@@ -393,8 +393,8 @@ public class EventManager {
         return LifeFactory.getMonster(id);
     }
 
-    public MapleReactor getReactor(final int id) {
-        return new MapleReactor(MapleReactorFactory.getReactor(id), id);
+    public Reactor getReactor(final int id) {
+        return new Reactor(MapleReactorFactory.getReactor(id), id);
     }
 
     public void broadcastShip(final int mapid, final int effect, final int mode) {

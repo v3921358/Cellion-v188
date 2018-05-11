@@ -73,7 +73,7 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.MapleReactorFactory;
 import server.life.NPCLife;
-import server.maps.objects.MapleReactor;
+import server.maps.objects.Reactor;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
 import server.quest.Quest;
@@ -1485,7 +1485,7 @@ public class AdminCommand {
         @Override
         public int execute(ClientSocket c, String[] splitted) {
             for (MapleMapObject reactor1l : c.getPlayer().getMap().getAllMapObjects(MapleMapObjectType.REACTOR)) {
-                MapleReactor reactor2l = (MapleReactor) reactor1l;
+                Reactor reactor2l = (Reactor) reactor1l;
                 c.getPlayer().dropMessage(5, "Reactor: oID: " + reactor2l.getObjectId() + " reactorID: " + reactor2l.getReactorId() + " Position: " + reactor2l.getPosition().toString() + " State: " + reactor2l.getState() + " Name: " + reactor2l.getName());
             }
             return 0;
@@ -2078,7 +2078,7 @@ public class AdminCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            MapleReactor reactor = new MapleReactor(MapleReactorFactory.getReactor(Integer.parseInt(splitted[1])), Integer.parseInt(splitted[1]));
+            Reactor reactor = new Reactor(MapleReactorFactory.getReactor(Integer.parseInt(splitted[1])), Integer.parseInt(splitted[1]));
             reactor.setDelay(-1);
             c.getPlayer().getMap().spawnReactorOnGroundBelow(reactor, new Point(c.getPlayer().getTruePosition().x, c.getPlayer().getTruePosition().y - 20));
             return 1;
@@ -2785,7 +2785,7 @@ public class AdminCommand {
             List<MapleMapObject> reactors = map.getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.REACTOR));
             if (splitted[1].equals("all")) {
                 for (MapleMapObject reactorL : reactors) {
-                    MapleReactor reactor2l = (MapleReactor) reactorL;
+                    Reactor reactor2l = (Reactor) reactorL;
                     c.getPlayer().getMap().destroyReactor(reactor2l.getObjectId());
                 }
             } else {

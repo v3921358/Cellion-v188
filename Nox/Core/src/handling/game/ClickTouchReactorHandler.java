@@ -4,7 +4,7 @@ import client.ClientSocket;
 import constants.GameConstants;
 import scripting.provider.ReactorScriptManager;
 import server.MapleInventoryManipulator;
-import server.maps.objects.MapleReactor;
+import server.maps.objects.Reactor;
 import net.InPacket;
 import net.ProcessPacket;
 
@@ -23,7 +23,7 @@ public class ClickTouchReactorHandler implements ProcessPacket<ClientSocket> {
     public void Process(ClientSocket c, InPacket iPacket) {
         final int oid = iPacket.DecodeInt();
         final boolean touched = iPacket.GetRemainder() == 0 || iPacket.DecodeByte() > 0; //the byte is probably the state to set it to
-        final MapleReactor reactor = c.getPlayer().getMap().getReactorByOid(oid);
+        final Reactor reactor = c.getPlayer().getMap().getReactorByOid(oid);
 
         if (c.getPlayer().isIntern()) {
             c.getPlayer().dropMessage(5, "[Debug] Reactor ID : " + oid);

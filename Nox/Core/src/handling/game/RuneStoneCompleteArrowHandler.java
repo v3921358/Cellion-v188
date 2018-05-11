@@ -3,7 +3,7 @@ package handling.game;
 import client.ClientSocket;
 import client.SkillFactory;
 import server.maps.objects.User;
-import server.maps.objects.MapleRuneStone;
+import server.maps.objects.RuneStone;
 import net.InPacket;
 import tools.packet.WvsContext;
 import net.ProcessPacket;
@@ -25,7 +25,7 @@ public class RuneStoneCompleteArrowHandler implements ProcessPacket<ClientSocket
         boolean sucess = iPacket.DecodeByte() > 0;
 
         User chr = c.getPlayer();
-        MapleRuneStone rune = chr.getMap().getRuneStone();
+        RuneStone rune = chr.getMap().getRuneStone();
 
         if (sucess
                 && rune != null
