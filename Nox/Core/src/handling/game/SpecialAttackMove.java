@@ -334,8 +334,9 @@ public final class SpecialAttackMove implements ProcessPacket<MapleClient> {
                 break;
             }
             case WildHunter.JAGUAR_RIDER: {
-                pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932215 /*1932015*/);
+                pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932215/*1932015*/);
                 pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pPlayer.setUnmountState(false);
                 break;
             }
             case DawnWarrior.SOUL_SPEED:{

@@ -258,6 +258,18 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
+    /**
+     * Unmount Variables
+     * Used to check whether the Jaguar should unmount or not, used to avoid constant dismounts for now. -Mazen
+     */
+    public boolean bUnmount;
+    
+    public void setUnmountState(boolean bValue) {
+        if (isDeveloper()) dropMessage(5, "[Debug] Unmount State : " + bUnmount);
+        bUnmount = bValue;
+        if (isDeveloper()) dropMessage(5, "[Debug] Unmount State : " + bUnmount);
+    }
+    
     /*
      *  V: Matrix
      */
@@ -291,18 +303,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public boolean hasGodMode() {
-        if (bGodMode) {
-            return true;
-        }
-        return false;
+        return bGodMode;
     }
 
     public void toggleGodMode(boolean bEnabled) {
-        if (bEnabled) {
-            bGodMode = true;
-        } else {
-            bGodMode = false;
-        }
+        bGodMode = bEnabled;
     }
 
     /*
@@ -2735,6 +2740,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      */
     public void cancelEffect(final MapleStatEffect effect, final boolean overwrite, final long startTime) {
         if (effect == null) {
+            return;
+        }
+        if ((effect.getSourceId() == WildHunter.JAGUAR_RIDER) && (bUnmount == false)) {
+            if (isDeveloper()) dropMessage(5, "[Debug] Unmount State Disabled");
+            SendPacket(CWvsContext.enableActions());
             return;
         }
         cancelEffect(effect, overwrite, startTime, effect.getStatups());
