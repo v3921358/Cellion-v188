@@ -13,8 +13,8 @@ import static java.lang.Integer.min;
 import java.util.Random;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadLocalRandom;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.Timer;
 import server.maps.objects.User;
 import tools.packet.BuffPacket;
@@ -37,11 +37,11 @@ public class Hero {
             }
 
             int nDuration = (pPlayer.getSkillLevel(Aran.SWING_STUDIES_I) > 0) ? 4000 : 2000;
-            final MapleStatEffect buffEffects = SkillFactory.getSkill(Aran.SWING_STUDIES_I).getEffect(pPlayer.getTotalSkillLevel(Aran.SWING_STUDIES_I));
+            final StatEffect buffEffects = SkillFactory.getSkill(Aran.SWING_STUDIES_I).getEffect(pPlayer.getTotalSkillLevel(Aran.SWING_STUDIES_I));
 
             buffEffects.statups.put(CharacterTemporaryStat.NextAttackEnhance, 1);
 
-            final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
+            final StatEffect.CancelEffectAction cancelAction = new StatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
             final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, nDuration);
             pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), buffSchedule, buffEffects.statups, false, nDuration, pPlayer.getId());
             pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, Aran.SWING_STUDIES_I, nDuration, buffEffects.statups, buffEffects));
@@ -53,11 +53,11 @@ public class Hero {
             }
 
             int nDuration = 15000;
-            final MapleStatEffect buffEffects = SkillFactory.getSkill(Aran.ADRENALINE_RUSH).getEffect(pPlayer.getTotalSkillLevel(Aran.ADRENALINE_RUSH));
+            final StatEffect buffEffects = SkillFactory.getSkill(Aran.ADRENALINE_RUSH).getEffect(pPlayer.getTotalSkillLevel(Aran.ADRENALINE_RUSH));
 
-            buffEffects.statups.put(CharacterTemporaryStat.AdrenalinBoost, buffEffects.info.get(MapleStatInfo.x));
+            buffEffects.statups.put(CharacterTemporaryStat.AdrenalinBoost, buffEffects.info.get(StatInfo.x));
 
-            final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
+            final StatEffect.CancelEffectAction cancelAction = new StatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
             final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, nDuration);
             pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), buffSchedule, buffEffects.statups, false, nDuration, pPlayer.getId());
             pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, Aran.ADRENALINE_RUSH, nDuration, buffEffects.statups, buffEffects));
@@ -92,9 +92,9 @@ public class Hero {
             pPlayer.getClient().SendPacket(CField.updateCombo(nCombo));
 
             // Apply the bonuses provided by the combo.
-            final MapleStatEffect buffEffects = SkillFactory.getSkill(Aran.COMBO_ABILITY).getEffect(pPlayer.getTotalSkillLevel(Aran.COMBO_ABILITY));
+            final StatEffect buffEffects = SkillFactory.getSkill(Aran.COMBO_ABILITY).getEffect(pPlayer.getTotalSkillLevel(Aran.COMBO_ABILITY));
             buffEffects.statups.put(CharacterTemporaryStat.ComboAbilityBuff, (int) nCombo);
-            pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), null, buffEffects.statups, false, buffEffects.info.get(MapleStatInfo.time), pPlayer.getId());
+            pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), null, buffEffects.statups, false, buffEffects.info.get(StatInfo.time), pPlayer.getId());
             pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, Aran.COMBO_ABILITY, 99999, buffEffects.statups, buffEffects));
 
             if (nCombo >= 998) { // Apply Adrenaline Rush upon reaching max stacks.
@@ -195,7 +195,7 @@ public class Hero {
             }
             int nDrawnCard = pRandom.nextInt((nMaximumCard - nMinimumCard) + 1) + nMinimumCard;
 
-            final MapleStatEffect pEffect = SkillFactory.getSkill(nSkillID).getEffect(pPlayer.getTotalSkillLevel(nSkillID));
+            final StatEffect pEffect = SkillFactory.getSkill(nSkillID).getEffect(pPlayer.getTotalSkillLevel(nSkillID));
 
             switch (nDrawnCard) {
                 case 1: // Destin Card
@@ -217,10 +217,10 @@ public class Hero {
                     break;
             }
 
-            final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
-            final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, pEffect.info.get(MapleStatInfo.time));
-            pPlayer.registerEffect(pEffect, System.currentTimeMillis(), buffSchedule, pEffect.statups, false, pEffect.info.get(MapleStatInfo.time), pPlayer.getId());
-            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkillID, pEffect.info.get(MapleStatInfo.time), pEffect.statups, pEffect));
+            final StatEffect.CancelEffectAction cancelAction = new StatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
+            final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, pEffect.info.get(StatInfo.time));
+            pPlayer.registerEffect(pEffect, System.currentTimeMillis(), buffSchedule, pEffect.statups, false, pEffect.info.get(StatInfo.time), pPlayer.getId());
+            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkillID, pEffect.info.get(StatInfo.time), pEffect.statups, pEffect));
 
             updateDeckRequest(pPlayer, 0); // Reset the deck back to zero.
         }

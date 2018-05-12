@@ -518,7 +518,7 @@ public final class MapleMap {
         // Handle buffs given to map when the monster is dead
         if (monster.getBuffToGive() > -1) {
             final int buffid = monster.getBuffToGive();
-            final MapleStatEffect buff = MapleItemInformationProvider.getInstance().getItemEffect(buffid);
+            final StatEffect buff = MapleItemInformationProvider.getInstance().getItemEffect(buffid);
 
             charactersLock.readLock().lock();
             try {

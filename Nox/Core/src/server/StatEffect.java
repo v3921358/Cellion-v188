@@ -53,10 +53,10 @@ import javax.script.ScriptException;
 import tools.Utility;
 import tools.packet.CField.SummonPacket;
 
-public class MapleStatEffect implements Serializable {
+public class StatEffect implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
-    public Map<MapleStatInfo, Integer> info;
+    public Map<StatInfo, Integer> info;
     private Map<MapleTraitType, Integer> traits;
     private boolean overTime, partyBuff = true;
     public EnumMap<CharacterTemporaryStat, Integer> statups;
@@ -75,26 +75,26 @@ public class MapleStatEffect implements Serializable {
     private int weapon = 0;
     private int expBuff, itemup, mesoup, cashup, berserk, illusion, booster, berserk2, cp, nuffSkill, combo;
 
-    public static MapleStatEffect loadSkillEffectFromData(final MapleData source, final int skillid, final int level, final String variables) {
+    public static StatEffect loadSkillEffectFromData(final MapleData source, final int skillid, final int level, final String variables) {
         return loadFromData(source, skillid, level, variables);
     }
 
-    public static MapleStatEffect loadItemEffectFromData(final MapleData source, final int itemid) {
+    public static StatEffect loadItemEffectFromData(final MapleData source, final int itemid) {
         return loadFromData(source, itemid, 1, null);
     }
 
-    private static MapleStatEffect loadFromData(final MapleData source, final int sourceid, final int level, final String variables) {
-        final MapleStatEffect effect = new MapleStatEffect();
+    private static StatEffect loadFromData(final MapleData source, final int sourceid, final int level, final String variables) {
+        final StatEffect effect = new StatEffect();
         effect.sourceid = sourceid;
         effect.level = (byte) level;
         if (source == null) {
             return effect;
         }
 
-        effect.info = new EnumMap<>(MapleStatInfo.class);
+        effect.info = new EnumMap<>(StatInfo.class);
         effect.statups = new EnumMap<>(CharacterTemporaryStat.class);
 
-        for (final MapleStatInfo i : MapleStatInfo.values()) {
+        for (final StatInfo i : StatInfo.values()) {
             final String propertyName = i.name();
             int value = parseEval(propertyName, source, -1, variables, level, i.isSpecial());
             if (i.getStat() != null && value != -1) {
@@ -254,12 +254,12 @@ public class MapleStatEffect implements Serializable {
         effect.totalprob = totalprob;
 
         // start of server calculated stuffs
-        final int priceUnit = effect.info.get(MapleStatInfo.priceUnit); // Guild skills
+        final int priceUnit = effect.info.get(StatInfo.priceUnit); // Guild skills
         if (priceUnit > 0) {
-            final int price = effect.info.get(MapleStatInfo.price);
-            final int extendPrice = effect.info.get(MapleStatInfo.extendPrice);
-            effect.info.put(MapleStatInfo.price, price * priceUnit);
-            effect.info.put(MapleStatInfo.extendPrice, extendPrice * priceUnit);
+            final int price = effect.info.get(StatInfo.price);
+            final int extendPrice = effect.info.get(StatInfo.extendPrice);
+            effect.info.put(StatInfo.price, price * priceUnit);
+            effect.info.put(StatInfo.extendPrice, extendPrice * priceUnit);
         }
         switch (sourceid) {
             case 1100002:
@@ -283,40 +283,40 @@ public class MapleStatEffect implements Serializable {
             case 3120008:
             case 23100006:
             case 23120012:
-                effect.info.put(MapleStatInfo.mobCount, 6);
+                effect.info.put(StatInfo.mobCount, 6);
                 break;
             case 35121005:
             case 35111004:
             case 35121013:
             case 35121054: //reactive armor mech
-                effect.info.put(MapleStatInfo.attackCount, 6);
-                effect.info.put(MapleStatInfo.bulletCount, 6);
+                effect.info.put(StatInfo.attackCount, 6);
+                effect.info.put(StatInfo.bulletCount, 6);
                 break;
             case 24121000:
-                effect.info.put(MapleStatInfo.attackCount, 6);
+                effect.info.put(StatInfo.attackCount, 6);
                 break;
             case 24100003: // TODO: for now, or could it be card stack? (1 count)
             case 24120002:
-                effect.info.put(MapleStatInfo.attackCount, 15);
+                effect.info.put(StatInfo.attackCount, 15);
                 break;
         }
 
         if (GameConstants.isNoDelaySkill(sourceid)) {
-            effect.info.put(MapleStatInfo.mobCount, 6);
+            effect.info.put(StatInfo.mobCount, 6);
         }
 
-        effect.info.put(MapleStatInfo.time, (effect.info.get(MapleStatInfo.time) * 1000)); // items have their times stored in ms, of course
-        effect.info.put(MapleStatInfo.subTime, (effect.info.get(MapleStatInfo.subTime) * 1000));
-        effect.overTime = effect.info.get(MapleStatInfo.time) > -1;
+        effect.info.put(StatInfo.time, (effect.info.get(StatInfo.time) * 1000)); // items have their times stored in ms, of course
+        effect.info.put(StatInfo.subTime, (effect.info.get(StatInfo.subTime) * 1000));
+        effect.overTime = effect.info.get(StatInfo.time) > -1;
         effect.monsterStatus = new EnumMap<>(MonsterStatus.class);
 
         //Fetch effect handler
         boolean bHasEffect = EffectManager.SetEffect(effect, sourceid);
-        if (!bHasEffect && effect.info.get(MapleStatInfo.time) > -1) {
+        if (!bHasEffect && effect.info.get(StatInfo.time) > -1) {
             LogHelper.GENERAL_EXCEPTION.get().log(Priority.DEBUG, "Skill :" + sourceid + " has an over-time property but no effects.");
         }
 
-        if (effect.info.get(MapleStatInfo.time) > -1) {
+        if (effect.info.get(StatInfo.time) > -1) {
             effect.overTime = true;
         }
 
@@ -397,11 +397,11 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final boolean applyTo(User chr) {
-        return applyTo(chr, chr, true, null, info.get(MapleStatInfo.time));
+        return applyTo(chr, chr, true, null, info.get(StatInfo.time));
     }
 
     public final boolean applyTo(User chr, Point pos) {
-        return applyTo(chr, chr, true, pos, info.get(MapleStatInfo.time));
+        return applyTo(chr, chr, true, pos, info.get(StatInfo.time));
     }
 
     public final boolean applyTo(final User applyfrom, final User applyto, final boolean primary, final Point pos, int newDuration) {
@@ -435,12 +435,12 @@ public class MapleStatEffect implements Serializable {
 
         final PlayerStats stat = applyto.getStat();
         if (primary) {
-            if (info.get(MapleStatInfo.itemConNo) != 0 && !applyto.inPVP()) {
-                if (!applyto.haveItem(info.get(MapleStatInfo.itemCon), info.get(MapleStatInfo.itemConNo), false, true)) {
+            if (info.get(StatInfo.itemConNo) != 0 && !applyto.inPVP()) {
+                if (!applyto.haveItem(info.get(StatInfo.itemCon), info.get(StatInfo.itemConNo), false, true)) {
                     applyto.getClient().SendPacket(WvsContext.enableActions());
                     return false;
                 }
-                MapleInventoryManipulator.removeById(applyto.getClient(), GameConstants.getInventoryType(info.get(MapleStatInfo.itemCon)), info.get(MapleStatInfo.itemCon), info.get(MapleStatInfo.itemConNo), false, true);
+                MapleInventoryManipulator.removeById(applyto.getClient(), GameConstants.getInventoryType(info.get(StatInfo.itemCon)), info.get(StatInfo.itemCon), info.get(StatInfo.itemConNo), false, true);
             }
         } else if (!primary && isResurrection()) {
             hpchange = stat.getMaxHp();
@@ -507,7 +507,7 @@ public class MapleStatEffect implements Serializable {
             applyto.setExtractor(new Extractor(applyto, sourceid, useLevel * 50, 1440)); //no clue about time left
             applyto.getMap().spawnExtractor(applyto.getExtractor());
         } else if (isMistEruption()) {
-            int i = info.get(MapleStatInfo.y);
+            int i = info.get(StatInfo.y);
             for (Mist m : applyto.getMap().getAllMists()) {
                 if (m.getOwnerId() == applyto.getId() && m.getSourceSkill().getId() == 2111003) {
                     if (m.getSchedule() != null) {
@@ -657,7 +657,7 @@ public class MapleStatEffect implements Serializable {
         } else if (randomPickup != null && randomPickup.size() > 0) {
             MapleItemInformationProvider.getInstance().getItemEffect(randomPickup.get(Randomizer.nextInt(randomPickup.size()))).applyTo(applyto);
         } else if (GameConstants.isReturnHQSkill(sourceid)) { // a beginner skill that returns the player to where it started, the HQ
-            applyto.changeMap(info.get(MapleStatInfo.x), 0);
+            applyto.changeMap(info.get(StatInfo.x), 0);
         } else if (this.fieldExpType != -1) {
             // Calculate the base bonus
             int baseBonusPercentage = 0;
@@ -728,7 +728,7 @@ public class MapleStatEffect implements Serializable {
             applyfrom.cancelEffect(this, true, -1, statups);
             applyfrom.getMap().spawnSummon(tosummon);
             applyfrom.addSummon(tosummon);
-            tosummon.addHP(info.get(MapleStatInfo.x).shortValue());
+            tosummon.addHP(info.get(StatInfo.x).shortValue());
             if (isBeholder()) {
                 tosummon.addHP((short) 1);
             } else if (sourceid == 4341006) {
@@ -976,9 +976,9 @@ public class MapleStatEffect implements Serializable {
                     }
                 }
                 List<User> awarded = new ArrayList<>();
-                while (awarded.size() < Math.min(membrs, info.get(MapleStatInfo.y))) {
+                while (awarded.size() < Math.min(membrs, info.get(StatInfo.y))) {
                     for (User chr : applyfrom.getMap().getCharacters()) {
-                        if (chr != null && chr.isAlive() && chr.getParty() != null && chr.getParty().getId() == applyfrom.getParty().getId() && !awarded.contains(chr) && Randomizer.nextInt(info.get(MapleStatInfo.y)) == 0) {
+                        if (chr != null && chr.isAlive() && chr.getParty() != null && chr.getParty().getId() == applyfrom.getParty().getId() && !awarded.contains(chr) && Randomizer.nextInt(info.get(StatInfo.y)) == 0) {
                             awarded.add(chr);
                         }
                     }
@@ -1041,7 +1041,7 @@ public class MapleStatEffect implements Serializable {
                 }
             }
             i++;
-            if (i >= info.get(MapleStatInfo.mobCount)) {
+            if (i >= info.get(StatInfo.mobCount)) {
                 break;
             }
         }
@@ -1080,7 +1080,7 @@ public class MapleStatEffect implements Serializable {
                 }
             }
             i++;
-            if (i >= info.get(MapleStatInfo.mobCount) && sourceid != 35111005) {
+            if (i >= info.get(StatInfo.mobCount) && sourceid != 35111005) {
                 break;
             }
         }
@@ -1118,7 +1118,7 @@ public class MapleStatEffect implements Serializable {
                     //localstatups.put(CharacterTemporaryStat.SNATCH, 1);
                     break;
                 default:
-                    localstatups.put(CharacterTemporaryStat.Morph, info.get(MapleStatInfo.x));
+                    localstatups.put(CharacterTemporaryStat.Morph, info.get(StatInfo.x));
                     break;
             }
             for (Map.Entry<CharacterTemporaryStat, Integer> stat : statups.entrySet()) {
@@ -1130,11 +1130,11 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final Rectangle calculateBoundingBox(final Point posFrom, final boolean facingLeft) {
-        return calculateBoundingBox(posFrom, facingLeft, lt, rb, info.get(MapleStatInfo.range));
+        return calculateBoundingBox(posFrom, facingLeft, lt, rb, info.get(StatInfo.range));
     }
 
     public final Rectangle calculateBoundingBox(final Point posFrom, final boolean facingLeft, int addedRange) {
-        return calculateBoundingBox(posFrom, facingLeft, lt, rb, info.get(MapleStatInfo.range) + addedRange);
+        return calculateBoundingBox(posFrom, facingLeft, lt, rb, info.get(StatInfo.range) + addedRange);
     }
 
     public static Rectangle calculateBoundingBox(final Point posFrom, final boolean facingLeft, final Point lt, final Point rb, final int range) {
@@ -1160,7 +1160,7 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final void setDuration(int d) {
-        this.info.put(MapleStatInfo.time, d);
+        this.info.put(StatInfo.time, d);
     }
 
     public final void silentApplyBuff(User chr, long starttime, int localDuration, Map<CharacterTemporaryStat, Integer> statup, int cid) {
@@ -1173,7 +1173,7 @@ public class MapleStatEffect implements Serializable {
                 chr.getCheatTracker().resetSummonAttack();
                 chr.getMap().spawnSummon(tosummon);
                 chr.addSummon(tosummon);
-                tosummon.addHP(info.get(MapleStatInfo.x).shortValue());
+                tosummon.addHP(info.get(StatInfo.x).shortValue());
                 if (isBeholder()) {
                     tosummon.addHP((short) 1);
                 }
@@ -1193,7 +1193,7 @@ public class MapleStatEffect implements Serializable {
         long starttime = System.currentTimeMillis();
         EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
         stat.put(CharacterTemporaryStat.SmashStack, (int) combo);
-        applyto.registerEffect(this, starttime, null, stat, false, info.get(MapleStatInfo.time), applyto.getId());
+        applyto.registerEffect(this, starttime, null, stat, false, info.get(StatInfo.time), applyto.getId());
         applyto.getClient().SendPacket(BuffPacket.giveBuff(applyto, 0, 99999, stat, this));
     }
 
@@ -1201,7 +1201,7 @@ public class MapleStatEffect implements Serializable {
         long starttime = System.currentTimeMillis();
         EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
         stat.put(CharacterTemporaryStat.SurplusSupply, combo);
-        applyto.registerEffect(this, starttime, null, stat, false, info.get(MapleStatInfo.time), applyto.getId());
+        applyto.registerEffect(this, starttime, null, stat, false, info.get(StatInfo.time), applyto.getId());
         applyto.getClient().SendPacket(BuffPacket.giveBuff(applyto, 0, 99999, stat, this));
     }
 
@@ -1217,7 +1217,7 @@ public class MapleStatEffect implements Serializable {
         long starttime = System.currentTimeMillis();
         EnumMap stat = new EnumMap(CharacterTemporaryStat.class);
         stat.put(CharacterTemporaryStat.BlessOfDarkness, combo);
-        applyto.registerEffect(this, starttime, null, stat, false, info.get(MapleStatInfo.time), applyto.getId());
+        applyto.registerEffect(this, starttime, null, stat, false, info.get(StatInfo.time), applyto.getId());
         applyto.getClient().SendPacket(BuffPacket.giveBuff(applyto, this.sourceid, 99999, stat, this));
     }
 
@@ -1227,7 +1227,7 @@ public class MapleStatEffect implements Serializable {
         double hpx = applyto.getStat().getMaxHp() / applyto.getStat().getHp();
         double mpx = applyto.getStat().getMaxMp() / applyto.getStat().getMp();
         stat.put(CharacterTemporaryStat.LifeTidal, hpx >= mpx ? 2 : 1); //for now
-        applyto.registerEffect(this, starttime, null, stat, false, info.get(MapleStatInfo.time), applyto.getId());
+        applyto.registerEffect(this, starttime, null, stat, false, info.get(StatInfo.time), applyto.getId());
         applyto.getClient().SendPacket(BuffPacket.giveBuff(applyto, this.sourceid, 99999999, stat, this));
     }
 
@@ -1280,20 +1280,20 @@ public class MapleStatEffect implements Serializable {
     private void handleExtraEffect(final User applyfrom, final User applyto, Map<CharacterTemporaryStat, Integer> effects, int localDuration) {
         switch (sourceid) {
             case 2022963: // Ryden's Poison
-                effects.put(CharacterTemporaryStat.IndieSpeed, info.get(MapleStatInfo.indieSpeed));
+                effects.put(CharacterTemporaryStat.IndieSpeed, info.get(StatInfo.indieSpeed));
                 break;
             case 21101003: // Body Pressure
             case Aran.BODY_PRESSURE:
-                effects.put(CharacterTemporaryStat.BodyPressure, info.get(MapleStatInfo.x));
+                effects.put(CharacterTemporaryStat.BodyPressure, info.get(StatInfo.x));
                 break;
             case 21100005: // Combo Drain
             case 32101004: // Combo Drain
             case Fighter.COMBO_ATTACK:
             case Aran.DRAIN:
-                effects.put(CharacterTemporaryStat.ComboDrain, info.get(MapleStatInfo.x));
+                effects.put(CharacterTemporaryStat.ComboDrain, info.get(StatInfo.x));
                 break;
             case DawnWarrior.FALLING_MOON:
-                effects.put(CharacterTemporaryStat.ComboDrain, info.get(MapleStatInfo.x));
+                effects.put(CharacterTemporaryStat.ComboDrain, info.get(StatInfo.x));
                 break;
             case 32111012:
             case 32121017:
@@ -1453,9 +1453,9 @@ public class MapleStatEffect implements Serializable {
                 break;
             }
             case DarkKnight.SACRIFICE_1: { //Sacrifice
-                info.put(MapleStatInfo.time, 40000);
-                effects.put(CharacterTemporaryStat.IgnoreTargetDEF, info.get(MapleStatInfo.ignoreMobpdpR));
-                effects.put(CharacterTemporaryStat.BdR, info.get(MapleStatInfo.indieBDR));
+                info.put(StatInfo.time, 40000);
+                effects.put(CharacterTemporaryStat.IgnoreTargetDEF, info.get(StatInfo.ignoreMobpdpR));
+                effects.put(CharacterTemporaryStat.BdR, info.get(StatInfo.indieBDR));
                 applyto.addHP((int) ((applyto.getStat().getCurrentMaxHp() * (level / 100.0D)) * (getX() / 100.0D)));
                 applyfrom.getClient().SendPacket(WvsContext.enableActions());
                 break;
@@ -1465,11 +1465,11 @@ public class MapleStatEffect implements Serializable {
 
     private int calcHPChange(final User applyfrom, final boolean primary) {
         int hpchange = 0;
-        if (info.get(MapleStatInfo.hp) != 0) {
+        if (info.get(StatInfo.hp) != 0) {
             if (primary) {
-                hpchange += alchemistModifyVal(applyfrom, info.get(MapleStatInfo.hp), true);
+                hpchange += alchemistModifyVal(applyfrom, info.get(StatInfo.hp), true);
             } else {
-                hpchange += info.get(MapleStatInfo.hp);
+                hpchange += info.get(StatInfo.hp);
             }
             if (applyfrom.hasDisease(MapleDisease.ZOMBIFY)) {
                 hpchange /= 2;
@@ -1480,8 +1480,8 @@ public class MapleStatEffect implements Serializable {
         }
         // actually receivers probably never get any hp when it's not heal but whatever
         if (primary) {
-            if (info.get(MapleStatInfo.hpCon) != 0) {
-                hpchange -= info.get(MapleStatInfo.hpCon);
+            if (info.get(StatInfo.hpCon) != 0) {
+                hpchange -= info.get(StatInfo.hpCon);
             }
         }
         switch (this.sourceid) {
@@ -1502,11 +1502,11 @@ public class MapleStatEffect implements Serializable {
 
     private int calcMPChange(final User applyfrom, final boolean primary) {
         int mpchange = 0;
-        if (info.get(MapleStatInfo.mp) != 0) {
+        if (info.get(StatInfo.mp) != 0) {
             if (primary) {
-                mpchange += alchemistModifyVal(applyfrom, info.get(MapleStatInfo.mp), false); // recovery up doesn't apply for mp
+                mpchange += alchemistModifyVal(applyfrom, info.get(StatInfo.mp), false); // recovery up doesn't apply for mp
             } else {
-                mpchange += info.get(MapleStatInfo.mp);
+                mpchange += info.get(StatInfo.mp);
             }
         }
         if (mpR != 0) {
@@ -1516,12 +1516,12 @@ public class MapleStatEffect implements Serializable {
             mpchange = 0;
         }
         if (primary) {
-            if (info.get(MapleStatInfo.mpCon) != 0 && !GameConstants.isDemonSlayer(applyfrom.getJob())) {
+            if (info.get(StatInfo.mpCon) != 0 && !GameConstants.isDemonSlayer(applyfrom.getJob())) {
                 boolean free = false;
                 if (applyfrom.getJob() == 411 || applyfrom.getJob() == 412) {
                     final Skill expert = SkillFactory.getSkill(4110012);
                     if (applyfrom.getTotalSkillLevel(expert) > 0) {
-                        final MapleStatEffect eff = expert.getEffect(applyfrom.getTotalSkillLevel(expert));
+                        final StatEffect eff = expert.getEffect(applyfrom.getTotalSkillLevel(expert));
                         if (eff.makeChanceResult()) {
                             free = true;
                         }
@@ -1530,16 +1530,16 @@ public class MapleStatEffect implements Serializable {
                 if (applyfrom.getBuffedValue(CharacterTemporaryStat.Infinity) != null) {
                     mpchange = 0;
                 } else if (!free) { // MP hack fix? kinda.
-                    double mpcalc = (info.get(MapleStatInfo.mpCon) - (info.get(MapleStatInfo.mpCon) * applyfrom.getStat().mpconReduce / 100)) * (applyfrom.getStat().mpconPercent / 100.0);
+                    double mpcalc = (info.get(StatInfo.mpCon) - (info.get(StatInfo.mpCon) * applyfrom.getStat().mpconReduce / 100)) * (applyfrom.getStat().mpconPercent / 100.0);
                     double finalMPCalc = mpcalc * 0.65; //for now just as a balance, so some skills cost a bit more, but the 2x ones are almost correct.
                     mpchange -= finalMPCalc;
                     //mpchange -= (info.get(MapleStatInfo.mpCon) - (info.get(MapleStatInfo.mpCon) * applyfrom.getStat().mpconReduce / 100)) * (applyfrom.getStat().mpconPercent / 100.0);
                 }
-            } else if (info.get(MapleStatInfo.forceCon) != 0) {
+            } else if (info.get(StatInfo.forceCon) != 0) {
                 if (applyfrom.hasBuff(CharacterTemporaryStat.InfinityForce)) {
                     mpchange = 0;
                 } else {
-                    int nFuryCost = info.get(MapleStatInfo.forceCon);
+                    int nFuryCost = info.get(StatInfo.forceCon);
                     if (applyfrom.hasSkill(DemonSlayer.BLUE_BLOOD)) {
                         mpchange -= (nFuryCost * 0.8);
                     } else {
@@ -1561,11 +1561,11 @@ public class MapleStatEffect implements Serializable {
 
     public final int calcPowerChange(final User applyfrom) {
         int powerchange = 0;
-        if (info.get(MapleStatInfo.powerCon) != 0 && GameConstants.isXenon(applyfrom.getJob())) {
+        if (info.get(StatInfo.powerCon) != 0 && GameConstants.isXenon(applyfrom.getJob())) {
             if (applyfrom.getBuffedValue(CharacterTemporaryStat.AmaranthGenerator) != null) {
                 powerchange = 0;
             } else {
-                powerchange = info.get(MapleStatInfo.powerCon);
+                powerchange = info.get(StatInfo.powerCon);
             }
         }
         return powerchange;
@@ -1574,10 +1574,10 @@ public class MapleStatEffect implements Serializable {
     public final int calcPsychicPowerChange(final User applyfrom) {
         int powerchange = 0;
         if (GameConstants.isKinesis(applyfrom.getJob())) {
-            if (info.get(MapleStatInfo.ppCon) != 0) {
-                powerchange = info.get(MapleStatInfo.ppCon) * -1;
-            } else if (info.get(MapleStatInfo.ppRecovery) != 0) {
-                powerchange = info.get(MapleStatInfo.ppRecovery);
+            if (info.get(StatInfo.ppCon) != 0) {
+                powerchange = info.get(StatInfo.ppCon) * -1;
+            } else if (info.get(StatInfo.ppRecovery) != 0) {
+                powerchange = info.get(StatInfo.ppRecovery);
             }
         }
         return powerchange;
@@ -1815,15 +1815,15 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final int getHp() {
-        return info.get(MapleStatInfo.hp);
+        return info.get(StatInfo.hp);
     }
 
     public final int getMp() {
-        return info.get(MapleStatInfo.mp);
+        return info.get(StatInfo.mp);
     }
 
     public final int getDOTStack() {
-        return info.get(MapleStatInfo.dotSuperpos);
+        return info.get(StatInfo.dotSuperpos);
     }
 
     public final double getHpR() {
@@ -1835,67 +1835,67 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final int getMastery() {
-        return info.get(MapleStatInfo.mastery);
+        return info.get(StatInfo.mastery);
     }
 
     public final int getWatk() {
-        return info.get(MapleStatInfo.pad);
+        return info.get(StatInfo.pad);
     }
 
     public final int getMatk() {
-        return info.get(MapleStatInfo.mad);
+        return info.get(StatInfo.mad);
     }
 
     public final int getWdef() {
-        return info.get(MapleStatInfo.pdd);
+        return info.get(StatInfo.pdd);
     }
 
     public final int getMdef() {
-        return info.get(MapleStatInfo.mdd);
+        return info.get(StatInfo.mdd);
     }
 
     public final int getAcc() {
-        return info.get(MapleStatInfo.acc);
+        return info.get(StatInfo.acc);
     }
 
-    public final int getAccR() {
+    /*public final int getAccR() {
         return info.get(MapleStatInfo.ar);
-    }
+    }*/
 
     public final int getAvoid() {
-        return info.get(MapleStatInfo.eva);
+        return info.get(StatInfo.eva);
     }
 
     public final int getSpeed() {
-        return info.get(MapleStatInfo.speed);
+        return info.get(StatInfo.speed);
     }
 
     public final int getJump() {
-        return info.get(MapleStatInfo.jump);
+        return info.get(StatInfo.jump);
     }
 
     public final int gettargetPlus() {
-        return info.get(MapleStatInfo.targetPlus);
+        return info.get(StatInfo.targetPlus);
     }
 
-    public final int getSpeedMax() {
+    /*public final int getSpeedMax() {
         return info.get(MapleStatInfo.speedMax);
-    }
+    }*/
 
     public final int getPassiveSpeed() {
-        return info.get(MapleStatInfo.psdSpeed);
+        return info.get(StatInfo.psdSpeed);
     }
 
     public final int getPassiveJump() {
-        return info.get(MapleStatInfo.psdJump);
+        return info.get(StatInfo.psdJump);
     }
 
     public final int getDuration() {
-        return info.get(MapleStatInfo.time);
+        return info.get(StatInfo.time);
     }
 
     public final int getSubTime() {
-        return info.get(MapleStatInfo.subTime);
+        return info.get(StatInfo.subTime);
     }
 
     public final boolean isOverTime() {
@@ -1906,7 +1906,7 @@ public class MapleStatEffect implements Serializable {
         return statups;
     }
 
-    public final boolean sameSource(final MapleStatEffect effect) {
+    public final boolean sameSource(final StatEffect effect) {
         boolean sameSrc = this.sourceid == effect.sourceid;
         switch (this.sourceid) { // All these are passive skills, will have to cast the normal ones.
             case 32120000: // Advanced Dark Aura
@@ -1929,75 +1929,75 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final int getCr() {
-        return info.get(MapleStatInfo.cr);
+        return info.get(StatInfo.cr);
     }
 
     public final int getT() {
-        return info.get(MapleStatInfo.t);
+        return info.get(StatInfo.t);
     }
 
     public final int getU() {
-        return info.get(MapleStatInfo.u);
+        return info.get(StatInfo.u);
     }
 
     public final int getV() {
-        return info.get(MapleStatInfo.v);
+        return info.get(StatInfo.v);
     }
 
     public final int getW() {
-        return info.get(MapleStatInfo.w);
+        return info.get(StatInfo.w);
     }
 
     public final int getPPRecovery() {
-        return info.get(MapleStatInfo.ppRecovery);
+        return info.get(StatInfo.ppRecovery);
     }
 
     public final int getPPCon() {
-        return info.get(MapleStatInfo.ppCon);
+        return info.get(StatInfo.ppCon);
     }
 
     public final int getX() {
-        return info.get(MapleStatInfo.x);
+        return info.get(StatInfo.x);
     }
 
     public final int getY() {
-        return info.get(MapleStatInfo.y);
+        return info.get(StatInfo.y);
     }
 
     public final int getZ() {
-        return info.get(MapleStatInfo.z);
+        return info.get(StatInfo.z);
     }
 
     public final int getS() {
-        return info.get(MapleStatInfo.s);
+        return info.get(StatInfo.s);
     }
 
     public final int getDamage() {
-        return info.get(MapleStatInfo.damage);
+        return info.get(StatInfo.damage);
     }
 
     public final int getPVPDamage() {
-        return info.get(MapleStatInfo.PVPdamage);
+        return info.get(StatInfo.PVPdamage);
     }
 
     public final int getAttackCount() {
-        return info.get(MapleStatInfo.attackCount);
+        return info.get(StatInfo.attackCount);
     }
 
     public final int getBulletCount() {
-        return info.get(MapleStatInfo.bulletCount);
+        return info.get(StatInfo.bulletCount);
     }
 
     public final int getBulletConsume() {
-        return info.get(MapleStatInfo.bulletConsume);
+        return info.get(StatInfo.bulletConsume);
     }
 
     public final int getOnActive() {
-        return info.get(MapleStatInfo.onActive);
+        return info.get(StatInfo.onActive);
     }
 
     public final int getMobCount() {
-        return info.get(MapleStatInfo.mobCount);
+        return info.get(StatInfo.mobCount);
     }
 
     public final int getMoneyCon() {
@@ -2005,18 +2005,18 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final int getCooltimeReduceR() {
-        return info.get(MapleStatInfo.coolTimeR);
+        return info.get(StatInfo.coolTimeR);
     }
 
     public final int getMesoAcquisition() {
-        return info.get(MapleStatInfo.mesoR);
+        return info.get(StatInfo.mesoR);
     }
 
     public final int getCooldown(final User chra) {
         if (chra.getStat().coolTimeR > 0) {
-            return Math.max(0, ((info.get(MapleStatInfo.cooltime) * (100 - (chra.getStat().coolTimeR / 100))) - chra.getStat().reduceCooltime));
+            return Math.max(0, ((info.get(StatInfo.cooltime) * (100 - (chra.getStat().coolTimeR / 100))) - chra.getStat().reduceCooltime));
         }
-        return Math.max(0, (info.get(MapleStatInfo.cooltime) - chra.getStat().reduceCooltime));
+        return Math.max(0, (info.get(StatInfo.cooltime) - chra.getStat().reduceCooltime));
     }
 
     public final Map<MonsterStatus, Integer> getMonsterStati() {
@@ -2089,7 +2089,7 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final boolean isPoison() {
-        return info.get(MapleStatInfo.dot) > 0 && info.get(MapleStatInfo.dotTime) > 0;
+        return info.get(StatInfo.dot) > 0 && info.get(StatInfo.dotTime) > 0;
     }
 
     public boolean isMist() {
@@ -2342,11 +2342,11 @@ public class MapleStatEffect implements Serializable {
      * @return true if the effect should happen based on it's probablity, false otherwise
      */
     public final boolean makeChanceResult() {
-        return info.get(MapleStatInfo.prop) >= 100 || Randomizer.nextInt(100) < info.get(MapleStatInfo.prop);
+        return info.get(StatInfo.prop) >= 100 || Randomizer.nextInt(100) < info.get(StatInfo.prop);
     }
 
     public final int getProb() {
-        return info.get(MapleStatInfo.prop);
+        return info.get(StatInfo.prop);
     }
 
     public final short getIgnoreMob() {
@@ -2354,103 +2354,103 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final int getEnhancedHP() {
-        return info.get(MapleStatInfo.emhp);
+        return info.get(StatInfo.emhp);
     }
 
     public final int getEnhancedMP() {
-        return info.get(MapleStatInfo.emmp);
+        return info.get(StatInfo.emmp);
     }
 
     public final int getEnhancedWatk() {
-        return info.get(MapleStatInfo.epad);
+        return info.get(StatInfo.epad);
     }
 
     public final int getEnhancedWdef() {
-        return info.get(MapleStatInfo.pdd);
+        return info.get(StatInfo.pdd);
     }
 
     public final int getEnhancedMatk() {
-        return info.get(MapleStatInfo.emad);
+        return info.get(StatInfo.emad);
     }
 
     public final int getEnhancedMdef() {
-        return info.get(MapleStatInfo.emdd);
+        return info.get(StatInfo.emdd);
     }
 
     public final int getDOT() {
-        return info.get(MapleStatInfo.dot);
+        return info.get(StatInfo.dot);
     }
 
     public final int getDOTTime() {
-        return info.get(MapleStatInfo.dotTime);
+        return info.get(StatInfo.dotTime);
     }
 
     public final int getCriticalMax() {
-        return info.get(MapleStatInfo.criticaldamageMax);
+        return info.get(StatInfo.criticaldamageMax);
     }
 
     public final int getCriticalMin() {
-        return info.get(MapleStatInfo.criticaldamageMin);
+        return info.get(StatInfo.criticaldamageMin);
     }
 
     public final int getASRRate() {
-        return info.get(MapleStatInfo.asrR);
+        return info.get(StatInfo.asrR);
     }
 
     public final int getTERRate() {
-        return info.get(MapleStatInfo.terR);
+        return info.get(StatInfo.terR);
     }
 
     public final int getDAMRate() {
-        return info.get(MapleStatInfo.damR);
+        return info.get(StatInfo.damR);
     }
 
     public final int getHpToDamage() {
-        return info.get(MapleStatInfo.mhp2damX);
+        return info.get(StatInfo.mhp2damX);
     }
 
     public final int getMpToDamage() {
-        return info.get(MapleStatInfo.mmp2damX);
+        return info.get(StatInfo.mmp2damX);
     }
 
     public final int getLevelToDamage() {
-        return info.get(MapleStatInfo.lv2damX);
+        return info.get(StatInfo.lv2damX);
     }
 
     public final int getLevelToWatk() {
-        return info.get(MapleStatInfo.lv2pdX);
+        return info.get(StatInfo.lv2pdX);
     }
 
     public final int getLevelToMatk() {
-        return info.get(MapleStatInfo.lv2mdX);
+        return info.get(StatInfo.lv2mdX);
     }
 
     public final int getEXPLossRate() {
-        return info.get(MapleStatInfo.expLossReduceR);
+        return info.get(StatInfo.expLossReduceR);
     }
 
     public final int getBuffTimeRate() {
-        return info.get(MapleStatInfo.bufftimeR);
+        return info.get(StatInfo.bufftimeR);
     }
 
     public final int getSuddenDeathR() {
-        return info.get(MapleStatInfo.suddenDeathR);
+        return info.get(StatInfo.suddenDeathR);
     }
 
     public final int getPercentAcc() {
-        return info.get(MapleStatInfo.accR);
+        return info.get(StatInfo.accR);
     }
 
     public final int getPercentAvoid() {
-        return info.get(MapleStatInfo.evaR);
+        return info.get(StatInfo.evaR);
     }
 
     public final int getSummonTimeInc() {
-        return info.get(MapleStatInfo.summonTimeR);
+        return info.get(StatInfo.summonTimeR);
     }
 
     public final int getMPConsumeEff() {
-        return info.get(MapleStatInfo.mpConEff);
+        return info.get(StatInfo.mpConEff);
     }
 
     public final short getMesoRate() {
@@ -2462,19 +2462,19 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final int getAttackX() {
-        return info.get(MapleStatInfo.padX);
+        return info.get(StatInfo.padX);
     }
 
     public final int getMagicX() {
-        return info.get(MapleStatInfo.madX);
+        return info.get(StatInfo.madX);
     }
 
     public final int getPercentHP() {
-        return info.get(MapleStatInfo.mhpR);
+        return info.get(StatInfo.mhpR);
     }
 
     public final int getPercentMP() {
-        return info.get(MapleStatInfo.mmpR);
+        return info.get(StatInfo.mmpR);
     }
 
     public final int getConsume() {
@@ -2482,7 +2482,7 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final int getSelfDestruction() {
-        return info.get(MapleStatInfo.selfDestruction);
+        return info.get(StatInfo.selfDestruction);
     }
 
     public final int getCharColor() {
@@ -2517,27 +2517,27 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final int getRange() {
-        return info.get(MapleStatInfo.range);
+        return info.get(StatInfo.range);
     }
 
     public final int getER() {
-        return info.get(MapleStatInfo.er);
+        return info.get(StatInfo.er);
     }
 
     public final int getPrice() {
-        return info.get(MapleStatInfo.price);
+        return info.get(StatInfo.price);
     }
 
     public final int getExtendPrice() {
-        return info.get(MapleStatInfo.extendPrice);
+        return info.get(StatInfo.extendPrice);
     }
 
     public final int getPeriod() {
-        return info.get(MapleStatInfo.period);
+        return info.get(StatInfo.period);
     }
 
     public final int getReqGuildLevel() {
-        return info.get(MapleStatInfo.reqGuildLevel);
+        return info.get(StatInfo.reqGuildLevel);
     }
 
     public final byte getEXPRate() {
@@ -2571,83 +2571,83 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final int getStr() {
-        return info.get(MapleStatInfo.str);
+        return info.get(StatInfo.str);
     }
 
     public final int getStrX() {
-        return info.get(MapleStatInfo.strX);
+        return info.get(StatInfo.strX);
     }
 
     public final int getStrFX() {
-        return info.get(MapleStatInfo.strFX);
+        return info.get(StatInfo.strFX);
     }
 
     public final int getDex() {
-        return info.get(MapleStatInfo.dex);
+        return info.get(StatInfo.dex);
     }
 
     public final int getDexX() {
-        return info.get(MapleStatInfo.dexX);
+        return info.get(StatInfo.dexX);
     }
 
     public final int getDexFX() {
-        return info.get(MapleStatInfo.dexFX);
+        return info.get(StatInfo.dexFX);
     }
 
     public final int getInt() {
-        return info.get(MapleStatInfo.int_);
+        return info.get(StatInfo.int_);
     }
 
     public final int getIntX() {
-        return info.get(MapleStatInfo.intX);
+        return info.get(StatInfo.intX);
     }
 
     public final int getIntFX() {
-        return info.get(MapleStatInfo.intFX);
+        return info.get(StatInfo.intFX);
     }
 
     public final int getLuk() {
-        return info.get(MapleStatInfo.luk);
+        return info.get(StatInfo.luk);
     }
 
     public final int getLukX() {
-        return info.get(MapleStatInfo.lukX);
+        return info.get(StatInfo.lukX);
     }
 
     public final int getLukFX() {
-        return info.get(MapleStatInfo.lukFX);
+        return info.get(StatInfo.lukFX);
     }
 
     public final int getMaxHpX() {
-        return info.get(MapleStatInfo.mhpX);
+        return info.get(StatInfo.mhpX);
     }
 
     public final int getMaxMpX() {
-        return info.get(MapleStatInfo.mmpX);
+        return info.get(StatInfo.mmpX);
     }
 
     public final int getMaxDemonFury() {
-        return info.get(MapleStatInfo.MDF);
+        return info.get(StatInfo.MDF);
     }
 
     public final int getAccX() {
-        return info.get(MapleStatInfo.accX);
+        return info.get(StatInfo.accX);
     }
 
     public final int getMPConReduce() {
-        return info.get(MapleStatInfo.mpConReduce);
+        return info.get(StatInfo.mpConReduce);
     }
 
     public final int getIndieMHp() {
-        return info.get(MapleStatInfo.indieMhp);
+        return info.get(StatInfo.indieMhp);
     }
 
     public final int getIndieMMp() {
-        return info.get(MapleStatInfo.indieMmp);
+        return info.get(StatInfo.indieMmp);
     }
 
     public final int getIndieAllStat() {
-        return info.get(MapleStatInfo.indieAllStat);
+        return info.get(StatInfo.indieAllStat);
     }
 
     public final byte getType() {
@@ -2655,7 +2655,7 @@ public class MapleStatEffect implements Serializable {
     }
 
     public int getBossDamage() {
-        return info.get(MapleStatInfo.bdR);
+        return info.get(StatInfo.bdR);
     }
 
     public int getInterval() {
@@ -2667,30 +2667,30 @@ public class MapleStatEffect implements Serializable {
     }
 
     public int getPDDX() {
-        return info.get(MapleStatInfo.pddX);
+        return info.get(StatInfo.pddX);
     }
 
     public int getMDDX() {
-        return info.get(MapleStatInfo.mddX);
+        return info.get(StatInfo.mddX);
     }
 
     public int getPDDRate() {
-        return info.get(MapleStatInfo.pddR);
+        return info.get(StatInfo.pddR);
     }
 
     public int getMDDRate() {
-        return info.get(MapleStatInfo.mddR);
+        return info.get(StatInfo.mddR);
     }
 
     public int getMaxHpPerLevel() {
-        return info.get(MapleStatInfo.lv2mhp);
+        return info.get(StatInfo.lv2mhp);
     }
 
     public int getMaxMpPerLevel() {
-        return info.get(MapleStatInfo.lv2mmp);
+        return info.get(StatInfo.lv2mmp);
     }
 
-    public Map<MapleStatInfo, Integer> getAllStatInfo() {
+    public Map<StatInfo, Integer> getAllStatInfo() {
         return Collections.unmodifiableMap(info);
     }
 
@@ -2702,7 +2702,7 @@ public class MapleStatEffect implements Serializable {
         this.moveTo = moveTo;
     }
 
-    public int getValue(MapleStatInfo mapleStatInfo, int slv) {
+    public int getValue(StatInfo mapleStatInfo, int slv) {
         int result = 0;
         String value = mapleStatInfo.toString();
         if (value == null) {
@@ -2730,12 +2730,12 @@ public class MapleStatEffect implements Serializable {
 
     public static class CancelEffectAction implements Runnable {
 
-        private final MapleStatEffect effect;
+        private final StatEffect effect;
         private final WeakReference<User> target;
         private final long startTime;
         private final Map<CharacterTemporaryStat, Integer> statup;
 
-        public CancelEffectAction(final User target, final MapleStatEffect effect, final long startTime, final Map<CharacterTemporaryStat, Integer> statup) {
+        public CancelEffectAction(final User target, final StatEffect effect, final long startTime, final Map<CharacterTemporaryStat, Integer> statup) {
             this.effect = effect;
             this.target = new WeakReference<>(target);
             this.startTime = startTime;

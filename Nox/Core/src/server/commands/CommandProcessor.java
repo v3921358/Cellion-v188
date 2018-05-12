@@ -49,13 +49,19 @@ public class CommandProcessor {
     static {
 
         Class<?>[] CommandFiles = {
+            
             PlayerCommand.class,
-            InternCommand.class,
             DonatorCommand.class,
-            DebugCommands.class,
-            ThreadTesterCommand.class,
+            
+            InternCommand.class,
             GMCommand.class,
-            AdminCommand.class
+            AdminCommand.class,
+            
+            DeveloperCommands.class,
+            ThreadTesterCommand.class,
+            
+            CommandVault.class
+                
         };
 
         for (Class<?> clasz : CommandFiles) {
@@ -107,6 +113,12 @@ public class CommandProcessor {
         }
     }
 
+    /**
+     * Auto Command List
+     * @author Mazen Massoud
+     * 
+     * @param c ClientSocket
+     */
     public static void dropHelp(ClientSocket c) {
         String sAccessRank = "Unknown";
         if (c.getPlayer().isDeveloper()) {
@@ -167,13 +179,13 @@ public class CommandProcessor {
                 }
                 return true;
             }
-            if (line.split(" ")[0].equals("cmd") || String.valueOf(line.charAt(0)).equals(PlayerGMRank.INTERN.getCommandPrefix()) || String.valueOf(line.charAt(0)).equals(PlayerGMRank.GM.getCommandPrefix()) || String.valueOf(line.charAt(0)).equals(PlayerGMRank.DONATOR.getCommandPrefix())) { //Redundant for now, but in case we change symbols later. This will become extensible.
+            if (line.split(" ")[0].equals("cmd") || String.valueOf(line.charAt(0)).equals(PlayerGMRank.INTERN.getCommandPrefix()) || String.valueOf(line.charAt(0)).equals(PlayerGMRank.GM.getCommandPrefix()) || String.valueOf(line.charAt(0)).equals(PlayerGMRank.DONOR.getCommandPrefix())) { //Redundant for now, but in case we change symbols later. This will become extensible.
                 String[] splitted = line.split(" ");
                 splitted[0] = splitted[0].toLowerCase();
 
                 MapleCommand co = commands.get(splitted[0]);
                 if (co == null) {
-                    if (splitted[0].equals(line.charAt(0) + "help")) {
+                    if (splitted[0].equals(line.charAt(0) + "commands")) {
                         dropHelp(c);
                         return true;
                     }

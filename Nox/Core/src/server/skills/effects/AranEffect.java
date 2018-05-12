@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Aran;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,11 +18,11 @@ import server.skills.effects.manager.Effect;
 public class AranEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Aran.BODY_PRESSURE:
-                pEffect.statups.put(CharacterTemporaryStat.BodyPressure, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.BodyPressure, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Aran.COMBAT_STEP:
                 break;
@@ -34,7 +34,7 @@ public class AranEffect extends AbstractEffect {
             case Aran.GUARDIAN_ARMOR:
                 break;
             case Aran.POLEARM_BOOSTER:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case Aran.SMASH_SWING:
                 break;
@@ -57,8 +57,8 @@ public class AranEffect extends AbstractEffect {
             case Aran.COMMAND_MASTERY_I:
                 break;
             case Aran.DRAIN:
-                pEffect.statups.put(CharacterTemporaryStat.AranDrain, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.AranDrain, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Aran.FINAL_ATTACK_1:
                 break;
@@ -84,8 +84,8 @@ public class AranEffect extends AbstractEffect {
             case Aran.SELF_RECOVERY:
                 break;
             case Aran.SNOW_CHARGE_1:
-                pEffect.statups.put(CharacterTemporaryStat.WeaponCharge, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.WeaponCharge, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.z));
                 break;
             case Aran.SWING_STUDIES_I:
                 break;
@@ -140,13 +140,13 @@ public class AranEffect extends AbstractEffect {
             case Aran.JUDGMENT_DRAW_3:
                 break;
             case Aran.MAHA_BLESSING:
-                pEffect.statups.put(CharacterTemporaryStat.MAD, pEffect.info.get(MapleStatInfo.indieMad));
-                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.MAD, pEffect.info.get(StatInfo.indieMad));
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(StatInfo.indiePad));
                 break;
             case Aran.MIGHT:
-                pEffect.statups.put(CharacterTemporaryStat.KnockBack, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(MapleStatInfo.epad));
-                pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(MapleStatInfo.epdd));
+                pEffect.statups.put(CharacterTemporaryStat.KnockBack, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(StatInfo.epad));
+                pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(StatInfo.epdd));
                 break;
             case Aran.MIGHT_1:
                 break;
@@ -155,8 +155,8 @@ public class AranEffect extends AbstractEffect {
             case Aran.ROLLING_SPIN_2:
                 break;
             case Aran.SNOW_CHARGE:
-                pEffect.statups.put(CharacterTemporaryStat.WeaponCharge, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.WeaponCharge, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.z));
                 break;
             case Aran.ADRENALINE_BURST:
                 break;
@@ -231,7 +231,7 @@ public class AranEffect extends AbstractEffect {
             case Aran.HEAVY_SWING:
                 break;
             case Aran.HEROIC_MEMORIES_3:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case Aran.HEROS_WILL_70_7:
                 break;
@@ -270,7 +270,7 @@ public class AranEffect extends AbstractEffect {
             case Aran.MAHAS_DOMAIN_1:
                 break;
             case Aran.MAPLE_WARRIOR_70_7:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
                 break;
             case Aran.MERCILESS_HUNT:
                 break;
@@ -499,7 +499,7 @@ public class AranEffect extends AbstractEffect {
             case Aran.RAGE_OF_PHARAOH_40_4:
                 break;
             case Aran.RECOVERY_3:
-                pEffect.statups.put(CharacterTemporaryStat.Regen, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Regen, pEffect.info.get(StatInfo.x));
                 break;
             case Aran.RED_DRACO_5:
                 break;

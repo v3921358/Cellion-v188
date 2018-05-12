@@ -41,8 +41,8 @@ import handling.world.MapleGuildSkill;
 import net.OutPacket;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.MapleStringInformationProvider;
 import server.StructSetItem;
 import server.StructSetItem.SetItem;
@@ -542,7 +542,7 @@ public class PlayerStats implements Serializable {
                     final long now = System.currentTimeMillis();
                     for (MapleGuildSkill gs : g.getSkills()) {
                         if (gs.timestamp > now && gs.activator.length() > 0) {
-                            final MapleStatEffect e = SkillFactory.getSkill(gs.skillID).getEffect(gs.level);
+                            final StatEffect e = SkillFactory.getSkill(gs.skillID).getEffect(gs.level);
                             crit_rate += e.getCr();
                             watk += e.getAttackX();
                             magic += e.getMagicX();
@@ -555,7 +555,7 @@ public class PlayerStats implements Serializable {
                 }
             }
             for (Pair<Integer, Integer> ix : pPlayer.getCharacterCard().getCardEffects()) {
-                final MapleStatEffect e = SkillFactory.getSkill(ix.getLeft()).getEffect(ix.getRight());
+                final StatEffect e = SkillFactory.getSkill(ix.getLeft()).getEffect(ix.getRight());
                 percent_wdef += e.getPDDRate();
                 watk += (e.getLevelToWatk() * pPlayer.getLevel());
                 percent_hp += e.getPercentHP();
@@ -643,7 +643,7 @@ public class PlayerStats implements Serializable {
             localmaxmp = Math.min(GameConstants.maxMP, localmaxmp_);
 
             if (pPlayer.getEventInstance() != null && pPlayer.getEventInstance().getName().startsWith("PVP")) { //hack
-                MapleStatEffect eff;
+                StatEffect eff;
                 localmaxhp = Math.min(40000, localmaxhp * 3); //approximate.
                 localmaxmp = Math.min(20000, localmaxmp * 2);
                 //not sure on 20000 cap
@@ -918,7 +918,7 @@ public class PlayerStats implements Serializable {
     private void handlePassiveSkills(User pPlayer) {
         Skill pSkill;
         int nSLV;
-        MapleStatEffect pEffect;
+        StatEffect pEffect;
 
         psdSkills.clear();
         for (Skill sk : pPlayer.getSkills().keySet()) {
@@ -937,7 +937,7 @@ public class PlayerStats implements Serializable {
         pSkill = SkillFactory.getSkill(Magician.MP_BOOST);
         nSLV = pPlayer.getTotalSkillLevel(pSkill);
         if (nSLV > 0) {
-            final MapleStatEffect MPBoostEffect = pSkill.getEffect(nSLV);
+            final StatEffect MPBoostEffect = pSkill.getEffect(nSLV);
 
             // Max MP increased by 20%
             percent_mp += MPBoostEffect.getPercentMP();
@@ -1385,7 +1385,7 @@ public class PlayerStats implements Serializable {
                     pEffect = pSkill.getEffect(nSLV);
                     accuracy += pEffect.getAccX();
                     jump += pEffect.getPassiveJump();
-                    speed += pEffect.getSpeedMax(); // TODO: split speed max and speed. (speed have a limit, while speedMax will add to the max)
+                    speed += pEffect.getSpeed(); // TODO: split speed max and speed. (speed have a limit, while speedMax will add to the max)
                 } // TODO: research more on percentage hp/mp and stats, which doesn't take effect to note.
                 pSkill = SkillFactory.getSkill(5080004); // Shadow Heart
                 nSLV = pPlayer.getTotalSkillLevel(pSkill);
@@ -1455,7 +1455,7 @@ public class PlayerStats implements Serializable {
                 nSLV = pPlayer.getTotalSkillLevel(pSkill);
                 if (nSLV > 0) {
                     pEffect = pSkill.getEffect(nSLV);
-                    speed += pEffect.getSpeedMax();
+                    speed += pEffect.getSpeed();
                 }
                 // 4000010: Magic Theft, invisible.
                 if (pPlayer.getJob() >= 410 && pPlayer.getJob() <= 412) {
@@ -1525,7 +1525,7 @@ public class PlayerStats implements Serializable {
                 nSLV = pPlayer.getTotalSkillLevel(pSkill);
                 if (nSLV > 0) {
                     pEffect = pSkill.getEffect(nSLV);
-                    speed += pEffect.getSpeedMax();
+                    speed += pEffect.getSpeed();
                 }
                 pSkill = SkillFactory.getSkill(4310004);
                 nSLV = pPlayer.getTotalSkillLevel(pSkill);
@@ -2616,9 +2616,9 @@ public class PlayerStats implements Serializable {
             if (currentSkillLevel <= 0) {
                 continue;
             }
-            MapleStatEffect effect = skill.getEffect(currentSkillLevel);
+            StatEffect effect = skill.getEffect(currentSkillLevel);
 
-            for (Map.Entry<MapleStatInfo, Integer> info : effect.getAllStatInfo().entrySet()) {
+            for (Map.Entry<StatInfo, Integer> info : effect.getAllStatInfo().entrySet()) {
                 if (info.getValue() <= 0) {
                     continue;
                 }
@@ -2686,7 +2686,7 @@ public class PlayerStats implements Serializable {
         int prefix = pPlayer.getJob() * 10000;
         Skill bx;
         int bof;
-        MapleStatEffect eff;
+        StatEffect eff;
         for (int i = 30; i < 50; i++) {
             int skillid = prefix + i;
             bx = SkillFactory.getSkill(skillid);
@@ -2711,9 +2711,9 @@ public class PlayerStats implements Serializable {
                         case 34:
                             crit_rate += eff.getCr();
                             break;
-                        case 35:
+                        /*case 35:
                             accuracy += eff.getAccR();
-                            break;
+                            break;*/
                         case 36:
                             percent_hp += eff.getPercentHP();
                             break;
@@ -2758,7 +2758,7 @@ public class PlayerStats implements Serializable {
     private void handleTemporaryStats(User pPlayer) {
         for (Map.Entry<CharacterTemporaryStat, CharacterTemporaryStatValueHolder> buffedValue
                 : pPlayer.getBuffedValuesPlayerStats()) {
-            final MapleStatEffect eff = buffedValue.getValue().effect;
+            final StatEffect eff = buffedValue.getValue().effect;
             final Integer buff = buffedValue.getValue().value;
 
             if (eff == null) {
@@ -3158,7 +3158,7 @@ public class PlayerStats implements Serializable {
     }
 
     /**
-     * Calculates the sttack damage rate the player is allowed to attack, according to its star force vs map barrier req long double __cdecl
+     * Calculates the stack damage rate the player is allowed to attack, according to its star force vs map barrier req long double __cdecl
      * GetStarForceDamageRate(int nStartForceClass)
      *
      * @param starForceClass
@@ -3587,7 +3587,7 @@ public class PlayerStats implements Serializable {
             passive_mastery = 0;
             return;
         }// TODO: add job id check above skill, etc
-        final MapleStatEffect eff = SkillFactory.getSkill(skil).getEffect(player.getTotalSkillLevel(skil));
+        final StatEffect eff = SkillFactory.getSkill(skil).getEffect(player.getTotalSkillLevel(skil));
         if (acc) {
             accuracy += eff.getX();
             if (skil == 35100000) {
@@ -3603,7 +3603,7 @@ public class PlayerStats implements Serializable {
             final Skill bx = SkillFactory.getSkill(4120012); // Claw Expert
             final int bof = player.getTotalSkillLevel(bx);
             if (bof > 0) {
-                final MapleStatEffect eff2 = bx.getEffect(bof);
+                final StatEffect eff2 = bx.getEffect(bof);
                 passive_mastery = (byte) eff2.getMastery(); // Override
                 accuracy += eff2.getPercentAcc();
                 avoidabilityRate += eff2.getPercentAvoid();
@@ -3713,7 +3713,7 @@ public class PlayerStats implements Serializable {
             final Skill effect = SkillFactory.getSkill(1110000); // Improving MP Recovery
             final int lvl = pPlayer.getSkillLevel(effect);
             if (lvl > 0) {
-                MapleStatEffect eff = effect.getEffect(lvl);
+                StatEffect eff = effect.getEffect(lvl);
                 if (eff.getHp() > 0) {
                     shouldHealHP += eff.getHp();
                     hpRecoverTime = 4000;
@@ -3742,7 +3742,7 @@ public class PlayerStats implements Serializable {
             final Skill effect = SkillFactory.getSkill(5700005); // Perseverance
             final int lvl = pPlayer.getSkillLevel(effect);
             if (lvl > 0) {
-                final MapleStatEffect eff = effect.getEffect(lvl);
+                final StatEffect eff = effect.getEffect(lvl);
                 shouldHealHP += eff.getX();
                 shouldHealMP += eff.getX();
                 hpRecoverTime = eff.getY();

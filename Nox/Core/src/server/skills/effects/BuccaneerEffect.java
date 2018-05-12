@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Buccaneer;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class BuccaneerEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Buccaneer.BUCCANEER_BLAST:
                 break;
@@ -29,7 +29,7 @@ public class BuccaneerEffect extends AbstractEffect {
             case Buccaneer.BUCCANEER_BLAST_SPREAD:
                 break;
             case Buccaneer.CROSSBONES:
-                pEffect.statups.put(CharacterTemporaryStat.IndiePADR, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePADR, pEffect.info.get(StatInfo.indiePad));
                 break;
             case Buccaneer.DEMOLITION:
                 break;
@@ -51,7 +51,7 @@ public class BuccaneerEffect extends AbstractEffect {
             case Buccaneer.ENERGY_ORB:
                 break;
             case Buccaneer.EPIC_ADVENTURE_7:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case Buccaneer.HEROS_WILL_20_2:
                 break;
@@ -82,7 +82,7 @@ public class BuccaneerEffect extends AbstractEffect {
             case Buccaneer.HYPER_STRENGTH_60_6:
                 break;
             case Buccaneer.MAPLE_WARRIOR_30_3:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
                 break;
             case Buccaneer.NAUTILUS_STRIKE_1:
                 break;
@@ -99,8 +99,8 @@ public class BuccaneerEffect extends AbstractEffect {
             case Buccaneer.OCTOPUNCH_REINFORCE:
                 break;
             case Buccaneer.PIRATES_REVENGE:
-                pEffect.info.put(MapleStatInfo.cooltime, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.DamR, (int) pEffect.info.get(MapleStatInfo.damR));
+                pEffect.info.put(StatInfo.cooltime, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, (int) pEffect.info.get(StatInfo.damR));
                 break;
             case Buccaneer.POWER_UNITY:
                 break;
@@ -109,7 +109,7 @@ public class BuccaneerEffect extends AbstractEffect {
             case Buccaneer.SNATCH:
                 break;
             case Buccaneer.SPEED_INFUSION_1:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case Buccaneer.STIMULATING_CONVERSATION:
                 break;

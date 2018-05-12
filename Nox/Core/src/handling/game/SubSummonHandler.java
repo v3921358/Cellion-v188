@@ -7,7 +7,7 @@ import constants.GameConstants;
 import java.awt.Point;
 import net.InPacket;
 import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.Randomizer;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -78,7 +78,7 @@ public class SubSummonHandler implements ProcessPacket<ClientSocket> {
                 if (bHealingLvl <= 0 || bHealing == null) {
                     return;
                 }
-                final MapleStatEffect healEffect = bHealing.getEffect(bHealingLvl);
+                final StatEffect healEffect = bHealing.getEffect(bHealingLvl);
                 if (bHealing.getId() == 1320009) {
                     healEffect.applyTo(chr);
                 } else if (bHealing.getId() == 1320008) {

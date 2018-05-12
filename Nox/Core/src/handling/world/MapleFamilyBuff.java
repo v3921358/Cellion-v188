@@ -6,8 +6,8 @@ import java.util.concurrent.ScheduledFuture;
 import client.CharacterTemporaryStat;
 import java.util.Map;
 import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
-import server.MapleStatEffect.CancelEffectAction;
+import server.StatEffect;
+import server.StatEffect.CancelEffectAction;
 import server.Timer.BuffTimer;
 import server.maps.objects.User;
 import tools.packet.BuffPacket;
@@ -77,7 +77,7 @@ public enum MapleFamilyBuff {
             chr.setBuffedValue(stat.getKey(), stat.getValue());
         }
         chr.getClient().SendPacket(BuffPacket.giveBuff(chr, -getEffectId(), duration * 60000, effects, null));
-        final MapleStatEffect eff = MapleItemInformationProvider.getInstance().getItemEffect(getEffectId());
+        final StatEffect eff = MapleItemInformationProvider.getInstance().getItemEffect(getEffectId());
         chr.cancelEffect(eff, true, -1, effects);
         final long starttime = System.currentTimeMillis();
         final CancelEffectAction cancelAction = new CancelEffectAction(chr, eff, starttime, effects);

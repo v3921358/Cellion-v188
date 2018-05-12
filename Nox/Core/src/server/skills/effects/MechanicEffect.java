@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Mechanic;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class MechanicEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Mechanic.FLAME_LAUNCHER:
                 break;
@@ -31,14 +31,14 @@ public class MechanicEffect extends AbstractEffect {
             case Mechanic.GODDESS_GUARD_4000_400_40_4:
                 break;
             case Mechanic.HUMANOID_MECH:
-                pEffect.statups.put(CharacterTemporaryStat.IndieSpeed, pEffect.info.get(MapleStatInfo.indieSpeed));
-                pEffect.statups.put(CharacterTemporaryStat.EMHP, pEffect.info.get(MapleStatInfo.emhp));
-                pEffect.statups.put(CharacterTemporaryStat.EMMP, pEffect.info.get(MapleStatInfo.emmp));
-                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(MapleStatInfo.epad));
-                pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(MapleStatInfo.epdd));
-                pEffect.statups.put(CharacterTemporaryStat.Mechanic, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieSpeed, pEffect.info.get(StatInfo.indieSpeed));
+                pEffect.statups.put(CharacterTemporaryStat.EMHP, pEffect.info.get(StatInfo.emhp));
+                pEffect.statups.put(CharacterTemporaryStat.EMMP, pEffect.info.get(StatInfo.emmp));
+                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(StatInfo.epad));
+                pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(StatInfo.epdd));
+                pEffect.statups.put(CharacterTemporaryStat.Mechanic, pEffect.info.get(StatInfo.x));
                 pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932016);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Mechanic.ME07_DRILLHANDS:
                 break;
@@ -59,13 +59,13 @@ public class MechanicEffect extends AbstractEffect {
             case Mechanic.MECHANIC_MASTERY:
                 break;
             case Mechanic.MECHANIC_RAGE:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case Mechanic.OPEN_PORTAL_GX9:
                 break;
             case Mechanic.PERFECT_ARMOR:
-                pEffect.statups.put(CharacterTemporaryStat.PowerGuard, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.PowerGuard, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Mechanic.PHYSICAL_TRAINING_30_3:
                 break;
@@ -92,8 +92,8 @@ public class MechanicEffect extends AbstractEffect {
             case Mechanic.METAL_FIST_MASTERY:
                 break;
             case Mechanic.OVERCLOCK:
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
-                pEffect.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pEffect.info.get(StatInfo.x));
                 break;
             case Mechanic.OVERCLOCK_1:
                 break;
@@ -116,14 +116,14 @@ public class MechanicEffect extends AbstractEffect {
             case Mechanic.SUPPORT_UNIT_HEX:
                 break;
             case Mechanic.TANK_MECH:
-                pEffect.statups.put(CharacterTemporaryStat.IndieSpeed, pEffect.info.get(MapleStatInfo.indieSpeed));
-                pEffect.statups.put(CharacterTemporaryStat.EMHP, pEffect.info.get(MapleStatInfo.emhp));
-                pEffect.statups.put(CharacterTemporaryStat.EMMP, pEffect.info.get(MapleStatInfo.emmp));
-                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(MapleStatInfo.epad));
-                pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(MapleStatInfo.epdd));
-                pEffect.statups.put(CharacterTemporaryStat.Mechanic, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieSpeed, pEffect.info.get(StatInfo.indieSpeed));
+                pEffect.statups.put(CharacterTemporaryStat.EMHP, pEffect.info.get(StatInfo.emhp));
+                pEffect.statups.put(CharacterTemporaryStat.EMMP, pEffect.info.get(StatInfo.emmp));
+                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(StatInfo.epad));
+                pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(StatInfo.epdd));
+                pEffect.statups.put(CharacterTemporaryStat.Mechanic, pEffect.info.get(StatInfo.x));
                 pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932016);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Mechanic.AMPLIFIER_ROBOT_AF11:
                 break;
@@ -146,23 +146,23 @@ public class MechanicEffect extends AbstractEffect {
             case Mechanic.ENHANCED_SUPPORT_UNIT:
                 break;
             case Mechanic.EXTREME_MECH:
-                pEffect.statups.put(CharacterTemporaryStat.IndieSpeed, pEffect.info.get(MapleStatInfo.indieSpeed));
-                pEffect.statups.put(CharacterTemporaryStat.EMHP, pEffect.info.get(MapleStatInfo.emhp));
-                pEffect.statups.put(CharacterTemporaryStat.EMMP, pEffect.info.get(MapleStatInfo.emmp));
-                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(MapleStatInfo.epad));
-                pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(MapleStatInfo.epdd));
-                pEffect.statups.put(CharacterTemporaryStat.Mechanic, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieSpeed, pEffect.info.get(StatInfo.indieSpeed));
+                pEffect.statups.put(CharacterTemporaryStat.EMHP, pEffect.info.get(StatInfo.emhp));
+                pEffect.statups.put(CharacterTemporaryStat.EMMP, pEffect.info.get(StatInfo.emmp));
+                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(StatInfo.epad));
+                pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(StatInfo.epdd));
+                pEffect.statups.put(CharacterTemporaryStat.Mechanic, pEffect.info.get(StatInfo.x));
                 pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932016);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Mechanic.FOR_LIBERTY_3:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case Mechanic.FULL_SPREAD:
                 break;
             case Mechanic.GIANT_ROBOT_SG88_:
                 pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Mechanic.HEAVY_SALVO_PLUS:
                 break;
@@ -201,7 +201,7 @@ public class MechanicEffect extends AbstractEffect {
             case Mechanic.LASER_BLAST:
                 break;
             case Mechanic.MAPLE_WARRIOR_600_60_6:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
                 break;
             case Mechanic.MECH_ALLOY_RESEARCH:
                 break;

@@ -18,7 +18,7 @@ import client.jobs.Kinesis;
 import client.jobs.Kinesis.KinesisHandler;
 import client.jobs.Resistance.BlasterHandler;
 import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.Randomizer;
 import server.life.Mob;
 import server.life.MobAttackInfo;
@@ -185,7 +185,7 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
                 Skill bx = SkillFactory.getSkill(31110008);
                 int bof = pPlayer.getTotalSkillLevel(bx);
                 if (bof > 0) {
-                    MapleStatEffect eff = bx.getEffect(bof);
+                    StatEffect eff = bx.getEffect(bof);
                     if (Randomizer.nextInt(100) <= eff.getX()) {
                         pPlayer.handleForceGain(oid, 31110008, eff.getZ());
                     }
@@ -210,7 +210,7 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
                     && pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -10) != null
                     && pPlayer.getTotalSkillLevel(1220006) > 0) {
 
-                MapleStatEffect eff = SkillFactory.getSkill(1220006).getEffect(pPlayer.getTotalSkillLevel(1220006));
+                StatEffect eff = SkillFactory.getSkill(1220006).getEffect(pPlayer.getTotalSkillLevel(1220006));
                 attacker.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.STUN, 1, 1220006, null, false), false, eff.getDuration(), true, eff);
                 fake = 1220006;
             }
@@ -231,7 +231,7 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
         if (pPhysical && skillid == 1201007 && pPlayer.getTotalSkillLevel(1201007) > 0) {
             damage -= pDMG;
             if (damage > 0) {
-                MapleStatEffect eff = SkillFactory.getSkill(1201007).getEffect(pPlayer.getTotalSkillLevel(1201007));
+                StatEffect eff = SkillFactory.getSkill(1201007).getEffect(pPlayer.getTotalSkillLevel(1201007));
                 long enemyDMG = Math.min(damage * (eff.getY() / 100), attacker.getMobMaxHp() / 2L);
                 if (enemyDMG > pDMG) {
                     enemyDMG = pDMG;

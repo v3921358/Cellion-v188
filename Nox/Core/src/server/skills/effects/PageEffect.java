@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Page;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class PageEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Page.BLIZZARD_CHARGE_1:
                 break;
@@ -41,7 +41,7 @@ public class PageEffect extends AbstractEffect {
             case Page.THREATEN_1:
                 break;
             case Page.WEAPON_BOOSTER_2:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x) * 2);
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x) * 2);
                 break;
             case Page.WEAPON_MASTERY_2:
                 break;

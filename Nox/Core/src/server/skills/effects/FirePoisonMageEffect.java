@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.FirePoisonMage;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class FirePoisonMageEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case FirePoisonMage.ARCANE_OVERDRIVE_2:
                 break;
@@ -26,10 +26,10 @@ public class FirePoisonMageEffect extends AbstractEffect {
                 break;
             case FirePoisonMage.ELEMENTAL_ADAPTATION_FIRE_POISON:
                 pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, 1);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case FirePoisonMage.ELEMENTAL_DECREASE_2:
-                pEffect.statups.put(CharacterTemporaryStat.ElementalReset, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.ElementalReset, pEffect.info.get(StatInfo.x));
                 break;
             case FirePoisonMage.ELEMENT_AMPLIFICATION_2:
                 break;
@@ -47,9 +47,9 @@ public class FirePoisonMageEffect extends AbstractEffect {
                 break;
             case FirePoisonMage.TELEPORT_MASTERY_3:
                 pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
-                pEffect.statups.put(CharacterTemporaryStat.TeleportMasteryOn, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.mpCon, pEffect.info.get(MapleStatInfo.y));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.TeleportMasteryOn, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.mpCon, pEffect.info.get(StatInfo.y));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case FirePoisonMage.VIRAL_SLIME:
                 break;

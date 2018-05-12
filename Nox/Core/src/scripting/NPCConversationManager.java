@@ -65,7 +65,7 @@ import server.MapleSlideMenu.SlideMenu3;
 import server.MapleSlideMenu.SlideMenu4;
 import server.MapleSlideMenu.SlideMenu5;
 import server.MapleSquad;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.MapleStringInformationProvider;
 import server.Randomizer;
 import server.SpeedRunner;
@@ -1815,14 +1815,14 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return MapleItemInformationProvider.getInstance().getReqLevel(itemId);
     }
 
-    public MapleStatEffect getEffect(int buff) {
+    public StatEffect getEffect(int buff) {
         return MapleItemInformationProvider.getInstance().getItemEffect(buff);
     }
 
     public void buffGuild(final int buff, final int duration, final String msg) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if (ii.getItemEffect(buff) != null && getPlayer().getGuildId() > 0) {
-            final MapleStatEffect mse = ii.getItemEffect(buff);
+            final StatEffect mse = ii.getItemEffect(buff);
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (User chr : cserv.getPlayerStorage().getAllCharacters()) {
                     if (chr.getGuildId() == getPlayer().getGuildId()) {

@@ -13,8 +13,7 @@ import tools.packet.WvsContext;
 import net.ProcessPacket;
 
 /**
- *
- * @author Lloyd Korn
+ * UserChat
  * @author Mazen Massoud
  */
 @PacketThrottleLimits(
@@ -32,22 +31,21 @@ public class GeneralChatHandler implements ProcessPacket<ClientSocket> {
 
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
-        final User chr = c.getPlayer();
-
-        if (chr == null) {
+        final User pPlayer = c.getPlayer();
+        if (pPlayer == null) {
             return;
         }
-        chr.updateTick(iPacket.DecodeInt());
+        
+        pPlayer.updateTick(iPacket.DecodeInt());
+        final String sText = iPacket.DecodeString();
+        final boolean bAppendToChatLogList = iPacket.DecodeByte() == 0;
 
-        final String text = iPacket.DecodeString();
-        final boolean appendToChatLogList = iPacket.DecodeByte() == 0;
-
-        if (text.length() > 0 && chr.getMap() != null && !CommandProcessor.processCommand(c, text, ServerConstants.CommandType.NORMAL)) {
-            if (!chr.isGM() && text.length() >= 80) {
+        if (sText.length() > 0 && pPlayer.getMap() != null && !CommandProcessor.processCommand(c, sText, ServerConstants.CommandType.NORMAL)) {
+            if (!pPlayer.isGM() && sText.length() >= 80) {
                 LogHelper.PACKET_EDIT_HACK.get().info(
                         String.format("[GeneralChat] %s [ChrID: %d; AccId %d] has tried to send a general chat of length > 80. [%d]. AppendToChatLog: %s\r\nText:%s",
-                                chr.getName(), chr.getId(), c.getAccID(),
-                                text.length(), String.valueOf(appendToChatLogList), text));
+                                pPlayer.getName(), pPlayer.getId(), c.getAccID(),
+                                sText.length(), String.valueOf(bAppendToChatLogList), sText));
                 c.Close();
                 return;
             }
@@ -72,34 +70,34 @@ public class GeneralChatHandler implements ProcessPacket<ClientSocket> {
             * 12 - Blue Text on Light Blue Backdrop
             * 13 - Dark Pink Text on 'Super Megaphone' Backdrop
              */
-            if (chr.isDeveloper()) {
+            if (pPlayer.isDeveloper()) {
                 chatColour = 12;
                 chatPrefix = "DEV ";
-            } else if (chr.isGM()) {
+            } else if (pPlayer.isGM()) {
                 chatColour = 10;
                 chatPrefix = "GM ";
             } else {
-                if (chr.isIntern()) {
+                if (pPlayer.isIntern()) {
                     chatColour = 9;
-                } else if (chr.isDonator()) {
+                } else if (pPlayer.isDonator()) {
                     chatColour = 4;
                 }
             }
 
-            if (chr.getCanTalk() || chr.isGM()) {
-                if (chr.isHidden()) { // Broadcast only to Game Masters if character is hidden.
-                    chr.getMap().broadcastGMMessage(chr, CField.getGameMessage("(Hidden) " + chr.getName() + " : " + text, (short) 6), true);
-                    chr.getMap().broadcastGMMessage(chr, CField.getChatText(chr.getId(), text, false, !appendToChatLogList), true);
+            if (pPlayer.getCanTalk() || pPlayer.isGM()) {
+                if (pPlayer.isHidden()) { // Broadcast only to Game Masters if character is hidden.
+                    pPlayer.getMap().broadcastGMMessage(pPlayer, CField.getGameMessage("(Hidden) " + pPlayer.getName() + " : " + sText, (short) 6), true);
+                    pPlayer.getMap().broadcastGMMessage(pPlayer, CField.getChatText(pPlayer.getId(), sText, false, !bAppendToChatLogList), true);
                 } else {
-                    if ((!chr.isIntern()) || (chr.isIntern() && chr.usingStaffChat())) { // If player is staff, only use special text if they have it enabled.
+                    if ((!pPlayer.isIntern()) || (pPlayer.isIntern() && pPlayer.usingStaffChat())) { // If player is staff, only use special text if they have it enabled.
                         if (chatColour > 0 || !chatPrefix.equals("")) {
-                            chr.getMap().broadcastMessage(CField.getGameMessage(chatPrefix + chr.getName() + " : " + text, chatColour));
-                            chr.getMap().broadcastMessage(CField.getChatText(chr.getId(), text, false, !appendToChatLogList));
+                            pPlayer.getMap().broadcastMessage(CField.getGameMessage(chatPrefix + pPlayer.getName() + " : " + sText, chatColour));
+                            pPlayer.getMap().broadcastMessage(CField.getChatText(pPlayer.getId(), sText, false, !bAppendToChatLogList));
                         } else {
-                            chr.getMap().broadcastMessage(CField.getChatText(chr.getId(), text, chr.isGM(), appendToChatLogList));
+                            pPlayer.getMap().broadcastMessage(CField.getChatText(pPlayer.getId(), sText, pPlayer.isGM(), bAppendToChatLogList));
                         }
                     } else {
-                        chr.getMap().broadcastMessage(CField.getChatText(chr.getId(), text, (chr.usingStaffChat() && chr.isGM()), appendToChatLogList));
+                        pPlayer.getMap().broadcastMessage(CField.getChatText(pPlayer.getId(), sText, (pPlayer.usingStaffChat() && pPlayer.isGM()), bAppendToChatLogList));
                     }
                 }
             } else {

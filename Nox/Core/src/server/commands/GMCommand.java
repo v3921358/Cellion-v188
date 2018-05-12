@@ -1,65 +1,32 @@
 package server.commands;
 
 import client.*;
-import client.anticheat.CheatingOffense;
 import client.anticheat.ReportType;
 import client.inventory.*;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
-import constants.skills.Fighter;
-import database.Database;
 import handling.world.CheaterData;
 import handling.world.World;
-import net.OutPacket;
-import provider.data.HexTool;
-import scripting.EventInstanceManager;
-import scripting.EventManager;
 import scripting.provider.*;
 import server.*;
-import server.Timer;
 import server.Timer.*;
-import server.events.MapleEvent;
-import server.events.MapleEventType;
 import server.life.LifeFactory;
 import server.life.Mob;
-import server.life.MonsterInformationProvider;
-import server.life.PlayerNPC;
 import server.maps.*;
 import server.maps.objects.User;
-import server.life.NPCLife;
 import server.maps.objects.Pet;
-import server.maps.objects.Reactor;
-import server.quest.Quest;
-import server.shops.MapleShopFactory;
 import service.ChannelServer;
-import service.RecvPacketOpcode;
-import service.SendPacketOpcode;
 import tools.Pair;
 import tools.StringUtil;
-import tools.Tuple;
 import tools.packet.CField;
-import tools.packet.CField.NPCPacket;
-import tools.packet.WvsContext;
-import tools.packet.MobPacket;
-
-import java.awt.*;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.concurrent.ScheduledFuture;
-import server.messages.QuestStatusMessage;
-import tools.LogHelper;
-
 import static tools.StringUtil.getOptionalIntArg;
 import tools.Utility;
-import tools.packet.BuffPacket;
+import tools.packet.WvsContext;
 
 /**
  * GameMaster Commands
@@ -88,7 +55,7 @@ public class GMCommand {
         @Override
         public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().setGM((byte) 0);
-            c.getPlayer().dropMessage(6, "You have removed the GameMaster privileges from your current character.");
+            c.getPlayer().dropMessage(6, "You have removed the Game Master privileges from your current character.");
             return 1;
         }
     }
@@ -106,9 +73,6 @@ public class GMCommand {
                 pPlayer.toggleGodMode(true);
                 pPlayer.dropMessage(5, "God mode is now enabled.");
             }
-
-            pPlayer.getQuestNAdd(Quest.getInstance(GameConstants.JAGUAR)).setCustomData(String.valueOf((9304004 - 9303999) * 10));
-            c.SendPacket(WvsContext.updateJaguar(pPlayer));
             return 0;
         }
     }
@@ -163,6 +127,117 @@ public class GMCommand {
         }
     }
 
+    public static class GiveEP extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            if (splitted.length < 3) {
+                c.getPlayer().dropMessage(6, "Need playername and amount.");
+                return 0;
+            }
+            User chrs = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            if (chrs == null) {
+                c.getPlayer().dropMessage(6, "Make sure they are in the correct channel");
+            } else {
+                chrs.setPoints(chrs.getPoints() + Integer.parseInt(splitted[2]));
+                c.getPlayer().dropMessage(6, splitted[1] + " has " + chrs.getPoints() + " points, after giving " + splitted[2] + ".");
+            }
+            return 1;
+        }
+    }
+
+    public static class GiveSP extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            if (splitted.length < 2) {
+                c.getPlayer().setRemainingSp(CommandProcessorUtil.getOptionalIntArg(splitted, 1, 1));
+                c.getPlayer().updateSingleStat(MapleStat.AVAILABLESP, 0);
+                c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") has been given " + Integer.parseInt(splitted[2]) + "Skill Points.");
+            } else {
+                User pPlayer = Utility.requestCharacter(splitted[1]);
+                if (pPlayer != null) {
+                    pPlayer.setRemainingSp(CommandProcessorUtil.getOptionalIntArg(splitted, 1, 1));
+                    pPlayer.updateSingleStat(MapleStat.AVAILABLESP, 0);
+                    c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") has been given " + Integer.parseInt(splitted[2]) + "Skill Points.");
+                } else {
+                    c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") could not be found.");
+                }
+            }
+            return 1;
+        }
+    }
+
+    public static class HyperSkills extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            User oPlayer;
+            if (splitted.length > 1) {
+                oPlayer = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            } else {
+                oPlayer = c.getPlayer();
+            }
+
+            oPlayer.giveHyperSkills();
+            c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") has had all their hyper skills maximized.");
+            return 1;
+        }
+    }
+
+    public static class MaxSkills extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            User oPlayer;
+            if (splitted.length > 1 && c.getPlayer().isAdmin()) {
+                oPlayer = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            } else {
+                oPlayer = c.getPlayer();
+            }
+
+            HashMap<Skill, SkillEntry> skillBook = new HashMap<>();
+            for (Skill xSkill : SkillFactory.getAllSkills()) {
+                if (GameConstants.isApplicableSkill(xSkill.getId()) && xSkill.canBeLearnedBy(oPlayer.getJob()) && !xSkill.isInvisible()) { // No additional skills.
+                    skillBook.put(xSkill, new SkillEntry((byte) xSkill.getMaxLevel(), (byte) xSkill.getMaxLevel(), SkillFactory.getDefaultSExpiry(xSkill)));
+                }
+            }
+
+            c.getPlayer().changeSkillsLevel(skillBook);
+            c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") has had all their applicable skills maximized.");
+            return 1;
+        }
+    }
+    
+    public static class KillMap extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            for (User map : c.getPlayer().getMap().getCharacters()) {
+                if (map != null && !map.isIntern()) {
+                    map.getStat().setHp((short) 0, map);
+                    map.getStat().setMp((short) 0, map);
+                    map.updateSingleStat(MapleStat.HP, 0);
+                    map.updateSingleStat(MapleStat.MP, 0);
+                }
+            }
+            return 1;
+        }
+    }
+
+    public static class LevelTo extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            while (c.getPlayer().getLevel() < Integer.parseInt(splitted[1])) {
+                if (c.getPlayer().getLevel() < 255) {
+                    c.getPlayer().levelUp();
+                }
+            }
+            return 1;
+        }
+    }
+    
     public static class Reports extends CommandExecute {
 
         @Override
@@ -427,31 +502,35 @@ public class GMCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
-            if (victim != null) {
-                if (c.getPlayer().inPVP() || (!c.getPlayer().isGM() && (victim.isInBlockedMap() || victim.isGM()))) {
-                    c.getPlayer().dropMessage(5, "Try again later.");
+            User pTarget = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            if (!c.getPlayer().isAdmin() && pTarget.getGMLevel() > c.getPlayer().getGMLevel()) {
+                c.getPlayer().dropMessage(5, "You do not have permission to warp this character to your location.");
+                return 0;
+            }
+            if (pTarget != null) {
+                if (c.getPlayer().inPVP() || (!c.getPlayer().isGM() && (pTarget.isInBlockedMap() || pTarget.isGM()))) {
+                    c.getPlayer().dropMessage(5, "Please try again later.");
                     return 0;
                 }
-                victim.changeMap(c.getPlayer().getMap(), c.getPlayer().getMap().findClosestPortal(c.getPlayer().getTruePosition()));
+                pTarget.changeMap(c.getPlayer().getMap(), c.getPlayer().getMap().findClosestPortal(c.getPlayer().getTruePosition()));
             } else {
                 int ch = World.Find.findChannel(splitted[1]);
                 if (ch < 0) {
-                    c.getPlayer().dropMessage(5, "Not found.");
+                    c.getPlayer().dropMessage(5, "Specified character could not be found.");
                     return 0;
                 }
-                victim = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(splitted[1]);
-                if (victim == null || victim.inPVP() || (!c.getPlayer().isGM() && (victim.isInBlockedMap() || victim.isGM()))) {
-                    c.getPlayer().dropMessage(5, "Try again later.");
+                pTarget = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(splitted[1]);
+                if (pTarget == null || pTarget.inPVP() || (!c.getPlayer().isGM() && (pTarget.isInBlockedMap() || pTarget.isGM()))) {
+                    c.getPlayer().dropMessage(5, "Please try again later.");
                     return 0;
                 }
-                c.getPlayer().dropMessage(5, "Victim is cross changing channel.");
-                victim.dropMessage(5, "Cross changing channel.");
-                if (victim.getMapId() != c.getPlayer().getMapId()) {
-                    final MapleMap mapp = victim.getClient().getChannelServer().getMapFactory().getMap(c.getPlayer().getMapId());
-                    victim.changeMap(mapp, mapp.findClosestPortal(c.getPlayer().getTruePosition()));
+                c.getPlayer().dropMessage(5, "The specified character is cross changing channel.");
+                pTarget.dropMessage(5, "[" + ServerConstants.SERVER_NAME + "] Changing Channels.");
+                if (pTarget.getMapId() != c.getPlayer().getMapId()) {
+                    final MapleMap mapp = pTarget.getClient().getChannelServer().getMapFactory().getMap(c.getPlayer().getMapId());
+                    pTarget.changeMap(mapp, mapp.findClosestPortal(c.getPlayer().getTruePosition()));
                 }
-                victim.changeChannel(c.getChannel());
+                pTarget.changeChannel(c.getChannel());
             }
             return 1;
         }
@@ -650,117 +729,6 @@ public class GMCommand {
         }
     }
     
-    public static class GiveEP extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            if (splitted.length < 3) {
-                c.getPlayer().dropMessage(6, "Need playername and amount.");
-                return 0;
-            }
-            User chrs = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
-            if (chrs == null) {
-                c.getPlayer().dropMessage(6, "Make sure they are in the correct channel");
-            } else {
-                chrs.setPoints(chrs.getPoints() + Integer.parseInt(splitted[2]));
-                c.getPlayer().dropMessage(6, splitted[1] + " has " + chrs.getPoints() + " points, after giving " + splitted[2] + ".");
-            }
-            return 1;
-        }
-    }
-
-    public static class GiveSP extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            if (splitted.length < 2) {
-                c.getPlayer().setRemainingSp(CommandProcessorUtil.getOptionalIntArg(splitted, 1, 1));
-                c.getPlayer().updateSingleStat(MapleStat.AVAILABLESP, 0);
-                c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") has been given " + Integer.parseInt(splitted[2]) + "Skill Points.");
-            } else {
-                User pPlayer = Utility.requestCharacter(splitted[1]);
-                if (pPlayer != null) {
-                    pPlayer.setRemainingSp(CommandProcessorUtil.getOptionalIntArg(splitted, 1, 1));
-                    pPlayer.updateSingleStat(MapleStat.AVAILABLESP, 0);
-                    c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") has been given " + Integer.parseInt(splitted[2]) + "Skill Points.");
-                } else {
-                    c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") could not be found.");
-                }
-            }
-            return 1;
-        }
-    }
-
-    public static class KillMap extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            for (User map : c.getPlayer().getMap().getCharacters()) {
-                if (map != null && !map.isIntern()) {
-                    map.getStat().setHp((short) 0, map);
-                    map.getStat().setMp((short) 0, map);
-                    map.updateSingleStat(MapleStat.HP, 0);
-                    map.updateSingleStat(MapleStat.MP, 0);
-                }
-            }
-            return 1;
-        }
-    }
-
-    public static class LevelTo extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            while (c.getPlayer().getLevel() < Integer.parseInt(splitted[1])) {
-                if (c.getPlayer().getLevel() < 255) {
-                    c.getPlayer().levelUp();
-                }
-            }
-            return 1;
-        }
-    }
-    
-    public static class HyperSkills extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            User oPlayer;
-            if (splitted.length > 1) {
-                oPlayer = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
-            } else {
-                oPlayer = c.getPlayer();
-            }
-
-            oPlayer.giveHyperSkills();
-            c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") has had all their hyper skills maximized.");
-            return 1;
-        }
-    }
-
-    public static class MaxSkills extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            User oPlayer;
-            if (splitted.length > 1 && c.getPlayer().isAdmin()) {
-                oPlayer = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
-            } else {
-                oPlayer = c.getPlayer();
-            }
-
-            HashMap<Skill, SkillEntry> skillBook = new HashMap<>();
-            for (Skill xSkill : SkillFactory.getAllSkills()) {
-                if (GameConstants.isApplicableSkill(xSkill.getId()) && xSkill.canBeLearnedBy(oPlayer.getJob()) && !xSkill.isInvisible()) { // No additional skills.
-                    skillBook.put(xSkill, new SkillEntry((byte) xSkill.getMaxLevel(), (byte) xSkill.getMaxLevel(), SkillFactory.getDefaultSExpiry(xSkill)));
-                }
-            }
-
-            c.getPlayer().changeSkillsLevel(skillBook);
-            c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") has had all their applicable skills maximized.");
-            return 1;
-        }
-    }
-
     public static class ITEM extends CommandExecute {
 
         @Override

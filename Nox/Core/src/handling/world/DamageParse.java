@@ -20,7 +20,7 @@ import client.jobs.Hero.AranHandler;
 import client.jobs.Hero.PhantomHandler;
 import client.jobs.Kinesis.KinesisHandler;
 import net.InPacket;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.Randomizer;
 import server.life.*;
 import server.maps.MapleMap;
@@ -48,7 +48,7 @@ import tools.packet.MobPacket;
 
 public class DamageParse {
 
-    public static void applyAttack(AttackInfo attack, Skill theSkill, User pPlayer, int attackCount, double maxDamagePerMonster, MapleStatEffect effect, AttackType attackType) {
+    public static void applyAttack(AttackInfo attack, Skill theSkill, User pPlayer, int attackCount, double maxDamagePerMonster, StatEffect effect, AttackType attackType) {
         if (!pPlayer.isAlive()) {
             pPlayer.getCheatTracker().registerOffense(CheatingOffense.ATTACKING_WHILE_DEAD);
             return;
@@ -114,7 +114,7 @@ public class DamageParse {
         int CriticalDamage = stats.passive_sharpeye_percent();
         int ShdowPartnerAttackPercentage = 0;
         if (attackType == AttackType.RANGED_WITH_ShadowPartner || attackType == AttackType.NON_RANGED_WITH_MIRROR) {
-            MapleStatEffect shadowPartnerEffect = pPlayer.getStatForBuff(CharacterTemporaryStat.ShadowPartner);
+            StatEffect shadowPartnerEffect = pPlayer.getStatForBuff(CharacterTemporaryStat.ShadowPartner);
             if (shadowPartnerEffect != null) {
                 ShdowPartnerAttackPercentage += shadowPartnerEffect.getX();
             }
@@ -236,7 +236,7 @@ public class DamageParse {
 
                 if (pPlayer.getSkillLevel(36110005) > 0) {
                     Skill skill = SkillFactory.getSkill(36110005);
-                    MapleStatEffect eff = skill.getEffect(pPlayer.getSkillLevel(skill));
+                    StatEffect eff = skill.getEffect(pPlayer.getSkillLevel(skill));
                     if (pPlayer.getLastComboTime() + 5000 < System.currentTimeMillis()) {
                         monster.setTriangulation(0);
                         //player.clearDamageMeters();
@@ -313,7 +313,7 @@ public class DamageParse {
                         for (int i : skills) {
                             Skill skill = SkillFactory.getSkill(i);
                             if (pPlayer.getTotalSkillLevel(skill) > 0) {
-                                MapleStatEffect venomEffect = skill.getEffect(pPlayer.getTotalSkillLevel(skill));
+                                StatEffect venomEffect = skill.getEffect(pPlayer.getTotalSkillLevel(skill));
                                 if (!venomEffect.makeChanceResult()) {
                                     break;
                                 }
@@ -325,7 +325,7 @@ public class DamageParse {
                     case 4121017:
                         Skill skill = SkillFactory.getSkill(4121017);
                         if (pPlayer.getTotalSkillLevel(skill) > 0) {
-                            MapleStatEffect showdown = skill.getEffect(pPlayer.getTotalSkillLevel(skill));
+                            StatEffect showdown = skill.getEffect(pPlayer.getTotalSkillLevel(skill));
                             monster.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.SHOWDOWN, showdown.getX(), 4121017, null, false), false, showdown.getDuration(), false, showdown);
                         }
                         break;
@@ -348,13 +348,13 @@ public class DamageParse {
                     case 21120009:
                     case 21120010:
                         if ((pPlayer.getBuffedValue(CharacterTemporaryStat.WeaponCharge) != null) && (!monster.getStats().isBoss())) {
-                            MapleStatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.WeaponCharge);
+                            StatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.WeaponCharge);
                             if (eff != null) {
                                 monster.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.SPEED, eff.getX(), eff.getSourceId(), null, false), false, eff.getY() * 1000, true, eff);
                             }
                         }
                         if ((pPlayer.getBuffedValue(CharacterTemporaryStat.BodyPressure) != null) && (!monster.getStats().isBoss())) {
-                            MapleStatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.BodyPressure);
+                            StatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.BodyPressure);
 
                             if ((eff != null) && (eff.makeChanceResult()) && (!monster.isBuffed(MonsterStatus.NEUTRALISE))) {
                                 monster.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.NEUTRALISE, 1, eff.getSourceId(), null, false), false, eff.getX() * 1000, true, eff);
@@ -511,7 +511,7 @@ public class DamageParse {
                             for (int i : skills) {
                                 Skill skill = SkillFactory.getSkill(i);
                                 if (pPlayer.getTotalSkillLevel(skill) > 0) {
-                                    MapleStatEffect venomEffect = skill.getEffect(pPlayer.getTotalSkillLevel(skill));
+                                    StatEffect venomEffect = skill.getEffect(pPlayer.getTotalSkillLevel(skill));
                                     if (!venomEffect.makeChanceResult()) {
                                         break;
                                     }
@@ -541,13 +541,13 @@ public class DamageParse {
                         case 21120009:
                         case 21120010:
                             if ((pPlayer.getBuffedValue(CharacterTemporaryStat.WeaponCharge) != null) && (!monster.getStats().isBoss())) {
-                                MapleStatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.WeaponCharge);
+                                StatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.WeaponCharge);
                                 if (eff != null) {
                                     monster.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.SPEED, Integer.valueOf(eff.getX()), eff.getSourceId(), null, false), false, eff.getY() * 1000, true, eff);
                                 }
                             }
                             if ((pPlayer.getBuffedValue(CharacterTemporaryStat.BodyPressure) != null) && (!monster.getStats().isBoss())) {
-                                MapleStatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.BodyPressure);
+                                StatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.BodyPressure);
 
                                 if ((eff != null) && (eff.makeChanceResult()) && (!monster.isBuffed(MonsterStatus.NEUTRALISE))) {
                                     monster.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.NEUTRALISE, Integer.valueOf(1), eff.getSourceId(), null, false), false, eff.getX() * 1000, true, eff);
@@ -577,7 +577,7 @@ public class DamageParse {
                             }
                         }
                         if (pPlayer.getBuffedValue(CharacterTemporaryStat.Blind) != null) {
-                            MapleStatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.Blind);
+                            StatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.Blind);
 
                             if ((eff != null) && (eff.makeChanceResult())) {
                                 MonsterStatusEffect monsterStatusEffect = new MonsterStatusEffect(MonsterStatus.ACC, Integer.valueOf(eff.getX()), eff.getSourceId(), null, false);
@@ -587,7 +587,7 @@ public class DamageParse {
                         if ((pPlayer.getJob() == 121) || (pPlayer.getJob() == 122)) {
                             Skill skill = SkillFactory.getSkill(1211006);
                             if (pPlayer.isBuffFrom(CharacterTemporaryStat.WeaponCharge, skill)) {
-                                MapleStatEffect eff = skill.getEffect(pPlayer.getTotalSkillLevel(skill));
+                                StatEffect eff = skill.getEffect(pPlayer.getTotalSkillLevel(skill));
                                 MonsterStatusEffect monsterStatusEffect = new MonsterStatusEffect(MonsterStatus.FREEZE, Integer.valueOf(1), skill.getId(), null, false);
                                 monster.applyStatus(pPlayer, monsterStatusEffect, false, eff.getY() * 2000, true, eff);
                             }
@@ -619,7 +619,7 @@ public class DamageParse {
         // Life Sap
         if (GameConstants.isDemonAvenger(pPlayer.getJob())) {
             if (pPlayer.getSkillLevel(31010002) > 0) {
-                MapleStatEffect eff = SkillFactory.getSkill(31010002).getEffect(pPlayer.getSkillLevel(31010002));
+                StatEffect eff = SkillFactory.getSkill(31010002).getEffect(pPlayer.getSkillLevel(31010002));
                 if (eff.makeChanceResult()) {
                     if (pPlayer.getExceed() / 2 > ((pPlayer.getSkillLevel(31210006) > 0 ? pPlayer.getSkillLevel(31210006) + 5 : 0) + eff.getX())) {
                         pPlayer.addHP((int) Math.min((totDamageToOneMonster * ((((pPlayer.getSkillLevel(31210006) > 0 ? pPlayer.getSkillLevel(31210006) + 5 : 0) + eff.getX()) - ((int) (pPlayer.getExceed() / 2))) / 100.0D)) * -1, pPlayer.getStat().getCurrentMaxHp() / 2));
@@ -662,7 +662,7 @@ public class DamageParse {
         if (GameConstants.isLuminous(pPlayer.getJob())) {
             final Integer darkcrescendo_value = pPlayer.getBuffedValue(CharacterTemporaryStat.StackBuff);
             if (darkcrescendo_value != null && darkcrescendo_value != 1) {
-                MapleStatEffect crescendo = SkillFactory.getSkill(27121005).getEffect(pPlayer.getSkillLevel(27121005));
+                StatEffect crescendo = SkillFactory.getSkill(27121005).getEffect(pPlayer.getSkillLevel(27121005));
                 if (crescendo != null) {
 
                     if (crescendo.makeChanceResult()) {
@@ -677,7 +677,7 @@ public class DamageParse {
         }
 
         if (pPlayer.getJob() >= 1500 && pPlayer.getJob() <= 1512) {
-            MapleStatEffect crescendo = SkillFactory.getSkill(15001022).getEffect(pPlayer.getSkillLevel(15001022));
+            StatEffect crescendo = SkillFactory.getSkill(15001022).getEffect(pPlayer.getSkillLevel(15001022));
             if (crescendo != null) {
 
                 if (crescendo.makeChanceResult()) {
@@ -692,7 +692,7 @@ public class DamageParse {
 
         // Combo
         if (pPlayer.getJob() >= 420 && pPlayer.getJob() <= 422) {
-            MapleStatEffect crescendo = SkillFactory.getSkill(4200013).getEffect(pPlayer.getSkillLevel(4200013));
+            StatEffect crescendo = SkillFactory.getSkill(4200013).getEffect(pPlayer.getSkillLevel(4200013));
             if (crescendo != null) {
 
                 if (crescendo.makeChanceResult()) {
@@ -724,7 +724,7 @@ public class DamageParse {
             }
         }
         if (pPlayer.getSkillLevel(4100012) > 0) {
-            MapleStatEffect eff = SkillFactory.getSkill(4100012).getEffect(pPlayer.getSkillLevel(4100012));
+            StatEffect eff = SkillFactory.getSkill(4100012).getEffect(pPlayer.getSkillLevel(4100012));
             if (eff.makeChanceResult()) {
                 for (Map.Entry z : effect.getMonsterStati().entrySet()) {
                     for (AttackMonster ap : attack.allDamage) {
@@ -807,7 +807,7 @@ public class DamageParse {
         }
     }
 
-    public static void applyAttackMagic(AttackInfo attack, Skill theSkill, User pPlayer, MapleStatEffect effect) {
+    public static void applyAttackMagic(AttackInfo attack, Skill theSkill, User pPlayer, StatEffect effect) {
 
         if (attack.real && GameConstants.getAttackDelay(attack.skill, theSkill) >= 100) {
             pPlayer.getCheatTracker().checkAttack(attack.skill, attack.lastAttackTickCount);
@@ -977,7 +977,7 @@ public class DamageParse {
                 final Integer dark_cresendo_value = pPlayer.getBuffedValue(CharacterTemporaryStat.Larkness);
 
                 if (dark_cresendo_value != null && dark_cresendo_value != 1) {
-                    MapleStatEffect crescendo = SkillFactory.getSkill(27121005).getEffect(pPlayer.getSkillLevel(27121005));
+                    StatEffect crescendo = SkillFactory.getSkill(27121005).getEffect(pPlayer.getSkillLevel(27121005));
                     if (crescendo != null) {
 
                         if (crescendo.makeChanceResult()) {
@@ -992,7 +992,7 @@ public class DamageParse {
             }
 
             if (pPlayer.getJob() >= 1500 && pPlayer.getJob() <= 1512) {
-                MapleStatEffect crescendo = SkillFactory.getSkill(15001022).getEffect(pPlayer.getSkillLevel(15001022));
+                StatEffect crescendo = SkillFactory.getSkill(15001022).getEffect(pPlayer.getSkillLevel(15001022));
                 if (crescendo != null) {
 
                     if (crescendo.makeChanceResult()) {
@@ -1103,7 +1103,7 @@ public class DamageParse {
         }
     }
 
-    private static double calculateMaxMagicDamagePerHit(User chr, Skill skill, Mob monster, MonsterStats mobstats, PlayerStats stats, Element elem, Integer sharpEye, double maxDamagePerMonster, MapleStatEffect attackEffect) {
+    private static double calculateMaxMagicDamagePerHit(User chr, Skill skill, Mob monster, MonsterStats mobstats, PlayerStats stats, Element elem, Integer sharpEye, double maxDamagePerMonster, StatEffect attackEffect) {
         int dLevel = Math.max(mobstats.getLevel() - chr.getLevel(), 0) * 2;
         int HitRate = Math.min((int) Math.floor(Math.sqrt(stats.getAccuracy())) - (int) Math.floor(Math.sqrt(mobstats.getEva())) + 100, 100);
         if (dLevel > HitRate) {
@@ -1205,7 +1205,7 @@ public class DamageParse {
         }
     }
 
-    private static double calculateMaxWeaponDamagePerHit(User player, Mob monster, AttackInfo attack, Skill theSkill, MapleStatEffect attackEffect, double maximumDamageToMonster, Integer CriticalDamagePercent) {
+    private static double calculateMaxWeaponDamagePerHit(User player, Mob monster, AttackInfo attack, Skill theSkill, StatEffect attackEffect, double maximumDamageToMonster, Integer CriticalDamagePercent) {
         int dLevel = Math.max(monster.getStats().getLevel() - player.getLevel(), 0) * 2;
         int HitRate = Math.min((int) Math.floor(Math.sqrt(player.getStat().getAccuracy())) - (int) Math.floor(Math.sqrt(monster.getStats().getEva())) + 100, 100);
         if (dLevel > HitRate) {
@@ -1290,7 +1290,7 @@ public class DamageParse {
         if ((player.getJob() == 311) || (player.getJob() == 312) || (player.getJob() == 321) || (player.getJob() == 322)) {
             Skill mortal = SkillFactory.getSkill((player.getJob() == 311) || (player.getJob() == 312) ? 3110001 : 3210001);
             if (player.getTotalSkillLevel(mortal) > 0) {
-                MapleStatEffect mort = mortal.getEffect(player.getTotalSkillLevel(mortal));
+                StatEffect mort = mortal.getEffect(player.getTotalSkillLevel(mortal));
                 if ((mort != null) && (monster.getHPPercent() < mort.getX())) {
                     elementalMaxDamagePerMonster = 999999.0D;
                     defined = true;
@@ -1302,7 +1302,7 @@ public class DamageParse {
         } else if ((player.getJob() == 221) || (player.getJob() == 222)) {
             Skill mortal = SkillFactory.getSkill(2210000);
             if (player.getTotalSkillLevel(mortal) > 0) {
-                MapleStatEffect mort = mortal.getEffect(player.getTotalSkillLevel(mortal));
+                StatEffect mort = mortal.getEffect(player.getTotalSkillLevel(mortal));
                 if ((mort != null) && (monster.getHPPercent() < mort.getX())) {
                     elementalMaxDamagePerMonster = 999999.0D;
                     defined = true;
@@ -1416,7 +1416,7 @@ public class DamageParse {
         return attack;
     }
 
-    public static final void modifyCriticalAttack(AttackInfo pAttack, User pPlayer, int nType, MapleStatEffect pEffect) {
+    public static final void modifyCriticalAttack(AttackInfo pAttack, User pPlayer, int nType, StatEffect pEffect) {
         int nCriticalRate;
         boolean bShadow;
         List damages;

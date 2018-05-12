@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Noblesse;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class NoblesseEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Noblesse.SIXTH_PARTY_TONIGHT_4:
                 break;
@@ -113,7 +113,7 @@ public class NoblesseEffect extends AbstractEffect {
             case Noblesse.EMPRESSS_BLESSING_10_1:
                 break;
             case Noblesse.EMPRESSS_PRAYER:
-                pEffect.statups.put(CharacterTemporaryStat.MaxLevelBuff, (int) pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.MaxLevelBuff, (int) pEffect.info.get(StatInfo.x));
                 break;
             case Noblesse.EMPRESSS_SHOUT:
                 break;
@@ -261,7 +261,7 @@ public class NoblesseEffect extends AbstractEffect {
             case Noblesse.RAGE_OF_PHARAOH_7:
                 break;
             case Noblesse.RECOVERY:
-                pEffect.statups.put(CharacterTemporaryStat.Regen, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Regen, pEffect.info.get(StatInfo.x));
                 break;
             case Noblesse.RED_DRACO_4:
                 break;

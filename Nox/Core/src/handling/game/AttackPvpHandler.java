@@ -24,7 +24,7 @@ import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import handling.world.PlayerHandler;
 import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.Randomizer;
 import server.life.MobSkill;
 import server.maps.objects.User;
@@ -62,7 +62,7 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
         boolean magic = false, move = false, pull = false, push = false;
 
         double maxdamage = lvl == 3 ? chr.getStat().getCurrentMaxBasePVPDamageL() : chr.getStat().getCurrentMaxBasePVPDamage();
-        MapleStatEffect effect = null;
+        StatEffect effect = null;
         chr.checkFollow();
         Rectangle box;
 
@@ -191,10 +191,10 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
                     }
                 }
             }
-            box = MapleStatEffect.calculateBoundingBox(chr.getTruePosition(), facingLeft, lt, rb, chr.getStat().defRange);
+            box = StatEffect.calculateBoundingBox(chr.getTruePosition(), facingLeft, lt, rb, chr.getStat().defRange);
         }
         chr.getCheatTracker().checkPVPAttack(skillid);
-        final MapleStatEffect shad = chr.getStatForBuff(CharacterTemporaryStat.ShadowPartner);
+        final StatEffect shad = chr.getStatForBuff(CharacterTemporaryStat.ShadowPartner);
         final int originalAttackCount = attackCount;
         attackCount *= (shad != null ? 2 : 1);
 
@@ -253,17 +253,17 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
                                 //} else if (attacked.getLevel() > chr.getLevel() && Randomizer.nextInt(100) < (attacked.getLevel() - chr.getLevel())) {
                                 //	ourDamage = 0;
                             } else if (attacked.getJob() == 122 && attacked.getTotalSkillLevel(1220006) > 0 && attacked.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -10) != null) {
-                                final MapleStatEffect eff = SkillFactory.getSkill(1220006).getEffect(attacked.getTotalSkillLevel(1220006));
+                                final StatEffect eff = SkillFactory.getSkill(1220006).getEffect(attacked.getTotalSkillLevel(1220006));
                                 if (eff.makeChanceResult()) {
                                     ourDamage = 0;
                                 }
                             } else if (attacked.getJob() == 412 && attacked.getTotalSkillLevel(4120002) > 0) {
-                                final MapleStatEffect eff = SkillFactory.getSkill(4120002).getEffect(attacked.getTotalSkillLevel(4120002));
+                                final StatEffect eff = SkillFactory.getSkill(4120002).getEffect(attacked.getTotalSkillLevel(4120002));
                                 if (eff.makeChanceResult()) {
                                     ourDamage = 0;
                                 }
                             } else if (attacked.getJob() == 422 && attacked.getTotalSkillLevel(4220006) > 0) {
-                                final MapleStatEffect eff = SkillFactory.getSkill(4220002).getEffect(attacked.getTotalSkillLevel(4220002));
+                                final StatEffect eff = SkillFactory.getSkill(4220002).getEffect(attacked.getTotalSkillLevel(4220002));
                                 if (eff.makeChanceResult()) {
                                     ourDamage = 0;
                                 }
@@ -324,7 +324,7 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
                     }
                     if (chr.getJob() == 121 || chr.getJob() == 122 || chr.getJob() == 2110 || chr.getJob() == 2111 || chr.getJob() == 2112) { // WHITEKNIGHT
                         if (chr.getBuffSource(CharacterTemporaryStat.WeaponCharge) == 1211006 || chr.getBuffSource(CharacterTemporaryStat.WeaponCharge) == 21101006) {
-                            final MapleStatEffect eff = chr.getStatForBuff(CharacterTemporaryStat.WeaponCharge);
+                            final StatEffect eff = chr.getStatForBuff(CharacterTemporaryStat.WeaponCharge);
                             if (eff.makeChanceResult()) {
                                 MobSkill skill = new MobSkill(MapleDisease.FREEZE.getDisease(), 1);
                                 skill.setX(1);
@@ -333,7 +333,7 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
                             }
                         }
                     } else if (chr.getBuffedValue(CharacterTemporaryStat.Slow) != null) {
-                        final MapleStatEffect eff = chr.getStatForBuff(CharacterTemporaryStat.Slow);
+                        final StatEffect eff = chr.getStatForBuff(CharacterTemporaryStat.Slow);
                         if (eff != null && eff.makeChanceResult()) {
                             MobSkill skill = new MobSkill(MapleDisease.SLOW.getDisease(), 1);
                             skill.setX(100 - Math.abs(eff.getX()));
@@ -347,7 +347,7 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
                             for (int i : skills) {
                                 final Skill skill = SkillFactory.getSkill(i);
                                 if (chr.getTotalSkillLevel(skill) > 0) {
-                                    final MapleStatEffect venomEffect = skill.getEffect(chr.getTotalSkillLevel(skill));
+                                    final StatEffect venomEffect = skill.getEffect(chr.getTotalSkillLevel(skill));
                                     if (venomEffect.makeChanceResult()) {// THIS MIGHT ACTUALLY BE THE DOT
                                         MobSkill skil = new MobSkill(MapleDisease.POISON.getDisease(), 1);
                                         skil.setX(venomEffect.getDuration());
@@ -368,7 +368,7 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
                             for (int i : skills) {
                                 final Skill skill = SkillFactory.getSkill(i);
                                 if (chr.getTotalSkillLevel(skill) > 0) {
-                                    final MapleStatEffect venomEffect = skill.getEffect(chr.getTotalSkillLevel(skill));
+                                    final StatEffect venomEffect = skill.getEffect(chr.getTotalSkillLevel(skill));
                                     if (venomEffect.makeChanceResult()) {
                                         venomEffect.applyTo(attacked);
                                     }

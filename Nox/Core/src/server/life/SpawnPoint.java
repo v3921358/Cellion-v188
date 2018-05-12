@@ -9,7 +9,7 @@ import client.MonsterStatusEffect;
 import client.SkillFactory;
 import server.MapleCarnivalFactory;
 import server.MapleCarnivalFactory.MCSkill;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.Randomizer;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
@@ -146,7 +146,7 @@ public class SpawnPoint extends Spawns {
         }
         for (Summon s : map.getAllSummons()) {
             if (s.getSkill() == 35111005) {
-                final MapleStatEffect effect = SkillFactory.getSkill(s.getSkill()).getEffect(s.getSkillLevel());
+                final StatEffect effect = SkillFactory.getSkill(s.getSkill()).getEffect(s.getSkillLevel());
                 for (Map.Entry<MonsterStatus, Integer> stat : effect.getMonsterStati().entrySet()) {
                     mob.applyStatus(s.getOwner(), new MonsterStatusEffect(stat.getKey(), stat.getValue(), s.getSkill(), null, false), false, effect.getDuration(), true, effect);
                 }

@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.FirePoisonArchMage;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class FirePoisonArchMageEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case FirePoisonArchMage.ARCANE_AIM:
                 break;
@@ -29,7 +29,7 @@ public class FirePoisonArchMageEffect extends AbstractEffect {
             case FirePoisonArchMage.BUFF_MASTERY_1:
                 break;
             case FirePoisonArchMage.EPIC_ADVENTURE_3:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case FirePoisonArchMage.FERVENT_DRAIN:
                 break;
@@ -70,13 +70,13 @@ public class FirePoisonArchMageEffect extends AbstractEffect {
             case FirePoisonArchMage.INFERNO_AURA:
                 break;
             case FirePoisonArchMage.INFINITY:
-                pEffect.setHpR(pEffect.info.get(MapleStatInfo.y) / 100.0);
-                pEffect.setMpR(pEffect.info.get(MapleStatInfo.y) / 100.0);
-                pEffect.statups.put(CharacterTemporaryStat.Infinity, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.Stance, (int) pEffect.info.get(MapleStatInfo.prop));
+                pEffect.setHpR(pEffect.info.get(StatInfo.y) / 100.0);
+                pEffect.setMpR(pEffect.info.get(StatInfo.y) / 100.0);
+                pEffect.statups.put(CharacterTemporaryStat.Infinity, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, (int) pEffect.info.get(StatInfo.prop));
                 break;
             case FirePoisonArchMage.MAPLE_WARRIOR_5:
-                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(StatInfo.x));
                 break;
             case FirePoisonArchMage.MEGIDDO_FLAME:
                 break;
@@ -96,7 +96,7 @@ public class FirePoisonArchMageEffect extends AbstractEffect {
                 break;
             case FirePoisonArchMage.PARALYZE:
                 pEffect.monsterStatus.put(MonsterStatus.FREEZE, 1);
-                pEffect.info.put(MapleStatInfo.time, pEffect.info.get(MapleStatInfo.time) * 2);
+                pEffect.info.put(StatInfo.time, pEffect.info.get(StatInfo.time) * 2);
                 break;
             case FirePoisonArchMage.PARALYZE_CRIPPLE:
                 break;

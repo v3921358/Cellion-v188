@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Thief;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,12 +18,12 @@ import server.skills.effects.manager.Effect;
 public class ThiefEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Thief.BANDIT_SLASH:
                 break;
             case Thief.DARK_SIGHT_2:
-                pEffect.statups.put(CharacterTemporaryStat.DarkSight, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.DarkSight, pEffect.info.get(StatInfo.x));
                 break;
             case Thief.DISORDER_1:
                 break;
@@ -34,8 +34,8 @@ public class ThiefEffect extends AbstractEffect {
             case Thief.FLASH_JUMP_4:
                 break;
             case Thief.HASTE_4:
-                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
-                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(MapleStatInfo.jump));
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(StatInfo.speed));
+                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(StatInfo.jump));
                 break;
             case Thief.KEEN_EYES_1:
                 break;

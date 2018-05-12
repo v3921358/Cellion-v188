@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Hunter;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,13 +18,13 @@ import server.skills.effects.manager.Effect;
 public class HunterEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Hunter.ARROW_BOMB:
                 pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Hunter.BOW_BOOSTER_2:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case Hunter.BOW_MASTERY_2:
                 break;
@@ -43,8 +43,8 @@ public class HunterEffect extends AbstractEffect {
             case Hunter.SILVER_HAWK:
                 break;
             case Hunter.SOUL_ARROW_BOW:
-                pEffect.statups.put(CharacterTemporaryStat.SoulArrow, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(MapleStatInfo.epad));
+                pEffect.statups.put(CharacterTemporaryStat.SoulArrow, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(StatInfo.epad));
                 break;
 
         }

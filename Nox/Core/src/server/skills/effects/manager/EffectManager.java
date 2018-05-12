@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import server.MapleStatEffect;
+import server.StatEffect;
 import org.reflections.Reflections;
 import tools.LogHelper;
 
@@ -52,7 +52,7 @@ public class EffectManager {
         return false;
     }
 
-    public static boolean SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public static boolean SetEffect(StatEffect pEffect, int nSourceID) {
         for (Class<?> effectClass : liEffectClassess) {
             int nClass = nSourceID / 10000;
             try {

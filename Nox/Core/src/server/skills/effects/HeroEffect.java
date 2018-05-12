@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Hero;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class HeroEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Hero.ADVANCED_COMBO:
                 break;
@@ -40,15 +40,15 @@ public class HeroEffect extends AbstractEffect {
                 break;
             case Hero.CRY_VALHALLA:
                 pEffect.statups.clear();
-                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
                 break;
             case Hero.ENRAGE:
-                pEffect.statups.put(CharacterTemporaryStat.Enrage, pEffect.info.get(MapleStatInfo.x) * 100 + pEffect.info.get(MapleStatInfo.mobCount));
+                pEffect.statups.put(CharacterTemporaryStat.Enrage, pEffect.info.get(StatInfo.x) * 100 + pEffect.info.get(StatInfo.mobCount));
                 break;
             case Hero.EPIC_ADVENTURE_4:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case Hero.HEROS_WILL_9:
                 break;
@@ -81,7 +81,7 @@ public class HeroEffect extends AbstractEffect {
             case Hero.MAGIC_CRASH_2:
                 break;
             case Hero.MAPLE_WARRIOR_10:
-                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(StatInfo.x));
                 break;
             case Hero.MONSTER_MAGNET_1:
                 break;

@@ -66,8 +66,8 @@ import handling.game.WhisperHandler.WhisperFlag;
 import java.awt.Rectangle;
 import javax.swing.text.Position;
 
-import server.MapleStatEffect;
-import static server.MapleStatInfo.s;
+import server.StatEffect;
+import static server.StatInfo.s;
 import server.maps.Map_MCarnival;
 import server.maps.Map_MaplePlatform;
 import server.maps.objects.ForceAtom;

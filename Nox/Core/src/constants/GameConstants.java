@@ -20,7 +20,7 @@ import client.inventory.MapleWeaponType;
 import constants.skills.*;
 import handling.login.Balloon;
 import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.MapleStringInformationProvider;
 import server.NebuliteGrade;
 import server.Randomizer;
@@ -4411,7 +4411,7 @@ public class GameConstants {
         }
     }
 
-    public static double getAttackRange(MapleStatEffect def, int rangeInc) {
+    public static double getAttackRange(StatEffect def, int rangeInc) {
         double defRange = ((400.0 + rangeInc) * (400.0 + rangeInc));
         if (def != null) {
             defRange += def.getMaxDistanceSq() + (def.getRange() * def.getRange());

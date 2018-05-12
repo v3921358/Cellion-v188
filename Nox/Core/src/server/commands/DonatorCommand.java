@@ -55,13 +55,13 @@ import tools.packet.WvsContext;
 import tools.packet.MobPacket;
 
 /**
- *
+ * Donor Commands
  * @author Mazen Massoud
  */
 public class DonatorCommand {
 
     public static PlayerGMRank getPlayerLevelRequired() {
-        return PlayerGMRank.DONATOR;
+        return PlayerGMRank.DONOR;
     }
 
     public static class DonorHelp extends CommandExecute {

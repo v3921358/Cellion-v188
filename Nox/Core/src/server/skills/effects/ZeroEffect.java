@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Zero;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class ZeroEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Zero.ARCHANGELIC_BLESSING:
                 break;
@@ -57,18 +57,18 @@ public class ZeroEffect extends AbstractEffect {
             case Zero.DECENT_SPEED_INFUSION_20_2:
                 break;
             case Zero.DIVINE_FORCE:
-                pEffect.statups.put(CharacterTemporaryStat.ZeroAuraStr, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.IndieTerR, pEffect.info.get(MapleStatInfo.indieTerR));
-                pEffect.statups.put(CharacterTemporaryStat.IndieAsrR, pEffect.info.get(MapleStatInfo.indieAsrR));
-                pEffect.statups.put(CharacterTemporaryStat.IndiePDD, pEffect.info.get(MapleStatInfo.indiePdd));
-                pEffect.statups.put(CharacterTemporaryStat.IndieMAD, pEffect.info.get(MapleStatInfo.indiePad));
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indieMad));
+                pEffect.statups.put(CharacterTemporaryStat.ZeroAuraStr, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieTerR, pEffect.info.get(StatInfo.indieTerR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieAsrR, pEffect.info.get(StatInfo.indieAsrR));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePDD, pEffect.info.get(StatInfo.indiePdd));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMAD, pEffect.info.get(StatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indieMad));
                 break;
             case Zero.DIVINE_SPEED:
-                pEffect.statups.put(CharacterTemporaryStat.ZeroAuraSpd, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
-                pEffect.statups.put(CharacterTemporaryStat.IndieJump, pEffect.info.get(MapleStatInfo.indieJump));
-                pEffect.statups.put(CharacterTemporaryStat.IndieSpeed, pEffect.info.get(MapleStatInfo.indieSpeed));
+                pEffect.statups.put(CharacterTemporaryStat.ZeroAuraSpd, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(StatInfo.indieBooster));
+                pEffect.statups.put(CharacterTemporaryStat.IndieJump, pEffect.info.get(StatInfo.indieJump));
+                pEffect.statups.put(CharacterTemporaryStat.IndieSpeed, pEffect.info.get(StatInfo.indieSpeed));
                 break;
             case Zero.DOUBLETIME:
                 break;
@@ -85,7 +85,7 @@ public class ZeroEffect extends AbstractEffect {
             case Zero.EMPRESSS_BLESSING:
                 break;
             case Zero.FOCUSED_TIME:
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.x));
                 break;
             case Zero.FOLLOW_THE_LEAD_4:
                 break;
@@ -148,7 +148,7 @@ public class ZeroEffect extends AbstractEffect {
             case Zero.RHINNES_BLESSING:
                 break;
             case Zero.RHINNES_PROTECTION:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
                 break;
             case Zero.SHADOW_RAIN_1:
                 break;

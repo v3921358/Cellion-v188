@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Ranger;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class RangerEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Ranger.ARROW_BLASTER_1:
                 break;
@@ -49,8 +49,8 @@ public class RangerEffect extends AbstractEffect {
             case Ranger.PUPPET_1:
                 break;
             case Ranger.RECKLESS_HUNT_BOW:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
-                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.padX));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(StatInfo.padX));
                 break;
             case Ranger.STRAFE_1:
                 break;

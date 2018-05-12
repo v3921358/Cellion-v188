@@ -7,7 +7,7 @@ import client.SkillFactory;
 import client.anticheat.CheatingOffense;
 import constants.GameConstants;
 import constants.skills.BeastTamer;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.maps.AnimatedMapleMapObject;
 import server.maps.MapleMap;
 import server.maps.MapleMapObjectType;
@@ -30,7 +30,7 @@ public class Summon extends AnimatedMapleMapObject {
     private long summonTickDifference;
     private long lastAttackTime;
 
-    public Summon(User owner, MapleStatEffect skill, Point pos, SummonMovementType movementType, int summonDuration) {
+    public Summon(User owner, StatEffect skill, Point pos, SummonMovementType movementType, int summonDuration) {
         this(owner, skill.getSourceId(), skill.getLevel(), pos, movementType, summonDuration);
     }
 

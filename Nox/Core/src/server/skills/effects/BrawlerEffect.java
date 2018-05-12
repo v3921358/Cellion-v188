@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Brawler;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class BrawlerEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Brawler.BACKSPIN_BLOW_1:
                 break;
@@ -27,7 +27,7 @@ public class BrawlerEffect extends AbstractEffect {
             case Brawler.CRITICAL_PUNCH_1:
                 break;
             case Brawler.DARK_CLARITY_2:
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
                 break;
             case Brawler.DARK_CLARITY_3:
                 break;
@@ -40,7 +40,7 @@ public class BrawlerEffect extends AbstractEffect {
             case Brawler.HP_BOOST_5:
                 break;
             case Brawler.KNUCKLE_BOOSTER_3:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case Brawler.KNUCKLE_MASTERY_1:
                 break;

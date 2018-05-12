@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.maps.objects.User;
 import tools.Pair;
 import net.InPacket;
@@ -238,7 +238,7 @@ public class GuildOperationHandler implements ProcessPacket<ClientSocket> {
                 if (eff > skilli.getMaxLevel()) {
                     return;
                 }
-                final MapleStatEffect skillid = skilli.getEffect(eff);
+                final StatEffect skillid = skilli.getEffect(eff);
                 int reqGuildLevel = skillid.getReqGuildLevel();
                 if (reqGuildLevel <= 0 || reqGuildLevel > World.Guild.getGuildLevel(guild)) {
                     return;
@@ -256,7 +256,7 @@ public class GuildOperationHandler implements ProcessPacket<ClientSocket> {
                 if (eff <= 0) {
                     return;
                 }
-                final MapleStatEffect skillii = skilli.getEffect(eff);
+                final StatEffect skillii = skilli.getEffect(eff);
                 if (skillii.getReqGuildLevel() < 0 || c.getPlayer().getMeso() < skillii.getExtendPrice()) {
                     return;
                 }

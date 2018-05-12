@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import net.InPacket;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
@@ -144,7 +144,7 @@ public class SummonAttackHandler implements ProcessPacket<ClientSocket> {
 
         map.broadcastMessage(chr, CField.SummonPacket.summonAttack(summon.getOwnerId(), summon.getObjectId(), animation, allDamage, chr.getLevel(), false), summon.getTruePosition());
         Skill summonSkill = SkillFactory.getSkill(summon.getSkill());
-        MapleStatEffect summonEffect = summonSkill.getEffect(summon.getSkillLevel());
+        StatEffect summonEffect = summonSkill.getEffect(summon.getSkillLevel());
         if (summonEffect == null) {
             return;
         }

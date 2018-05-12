@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Gunslinger;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class GunslingerEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Gunslinger.BLANK_SHOT:
                 break;
@@ -27,12 +27,12 @@ public class GunslingerEffect extends AbstractEffect {
             case Gunslinger.GRENADE:
                 break;
             case Gunslinger.GUN_BOOSTER_1:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x) * 2);
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x) * 2);
                 break;
             case Gunslinger.GUN_MASTERY:
                 break;
             case Gunslinger.INFINITY_BLAST:
-                pEffect.statups.put(CharacterTemporaryStat.NoBulletConsume, pEffect.info.get(MapleStatInfo.bulletConsume));
+                pEffect.statups.put(CharacterTemporaryStat.NoBulletConsume, pEffect.info.get(StatInfo.bulletConsume));
                 break;
             case Gunslinger.PHYSICAL_TRAINING_3:
                 break;

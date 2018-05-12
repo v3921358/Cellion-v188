@@ -25,7 +25,7 @@ import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
 import server.quest.Quest;
 import net.InPacket;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.maps.objects.RuneStone;
 import tools.packet.CField;
 import tools.packet.CSPacket;
@@ -69,7 +69,7 @@ public class PlayerHandler {
     public static final void UseRune(final InPacket iPacket, final User chr) {
         final byte result = iPacket.DecodeByte();
         final RuneStone rune = chr.getMap().getAllRune().get(0);
-        MapleStatEffect effect;
+        StatEffect effect;
         if (result == 1) {
             switch (chr.getTouchedRune()) {
                 case 0: //疾速之輪
@@ -162,7 +162,7 @@ public class PlayerHandler {
                 effect = 4;
                 break;
         }
-        MapleStatEffect flame = SkillFactory.getSkill(tempskill).getEffect(chr.getSkillLevel(tempskill));
+        StatEffect flame = SkillFactory.getSkill(tempskill).getEffect(chr.getSkillLevel(tempskill));
         /* if (flame != null && chr.getSkillLevel(elementid) > 0) { // This should be fruther looked into.
             if (!chr.getSummons().keySet().contains(elementid)) {
                 MapleStatEffect element = SkillFactory.getSkill(elementid).getEffect(chr.getSkillLevel(elementid));

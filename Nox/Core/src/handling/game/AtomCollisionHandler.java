@@ -34,7 +34,7 @@ import handling.world.PlayerHandler;
 import server.maps.objects.User;
 import net.InPacket;
 import net.ProcessPacket;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
 import service.ChannelServer;
@@ -74,7 +74,7 @@ public final class AtomCollisionHandler implements ProcessPacket<ClientSocket> {
             return;
         }
         int skillLevel = pPlayer.getTotalSkillLevel(skill);
-        MapleStatEffect effect = attack.getAttackEffect(pPlayer, skillLevel, skill);
+        StatEffect effect = attack.getAttackEffect(pPlayer, skillLevel, skill);
         if (effect == null) {
             if (pPlayer.isDeveloper()) {
                 pPlayer.dropMessage(5, "[AtomCollision Debug] Returning Early 2 / Atom ID : " + attack.skill);

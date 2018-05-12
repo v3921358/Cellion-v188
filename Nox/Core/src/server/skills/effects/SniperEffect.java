@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Sniper;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class SniperEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Sniper.AGGRESSIVE_RESISTANCE:
                 break;
@@ -43,14 +43,14 @@ public class SniperEffect extends AbstractEffect {
             case Sniper.MORTAL_BLOW:
                 break;
             case Sniper.PAIN_KILLER:
-                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, pEffect.info.get(MapleStatInfo.asrR));
-                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, pEffect.info.get(MapleStatInfo.terR));
+                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, pEffect.info.get(StatInfo.asrR));
+                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, pEffect.info.get(StatInfo.terR));
                 break;
             case Sniper.PUPPET_2:
                 break;
             case Sniper.RECKLESS_HUNT_CROSSBOW:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
-                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.padX));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(StatInfo.padX));
                 break;
             case Sniper.SNAPFREEZE_SHOT:
                 break;

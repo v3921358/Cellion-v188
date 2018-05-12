@@ -11,7 +11,7 @@ import client.buddy.BuddyFlags;
 import client.buddy.BuddyList;
 import client.buddy.BuddyResult;
 import client.buddy.BuddylistEntry;
-import server.MapleStatEffect;
+import server.StatEffect;
 import client.inventory.*;
 import client.inventory.MapleImp.ImpFlag;
 import constants.GameConstants;
@@ -45,7 +45,7 @@ import net.OutPacket;
 import scripting.EventInstanceManager;
 import scripting.provider.NPCScriptManager;
 import server.*;
-import server.MapleStatEffect.CancelEffectAction;
+import server.StatEffect.CancelEffectAction;
 import server.Timer;
 import server.Timer.BuffTimer;
 import server.Timer.MapTimer;
@@ -2612,16 +2612,16 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return mbsvh == null ? null : mbsvh.localDuration;
     }
 
-    public MapleStatEffect getStatForBuff(CharacterTemporaryStat effect) {
+    public StatEffect getStatForBuff(CharacterTemporaryStat effect) {
         final CharacterTemporaryStatValueHolder mbsvh = effects.get(effect);
         return mbsvh == null ? null : mbsvh.effect;
     }
 
-    public void registerEffect(MapleStatEffect effect, long starttime, ScheduledFuture<?> schedule, int from) {
+    public void registerEffect(StatEffect effect, long starttime, ScheduledFuture<?> schedule, int from) {
         registerEffect(effect, starttime, schedule, effect.getStatups(), false, effect.getDuration(), from);
     }
 
-    public void registerEffect(MapleStatEffect effect, long starttime, ScheduledFuture<?> schedule, Map<CharacterTemporaryStat, Integer> statups, boolean silent, final int localDuration, final int cid) {
+    public void registerEffect(StatEffect effect, long starttime, ScheduledFuture<?> schedule, Map<CharacterTemporaryStat, Integer> statups, boolean silent, final int localDuration, final int cid) {
         if (statups.isEmpty() && (!GameConstants.isNotBuffSkill(effect.getSourceId()))) { //
             if (ServerConstants.DEVELOPER_DEBUG_MODE) {
                 LogHelper.GENERAL_EXCEPTION.get().fatal("[WARNING] The buff " + effect.getSourceId() + " has no effect values! Please define the statups in the BuffClass. (Server.buffs.XXX, create if not exists.)");
@@ -2657,7 +2657,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    public List<CharacterTemporaryStat> getTemporaryStats(final MapleStatEffect effect, final long startTime) {
+    public List<CharacterTemporaryStat> getTemporaryStats(final StatEffect effect, final long startTime) {
         List<CharacterTemporaryStat> liStats = new ArrayList<>();
 
         effects.entrySet().stream()
@@ -2732,7 +2732,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @param overwrite when overwrite is set no data is sent and all the Buffstats in the StatEffect are deregistered
      * @param startTime
      */
-    public void cancelEffect(final MapleStatEffect effect, final boolean overwrite, final long startTime) {
+    public void cancelEffect(final StatEffect effect, final boolean overwrite, final long startTime) {
         if (effect == null) {
             return;
         }
@@ -2744,7 +2744,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         cancelEffect(effect, overwrite, startTime, effect.getStatups());
     }
 
-    public void cancelEffect(final MapleStatEffect effect, final boolean overwrite, final long startTime, Map<CharacterTemporaryStat, Integer> statups) {
+    public void cancelEffect(final StatEffect effect, final boolean overwrite, final long startTime, Map<CharacterTemporaryStat, Integer> statups) {
         if (effect == null) {
             return;
         }
@@ -3032,7 +3032,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void doRecovery() {
-        MapleStatEffect bloodEffect = getStatForBuff(CharacterTemporaryStat.Regen);
+        StatEffect bloodEffect = getStatForBuff(CharacterTemporaryStat.Regen);
         if (bloodEffect == null) {
             bloodEffect = getStatForBuff(CharacterTemporaryStat.Mechanic);
             if (bloodEffect == null) {
@@ -3180,7 +3180,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private final void handleEnergyChargedFinal(Skill echskill, int targets, int skillLevel) {
         if (targets > 0) {
             Integer energyLevel = getBuffedValue(CharacterTemporaryStat.EnergyCharged);
-            MapleStatEffect skillEffect = echskill.getEffect(skillLevel);
+            StatEffect skillEffect = echskill.getEffect(skillLevel);
             if (energyLevel == null || energyLevel < 0) {
                 skillEffect.applyEnergyBuff(this, echskill.getId(), targets);
             } else {
@@ -3221,7 +3221,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public final void handleBattleshipHP(int damage) {
         if (damage < 0) {
-            final MapleStatEffect effect = getStatForBuff(CharacterTemporaryStat.RideVehicle);
+            final StatEffect effect = getStatForBuff(CharacterTemporaryStat.RideVehicle);
             if (effect != null && effect.getSourceId() == 5221006) {
                 battleshipHP += damage;
                 client.SendPacket(CField.skillCooldown(5221999, battleshipHP / 10));
@@ -3254,7 +3254,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 break;
         }
 
-        MapleStatEffect ceffect;
+        StatEffect ceffect;
         int advComboSkillLevel = getTotalSkillLevel(advcombo);
         if (advComboSkillLevel > 0) {
             ceffect = advcombo.getEffect(advComboSkillLevel);
@@ -3301,7 +3301,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (getSkillLevel(normalcombo) <= 0) {
             return;
         }
-        MapleStatEffect ceffect = getStatForBuff(CharacterTemporaryStat.ComboCounter);
+        StatEffect ceffect = getStatForBuff(CharacterTemporaryStat.ComboCounter);
         if (ceffect == null) {
             return;
 
@@ -7672,7 +7672,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         final int skilllevel = getTotalSkillLevel(BerserkX);
         if (skilllevel >= 1 && map != null) {
             lastBerserkTime = System.currentTimeMillis();
-            final MapleStatEffect ampStat = BerserkX.getEffect(skilllevel);
+            final StatEffect ampStat = BerserkX.getEffect(skilllevel);
             stats.Berserk = stats.getHp() * 100 / stats.getCurrentMaxHp() >= ampStat.getX();
             client.SendPacket(EffectPacket.showOwnBuffEffect(1320006, UserEffectCodes.SkillUse, getLevel(), skilllevel, (byte) (stats.Berserk ? 1 : 0)));
             map.broadcastMessage(this, EffectPacket.showBuffeffect(getId(), 1320006, UserEffectCodes.SkillUse, getLevel(), skilllevel, (byte) (stats.Berserk ? 1 : 0)), false);
@@ -9430,14 +9430,14 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         getMap().spawnFamiliar(mf, respawn);
 
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-        final MapleStatEffect eff = ii.getItemEffect(ii.getFamiliar(summonedFamiliar.getFamiliar()).getPassive());
+        final StatEffect eff = ii.getItemEffect(ii.getFamiliar(summonedFamiliar.getFamiliar()).getPassive());
         if (eff != null && eff.getInterval() <= 0 && eff.makeChanceResult()) { //i think this is actually done through a recv, which is ATTACK_FAMILIAR +1
             eff.applyTo(this);
         }
         lastFamiliarEffectTime = System.currentTimeMillis();
     }
 
-    public final boolean canFamiliarEffect(long now, MapleStatEffect eff) {
+    public final boolean canFamiliarEffect(long now, StatEffect eff) {
         return lastFamiliarEffectTime > 0 && lastFamiliarEffectTime + eff.getInterval() < now;
     }
 
@@ -9449,7 +9449,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             if (summonedFamiliar != null && summonedFamiliar.getId() == mf.getId()) {
                 mf.addFatigue(this, 5);
                 final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-                final MapleStatEffect eff = ii.getItemEffect(ii.getFamiliar(summonedFamiliar.getFamiliar()).getPassive());
+                final StatEffect eff = ii.getItemEffect(ii.getFamiliar(summonedFamiliar.getFamiliar()).getPassive());
                 if (eff != null && eff.getInterval() > 0 && canFamiliarEffect(now, eff) && eff.makeChanceResult()) {
                     eff.applyTo(this);
                 }
@@ -9561,7 +9561,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 damage = 0;
             }
         }
-        MapleStatEffect barrier = getStatForBuff(CharacterTemporaryStat.ComboBarrier);
+        StatEffect barrier = getStatForBuff(CharacterTemporaryStat.ComboBarrier);
         if (barrier != null) {
             damage = ((barrier.getX() / 1000.0) * damage);
         }
@@ -9578,7 +9578,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             if (getJob() == 122 && !skillisCooling(1220013)) {
                 final Skill divine = SkillFactory.getSkill(1220013);
                 if (getTotalSkillLevel(divine) > 0) {
-                    final MapleStatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
+                    final StatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
                     if (divineShield.makeChanceResult()) {
                         divineShield.applyTo(this);
 
@@ -9597,7 +9597,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             } else if (getJob() == 433 || getJob() == 434) {
                 final Skill divine = SkillFactory.getSkill(4330001);
                 if (getTotalSkillLevel(divine) > 0 && getBuffedValue(CharacterTemporaryStat.DarkSight) == null && !skillisCooling(divine.getId())) {
-                    final MapleStatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
+                    final StatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
                     if (Randomizer.nextInt(100) < divineShield.getX()) {
                         divineShield.applyTo(this);
                     }
@@ -9605,7 +9605,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             } else if ((getJob() == 512 || getJob() == 522) && getBuffedValue(CharacterTemporaryStat.DamR) == null) {
                 final Skill divine = SkillFactory.getSkill(getJob() == 512 ? 5120011 : 5220012);
                 if (getTotalSkillLevel(divine) > 0 && !skillisCooling(divine.getId())) {
-                    final MapleStatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
+                    final StatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
                     if (divineShield.makeChanceResult()) {
                         divineShield.applyTo(this);
 
@@ -9615,7 +9615,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             } else if (getJob() == 312 && attacke != null) {
                 final Skill divine = SkillFactory.getSkill(3120010);
                 if (getTotalSkillLevel(divine) > 0) {
-                    final MapleStatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
+                    final StatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
                     if (divineShield.makeChanceResult()) {
                         if (attacke instanceof Mob) {
                             final Rectangle bounds = divineShield.calculateBoundingBox(getTruePosition(), isFacingLeft());
@@ -9646,7 +9646,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             } else if ((getJob() == 531 || getJob() == 532) && attacke != null) {
                 final Skill divine = SkillFactory.getSkill(5310009); //iPacket.DecodeInt() = 5310009, then iPacket.DecodeInt() = damage. (175000)
                 if (getTotalSkillLevel(divine) > 0) {
-                    final MapleStatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
+                    final StatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
                     if (divineShield.makeChanceResult()) {
                         if (attacke instanceof Mob) {
                             final Mob attacker = (Mob) attacke;
@@ -9664,7 +9664,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 final Skill divine = SkillFactory.getSkill(1421013);
                 if (getTotalSkillLevel(divine) > 0 && !skillisCooling(divine.getId()) && getBuffSource(CharacterTemporaryStat.Beholder) == 1421015) {
                     World.Broadcast.broadcastMessage(CField.getGameMessage("Sacrifice.", (short) 7));
-                    final MapleStatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
+                    final StatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
                     if (divineShield.makeChanceResult()) {
                         addCooldown(divine.getId(), System.currentTimeMillis(), divineShield.getCooldown(this) * 0);
 
@@ -9694,7 +9694,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                         attacker.damage(this, bouncedamage, true);
                         getMap().broadcastMessage(this, MobPacket.damageMonster(attacker.getObjectId(), bouncedamage), getTruePosition());
                         if (getBuffSource(CharacterTemporaryStat.Guard) == 31101003) {
-                            MapleStatEffect eff = this.getStatForBuff(CharacterTemporaryStat.Guard);
+                            StatEffect eff = this.getStatForBuff(CharacterTemporaryStat.Guard);
                             if (eff.makeChanceResult()) {
                                 attacker.applyStatus(this, new MonsterStatusEffect(MonsterStatus.STUN, 1, eff.getSourceId(), null, false), false, eff.getSubTime(), true, eff);
                             }
@@ -9705,7 +9705,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                         attacker.addHP(-((int) bouncedamage));
                         attack.add((int) bouncedamage);
                         if (getBuffSource(CharacterTemporaryStat.Guard) == 31101003) {
-                            MapleStatEffect eff = this.getStatForBuff(CharacterTemporaryStat.Guard);
+                            StatEffect eff = this.getStatForBuff(CharacterTemporaryStat.Guard);
                             if (eff.makeChanceResult()) {
                                 attacker.disease(MapleDisease.STUN.getDisease(), 1);
                             }
@@ -9773,7 +9773,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             addMP(((int) Math.min(maxmp, Math.min(((int) ((double) totDamage * (double) getStatForBuff(CharacterTemporaryStat.ComboDrain).getX() / 100.0)), stats.getMaxMp() / 2))));
         }
         if (getBuffedValue(CharacterTemporaryStat.REAPER) != null && getBuffedValue(CharacterTemporaryStat.SUMMON) == null && getSummonsSize() < 4 && canSummon()) {
-            final MapleStatEffect eff = getStatForBuff(CharacterTemporaryStat.REAPER);
+            final StatEffect eff = getStatForBuff(CharacterTemporaryStat.REAPER);
             if (eff.makeChanceResult()) {
                 eff.applyTo(this, this, false, null, eff.getDuration());
             }
@@ -9783,7 +9783,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             for (int i : venomskills) {
                 final Skill skill = SkillFactory.getSkill(i);
                 if (getTotalSkillLevel(skill) > 0) {
-                    final MapleStatEffect venomEffect = skill.getEffect(getTotalSkillLevel(skill));
+                    final StatEffect venomEffect = skill.getEffect(getTotalSkillLevel(skill));
                     if (venomEffect.makeChanceResult() && getAllLinkMid().size() < venomEffect.getY()) {
                         setLinkMid(oid, venomEffect.getX());
                         venomEffect.applyTo(this);
@@ -9805,7 +9805,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             }
             final Skill skill = SkillFactory.getSkill(i);
             if (getTotalSkillLevel(skill) > 0) {
-                final MapleStatEffect venomEffect = skill.getEffect(getTotalSkillLevel(skill));
+                final StatEffect venomEffect = skill.getEffect(getTotalSkillLevel(skill));
                 final Mob monster = map.getMonsterByOid(oid);
                 if (venomEffect.makeChanceResult() && monster != null) {
                     monster.applyStatus(this, new MonsterStatusEffect(MonsterStatus.POISON, 1, i, null, false), true, venomEffect.getDuration(), true, venomEffect);
@@ -9816,7 +9816,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (getJob() == 2410 || getJob() == 2411 || getJob() == 2412) {
             final Skill skil = SkillFactory.getSkill(getJob() == 2412 ? 24120002 : 24100003);
             if (getTotalSkillLevel(skil) > 0 && critCount > 0 && skillid != 24120002 && skillid != 24100003) {
-                final MapleStatEffect eff = skil.getEffect(getTotalSkillLevel(skil));
+                final StatEffect eff = skil.getEffect(getTotalSkillLevel(skil));
                 if (eff.makeChanceResult()) {
                     setBattleshipHP(Math.min(getJob() == 2412 ? 40 : 20, currentBattleshipHP() + 1));
                     attackCarte(eff, oid, 1);
@@ -9833,7 +9833,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (skillid > 0) {
             final Skill skil = SkillFactory.getSkill(skillid);
             if (skil != null) {
-                final MapleStatEffect effect = skil.getEffect(getTotalSkillLevel(skil));
+                final StatEffect effect = skil.getEffect(getTotalSkillLevel(skil));
                 switch (skillid) {
                     case 15111001:
                     case 3111008:
@@ -9862,7 +9862,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    public void attackCarte(final MapleStatEffect eff, final int oid, final int x) {
+    public void attackCarte(final StatEffect eff, final int oid, final int x) {
         if (x > 0) {
             lastBerserkTime += x; //lol unused variable.
             map.broadcastMessage(PhantomPacket.getCarteAnimation(id, oid, job, (int) lastBerserkTime, x));
@@ -9947,7 +9947,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (!isIntern()) {
             //cancelEffectFromTemporaryStat(CharacterTemporaryStat.WIND_WALK);
             //cancelEffectFromTemporaryStat(CharacterTemporaryStat.Speed);
-            final MapleStatEffect ds = getStatForBuff(CharacterTemporaryStat.DarkSight);
+            final StatEffect ds = getStatForBuff(CharacterTemporaryStat.DarkSight);
             if (ds != null) {
                 if (ds.getSourceId() != 4330001 || !ds.makeChanceResult()) {
                     cancelEffectFromTemporaryStat(CharacterTemporaryStat.DarkSight);
@@ -10022,7 +10022,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void handleCardStack() {
         Skill noir = SkillFactory.getSkill(24120002);
         Skill blanc = SkillFactory.getSkill(24100003);
-        MapleStatEffect ceffect = null;
+        StatEffect ceffect = null;
         int advSkillLevel = getTotalSkillLevel(noir);
         boolean isAdv = false;
         if (advSkillLevel > 0) {
@@ -10184,7 +10184,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void cancelStolenSkill(int skillID) {
         final Skill skk = SkillFactory.getSkill(skillID);
-        final MapleStatEffect eff = skk.getEffect(getTotalSkillLevel(skk));
+        final StatEffect eff = skk.getEffect(getTotalSkillLevel(skk));
 
         if (eff.isMonsterBuff() || (eff.getStatups().isEmpty() && !eff.getMonsterStati().isEmpty())) {
             for (MapleMapObject o : map.getAllMapObjects(MapleMapObjectType.MONSTER)) {
@@ -11661,7 +11661,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void handlePsychicPoint(int skillid) {
         int maxPP = 0;
-        MapleStatEffect effects = SkillFactory.getSkill(skillid).getEffect(getSkillLevel(skillid));
+        StatEffect effects = SkillFactory.getSkill(skillid).getEffect(getSkillLevel(skillid));
         dropMessage(5, "PPCon: " + effects.getPPCon() + " | PPRecovery: " + effects.getPPRecovery());
 
         switch (getJob()) {
@@ -11712,7 +11712,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (getSkillLevel(NightWalker.SHADOW_BAT) > 0 || getSkillLevel(NightWalker.SHADOW_BAT_1) > 0 || getSkillLevel(NightWalker.SHADOW_BAT_2) > 0 || getSkillLevel(NightWalker.SHADOW_BAT_3) > 0) {
             if (kaiserCombo >= 3) {
                 if (batCount < 2) {
-                    MapleStatEffect batEffect = batSkill.getEffect(getSkillLevel(NightWalker.SHADOW_BAT_3));
+                    StatEffect batEffect = batSkill.getEffect(getSkillLevel(NightWalker.SHADOW_BAT_3));
                     Point batPos = getTruePosition();
                     Summon batSummon = new Summon(this, batEffect, batPos, SummonMovementType.CIRCLE_FOLLOW, 60000);
 

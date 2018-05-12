@@ -2,22 +2,37 @@ package server.commands;
 
 import client.ClientSocket;
 import constants.ServerConstants;
+import server.maps.objects.User;
 
 /**
- * Developer Debug Commands
- * @author
+ * Developer Commands
+ * @author Mazen Massoud
  */
-public class DebugCommands {
+public class DeveloperCommands {
 
     public static ServerConstants.PlayerGMRank getPlayerLevelRequired() {
         return ServerConstants.PlayerGMRank.INTERNAL_DEVELOPER;
     }
 
+    /**
+     * Enables access to the commands in the CommandVault class.
+     */
+    public static class CommandVault extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            User pPlayer = c.getPlayer();
+            pPlayer.setGM((pPlayer.getGMLevel() < 10) ? (byte) 10 : (byte) 5);
+            pPlayer.dropMessage(6, "You" + ((pPlayer.getGMLevel() < 10) ? " now " : " no longer ") + "have access to additional commands located in the Command Vault.");
+            return 1;
+        }
+    }
+    
     public static class ToggleCooldown extends CommandExecute {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            c.getPlayer().dropMessage(6, "Cooldown " + (c.getPlayer().toggleCooldown() ? "removed." : "restored."));
+            c.getPlayer().dropMessage(6, "Cooldowns " + (c.getPlayer().toggleCooldown() ? "removed." : "restored."));
             return 1;
         }
     }
@@ -35,6 +50,15 @@ public class DebugCommands {
                 }
             }
             c.getPlayer().getMap().setBurningFieldLevel((byte) Math.min(10, fieldLevel));
+            return 1;
+        }
+    }
+    
+    public static class CancelBuffs extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            c.getPlayer().cancelAllBuffs();
             return 1;
         }
     }

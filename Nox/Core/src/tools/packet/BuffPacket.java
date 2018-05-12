@@ -17,7 +17,7 @@ import service.SendPacketOpcode;
 import provider.data.HexTool;
 import net.OutPacket;
 
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.Randomizer;
 import server.life.MobSkill;
 import server.maps.objects.User;
@@ -140,11 +140,11 @@ public class BuffPacket {
      * @param effect - The status changes that occur with the buff
      * @return The encoded buff packet.
      */
-    public static OutPacket giveBuff(User chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect) {
+    public static OutPacket giveBuff(User chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, StatEffect effect) {
         return giveBuff(chr, buffid, bufflength, statups, effect, 0, 0, 0, 0);
     }
 
-    public static OutPacket giveBuff(User chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect, int diceRange, int diceId, int lightGauge, int darkGauge) {
+    public static OutPacket giveBuff(User chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, StatEffect effect, int diceRange, int diceId, int lightGauge, int darkGauge) {
 
         BuffPacket.clearFakeBuffstats(statups);
         boolean bEndecode4Byte = false, bMovementAffecting = false;
@@ -201,7 +201,7 @@ public class BuffPacket {
      * @return The encoded buff packet.
      */
     private static void encodeForLocal(OutPacket oPacket, User pPlayer, int nBuffID, int tDuration,
-            Map<CharacterTemporaryStat, Integer> mTemporaryStats, MapleStatEffect pEffect, int diceRange,
+            Map<CharacterTemporaryStat, Integer> mTemporaryStats, StatEffect pEffect, int diceRange,
             int diceId, int lightGauge, int darkGauge, boolean bEndecode4Byte) {
 
         mTemporaryStats = SortCTS(mTemporaryStats);
@@ -545,7 +545,7 @@ public class BuffPacket {
      * Encodes TwoState status changes. These states are always applied to any character.
      *
      */
-    private static void encodeTwoStateTemporaryStat(OutPacket oPacket, User chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect) {
+    private static void encodeTwoStateTemporaryStat(OutPacket oPacket, User chr, int buffid, int bufflength, Map<CharacterTemporaryStat, Integer> statups, StatEffect effect) {
         if (statups.containsKey(CharacterTemporaryStat.EnergyCharged)) {
             oPacket.EncodeInt(statups.get(CharacterTemporaryStat.EnergyCharged));//Value
             oPacket.EncodeInt(buffid);//Reason
@@ -854,7 +854,7 @@ public class BuffPacket {
         return oPacket;
     }
 
-    public static OutPacket giveForeignBuff(int cid, Map<CharacterTemporaryStat, Integer> statups, MapleStatEffect effect) {
+    public static OutPacket giveForeignBuff(int cid, Map<CharacterTemporaryStat, Integer> statups, StatEffect effect) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.UserTemporaryStatSet.getValue());
         oPacket.EncodeInt(cid);

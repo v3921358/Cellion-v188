@@ -4,25 +4,16 @@ import java.util.Arrays;
 
 import client.ClientSocket;
 import client.MapleStat;
-import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
-import database.Database;
 import handling.world.World;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import service.ChannelServer;
 import scripting.EventInstanceManager;
 import scripting.EventManager;
 import scripting.provider.NPCChatByType;
 import scripting.provider.NPCChatType;
 import scripting.provider.NPCScriptManager;
-import server.MapleInventoryManipulator;
-import server.MapleItemInformationProvider;
 import server.life.LifeFactory;
 import server.life.Mob;
 import server.maps.MapleMap;
@@ -30,16 +21,13 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.SavedLocationType;
 import server.maps.objects.User;
-import tools.LogHelper;
 import tools.StringUtil;
 import tools.packet.CField;
 import tools.packet.WvsContext;
 
-/*
- * Cellion Player Commands
- *
+/**
+ * Player Commands
  * @author Mazen Massoud
- * @author Emilyx3
  */
 public class PlayerCommand {
 

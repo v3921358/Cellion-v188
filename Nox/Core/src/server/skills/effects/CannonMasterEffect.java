@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.CannonMaster;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,13 +18,13 @@ import server.skills.effects.manager.Effect;
 public class CannonMasterEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case CannonMaster.ANCHORS_AWEIGH:
                 pEffect.statups.put(CharacterTemporaryStat.PUPPET, 1);
                 break;
             case CannonMaster.BUCKSHOT:
-                pEffect.statups.put(CharacterTemporaryStat.AttackCountX, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.AttackCountX, pEffect.info.get(StatInfo.x));
                 break;
             case CannonMaster.CANNON_BARRAGE:
                 break;
@@ -48,7 +48,7 @@ public class CannonMasterEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.Dice, 0);
                 break;
             case CannonMaster.EPIC_ADVENTURE_2:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case CannonMaster.HEROS_WILL_7:
                 break;
@@ -79,7 +79,7 @@ public class CannonMasterEffect extends AbstractEffect {
             case CannonMaster.HYPER_STRENGTH_2:
                 break;
             case CannonMaster.MAPLE_WARRIOR_8:
-                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(StatInfo.x));
                 break;
             case CannonMaster.MEGA_MONKEY_MAGIC:
                 break;
@@ -97,7 +97,7 @@ public class CannonMasterEffect extends AbstractEffect {
             case CannonMaster.NAUTILUS_STRIKE:
                 break;
             case CannonMaster.PIRATES_SPIRIT:
-                pEffect.statups.put(CharacterTemporaryStat.Stance, (int) pEffect.info.get(MapleStatInfo.prop));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, (int) pEffect.info.get(StatInfo.prop));
                 break;
             case CannonMaster.ROLLING_RAINBOW:
                 break;

@@ -50,8 +50,8 @@ public class MapleItemInformationProvider {
     protected final Map<Integer, ItemInformation> dataCache = new HashMap<>();
     protected final Map<Integer, FarmItemInformation> farmDataCache = new HashMap<>();
     protected final Map<String, List<Triple<String, Point, Point>>> afterImage = new HashMap<>();
-    protected final Map<Integer, MapleStatEffect> itemEffects = new HashMap<>();
-    protected final Map<Integer, MapleStatEffect> itemEffectsEx = new HashMap<>();
+    protected final Map<Integer, StatEffect> itemEffects = new HashMap<>();
+    protected final Map<Integer, StatEffect> itemEffectsEx = new HashMap<>();
     protected final Map<Integer, Integer> mobIds = new HashMap<>();
     protected final Map<Integer, Pair<Integer, Integer>> potLife = new HashMap<>(); //itemid to lifeid, levels
     protected final Map<Integer, MapleFamiliar> familiars = new HashMap<>(); //by familiarID
@@ -1214,27 +1214,27 @@ public class MapleItemInformationProvider {
                 + equip.getHands() + equip.getSpeed() + equip.getHp() + equip.getMp() + equip.getWdef() + equip.getMdef();
     }
 
-    public final MapleStatEffect getItemEffect(final int itemId) {
-        MapleStatEffect ret = itemEffects.get(itemId);
+    public final StatEffect getItemEffect(final int itemId) {
+        StatEffect ret = itemEffects.get(itemId);
         if (ret == null) {
             final MapleData item = getItemData(itemId);
             if (item == null || item.getChildByPath("spec") == null) {
                 return null;
             }
-            ret = MapleStatEffect.loadItemEffectFromData(item.getChildByPath("spec"), itemId);
+            ret = StatEffect.loadItemEffectFromData(item.getChildByPath("spec"), itemId);
             itemEffects.put(itemId, ret);
         }
         return ret;
     }
 
-    public final MapleStatEffect getItemEffectEX(final int itemId) {
-        MapleStatEffect ret = itemEffectsEx.get(itemId);
+    public final StatEffect getItemEffectEX(final int itemId) {
+        StatEffect ret = itemEffectsEx.get(itemId);
         if (ret == null) {
             final MapleData item = getItemData(itemId);
             if (item == null || item.getChildByPath("specEx") == null) {
                 return null;
             }
-            ret = MapleStatEffect.loadItemEffectFromData(item.getChildByPath("specEx"), itemId);
+            ret = StatEffect.loadItemEffectFromData(item.getChildByPath("specEx"), itemId);
             itemEffectsEx.put(itemId, ret);
         }
         return ret;

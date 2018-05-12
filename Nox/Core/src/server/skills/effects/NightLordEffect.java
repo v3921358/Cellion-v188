@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.NightLord;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,22 +18,22 @@ import server.skills.effects.manager.Effect;
 public class NightLordEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case NightLord.BLEED_DART:
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
                 break;
             case NightLord.CLAW_EXPERT:
                 break;
             case NightLord.DARK_HARMONY:
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
                 break;
             case NightLord.DARK_HARMONY_1:
                 break;
             case NightLord.DEATH_STAR:
                 break;
             case NightLord.EPIC_ADVENTURE:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case NightLord.EXPERT_THROWING_STAR_HANDLING_1:
                 break;
@@ -74,7 +74,7 @@ public class NightLordEffect extends AbstractEffect {
             case NightLord.HYPER_STRENGTH_3000_300_30_3:
                 break;
             case NightLord.MAPLE_WARRIOR_1:
-                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(StatInfo.x));
                 break;
             case NightLord.NIGHT_LORDS_MARK:
                 break;

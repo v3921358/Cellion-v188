@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
 
 import net.OutPacket;
 import scripting.EventManager;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.life.Mob;
-import static server.MapleStatInfo.dot;
-import static server.MapleStatInfo.dotInterval;
-import static server.MapleStatInfo.dotSuperpos;
-import static server.MapleStatInfo.dotTime;
+import static server.StatInfo.dot;
+import static server.StatInfo.dotInterval;
+import static server.StatInfo.dotSuperpos;
+import static server.StatInfo.dotTime;
 import static server.life.mob.MobStat.*;
 import static server.life.mob.MobStat.BurnedInfo;
 import server.skills.Option;
@@ -455,7 +455,7 @@ public class MobTemporaryStat {
                 filter(b -> b.getSkillId() == skill.getId() && b.getCharacterId() == charId)
                 .findFirst().orElse(null);
         int slv = Utility.requestCharacter(charId).getSkillLevel(skill.getId());
-        MapleStatEffect si = skill.getEffect(slv);
+        StatEffect si = skill.getEffect(slv);
         BurnedInfo bi = new BurnedInfo();
         bi.setCharacterId(charId);
         bi.setSkillId(skill.getId());

@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Magician;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class MagicianEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Magician.ELEMENTAL_WEAKNESS:
                 break;
@@ -33,8 +33,8 @@ public class MagicianEffect extends AbstractEffect {
             case Magician.MAGIC_CLAW_1:
                 break;
             case Magician.MAGIC_GUARD_2:
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
-                pEffect.statups.put(CharacterTemporaryStat.MagicGuard, pEffect.info.get(MapleStatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.MagicGuard, pEffect.info.get(StatInfo.x));
                 break;
             case Magician.MP_BOOST:
                 break;

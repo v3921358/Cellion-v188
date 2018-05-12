@@ -8,8 +8,8 @@ import client.SkillFactory;
 import constants.skills.*;
 import handling.world.AttackInfo;
 import handling.world.AttackMonster;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.life.Mob;
 import server.life.MobAttackInfo;
 import server.maps.objects.User;
@@ -30,7 +30,7 @@ public class MobStatRequest {
      * @param pAttack
      * @param pEffect
      */
-    public static void apply(User pPlayer, AttackInfo pAttack, MapleStatEffect pEffect) {
+    public static void apply(User pPlayer, AttackInfo pAttack, StatEffect pEffect) {
         Option pOpt = new Option();
 
         for (AttackMonster pAttackMob : pAttack.allDamage) {
@@ -58,7 +58,7 @@ public class MobStatRequest {
                     pStat = MobStat.Stun;
                     applyStat(pMobStat, pStat, pOpt);
 
-                    pOpt.nOption = pEffect.info.get(MapleStatInfo.x);
+                    pOpt.nOption = pEffect.info.get(StatInfo.x);
                     pOpt.rOption = pAttack.skill;
                     pOpt.tOption = 4;
                     pStat = MobStat.AddDamParty;
@@ -68,13 +68,13 @@ public class MobStatRequest {
                     int nAmount = 0;
                     if (pMobStat.hasCurrentMobStat(MobStat.MultiPMDR)) {
                         nAmount = pMobStat.getCurrentOptionsByMobStat(MobStat.MultiPMDR).cOption;
-                        if (nAmount < pEffect.info.get(MapleStatInfo.x)) {
+                        if (nAmount < pEffect.info.get(StatInfo.x)) {
                             nAmount++;
                         }
                     }
-                    pOpt.nOption = pEffect.info.get(MapleStatInfo.y) * nAmount;
+                    pOpt.nOption = pEffect.info.get(StatInfo.y) * nAmount;
                     pOpt.rOption = pAttack.skill;
-                    pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                    pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                     pOpt.cOption = nAmount;
                     pStat = MobStat.MultiPMDR;
                     break;
@@ -82,28 +82,28 @@ public class MobStatRequest {
                 case FirePoisonArchMage.FLAME_HAZE: {
                     pOpt.nOption = 1;
                     pOpt.rOption = pAttack.skill;
-                    pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                    pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                     pStat = MobStat.Invincible;
                     applyStat(pMobStat, pStat, pOpt);
 
                     pOpt.nOption = 1;
                     pOpt.rOption = pAttack.skill;
-                    pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                    pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                     pStat = MobStat.Speed;
                     break;
                 }
                 case NightLord.SHOWDOWN: {
                     pOpt.nOption = 1;
                     pOpt.rOption = pAttack.skill;
-                    pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                    pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                     pStat = MobStat.Showdown;
                     break;
                 }
                 case AngelicBuster.FINALE_RIBBON: {
-                    if (Utility.resultSuccess(pEffect.info.get(MapleStatInfo.prop) > 0 ? pEffect.info.get(MapleStatInfo.prop) : 10)) {
+                    if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
                         pOpt.nOption = 1;
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.AddDamParty;
                     } else {
                         bApplyStat = false;
@@ -113,10 +113,10 @@ public class MobStatRequest {
                 case AngelicBuster.LOVELY_STING:
                 case AngelicBuster.LOVELY_STING_1:
                 case AngelicBuster.LOVELY_STING_2: {
-                    if (Utility.resultSuccess(pEffect.info.get(MapleStatInfo.prop) > 0 ? pEffect.info.get(MapleStatInfo.prop) : 10)) {
+                    if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
                         pOpt.nOption = 1;
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.Explosion;
                     } else {
                         bApplyStat = false;
@@ -141,22 +141,22 @@ public class MobStatRequest {
                 case Aran.SNOW_CHARGE_1: {
                     pOpt.nOption = - 1;
                     pOpt.rOption = pAttack.skill;
-                    pOpt.tOption = pEffect.info.get(MapleStatInfo.y);
+                    pOpt.tOption = pEffect.info.get(StatInfo.y);
                     pOpt.mOption = 1;
                     pStat = MobStat.Speed;
                     break;
                 }
                 case DawnWarrior.IMPALING_RAYS: {
-                    if (Utility.resultSuccess(pEffect.info.get(MapleStatInfo.prop) > 0 ? pEffect.info.get(MapleStatInfo.prop) : 10)) {
+                    if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
                         pOpt.nOption = 1;
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.Stun;
                         applyStat(pMobStat, pStat, pOpt);
 
                         pOpt.nOption = 1;
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.SeperateSoulC;
                     } else {
                         bApplyStat = false;
@@ -164,22 +164,22 @@ public class MobStatRequest {
                     break;
                 }
                 case DemonSlayer.DEMON_CRY: {
-                    pOpt.nOption = -pEffect.info.get(MapleStatInfo.y);
+                    pOpt.nOption = -pEffect.info.get(StatInfo.y);
                     pOpt.rOption = pAttack.skill;
-                    pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                    pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                     applyStat(pMobStat, MobStat.PAD, pOpt);
                     applyStat(pMobStat, MobStat.PDR, pOpt);
                     applyStat(pMobStat, MobStat.MAD, pOpt);
                     applyStat(pMobStat, MobStat.MDR, pOpt);
 
-                    pOpt.nOption = -pEffect.info.get(MapleStatInfo.z);
+                    pOpt.nOption = -pEffect.info.get(StatInfo.z);
                     pOpt.rOption = pAttack.skill;
-                    pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                    pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                     pStat = MobStat.ACC;
                     break;
                 }
                 case DemonAvenger.NETHER_SLICE: {
-                    pOpt.nOption = pEffect.info.get(MapleStatInfo.x);
+                    pOpt.nOption = pEffect.info.get(StatInfo.x);
                     pOpt.rOption = pAttack.skill;
                     pOpt.tOption = 30;
                     pMobStat.addStatOptionsAndBroadcast(MobStat.PDR, pOpt);
@@ -187,17 +187,17 @@ public class MobStatRequest {
                     break;
                 }
                 case Hayato.SUDDEN_STRIKE: {
-                    pOpt.nOption = pEffect.info.get(MapleStatInfo.u);
+                    pOpt.nOption = pEffect.info.get(StatInfo.u);
                     pOpt.rOption = pAttack.skill;
-                    pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                    pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                     pStat = MobStat.AddDamParty;
                     break;
                 }
                 case Mercedes.UNICORN_SPIKE: {
-                    if (Utility.resultSuccess(pEffect.info.get(MapleStatInfo.prop) > 0 ? pEffect.info.get(MapleStatInfo.prop) : 10)) {
-                        pOpt.nOption = pEffect.info.get(MapleStatInfo.x);
+                    if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
+                        pOpt.nOption = pEffect.info.get(StatInfo.x);
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.AddDamSkill;
                     } else {
                         bApplyStat = false;
@@ -205,10 +205,10 @@ public class MobStatRequest {
                     break;
                 }
                 case Mercedes.SPIKES_ROYALE_1: {
-                    if (Utility.resultSuccess(pEffect.info.get(MapleStatInfo.prop) > 0 ? pEffect.info.get(MapleStatInfo.prop) : 10)) {
-                        pOpt.nOption = pEffect.info.get(MapleStatInfo.x);
+                    if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
+                        pOpt.nOption = pEffect.info.get(StatInfo.x);
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.Weakness;
                     } else {
                         bApplyStat = false;
@@ -217,10 +217,10 @@ public class MobStatRequest {
                 }
                 case Mihile.FOURPOINT_ASSAULT:
                 case Mihile.RADIANT_CROSS: {
-                    if (Utility.resultSuccess(pEffect.info.get(MapleStatInfo.prop) > 0 ? pEffect.info.get(MapleStatInfo.prop) : 10)) {
-                        pOpt.nOption = pEffect.info.get(MapleStatInfo.x);
+                    if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
+                        pOpt.nOption = pEffect.info.get(StatInfo.x);
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.ACC;
                     } else {
                         bApplyStat = false;
@@ -228,19 +228,19 @@ public class MobStatRequest {
                     break;
                 }
                 case Shade.DEATH_MARK: {
-                    int nHeal = pEffect.info.get(MapleStatInfo.x);
+                    int nHeal = pEffect.info.get(StatInfo.x);
                     pPlayer.addHP(nHeal);
                     pOpt.nOption = 1;
                     pOpt.rOption = pAttack.skill;
-                    pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                    pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                     pStat = MobStat.DebuffHealing;
                     break;
                 }
                 case Paladin.DIVINE_CHARGE: {
-                    if (Utility.resultSuccess(pEffect.info.get(MapleStatInfo.prop) > 0 ? pEffect.info.get(MapleStatInfo.prop) : 10)) {
+                    if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
                         pOpt.nOption = 1;
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.Seal;
                     } else {
                         bApplyStat = false;
@@ -249,34 +249,34 @@ public class MobStatRequest {
                 }
                 case Crusader.SHOUT: {
                     if (pMob.getStats().isBoss()) {
-                        pOpt.nOption = pEffect.info.get(MapleStatInfo.x);
+                        pOpt.nOption = pEffect.info.get(StatInfo.x);
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.Weakness;
                     } else {
                         pOpt.nOption = 1;
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.Stun;
                     }
                     break;
                 }
                 case Hero.PUNCTURE: {
-                    pOpt.nOption = pEffect.info.get(MapleStatInfo.y);
+                    pOpt.nOption = pEffect.info.get(StatInfo.y);
                     pOpt.rOption = pAttack.skill;
-                    pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                    pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                     pStat = MobStat.AddDamParty;
                     break;
                 }
                 case Paladin.SMITE_SHIELD: {
                     pOpt.nOption = 1;
                     pOpt.rOption = pAttack.skill;
-                    pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                    pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                     pStat = MobStat.Smite;
                     break;
                 }
                 case WildHunter.DASH_N_SLASH_1: {//(33101115)  //Stun + Bite Debuff
-                    if (Utility.resultSuccess(pEffect.info.get(MapleStatInfo.prop) > 0 ? pEffect.info.get(MapleStatInfo.prop) : 10)) {
+                    if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
                         int nAmount = 0;
                         if (pMobStat.hasCurrentMobStat(MobStat.JaguarBleeding)) {
                             nAmount = pMobStat.getCurrentOptionsByMobStat(MobStat.JaguarBleeding).nOption;
@@ -290,21 +290,21 @@ public class MobStatRequest {
 
                         pOpt.nOption = 1;
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.Stun;
                     } else {
                         pOpt.nOption = 1;
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.Stun;
                     }
                     break;
                 }
                 case WildHunter.DASH_N_SLASH_2: { //(33101215)   //Stun Debuff
-                    if (Utility.resultSuccess(pEffect.info.get(MapleStatInfo.prop) > 0 ? pEffect.info.get(MapleStatInfo.prop) : 10)) {
+                    if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
                         pOpt.nOption = 1;
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.Stun;
                     } else {
                         bApplyStat = false;
@@ -312,7 +312,7 @@ public class MobStatRequest {
                     break;
                 }
                 case WildHunter.SWIPE: {
-                    if (Utility.resultSuccess(pEffect.info.get(MapleStatInfo.prop) > 0 ? pEffect.info.get(MapleStatInfo.prop) : 10)) {
+                    if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
                         int nAmount = 0;
                         if (pMobStat.hasCurrentMobStat(MobStat.JaguarBleeding)) {
                             nAmount = pMobStat.getCurrentOptionsByMobStat(MobStat.JaguarBleeding).nOption;
@@ -328,7 +328,7 @@ public class MobStatRequest {
                     break;
                 }
                 case WildHunter.JAGUAR_SOUL: {
-                    if (Utility.resultSuccess(pEffect.info.get(MapleStatInfo.prop) > 0 ? pEffect.info.get(MapleStatInfo.prop) : 10)) {
+                    if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
                         int nAmount = 0;
                         if (pMobStat.hasCurrentMobStat(MobStat.JaguarBleeding)) {
                             nAmount = pMobStat.getCurrentOptionsByMobStat(MobStat.JaguarBleeding).nOption;
@@ -342,7 +342,7 @@ public class MobStatRequest {
 
                         pOpt.nOption = 1;
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.Stun;
                     } else {
                         bApplyStat = false;
@@ -352,16 +352,16 @@ public class MobStatRequest {
                 case Xenon.ENTANGLING_LASH: {
                     pOpt.nOption = 1;
                     pOpt.rOption = pAttack.skill;
-                    pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                    pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                     applyStat(pMobStat, MobStat.Stun, pOpt);
                     pStat = MobStat.MagicCrash;
                     break;
                 }
                 case Xenon.ORBITAL_CATACLYSM: {
-                    if (Utility.resultSuccess(pEffect.info.get(MapleStatInfo.prop) > 0 ? pEffect.info.get(MapleStatInfo.prop) : 10)) {
-                        pOpt.nOption = pEffect.info.get(MapleStatInfo.x);
+                    if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
+                        pOpt.nOption = pEffect.info.get(StatInfo.x);
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.PDR;
                     } else {
                         bApplyStat = false;
@@ -383,13 +383,13 @@ public class MobStatRequest {
                 case Cannoneer.BLAST_BACK:
                 case Bowmaster.BINDING_SHOT:
                 case Crossbowman.NET_TOSS: {
-                    if (Utility.resultSuccess(pEffect.info.get(MapleStatInfo.prop) > 0 ? pEffect.info.get(MapleStatInfo.prop) : 10)) {
+                    if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
                         if (pMob.getStats().isBoss()) {
-                            pOpt.nOption = pEffect.info.get(MapleStatInfo.x);
-                            pOpt.tOption = (pEffect.info.get(MapleStatInfo.time) / 1000) / 2;
+                            pOpt.nOption = pEffect.info.get(StatInfo.x);
+                            pOpt.tOption = (pEffect.info.get(StatInfo.time) / 1000) / 2;
                         } else {
-                            pOpt.nOption = pEffect.info.get(MapleStatInfo.y);
-                            pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                            pOpt.nOption = pEffect.info.get(StatInfo.y);
+                            pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         }
                         pOpt.rOption = pAttack.skill;
                         pStat = MobStat.Speed;
@@ -409,7 +409,7 @@ public class MobStatRequest {
                 case Mercedes.ELEMENTAL_KNIGHTS_2: {
                     pOpt.nOption = 5;
                     pOpt.rOption = pAttack.skill;
-                    pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                    pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                     pStat = MobStat.Freeze;
                     break;
                 }
@@ -469,11 +469,11 @@ public class MobStatRequest {
                 case FirePoisonMage.TELEPORT_MASTERY_3:
                 case IceLightningArchMage.CHAIN_LIGHTNING:
                 case Priest.SHINING_RAY: {
-                    if (Utility.resultSuccess(pEffect.info.get(MapleStatInfo.prop) > 0 ? pEffect.info.get(MapleStatInfo.prop) : 10)) {
+                    if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
                         MobTemporaryStat pStun = pMob.getTemporaryStat();
                         pOpt.nOption = 1;
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                         pStat = MobStat.Stun;
                     } else {
                         bApplyStat = false;
@@ -537,13 +537,13 @@ public class MobStatRequest {
      * @param pEffect
      * @param nSkillID
      */
-    public static void applyBurn(MobTemporaryStat pMobStat, MapleStatEffect pEffect, int nSkillID) {
+    public static void applyBurn(MobTemporaryStat pMobStat, StatEffect pEffect, int nSkillID) {
         Skill pSkill = SkillFactory.getSkill(nSkillID);
         Option pOpt = new Option();
 
-        pOpt.nOption = pEffect.info.get(MapleStatInfo.damage);
+        pOpt.nOption = pEffect.info.get(StatInfo.damage);
         pOpt.rOption = nSkillID;
-        pOpt.tOption = pEffect.info.get(MapleStatInfo.time) / 1000;
+        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
         pMobStat.addStatOptionsAndBroadcast(MobStat.Poison, pOpt); // Mask Poison as Burn for now.
     }
 }

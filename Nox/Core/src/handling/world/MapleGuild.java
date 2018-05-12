@@ -27,7 +27,7 @@ import handling.world.MapleBBSThread.MapleBBSReply;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import net.OutPacket;
 
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CField;
@@ -1023,7 +1023,7 @@ public class MapleGuild implements java.io.Serializable {
             return false;
         }
         final MapleGuildSkill ourSkill = guildSkills.get(skill);
-        final MapleStatEffect skillid = SkillFactory.getSkill(skill).getEffect(ourSkill.level);
+        final StatEffect skillid = SkillFactory.getSkill(skill).getEffect(ourSkill.level);
         if (ourSkill.timestamp > System.currentTimeMillis() || skillid.getPeriod() <= 0) {
             return false;
         }
@@ -1034,7 +1034,7 @@ public class MapleGuild implements java.io.Serializable {
     }
 
     public boolean purchaseSkill(int skill, String name, int cid) {
-        final MapleStatEffect skillid = SkillFactory.getSkill(skill).getEffect(getSkillLevel(skill) + 1);
+        final StatEffect skillid = SkillFactory.getSkill(skill).getEffect(getSkillLevel(skill) + 1);
         if (skillid.getReqGuildLevel() > getLevel() || skillid.getLevel() <= getSkillLevel(skill)) {
             return false;
         }

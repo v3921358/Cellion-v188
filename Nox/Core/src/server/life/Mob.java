@@ -19,7 +19,7 @@ import handling.world.MaplePartyCharacter;
 
 import scripting.EventInstanceManager;
 import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.Randomizer;
 import server.Timer.EtcTimer;
 import server.maps.MapleMap;
@@ -1013,7 +1013,7 @@ public class Mob extends AbstractLoadedMapleLife {
         return stats.getEffectiveness(e);
     }
 
-    public void applyStatus(User from, MonsterStatusEffect status, boolean poison, long duration, boolean checkboss, MapleStatEffect eff) {
+    public void applyStatus(User from, MonsterStatusEffect status, boolean poison, long duration, boolean checkboss, StatEffect eff) {
         if (!isAlive() || getLinkCID() > 0) {
             return;
         }

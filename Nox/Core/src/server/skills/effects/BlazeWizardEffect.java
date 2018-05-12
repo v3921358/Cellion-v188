@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.BlazeWizard;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class BlazeWizardEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case BlazeWizard.ELEMENTAL_WEAKNESS_3:
                 break;
@@ -88,7 +88,7 @@ public class BlazeWizardEffect extends AbstractEffect {
             case BlazeWizard.TELEPORT_2:
                 break;
             case BlazeWizard.WORD_OF_FIRE:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case BlazeWizard.BRILLIANT_ENLIGHTENMENT:
                 break;
@@ -137,11 +137,11 @@ public class BlazeWizardEffect extends AbstractEffect {
             case BlazeWizard.BLAZING_EXTINCTION_SPREAD:
                 break;
             case BlazeWizard.BURNING_CONDUIT:
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
-                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(StatInfo.indieBooster));
                 break;
             case BlazeWizard.CALL_OF_CYGNUS_5:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
                 break;
             case BlazeWizard.CATACLYSM:
                 break;
@@ -166,12 +166,12 @@ public class BlazeWizardEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.SUMMON, nSourceID);
                 break;
             case BlazeWizard.FLAME_BARRIER:
-                pEffect.statups.put(CharacterTemporaryStat.FireBarrier, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.FireBarrier, pEffect.info.get(StatInfo.x));
                 break;
             case BlazeWizard.FLAME_BARRIER_1:
                 break;
             case BlazeWizard.GLORY_OF_THE_GUARDIANS_4:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case BlazeWizard.HYPER_ACCURACY_10_1:
                 break;

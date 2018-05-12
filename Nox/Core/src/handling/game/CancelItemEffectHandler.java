@@ -3,7 +3,7 @@ package handling.game;
 import client.ClientSocket;
 import server.MapleItemInformationProvider;
 import net.InPacket;
-import server.MapleStatEffect;
+import server.StatEffect;
 import net.ProcessPacket;
 
 public final class CancelItemEffectHandler implements ProcessPacket<ClientSocket> {
@@ -17,7 +17,7 @@ public final class CancelItemEffectHandler implements ProcessPacket<ClientSocket
     public void Process(ClientSocket c, InPacket iPacket) {
         int itemId = iPacket.DecodeInt();
 
-        MapleStatEffect effect = MapleItemInformationProvider.getInstance().getItemEffect(-itemId);
+        StatEffect effect = MapleItemInformationProvider.getInstance().getItemEffect(-itemId);
         if (effect != null) {
             c.getPlayer().cancelEffect(effect, false, -1L);
         }

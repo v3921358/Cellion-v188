@@ -92,6 +92,10 @@ import tools.packet.WvsContext;
 import tools.packet.MobPacket;
 import tools.packet.PetPacket;
 
+/**
+ * Administrator Commands
+ * @author Mazen Massoud
+ */
 public class AdminCommand {
 
     public static PlayerGMRank getPlayerLevelRequired() {

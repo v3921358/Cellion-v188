@@ -6,7 +6,7 @@ package client.jobs;
 import client.CharacterTemporaryStat;
 import client.Skill;
 import client.SkillFactory;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.maps.objects.User;
 import tools.packet.BuffPacket;
 import tools.packet.JobPacket.KinesisPacket;
@@ -21,7 +21,7 @@ public class Kinesis {
     public static class KinesisHandler {
 
         public static void handlePsychicPoint(User pPlayer, int nSkill) {
-            MapleStatEffect pEffect = SkillFactory.getSkill(nSkill).getEffect(pPlayer.getTotalSkillLevel(nSkill));
+            StatEffect pEffect = SkillFactory.getSkill(nSkill).getEffect(pPlayer.getTotalSkillLevel(nSkill));
 
             int nPsychicPointChange = pEffect.calcPsychicPowerChange(pPlayer);
 
@@ -47,7 +47,7 @@ public class Kinesis {
 
         public static void requestMentalShield(User pPlayer) {
             Skill pSkill = SkillFactory.getSkill(constants.skills.Kinesis.MENTAL_SHIELD);
-            MapleStatEffect pEffect = pSkill.getEffect(pPlayer.getTotalSkillLevel(pSkill));
+            StatEffect pEffect = pSkill.getEffect(pPlayer.getTotalSkillLevel(pSkill));
 
             pEffect.statups.put(CharacterTemporaryStat.KinesisPsychicEnergeShield, 1);
             pPlayer.registerEffect(pEffect, System.currentTimeMillis(), null, pEffect.statups, false, 2100000000, pPlayer.getId());

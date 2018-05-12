@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Citizen;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class CitizenEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Citizen.SIXTH_PARTY_TONIGHT_8:
                 break;
@@ -139,8 +139,8 @@ public class CitizenEffect extends AbstractEffect {
             case Citizen.ICE_TEMPEST_6:
                 break;
             case Citizen.INFILTRATE_4:
-                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
-                pEffect.statups.put(CharacterTemporaryStat.Sneak, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(StatInfo.speed));
+                pEffect.statups.put(CharacterTemporaryStat.Sneak, pEffect.info.get(StatInfo.x));
                 break;
             case Citizen.INVINCIBILITY_10_1:
                 break;

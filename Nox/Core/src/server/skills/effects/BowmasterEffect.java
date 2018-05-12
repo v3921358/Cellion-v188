@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Bowmaster;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class BowmasterEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Bowmaster.ADVANCED_FINAL_ATTACK_3:
                 break;
@@ -41,8 +41,8 @@ public class BowmasterEffect extends AbstractEffect {
             case Bowmaster.BROILER_SHOT:
                 break;
             case Bowmaster.CONCENTRATION_2:
-                pEffect.statups.put(CharacterTemporaryStat.Concentration, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.Concentration, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
                 break;
             case Bowmaster.ELITE_PUPPET:
                 break;
@@ -51,7 +51,7 @@ public class BowmasterEffect extends AbstractEffect {
             case Bowmaster.ENCHANTED_QUIVER_1:
                 break;
             case Bowmaster.EPIC_ADVENTURE_40_4:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case Bowmaster.GRITTY_GUST:
                 break;
@@ -96,17 +96,17 @@ public class BowmasterEffect extends AbstractEffect {
             case Bowmaster.HYPER_STRENGTH_4:
                 break;
             case Bowmaster.ILLUSION_STEP_1:
-                pEffect.statups.put(CharacterTemporaryStat.DEX, pEffect.info.get(MapleStatInfo.dex));
-                pEffect.statups.put(CharacterTemporaryStat.EVAR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.DEX, pEffect.info.get(StatInfo.dex));
+                pEffect.statups.put(CharacterTemporaryStat.EVAR, pEffect.info.get(StatInfo.x));
                 break;
             case Bowmaster.MAPLE_WARRIOR_800_80_8:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
                 break;
             case Bowmaster.MARKSMANSHIP:
                 break;
             case Bowmaster.SHARP_EYES_3:
-                pEffect.statups.put(CharacterTemporaryStat.SharpEyes, pEffect.info.get(MapleStatInfo.y));
-                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.SharpEyes, pEffect.info.get(StatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(StatInfo.x));
                 break;
             case Bowmaster.SHARP_EYES_CRITICAL_CHANCE:
                 break;

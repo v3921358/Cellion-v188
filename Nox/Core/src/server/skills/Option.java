@@ -4,8 +4,8 @@ import client.SkillFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 
 /**
  * Created on 1/3/2018.
@@ -48,9 +48,9 @@ public class Option {
     }
 
     public Option(int skillID, byte slv) {
-        MapleStatEffect pEffect = SkillFactory.getSkill(skillID).getEffect(1);
+        StatEffect pEffect = SkillFactory.getSkill(skillID).getEffect(1);
         rOption = skillID;
-        tOption = pEffect.info.get(MapleStatInfo.time);
+        tOption = pEffect.info.get(StatInfo.time);
     }
 
     public Option() {
