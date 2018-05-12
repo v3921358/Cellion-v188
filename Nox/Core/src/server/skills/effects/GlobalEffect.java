@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Global;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class GlobalEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Global.BUFFALO_1:
                 pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932065);
@@ -310,12 +310,12 @@ public class GlobalEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1902060);
                 break;
             case Global.DECENT_SPEED_INFUSION_5:
-                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(MapleStatInfo.jump));
-                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
+                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(StatInfo.jump));
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(StatInfo.speed));
                 break;
             case Global.DECENT_HYPER_BODY_5:
-                pEffect.statups.put(CharacterTemporaryStat.MaxHP, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.MaxMP, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.MaxHP, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.MaxMP, pEffect.info.get(StatInfo.x));
                 break;
         }
     }

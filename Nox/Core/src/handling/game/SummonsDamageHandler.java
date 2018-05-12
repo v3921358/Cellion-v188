@@ -42,14 +42,14 @@ public class SummonsDamageHandler implements ProcessPacket<ClientSocket> {
                         remove = true;
                     }
                     if (summon.getSkill() == 14000027) {
-                        chr.getMap().broadcastMessage(CField.SummonPacket.removeSummon(summon, true));
+                        chr.getMap().broadcastPacket(CField.SummonPacket.removeSummon(summon, true));
                         chr.getMap().removeMapObject(summon);
                         summon.getOwner().removeVisibleMapObject(summon);
                         if (summon.getOwner().getSummons().get(summon.getSkill()) != null) {
                             summon.getOwner().getSummons().remove(summon.getSkill());
                         }
                     }
-                    chr.getMap().broadcastMessage(chr, CField.SummonPacket.damageSummon(chr.getId(), summon.getSkill(), damage, unkByte, monsterIdFrom), summon.getTruePosition());
+                    chr.getMap().broadcastPacket(chr, CField.SummonPacket.damageSummon(chr.getId(), summon.getSkill(), damage, unkByte, monsterIdFrom), summon.getTruePosition());
                     break;
                 }
             }

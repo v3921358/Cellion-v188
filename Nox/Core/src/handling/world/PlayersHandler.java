@@ -264,7 +264,7 @@ public class PlayersHandler {
                     tt.setFollowInitiator(false);
                     c.getPlayer().setFollowOn(true);
                     c.getPlayer().setFollowInitiator(true);
-                    c.getPlayer().getMap().broadcastMessage(CField.followEffect(tt.getId(), c.getPlayer().getId(), null));
+                    c.getPlayer().getMap().broadcastPacket(CField.followEffect(tt.getId(), c.getPlayer().getId(), null));
                 } else {
                     c.getPlayer().setFollowId(0);
                     tt.setFollowId(0);
@@ -371,8 +371,8 @@ public class PlayersHandler {
                         chr.setMarriageId(c.getPlayer().getId());
                         c.getPlayer().setMarriageId(chr.getId());
 
-                        chr.fakeRelog();
-                        c.getPlayer().fakeRelog();
+                        chr.reloadUser();
+                        c.getPlayer().reloadUser();
                     } catch (Exception e) {
                         LogHelper.GENERAL_EXCEPTION.get().info("Ring Action:\n{}", e);
 

@@ -57,11 +57,11 @@ public class UseCarvedSealHandler implements ProcessPacket<ClientSocket> {
                 modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, itemEq));
                 c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
-                c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), true, toUse.getItemId()));
+                c.getPlayer().getMap().broadcastPacket(CField.showPotentialReset(c.getPlayer().getId(), true, toUse.getItemId()));
             }
         } else {
             used = true;
-            c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), false, toUse.getItemId()));
+            c.getPlayer().getMap().broadcastPacket(CField.showPotentialReset(c.getPlayer().getId(), false, toUse.getItemId()));
         }
 
         if (used) {

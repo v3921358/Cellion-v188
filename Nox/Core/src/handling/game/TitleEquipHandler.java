@@ -54,7 +54,7 @@ public final class TitleEquipHandler implements ProcessPacket<ClientSocket> {
         } else {
             chr.getQuestNAdd(Quest.getInstance(124000)).setCustomData(String.valueOf(itemId));
         }
-        chr.getMap().broadcastMessage(chr, CField.showTitle(chr.getId(), itemId), false);
+        chr.getMap().broadcastPacket(chr, CField.showTitle(chr.getId(), itemId), false);
         c.SendPacket(WvsContext.enableActions());
     }
 

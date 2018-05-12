@@ -7,7 +7,7 @@ import constants.GameConstants;
 import handling.world.MaplePartyCharacter;
 import java.awt.Rectangle;
 import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.maps.FieldLimitType;
 import server.maps.MapleMap;
 import server.maps.objects.User;
@@ -329,7 +329,7 @@ public class _CommonPlayerOperationHandler {
     public static final boolean useItem(final ClientSocket c, final int id) {
         if (GameConstants.isUse(id)) { // TO prevent caching of everything, waste of mem
             final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-            final MapleStatEffect eff = ii.getItemEffect(id);
+            final StatEffect eff = ii.getItemEffect(id);
             if (eff == null) {
                 return false;
             }
@@ -358,7 +358,7 @@ public class _CommonPlayerOperationHandler {
         return false;
     }
 
-    public static final void consumeItem(final ClientSocket c, final MapleStatEffect eff) {
+    public static final void consumeItem(final ClientSocket c, final StatEffect eff) {
         if (eff == null) {
             return;
         }
@@ -411,12 +411,12 @@ public class _CommonPlayerOperationHandler {
             if (pet.getCloseness() >= GameConstants.getClosenessNeededForLevel(pet.getLevel() + 1)) {
                 pet.setLevel(pet.getLevel() + 1);
                 c.SendPacket(CField.EffectPacket.showOwnPetLevelUp(null, c.getPlayer().getPetIndex(pet)));
-                c.getPlayer().getMap().broadcastMessage(PetPacket.showPetLevelUp(c.getPlayer(), petindex));
+                c.getPlayer().getMap().broadcastPacket(PetPacket.showPetLevelUp(c.getPlayer(), petindex));
             }
         }
         // c.getPlayer().forceUpdateItem(pet.getItem());
         c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
-        c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, petindex, true, true), true);
+        c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, petindex, true, true), true);
         return true;
     }
 }

@@ -87,7 +87,7 @@ public class MapleOxQuiz extends MapleEvent {
                     }
                 }
                 if (toSend.getCharactersSize() - number <= 1 || timesAsked == 10) {
-                    toSend.broadcastMessage(WvsContext.broadcastMsg(6, "The event has ended"));
+                    toSend.broadcastPacket(WvsContext.broadcastMsg(6, "The event has ended"));
                     unreset();
                     for (User chr : toSend.getCharacters()) {
                         if (chr != null && !chr.isGM() && chr.isAlive()) {
@@ -101,8 +101,8 @@ public class MapleOxQuiz extends MapleEvent {
                     return;
                 }
 
-                toSend.broadcastMessage(CField.showOXQuiz(question.getKey().left, question.getKey().right, true));
-                toSend.broadcastMessage(CField.getClock(10)); //quickly change to 12
+                toSend.broadcastPacket(CField.showOXQuiz(question.getKey().left, question.getKey().right, true));
+                toSend.broadcastPacket(CField.getClock(10)); //quickly change to 12
             }
         }, 10000);
         if (oxSchedule != null) {
@@ -115,7 +115,7 @@ public class MapleOxQuiz extends MapleEvent {
                 if (finished) {
                     return;
                 }
-                toSend.broadcastMessage(CField.showOXQuiz(question.getKey().left, question.getKey().right, false));
+                toSend.broadcastPacket(CField.showOXQuiz(question.getKey().left, question.getKey().right, false));
                 timesAsked++;
                 for (User chr : toSend.getCharacters()) {
                     if (chr != null && !chr.isGM() && chr.isAlive()) { // make sure they aren't null... maybe something can happen in 12 seconds.

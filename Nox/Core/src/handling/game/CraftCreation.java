@@ -26,7 +26,7 @@ public final class CraftCreation implements ProcessPacket<ClientSocket> {
         if (time > 6000 || time < 3000) {
             time = 4000;
         }
-        chr.getMap().broadcastMessage(CField.craftMake(chr.getId(), something, time));
+        chr.getMap().broadcastPacket(CField.craftMake(chr.getId(), something, time));
     }
 
 }

@@ -75,7 +75,7 @@ public class UseSkillBookHandler implements ProcessPacket<ClientSocket> {
             }
         }
 
-        c.getPlayer().getMap().broadcastMessage(WvsContext.useSkillBook(chr, skill, maxlevel, canuse, success));
+        c.getPlayer().getMap().broadcastPacket(WvsContext.useSkillBook(chr, skill, maxlevel, canuse, success));
         c.SendPacket(WvsContext.enableActions());
         return true;
     }

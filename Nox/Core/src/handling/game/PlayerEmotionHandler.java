@@ -53,7 +53,7 @@ public final class PlayerEmotionHandler implements ProcessPacket<ClientSocket> {
             }
         }
         if (emote > 0 && chr != null && chr.getMap() != null && !chr.isHidden()) { //O_o
-            chr.getMap().broadcastMessage(chr, CField.facialExpression(chr, emote), false);
+            chr.getMap().broadcastPacket(chr, CField.facialExpression(chr, emote), false);
 
         }
     }

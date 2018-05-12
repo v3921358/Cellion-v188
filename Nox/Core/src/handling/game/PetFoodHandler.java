@@ -81,11 +81,11 @@ public class PetFoodHandler implements ProcessPacket<ClientSocket> {
                     pet.setLevel(pet.getLevel() + 1);
                     c.SendPacket(CField.EffectPacket.showOwnPetLevelUp(null, index));
                     c.getPlayer().dropMessage(6, "Your pet has leveled up! " + pet.getName() + " is now level " + pet.getLevel() + "." + " Pet Closeness: " + pet.getCloseness());
-                    c.getPlayer().getMap().broadcastMessage(CField.EffectPacket.showOwnPetLevelUp(c.getPlayer(), index));
+                    c.getPlayer().getMap().broadcastPacket(CField.EffectPacket.showOwnPetLevelUp(c.getPlayer(), index));
                 }
             }
             c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
-            c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, index, true, true), true);
+            c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, index, true, true), true);
         } else {
             if (gainCloseness) {
                 int newCloseness = pet.getCloseness() - 1;
@@ -98,7 +98,7 @@ public class PetFoodHandler implements ProcessPacket<ClientSocket> {
                 }
             }
             c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
-            c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, c.getPlayer().getPetIndex(pet), false, true), true);
+            c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, c.getPlayer().getPetIndex(pet), false, true), true);
         }
         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, true, false);
         c.SendPacket(WvsContext.enableActions());

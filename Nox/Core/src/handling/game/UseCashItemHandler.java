@@ -55,7 +55,7 @@ import server.maps.objects.Mist;
 import server.maps.objects.Pet;
 import server.maps.objects.MonsterFamiliar;
 import server.quest.Quest;
-import server.shops.MapleShopFactory;
+import server.shops.ShopFactory;
 import server.stores.HiredMerchant;
 import net.InPacket;
 import server.maps.objects.User.CharacterTemporaryValues;
@@ -155,7 +155,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                         pPlayer.dropMessage(5, "This item's Potential cannot be reset.");
                     }
 
-                    pPlayer.getMap().broadcastMessage(CField.showPotentialReset(pPlayer.getId(), bRenewedPotential, pItem.getItemId()));
+                    pPlayer.getMap().broadcastPacket(CField.showPotentialReset(pPlayer.getId(), bRenewedPotential, pItem.getItemId()));
                     c.SendPacket(CField.enchantResult(bRenewedPotential ? 0 : 0));
 
                     if (pPlayer.isDeveloper()) {
@@ -214,7 +214,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                         pPlayer.dropMessage(5, "This item's Bonus Potential cannot be reset.");
                     }
 
-                    pPlayer.getMap().broadcastMessage(CField.showPotentialReset(pPlayer.getId(), bRenewedPotential, pItem.getItemId()));
+                    pPlayer.getMap().broadcastPacket(CField.showPotentialReset(pPlayer.getId(), bRenewedPotential, pItem.getItemId()));
                     c.SendPacket(CField.enchantResult(bRenewedPotential ? 0 : 0));
 
                     if (pPlayer.isDeveloper()) {
@@ -722,7 +722,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                     }
 
                     // Show to map
-                    pPlayer.getMap().broadcastMessage(CField.showPotentialReset(pPlayer.getId(), renewedPotential, item.getItemId()));
+                    pPlayer.getMap().broadcastPacket(CField.showPotentialReset(pPlayer.getId(), renewedPotential, item.getItemId()));
                     c.SendPacket(CField.enchantResult(renewedPotential ? 0 : 0));
                     pPlayer.yellowMessage("Potential ID (Line 1) : " + equip.getPotential1());
                     pPlayer.yellowMessage("Potential ID (Line 2) : " + equip.getPotential2());
@@ -795,7 +795,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                     }
 
                     // Show to map
-                    pPlayer.getMap().broadcastMessage(CField.showPotentialReset(pPlayer.getId(), renewedPotential, item.getItemId()));
+                    pPlayer.getMap().broadcastPacket(CField.showPotentialReset(pPlayer.getId(), renewedPotential, item.getItemId()));
                     c.SendPacket(CField.enchantResult(renewedPotential ? 0 : 0));
                 }
                 break;
@@ -848,7 +848,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                     }
 
                     // Show to map
-                    pPlayer.getMap().broadcastMessage(CField.showPotentialReset(pPlayer.getId(), renewedPotential, item.getItemId()));
+                    pPlayer.getMap().broadcastPacket(CField.showPotentialReset(pPlayer.getId(), renewedPotential, item.getItemId()));
                     c.SendPacket(CField.enchantResult(renewedPotential ? 0 : 0));
                 }
                 break;
@@ -901,7 +901,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                     }
 
                     // Show to map
-                    pPlayer.getMap().broadcastMessage(CField.showPotentialReset(pPlayer.getId(), renewedPotential, item.getItemId()));
+                    pPlayer.getMap().broadcastPacket(CField.showPotentialReset(pPlayer.getId(), renewedPotential, item.getItemId()));
                     c.SendPacket(CField.enchantResult(renewedPotential ? 0 : 0));
                 }
                 break;
@@ -918,7 +918,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
                         c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
-                        c.getPlayer().getMap().broadcastMessage(CField.showPotentialReset(c.getPlayer().getId(), true, toUse.getItemId()));
+                        c.getPlayer().getMap().broadcastPacket(CField.showPotentialReset(c.getPlayer().getId(), true, toUse.getItemId()));
 
                         bUsed = true;
                     }
@@ -1248,7 +1248,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                     sb.append(" : ");
                     sb.append(message);
 
-                    c.getPlayer().getMap().broadcastMessage(WvsContext.broadcastMsg(2, sb.toString()));
+                    c.getPlayer().getMap().broadcastPacket(WvsContext.broadcastMsg(2, sb.toString()));
                     bUsed = true;
                 } else {
                     c.getPlayer().dropMessage(5, "The usage of Megaphone is currently disabled.");
@@ -1583,7 +1583,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case 5100000: { // Congratulatory Song
-                c.getPlayer().getMap().broadcastMessage(CField.musicChange("Jukebox/Congratulation"));
+                c.getPlayer().getMap().broadcastPacket(CField.musicChange("Jukebox/Congratulation"));
                 bUsed = true;
                 break;
             }
@@ -1722,7 +1722,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                     c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
                     //c.getPlayer().forceUpdateItem(pet.getItem());
                     c.SendPacket(WvsContext.enableActions());
-                    c.getPlayer().getMap().broadcastMessage(CSPacket.changePetName(c.getPlayer(), nName, slo));
+                    c.getPlayer().getMap().broadcastPacket(CSPacket.changePetName(c.getPlayer(), nName, slo));
                     bUsed = true;
                 }
                 break;
@@ -1845,7 +1845,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 } else if ((c.getPlayer().getMapId() >= 680000210 && c.getPlayer().getMapId() <= 680000502) || (c.getPlayer().getMapId() / 1000 == 980000 && c.getPlayer().getMapId() != 980000000) || (c.getPlayer().getMapId() / 100 == 1030008) || (c.getPlayer().getMapId() / 100 == 922010) || (c.getPlayer().getMapId() / 10 == 13003000)) {
                     c.getPlayer().dropMessage(5, "You may not use this here.");
                 } else {
-                    MapleShopFactory.getInstance().getShop(9090000).sendShop(c);
+                    ShopFactory.getInstance().getShop(9090000).sendShop(c);
                 }
                 //used = true;
                 break;
@@ -1937,7 +1937,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 return;
             }
             c.getPlayer().dropMessage(5, "Auto relogging. Please wait.");
-            c.getPlayer().fakeRelog();
+            c.getPlayer().reloadUser();
             if (c.getPlayer().getScrolledPosition() != 0) {
                 c.SendPacket(WvsContext.pamSongUI());
             }

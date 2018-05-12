@@ -9,7 +9,7 @@ import client.Skill;
 import client.SkillFactory;
 import net.OutPacket;
 
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.life.Mob;
 import server.life.MobSkill;
 import server.maps.MapleMapObject;
@@ -21,7 +21,7 @@ public class Mist extends MapleMapObject {
     private Rectangle mistPosition;
     private User owner = null;
     private Mob mob = null;
-    private MapleStatEffect source;
+    private StatEffect source;
     private MobSkill skill;
     private boolean isMobMist, isShelter, isRecovery, isTimeCapsule;
     private int skillDelay, skilllevel, isPoisonMist, ownerId;
@@ -46,7 +46,7 @@ public class Mist extends MapleMapObject {
         isTimeCapsule = false;
     }
 
-    public Mist(Rectangle mistPosition, User owner, MapleStatEffect source) {
+    public Mist(Rectangle mistPosition, User owner, StatEffect source) {
         this.mistPosition = mistPosition;
         this.ownerId = owner.getId();
         this.source = source;
@@ -103,7 +103,7 @@ public class Mist extends MapleMapObject {
     public Mist(Rectangle mistPosition, User owner) {
         this.mistPosition = mistPosition;
         this.ownerId = owner.getId();
-        this.source = new MapleStatEffect();
+        this.source = new StatEffect();
         this.source.setSourceId(2111003);
         this.source.setSourceId(12111005);
         this.skilllevel = 30;
@@ -204,7 +204,7 @@ public class Mist extends MapleMapObject {
         return mistPosition;
     }
 
-    public MapleStatEffect getSource() {
+    public StatEffect getSource() {
         return source;
     }
 

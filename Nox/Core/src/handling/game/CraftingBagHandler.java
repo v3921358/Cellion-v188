@@ -10,7 +10,7 @@ import client.inventory.MapleInventoryType;
 import client.inventory.ModifyInventory;
 import client.inventory.ModifyInventoryOperation;
 import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
@@ -40,7 +40,7 @@ public final class CraftingBagHandler implements ProcessPacket<ClientSocket> {
             c.SendPacket(WvsContext.enableActions());
             return;
         }
-        final MapleStatEffect effect = MapleItemInformationProvider.getInstance().getItemEffect(itemId);
+        final StatEffect effect = MapleItemInformationProvider.getInstance().getItemEffect(itemId);
         if (effect == null || effect.getSlotCount() == 0 || effect.getSlotPerLine() == 0) {
             /*-<imgdir name="03080000">
             <imgdir name="spec">

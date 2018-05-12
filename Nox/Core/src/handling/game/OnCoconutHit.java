@@ -66,18 +66,18 @@ public final class OnCoconutHit implements ProcessPacket<ClientSocket> {
             if (Math.random() < 0.01 && map.getStopped() > 0) {
                 nut.setStopped(true);
                 map.stopCoconut();
-                c.getPlayer().getMap().broadcastMessage(CField.hitCoconut(false, id, 1));
+                c.getPlayer().getMap().broadcastPacket(CField.hitCoconut(false, id, 1));
                 return;
             }
             nut.resetHits(); // For next event (without restarts)
             //System.out.println("Coconut4");
             if (Math.random() < 0.05 && map.getBombings() > 0) {
                 //System.out.println("Coconut5-1");
-                c.getPlayer().getMap().broadcastMessage(CField.hitCoconut(false, id, 2));
+                c.getPlayer().getMap().broadcastPacket(CField.hitCoconut(false, id, 2));
                 map.bombCoconut();
             } else if (map.getFalling() > 0) {
                 //System.out.println("Coconut5-2");
-                c.getPlayer().getMap().broadcastMessage(CField.hitCoconut(false, id, 3));
+                c.getPlayer().getMap().broadcastPacket(CField.hitCoconut(false, id, 3));
                 map.fallCoconut();
                 if (c.getPlayer().getTeam() == 0) {
                     map.addMapleScore();
@@ -86,12 +86,12 @@ public final class OnCoconutHit implements ProcessPacket<ClientSocket> {
                     map.addStoryScore();
                     //c.getPlayer().getMap().broadcastMessage(CWvsContext.broadcastMsg(5, c.getPlayer().getName() + " of Team Story knocks down a " + co + "."));
                 }
-                c.getPlayer().getMap().broadcastMessage(CField.coconutScore(map.getCoconutScore()));
+                c.getPlayer().getMap().broadcastPacket(CField.coconutScore(map.getCoconutScore()));
             }
         } else {
             //System.out.println("Coconut3-2");
             nut.hit();
-            c.getPlayer().getMap().broadcastMessage(CField.hitCoconut(false, id, 1));
+            c.getPlayer().getMap().broadcastPacket(CField.hitCoconut(false, id, 1));
         }
     }
 }

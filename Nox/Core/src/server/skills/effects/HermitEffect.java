@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Hermit;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class HermitEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Hermit.ALCHEMIC_ADRENALINE_2:
                 break;
@@ -42,7 +42,7 @@ public class HermitEffect extends AbstractEffect {
             case Hermit.SHADOW_MESO:
                 break;
             case Hermit.SHADOW_PARTNER_2:
-                pEffect.statups.put(CharacterTemporaryStat.ShadowPartner, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.ShadowPartner, pEffect.info.get(StatInfo.x));
                 break;
             case Hermit.SHADOW_STARS_1:
                 pEffect.statups.put(CharacterTemporaryStat.NoBulletConsume, 0);

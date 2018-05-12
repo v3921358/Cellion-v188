@@ -12,7 +12,7 @@ import client.jobs.Nova;
 import client.jobs.Resistance.*;
 import net.InPacket;
 import net.ProcessPacket;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.Randomizer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
@@ -38,7 +38,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.w3c.dom.css.Rect;
-import server.MapleStatInfo;
+import server.StatInfo;
 import server.Timer;
 import server.Timer.MapTimer;
 import server.life.mob.MobStat;
@@ -102,7 +102,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
         int nSkillLevel = iPacket.DecodeByte();
         Skill pSkill = SkillFactory.getSkill(nSkill);
         nSkillLevel = pPlayer.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(nSkill));
-        MapleStatEffect pEffect = pPlayer.inPVP() ? pSkill.getPVPEffect(nSkillLevel) : pSkill.getEffect(nSkillLevel);
+        StatEffect pEffect = pPlayer.inPVP() ? pSkill.getPVPEffect(nSkillLevel) : pSkill.getEffect(nSkillLevel);
         int nMob;
         Mob pMob;
 
@@ -217,22 +217,22 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 switch (pBuffFromMobStat) {
                     case PCounter:
                     case MCounter:
-                        pEffect.statups.put(CharacterTemporaryStat.PowerGuard, pEffect.info.get(MapleStatInfo.y));
-                        pEffect.info.put(MapleStatInfo.time, 30000);
+                        pEffect.statups.put(CharacterTemporaryStat.PowerGuard, pEffect.info.get(StatInfo.y));
+                        pEffect.info.put(StatInfo.time, 30000);
                         break;
                     case PImmune:
                     case MImmune:
-                        pEffect.statups.put(CharacterTemporaryStat.MagicGuard, pEffect.info.get(MapleStatInfo.x));
-                        pEffect.info.put(MapleStatInfo.time, 30000);
+                        pEffect.statups.put(CharacterTemporaryStat.MagicGuard, pEffect.info.get(StatInfo.x));
+                        pEffect.info.put(StatInfo.time, 30000);
                         break;
                     case PowerUp:
                     case MagicUp:
-                        pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.epad));
-                        pEffect.info.put(MapleStatInfo.time, 30000);
+                        pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(StatInfo.epad));
+                        pEffect.info.put(StatInfo.time, 30000);
                         break;
                     case Invincible:
                         pEffect.statups.put(CharacterTemporaryStat.NotDamaged, 1);
-                        pEffect.info.put(MapleStatInfo.time, 5000);
+                        pEffect.info.put(StatInfo.time, 5000);
                         break;
                 }
                 break;
@@ -240,13 +240,13 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             case Shade.SUMMON_OTHER_SPIRIT:
             case NightWalker.DARKNESS_ASCENDING: {
                 pEffect.statups.put(CharacterTemporaryStat.ReviveOnce, 1);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
             case Evan.MAGIC_GUARD_1:
             case Evan.MAGIC_GUARD_3: {
-                pEffect.statups.put(CharacterTemporaryStat.MagicGuard, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.MagicGuard, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
             case Assassin.ASSASSINS_MARK:
@@ -255,87 +255,87 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             case NightLord.NIGHT_LORDS_MARK:
             case NightLord.NIGHT_LORDS_MARK_1: {
                 pEffect.statups.put(CharacterTemporaryStat.NightLordMark, 0);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
             case Fighter.COMBO_ATTACK: {
                 pEffect.statups.put(CharacterTemporaryStat.ComboCounter, 0);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 HeroHandler.setComboAttack(pPlayer, 0);
                 break;
             }
             case Xenon.PINPOINT_SALVO: {
-                pEffect.statups.put(CharacterTemporaryStat.HollowPointBullet, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.HollowPointBullet, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
             case Xenon.AEGIS_SYSTEM:
             case Xenon.AEGIS_SYSTEM_1: {
-                pEffect.statups.put(CharacterTemporaryStat.XenonAegisSystem, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.XenonAegisSystem, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
             case Aran.BODY_PRESSURE: {
-                pEffect.statups.put(CharacterTemporaryStat.PowerGuard, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.PowerGuard, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
             case BattleMage.CONDEMNATION:
             case BattleMage.GRIM_CONTRACT:
             case BattleMage.GRIM_CONTRACT_II:
             case BattleMage.GRIM_CONTRACT_III: {
-                pEffect.statups.put(CharacterTemporaryStat.BMageDeath, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.BMageDeath, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
             case NightWalker.SHADOW_BAT:
             case NightWalker.SHADOW_BAT_2:
             case NightWalker.SHADOW_BAT_3: {
-                pEffect.statups.put(CharacterTemporaryStat.NightWalkerBat, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.NightWalkerBat, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
             case Shade.FOX_SPIRITS: {
                 pEffect.statups.put(CharacterTemporaryStat.ChangeFoxMan, 1);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
             case WindArcher.TRIFLING_WIND_I:
             case WindArcher.TRIFLING_WIND_II:
             case WindArcher.TRIFLING_WIND_III: {
-                pEffect.statups.put(CharacterTemporaryStat.TriflingWhimOnOff, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.TriflingWhimOnOff, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
             case Xenon.MANIFEST_PROJECTOR: {
                 pEffect.statups.put(CharacterTemporaryStat.ShadowPartner, 1);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
             case NightWalker.DARK_SERVANT: {
                 pEffect.statups.put(CharacterTemporaryStat.ShadowServant, 1);
-                pEffect.info.put(MapleStatInfo.time, 180000);
+                pEffect.info.put(StatInfo.time, 180000);
                 break;
             }
             case NightWalker.SHADOW_ILLUSION:
             case NightWalker.SHADOW_ILLUSION_1:
             case NightWalker.SHADOW_ILLUSION_2: {
                 pEffect.statups.put(CharacterTemporaryStat.ShadowIllusion, 1);
-                pEffect.info.put(MapleStatInfo.time, 30000);
+                pEffect.info.put(StatInfo.time, 30000);
                 break;
             }
             case Kaiser.FINAL_FORM:
             case Kaiser.FINAL_FORM_1:
             case Kaiser.FINAL_TRANCE: {
-                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(MapleStatInfo.cr));
-                pEffect.statups.put(CharacterTemporaryStat.IndiePMdR, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.prop));
-                pEffect.info.put(MapleStatInfo.time, 60000);
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(StatInfo.cr));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePMdR, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(StatInfo.prop));
+                pEffect.info.put(StatInfo.time, 60000);
                 break;
             }
             case WildHunter.JAGUAR_RIDER: {
                 pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932215/*1932015*/);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 pPlayer.setUnmountState(false);
                 break;
             }
@@ -346,13 +346,13 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             case DawnWarrior.FALLING_MOON:{
                 pPlayer.dispelBuff(DawnWarrior.RISING_SUN);
                 pEffect.statups.put(CharacterTemporaryStat.PoseType, 1);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
             case DawnWarrior.RISING_SUN: {
                 pPlayer.dispelBuff(DawnWarrior.FALLING_MOON);
                 pEffect.statups.put(CharacterTemporaryStat.PoseType, 2);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
             case DawnWarrior.EQUINOX_CYCLE: {
@@ -365,10 +365,10 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             }
         }
         if (bApplyStats) {
-            final MapleStatEffect.CancelEffectAction pCancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
-            final ScheduledFuture<?> tBuffSchedule = Timer.BuffTimer.getInstance().schedule(pCancelAction, pEffect.info.get(MapleStatInfo.time));
-            pPlayer.registerEffect(pEffect, System.currentTimeMillis(), tBuffSchedule, pEffect.statups, false, pEffect.info.get(MapleStatInfo.time), pPlayer.getId());
-            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, pEffect.info.get(MapleStatInfo.time), pEffect.statups, pEffect));
+            final StatEffect.CancelEffectAction pCancelAction = new StatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
+            final ScheduledFuture<?> tBuffSchedule = Timer.BuffTimer.getInstance().schedule(pCancelAction, pEffect.info.get(StatInfo.time));
+            pPlayer.registerEffect(pEffect, System.currentTimeMillis(), tBuffSchedule, pEffect.statups, false, pEffect.info.get(StatInfo.time), pPlayer.getId());
+            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, pEffect.info.get(StatInfo.time), pEffect.statups, pEffect));
         }
 
         /*Summons Handler*/
@@ -389,7 +389,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 break;
             }
             case BeastTamer.LIL_FORT: {
-                pEffect.info.put(MapleStatInfo.time, 60000);
+                pEffect.info.put(StatInfo.time, 60000);
                 pMovement = SummonMovementType.FOLLOW;
                 break;
             }
@@ -412,7 +412,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             case Kaiser.TEMPEST_BLADES: // Normal Tempest Blades in Morph
             case Kaiser.ADVANCED_TEMPEST_BLADES_1: // Advanced Tempest Blades
             case Kaiser.ADVANCED_TEMPEST_BLADES: { // Advanced Tempest Blades in Morph
-                final MapleStatEffect pTempestBlades = SkillFactory.getSkill(Kaiser.TEMPEST_BLADES_1).getEffect(1);
+                final StatEffect pTempestBlades = SkillFactory.getSkill(Kaiser.TEMPEST_BLADES_1).getEffect(1);
                 StopForceAtom pAtom = new StopForceAtom();
                 List<Integer> aThree = Arrays.asList(0, 0, 0);
                 List<Integer> aFive = Arrays.asList(0, 0, 0, 0, 0);
@@ -442,11 +442,11 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 
                 if (!pPlayer.hasBuff(CharacterTemporaryStat.StopForceAtomInfo)) {
                     pTempestBlades.statups.put(CharacterTemporaryStat.StopForceAtomInfo, nID);
-                    pTempestBlades.info.put(MapleStatInfo.time, 30000);
-                    final MapleStatEffect.CancelEffectAction pCancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pTempestBlades, System.currentTimeMillis(), pTempestBlades.statups);
-                    final ScheduledFuture<?> tBuffSchedule = Timer.BuffTimer.getInstance().schedule(pCancelAction, pTempestBlades.info.get(MapleStatInfo.time));
-                    pPlayer.registerEffect(pTempestBlades, System.currentTimeMillis(), tBuffSchedule, pTempestBlades.statups, false, pTempestBlades.info.get(MapleStatInfo.time), pPlayer.getId());
-                    pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, pTempestBlades.info.get(MapleStatInfo.time), pTempestBlades.statups, pTempestBlades));
+                    pTempestBlades.info.put(StatInfo.time, 30000);
+                    final StatEffect.CancelEffectAction pCancelAction = new StatEffect.CancelEffectAction(pPlayer, pTempestBlades, System.currentTimeMillis(), pTempestBlades.statups);
+                    final ScheduledFuture<?> tBuffSchedule = Timer.BuffTimer.getInstance().schedule(pCancelAction, pTempestBlades.info.get(StatInfo.time));
+                    pPlayer.registerEffect(pTempestBlades, System.currentTimeMillis(), tBuffSchedule, pTempestBlades.statups, false, pTempestBlades.info.get(StatInfo.time), pPlayer.getId());
+                    pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, pTempestBlades.info.get(StatInfo.time), pTempestBlades.statups, pTempestBlades));
                 }
                 break;
             }
@@ -455,10 +455,10 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             case Kaiser.FINAL_TRANCE: {
                 final EnumMap<CharacterTemporaryStat, Integer> mMorphStat = new EnumMap<>(CharacterTemporaryStat.class);
                 mMorphStat.put(CharacterTemporaryStat.Morph, 1201/*nSkill == Kaiser.FINAL_TRANCE ? 1201 : 1200*/);
-                final MapleStatEffect.CancelEffectAction pCancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), mMorphStat);
-                final ScheduledFuture<?> tBuffSchedule = Timer.BuffTimer.getInstance().schedule(pCancelAction, pEffect.info.get(MapleStatInfo.time));
-                pPlayer.registerEffect(pEffect, System.currentTimeMillis(), tBuffSchedule, mMorphStat, false, pEffect.info.get(MapleStatInfo.time), pPlayer.getId());
-                pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, pEffect.info.get(MapleStatInfo.time), mMorphStat, pEffect));
+                final StatEffect.CancelEffectAction pCancelAction = new StatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), mMorphStat);
+                final ScheduledFuture<?> tBuffSchedule = Timer.BuffTimer.getInstance().schedule(pCancelAction, pEffect.info.get(StatInfo.time));
+                pPlayer.registerEffect(pEffect, System.currentTimeMillis(), tBuffSchedule, mMorphStat, false, pEffect.info.get(StatInfo.time), pPlayer.getId());
+                pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, pEffect.info.get(StatInfo.time), mMorphStat, pEffect));
                 break;
             }
             case BeastTamer.BEAR_MODE:
@@ -560,12 +560,12 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                     pMob.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.STUN, 1, nSkill, null, false), false, pEffect.getDuration(), true, pEffect);
                 }
 
-                pPlayer.getMap().broadcastMessage(pPlayer, CField.EffectPacket.showBuffeffect(pPlayer.getId(), nSkill, UserEffectCodes.SkillUse, pPlayer.getLevel(), nSkillLevel, iPacket.DecodeByte()), pPlayer.getTruePosition());
+                pPlayer.getMap().broadcastPacket(pPlayer, CField.EffectPacket.showBuffeffect(pPlayer.getId(), nSkill, UserEffectCodes.SkillUse, pPlayer.getLevel(), nSkillLevel, iPacket.DecodeByte()), pPlayer.getTruePosition());
                 break;
             }
             case NightWalker.DARK_OMEN: {
                 for (int i = 0; i <= 5; i++) {
-                    pPlayer.getMap().broadcastMessage(JobPacket.NightWalkerPacket.ShadowBats(pPlayer.getId(), pPlayer.getObjectId()));
+                    pPlayer.getMap().broadcastPacket(JobPacket.NightWalkerPacket.ShadowBats(pPlayer.getId(), pPlayer.getObjectId()));
                 }
                 break;
             }
@@ -592,7 +592,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 pMob = pPlayer.getMap().getMonsterByOid(nMob);
                 if (pMob != null) {
                     boolean success = true; // (pMob.getHp() <= pMob.getMobMaxHp() / 2L) && (pMob.getId() >= 9304000) && (pMob.getId() < 9305000);
-                    pPlayer.getMap().broadcastMessage(pPlayer, CField.EffectPacket.showBuffeffect(pPlayer.getId(), nSkill, UserEffectCodes.SkillUse, pPlayer.getLevel(), nSkillLevel, (byte) (success ? 1 : 0)), pPlayer.getTruePosition());
+                    pPlayer.getMap().broadcastPacket(pPlayer, CField.EffectPacket.showBuffeffect(pPlayer.getId(), nSkill, UserEffectCodes.SkillUse, pPlayer.getLevel(), nSkillLevel, (byte) (success ? 1 : 0)), pPlayer.getTruePosition());
                     if (success) {
                         pPlayer.getQuestNAdd(Quest.getInstance(GameConstants.JAGUAR)).setCustomData(String.valueOf((pMob.getId() - 9303999) * 10));
                         pPlayer.getMap().killMonster(pMob, pPlayer, true, false, (byte) 1);
@@ -635,11 +635,11 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 nMob = pPlayer.getFirstLinkMid();
                 pMob = pPlayer.getMap().getMonsterByOid(nMob);
                 pPlayer.setKeyDownSkillTime(0L);
-                pPlayer.getMap().broadcastMessage(pPlayer, CField.skillCancel(pPlayer, nSkill), false);
+                pPlayer.getMap().broadcastPacket(pPlayer, CField.skillCancel(pPlayer, nSkill), false);
                 if (pMob != null) {
                     boolean success = (pMob.getStats().getLevel() < pPlayer.getLevel()) && (pMob.getId() < 9000000) && (!pMob.getStats().isBoss());
                     if (success) {
-                        pPlayer.getMap().broadcastMessage(MobPacket.suckMonster(pMob.getObjectId(), pPlayer.getId()));
+                        pPlayer.getMap().broadcastPacket(MobPacket.suckMonster(pMob.getObjectId(), pPlayer.getId()));
                         pPlayer.getMap().killMonster(pMob, pPlayer, false, false, (byte) -1);
                     } else {
                         pPlayer.dropMessage(5, "The monster has too much physical strength, so you cannot catch it.");
@@ -662,7 +662,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 break;
             case 4341003:
                 pPlayer.setKeyDownSkillTime(0);
-                pPlayer.getMap().broadcastMessage(pPlayer, CField.skillCancel(pPlayer, nSkill), false);
+                pPlayer.getMap().broadcastPacket(pPlayer, CField.skillCancel(pPlayer, nSkill), false);
                 break;
             /*case ChiefBandit.MESO_EXPLOSION:
                 int counter = 0;
@@ -760,7 +760,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
         }
         if (GameConstants.isWildHunter(pPlayer.getJob())) {
             if (GameConstants.isJaguarSkill(nSkill)) { // Tell the client to display the Jaguar skills.
-                pPlayer.getMap().broadcastMessage(SummonPacket.jaguarSkillRequest(nSkill));
+                pPlayer.getMap().broadcastPacket(SummonPacket.jaguarSkillRequest(nSkill));
                 c.SendPacket(CField.SummonPacket.jaguarActive(true));
             }
         }

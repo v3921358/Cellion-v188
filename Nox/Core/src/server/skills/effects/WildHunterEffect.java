@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.WildHunter;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class WildHunterEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case WildHunter.ANOTHER_BITE:
                 break;
@@ -44,7 +44,7 @@ public class WildHunterEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932015); // ps: u dont always use this jag lulz
                 pEffect.statups.put(CharacterTemporaryStat.JaguarCount, 1);
                 pEffect.statups.put(CharacterTemporaryStat.JaguarSummoned, 1);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case WildHunter.NATURES_BALANCE:
                 break;
@@ -64,8 +64,8 @@ public class WildHunterEffect extends AbstractEffect {
             case WildHunter.SUMMON_JAGUAR_9:
             case WildHunter.SUMMON_JAGUAR_10:
                 pEffect.statups.put(CharacterTemporaryStat.SUMMON, 3870); //Fake flag for summons
-                pEffect.statups.put(CharacterTemporaryStat.JaguarSummoned, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.JaguarSummoned, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case WildHunter.SWIPE:
                 break;
@@ -76,14 +76,14 @@ public class WildHunterEffect extends AbstractEffect {
             case WildHunter.WILD_LURE:
                 break;
             case WildHunter.CALL_OF_THE_WILD:
-                pEffect.statups.put(CharacterTemporaryStat.HowlingDefence, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.HowlingEvasion, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.HowlingMaxMP, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.HowlingCritical, pEffect.info.get(MapleStatInfo.z));
-                pEffect.statups.put(CharacterTemporaryStat.HowlingAttackDamage, pEffect.info.get(MapleStatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.HowlingDefence, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.HowlingEvasion, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.HowlingMaxMP, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.HowlingCritical, pEffect.info.get(StatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.HowlingAttackDamage, pEffect.info.get(StatInfo.z));
                 break;
             case WildHunter.CROSSBOW_BOOSTER:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x) * 2);
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x) * 2);
                 break;
             case WildHunter.CROSSBOW_MASTERY_1:
                 break;
@@ -114,9 +114,9 @@ public class WildHunterEffect extends AbstractEffect {
             case WildHunter.SILVER_HAWK_1:
                 break;
             case WildHunter.SOUL_ARROW_CROSSBOW:
-                pEffect.statups.put(CharacterTemporaryStat.SoulArrow, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.pad));
-                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(MapleStatInfo.epad));
+                pEffect.statups.put(CharacterTemporaryStat.SoulArrow, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(StatInfo.pad));
+                pEffect.statups.put(CharacterTemporaryStat.EPAD, pEffect.info.get(StatInfo.epad));
                 pEffect.statups.put(CharacterTemporaryStat.NoBulletConsume, 1);
                 break;
             case WildHunter.TRIPLE_SHOT_1:
@@ -174,9 +174,9 @@ public class WildHunterEffect extends AbstractEffect {
             case WildHunter.EXTENDED_MAGAZINE_1:
                 break;
             case WildHunter.FELINE_BERSERK:
-                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.BeastFormDamageUp, pEffect.info.get(MapleStatInfo.z));
-                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.BeastFormDamageUp, pEffect.info.get(StatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(StatInfo.indieBooster));
                 break;
             case WildHunter.FELINE_BERSERK_RAPID_ATTACK:
                 break;
@@ -185,7 +185,7 @@ public class WildHunterEffect extends AbstractEffect {
             case WildHunter.FELINE_BERSERK_VITALITY:
                 break;
             case WildHunter.FOR_LIBERTY_1:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case WildHunter.HEROS_WILL_40_4:
                 break;
@@ -228,13 +228,13 @@ public class WildHunterEffect extends AbstractEffect {
             case WildHunter.JAGUAR_SOUL_1:
                 break;
             case WildHunter.MAPLE_WARRIOR_50_5:
-                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(StatInfo.x));
                 break;
             case WildHunter.NATURAL_FORCE:
                 break;
             case WildHunter.SHARP_EYES_1:
-                pEffect.statups.put(CharacterTemporaryStat.SharpEyes, pEffect.info.get(MapleStatInfo.y));
-                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.SharpEyes, pEffect.info.get(StatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(StatInfo.x));
                 break;
             case WildHunter.SILENT_RAMPAGE:
                 break;

@@ -1,10 +1,10 @@
 package server.skills.effects.manager;
 
-import server.MapleStatEffect;
+import server.StatEffect;
 
 public abstract class AbstractEffect {
 
-    public abstract void SetEffect(MapleStatEffect pEffect, int nSkill);
+    public abstract void SetEffect(StatEffect pEffect, int nSkill);
 
     public abstract boolean IsCorrectClass(int nClass);
 

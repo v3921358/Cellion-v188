@@ -199,7 +199,7 @@ public class UseMagnifyingGlassHandler implements ProcessPacket<ClientSocket> {
 
                 // c.getPlayer().getTrait(MapleTrait.MapleTraitType.insight).addExp((src == 0x7F && price != -1 ? 10 : insight ? 10 : ((magnify.getItemId() + 2) - 2460000)) * 2, c.getPlayer());
                 // Broadcast to map
-                chr.getMap().broadcastMessage(CField.showMagnifyingEffect(chr.getId(), equipment.getPosition()));
+                chr.getMap().broadcastPacket(CField.showMagnifyingEffect(chr.getId(), equipment.getPosition()));
 
                 // Update inventory 
                 List<ModifyInventory> modifications = new ArrayList<>();

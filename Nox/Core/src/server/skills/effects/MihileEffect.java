@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Mihile;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class MihileEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Mihile.ARCHANGELIC_BLESSING_800_80_8:
                 break;
@@ -69,7 +69,7 @@ public class MihileEffect extends AbstractEffect {
             case Mihile.EMPRESSS_BLESSING_60_6:
                 break;
             case Mihile.EMPRESSS_PRAYER_1:
-                pEffect.statups.put(CharacterTemporaryStat.MaxLevelBuff, (int) pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.MaxLevelBuff, (int) pEffect.info.get(StatInfo.x));
                 break;
             case Mihile.EMPRESSS_SHOUT_1:
                 break;
@@ -112,7 +112,7 @@ public class MihileEffect extends AbstractEffect {
             case Mihile.INVINCIBILITY_40_4:
                 break;
             case Mihile.KNIGHTS_WATCH_1:
-                pEffect.statups.put(CharacterTemporaryStat.Stance, (int) pEffect.info.get(MapleStatInfo.prop));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, (int) pEffect.info.get(StatInfo.prop));
                 break;
             case Mihile.LEGENDARY_SPIRIT_30_3:
                 break;
@@ -200,7 +200,7 @@ public class MihileEffect extends AbstractEffect {
             case Mihile.HP_BOOST:
                 break;
             case Mihile.ROYAL_GUARD:
-                pEffect.statups.put(CharacterTemporaryStat.RoyalGuardPrepare, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.RoyalGuardPrepare, pEffect.info.get(StatInfo.x));
                 break;
             case Mihile.ROYAL_GUARD_1:
                 break;
@@ -227,28 +227,28 @@ public class MihileEffect extends AbstractEffect {
             case Mihile.WEIGHTLESS_HEART:
                 break;
             case Mihile.FINAL_ATTACK_5:
-                pEffect.statups.put(CharacterTemporaryStat.FinalAttackProp, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.FinalAttackProp, pEffect.info.get(StatInfo.x));
                 break;
             case Mihile.PHYSICAL_TRAINING_90_9:
                 break;
             case Mihile.RADIANT_DRIVER:
                 break;
             case Mihile.RALLY:
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
                 break;
             case Mihile.SOUL_DRIVER:
                 break;
             case Mihile.SWORD_BOOSTER_1:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case Mihile.SWORD_MASTERY_3:
                 break;
             case Mihile.ADVANCED_ROYAL_GUARD:
                 break;
             case Mihile.ENDURING_SPIRIT:
-                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.y));
-                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.z));
-                pEffect.statups.put(CharacterTemporaryStat.DamageReduce, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(StatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(StatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.DamageReduce, pEffect.info.get(StatInfo.x));
                 break;
             case Mihile.INTENSE_FOCUS:
                 break;
@@ -258,8 +258,8 @@ public class MihileEffect extends AbstractEffect {
             case Mihile.RADIANT_BUSTER:
                 break;
             case Mihile.RADIANT_CHARGE:
-                pEffect.statups.put(CharacterTemporaryStat.WeaponCharge, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.WeaponCharge, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.z));
                 break;
             case Mihile.RADIANT_CHARGE_1:
                 break;
@@ -272,16 +272,16 @@ public class MihileEffect extends AbstractEffect {
             case Mihile.SELF_RECOVERY_2:
                 break;
             case Mihile.SOUL_LINK:
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
-                pEffect.statups.put(CharacterTemporaryStat.MichaelSoulLink, pEffect.info.get(MapleStatInfo.s));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.MichaelSoulLink, pEffect.info.get(StatInfo.s));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Mihile.TRINITY_ATTACK:
                 break;
             case Mihile.ADVANCED_FINAL_ATTACK_1:
                 break;
             case Mihile.CALL_OF_CYGNUS_1:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
                 break;
             case Mihile.CHARGING_LIGHT:
                 break;
@@ -332,7 +332,7 @@ public class MihileEffect extends AbstractEffect {
             case Mihile.POWER_STANCE:
                 break;
             case Mihile.QUEEN_OF_TOMORROW:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case Mihile.RADIANT_BLAST:
                 break;
@@ -352,8 +352,8 @@ public class MihileEffect extends AbstractEffect {
                 break;
             case Mihile.ROILING_SOUL:
                 pEffect.statups.put(CharacterTemporaryStat.Enrage, 1);
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Mihile.SACRED_CUBE:
                 break;

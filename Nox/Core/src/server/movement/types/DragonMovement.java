@@ -43,7 +43,7 @@ public class DragonMovement implements ProcessPacket<ClientSocket> {
         MovementParse.updatePosition(res, chr.getDragon());
 
         if (!chr.isHidden()) {
-            chr.getMap().broadcastMessage(chr, CField.moveDragon(chr.getDragon(), pos, res), chr.getTruePosition());
+            chr.getMap().broadcastPacket(chr, CField.moveDragon(chr.getDragon(), pos, res), chr.getTruePosition());
         }
     }
 }

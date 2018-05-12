@@ -52,7 +52,7 @@ public final class MechCancel implements ProcessPacket<ClientSocket> {
         }
         if (skill.isChargeSkill()) {
             chr.setKeyDownSkillTime(0L);
-            chr.getMap().broadcastMessage(chr, CField.skillCancel(chr, sourceid), false);
+            chr.getMap().broadcastPacket(chr, CField.skillCancel(chr, sourceid), false);
         } else {
             chr.cancelEffect(skill.getEffect(iPacket.DecodeByte()), false, -1L);
         }

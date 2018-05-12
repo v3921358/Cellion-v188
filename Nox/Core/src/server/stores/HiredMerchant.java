@@ -131,7 +131,7 @@ public class HiredMerchant extends AbstractPlayerStore {
         }
         if (remove) {
             ChannelServer.getInstance(channel).removeMerchant(this);
-            getMap().broadcastMessage(PlayerShopPacket.destroyHiredMerchant(getOwnerId()));
+            getMap().broadcastPacket(PlayerShopPacket.destroyHiredMerchant(getOwnerId()));
         }
         getMap().removeMapObject(this);
         schedule = null;

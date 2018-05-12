@@ -85,7 +85,6 @@ public class Start {
 
         /*Setting Debug Configuration*/
         ServerConstants.DEVELOPER_DEBUG_MODE = Boolean.valueOf(config.getProperty("DEBUG"));
-        ServerConstants.DEVELOPER_PACKET_DEBUG_MODE = Boolean.valueOf(config.getProperty("PACKET_DEBUG"));
 
         /*Setting API Configuration*/
         ApiConstants.PRODUCT_ID = config.getProperty("CLIENT_ID");
@@ -322,7 +321,7 @@ public class Start {
         //MapleMonsterInformationProvider.getInstance().addExtra();
         RankingWorker.run();
 
-        if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
+        if (ServerConstants.DEVELOPER_DEBUG_MODE) {
             System.out.println("[Info] Developer Packet debug mode is enabled.");
         }
 

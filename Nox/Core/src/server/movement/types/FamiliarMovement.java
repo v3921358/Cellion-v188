@@ -38,7 +38,7 @@ public class FamiliarMovement implements ProcessPacket<ClientSocket> {
         List<LifeMovementFragment> res = MovementParse.parseMovement(iPacket);
         MovementParse.updatePosition(res, chr.getSummonedFamiliar());
         if (!chr.isHidden()) {
-            chr.getMap().broadcastMessage(chr, CField.moveFamiliar(chr.getSummonedFamiliar(), res), chr.getTruePosition());
+            chr.getMap().broadcastPacket(chr, CField.moveFamiliar(chr.getSummonedFamiliar(), res), chr.getTruePosition());
         } else {
             chr.getMap().broadcastGMMessage(chr, CField.moveFamiliar(chr.getSummonedFamiliar(), res), false);
         }

@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.IceLightningArchMage;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,13 +18,13 @@ import server.skills.effects.manager.Effect;
 public class IceLightningArchMageEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case IceLightningArchMage.ABSOLUTE_ZERO_AURA:
                 pEffect.statups.put(CharacterTemporaryStat.IceAura, 1);
-                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.v));
-                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.v));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(StatInfo.v));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(StatInfo.v));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case IceLightningArchMage.ARCANE_AIM_1:
                 break;
@@ -32,7 +32,7 @@ public class IceLightningArchMageEffect extends AbstractEffect {
                 break;
             case IceLightningArchMage.BLIZZARD:
                 pEffect.monsterStatus.put(MonsterStatus.FREEZE, 1);
-                pEffect.info.put(MapleStatInfo.time, pEffect.info.get(MapleStatInfo.time) * 2);
+                pEffect.info.put(StatInfo.time, pEffect.info.get(StatInfo.time) * 2);
                 break;
             case IceLightningArchMage.BLIZZARD_1:
                 break;
@@ -54,12 +54,12 @@ public class IceLightningArchMageEffect extends AbstractEffect {
                 pEffect.monsterStatus.put(MonsterStatus.FREEZE, 1);
                 break;
             case IceLightningArchMage.EPIC_ADVENTURE_5:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case IceLightningArchMage.FREEZING_BREATH:
-                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, pEffect.info.get(StatInfo.x));
                 pEffect.monsterStatus.put(MonsterStatus.FREEZE, 1);
-                pEffect.monsterStatus.put(MonsterStatus.MAGIC_ATTACK_UP, -pEffect.info.get(MapleStatInfo.y));
+                pEffect.monsterStatus.put(MonsterStatus.MAGIC_ATTACK_UP, -pEffect.info.get(StatInfo.y));
                 break;
             case IceLightningArchMage.FROST_CLUTCH:
                 break;
@@ -102,15 +102,15 @@ public class IceLightningArchMageEffect extends AbstractEffect {
             case IceLightningArchMage.HYPER_STRENGTH_500_50_5:
                 break;
             case IceLightningArchMage.INFINITY_1:
-                pEffect.setHpR(pEffect.info.get(MapleStatInfo.y) / 100.0);
-                pEffect.setMpR(pEffect.info.get(MapleStatInfo.y) / 100.0);
-                pEffect.statups.put(CharacterTemporaryStat.Infinity, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.Stance, (int) pEffect.info.get(MapleStatInfo.prop));
+                pEffect.setHpR(pEffect.info.get(StatInfo.y) / 100.0);
+                pEffect.setMpR(pEffect.info.get(StatInfo.y) / 100.0);
+                pEffect.statups.put(CharacterTemporaryStat.Infinity, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, (int) pEffect.info.get(StatInfo.prop));
                 break;
             case IceLightningArchMage.LIGHTNING_ORB:
                 break;
             case IceLightningArchMage.MAPLE_WARRIOR_10_1:
-                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(StatInfo.x));
                 break;
             case IceLightningArchMage.TELEPORT_MASTERY_RANGE_1:
                 break;

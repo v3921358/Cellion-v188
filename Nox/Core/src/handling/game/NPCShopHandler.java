@@ -7,13 +7,13 @@ import constants.GameConstants;
 import constants.InventoryConstants;
 import java.util.ArrayList;
 import server.maps.objects.User;
-import server.shops.MapleShop;
+import server.shops.Shop;
 import net.InPacket;
 import scripting.provider.NPCScriptManager;
 import tools.packet.WvsContext;
 import net.ProcessPacket;
 import server.MapleInventoryManipulator;
-import server.shops.MapleShopFactory;
+import server.shops.ShopFactory;
 
 /**
  *
@@ -65,7 +65,7 @@ public class NPCShopHandler implements ProcessPacket<ClientSocket> {
 
         switch (bmode) {
             case NPC_SHOP_ACTION_BUY: {
-                MapleShop oShop = pPlayer.getShop();
+                Shop oShop = pPlayer.getShop();
                 if (oShop == null) {
                     return;
                 }
@@ -91,7 +91,7 @@ public class NPCShopHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case NPC_SHOP_ACTION_SELL: {
-                MapleShop shop = pPlayer.getShop();
+                Shop shop = pPlayer.getShop();
                 if (shop == null) {
                     return;
                 }
@@ -107,7 +107,7 @@ public class NPCShopHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case NPC_SHOP_ACTION_RECHARGE: {
-                MapleShop shop = pPlayer.getShop();
+                Shop shop = pPlayer.getShop();
                 if (shop == null) {
                     return;
                 }

@@ -15,7 +15,7 @@ import client.Skill;
 import client.SkillFactory;
 import client.SummonSkillEntry;
 import handling.world.PlayersHandler;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.Randomizer;
 import server.life.MobSkill;
 import server.maps.MapleMap;
@@ -59,7 +59,7 @@ public final class SummonPvpHandler implements ProcessPacket<ClientSocket> {
             return;
         }
         final Skill skil = SkillFactory.getSkill(summon.getSkill());
-        final MapleStatEffect effect = skil.getEffect(summon.getSkillLevel());
+        final StatEffect effect = skil.getEffect(summon.getSkillLevel());
         final int lvl = Integer.parseInt(chr.getEventInstance().getProperty("lvl"));
         final int type = Integer.parseInt(chr.getEventInstance().getProperty("type"));
         final int ourScore = Integer.parseInt(chr.getEventInstance().getProperty(String.valueOf(chr.getId())));
@@ -94,7 +94,7 @@ public final class SummonPvpHandler implements ProcessPacket<ClientSocket> {
             lt = new Point(-100, -100);
             rb = new Point(100, 100);
         }
-        final Rectangle box = MapleStatEffect.calculateBoundingBox(chr.getTruePosition(), chr.isFacingLeft(), lt, rb, 0);
+        final Rectangle box = StatEffect.calculateBoundingBox(chr.getTruePosition(), chr.isFacingLeft(), lt, rb, 0);
         List<AttackMonster> ourAttacks = new ArrayList<>();
         List<Pair<Long, Boolean>> attacks;
         maxdamage *= chr.getStat().dam_r / 100.0;
@@ -171,9 +171,9 @@ public final class SummonPvpHandler implements ProcessPacket<ClientSocket> {
             //chr.getClient().write(CField.getPVPScore(ourScore + addedScore, killed));
         }
         if (didAttack) {
-            chr.getMap().broadcastMessage(CField.SummonPacket.pvpSummonAttack(chr.getId(), chr.getLevel(), summon.getObjectId(), summon.isFacingLeft() ? 4 : 0x84, summon.getTruePosition(), ourAttacks));
+            chr.getMap().broadcastPacket(CField.SummonPacket.pvpSummonAttack(chr.getId(), chr.getLevel(), summon.getObjectId(), summon.isFacingLeft() ? 4 : 0x84, summon.getTruePosition(), ourAttacks));
             if (!summon.isMultiAttack()) {
-                chr.getMap().broadcastMessage(CField.SummonPacket.removeSummon(summon, true));
+                chr.getMap().broadcastPacket(CField.SummonPacket.removeSummon(summon, true));
                 chr.getMap().removeMapObject(summon);
                 chr.removeVisibleMapObject(summon);
                 chr.removeSummon(summon);

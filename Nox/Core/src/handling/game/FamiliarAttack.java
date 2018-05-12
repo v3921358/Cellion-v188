@@ -57,7 +57,7 @@ public final class FamiliarAttack implements ProcessPacket<ClientSocket> {
             return;
         }
         MonsterStats oStats = chr.getSummonedFamiliar().getStats();
-        chr.getMap().broadcastMessage(chr, CField.familiarAttack(chr.getId(), unk, attackPair), chr.getTruePosition());
+        chr.getMap().broadcastPacket(chr, CField.familiarAttack(chr.getId(), unk, attackPair), chr.getTruePosition());
         for (Triple attack : attackPair) {
             Mob mons = chr.getMap().getMonsterByOid(((Integer) attack.left).intValue());
             if ((mons != null) && (mons.isAlive()) && (!mons.getStats().isFriendly()) && (mons.getLinkCID() <= 0) && (((List) attack.right).size() <= f.attackCount)) {

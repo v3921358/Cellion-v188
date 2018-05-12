@@ -12,8 +12,8 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import provider.MapleData;
 import provider.MapleDataTool;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.Randomizer;
 import server.life.Element;
 import tools.Pair;
@@ -22,8 +22,8 @@ import tools.Utility;
 public class Skill implements Comparator<Skill> {
 
     private String psdDamR = "", targetPlus = "";
-    private final List<MapleStatEffect> effects = new ArrayList<>();
-    private List<MapleStatEffect> pvpEffects = null;
+    private final List<StatEffect> effects = new ArrayList<>();
+    private List<StatEffect> pvpEffects = null;
     private List<Integer> animation = null;
     private final List<Pair<String, Integer>> requiredSkill = new ArrayList<>();
     private Element element = Element.NEUTRAL;
@@ -138,11 +138,11 @@ public class Skill implements Comparator<Skill> {
             ret.trueMax = ret.maxLevel + (ret.combatOrders ? 2 : 0);
 
             for (int i = 1; i <= ret.trueMax; i++) {
-                ret.effects.add(MapleStatEffect.loadSkillEffectFromData(commonDir, id, i, "x")); // omg
+                ret.effects.add(StatEffect.loadSkillEffectFromData(commonDir, id, i, "x")); // omg
             }
         } else {
             for (final MapleData leve : levelDir) {
-                ret.effects.add(MapleStatEffect.loadSkillEffectFromData(leve, id, Byte.parseByte(leve.getName()), null));
+                ret.effects.add(StatEffect.loadSkillEffectFromData(leve, id, Byte.parseByte(leve.getName()), null));
             }
             ret.maxLevel = ret.effects.size();
             ret.trueMax = ret.effects.size();
@@ -152,7 +152,7 @@ public class Skill implements Comparator<Skill> {
         if (level2 != null) {
             ret.pvpEffects = new ArrayList<>();
             for (int i = 1; i <= ret.trueMax; i++) {
-                ret.pvpEffects.add(MapleStatEffect.loadSkillEffectFromData(level2, id, i, "x"));
+                ret.pvpEffects.add(StatEffect.loadSkillEffectFromData(level2, id, i, "x"));
             }
         }
         final MapleData reqDataRoot = data.getChildByPath("req");
@@ -170,7 +170,7 @@ public class Skill implements Comparator<Skill> {
         return ret;
     }
 
-    public MapleStatEffect getEffect(final int level) {
+    public StatEffect getEffect(final int level) {
         if (effects.size() < level) {
             if (effects.size() > 0) { //incAllskill
                 return effects.get(effects.size() - 1);
@@ -182,7 +182,7 @@ public class Skill implements Comparator<Skill> {
         return effects.get(level - 1);
     }
 
-    public MapleStatEffect getPVPEffect(final int level) {
+    public StatEffect getPVPEffect(final int level) {
         if (pvpEffects == null) {
             return getEffect(level);
         }

@@ -42,7 +42,7 @@ public class Kite extends MapleMapObject {
         final MapleMap map = Map_ref.get();
 
         if (map != null) {
-            map.broadcastMessage(CField.destroyKite(getObjectId(), true));
+            map.broadcastPacket(CField.destroyKite(getObjectId(), true));
             map.removeMapObject(this);
 
             // cleanup

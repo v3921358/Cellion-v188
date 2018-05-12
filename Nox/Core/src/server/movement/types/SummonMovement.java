@@ -46,7 +46,7 @@ public class SummonMovement implements ProcessPacket<ClientSocket> {
             sum.setvYCS(iPacket.DecodeShort());
             List<LifeMovementFragment> res = MovementParse.parseMovement(iPacket);
             MovementParse.updatePosition(res, sum);
-            chr.getMap().broadcastMessage(chr, SummonPacket.moveSummon(sum, res), sum.getTruePosition());
+            chr.getMap().broadcastPacket(chr, SummonPacket.moveSummon(sum, res), sum.getTruePosition());
         }
     }
 }

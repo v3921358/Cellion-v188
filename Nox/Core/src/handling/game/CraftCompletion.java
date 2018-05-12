@@ -18,7 +18,7 @@ import constants.InventoryConstants;
 import handling.world.ItemMakerHandler.CraftRanking;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.Randomizer;
 import server.maps.objects.User;
 import server.maps.objects.Extractor;
@@ -76,7 +76,7 @@ public final class CraftCompletion implements ProcessPacket<ClientSocket> {
                         if (chr.getMeso() < extractor.fee) {
                             return;
                         }
-                        final MapleStatEffect eff = ii.getItemEffect(extractor.itemId);
+                        final StatEffect eff = ii.getItemEffect(extractor.itemId);
                         if (eff != null && eff.getUseLevel() < reqLevel) {
                             return;
                         }
@@ -268,7 +268,7 @@ public final class CraftCompletion implements ProcessPacket<ClientSocket> {
         }
         Quest.getInstance(2550).forceStart(c.getPlayer(), 9031000, "1"); //removes tutorial stuff
         chr.setFatigue((byte) (chr.getFatigue() + fatigue));
-        chr.getMap().broadcastMessage(CField.craftFinished(chr.getId(), craftID, cr.i, toGet, quantity, expGain));
+        chr.getMap().broadcastPacket(CField.craftFinished(chr.getId(), craftID, cr.i, toGet, quantity, expGain));
     }
 
 }

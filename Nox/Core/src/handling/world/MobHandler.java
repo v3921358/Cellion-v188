@@ -24,7 +24,7 @@ public class MobHandler {
 
             }
 
-            map.broadcastMessage(WvsContext.broadcastMsg(6, "Your party has failed to protect the monster."));
+            map.broadcastPacket(WvsContext.broadcastMsg(6, "Your party has failed to protect the monster."));
             mapp = chr.getMap().getForcedReturnMap();
             for (User chrz : map.getCharacters()) {
                 chrz.changeMap(mapp, mapp.getPortal(0));

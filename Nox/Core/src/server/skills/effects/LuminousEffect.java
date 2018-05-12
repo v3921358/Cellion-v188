@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Luminous;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class LuminousEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Luminous.ABYSSAL_DROP:
                 break;
@@ -37,7 +37,7 @@ public class LuminousEffect extends AbstractEffect {
             case Luminous.MANA_WELL_1:
                 break;
             case Luminous.STANDARD_MAGIC_GUARD:
-                pEffect.statups.put(CharacterTemporaryStat.MagicGuard, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.MagicGuard, pEffect.info.get(StatInfo.x));
                 break;
             case Luminous.BLACK_BLESSING:
                 break;
@@ -46,11 +46,11 @@ public class LuminousEffect extends AbstractEffect {
             case Luminous.HIGH_WISDOM_1:
                 break;
             case Luminous.MAGIC_BOOSTER_3:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case Luminous.PRESSURE_VOID:
-                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Luminous.SPELL_MASTERY_1:
                 break;
@@ -59,20 +59,20 @@ public class LuminousEffect extends AbstractEffect {
             case Luminous.DEATH_SCYTHE:
                 break;
             case Luminous.DUSK_GUARD:
-                pEffect.statups.put(CharacterTemporaryStat.IndiePDD, pEffect.info.get(MapleStatInfo.indiePdd));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePDD, pEffect.info.get(StatInfo.indiePdd));
                 break;
             case Luminous.LUNAR_TIDE:
                 break;
             case Luminous.MOONLIGHT_SPEAR:
                 break;
             case Luminous.PHOTIC_MEDITATION:
-                pEffect.statups.put(CharacterTemporaryStat.EMAD, pEffect.info.get(MapleStatInfo.emad));
+                pEffect.statups.put(CharacterTemporaryStat.EMAD, pEffect.info.get(StatInfo.emad));
                 break;
             case Luminous.RAY_OF_REDEMPTION:
                 break;
             case Luminous.SHADOW_SHELL:
-                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.KeyDownAreaMoving, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Luminous.SPECTRAL_LIGHT_1:
                 break;
@@ -85,9 +85,9 @@ public class LuminousEffect extends AbstractEffect {
             case Luminous.APOCALYPSE_REINFORCE:
                 break;
             case Luminous.ARCANE_PITCH:
-                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.y));
-                pEffect.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.ElementalReset, pEffect.info.get(MapleStatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(StatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.ElementalReset, pEffect.info.get(StatInfo.y));
                 break;
             case Luminous.ARMAGEDDON:
                 pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
@@ -95,8 +95,8 @@ public class LuminousEffect extends AbstractEffect {
             case Luminous.DARKNESS_MASTERY:
                 break;
             case Luminous.DARK_CRESCENDO:
-                pEffect.statups.put(CharacterTemporaryStat.StackBuff, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 180000);
+                pEffect.statups.put(CharacterTemporaryStat.StackBuff, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 180000);
                 break;
             case Luminous.ENDER:
                 break;
@@ -109,7 +109,7 @@ public class LuminousEffect extends AbstractEffect {
             case Luminous.EQUALIZE:
                 break;
             case Luminous.HEROIC_MEMORIES_6:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case Luminous.HEROS_WILL_200_20_2:
                 break;
@@ -142,7 +142,7 @@ public class LuminousEffect extends AbstractEffect {
             case Luminous.MAGIC_MASTERY_2:
                 break;
             case Luminous.MAPLE_WARRIOR_300_30_3:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
                 break;
             case Luminous.MORNING_STAR:
                 break;

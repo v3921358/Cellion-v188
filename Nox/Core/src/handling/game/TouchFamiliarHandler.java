@@ -35,7 +35,7 @@ public final class TouchFamiliarHandler implements ProcessPacket<ClientSocket> {
             damage = maxDamage;
         }
         if ((!target.getStats().isFriendly()) && (chr.getCheatTracker().checkFamiliarAttack(chr))) {
-            chr.getMap().broadcastMessage(chr, CField.touchFamiliar(chr.getId(), unk, target.getObjectId(), type, 600, damage), chr.getTruePosition());
+            chr.getMap().broadcastPacket(chr, CField.touchFamiliar(chr.getId(), unk, target.getObjectId(), type, 600, damage), chr.getTruePosition());
             target.damage(chr, damage, true);
             chr.getSummonedFamiliar().addFatigue(chr);
         }

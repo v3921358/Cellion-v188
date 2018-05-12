@@ -50,12 +50,12 @@ public class PetCommandHandler implements ProcessPacket<ClientSocket> {
                 if (newCloseness >= GameConstants.getClosenessNeededForLevel(pet.getLevel() + 1)) {
                     pet.setLevel(pet.getLevel() + 1);
                     c.SendPacket(CField.EffectPacket.showOwnPetLevelUp(null, petIndex));
-                    chr.getMap().broadcastMessage(PetPacket.showPetLevelUp(chr, petIndex));
+                    chr.getMap().broadcastPacket(PetPacket.showPetLevelUp(chr, petIndex));
                 }
                 //  chr.forceUpdateItem(pet.getItem());
                 c.SendPacket(PetPacket.updatePet(pet, chr.getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
             }
         }
-        chr.getMap().broadcastMessage(PetPacket.commandResponse(chr.getId(), (byte) petCommand.getSkillId(), petIndex, success, false));
+        chr.getMap().broadcastPacket(PetPacket.commandResponse(chr.getId(), (byte) petCommand.getSkillId(), petIndex, success, false));
     }
 }

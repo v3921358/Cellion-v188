@@ -17,7 +17,7 @@ import client.jobs.Nova.KaiserHandler;
 import constants.skills.Kaiser;
 import java.awt.Point;
 import java.awt.Rectangle;
-import server.MapleStatEffect;
+import server.StatEffect;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.css.Rect;
@@ -72,7 +72,7 @@ public final class ReleaseTempestBlades implements ProcessPacket<ClientSocket> {
             }
             
             ForceAtom forceAtomInfo = new ForceAtom(1, nInc, 25, 30, 0, 10 * i, (int) System.currentTimeMillis(), 1, 0, new Point());
-            pPlayer.getMap().broadcastMessage(CField.createForceAtom(false, 0, pPlayer.getId(), nType,
+            pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, 0, pPlayer.getId(), nType,
                     true, pMob.getObjectId(), KaiserHandler.getTempestBladeSkill(pPlayer), forceAtomInfo, new Rectangle(), 0, 300,
                     pMob.getPosition(), KaiserHandler.getTempestBladeSkill(pPlayer), pMob.getPosition()));
 
@@ -101,12 +101,12 @@ public final class ReleaseTempestBlades implements ProcessPacket<ClientSocket> {
             }
             
             ForceAtom forceAtomInfo = new ForceAtom(1, nInc, 25, 30, 0, 12 * i, (int) System.currentTimeMillis(), 1, 0, new Point());
-            pPlayer.getMap().broadcastMessage(CField.createForceAtom(false, 0, pPlayer.getId(), nType,
+            pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, 0, pPlayer.getId(), nType,
                     true, pMob.getObjectId(), KaiserHandler.getTempestBladeSkill(pPlayer), forceAtomInfo, new Rectangle(), 0, 300,
                     pMob.getPosition(), KaiserHandler.getTempestBladeSkill(pPlayer), pMob.getPosition()));
         }
         
-        MapleStatEffect pEffect = SkillFactory.getSkill(KaiserHandler.getTempestBladeSkill(pPlayer)).getEffect(pPlayer.getTotalSkillLevel(KaiserHandler.getTempestBladeSkill(pPlayer)));
+        StatEffect pEffect = SkillFactory.getSkill(KaiserHandler.getTempestBladeSkill(pPlayer)).getEffect(pPlayer.getTotalSkillLevel(KaiserHandler.getTempestBladeSkill(pPlayer)));
         pPlayer.cancelEffect(pEffect, true, 0);
         pPlayer.cancelTemporaryStats(CharacterTemporaryStat.StopForceAtomInfo);
     }

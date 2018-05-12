@@ -48,7 +48,7 @@ public class AdminChatHandler implements ProcessPacket<ClientSocket> {
                 c.getChannelServer().broadcastMessage(packet);
                 break;
             case 2:// /alertm /alertmap, /noticem /noticemap, /slidem /slidemap
-                c.getPlayer().getMap().broadcastMessage(packet);
+                c.getPlayer().getMap().broadcastPacket(packet);
                 break;
 
         }

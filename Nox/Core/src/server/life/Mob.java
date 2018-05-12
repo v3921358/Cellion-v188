@@ -19,7 +19,7 @@ import handling.world.MaplePartyCharacter;
 
 import scripting.EventInstanceManager;
 import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.Randomizer;
 import server.Timer.EtcTimer;
 import server.maps.MapleMap;
@@ -303,10 +303,10 @@ public class Mob extends AbstractLoadedMapleLife {
                     sponge.get().hp -= rDamage;
 
                     if (sponge.get().hp <= 0) {
-                        map.broadcastMessage(MobPacket.showBossHP(sponge.get().getId(), -1, sponge.get().getMobMaxHp()));
+                        map.broadcastPacket(MobPacket.showBossHP(sponge.get().getId(), -1, sponge.get().getMobMaxHp()));
                         map.killMonster(sponge.get(), from, true, false, (byte) 1, lastSkill);
                     } else {
-                        map.broadcastMessage(MobPacket.showBossHP(sponge.get()));
+                        map.broadcastPacket(MobPacket.showBossHP(sponge.get()));
                     }
                 }
             }
@@ -324,13 +324,13 @@ public class Mob extends AbstractLoadedMapleLife {
                 if (sponge.get() == null && hp > 0) {
                     switch (stats.getHPDisplayType()) {
                         case BossHP:
-                            map.broadcastMessage(MobPacket.showBossHP(this), this.getTruePosition());
+                            map.broadcastPacket(MobPacket.showBossHP(this), this.getTruePosition());
                             break;
                         case FriendlyMonsterHP:
-                            map.broadcastMessage(from, MobPacket.damageFriendlyMob(this, damage, true), false);
+                            map.broadcastPacket(from, MobPacket.damageFriendlyMob(this, damage, true), false);
                             break;
                         case MulungDojoMonsterHP:
-                            map.broadcastMessage(MobPacket.showMonsterHP(getObjectId(), getHPPercent()));
+                            map.broadcastPacket(MobPacket.showMonsterHP(getObjectId(), getHPPercent()));
                             from.mulungEnergyModifier(true);
                             break;
                         case RegularMonsterHP:
@@ -352,15 +352,15 @@ public class Mob extends AbstractLoadedMapleLife {
                             }
                             break;
                         case BossHPWithRegularHPBar:
-                            map.broadcastMessage(MobPacket.showBossHP(this), this.getPosition());
-                            map.broadcastMessage(MobPacket.showMonsterHP(getObjectId(), (int) Math.ceil((hp * 100.0) / getMobMaxHp())));
+                            map.broadcastPacket(MobPacket.showBossHP(this), this.getPosition());
+                            map.broadcastPacket(MobPacket.showMonsterHP(getObjectId(), (int) Math.ceil((hp * 100.0) / getMobMaxHp())));
                             break;
                     }
                 }
 
                 if (hp <= 0) {
                     if (stats.getHPDisplayType() == MonsterHpDisplayType.BossHP) {
-                        map.broadcastMessage(MobPacket.showBossHP(getId(), -1, getMobMaxHp()), this.getTruePosition());
+                        map.broadcastPacket(MobPacket.showBossHP(getId(), -1, getMobMaxHp()), this.getTruePosition());
                     }
                     // Spawn revives - This must be called before broadcasting killMonster, otherwise the position will be incorrectly spawned
                     spawnRevives(getMap());
@@ -392,7 +392,7 @@ public class Mob extends AbstractLoadedMapleLife {
             setMp(TotalMP);
         }
         if (broadcast) {
-            map.broadcastMessage(MobPacket.healMonster(getObjectId(), hp));
+            map.broadcastPacket(MobPacket.healMonster(getObjectId(), hp));
         } else if (sponge.get() != null) { // else if, since only sponge doesn't broadcast
             sponge.get().hp += hp;
         }
@@ -469,7 +469,7 @@ public class Mob extends AbstractLoadedMapleLife {
                 totalEXPGained *= attacker.getStat().expMod;
             }
             // Double time rate
-            if (ServerConstants.DoubleTime) {
+            if (ServerConstants.DOUBLE_TIME) {
                 totalEXPGained *= 2.0;
             }
             // Showdown skill
@@ -819,8 +819,8 @@ public class Mob extends AbstractLoadedMapleLife {
                     map.spawnRevives(mob, this.getObjectId());
 
                     if (mob.getId() == 9300216) {
-                        map.broadcastMessage(CField.environmentChange("Dojang/clear", 5, 0));//was4
-                        map.broadcastMessage(CField.environmentChange("dojang/end/clear", 12, 0));//was3
+                        map.broadcastPacket(CField.environmentChange("Dojang/clear", 5, 0));//was4
+                        map.broadcastPacket(CField.environmentChange("dojang/end/clear", 12, 0));//was3
                     }
                 }
                 break;
@@ -1013,7 +1013,7 @@ public class Mob extends AbstractLoadedMapleLife {
         return stats.getEffectiveness(e);
     }
 
-    public void applyStatus(User from, MonsterStatusEffect status, boolean poison, long duration, boolean checkboss, MapleStatEffect eff) {
+    public void applyStatus(User from, MonsterStatusEffect status, boolean poison, long duration, boolean checkboss, StatEffect eff) {
         if (!isAlive() || getLinkCID() > 0) {
             return;
         }
@@ -1149,10 +1149,10 @@ public class Mob extends AbstractLoadedMapleLife {
             try {
                 poisons.add(status);
                 if (con != null) {
-                    map.broadcastMessage(con, MobPacket.applyMonsterStatus(this, poisons), getTruePosition());
+                    map.broadcastPacket(con, MobPacket.applyMonsterStatus(this, poisons), getTruePosition());
                     con.getClient().SendPacket(MobPacket.applyMonsterStatus(this, poisons));
                 } else {
-                    map.broadcastMessage(MobPacket.applyMonsterStatus(this, poisons), getTruePosition());
+                    map.broadcastPacket(MobPacket.applyMonsterStatus(this, poisons), getTruePosition());
                 }
             } finally {
                 poisonsLock.writeLock().unlock();
@@ -1160,10 +1160,10 @@ public class Mob extends AbstractLoadedMapleLife {
         } else {
             stati.put(stat, status);
             if (con != null) {
-                map.broadcastMessage(con, MobPacket.applyMonsterStatus(this, status), getTruePosition());
+                map.broadcastPacket(con, MobPacket.applyMonsterStatus(this, status), getTruePosition());
                 con.getClient().SendPacket(MobPacket.applyMonsterStatus(this, status));
             } else {
-                map.broadcastMessage(MobPacket.applyMonsterStatus(this, status), getTruePosition());
+                map.broadcastPacket(MobPacket.applyMonsterStatus(this, status), getTruePosition());
             }
         }
     }
@@ -1173,7 +1173,7 @@ public class Mob extends AbstractLoadedMapleLife {
             cancelStatus(status.getStati());
         }
         stati.put(status.getStati(), status);
-        map.broadcastMessage(MobPacket.applyMonsterStatus(this, status), getTruePosition());
+        map.broadcastPacket(MobPacket.applyMonsterStatus(this, status), getTruePosition());
     }
 
     public void dispelSkill(MobSkill skillId) {
@@ -1202,18 +1202,18 @@ public class Mob extends AbstractLoadedMapleLife {
         if (reflection.size() > 0) {
             this.reflectpack = MobPacket.applyMonsterStatus(getObjectId(), effect, reflection, skill);
             if (con != null) {
-                map.broadcastMessage(con, reflectpack, getTruePosition());
+                map.broadcastPacket(con, reflectpack, getTruePosition());
                 con.getClient().SendPacket(this.reflectpack);
             } else {
-                map.broadcastMessage(reflectpack, getTruePosition());
+                map.broadcastPacket(reflectpack, getTruePosition());
             }
         } else {
             for (Entry<MonsterStatus, Integer> z : effect.entrySet()) {
                 if (con != null) {
-                    map.broadcastMessage(con, MobPacket.applyMonsterStatus(getObjectId(), z.getKey(), z.getValue(), skill), getTruePosition());
+                    map.broadcastPacket(con, MobPacket.applyMonsterStatus(getObjectId(), z.getKey(), z.getValue(), skill), getTruePosition());
                     con.getClient().SendPacket(MobPacket.applyMonsterStatus(getObjectId(), z.getKey(), z.getValue(), skill));
                 } else {
-                    map.broadcastMessage(MobPacket.applyMonsterStatus(getObjectId(), z.getKey(), z.getValue(), skill), getTruePosition());
+                    map.broadcastPacket(MobPacket.applyMonsterStatus(getObjectId(), z.getKey(), z.getValue(), skill), getTruePosition());
                 }
             }
         }
@@ -1322,7 +1322,7 @@ public class Mob extends AbstractLoadedMapleLife {
         if (!cancel) {
             damage(chr, damage, false);
             if (shadowWeb) {
-                map.broadcastMessage(MobPacket.damageMonster(getObjectId(), damage), getTruePosition());
+                map.broadcastPacket(MobPacket.damageMonster(getObjectId(), damage), getTruePosition());
             }
         }
     }
@@ -1419,10 +1419,10 @@ public class Mob extends AbstractLoadedMapleLife {
         mse.cancelPoisonSchedule(this);
         User con = getController();
         if (con != null) {
-            map.broadcastMessage(con, MobPacket.cancelMonsterStatus(getObjectId(), stat), getTruePosition());
+            map.broadcastPacket(con, MobPacket.cancelMonsterStatus(getObjectId(), stat), getTruePosition());
             con.getClient().SendPacket(MobPacket.cancelMonsterStatus(getObjectId(), stat));
         } else {
-            map.broadcastMessage(MobPacket.cancelMonsterStatus(getObjectId(), stat), getTruePosition());
+            map.broadcastPacket(MobPacket.cancelMonsterStatus(getObjectId(), stat), getTruePosition());
         }
         stati.remove(stat);
     }
@@ -1447,10 +1447,10 @@ public class Mob extends AbstractLoadedMapleLife {
             stat.cancelPoisonSchedule(this);
             User con = getController();
             if (con != null) {
-                map.broadcastMessage(con, MobPacket.cancelPoison(this.getObjectId(), stat), getTruePosition());
+                map.broadcastPacket(con, MobPacket.cancelPoison(this.getObjectId(), stat), getTruePosition());
                 con.getClient().SendPacket(MobPacket.cancelPoison(this.getObjectId(), stat));
             } else {
-                map.broadcastMessage(MobPacket.cancelPoison(this.getObjectId(), stat), getTruePosition());
+                map.broadcastPacket(MobPacket.cancelPoison(this.getObjectId(), stat), getTruePosition());
             }
         } finally {
             poisonsLock.writeLock().unlock();

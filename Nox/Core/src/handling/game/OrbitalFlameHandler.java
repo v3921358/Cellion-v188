@@ -31,8 +31,8 @@ import java.util.List;
 import server.maps.objects.User;
 import net.InPacket;
 import net.ProcessPacket;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.maps.objects.ForceAtom;
 import server.maps.objects.ForceAtomType;
 import tools.packet.CField;
@@ -51,8 +51,8 @@ public final class OrbitalFlameHandler implements ProcessPacket<ClientSocket> {
         byte nSLV = iPacket.DecodeByte();
         short nDirection = iPacket.DecodeShort();
         Skill pSkill = SkillFactory.getSkill(nSkillID);
-        MapleStatEffect pEffect = pSkill.getEffect(nSLV);
-        int nRange = pEffect.info.get(MapleStatInfo.range);
+        StatEffect pEffect = pSkill.getEffect(nSLV);
+        int nRange = pEffect.info.get(StatInfo.range);
 
         ForceAtomType fae;
         switch (nSkillID) {
@@ -86,10 +86,10 @@ public final class OrbitalFlameHandler implements ProcessPacket<ClientSocket> {
                 angle = 90;
                 break;
         }
-        ForceAtom fai = new ForceAtom(1, fae.getInc(), 11, 13, angle, 0, curTime, pEffect.info.get(MapleStatInfo.mobCount), BlazeWizard.ORBITAL_FLAME_1, new Point(0, 0));
+        ForceAtom fai = new ForceAtom(1, fae.getInc(), 11, 13, angle, 0, curTime, pEffect.info.get(StatInfo.mobCount), BlazeWizard.ORBITAL_FLAME_1, new Point(0, 0));
         List<ForceAtom> faiList = new ArrayList<>();
         faiList.add(fai);
-        pPlayer.getMap().broadcastMessage(CField.createForceAtom(false, 0, pPlayer.getId(), fae.getForceAtomType(), false,
+        pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, 0, pPlayer.getId(), fae.getForceAtomType(), false,
                 new ArrayList<>(), nSkillID, faiList, null, nDirection, nRange, null, 0, null));
 
         //PlayerHandler.OrbitalFlame(iPacket, c);

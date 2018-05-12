@@ -107,7 +107,7 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
 
                 if (bSmartMob) {
                     c.SendPacket(MobPacket.SmartMobNotice(1, oid, 2, nextSkill.getSkillId(), sMobNotice));
-                    c.getPlayer().getMap().broadcastMessage(MobPacket.SmartMobNotice(2, oid, 2, nextSkill.getSkillId(), sMobNotice));
+                    c.getPlayer().getMap().broadcastPacket(MobPacket.SmartMobNotice(2, oid, 2, nextSkill.getSkillId(), sMobNotice));
                 }
 
                 final long tNow = System.currentTimeMillis();
@@ -159,6 +159,6 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
         MapleMap map = c.getPlayer().getMap();
         MovementParse.updatePosition(res, pMob);
         map.moveMonster(pMob, pMob.getPosition());
-        map.broadcastMessage(chr, MobPacket.moveMonster(pMob, bNextAcctackPossible, nSkillID, nSkill1, nSkill2, nSkillOpt, oid, res, multiTarget, randomTime), pMob.getPosition());
+        map.broadcastPacket(chr, MobPacket.moveMonster(pMob, bNextAcctackPossible, nSkillID, nSkill1, nSkill2, nSkillOpt, oid, res, multiTarget, randomTime), pMob.getPosition());
     }
 }

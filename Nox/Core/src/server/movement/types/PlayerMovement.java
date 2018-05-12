@@ -59,7 +59,7 @@ public class PlayerMovement implements ProcessPacket<ClientSocket> {
             if (pPlayer.isHidden()) {
                 c.getPlayer().getMap().broadcastGMMessage(pPlayer, CField.movePlayer(pPlayer, res), false);
             } else {
-                c.getPlayer().getMap().broadcastMessage(c.getPlayer(), CField.movePlayer(pPlayer, res), false);
+                c.getPlayer().getMap().broadcastPacket(c.getPlayer(), CField.movePlayer(pPlayer, res), false);
             }
             MovementParse.updatePosition(res, pPlayer);
             Point pPOS_ = pPlayer.getTruePosition();
@@ -72,7 +72,7 @@ public class PlayerMovement implements ProcessPacket<ClientSocket> {
                     follower.getClient().SendPacket(CField.moveFollow(pPOS, originalPosition, pPOS_, res));
                     MovementParse.updatePosition(res, follower);
                     pMap.movePlayer(follower, pPOS_);
-                    pMap.broadcastMessage(follower, CField.movePlayer(follower, res), false);
+                    pMap.broadcastPacket(follower, CField.movePlayer(follower, res), false);
                 } else {
                     pPlayer.checkFollow();
                 }

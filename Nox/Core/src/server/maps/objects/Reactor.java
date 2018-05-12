@@ -123,7 +123,7 @@ public class Reactor extends AnimatedMapleMapObject {
     public void forceHitReactor(final byte newState) {
         setState((byte) newState);
         setTimerActive(false);
-        map.broadcastMessage(CField.triggerReactor(this, (short) 0));
+        map.broadcastPacket(CField.triggerReactor(this, (short) 0));
     }
 
     //hitReactor command for item-triggered reactors
@@ -132,7 +132,7 @@ public class Reactor extends AnimatedMapleMapObject {
     }
 
     public void forceTrigger() {
-        map.broadcastMessage(CField.triggerReactor(this, (short) 0));
+        map.broadcastPacket(CField.triggerReactor(this, (short) 0));
     }
 
     public void delayedDestroyReactor(long delay) {
@@ -155,14 +155,14 @@ public class Reactor extends AnimatedMapleMapObject {
                     if ((stats.getType(state) < 100 || stats.getType(state) == 999) && delay > 0) { //reactor broken
                         map.destroyReactor(getObjectId());
                     } else { //item-triggered on final step
-                        map.broadcastMessage(CField.triggerReactor(this, stance));
+                        map.broadcastPacket(CField.triggerReactor(this, stance));
                     }
                     //if (rid > 200011) {
                     ReactorScriptManager.getInstance().act(c, this);
                     //}
                 } else { //reactor not broken yet
                     boolean done = false;
-                    map.broadcastMessage(CField.triggerReactor(this, stance)); //magatia is weird cause full beaker can be activated by gm hat o.o
+                    map.broadcastPacket(CField.triggerReactor(this, stance)); //magatia is weird cause full beaker can be activated by gm hat o.o
                     if (state == stats.getNextState(state) || rid == 2618000 || rid == 2309000) { //current state = next state, looping reactor
                         if (rid > 200011) {
                             ReactorScriptManager.getInstance().act(c, this);

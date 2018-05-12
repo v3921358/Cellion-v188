@@ -16,8 +16,8 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ScheduledFuture;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.Randomizer;
 import server.Timer;
 import server.maps.objects.User;
@@ -118,11 +118,11 @@ public class Explorer {
             }
 
             int nDuration = 210000000;
-            final MapleStatEffect buffEffects = SkillFactory.getSkill(Fighter.COMBO_ATTACK).getEffect(pPlayer.getTotalSkillLevel(Fighter.COMBO_ATTACK));
+            final StatEffect buffEffects = SkillFactory.getSkill(Fighter.COMBO_ATTACK).getEffect(pPlayer.getTotalSkillLevel(Fighter.COMBO_ATTACK));
 
             buffEffects.statups.put(CharacterTemporaryStat.ComboCounter, nAmount);
 
-            final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
+            final StatEffect.CancelEffectAction cancelAction = new StatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
             final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, nDuration);
             pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), buffSchedule, buffEffects.statups, false, nDuration, pPlayer.getId());
             pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, Fighter.COMBO_ATTACK, nDuration, buffEffects.statups, buffEffects));
@@ -167,18 +167,18 @@ public class Explorer {
             int nBodyCount = pPlayer.getPrimaryStack();
 
             // Apply the respected buff bonuses to the player.
-            final MapleStatEffect pEffect = SkillFactory.getSkill(Shadower.SHADOWER_INSTINCT).getEffect(pPlayer.getTotalSkillLevel(Shadower.SHADOWER_INSTINCT));
+            final StatEffect pEffect = SkillFactory.getSkill(Shadower.SHADOWER_INSTINCT).getEffect(pPlayer.getTotalSkillLevel(Shadower.SHADOWER_INSTINCT));
 
             pEffect.statups.put(CharacterTemporaryStat.IgnoreMobpdpR, pPlayer.getSkillLevel(Shadower.SHADOWER_INSTINCT));
-            pEffect.statups.put(CharacterTemporaryStat.PAD, (1 + nBodyCount) * pEffect.info.get(MapleStatInfo.x));
+            pEffect.statups.put(CharacterTemporaryStat.PAD, (1 + nBodyCount) * pEffect.info.get(StatInfo.x));
             if (nBodyCount > 0) {
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, (nBodyCount) * pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, (nBodyCount) * pEffect.info.get(StatInfo.x));
             }
 
-            final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
-            final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, pEffect.info.get(MapleStatInfo.time));
-            pPlayer.registerEffect(pEffect, System.currentTimeMillis(), buffSchedule, pEffect.statups, false, pEffect.info.get(MapleStatInfo.time), pPlayer.getId());
-            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, Shadower.SHADOWER_INSTINCT, pEffect.info.get(MapleStatInfo.time), pEffect.statups, pEffect));
+            final StatEffect.CancelEffectAction cancelAction = new StatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
+            final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, pEffect.info.get(StatInfo.time));
+            pPlayer.registerEffect(pEffect, System.currentTimeMillis(), buffSchedule, pEffect.statups, false, pEffect.info.get(StatInfo.time), pPlayer.getId());
+            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, Shadower.SHADOWER_INSTINCT, pEffect.info.get(StatInfo.time), pEffect.statups, pEffect));
 
             pPlayer.setPrimaryStack(0); // Set body count back to zero.
             pPlayer.dropMessage(-1, "Body Count Reset");
@@ -198,19 +198,19 @@ public class Explorer {
             }
 
             // Apply the respected buff bonuses to the player.
-            final MapleStatEffect pEffect = SkillFactory.getSkill(Shadower.FLIP_OF_THE_COIN).getEffect(pPlayer.getTotalSkillLevel(Shadower.FLIP_OF_THE_COIN));
+            final StatEffect pEffect = SkillFactory.getSkill(Shadower.FLIP_OF_THE_COIN).getEffect(pPlayer.getTotalSkillLevel(Shadower.FLIP_OF_THE_COIN));
 
             pEffect.statups.put(CharacterTemporaryStat.FlipTheCoin, nAmount);
             pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, nAmount * 10);
-            pEffect.statups.put(CharacterTemporaryStat.IndieDamR, nAmount * pEffect.info.get(MapleStatInfo.indieDamR));
+            pEffect.statups.put(CharacterTemporaryStat.IndieDamR, nAmount * pEffect.info.get(StatInfo.indieDamR));
 
-            final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
-            final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, pEffect.info.get(MapleStatInfo.time));
-            pPlayer.registerEffect(pEffect, System.currentTimeMillis(), buffSchedule, pEffect.statups, false, pEffect.info.get(MapleStatInfo.time), pPlayer.getId());
-            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, Shadower.FLIP_OF_THE_COIN, pEffect.info.get(MapleStatInfo.time), pEffect.statups, pEffect));
+            final StatEffect.CancelEffectAction cancelAction = new StatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
+            final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, pEffect.info.get(StatInfo.time));
+            pPlayer.registerEffect(pEffect, System.currentTimeMillis(), buffSchedule, pEffect.statups, false, pEffect.info.get(StatInfo.time), pPlayer.getId());
+            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, Shadower.FLIP_OF_THE_COIN, pEffect.info.get(StatInfo.time), pEffect.statups, pEffect));
 
             // Turn off Flip The Coin in order for the player to require another critical strike for next use.
-            pPlayer.getMap().broadcastMessage(ShadowerPacket.toggleFlipTheCoin(false));
+            pPlayer.getMap().broadcastPacket(ShadowerPacket.toggleFlipTheCoin(false));
             pPlayer.dropMessage(-1, "Flip of the Coin (" + nAmount + "/5)");
         }
     }
@@ -227,7 +227,7 @@ public class Explorer {
                     ForceAtom forceAtomInfo = new ForceAtom(1, nInc, 20, 40,
                             0, 100, (int) System.currentTimeMillis(), 1, 0,
                             new Point());
-                    pPlayer.getMap().broadcastMessage(CField.createForceAtom(false, nMobID, pPlayer.getId(), nType,
+                    pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, nMobID, pPlayer.getId(), nType,
                             true, nMobID, Assassin.ASSASSINS_MARK, forceAtomInfo, new Rectangle(), 0, 300,
                             pMob.getPosition(), 2070000, pMob.getPosition()));
                 }

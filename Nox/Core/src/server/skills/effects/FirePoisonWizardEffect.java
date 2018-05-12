@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.FirePoisonWizard;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class FirePoisonWizardEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case FirePoisonWizard.ELEMENTAL_DRAIN:
                 break;
@@ -31,7 +31,7 @@ public class FirePoisonWizardEffect extends AbstractEffect {
             case FirePoisonWizard.IGNITE_1:
                 break;
             case FirePoisonWizard.MAGIC_BOOSTER_2:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case FirePoisonWizard.MEDITATION_1:
                 break;

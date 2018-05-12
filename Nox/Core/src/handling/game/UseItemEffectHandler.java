@@ -58,7 +58,7 @@ public final class UseItemEffectHandler implements ProcessPacket<ClientSocket> {
         if (itemId != 5510000) {
             chr.setItemEffect(itemId);
         }
-        chr.getMap().broadcastMessage(chr, CField.itemEffect(chr.getId(), itemId), false);
+        chr.getMap().broadcastPacket(chr, CField.itemEffect(chr.getId(), itemId), false);
     }
 
 }

@@ -241,12 +241,13 @@ public final class MigrateInHandler implements ProcessPacket<ClientSocket> {
 
         // Game Master Quality of Life Features
         if (pPlayer.isGM()) {
-            pPlayer.gainMeso((9999999999L - pPlayer.getMeso()), false);
-            pPlayer.setNX(99999999);
-            pPlayer.toggleGodMode(true);
+            if (pPlayer.getGMLevel() > 5) pPlayer.setGM((byte) 5); // Reset Command Vault & Keep GM Levels Organized
+            pPlayer.gainMeso((9999999999L - pPlayer.getMeso()), false); // Maximum Mesos
+            pPlayer.setNX(99999999); // Maximum NX
+            pPlayer.toggleGodMode(true); // Enabled God Mode
             pPlayer.dropMessage(6, "[Reminder] God mode has been enabled by default.");
             pPlayer.dropMessage(5, "[Visibility] Your character is currently hidden.");
-            SkillFactory.getSkill(9101004).getEffect(1).applyTo(c.getPlayer());
+            SkillFactory.getSkill(9101004).getEffect(1).applyTo(c.getPlayer()); // Enabled Hide Mode
         }
 
         if (pPlayer.getStat().equippedSummon > 0) {

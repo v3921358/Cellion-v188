@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Marksman;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,15 +18,15 @@ import server.skills.effects.manager.Effect;
 public class MarksmanEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Marksman.ARROW_ILLUSION:
                 break;
             case Marksman.BOLT_SURPLUS:
                 break;
             case Marksman.BULLSEYE_SHOT:
-                pEffect.statups.put(CharacterTemporaryStat.IgnoreMobpdpR, pEffect.info.get(MapleStatInfo.ignoreMobpdpR));
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.IgnoreMobpdpR, pEffect.info.get(StatInfo.ignoreMobpdpR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
                 pEffect.statups.put(CharacterTemporaryStat.BullsEye, 1);
                 break;
             case Marksman.CROSSBOW_EXPERT_1:
@@ -34,7 +34,7 @@ public class MarksmanEffect extends AbstractEffect {
             case Marksman.ELITE_PUPPET_1:
                 break;
             case Marksman.EPIC_ADVENTURE_6:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case Marksman.HEROS_WILL_10_1:
                 break;
@@ -67,13 +67,13 @@ public class MarksmanEffect extends AbstractEffect {
             case Marksman.HYPER_STRENGTH_100_10_1:
                 break;
             case Marksman.ILLUSION_STEP:
-                pEffect.statups.put(CharacterTemporaryStat.Blind, pEffect.info.get(MapleStatInfo.x));
-                pEffect.monsterStatus.put(MonsterStatus.ACC, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Blind, pEffect.info.get(StatInfo.x));
+                pEffect.monsterStatus.put(MonsterStatus.ACC, pEffect.info.get(StatInfo.x));
                 break;
             case Marksman.LAST_MAN_STANDING:
                 break;
             case Marksman.MAPLE_WARRIOR_20_2:
-                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.BasicStatUp, pEffect.info.get(StatInfo.x));
                 break;
             case Marksman.MARKSMANSHIP_2:
                 break;
@@ -88,8 +88,8 @@ public class MarksmanEffect extends AbstractEffect {
             case Marksman.PIERCING_ARROW_SPREAD:
                 break;
             case Marksman.SHARP_EYES:
-                pEffect.statups.put(CharacterTemporaryStat.SharpEyes, pEffect.info.get(MapleStatInfo.y));
-                pEffect.statups.put(CharacterTemporaryStat.CriticalGrowing, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.SharpEyes, pEffect.info.get(StatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalGrowing, pEffect.info.get(StatInfo.x));
                 break;
             case Marksman.SHARP_EYES_CRITICAL_CHANCE_1:
                 break;

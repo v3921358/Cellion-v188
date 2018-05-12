@@ -65,7 +65,7 @@ import server.MapleSlideMenu.SlideMenu3;
 import server.MapleSlideMenu.SlideMenu4;
 import server.MapleSlideMenu.SlideMenu5;
 import server.MapleSquad;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.MapleStringInformationProvider;
 import server.Randomizer;
 import server.SpeedRunner;
@@ -82,7 +82,7 @@ import server.maps.MapleMap;
 import server.maps.objects.User;
 import server.life.NPCLife;
 import server.quest.Quest;
-import server.shops.MapleShopFactory;
+import server.shops.ShopFactory;
 import tools.LogHelper;
 import tools.Pair;
 import tools.StringUtil;
@@ -524,7 +524,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         //       c.getPlayer().getInventory(MapleInventoryType.USE).removeItem(slot, (short) 1, false);
         c.SendPacket(CField.getCharInfo(c.getPlayer()));
         c.SendPacket(WvsContext.enableActions());
-        c.getPlayer().fakeRelog2();
+        c.getPlayer().reloadUser();
         //  MapleMap currentMap = c.getPlayer().getMap();
         //  currentMap.removePlayer(c.getPlayer());
         //  currentMap.addPlayer(c.getPlayer());
@@ -706,11 +706,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void openShop(int id) {
-        MapleShopFactory.getInstance().getShop(id).sendShop(c);
+        ShopFactory.getInstance().getShop(id).sendShop(c);
     }
 
     public void openShopNPC(int id) {
-        MapleShopFactory.getInstance().getShop(id).sendShop(c, this.id);
+        ShopFactory.getInstance().getShop(id).sendShop(c, this.id);
     }
 
     public int gainGachaponItemp(int id, int quantity) {
@@ -924,7 +924,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public void showEffect(boolean broadcast, String effect) {
         if (broadcast) {
-            c.getPlayer().getMap().broadcastMessage(CField.showEffect(effect));
+            c.getPlayer().getMap().broadcastPacket(CField.showEffect(effect));
         } else {
             c.SendPacket(CField.showEffect(effect));
         }
@@ -932,7 +932,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public void playSound(boolean broadcast, String sound) {
         if (broadcast) {
-            c.getPlayer().getMap().broadcastMessage(CField.playSound(sound));
+            c.getPlayer().getMap().broadcastPacket(CField.playSound(sound));
         } else {
             c.SendPacket(CField.playSound(sound));
         }
@@ -940,7 +940,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public void environmentChange(boolean broadcast, String env) {
         if (broadcast) {
-            c.getPlayer().getMap().broadcastMessage(CField.environmentChange(env, 2, 0));
+            c.getPlayer().getMap().broadcastPacket(CField.environmentChange(env, 2, 0));
         } else {
             c.SendPacket(CField.environmentChange(env, 2, 0));
         }
@@ -1035,8 +1035,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             final boolean ret = c.getChannelServer().addMapleSquad(squad, type);
             if (ret) {
                 final MapleMap map = c.getPlayer().getMap();
-                map.broadcastMessage(CField.getClock(minutes * 60));
-                map.broadcastMessage(WvsContext.broadcastMsg(-6, startText));
+                map.broadcastPacket(CField.getClock(minutes * 60));
+                map.broadcastPacket(WvsContext.broadcastMsg(-6, startText));
             } else {
                 squad.clear();
             }
@@ -1051,8 +1051,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             final boolean ret = c.getChannelServer().addMapleSquad(squad, type);
             if (ret) {
                 final MapleMap map = c.getPlayer().getMap();
-                map.broadcastMessage(CField.getClock(minutes * 60));
-                map.broadcastMessage(WvsContext.broadcastMsg(6, c.getPlayer().getName() + startText));
+                map.broadcastPacket(CField.getClock(minutes * 60));
+                map.broadcastPacket(WvsContext.broadcastMsg(6, c.getPlayer().getName() + startText));
             } else {
                 squad.clear();
             }
@@ -1214,7 +1214,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         sel.setViciousHammer((byte) 69);
         sel.setEnhance((byte) 69);
         c.getPlayer().equipChanged();
-        c.getPlayer().fakeRelog();
+        c.getPlayer().reloadUser();
     }
 
     public void changeStat(byte slot, int type, int amount) {
@@ -1299,7 +1299,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                 break;
         }
         c.getPlayer().equipChanged();
-        c.getPlayer().fakeRelog();
+        c.getPlayer().reloadUser();
     }
 
     public void openPackageDeliverer() {
@@ -1358,7 +1358,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void OpenUI(int ui) {
-        c.getPlayer().getMap().broadcastMessage(UIPacket.openUI(ui));
+        c.getPlayer().getMap().broadcastPacket(UIPacket.openUI(ui));
     }
 
     public void getMulungRanking() {
@@ -1815,14 +1815,14 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return MapleItemInformationProvider.getInstance().getReqLevel(itemId);
     }
 
-    public MapleStatEffect getEffect(int buff) {
+    public StatEffect getEffect(int buff) {
         return MapleItemInformationProvider.getInstance().getItemEffect(buff);
     }
 
     public void buffGuild(final int buff, final int duration, final String msg) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if (ii.getItemEffect(buff) != null && getPlayer().getGuildId() > 0) {
-            final MapleStatEffect mse = ii.getItemEffect(buff);
+            final StatEffect mse = ii.getItemEffect(buff);
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (User chr : cserv.getPlayerStorage().getAllCharacters()) {
                     if (chr.getGuildId() == getPlayer().getGuildId()) {
@@ -2028,14 +2028,14 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public final void doWeddingEffect(final Object ch) {
         final User chr = (User) ch;
         final User player = getPlayer();
-        getMap().broadcastMessage(WvsContext.yellowChat(player.getName() + ", do you take " + chr.getName() + " as your wife and promise to stay beside her through all downtimes, crashes, and lags?"));
+        getMap().broadcastPacket(WvsContext.yellowChat(player.getName() + ", do you take " + chr.getName() + " as your wife and promise to stay beside her through all downtimes, crashes, and lags?"));
         CloneTimer.getInstance().schedule(new Runnable() {
             @Override
             public void run() {
                 if (chr == null || player == null) {
                     warpMap(680000500, 0);
                 } else {
-                    chr.getMap().broadcastMessage(WvsContext.yellowChat(chr.getName() + ", do you take " + player.getName() + " as your husband and promise to stay beside him through all downtimes, crashes, and lags?"));
+                    chr.getMap().broadcastPacket(WvsContext.yellowChat(chr.getName() + ", do you take " + player.getName() + " as your husband and promise to stay beside him through all downtimes, crashes, and lags?"));
                 }
             }
         }, 10000);

@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Xenon;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,20 +18,20 @@ import server.skills.effects.manager.Effect;
 public class XenonEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Xenon.BEAM_SPLINE:
                 break;
             case Xenon.CIRCUIT_SURGE:
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
                 break;
             case Xenon.GODDESS_GUARD_40_4:
                 break;
             case Xenon.GODDESS_GUARD_500_50_5:
                 break;
             case Xenon.MULTILATERAL_II:
-                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.w));
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(StatInfo.w));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.z));
                 break;
             case Xenon.PINPOINT_SALVO:
                 break;
@@ -40,18 +40,18 @@ public class XenonEffect extends AbstractEffect {
             case Xenon.RADIAL_NERVE:
                 break;
             case Xenon.EFFICIENCY_STREAMLINE:
-                pEffect.statups.put(CharacterTemporaryStat.IndieMMPR, pEffect.info.get(MapleStatInfo.indieMmpR));
-                pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, pEffect.info.get(MapleStatInfo.indieMhpR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMMPR, pEffect.info.get(StatInfo.indieMmpR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, pEffect.info.get(StatInfo.indieMhpR));
                 break;
             case Xenon.ION_THRUST:
                 break;
             case Xenon.MULTILATERAL_III:
-                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.w));
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(StatInfo.w));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.z));
                 break;
             case Xenon.PERSPECTIVE_SHIFT:
-                pEffect.info.put(MapleStatInfo.powerCon, 6);
-                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(MapleStatInfo.x));
+                pEffect.info.put(StatInfo.powerCon, 6);
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(StatInfo.x));
                 break;
             case Xenon.PERSPECTIVE_SHIFT_1:
                 break;
@@ -66,13 +66,13 @@ public class XenonEffect extends AbstractEffect {
             case Xenon.STRUCTURAL_INTEGRITY:
                 break;
             case Xenon.XENON_BOOSTER:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case Xenon.XENON_MASTERY:
                 break;
             case Xenon.AEGIS_SYSTEM:
                 pEffect.statups.put(CharacterTemporaryStat.XenonAegisSystem, 1);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Xenon.AEGIS_SYSTEM_1:
                 break;
@@ -85,29 +85,29 @@ public class XenonEffect extends AbstractEffect {
             case Xenon.DIAGONAL_CHASE:
                 break;
             case Xenon.EMERGENCY_RESUPPLY:
-                pEffect.statups.put(CharacterTemporaryStat.SurplusSupply, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.SurplusSupply, pEffect.info.get(StatInfo.x));
                 break;
             case Xenon.GRAVITY_PILLAR:
                 break;
             case Xenon.HYBRID_DEFENSES:
-                pEffect.statups.put(CharacterTemporaryStat.EVAR, pEffect.info.get(MapleStatInfo.prop));
-                pEffect.statups.put(CharacterTemporaryStat.DamAbsorbShield, pEffect.info.get(MapleStatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.EVAR, pEffect.info.get(StatInfo.prop));
+                pEffect.statups.put(CharacterTemporaryStat.DamAbsorbShield, pEffect.info.get(StatInfo.z));
                 break;
             case Xenon.MANIFEST_PROJECTOR:
                 pEffect.statups.put(CharacterTemporaryStat.ShadowPartner, 1);
                 break;
             case Xenon.MULTILATERAL_IV:
-                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.w));
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(StatInfo.w));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.z));
                 break;
             case Xenon.PINPOINT_SALVO_REDESIGN_B:
                 break;
             case Xenon.TRIANGULATION:
                 break;
             case Xenon.AMARANTH_GENERATOR:
-                pEffect.statups.put(CharacterTemporaryStat.SurplusSupply, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.AmaranthGenerator, pEffect.info.get(MapleStatInfo.y));
-                pEffect.info.put(MapleStatInfo.time, 10000);
+                pEffect.statups.put(CharacterTemporaryStat.SurplusSupply, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.AmaranthGenerator, pEffect.info.get(StatInfo.y));
+                pEffect.info.put(StatInfo.time, 10000);
                 break;
             case Xenon.BEAM_DANCE:
                 break;
@@ -168,7 +168,7 @@ public class XenonEffect extends AbstractEffect {
             case Xenon.INSTANT_SHOCK:
                 break;
             case Xenon.MAPLE_WARRIOR_9:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
                 break;
             case Xenon.MECHA_PURGE_BOMBARD:
                 break;
@@ -183,22 +183,22 @@ public class XenonEffect extends AbstractEffect {
             case Xenon.MECHA_PURGE_SPREAD:
                 break;
             case Xenon.MULTILATERAL_V:
-                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.w));
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(StatInfo.w));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.z));
                 break;
             case Xenon.MULTILATERAL_VI:
-                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.w));
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(StatInfo.w));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.z));
                 break;
             case Xenon.OFFENSIVE_MATRIX:
-                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pEffect.info.get(MapleStatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pEffect.info.get(StatInfo.y));
                 break;
             case Xenon.OFFENSIVE_MATRIX_1:
                 break;
             case Xenon.OOPARTS_CODE:
-                pEffect.statups.put(CharacterTemporaryStat.BdR, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.BdR, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case Xenon.ORBITAL_CATACLYSM:
                 break;
@@ -319,8 +319,8 @@ public class XenonEffect extends AbstractEffect {
             case Xenon.MOTORCYCLE_8:
                 break;
             case Xenon.MULTILATERAL_I:
-                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.w));
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(StatInfo.w));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.z));
                 break;
             case Xenon.NIGHTMARE_80_8:
                 break;

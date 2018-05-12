@@ -39,7 +39,7 @@ public final class HarvestBeginHandler implements ProcessPacket<ClientSocket> {
         } else {
             marr.setCustomData(String.valueOf(System.currentTimeMillis()));
             c.SendPacket(CField.harvestMessage(reactor.getObjectId(), 13)); //ok to harvest, gogo
-            c.getPlayer().getMap().broadcastMessage(chr, CField.showHarvesting(chr.getId(), item.getItemId()), false);
+            c.getPlayer().getMap().broadcastPacket(chr, CField.showHarvesting(chr.getId(), item.getItemId()), false);
         }
     }
 

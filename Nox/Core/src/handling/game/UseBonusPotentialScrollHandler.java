@@ -70,7 +70,7 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<ClientSocke
         aModifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, pEquip));
         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, pScroll.getPosition(), (short) 1, false);
         c.SendPacket(CField.enchantResult(pResult == Equip.ScrollResult.SUCCESS ? 1 : pResult == Equip.ScrollResult.CURSE ? 2 : 0));
-        pPlayer.getMap().broadcastMessage(pPlayer, CField.getScrollEffect(c.getPlayer().getId(), pResult, false, pEquip.getItemId(), pScroll.getItemId()), true);
+        pPlayer.getMap().broadcastPacket(pPlayer, CField.getScrollEffect(c.getPlayer().getId(), pResult, false, pEquip.getItemId(), pScroll.getItemId()), true);
         c.SendPacket(WvsContext.inventoryOperation(true, aModifications));
         //}
     }

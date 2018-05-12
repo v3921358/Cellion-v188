@@ -11,7 +11,7 @@ import constants.GameConstants;
 import constants.skills.Aran;
 import constants.skills.Blaster;
 import java.util.concurrent.ScheduledFuture;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.Timer;
 import server.maps.objects.User;
 import tools.packet.BuffPacket;
@@ -58,7 +58,7 @@ public class Resistance {
             pPlayer.setPrimaryStack(nAmmo);
             pPlayer.setAdditionalStack(nGauge);
 
-            final MapleStatEffect buffEffects = SkillFactory.getSkill(Blaster.REVOLVING_CANNON).getEffect(pPlayer.getTotalSkillLevel(Blaster.REVOLVING_CANNON));
+            final StatEffect buffEffects = SkillFactory.getSkill(Blaster.REVOLVING_CANNON).getEffect(pPlayer.getTotalSkillLevel(Blaster.REVOLVING_CANNON));
             buffEffects.statups.put(CharacterTemporaryStat.RWCylinder, 1);
             pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), null, buffEffects.statups, false, 2100000000, pPlayer.getId());
             pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, Blaster.REVOLVING_CANNON, 2100000000, buffEffects.statups, buffEffects));
@@ -66,11 +66,11 @@ public class Resistance {
 
         public static void handleOverheat(User pPlayer) {
             int nDuration = 7000;
-            final MapleStatEffect buffEffects = SkillFactory.getSkill(Blaster.BUNKER_BUSTER_EXPLOSION).getEffect(pPlayer.getTotalSkillLevel(Blaster.BUNKER_BUSTER_EXPLOSION));
+            final StatEffect buffEffects = SkillFactory.getSkill(Blaster.BUNKER_BUSTER_EXPLOSION).getEffect(pPlayer.getTotalSkillLevel(Blaster.BUNKER_BUSTER_EXPLOSION));
 
             buffEffects.statups.put(CharacterTemporaryStat.RWOverHeat, 1);
 
-            final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
+            final StatEffect.CancelEffectAction cancelAction = new StatEffect.CancelEffectAction(pPlayer, buffEffects, System.currentTimeMillis(), buffEffects.statups);
             final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, nDuration);
             pPlayer.registerEffect(buffEffects, System.currentTimeMillis(), buffSchedule, buffEffects.statups, false, nDuration, pPlayer.getId());
             pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, Blaster.BUNKER_BUSTER_EXPLOSION, nDuration, buffEffects.statups, buffEffects));
@@ -94,7 +94,7 @@ public class Resistance {
 
         public static void requestBlastShield(User pPlayer) {
             Skill pSkill = SkillFactory.getSkill(constants.skills.Blaster.BLAST_SHIELD);
-            MapleStatEffect pEffect = pSkill.getEffect(pPlayer.getTotalSkillLevel(pSkill));
+            StatEffect pEffect = pSkill.getEffect(pPlayer.getTotalSkillLevel(pSkill));
 
             pEffect.statups.put(CharacterTemporaryStat.RWBarrier, 1);
             pPlayer.registerEffect(pEffect, System.currentTimeMillis(), null, pEffect.statups, false, 3000, pPlayer.getId());
@@ -106,12 +106,12 @@ public class Resistance {
                 return;
             }
             Skill pSkill = SkillFactory.getSkill(constants.skills.Blaster.VITALITY_SHIELD);
-            MapleStatEffect pEffect = pSkill.getEffect(pPlayer.getTotalSkillLevel(pSkill));
+            StatEffect pEffect = pSkill.getEffect(pPlayer.getTotalSkillLevel(pSkill));
             int nDuration = 15000;
 
             pEffect.statups.put(CharacterTemporaryStat.RWBarrierHeal, 1);
 
-            final MapleStatEffect.CancelEffectAction cancelAction = new MapleStatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
+            final StatEffect.CancelEffectAction cancelAction = new StatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
             final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, nDuration);
 
             pPlayer.registerEffect(pEffect, System.currentTimeMillis(), buffSchedule, pEffect.statups, false, nDuration, pPlayer.getId());

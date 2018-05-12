@@ -24,17 +24,17 @@ import java.io.Serializable;
 import java.util.Map;
 
 import client.CharacterTemporaryStat;
-import server.MapleStatEffect;
+import server.StatEffect;
 
 public class PlayerBuffValueHolder implements Serializable {
 
     private static final long serialVersionUID = 9179541993413738569L;
     public long startTime;
     public int localDuration, cid;
-    public MapleStatEffect effect;
+    public StatEffect effect;
     public Map<CharacterTemporaryStat, Integer> statup;
 
-    public PlayerBuffValueHolder(final long startTime, final MapleStatEffect effect, final Map<CharacterTemporaryStat, Integer> statup, int localDuration, int cid) {
+    public PlayerBuffValueHolder(final long startTime, final StatEffect effect, final Map<CharacterTemporaryStat, Integer> statup, int localDuration, int cid) {
         this.startTime = startTime;
         this.effect = effect;
         this.statup = statup;

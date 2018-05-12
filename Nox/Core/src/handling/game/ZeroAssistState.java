@@ -25,7 +25,7 @@ public class ZeroAssistState implements ProcessPacket<ClientSocket> {
         if (chr == null) {
             return;
         }
-        c.getPlayer().getMap().broadcastMessage(chr, CField.zeroTagState(chr), chr.getPosition());
+        c.getPlayer().getMap().broadcastPacket(chr, CField.zeroTagState(chr), chr.getPosition());
     }
 
 }

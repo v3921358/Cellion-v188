@@ -46,6 +46,6 @@ public class CreateKinesisPsychicAreaHandler implements ProcessPacket<ClientSock
         }
 
         c.SendPacket(JobPacket.Kinesis.OnCreatePsychicArea(c.getPlayer().getId(), nAction, nActionSpeed, nParentPsychicAreaKey, nSkillID, nSLV, nPsychicAreaKey, nDurationTime, isLeft, nSkeletonFilePathIdx, nSkeletonAniIdx, nSkeletonLoop, posStart));
-        c.getPlayer().getMap().broadcastMessage(c.getPlayer(), JobPacket.Kinesis.OnCreatePsychicArea(c.getPlayer().getId(), nAction, nActionSpeed, nParentPsychicAreaKey, nSkillID, nSLV, nPsychicAreaKey, nDurationTime, isLeft, nSkeletonFilePathIdx, nSkeletonAniIdx, nSkeletonLoop, posStart), false);
+        c.getPlayer().getMap().broadcastPacket(c.getPlayer(), JobPacket.Kinesis.OnCreatePsychicArea(c.getPlayer().getId(), nAction, nActionSpeed, nParentPsychicAreaKey, nSkillID, nSLV, nPsychicAreaKey, nDurationTime, isLeft, nSkeletonFilePathIdx, nSkeletonAniIdx, nSkeletonLoop, posStart), false);
     }
 }

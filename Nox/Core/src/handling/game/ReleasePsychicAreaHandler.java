@@ -26,7 +26,7 @@ public class ReleasePsychicAreaHandler implements ProcessPacket<ClientSocket> {
         int nPsychicAreaKey = iPacket.DecodeInt();
 
         c.SendPacket(JobPacket.Kinesis.OnReleasePsychicArea(c.getPlayer().getId(), nPsychicAreaKey));
-        c.getPlayer().getMap().broadcastMessage(c.getPlayer(), JobPacket.Kinesis.OnReleasePsychicArea(c.getPlayer().getId(), nPsychicAreaKey), false);
+        c.getPlayer().getMap().broadcastPacket(c.getPlayer(), JobPacket.Kinesis.OnReleasePsychicArea(c.getPlayer().getId(), nPsychicAreaKey), false);
     }
 
 }

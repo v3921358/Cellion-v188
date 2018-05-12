@@ -7,7 +7,7 @@ import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
 import provider.data.HexTool;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.maps.objects.User;
 
 public class AttackInfo {
@@ -28,7 +28,7 @@ public class AttackInfo {
         position = null;
     }
 
-    public final MapleStatEffect getAttackEffect(User pPlayer, int nSLV, Skill pSkill) {
+    public final StatEffect getAttackEffect(User pPlayer, int nSLV, Skill pSkill) {
         if (GameConstants.isMulungSkill(skill) || GameConstants.isPyramidSkill(skill) || GameConstants.isInflationSkill(skill)) {
             nSLV = 1;
         } else if (nSLV <= 0) {

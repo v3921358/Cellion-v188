@@ -25,7 +25,7 @@ import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
 import server.quest.Quest;
 import net.InPacket;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.maps.objects.RuneStone;
 import tools.packet.CField;
 import tools.packet.CSPacket;
@@ -69,7 +69,7 @@ public class PlayerHandler {
     public static final void UseRune(final InPacket iPacket, final User chr) {
         final byte result = iPacket.DecodeByte();
         final RuneStone rune = chr.getMap().getAllRune().get(0);
-        MapleStatEffect effect;
+        StatEffect effect;
         if (result == 1) {
             switch (chr.getTouchedRune()) {
                 case 0: //疾速之輪
@@ -100,8 +100,8 @@ public class PlayerHandler {
                     chr.yellowMessage("[Rune] Scroll Rune Activated: Random Scroll Obtained!");
                     break;
             }
-            chr.getMap().broadcastMessage(CField.RunePacket.removeRune(rune, chr));
-            chr.getMap().broadcastMessage(CField.RunePacket.showRuneEffect(chr.getTouchedRune()));
+            chr.getMap().broadcastPacket(CField.RunePacket.removeRune(rune, chr));
+            chr.getMap().broadcastPacket(CField.RunePacket.showRuneEffect(chr.getTouchedRune()));
             chr.getMap().removeMapObject(rune);
             if (chr.getReborns() == 0) {
                 chr.setRuneTimeStamp(System.currentTimeMillis() + 14400000);
@@ -162,7 +162,7 @@ public class PlayerHandler {
                 effect = 4;
                 break;
         }
-        MapleStatEffect flame = SkillFactory.getSkill(tempskill).getEffect(chr.getSkillLevel(tempskill));
+        StatEffect flame = SkillFactory.getSkill(tempskill).getEffect(chr.getSkillLevel(tempskill));
         /* if (flame != null && chr.getSkillLevel(elementid) > 0) { // This should be fruther looked into.
             if (!chr.getSummons().keySet().contains(elementid)) {
                 MapleStatEffect element = SkillFactory.getSkill(elementid).getEffect(chr.getSkillLevel(elementid));
@@ -172,7 +172,7 @@ public class PlayerHandler {
                 element.applyTo(chr);
             }
         }*/
-        chr.getMap().broadcastMessage(CField.OrbitalFlame(chr.getId(), skillid, effect, direction, flame.getRange()));
+        chr.getMap().broadcastPacket(CField.OrbitalFlame(chr.getId(), skillid, effect, direction, flame.getRange()));
     }
 
     public static void absorbingDF(InPacket iPacket, final ClientSocket c) {

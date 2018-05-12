@@ -34,7 +34,7 @@ import handling.world.PlayerHandler;
 import server.maps.objects.User;
 import net.InPacket;
 import net.ProcessPacket;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
 import service.ChannelServer;
@@ -74,7 +74,7 @@ public final class AtomCollisionHandler implements ProcessPacket<ClientSocket> {
             return;
         }
         int skillLevel = pPlayer.getTotalSkillLevel(skill);
-        MapleStatEffect effect = attack.getAttackEffect(pPlayer, skillLevel, skill);
+        StatEffect effect = attack.getAttackEffect(pPlayer, skillLevel, skill);
         if (effect == null) {
             if (pPlayer.isDeveloper()) {
                 pPlayer.dropMessage(5, "[AtomCollision Debug] Returning Early 2 / Atom ID : " + attack.skill);
@@ -151,7 +151,7 @@ public final class AtomCollisionHandler implements ProcessPacket<ClientSocket> {
         // Map attack/movement broadcast, this needs to be broadcasted first before applying
         // otherwise if the monster is killed with a single hit the damage is not shown.
         if (!pPlayer.isHidden()) {
-            pPlayer.getMap().broadcastMessage(pPlayer, CField.magicAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, pPlayer.getLevel(), attack.attackFlag), pPlayer.getTruePosition());
+            pPlayer.getMap().broadcastPacket(pPlayer, CField.magicAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, pPlayer.getLevel(), attack.attackFlag), pPlayer.getTruePosition());
         } else {
             pPlayer.getMap().broadcastGMMessage(pPlayer, CField.magicAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, pPlayer.getLevel(), attack.attackFlag), false);
         }

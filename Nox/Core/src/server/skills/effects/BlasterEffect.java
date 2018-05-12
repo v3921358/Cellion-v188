@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Blaster;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class BlasterEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Blaster.BLAST_SHIELD:
                 break;
@@ -49,7 +49,7 @@ public class BlasterEffect extends AbstractEffect {
             case Blaster.REVOLVING_CANNON_MASTERY:
                 break;
             case Blaster.ARM_CANNON_BOOST:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case Blaster.ARM_CANNON_MASTERY:
                 break;
@@ -138,7 +138,7 @@ public class BlasterEffect extends AbstractEffect {
             case Blaster.IMPROVED_BUNKER_SHOCKWAVE:
                 break;
             case Blaster.MAPLE_WARRIOR_40_4:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
                 break;
             case Blaster.MUZZLE_FLASH:
                 break;

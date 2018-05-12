@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.Pirate;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,13 +18,13 @@ import server.skills.effects.manager.Effect;
 public class PirateEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Pirate.BULLET_TIME:
                 break;
             case Pirate.DASH:
-                pEffect.statups.put(CharacterTemporaryStat.DashSpeed, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.DashJump, pEffect.info.get(MapleStatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.DashSpeed, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.DashJump, pEffect.info.get(StatInfo.y));
                 break;
             case Pirate.DOUBLE_SHOT:
                 break;

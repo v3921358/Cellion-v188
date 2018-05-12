@@ -33,6 +33,6 @@ public class PetChatHandler implements ProcessPacket<ClientSocket> {
         if (chr.getMap() == null || chr.getPet(petid) == null) {
             return;
         }
-        chr.getMap().broadcastMessage(chr, PetPacket.petChat(chr.getId(), command, text, (byte) petid), true);
+        chr.getMap().broadcastPacket(chr, PetPacket.petChat(chr.getId(), command, text, (byte) petid), true);
     }
 }

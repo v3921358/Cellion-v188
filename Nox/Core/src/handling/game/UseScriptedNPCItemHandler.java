@@ -1198,7 +1198,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                         queststatus.setCustomData(skinString == null ? "0" : skinString);
                         c.getPlayer().updateQuest(queststatus);
                         c.SendPacket(WvsContext.showQuestMsg("Damage skin has been changed!"));
-                        chr.getMap().broadcastMessage(chr, WvsContext.showForeignDamageSkin(chr, skinnum), false);
+                        chr.getMap().broadcastPacket(chr, WvsContext.showForeignDamageSkin(chr, skinnum), false);
                         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
                     } else {
                         c.SendPacket(WvsContext.showQuestMsg("Zero can't used skins!"));

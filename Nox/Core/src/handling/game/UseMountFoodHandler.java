@@ -46,7 +46,7 @@ public class UseMountFoodHandler implements ProcessPacket<ClientSocket> {
                     levelup = true;
                 }
             }
-            chr.getMap().broadcastMessage(WvsContext.updateMount(chr, levelup));
+            chr.getMap().broadcastPacket(WvsContext.updateMount(chr, levelup));
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
         }
         c.SendPacket(WvsContext.enableActions());

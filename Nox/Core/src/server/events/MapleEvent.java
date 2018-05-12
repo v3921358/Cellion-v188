@@ -55,7 +55,7 @@ public abstract class MapleEvent {
 
     public void broadcast(final OutPacket packet) {
         for (int i = 0; i < type.mapids.length; i++) {
-            getMap(i).broadcastMessage(packet);
+            getMap(i).broadcastPacket(packet);
         }
     }
 

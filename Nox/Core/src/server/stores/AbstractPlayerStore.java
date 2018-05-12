@@ -194,9 +194,9 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     public void update() {
         if (isAvailable()) {
             if (getShopType() == IMaplePlayerShop.HIRED_MERCHANT) {
-                getMap().broadcastMessage(PlayerShopPacket.updateHiredMerchant((HiredMerchant) this));
+                getMap().broadcastPacket(PlayerShopPacket.updateHiredMerchant((HiredMerchant) this));
             } else if (getMCOwner() != null) {
-                getMap().broadcastMessage(PlayerShopPacket.sendPlayerShopBox(getMCOwner()));
+                getMap().broadcastPacket(PlayerShopPacket.sendPlayerShopBox(getMCOwner()));
             }
         }
     }

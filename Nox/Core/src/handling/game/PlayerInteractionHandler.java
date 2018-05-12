@@ -409,7 +409,7 @@ public class PlayerInteractionHandler implements ProcessPacket<ClientSocket> {
                             merchant.setStoreid(c.getChannelServer().addMerchant(merchant));
                             merchant.setOpen(true);
                             merchant.setAvailable(true);
-                            chr.getMap().broadcastMessage(PlayerShopPacket.spawnHiredMerchant(merchant));
+                            chr.getMap().broadcastPacket(PlayerShopPacket.spawnHiredMerchant(merchant));
                             chr.setPlayerShop(null);
 
                         } else if (shop.getShopType() == 2) {

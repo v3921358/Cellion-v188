@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.DawnWarrior;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,13 +18,13 @@ import server.skills.effects.manager.Effect;
 public class DawnWarriorEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case DawnWarrior.GUARDIAN_ARMOR_1:
                 break;
             case DawnWarrior.HAND_OF_LIGHT:
-                pEffect.statups.put(CharacterTemporaryStat.ACCR, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.ACCR, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
                 break;
             case DawnWarrior.HAND_OF_LIGHT_1:
                 break;
@@ -43,7 +43,7 @@ public class DawnWarriorEffect extends AbstractEffect {
             case DawnWarrior.SOUL_ELEMENT:
                 pEffect.statups.put(CharacterTemporaryStat.CygnusElementSkill, 1);
                 pEffect.statups.put(CharacterTemporaryStat.ElementSoul, 1);
-                pEffect.statups.put(CharacterTemporaryStat.IgnoreMobpdpR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IgnoreMobpdpR, pEffect.info.get(StatInfo.x));
                 pEffect.monsterStatus.put(MonsterStatus.SUMMON, 1);
                 pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
@@ -54,16 +54,16 @@ public class DawnWarriorEffect extends AbstractEffect {
             case DawnWarrior.BRANDISH_1:
                 break;
             case DawnWarrior.DIVINE_HAND:
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
                 break;
             case DawnWarrior.DIVINE_HAND_1:
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
                 break;
             case DawnWarrior.FALLING_MOON:
                 pEffect.statups.put(CharacterTemporaryStat.PoseType, 1);
                 pEffect.statups.put(CharacterTemporaryStat.BuckShot, 1);
-                pEffect.statups.put(CharacterTemporaryStat.IndieCr, pEffect.info.get(MapleStatInfo.indieCr));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.IndieCr, pEffect.info.get(StatInfo.indieCr));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case DawnWarrior.FINAL_ATTACK_3:
                 break;
@@ -84,7 +84,7 @@ public class DawnWarriorEffect extends AbstractEffect {
             case DawnWarrior.SOUL_RUSH:
                 break;
             case DawnWarrior.SOUL_SPEED:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case DawnWarrior.SWORD_BOOSTER:
                 break;
@@ -120,16 +120,16 @@ public class DawnWarriorEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.PoseType, 2);
                 //pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
                 //pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.indieBooster));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case DawnWarrior.SELF_RECOVERY_3:
                 break;
             case DawnWarrior.SOUL_DRIVER_1:
                 break;
             case DawnWarrior.SOUL_OF_THE_GUARDIAN:
-                pEffect.statups.put(CharacterTemporaryStat.IncMaxHP, pEffect.info.get(MapleStatInfo.indieMhp));
-                pEffect.statups.put(CharacterTemporaryStat.IndieMAD, pEffect.info.get(MapleStatInfo.indiePdd));
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(MapleStatInfo.indiePdd));
+                pEffect.statups.put(CharacterTemporaryStat.IncMaxHP, pEffect.info.get(StatInfo.indieMhp));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMAD, pEffect.info.get(StatInfo.indiePdd));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePdd));
                 break;
             case DawnWarrior.SOUL_OF_THE_GUARDIAN_1:
                 break;
@@ -140,7 +140,7 @@ public class DawnWarriorEffect extends AbstractEffect {
             case DawnWarrior.WILL_OF_STEEL:
                 break;
             case DawnWarrior.CALL_OF_CYGNUS_3:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
                 break;
             case DawnWarrior.CAREENING_DANCE_BOSS_RUSH:
                 break;
@@ -168,7 +168,7 @@ public class DawnWarriorEffect extends AbstractEffect {
             case DawnWarrior.EQUINOX_SLASH:
                 break;
             case DawnWarrior.GLORY_OF_THE_GUARDIANS_2:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case DawnWarrior.HYPER_ACCURACY_50_5:
                 break;
@@ -211,12 +211,12 @@ public class DawnWarriorEffect extends AbstractEffect {
             case DawnWarrior.SOLAR_PIERCE:
                 break;
             case DawnWarrior.SOUL_FORGE:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case DawnWarrior.SOUL_PLEDGE:
-                pEffect.statups.put(CharacterTemporaryStat.IndieCr, pEffect.info.get(MapleStatInfo.indieCr));
-                pEffect.statups.put(CharacterTemporaryStat.IndieAllStat, pEffect.info.get(MapleStatInfo.indieAllStat));
-                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.prop));
+                pEffect.statups.put(CharacterTemporaryStat.IndieCr, pEffect.info.get(StatInfo.indieCr));
+                pEffect.statups.put(CharacterTemporaryStat.IndieAllStat, pEffect.info.get(StatInfo.indieAllStat));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(StatInfo.prop));
                 break;
             case DawnWarrior.SOUL_PLEDGE_1:
                 break;

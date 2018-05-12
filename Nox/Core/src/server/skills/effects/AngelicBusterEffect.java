@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.AngelicBuster;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,15 +18,15 @@ import server.skills.effects.manager.Effect;
 public class AngelicBusterEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case AngelicBuster.AFFINITY_HEART_I:
                 break;
             case AngelicBuster.FEATHER_HOP:
                 break;
             case AngelicBuster.MELODY_CROSS:
-                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
-                pEffect.statups.put(CharacterTemporaryStat.EMHP, pEffect.info.get(MapleStatInfo.mhpX));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(StatInfo.indieBooster));
+                pEffect.statups.put(CharacterTemporaryStat.EMHP, pEffect.info.get(StatInfo.mhpX));
                 break;
             case AngelicBuster.STAR_BUBBLE:
                 break;
@@ -43,7 +43,7 @@ public class AngelicBusterEffect extends AbstractEffect {
             case AngelicBuster.PINK_PUMMEL:
                 break;
             case AngelicBuster.POWER_TRANSFER:
-                pEffect.statups.put(CharacterTemporaryStat.DamAbsorbShield, pEffect.info.get(MapleStatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.DamAbsorbShield, pEffect.info.get(StatInfo.y));
                 break;
             case AngelicBuster.SOUL_SHOOTER_MASTERY:
                 break;
@@ -56,7 +56,7 @@ public class AngelicBusterEffect extends AbstractEffect {
             case AngelicBuster.HEAVENLY_CRASH:
                 break;
             case AngelicBuster.IRON_BLOSSOM:
-                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(MapleStatInfo.prop));
+                pEffect.statups.put(CharacterTemporaryStat.Stance, pEffect.info.get(StatInfo.prop));
                 break;
             case AngelicBuster.LOVE_ME_HEART:
                 break;
@@ -109,7 +109,7 @@ public class AngelicBusterEffect extends AbstractEffect {
             case AngelicBuster.NOVA_TEMPERANCE_1:
                 break;
             case AngelicBuster.NOVA_WARRIOR:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
                 break;
             case AngelicBuster.PIERCING_SOUL_SEEKER:
                 break;
@@ -130,7 +130,7 @@ public class AngelicBusterEffect extends AbstractEffect {
             case AngelicBuster.SOUL_SHOOTER_EXPERT:
                 break;
             case AngelicBuster.STAR_GAZER:
-                pEffect.statups.put(CharacterTemporaryStat.SoulGazeCriDamR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.SoulGazeCriDamR, pEffect.info.get(StatInfo.x));
                 break;
             case AngelicBuster.SUPREME_SUPERNOVA:
                 break;

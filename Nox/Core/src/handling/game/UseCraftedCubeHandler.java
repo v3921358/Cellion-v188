@@ -128,7 +128,7 @@ public class UseCraftedCubeHandler implements ProcessPacket<ClientSocket> {
         }
 
         // Show to map
-        chr.getMap().broadcastMessage(CField.showPotentialReset(chr.getId(), renewedPotential, item.getItemId()));
+        chr.getMap().broadcastPacket(CField.showPotentialReset(chr.getId(), renewedPotential, item.getItemId()));
         c.SendPacket(CField.enchantResult(renewedPotential ? 0 : 0));
     }
 

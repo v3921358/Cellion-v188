@@ -58,7 +58,7 @@ import server.maps.objects.MechDoor;
 import server.maps.objects.MonsterFamiliar;
 import server.movement.LifeMovementFragment;
 import server.quest.Quest;
-import server.shops.MapleShop;
+import server.shops.Shop;
 import server.shops.ShopOperationType;
 import handling.world.AttackMonster;
 import handling.game.PlayerDamageHandler;
@@ -66,8 +66,8 @@ import handling.game.WhisperHandler.WhisperFlag;
 import java.awt.Rectangle;
 import javax.swing.text.Position;
 
-import server.MapleStatEffect;
-import static server.MapleStatInfo.s;
+import server.StatEffect;
+import static server.StatInfo.s;
 import server.maps.Map_MCarnival;
 import server.maps.Map_MaplePlatform;
 import server.maps.objects.ForceAtom;
@@ -3718,7 +3718,7 @@ public class CField {
             return oPacket;
         }
 
-        public static OutPacket getNPCShop(int shopNPCId, MapleShop shop, ClientSocket c) {
+        public static OutPacket getNPCShop(int shopNPCId, Shop shop, ClientSocket c) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.OpenShopDlg.getValue());
             oPacket.EncodeByte(0); //if this is true then send a int with m_dwPetTemplateID (pet item id)
@@ -3727,7 +3727,7 @@ public class CField {
             return oPacket;
         }
 
-        public static OutPacket confirmShopTransaction(ShopOperationType code, MapleShop shop, ClientSocket c, int indexBought) {
+        public static OutPacket confirmShopTransaction(ShopOperationType code, Shop shop, ClientSocket c, int indexBought) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.ShopResult.getValue());
             oPacket.EncodeByte(code.getOp());

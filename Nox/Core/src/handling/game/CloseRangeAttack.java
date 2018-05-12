@@ -25,8 +25,8 @@ import handling.world.AttackType;
 import handling.world.DamageParse;
 import handling.world.PlayerHandler;
 import net.InPacket;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.Randomizer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
@@ -61,7 +61,7 @@ public final class CloseRangeAttack {
         
         Skill pSkill = null;
         int nSLV = pPlayer.getTotalSkillLevel(pSkill);
-        MapleStatEffect pEffect = null;
+        StatEffect pEffect = null;
         Item pShield = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -10);
         int nAttackCount = pShield != null && (pShield.getItemId() / 10000 == 134) ? 2 : 1;
         double nMaxDamage = pPlayer.getStat().getCurrentMaxBaseDamage();
@@ -247,7 +247,7 @@ public final class CloseRangeAttack {
             }
             default: {
                 if (!pPlayer.isHidden()) {
-                    pPlayer.getMap().broadcastMessage(pPlayer, CField.closeRangeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge), pPlayer.getTruePosition());
+                    pPlayer.getMap().broadcastPacket(pPlayer, CField.closeRangeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge), pPlayer.getTruePosition());
                 } else {
                     pPlayer.getMap().broadcastGMMessage(pPlayer, CField.closeRangeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge), false);
                 }

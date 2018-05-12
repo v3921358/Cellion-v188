@@ -226,7 +226,7 @@ public class UseScrollsHandler implements ProcessPacket<ClientSocket> {
         modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, scrolled));
 
         c.SendPacket(WvsContext.inventoryOperation(true, modifications));
-        chr.getMap().broadcastMessage(chr, CField.getScrollEffect(c.getPlayer().getId(), scrollSuccess, legendarySpirit, toScroll.getItemId(), scroll.getItemId()), vegas == 0);
+        chr.getMap().broadcastPacket(chr, CField.getScrollEffect(c.getPlayer().getId(), scrollSuccess, legendarySpirit, toScroll.getItemId(), scroll.getItemId()), vegas == 0);
         c.SendPacket(CField.enchantResult(scrollSuccess == Equip.ScrollResult.SUCCESS ? 1 : scrollSuccess == Equip.ScrollResult.CURSE ? 2 : 0));
         if (dst < 0 && (scrollSuccess == Equip.ScrollResult.SUCCESS || scrollSuccess == Equip.ScrollResult.CURSE) && vegas == 0) {
             chr.equipChanged();

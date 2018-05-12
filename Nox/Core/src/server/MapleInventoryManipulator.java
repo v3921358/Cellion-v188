@@ -590,7 +590,7 @@ public class MapleInventoryManipulator {
             if (type == MapleInventoryType.ETC && dst > 100 && dst % 100 != 0) {
                 final int eSlot = c.getPlayer().getExtendedSlot((dst / 100) - 1);
                 if (eSlot > 0) {
-                    final MapleStatEffect ee = ii.getItemEffect(eSlot);
+                    final StatEffect ee = ii.getItemEffect(eSlot);
                     if (dst % 100 > ee.getSlotCount() || ee.getType() != ii.getBagType(source.getItemId()) || ee.getType() <= 0) {
                         c.getPlayer().dropMessage(1, "You may not move that item to the bag.");
                         c.SendPacket(WvsContext.enableActions());

@@ -844,7 +844,7 @@ public class EventInstanceManager {
             }
         }
         squad.setStatus((byte) 2);
-        squad.getBeginMap().broadcastMessage(CField.stopClock());
+        squad.getBeginMap().broadcastPacket(CField.stopClock());
     }
 
     public boolean isDisconnected(final User chr) {

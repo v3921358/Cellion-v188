@@ -12,7 +12,7 @@ import handling.world.AttackMonster;
 import handling.world.AttackType;
 import handling.world.DamageParse;
 import service.ChannelServer;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.Timer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
@@ -51,7 +51,7 @@ public final class NonTargetAtomAttackHandler implements ProcessPacket<ClientSoc
             return;
         }
         int skillLevel = chr.getTotalSkillLevel(skill);
-        MapleStatEffect effect = attack.getAttackEffect(chr, skillLevel, skill);
+        StatEffect effect = attack.getAttackEffect(chr, skillLevel, skill);
         if (effect == null) {
             return;
         } else if (effect.getCooldown(chr) > 0) {  // Handle cooldowns
@@ -112,7 +112,7 @@ public final class NonTargetAtomAttackHandler implements ProcessPacket<ClientSoc
         // Map attack/movement broadcast, this needs to be broadcasted first before applying
         // otherwise if the monster is killed with a single hit the damage is not shown.
         if (!chr.isHidden()) {
-            chr.getMap().broadcastMessage(chr, CField.magicAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.attackFlag), chr.getTruePosition());
+            chr.getMap().broadcastPacket(chr, CField.magicAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.attackFlag), chr.getTruePosition());
         } else {
             chr.getMap().broadcastGMMessage(chr, CField.magicAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.attackFlag), false);
         }

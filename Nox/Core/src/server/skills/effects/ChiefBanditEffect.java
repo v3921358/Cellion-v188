@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.ChiefBandit;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class ChiefBanditEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case ChiefBandit.ADVANCED_DARK_SIGHT:
                 break;
@@ -48,11 +48,11 @@ public class ChiefBanditEffect extends AbstractEffect {
                 break;
             case ChiefBandit.PICK_POCKET:
                 //pEffect.statups.put(CharacterTemporaryStat.PickPocket, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.MesoUp, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.MesoUp, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case ChiefBandit.SHADOW_PARTNER:
-                pEffect.statups.put(CharacterTemporaryStat.ShadowPartner, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.ShadowPartner, pEffect.info.get(StatInfo.x));
                 break;
             case ChiefBandit.SHIELD_MASTERY_2:
                 break;

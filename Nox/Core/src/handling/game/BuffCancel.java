@@ -63,7 +63,7 @@ public final class BuffCancel implements ProcessPacket<ClientSocket> {
         
         if (pSkill.isChargeSkill()) {
             pPlayer.setKeyDownSkillTime(0L);
-            pPlayer.getMap().broadcastMessage(pPlayer, CField.skillCancel(pPlayer, nSourceID), false);
+            pPlayer.getMap().broadcastPacket(pPlayer, CField.skillCancel(pPlayer, nSourceID), false);
         } else {
             if (pPlayer.hasBuff(CharacterTemporaryStat.RideVehicle)) {
                 pPlayer.setUnmountState(true); // Allows for unmounting.

@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.WindArcher;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,7 +18,7 @@ import server.skills.effects.manager.Effect;
 public class WindArcherEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case WindArcher.ARCHERY_MASTERY_1:
                 break;
@@ -33,14 +33,14 @@ public class WindArcherEffect extends AbstractEffect {
             case WindArcher.STORM:
                 break;
             case WindArcher.STORM_ELEMENTAL:
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case WindArcher.WHISPERS_OF_THE_WIND:
                 break;
             case WindArcher.WIND_WALK_1:
                 break;
             case WindArcher.BOW_BOOSTER:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case WindArcher.BOW_BOOSTER_1:
                 break;
@@ -67,8 +67,8 @@ public class WindArcherEffect extends AbstractEffect {
             case WindArcher.STRAFE:
                 break;
             case WindArcher.SYLVAN_AID:
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, (int) (pEffect.info.get(MapleStatInfo.indiePad) * 1.5));
-                pEffect.statups.put(CharacterTemporaryStat.HowlingCritical, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, (int) (pEffect.info.get(StatInfo.indiePad) * 1.5));
+                pEffect.statups.put(CharacterTemporaryStat.HowlingCritical, pEffect.info.get(StatInfo.x));
                 pEffect.statups.put(CharacterTemporaryStat.SoulArrow, 1);
                 break;
             case WindArcher.TRIFLING_WIND_I:
@@ -80,10 +80,10 @@ public class WindArcherEffect extends AbstractEffect {
             case WindArcher.WIND_WALK:
                 break;
             case WindArcher.ALBATROSS:
-                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.indiePad));
-                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
-                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(MapleStatInfo.indieCr));
-                pEffect.statups.put(CharacterTemporaryStat.Albatross, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(StatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(StatInfo.indieBooster));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(StatInfo.indieCr));
+                pEffect.statups.put(CharacterTemporaryStat.Albatross, pEffect.info.get(StatInfo.x));
                 break;
             case WindArcher.ARROW_RAIN:
                 break;
@@ -122,20 +122,20 @@ public class WindArcherEffect extends AbstractEffect {
             case WindArcher.WIND_SHOT:
                 break;
             case WindArcher.ALBATROSS_MAX:
-                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(MapleStatInfo.indiePad));
-                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
-                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(MapleStatInfo.indieCr));
-                pEffect.statups.put(CharacterTemporaryStat.Albatross, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(StatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(StatInfo.indieBooster));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(StatInfo.indieCr));
+                pEffect.statups.put(CharacterTemporaryStat.Albatross, pEffect.info.get(StatInfo.x));
                 break;
             case WindArcher.BOW_EXPERT_2:
                 break;
             case WindArcher.CALL_OF_CYGNUS_4:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
                 break;
             case WindArcher.EMERALD_DUST:
                 break;
             case WindArcher.GLORY_OF_THE_GUARDIANS_3:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case WindArcher.HYPER_ACCURACY_7000_700_70_7:
                 break;
@@ -166,8 +166,8 @@ public class WindArcherEffect extends AbstractEffect {
             case WindArcher.MONSOON:
                 break;
             case WindArcher.SHARP_EYES_2:
-                pEffect.statups.put(CharacterTemporaryStat.SharpEyes, pEffect.info.get(MapleStatInfo.y));
-                pEffect.statups.put(CharacterTemporaryStat.CriticalGrowing, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.SharpEyes, pEffect.info.get(StatInfo.y));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalGrowing, pEffect.info.get(StatInfo.x));
                 break;
             case WindArcher.SONG_OF_HEAVEN:
                 break;
@@ -189,13 +189,13 @@ public class WindArcherEffect extends AbstractEffect {
                 break;
             case WindArcher.STORM_BRINGER:
                 pEffect.statups.put(CharacterTemporaryStat.IndieDamR, 40);
-                pEffect.statups.put(CharacterTemporaryStat.StormBringer, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.StormBringer, pEffect.info.get(StatInfo.x));
                 break;
             case WindArcher.TOUCH_OF_THE_WIND:
-                pEffect.statups.put(CharacterTemporaryStat.DEXR, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.IndiePADR, pEffect.info.get(MapleStatInfo.indiePad));
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
-                pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, pEffect.info.get(MapleStatInfo.indieMhpR));
+                pEffect.statups.put(CharacterTemporaryStat.DEXR, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePADR, pEffect.info.get(StatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, pEffect.info.get(StatInfo.indieMhpR));
                 break;
             case WindArcher.TRIFLING_WIND_DOUBLE_CHANCE:
                 break;

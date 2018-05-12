@@ -151,7 +151,7 @@ public class MapleMount implements Serializable {
         final User chr = owner.get();
         if (chr != null) {
 //	    cancelSchedule();
-            chr.getMap().broadcastMessage(WvsContext.updateMount(chr, false));
+            chr.getMap().broadcastPacket(WvsContext.updateMount(chr, false));
         }
     }
 }

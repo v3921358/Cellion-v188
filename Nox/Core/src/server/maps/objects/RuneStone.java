@@ -112,7 +112,7 @@ public class RuneStone extends AnimatedMapleMapObject {
      */
     public boolean completeRune(MapleMap map) {
         if (nextRuneSpawnTime == 0) {
-            map.broadcastMessage(CField.RunePacket.finishRune());
+            map.broadcastPacket(CField.RunePacket.finishRune());
 
             // Set next rune spawn time
             nextRuneSpawnTime = System.currentTimeMillis() + (1000L * 60L * (long) (Randomizer.nextInt(10) + 10));
@@ -134,7 +134,7 @@ public class RuneStone extends AnimatedMapleMapObject {
         this.nextRuneSpawnTime = 0; // set as spawned.
 
         if (!isMapCreation) {
-            map.broadcastMessage(CField.RunePacket.spawnRune(this), p);
+            map.broadcastPacket(CField.RunePacket.spawnRune(this), p);
         }
     }
 

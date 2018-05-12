@@ -139,7 +139,7 @@ public class UseRewardItemHandler implements ProcessPacket<ClientSocket> {
                                 MapleInventoryManipulator.removeById(c, GameConstants.getInventoryType(itemId), itemId, 1, false, false);
 
                                 c.SendPacket(CField.EffectPacket.showRewardItemAnimation(reward.itemid, reward.effect));
-                                chr.getMap().broadcastMessage(chr, CField.EffectPacket.showRewardItemAnimation(reward.itemid, reward.effect, chr.getId()), false);
+                                chr.getMap().broadcastPacket(chr, CField.EffectPacket.showRewardItemAnimation(reward.itemid, reward.effect, chr.getId()), false);
                                 return true;
                             }
                         }

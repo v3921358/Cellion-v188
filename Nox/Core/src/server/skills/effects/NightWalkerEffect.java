@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.NightWalker;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,29 +18,29 @@ import server.skills.effects.manager.Effect;
 public class NightWalkerEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case NightWalker.DARKNESS:
                 break;
             case NightWalker.DARK_ELEMENTAL:
-                pEffect.statups.put(CharacterTemporaryStat.ElementDarkness, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.ElementDarkness, pEffect.info.get(StatInfo.x));
                 break;
             case NightWalker.DARK_SIGHT:
-                pEffect.statups.put(CharacterTemporaryStat.DarkSight, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.DarkSight, pEffect.info.get(StatInfo.x));
                 break;
             case NightWalker.DARK_SIGHT_1:
                 break;
             case NightWalker.DISORDER:
                 break;
             case NightWalker.HASTE_1:
-                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
-                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(MapleStatInfo.jump));
-                pEffect.statups.put(CharacterTemporaryStat.EVAR, pEffect.info.get(MapleStatInfo.er));
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(StatInfo.speed));
+                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(StatInfo.jump));
+                pEffect.statups.put(CharacterTemporaryStat.EVAR, pEffect.info.get(StatInfo.er));
                 break;
             case NightWalker.HASTE_2:
-                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
-                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(MapleStatInfo.jump));
-                pEffect.statups.put(CharacterTemporaryStat.EVAR, pEffect.info.get(MapleStatInfo.er));
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(StatInfo.speed));
+                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(StatInfo.jump));
+                pEffect.statups.put(CharacterTemporaryStat.EVAR, pEffect.info.get(StatInfo.er));
                 break;
             case NightWalker.KEEN_EYES:
                 break;
@@ -84,9 +84,9 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.GUST_CHARM:
                 break;
             case NightWalker.HASTE:
-                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
-                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(MapleStatInfo.jump));
-                pEffect.statups.put(CharacterTemporaryStat.EVAR, pEffect.info.get(MapleStatInfo.er));
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(StatInfo.speed));
+                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(StatInfo.jump));
+                pEffect.statups.put(CharacterTemporaryStat.EVAR, pEffect.info.get(StatInfo.er));
                 break;
             case NightWalker.PHYSICAL_TRAINING_200_20_2:
                 break;
@@ -95,7 +95,7 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.SHURIKEN_BURST:
                 break;
             case NightWalker.THROWING_BOOSTER:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case NightWalker.THROWING_MASTERY:
                 break;
@@ -120,7 +120,7 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.BAT_AFFINITY_II:
                 break;
             case NightWalker.DARKNESS_ASCENDING:
-                pEffect.statups.put(CharacterTemporaryStat.DarknessAscension, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.DarknessAscension, pEffect.info.get(StatInfo.x));
                 break;
             case NightWalker.DARK_FLARE_1:
                 break;
@@ -173,12 +173,12 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.DARK_OMEN_SPREAD:
                 break;
             case NightWalker.DOMINION:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStance, pEffect.info.get(MapleStatInfo.indieStance));
-                pEffect.statups.put(CharacterTemporaryStat.IndieCr, pEffect.info.get(MapleStatInfo.indieCr));
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStance, pEffect.info.get(StatInfo.indieStance));
+                pEffect.statups.put(CharacterTemporaryStat.IndieCr, pEffect.info.get(StatInfo.indieCr));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case NightWalker.GLORY_OF_THE_GUARDIANS_1:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case NightWalker.HYPER_ACCURACY_10:
                 break;
@@ -217,7 +217,7 @@ public class NightWalkerEffect extends AbstractEffect {
             case NightWalker.QUINTUPLE_STAR_REINFORCE:
                 break;
             case NightWalker.SHADOW_ILLUSION:
-                pEffect.statups.put(CharacterTemporaryStat.ShadowIllusion, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.ShadowIllusion, pEffect.info.get(StatInfo.x));
                 break;
             case NightWalker.SHADOW_ILLUSION_1:
                 break;

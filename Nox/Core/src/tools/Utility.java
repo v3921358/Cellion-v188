@@ -155,7 +155,7 @@ public class Utility {
                     pPlayer.gainMeso(pMapLoot.getMeso(), true);
                     pMapLoot.setPickedUp(true);
                     pPlayer.getMap().removeMapObject(item);
-                    pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
+                    pPlayer.getMap().broadcastPacket(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
                 } else { // Item Drops
                     if (pMapLoot.isPickedUp()) {
                         pPlayer.getClient().SendPacket(WvsContext.enableActions());
@@ -189,7 +189,7 @@ public class Utility {
                 }
 
                 pMapLoot.setPickedUp(true);
-                pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
+                pPlayer.getMap().broadcastPacket(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
                 pPlayer.getMap().removeMapObject(item);
             }
             try {
@@ -238,7 +238,7 @@ public class Utility {
                     pPlayer.gainMeso(pMapLoot.getMeso(), true);
                     pMapLoot.setPickedUp(true);
                     pPlayer.getMap().removeMapObject(item);
-                    pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
+                    pPlayer.getMap().broadcastPacket(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
                 } else { // Item Drops
                     if (pMapLoot.isPickedUp()) {
                         pPlayer.getClient().SendPacket(WvsContext.enableActions());
@@ -272,7 +272,7 @@ public class Utility {
                 }
 
                 pMapLoot.setPickedUp(true);
-                pPlayer.getMap().broadcastMessage(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
+                pPlayer.getMap().broadcastPacket(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
                 pPlayer.getMap().removeMapObject(item);
             }
             try {

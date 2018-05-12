@@ -5,8 +5,8 @@ import client.CharacterTemporaryStat;
 import client.MapleJob;
 import client.MonsterStatus;
 import constants.skills.BattleMage;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -18,18 +18,18 @@ import server.skills.effects.manager.Effect;
 public class BattleMageEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case BattleMage.COMBAT_TELEPORT:
                 break;
             case BattleMage.CONDEMNATION:
                 pEffect.statups.put(CharacterTemporaryStat.BMageDeath, 1);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case BattleMage.DARK_AURA_1:
                 pEffect.statups.put(CharacterTemporaryStat.BMageAura, (int) pEffect.getLevel());
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case BattleMage.ELEMENTAL_WEAKNESS_1:
                 break;
@@ -39,9 +39,9 @@ public class BattleMageEffect extends AbstractEffect {
                 break;
             case BattleMage.HASTY_AURA:
                 pEffect.statups.put(CharacterTemporaryStat.BMageAura, (int) pEffect.getLevel());
-                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.indieSpeed));
-                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.x));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(StatInfo.indieSpeed));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case BattleMage.STAFF_ARTIST:
                 break;
@@ -69,11 +69,11 @@ public class BattleMageEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.BMageAura, (int) pEffect.getLevel());
                 pEffect.statups.put(CharacterTemporaryStat.ComboDrain, 2);
                 pEffect.statups.put(CharacterTemporaryStat.Regen, 2);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case BattleMage.GRIM_CONTRACT:
                 pEffect.statups.put(CharacterTemporaryStat.BMageDeath, 1);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case BattleMage.HIGH_WISDOM_6:
                 break;
@@ -82,7 +82,7 @@ public class BattleMageEffect extends AbstractEffect {
             case BattleMage.QUAD_BLOW:
                 break;
             case BattleMage.STAFF_BOOST:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
                 break;
             case BattleMage.STAFF_MASTERY:
                 break;
@@ -98,10 +98,10 @@ public class BattleMageEffect extends AbstractEffect {
                 break;
             case BattleMage.BLUE_AURA:
                 pEffect.statups.put(CharacterTemporaryStat.BMageAura, (int) pEffect.getLevel());
-                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(MapleStatInfo.asrR));
-                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(MapleStatInfo.terR));
-                pEffect.statups.put(CharacterTemporaryStat.IgnoreMobDamR, pEffect.info.get(MapleStatInfo.y));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, pEffect.info.get(StatInfo.asrR));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, pEffect.info.get(StatInfo.terR));
+                pEffect.statups.put(CharacterTemporaryStat.IgnoreMobDamR, pEffect.info.get(StatInfo.y));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case BattleMage.BODY_BOOST:
                 break;
@@ -118,7 +118,7 @@ public class BattleMageEffect extends AbstractEffect {
                 break;
             case BattleMage.GRIM_CONTRACT_II:
                 pEffect.statups.put(CharacterTemporaryStat.BMageDeath, 1);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case BattleMage.POWER_STANCE_4:
                 break;
@@ -142,16 +142,16 @@ public class BattleMageEffect extends AbstractEffect {
                 break;
             case BattleMage.BATTLE_RAGE:
                 pEffect.statups.put(CharacterTemporaryStat.Enrage, 1);
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(MapleStatInfo.z));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(StatInfo.z));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case BattleMage.BLUE_AURA_DISPEL_MAGIC:
                 break;
             case BattleMage.DARK_AURA:
                 pEffect.statups.put(CharacterTemporaryStat.BMageAura, (int) pEffect.getLevel());
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case BattleMage.DARK_AURA_BOSS_RUSH:
                 break;
@@ -177,13 +177,13 @@ public class BattleMageEffect extends AbstractEffect {
             case BattleMage.FINISHING_BLOW:
                 break;
             case BattleMage.FOR_LIBERTY:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case BattleMage.GRAND_LIGHT_AURA:
                 break;
             case BattleMage.GRIM_CONTRACT_III:
                 pEffect.statups.put(CharacterTemporaryStat.BMageDeath, 1);
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case BattleMage.HEROS_WILL_6:
                 break;
@@ -214,7 +214,7 @@ public class BattleMageEffect extends AbstractEffect {
             case BattleMage.HYPER_STRENGTH:
                 break;
             case BattleMage.MAPLE_WARRIOR_6:
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
                 break;
             case BattleMage.MASTER_OF_DEATH:
                 pEffect.statups.put(CharacterTemporaryStat.AttackCountX, 2);
@@ -252,11 +252,11 @@ public class BattleMageEffect extends AbstractEffect {
             case BattleMage.TWISTER_SPIN_SPREAD:
                 break;
             case BattleMage.UNIFICATION_AURA:
-                pEffect.statups.put(CharacterTemporaryStat.BMageAura, pEffect.info.get(MapleStatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.BMageAura, pEffect.info.get(StatInfo.x));
                 break;
             case BattleMage.WEAKENING_AURA:
                 pEffect.statups.put(CharacterTemporaryStat.BMageAura, (int) pEffect.getLevel());
-                pEffect.info.put(MapleStatInfo.time, 2100000000);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case BattleMage.WEAKENING_AURA_ELEMENTAL_DECREASE:
                 break;

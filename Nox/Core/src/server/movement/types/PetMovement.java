@@ -56,7 +56,7 @@ public class PetMovement implements ProcessPacket<ClientSocket> {
         List<LifeMovementFragment> res = MovementParse.parseMovement(iPacket);
         if (chr.getMap() != null) { // map crash hack
             pet.updatePosition(res);
-            chr.getMap().broadcastMessage(chr, PetPacket.movePet(chr.getId(), index, pet, res), false);
+            chr.getMap().broadcastPacket(chr, PetPacket.movePet(chr.getId(), index, pet, res), false);
             if (chr.hasBlockedInventory() || chr.getStat().pickupRange <= 0.0 || chr.inPVP()) {
                 return;
             }

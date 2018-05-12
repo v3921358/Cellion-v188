@@ -483,7 +483,7 @@ public class MapScriptMethods {
                     @Override
                     public void run() {
                         c.getPlayer().getMap().spawnPinkZakum(-10, 329);
-                        c.getPlayer().getMap().broadcastMessage(CField.musicChange("Bgm10.img/Eregos"));
+                        c.getPlayer().getMap().broadcastPacket(CField.musicChange("Bgm10.img/Eregos"));
                     }
                 }, 10000);
                 break;
@@ -966,7 +966,7 @@ public class MapScriptMethods {
             }
             case boss_Ravana_mirror:
             case boss_Ravana: { //event handles this so nothing for now until i find out something to do with it
-                c.getPlayer().getMap().broadcastMessage(WvsContext.broadcastMsg(5, "Ravana has appeared!"));
+                c.getPlayer().getMap().broadcastPacket(WvsContext.broadcastMsg(5, "Ravana has appeared!"));
                 break;
             }
             case killing_BonusSetting: { //spawns monsters according to mapid

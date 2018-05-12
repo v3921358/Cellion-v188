@@ -3,8 +3,8 @@ package server.skills.effects;
 import server.skills.effects.manager.AbstractEffect;
 import client.CharacterTemporaryStat;
 import constants.skills.BeastTamer;
-import server.MapleStatEffect;
-import server.MapleStatInfo;
+import server.StatEffect;
+import server.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**
@@ -16,7 +16,7 @@ import server.skills.effects.manager.Effect;
 public class BeastTamerEffect extends AbstractEffect {
 
     @Override
-    public void SetEffect(MapleStatEffect pEffect, int nSourceID) {
+    public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case BeastTamer.ARCHANGEL_2000_200_20_2:
                 break;
@@ -31,8 +31,8 @@ public class BeastTamerEffect extends AbstractEffect {
             case BeastTamer.BEAST_SCEPTER_MASTERY:
                 break;
             case BeastTamer.BIRDSEYE_VIEW:
-                pEffect.statups.put(CharacterTemporaryStat.IndieCr, pEffect.info.get(MapleStatInfo.indieCr));
-                pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(MapleStatInfo.indiePdd));
+                pEffect.statups.put(CharacterTemporaryStat.IndieCr, pEffect.info.get(StatInfo.indieCr));
+                pEffect.statups.put(CharacterTemporaryStat.EPDD, pEffect.info.get(StatInfo.indiePdd));
                 break;
             case BeastTamer.BLESSING_OF_THE_FAIRY_2:
                 break;
@@ -76,8 +76,8 @@ public class BeastTamerEffect extends AbstractEffect {
             case BeastTamer.GUARDIAN_LEAP:
                 break;
             case BeastTamer.HAWK_FLOCK:
-                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
-                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(MapleStatInfo.jump));
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(StatInfo.speed));
+                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(StatInfo.jump));
                 break;
             case BeastTamer.HAWK_MODE:
                 break;
@@ -152,7 +152,7 @@ public class BeastTamerEffect extends AbstractEffect {
             case BeastTamer.DEEP_BREATH:
                 break;
             case BeastTamer.DEFENSE_IGNORANCE:
-                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(MapleStatInfo.indieBooster));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(StatInfo.indieBooster));
                 break;
             case BeastTamer.DUMB_LUCK:
                 break;
@@ -316,18 +316,18 @@ public class BeastTamerEffect extends AbstractEffect {
             case BeastTamer.PURR_ZONE:
                 break;
             case BeastTamer.RAPTOR_TALONS:
-                pEffect.statups.put(CharacterTemporaryStat.IndieMAD, pEffect.info.get(MapleStatInfo.indieMad));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMAD, pEffect.info.get(StatInfo.indieMad));
                 break;
             case BeastTamer.RAZOR_BEAK:
-                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(MapleStatInfo.speed));
-                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(MapleStatInfo.jump));
+                pEffect.statups.put(CharacterTemporaryStat.Speed, pEffect.info.get(StatInfo.speed));
+                pEffect.statups.put(CharacterTemporaryStat.Jump, pEffect.info.get(StatInfo.jump));
                 break;
             case BeastTamer.RED_CARD:
                 break;
             case BeastTamer.STICKY_PAWS:
                 break;
             case BeastTamer.TEAM_ROAR:
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(MapleStatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
                 pEffect.statups.put(CharacterTemporaryStat.TeamRoar, 1);
                 pEffect.statups.put(CharacterTemporaryStat.NotDamaged, 1);
                 break;

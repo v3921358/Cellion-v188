@@ -45,15 +45,15 @@ public final class AngelicDressup implements ProcessPacket<ClientSocket> {
         boolean isAngelic;
         if (transformationId == 5010094 || transformationId == 5010093) {//5010093 too?
             isAngelic = true;
-            chr.getMap().broadcastMessage(chr, CField.showAngelicBusterTransformation(chr.getId(), transformationId), false);
-            chr.getMap().broadcastMessage(chr, CField.updateCharLook(chr, isAngelic), false);
+            chr.getMap().broadcastPacket(chr, CField.showAngelicBusterTransformation(chr.getId(), transformationId), false);
+            chr.getMap().broadcastPacket(chr, CField.updateCharLook(chr, isAngelic), false);
             chr.setAngelicDressupState(isAngelic);
             c.SendPacket(WvsContext.enableActions());
         } else {
             //change back?
             isAngelic = false;
-            chr.getMap().broadcastMessage(chr, CField.showAngelicBusterTransformation(chr.getId(), transformationId), false);
-            chr.getMap().broadcastMessage(chr, CField.updateCharLook(chr, isAngelic), false);
+            chr.getMap().broadcastPacket(chr, CField.showAngelicBusterTransformation(chr.getId(), transformationId), false);
+            chr.getMap().broadcastPacket(chr, CField.updateCharLook(chr, isAngelic), false);
             chr.setAngelicDressupState(isAngelic);
             c.SendPacket(WvsContext.enableActions());
         }

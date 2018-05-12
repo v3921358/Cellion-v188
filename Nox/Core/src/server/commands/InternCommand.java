@@ -2,51 +2,34 @@ package server.commands;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-
 import client.MapleCharacterUtil;
 import client.ClientSocket;
-import client.MapleDisease;
-import client.MapleStat;
 import client.SkillFactory;
-import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
-import handling.world.CheaterData;
 import handling.world.World;
 import java.awt.Point;
-import java.text.DateFormat;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.Map.Entry;
 import service.ChannelServer;
-import service.RecvPacketOpcode;
-import service.SendPacketOpcode;
-import provider.data.HexTool;
-import scripting.EventManager;
 import scripting.provider.NPCChatByType;
 import scripting.provider.NPCChatType;
-import scripting.provider.NPCScriptManager;
-import server.MapleInventoryManipulator;
 import server.MaplePortal;
 import server.MapleSquad.MapleSquadType;
 import server.MapleStringInformationProvider;
 import server.life.LifeFactory;
-import server.life.Mob;
-import server.life.MobSkillFactory;
 import server.maps.MapleMap;
-import server.maps.MapleMapItem;
+import server.maps.objects.User;
+import server.life.Mob;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.objects.User;
 import server.quest.Quest;
-import server.shops.MapleShopFactory;
 import tools.Pair;
 import tools.StringUtil;
 import tools.Tuple;
@@ -55,8 +38,8 @@ import tools.packet.CField.NPCPacket;
 import tools.packet.WvsContext;
 
 /**
- *
- * @author Emilyx3
+ * Intern Commands
+ * @author Mazen Massoud
  */
 public class InternCommand {
 
@@ -71,8 +54,6 @@ public class InternCommand {
             if (c.getPlayer().isHidden()) {
                 c.getPlayer().dropMessage(5, "[Visibility] Your character is no longer hidden.");
                 c.getPlayer().dispelBuff(9101004);
-                //MapleItemInformationProvider.getInstance().getItemEffect(2100069).applyTo(c.getPlayer());
-                //c.write(CWvsContext.InfoPacket.getStatusMsg(2100069));
             } else {
                 c.getPlayer().dropMessage(5, "[Visibility] Your character is now hidden.");
                 SkillFactory.getSkill(9101004).getEffect(1).applyTo(c.getPlayer());
@@ -100,6 +81,16 @@ public class InternCommand {
             }
 
             return 0;
+        }
+    }
+    
+    public static class Save extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            c.getPlayer().setExp(c.getPlayer().getExp() - GameConstants.getExpNeededForLevel(c.getPlayer().getLevel()) >= 0 ? GameConstants.getExpNeededForLevel(c.getPlayer().getLevel()) : 0);
+            c.getPlayer().saveToDB(false, false);
+            return 1;
         }
     }
 
@@ -140,115 +131,25 @@ public class InternCommand {
         }
     }
 
-    public static class CharInfo extends CommandExecute {
+    public static class MOB extends CommandExecute {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            final StringBuilder builder = new StringBuilder();
-            final User other = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
-            if (other == null) {
-                builder.append("...does not exist");
-                c.getPlayer().dropMessage(6, builder.toString());
-                return 0;
+            Mob pMob = null;
+            for (final MapleMapObject monstermo : c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), 100000, Arrays.asList(MapleMapObjectType.MONSTER))) {
+                pMob = (Mob) LifeFactory.getMonster(monstermo.getObjectId());
+                if (pMob.isAlive()) {
+                    c.getPlayer().dropMessage(6, "Monster " + pMob.toString());
+                    break; // only one
+                }
             }
-            //if (other.getClient().getLastPing() <= 0) {
-            //    other.getClient().sendPing();
-            //}
-            builder.append(ClientSocket.getLogMessage(other, ""));
-            builder.append(" at (").append(other.getPosition().x);
-            builder.append(", ").append(other.getPosition().y);
-            builder.append(")");
-
-            builder.append("\r\nHP : ");
-            builder.append(other.getStat().getHp());
-            builder.append(" /");
-            builder.append(other.getStat().getCurrentMaxHp());
-
-            builder.append(" || MP : ");
-            builder.append(other.getStat().getMp());
-            builder.append(" /");
-            builder.append(other.getStat().getCurrentMaxMp(other.getJob()));
-
-            builder.append(" || BattleshipHP : ");
-            builder.append(other.currentBattleshipHP());
-
-            builder.append("\r\n WATK : ");
-            builder.append(other.getStat().getTotalWatk());
-            builder.append(" || MATK : ");
-            builder.append(other.getStat().getTotalMagic());
-            builder.append(" || MAXDAMAGE : ");
-            builder.append(other.getStat().getCurrentMaxBaseDamage());
-            builder.append(" || DAMAGE % : ");
-            builder.append(other.getStat().dam_r);
-            builder.append(" || BOSSDAMAGE % : ");
-            builder.append(other.getStat().bossdam_r);
-            builder.append(" || CRIT CHANCE : ");
-            builder.append(other.getStat().passive_sharpeye_rate());
-            builder.append(" || CRIT DAMAGE : ");
-            builder.append(other.getStat().passive_sharpeye_percent());
-
-            builder.append("\r\n STR : ");
-            builder.append(other.getStat().getStr()).append(" + (").append(other.getStat().getTotalStr() - other.getStat().getStr()).append(")");
-            builder.append(" || DEX : ");
-            builder.append(other.getStat().getDex()).append(" + (").append(other.getStat().getTotalDex() - other.getStat().getDex()).append(")");
-            builder.append(" || INT : ");
-            builder.append(other.getStat().getInt()).append(" + (").append(other.getStat().getTotalInt() - other.getStat().getInt()).append(")");
-            builder.append(" || LUK : ");
-            builder.append(other.getStat().getLuk()).append(" + (").append(other.getStat().getTotalLuk() - other.getStat().getLuk()).append(")");
-
-            builder.append(" || Weapon avoidability : ");
-            builder.append(other.getStat().avoidability_weapon);
-
-            builder.append(" || Magic avoidability : ");
-            builder.append(other.getStat().avoidability_magic);
-
-            builder.append(" || Avoidability Rate : ");
-            builder.append(other.getStat().avoidabilityRate);
-
-            builder.append("\r\n EXP : ");
-            builder.append(other.getExp());
-            builder.append(" || MESO : ");
-            builder.append(other.getMeso());
-
-            builder.append("\r\n Vote Points : ");
-            builder.append(other.getVPoints());
-            builder.append(" || Event Points : ");
-            builder.append(other.getPoints());
-            builder.append(" || NX Prepaid : ");
-            builder.append(other.getCSPoints(1));
-
-            builder.append("\r\n Party : ");
-            builder.append(other.getParty() == null ? -1 : other.getParty().getId());
-
-            builder.append(" || hasTrade: ");
-            builder.append(other.getTrade() != null);
-            builder.append(" || Latency: ");
-            builder.append(other.getClient().getLatency());
-            //builder.append(" || PING: ");
-            //builder.append(other.getClient().getLastPing());
-            //builder.append(" || PONG: ");
-            //builder.append(other.getClient().getLastPong());
-            builder.append(" || remoteAddress: ");
-            other.getClient().DebugMessage(builder);
-
-            c.getPlayer().dropMessage(6, builder.toString());
-            return 1;
-        }
-    }
-
-    public static class Cheaters extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            List<CheaterData> cheaters = World.getCheaters();
-            for (int x = cheaters.size() - 1; x >= 0; x--) {
-                CheaterData cheater = cheaters.get(x);
-                c.getPlayer().dropMessage(6, cheater.getInfo());
+            if (pMob == null) {
+                c.getPlayer().dropMessage(6, "Sorry, no monster was found nearby.");
             }
             return 1;
         }
     }
-
+    
     public static class GoTo extends CommandExecute {
 
         private static final HashMap<String, Integer> gotomaps = new HashMap<>();
@@ -408,7 +309,7 @@ public class InternCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            c.getPlayer().fakeRelog2();
+            c.getPlayer().reloadUser();
             return 1;
         }
     }
@@ -417,7 +318,7 @@ public class InternCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            c.getPlayer().getMap().broadcastMessage(CField.getClock(CommandProcessorUtil.getOptionalIntArg(splitted, 1, 60)));
+            c.getPlayer().getMap().broadcastPacket(CField.getClock(CommandProcessorUtil.getOptionalIntArg(splitted, 1, 60)));
             return 1;
         }
     }
@@ -435,114 +336,6 @@ public class InternCommand {
                 c.getPlayer().dropMessage(6, "The victim does not exist.");
                 return 0;
             }
-        }
-    }
-
-    public static class TempBan extends CommandExecute {
-
-        protected boolean ipBan = false;
-        private final String[] types = {"HACK", "BOT", "AD", "HARASS", "CURSE", "SCAM", "MISCONDUCT", "SELL", "ICASH", "TEMP", "GM", "IPROGRAM", "MEGAPHONE"};
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            if (splitted.length < 4) {
-                c.getPlayer().dropMessage(6, "Tempban [name] [REASON] [hours]");
-                StringBuilder s = new StringBuilder("Tempban reasons: ");
-                for (int i = 0; i < types.length; i++) {
-                    s.append(i + 1).append(" - ").append(types[i]).append(", ");
-                }
-                c.getPlayer().dropMessage(6, s.toString());
-                return 0;
-            }
-            final User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
-            final int reason = Integer.parseInt(splitted[2]);
-            final int numHour = Integer.parseInt(splitted[3]);
-
-            final Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.HOUR, numHour);
-            final DateFormat df = DateFormat.getInstance();
-
-            if (victim == null || reason < 0 || reason >= types.length) {
-                c.getPlayer().dropMessage(6, "Unable to find character or reason was not valid, type tempban to see reasons");
-                return 0;
-            }
-            victim.tempban("Temp banned by " + c.getPlayer().getName() + " for " + types[reason] + " reason", cal, reason, ipBan);
-            c.getPlayer().dropMessage(6, "The character " + splitted[1] + " has been successfully tempbanned till " + df.format(cal.getTime()));
-            return 1;
-        }
-    }
-
-    public static class Jail extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            if (splitted.length < 3) {
-                c.getPlayer().dropMessage(6, "Syntax: !jail <name> <minutes, 0 = forever>");
-                return 0;
-            }
-            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
-            final int minutes = Math.max(0, Integer.parseInt(splitted[2]));
-            if (victim != null && c.getPlayer().getGMLevel() >= victim.getGMLevel()) {
-                MapleMap target = ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(GameConstants.JAIL);
-                victim.getQuestNAdd(Quest.getInstance(GameConstants.JAIL_QUEST)).setCustomData(String.valueOf(minutes * 60));
-                victim.changeMap(target, target.getPortal(0));
-            } else {
-                c.getPlayer().dropMessage(6, "Please go to the same channel as the targeted character.");
-                return 0;
-            }
-            return 1;
-        }
-    }
-
-    public static class TempBanIP extends TempBan {
-
-        public TempBanIP() {
-            ipBan = true;
-        }
-    }
-
-    public static class Map extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            try {
-                User victim;
-                int ch = World.Find.findChannel(splitted[1]);
-                if (ch < 0) {
-                    MapleMap target = c.getChannelServer().getMapFactory().getMap(Integer.parseInt(splitted[1]));
-                    if (target == null) {
-                        c.getPlayer().dropMessage(6, "Map does not exist");
-                        return 0;
-                    }
-                    MaplePortal targetPortal = null;
-                    if (splitted.length > 2) {
-                        try {
-                            targetPortal = target.getPortal(Integer.parseInt(splitted[2]));
-                        } catch (IndexOutOfBoundsException e) {
-                            // noop, assume the gm didn't know how many portals there are
-                            c.getPlayer().dropMessage(5, "Invalid portal selected.");
-                        } catch (NumberFormatException a) {
-                            // noop, assume that the gm is drunk
-                        }
-                    }
-                    if (targetPortal == null) {
-                        targetPortal = target.getPortal(0);
-                    }
-                    c.getPlayer().changeMap(target, targetPortal);
-                } else {
-                    victim = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(splitted[1]);
-                    c.getPlayer().dropMessage(6, "Cross changing channel. Please wait.");
-                    if (victim.getMapId() != c.getPlayer().getMapId()) {
-                        final MapleMap mapp = c.getChannelServer().getMapFactory().getMap(victim.getMapId());
-                        c.getPlayer().changeMap(mapp, mapp.findClosestPortal(victim.getTruePosition()));
-                    }
-                    c.getPlayer().changeChannel(ch);
-                }
-            } catch (NumberFormatException e) {
-                c.getPlayer().dropMessage(6, "Something went wrong " + e.getMessage());
-                return 0;
-            }
-            return 1;
         }
     }
 
@@ -574,7 +367,7 @@ public class InternCommand {
         }
     }
 
-    public static class Find extends CommandExecute {
+    public static class Search extends CommandExecute {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
@@ -608,8 +401,6 @@ public class InternCommand {
                                         break;
                                     }
                                     sb.append(singleRetNpc);
-                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retNpcs.toString(), "00 00", (byte) 0, 9010000));
-                                    //c.getPlayer().dropMessage(6, singleRetNpc);
                                 }
                             } else {
                                 c.getPlayer().dropMessage(6, "No NPC's Found");
@@ -632,8 +423,6 @@ public class InternCommand {
                                         break;
                                     }
                                     sb.append(singleRetMap);
-                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retMaps.toString(), "00 00", (byte) 0, 9010000));
-                                    //c.getPlayer().dropMessage(6, singleRetMap);
                                 }
                             } else {
                                 c.getPlayer().dropMessage(6, "No Maps Found");
@@ -654,8 +443,6 @@ public class InternCommand {
                                         break;
                                     }
                                     sb.append(singleRetMob);
-                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retMobs.toString(), "00 00", (byte) 0, 9010000));
-                                    //c.getPlayer().dropMessage(6, singleRetMob);
                                 }
                             } else {
                                 c.getPlayer().dropMessage(6, "No Mobs Found");
@@ -677,8 +464,6 @@ public class InternCommand {
                                         break;
                                     }
                                     sb.append(singleRetItem);
-                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retItems.toString(), "00 00", (byte) 0, 9010000));
-                                    //c.getPlayer().dropMessage(6, singleRetItem);
                                 }
                             } else {
                                 c.getPlayer().dropMessage(6, "No Items Found");
@@ -698,8 +483,6 @@ public class InternCommand {
                                         break;
                                     }
                                     sb.append(singleRetQuest);
-                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retQuests.toString(), "00 00", (byte) 0, 9010000));
-                                    //    c.getPlayer().dropMessage(6, singleRetItem);
                                 }
                             } else {
                                 c.getPlayer().dropMessage(6, "No Quests Found");
@@ -721,8 +504,6 @@ public class InternCommand {
                                         break;
                                     }
                                     sb.append(singleRetSkill);
-                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retSkills.toString(), "00 00", (byte) 0, 9010000));
-                                    //    c.getPlayer().dropMessage(6, singleRetSkill);
                                 }
                             } else {
                                 c.getPlayer().dropMessage(6, "No Skills Found");
@@ -738,21 +519,11 @@ public class InternCommand {
             return 0;
         }
     }
-
-    public static class ID extends Find {
-    }
-
-    public static class LookUp extends Find {
-    }
-
-    public static class Search extends Find {
-    }
-
+    
     public static class WhosFirst extends CommandExecute {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            //probably bad way to do it
             final long currentTime = System.currentTimeMillis();
             List<Pair<String, Long>> players = new ArrayList<>();
             for (User chr : c.getPlayer().getMap().getCharacters()) {
@@ -855,60 +626,11 @@ public class InternCommand {
         }
     }
 
-    public static class CancelBuffs extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            c.getPlayer().cancelAllBuffs();
-            return 1;
-        }
-    }
-
     public static class CC extends CommandExecute {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().changeChannel(Integer.parseInt(splitted[1]));
-            return 1;
-        }
-    }
-
-    public static class FakeRelog2 extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            c.getPlayer().fakeRelog();
-            return 1;
-        }
-    }
-
-    public static class OpenNpc extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            NPCScriptManager.getInstance().start(c, Integer.parseInt(splitted[1]), splitted.length > 2 ? StringUtil.joinStringFrom(splitted, 2) : splitted[1]);
-            return 1;
-        }
-    }
-
-    public static class OpenShop extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            MapleShopFactory.getInstance().getShop(Integer.parseInt(splitted[1]));
-            return 1;
-        }
-    }
-
-    public static class Shop extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            MapleShopFactory shop = MapleShopFactory.getInstance();
-            int shopId = Integer.parseInt(splitted[1]);
-            if (shop.getShop(shopId) != null) {
-                shop.getShop(shopId).sendShop(c);
-            }
             return 1;
         }
     }
@@ -923,103 +645,6 @@ public class InternCommand {
                 }
             }
             c.getPlayer().dropMessage(0, "All characters have been succesfully saved.");
-            return 1;
-        }
-    }
-
-    public static class ActiveBomberman extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            User player = c.getPlayer();
-            if (player.getMapId() != 109010100) {
-                player.dropMessage(5, "This command is only usable in map 109010100.");
-            } else {
-                c.getChannelServer().toggleBomberman(c.getPlayer());
-                for (User chr : player.getMap().getCharacters()) {
-                    if (!chr.isIntern()) {
-                        chr.cancelAllBuffs();
-                        chr.giveDebuff(MapleDisease.SEAL, MobSkillFactory.getMobSkill(120, 1));
-                        //MapleInventoryManipulator.removeById(chr.getClient(), MapleInventoryType.USE, 2100067, chr.getItemQuantity(2100067, false), true, true);
-                        //chr.gainItem(2100067, 30);
-                        //MapleInventoryManipulator.removeById(chr.getClient(), MapleInventoryType.ETC, 4031868, chr.getItemQuantity(4031868, false), true, true);
-                        //chr.gainItem(4031868, (short) 5);
-                        //chr.dropMessage(0, "You have been granted 5 jewels(lifes) and 30 bombs.");
-                        //chr.dropMessage(0, "Pick up as many bombs and jewels as you can!");
-                        //chr.dropMessage(0, "Check inventory for Bomb under use");
-                    }
-                }
-                for (User chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                    chrs.getClient().SendPacket(WvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has started!"));
-                }
-                player.getMap().broadcastMessage(CField.getClock(60));
-            }
-            return 1;
-        }
-    }
-
-    public static class Song extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            c.getPlayer().getMap().broadcastMessage(CField.musicChange(splitted[1]));
-            return 1;
-        }
-    }
-
-    public static class DeactiveBomberman extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            User player = c.getPlayer();
-            if (player.getMapId() != 109010100) {
-                player.dropMessage(5, "This command is only usable in map 109010100.");
-            } else {
-                c.getChannelServer().toggleBomberman(c.getPlayer());
-                int count = 0;
-                String winner = "";
-                for (User chr : player.getMap().getCharacters()) {
-                    if (!chr.isGM()) {
-                        if (count == 0) {
-                            winner = chr.getName();
-                            count++;
-                        } else {
-                            winner += " , " + chr.getName();
-                        }
-                    }
-                }
-                for (User chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                    chrs.getClient().SendPacket(WvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has ended! The winners are: " + winner));
-                }
-            }
-            return 1;
-        }
-    }
-
-    public static class Bob extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            Mob mob = LifeFactory.getMonster(9400551);
-            for (int i = 0; i < 10; i++) {
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(mob, c.getPlayer().getPosition());
-            }
-            return 1;
-        }
-    }
-
-    public static class StartAutoEvent extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            final EventManager em = c.getChannelServer().getEventSM().getEventManager("AutomatedEvent");
-            if (em != null) {
-                em.setWorldEvent();
-                em.scheduleRandomEvent();
-                System.out.println("Scheduling Random Automated Event.");
-            } else {
-                System.out.println("Could not locate Automated Event script.");
-            }
             return 1;
         }
     }

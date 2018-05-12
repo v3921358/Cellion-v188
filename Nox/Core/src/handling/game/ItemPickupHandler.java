@@ -162,7 +162,7 @@ public class ItemPickupHandler implements ProcessPacket<ClientSocket> {
 
     private static void removeItem(User chr, MapleMapItem mapitem, MapleMapObject ob) {
         mapitem.setPickedUp(true);
-        chr.getMap().broadcastMessage(CField.removeItemFromMap(mapitem.getObjectId(), 2, chr.getId()), mapitem.getPosition());
+        chr.getMap().broadcastPacket(CField.removeItemFromMap(mapitem.getObjectId(), 2, chr.getId()), mapitem.getPosition());
         chr.getMap().removeMapObject(ob);
 
         if (mapitem.isRandomDrop()) {
@@ -172,7 +172,7 @@ public class ItemPickupHandler implements ProcessPacket<ClientSocket> {
 
     public static final void removeItem_Pet(final User chr, final MapleMapItem mapitem, int pet) {
         mapitem.setPickedUp(true);
-        chr.getMap().broadcastMessage(CField.removeItemFromMap(mapitem.getObjectId(), 5, chr.getId(), pet));
+        chr.getMap().broadcastPacket(CField.removeItemFromMap(mapitem.getObjectId(), 5, chr.getId(), pet));
         chr.getMap().removeMapObject(mapitem);
 
         if (mapitem.isRandomDrop()) {
