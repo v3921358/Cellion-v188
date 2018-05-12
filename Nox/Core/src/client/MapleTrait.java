@@ -11,16 +11,17 @@ public class MapleTrait {
 
     public static enum MapleTraitType implements Serializable { //in order
 
-        charisma(500, MapleStat.CHARISMA), //ambition
-        insight(500, MapleStat.INSIGHT),
-        will(500, MapleStat.WILL), //willpower
-        craft(500, MapleStat.CRAFT), //diligence
-        sense(500, MapleStat.SENSE), //empathy
-        charm(5000, MapleStat.CHARM);
+        charisma(500, Stat.CharismaEXP), //ambition
+        insight(500, Stat.InsightEXP),
+        will(500, Stat.WillEXP), //willpower
+        craft(500, Stat.CraftEXP), //diligence
+        sense(500, Stat.SenseEXP), //empathy
+        charm(5000, Stat.CharmEXP);
+        
         final int limit;
-        final MapleStat stat;
+        final Stat stat;
 
-        private MapleTraitType(int type, MapleStat theStat) {
+        private MapleTraitType(int type, Stat theStat) {
             this.limit = type;
             this.stat = theStat;
         }
@@ -29,7 +30,7 @@ public class MapleTrait {
             return limit;
         }
 
-        public MapleStat getStat() {
+        public Stat getStat() {
             return stat;
         }
 

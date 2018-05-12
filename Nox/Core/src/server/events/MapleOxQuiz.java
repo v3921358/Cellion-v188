@@ -3,7 +3,7 @@ package server.events;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
 
-import client.MapleStat;
+import client.Stat;
 import server.Timer.EventTimer;
 import server.events.MapleOxQuizFactory.MapleOxQuizEntry;
 import server.maps.MapleMap;
@@ -121,7 +121,7 @@ public class MapleOxQuiz extends MapleEvent {
                     if (chr != null && !chr.isGM() && chr.isAlive()) { // make sure they aren't null... maybe something can happen in 12 seconds.
                         if (!isCorrectAnswer(chr, question.getValue().getAnswer())) {
                             chr.getStat().setHp((short) 0, chr);
-                            chr.updateSingleStat(MapleStat.HP, 0);
+                            chr.updateSingleStat(Stat.HP, 0);
                         } else {
                             chr.gainExp(3000, true, true, false);
                         }

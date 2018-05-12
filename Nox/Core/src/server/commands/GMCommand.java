@@ -154,13 +154,13 @@ public class GMCommand {
         public int execute(ClientSocket c, String[] splitted) {
             if (splitted.length < 2) {
                 c.getPlayer().setRemainingSp(CommandProcessorUtil.getOptionalIntArg(splitted, 1, 1));
-                c.getPlayer().updateSingleStat(MapleStat.AVAILABLESP, 0);
+                c.getPlayer().updateSingleStat(Stat.SP, 0);
                 c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") has been given " + Integer.parseInt(splitted[2]) + "Skill Points.");
             } else {
                 User pPlayer = Utility.requestCharacter(splitted[1]);
                 if (pPlayer != null) {
                     pPlayer.setRemainingSp(CommandProcessorUtil.getOptionalIntArg(splitted, 1, 1));
-                    pPlayer.updateSingleStat(MapleStat.AVAILABLESP, 0);
+                    pPlayer.updateSingleStat(Stat.SP, 0);
                     c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") has been given " + Integer.parseInt(splitted[2]) + "Skill Points.");
                 } else {
                     c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") could not be found.");
@@ -276,8 +276,8 @@ public class GMCommand {
                 if (map != null && !map.isIntern()) {
                     map.getStat().setHp((short) 0, map);
                     map.getStat().setMp((short) 0, map);
-                    map.updateSingleStat(MapleStat.HP, 0);
-                    map.updateSingleStat(MapleStat.MP, 0);
+                    map.updateSingleStat(Stat.HP, 0);
+                    map.updateSingleStat(Stat.MP, 0);
                 }
             }
             return 1;
@@ -388,7 +388,7 @@ public class GMCommand {
                 User playernear = (User) closeplayers;
                 if (playernear.isAlive() && playernear != c.getPlayer() && playernear.getJob() != 910) {
                     playernear.setHp(0);
-                    playernear.updateSingleStat(MapleStat.HP, 0);
+                    playernear.updateSingleStat(Stat.HP, 0);
                     playernear.dropMessage(5, "You were too close to the MapleGM.");
                 }
             }
@@ -414,9 +414,9 @@ public class GMCommand {
             for (User mch : player.getMap().getCharacters()) {
                 if (mch != null) {
                     mch.getStat().setHp(mch.getStat().getMaxHp(), mch);
-                    mch.updateSingleStat(MapleStat.HP, mch.getStat().getMaxHp());
+                    mch.updateSingleStat(Stat.HP, mch.getStat().getMaxHp());
                     mch.getStat().setMp(mch.getStat().getMaxMp(), mch);
-                    mch.updateSingleStat(MapleStat.MP, mch.getStat().getMaxMp());
+                    mch.updateSingleStat(Stat.MP, mch.getStat().getMaxMp());
                     mch.dispelDebuffs();
                 }
             }
@@ -755,8 +755,8 @@ public class GMCommand {
                 if (player.allowedToTarget(pTarget) && player.getGMLevel() >= pTarget.getGMLevel()) {
                     pTarget.getStat().setHp((short) 0, pTarget);
                     pTarget.getStat().setMp((short) 0, pTarget);
-                    pTarget.updateSingleStat(MapleStat.HP, 0);
-                    pTarget.updateSingleStat(MapleStat.MP, 0);
+                    pTarget.updateSingleStat(Stat.HP, 0);
+                    pTarget.updateSingleStat(Stat.MP, 0);
                 }
             }
             pTarget.gainExp(nCurrentExp, true, true, true); // Give back exp lost.
@@ -783,7 +783,7 @@ public class GMCommand {
             }
             if (victim != null && player.allowedToTarget(victim)) {
                 victim.addFame(fame);
-                victim.updateSingleStat(MapleStat.FAME, victim.getFame());
+                victim.updateSingleStat(Stat.Fame, victim.getFame());
             }
             return 1;
         }

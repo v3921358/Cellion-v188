@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.MapleStat;
+import client.Stat;
 import client.PlayerStats;
 import constants.GameConstants;
 import java.util.EnumMap;
@@ -27,29 +27,29 @@ public class DistributeAPHandler implements ProcessPacket<ClientSocket> {
     public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
-        Map<MapleStat, Long> statupdate = new EnumMap<>(MapleStat.class);
+        Map<Stat, Long> statupdate = new EnumMap<>(Stat.class);
         chr.updateTick(iPacket.DecodeInt());
         final long statmask = iPacket.DecodeLong();
         final PlayerStats stat = chr.getStat();
         final int job = chr.getJob();
         if (chr.getRemainingAp() > 0) {
-            if ((statmask & MapleStat.STR.getValue()) != 0) { // Str
+            if ((statmask & Stat.STR.getValue()) != 0) { // Str
                 stat.setStr((short) (stat.getStr() + 1), chr);
-                statupdate.put(MapleStat.STR, (long) stat.getStr());
+                statupdate.put(Stat.STR, (long) stat.getStr());
             }
-            if ((statmask & MapleStat.DEX.getValue()) != 0) {  // Dex
+            if ((statmask & Stat.DEX.getValue()) != 0) {  // Dex
                 stat.setDex((short) (stat.getDex() + 1), chr);
-                statupdate.put(MapleStat.DEX, (long) stat.getDex());
+                statupdate.put(Stat.DEX, (long) stat.getDex());
             }
-            if ((statmask & MapleStat.INT.getValue()) != 0) {  // Int
+            if ((statmask & Stat.INT.getValue()) != 0) {  // Int
                 stat.setInt((short) (stat.getInt() + 1), chr);
-                statupdate.put(MapleStat.INT, (long) stat.getInt());
+                statupdate.put(Stat.INT, (long) stat.getInt());
             }
-            if ((statmask & MapleStat.LUK.getValue()) != 0) {  // Luk
+            if ((statmask & Stat.LUK.getValue()) != 0) {  // Luk
                 stat.setLuk((short) (stat.getLuk() + 1), chr);
-                statupdate.put(MapleStat.LUK, (long) stat.getLuk());
+                statupdate.put(Stat.LUK, (long) stat.getLuk());
             }
-            if ((statmask & MapleStat.MAXHP.getValue()) != 0) { // HP
+            if ((statmask & Stat.MaxHP.getValue()) != 0) { // HP
                 int maxhp = stat.getMaxHp();
                 if (chr.getHpApUsed() >= 10000 || maxhp >= 500000) {
                     return;
@@ -78,9 +78,9 @@ public class DistributeAPHandler implements ProcessPacket<ClientSocket> {
                 maxhp = Math.min(500000, Math.abs(maxhp));
                 chr.setHpApUsed((short) (chr.getHpApUsed() + 1));
                 stat.setMaxHp(maxhp, chr);
-                statupdate.put(MapleStat.MAXHP, (long) maxhp);
+                statupdate.put(Stat.MaxHP, (long) maxhp);
             }
-            if ((statmask & MapleStat.IndieMMP.getValue()) != 0) {  // MP
+            if ((statmask & Stat.MaxMP.getValue()) != 0) {  // MP
                 int maxmp = stat.getMaxMp();
                 if (chr.getHpApUsed() >= 10000 || stat.getMaxMp() >= 500000) {
                     return;
@@ -101,11 +101,11 @@ public class DistributeAPHandler implements ProcessPacket<ClientSocket> {
                 maxmp = Math.min(500000, Math.abs(maxmp));
                 chr.setHpApUsed((short) (chr.getHpApUsed() + 1));
                 stat.setMaxMp(maxmp, chr);
-                statupdate.put(MapleStat.IndieMMP, (long) maxmp);
+                statupdate.put(Stat.MaxMP, (long) maxmp);
             }
             chr.setRemainingAp((short) (chr.getRemainingAp() - 1));
-            statupdate.put(MapleStat.AVAILABLEAP, (long) chr.getRemainingAp());
-            c.SendPacket(WvsContext.updatePlayerStats(statupdate, true, chr));
+            statupdate.put(Stat.AP, (long) chr.getRemainingAp());
+            c.SendPacket(WvsContext.OnPlayerStatChanged(chr, statupdate));
         }
 
     }

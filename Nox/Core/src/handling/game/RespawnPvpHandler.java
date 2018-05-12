@@ -27,7 +27,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import client.ClientSocket;
-import client.MapleStat;
+import client.Stat;
 import server.maps.objects.User;
 import tools.Pair;
 import net.InPacket;
@@ -51,7 +51,7 @@ public final class RespawnPvpHandler implements ProcessPacket<ClientSocket> {
         final int type = Integer.parseInt(c.getPlayer().getEventInstance().getProperty("type"));
         byte lvl = 0;
         c.getPlayer().getStat().heal_noUpdate(c.getPlayer());
-        c.getPlayer().updateSingleStat(MapleStat.MP, c.getPlayer().getStat().getMp());
+        c.getPlayer().updateSingleStat(Stat.MP, c.getPlayer().getStat().getMp());
         //c.getPlayer().getEventInstance().schedule("broadcastType", 500);   
         ThreadLock.lock();
         try {

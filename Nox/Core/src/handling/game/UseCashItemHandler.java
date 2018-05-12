@@ -14,7 +14,7 @@ import java.util.Map;
 import client.MapleCharacterUtil;
 import client.ClientSocket;
 import client.QuestStatus.QuestState;
-import client.MapleStat;
+import client.Stat;
 import client.PlayerStats;
 import client.Skill;
 import client.SkillEntry;
@@ -283,7 +283,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case 5050000: { // AP Reset
-                Map<MapleStat, Long> statupdate = new EnumMap<>(MapleStat.class);
+                Map<Stat, Long> statupdate = new EnumMap<>(Stat.class);
                 final int apto = (int) iPacket.DecodeLong();
                 final int apfrom = (int) iPacket.DecodeLong();
 
@@ -365,25 +365,25 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                         case 0x40: { // str
                             final long toSet = playerst.getStr() + 1;
                             playerst.setStr((short) toSet, c.getPlayer());
-                            statupdate.put(MapleStat.STR, toSet);
+                            statupdate.put(Stat.STR, toSet);
                             break;
                         }
                         case 0x80: { // dex
                             final long toSet = playerst.getDex() + 1;
                             playerst.setDex((short) toSet, c.getPlayer());
-                            statupdate.put(MapleStat.DEX, toSet);
+                            statupdate.put(Stat.DEX, toSet);
                             break;
                         }
                         case 0x100: { // int
                             final long toSet = playerst.getInt() + 1;
                             playerst.setInt((short) toSet, c.getPlayer());
-                            statupdate.put(MapleStat.INT, toSet);
+                            statupdate.put(Stat.INT, toSet);
                             break;
                         }
                         case 0x200: { // luk
                             final long toSet = playerst.getLuk() + 1;
                             playerst.setLuk((short) toSet, c.getPlayer());
-                            statupdate.put(MapleStat.LUK, toSet);
+                            statupdate.put(Stat.LUK, toSet);
                             break;
                         }
                         case 0x800: // hp
@@ -391,7 +391,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                             maxhp += GameConstants.getHpApByJob((short) job);
                             c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() + 1));
                             playerst.setMaxHp(maxhp, c.getPlayer());
-                            statupdate.put(MapleStat.MAXHP, (long) maxhp);
+                            statupdate.put(Stat.MaxHP, (long) maxhp);
                             break;
 
                         case 0x2000: // mp
@@ -403,32 +403,32 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                             maxmp = Math.min(500000, Math.abs(maxmp));
                             c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() + 1));
                             playerst.setMaxMp(maxmp, c.getPlayer());
-                            statupdate.put(MapleStat.IndieMMP, (long) maxmp);
+                            statupdate.put(Stat.MaxMP, (long) maxmp);
                             break;
                     }
                     switch (apfrom) { // AP from
                         case 0x40: { // str
                             final long toSet = playerst.getStr() - 1;
                             playerst.setStr((short) toSet, c.getPlayer());
-                            statupdate.put(MapleStat.STR, toSet);
+                            statupdate.put(Stat.STR, toSet);
                             break;
                         }
                         case 0x80: { // dex
                             final long toSet = playerst.getDex() - 1;
                             playerst.setDex((short) toSet, c.getPlayer());
-                            statupdate.put(MapleStat.DEX, toSet);
+                            statupdate.put(Stat.DEX, toSet);
                             break;
                         }
                         case 0x100: { // int
                             final long toSet = playerst.getInt() - 1;
                             playerst.setInt((short) toSet, c.getPlayer());
-                            statupdate.put(MapleStat.INT, toSet);
+                            statupdate.put(Stat.INT, toSet);
                             break;
                         }
                         case 0x200: { // luk
                             final long toSet = playerst.getLuk() - 1;
                             playerst.setLuk((short) toSet, c.getPlayer());
-                            statupdate.put(MapleStat.LUK, toSet);
+                            statupdate.put(Stat.LUK, toSet);
                             break;
                         }
                         case 0x800: // HP
@@ -436,7 +436,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                             maxhp -= GameConstants.getHpApByJob((short) job);
                             c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() - 1));
                             playerst.setMaxHp(maxhp, c.getPlayer());
-                            statupdate.put(MapleStat.MAXHP, (long) maxhp);
+                            statupdate.put(Stat.MaxHP, (long) maxhp);
                             break;
                         case 0x2000: // MP
                             int maxmp = playerst.getMaxMp();
@@ -446,10 +446,10 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                             maxmp -= GameConstants.getMpApByJob((short) job);
                             c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() - 1));
                             playerst.setMaxMp(maxmp, c.getPlayer());
-                            statupdate.put(MapleStat.IndieMMP, (long) maxmp);
+                            statupdate.put(Stat.MaxMP, (long) maxmp);
                             break;
                     }
-                    c.SendPacket(WvsContext.updatePlayerStats(statupdate, true, c.getPlayer()));
+                    c.SendPacket(WvsContext.OnPlayerStatChanged(c.getPlayer(), statupdate));
                 }
                 break;
             }

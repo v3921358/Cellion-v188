@@ -1,6 +1,6 @@
 package server.messages;
 
-import client.MapleStat;
+import client.Stat;
 import net.OutPacket;
 
 /**
@@ -24,22 +24,22 @@ public class TraitMessage implements MessageInterface {
     public void messagePacket(OutPacket oPacket) {
         oPacket.EncodeByte(_MessageOpcodesType.Trait.getType());//MessageType
         oPacket.EncodeLong(flag);
-        if ((flag & MapleStat.CHARISMA.getValue()) != 0) {
+        if ((flag & Stat.CharismaEXP.getValue()) != 0) {
             oPacket.EncodeInt(amount);
         }
-        if ((flag & MapleStat.INSIGHT.getValue()) != 0) {
+        if ((flag & Stat.InsightEXP.getValue()) != 0) {
             oPacket.EncodeInt(amount);
         }
-        if ((flag & MapleStat.WILL.getValue()) != 0) {
+        if ((flag & Stat.WillEXP.getValue()) != 0) {
             oPacket.EncodeInt(amount);
         }
-        if ((flag & MapleStat.CRAFT.getValue()) != 0) {
+        if ((flag & Stat.CraftEXP.getValue()) != 0) {
             oPacket.EncodeInt(amount);
         }
-        if ((flag & MapleStat.SENSE.getValue()) != 0) {
+        if ((flag & Stat.SenseEXP.getValue()) != 0) {
             oPacket.EncodeInt(amount);
         }
-        if ((flag & MapleStat.CHARM.getValue()) != 0) {
+        if ((flag & Stat.CharmEXP.getValue()) != 0) {
             oPacket.EncodeInt(amount);
         }
     }

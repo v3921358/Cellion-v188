@@ -6,7 +6,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.MapleStat;
+import client.Stat;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -91,7 +91,7 @@ public class DistributeSPHandler implements ProcessPacket<ClientSocket> {
             /*if (GameConstants.isBeastTamer(chr.getJob())) {
                 chr.setRemainingSp(chr.getRemainingSp(skillbook) - amount, skillbook);
             }*/
-            chr.updateSingleStat(MapleStat.AVAILABLESP, chr.getRemainingSp(skillbook));
+            chr.updateSingleStat(Stat.SP, chr.getRemainingSp(skillbook));
             chr.changeSingleSkillLevel(skill, (byte) (curLevel + amount), chr.getMasterLevel(skill));
         } else if (!skill.canBeLearnedBy(chr.getJob()) && !chr.isGM()) {
             AutobanManager.getInstance().addPoints(c, 1000, 0, "Trying to learn a skill for a different job (" + skillid + ")");

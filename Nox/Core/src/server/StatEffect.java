@@ -463,7 +463,7 @@ public class StatEffect implements Serializable {
                 hpchange = stat.getHp() == 1 ? 0 : stat.getHp() - 1;
             }
         }
-        final Map<MapleStat, Long> hpmpupdate = new EnumMap<>(MapleStat.class);
+        final Map<Stat, Long> hpmpupdate = new EnumMap<>(Stat.class);
         if (hpchange != 0) {
             if (hpchange < 0 && (-hpchange) > stat.getHp() && !applyto.hasDisease(MapleDisease.ZOMBIFY)) {
                 applyto.getClient().SendPacket(WvsContext.enableActions());
@@ -480,11 +480,11 @@ public class StatEffect implements Serializable {
             if ((mpchange < 0 && GameConstants.isDemonSlayer(applyto.getJob())) || !GameConstants.isDemonSlayer(applyto.getJob())) { // heal
                 stat.setMp(stat.getMp() + mpchange, applyto);
             }
-            hpmpupdate.put(MapleStat.MP, Long.valueOf(stat.getMp()));
+            hpmpupdate.put(Stat.MP, Long.valueOf(stat.getMp()));
         }
-        hpmpupdate.put(MapleStat.HP, Long.valueOf(stat.getHp()));
+        hpmpupdate.put(Stat.HP, Long.valueOf(stat.getHp()));
 
-        applyto.getClient().SendPacket(WvsContext.updatePlayerStats(hpmpupdate, true, applyto));
+        applyto.getClient().SendPacket(WvsContext.OnPlayerStatChanged(applyto, hpmpupdate));
         if (powerchange != 0) {
             if (applyto.getXenonSurplus() - powerchange < 0) {
                 return false;
@@ -530,13 +530,13 @@ public class StatEffect implements Serializable {
         } else if (cosmetic > 0) {
             if (cosmetic >= 30000) {
                 applyto.setHair(cosmetic);
-                applyto.updateSingleStat(MapleStat.HAIR, cosmetic);
+                applyto.updateSingleStat(Stat.Hair, cosmetic);
             } else if (cosmetic >= 20000) {
                 applyto.setFace(cosmetic);
-                applyto.updateSingleStat(MapleStat.FACE, cosmetic);
+                applyto.updateSingleStat(Stat.Face, cosmetic);
             } else if (cosmetic < 100) {
                 applyto.setSkinColor((byte) cosmetic);
-                applyto.updateSingleStat(MapleStat.SKIN, cosmetic);
+                applyto.updateSingleStat(Stat.Skin, cosmetic);
             }
             applyto.equipChanged();
         } else if (recipe > 0) {

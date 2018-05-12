@@ -20,7 +20,7 @@ import client.CharacterTemporaryStat;
 import client.ClientSocket;
 import client.MapleCoolDownValueHolder;
 import client.MapleDiseaseValueHolder;
-import client.MapleStat;
+import client.Stat;
 import client.MonsterStatusEffect;
 import client.buddy.Buddy;
 import client.buddy.BuddyFlags;
@@ -1931,7 +1931,7 @@ public class World {
             } else if (GameConstants.isDemonSlayer(pPlayer.getJob())) {
                 if (pPlayer.hasSkill(DemonSlayer.MAX_FURY)) {
                     pPlayer.getStat().setMp(pPlayer.getStat().getMp() + 10, pPlayer);
-                    pPlayer.updateSingleStat(MapleStat.MP, pPlayer.getStat().getMp());
+                    pPlayer.updateSingleStat(Stat.MP, pPlayer.getStat().getMp());
                 }
             }
             if (pPlayer.canRecover(tNow)) {

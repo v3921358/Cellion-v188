@@ -5,7 +5,7 @@ package server.commands;
 
 import client.ClientSocket;
 import client.MapleDisease;
-import client.MapleStat;
+import client.Stat;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryIdentifier;
@@ -71,41 +71,41 @@ public class CommandVault {
     public static class STR extends DistributeStatCommands {
 
         public STR() {
-            stat = MapleStat.STR;
+            stat = Stat.STR;
         }
     }
 
     public static class DEX extends DistributeStatCommands {
 
         public DEX() {
-            stat = MapleStat.DEX;
+            stat = Stat.DEX;
         }
     }
 
     public static class INT extends DistributeStatCommands {
 
         public INT() {
-            stat = MapleStat.INT;
+            stat = Stat.INT;
         }
     }
 
     public static class LUK extends DistributeStatCommands {
 
         public LUK() {
-            stat = MapleStat.LUK;
+            stat = Stat.LUK;
         }
     }
 
     public static class Hair extends DistributeStatCommands {
 
         public Hair() {
-            stat = MapleStat.HAIR;
+            stat = Stat.Hair;
         }
     }
 
     public abstract static class DistributeStatCommands extends CommandExecute {
 
-        protected MapleStat stat = null;
+        protected Stat stat = null;
         private static final int statLim = 5000;
         private static final int hpMpLim = 500000;
 
@@ -113,35 +113,35 @@ public class CommandVault {
             switch (stat) {
                 case STR:
                     player.getStat().setStr((short) (current + amount), player);
-                    player.updateSingleStat(MapleStat.STR, player.getStat().getStr());
+                    player.updateSingleStat(Stat.STR, player.getStat().getStr());
                     break;
                 case DEX:
                     player.getStat().setDex((short) (current + amount), player);
-                    player.updateSingleStat(MapleStat.DEX, player.getStat().getDex());
+                    player.updateSingleStat(Stat.DEX, player.getStat().getDex());
                     break;
                 case INT:
                     player.getStat().setInt((short) (current + amount), player);
-                    player.updateSingleStat(MapleStat.INT, player.getStat().getInt());
+                    player.updateSingleStat(Stat.INT, player.getStat().getInt());
                     break;
                 case LUK:
                     player.getStat().setLuk((short) (current + amount), player);
-                    player.updateSingleStat(MapleStat.LUK, player.getStat().getLuk());
+                    player.updateSingleStat(Stat.LUK, player.getStat().getLuk());
                     break;
-                case MAXHP:
+                case MaxHP:
                     long maxhp = Math.min(500000, Math.abs(current + amount * 30));
                     player.getStat().setMaxHp((short) (current + amount * 30), player);
                     player.getStat().setMaxHp((short) maxhp, player);
-                    player.updateSingleStat(MapleStat.HP, player.getStat().getHp());
+                    player.updateSingleStat(Stat.MaxHP, player.getStat().getHp());
                     break;
-                case IndieMMP:
+                case MaxMP:
                     long maxmp = Math.min(500000, Math.abs(current + amount));
                     player.getStat().setMaxMp((short) maxmp, player);
-                    player.updateSingleStat(MapleStat.MP, player.getStat().getMp());
+                    player.updateSingleStat(Stat.MaxMP, player.getStat().getMp());
                     break;
-                case HAIR:
+                case Hair:
                     int hair = amount;
                     player.setZeroBetaHair(hair);
-                    player.updateSingleStat(MapleStat.HAIR, player.getZeroBetaHair());
+                    player.updateSingleStat(Stat.Hair, player.getZeroBetaHair());
                     break;
             }
         }
@@ -156,9 +156,9 @@ public class CommandVault {
                     return player.getStat().getInt();
                 case LUK:
                     return player.getStat().getLuk();
-                case MAXHP:
+                case MaxHP:
                     return player.getStat().getMaxHp();
-                case IndieMMP:
+                case MaxMP:
                     return player.getStat().getMaxMp();
                 default:
                     throw new RuntimeException(); //Will never happen.
@@ -180,7 +180,7 @@ public class CommandVault {
             }
             int hpUsed = 0;
             int mpUsed = 0;
-            if (stat == MapleStat.IndieMMP) {
+            if (stat == Stat.MaxMP) {
                 mpUsed = change;
                 short job = c.getPlayer().getJob();
                 if (GameConstants.isDemonSlayer(job) || GameConstants.isAngelicBuster(job) || GameConstants.isDemonAvenger(job)) {
@@ -198,7 +198,7 @@ public class CommandVault {
                 c.getPlayer().dropMessage(5, "You don't have enough AP for that.");
                 return 0;
             }
-            if (getStat(c.getPlayer()) + change > hpMpLim && (stat == MapleStat.MAXHP || stat == MapleStat.IndieMMP)) {
+            if (getStat(c.getPlayer()) + change > hpMpLim && (stat == Stat.MaxHP || stat == Stat.MaxMP)) {
                 c.getPlayer().dropMessage(5, "The stat limit is " + hpMpLim + ".");
                 return 0;
             }
@@ -206,8 +206,8 @@ public class CommandVault {
             c.getPlayer().setRemainingAp((short) (c.getPlayer().getRemainingAp() - change));
             c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() + hpUsed));
             c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() + mpUsed));
-            c.getPlayer().updateSingleStat(MapleStat.AVAILABLEAP, c.getPlayer().getRemainingAp());
-            if (stat == MapleStat.MAXHP) {
+            c.getPlayer().updateSingleStat(Stat.AP, c.getPlayer().getRemainingAp());
+            if (stat == Stat.MaxHP) {
                 c.getPlayer().dropMessage(5, StringUtil.makeEnumHumanReadable(stat.name()) + " has been raised by " + change * 30 + ".");
                 c.getPlayer().reloadUser();
             } else {

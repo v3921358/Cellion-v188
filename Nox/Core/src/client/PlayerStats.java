@@ -701,9 +701,22 @@ public class PlayerStats implements Serializable {
             if (oldmaxhp != 0 && oldmaxhp != localmaxhp) {
                 pPlayer.updatePartyMemberHP();
             }
+            
+            updatePrimaryStats(pPlayer); // Call Update Stat Packet
         } finally {
             reLock.unlock();
         }
+    }
+    
+    private void updatePrimaryStats(User pPlayer) {
+        final Map<Stat, Long> aStatUpdates = new EnumMap<>(Stat.class);
+        aStatUpdates.put(Stat.MaxHP, (long) localmaxhp);
+        aStatUpdates.put(Stat.MaxMP, (long) localmaxmp);
+        aStatUpdates.put(Stat.STR, (long) localstr);
+        aStatUpdates.put(Stat.DEX, (long) localdex);
+        aStatUpdates.put(Stat.INT, (long) localint_);
+        aStatUpdates.put(Stat.LUK, (long) localluk);
+        pPlayer.SendPacket(WvsContext.OnPlayerStatChanged(pPlayer, new EnumMap<>(Stat.class)));
     }
 
     private void handleEquipPotentialStats(User pPlayer, int nRequiredLevel, int nPotentialID) {
@@ -3682,8 +3695,8 @@ public class PlayerStats implements Serializable {
 
     public void heal(User pPlayer) {
         heal_noUpdate(pPlayer);
-        pPlayer.updateSingleStat(MapleStat.HP, getCurrentMaxHp());
-        pPlayer.updateSingleStat(MapleStat.MP, getCurrentMaxMp(pPlayer.getJob()));
+        pPlayer.updateSingleStat(Stat.HP, getCurrentMaxHp());
+        pPlayer.updateSingleStat(Stat.MP, getCurrentMaxMp(pPlayer.getJob()));
     }
 
     public Pair<Integer, Integer> handleEquipAdditions(MapleItemInformationProvider ii, User pPlayer, boolean first_login, Map<Skill, SkillEntry> sData, final int itemId) {

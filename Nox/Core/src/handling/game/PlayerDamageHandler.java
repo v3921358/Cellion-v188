@@ -4,7 +4,7 @@ import java.awt.Point;
 
 import client.CharacterTemporaryStat;
 import client.ClientSocket;
-import client.MapleStat;
+import client.Stat;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
 import client.PlayerStats;
@@ -315,9 +315,9 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
         if (!pPlayer.isAlive()) {
             if (pPlayer.hasBuff(CharacterTemporaryStat.ReviveOnce)) {
                 pPlayer.getStat().setHp(pPlayer.getStat().getMaxHp(), pPlayer);
-                pPlayer.updateSingleStat(MapleStat.HP, pPlayer.getStat().getMaxHp());
+                pPlayer.updateSingleStat(Stat.HP, pPlayer.getStat().getMaxHp());
                 pPlayer.getStat().setMp(pPlayer.getStat().getMaxMp(), pPlayer);
-                pPlayer.updateSingleStat(MapleStat.MP, pPlayer.getStat().getMaxMp());
+                pPlayer.updateSingleStat(Stat.MP, pPlayer.getStat().getMaxMp());
                 pPlayer.dispelDebuffs();
                 pPlayer.cancelAllBuffs();
             }

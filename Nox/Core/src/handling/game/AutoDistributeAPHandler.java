@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.MapleStat;
+import client.Stat;
 import client.PlayerStats;
 import constants.GameConstants;
 import java.util.EnumMap;
@@ -35,14 +35,14 @@ public class AutoDistributeAPHandler implements ProcessPacket<ClientSocket> {
         int amount2 = 0;
 
         PlayerStats playerst = chr.getStat();
-        Map<MapleStat, Long> statupdate = new EnumMap<>(MapleStat.class);
+        Map<Stat, Long> statupdate = new EnumMap<>(Stat.class);
 
         if (!GameConstants.isXenon(chr.getJob())) {
             secondaryStat = iPacket.DecodeLong();
             amount2 = iPacket.DecodeInt();
         }
 
-        if (GameConstants.isDemonAvenger(chr.getJob()) && MapleStat.MAXHP.getValue() != 0) {
+        if (GameConstants.isDemonAvenger(chr.getJob()) && Stat.MaxHP.getValue() != 0) {
             if (chr.getRemainingAp() >= amount + amount2) {
                 int maxhp = playerst.getMaxHp();
                 if (chr.getHpApUsed() >= 10000 || maxhp >= 500000) {
@@ -52,12 +52,12 @@ public class AutoDistributeAPHandler implements ProcessPacket<ClientSocket> {
                 maxhp = Math.min(500000, Math.abs(maxhp));
                 chr.setHpApUsed((short) (chr.getHpApUsed() + chr.getRemainingAp()));
                 playerst.setMaxHp(maxhp, chr);
-                statupdate.put(MapleStat.MAXHP, (long) maxhp);
+                statupdate.put(Stat.MaxHP, (long) maxhp);
 
                 chr.setRemainingAp((short) (chr.getRemainingAp() - (amount)));
-                statupdate.put(MapleStat.AVAILABLEAP, (long) chr.getRemainingAp());
+                statupdate.put(Stat.AP, (long) chr.getRemainingAp());
 
-                c.SendPacket(WvsContext.updatePlayerStats(statupdate, true, chr));
+                c.SendPacket(WvsContext.OnPlayerStatChanged(chr, statupdate));
             }
         }
 
@@ -66,55 +66,55 @@ public class AutoDistributeAPHandler implements ProcessPacket<ClientSocket> {
         }
 
         if (chr.getRemainingAp() >= amount + amount2) {
-            if ((primaryStat & MapleStat.STR.getValue()) != 0) {
+            if ((primaryStat & Stat.STR.getValue()) != 0) {
                 playerst.setStr((short) (playerst.getStr() + amount), chr);
-                statupdate.put(MapleStat.STR, Long.valueOf(playerst.getStr()));
+                statupdate.put(Stat.STR, Long.valueOf(playerst.getStr()));
             }
-            if ((primaryStat & MapleStat.DEX.getValue()) != 0) {
+            if ((primaryStat & Stat.DEX.getValue()) != 0) {
                 playerst.setDex((short) (playerst.getDex() + amount), chr);
-                statupdate.put(MapleStat.DEX, Long.valueOf(playerst.getDex()));
+                statupdate.put(Stat.DEX, Long.valueOf(playerst.getDex()));
             }
-            if ((primaryStat & MapleStat.INT.getValue()) != 0) {
+            if ((primaryStat & Stat.INT.getValue()) != 0) {
                 playerst.setInt((short) (playerst.getInt() + amount), chr);
-                statupdate.put(MapleStat.INT, Long.valueOf(playerst.getInt()));
+                statupdate.put(Stat.INT, Long.valueOf(playerst.getInt()));
             }
-            if ((primaryStat & MapleStat.LUK.getValue()) != 0) {
+            if ((primaryStat & Stat.LUK.getValue()) != 0) {
                 playerst.setLuk((short) (playerst.getLuk() + amount), chr);
-                statupdate.put(MapleStat.LUK, Long.valueOf(playerst.getLuk()));
+                statupdate.put(Stat.LUK, Long.valueOf(playerst.getLuk()));
             }
-            if ((primaryStat & MapleStat.MAXHP.getValue()) != 0) {
+            if ((primaryStat & Stat.MaxHP.getValue()) != 0) {
                 if (playerst.getMaxHp() + (amount * 30) > 500000) {
                     return;
                 }
                 playerst.setMaxHp((short) (playerst.getMaxHp() + amount * 30), chr);
-                statupdate.put(MapleStat.MAXHP, Long.valueOf(playerst.getMaxHp()));
+                statupdate.put(Stat.MaxHP, Long.valueOf(playerst.getMaxHp()));
             }
-            if ((secondaryStat & MapleStat.STR.getValue()) != 0) {
+            if ((secondaryStat & Stat.STR.getValue()) != 0) {
                 playerst.setStr((short) (playerst.getStr() + amount2), chr);
-                statupdate.put(MapleStat.STR, Long.valueOf(playerst.getStr()));
+                statupdate.put(Stat.STR, Long.valueOf(playerst.getStr()));
             }
-            if ((secondaryStat & MapleStat.DEX.getValue()) != 0) {
+            if ((secondaryStat & Stat.DEX.getValue()) != 0) {
                 playerst.setDex((short) (playerst.getDex() + amount2), chr);
-                statupdate.put(MapleStat.DEX, Long.valueOf(playerst.getDex()));
+                statupdate.put(Stat.DEX, Long.valueOf(playerst.getDex()));
             }
-            if ((secondaryStat & MapleStat.INT.getValue()) != 0) {
+            if ((secondaryStat & Stat.INT.getValue()) != 0) {
                 playerst.setInt((short) (playerst.getInt() + amount2), chr);
-                statupdate.put(MapleStat.INT, Long.valueOf(playerst.getInt()));
+                statupdate.put(Stat.INT, Long.valueOf(playerst.getInt()));
             }
-            if ((secondaryStat & MapleStat.LUK.getValue()) != 0) {
+            if ((secondaryStat & Stat.LUK.getValue()) != 0) {
                 playerst.setLuk((short) (playerst.getLuk() + amount2), chr);
-                statupdate.put(MapleStat.LUK, Long.valueOf(playerst.getLuk()));
+                statupdate.put(Stat.LUK, Long.valueOf(playerst.getLuk()));
             }
-            if ((secondaryStat & MapleStat.MAXHP.getValue()) != 0) {
+            if ((secondaryStat & Stat.MaxHP.getValue()) != 0) {
                 if (playerst.getMaxHp() + (amount2 * 30) > 500000) {
                     return;
                 }
                 playerst.setMaxHp((short) (playerst.getMaxHp() + amount2 * 30), chr);
-                statupdate.put(MapleStat.MAXHP, Long.valueOf(playerst.getMaxHp()));
+                statupdate.put(Stat.MaxHP, Long.valueOf(playerst.getMaxHp()));
             }
             chr.setRemainingAp((short) (chr.getRemainingAp() - (amount + amount2)));
-            statupdate.put(MapleStat.AVAILABLEAP, (long) chr.getRemainingAp());
-            c.SendPacket(WvsContext.updatePlayerStats(statupdate, true, chr));
+            statupdate.put(Stat.AP, (long) chr.getRemainingAp());
+            c.SendPacket(WvsContext.OnPlayerStatChanged(chr, statupdate));
         }
     }
 

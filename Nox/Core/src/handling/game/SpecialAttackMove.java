@@ -490,9 +490,9 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 for (User pCharacter : pPlayer.getMap().getCharacters()) {
                     if (pCharacter != null) {
                         pCharacter.getStat().setHp(pCharacter.getStat().getMaxHp(), pCharacter);
-                        pCharacter.updateSingleStat(MapleStat.HP, pCharacter.getStat().getMaxHp());
+                        pCharacter.updateSingleStat(Stat.HP, pCharacter.getStat().getMaxHp());
                         pCharacter.getStat().setMp(pCharacter.getStat().getMaxMp(), pCharacter);
-                        pCharacter.updateSingleStat(MapleStat.MP, pCharacter.getStat().getMaxMp());
+                        pCharacter.updateSingleStat(Stat.MP, pCharacter.getStat().getMaxMp());
                         pCharacter.dispelDebuffs();
                     }
                 }
@@ -503,9 +503,9 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 for (User pCharacter : pPlayer.getMap().getCharacters()) {
                     if (pCharacter != null && pCharacter.getParty() == pPlayer.getParty()) {
                         pCharacter.getStat().setHp(pCharacter.getStat().getMaxHp(), pCharacter);
-                        pCharacter.updateSingleStat(MapleStat.HP, pCharacter.getStat().getMaxHp());
+                        pCharacter.updateSingleStat(Stat.HP, pCharacter.getStat().getMaxHp());
                         pCharacter.getStat().setMp(pCharacter.getStat().getMaxMp(), pCharacter);
-                        pCharacter.updateSingleStat(MapleStat.MP, pCharacter.getStat().getMaxMp());
+                        pCharacter.updateSingleStat(Stat.MP, pCharacter.getStat().getMaxMp());
                         pCharacter.dispelDebuffs();
                     }
                 }
@@ -518,7 +518,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                         int nFinalHp = pCharacter.getStat().getHp() + nHpRecovery;
 
                         pCharacter.getStat().setHp(nFinalHp, pCharacter);
-                        pCharacter.updateSingleStat(MapleStat.HP, nFinalHp);
+                        pCharacter.updateSingleStat(Stat.HP, nFinalHp);
                         pCharacter.dispelDebuffs();
                     }
                 }

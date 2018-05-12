@@ -5,7 +5,6 @@ import client.CharacterTemporaryStat;
 /**
  * StatInfo
  * @author AlphaEta
- * @author Mazen Massoud
  */
 public enum StatInfo {
 

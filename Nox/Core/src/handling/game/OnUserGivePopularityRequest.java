@@ -22,7 +22,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.MapleStat;
+import client.Stat;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.WvsContext;
@@ -55,7 +55,7 @@ public final class OnUserGivePopularityRequest implements ProcessPacket<ClientSo
             case OK:
                 if (Math.abs(target.getFame() + famechange) <= 99999) {
                     target.addFame(famechange);
-                    target.updateSingleStat(MapleStat.FAME, target.getFame());
+                    target.updateSingleStat(Stat.Fame, target.getFame());
                 }
                 if (!chr.isGM()) {
                     chr.hasGivenFame(target);

@@ -23,7 +23,7 @@ package handling.game;
 
 import client.CharacterTemporaryStat;
 import client.ClientSocket;
-import client.MapleStat;
+import client.Stat;
 import client.Skill;
 import client.SkillFactory;
 import constants.skills.DualBlade;
@@ -57,7 +57,7 @@ public final class BuffCancel implements ProcessPacket<ClientSocket> {
         
         if (nSourceID == DualBlade.ASURAS_ANGER) {
             pPlayer.getStat().setHp(0, pPlayer);
-            pPlayer.updateSingleStat(MapleStat.HP, 0);
+            pPlayer.updateSingleStat(Stat.HP, 0);
             pPlayer.getClient().SendPacket(WvsContext.enableActions());
         }
         

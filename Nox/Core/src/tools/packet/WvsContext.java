@@ -2,7 +2,7 @@ package tools.packet;
 
 import client.*;
 import client.MapleSpecialStats.MapleSpecialStatUpdateType;
-import client.MapleStat.Temp;
+import client.Stat.Temp;
 import client.buddy.Buddy;
 import client.buddy.BuddyList;
 import client.buddy.BuddylistEntry;
@@ -195,148 +195,328 @@ public class WvsContext {
         return oPacket;
     }
 
-    public static OutPacket enableActions() {
-        return updatePlayerStats(new EnumMap<>(MapleStat.class), true, null);
+    public static OutPacket oldEnableActions() {
+        return updatePlayerStats(new EnumMap<>(Stat.class), true, null);
     }
 
-    public static OutPacket updatePlayerStats(Map<MapleStat, Long> stats, User chr) {
-        return updatePlayerStats(stats, false, chr);
-    }
-
-    public static OutPacket updatePlayerStats(Map<MapleStat, Long> mystats, boolean itemReaction, User chr) {
-
+    /**
+     * StatChanged Packet
+     * Updates the characters stats in the game client.
+     * 
+     * @param pPlayer
+     * @param aStats
+     * @param bExclRequest
+     * @param nMixBaseHairColor
+     * @param nMixAddHairColor
+     * @param nMixHairBaseProb
+     * @param nCharm
+     * @param bUpdateCovery
+     * @param nHPRecovery
+     * @param nMPRecovery
+     */
+    public static OutPacket OnPlayerStatChanged(User pPlayer, Map<Stat, Long> aStats, boolean bExclRequest, byte nMixBaseHairColor, 
+        byte nMixAddHairColor, byte nMixHairBaseProb, byte nCharm, boolean bUpdateCovery, int nHPRecovery, int nMPRecovery) {
+        
         OutPacket oPacket = new OutPacket(SendPacketOpcode.StatChanged.getValue());
-        oPacket.EncodeBool(itemReaction);
-        long flag = 0;
-        if (mystats != null) {
-            for (MapleStat statupdate : mystats.keySet()) {
-                flag |= statupdate.getValue();
+        oPacket.EncodeBool(bExclRequest);
+        
+        long nFlag = 0;
+        if (aStats != null) {
+            for (Stat pStatUpdate : aStats.keySet()) {
+                nFlag |= pStatUpdate.getValue();
             }
         }
-        oPacket.EncodeLong(flag);
-
-        if ((flag & MapleStat.SKIN.getValue()) != 0) {
-            oPacket.EncodeByte(mystats.get(MapleStat.SKIN).byteValue());
+        oPacket.EncodeLong(nFlag);
+        
+        if ((nFlag & Stat.Skin.getValue()) != 0) {
+            oPacket.EncodeByte(aStats.get(Stat.Skin).byteValue());
         }
-        if ((flag & MapleStat.FACE.getValue()) != 0) {
-            oPacket.EncodeInt(mystats.get(MapleStat.FACE).intValue());
+        if ((nFlag & Stat.Face.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.Face).intValue());
         }
-        if ((flag & MapleStat.HAIR.getValue()) != 0) {
-            oPacket.EncodeInt(mystats.get(MapleStat.HAIR).intValue());
+        if ((nFlag & Stat.Hair.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.Hair).intValue());
         }
-        if ((flag & MapleStat.LEVEL.getValue()) != 0) {
-            oPacket.EncodeByte(mystats.get(MapleStat.LEVEL).byteValue());
+        if ((nFlag & Stat.Level.getValue()) != 0) {
+            oPacket.EncodeByte(aStats.get(Stat.Level).byteValue());
         }
-        if ((flag & MapleStat.JOB.getValue()) != 0) {
-            oPacket.EncodeShort(mystats.get(MapleStat.JOB).shortValue());
-            oPacket.EncodeShort(chr.getSubcategory());
+        if ((nFlag & Stat.Job.getValue()) != 0) {
+            oPacket.EncodeShort(aStats.get(Stat.Job).shortValue());
+            oPacket.EncodeShort(pPlayer.getSubcategory());
         }
-        if ((flag & MapleStat.STR.getValue()) != 0) {
-            oPacket.EncodeShort(mystats.get(MapleStat.STR).shortValue());
+        if ((nFlag & Stat.STR.getValue()) != 0) {
+            oPacket.EncodeShort(aStats.get(Stat.STR).shortValue());
         }
-        if ((flag & MapleStat.DEX.getValue()) != 0) {
-            oPacket.EncodeShort(mystats.get(MapleStat.DEX).shortValue());
+        if ((nFlag & Stat.DEX.getValue()) != 0) {
+            oPacket.EncodeShort(aStats.get(Stat.DEX).shortValue());
         }
-        if ((flag & MapleStat.INT.getValue()) != 0) {
-            oPacket.EncodeShort(mystats.get(MapleStat.INT).shortValue());
+        if ((nFlag & Stat.INT.getValue()) != 0) {
+            oPacket.EncodeShort(aStats.get(Stat.INT).shortValue());
         }
-        if ((flag & MapleStat.LUK.getValue()) != 0) {
-            oPacket.EncodeShort(mystats.get(MapleStat.LUK).shortValue());
+        if ((nFlag & Stat.LUK.getValue()) != 0) {
+            oPacket.EncodeShort(aStats.get(Stat.LUK).shortValue());
         }
-        if ((flag & MapleStat.HP.getValue()) != 0) {
-            oPacket.EncodeInt(mystats.get(MapleStat.HP).intValue());
+        if ((nFlag & Stat.HP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.HP).intValue());
         }
-        if ((flag & MapleStat.MAXHP.getValue()) != 0) {
-            oPacket.EncodeInt(mystats.get(MapleStat.MAXHP).intValue());
+        if ((nFlag & Stat.MaxHP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.MaxHP).intValue());
         }
-        if ((flag & MapleStat.MP.getValue()) != 0) {
-            oPacket.EncodeInt(mystats.get(MapleStat.MP).intValue());
+        if ((nFlag & Stat.MP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.MP).intValue());
         }
-        if ((flag & MapleStat.IndieMMP.getValue()) != 0) {
-            oPacket.EncodeInt(mystats.get(MapleStat.IndieMMP).intValue());
+        if ((nFlag & Stat.MaxMP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.MaxMP).intValue());
         }
-        if ((flag & MapleStat.AVAILABLEAP.getValue()) != 0) {
-            oPacket.EncodeShort(mystats.get(MapleStat.AVAILABLEAP).shortValue());
+        if ((nFlag & Stat.AP.getValue()) != 0) {
+            oPacket.EncodeShort(aStats.get(Stat.AP).shortValue());
         }
-        if ((flag & MapleStat.AVAILABLESP.getValue()) != 0) {
-            if (GameConstants.isExtendedSpJob(chr.getJob())) {
-                oPacket.EncodeByte(chr.getRemainingSpSize());
-                for (int i = 0; i < chr.getRemainingSps().length; i++) {
-                    if (chr.getRemainingSp(i) > 0) {
+        if ((nFlag & Stat.SP.getValue()) != 0) {
+            if (GameConstants.isExtendedSpJob(pPlayer.getJob())) {
+                oPacket.EncodeByte(pPlayer.getRemainingSpSize());
+                for (int i = 0; i < pPlayer.getRemainingSps().length; i++) {
+                    if (pPlayer.getRemainingSp(i) > 0) {
                         oPacket.EncodeByte(i + 1);
-                        oPacket.EncodeInt(chr.getRemainingSp(i));
+                        oPacket.EncodeInt(pPlayer.getRemainingSp(i));
                     }
                 }
             } else {
-                oPacket.EncodeShort(chr.getRemainingSp());
+                oPacket.EncodeShort(pPlayer.getRemainingSp());
             }
         }
-        if ((flag & MapleStat.EXP.getValue()) != 0) {
-            oPacket.EncodeLong(mystats.get(MapleStat.EXP));
+        if ((nFlag & Stat.EXP.getValue()) != 0) {
+            oPacket.EncodeLong(aStats.get(Stat.EXP));
         }
-        if ((flag & MapleStat.FAME.getValue()) != 0) {
-            oPacket.EncodeInt(mystats.get(MapleStat.FAME).intValue());
+        if ((nFlag & Stat.Fame.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.Fame).intValue());
         }
-        if ((flag & MapleStat.MESO.getValue()) != 0) {
-            oPacket.EncodeLong(mystats.get(MapleStat.MESO));
+        if ((nFlag & Stat.Meso.getValue()) != 0) {
+            oPacket.EncodeLong(aStats.get(Stat.Meso));
         }
-        if ((flag & MapleStat.FATIGUE.getValue()) != 0) {
-            oPacket.EncodeByte(mystats.get(MapleStat.FATIGUE).byteValue());
+        if ((nFlag & Stat.Fatigue.getValue()) != 0) {
+            oPacket.EncodeByte(aStats.get(Stat.Fatigue).byteValue());
         }
-        if ((flag & MapleStat.CHARISMA.getValue()) != 0) {
-            oPacket.EncodeInt(mystats.get(MapleStat.CHARISMA).intValue());
+        if ((nFlag & Stat.CharismaEXP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.CharismaEXP).intValue());
         }
-        if ((flag & MapleStat.INSIGHT.getValue()) != 0) {
-            oPacket.EncodeInt(mystats.get(MapleStat.INSIGHT).intValue());
+        if ((nFlag & Stat.InsightEXP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.InsightEXP).intValue());
         }
-        if ((flag & MapleStat.WILL.getValue()) != 0) {
-            oPacket.EncodeInt(mystats.get(MapleStat.WILL).intValue());
+        if ((nFlag & Stat.WillEXP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.WillEXP).intValue());
         }
-        if ((flag & MapleStat.CRAFT.getValue()) != 0) {
-            oPacket.EncodeInt(mystats.get(MapleStat.CRAFT).intValue());
+        if ((nFlag & Stat.CraftEXP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.CraftEXP).intValue());
         }
-        if ((flag & MapleStat.SENSE.getValue()) != 0) {
-            oPacket.EncodeInt(mystats.get(MapleStat.SENSE).intValue());
+        if ((nFlag & Stat.SenseEXP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.SenseEXP).intValue());
         }
-        if ((flag & MapleStat.CHARM.getValue()) != 0) {
-            oPacket.EncodeInt(mystats.get(MapleStat.CHARM).intValue());
+        if ((nFlag & Stat.CharmEXP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.CharmEXP).intValue());
         }
-        if ((flag & MapleStat.TRAIT_LIMIT.getValue()) != 0) {
-            oPacket.EncodeShort(mystats.get(MapleStat.CHARISMA).shortValue());
-            oPacket.EncodeShort(mystats.get(MapleStat.INSIGHT).shortValue());
-            oPacket.EncodeShort(mystats.get(MapleStat.WILL).shortValue());
-            oPacket.EncodeShort(mystats.get(MapleStat.CRAFT).shortValue());
-            oPacket.EncodeShort(mystats.get(MapleStat.SENSE).shortValue());
-            oPacket.EncodeShort(mystats.get(MapleStat.CHARM).shortValue());
+        if ((nFlag & Stat.DayLimit.getValue()) != 0) {
+            oPacket.EncodeShort(aStats.get(Stat.CharismaEXP).shortValue());
+            oPacket.EncodeShort(aStats.get(Stat.InsightEXP).shortValue());
+            oPacket.EncodeShort(aStats.get(Stat.WillEXP).shortValue());
+            oPacket.EncodeShort(aStats.get(Stat.CraftEXP).shortValue());
+            oPacket.EncodeShort(aStats.get(Stat.SenseEXP).shortValue());
+            oPacket.EncodeShort(aStats.get(Stat.CharmEXP).shortValue());
             oPacket.EncodeByte(0);
             oPacket.EncodeLong(PacketHelper.getTime(-2));
         }
-        if ((flag & MapleStat.ALBA_ACTIVITY.getValue()) != 0) {
+        if ((nFlag & Stat.AlbaActivity.getValue()) != 0) {
+            oPacket.EncodeByte(0); // nAlbaActivityID
+            oPacket.EncodeInt(0);  // nAlbaStartTime.dwHighDateTime
+            oPacket.EncodeInt(0);  // nAlbaStartTime.dwLowDateTime
+            oPacket.EncodeInt(0);  // nAlbaDuration
+            oPacket.EncodeByte(0); // nAlbaSpecialReward
+        }
+        if ((nFlag & Stat.CharacterCard.getValue()) != 0) {
+            pPlayer.getCharacterCard().connectData(oPacket);
+        }
+        if ((nFlag & Stat.PvpEXP.getValue()) != 0) {
+            oPacket.EncodeInt(0);  // nExp
+            oPacket.EncodeByte(0); // nGrade
+            oPacket.EncodeInt(0);  // nPoint
+        }
+        if ((nFlag & Stat.PvpRank.getValue()) != 0) {
+            oPacket.EncodeByte(0); // nPvPModeLevel
+            oPacket.EncodeByte(0); // nPvPModeType
+        }
+        if ((nFlag & Stat.PvpPoints.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.PvpPoints).intValue()); // nEventPoint
+        }
+        
+        oPacket.EncodeByte(nMixBaseHairColor);
+        oPacket.EncodeByte(nMixAddHairColor);
+        oPacket.EncodeByte(nMixHairBaseProb);
+        
+        oPacket.EncodeBool(nCharm > 0);
+        if (nCharm > 0) {
+            oPacket.EncodeByte(nCharm);
+        }
+        
+        oPacket.EncodeBool(bUpdateCovery);
+        if (bUpdateCovery) {
+            oPacket.EncodeInt(nHPRecovery);
+            oPacket.EncodeInt(nMPRecovery);
+        }
+                
+        return oPacket;
+    }
+    
+    public static OutPacket OnPlayerStatChanged(User pPlayer, Map<Stat, Long> aStats) {
+        return OnPlayerStatChanged(pPlayer, aStats, false, (byte) 0, (byte) 0, (byte) 0, (byte) 0, false, 0, 0);
+    }
+    
+    public static OutPacket enableActions() {
+        return OnPlayerStatChanged(null, new EnumMap<>(Stat.class));
+    }
+    
+    /**
+     * Old Packet for Player StatChanged
+     * @param stats
+     * @param chr
+     * @return 
+     */
+    public static OutPacket updatePlayerStats(Map<Stat, Long> stats, User chr) {
+        return updatePlayerStats(stats, false, chr);
+    }
+
+    public static OutPacket updatePlayerStats(Map<Stat, Long> aStats, boolean bItemReaction, User pPlayer) {
+
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.StatChanged.getValue());
+        oPacket.EncodeBool(bItemReaction);
+        long nFlag = 0;
+        if (aStats != null) {
+            for (Stat statupdate : aStats.keySet()) {
+                nFlag |= statupdate.getValue();
+            }
+        }
+        oPacket.EncodeLong(nFlag);
+
+        if ((nFlag & Stat.Skin.getValue()) != 0) {
+            oPacket.EncodeByte(aStats.get(Stat.Skin).byteValue());
+        }
+        if ((nFlag & Stat.Face.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.Face).intValue());
+        }
+        if ((nFlag & Stat.Hair.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.Hair).intValue());
+        }
+        if ((nFlag & Stat.Level.getValue()) != 0) {
+            oPacket.EncodeByte(aStats.get(Stat.Level).byteValue());
+        }
+        if ((nFlag & Stat.Job.getValue()) != 0) {
+            oPacket.EncodeShort(aStats.get(Stat.Job).shortValue());
+            oPacket.EncodeShort(pPlayer.getSubcategory());
+        }
+        if ((nFlag & Stat.STR.getValue()) != 0) {
+            oPacket.EncodeShort(aStats.get(Stat.STR).shortValue());
+        }
+        if ((nFlag & Stat.DEX.getValue()) != 0) {
+            oPacket.EncodeShort(aStats.get(Stat.DEX).shortValue());
+        }
+        if ((nFlag & Stat.INT.getValue()) != 0) {
+            oPacket.EncodeShort(aStats.get(Stat.INT).shortValue());
+        }
+        if ((nFlag & Stat.LUK.getValue()) != 0) {
+            oPacket.EncodeShort(aStats.get(Stat.LUK).shortValue());
+        }
+        if ((nFlag & Stat.HP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.HP).intValue());
+        }
+        if ((nFlag & Stat.MaxHP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.MaxHP).intValue());
+        }
+        if ((nFlag & Stat.MP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.MP).intValue());
+        }
+        if ((nFlag & Stat.MaxMP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.MaxMP).intValue());
+        }
+        if ((nFlag & Stat.AP.getValue()) != 0) {
+            oPacket.EncodeShort(aStats.get(Stat.AP).shortValue());
+        }
+        if ((nFlag & Stat.SP.getValue()) != 0) {
+            if (GameConstants.isExtendedSpJob(pPlayer.getJob())) {
+                oPacket.EncodeByte(pPlayer.getRemainingSpSize());
+                for (int i = 0; i < pPlayer.getRemainingSps().length; i++) {
+                    if (pPlayer.getRemainingSp(i) > 0) {
+                        oPacket.EncodeByte(i + 1);
+                        oPacket.EncodeInt(pPlayer.getRemainingSp(i));
+                    }
+                }
+            } else {
+                oPacket.EncodeShort(pPlayer.getRemainingSp());
+            }
+        }
+        if ((nFlag & Stat.EXP.getValue()) != 0) {
+            oPacket.EncodeLong(aStats.get(Stat.EXP));
+        }
+        if ((nFlag & Stat.Fame.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.Fame).intValue());
+        }
+        if ((nFlag & Stat.Meso.getValue()) != 0) {
+            oPacket.EncodeLong(aStats.get(Stat.Meso));
+        }
+        if ((nFlag & Stat.Fatigue.getValue()) != 0) {
+            oPacket.EncodeByte(aStats.get(Stat.Fatigue).byteValue());
+        }
+        if ((nFlag & Stat.CharismaEXP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.CharismaEXP).intValue());
+        }
+        if ((nFlag & Stat.InsightEXP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.InsightEXP).intValue());
+        }
+        if ((nFlag & Stat.WillEXP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.WillEXP).intValue());
+        }
+        if ((nFlag & Stat.CraftEXP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.CraftEXP).intValue());
+        }
+        if ((nFlag & Stat.SenseEXP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.SenseEXP).intValue());
+        }
+        if ((nFlag & Stat.CharmEXP.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.CharmEXP).intValue());
+        }
+        if ((nFlag & Stat.DayLimit.getValue()) != 0) {
+            oPacket.EncodeShort(aStats.get(Stat.CharismaEXP).shortValue());
+            oPacket.EncodeShort(aStats.get(Stat.InsightEXP).shortValue());
+            oPacket.EncodeShort(aStats.get(Stat.WillEXP).shortValue());
+            oPacket.EncodeShort(aStats.get(Stat.CraftEXP).shortValue());
+            oPacket.EncodeShort(aStats.get(Stat.SenseEXP).shortValue());
+            oPacket.EncodeShort(aStats.get(Stat.CharmEXP).shortValue());
+            oPacket.EncodeByte(0);
+            oPacket.EncodeLong(PacketHelper.getTime(-2));
+        }
+        if ((nFlag & Stat.AlbaActivity.getValue()) != 0) {
             oPacket.EncodeByte(0);//AlbaActivityID
             oPacket.EncodeInt(0);//AlbaStartTime.dwHighDateTime
             oPacket.EncodeInt(0);//AlbaStartTime.dwLowDateTime
             oPacket.EncodeInt(0);//AlbaDuration
             oPacket.EncodeByte(0);//AlbaSpecialReward
         }
-        if ((flag & MapleStat.CHARACTER_CARD_UPDATE.getValue()) != 0) {
-            chr.getCharacterCard().connectData(oPacket);
+        if ((nFlag & Stat.CharacterCard.getValue()) != 0) {
+            pPlayer.getCharacterCard().connectData(oPacket);
         }
-        if ((flag & MapleStat.BATTLE_EXP.getValue()) != 0) {
+        if ((nFlag & Stat.PvpEXP.getValue()) != 0) {
             oPacket.EncodeInt(0); //pvp exp
             oPacket.EncodeByte(0);// grade
             oPacket.EncodeInt(0); //point
         }
-        if ((flag & MapleStat.BATTLE_RANK.getValue()) != 0) {
+        if ((nFlag & Stat.PvpRank.getValue()) != 0) {
             oPacket.EncodeByte(0); //nPvPModeLevel
             oPacket.EncodeByte(0); //nPvPModeType
         }
-        if ((flag & MapleStat.BATTLE_POINTS.getValue()) != 0) {
-            oPacket.EncodeInt(mystats.get(MapleStat.BATTLE_POINTS).intValue()); //EventPoint
+        if ((nFlag & Stat.PvpPoints.getValue()) != 0) {
+            oPacket.EncodeInt(aStats.get(Stat.PvpPoints).intValue()); //EventPoint
         }
         oPacket.EncodeByte(-1);//nMixBaseHairColor
         oPacket.EncodeByte(0);//nMixAddHairColor
         oPacket.EncodeByte(0);//nMixHairBaseProb
-        if (flag == 0 && !itemReaction) {
+        if (nFlag == 0 && !bItemReaction) {
             oPacket.EncodeByte(1);
         }
         oPacket.EncodeByte(0);
@@ -368,61 +548,61 @@ public class WvsContext {
     }
 
     public static OutPacket setTemporaryStats(short str, short dex, short _int, short luk, short watk, short matk, short acc, short avoid, short speed, short jump) {
-        Map<Temp, Integer> stats = new EnumMap<>(MapleStat.Temp.class);
+        Map<Temp, Integer> stats = new EnumMap<>(Stat.Temp.class);
 
-        stats.put(MapleStat.Temp.STR, Integer.valueOf(str));
-        stats.put(MapleStat.Temp.DEX, Integer.valueOf(dex));
-        stats.put(MapleStat.Temp.INT, Integer.valueOf(_int));
-        stats.put(MapleStat.Temp.LUK, Integer.valueOf(luk));
-        stats.put(MapleStat.Temp.WATK, Integer.valueOf(watk));
-        stats.put(MapleStat.Temp.MATK, Integer.valueOf(matk));
-        stats.put(MapleStat.Temp.ACC, Integer.valueOf(acc));
-        stats.put(MapleStat.Temp.EVA, Integer.valueOf(avoid));
-        stats.put(MapleStat.Temp.SPEED, Integer.valueOf(speed));
-        stats.put(MapleStat.Temp.JUMP, Integer.valueOf(jump));
+        stats.put(Stat.Temp.STR, Integer.valueOf(str));
+        stats.put(Stat.Temp.DEX, Integer.valueOf(dex));
+        stats.put(Stat.Temp.INT, Integer.valueOf(_int));
+        stats.put(Stat.Temp.LUK, Integer.valueOf(luk));
+        stats.put(Stat.Temp.WATK, Integer.valueOf(watk));
+        stats.put(Stat.Temp.MATK, Integer.valueOf(matk));
+        stats.put(Stat.Temp.ACC, Integer.valueOf(acc));
+        stats.put(Stat.Temp.EVA, Integer.valueOf(avoid));
+        stats.put(Stat.Temp.SPEED, Integer.valueOf(speed));
+        stats.put(Stat.Temp.JUMP, Integer.valueOf(jump));
 
         return temporaryStats(stats);
     }
 
     public static OutPacket temporaryStats_Aran() {
-        Map<Temp, Integer> stats = new EnumMap<>(MapleStat.Temp.class);
+        Map<Temp, Integer> stats = new EnumMap<>(Stat.Temp.class);
 
-        stats.put(MapleStat.Temp.STR, Integer.valueOf(999));
-        stats.put(MapleStat.Temp.DEX, Integer.valueOf(999));
-        stats.put(MapleStat.Temp.INT, Integer.valueOf(999));
-        stats.put(MapleStat.Temp.LUK, Integer.valueOf(999));
-        stats.put(MapleStat.Temp.WATK, Integer.valueOf(255));
-        stats.put(MapleStat.Temp.ACC, Integer.valueOf(999));
-        stats.put(MapleStat.Temp.EVA, Integer.valueOf(999));
-        stats.put(MapleStat.Temp.SPEED, Integer.valueOf(140));
-        stats.put(MapleStat.Temp.JUMP, Integer.valueOf(120));
+        stats.put(Stat.Temp.STR, Integer.valueOf(999));
+        stats.put(Stat.Temp.DEX, Integer.valueOf(999));
+        stats.put(Stat.Temp.INT, Integer.valueOf(999));
+        stats.put(Stat.Temp.LUK, Integer.valueOf(999));
+        stats.put(Stat.Temp.WATK, Integer.valueOf(255));
+        stats.put(Stat.Temp.ACC, Integer.valueOf(999));
+        stats.put(Stat.Temp.EVA, Integer.valueOf(999));
+        stats.put(Stat.Temp.SPEED, Integer.valueOf(140));
+        stats.put(Stat.Temp.JUMP, Integer.valueOf(120));
 
         return temporaryStats(stats);
     }
 
     public static OutPacket temporaryStats_Balrog(User chr) {
-        Map<Temp, Integer> stats = new EnumMap<>(MapleStat.Temp.class);
+        Map<Temp, Integer> stats = new EnumMap<>(Stat.Temp.class);
 
         int offset = 1 + (chr.getLevel() - 90) / 20;
-        stats.put(MapleStat.Temp.STR, Integer.valueOf(chr.getStat().getTotalStr() / offset));
-        stats.put(MapleStat.Temp.DEX, Integer.valueOf(chr.getStat().getTotalDex() / offset));
-        stats.put(MapleStat.Temp.INT, Integer.valueOf(chr.getStat().getTotalInt() / offset));
-        stats.put(MapleStat.Temp.LUK, Integer.valueOf(chr.getStat().getTotalLuk() / offset));
-        stats.put(MapleStat.Temp.WATK, Integer.valueOf(chr.getStat().getTotalWatk() / offset));
-        stats.put(MapleStat.Temp.MATK, Integer.valueOf(chr.getStat().getTotalMagic() / offset));
+        stats.put(Stat.Temp.STR, Integer.valueOf(chr.getStat().getTotalStr() / offset));
+        stats.put(Stat.Temp.DEX, Integer.valueOf(chr.getStat().getTotalDex() / offset));
+        stats.put(Stat.Temp.INT, Integer.valueOf(chr.getStat().getTotalInt() / offset));
+        stats.put(Stat.Temp.LUK, Integer.valueOf(chr.getStat().getTotalLuk() / offset));
+        stats.put(Stat.Temp.WATK, Integer.valueOf(chr.getStat().getTotalWatk() / offset));
+        stats.put(Stat.Temp.MATK, Integer.valueOf(chr.getStat().getTotalMagic() / offset));
 
         return temporaryStats(stats);
     }
 
-    public static OutPacket temporaryStats(Map<MapleStat.Temp, Integer> mystats) {
+    public static OutPacket temporaryStats(Map<Stat.Temp, Integer> mystats) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.ForcedStatSet.getValue());
         int updateMask = 0;
-        for (MapleStat.Temp statupdate : mystats.keySet()) {
+        for (Stat.Temp statupdate : mystats.keySet()) {
             updateMask |= statupdate.getValue();
         }
         oPacket.EncodeInt(updateMask);
-        for (final Entry<MapleStat.Temp, Integer> statupdate : mystats.entrySet()) {
+        for (final Entry<Stat.Temp, Integer> statupdate : mystats.entrySet()) {
             switch (statupdate.getKey()) {
                 case SPEED:
                 case JUMP:
@@ -4181,107 +4361,5 @@ public class WvsContext {
             oPacket.EncodeInt(nStealSkillID);
         }
         return oPacket;
-    }
-
-    public static class FriendPacket {
-
-        /*public static OutPacket declinedRequest(String declinedName) {
-            
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FriendResult.getValue());
-            oPacket.Encode(FriendType.DECLINE_MESSAGE.getValue());
-            oPacket.EncodeString(declinedName);
-
-            return oPacket;
-        }
-
-        public static OutPacket updateBuddylist(Collection<FriendEntry> buddylist) {
-            return updateBuddylist(buddylist, false, false);
-        }
-
-        public static OutPacket updateBuddylist(Collection<FriendEntry> buddylist, boolean deleted, boolean add) {
-            
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FriendResult.getValue());
-            oPacket.Encode(deleted ? FriendType.UPDATE.getValue() : add ? FriendType.UPDATE.getValue() : FriendType.UPDATE.getValue()); // TODO find add/delete values
-            oPacket.EncodeInt(buddylist.size());
-            for (FriendEntry buddy : buddylist) {
-                buddy.encode(oPacket);
-            }
-            for (int x = 0; x < buddylist.size(); x++) {
-                oPacket.EncodeInt(0);
-            }
-
-            return oPacket;
-        }
-
-        public static OutPacket updateBuddyChannel(int characterid, int channel) {
-            
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FriendResult.getValue());
-            oPacket.Encode(20);
-            oPacket.EncodeInt(characterid);
-            oPacket.Encode(0);
-            oPacket.EncodeInt(channel);
-
-            return oPacket;
-        }
-
-        public static OutPacket requestMessage(String toName) {
-            
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FriendResult.getValue());
-            oPacket.Encode(FriendType.REQUEST_SENT.getValue());
-            oPacket.EncodeString(toName);
-
-            return oPacket;
-        }
-
-        public static OutPacket requestBuddyAdd(boolean inShop, int id, int accId, String name, int level, int job, int subJob, FriendEntry ble) {
-            
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FriendResult.getValue());
-            oPacket.Encode(FriendType.RECEIVE_REQUEST.getValue());
-            oPacket.Encode(inShop);
-            oPacket.EncodeInt(id);
-            oPacket.EncodeInt(accId);
-            oPacket.EncodeString(name);
-            oPacket.EncodeInt(level);
-            oPacket.EncodeInt(job);
-            oPacket.EncodeInt(subJob);
-
-            ble.encode(oPacket);
-
-            return oPacket;
-        }
-
-        public static OutPacket updateBuddyCapacity(int capacity) {
-            
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FriendResult.getValue());
-            oPacket.Encode(FriendType.UPDATE_FRIEND_MAX.getValue());
-            oPacket.Encode(capacity);
-
-            return oPacket;
-        }
-
-        public static OutPacket buddylistMessage(byte message) {
-            
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FriendResult.getValue());
-            oPacket.Encode(message);
-
-            return oPacket;
-        }
-
-        public static OutPacket addBuddy(FriendEntry ble) {
-            
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FriendResult.getValue());
-            oPacket.Encode(FriendType.ADD.getValue());
-            ble.encode(oPacket);
-
-            return oPacket;
-        }*/
     }
 }

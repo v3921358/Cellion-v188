@@ -12,7 +12,7 @@ import java.util.Map;
 
 import client.QuestStatus;
 import client.QuestStatus.QuestState;
-import client.MapleStat;
+import client.Stat;
 import client.MapleTrait.MapleTraitType;
 import client.Skill;
 import client.SkillEntry;
@@ -249,7 +249,7 @@ public class QuestAction implements Serializable {
                 }
                 final int fameGain = intStore;
                 c.addFame(fameGain);
-                c.updateSingleStat(MapleStat.FAME, c.getFame());
+                c.updateSingleStat(Stat.Fame, c.getFame());
                 FameMessage fame = new FameMessage(c.getFame());
                 c.write(WvsContext.messagePacket(fame));
                 break;
@@ -497,7 +497,7 @@ public class QuestAction implements Serializable {
             case pop: {
                 final int fameGain = intStore;
                 c.addFame(fameGain);
-                c.updateSingleStat(MapleStat.FAME, c.getFame());
+                c.updateSingleStat(Stat.Fame, c.getFame());
                 FameMessage fame = new FameMessage(c.getFame());
                 c.write(WvsContext.messagePacket(fame));
                 break;

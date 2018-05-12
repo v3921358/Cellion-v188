@@ -3,7 +3,7 @@ package handling.game;
 import client.ClientSocket;
 import client.QuestStatus;
 import client.QuestStatus.QuestState;
-import client.MapleStat;
+import client.Stat;
 import client.PlayerRandomStream;
 import client.PlayerStats;
 import client.Skill;
@@ -230,7 +230,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     //if (c.getPlayer().getGender() == 1) {
                     int hair = 32150 + (c.getPlayer().getHair() % 10);
                     c.getPlayer().setHair(hair);
-                    c.getPlayer().updateSingleStat(MapleStat.HAIR, hair);
+                    c.getPlayer().updateSingleStat(Stat.Hair, hair);
                     MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.CASH, slot, (byte) 1, false);
                     //}
                     break;
@@ -239,7 +239,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     //if (c.getPlayer().getGender() == 0) {
                     int hair = 32160 + (c.getPlayer().getHair() % 10);
                     c.getPlayer().setHair(hair);
-                    c.getPlayer().updateSingleStat(MapleStat.HAIR, hair);
+                    c.getPlayer().updateSingleStat(Stat.Hair, hair);
                     MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.CASH, slot, (byte) 1, false);
                     //}
                     break;

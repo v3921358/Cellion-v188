@@ -4,7 +4,7 @@
 package client.jobs;
 
 import client.CharacterTemporaryStat;
-import client.MapleStat;
+import client.Stat;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -119,7 +119,7 @@ public class Resistance {
 
             int nHpRecovered = pPlayer.getStat().getHp() + (pPlayer.getStat().getMaxHp() / 2);
             pPlayer.getStat().setHp(nHpRecovered, pPlayer);
-            pPlayer.updateSingleStat(MapleStat.HP, nHpRecovered);
+            pPlayer.updateSingleStat(Stat.HP, nHpRecovered);
 
             pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.RWBarrier); // Consume Blast Shield
         }

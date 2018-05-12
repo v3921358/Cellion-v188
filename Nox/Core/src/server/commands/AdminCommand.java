@@ -10,7 +10,7 @@ import java.util.concurrent.ScheduledFuture;
 
 import client.ClientSocket;
 import client.MapleCharacterUtil;
-import client.MapleStat;
+import client.Stat;
 import client.Skill;
 import client.SkillFactory;
 import client.anticheat.CheatingOffense;
@@ -178,15 +178,15 @@ public class AdminCommand {
                 case 2:
                     c.getPlayer().setLevel((short) Integer.parseInt(splitted[1]));
                     c.getPlayer().setExp(0);
-                    c.getPlayer().updateSingleStat(MapleStat.EXP, 0);
-                    c.getPlayer().updateSingleStat(MapleStat.LEVEL, c.getPlayer().getLevel());
+                    c.getPlayer().updateSingleStat(Stat.EXP, 0);
+                    c.getPlayer().updateSingleStat(Stat.Level, c.getPlayer().getLevel());
                     break;
                 case 1:
                     User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
                     victim.setLevel((short) Integer.parseInt(splitted[1]));
                     victim.setExp(0);
-                    victim.updateSingleStat(MapleStat.EXP, 0);
-                    victim.updateSingleStat(MapleStat.LEVEL, c.getPlayer().getLevel());
+                    victim.updateSingleStat(Stat.EXP, 0);
+                    victim.updateSingleStat(Stat.Level, c.getPlayer().getLevel());
                     break;
                 default:
                     c.getPlayer().dropMessage(5, "Syntax: !setlevel <level> or !setlevel <character> <level>");

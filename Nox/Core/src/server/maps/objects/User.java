@@ -98,6 +98,7 @@ import java.util.stream.Collectors;
 import server.skills.VMatrixRecord;
 import server.maps.objects.StopForceAtom;
 import static tools.packet.WvsContext.OnLoadAccountIDOfCharacterFriendResult;
+import static tools.packet.WvsContext.OnPlayerStatChanged;
 
 public class User extends AnimatedMapleMapObject implements Serializable, MapleCharacterLook {
 
@@ -3333,18 +3334,18 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void enforceMaxHpMp() {
-        Map<MapleStat, Long> statups = new EnumMap<>(MapleStat.class
+        Map<Stat, Long> statups = new EnumMap<>(Stat.class
         );
         if (stats.getMp() > stats.getCurrentMaxMp(this.getJob())) {
             stats.setMp(stats.getMp(), this);
-            statups.put(MapleStat.MP, Long.valueOf(stats.getMp()));
+            statups.put(Stat.MP, Long.valueOf(stats.getMp()));
         }
         if (stats.getHp() > stats.getCurrentMaxHp()) {
             stats.setHp(stats.getHp(), this);
-            statups.put(MapleStat.HP, Long.valueOf(stats.getHp()));
+            statups.put(Stat.HP, Long.valueOf(stats.getHp()));
         }
         if (statups.size() > 0) {
-            client.SendPacket(WvsContext.updatePlayerStats(statups, this));
+            client.SendPacket(WvsContext.OnPlayerStatChanged(this, statups));
         }
     }
 
@@ -3696,7 +3697,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void updateFame() {
-        updateSingleStat(MapleStat.FAME, this.fame);
+        updateSingleStat(Stat.Fame, this.fame);
     }
 
     public boolean changeMap(final MapleMap to, final Point pos) {
@@ -3825,12 +3826,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void changeJob(short newJob) {
-        Map<MapleStat, Long> statup = new EnumMap<>(MapleStat.class
-        );
+        Map<Stat, Long> statup = new EnumMap<>(Stat.class);
 
         try {
             this.job = newJob;
-            statup.put(MapleStat.JOB, Long.valueOf(newJob));
+            statup.put(Stat.Job, Long.valueOf(newJob));
 
             // Handle SP gain here
             if (!GameConstants.isExtendedSpJob(job)) {
@@ -3845,7 +3845,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     resetStatsByJob(true);
                 }
 
-                statup.put(MapleStat.AVAILABLEAP, Long.valueOf(remainingAp));
+                statup.put(Stat.AP, Long.valueOf(remainingAp));
             }
 
             // Handle HP and MP gain here
@@ -3933,14 +3933,14 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             }
             stats.setInfo(maxhp, maxmp, maxhp, maxmp);
 
-            statup.put(MapleStat.MAXHP, Long.valueOf(maxhp));
-            statup.put(MapleStat.IndieMMP, Long.valueOf(maxmp));
-            statup.put(MapleStat.HP, Long.valueOf(maxhp));
-            statup.put(MapleStat.MP, Long.valueOf(maxmp));
+            statup.put(Stat.MaxHP, Long.valueOf(maxhp));
+            statup.put(Stat.MaxMP, Long.valueOf(maxmp));
+            statup.put(Stat.HP, Long.valueOf(maxhp));
+            statup.put(Stat.MP, Long.valueOf(maxmp));
 
             characterCard.recalcLocalStats(this);
             stats.recalcLocalStats(this);
-            client.SendPacket(WvsContext.updatePlayerStats(statup, this));
+            client.SendPacket(WvsContext.OnPlayerStatChanged(this, statup));
             //map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), UserEffectCodes.JobChanged), false); // Bugged, displays for all players.
             client.SendPacket(EffectPacket.showForeignEffect(getId(), UserEffectCodes.JobChanged));
             silentPartyUpdate();
@@ -4098,18 +4098,18 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void gainAp(short ap) {
         this.remainingAp += ap;
-        updateSingleStat(MapleStat.AVAILABLEAP, this.remainingAp);
+        updateSingleStat(Stat.AP, this.remainingAp);
     }
 
     public void gainSP(int sp) {
         this.remainingSp[GameConstants.getSkillBook(job, 0)] += sp; //default
-        updateSingleStat(MapleStat.AVAILABLESP, 0); // we don't care the value here
+        updateSingleStat(Stat.SP, 0); // we don't care the value here
         spMessage(sp, job);
     }
 
     public void gainSP(int sp, final int skillbook) {
         this.remainingSp[skillbook] += sp;
-        updateSingleStat(MapleStat.AVAILABLESP, 0);
+        updateSingleStat(Stat.SP, 0);
         spMessage(sp, job);
     }
 
@@ -4133,7 +4133,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         for (int i = 0; i < remainingSp.length; i++) {
             this.remainingSp[i] = sp;
         }
-        updateSingleStat(MapleStat.AVAILABLESP, 0);
+        updateSingleStat(Stat.SP, 0);
     }
 
     public void resetAPSP() {
@@ -4451,7 +4451,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 }
                 this.exp = expAfterDeath;
             }
-            this.updateSingleStat(MapleStat.EXP, this.exp);
+            this.updateSingleStat(Stat.EXP, this.exp);
         }
         if (pyramidSubway != null) {
             stats.setHp((short) 50, this);
@@ -4526,7 +4526,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      */
     public void addHP(int delta) {
         if (stats.setHp(stats.getHp() + delta, this)) {
-            updateSingleStat(MapleStat.HP, stats.getHp());
+            updateSingleStat(Stat.HP, stats.getHp());
         }
     }
 
@@ -4543,29 +4543,29 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void addMP(int delta, boolean ignore) {
         if ((delta < 0 && GameConstants.isDemonSlayer(getJob())) || !GameConstants.isDemonSlayer(getJob()) || ignore) {
             if (stats.setMp(stats.getMp() + delta, this)) {
-                updateSingleStat(MapleStat.MP, stats.getMp());
+                updateSingleStat(Stat.MP, stats.getMp());
             }
         }
     }
 
     public void addMPHP(int hpDiff, int mpDiff) {
-        Map<MapleStat, Long> statups = new EnumMap<>(MapleStat.class
+        Map<Stat, Long> statups = new EnumMap<>(Stat.class
         );
 
         if (stats.setHp(stats.getHp() + hpDiff, this)) {
-            statups.put(MapleStat.HP, Long.valueOf(stats.getHp()));
+            statups.put(Stat.HP, Long.valueOf(stats.getHp()));
         }
         if ((mpDiff < 0 && GameConstants.isDemonSlayer(getJob())) || !GameConstants.isDemonSlayer(getJob())) {
             if (stats.setMp(stats.getMp() + mpDiff, this)) {
-                statups.put(MapleStat.MP, Long.valueOf(stats.getMp()));
+                statups.put(Stat.MP, Long.valueOf(stats.getMp()));
             }
         }
         if (statups.size() > 0) {
-            client.SendPacket(WvsContext.updatePlayerStats(statups, this));
+            client.SendPacket(WvsContext.OnPlayerStatChanged(this, statups));
         }
     }
 
-    public void updateSingleStat(MapleStat stat, long newval) {
+    public void updateSingleStat(Stat stat, long newval) {
         updateSingleStat(stat, newval, false);
     }
 
@@ -4573,18 +4573,17 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * Updates a single stat of this MapleCharacter for the client. This method only creates and sends an update packet, it does not update
      * the stat stored in this MapleCharacter instance.
      *
-     * @param stat
-     * @param newval
-     * @param itemReaction
+     * @param pStat
+     * @param nNewVal
+     * @param bItemReaction
      */
-    public void updateSingleStat(MapleStat stat, long newval, boolean itemReaction) {
-        Map<MapleStat, Long> statup = new EnumMap<>(MapleStat.class
-        );
-        statup.put(stat, newval);
-        client.SendPacket(WvsContext.updatePlayerStats(statup, itemReaction, this));
+    public void updateSingleStat(Stat pStat, long nNewVal, boolean bItemReaction) {
+        Map<Stat, Long> statup = new EnumMap<>(Stat.class);
+        statup.put(pStat, nNewVal);
+        client.SendPacket(WvsContext.OnPlayerStatChanged(this, statup, bItemReaction, (byte) 0, (byte) 0, (byte) 0, (byte) 0, false, 0, 0));
     }
 
-    public void setGmLevel(byte level) {
+    public void setGMLevel(byte level) {
         this.gmLevel = level;
     }
 
@@ -4672,7 +4671,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             familyRep(getNeededExp(), needed, leveled);
         }
         if (totalEXPGained != 0) {
-            updateSingleStat(MapleStat.EXP, getExp());
+            updateSingleStat(Stat.EXP, getExp());
 
             if (show) {
                 int truncatedEXP = (int) totalEXPGained;
@@ -4925,7 +4924,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             return;
         }
         meso += gain;
-        updateSingleStat(MapleStat.MESO, meso, false);
+        updateSingleStat(Stat.Meso, meso, false);
         client.SendPacket(WvsContext.enableActions());
         if (show) {
             client.SendPacket(InfoPacket.showMesoGain(gain, inChat));
@@ -5107,11 +5106,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         stats.dex = 4;
         stats.int_ = 4;
         stats.luk = 4;
-        updateSingleStat(MapleStat.AVAILABLEAP, remainingAp);
-        updateSingleStat(MapleStat.STR, 4);
-        updateSingleStat(MapleStat.DEX, 4);
-        updateSingleStat(MapleStat.INT, 4);
-        updateSingleStat(MapleStat.LUK, 4);
+        updateSingleStat(Stat.AP, remainingAp);
+        updateSingleStat(Stat.STR, 4);
+        updateSingleStat(Stat.DEX, 4);
+        updateSingleStat(Stat.INT, 4);
+        updateSingleStat(Stat.LUK, 4);
     }
 
     public void levelUp() {
@@ -5184,22 +5183,21 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         level++;
 
         // Update stats related stuff
-        final Map<MapleStat, Long> statup = new EnumMap<>(MapleStat.class
-        );
+        final Map<Stat, Long> statup = new EnumMap<>(Stat.class);
 
-        statup.put(MapleStat.MAXHP, (long) localhp);
-        statup.put(MapleStat.IndieMMP, (long) localmp);
-        statup.put(MapleStat.HP, (long) localhp);
-        statup.put(MapleStat.MP, (long) localmp);
-        statup.put(MapleStat.EXP, exp);
-        statup.put(MapleStat.LEVEL, (long) level);
+        statup.put(Stat.MaxHP, (long) localhp);
+        statup.put(Stat.MaxMP, (long) localmp);
+        statup.put(Stat.HP, (long) localhp);
+        statup.put(Stat.MP, (long) localmp);
+        statup.put(Stat.EXP, exp);
+        statup.put(Stat.Level, (long) level);
 
         // AP allocation
         if (level < 10) { //Auto STR up until 10.
             stats.str += 5;
             remainingAp = 0;
 
-            statup.put(MapleStat.STR, (long) stats.getStr());
+            statup.put(Stat.STR, (long) stats.getStr());
         } else if (level == 10) {//Auto AP Reset when hitting level 10.
             remainingAp += 5;
             resetAp();
@@ -5342,13 +5340,13 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             giveHyperSkills();
         }*/
 
-        statup.put(MapleStat.AVAILABLEAP, (long) remainingAp);
-        statup.put(MapleStat.AVAILABLESP, (long) remainingSp[GameConstants.getSkillBook(job, level)]);
+        statup.put(Stat.AP, (long) remainingAp);
+        statup.put(Stat.SP, (long) remainingSp[GameConstants.getSkillBook(job, level)]);
 
         // Packet + stats updates
         // client.write(CField.getAndroidTalkStyle(2008, "Yay", 2));
         stats.setInfo(maxhp, maxmp, localhp, localmp);
-        client.SendPacket(WvsContext.updatePlayerStats(statup, this));
+        client.SendPacket(WvsContext.OnPlayerStatChanged(this, statup));
         //map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), UserEffectCodes.LevelUp), true); // lol this is buggy.
         client.SendPacket(EffectPacket.showForeignEffect(getId(), UserEffectCodes.LevelUp));
         characterCard.recalcLocalStats(this);
@@ -7597,7 +7595,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             if (rs.next()) {
                 if (rs.getInt("gift") == fame && fame > 0) { //not exploited! hurray
                     addFame(fame);
-                    updateSingleStat(MapleStat.FAME, getFame());
+                    updateSingleStat(Stat.Fame, getFame());
                     FameMessage fameMessage = new FameMessage(fame);
                     write(WvsContext.messagePacket(fameMessage));
                 }
@@ -8448,8 +8446,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void resetStats(final int str, final int dex, final int int_, final int luk) {
-        Map<MapleStat, Long> stat = new EnumMap<>(MapleStat.class
-        );
+        Map<Stat, Long> stat = new EnumMap<>(Stat.class);
         int total = stats.getStr() + stats.getDex() + stats.getLuk() + stats.getInt() + getRemainingAp();
 
         total -= str;
@@ -8466,12 +8463,12 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
         setRemainingAp((int) total);
         stats.recalcLocalStats(this);
-        stat.put(MapleStat.STR, (long) str);
-        stat.put(MapleStat.DEX, (long) dex);
-        stat.put(MapleStat.INT, (long) int_);
-        stat.put(MapleStat.LUK, (long) luk);
-        stat.put(MapleStat.AVAILABLEAP, (long) total);
-        client.SendPacket(WvsContext.updatePlayerStats(stat, false, this));
+        stat.put(Stat.STR, (long) str);
+        stat.put(Stat.DEX, (long) dex);
+        stat.put(Stat.INT, (long) int_);
+        stat.put(Stat.LUK, (long) luk);
+        stat.put(Stat.AP, (long) total);
+        client.SendPacket(WvsContext.OnPlayerStatChanged(this, stat));
     }
 
     public Event_PyramidSubway getPyramidSubway() {
@@ -9192,7 +9189,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void setFatigue(int j) {
         this.fatigue = (short) Math.max(0, j);
-        updateSingleStat(MapleStat.FATIGUE, this.fatigue);
+        updateSingleStat(Stat.Fatigue, this.fatigue);
     }
 
     public void reloadCharacter() {
@@ -9492,7 +9489,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (p != pvpPoints) {
             PvpPointMessage pvp = new PvpPointMessage(0, p - pvpPoints);
             write(WvsContext.messagePacket(pvp));
-            updateSingleStat(MapleStat.BATTLE_POINTS, p);
+            updateSingleStat(Stat.PvpPoints, p);
         }
         this.pvpPoints = p;
     }
@@ -9503,8 +9500,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (p != previous) {
             stats.recalcPVPRank(this);
 
-            updateSingleStat(MapleStat.BATTLE_EXP, stats.pvpExp);
-            updateSingleStat(MapleStat.BATTLE_RANK, stats.pvpRank);
+            updateSingleStat(Stat.PvpEXP, stats.pvpExp);
+            updateSingleStat(Stat.PvpRank, stats.pvpRank);
         }
     }
 
@@ -9966,7 +9963,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void applyIceGage(int x) {
-        updateSingleStat(MapleStat.ICE_GAUGE, x);
+        updateSingleStat(Stat.IceGuage, x);
     }
 
     public Rectangle getBounds() {
@@ -12334,8 +12331,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, equip));
             client.SendPacket(WvsContext.inventoryOperation(true, mod));
         }
-        updateSingleStat(MapleStat.FACE, this.face);
-        updateSingleStat(MapleStat.HAIR, this.hair);
+        updateSingleStat(Stat.Face, this.face);
+        updateSingleStat(Stat.Hair, this.hair);
         equipChanged();
     }
 

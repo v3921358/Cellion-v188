@@ -18,7 +18,7 @@ import client.InnerAbillity;
 import client.InnerSkillValueHolder;
 import client.MapleCharacterCreationUtil;
 import client.ClientSocket;
-import client.MapleStat;
+import client.Stat;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
@@ -573,7 +573,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public void setHair(int hair) {
         //if (hairExists(hair)) {
         getPlayer().setHair(hair);
-        getPlayer().updateSingleStat(MapleStat.HAIR, hair);
+        getPlayer().updateSingleStat(Stat.Hair, hair);
         getPlayer().equipChanged();
         //}
     }
@@ -581,7 +581,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public void setSecondHair(int hair) {
         //if (hairExists(hair)) {
         getPlayer().setZeroBetaHair(hair);
-        getPlayer().updateSingleStat(MapleStat.HAIR, hair);
+        getPlayer().updateSingleStat(Stat.Hair, hair);
         getPlayer().equipChanged();
         //}
     }
@@ -589,7 +589,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public void setFace(int face) {
         //if (faceExists(face)) {
         getPlayer().setFace(face);
-        getPlayer().updateSingleStat(MapleStat.FACE, face);
+        getPlayer().updateSingleStat(Stat.Face, face);
         getPlayer().equipChanged();
         //}
     }
@@ -597,14 +597,14 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public void setSecondFace(int face) {
         //if (faceExists(face)) {
         getPlayer().setZeroBetaFace(face);
-        getPlayer().updateSingleStat(MapleStat.FACE, face);
+        getPlayer().updateSingleStat(Stat.Face, face);
         getPlayer().equipChanged();
         //}
     }
 
     public void setSkin(int color) {
         getPlayer().setSkinColor((byte) color);
-        getPlayer().updateSingleStat(MapleStat.SKIN, color);
+        getPlayer().updateSingleStat(Stat.Skin, color);
         getPlayer().equipChanged();
     }
 
@@ -666,13 +666,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         int args = args_all[Randomizer.nextInt(args_all.length)];
         if (args < 100) {
             c.getPlayer().setSkinColor((byte) args);
-            c.getPlayer().updateSingleStat(MapleStat.SKIN, args);
+            c.getPlayer().updateSingleStat(Stat.Skin, args);
         } else if (args < 30000) {
             c.getPlayer().setFace(args);
-            c.getPlayer().updateSingleStat(MapleStat.FACE, args);
+            c.getPlayer().updateSingleStat(Stat.Face, args);
         } else {
             c.getPlayer().setHair(args);
-            c.getPlayer().updateSingleStat(MapleStat.HAIR, args);
+            c.getPlayer().updateSingleStat(Stat.Hair, args);
         }
         c.getPlayer().equipChanged();
 
@@ -687,13 +687,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
         if (args < 100) {
             c.getPlayer().setSkinColor((byte) args);
-            c.getPlayer().updateSingleStat(MapleStat.SKIN, args);
+            c.getPlayer().updateSingleStat(Stat.Skin, args);
         } else if (args < 30000) {
             c.getPlayer().setFace(args);
-            c.getPlayer().updateSingleStat(MapleStat.FACE, args);
+            c.getPlayer().updateSingleStat(Stat.Face, args);
         } else {
             c.getPlayer().setHair(args);
-            c.getPlayer().updateSingleStat(MapleStat.HAIR, args);
+            c.getPlayer().updateSingleStat(Stat.Hair, args);
         }
         c.getPlayer().equipChanged();
 
@@ -1446,7 +1446,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void maxStats() {
-        Map<MapleStat, Integer> statup = new EnumMap<>(MapleStat.class);
+        Map<Stat, Long> statup = new EnumMap<>(Stat.class);
         c.getPlayer().getStat().str = (short) 999;
         c.getPlayer().getStat().dex = (short) 999;
         c.getPlayer().getStat().int_ = (short) 999;
@@ -1458,15 +1458,16 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         c.getPlayer().getStat().setHp(500000, c.getPlayer());
         c.getPlayer().getStat().setMp(overrDemon, c.getPlayer());
 
-        statup.put(MapleStat.STR, Integer.valueOf(999));
-        statup.put(MapleStat.DEX, Integer.valueOf(999));
-        statup.put(MapleStat.LUK, Integer.valueOf(999));
-        statup.put(MapleStat.INT, Integer.valueOf(999));
-        statup.put(MapleStat.HP, Integer.valueOf(500000));
-        statup.put(MapleStat.MAXHP, Integer.valueOf(500000));
-        statup.put(MapleStat.MP, Integer.valueOf(overrDemon));
-        statup.put(MapleStat.IndieMMP, Integer.valueOf(overrDemon));
+        statup.put(Stat.STR, Long.valueOf(999));
+        statup.put(Stat.DEX, Long.valueOf(999));
+        statup.put(Stat.LUK, Long.valueOf(999));
+        statup.put(Stat.INT, Long.valueOf(999));
+        statup.put(Stat.HP, Long.valueOf(500000));
+        statup.put(Stat.MaxHP, Long.valueOf(500000));
+        statup.put(Stat.MP, Long.valueOf(overrDemon));
+        statup.put(Stat.MaxMP, Long.valueOf(overrDemon));
         c.getPlayer().getStat().recalcLocalStats(c.getPlayer());
+        c.SendPacket(WvsContext.OnPlayerStatChanged(c.getPlayer(), statup));
         //c.write(CWvsContext.updatePlayerStats(statup, c.getPlayer().getJob()));
     }
 
