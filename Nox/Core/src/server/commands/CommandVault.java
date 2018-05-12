@@ -4,18 +4,39 @@
 package server.commands;
 
 import client.ClientSocket;
+import client.MapleDisease;
 import client.SkillFactory;
+import constants.GameConstants;
 import constants.ServerConstants;
 import handling.world.CheaterData;
 import handling.world.World;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import provider.data.HexTool;
+import scripting.EventManager;
+import scripting.provider.NPCChatByType;
+import scripting.provider.NPCChatType;
 import scripting.provider.NPCScriptManager;
 import server.MaplePortal;
+import server.MapleStringInformationProvider;
+import server.life.LifeFactory;
+import server.life.Mob;
+import server.life.MobSkillFactory;
 import server.maps.MapleMap;
+import server.maps.MapleMapObject;
+import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
+import server.quest.Quest;
 import server.shops.MapleShopFactory;
 import service.ChannelServer;
+import service.RecvPacketOpcode;
+import service.SendPacketOpcode;
+import tools.Pair;
 import tools.StringUtil;
+import tools.Tuple;
+import tools.packet.CField;
+import tools.packet.WvsContext;
 
 /**
  * Additional Command Vault
@@ -210,6 +231,341 @@ public class CommandVault {
             int shopId = Integer.parseInt(splitted[1]);
             if (shop.getShop(shopId) != null) {
                 shop.getShop(shopId).sendShop(c);
+            }
+            return 1;
+        }
+    }
+    
+    public static class ActiveBomberman extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            User player = c.getPlayer();
+            if (player.getMapId() != 109010100) {
+                player.dropMessage(5, "This command is only usable in map 109010100.");
+            } else {
+                c.getChannelServer().toggleBomberman(c.getPlayer());
+                for (User chr : player.getMap().getCharacters()) {
+                    if (!chr.isIntern()) {
+                        chr.cancelAllBuffs();
+                        chr.giveDebuff(MapleDisease.SEAL, MobSkillFactory.getMobSkill(120, 1));
+                        //MapleInventoryManipulator.removeById(chr.getClient(), MapleInventoryType.USE, 2100067, chr.getItemQuantity(2100067, false), true, true);
+                        //chr.gainItem(2100067, 30);
+                        //MapleInventoryManipulator.removeById(chr.getClient(), MapleInventoryType.ETC, 4031868, chr.getItemQuantity(4031868, false), true, true);
+                        //chr.gainItem(4031868, (short) 5);
+                        //chr.dropMessage(0, "You have been granted 5 jewels(lifes) and 30 bombs.");
+                        //chr.dropMessage(0, "Pick up as many bombs and jewels as you can!");
+                        //chr.dropMessage(0, "Check inventory for Bomb under use");
+                    }
+                }
+                for (User chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+                    chrs.getClient().SendPacket(WvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has started!"));
+                }
+                player.getMap().broadcastMessage(CField.getClock(60));
+            }
+            return 1;
+        }
+    }
+
+    public static class Song extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            c.getPlayer().getMap().broadcastMessage(CField.musicChange(splitted[1]));
+            return 1;
+        }
+    }
+
+    public static class DeactiveBomberman extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            User player = c.getPlayer();
+            if (player.getMapId() != 109010100) {
+                player.dropMessage(5, "This command is only usable in map 109010100.");
+            } else {
+                c.getChannelServer().toggleBomberman(c.getPlayer());
+                int count = 0;
+                String winner = "";
+                for (User chr : player.getMap().getCharacters()) {
+                    if (!chr.isGM()) {
+                        if (count == 0) {
+                            winner = chr.getName();
+                            count++;
+                        } else {
+                            winner += " , " + chr.getName();
+                        }
+                    }
+                }
+                for (User chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+                    chrs.getClient().SendPacket(WvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has ended! The winners are: " + winner));
+                }
+            }
+            return 1;
+        }
+    }
+
+    public static class Bob extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            Mob mob = LifeFactory.getMonster(9400551);
+            for (int i = 0; i < 10; i++) {
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(mob, c.getPlayer().getPosition());
+            }
+            return 1;
+        }
+    }
+
+    public static class StartAutoEvent extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            final EventManager em = c.getChannelServer().getEventSM().getEventManager("AutomatedEvent");
+            if (em != null) {
+                em.setWorldEvent();
+                em.scheduleRandomEvent();
+                System.out.println("Scheduling Random Automated Event.");
+            } else {
+                System.out.println("Could not locate Automated Event script.");
+            }
+            return 1;
+        }
+    }
+    
+    public static class CutScene extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            //c.write(NPCPacket.getCutSceneSkip());
+            return 1;
+        }
+    }
+
+    public static class DemonJob extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            c.SendPacket(CField.NPCPacket.getDemonSelection());
+            return 1;
+        }
+    }
+    
+    public static class Find extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            switch (splitted.length) {
+                case 1:
+                    c.getPlayer().dropMessage(6, splitted[0] + ": <NPC> <MOB> <ITEM> <MAP> <SKILL> <QUEST> <HEADER/OPCODE>");
+                    break;
+                case 2:
+                    c.getPlayer().dropMessage(6, "Provide something to search.");
+                    break;
+                default:
+                    String type = splitted[1].toUpperCase();
+                    String search = StringUtil.joinStringFrom(splitted, 2);
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("<<" + "Type: ").append(type).append(" | " + "Search: ").append(search).append(">>");
+
+                    switch (type) {
+                        case "NPC":
+                            List<String> retNpcs = new ArrayList<>();
+                            for (java.util.Map.Entry<Integer, String> npcPair : MapleStringInformationProvider.getNPCStringCache().entrySet()) {
+                                if (npcPair.getValue().toLowerCase().contains(search.toLowerCase())
+                                        || search.toLowerCase().contains(npcPair.getValue().toLowerCase())) {
+                                    retNpcs.add("\r\n" + npcPair.getKey() + " - " + npcPair.getValue());
+                                }
+                            }
+                            if (retNpcs.size() > 0) {
+                                for (String singleRetNpc : retNpcs) {
+                                    if (sb.length() > 10000) {
+                                        sb.append("\r\nThere were too many results, and could not display all of them.");
+                                        break;
+                                    }
+                                    sb.append(singleRetNpc);
+                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retNpcs.toString(), "00 00", (byte) 0, 9010000));
+                                    //c.getPlayer().dropMessage(6, singleRetNpc);
+                                }
+                            } else {
+                                c.getPlayer().dropMessage(6, "No NPC's Found");
+                            }
+                            break;
+                        case "MAP":
+                            List<String> retMaps = new ArrayList<>();
+
+                            for (java.util.Map.Entry<Integer, Pair<String, String>> mapPair : MapleStringInformationProvider.getMapStringCache().entrySet()) {
+                                if (mapPair.getValue().getRight().toLowerCase().contains(search.toLowerCase())
+                                        || search.toLowerCase().contains(mapPair.getValue().getRight())) {
+                                    final String fullMapName = mapPair.getValue().getLeft() + " - " + mapPair.getValue().getRight();
+                                    retMaps.add("\r\n" + mapPair.getKey() + " - " + fullMapName);
+                                }
+                            }
+                            if (retMaps.size() > 0) {
+                                for (String singleRetMap : retMaps) {
+                                    if (sb.length() > 10000) {
+                                        sb.append("\r\nThere were too many results, and could not display all of them.");
+                                        break;
+                                    }
+                                    sb.append(singleRetMap);
+                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retMaps.toString(), "00 00", (byte) 0, 9010000));
+                                    //c.getPlayer().dropMessage(6, singleRetMap);
+                                }
+                            } else {
+                                c.getPlayer().dropMessage(6, "No Maps Found");
+                            }
+                            break;
+                        case "MOB":
+                            List<String> retMobs = new ArrayList<>();
+
+                            for (java.util.Map.Entry<Integer, String> mobPair : MapleStringInformationProvider.getMobStringCache().entrySet()) {
+                                if (mobPair.getValue().toLowerCase().contains(search.toLowerCase())) {
+                                    retMobs.add("\r\n" + mobPair.getKey() + " - " + mobPair.getValue());
+                                }
+                            }
+                            if (retMobs.size() > 0) {
+                                for (String singleRetMob : retMobs) {
+                                    if (sb.length() > 10000) {
+                                        sb.append("\r\nThere were too many results, and could not display all of them.");
+                                        break;
+                                    }
+                                    sb.append(singleRetMob);
+                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retMobs.toString(), "00 00", (byte) 0, 9010000));
+                                    //c.getPlayer().dropMessage(6, singleRetMob);
+                                }
+                            } else {
+                                c.getPlayer().dropMessage(6, "No Mobs Found");
+                            }
+                            break;
+                        case "ITEM":
+                            List<String> retItems = new ArrayList<>();
+
+                            for (java.util.Map.Entry<Integer, Pair<String, String>> itemValue : MapleStringInformationProvider.getAllitemsStringCache().entrySet()) {
+                                if (itemValue.getValue().getLeft().toLowerCase().contains(search.toLowerCase())
+                                        || search.toLowerCase().contains(itemValue.getValue().getLeft().toLowerCase())) {
+                                    retItems.add("\r\n" + itemValue.getKey() + " - " + itemValue.getValue().getLeft());
+                                }
+                            }
+                            if (retItems.size() > 0) {
+                                for (String singleRetItem : retItems) {
+                                    if (sb.length() > 10000) {
+                                        sb.append("\r\nThere were too many results, and could not display all of them.");
+                                        break;
+                                    }
+                                    sb.append(singleRetItem);
+                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retItems.toString(), "00 00", (byte) 0, 9010000));
+                                    //c.getPlayer().dropMessage(6, singleRetItem);
+                                }
+                            } else {
+                                c.getPlayer().dropMessage(6, "No Items Found");
+                            }
+                            break;
+                        case "QUEST":
+                            List<String> retQuests = new ArrayList<>();
+                            for (Quest questPair : Quest.getAllInstances()) {
+                                if (questPair.getName().length() > 0 && questPair.getName().toLowerCase().contains(search.toLowerCase())) {
+                                    retQuests.add("\r\n" + questPair.getId() + " - " + questPair.getName());
+                                }
+                            }
+                            if (retQuests.size() > 0) {
+                                for (String singleRetQuest : retQuests) {
+                                    if (sb.length() > 10000) {
+                                        sb.append("\r\nThere were too many results, and could not display all of them.");
+                                        break;
+                                    }
+                                    sb.append(singleRetQuest);
+                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retQuests.toString(), "00 00", (byte) 0, 9010000));
+                                    //    c.getPlayer().dropMessage(6, singleRetItem);
+                                }
+                            } else {
+                                c.getPlayer().dropMessage(6, "No Quests Found");
+                            }
+                            break;
+                        case "SKILL":
+                            List<String> retSkills = new ArrayList<>();
+                            for (java.util.Map.Entry<Integer, Tuple<String, String, String>> itemValue : MapleStringInformationProvider.getSkillStringCache().entrySet()) {
+                                final String skillName = itemValue.getValue().get_2();
+
+                                if (skillName.toLowerCase().contains(search.toLowerCase()) || search.toLowerCase().contains(skillName)) {
+                                    retSkills.add("\r\n" + itemValue.getKey() + " - " + skillName);
+                                }
+                            }
+                            if (retSkills.size() > 0) {
+                                for (String singleRetSkill : retSkills) {
+                                    if (sb.length() > 10000) {
+                                        sb.append("\r\nThere were too many results, and could not display all of them.");
+                                        break;
+                                    }
+                                    sb.append(singleRetSkill);
+                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retSkills.toString(), "00 00", (byte) 0, 9010000));
+                                    //    c.getPlayer().dropMessage(6, singleRetSkill);
+                                }
+                            } else {
+                                c.getPlayer().dropMessage(6, "No Skills Found");
+                            }
+                            break;
+                        case "HEADER":
+                        case "OPCODE":
+                            List<String> headers = new ArrayList<>();
+                            headers.add("\r\nSend Opcodes:");
+                            for (SendPacketOpcode send : SendPacketOpcode.values()) {
+                                if (send.name() != null && send.name().toLowerCase().contains(search.toLowerCase())) {
+                                    headers.add("\r\n" + send.name() + " Value: " + send.getValue() + " Hex: " + HexTool.getOpcodeToString(send.getValue()));
+                                }
+                            }
+                            headers.add("\r\nRecv Opcodes:");
+                            for (RecvPacketOpcode recv : RecvPacketOpcode.values()) {
+                                if (recv.name() != null && recv.name().toLowerCase().contains(search.toLowerCase())) {
+                                    headers.add("\r\n" + recv.name() + " Value: " + recv.getValue() + " Hex: " + HexTool.getOpcodeToString(recv.getValue()));
+                                }
+                            }
+                            for (String header : headers) {
+                                if (sb.length() > 10000) {
+                                    sb.append("\r\nThere were too many results, and could not display all of them.");
+                                    break;
+                                }
+                                sb.append(header);
+                                //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, headers.toString(), "00 00", (byte) 0, 9010000));
+                                //c.getPlayer().dropMessage(6, header);
+                            }
+                            break;
+                        default:
+                            c.getPlayer().dropMessage(6, "Sorry, that search call is unavailable");
+                            break;
+                    }
+                    c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sb.toString(), NPCChatByType.NPC_Cancellable));
+                    break;
+            }
+            return 0;
+        }
+    }
+    
+    public static class KillAllDrops extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            MapleMap map = c.getPlayer().getMap();
+            double range = Double.POSITIVE_INFINITY;
+
+            if (splitted.length > 1) {
+                int irange = Integer.parseInt(splitted[1]);
+                if (splitted.length <= 2) {
+                    range = irange * irange;
+                } else {
+                    map = c.getChannelServer().getMapFactory().getMap(Integer.parseInt(splitted[2]));
+                }
+            }
+            if (map == null) {
+                c.getPlayer().dropMessage(6, "Map does not exist");
+                return 0;
+            }
+            Mob mob;
+            for (MapleMapObject monstermo : map.getMapObjectsInRange(c.getPlayer().getPosition(), range, Arrays.asList(MapleMapObjectType.MONSTER))) {
+                mob = (Mob) monstermo;
+                if (!mob.getStats().isBoss() || mob.getStats().isPartyBonus() || c.getPlayer().isGM()) {
+                    map.killMonster(mob, c.getPlayer(), true, false, (byte) 1);
+                }
             }
             return 1;
         }

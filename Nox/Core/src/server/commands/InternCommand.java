@@ -2,51 +2,31 @@ package server.commands;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-
 import client.MapleCharacterUtil;
 import client.ClientSocket;
-import client.MapleDisease;
-import client.MapleStat;
 import client.SkillFactory;
-import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
-import handling.world.CheaterData;
 import handling.world.World;
 import java.awt.Point;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Map.Entry;
 import service.ChannelServer;
-import service.RecvPacketOpcode;
-import service.SendPacketOpcode;
-import provider.data.HexTool;
-import scripting.EventManager;
 import scripting.provider.NPCChatByType;
 import scripting.provider.NPCChatType;
-import scripting.provider.NPCScriptManager;
-import server.MapleInventoryManipulator;
 import server.MaplePortal;
 import server.MapleSquad.MapleSquadType;
 import server.MapleStringInformationProvider;
-import server.life.LifeFactory;
-import server.life.Mob;
-import server.life.MobSkillFactory;
 import server.maps.MapleMap;
-import server.maps.MapleMapItem;
-import server.maps.MapleMapObject;
-import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
 import server.quest.Quest;
-import server.shops.MapleShopFactory;
 import tools.Pair;
 import tools.StringUtil;
 import tools.Tuple;
@@ -741,103 +721,6 @@ public class InternCommand {
                 }
             }
             c.getPlayer().dropMessage(0, "All characters have been succesfully saved.");
-            return 1;
-        }
-    }
-
-    public static class ActiveBomberman extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            User player = c.getPlayer();
-            if (player.getMapId() != 109010100) {
-                player.dropMessage(5, "This command is only usable in map 109010100.");
-            } else {
-                c.getChannelServer().toggleBomberman(c.getPlayer());
-                for (User chr : player.getMap().getCharacters()) {
-                    if (!chr.isIntern()) {
-                        chr.cancelAllBuffs();
-                        chr.giveDebuff(MapleDisease.SEAL, MobSkillFactory.getMobSkill(120, 1));
-                        //MapleInventoryManipulator.removeById(chr.getClient(), MapleInventoryType.USE, 2100067, chr.getItemQuantity(2100067, false), true, true);
-                        //chr.gainItem(2100067, 30);
-                        //MapleInventoryManipulator.removeById(chr.getClient(), MapleInventoryType.ETC, 4031868, chr.getItemQuantity(4031868, false), true, true);
-                        //chr.gainItem(4031868, (short) 5);
-                        //chr.dropMessage(0, "You have been granted 5 jewels(lifes) and 30 bombs.");
-                        //chr.dropMessage(0, "Pick up as many bombs and jewels as you can!");
-                        //chr.dropMessage(0, "Check inventory for Bomb under use");
-                    }
-                }
-                for (User chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                    chrs.getClient().SendPacket(WvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has started!"));
-                }
-                player.getMap().broadcastMessage(CField.getClock(60));
-            }
-            return 1;
-        }
-    }
-
-    public static class Song extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            c.getPlayer().getMap().broadcastMessage(CField.musicChange(splitted[1]));
-            return 1;
-        }
-    }
-
-    public static class DeactiveBomberman extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            User player = c.getPlayer();
-            if (player.getMapId() != 109010100) {
-                player.dropMessage(5, "This command is only usable in map 109010100.");
-            } else {
-                c.getChannelServer().toggleBomberman(c.getPlayer());
-                int count = 0;
-                String winner = "";
-                for (User chr : player.getMap().getCharacters()) {
-                    if (!chr.isGM()) {
-                        if (count == 0) {
-                            winner = chr.getName();
-                            count++;
-                        } else {
-                            winner += " , " + chr.getName();
-                        }
-                    }
-                }
-                for (User chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                    chrs.getClient().SendPacket(WvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has ended! The winners are: " + winner));
-                }
-            }
-            return 1;
-        }
-    }
-
-    public static class Bob extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            Mob mob = LifeFactory.getMonster(9400551);
-            for (int i = 0; i < 10; i++) {
-                c.getPlayer().getMap().spawnMonsterOnGroundBelow(mob, c.getPlayer().getPosition());
-            }
-            return 1;
-        }
-    }
-
-    public static class StartAutoEvent extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            final EventManager em = c.getChannelServer().getEventSM().getEventManager("AutomatedEvent");
-            if (em != null) {
-                em.setWorldEvent();
-                em.scheduleRandomEvent();
-                System.out.println("Scheduling Random Automated Event.");
-            } else {
-                System.out.println("Could not locate Automated Event script.");
-            }
             return 1;
         }
     }

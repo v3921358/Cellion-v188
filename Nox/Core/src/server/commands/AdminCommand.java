@@ -315,24 +315,6 @@ public class AdminCommand {
         }
     }
 
-    public static class CutScene extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            //c.write(NPCPacket.getCutSceneSkip());
-            return 1;
-        }
-    }
-
-    public static class DemonJob extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            c.SendPacket(NPCPacket.getDemonSelection());
-            return 1;
-        }
-    }
-
     public static class NearestPortal extends CommandExecute {
 
         @Override
@@ -364,15 +346,6 @@ public class AdminCommand {
         }
     }
 
-    public static class GMPerson extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]).setGM(Byte.parseByte(splitted[2]));
-            return 1;
-        }
-    }
-
     public static class ToggleMultiLevel extends CommandExecute {
 
         @Override
@@ -387,9 +360,7 @@ public class AdminCommand {
         @Override
         public int execute(ClientSocket c, String[] splitted) {
             ServerConstants.DoubleTime = !ServerConstants.DoubleTime;
-            //if (ServerConstants.DoubleMiracleTime) {
             World.Broadcast.broadcastMessage(WvsContext.broadcastMsg(4, "It's Miracle Time!  Between 2:00 PM and 4:00 PM (Pacific) today, Miracle, Premium, Revolutionary Miracle, Super Miracle, Enlightening Miracle and Carved Slot Miracle Cubes have increased chances to raise your item to the next potential tier!"));
-            //}
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
                     mch.dropMessage(0, "Double Time Event has " + (ServerConstants.DoubleTime ? "began!" : "ended"));
@@ -413,26 +384,7 @@ public class AdminCommand {
         }
     }
 
-    public static class TestDirection extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            c.SendPacket(CField.UIPacket.UserInGameDirectionEvent(StringUtil.joinStringFrom(splitted, 5), Integer.parseInt(splitted[1]), Integer.parseInt(splitted[2]), Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5])));
-            return 1;
-        }
-    }
-
-    public static class MakePacket extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            byte[] aData = StringUtil.joinStringFrom(splitted, 1).getBytes();
-            byte[] aDataTrim = new byte[aData.length - 2];
-            System.arraycopy(aData, 2, aDataTrim, 0, aDataTrim.length);
-            c.SendPacket(new OutPacket((short) ((aData[0] & 0xFF) + (aData[1] >>> 8))).Encode(aDataTrim));
-            return 1;
-        }
-    }
+    
 
     public static class StripEveryone extends CommandExecute {
 
@@ -682,225 +634,7 @@ public class AdminCommand {
         }
     }
     
-    public static class Find extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            switch (splitted.length) {
-                case 1:
-                    c.getPlayer().dropMessage(6, splitted[0] + ": <NPC> <MOB> <ITEM> <MAP> <SKILL> <QUEST> <HEADER/OPCODE>");
-                    break;
-                case 2:
-                    c.getPlayer().dropMessage(6, "Provide something to search.");
-                    break;
-                default:
-                    String type = splitted[1].toUpperCase();
-                    String search = StringUtil.joinStringFrom(splitted, 2);
-
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("<<" + "Type: ").append(type).append(" | " + "Search: ").append(search).append(">>");
-
-                    switch (type) {
-                        case "NPC":
-                            List<String> retNpcs = new ArrayList<>();
-                            for (java.util.Map.Entry<Integer, String> npcPair : MapleStringInformationProvider.getNPCStringCache().entrySet()) {
-                                if (npcPair.getValue().toLowerCase().contains(search.toLowerCase())
-                                        || search.toLowerCase().contains(npcPair.getValue().toLowerCase())) {
-                                    retNpcs.add("\r\n" + npcPair.getKey() + " - " + npcPair.getValue());
-                                }
-                            }
-                            if (retNpcs.size() > 0) {
-                                for (String singleRetNpc : retNpcs) {
-                                    if (sb.length() > 10000) {
-                                        sb.append("\r\nThere were too many results, and could not display all of them.");
-                                        break;
-                                    }
-                                    sb.append(singleRetNpc);
-                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retNpcs.toString(), "00 00", (byte) 0, 9010000));
-                                    //c.getPlayer().dropMessage(6, singleRetNpc);
-                                }
-                            } else {
-                                c.getPlayer().dropMessage(6, "No NPC's Found");
-                            }
-                            break;
-                        case "MAP":
-                            List<String> retMaps = new ArrayList<>();
-
-                            for (java.util.Map.Entry<Integer, Pair<String, String>> mapPair : MapleStringInformationProvider.getMapStringCache().entrySet()) {
-                                if (mapPair.getValue().getRight().toLowerCase().contains(search.toLowerCase())
-                                        || search.toLowerCase().contains(mapPair.getValue().getRight())) {
-                                    final String fullMapName = mapPair.getValue().getLeft() + " - " + mapPair.getValue().getRight();
-                                    retMaps.add("\r\n" + mapPair.getKey() + " - " + fullMapName);
-                                }
-                            }
-                            if (retMaps.size() > 0) {
-                                for (String singleRetMap : retMaps) {
-                                    if (sb.length() > 10000) {
-                                        sb.append("\r\nThere were too many results, and could not display all of them.");
-                                        break;
-                                    }
-                                    sb.append(singleRetMap);
-                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retMaps.toString(), "00 00", (byte) 0, 9010000));
-                                    //c.getPlayer().dropMessage(6, singleRetMap);
-                                }
-                            } else {
-                                c.getPlayer().dropMessage(6, "No Maps Found");
-                            }
-                            break;
-                        case "MOB":
-                            List<String> retMobs = new ArrayList<>();
-
-                            for (java.util.Map.Entry<Integer, String> mobPair : MapleStringInformationProvider.getMobStringCache().entrySet()) {
-                                if (mobPair.getValue().toLowerCase().contains(search.toLowerCase())) {
-                                    retMobs.add("\r\n" + mobPair.getKey() + " - " + mobPair.getValue());
-                                }
-                            }
-                            if (retMobs.size() > 0) {
-                                for (String singleRetMob : retMobs) {
-                                    if (sb.length() > 10000) {
-                                        sb.append("\r\nThere were too many results, and could not display all of them.");
-                                        break;
-                                    }
-                                    sb.append(singleRetMob);
-                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retMobs.toString(), "00 00", (byte) 0, 9010000));
-                                    //c.getPlayer().dropMessage(6, singleRetMob);
-                                }
-                            } else {
-                                c.getPlayer().dropMessage(6, "No Mobs Found");
-                            }
-                            break;
-                        case "ITEM":
-                            List<String> retItems = new ArrayList<>();
-
-                            for (java.util.Map.Entry<Integer, Pair<String, String>> itemValue : MapleStringInformationProvider.getAllitemsStringCache().entrySet()) {
-                                if (itemValue.getValue().getLeft().toLowerCase().contains(search.toLowerCase())
-                                        || search.toLowerCase().contains(itemValue.getValue().getLeft().toLowerCase())) {
-                                    retItems.add("\r\n" + itemValue.getKey() + " - " + itemValue.getValue().getLeft());
-                                }
-                            }
-                            if (retItems.size() > 0) {
-                                for (String singleRetItem : retItems) {
-                                    if (sb.length() > 10000) {
-                                        sb.append("\r\nThere were too many results, and could not display all of them.");
-                                        break;
-                                    }
-                                    sb.append(singleRetItem);
-                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retItems.toString(), "00 00", (byte) 0, 9010000));
-                                    //c.getPlayer().dropMessage(6, singleRetItem);
-                                }
-                            } else {
-                                c.getPlayer().dropMessage(6, "No Items Found");
-                            }
-                            break;
-                        case "QUEST":
-                            List<String> retQuests = new ArrayList<>();
-                            for (Quest questPair : Quest.getAllInstances()) {
-                                if (questPair.getName().length() > 0 && questPair.getName().toLowerCase().contains(search.toLowerCase())) {
-                                    retQuests.add("\r\n" + questPair.getId() + " - " + questPair.getName());
-                                }
-                            }
-                            if (retQuests.size() > 0) {
-                                for (String singleRetQuest : retQuests) {
-                                    if (sb.length() > 10000) {
-                                        sb.append("\r\nThere were too many results, and could not display all of them.");
-                                        break;
-                                    }
-                                    sb.append(singleRetQuest);
-                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retQuests.toString(), "00 00", (byte) 0, 9010000));
-                                    //    c.getPlayer().dropMessage(6, singleRetItem);
-                                }
-                            } else {
-                                c.getPlayer().dropMessage(6, "No Quests Found");
-                            }
-                            break;
-                        case "SKILL":
-                            List<String> retSkills = new ArrayList<>();
-                            for (java.util.Map.Entry<Integer, Tuple<String, String, String>> itemValue : MapleStringInformationProvider.getSkillStringCache().entrySet()) {
-                                final String skillName = itemValue.getValue().get_2();
-
-                                if (skillName.toLowerCase().contains(search.toLowerCase()) || search.toLowerCase().contains(skillName)) {
-                                    retSkills.add("\r\n" + itemValue.getKey() + " - " + skillName);
-                                }
-                            }
-                            if (retSkills.size() > 0) {
-                                for (String singleRetSkill : retSkills) {
-                                    if (sb.length() > 10000) {
-                                        sb.append("\r\nThere were too many results, and could not display all of them.");
-                                        break;
-                                    }
-                                    sb.append(singleRetSkill);
-                                    //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, retSkills.toString(), "00 00", (byte) 0, 9010000));
-                                    //    c.getPlayer().dropMessage(6, singleRetSkill);
-                                }
-                            } else {
-                                c.getPlayer().dropMessage(6, "No Skills Found");
-                            }
-                            break;
-                        case "HEADER":
-                        case "OPCODE":
-                            List<String> headers = new ArrayList<>();
-                            headers.add("\r\nSend Opcodes:");
-                            for (SendPacketOpcode send : SendPacketOpcode.values()) {
-                                if (send.name() != null && send.name().toLowerCase().contains(search.toLowerCase())) {
-                                    headers.add("\r\n" + send.name() + " Value: " + send.getValue() + " Hex: " + HexTool.getOpcodeToString(send.getValue()));
-                                }
-                            }
-                            headers.add("\r\nRecv Opcodes:");
-                            for (RecvPacketOpcode recv : RecvPacketOpcode.values()) {
-                                if (recv.name() != null && recv.name().toLowerCase().contains(search.toLowerCase())) {
-                                    headers.add("\r\n" + recv.name() + " Value: " + recv.getValue() + " Hex: " + HexTool.getOpcodeToString(recv.getValue()));
-                                }
-                            }
-                            for (String header : headers) {
-                                if (sb.length() > 10000) {
-                                    sb.append("\r\nThere were too many results, and could not display all of them.");
-                                    break;
-                                }
-                                sb.append(header);
-                                //c.write(NPCPacket.getNPCTalk(9010000, (byte) 0, headers.toString(), "00 00", (byte) 0, 9010000));
-                                //c.getPlayer().dropMessage(6, header);
-                            }
-                            break;
-                        default:
-                            c.getPlayer().dropMessage(6, "Sorry, that search call is unavailable");
-                            break;
-                    }
-                    c.SendPacket(NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sb.toString(), NPCChatByType.NPC_Cancellable));
-                    break;
-            }
-            return 0;
-        }
-    }
     
-    public static class KillAllDrops extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            MapleMap map = c.getPlayer().getMap();
-            double range = Double.POSITIVE_INFINITY;
-
-            if (splitted.length > 1) {
-                int irange = Integer.parseInt(splitted[1]);
-                if (splitted.length <= 2) {
-                    range = irange * irange;
-                } else {
-                    map = c.getChannelServer().getMapFactory().getMap(Integer.parseInt(splitted[2]));
-                }
-            }
-            if (map == null) {
-                c.getPlayer().dropMessage(6, "Map does not exist");
-                return 0;
-            }
-            Mob mob;
-            for (MapleMapObject monstermo : map.getMapObjectsInRange(c.getPlayer().getPosition(), range, Arrays.asList(MapleMapObjectType.MONSTER))) {
-                mob = (Mob) monstermo;
-                if (!mob.getStats().isBoss() || mob.getStats().isPartyBonus() || c.getPlayer().isGM()) {
-                    map.killMonster(mob, c.getPlayer(), true, false, (byte) 1);
-                }
-            }
-            return 1;
-        }
-    }
     
     public static class Position extends CommandExecute {
 
