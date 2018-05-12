@@ -1,6 +1,6 @@
 package server.shops;
 
-public class MapleShopItem {
+public class ShopItem {
 
     private short buyable;
     private short quantity;
@@ -25,15 +25,15 @@ public class MapleShopItem {
     private int saleLimit;
     private int levelLimited;
 
-    public MapleShopItem(int itemId, int price, short slot, short buyable) {
+    public ShopItem(int itemId, int price, short slot, short buyable) {
         this(buyable, (short) 1, itemId, price, slot, 0, 0, (byte) 0, 0, 0, 0, 0);
     }
 
-    public MapleShopItem(int itemId, int price, short slot, short buyable, short quantity) {
+    public ShopItem(int itemId, int price, short slot, short buyable, short quantity) {
         this(buyable, quantity, itemId, price, slot, 0, 0, (byte) 0, 0, 0, 0, 0);
     }
 
-    public MapleShopItem(short buyable, short quantity, int itemId, int price, short slot, int reqItem, int reqItemQ, byte rank, int category, int minLevel, int expiration, int potential) {
+    public ShopItem(short buyable, short quantity, int itemId, int price, short slot, int reqItem, int reqItemQ, byte rank, int category, int minLevel, int expiration, int potential) {
         this.buyable = buyable;
         this.quantity = quantity;
         this.itemId = itemId;

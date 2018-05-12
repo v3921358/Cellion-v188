@@ -55,7 +55,7 @@ import server.maps.objects.Mist;
 import server.maps.objects.Pet;
 import server.maps.objects.MonsterFamiliar;
 import server.quest.Quest;
-import server.shops.MapleShopFactory;
+import server.shops.ShopFactory;
 import server.stores.HiredMerchant;
 import net.InPacket;
 import server.maps.objects.User.CharacterTemporaryValues;
@@ -1845,7 +1845,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 } else if ((c.getPlayer().getMapId() >= 680000210 && c.getPlayer().getMapId() <= 680000502) || (c.getPlayer().getMapId() / 1000 == 980000 && c.getPlayer().getMapId() != 980000000) || (c.getPlayer().getMapId() / 100 == 1030008) || (c.getPlayer().getMapId() / 100 == 922010) || (c.getPlayer().getMapId() / 10 == 13003000)) {
                     c.getPlayer().dropMessage(5, "You may not use this here.");
                 } else {
-                    MapleShopFactory.getInstance().getShop(9090000).sendShop(c);
+                    ShopFactory.getInstance().getShop(9090000).sendShop(c);
                 }
                 //used = true;
                 break;
@@ -1937,7 +1937,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 return;
             }
             c.getPlayer().dropMessage(5, "Auto relogging. Please wait.");
-            c.getPlayer().fakeRelog();
+            c.getPlayer().reloadUser();
             if (c.getPlayer().getScrolledPosition() != 0) {
                 c.SendPacket(WvsContext.pamSongUI());
             }

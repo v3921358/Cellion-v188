@@ -3,13 +3,13 @@ package server.shops;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapleShopFactory {
+public class ShopFactory {
 
-    private final Map<Integer, MapleShop> shops = new HashMap<Integer, MapleShop>();
-    private final Map<Integer, MapleShop> npcShops = new HashMap<Integer, MapleShop>();
-    private static final MapleShopFactory instance = new MapleShopFactory();
+    private final Map<Integer, Shop> shops = new HashMap<Integer, Shop>();
+    private final Map<Integer, Shop> npcShops = new HashMap<Integer, Shop>();
+    private static final ShopFactory instance = new ShopFactory();
 
-    public static MapleShopFactory getInstance() {
+    public static ShopFactory getInstance() {
         return instance;
     }
 
@@ -18,22 +18,22 @@ public class MapleShopFactory {
         this.npcShops.clear();
     }
 
-    public MapleShop getShop(int shopId) {
+    public Shop getShop(int shopId) {
         if (this.shops.containsKey(Integer.valueOf(shopId))) {
-            return (MapleShop) this.shops.get(Integer.valueOf(shopId));
+            return (Shop) this.shops.get(Integer.valueOf(shopId));
         }
         return loadShop(shopId, true);
     }
 
-    public MapleShop getShopForNPC(int npcId) {
+    public Shop getShopForNPC(int npcId) {
         if (this.npcShops.containsKey(Integer.valueOf(npcId))) {
-            return (MapleShop) this.npcShops.get(Integer.valueOf(npcId));
+            return (Shop) this.npcShops.get(Integer.valueOf(npcId));
         }
         return loadShop(npcId, false);
     }
 
-    private MapleShop loadShop(int id, boolean isShopId) {
-        MapleShop ret = MapleShop.createFromDB(id, isShopId);
+    private Shop loadShop(int id, boolean isShopId) {
+        Shop ret = Shop.createFromDB(id, isShopId);
         if (ret != null) {
             this.shops.put(Integer.valueOf(ret.getId()), ret);
             this.npcShops.put(Integer.valueOf(ret.getNpcId()), ret);

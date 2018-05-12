@@ -57,9 +57,9 @@ import server.movement.LifeMovementFragment;
 import server.potentials.ItemPotentialProvider;
 import server.potentials.ItemPotentialTierType;
 import server.quest.Quest;
-import server.shops.MapleShop;
-import server.shops.MapleShopFactory;
-import server.shops.MapleShopItem;
+import server.shops.Shop;
+import server.shops.ShopFactory;
+import server.shops.ShopItem;
 import server.stores.IMaplePlayerShop;
 import service.ChannelServer;
 import service.LoginServer;
@@ -127,7 +127,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private List<MechDoor> mechDoors;
     private List<Pet> pets;
     private List<ShopRepurchase> shopRepurchases;
-    private MapleShop azwanShopList;
+    private Shop azwanShopList;
     private MapleImp[] imps;
     private List<Pair<Integer, Boolean>> stolenSkills = new ArrayList<>();
     private transient WeakReference<User>[] clones;
@@ -158,7 +158,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private PlayerStats stats;
     private final MapleCharacterCards characterCard;
     private transient MapleMap map;
-    private transient MapleShop shop;
+    private transient Shop shop;
     private transient EvanDragon dragon;
     private transient KannaHaku haku;
     private transient Extractor extractor;
@@ -415,6 +415,15 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         pStopForceAtom = pNew;
     }
 
+    /**
+     * Fully dispose a character through enable actions and clearing clicked NPC.
+     */
+    public void completeDispose() {
+        getClient().removeClickedNPC();
+        NPCScriptManager.getInstance().dispose(getClient());
+        SendPacket(WvsContext.enableActions());
+    }
+    
     /**
      * Channel ID
      *
@@ -696,7 +705,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         ret.honourExp = ct.honourexp;
         ret.honorLevel = ct.honourlevel;
         ret.innerSkills = (LinkedList<InnerSkillValueHolder>) ct.innerSkills;
-        ret.azwanShopList = (MapleShop) ct.azwanShopList;
+        ret.azwanShopList = (Shop) ct.azwanShopList;
         ret.pvpExp = ct.pvpExp;
         ret.pvpPoints = ct.pvpPoints;
         /*
@@ -4365,7 +4374,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     setDeathCount(0);
 
                     changeMap(105200000, 0);
-                    fakeRelog2();
+                    reloadUser();
                     dropMessage(5, "Ran out of deaths, Better luck next time..");
                     break;
                 case 401060200: // Magnus Death Count
@@ -4373,7 +4382,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     setDeathCount(0);
 
                     changeMap(400000000, 0);
-                    fakeRelog2();
+                    reloadUser();
                     dropMessage(5, "Ran out of deaths, Better luck next time..");
                     break;
                 case 350060600: // Lotus Death Count
@@ -4382,7 +4391,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     setDeathCount(0);
 
                     changeMap(350060300, 0);
-                    fakeRelog2();
+                    reloadUser();
                     dropMessage(5, "Ran out of deaths, Better luck next time..");
                     break;
             }
@@ -4871,11 +4880,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    public MapleShop getShop() {
+    public Shop getShop() {
         return shop;
     }
 
-    public void setShop(MapleShop shop) {
+    public void setShop(Shop shop) {
         this.shop = shop;
     }
 
@@ -9191,7 +9200,17 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         forceChangeChannel(currentChannel);
     }
 
-    public void fakeRelog() {
+    public void reloadUser() {
+        final int chan = client.getChannel();
+        final MapleMap mapp = getMap();
+        mapp.setCheckStates(false);
+        saveToDB(false, false);
+        mapp.removePlayer(this);
+        mapp.addPlayer(this);
+        forceChangeChannel(chan);
+    }
+    
+    /*public void fakeRelog() {
         final int chan = client.getChannel();
         final MapleMap mapp = getMap();
         mapp.setCheckStates(false);
@@ -9201,17 +9220,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         mapp.removePlayer(this);
         mapp.addPlayer(this);
         forceChangeChannel(chan);
-    }
-
-    public void fakeRelog2() {
-        final int chan = client.getChannel();
-        final MapleMap mapp = getMap();
-        mapp.setCheckStates(false);
-        saveToDB(false, false);
-        mapp.removePlayer(this);
-        mapp.addPlayer(this);
-        forceChangeChannel(chan);
-    }
+    }*/
 
     public boolean canSummon() {
         return canSummon(5000);
@@ -10382,7 +10391,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             changeSkillLevel(SkillFactory.getSkill(inner.getSkillId()), inner.getSkillLevel(), inner.getSkillLevel());
             client.SendPacket(CField.getCharInfo(this));
             client.SendPacket(CField.updateInnerPotential(ability, inner.getSkillId(), inner.getSkillLevel(), inner.getRank()));
-            fakeRelog2();
+            reloadUser();
         }
     }
 
@@ -10396,7 +10405,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             changeSkillLevel(SkillFactory.getSkill(inner.getSkillId()), inner.getSkillLevel(), inner.getSkillLevel());
             client.SendPacket(CField.getCharInfo(this));
             client.SendPacket(CField.updateInnerPotential(ability, inner.getSkillId(), inner.getSkillLevel(), inner.getRank()));
-            fakeRelog2();
+            reloadUser();
         }
     }
 
@@ -10410,7 +10419,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             changeSkillLevel(SkillFactory.getSkill(inner.getSkillId()), inner.getSkillLevel(), inner.getSkillLevel());
             client.SendPacket(CField.getCharInfo(this));
             client.SendPacket(CField.updateInnerPotential(ability, inner.getSkillId(), inner.getSkillLevel(), inner.getRank()));
-            fakeRelog2();
+            reloadUser();
         }
     }
 
@@ -10541,30 +10550,30 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
          * 10 Reindeer Milk - 2 conqueror coins
          * 100% Scrolls - 3 conqueror coins
          */
-        azwanShopList = new MapleShop(100000000 + getId(), 2182002);
+        azwanShopList = new Shop(100000000 + getId(), 2182002);
         int itemid = GameConstants.getAzwanRecipes()[(int) Math.floor(Math.random() * GameConstants.getAzwanRecipes().length)];
-        azwanShopList.addItem(new MapleShopItem((short) 1, (short) 1, itemid, 0, (short) 0, 4310038, 75, (byte) 0, 0, 0, 0, 0));
+        azwanShopList.addItem(new ShopItem((short) 1, (short) 1, itemid, 0, (short) 0, 4310038, 75, (byte) 0, 0, 0, 0, 0));
         itemid = GameConstants.getAzwanScrolls()[(int) Math.floor(Math.random() * GameConstants.getAzwanScrolls().length)];
-        azwanShopList.addItem(new MapleShopItem((short) 1, (short) 1, itemid, 0, (short) 0, 4310036, 15, (byte) 0, 0, 0, 0, 0));
+        azwanShopList.addItem(new ShopItem((short) 1, (short) 1, itemid, 0, (short) 0, 4310036, 15, (byte) 0, 0, 0, 0, 0));
         itemid = (Integer) GameConstants.getUseItems()[(int) Math.floor(Math.random() * GameConstants.getUseItems().length)].getLeft();
         int price = (Integer) GameConstants.getUseItems()[(int) Math.floor(Math.random() * GameConstants.getUseItems().length)].getRight();
-        azwanShopList.addItem(new MapleShopItem((short) 1, (short) 1, itemid, price, (short) 0, 0, 0, (byte) 0, 0, 0, 0, 0));
+        azwanShopList.addItem(new ShopItem((short) 1, (short) 1, itemid, price, (short) 0, 0, 0, (byte) 0, 0, 0, 0, 0));
         itemid = GameConstants.getCirculators()[(int) Math.floor(Math.random() * GameConstants.getCirculators().length)];
         price = InnerAbillity.getInstance().getCirculatorRank(itemid);
         if (price > 10) {
             price = 10;
         }
-        azwanShopList.addItem(new MapleShopItem((short) 1, (short) 1, itemid, 0, (short) 0, 4310038, price, (byte) 0, 0, 0, 0, 0));
+        azwanShopList.addItem(new ShopItem((short) 1, (short) 1, itemid, 0, (short) 0, 4310038, price, (byte) 0, 0, 0, 0, 0));
         //client.write(CField.getWhisper("Jean Pierre", client.getChannel(), "Psst! I got some new items in stock! Come take a look! Oh, but if your Honor Level increased, why not wait until you get a Circulator?"));
     }
 
-    public MapleShop getAzwanShop() {
+    public Shop getAzwanShop() {
         return azwanShopList;
     }
 
     public void openAzwanShop() {
         if (azwanShopList == null) {
-            MapleShopFactory.getInstance().getShop(2182002).sendShop(client);
+            ShopFactory.getInstance().getShop(2182002).sendShop(client);
         } else {
             getAzwanShop().sendShop(client);
         }

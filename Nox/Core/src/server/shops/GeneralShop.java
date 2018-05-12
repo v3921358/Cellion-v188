@@ -1,10 +1,10 @@
 package server.shops;
 
-public class MapleGeneralShop {
+public class GeneralShop {
 
     public static final int shopId = 111111;
 
-    public static enum GeneralShop {
+    public static enum GeneralShopInfo {
 
         I(1, shopId, 1302000, 1, 1, 0, 0, (byte) 0, 0, 0, 0, 0, 0, 0);
 
@@ -25,7 +25,7 @@ public class MapleGeneralShop {
         private final int shopitemid, shopid, itemid, price, position, reqitem, reqitemq, buyable, category, minlevel, expiration;
         private final int level, additions;
 
-        GeneralShop(int shopitemid, int shopid, int itemid, int price, int position, int reqitem, int reqitemq, byte rank, int buyable, int category, int minlevel, int expiration, int level, int additions) {
+        GeneralShopInfo(int shopitemid, int shopid, int itemid, int price, int position, int reqitem, int reqitemq, byte rank, int buyable, int category, int minlevel, int expiration, int level, int additions) {
             this.shopitemid = shopitemid;
             this.shopid = shopid;
             this.itemid = itemid;

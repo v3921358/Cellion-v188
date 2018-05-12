@@ -82,7 +82,7 @@ import server.maps.MapleMap;
 import server.maps.objects.User;
 import server.life.NPCLife;
 import server.quest.Quest;
-import server.shops.MapleShopFactory;
+import server.shops.ShopFactory;
 import tools.LogHelper;
 import tools.Pair;
 import tools.StringUtil;
@@ -524,7 +524,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         //       c.getPlayer().getInventory(MapleInventoryType.USE).removeItem(slot, (short) 1, false);
         c.SendPacket(CField.getCharInfo(c.getPlayer()));
         c.SendPacket(WvsContext.enableActions());
-        c.getPlayer().fakeRelog2();
+        c.getPlayer().reloadUser();
         //  MapleMap currentMap = c.getPlayer().getMap();
         //  currentMap.removePlayer(c.getPlayer());
         //  currentMap.addPlayer(c.getPlayer());
@@ -706,11 +706,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void openShop(int id) {
-        MapleShopFactory.getInstance().getShop(id).sendShop(c);
+        ShopFactory.getInstance().getShop(id).sendShop(c);
     }
 
     public void openShopNPC(int id) {
-        MapleShopFactory.getInstance().getShop(id).sendShop(c, this.id);
+        ShopFactory.getInstance().getShop(id).sendShop(c, this.id);
     }
 
     public int gainGachaponItemp(int id, int quantity) {
@@ -1214,7 +1214,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         sel.setViciousHammer((byte) 69);
         sel.setEnhance((byte) 69);
         c.getPlayer().equipChanged();
-        c.getPlayer().fakeRelog();
+        c.getPlayer().reloadUser();
     }
 
     public void changeStat(byte slot, int type, int amount) {
@@ -1299,7 +1299,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                 break;
         }
         c.getPlayer().equipChanged();
-        c.getPlayer().fakeRelog();
+        c.getPlayer().reloadUser();
     }
 
     public void openPackageDeliverer() {

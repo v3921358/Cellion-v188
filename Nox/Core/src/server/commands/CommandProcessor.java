@@ -185,7 +185,7 @@ public class CommandProcessor {
 
                 MapleCommand co = commands.get(splitted[0]);
                 if (co == null) {
-                    if (splitted[0].equals(line.charAt(0) + "commands")) {
+                    if (splitted[0].equals(line.charAt(0) + "help")) {
                         dropHelp(c);
                         return true;
                     }

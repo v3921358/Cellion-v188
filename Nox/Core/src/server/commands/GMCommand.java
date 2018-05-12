@@ -9,6 +9,7 @@ import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
 import handling.world.CheaterData;
 import handling.world.World;
+import java.text.DateFormat;
 import scripting.provider.*;
 import server.*;
 import server.Timer.*;
@@ -24,6 +25,7 @@ import tools.packet.CField;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
+import server.quest.Quest;
 import static tools.StringUtil.getOptionalIntArg;
 import tools.Utility;
 import tools.packet.WvsContext;
@@ -168,6 +170,63 @@ public class GMCommand {
         }
     }
 
+    public static class TempBan extends CommandExecute {
+
+        protected boolean ipBan = false;
+        private final String[] types = {"HACK", "BOT", "AD", "HARASS", "CURSE", "SCAM", "MISCONDUCT", "SELL", "ICASH", "TEMP", "GM", "IPROGRAM", "MEGAPHONE"};
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            if (splitted.length < 4) {
+                c.getPlayer().dropMessage(6, "Tempban [name] [REASON] [hours]");
+                StringBuilder s = new StringBuilder("Tempban reasons: ");
+                for (int i = 0; i < types.length; i++) {
+                    s.append(i + 1).append(" - ").append(types[i]).append(", ");
+                }
+                c.getPlayer().dropMessage(6, s.toString());
+                return 0;
+            }
+            final User pTarget = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            final int nReason = Integer.parseInt(splitted[2]);
+            final int tHours = Integer.parseInt(splitted[3]);
+
+            final Calendar pCalender = Calendar.getInstance();
+            pCalender.add(Calendar.HOUR, tHours);
+            final DateFormat pFormat = DateFormat.getInstance();
+
+            if (pTarget == null || nReason < 0 || nReason >= types.length) {
+                c.getPlayer().dropMessage(6, "Unable to find character or reason was not valid, type tempban to see reasons");
+                return 0;
+            }
+            pTarget.tempban("Temp banned by " + c.getPlayer().getName() + " for " + types[nReason] + " reason", pCalender, nReason, ipBan);
+            c.getPlayer().dropMessage(6, "The character " + splitted[1] + " has been successfully tempbanned till " + pFormat.format(pCalender.getTime()));
+            return 1;
+        }
+    }
+
+    public static class Jail extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            if (splitted.length < 3) {
+                c.getPlayer().dropMessage(6, "Syntax: !jail <character> <minutes, 0 = forever>");
+                return 0;
+            }
+            User pTarget = Utility.requestCharacter(splitted[1]);
+            final int tDuration = Math.max(0, Integer.parseInt(splitted[2]));
+            if (pTarget != null && c.getPlayer().getGMLevel() >= pTarget.getGMLevel()) {
+                MapleMap pTargetMap = ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(ServerConstants.JAIL_MAP);
+                pTarget.getQuestNAdd(Quest.getInstance(GameConstants.JAIL_QUEST)).setCustomData(String.valueOf(tDuration * 60));
+                pTarget.changeMap(pTargetMap, pTargetMap.getPortal(0));
+                c.getPlayer().dropMessage(6, "Character (" + pTarget.getName() + ") has been jailed" + ((tDuration == 0) ? " forever " : (" for " + tDuration + " minutes.")));
+            } else {
+                c.getPlayer().dropMessage(6, "Please go to the same channel as the targeted character / Character not found.");
+                return 0;
+            }
+            return 1;
+        }
+    }
+    
     public static class HyperSkills extends CommandExecute {
 
         @Override
@@ -224,6 +283,7 @@ public class GMCommand {
             return 1;
         }
     }
+    
 
     public static class LevelTo extends CommandExecute {
 

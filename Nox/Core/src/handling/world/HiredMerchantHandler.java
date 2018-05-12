@@ -164,7 +164,7 @@ public class HiredMerchantHandler {
                     return;
                 }
                 if (deletePackage(c.getPlayer().getAccountID(), pack.getPackageid(), c.getPlayer().getId())) {
-                    c.getPlayer().fakeRelog();
+                    c.getPlayer().reloadUser();
                     c.getPlayer().gainMeso(pack.getMesos(), true);
                     c.SendPacket(PlayerShopPacket.merchItem_Message((byte) 0x1d));
                     c.getPlayer().setConversation(MapleCharacterConversationType.None);

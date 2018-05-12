@@ -5,33 +5,50 @@ package server.commands;
 
 import client.ClientSocket;
 import client.MapleDisease;
-import client.SkillFactory;
+import client.MapleStat;
+import client.inventory.Equip;
+import client.inventory.Item;
+import client.inventory.MapleInventoryIdentifier;
+import client.inventory.MapleInventoryType;
+import client.inventory.MapleRing;
 import constants.GameConstants;
 import constants.ServerConstants;
 import handling.world.CheaterData;
 import handling.world.World;
+import java.awt.Point;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import net.OutPacket;
 import provider.data.HexTool;
+import scripting.EventInstanceManager;
 import scripting.EventManager;
 import scripting.provider.NPCChatByType;
 import scripting.provider.NPCChatType;
 import scripting.provider.NPCScriptManager;
+import server.MapleInventoryManipulator;
+import server.MapleItemInformationProvider;
 import server.MaplePortal;
 import server.MapleStringInformationProvider;
+import server.events.MapleEvent;
+import server.events.MapleEventType;
 import server.life.LifeFactory;
 import server.life.Mob;
 import server.life.MobSkillFactory;
+import server.life.MonsterInformationProvider;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
+import server.maps.SavedLocationType;
+import server.maps.objects.Pet;
 import server.maps.objects.User;
 import server.quest.Quest;
-import server.shops.MapleShopFactory;
+import server.shops.ShopFactory;
 import service.ChannelServer;
 import service.RecvPacketOpcode;
 import service.SendPacketOpcode;
+import tools.LogHelper;
 import tools.Pair;
 import tools.StringUtil;
 import tools.Tuple;
@@ -51,6 +68,155 @@ public class CommandVault {
         return ServerConstants.PlayerGMRank.COMMAND_VAULT_ACCESS;
     }
 
+    public static class STR extends DistributeStatCommands {
+
+        public STR() {
+            stat = MapleStat.STR;
+        }
+    }
+
+    public static class DEX extends DistributeStatCommands {
+
+        public DEX() {
+            stat = MapleStat.DEX;
+        }
+    }
+
+    public static class INT extends DistributeStatCommands {
+
+        public INT() {
+            stat = MapleStat.INT;
+        }
+    }
+
+    public static class LUK extends DistributeStatCommands {
+
+        public LUK() {
+            stat = MapleStat.LUK;
+        }
+    }
+
+    public static class Hair extends DistributeStatCommands {
+
+        public Hair() {
+            stat = MapleStat.HAIR;
+        }
+    }
+
+    public abstract static class DistributeStatCommands extends CommandExecute {
+
+        protected MapleStat stat = null;
+        private static final int statLim = 5000;
+        private static final int hpMpLim = 500000;
+
+        private void setStat(User player, int current, int amount) {
+            switch (stat) {
+                case STR:
+                    player.getStat().setStr((short) (current + amount), player);
+                    player.updateSingleStat(MapleStat.STR, player.getStat().getStr());
+                    break;
+                case DEX:
+                    player.getStat().setDex((short) (current + amount), player);
+                    player.updateSingleStat(MapleStat.DEX, player.getStat().getDex());
+                    break;
+                case INT:
+                    player.getStat().setInt((short) (current + amount), player);
+                    player.updateSingleStat(MapleStat.INT, player.getStat().getInt());
+                    break;
+                case LUK:
+                    player.getStat().setLuk((short) (current + amount), player);
+                    player.updateSingleStat(MapleStat.LUK, player.getStat().getLuk());
+                    break;
+                case MAXHP:
+                    long maxhp = Math.min(500000, Math.abs(current + amount * 30));
+                    player.getStat().setMaxHp((short) (current + amount * 30), player);
+                    player.getStat().setMaxHp((short) maxhp, player);
+                    player.updateSingleStat(MapleStat.HP, player.getStat().getHp());
+                    break;
+                case IndieMMP:
+                    long maxmp = Math.min(500000, Math.abs(current + amount));
+                    player.getStat().setMaxMp((short) maxmp, player);
+                    player.updateSingleStat(MapleStat.MP, player.getStat().getMp());
+                    break;
+                case HAIR:
+                    int hair = amount;
+                    player.setZeroBetaHair(hair);
+                    player.updateSingleStat(MapleStat.HAIR, player.getZeroBetaHair());
+                    break;
+            }
+        }
+
+        private int getStat(User player) {
+            switch (stat) {
+                case STR:
+                    return player.getStat().getStr();
+                case DEX:
+                    return player.getStat().getDex();
+                case INT:
+                    return player.getStat().getInt();
+                case LUK:
+                    return player.getStat().getLuk();
+                case MAXHP:
+                    return player.getStat().getMaxHp();
+                case IndieMMP:
+                    return player.getStat().getMaxMp();
+                default:
+                    throw new RuntimeException(); //Will never happen.
+            }
+        }
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            if (splitted.length < 2) {
+                c.getPlayer().dropMessage(5, "Invalid number entered.");
+                return 0;
+            }
+            int change;
+            try {
+                change = Integer.parseInt(splitted[1]);
+            } catch (NumberFormatException nfe) {
+                c.getPlayer().dropMessage(5, "Invalid number entered.");
+                return 0;
+            }
+            int hpUsed = 0;
+            int mpUsed = 0;
+            if (stat == MapleStat.IndieMMP) {
+                mpUsed = change;
+                short job = c.getPlayer().getJob();
+                if (GameConstants.isDemonSlayer(job) || GameConstants.isAngelicBuster(job) || GameConstants.isDemonAvenger(job)) {
+                    c.getPlayer().dropMessage(5, "You cannot raise MP.");
+                    return 0;
+                }
+                change *= GameConstants.getMpApByJob(job);
+            }
+
+            if (change <= 0) {
+                c.getPlayer().dropMessage(5, "You don't have enough AP Resets for that.");
+                return 0;
+            }
+            if (c.getPlayer().getRemainingAp() < change) {
+                c.getPlayer().dropMessage(5, "You don't have enough AP for that.");
+                return 0;
+            }
+            if (getStat(c.getPlayer()) + change > hpMpLim && (stat == MapleStat.MAXHP || stat == MapleStat.IndieMMP)) {
+                c.getPlayer().dropMessage(5, "The stat limit is " + hpMpLim + ".");
+                return 0;
+            }
+            setStat(c.getPlayer(), getStat(c.getPlayer()), change);
+            c.getPlayer().setRemainingAp((short) (c.getPlayer().getRemainingAp() - change));
+            c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() + hpUsed));
+            c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() + mpUsed));
+            c.getPlayer().updateSingleStat(MapleStat.AVAILABLEAP, c.getPlayer().getRemainingAp());
+            if (stat == MapleStat.MAXHP) {
+                c.getPlayer().dropMessage(5, StringUtil.makeEnumHumanReadable(stat.name()) + " has been raised by " + change * 30 + ".");
+                c.getPlayer().reloadUser();
+            } else {
+                c.getPlayer().dropMessage(5, StringUtil.makeEnumHumanReadable(stat.name()) + " has been raised by " + change + ".");
+            }
+            return 1;
+        }
+    }
+    
     public static class CharInfo extends CommandExecute {
 
         @Override
@@ -218,7 +384,7 @@ public class CommandVault {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            MapleShopFactory.getInstance().getShop(Integer.parseInt(splitted[1]));
+            ShopFactory.getInstance().getShop(Integer.parseInt(splitted[1]));
             return 1;
         }
     }
@@ -227,7 +393,7 @@ public class CommandVault {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            MapleShopFactory shop = MapleShopFactory.getInstance();
+            ShopFactory shop = ShopFactory.getInstance();
             int shopId = Integer.parseInt(splitted[1]);
             if (shop.getShop(shopId) != null) {
                 shop.getShop(shopId).sendShop(c);
@@ -570,4 +736,601 @@ public class CommandVault {
             return 1;
         }
     }
+    
+    public static class Position extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            Point position = c.getPlayer().getPosition();
+
+            c.getPlayer().dropMessage(6, "Your position is: " + position + ".");
+            return 1;
+        }
+    }
+    
+    public static class GivePet extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            if (splitted.length < 6) {
+                c.getPlayer().dropMessage(0, splitted[0] + " <character name> <petid> <petname> <petlevel> <petcloseness> <petfullness>");
+                return 0;
+            }
+            User petowner = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            int id = Integer.parseInt(splitted[2]);
+            String name = splitted[3];
+            int level = Integer.parseInt(splitted[4]);
+            int closeness = Integer.parseInt(splitted[5]);
+            int fullness = Integer.parseInt(splitted[6]);
+            long period = 20000;
+            short flags = 0;
+            if (id >= 5001000 || id < 5000000) {
+                c.getPlayer().dropMessage(0, "Invalid pet id.");
+                return 0;
+            }
+            if (level > 30) {
+                level = 30;
+            }
+            if (closeness > 30000) {
+                closeness = 30000;
+            }
+            if (fullness > 100) {
+                fullness = 100;
+            }
+            if (level < 1) {
+                level = 1;
+            }
+            if (closeness < 0) {
+                closeness = 0;
+            }
+            if (fullness < 0) {
+                fullness = 0;
+            }
+            try {
+                MapleInventoryManipulator.addById(petowner.getClient(), id, (short) 1, "", Pet.createPet(id, name, level, closeness, fullness, MapleInventoryIdentifier.getInstance(), id == 5000054 ? (int) period : 0, flags), 45, false, null);
+            } catch (NullPointerException ex) {
+            }
+            return 1;
+        }
+    }
+    
+    public static class AutoEvent extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            MapleEvent.onStartEvent(c.getPlayer());
+            return 1;
+        }
+    }
+
+    public static class StartEvent extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            if (c.getChannelServer().getEvent() == c.getPlayer().getMapId()) {
+                MapleEvent.setEvent(c.getChannelServer(), false);
+                c.getPlayer().dropMessage(5, "Started the event and closed off");
+                return 1;
+            } else {
+                c.getPlayer().dropMessage(5, "!event must've been done first, and you must be in the event map.");
+                return 0;
+            }
+        }
+    }
+
+    public static class Event extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            final MapleEventType type = MapleEventType.getByString(splitted[1]);
+            if (type == null) {
+                final StringBuilder sb = new StringBuilder("Wrong syntax: ");
+                for (MapleEventType t : MapleEventType.values()) {
+                    sb.append(t.name()).append(",");
+                }
+                c.getPlayer().dropMessage(5, sb.toString().substring(0, sb.toString().length() - 1));
+                return 0;
+            }
+            final String msg = MapleEvent.scheduleEvent(type, c.getChannelServer());
+            if (msg.length() > 0) {
+                c.getPlayer().dropMessage(5, msg);
+                return 0;
+            }
+            return 1;
+        }
+    }
+    
+    public static class SpeakMega extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            if (victim == null) {
+                c.getPlayer().dropMessage(0, "The person isn't login, or doesn't exists.");
+                return 0;
+            }
+            World.Broadcast.broadcastSmega(WvsContext.broadcastMsg(3, victim.getClient().getChannel(), victim.getName() + " : " + StringUtil.joinStringFrom(splitted, 2), true));
+            return 1;
+        }
+    }
+    
+    public static class KillMonsterByOID extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            MapleMap map = c.getPlayer().getMap();
+            int targetId = Integer.parseInt(splitted[1]);
+            Mob monster = map.getMonsterByOid(targetId);
+            if (monster != null) {
+                map.killMonster(monster, c.getPlayer(), false, false, (byte) 1);
+            }
+            return 1;
+        }
+    }
+
+    public static class RemoveNPCs extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            c.getPlayer().getMap().resetNPCs();
+            return 1;
+        }
+    }
+
+    public static class GMChatNotice extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            for (User all : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
+                all.dropMessage(-6, StringUtil.joinStringFrom(splitted, 1));
+            }
+            return 1;
+        }
+    }
+    
+    public static class Yellow extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            int range = -1;
+            switch (splitted[1]) {
+                case "m":
+                    range = 0;
+                    break;
+                case "c":
+                    range = 1;
+                    break;
+                case "w":
+                    range = 2;
+                    break;
+            }
+            if (range == -1) {
+                range = 2;
+            }
+            OutPacket packet = WvsContext.yellowChat((splitted[0].equals("!y") ? ("[" + c.getPlayer().getName() + "] ") : "") + StringUtil.joinStringFrom(splitted, 2));
+            switch (range) {
+                case 0:
+                    c.getPlayer().getMap().broadcastMessage(packet);
+                    break;
+                case 1:
+                    ChannelServer.getInstance(c.getChannel()).broadcastPacket(packet);
+                    break;
+                case 2:
+                    World.Broadcast.broadcastMessage(packet);
+                    break;
+                default:
+                    break;
+            }
+            return 1;
+        }
+    }
+    
+    public static class Letter extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            if (splitted.length < 3) {
+                c.getPlayer().dropMessage(6, "syntax: !letter <color (green/red)> <word>");
+                return 0;
+            }
+            int start;
+            int nstart;
+            if (splitted[1].equalsIgnoreCase("green")) {
+                start = 3991026;
+                nstart = 3990019;
+            } else if (splitted[1].equalsIgnoreCase("red")) {
+                start = 3991000;
+                nstart = 3990009;
+            } else {
+                c.getPlayer().dropMessage(6, "Unknown color!");
+                return 0;
+            }
+            String splitString = StringUtil.joinStringFrom(splitted, 2);
+            List<Integer> chars = new ArrayList<>();
+            splitString = splitString.toUpperCase();
+
+            for (int i = 0; i < splitString.length(); ++i) {
+                char chr = splitString.charAt(i);
+                if (chr == ' ') {
+                    chars.add(Integer.valueOf(-1));
+                } else if ((chr >= 'A') && (chr <= 'Z')) {
+                    chars.add(Integer.valueOf(chr));
+                } else if ((chr >= '0') && (chr <= '9')) {
+                    chars.add(Integer.valueOf(chr + 200));
+                }
+            }
+            int dStart = c.getPlayer().getPosition().x - (splitString.length() / 2 * 32);
+            for (Integer i : chars) {
+                if (i.intValue() == -1) {
+                    dStart += 32;
+                } else {
+                    int val;
+                    Item item;
+                    if (i.intValue() < 200) {
+                        val = start + i.intValue() - 65;
+                        item = new Item(val, (byte) 0, (short) 1);
+                        c.getPlayer().getMap().spawnItemDrop(c.getPlayer(), c.getPlayer(), item, new Point(dStart, c.getPlayer().getPosition().y), false, false, false);
+                        dStart += 32;
+                    } else if ((i.intValue() >= 200) && (i.intValue() <= 300)) {
+                        val = nstart + i.intValue() - 48 - 200;
+                        item = new Item(val, (byte) 0, (short) 1);
+                        c.getPlayer().getMap().spawnItemDrop(c.getPlayer(), c.getPlayer(), item, new Point(dStart, c.getPlayer().getPosition().y), false, false, false);
+                        dStart += 32;
+                    }
+                }
+            }
+            return 1;
+        }
+    }
+    
+    public static class SpawnMob extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            final String mname = splitted[2];
+            final int num = Integer.parseInt(splitted[1]);
+            int mid = 0;
+            for (Pair<Integer, String> mob : MonsterInformationProvider.getInstance().getAllMonsters()) {
+                if (mob.getRight().toLowerCase().equals(mname.toLowerCase())) {
+                    mid = mob.getLeft();
+                    break;
+                }
+            }
+
+            Mob onemob;
+            try {
+                onemob = LifeFactory.getMonster(mid);
+            } catch (RuntimeException e) {
+                c.getPlayer().dropMessage(5, "Error: " + e.getMessage());
+                return 0;
+            }
+            if (onemob == null) {
+                c.getPlayer().dropMessage(5, "Mob does not exist");
+                return 0;
+            }
+            for (int i = 0; i < num; i++) {
+                Mob mob = LifeFactory.getMonster(mid);
+                c.getPlayer().getMap().spawnMonsterOnGroundBelow(mob, c.getPlayer().getPosition());
+            }
+            return 1;
+        }
+    }
+    
+    /*public static class SpawnMist extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            int clock = 1;
+            MapleMonster mob = LifeFactory.getMonster(891000);
+            c.write(CField.spawnClockMist(this));
+            return 0;
+        }
+    }*/
+    
+    public static class ItemSearch extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            String search = StringUtil.joinStringFrom(splitted, 1);
+            String result = "";
+
+            List<String> retItems = new ArrayList<>();
+            int selection = 0;
+            for (java.util.Map.Entry<Integer, Pair<String, String>> itemValue : MapleStringInformationProvider.getAllitemsStringCache().entrySet()) {
+                if (itemValue.getValue().getLeft().toLowerCase().contains(search.toLowerCase())
+                        || search.toLowerCase().contains(itemValue.getValue().getLeft().toLowerCase())) {
+                    retItems.add("\r\n#L" + selection + "##b" + itemValue.getKey() + " " + " #k- " + " #r#z" + itemValue.getValue().getLeft() + "##k");
+                    selection++;
+                }
+            }
+
+            if (retItems.size() > 0) {
+                for (String singleRetItem : retItems) {
+                    if (result.length() < 10000) {
+                        result += singleRetItem;
+                    } else {
+                        result += "\r\n#bCouldn't load all items, there are too many results.#k";
+                        c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, result, NPCChatByType.NPC_Cancellable));
+                        return 1;
+                    }
+                }
+            } else {
+                result = "No Items Found";
+            }
+            c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OnAskMenu, result, NPCChatByType.NPC_Cancellable));
+            return 1;
+        }
+    }
+    
+    public static class DropItem extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            final String itemName = StringUtil.joinStringFrom(splitted, 2);
+            final short quantity = (short) CommandProcessorUtil.getOptionalIntArg(splitted, 1, 1);
+            int itemId = 0;
+
+            for (java.util.Map.Entry<Integer, Pair<String, String>> item : MapleStringInformationProvider.getAllitemsStringCache().entrySet()) {
+                final String name = item.getValue().getLeft();
+
+                if (name.toLowerCase().equals(itemName.toLowerCase())) {
+                    itemId = item.getKey();
+                    break;
+                }
+            }
+            MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+            if (!ii.itemExists(itemId)) {
+                c.getPlayer().dropMessage(5, itemName + " does not exist");
+            } else {
+                Item toDrop;
+                if (GameConstants.getInventoryType(itemId) == MapleInventoryType.EQUIP) {
+
+                    toDrop = (Equip) ii.getEquipById(itemId);
+                } else {
+                    toDrop = new client.inventory.Item(itemId, (byte) 0, (short) quantity, (byte) 0);
+                }
+                if (!c.getPlayer().isAdmin()) {
+                    toDrop.setGMLog(c.getPlayer().getName() + " used !drop");
+                    toDrop.setOwner(c.getPlayer().getName());
+                }
+                c.getPlayer().getMap().spawnItemDrop(c.getPlayer(), c.getPlayer(), toDrop, c.getPlayer().getPosition(), true, true, false);
+            }
+            return 1;
+        }
+    }
+    
+    /*public static class Drop extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            final int itemId = Integer.parseInt(splitted[1]);
+            final short quantity = (short) CommandProcessorUtil.getOptionalIntArg(splitted, 2, 1);
+            MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+            if (!ii.itemExists(itemId)) {
+                c.getPlayer().dropMessage(5, itemId + " does not exist");
+            } else {
+                Item toDrop;
+                if (GameConstants.getInventoryType(itemId) == MapleInventoryType.EQUIP) {
+
+                    toDrop = ii.randomizeStats((Equip) ii.getEquipById(itemId));
+                } else {
+                    toDrop = new client.inventory.Item(itemId, (byte) 0, (short) quantity, (byte) 0);
+                }
+                if (!c.getPlayer().isAdmin()) {
+                    toDrop.setGMLog(c.getPlayer().getName() + " used !drop");
+                    toDrop.setOwner(c.getPlayer().getName());
+                }
+                c.getPlayer().getMap().spawnItemDrop(c.getPlayer(), c.getPlayer(), toDrop, c.getPlayer().getPosition(), true, true, false);
+            }
+            return 1;
+        }
+    }
+
+    public static class DropItem extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            final String itemName = StringUtil.joinStringFrom(splitted, 2);
+            final short quantity = (short) CommandProcessorUtil.getOptionalIntArg(splitted, 1, 1);
+            int itemId = 0;
+
+            for (Map.Entry<Integer, Pair<String, String>> item : MapleStringInformationProvider.getAllitemsStringCache().entrySet()) {
+                final String name = item.getValue().getLeft();
+
+                if (name.toLowerCase().equals(itemName.toLowerCase())) {
+                    itemId = item.getKey();
+                    break;
+                }
+            }
+            MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+            if (!ii.itemExists(itemId)) {
+                c.getPlayer().dropMessage(5, itemName + " does not exist");
+            } else {
+                Item toDrop;
+                if (GameConstants.getInventoryType(itemId) == MapleInventoryType.EQUIP) {
+
+                    toDrop = (Equip) ii.getEquipById(itemId);
+                } else {
+                    toDrop = new client.inventory.Item(itemId, (byte) 0, (short) quantity, (byte) 0);
+                }
+                if (!c.getPlayer().isAdmin()) {
+                    toDrop.setGMLog(c.getPlayer().getName() + " used !drop");
+                    toDrop.setOwner(c.getPlayer().getName());
+                }
+                c.getPlayer().getMap().spawnItemDrop(c.getPlayer(), c.getPlayer(), toDrop, c.getPlayer().getPosition(), true, true, false);
+            }
+            return 1;
+        }
+    }*/
+    
+    public static class Marry extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            if (splitted.length < 3) {
+                c.getPlayer().dropMessage(6, "Need <name> <itemid>");
+                return 0;
+            }
+            int itemId = Integer.parseInt(splitted[2]);
+            if (!GameConstants.isEffectRing(itemId)) {
+                c.getPlayer().dropMessage(6, "Invalid itemID.");
+            } else {
+                User fff = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+                if (fff == null) {
+                    c.getPlayer().dropMessage(6, "Player must be online");
+                } else {
+                    int[] ringID = {MapleInventoryIdentifier.getInstance(), MapleInventoryIdentifier.getInstance()};
+                    try {
+                        User[] chrz = {fff, c.getPlayer()};
+                        for (int i = 0; i < chrz.length; i++) {
+                            Equip eq = (Equip) MapleItemInformationProvider.getInstance().getEquipById(itemId, ringID[i]);
+                            if (eq == null) {
+                                c.getPlayer().dropMessage(6, "Invalid itemID.");
+                                return 0;
+                            }
+                            MapleInventoryManipulator.addbyItem(chrz[i].getClient(), eq.copy());
+                            chrz[i].dropMessage(6, "Successfully married with " + chrz[i == 0 ? 1 : 0].getName());
+                        }
+                        MapleRing.addToDB(itemId, c.getPlayer(), fff.getName(), fff.getId(), ringID);
+                    } catch (SQLException e) {
+                        LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
+                    }
+                }
+            }
+            return 1;
+        }
+    }
+    
+    public static class PinkZak extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            final EventManager eem = c.getChannelServer().getEventSM().getEventManager("PinkZakumEntrance");
+            final EventInstanceManager eim = eem.getInstance(("PinkZakumEntrance"));
+            if (eem.getProperty("entryPossible").equals("true")) {
+                NPCScriptManager.getInstance().start(c, 9201160, null);
+            }
+            if (eem.getProperty("entryPossible").equals("false")) {
+                c.getPlayer().dropMessage(5, "Entry to the [Pink Zakum] Event is currently closed please wait patiently for the next entrance!");
+            }
+            return 1;
+        }
+    }
+
+    public static class ExpFix extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            c.getPlayer().setExp(c.getPlayer().getExp() - GameConstants.getExpNeededForLevel(c.getPlayer().getLevel()) >= 0 ? GameConstants.getExpNeededForLevel(c.getPlayer().getLevel()) : 0);
+            return 1;
+        }
+    }
+
+    public static class ResetExp extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            c.getPlayer().setExp(0);
+            return 1;
+        }
+    }
+    
+    public static class Menu extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            c.removeClickedNPC();
+            NPCScriptManager.getInstance().dispose(c);
+            c.SendPacket(WvsContext.enableActions());
+
+            if (c.getPlayer().isInBlockedMap()) {
+                c.getPlayer().dropMessage(5, "This command may not be used here.");
+                return 0;
+            } else {
+                NPCScriptManager.getInstance().start(c, 9001001, null);
+                return 1;
+            }
+        }
+    }
+    
+    public static class Online extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            int nSize = 0;
+            for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
+                nSize += ChannelServer.getInstance(i).getPlayerStorage().getAllCharacters().size();
+            }
+
+            String sMessage = "#d" + ServerConstants.SERVER_NAME + " MapleStory Server#k\r\n"
+                    + "There are currently #e#r" + nSize + "#k#n user(s) online.\r\n\r\n#r";
+
+            for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
+                sMessage += ChannelServer.getInstance(i).getPlayerStorage().formatOnlinePlayers(true);
+            }
+
+            c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage, NPCChatByType.NPC_Cancellable));
+            return 1;
+        }
+    }
+    
+    public static class FM extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            for (int i : GameConstants.blockedMaps) {
+                if (c.getPlayer().getMapId() == i) {
+                    c.getPlayer().dropMessage(5, "You may not use this command here.");
+                    return 0;
+                }
+            }
+            if (c.getPlayer().hasBlockedInventory() || c.getPlayer().getMap().getSquadByMap() != null || c.getPlayer().getEventInstance() != null || c.getPlayer().getMap().getEMByMap() != null || c.getPlayer().getMapId() >= 990000000/* || FieldLimitType.VipRock.check(c.getPlayer().getMap().getFieldLimit())*/) {
+                c.getPlayer().dropMessage(5, "You may not use this command here.");
+                return 0;
+            }
+            if ((c.getPlayer().getMapId() >= 680000210 && c.getPlayer().getMapId() <= 680000502) || (c.getPlayer().getMapId() / 1000 == 980000 && c.getPlayer().getMapId() != 980000000) || (c.getPlayer().getMapId() / 100 == 1030008) || (c.getPlayer().getMapId() / 100 == 922010) || (c.getPlayer().getMapId() / 10 == 13003000)) {
+                c.getPlayer().dropMessage(5, "You may not use this command here.");
+                return 0;
+            }
+            if (c.getPlayer().getMapId() == ServerConstants.UNIVERSAL_START_MAP) {
+                c.getPlayer().dropMessage(5, "You may not use this command here.");
+                return 0;
+            }
+            if (c.getPlayer().getMapId() == 910000000) {
+                c.getPlayer().dropMessage(5, "You are already in the Free Market.");
+            }
+
+            c.getPlayer().saveLocation(SavedLocationType.FREE_MARKET, c.getPlayer().getMap().getReturnMap().getId());
+            MapleMap map = c.getChannelServer().getMapFactory().getMap(910000000);
+
+            c.getPlayer().changeMap(map, map.getPortal(0));
+            return 1;
+        }
+    }
+    
+    public static class SpawnBomb extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            if (c.getPlayer().getMapId() != 109010100) {
+                c.getPlayer().dropMessage(5, "You may only spawn bomb in the event map.");
+                return 0;
+            }
+            if (!c.getChannelServer().bombermanActive()) {
+                c.getPlayer().dropMessage(5, "You may not spawn bombs yet.");
+                return 0;
+            }
+            c.getPlayer().getMap().spawnMonsterOnGroudBelow(LifeFactory.getMonster(9300166), c.getPlayer().getPosition());
+            return 1;
+        }
+    }
+    
+    /*public static class TempBanIP extends TempBan {
+
+        public TempBanIP() {
+            ipBan = true;
+        }
+    }*/
+    
+    
 }

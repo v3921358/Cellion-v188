@@ -3,7 +3,7 @@ package server.life;
 import client.ClientSocket;
 import server.MapleStringInformationProvider;
 import server.maps.MapleMapObjectType;
-import server.shops.MapleShopFactory;
+import server.shops.ShopFactory;
 import tools.packet.CField.NPCPacket;
 
 public class NPCLife extends AbstractLoadedMapleLife {
@@ -20,11 +20,11 @@ public class NPCLife extends AbstractLoadedMapleLife {
     }
 
     public final boolean hasShop() {
-        return MapleShopFactory.getInstance().getShopForNPC(getId()) != null;
+        return ShopFactory.getInstance().getShopForNPC(getId()) != null;
     }
 
     public final void sendShop(final ClientSocket c) {
-        MapleShopFactory.getInstance().getShopForNPC(getId()).sendShop(c);
+        ShopFactory.getInstance().getShopForNPC(getId()).sendShop(c);
     }
 
     // Handling for custom NPCs.

@@ -18,9 +18,10 @@ public class DonatorCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            c.getPlayer().dropMessage(6, "$donorhelp - Display availible donator commands.");
-            c.getPlayer().dropMessage(6, "$togglesmega - Enable or disable player Super Megaphones.");
-            c.getPlayer().dropMessage(6, "The availible " + ServerConstants.SERVER_NAME + " donator commands have been listed above.");
+            c.getPlayer().yellowMessage("----------------- DONOR COMMANDS -----------------");
+            c.getPlayer().yellowMessage("$donorhelp  : Display availible donator commands.");
+            c.getPlayer().yellowMessage("$togglesmega : Enable or disable player Super Megaphones.");
+            c.getPlayer().completeDispose();
             return 1;
         }
     }

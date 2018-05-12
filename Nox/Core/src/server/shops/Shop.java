@@ -23,12 +23,12 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class MapleShop {
+public class Shop {
 
     private static final Set<Integer> rechargeableItems = new LinkedHashSet<>();
     private final int id;
     private final int npcId;
-    private final List<MapleShopItem> items = new LinkedList<>();
+    private final List<ShopItem> items = new LinkedList<>();
     private final List<Pair<Integer, String>> ranks = new ArrayList<>();
 
     static {
@@ -57,16 +57,16 @@ public class MapleShop {
         rechargeableItems.add(Integer.valueOf(2332000));
     }
 
-    public MapleShop(int id, int npcId) {
+    public Shop(int id, int npcId) {
         this.id = id;
         this.npcId = npcId;
     }
 
-    public void addItem(MapleShopItem item) {
+    public void addItem(ShopItem item) {
         this.items.add(item);
     }
 
-    public List<MapleShopItem> getItems() {
+    public List<ShopItem> getItems() {
         return this.items;
     }
 
@@ -89,7 +89,7 @@ public class MapleShop {
 
         // Item information
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-        final MapleShopItem shopitem = findBySlot(slot);
+        final ShopItem shopitem = findBySlot(slot);
 
         if (shopitem != null) {
             // Check if the itemid that the player sends is the same itemid on the server
@@ -229,7 +229,7 @@ public class MapleShop {
         c.SendPacket(WvsContext.enableActions());
     }
 
-    private boolean checkRankEligibility(final User chr, final MapleShopItem shopitem) {
+    private boolean checkRankEligibility(final User chr, final ShopItem shopitem) {
         if (shopitem.getRank() >= 0) {
             boolean passed = true;
             int y = 0;
@@ -362,8 +362,8 @@ public class MapleShop {
         }
     }
 
-    protected MapleShopItem findById(int itemId) {
-        for (MapleShopItem item : this.items) {
+    protected ShopItem findById(int itemId) {
+        for (ShopItem item : this.items) {
             if (item.getItemId() == itemId) {
                 return item;
             }
@@ -371,8 +371,8 @@ public class MapleShop {
         return null;
     }
 
-    protected MapleShopItem findBySlot(short slot) {
-        for (MapleShopItem item : this.items) {
+    protected ShopItem findBySlot(short slot) {
+        for (ShopItem item : this.items) {
             if (item.getSlot() == slot) {
                 return item;
             }
@@ -380,8 +380,8 @@ public class MapleShop {
         return null;
     }
 
-    public static MapleShop createFromDB(int id, boolean isShopId) {
-        MapleShop ret = null;
+    public static Shop createFromDB(int id, boolean isShopId) {
+        Shop ret = null;
 
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         try (Connection con = Database.GetConnection()) {
@@ -392,7 +392,7 @@ public class MapleShop {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 shopId = rs.getInt("shopid");
-                ret = new MapleShop(shopId, rs.getInt("npcid"));
+                ret = new Shop(shopId, rs.getInt("npcid"));
                 rs.close();
                 ps.close();
             } else {
@@ -407,7 +407,7 @@ public class MapleShop {
             while (rs.next()) {
                 if (ii.itemExists(rs.getInt("itemid"))) {
                     if ((GameConstants.isThrowingStar(rs.getInt("itemid"))) || (GameConstants.isBullet(rs.getInt("itemid")))) {
-                        MapleShopItem starItem = new MapleShopItem((short) rs.getShort("buyable"), ii.getSlotMax(rs.getInt("itemid")), rs.getInt("itemid"), rs.getInt("price"), (short) rs.getInt("position"), rs.getInt("reqitem"), rs.getInt("reqitemq"), rs.getByte("rank"), rs.getInt("category"), rs.getInt("minLevel"), rs.getInt("expiration"), rs.getInt("potential"));
+                        ShopItem starItem = new ShopItem((short) rs.getShort("buyable"), ii.getSlotMax(rs.getInt("itemid")), rs.getInt("itemid"), rs.getInt("price"), (short) rs.getInt("position"), rs.getInt("reqitem"), rs.getInt("reqitemq"), rs.getByte("rank"), rs.getInt("category"), rs.getInt("minLevel"), rs.getInt("expiration"), rs.getInt("potential"));
                         starItem.setPointQuestId(rs.getInt("pointquestid"));
                         starItem.setPointQuestPrice(rs.getInt("pointquestprice"));
                         starItem.setStarCoin(rs.getInt("starcoin"));
@@ -420,7 +420,7 @@ public class MapleShop {
                         starItem.setLevelLimited(rs.getInt("levellimited"));
                         ret.addItem(starItem);
                     } else {
-                        MapleShopItem shopItem = new MapleShopItem((short) rs.getShort("buyable"), rs.getShort("quantity"), rs.getInt("itemid"), rs.getInt("price"), (short) rs.getInt("position"), rs.getInt("reqitem"), rs.getInt("reqitemq"), rs.getByte("rank"), rs.getInt("category"), rs.getInt("minLevel"), rs.getInt("expiration"), rs.getInt("potential"));
+                        ShopItem shopItem = new ShopItem((short) rs.getShort("buyable"), rs.getShort("quantity"), rs.getInt("itemid"), rs.getInt("price"), (short) rs.getInt("position"), rs.getInt("reqitem"), rs.getInt("reqitemq"), rs.getByte("rank"), rs.getInt("category"), rs.getInt("minLevel"), rs.getInt("expiration"), rs.getInt("potential"));
                         shopItem.setPointQuestId(rs.getInt("pointquestid"));
                         shopItem.setPointQuestPrice(rs.getInt("pointquestprice"));
                         shopItem.setStarCoin(rs.getInt("starcoin"));
@@ -436,7 +436,7 @@ public class MapleShop {
                 }
             }
             for (Integer recharge : recharges) {
-                ret.addItem(new MapleShopItem((short) 1, ii.getSlotMax(recharge), recharge, 0, (short) 0, 0, 0, (byte) 0, 0, 0, 0, 0));
+                ret.addItem(new ShopItem((short) 1, ii.getSlotMax(recharge), recharge, 0, (short) 0, 0, 0, (byte) 0, 0, 0, 0, 0));
             }
             rs.close();
             ps.close();

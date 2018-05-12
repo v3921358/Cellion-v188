@@ -17,8 +17,8 @@ import server.maps.objects.User;
 import server.maps.objects.Pet;
 import server.movement.LifeMovementFragment;
 import server.quest.Quest;
-import server.shops.MapleShop;
-import server.shops.MapleShopItem;
+import server.shops.Shop;
+import server.shops.ShopItem;
 import server.stores.AbstractPlayerStore;
 import server.stores.IMaplePlayerShop;
 import tools.KoreanDateUtil;
@@ -1414,7 +1414,7 @@ public class PacketHelper {
         oPacket.EncodeShort(pet.getGiant()); //nGiantRate_CS
     }
 
-    public static void addShopInfo(OutPacket oPacket, MapleShop shop, ClientSocket c) {
+    public static void addShopInfo(OutPacket oPacket, Shop shop, ClientSocket c) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         oPacket.EncodeInt(0);
         oPacket.EncodeInt(shop.getNpcId()); //m_nSelectNpcItemID
@@ -1435,7 +1435,7 @@ public class PacketHelper {
 
         oPacket.EncodeShort(shop.getItems().size() + shopRepurchases.size());
         //System.err.println("Size: " + shop.getItems().size() + shopRepurchases.size());
-        for (MapleShopItem item : shop.getItems()) {
+        for (ShopItem item : shop.getItems()) {
             addShopItemInfo(oPacket, item, shop, ii, null, c.getPlayer());
         }
         for (ShopRepurchase repurchaseItem : shopRepurchases) {
@@ -1444,7 +1444,7 @@ public class PacketHelper {
             int ItemRepurchasePrice = repurchaseItem.getPreviousSalePrice();
             short ItemRepurchaseQuantity = repurchaseItem.getItem().getQuantity();
 
-            MapleShopItem si = new MapleShopItem(ItemRepurchaseId, ItemRepurchasePrice, (short) 0, (short) 0, ItemRepurchaseQuantity);
+            ShopItem si = new ShopItem(ItemRepurchaseId, ItemRepurchasePrice, (short) 0, (short) 0, ItemRepurchaseQuantity);
 
             addShopItemInfo(oPacket, si, shop, ii, repurchaseItemInfo, c.getPlayer());
 
@@ -1510,7 +1510,7 @@ public class PacketHelper {
         }
         addRedLeafInfo(oPacket, chr);
     }*/
-    public static void addShopItemInfo(OutPacket oPacket, MapleShopItem item, MapleShop shop, MapleItemInformationProvider ii, Item repurchaseItemInfo, User chr) {
+    public static void addShopItemInfo(OutPacket oPacket, ShopItem item, Shop shop, MapleItemInformationProvider ii, Item repurchaseItemInfo, User chr) {
         oPacket.EncodeInt(item.getItemId());
         oPacket.EncodeInt(item.getCategory());
         oPacket.EncodeInt(1440 * item.getExpiration());

@@ -371,8 +371,8 @@ public class PlayersHandler {
                         chr.setMarriageId(c.getPlayer().getId());
                         c.getPlayer().setMarriageId(chr.getId());
 
-                        chr.fakeRelog();
-                        c.getPlayer().fakeRelog();
+                        chr.reloadUser();
+                        c.getPlayer().reloadUser();
                     } catch (Exception e) {
                         LogHelper.GENERAL_EXCEPTION.get().info("Ring Action:\n{}", e);
 

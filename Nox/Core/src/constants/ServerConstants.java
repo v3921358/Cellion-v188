@@ -99,7 +99,8 @@ public class ServerConstants {
     public static final boolean AUTO_PET_LOOT = true; //Enables automatic pet loot whenever a pet is equipped.
     public static final boolean STRICT_PET_LOOT = true; //Only picks up USE and ETC item types.
     public static final boolean DAMAGE_CORRECTION = true; //Enables damage modifications for some skills, used to correct or change damage lines.
-
+    public static final int JAIL_MAP = 931050960; //Map ID used for the server jail, a map where characters may not leave from.
+    
     /*Spawn Rate Configuration*/
     public static final boolean MODIFY_SPAWN_RATE = true; //Enables spawn rate multiplier.
     public static final float SPAWN_RATE_MULTIPLIER = 3.00F; //Multipy the spawn rate globally by this variable.
