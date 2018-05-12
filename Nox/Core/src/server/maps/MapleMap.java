@@ -634,26 +634,26 @@ public final class MapleMap {
                 type = ExpeditionType.Hilla;
             }
             doShrine(true);
-        } else if (mobid == 8920000 || mobid == 8920001 || mobid == 8920002 || mobid == 8920003 && smr.mapid == 105200710) {  // Root Abyss Reactors
+        } else if (mobid == 8920000 || mobid == 8920001 || mobid == 8920002 || mobid == 8920003) {  // Root Abyss Reactors
             final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052009), 1052009);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(124, 135));
-        } else if (mobid == 8900000 || mobid == 8900001 || mobid == 8900002 || mobid == 8900003 && smr.mapid == 105200210) {
+        } else if (mobid == 8900000 || mobid == 8900001 || mobid == 8900002 || mobid == 8900003) {
             final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052009), 1052009);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(497, 551));
 
-        } else if (mobid == 8910000 || mobid == 8910001 || mobid == 8910002 || mobid == 8910003 && smr.mapid == 105200510) {
+        } else if (mobid == 8910000 || mobid == 8910001 || mobid == 8910002 || mobid == 8910003) {
             final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052009), 1052009);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(-195, 455));
 
-        } else if (mobid == 8910100 || mobid == 8910101 || mobid == 8910102 || mobid == 8910103 && smr.mapid == 105200110) {
+        } else if (mobid == 8910100 || mobid == 8910101 || mobid == 8910102 || mobid == 8910103) {
             final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052006), 1052006);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(-195, 455));
 
-        } else if (mobid == 8930100 || mobid == 8930101 || mobid == 8930102 || mobid == 8930103 && smr.mapid == 105200410) {
+        } else if (mobid == 8930100 || mobid == 8930101 || mobid == 8930102 || mobid == 8930103) {
             final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052006), 1052006);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(-78, 442));
