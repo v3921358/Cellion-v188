@@ -924,7 +924,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public void showEffect(boolean broadcast, String effect) {
         if (broadcast) {
-            c.getPlayer().getMap().broadcastMessage(CField.showEffect(effect));
+            c.getPlayer().getMap().broadcastPacket(CField.showEffect(effect));
         } else {
             c.SendPacket(CField.showEffect(effect));
         }
@@ -932,7 +932,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public void playSound(boolean broadcast, String sound) {
         if (broadcast) {
-            c.getPlayer().getMap().broadcastMessage(CField.playSound(sound));
+            c.getPlayer().getMap().broadcastPacket(CField.playSound(sound));
         } else {
             c.SendPacket(CField.playSound(sound));
         }
@@ -940,7 +940,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public void environmentChange(boolean broadcast, String env) {
         if (broadcast) {
-            c.getPlayer().getMap().broadcastMessage(CField.environmentChange(env, 2, 0));
+            c.getPlayer().getMap().broadcastPacket(CField.environmentChange(env, 2, 0));
         } else {
             c.SendPacket(CField.environmentChange(env, 2, 0));
         }
@@ -1035,8 +1035,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             final boolean ret = c.getChannelServer().addMapleSquad(squad, type);
             if (ret) {
                 final MapleMap map = c.getPlayer().getMap();
-                map.broadcastMessage(CField.getClock(minutes * 60));
-                map.broadcastMessage(WvsContext.broadcastMsg(-6, startText));
+                map.broadcastPacket(CField.getClock(minutes * 60));
+                map.broadcastPacket(WvsContext.broadcastMsg(-6, startText));
             } else {
                 squad.clear();
             }
@@ -1051,8 +1051,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             final boolean ret = c.getChannelServer().addMapleSquad(squad, type);
             if (ret) {
                 final MapleMap map = c.getPlayer().getMap();
-                map.broadcastMessage(CField.getClock(minutes * 60));
-                map.broadcastMessage(WvsContext.broadcastMsg(6, c.getPlayer().getName() + startText));
+                map.broadcastPacket(CField.getClock(minutes * 60));
+                map.broadcastPacket(WvsContext.broadcastMsg(6, c.getPlayer().getName() + startText));
             } else {
                 squad.clear();
             }
@@ -1358,7 +1358,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void OpenUI(int ui) {
-        c.getPlayer().getMap().broadcastMessage(UIPacket.openUI(ui));
+        c.getPlayer().getMap().broadcastPacket(UIPacket.openUI(ui));
     }
 
     public void getMulungRanking() {
@@ -2028,14 +2028,14 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public final void doWeddingEffect(final Object ch) {
         final User chr = (User) ch;
         final User player = getPlayer();
-        getMap().broadcastMessage(WvsContext.yellowChat(player.getName() + ", do you take " + chr.getName() + " as your wife and promise to stay beside her through all downtimes, crashes, and lags?"));
+        getMap().broadcastPacket(WvsContext.yellowChat(player.getName() + ", do you take " + chr.getName() + " as your wife and promise to stay beside her through all downtimes, crashes, and lags?"));
         CloneTimer.getInstance().schedule(new Runnable() {
             @Override
             public void run() {
                 if (chr == null || player == null) {
                     warpMap(680000500, 0);
                 } else {
-                    chr.getMap().broadcastMessage(WvsContext.yellowChat(chr.getName() + ", do you take " + player.getName() + " as your husband and promise to stay beside him through all downtimes, crashes, and lags?"));
+                    chr.getMap().broadcastPacket(WvsContext.yellowChat(chr.getName() + ", do you take " + player.getName() + " as your husband and promise to stay beside him through all downtimes, crashes, and lags?"));
                 }
             }
         }, 10000);

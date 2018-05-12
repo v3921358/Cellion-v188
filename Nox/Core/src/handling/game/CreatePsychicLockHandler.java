@@ -56,7 +56,7 @@ public class CreatePsychicLockHandler implements ProcessPacket<ClientSocket> {
         }
         byte end = iPacket.DecodeByte();
         c.SendPacket(JobPacket.Kinesis.OnCreatePsychicLock(c.getPlayer().getId(), nSkillID, nSLV, nAction, nActionSpeed, PsychicLock));
-        c.getPlayer().getMap().broadcastMessage(c.getPlayer(), JobPacket.Kinesis.OnCreatePsychicLock(c.getPlayer().getId(), nSkillID, nSLV, nAction, nActionSpeed, PsychicLock), false);
+        c.getPlayer().getMap().broadcastPacket(c.getPlayer(), JobPacket.Kinesis.OnCreatePsychicLock(c.getPlayer().getId(), nSkillID, nSLV, nAction, nActionSpeed, PsychicLock), false);
     }
 
 }

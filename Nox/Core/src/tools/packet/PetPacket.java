@@ -45,7 +45,7 @@ public class PetPacket {
                 oPacket.EncodeByte(pPet.getTransform());
                 oPacket.EncodeByte(pPet.getReinforced());
 
-                if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
+                if (ServerConstants.DEVELOPER_DEBUG_MODE) {
                     System.err.println(String.format("[Debug] Pet Template [%d], Name [%s], SN [%d], Pos [%d:%d]", pPet.getItem().getItemId(), pPet.getName(), pPet.getItem().getUniqueId(), pPet.getPos().x, pPet.getPos().y));
                 }
             } else {

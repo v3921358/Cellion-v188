@@ -28,7 +28,7 @@ public final class OnUserSitRequest implements ProcessPacket<ClientSocket> {
             chr.setChair(0);
             c.SendPacket(CField.cancelChair(chr.getId(), -1));
 
-            chr.getMap().broadcastMessage(chr, CField.showChair(chr.getId(), 0), false);
+            chr.getMap().broadcastPacket(chr, CField.showChair(chr.getId(), 0), false);
         } else {
             chr.setChair(chairId);
             c.SendPacket(CField.cancelChair(chr.getId(), chairId));

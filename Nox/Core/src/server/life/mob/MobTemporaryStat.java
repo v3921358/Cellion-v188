@@ -316,7 +316,7 @@ public class MobTemporaryStat {
         synchronized (currentStatVals) {
             getRemovedStatVals().put(mobStat, getCurrentStatVals().get(mobStat));
             getCurrentStatVals().remove(mobStat);
-            getMob().getMap().broadcastMessage(MobPacket.mobStatReset(getMob(), (byte) 1, false));
+            getMob().getMap().broadcastPacket(MobPacket.mobStatReset(getMob(), (byte) 1, false));
             getSchedules().remove(mobStat);
             if (!fromSchedule && getSchedules().containsKey(mobStat)) {
                 getSchedules().get(mobStat).cancel(true);
@@ -335,7 +335,7 @@ public class MobTemporaryStat {
             if (getBurnedInfos().size() == 0) {
                 getCurrentStatVals().remove(BurnedInfo);
             }
-            getMob().getMap().broadcastMessage(MobPacket.mobStatReset(getMob(), (byte) 1, false, biList));
+            getMob().getMap().broadcastPacket(MobPacket.mobStatReset(getMob(), (byte) 1, false, biList));
             if (!fromSchedule) {
                 getBurnCancelSchedules().get(charId).cancel(true);
                 getBurnCancelSchedules().remove(charId);
@@ -357,7 +357,7 @@ public class MobTemporaryStat {
      */
     public void addStatOptionsAndBroadcast(MobStat mobStat, Option option) {
         addStatOptions(mobStat, option);
-        mob.getMap().broadcastMessage(MobPacket.mobStatSet(getMob(), (short) 0));
+        mob.getMap().broadcastPacket(MobPacket.mobStatSet(getMob(), (short) 0));
     }
 
     /**

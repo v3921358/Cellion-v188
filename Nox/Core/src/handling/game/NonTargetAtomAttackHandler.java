@@ -112,7 +112,7 @@ public final class NonTargetAtomAttackHandler implements ProcessPacket<ClientSoc
         // Map attack/movement broadcast, this needs to be broadcasted first before applying
         // otherwise if the monster is killed with a single hit the damage is not shown.
         if (!chr.isHidden()) {
-            chr.getMap().broadcastMessage(chr, CField.magicAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.attackFlag), chr.getTruePosition());
+            chr.getMap().broadcastPacket(chr, CField.magicAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.attackFlag), chr.getTruePosition());
         } else {
             chr.getMap().broadcastGMMessage(chr, CField.magicAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.attackFlag), false);
         }

@@ -333,7 +333,7 @@ public class GuildOperationHandler implements ProcessPacket<ClientSocket> {
         if (mc.getMap() == null) {
             return;
         }
-        mc.getMap().broadcastMessage(WvsContext.GuildPacket.sendSetGuildNameMsg(mc));
-        mc.getMap().broadcastMessage(WvsContext.GuildPacket.sendSetGuildMarkMsg(mc));
+        mc.getMap().broadcastPacket(WvsContext.GuildPacket.sendSetGuildNameMsg(mc));
+        mc.getMap().broadcastPacket(WvsContext.GuildPacket.sendSetGuildMarkMsg(mc));
     }
 }

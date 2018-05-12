@@ -398,7 +398,7 @@ public class EventManager {
     }
 
     public void broadcastShip(final int mapid, final int effect, final int mode) {
-        getMapFactory().getMap(mapid).broadcastMessage(CField.boatPacket(effect, mode));
+        getMapFactory().getMap(mapid).broadcastPacket(CField.boatPacket(effect, mode));
     }
 
     public void broadcastYellowMsg(final String msg) {

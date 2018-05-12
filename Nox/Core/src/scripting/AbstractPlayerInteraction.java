@@ -205,7 +205,7 @@ public abstract class AbstractPlayerInteraction {
 
     public final void mapChangeTimer(final int map, final int nextmap, final int time, final boolean notice) {
         final List<User> current = c.getChannelServer().getMapFactory().getMap(map).getCharacters();
-        c.getChannelServer().getMapFactory().getMap(map).broadcastMessage(CField.getClock(time));
+        c.getChannelServer().getMapFactory().getMap(map).broadcastPacket(CField.getClock(time));
         if (notice) {
             c.getChannelServer().getMapFactory().getMap(map).startMapEffect("You will be moved out of the map when the timer ends.", 5120041);
         }
@@ -608,7 +608,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final void changeMusic(final String songName) {
-        getPlayer().getMap().broadcastMessage(CField.musicChange(songName));
+        getPlayer().getMap().broadcastPacket(CField.musicChange(songName));
     }
 
     public final void worldMessage(final int type, final String message) {
@@ -633,7 +633,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final void mapMessage(final int type, final String message) {
-        c.getPlayer().getMap().broadcastMessage(WvsContext.broadcastMsg(type, message));
+        c.getPlayer().getMap().broadcastPacket(WvsContext.broadcastMsg(type, message));
     }
 
     public final void guildMessage(final int type, final String message) {
@@ -1281,7 +1281,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public void sendNPCText(final String text, final int npc) {
-        getMap().broadcastMessage(NPCPacket.getNPCTalk(npc, NPCChatType.OK, text, NPCChatByType.NPC_Cancellable, npc));
+        getMap().broadcastPacket(NPCPacket.getNPCTalk(npc, NPCChatType.OK, text, NPCChatByType.NPC_Cancellable, npc));
     }
 
     public boolean getTempFlag(final int flag) {
@@ -1332,9 +1332,9 @@ public abstract class AbstractPlayerInteraction {
         final List<User> check1 = c.getChannelServer().getMapFactory().getMap(955000100).getCharacters();
         final List<User> check2 = c.getChannelServer().getMapFactory().getMap(955000200).getCharacters();
         final List<User> check3 = c.getChannelServer().getMapFactory().getMap(955000300).getCharacters();
-        c.getChannelServer().getMapFactory().getMap(955000100).broadcastMessage(CField.getClock(20 * 60));
-        c.getChannelServer().getMapFactory().getMap(955000200).broadcastMessage(CField.getClock(20 * 60));
-        c.getChannelServer().getMapFactory().getMap(955000300).broadcastMessage(CField.getClock(20 * 60));
+        c.getChannelServer().getMapFactory().getMap(955000100).broadcastPacket(CField.getClock(20 * 60));
+        c.getChannelServer().getMapFactory().getMap(955000200).broadcastPacket(CField.getClock(20 * 60));
+        c.getChannelServer().getMapFactory().getMap(955000300).broadcastPacket(CField.getClock(20 * 60));
         EventTimer.getInstance().schedule(new Runnable() {
             @Override
             public void run() {

@@ -34,7 +34,7 @@ public class RemoveSummonHandler implements ProcessPacket<ClientSocket> {
         if (summon.getSkill() == 35111002 || summon.getSkill() == 35121010) { //rock n shock, amp
             return;
         }
-        c.getPlayer().getMap().broadcastMessage(CField.SummonPacket.removeSummon(summon, true));
+        c.getPlayer().getMap().broadcastPacket(CField.SummonPacket.removeSummon(summon, true));
         c.getPlayer().getMap().removeMapObject(summon);
         c.getPlayer().removeVisibleMapObject(summon);
         c.getPlayer().removeSummon(summon);

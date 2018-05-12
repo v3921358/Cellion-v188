@@ -154,7 +154,7 @@ public class SpawnPoint extends Spawns {
             }
         }
         if (msg != null) {
-            map.broadcastMessage(WvsContext.broadcastMsg(6, msg));
+            map.broadcastPacket(WvsContext.broadcastMsg(6, msg));
         }
         return mob;
     }

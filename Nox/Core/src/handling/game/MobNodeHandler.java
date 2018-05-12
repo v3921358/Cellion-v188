@@ -58,7 +58,7 @@ public class MobNodeHandler implements ProcessPacket<ClientSocket> {
                     case 9320001:
                     case 9320002:
                     case 9320003:
-                        chr.getMap().broadcastMessage(WvsContext.broadcastMsg(5, "Proceed to the next stage."));
+                        chr.getMap().broadcastPacket(WvsContext.broadcastMsg(5, "Proceed to the next stage."));
                         chr.getMap().removeMonster(mob_from);
                 }
             }

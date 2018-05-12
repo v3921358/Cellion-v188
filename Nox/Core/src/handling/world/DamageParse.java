@@ -396,7 +396,7 @@ public class DamageParse {
                             for (AttackMonster at : attack.allDamage) {
                                 int nPercent = 35;
                                 if (Randomizer.nextInt(100) < nPercent && attack.skill != 25100010 && attack.skill != 25100010) {
-                                    pPlayer.getMap().broadcastMessage(JobPacket.ShadePacket.FoxSpirit(pPlayer, at));
+                                    pPlayer.getMap().broadcastPacket(JobPacket.ShadePacket.FoxSpirit(pPlayer, at));
                                 }
                             }
                         }
@@ -420,7 +420,7 @@ public class DamageParse {
                         if (pPlayer.hasSkill(Phantom.CARTE_BLANCHE)) {
                             //for (AttackMonster at : attack.allDamage) {
                             if (Randomizer.nextInt(100) < 20) {
-                                pPlayer.getMap().broadcastMessage(JobPacket.PhantomPacket.ThrowCarte(pPlayer, 0/*at.getObjectId()*/));
+                                pPlayer.getMap().broadcastPacket(JobPacket.PhantomPacket.ThrowCarte(pPlayer, 0/*at.getObjectId()*/));
                                 PhantomHandler.handleDeck(pPlayer);
                             }
                             //}
@@ -430,7 +430,7 @@ public class DamageParse {
                         //for (AttackMonster at : attack.allDamage) {
                         if (pPlayer.hasBuff(CharacterTemporaryStat.HollowPointBullet)) {
                             if (Randomizer.nextInt(100) < 30) {
-                                pPlayer.getMap().broadcastMessage(JobPacket.XenonPacket.EazisSystem(pPlayer.getId(), 0));
+                                pPlayer.getMap().broadcastPacket(JobPacket.XenonPacket.EazisSystem(pPlayer.getId(), 0));
                             }
                         }
                         //}
@@ -787,7 +787,7 @@ public class DamageParse {
                     for (Mob mob : monsters) {
                         points.add(mob.getPosition());
                     }
-                    pPlayer.getMap().broadcastMessage(WvsContext.giveMarkOfTheif(pPlayer.getId(), source.getObjectId(),
+                    pPlayer.getMap().broadcastPacket(WvsContext.giveMarkOfTheif(pPlayer.getId(), source.getObjectId(),
                             4100012, monsters, pPlayer.getPosition(), monsters.get(0).getPosition(), 2070005));
                 }
             }
@@ -801,7 +801,7 @@ public class DamageParse {
 
                 final List<Mob> monsters = new ArrayList<>();
 
-                pPlayer.getMap().broadcastMessage(WvsContext.giveMarkOfTheif(pPlayer.getId(), ap.getObjectId(),
+                pPlayer.getMap().broadcastPacket(WvsContext.giveMarkOfTheif(pPlayer.getId(), ap.getObjectId(),
                         4100012, monsters, pPlayer.getPosition(), ap.getPosition(), 2070005));
             }
         }
@@ -1478,13 +1478,13 @@ public class DamageParse {
                 }
                 if (GameConstants.isThiefShadower(pPlayer.getJob())) {
                     if (Randomizer.nextInt(100) < 50) { // TODO: Handle on critical strike correctly instead.
-                        pPlayer.getMap().broadcastMessage(ShadowerPacket.toggleFlipTheCoin(true));
+                        pPlayer.getMap().broadcastPacket(ShadowerPacket.toggleFlipTheCoin(true));
                     }
                 }
 
                 if (bCritical) {
                     if (GameConstants.isThiefShadower(pPlayer.getJob())) {
-                        pPlayer.getMap().broadcastMessage(ShadowerPacket.toggleFlipTheCoin(true));
+                        pPlayer.getMap().broadcastPacket(ShadowerPacket.toggleFlipTheCoin(true));
                     }
                     /*if (chr.getJob() == 422 && chr.dualBrid == 0 && chr.acaneAim < 5) {
                         chr.getMap().broadcastMessage(CField.OnOffFlipTheCoin(true));

@@ -318,7 +318,7 @@ public class InternCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            c.getPlayer().getMap().broadcastMessage(CField.getClock(CommandProcessorUtil.getOptionalIntArg(splitted, 1, 60)));
+            c.getPlayer().getMap().broadcastPacket(CField.getClock(CommandProcessorUtil.getOptionalIntArg(splitted, 1, 60)));
             return 1;
         }
     }

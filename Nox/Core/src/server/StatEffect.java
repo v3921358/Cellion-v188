@@ -388,7 +388,7 @@ public class StatEffect implements Serializable {
                             mob.setMp(mob.getMp() - absorbMp);
                             applyto.getStat().setMp((int) (applyto.getStat().getMp() + absorbMp), applyto);
                             applyto.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level));
-                            applyto.getMap().broadcastMessage(applyto, EffectPacket.showBuffeffect(applyto.getId(), sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level), false);
+                            applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffeffect(applyto.getId(), sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level), false);
                         }
                     }
                     break;
@@ -518,7 +518,7 @@ public class StatEffect implements Serializable {
                         m.getPoisonSchedule().cancel(false);
                         m.setPoisonSchedule(null);
                     }
-                    applyto.getMap().broadcastMessage(CField.removeMist(m.getObjectId(), true));
+                    applyto.getMap().broadcastPacket(CField.removeMist(m.getObjectId(), true));
                     applyto.getMap().removeMapObject(m);
 
                     i--;
@@ -626,10 +626,10 @@ public class StatEffect implements Serializable {
                 }
             } else if (sourceid == 2910000 || sourceid == 2910001) { //red flag
                 applyto.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.BuffItemEffect, applyto.getLevel(), level));
-                applyto.getMap().broadcastMessage(applyto, EffectPacket.showBuffeffect(applyto.getId(), sourceid, UserEffectCodes.BuffItemEffect, applyto.getLevel(), level), false);
+                applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffeffect(applyto.getId(), sourceid, UserEffectCodes.BuffItemEffect, applyto.getLevel(), level), false);
 
                 applyto.getClient().SendPacket(EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Effect", applyto.getDirection() == 1, -1, 0, 0));
-                applyto.getMap().broadcastMessage(applyto, EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Effect", applyto.getDirection() == 1, applyto.getId(), 0, 0), false);
+                applyto.getMap().broadcastPacket(applyto, EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Effect", applyto.getDirection() == 1, applyto.getId(), 0, 0), false);
                 if (applyto.getTeam() == (sourceid - 2910000)) { //restore duh flag
                     if (sourceid == 2910000) {
                         applyto.getEventInstance().broadcastPlayerMsg(-7, "The Red Team's flag has been restored.");
@@ -643,12 +643,12 @@ public class StatEffect implements Serializable {
                         applyto.getEventInstance().setProperty("redflag", String.valueOf(applyto.getId()));
                         applyto.getEventInstance().broadcastPlayerMsg(-7, "The Red Team's flag has been captured!");
                         applyto.getClient().SendPacket(EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Tail/Red", applyto.getDirection() == 1, -1, 600000, 0));
-                        applyto.getMap().broadcastMessage(applyto, EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Tail/Red", applyto.getDirection() == 1, applyto.getId(), 600000, 0), false);
+                        applyto.getMap().broadcastPacket(applyto, EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Tail/Red", applyto.getDirection() == 1, applyto.getId(), 600000, 0), false);
                     } else {
                         applyto.getEventInstance().setProperty("blueflag", String.valueOf(applyto.getId()));
                         applyto.getEventInstance().broadcastPlayerMsg(-7, "The Blue Team's flag has been captured!");
                         applyto.getClient().SendPacket(EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Tail/Blue", applyto.getDirection() == 1, -1, 600000, 0));
-                        applyto.getMap().broadcastMessage(applyto, EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Tail/Blue", applyto.getDirection() == 1, applyto.getId(), 600000, 0), false);
+                        applyto.getMap().broadcastPacket(applyto, EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Tail/Blue", applyto.getDirection() == 1, applyto.getId(), 600000, 0), false);
                     }
                 }
             } else {
@@ -738,7 +738,7 @@ public class StatEffect implements Serializable {
             } else if (sourceid == Mechanic.ROCK_N_SHOCK) {
                 for (Summon s : applyfrom.getSummonsReadLock()) {
                     if ((sourceid == 14121054) ? (s.getSkill() == 14121054) || (s.getSkill() == 14121055) || (s.getSkill() == 14121056) : (s.getSkill() == sourceid)) {
-                        applyfrom.getMap().broadcastMessage(SummonPacket.removeSummon(s, true));
+                        applyfrom.getMap().broadcastPacket(SummonPacket.removeSummon(s, true));
                         applyfrom.getMap().removeMapObject(s);
                         applyfrom.removeVisibleMapObject(s);
                         if (applyfrom.getSummons().get(s.getSkill()) != null) {
@@ -787,7 +787,7 @@ public class StatEffect implements Serializable {
                     return true; //no buff until 3
                 }
                 applyfrom.addCooldown(sourceid, System.currentTimeMillis(), getCooldown(applyfrom));
-                applyfrom.getMap().broadcastMessage(CField.teslaTriangle(applyfrom.getId(), count.get(0), count.get(1), count.get(2)));
+                applyfrom.getMap().broadcastPacket(CField.teslaTriangle(applyfrom.getId(), count.get(0), count.get(1), count.get(2)));
             } else if (sourceid == NightWalker.SHADOW_ILLUSION) {
                 final Summon illusion = new Summon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
                 final Summon illusion2 = new Summon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
@@ -814,7 +814,7 @@ public class StatEffect implements Serializable {
             if (applyto.getMechDoors().size() >= 2) {
                 final MechDoor remove = applyto.getMechDoors().remove(0);
                 newId = remove.getId();
-                applyto.getMap().broadcastMessage(CField.removeMechDoor(remove, true));
+                applyto.getMap().broadcastPacket(CField.removeMechDoor(remove, true));
                 applyto.getMap().removeMapObject(remove);
             } else {
                 for (MechDoor d : applyto.getMechDoors()) {
@@ -986,7 +986,7 @@ public class StatEffect implements Serializable {
                 for (User chr : awarded) {
                     applyTo(applyfrom, chr, false, null, newDuration);
                     chr.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level));
-                    chr.getMap().broadcastMessage(chr, EffectPacket.showBuffeffect(chr.getId(), sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level), false);
+                    chr.getMap().broadcastPacket(chr, EffectPacket.showBuffeffect(chr.getId(), sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level), false);
                 }
             }
         } else if (isPartyBuff() && (applyfrom.getParty() != null || isGmBuff() || applyfrom.inPVP())) {
@@ -1000,7 +1000,7 @@ public class StatEffect implements Serializable {
                     if ((isResurrection() && !affected.isAlive()) || (!isResurrection() && affected.isAlive())) {
                         applyTo(applyfrom, affected, false, null, newDuration);
                         affected.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level));
-                        affected.getMap().broadcastMessage(affected, EffectPacket.showBuffeffect(affected.getId(), sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level), false);
+                        affected.getMap().broadcastPacket(affected, EffectPacket.showBuffeffect(affected.getId(), sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level), false);
                     }
                     if (isTimeLeap()) {
                         for (MapleCoolDownValueHolder i : affected.getCooldowns()) {
@@ -1261,7 +1261,7 @@ public class StatEffect implements Serializable {
         handleExtraEffect(applyfrom, applyto, localstatups, localDuration);
 
         if (localstatups.size() > 0 && !applyto.isHidden()) {
-            applyto.getMap().broadcastMessage(applyto, EffectPacket.showBuffeffect(applyto.getId(), sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level), false);
+            applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffeffect(applyto.getId(), sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level), false);
         }
         if (!isMechDoor() && getSummonMovementType() == null) {
             applyto.cancelEffect(this, true, -1, localstatups);
@@ -1273,7 +1273,7 @@ public class StatEffect implements Serializable {
 
         if (localstatups.size() > 0) {//I rather write AFTER applying the damn thing. tyvm.
             applyto.getClient().SendPacket(BuffPacket.giveBuff(applyto, sourceid, localDuration, localstatups, this));
-            applyto.getMap().broadcastMessage(BuffPacket.giveForeignBuff(applyto));
+            applyto.getMap().broadcastPacket(BuffPacket.giveForeignBuff(applyto));
         }
     }
 
@@ -1335,7 +1335,7 @@ public class StatEffect implements Serializable {
             case Kanna.HAKU_REBORN:
                 if (applyto.getHaku() != null) {
                     applyto.getHaku().sendStats();
-                    applyto.getMap().broadcastMessage(applyto, CField.transformHaku(applyto.getId(), applyto.getHaku().getStats()), true);
+                    applyto.getMap().broadcastPacket(applyto, CField.transformHaku(applyto.getId(), applyto.getHaku().getStats()), true);
                 }
                 break;
             case Xenon.EMERGENCY_RESUPPLY: ///xenon emergency by @Mally
@@ -1351,7 +1351,7 @@ public class StatEffect implements Serializable {
             }
             case CannonBlaster.BARREL_ROULETTE: {
                 final int zz = Randomizer.nextInt(4) + 1;
-                applyto.getMap().broadcastMessage(applyto, CField.EffectPacket.showDiceEffect(applyto.getId(), sourceid, zz, -1, level), false);
+                applyto.getMap().broadcastPacket(applyto, CField.EffectPacket.showDiceEffect(applyto.getId(), sourceid, zz, -1, level), false);
                 applyto.getClient().SendPacket(CField.EffectPacket.showOwnDiceEffect(sourceid, zz, -1, level));
                 break;
             }
@@ -1366,7 +1366,7 @@ public class StatEffect implements Serializable {
             case CannonBlaster.LUCK_OF_THE_DIE:
             case Outlaw.ROLL_OF_THE_DICE_2: {
                 final int diceRoll = Randomizer.nextInt(6) + 1;
-                applyto.getMap().broadcastMessage(applyto, EffectPacket.showDiceEffect(applyto.getId(), sourceid, diceRoll, -1, level), false);
+                applyto.getMap().broadcastPacket(applyto, EffectPacket.showDiceEffect(applyto.getId(), sourceid, diceRoll, -1, level), false);
                 applyto.getClient().SendPacket(EffectPacket.showOwnDiceEffect(sourceid, diceRoll, -1, level));
 
                 if (diceRoll <= 1) {
@@ -1385,7 +1385,7 @@ public class StatEffect implements Serializable {
             case Mechanic.DOUBLE_DOWN_3: {//dice
                 final int diceRoll = Randomizer.nextInt(6) + 1;
                 final int diceRoll2 = makeChanceResult() ? (Randomizer.nextInt(6) + 1) : 0;
-                applyto.getMap().broadcastMessage(applyto, EffectPacket.showDiceEffect(applyto.getId(), sourceid, diceRoll, diceRoll2 > 0 ? -1 : 0, level), false);
+                applyto.getMap().broadcastPacket(applyto, EffectPacket.showDiceEffect(applyto.getId(), sourceid, diceRoll, diceRoll2 > 0 ? -1 : 0, level), false);
                 applyto.getClient().SendPacket(EffectPacket.showOwnDiceEffect(sourceid, diceRoll, diceRoll2 > 0 ? -1 : 0, level));
 
                 if (diceRoll <= 1 && diceRoll2 <= 1) {
@@ -1413,8 +1413,8 @@ public class StatEffect implements Serializable {
                 applyto.setCardStack((byte) 0);
                 applyto.resetRunningStack();
                 applyto.addRunningStack(skillid == 24100003 ? 5 : 10);
-                applyto.getMap().broadcastMessage(applyto, PhantomPacket.gainCardStack(applyto.getId(), applyto.getRunningStack(), skillid == 24120002 ? 2 : 1, skillid, 0, skillid == 24100003 ? 5 : 10), true);
-                applyto.getMap().broadcastMessage(applyto, CField.EffectPacket.showDiceEffect(applyto.getId(), this.sourceid, zz, -1, this.level), false);
+                applyto.getMap().broadcastPacket(applyto, PhantomPacket.gainCardStack(applyto.getId(), applyto.getRunningStack(), skillid == 24120002 ? 2 : 1, skillid, 0, skillid == 24100003 ? 5 : 10), true);
+                applyto.getMap().broadcastPacket(applyto, CField.EffectPacket.showDiceEffect(applyto.getId(), this.sourceid, zz, -1, this.level), false);
                 applyto.getClient().SendPacket(CField.EffectPacket.showOwnDiceEffect(this.sourceid, zz, -1, this.level));
                 effects = new EnumMap(CharacterTemporaryStat.class);
                 effects.put(CharacterTemporaryStat.Judgement, zz);

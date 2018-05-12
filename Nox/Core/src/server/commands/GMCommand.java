@@ -1062,7 +1062,7 @@ public class GMCommand {
             final int map = Integer.parseInt(splitted[1]);
             final int nextmap = Integer.parseInt(splitted[2]);
             final int time = Integer.parseInt(splitted[3]);
-            c.getChannelServer().getMapFactory().getMap(map).broadcastMessage(CField.getClock(time));
+            c.getChannelServer().getMapFactory().getMap(map).broadcastPacket(CField.getClock(time));
             c.getChannelServer().getMapFactory().getMap(map).startMapEffect("You will be moved out of the map when the timer ends.", 5120041);
             EventTimer.getInstance().schedule(new Runnable() {
                 @Override

@@ -6,7 +6,6 @@ import java.util.Set;
 import client.ClientSocket;
 import client.PartTimeJob;
 import constants.GameConstants;
-import constants.JobConstants;
 import constants.JobConstants.LoginJob;
 import constants.ServerConstants;
 import constants.WorldConstants.WorldOption;
@@ -64,10 +63,6 @@ public class CLogin {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.NMCOResult.getValue());
         oPacket.EncodeByte(useAuthServer ? 0 : 1);
-
-        if (ServerConstants.FORCE_HOTFIX) {
-            CLogin.ApplyHotFix(); // Fixes Nexon client issue where this packet sometimes isn't requested.
-        }
 
         return oPacket;
     }

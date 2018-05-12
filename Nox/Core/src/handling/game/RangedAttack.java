@@ -154,7 +154,7 @@ public final class RangedAttack implements ProcessPacket<ClientSocket> {
                     Mob mob = pPlayer.getMap().getMonsterByOid(at.getObjectId());
                     if (Randomizer.nextInt(100) < percent) {
                         if (mob != null) {
-                            c.getPlayer().getMap().broadcastMessage(c.getPlayer(), JobPacket.WindArcherPacket.TrifleWind(c.getPlayer().getId(), skillid, count, mob.getObjectId(), type), false);
+                            c.getPlayer().getMap().broadcastPacket(c.getPlayer(), JobPacket.WindArcherPacket.TrifleWind(c.getPlayer().getId(), skillid, count, mob.getObjectId(), type), false);
                             c.SendPacket(JobPacket.WindArcherPacket.TrifleWind(c.getPlayer().getId(), skillid, count, mob.getObjectId(), type));
                         }
                     }
@@ -365,9 +365,9 @@ public final class RangedAttack implements ProcessPacket<ClientSocket> {
         pPlayer.checkFollow();
         if (!pPlayer.isHidden()) {
             if (pAttack.skill == 3211006) {
-                pPlayer.getMap().broadcastMessage(pPlayer, CField.strafeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, visProjectile, pAttack.allDamage, pAttack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pPlayer.getTotalSkillLevel(3220010)), pPlayer.getTruePosition());
+                pPlayer.getMap().broadcastPacket(pPlayer, CField.strafeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, visProjectile, pAttack.allDamage, pAttack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pPlayer.getTotalSkillLevel(3220010)), pPlayer.getTruePosition());
             } else {
-                pPlayer.getMap().broadcastMessage(pPlayer, CField.rangedAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, visProjectile, pAttack.allDamage, pAttack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag), pPlayer.getTruePosition());
+                pPlayer.getMap().broadcastPacket(pPlayer, CField.rangedAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, visProjectile, pAttack.allDamage, pAttack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag), pPlayer.getTruePosition());
             }
         } else if (pAttack.skill == 3211006) {
             pPlayer.getMap().broadcastGMMessage(pPlayer, CField.strafeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, visProjectile, pAttack.allDamage, pAttack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pPlayer.getTotalSkillLevel(3220010)), false);

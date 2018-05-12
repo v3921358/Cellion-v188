@@ -1,6 +1,5 @@
 package client;
 
-import client.MapleSpecialStats.MapleHyperStats;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,7 +22,6 @@ import constants.InventoryConstants;
 import constants.ServerConstants;
 import constants.skills.Global;
 import constants.skills.Aran;
-import constants.skills.Evan;
 import constants.skills.BattleMage;
 import constants.skills.DemonAvenger;
 import constants.skills.Kaiser;
@@ -31,8 +29,6 @@ import constants.skills.Kanna;
 import constants.skills.Kinesis;
 import constants.skills.Luminous;
 import constants.skills.Magician;
-import constants.skills.Mihile;
-import constants.skills.NightWalker;
 import constants.skills.Warrior;
 import constants.skills.Xenon;
 import handling.world.World;
@@ -484,10 +480,10 @@ public class PlayerStats implements Serializable {
                     levelBonus += 5;
                 }
             }
-            if (dropMod > 0 && ServerConstants.DoubleTime) {
+            if (dropMod > 0 && ServerConstants.DOUBLE_TIME) {
                 dropMod *= 2.0;
             }
-            if (expMod > 0 && ServerConstants.DoubleTime) {
+            if (expMod > 0 && ServerConstants.DOUBLE_TIME) {
                 expMod *= 2.0;
             }
             for (Item item : pPlayer.getInventory(MapleInventoryType.ETC).list()) {
@@ -3269,7 +3265,7 @@ public class PlayerStats implements Serializable {
         if (changed) {
             chr.equipChanged();
             chr.getClient().SendPacket(EffectPacket.showForeignEffect(EffectPacket.UserEffectCodes.ItemLevelup));
-            chr.getMap().broadcastMessage(chr, EffectPacket.showForeignEffect(chr.getId(), EffectPacket.UserEffectCodes.ItemLevelup), false);
+            chr.getMap().broadcastPacket(chr, EffectPacket.showForeignEffect(chr.getId(), EffectPacket.UserEffectCodes.ItemLevelup), false);
         }
         return changed;
     }

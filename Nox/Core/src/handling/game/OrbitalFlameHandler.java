@@ -89,7 +89,7 @@ public final class OrbitalFlameHandler implements ProcessPacket<ClientSocket> {
         ForceAtom fai = new ForceAtom(1, fae.getInc(), 11, 13, angle, 0, curTime, pEffect.info.get(StatInfo.mobCount), BlazeWizard.ORBITAL_FLAME_1, new Point(0, 0));
         List<ForceAtom> faiList = new ArrayList<>();
         faiList.add(fai);
-        pPlayer.getMap().broadcastMessage(CField.createForceAtom(false, 0, pPlayer.getId(), fae.getForceAtomType(), false,
+        pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, 0, pPlayer.getId(), fae.getForceAtomType(), false,
                 new ArrayList<>(), nSkillID, faiList, null, nDirection, nRange, null, 0, null));
 
         //PlayerHandler.OrbitalFlame(iPacket, c);

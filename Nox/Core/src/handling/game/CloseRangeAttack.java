@@ -247,7 +247,7 @@ public final class CloseRangeAttack {
             }
             default: {
                 if (!pPlayer.isHidden()) {
-                    pPlayer.getMap().broadcastMessage(pPlayer, CField.closeRangeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge), pPlayer.getTruePosition());
+                    pPlayer.getMap().broadcastPacket(pPlayer, CField.closeRangeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge), pPlayer.getTruePosition());
                 } else {
                     pPlayer.getMap().broadcastGMMessage(pPlayer, CField.closeRangeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge), false);
                 }

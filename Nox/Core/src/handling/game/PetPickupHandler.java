@@ -129,7 +129,7 @@ public class PetPickupHandler implements ProcessPacket<ClientSocket> {
 
     public static final void removeItem_Pet(final User chr, final MapleMapItem mapitem, int pet) {
         mapitem.setPickedUp(true);
-        chr.getMap().broadcastMessage(CField.removeItemFromMap(mapitem.getObjectId(), 5, chr.getId(), pet));
+        chr.getMap().broadcastPacket(CField.removeItemFromMap(mapitem.getObjectId(), 5, chr.getId(), pet));
         chr.getMap().removeMapObject(mapitem);
         if (mapitem.isRandomDrop()) {
             chr.getMap().spawnRandDrop();

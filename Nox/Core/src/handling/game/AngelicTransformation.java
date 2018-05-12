@@ -45,7 +45,7 @@ public final class AngelicTransformation implements ProcessPacket<ClientSocket> 
             if (GameConstants.isAngelicBuster(c.getPlayer().getJob())) {
                 c.SendPacket(JobPacket.AngelicPacket.DressUpTime(type));
                 c.SendPacket(JobPacket.AngelicPacket.updateDress(chr.getAngelicDressupSuit(), c.getPlayer()));//default = 5010094
-                chr.getMap().broadcastMessage(chr, CField.updateCharLook(chr, true), false);//PLZ TEST ANGELIC CHANGE! <-- tells me these handlers might be fucked
+                chr.getMap().broadcastPacket(chr, CField.updateCharLook(chr, true), false);//PLZ TEST ANGELIC CHANGE! <-- tells me these handlers might be fucked
             } else {
                 c.SendPacket(WvsContext.enableActions());
             }

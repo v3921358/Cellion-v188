@@ -98,7 +98,7 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
         if (GameConstants.isXenon(pPlayer.getJob())) { // Making sure EazisSystem still works when a GM is hiding
             if (pPlayer.hasBuff(CharacterTemporaryStat.XenonAegisSystem)) {
                 if (Randomizer.nextInt(100) < (pPlayer.getTotalSkillLevel(Xenon.AEGIS_SYSTEM) * 10)) {
-                    pPlayer.getMap().broadcastMessage(JobPacket.XenonPacket.EazisSystem(pPlayer.getId(), oid));
+                    pPlayer.getMap().broadcastPacket(JobPacket.XenonPacket.EazisSystem(pPlayer.getId(), oid));
                 }
             }
         }
@@ -309,7 +309,7 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
                 offset = 0;
             }
         }
-        pPlayer.getMap().broadcastMessage(pPlayer, CField.damagePlayer(pPlayer.getId(), type_, damage, monsteridfrom, direction, skillid, pDMG, pPhysical, pID, pType, pPos, offset, offset_d, fake), false);
+        pPlayer.getMap().broadcastPacket(pPlayer, CField.damagePlayer(pPlayer.getId(), type_, damage, monsteridfrom, direction, skillid, pDMG, pPhysical, pID, pType, pPos, offset, offset_d, fake), false);
 
         // Revive Passives
         if (!pPlayer.isAlive()) {

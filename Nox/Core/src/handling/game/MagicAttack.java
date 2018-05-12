@@ -125,7 +125,7 @@ public final class MagicAttack implements ProcessPacket<ClientSocket> {
         // Map attack/movement broadcast, this needs to be broadcasted first before applying
         // otherwise if the monster is killed with a single hit the damage is not shown.
         if (!pPlayer.isHidden()) {
-            pPlayer.getMap().broadcastMessage(pPlayer, CField.magicAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSkillLevel, pAttack.display, pAttack.speed, pAttack.allDamage, pAttack.charge, pPlayer.getLevel(), pAttack.attackFlag), pPlayer.getTruePosition());
+            pPlayer.getMap().broadcastPacket(pPlayer, CField.magicAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSkillLevel, pAttack.display, pAttack.speed, pAttack.allDamage, pAttack.charge, pPlayer.getLevel(), pAttack.attackFlag), pPlayer.getTruePosition());
         } else {
             pPlayer.getMap().broadcastGMMessage(pPlayer, CField.magicAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSkillLevel, pAttack.display, pAttack.speed, pAttack.allDamage, pAttack.charge, pPlayer.getLevel(), pAttack.attackFlag), false);
         }

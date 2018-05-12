@@ -411,12 +411,12 @@ public class _CommonPlayerOperationHandler {
             if (pet.getCloseness() >= GameConstants.getClosenessNeededForLevel(pet.getLevel() + 1)) {
                 pet.setLevel(pet.getLevel() + 1);
                 c.SendPacket(CField.EffectPacket.showOwnPetLevelUp(null, c.getPlayer().getPetIndex(pet)));
-                c.getPlayer().getMap().broadcastMessage(PetPacket.showPetLevelUp(c.getPlayer(), petindex));
+                c.getPlayer().getMap().broadcastPacket(PetPacket.showPetLevelUp(c.getPlayer(), petindex));
             }
         }
         // c.getPlayer().forceUpdateItem(pet.getItem());
         c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
-        c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, petindex, true, true), true);
+        c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, petindex, true, true), true);
         return true;
     }
 }

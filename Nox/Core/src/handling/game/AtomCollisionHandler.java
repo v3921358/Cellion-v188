@@ -151,7 +151,7 @@ public final class AtomCollisionHandler implements ProcessPacket<ClientSocket> {
         // Map attack/movement broadcast, this needs to be broadcasted first before applying
         // otherwise if the monster is killed with a single hit the damage is not shown.
         if (!pPlayer.isHidden()) {
-            pPlayer.getMap().broadcastMessage(pPlayer, CField.magicAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, pPlayer.getLevel(), attack.attackFlag), pPlayer.getTruePosition());
+            pPlayer.getMap().broadcastPacket(pPlayer, CField.magicAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, pPlayer.getLevel(), attack.attackFlag), pPlayer.getTruePosition());
         } else {
             pPlayer.getMap().broadcastGMMessage(pPlayer, CField.magicAttack(pPlayer.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, pPlayer.getLevel(), attack.attackFlag), false);
         }

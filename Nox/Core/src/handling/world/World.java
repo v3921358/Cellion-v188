@@ -56,7 +56,6 @@ import tools.packet.CField;
 import tools.packet.WvsContext;
 import tools.packet.WvsContext.AlliancePacket;
 import tools.packet.WvsContext.ExpeditionPacket;
-import tools.packet.WvsContext.FriendPacket;
 import tools.packet.WvsContext.GuildPacket;
 import tools.packet.WvsContext.PartyPacket;
 import tools.packet.PetPacket;
@@ -73,7 +72,7 @@ public class World {
 
     /*Server Automated Save Handling*/
     private static long nLastSaveTime;
-    private static long nSaveInterval = ServerConstants.SAVE_INTERVAL * 1000 * 60; // Converts minutes to milliseconds.
+    private static long nSaveInterval = 15 * 1000 * 60; // Converts minutes to milliseconds.
 
     public static void saveAllCharacters() {
         for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
@@ -1253,8 +1252,8 @@ public class World {
             }
             if (bDifferentGuild && ch > 0) {
                 mc.write(GuildPacket.guildDisbanded(guildid));
-                mc.getMap().broadcastMessage(mc, GuildPacket.sendSetGuildNameMsg(mc), false);
-                mc.getMap().broadcastMessage(mc, GuildPacket.sendSetGuildMarkMsg(mc), false);
+                mc.getMap().broadcastPacket(mc, GuildPacket.sendSetGuildNameMsg(mc), false);
+                mc.getMap().broadcastPacket(mc, GuildPacket.sendSetGuildMarkMsg(mc), false);
             }
         }
     }

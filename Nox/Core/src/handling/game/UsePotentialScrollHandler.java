@@ -141,7 +141,7 @@ public class UsePotentialScrollHandler implements ProcessPacket<ClientSocket> {
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, scroll.getPosition(), (short) 1, false);
         }
         c.SendPacket(CField.enchantResult(result == Equip.ScrollResult.SUCCESS ? 1 : result == ScrollResult.CURSE ? 2 : 0));
-        chr.getMap().broadcastMessage(chr, CField.getScrollEffect(c.getPlayer().getId(), result, false, toScroll.getItemId(), scroll.getItemId()), true);
+        chr.getMap().broadcastPacket(chr, CField.getScrollEffect(c.getPlayer().getId(), result, false, toScroll.getItemId(), scroll.getItemId()), true);
 
         c.SendPacket(WvsContext.inventoryOperation(true, modifications));
     }

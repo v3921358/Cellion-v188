@@ -560,12 +560,12 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                     pMob.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.STUN, 1, nSkill, null, false), false, pEffect.getDuration(), true, pEffect);
                 }
 
-                pPlayer.getMap().broadcastMessage(pPlayer, CField.EffectPacket.showBuffeffect(pPlayer.getId(), nSkill, UserEffectCodes.SkillUse, pPlayer.getLevel(), nSkillLevel, iPacket.DecodeByte()), pPlayer.getTruePosition());
+                pPlayer.getMap().broadcastPacket(pPlayer, CField.EffectPacket.showBuffeffect(pPlayer.getId(), nSkill, UserEffectCodes.SkillUse, pPlayer.getLevel(), nSkillLevel, iPacket.DecodeByte()), pPlayer.getTruePosition());
                 break;
             }
             case NightWalker.DARK_OMEN: {
                 for (int i = 0; i <= 5; i++) {
-                    pPlayer.getMap().broadcastMessage(JobPacket.NightWalkerPacket.ShadowBats(pPlayer.getId(), pPlayer.getObjectId()));
+                    pPlayer.getMap().broadcastPacket(JobPacket.NightWalkerPacket.ShadowBats(pPlayer.getId(), pPlayer.getObjectId()));
                 }
                 break;
             }
@@ -592,7 +592,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 pMob = pPlayer.getMap().getMonsterByOid(nMob);
                 if (pMob != null) {
                     boolean success = true; // (pMob.getHp() <= pMob.getMobMaxHp() / 2L) && (pMob.getId() >= 9304000) && (pMob.getId() < 9305000);
-                    pPlayer.getMap().broadcastMessage(pPlayer, CField.EffectPacket.showBuffeffect(pPlayer.getId(), nSkill, UserEffectCodes.SkillUse, pPlayer.getLevel(), nSkillLevel, (byte) (success ? 1 : 0)), pPlayer.getTruePosition());
+                    pPlayer.getMap().broadcastPacket(pPlayer, CField.EffectPacket.showBuffeffect(pPlayer.getId(), nSkill, UserEffectCodes.SkillUse, pPlayer.getLevel(), nSkillLevel, (byte) (success ? 1 : 0)), pPlayer.getTruePosition());
                     if (success) {
                         pPlayer.getQuestNAdd(Quest.getInstance(GameConstants.JAGUAR)).setCustomData(String.valueOf((pMob.getId() - 9303999) * 10));
                         pPlayer.getMap().killMonster(pMob, pPlayer, true, false, (byte) 1);
@@ -635,11 +635,11 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 nMob = pPlayer.getFirstLinkMid();
                 pMob = pPlayer.getMap().getMonsterByOid(nMob);
                 pPlayer.setKeyDownSkillTime(0L);
-                pPlayer.getMap().broadcastMessage(pPlayer, CField.skillCancel(pPlayer, nSkill), false);
+                pPlayer.getMap().broadcastPacket(pPlayer, CField.skillCancel(pPlayer, nSkill), false);
                 if (pMob != null) {
                     boolean success = (pMob.getStats().getLevel() < pPlayer.getLevel()) && (pMob.getId() < 9000000) && (!pMob.getStats().isBoss());
                     if (success) {
-                        pPlayer.getMap().broadcastMessage(MobPacket.suckMonster(pMob.getObjectId(), pPlayer.getId()));
+                        pPlayer.getMap().broadcastPacket(MobPacket.suckMonster(pMob.getObjectId(), pPlayer.getId()));
                         pPlayer.getMap().killMonster(pMob, pPlayer, false, false, (byte) -1);
                     } else {
                         pPlayer.dropMessage(5, "The monster has too much physical strength, so you cannot catch it.");
@@ -662,7 +662,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 break;
             case 4341003:
                 pPlayer.setKeyDownSkillTime(0);
-                pPlayer.getMap().broadcastMessage(pPlayer, CField.skillCancel(pPlayer, nSkill), false);
+                pPlayer.getMap().broadcastPacket(pPlayer, CField.skillCancel(pPlayer, nSkill), false);
                 break;
             /*case ChiefBandit.MESO_EXPLOSION:
                 int counter = 0;
@@ -760,7 +760,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
         }
         if (GameConstants.isWildHunter(pPlayer.getJob())) {
             if (GameConstants.isJaguarSkill(nSkill)) { // Tell the client to display the Jaguar skills.
-                pPlayer.getMap().broadcastMessage(SummonPacket.jaguarSkillRequest(nSkill));
+                pPlayer.getMap().broadcastPacket(SummonPacket.jaguarSkillRequest(nSkill));
                 c.SendPacket(CField.SummonPacket.jaguarActive(true));
             }
         }

@@ -42,7 +42,7 @@ public class HakuMovement implements ProcessPacket<ClientSocket> {
             Point pos = new Point(chr.getHaku().getPosition());
             MovementParse.updatePosition(res, chr.getHaku());
             //chr.getHaku().updatePosition(res);
-            chr.getMap().broadcastMessage(chr, CField.moveHaku(chr.getHaku(), pos, res), false);
+            chr.getMap().broadcastPacket(chr, CField.moveHaku(chr.getHaku(), pos, res), false);
         }
     }
 

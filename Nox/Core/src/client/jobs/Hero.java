@@ -178,7 +178,7 @@ public class Hero {
 
         public static void updateDeckRequest(User pPlayer, int nCardCount) {
             pPlayer.setPrimaryStack(nCardCount);
-            pPlayer.getMap().broadcastMessage(PhantomPacket.updateCardStack(nCardCount));
+            pPlayer.getMap().broadcastPacket(PhantomPacket.updateCardStack(nCardCount));
         }
 
         public static void judgementDrawRequest(User pPlayer, int nSkillID) {

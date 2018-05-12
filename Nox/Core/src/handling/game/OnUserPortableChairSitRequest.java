@@ -55,7 +55,7 @@ public final class OnUserPortableChairSitRequest implements ProcessPacket<Client
             chr.startFishingTask();
         }
         chr.setChair(chairItem);
-        chr.getMap().broadcastMessage(chr, CField.showChair(chr.getId(), chairItem), false);
+        chr.getMap().broadcastPacket(chr, CField.showChair(chr.getId(), chairItem), false);
         c.SendPacket(WvsContext.enableActions());
     }
 }

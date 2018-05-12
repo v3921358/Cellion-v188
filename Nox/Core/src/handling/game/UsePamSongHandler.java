@@ -32,7 +32,7 @@ public class UsePamSongHandler implements ProcessPacket<ClientSocket> {
                 eq.setUpgradeSlots((byte) (eq.getUpgradeSlots() + 1));
                 c.getPlayer().forceReAddItemFlag(eq, inv);
                 MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.CASH, pam.getPosition(), (short) 1, true, false);
-                c.getPlayer().getMap().broadcastMessage(CField.pamsSongEffect(c.getPlayer().getId()));
+                c.getPlayer().getMap().broadcastPacket(CField.pamsSongEffect(c.getPlayer().getId()));
             }
         } else {
             c.getPlayer().setScrolledPosition((short) 0);

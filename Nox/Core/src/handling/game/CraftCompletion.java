@@ -268,7 +268,7 @@ public final class CraftCompletion implements ProcessPacket<ClientSocket> {
         }
         Quest.getInstance(2550).forceStart(c.getPlayer(), 9031000, "1"); //removes tutorial stuff
         chr.setFatigue((byte) (chr.getFatigue() + fatigue));
-        chr.getMap().broadcastMessage(CField.craftFinished(chr.getId(), craftID, cr.i, toGet, quantity, expGain));
+        chr.getMap().broadcastPacket(CField.craftFinished(chr.getId(), craftID, cr.i, toGet, quantity, expGain));
     }
 
 }

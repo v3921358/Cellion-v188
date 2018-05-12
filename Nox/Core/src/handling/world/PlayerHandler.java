@@ -100,8 +100,8 @@ public class PlayerHandler {
                     chr.yellowMessage("[Rune] Scroll Rune Activated: Random Scroll Obtained!");
                     break;
             }
-            chr.getMap().broadcastMessage(CField.RunePacket.removeRune(rune, chr));
-            chr.getMap().broadcastMessage(CField.RunePacket.showRuneEffect(chr.getTouchedRune()));
+            chr.getMap().broadcastPacket(CField.RunePacket.removeRune(rune, chr));
+            chr.getMap().broadcastPacket(CField.RunePacket.showRuneEffect(chr.getTouchedRune()));
             chr.getMap().removeMapObject(rune);
             if (chr.getReborns() == 0) {
                 chr.setRuneTimeStamp(System.currentTimeMillis() + 14400000);
@@ -172,7 +172,7 @@ public class PlayerHandler {
                 element.applyTo(chr);
             }
         }*/
-        chr.getMap().broadcastMessage(CField.OrbitalFlame(chr.getId(), skillid, effect, direction, flame.getRange()));
+        chr.getMap().broadcastPacket(CField.OrbitalFlame(chr.getId(), skillid, effect, direction, flame.getRange()));
     }
 
     public static void absorbingDF(InPacket iPacket, final ClientSocket c) {

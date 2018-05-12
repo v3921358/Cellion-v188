@@ -171,9 +171,9 @@ public final class SummonPvpHandler implements ProcessPacket<ClientSocket> {
             //chr.getClient().write(CField.getPVPScore(ourScore + addedScore, killed));
         }
         if (didAttack) {
-            chr.getMap().broadcastMessage(CField.SummonPacket.pvpSummonAttack(chr.getId(), chr.getLevel(), summon.getObjectId(), summon.isFacingLeft() ? 4 : 0x84, summon.getTruePosition(), ourAttacks));
+            chr.getMap().broadcastPacket(CField.SummonPacket.pvpSummonAttack(chr.getId(), chr.getLevel(), summon.getObjectId(), summon.isFacingLeft() ? 4 : 0x84, summon.getTruePosition(), ourAttacks));
             if (!summon.isMultiAttack()) {
-                chr.getMap().broadcastMessage(CField.SummonPacket.removeSummon(summon, true));
+                chr.getMap().broadcastPacket(CField.SummonPacket.removeSummon(summon, true));
                 chr.getMap().removeMapObject(summon);
                 chr.removeVisibleMapObject(summon);
                 chr.removeSummon(summon);

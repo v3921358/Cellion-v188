@@ -72,7 +72,7 @@ public final class ReleaseTempestBlades implements ProcessPacket<ClientSocket> {
             }
             
             ForceAtom forceAtomInfo = new ForceAtom(1, nInc, 25, 30, 0, 10 * i, (int) System.currentTimeMillis(), 1, 0, new Point());
-            pPlayer.getMap().broadcastMessage(CField.createForceAtom(false, 0, pPlayer.getId(), nType,
+            pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, 0, pPlayer.getId(), nType,
                     true, pMob.getObjectId(), KaiserHandler.getTempestBladeSkill(pPlayer), forceAtomInfo, new Rectangle(), 0, 300,
                     pMob.getPosition(), KaiserHandler.getTempestBladeSkill(pPlayer), pMob.getPosition()));
 
@@ -101,7 +101,7 @@ public final class ReleaseTempestBlades implements ProcessPacket<ClientSocket> {
             }
             
             ForceAtom forceAtomInfo = new ForceAtom(1, nInc, 25, 30, 0, 12 * i, (int) System.currentTimeMillis(), 1, 0, new Point());
-            pPlayer.getMap().broadcastMessage(CField.createForceAtom(false, 0, pPlayer.getId(), nType,
+            pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, 0, pPlayer.getId(), nType,
                     true, pMob.getObjectId(), KaiserHandler.getTempestBladeSkill(pPlayer), forceAtomInfo, new Rectangle(), 0, 300,
                     pMob.getPosition(), KaiserHandler.getTempestBladeSkill(pPlayer), pMob.getPosition()));
         }

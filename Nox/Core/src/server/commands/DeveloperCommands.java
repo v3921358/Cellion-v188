@@ -322,7 +322,7 @@ public class DeveloperCommands {
             int damage = Integer.parseInt(splitted[2]);
             Mob monster = map.getMonsterByOid(targetId);
             if (monster != null) {
-                map.broadcastMessage(MobPacket.damageMonster(targetId, damage));
+                map.broadcastPacket(MobPacket.damageMonster(targetId, damage));
                 monster.damage(c.getPlayer(), damage, false);
             }
             return 1;
@@ -351,7 +351,7 @@ public class DeveloperCommands {
             Mob mob;
             for (MapleMapObject monstermo : map.getMapObjectsInRange(c.getPlayer().getPosition(), range, Arrays.asList(MapleMapObjectType.MONSTER))) {
                 mob = (Mob) monstermo;
-                map.broadcastMessage(MobPacket.damageMonster(mob.getObjectId(), damage));
+                map.broadcastPacket(MobPacket.damageMonster(mob.getObjectId(), damage));
                 mob.damage(c.getPlayer(), damage, false);
             }
             return 1;
@@ -369,7 +369,7 @@ public class DeveloperCommands {
             for (MapleMapObject monstermo : map.getMapObjectsInRange(c.getPlayer().getPosition(), range, Arrays.asList(MapleMapObjectType.MONSTER))) {
                 mob = (Mob) monstermo;
                 if (mob.getId() == Integer.parseInt(splitted[2])) {
-                    map.broadcastMessage(MobPacket.damageMonster(mob.getObjectId(), damage));
+                    map.broadcastPacket(MobPacket.damageMonster(mob.getObjectId(), damage));
                     mob.damage(c.getPlayer(), damage, false);
                 }
             }

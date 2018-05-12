@@ -120,9 +120,9 @@ public class MapleCoconut extends MapleEvent {
     public void startEvent() {
         reset();
         setHittable(true);
-        getMap(0).broadcastMessage(WvsContext.broadcastMsg(5, "The event has started!!"));
-        getMap(0).broadcastMessage(CField.hitCoconut(true, 0, 0));
-        getMap(0).broadcastMessage(CField.getClock(300));
+        getMap(0).broadcastPacket(WvsContext.broadcastMsg(5, "The event has started!!"));
+        getMap(0).broadcastPacket(CField.hitCoconut(true, 0, 0));
+        getMap(0).broadcastPacket(CField.getClock(300));
 
         EventTimer.getInstance().schedule(new Runnable() {
 
@@ -147,7 +147,7 @@ public class MapleCoconut extends MapleEvent {
     }
 
     public void bonusTime() {
-        getMap(0).broadcastMessage(CField.getClock(60));
+        getMap(0).broadcastPacket(CField.getClock(60));
         EventTimer.getInstance().schedule(new Runnable() {
 
             @Override

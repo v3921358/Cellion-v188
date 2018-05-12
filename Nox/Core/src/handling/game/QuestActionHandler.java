@@ -168,7 +168,7 @@ enum QuestRes
                 //c.getPlayer().updateTick(iPacket.DecodeInt());
                 NPCScriptManager.getInstance().endQuest(c, npc, quest, false);
                 c.SendPacket(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.QuestComplete)); // Quest completion
-                chr.getMap().broadcastMessage(chr, CField.EffectPacket.showForeignEffect(chr.getId(), CField.EffectPacket.UserEffectCodes.QuestComplete), false);
+                chr.getMap().broadcastPacket(chr, CField.EffectPacket.showForeignEffect(chr.getId(), CField.EffectPacket.UserEffectCodes.QuestComplete), false);
                 break;
             }
         }

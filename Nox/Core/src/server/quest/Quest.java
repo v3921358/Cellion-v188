@@ -327,7 +327,7 @@ public class Quest implements Serializable {
             // completion time is set by the constructor
 
             c.getClient().SendPacket(EffectPacket.showForeignEffect(UserEffectCodes.QuestComplete)); // Quest completion
-            c.getMap().broadcastMessage(c, EffectPacket.showForeignEffect(c.getId(), UserEffectCodes.QuestComplete), false);
+            c.getMap().broadcastPacket(c, EffectPacket.showForeignEffect(c.getId(), UserEffectCodes.QuestComplete), false);
         }
     }
 
@@ -398,7 +398,7 @@ public class Quest implements Serializable {
             a.runEnd(c, null);
         }
         c.getClient().SendPacket(CField.EffectPacket.showForeignEffect(UserEffectCodes.QuestComplete));
-        c.getMap().broadcastMessage(c, CField.EffectPacket.showForeignEffect(c.getId(), UserEffectCodes.QuestComplete), false);
+        c.getMap().broadcastPacket(c, CField.EffectPacket.showForeignEffect(c.getId(), UserEffectCodes.QuestComplete), false);
     }
 
     public static enum MedalQuest {

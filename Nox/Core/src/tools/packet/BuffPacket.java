@@ -31,7 +31,7 @@ import tools.Pair;
 public class BuffPacket {
     
     public static OutPacket giveDice(int buffid, int skillid, int duration, Map<CharacterTemporaryStat, Integer> statups) {
-        if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
+        if (ServerConstants.DEVELOPER_DEBUG_MODE) {
             System.out.println("[Debug] Call Location (" + new java.lang.Throwable().getStackTrace()[0] + ")");
         }
 

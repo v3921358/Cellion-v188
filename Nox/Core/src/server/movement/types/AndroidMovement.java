@@ -36,7 +36,7 @@ public class AndroidMovement implements ProcessPacket<ClientSocket> {
         List<LifeMovementFragment> res = MovementParse.parseMovement(iPacket);
         if (chr.getMap() != null) {
             chr.getAndroid().updatePosition(res);
-            chr.getMap().broadcastMessage(chr, CField.moveAndroid(chr, res), false);
+            chr.getMap().broadcastPacket(chr, CField.moveAndroid(chr, res), false);
         }
     }
 

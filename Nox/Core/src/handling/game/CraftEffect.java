@@ -44,7 +44,7 @@ public final class CraftEffect implements ProcessPacket<ClientSocket> {
                 time = 4000;
             }
             c.SendPacket(CField.EffectPacket.showWZUOLEffect(effect, chr.getDirection() == 1, -1, time, effect.endsWith("Extract") ? 1 : 0));
-            chr.getMap().broadcastMessage(chr, CField.EffectPacket.showWZUOLEffect(effect, chr.getDirection() == 1, chr.getId(), time, effect.endsWith("Extract") ? 1 : 0), false);
+            chr.getMap().broadcastPacket(chr, CField.EffectPacket.showWZUOLEffect(effect, chr.getDirection() == 1, chr.getId(), time, effect.endsWith("Extract") ? 1 : 0), false);
         }
     }
 

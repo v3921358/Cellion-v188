@@ -172,7 +172,7 @@ public class MapleMapItem extends MapleMapObject {
 
     public void expire(final MapleMap map) {
         pickedUp = true;
-        map.broadcastMessage(CField.removeItemFromMap(getObjectId(), 0, 0));
+        map.broadcastPacket(CField.removeItemFromMap(getObjectId(), 0, 0));
         map.removeMapObject(this);
 
         if (isRandomDrop()) {

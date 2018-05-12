@@ -16,7 +16,7 @@ public class AndroidEmotionChanger {
 
     public static void changeEmotion(User chr, int emote) {
         if ((emote > 0) && (chr != null) && (chr.getMap() != null) && (!chr.isHidden()) && (emote <= 17) && (chr.getAndroid() != null)) {
-            chr.getMap().broadcastMessage(CField.showAndroidEmotion(chr.getId(), (byte) emote));
+            chr.getMap().broadcastPacket(CField.showAndroidEmotion(chr.getId(), (byte) emote));
         }
     }
 }

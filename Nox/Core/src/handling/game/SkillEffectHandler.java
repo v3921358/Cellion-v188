@@ -61,7 +61,7 @@ public final class SkillEffectHandler implements ProcessPacket<ClientSocket> {
             if (skillId == 33101005 || skillId == 27101202) {
                 chr.setLinkMid(iPacket.DecodeInt(), 0);
             }
-            chr.getMap().broadcastMessage(chr, CField.skillEffect(chr, skillId, level, direction, unk), false);
+            chr.getMap().broadcastPacket(chr, CField.skillEffect(chr, skillId, level, direction, unk), false);
         }
     }
 

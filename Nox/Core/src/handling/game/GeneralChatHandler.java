@@ -91,13 +91,13 @@ public class GeneralChatHandler implements ProcessPacket<ClientSocket> {
                 } else {
                     if ((!pPlayer.isIntern()) || (pPlayer.isIntern() && pPlayer.usingStaffChat())) { // If player is staff, only use special text if they have it enabled.
                         if (chatColour > 0 || !chatPrefix.equals("")) {
-                            pPlayer.getMap().broadcastMessage(CField.getGameMessage(chatPrefix + pPlayer.getName() + " : " + sText, chatColour));
-                            pPlayer.getMap().broadcastMessage(CField.getChatText(pPlayer.getId(), sText, false, !bAppendToChatLogList));
+                            pPlayer.getMap().broadcastPacket(CField.getGameMessage(chatPrefix + pPlayer.getName() + " : " + sText, chatColour));
+                            pPlayer.getMap().broadcastPacket(CField.getChatText(pPlayer.getId(), sText, false, !bAppendToChatLogList));
                         } else {
-                            pPlayer.getMap().broadcastMessage(CField.getChatText(pPlayer.getId(), sText, pPlayer.isGM(), bAppendToChatLogList));
+                            pPlayer.getMap().broadcastPacket(CField.getChatText(pPlayer.getId(), sText, pPlayer.isGM(), bAppendToChatLogList));
                         }
                     } else {
-                        pPlayer.getMap().broadcastMessage(CField.getChatText(pPlayer.getId(), sText, (pPlayer.usingStaffChat() && pPlayer.isGM()), bAppendToChatLogList));
+                        pPlayer.getMap().broadcastPacket(CField.getChatText(pPlayer.getId(), sText, (pPlayer.usingStaffChat() && pPlayer.isGM()), bAppendToChatLogList));
                     }
                 }
             } else {

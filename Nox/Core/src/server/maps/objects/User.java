@@ -2700,7 +2700,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     try {
                         for (Summon summon : summons) {
                             if (summon.getSkill() == summonId || (summonId == 35121009 && summon.getSkill() == 35121011) || ((summonId == 86 || summonId == 88 || summonId == 91 || summonId == 180 || summonId == 96) && summon.getSkill() == summonId + 999) || ((summonId == 1085 || summonId == 1087 || summonId == 1090 || summonId == 1179 || summonId == 1154) && summon.getSkill() == summonId - 999)) { //removes bots n tots
-                                map.broadcastMessage(SummonPacket.removeSummon(summon, true));
+                                map.broadcastPacket(SummonPacket.removeSummon(summon, true));
                                 map.removeMapObject(summon);
                                 visibleMapObjects.remove(summon);
                                 toRemove.add(summon);
@@ -2817,17 +2817,17 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         cancelPlayerBuffs(buffstats, overwrite);
         if (!overwrite) {
             if (effect.isHide() && client.getChannelServer().getPlayerStorage().getCharacterById(this.getId()) != null) { //Wow this is so fking hacky...
-                map.broadcastMessage(this, CField.spawnPlayerMapObject(this), false);
+                map.broadcastPacket(this, CField.spawnPlayerMapObject(this), false);
 
                 for (final Pet pet : pets) {
                     if (pet.getSummoned()) {
-                        map.broadcastMessage(this, PetPacket.OnActivated(this.id, getPetIndex(pet), true, pet, 0), true);
+                        map.broadcastPacket(this, PetPacket.OnActivated(this.id, getPetIndex(pet), true, pet, 0), true);
                     }
                 }
 
                 for (final WeakReference<User> chr : clones) {
                     if (chr.get() != null) {
-                        map.broadcastMessage(chr.get(), CField.spawnPlayerMapObject(chr.get()), false);
+                        map.broadcastPacket(chr.get(), CField.spawnPlayerMapObject(chr.get()), false);
                     }
                 }
             }
@@ -3109,7 +3109,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void setDOT(int d, int source, int sourceLevel) {
         this.dotHP = d;
         addHP(-(dotHP * 4));
-        map.broadcastMessage(CField.getPVPMist(id, source, sourceLevel, d));
+        map.broadcastPacket(CField.getPVPMist(id, source, sourceLevel, d));
         lastDOTTime = System.currentTimeMillis();
     }
 
@@ -3289,7 +3289,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             duration += (int) ((getBuffedStarttime(CharacterTemporaryStat.ComboCounter) - System.currentTimeMillis()));
 
             client.SendPacket(BuffPacket.giveBuff(this, normalcombo.getId(), duration, stat, ceffect));
-            map.broadcastMessage(this, BuffPacket.giveForeignBuff(this), false);
+            map.broadcastPacket(this, BuffPacket.giveForeignBuff(this), false);
             //map.broadcastMessage(this, BuffPacket.giveForeignBuff(this, getId(), stat, ceffect), false);
         }
     }
@@ -3323,7 +3323,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         duration += (int) ((getBuffedStarttime(CharacterTemporaryStat.ComboCounter) - System.currentTimeMillis()));
 
         client.SendPacket(BuffPacket.giveBuff(this, normalcombo.getId(), duration, stat, ceffect));
-        map.broadcastMessage(this, BuffPacket.giveForeignBuff(this), false);
+        map.broadcastPacket(this, BuffPacket.giveForeignBuff(this), false);
         //map.broadcastMessage(this, BuffPacket.giveForeignBuff(this, getId(), stat, ceffect), false);
     }
 
@@ -3948,7 +3948,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             familyUpdate();
 
             if (dragon != null) {
-                map.broadcastMessage(CField.removeDragon(this.id));
+                map.broadcastPacket(CField.removeDragon(this.id));
                 dragon = null;
             }
             if (haku != null) {
@@ -4080,7 +4080,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void makeDragon() {
         dragon = new EvanDragon(this);
-        map.broadcastMessage(CField.spawnDragon(dragon));
+        map.broadcastPacket(CField.spawnDragon(dragon));
     }
 
     public EvanDragon getDragon() {
@@ -4089,7 +4089,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void makeHaku() {
         haku = new KannaHaku(this);
-        map.broadcastMessage(CField.spawnHaku(haku, false));
+        map.broadcastPacket(CField.spawnHaku(haku, false));
     }
 
     public KannaHaku getHaku() {
@@ -4501,13 +4501,13 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void healHP(int delta) {
         addHP(delta);
         client.SendPacket(EffectPacket.showOwnHpHealed(delta));
-        getMap().broadcastMessage(this, EffectPacket.showHpHealed(getId(), delta), false);
+        getMap().broadcastPacket(this, EffectPacket.showHpHealed(getId(), delta), false);
     }
 
     public void healMP(int delta) {
         addMP(delta);
         client.SendPacket(EffectPacket.showOwnHpHealed(delta));
-        getMap().broadcastMessage(this, EffectPacket.showHpHealed(getId(), delta), false);
+        getMap().broadcastPacket(this, EffectPacket.showHpHealed(getId(), delta), false);
     }
 
     public int getCurrentHP() {
@@ -6567,7 +6567,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
             for (final Pet pet : pets) {
                 if (pet.getSummoned()) {
-                    map.broadcastMessage(this, PetPacket.OnActivated(this.id, getPetIndex(pet), true, pet, 0), true);
+                    map.broadcastPacket(this, PetPacket.OnActivated(this.id, getPetIndex(pet), true, pet, 0), true);
                 }
             }
 
@@ -6608,7 +6608,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (map == null) {
             return;
         }
-        map.broadcastMessage(this, CField.updateCharLook(this, false), false);
+        map.broadcastPacket(this, CField.updateCharLook(this, false), false);
         stats.recalcLocalStats(this);
         if (getMessenger() != null) {
             World.Messenger.updateMessenger(getMessenger().getId(), getName(), client.getChannel());
@@ -6719,7 +6719,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
             if (map != null) {
                 client.SendPacket(PetPacket.updatePet(pet, null, true)); // Remove pet from equip window.
-                map.broadcastMessage(this, PetPacket.OnDeactivated(this.id, getPetIndex(pet), pet), true); //Remove the pet from map.
+                map.broadcastPacket(this, PetPacket.OnDeactivated(this.id, getPetIndex(pet), pet), true); //Remove the pet from map.
                 //map.broadcastMessage(this, PetPacket.OnActivated(this.id, getPetIndex(pet), true, pet, 1), true);
             }
 
@@ -7518,7 +7518,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
             this.diseases.put(disease, new MapleDiseaseValueHolder(disease, System.currentTimeMillis(), skill.getDuration() - this.stats.decreaseDebuff));
             this.client.SendPacket(BuffPacket.giveDebuff(disease, skill));
-            this.map.broadcastMessage(this, BuffPacket.giveForeignDebuff(this.id, disease, skill), false);
+            this.map.broadcastPacket(this, BuffPacket.giveForeignDebuff(this.id, disease, skill), false);
 
             if ((skill.getX() > 0) && (disease == MapleDisease.POISON)) {
                 addHP((int) (-(skill.getX() * ((skill.getDuration() - this.stats.decreaseDebuff) / 1000L))));
@@ -7537,7 +7537,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void dispelDebuff(MapleDisease debuff) {
         if (hasDisease(debuff)) {
             client.SendPacket(BuffPacket.cancelDebuff(debuff));
-            map.broadcastMessage(this, BuffPacket.cancelForeignDebuff(id, debuff), false);
+            map.broadcastPacket(this, BuffPacket.cancelForeignDebuff(id, debuff), false);
 
             diseases.remove(debuff);
         }
@@ -7684,7 +7684,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             final StatEffect ampStat = BerserkX.getEffect(skilllevel);
             stats.Berserk = stats.getHp() * 100 / stats.getCurrentMaxHp() >= ampStat.getX();
             client.SendPacket(EffectPacket.showOwnBuffEffect(1320006, UserEffectCodes.SkillUse, getLevel(), skilllevel, (byte) (stats.Berserk ? 1 : 0)));
-            map.broadcastMessage(this, EffectPacket.showBuffeffect(getId(), 1320006, UserEffectCodes.SkillUse, getLevel(), skilllevel, (byte) (stats.Berserk ? 1 : 0)), false);
+            map.broadcastPacket(this, EffectPacket.showBuffeffect(getId(), 1320006, UserEffectCodes.SkillUse, getLevel(), skilllevel, (byte) (stats.Berserk ? 1 : 0)), false);
         } else {
             lastBerserkTime = -1; // somebody thre? O_O
         }
@@ -7693,7 +7693,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void setChalkboard(String text) {
         this.chalktext = text;
         if (map != null) {
-            map.broadcastMessage(CSPacket.useChalkboard(getId(), text));
+            map.broadcastPacket(CSPacket.useChalkboard(getId(), text));
         }
     }
 
@@ -8364,7 +8364,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                             //aMod.add(new ModifyInventory(ModifyInventoryOperation.Remove, pItem));
                             //aMod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, pItem));
                             //client.write(CWvsContext.inventoryOperation(true, aMod));
-                            map.broadcastMessage(this, PetPacket.OnActivated(this.id, getPetIndex(pet), true, pet, 0), true);
+                            map.broadcastPacket(this, PetPacket.OnActivated(this.id, getPetIndex(pet), true, pet, 0), true);
                             client.SendPacket(PetPacket.showPetUpdate(this, pet.getItem().getUniqueId(), (byte) (pet.getSummonedValue() - 1)));
                         }
                         dropMessage(5, "Your pet has been summoned, you may only have one pet active at a time.");
@@ -8427,7 +8427,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void removeExtractor() {
         if (extractor != null) {
-            map.broadcastMessage(CField.removeExtractor(this.id));
+            map.broadcastPacket(CField.removeExtractor(this.id));
             map.removeMapObject(extractor);
             extractor = null;
         }
@@ -8647,8 +8647,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             return;
         }
         if (followon) {
-            map.broadcastMessage(CField.followEffect(id, 0, null));
-            map.broadcastMessage(CField.followEffect(followid, 0, null));
+            map.broadcastPacket(CField.followEffect(id, 0, null));
+            map.broadcastPacket(CField.followEffect(followid, 0, null));
         }
         User tt = map.getCharacterById(followid);
         client.SendPacket(CField.getFollowMessage("Follow canceled."));
@@ -9382,7 +9382,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void removeAndroid() {
         if (map != null) {
-            map.broadcastMessage(CField.deactivateAndroid(this.id));
+            map.broadcastPacket(CField.deactivateAndroid(this.id));
         }
         android = null;
     }
@@ -9396,10 +9396,10 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             } else {
                 a.setFh(foot.getId());
             }
-            this.map.broadcastMessage(CField.spawnAndroid(this, a));
-            this.map.broadcastMessage(CField.showAndroidEmotion(getId(), (byte) (Randomizer.nextInt(17) + 1)));
+            this.map.broadcastPacket(CField.spawnAndroid(this, a));
+            this.map.broadcastPacket(CField.showAndroidEmotion(getId(), (byte) (Randomizer.nextInt(17) + 1)));
         } else if (map != null && a == null) { //Remove
-            map.broadcastMessage(this, CField.deactivateAndroid(this.getId()), true);
+            map.broadcastPacket(this, CField.deactivateAndroid(this.getId()), true);
         }
     }
 
@@ -9421,7 +9421,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void removeVisibleFamiliar() {
         getMap().removeMapObject(summonedFamiliar);
         removeVisibleMapObject(summonedFamiliar);
-        getMap().broadcastMessage(CField.removeFamiliar(this.getId()));
+        getMap().broadcastPacket(CField.removeFamiliar(this.getId()));
         anticheat.resetFamiliarAttack();
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         cancelEffect(ii.getItemEffect(ii.getFamiliar(summonedFamiliar.getFamiliar()).getPassive()), false, System.currentTimeMillis());
@@ -9513,7 +9513,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
         if (inPVP()) {
             //client.write(CField.getPVPTransform(newTeam + 1));
-            map.broadcastMessage(CField.changeTeam(id, newTeam + 1));
+            map.broadcastPacket(CField.changeTeam(id, newTeam + 1));
         } else {
             client.SendPacket(CField.showEquipEffect(newTeam));
         }
@@ -9525,7 +9525,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
         chair = 0;
         client.SendPacket(CField.cancelChair(id, -1));
-        map.broadcastMessage(this, CField.showChair(id, 0), false);
+        map.broadcastPacket(this, CField.showChair(id, 0), false);
         giveDebuff(MapleDisease.getBySkill(type), MobSkillFactory.getMobSkill(type, level));
     }
 
@@ -9639,7 +9639,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                                 mons.applyStatus(this, new MonsterStatusEffect(MonsterStatus.STUN, 1, divineShield.getSourceId(), null, false), false, divineShield.getDuration(), true, divineShield);
                                 final int theDmg = (int) (divineShield.getDamage() * getStat().getCurrentMaxBaseDamage() / 100.0);
                                 mons.damage(this, theDmg, true);
-                                getMap().broadcastMessage(MobPacket.damageMonster(mons.getObjectId(), theDmg));
+                                getMap().broadcastPacket(MobPacket.damageMonster(mons.getObjectId(), theDmg));
                                 i++;
                                 if (i >= divineShield.getMobCount()) {
                                     break;
@@ -9661,7 +9661,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                             final Mob attacker = (Mob) attacke;
                             final int theDmg = (int) (divineShield.getDamage() * getStat().getCurrentMaxBaseDamage() / 100.0);
                             attacker.damage(this, theDmg, true);
-                            getMap().broadcastMessage(MobPacket.damageMonster(attacker.getObjectId(), theDmg));
+                            getMap().broadcastPacket(MobPacket.damageMonster(attacker.getObjectId(), theDmg));
                         } else {
                             final User attacker = (User) attacke;
                             attacker.addHP(-divineShield.getDamage());
@@ -9681,7 +9681,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                             final Mob attacker = (Mob) attacke;
                             final int theDmg = (int) (divineShield.getDamage() * getStat().getCurrentMaxBaseDamage() / 100.0);
                             attacker.damage(this, theDmg, true);
-                            getMap().broadcastMessage(MobPacket.damageMonster(attacker.getObjectId(), theDmg));
+                            getMap().broadcastPacket(MobPacket.damageMonster(attacker.getObjectId(), theDmg));
                         } else {
                             final User attacker = (User) attacke;
                             attacker.addHP(-divineShield.getDamage());
@@ -9701,7 +9701,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                         final Mob attacker = (Mob) attacke;
                         bouncedamage = Math.min(bouncedamage, attacker.getMobMaxHp() / 10);
                         attacker.damage(this, bouncedamage, true);
-                        getMap().broadcastMessage(this, MobPacket.damageMonster(attacker.getObjectId(), bouncedamage), getTruePosition());
+                        getMap().broadcastPacket(this, MobPacket.damageMonster(attacker.getObjectId(), bouncedamage), getTruePosition());
                         if (getBuffSource(CharacterTemporaryStat.Guard) == 31101003) {
                             StatEffect eff = this.getStatForBuff(CharacterTemporaryStat.Guard);
                             if (eff.makeChanceResult()) {
@@ -9732,7 +9732,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                                     final Mob attacker = (Mob) attacke;
                                     final long theDmg = (long) (SkillFactory.getSkill(sum.getSkill()).getEffect(sum.getSkillLevel()).getX() * damage / 100.0);
                                     allDamage.add(new Pair<>(attacker.getObjectId(), theDmg));
-                                    getMap().broadcastMessage(SummonPacket.summonAttack(sum.getOwnerId(), sum.getObjectId(), (byte) 0x84, allDamage, getLevel(), true));
+                                    getMap().broadcastPacket(SummonPacket.summonAttack(sum.getOwnerId(), sum.getObjectId(), (byte) 0x84, allDamage, getLevel(), true));
                                     attacker.damage(this, theDmg, true);
                                     checkMonsterAggro(attacker);
                                     if (!attacker.isAlive()) {
@@ -9753,7 +9753,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             }
         }
         if (attack != null && attack.size() > 0 && attacke != null) {
-            getMap().broadcastMessage(CField.pvpCool(attacke.getObjectId(), attack));
+            getMap().broadcastPacket(CField.pvpCool(attacke.getObjectId(), attack));
         }
         ret.left = damage;
         return ret;
@@ -9874,7 +9874,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void attackCarte(final StatEffect eff, final int oid, final int x) {
         if (x > 0) {
             lastBerserkTime += x; //lol unused variable.
-            map.broadcastMessage(PhantomPacket.getCarteAnimation(id, oid, job, (int) lastBerserkTime, x));
+            map.broadcastPacket(PhantomPacket.getCarteAnimation(id, oid, job, (int) lastBerserkTime, x));
             client.SendPacket(PhantomPacket.updateCardStack(currentBattleshipHP()));
         }
     }
@@ -12144,7 +12144,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         for (User chr : getMap().getCharacters()) {
             MapleItemInformationProvider.getInstance().getItemEffect(2023055).applyTo(chr);
         }
-        getMap().broadcastMessage(CField.startMapEffect(name + " has received Double Miracle Time's Mysterious Blessing. Congratulations!", 2023055, true));
+        getMap().broadcastPacket(CField.startMapEffect(name + " has received Double Miracle Time's Mysterious Blessing. Congratulations!", 2023055, true));
         World.Broadcast.broadcastMessage(WvsContext.broadcastMsg(0x19, 0, name + " has received [Double Miracle Time's Miraculous Blessing]. Congratulations!", false));
     }
 
@@ -12283,7 +12283,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void zeroChange(boolean beta) {
         setZeroBetaState(beta);
-        getMap().broadcastMessage(this, CUserLocal.zeroTag(this), getPosition());
+        getMap().broadcastPacket(this, CUserLocal.zeroTag(this), getPosition());
     }
 
     public void checkZeroTranscendent() {
@@ -12521,7 +12521,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             if (clones[i].get() == null) {
                 final User newp = cloneLooks();
                 map.addPlayer(newp);
-                map.broadcastMessage(CField.updateCharLook(newp, false));
+                map.broadcastPacket(CField.updateCharLook(newp, false));
                 map.movePlayer(newp, getTruePosition());
                 clones[i] = new WeakReference<>(newp);
                 return;

@@ -210,7 +210,7 @@ public class Explorer {
             pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, Shadower.FLIP_OF_THE_COIN, pEffect.info.get(StatInfo.time), pEffect.statups, pEffect));
 
             // Turn off Flip The Coin in order for the player to require another critical strike for next use.
-            pPlayer.getMap().broadcastMessage(ShadowerPacket.toggleFlipTheCoin(false));
+            pPlayer.getMap().broadcastPacket(ShadowerPacket.toggleFlipTheCoin(false));
             pPlayer.dropMessage(-1, "Flip of the Coin (" + nAmount + "/5)");
         }
     }
@@ -227,7 +227,7 @@ public class Explorer {
                     ForceAtom forceAtomInfo = new ForceAtom(1, nInc, 20, 40,
                             0, 100, (int) System.currentTimeMillis(), 1, 0,
                             new Point());
-                    pPlayer.getMap().broadcastMessage(CField.createForceAtom(false, nMobID, pPlayer.getId(), nType,
+                    pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, nMobID, pPlayer.getId(), nType,
                             true, nMobID, Assassin.ASSASSINS_MARK, forceAtomInfo, new Rectangle(), 0, 300,
                             pMob.getPosition(), 2070000, pMob.getPosition()));
                 }

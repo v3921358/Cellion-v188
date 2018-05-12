@@ -134,9 +134,9 @@ public class MobSkill {
                             break;
                         }
                     }
-                    monster.getMap().broadcastMessage(MobPacket.spawnMonster(monster, -1, 0, false), oldPos);
-                    monster.getMap().broadcastMessage(MobPacket.spawnMonster(monster, -1, 0, false), monster.getTruePosition());
-                    monster.getMap().broadcastMessage(MobPacket.getMonsterTeleport(monster.getObjectId(), x, y));
+                    monster.getMap().broadcastPacket(MobPacket.spawnMonster(monster, -1, 0, false), oldPos);
+                    monster.getMap().broadcastPacket(MobPacket.spawnMonster(monster, -1, 0, false), monster.getTruePosition());
+                    monster.getMap().broadcastPacket(MobPacket.getMonsterTeleport(monster.getObjectId(), x, y));
                     monster.getMap().moveMonster(monster, monster.getTruePosition());
                 }
                 break;
@@ -301,7 +301,7 @@ public class MobSkill {
                 clock.setClockType(Randomizer.rand(1, 2));
                 monster.getMap().spawnClockMist(clock);
                 //player.send(MainPacketCreator.spawnClockMist(clock));
-                monster.getMap().broadcastMessage(CField.getGameMessage("Sacrifice.", (short) 7));
+                monster.getMap().broadcastPacket(CField.getGameMessage("Sacrifice.", (short) 7));
                 break;
             case 200:
                 if (monster == null) {

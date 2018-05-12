@@ -59,7 +59,7 @@ public class Summon extends AnimatedMapleMapObject {
 
     @Override
     public final void sendDestroyData(final ClientSocket client) {
-        client.getPlayer().getMap().broadcastMessage(SummonPacket.removeSummon(this, false));
+        client.getPlayer().getMap().broadcastPacket(SummonPacket.removeSummon(this, false));
         client.SendPacket(SummonPacket.removeSummon(this, false));
     }
 

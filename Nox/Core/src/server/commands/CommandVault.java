@@ -427,7 +427,7 @@ public class CommandVault {
                 for (User chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                     chrs.getClient().SendPacket(WvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has started!"));
                 }
-                player.getMap().broadcastMessage(CField.getClock(60));
+                player.getMap().broadcastPacket(CField.getClock(60));
             }
             return 1;
         }
@@ -437,7 +437,7 @@ public class CommandVault {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            c.getPlayer().getMap().broadcastMessage(CField.musicChange(splitted[1]));
+            c.getPlayer().getMap().broadcastPacket(CField.musicChange(splitted[1]));
             return 1;
         }
     }
@@ -910,7 +910,7 @@ public class CommandVault {
             OutPacket packet = WvsContext.yellowChat((splitted[0].equals("!y") ? ("[" + c.getPlayer().getName() + "] ") : "") + StringUtil.joinStringFrom(splitted, 2));
             switch (range) {
                 case 0:
-                    c.getPlayer().getMap().broadcastMessage(packet);
+                    c.getPlayer().getMap().broadcastPacket(packet);
                     break;
                 case 1:
                     ChannelServer.getInstance(c.getChannel()).broadcastPacket(packet);

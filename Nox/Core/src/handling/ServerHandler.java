@@ -447,7 +447,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                                 break; // Doesn't display these packets, prevents major console spam.
                             }
                         default:
-                            if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
+                            if (ServerConstants.DEVELOPER_DEBUG_MODE) {
                                 System.out.printf("[Recv Operation] %s (%d) : %s%n", head, nPacketID, iPacket.toString());
                             }
                             break;
@@ -457,7 +457,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     LogHelper.PACKET_HANDLER.get().error("Unvalid packet handling state for " + (pClientSocket.getPlayer() == null ? "null" : pClientSocket.getPlayer()) + " (" + pClientSocket.getAccountName() + ") on map " + (pClientSocket.getPlayer() == null ? "null" : pClientSocket.getPlayer().getMapId()) + " with packet " + iPacket.toString());
                 }
             } else {
-                if (ServerConstants.DEVELOPER_PACKET_DEBUG_MODE) {
+                if (ServerConstants.DEVELOPER_DEBUG_MODE) {
                     switch (head) {
                         case "UserActivateDamageSkin":
                             if (ServerConstants.REDUCED_DEBUG_SPAM) {

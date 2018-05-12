@@ -31,7 +31,7 @@ public class ReleasePsychicLockHandler implements ProcessPacket<ClientSocket> {
         // 8 bytes, pos?
 
         c.SendPacket(JobPacket.Kinesis.OnReleasePsychicLock(c.getPlayer().getId(), nParentPsychicAreaKey));
-        c.getPlayer().getMap().broadcastMessage(c.getPlayer(), JobPacket.Kinesis.OnReleasePsychicLock(c.getPlayer().getId(), nParentPsychicAreaKey), false);
+        c.getPlayer().getMap().broadcastPacket(c.getPlayer(), JobPacket.Kinesis.OnReleasePsychicLock(c.getPlayer().getId(), nParentPsychicAreaKey), false);
     }
 
 }

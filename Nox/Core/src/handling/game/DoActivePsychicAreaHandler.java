@@ -29,7 +29,7 @@ public class DoActivePsychicAreaHandler implements ProcessPacket<ClientSocket> {
         int nKey = iPacket.DecodeInt();
 
         c.SendPacket(JobPacket.Kinesis.OnDoActivePsychicArea(nKey, 1));
-        pPlayer.getMap().broadcastMessage(c.getPlayer(), JobPacket.Kinesis.OnDoActivePsychicArea(nKey, 1), false);
+        pPlayer.getMap().broadcastPacket(c.getPlayer(), JobPacket.Kinesis.OnDoActivePsychicArea(nKey, 1), false);
 
         if (pPlayer.getPrimaryStack() > 0) {
             KinesisHandler.psychicPointResult(pPlayer, pPlayer.getPrimaryStack() - 1);

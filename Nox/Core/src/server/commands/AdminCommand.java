@@ -223,7 +223,7 @@ public class AdminCommand {
             if (pet == null) {
                 return 0;
             }
-            c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PetPacket.petColor(c.getPlayer().getId(), (byte) 0, Color.yellow.getAlpha()), true);
+            c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PetPacket.petColor(c.getPlayer().getId(), (byte) 0, Color.yellow.getAlpha()), true);
             return 1;
         }
     }
@@ -359,11 +359,11 @@ public class AdminCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            ServerConstants.DoubleTime = !ServerConstants.DoubleTime;
+            ServerConstants.DOUBLE_TIME = !ServerConstants.DOUBLE_TIME;
             World.Broadcast.broadcastMessage(WvsContext.broadcastMsg(4, "It's Miracle Time!  Between 2:00 PM and 4:00 PM (Pacific) today, Miracle, Premium, Revolutionary Miracle, Super Miracle, Enlightening Miracle and Carved Slot Miracle Cubes have increased chances to raise your item to the next potential tier!"));
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
-                    mch.dropMessage(0, "Double Time Event has " + (ServerConstants.DoubleTime ? "began!" : "ended"));
+                    mch.dropMessage(0, "Double Time Event has " + (ServerConstants.DOUBLE_TIME ? "began!" : "ended"));
                 }
             }
             return 1;
@@ -374,10 +374,10 @@ public class AdminCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            ServerConstants.DoubleMiracleTime = !ServerConstants.DoubleMiracleTime;
+            ServerConstants.DOUBLE_MIRACLE_TIME = !ServerConstants.DOUBLE_MIRACLE_TIME;
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
-                    mch.dropMessage(0, "Double Miracle Time Event has " + (ServerConstants.DoubleMiracleTime ? "began!" : "ended"));
+                    mch.dropMessage(0, "Double Miracle Time Event has " + (ServerConstants.DOUBLE_MIRACLE_TIME ? "began!" : "ended"));
                 }
             }
             return 1;
@@ -626,7 +626,7 @@ public class AdminCommand {
                     continue;
                 }
                 mapitem.setPickedUp(true);
-                c.getPlayer().getMap().broadcastMessage(CField.removeItemFromMap(mapitem.getObjectId(), 2, c.getPlayer().getId()), mapitem.getPosition());
+                c.getPlayer().getMap().broadcastPacket(CField.removeItemFromMap(mapitem.getObjectId(), 2, c.getPlayer().getId()), mapitem.getPosition());
                 c.getPlayer().getMap().removeMapObject(item);
 
             }
@@ -679,7 +679,7 @@ public class AdminCommand {
                 if (mch == null) {
                     return 0;
                 } else {
-                    mch.getMap().broadcastMessage(CField.getChatText(mch.getId(), StringUtil.joinStringFrom(splitted, 1), mch.isGM(), true));
+                    mch.getMap().broadcastPacket(CField.getChatText(mch.getId(), StringUtil.joinStringFrom(splitted, 1), mch.isGM(), true));
                 }
             }
             return 1;
@@ -695,7 +695,7 @@ public class AdminCommand {
                 c.getPlayer().dropMessage(5, "unable to find '" + splitted[1]);
                 return 0;
             } else {
-                victim.getMap().broadcastMessage(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 2), victim.isGM(), true));
+                victim.getMap().broadcastPacket(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 2), victim.isGM(), true));
             }
             return 1;
         }
@@ -926,7 +926,7 @@ public class AdminCommand {
 
             OutPacket packet = WvsContext.broadcastMsg(type, sb.toString());
             if (range == 0) {
-                c.getPlayer().getMap().broadcastMessage(packet);
+                c.getPlayer().getMap().broadcastPacket(packet);
             } else if (range == 1) {
                 ChannelServer.getInstance(c.getChannel()).broadcastPacket(packet);
             } else if (range == 2) {
@@ -990,7 +990,7 @@ public class AdminCommand {
 
                 for (MapleMapObject mmo : c.getPlayer().getMap().getAllMapObjects(MapleMapObjectType.MONSTER)) {
                     final Mob monster = (Mob) mmo;
-                    c.getPlayer().getMap().broadcastMessage(MobPacket.moveMonster(
+                    c.getPlayer().getMap().broadcastPacket(MobPacket.moveMonster(
                             monster, false, -1, 0, 0, (short) 0, monster.getObjectId(), c.getPlayer().getLastGMMovement(), null, null));
                     monster.setPosition(c.getPlayer().getPosition());
                 }
@@ -1143,7 +1143,7 @@ public class AdminCommand {
         public int execute(ClientSocket c, String[] splitted) {
             for (User victim : c.getPlayer().getMap().getCharacters()) {
                 if (victim.getId() != c.getPlayer().getId()) {
-                    victim.getMap().broadcastMessage(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), true));
+                    victim.getMap().broadcastPacket(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), true));
                 }
             }
             return 1;
@@ -1156,7 +1156,7 @@ public class AdminCommand {
         public int execute(ClientSocket c, String[] splitted) {
             for (User victim : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 if (victim.getId() != c.getPlayer().getId()) {
-                    victim.getMap().broadcastMessage(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), true));
+                    victim.getMap().broadcastPacket(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), true));
                 }
             }
             return 1;
@@ -1170,7 +1170,7 @@ public class AdminCommand {
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (User victim : cserv.getPlayerStorage().getAllCharacters()) {
                     if (victim.getId() != c.getPlayer().getId()) {
-                        victim.getMap().broadcastMessage(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), true));
+                        victim.getMap().broadcastPacket(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), true));
                     }
                 }
             }
@@ -1191,7 +1191,7 @@ public class AdminCommand {
                 npc.setRx1(c.getPlayer().getPosition().x - 50);
                 npc.setFh(c.getPlayer().getMap().getSharedMapResources().footholds.findBelow(c.getPlayer().getPosition()).getId());
                 c.getPlayer().getMap().addMapObject(npc);
-                c.getPlayer().getMap().broadcastMessage(NPCPacket.spawnNPC(npc, true));
+                c.getPlayer().getMap().broadcastPacket(NPCPacket.spawnNPC(npc, true));
             } else {
                 c.getPlayer().dropMessage(6, "You have entered an invalid Npc-Id");
                 return 0;
@@ -1244,7 +1244,7 @@ public class AdminCommand {
                 }
 
                 c.getPlayer().getMap().addMapObject(npc);
-                c.getPlayer().getMap().broadcastMessage(NPCPacket.spawnNPC(npc, true));
+                c.getPlayer().getMap().broadcastPacket(NPCPacket.spawnNPC(npc, true));
                 c.getPlayer().dropMessage(6, "Please do not reload this map or else the NPC will disappear untill the next restart.");
             } else {
                 c.getPlayer().dropMessage(6, "You have entered an invalid npc id.");

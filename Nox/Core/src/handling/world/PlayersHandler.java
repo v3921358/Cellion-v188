@@ -264,7 +264,7 @@ public class PlayersHandler {
                     tt.setFollowInitiator(false);
                     c.getPlayer().setFollowOn(true);
                     c.getPlayer().setFollowInitiator(true);
-                    c.getPlayer().getMap().broadcastMessage(CField.followEffect(tt.getId(), c.getPlayer().getId(), null));
+                    c.getPlayer().getMap().broadcastPacket(CField.followEffect(tt.getId(), c.getPlayer().getId(), null));
                 } else {
                     c.getPlayer().setFollowId(0);
                     tt.setFollowId(0);
