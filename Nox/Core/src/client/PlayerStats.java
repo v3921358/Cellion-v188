@@ -20,9 +20,7 @@ import client.inventory.ModifyInventory;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import constants.ServerConstants;
-<<<<<<< HEAD
 import constants.skills.*;
-=======
 import constants.skills.Global;
 import constants.skills.Aran;
 import constants.skills.BattleMage;
@@ -34,7 +32,6 @@ import constants.skills.Luminous;
 import constants.skills.Magician;
 import constants.skills.Warrior;
 import constants.skills.Xenon;
->>>>>>> 918c577e589417fd30696f482e6a127616a8a46d
 import handling.world.World;
 import handling.world.MapleGuild;
 import handling.world.MapleGuildSkill;
@@ -1190,6 +1187,7 @@ public class PlayerStats implements Serializable {
                     localmaxmp_ += pEffect.getMaxDemonFury(); //yes
                 }
                 break;
+
             case 3120:
             case 3121:
             case 3122: // Demon Avenger
@@ -1328,15 +1326,12 @@ public class PlayerStats implements Serializable {
                     pEffect = pSkill.getEffect(nSLV);
                     accuracy += pEffect.getAccX();
                     jump += pEffect.getPassiveJump();
-<<<<<<< HEAD
-                    speed += pEffect.getSpeedMax();
+                   // speed += pSkill.getEffect(nSLV).getSpeed();
                 }
                 pSkill = SkillFactory.getSkill(Jett.SHADOW_HEART_1);
-=======
-                    speed += pEffect.getSpeed(); // TODO: split speed max and speed. (speed have a limit, while speedMax will add to the max)
+                   // speed += pSkill.getEffect(nSLV).getSpeed(); // TODO: split speed max and speed. (speed have a limit, while speedMax will add to the max)
                 } // TODO: research more on percentage hp/mp and stats, which doesn't take effect to note.
                 pSkill = SkillFactory.getSkill(5080004); // Shadow Heart
->>>>>>> 918c577e589417fd30696f482e6a127616a8a46d
                 nSLV = pPlayer.getTotalSkillLevel(pSkill);
                 if (nSLV > 0) {
                     pEffect = pSkill.getEffect(nSLV);
@@ -1376,7 +1371,6 @@ public class PlayerStats implements Serializable {
                         bossdam_r += pEffect.getBossDamage();
                     }
                 break;
-            }
             case 400: // Thief
             case 410: // Assassin
             case 411: // Hermit
