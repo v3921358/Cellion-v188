@@ -2573,20 +2573,25 @@ public class CField {
         OutPacket oPacket = new OutPacket(SendPacketOpcode.AffectedAreaCreated.getValue());
 
         oPacket.EncodeInt(clock.getObjectId());
-        oPacket.EncodeByte(1);
-        oPacket.EncodeInt(clock.getMobOwner().getObjectId());
+        oPacket.EncodeByte(1);//bMobOrigin
+        oPacket.EncodeInt(clock.getMobOwner().getObjectId());//nProp
         oPacket.EncodeInt(clock.getMobSkill().getSkillId());
         oPacket.EncodeByte(clock.getClockType());
-        oPacket.EncodeShort(0x07);//clock.getSkillDelay());
+        oPacket.EncodeShort(clock.getMobSkill().getEffectDelay());
+        oPacket.EncodeInt(0);//nUnk, new or for clocks specifically.
         oPacket.EncodeInt(clock.getBox().x);
         oPacket.EncodeInt(clock.getBox().y);
         oPacket.EncodeInt(clock.getBox().x + clock.getBox().width);
         oPacket.EncodeInt(clock.getBox().y + clock.getBox().height);
+        oPacket.EncodeInt(0);//bFail
+        oPacket.EncodePosition(clock.getMobOwner().getPosition());//mobForce.nMobPosX
+        oPacket.EncodeInt(0);//nForce
+        oPacket.EncodeInt(clock.getClockType() == 1 ? 15 : clock.getClockType() == 2 ? -15 : 0);//dwOption clock.getClockType() == 1 ? 15 : clock.getClockType() == 2 ? -15 : 0
+        oPacket.EncodeByte(0);
         oPacket.EncodeInt(0);
-        oPacket.EncodePosition(clock.getMobOwner().getPosition());
+        oPacket.EncodeByte(0);
         oPacket.EncodeInt(0);
-        oPacket.EncodeInt(clock.getClockType() == 1 ? 15 : clock.getClockType() == 2 ? -15 : 0);
-        oPacket.EncodeInt(0x78);
+        oPacket.Fill(0, 69);//could be removed probably
         //System.out.println(packet.toString());
 
         return oPacket;

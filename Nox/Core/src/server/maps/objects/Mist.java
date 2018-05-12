@@ -34,6 +34,7 @@ public class Mist extends MapleMapObject {
         this.ownerId = mob.getId();
         this.skill = skill;
         this.skilllevel = skill.getSkillLevel();
+        this.mob = mob;
 
         isUsed = false;
         clockType = -1;

@@ -455,12 +455,15 @@ public final class MapleMap {
         killMonster(monster, chr, withDrops, second, animation, 0);
     }
 
-    public final void replaceQueen(User chr, Mob pOldQueen, Mob pNewQueen) {
-        killMonster(pOldQueen, chr, false, true, (byte) 2);
+    public final void ReplaceMobDelayed(User chr, Mob pOldQueen, Mob pNewMob) {
         final Point pPos = new Point(pOldQueen.getPosition());
+        spawnedMonstersOnMap.decrementAndGet();
+        removeMapObject(pOldQueen);
+        pOldQueen.killed();
+        broadcastPacket(MobPacket.killMonster(pOldQueen.getObjectId(), 2, false));
         MapTimer.getInstance().schedule(() -> {
-            spawnMonsterOnGroudBelow(pNewQueen, pPos);
-        }, 2000);
+            spawnMonsterOnGroudBelow(pNewMob, pPos);
+        }, 1000);
     }
 
     public final void killMonster(Mob monster, User chr, boolean withDrops, boolean second, short animation, int lastSkill) {
@@ -631,31 +634,31 @@ public final class MapleMap {
                 type = ExpeditionType.Hilla;
             }
             doShrine(true);
-        } else if (mobid == 8920000 && smr.mapid == 105200710) {  // Root Abyss Reactors
+        } else if (mobid == 8920000 || mobid == 8920001 || mobid == 8920002 || mobid == 8920003 && smr.mapid == 105200710) {  // Root Abyss Reactors
             final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052009), 1052009);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(124, 135));
-        } else if (mobid == 8900000 && smr.mapid == 105200210) {
+        } else if (mobid == 8900000 || mobid == 8900001 || mobid == 8900002 || mobid == 8900003 && smr.mapid == 105200210) {
             final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052009), 1052009);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(497, 551));
 
-        } else if (mobid == 8910000 && smr.mapid == 105200510) {
+        } else if (mobid == 8910000 || mobid == 8910001 || mobid == 8910002 || mobid == 8910003 && smr.mapid == 105200510) {
             final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052009), 1052009);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(-195, 455));
 
-        } else if (mobid == 8910100 && smr.mapid == 105200110) {
+        } else if (mobid == 8910100 || mobid == 8910101 || mobid == 8910102 || mobid == 8910103 && smr.mapid == 105200110) {
             final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052006), 1052006);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(-195, 455));
 
-        } else if (mobid == 8930100 && smr.mapid == 105200410) {
+        } else if (mobid == 8930100 || mobid == 8930101 || mobid == 8930102 || mobid == 8930103 && smr.mapid == 105200410) {
             final Reactor my = new Reactor(MapleReactorFactory.getReactor(1052006), 1052006);
             my.setState((byte) 1);
             spawnReactorOnGroundBelow(my, new java.awt.Point(-78, 442));
 
-        } else if (mobid == 8870100 && smr.mapid == 262031300) { //hilla
+        } else if (mobid == 8870100) { //hilla
             World.Broadcast.broadcastMessage(WvsContext.broadcastMsg(6, "Dark Hilla is dead."));
             charactersLock.readLock().lock();
             try {
@@ -682,7 +685,7 @@ public final class MapleMap {
                 type = ExpeditionType.Arkarium;
             }
             doShrine(true);
-        } else if (mobid == 8920100 && smr.mapid == 105200310) {
+        } else if (mobid == 8920100 || mobid == 8920101 || mobid == 8920102 || mobid == 8920103 && smr.mapid == 105200310) {
 
             charactersLock.readLock().lock();
             try {
@@ -764,7 +767,7 @@ public final class MapleMap {
                 type = ExpeditionType.MagnusN;
             }
             doShrine(true);
-        } else if (mobid == 8900100 && smr.mapid == 105200610) {
+        } else if (mobid == 8900100 || mobid == 8900101 || mobid == 8900102 && smr.mapid == 105200610) {
 
             charactersLock.readLock().lock();
             try {
@@ -778,7 +781,7 @@ public final class MapleMap {
                 type = ExpeditionType.Easy_Pierre;
             }
             doShrine(true);
-        } else if (mobid == 8900000 && smr.mapid == 105200210) {
+        } else if (mobid == 8900000 || mobid == 8900001 || mobid == 8900002 && smr.mapid == 105200210) {
 
             charactersLock.readLock().lock();
             try {
@@ -792,7 +795,7 @@ public final class MapleMap {
                 type = ExpeditionType.Chaos_Pierre;
             }
             doShrine(true);
-        } else if (mobid == 8920000 && smr.mapid == 105200710) {
+        } else if (mobid == 8920000 || mobid == 8920001 ||  mobid == 8920002 || mobid == 8920003 && smr.mapid == 105200710) {
 
             charactersLock.readLock().lock();
             try {

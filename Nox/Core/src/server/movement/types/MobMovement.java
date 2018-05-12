@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import client.ClientSocket;
-import handling.AbstractMaplePacketHandler;
 import handling.world.MovementParse;
-import java.awt.Point;
 import java.util.Random;
 import net.InPacket;
 import server.Randomizer;
@@ -20,7 +18,6 @@ import server.movement.LifeMovementFragment;
 import tools.packet.MobPacket;
 import net.ProcessPacket;
 import server.life.LifeFactory;
-import server.life.MonsterStats;
 
 /**
  * @author Steven
@@ -61,31 +58,60 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
         int nAttackIdx = nAction - 13; //this number might be different per version
         int nForcedAttackIdx = 0, nForcedSkillIdx = 0;
 
-        boolean bSmartMob = false;
         String sMobNotice = "";
         switch (pMob.getId()) {
-            case 8880000: //magnus
-            case 8881000: //ursus
-            case 8930000: //chaos vellum
-                bSmartMob = true;
-                nForcedSkillIdx = 0;
-                nForcedAttackIdx = rand.nextInt(13);
-                if (nForcedAttackIdx == nAttackIdx) {
-                    nForcedAttackIdx = 0;
+            case 8910100: //von bon
+                if (pMob.getHPPercent() > 80) {
+                    nForcedAttackIdx = rand.nextInt(2);
+                    nForcedSkillIdx = 170; //Just shoots, no clocks.
+                } else {
+                    nForcedAttackIdx = rand.nextInt(3);
                 }
-                sMobNotice = "Magnus is preparing a dangerous move!";
                 break;
+            case 8910000: //chaos von bon
+                //TODO: Inner world portal spawns
+                if (pMob.getHPPercent() > 80) {
+                    nForcedAttackIdx = rand.nextInt(2);
+                    nForcedSkillIdx = 170; //Just shoots, no clocks.
+                } else if (pMob.getHPPercent() > 10) {
+                    nForcedAttackIdx = rand.nextInt(3);
+                } else {
+                    nForcedAttackIdx = rand.nextInt(9);//Unlocks his push moves.
+                }
+                break;
+            case 8910101: //disembodied von bon
+            case 8910001: //chaos disembodied von bon
+                break;
+            case 8920100: //queen
+            case 8920101: //queen
+            case 8920102: //queen
+            case 8920103: //queen
             case 8920000: //chaos queen
             case 8920001: //chaos queen
             case 8920002: //chaos queen
             case 8920003: //chaos queen
-                bSmartMob = true;
-                if (pMob.getHPPercent() < 99 && rand.nextInt(100) < 15) {
-                    int nTemplateID = 8920000 + rand.nextInt(4);
+                if (rand.nextInt(100) < 10) {
+                    int nTemplateID = pMob.getId() - (pMob.getId() % 10) + rand.nextInt(4);
                     if (nTemplateID != pMob.getId()) {
                         Mob pNewMob = LifeFactory.getMonster(nTemplateID);
                         pNewMob.setHp(pMob.getHp());
-                        pMob.getMap().replaceQueen(c.getPlayer(), pMob, pNewMob);
+                        pMob.getMap().ReplaceMobDelayed(c.getPlayer(), pMob, pNewMob);
+                    }
+                }
+                break;
+            case 8900100: //pierre
+            case 8900101: //pierre
+            case 8900102: //pierre twister
+            case 8900000: //chaos pierre
+            case 8900001: //chaos pierre
+            case 8900002: //chaos pierre twister
+                nForcedAttackIdx = rand.nextInt(2);
+                if (rand.nextInt(100) < 10) {
+                    int nTemplateID = pMob.getId() - (pMob.getId() % 10) + rand.nextInt(3);
+                    if (nTemplateID != pMob.getId()) {
+                        Mob pNewMob = LifeFactory.getMonster(nTemplateID);
+                        pNewMob.setHp(pMob.getHp());
+                        pMob.getMap().ReplaceMobDelayed(c.getPlayer(), pMob, pNewMob);
                     }
                 }
                 break;
@@ -99,13 +125,18 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
             List<MonsterSkill> skills = pMob.getStats().getSkills();
             int size = skills.size();
             if (size > 0) {
-                MonsterSkill nextSkill = skills.get(nForcedSkillIdx > 0 ? nForcedSkillIdx : Randomizer.nextInt(size));
+                MonsterSkill nextSkill = skills.get(Randomizer.nextInt(size));
 
-                if (chr.isAdmin()) {
-                    chr.yellowMessage(String.format("[Mob Movement Debug] nSkill: %s", nextSkill.getSkillId()));
+                if (nForcedSkillIdx != 0) {
+                    for (MonsterSkill SkillEntry : skills) {
+                        if (SkillEntry.getSkillId() == nForcedSkillIdx) {
+                            nextSkill = SkillEntry;
+                            break;
+                        }
+                    }
                 }
 
-                if (bSmartMob) {
+                if (!sMobNotice.isEmpty()) {
                     c.SendPacket(MobPacket.SmartMobNotice(1, oid, 2, nextSkill.getSkillId(), sMobNotice));
                     c.getPlayer().getMap().broadcastPacket(MobPacket.SmartMobNotice(2, oid, 2, nextSkill.getSkillId(), sMobNotice));
                 }
@@ -115,14 +146,13 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
                 MobSkill skill = nextSkill.getSkill();
 
                 if (tLastUsed == 0 || ((tNow - tLastUsed) > skill.getCoolTime())) {
-                    pMob.setLastSkillUsed(nSkill1, tNow, skill.getCoolTime());
 
-                    int reqHp = (int) (((float) pMob.getHp() / pMob.getMobMaxHp()) * 100); // In case this monster have 2.1b and above HP
-                    if (reqHp <= skill.getHP()) {
-                        if (skill.getCoolTime() == 0) {
-                            skill.applyEffect(chr, pMob, true);
-                        }
+                    if (chr.isAdmin()) {
+                        chr.yellowMessage(String.format("[Mob Movement Debug] nSkill: %s", nextSkill.getSkillId()));
                     }
+
+                    pMob.setLastSkillUsed(nSkill1, tNow, skill.getCoolTime());
+                    skill.applyEffect(chr, pMob, true);
                 }
             }
         }

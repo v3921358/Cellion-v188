@@ -300,8 +300,6 @@ public class MobSkill {
                 Mist clock = new Mist(box, monster, this);
                 clock.setClockType(Randomizer.rand(1, 2));
                 monster.getMap().spawnClockMist(clock);
-                //player.send(MainPacketCreator.spawnClockMist(clock));
-                monster.getMap().broadcastPacket(CField.getGameMessage("Sacrifice.", (short) 7));
                 break;
             case 200:
                 if (monster == null) {
