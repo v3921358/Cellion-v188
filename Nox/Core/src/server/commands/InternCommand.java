@@ -731,37 +731,6 @@ public class InternCommand {
         }
     }
 
-    public static class OpenNpc extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            NPCScriptManager.getInstance().start(c, Integer.parseInt(splitted[1]), splitted.length > 2 ? StringUtil.joinStringFrom(splitted, 2) : splitted[1]);
-            return 1;
-        }
-    }
-
-    public static class OpenShop extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            MapleShopFactory.getInstance().getShop(Integer.parseInt(splitted[1]));
-            return 1;
-        }
-    }
-
-    public static class Shop extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            MapleShopFactory shop = MapleShopFactory.getInstance();
-            int shopId = Integer.parseInt(splitted[1]);
-            if (shop.getShop(shopId) != null) {
-                shop.getShop(shopId).sendShop(c);
-            }
-            return 1;
-        }
-    }
-
     public static class SaveAll extends CommandExecute {
 
         @Override

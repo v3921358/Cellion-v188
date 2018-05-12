@@ -9,10 +9,13 @@ import constants.ServerConstants;
 import handling.world.CheaterData;
 import handling.world.World;
 import java.util.List;
+import scripting.provider.NPCScriptManager;
 import server.MaplePortal;
 import server.maps.MapleMap;
 import server.maps.objects.User;
+import server.shops.MapleShopFactory;
 import service.ChannelServer;
+import tools.StringUtil;
 
 /**
  * Additional Command Vault
@@ -176,6 +179,37 @@ public class CommandVault {
             } catch (NumberFormatException e) {
                 c.getPlayer().dropMessage(6, "Something went wrong " + e.getMessage());
                 return 0;
+            }
+            return 1;
+        }
+    }
+    
+    public static class OpenNpc extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            NPCScriptManager.getInstance().start(c, Integer.parseInt(splitted[1]), splitted.length > 2 ? StringUtil.joinStringFrom(splitted, 2) : splitted[1]);
+            return 1;
+        }
+    }
+
+    public static class OpenShop extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            MapleShopFactory.getInstance().getShop(Integer.parseInt(splitted[1]));
+            return 1;
+        }
+    }
+
+    public static class Shop extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            MapleShopFactory shop = MapleShopFactory.getInstance();
+            int shopId = Integer.parseInt(splitted[1]);
+            if (shop.getShop(shopId) != null) {
+                shop.getShop(shopId).sendShop(c);
             }
             return 1;
         }

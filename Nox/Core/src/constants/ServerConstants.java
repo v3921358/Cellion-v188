@@ -129,6 +129,50 @@ public class ServerConstants {
     public static boolean DoubleTime = false;
     public static boolean HOT_TIME = true;
 
+    /*GM Level & Command Configuration*/
+    public static enum PlayerGMRank {
+
+        NORMAL('@', 0),                 // Normal Player
+        DONOR('$', 1),                  // Donor Player
+        INTERN('!', 2),                 // Intern           (Minor Staff Permissions)
+        GM('!', 3),                     // Game Master      (Staff Permissions)
+        ADMIN('!', 4),                  // Administrator    (Full Staff Permissions)
+        INTERNAL_DEVELOPER('!', 5),     // Developer        (Complete Permissions)
+        
+        COMMAND_VAULT_ACCESS('!', 10);  // Additional Command Access (Developer Toggle)
+        
+        private final char cCommandPrefix;
+        private final int nGMLevel;
+
+        PlayerGMRank(char ch, int level) {
+            cCommandPrefix = ch;
+            this.nGMLevel = level;
+        }
+
+        public String getCommandPrefix() {
+            return String.valueOf(cCommandPrefix);
+        }
+
+        public int getLevel() {
+            return nGMLevel;
+        }
+    }
+
+    public static enum CommandType {
+
+        NORMAL(0),
+        TRADE(1);
+        private final int nType;
+
+        CommandType(int type) {
+            this.nType = type;
+        }
+
+        public int getType() {
+            return nType;
+        }
+    }
+    
     public static final byte[] hotfix() {
         if (APPLY_HOTFIX) {
             try {
@@ -179,47 +223,6 @@ public class ServerConstants {
                 return time >= 16 && time <= 21;
         }
         return time >= 19 && time <= 24;
-    }
-
-    /*GM Level & Command Configuration*/
-    public static enum PlayerGMRank {
-
-        NORMAL('@', 0),
-        DONATOR('$', 1),
-        INTERN('!', 2),
-        GM('!', 3),
-        ADMIN('!', 4),
-        INTERNAL_DEVELOPER('!', 5),;
-        private final char commandPrefix;
-        private final int level;
-
-        PlayerGMRank(char ch, int level) {
-            commandPrefix = ch;
-            this.level = level;
-        }
-
-        public String getCommandPrefix() {
-            return String.valueOf(commandPrefix);
-        }
-
-        public int getLevel() {
-            return level;
-        }
-    }
-
-    public static enum CommandType {
-
-        NORMAL(0),
-        TRADE(1);
-        private final int level;
-
-        CommandType(int level) {
-            this.level = level;
-        }
-
-        public int getType() {
-            return level;
-        }
     }
 
     public static enum Events {
@@ -311,14 +314,14 @@ public class ServerConstants {
         EVENT85("ChaosVonBon"),
         EVENT86("ChaosMagnus"),
         EVENT87("ChaosPinkBeanBattle");
-        private final String name;
+        private final String sName;
 
         Events(String name) {
-            this.name = name;
+            this.sName = name;
         }
 
         public String getName() {
-            return name;
+            return sName;
         }
     }
 
