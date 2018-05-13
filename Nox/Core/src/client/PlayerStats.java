@@ -1223,14 +1223,33 @@ public class PlayerStats implements Serializable {
                 if (nSLV > 0) {
                     defRange += pSkill.getEffect(nSLV).getRange();
                 }
+                pSkill = SkillFactory.getSkill(Hunter.BOW_MASTERY_2);
+                nSLV = pPlayer.getTotalSkillLevel(pSkill);
+                if (nSLV > 0) {
+                    trueMastery += pSkill.getEffect(nSLV).getMastery();
+                }
                 pSkill = SkillFactory.getSkill(Hunter.PHYSICAL_TRAINING_8);
                 nSLV = pPlayer.getTotalSkillLevel(pSkill);
                 if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(Archer.ARROW_BLOW, pEffect.getX());
-                    damageIncrease.put(Archer.DOUBLE_SHOT_1, pEffect.getY());
-                    localstr += pEffect.getStrX();
-                    localdex += pEffect.getDexX();
+                    localstr += pSkill.getEffect(nSLV).getStrX();
+                    localdex += pSkill.getEffect(nSLV).getDexX();
+                }
+                pSkill = SkillFactory.getSkill(Ranger.MARKSMANSHIP_3);
+                nSLV = pPlayer.getTotalSkillLevel(pSkill);
+                if (nSLV > 0) {
+                    ignoreTargetDEF += pSkill.getEffect(nSLV).getIgnoreMob();
+                    watk += pSkill.getEffect(nSLV).getAttackX();
+                }
+                pSkill = SkillFactory.getSkill(Ranger.FOCUSED_FURY_1);
+                nSLV = pPlayer.getTotalSkillLevel(pSkill);
+                if (nSLV > 0) {
+                    asrR += pSkill.getEffect(nSLV).getASRRate();
+                    terR += pSkill.getEffect(nSLV).getTERRate();
+                }
+                pSkill = SkillFactory.getSkill(Bowmaster.ADVANCED_FINAL_ATTACK_3);
+                nSLV = pPlayer.getTotalSkillLevel(pSkill);
+                if (nSLV > 0) {
+                    watk += pSkill.getEffect(nSLV).getAttackX();
                 }
                 pSkill = SkillFactory.getSkill(Ranger.EVASION_BOOST_2);
                 nSLV = pPlayer.getTotalSkillLevel(pSkill);
@@ -1242,11 +1261,7 @@ public class PlayerStats implements Serializable {
                 if (nSLV > 0) {
                     pEffect = pSkill.getEffect(nSLV);
                     trueMastery += pEffect.getMastery();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                }
-                pSkill = SkillFactory.getSkill(Bowmaster.BOW_EXPERT);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
+                    passive_sharpeye_min_percent += pEffect.getCriticalMin(); //Min/max crit was removed from the game, what's damage? TODO check
                     watk += pSkill.getEffect(nSLV).getX();
                 }
                 pSkill = SkillFactory.getSkill(Bowmaster.MARKSMANSHIP);
