@@ -706,17 +706,778 @@ public class PlayerStats implements Serializable {
             }
         }
 
+        // Warrior
+        pSkill = SkillFactory.getSkill(Spearman.PHYSICAL_TRAINING_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(Warrior.POWER_STRIKE_1, pEffect.getX());
+            damageIncrease.put(Warrior.SLASH_BLAST_1, pEffect.getY());
+            localstr += pEffect.getStrX();
+            localdex += pEffect.getDexX();
+        }
+        pSkill = SkillFactory.getSkill(Berserker.LORD_OF_DARKNESS);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            crit_rate += pEffect.getCr();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+            hpRecoverProp += pEffect.getProb();
+            hpRecoverPercent += pEffect.getX();
+        }
+        pSkill = SkillFactory.getSkill(DarkKnight.BERSERK);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            dam_r += pEffect.getDamage();
+            bossdam_r += pEffect.getDamage();
+        }
+        pSkill = SkillFactory.getSkill(Page.PHYSICAL_TRAINING_10_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(Warrior.POWER_STRIKE_1, pEffect.getX());
+            damageIncrease.put(Warrior.SLASH_BLAST_1, pEffect.getY());
+            localstr += pEffect.getStrX();
+            localdex += pEffect.getDexX();
+        }
+        pSkill = SkillFactory.getSkill(Paladin.GUARDIAN_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            asrR += pSkill.getEffect(nSLV).getASRRate();
+            terR += pSkill.getEffect(nSLV).getTERRate();
+        }
+        pSkill = SkillFactory.getSkill(Fighter.PHYSICAL_TRAINING_100_10);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(Warrior.POWER_STRIKE_1, pEffect.getX());
+            damageIncrease.put(Warrior.SLASH_BLAST_1, pEffect.getY());
+            localstr += pEffect.getStrX();
+            localdex += pEffect.getDexX();
+        }
+        pSkill = SkillFactory.getSkill(Crusader.CHANCE_ATTACK);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            dam_r += pEffect.getDamage();
+            bossdam_r += pEffect.getDamage();
+        }
+        pSkill = SkillFactory.getSkill(Hero.COMBAT_MASTERY_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            ignoreTargetDEF += pSkill.getEffect(nSLV).getIgnoreMob();
+        }
+        pSkill = SkillFactory.getSkill(Hero.ADVANCED_FINAL_ATTACK_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            watk += pEffect.getAttackX();
+            damageIncrease.put(Fighter.FINAL_ATTACK_6, (int) pEffect.getDamage());
+        }
+        pSkill = SkillFactory.getSkill(Warrior.IRON_BODY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            localmaxhp_ += pSkill.getEffect(nSLV).getPercentHP();
+            def += pSkill.getEffect(nSLV).getPDDX();
+            System.out.println(def);
+        }
+        pSkill = SkillFactory.getSkill(Warrior.WARRIOR_MASTERY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            // TO-DO: Add Stance
+            speed += pSkill.getEffect(nSLV).getPassiveSpeed();
+            jump += pSkill.getEffect(nSLV).getPassiveJump();
+            localmaxhp_ += pSkill.getEffect(nSLV).getMaxHpPerLevel();
+        }
+        pSkill = SkillFactory.getSkill(WhiteKnight.SHIELD_MASTERY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_wdef += pEffect.getX();
+            percent_mdef += pEffect.getX();
+        }
+        pSkill = SkillFactory.getSkill(Paladin.ACHILLES_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_wdef += pSkill.getEffect(nSLV).getT();
+        }
+        pSkill = SkillFactory.getSkill(Paladin.ADVANCED_CHARGE);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            trueMastery += pSkill.getEffect(nSLV).getMastery();
+        }
+        pSkill = SkillFactory.getSkill(Berserker.ELEMENTAL_RESISTANCE);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            terR += pSkill.getEffect(nSLV).getX();
+        }
+
+        // Magician
         pSkill = SkillFactory.getSkill(Magician.MP_BOOST);
         nSLV = pPlayer.getTotalSkillLevel(pSkill);
-        if (nSLV > 0) {
+        if (nSLV >0) {
             final StatEffect MPBoostEffect = pSkill.getEffect(nSLV);
             percent_mp += MPBoostEffect.getPercentMP(); // Max MP increased by 20%
             localmaxmp_ += MPBoostEffect.getMaxMpPerLevel() * pPlayer.getLevel();
             // TODO: +3% Critical Rate  w/ Wand Equipped
         }
-        pSkill = SkillFactory.getSkill(Global.ELVEN_BLESSING);
+        
+        // Fire Poison
+        pSkill = SkillFactory.getSkill(FirePoisonWizard.HIGH_WISDOM_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            localint_ += pSkill.getEffect(nSLV).getIntX();
+        }
+        pSkill = SkillFactory.getSkill(FirePoisonMage.BURNING_MAGIC);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            dotTime += pEffect.getX();
+            dot += pEffect.getZ();
+        }
+        pSkill = SkillFactory.getSkill(FirePoisonMage.ELEMENT_AMPLIFICATION_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            mpconPercent += pEffect.getX() - 100;
+            dam_r += pEffect.getY();
+            bossdam_r += pEffect.getY();
+        }
+        pSkill = SkillFactory.getSkill(FirePoisonArchMage.MIST_ERUPTION);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(FirePoisonMage.POISON_MIST, (int) pEffect.getX());
+        }
+        pSkill = SkillFactory.getSkill(FirePoisonArchMage.IFRIT);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            terR += pSkill.getEffect(nSLV).getTERRate();
+        }
+        pSkill = SkillFactory.getSkill(FirePoisonArchMage.BUFF_MASTERY_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            magic += pSkill.getEffect(nSLV).getMagicX();
+        }
+        pSkill = SkillFactory.getSkill(FirePoisonArchMage.ARCANE_AIM);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            dam_r += pEffect.getX() * pEffect.getY();
+            bossdam_r += pEffect.getX() * pEffect.getY();
+            ignoreTargetDEF += pEffect.getIgnoreMob();
+        }
+
+        // Ice Lightning
+        pSkill = SkillFactory.getSkill(IceLightningWizard.HIGH_WISDOM_7);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            localint_ += pSkill.getEffect(nSLV).getIntX();
+        }
+        pSkill = SkillFactory.getSkill(IceLightningMage.STORM_MAGIC);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            dot += pSkill.getEffect(nSLV).getZ();
+        }
+        pSkill = SkillFactory.getSkill(IceLightningMage.ELEMENT_AMPLIFICATION);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            mpconPercent += pEffect.getX() - 100;
+            dam_r += pEffect.getY();
+            bossdam_r += pEffect.getY();
+        }
+        pSkill = SkillFactory.getSkill(IceLightningArchMage.ELQUINES);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            terR += pSkill.getEffect(nSLV).getTERRate();
+        }
+        pSkill = SkillFactory.getSkill(IceLightningArchMage.BUFF_MASTERY_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            magic += pSkill.getEffect(nSLV).getMagicX();
+        }
+        pSkill = SkillFactory.getSkill(IceLightningArchMage.ARCANE_AIM_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            dam_r += pEffect.getX() * pEffect.getY();
+            bossdam_r += pEffect.getX() * pEffect.getY();
+            ignoreTargetDEF += pEffect.getIgnoreMob();
+        }
+
+        // Bishop
+        pSkill = SkillFactory.getSkill(Cleric.HIGH_WISDOM);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            localint_ += pSkill.getEffect(nSLV).getIntX();
+        }
+        pSkill = SkillFactory.getSkill(Priest.HOLY_FOCUS);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            crit_rate += pSkill.getEffect(nSLV).getCr();
+        }
+        pSkill = SkillFactory.getSkill(Bishop.BUFF_MASTERY_5);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            magic += pSkill.getEffect(nSLV).getMagicX();
+        }
+        pSkill = SkillFactory.getSkill(Bishop.ARCANE_AIM_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            dam_r += pEffect.getX() * pEffect.getY();
+            bossdam_r += pEffect.getX() * pEffect.getY();
+            ignoreTargetDEF += pEffect.getIgnoreMob();
+        }
+
+        // Bowmaster
+        pSkill = SkillFactory.getSkill(Archer.ARCHERY_MASTERY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            defRange += pSkill.getEffect(nSLV).getRange();
+        }
+        pSkill = SkillFactory.getSkill(Hunter.BOW_MASTERY_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            trueMastery += pSkill.getEffect(nSLV).getMastery();
+        }
+        pSkill = SkillFactory.getSkill(Hunter.PHYSICAL_TRAINING_8);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            localstr += pSkill.getEffect(nSLV).getStrX();
+            localdex += pSkill.getEffect(nSLV).getDexX();
+        }
+        pSkill = SkillFactory.getSkill(Ranger.MARKSMANSHIP_3);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            ignoreTargetDEF += pSkill.getEffect(nSLV).getIgnoreMob();
+            watk += pSkill.getEffect(nSLV).getAttackX();
+        }
+        pSkill = SkillFactory.getSkill(Ranger.FOCUSED_FURY_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            asrR += pSkill.getEffect(nSLV).getASRRate();
+            terR += pSkill.getEffect(nSLV).getTERRate();
+        }
+        pSkill = SkillFactory.getSkill(Bowmaster.ADVANCED_FINAL_ATTACK_3);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            watk += pSkill.getEffect(nSLV).getAttackX();
+        }
+        pSkill = SkillFactory.getSkill(Ranger.EVASION_BOOST_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            avoidabilityRate += pSkill.getEffect(nSLV).getER();
+        }
+        pSkill = SkillFactory.getSkill(Bowmaster.BOW_EXPERT);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            trueMastery += pEffect.getMastery();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin(); // TODO: Double check these, Min/Max Crit was removed in v179.
+            watk += pSkill.getEffect(nSLV).getX();
+        }
+        pSkill = SkillFactory.getSkill(Bowmaster.MARKSMANSHIP);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_hp += pEffect.getPercentHP();
+            ignoreTargetDEF += pEffect.getIgnoreMob();
+        }
+        pSkill = SkillFactory.getSkill(Bowmaster.SPIRIT_LINK_PHOENIX);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV > 0 && pPlayer.getBuffedValue(CharacterTemporaryStat.SpiritLink) != null) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_hp += pEffect.getX();
+            dam_r += pEffect.getDamage();
+            bossdam_r += pEffect.getDamage();
+        }
+
+        // Marksman
+        pSkill = SkillFactory.getSkill(Crossbowman.PHYSICAL_TRAINING_70_7);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(Archer.ARROW_BLOW, pEffect.getX());
+            damageIncrease.put(Archer.DOUBLE_SHOT_1, pEffect.getY());
+            localstr += pEffect.getStrX();
+            localdex += pEffect.getDexX();
+        }
+        pSkill = SkillFactory.getSkill(Marksman.ULTIMATE_STRAFE);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            damageIncrease.put(Sniper.STRAFE_2, pSkill.getEffect(nSLV).getDamage() - 150);
+        }
+        pSkill = SkillFactory.getSkill(Sniper.EVASION_BOOST);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            avoidabilityRate += pSkill.getEffect(nSLV).getER();
+        }
+        pSkill = SkillFactory.getSkill(Marksman.CROSSBOW_EXPERT_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            watk += pEffect.getX();
+            trueMastery += pEffect.getMastery();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+        }
+        pSkill = SkillFactory.getSkill(Marksman.MARKSMANSHIP_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_hp += pEffect.getPercentHP();
+            ignoreTargetDEF += pEffect.getIgnoreMob();
+        }
+        pSkill = SkillFactory.getSkill(Marksman.SPIRIT_LINK_FROSTPREY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV > 0 && pPlayer.getBuffedValue(CharacterTemporaryStat.SpiritLink) != null) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_hp += pEffect.getX();
+            dam_r += pEffect.getDamage();
+            bossdam_r += pEffect.getDamage();
+        }
+
+        // Thief
+        pSkill = SkillFactory.getSkill(Thief.HASTE_4);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            speed += pEffect.getSpeed();
+        }
+
+        // Night Lord
+        pSkill = SkillFactory.getSkill(NightLord.DARK_HARMONY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            ignoreTargetDEF += pEffect.getIgnoreMob();
+        }
+        pSkill = SkillFactory.getSkill(Assassin.PHYSICAL_TRAINING_50_5);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            localluk += pEffect.getLukX();
+            localdex += pEffect.getDexX();
+        }
+        pSkill = SkillFactory.getSkill(Hermit.ENVELOPING_DARKNESS_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_hp += pEffect.getPercentHP();
+            asrR += pEffect.getASRRate();
+            terR += pEffect.getTERRate();
+        }
+        pSkill = SkillFactory.getSkill(Hermit.EXPERT_THROWING_STAR_HANDLING);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(Thief.LUCKY_SEVEN, pEffect.getDAMRate());
+            damageIncrease.put(Assassin.SHURIKEN_BURST_1, pEffect.getDAMRate());
+            damageIncrease.put(Assassin.GUST_CHARM_1, pEffect.getDAMRate());
+        }
+        pSkill = SkillFactory.getSkill(Hermit.ALCHEMIC_ADRENALINE_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            RecoveryUP += pEffect.getX() - 100;
+        }
+
+        // Shadower
+        pSkill = SkillFactory.getSkill(Shadower.BOOMERANG_STAB);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) { // Savage Blow, Steal, and Assaulter
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(Bandit.SAVAGE_BLOW, (int) pEffect.getDAMRate());
+            damageIncrease.put(Bandit.STEAL, (int) pEffect.getDAMRate());
+            damageIncrease.put(ChiefBandit.PHASE_DASH, (int) pEffect.getDAMRate());
+        }
+        pSkill = SkillFactory.getSkill(ChiefBandit.MESO_MASTERY_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            mesoBuff *= (pEffect.getMesoRate() + 100.0) / 100.0;
+            pickRate += pEffect.getU();
+            mesoGuard -= pEffect.getV();
+            mesoGuardMeso -= pEffect.getW();
+            damageIncrease.put(4211006, pEffect.getX());
+        }
+        pSkill = SkillFactory.getSkill(ChiefBandit.ENVELOPING_DARKNESS_3);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_hp += pEffect.getPercentHP() + 27;
+            asrR += pEffect.getASRRate();
+            terR += pEffect.getTERRate();
+        }
+        pSkill = SkillFactory.getSkill(Bandit.SHADOW_RESISTANCE);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_hp += pEffect.getPercentHP();
+            asrR += pEffect.getASRRate();
+            terR += pEffect.getTERRate();
+        }
+        pSkill = SkillFactory.getSkill(ChiefBandit.SHIELD_MASTERY_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_wdef += pEffect.getX();
+            percent_mdef += pEffect.getX();
+        }
+
+        // Dual Blade
+        pSkill = SkillFactory.getSkill(DualBlade.LIFE_DRAIN);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            hpRecoverProp += pEffect.getProb();
+            hpRecoverPercent += pEffect.getX();
+        }
+        pSkill = SkillFactory.getSkill(DualBlade.FINAL_CUT);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) { // Fatal Blow, Slash Storm, Tornado Spin, Bloody Storm, Upper Stab, and Flying Assaulter
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(DualBlade.FATAL_BLOW, (int) pEffect.getDAMRate());
+            damageIncrease.put(DualBlade.SLASH_STORM, (int) pEffect.getDAMRate());
+            damageIncrease.put(DualBlade.TORNADO_SPIN_2, (int) pEffect.getDAMRate());
+            damageIncrease.put(DualBlade.TORNADO_SPIN_3, (int) pEffect.getDAMRate());
+            damageIncrease.put(DualBlade.BLOODY_STORM, (int) pEffect.getDAMRate());
+            damageIncrease.put(DualBlade.UPPER_STAB, (int) pEffect.getDAMRate());
+            damageIncrease.put(DualBlade.FLYING_ASSAULTER, (int) pEffect.getDAMRate());
+        }
+        pSkill = SkillFactory.getSkill(DualBlade.MIRRORED_TARGET);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            avoidabilityRate += pSkill.getEffect(nSLV).getER();
+        }
+        pSkill = SkillFactory.getSkill(DualBlade.SELF_HASTE);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            speed += pEffect.getSpeed();
+        }
+        pSkill = SkillFactory.getSkill(DualBlade.SHADOW_RESISTANCE_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_hp += pEffect.getPercentHP();
+            asrR += pEffect.getASRRate();
+            terR += pEffect.getTERRate();
+        }
+        pSkill = SkillFactory.getSkill(DualBlade.MIRRORED_TARGET);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_wdef += pEffect.getPDDRate();
+            percent_mdef += pEffect.getMDDRate();
+        }
+
+        // Buccaneer
+        pSkill = SkillFactory.getSkill(Marauder.BRAWLING_MASTERY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) { // Backspin Blow, Double Uppercut, and Corkscrew Blow
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(Brawler.BACKSPIN_BLOW_1, pEffect.getX());
+            damageIncrease.put(Brawler.DOUBLE_UPPERCUT_1, pEffect.getY());
+            damageIncrease.put(Brawler.CORKSCREW_BLOW_2, pEffect.getZ());
+        }
+        pSkill = SkillFactory.getSkill(Brawler.HP_BOOST_5);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+        }
+
+        // Corsair
+        pSkill = SkillFactory.getSkill(Corsair.ELEMENTAL_BOOST_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) { // Flamethrower and Ice Splitter
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(Outlaw.FLAMETHROWER, (int) pEffect.getDamage());
+            damageIncrease.put(Outlaw.ICE_SPLITTER, (int) pEffect.getDamage());
+        }
+
+        // Cannoneer
+        pSkill = SkillFactory.getSkill(Cannoneer.CANNON_BOOST);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            watk += pSkill.getEffect(nSLV).getAttackX();
+        }
+        pSkill = SkillFactory.getSkill(Cannoneer.PIRATE_TRAINING);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            localstr += pEffect.getStrX();
+            localdex += pEffect.getDexX();
+        }
+        pSkill = SkillFactory.getSkill(CannonBlaster.MONKEY_MADNESS);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            damageIncrease.put(Cannoneer.BARREL_BOMB, (int) pSkill.getEffect(nSLV).getDAMRate());
+        }
+        pSkill = SkillFactory.getSkill(CannonBlaster.PIRATE_RUSH);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_hp += pEffect.getHpR();
+            asrR += pEffect.getASRRate();
+            percent_wdef += pEffect.getPDDRate();
+        }
+        pSkill = SkillFactory.getSkill(CannonBlaster.REINFORCED_CANNON);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            watk += pSkill.getEffect(nSLV).getAttackX();
+        }
+
+        // Jett
+        pSkill = SkillFactory.getSkill(Jett.QUICK_MOTION_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            accuracy += pEffect.getAccX();
+            jump += pEffect.getPassiveJump();
+            speed += pSkill.getEffect(nSLV).getSpeed();
+        }
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            crit_rate += pEffect.getCr();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+        }
+        pSkill = SkillFactory.getSkill(Jett.PHYSICAL_TRAINING_7);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            localstr += pEffect.getStrX();
+            localdex += pEffect.getDexX();
+        }
+        pSkill = SkillFactory.getSkill(Jett.HIGH_LIFE);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_wdef += pEffect.getPDDRate();
+            percent_mdef += pEffect.getMDDRate();
+            localmaxhp_ += pEffect.getMaxHpX();
+            localmaxmp_ += pEffect.getMaxMpX();
+        }
+        pSkill = SkillFactory.getSkill(Jett.CUTTING_EDGE);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            crit_rate += pEffect.getCr();
+            ignoreTargetDEF += pEffect.getIgnoreMob();
+        }
+        pSkill = SkillFactory.getSkill(Jett.COLLATERAL_DAMAGE);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            crit_rate += pEffect.getCr();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+            passive_sharpeye_percent += pEffect.getCriticalMax();
+            bossdam_r += pEffect.getBossDamage();
+        }
+
+        // Dawn Warrior
+        pSkill = SkillFactory.getSkill(DawnWarrior.HP_BOOST_3);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+        }
+
+        // Blaze Wizard
+        pSkill = SkillFactory.getSkill(BlazeWizard.MP_BOOST_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_mp += pSkill.getEffect(nSLV).getPercentMP();
+        }
+        pSkill = SkillFactory.getSkill(BlazeWizard.MAGIC_CRITICAL);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            terR += pSkill.getEffect(nSLV).getX();
+        }
+        pSkill = SkillFactory.getSkill(BlazeWizard.ELEMENT_AMPLIFICATION_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            mpconPercent += pEffect.getX() - 100;
+            dam_r += pEffect.getY();
+            bossdam_r += pEffect.getY();
+        }
+        pSkill = SkillFactory.getSkill(BlazeWizard.IFRIT_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            terR += pSkill.getEffect(nSLV).getTERRate();
+        }
+
+        // Wind Archer
+        pSkill = SkillFactory.getSkill(WindArcher.ARCHERY_MASTERY_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            defRange += pSkill.getEffect(nSLV).getRange();
+        }
+        pSkill = SkillFactory.getSkill(WindArcher.EVASION_BOOST_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            avoidabilityRate += pSkill.getEffect(nSLV).getER();
+        }
+        pSkill = SkillFactory.getSkill(WindArcher.BOW_EXPERT_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            trueMastery += pEffect.getMastery();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+        }
+
+        // Night Walker
+        pSkill = SkillFactory.getSkill(NightWalker.ALCHEMIST);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            RecoveryUP += pEffect.getX() - 100;
+            BuffUP += pEffect.getY() - 100;
+        }
+        pSkill = SkillFactory.getSkill(NightWalker.KEEN_EYES);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            defRange += pSkill.getEffect(nSLV).getRange();
+        }
+
+        // Thunder Breaker
+        pSkill = SkillFactory.getSkill(ThunderBreaker.HP_BOOST_6);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+        }
+
+        //Aran
+        pSkill = SkillFactory.getSkill(Aran.HIGH_MASTERY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            watk += pEffect.getX();
+            trueMastery += pEffect.getMastery();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+        }
+        pSkill = SkillFactory.getSkill(Aran.SNOW_CHARGE_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            dam_r += pEffect.getDAMRate();
+            bossdam_r += pEffect.getDAMRate();
+        }
+        pSkill = SkillFactory.getSkill(Aran.FULL_SWING_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            damageIncrease.put(Aran.SMASH_WAVE, pSkill.getEffect(nSLV).getW());
+        }
+        pSkill = SkillFactory.getSkill(Aran.OVER_SWING);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            damageIncrease.put(Aran.COMBO_FENRIR, pSkill.getEffect(nSLV).getZ());
+        }
+        pSkill = SkillFactory.getSkill(Aran.SUDDEN_STRIKE_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(Aran.FINAL_CHARGE_1, (int) pEffect.getDAMRate());
+            damageIncrease.put(Aran.FINAL_TOSS_2, (int) pEffect.getDAMRate());
+        }
+        pSkill = SkillFactory.getSkill(Aran.DRAIN);        // Aran Drain grants +% Max HP
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+        }
+        pSkill = SkillFactory.getSkill(Aran.HIGH_DEFENSE); // Aran High Defense Grants +% Max HP
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+        }
+
+        // Evan
+        pSkill = SkillFactory.getSkill(Evan.MAGIC_AMPLIFICATION);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            mpconPercent += pEffect.getX() - 100;
+            dam_r += pEffect.getY();
+            bossdam_r += pEffect.getY();
+        }
+        pSkill = SkillFactory.getSkill(Evan.DRAGON_FURY_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            dam_r += pEffect.getDamage();
+            bossdam_r += pEffect.getDamage();
+        }
+        pSkill = SkillFactory.getSkill(Evan.MAGIC_MASTERY); // This is an invisible skill.
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            magic += pEffect.getX();
+            trueMastery += pEffect.getMastery();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+        }
+        pSkill = SkillFactory.getSkill(Global.MAGIC_LINK); // High Life
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            //localmaxmp_ += eff.getMaxMpX();
+            percent_mp += pEffect.getMpR();
+            localmaxmp_ += (120 * pPlayer.getLevel());
+        }
+
+        // Mercedes
+        pSkill = SkillFactory.getSkill(Mercedes.ELVEN_GRACE);
         nSLV = pPlayer.getSkillLevel(pSkill);
-        if (nSLV > 0) {
+        if (nSLV >0) {
+            pPlayer.getTrait(MapleTraitType.charm).addLocalExp(GameConstants.getTraitExpNeededForLevel(30));
+        }
+        pSkill = SkillFactory.getSkill(Mercedes.POTENTIAL_POWER);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            avoidabilityRate += pSkill.getEffect(nSLV).getER();
+        }
+        pSkill = SkillFactory.getSkill(Mercedes.PHYSICAL_TRAINING_6);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            localstr += pEffect.getStrX();
+            localdex += pEffect.getDexX();
+        }
+        pSkill = SkillFactory.getSkill(23110004); // TODO: Wrong Buff ID
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            avoidabilityRate += pSkill.getEffect(nSLV).getProb();
+            damageIncrease.put(Mercedes.RISING_RUSH, (int) pSkill.getEffect(nSLV).getDAMRate());
+        }
+        pSkill = SkillFactory.getSkill(Mercedes.ANCIENT_WARDING);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            avoidabilityRate += pSkill.getEffect(nSLV).getProb();
+        }
+        pSkill = SkillFactory.getSkill(Mercedes.DUAL_BOWGUNS_EXPERT);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            watk += pSkill.getEffect(nSLV).getX();
+        }
+        pSkill = SkillFactory.getSkill(Mercedes.DEFENSE_BREAK);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            ignoreTargetDEF += pSkill.getEffect(nSLV).getX();
+        }
+        pSkill = SkillFactory.getSkill(Mercedes.ROLLING_MOONSAULT);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            damageIncrease.put(23101001, (int) pSkill.getEffect(nSLV).getDAMRate());
+        }
+        pSkill = SkillFactory.getSkill(Mercedes.ADVANCED_FINAL_ATTACK);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            watk += pSkill.getEffect(nSLV).getAttackX();
+        }
+        pSkill = SkillFactory.getSkill(Mercedes.ELVEN_BLESSING_1);
+        nSLV = pPlayer.getSkillLevel(pSkill);
+        if (nSLV >0) {
             this.expMod_ElveBlessing += pSkill.getEffect(nSLV).getX() / 100f;
         }
         if (pPlayer.getBuffedValue(CharacterTemporaryStat.BullsEye) != null) {
@@ -724,1433 +1485,484 @@ public class PlayerStats implements Serializable {
             passive_sharpeye_min_percent += pSkill.getEffect(nSLV).getX();
             passive_sharpeye_percent += pSkill.getEffect(nSLV).getY();
         }
+        
+        // Phantom 
+        pSkill = SkillFactory.getSkill(Phantom.PHANTOM_INSTINCT_1); // +10% Crit Rate
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            crit_rate += pEffect.getCr();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+        }
+        pSkill = SkillFactory.getSkill(Phantom.DEXTEROUS_TRAINING); // +40 DEX, Base Avoidability: +20%
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            localdex += pEffect.getDexX();
+            avoidabilityRate += pEffect.getER();
+        }
+        pSkill = SkillFactory.getSkill(Phantom.PHANTOM_SWIFTNESS);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            speed += pEffect.getPassiveSpeed();
+            jump += pEffect.getPassiveJump();
+        }
+        pSkill = SkillFactory.getSkill(Phantom.FEATHER_FOOT);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            avoidabilityRate += pEffect.getX();
+        }
+        pSkill = SkillFactory.getSkill(Phantom.DEVILS_LUCK);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            localluk += pEffect.getLukX();
+        }
+        pSkill = SkillFactory.getSkill(Phantom.PIERCING_VISION);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            crit_rate += pEffect.getCr();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+        }
+        pSkill = SkillFactory.getSkill(Phantom.FINAL_FEINT);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            localluk += pEffect.getLukX();
+        }
 
-        switch (pPlayer.getJob()) {
-            case 100:
-            case 110:
-            case 111:
-            case 112:
-            case 120:
-            case 121:
-            case 122:
-            case 130:
-            case 131:
-            case 132: { // Warrior
-                pSkill = SkillFactory.getSkill(Spearman.PHYSICAL_TRAINING_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(Warrior.POWER_STRIKE_1, pEffect.getX());
-                    damageIncrease.put(Warrior.SLASH_BLAST_1, pEffect.getY());
-                    localstr += pEffect.getStrX();
-                    localdex += pEffect.getDexX();
-                }
-                pSkill = SkillFactory.getSkill(Berserker.LORD_OF_DARKNESS);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    crit_rate += pEffect.getCr();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                    hpRecoverProp += pEffect.getProb();
-                    hpRecoverPercent += pEffect.getX();
-                }
-                pSkill = SkillFactory.getSkill(DarkKnight.BERSERK);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    dam_r += pEffect.getDamage();
-                    bossdam_r += pEffect.getDamage();
-                }
-                pSkill = SkillFactory.getSkill(Page.PHYSICAL_TRAINING_10_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(Warrior.POWER_STRIKE_1, pEffect.getX());
-                    damageIncrease.put(Warrior.SLASH_BLAST_1, pEffect.getY());
-                    localstr += pEffect.getStrX();
-                    localdex += pEffect.getDexX();
-                }
-                pSkill = SkillFactory.getSkill(Paladin.GUARDIAN_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    asrR += pSkill.getEffect(nSLV).getASRRate();
-                    terR += pSkill.getEffect(nSLV).getTERRate();
-                }
-                pSkill = SkillFactory.getSkill(Fighter.PHYSICAL_TRAINING_100_10);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(Warrior.POWER_STRIKE_1, pEffect.getX());
-                    damageIncrease.put(Warrior.SLASH_BLAST_1, pEffect.getY());
-                    localstr += pEffect.getStrX();
-                    localdex += pEffect.getDexX();
-                }
-                pSkill = SkillFactory.getSkill(Crusader.CHANCE_ATTACK);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    dam_r += pEffect.getDamage();
-                    bossdam_r += pEffect.getDamage();
-                }
-                pSkill = SkillFactory.getSkill(Hero.COMBAT_MASTERY_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    ignoreTargetDEF += pSkill.getEffect(nSLV).getIgnoreMob();
-                }
-                pSkill = SkillFactory.getSkill(Hero.ADVANCED_FINAL_ATTACK_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    watk += pEffect.getAttackX();
-                    damageIncrease.put(Fighter.FINAL_ATTACK_6, (int) pEffect.getDamage());
-                }
-                pSkill = SkillFactory.getSkill(Warrior.IRON_BODY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    localmaxhp_ += pSkill.getEffect(nSLV).getPercentHP();
-                    def += pSkill.getEffect(nSLV).getPDDX();
-                    System.out.println(def);
-                }
-                pSkill = SkillFactory.getSkill(Warrior.WARRIOR_MASTERY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    // TO-DO: Add Stance
-                    speed += pSkill.getEffect(nSLV).getPassiveSpeed();
-                    jump += pSkill.getEffect(nSLV).getPassiveJump();
-                    localmaxhp_ += pSkill.getEffect(nSLV).getMaxHpPerLevel();
-                }
-                pSkill = SkillFactory.getSkill(WhiteKnight.SHIELD_MASTERY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_wdef += pEffect.getX();
-                    percent_mdef += pEffect.getX();
-                }
-                pSkill = SkillFactory.getSkill(Paladin.ACHILLES_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_wdef += pSkill.getEffect(nSLV).getT();
-                }
-                pSkill = SkillFactory.getSkill(Paladin.ADVANCED_CHARGE);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    trueMastery += pSkill.getEffect(nSLV).getMastery();
-                }
-                pSkill = SkillFactory.getSkill(Berserker.ELEMENTAL_RESISTANCE);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    terR += pSkill.getEffect(nSLV).getX();
-                }
-                break;
-            }
-            case 200: { // Mage First Job
-                break;
-            }
-            case 210:
-            case 211:
-            case 212: { // Fire Poison
-                pSkill = SkillFactory.getSkill(FirePoisonWizard.HIGH_WISDOM_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    localint_ += pSkill.getEffect(nSLV).getIntX();
-                }
-                pSkill = SkillFactory.getSkill(FirePoisonMage.BURNING_MAGIC);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    dotTime += pEffect.getX();
-                    dot += pEffect.getZ();
-                }
-                pSkill = SkillFactory.getSkill(FirePoisonMage.ELEMENT_AMPLIFICATION_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    mpconPercent += pEffect.getX() - 100;
-                    dam_r += pEffect.getY();
-                    bossdam_r += pEffect.getY();
-                }
-                pSkill = SkillFactory.getSkill(FirePoisonArchMage.MIST_ERUPTION);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(FirePoisonMage.POISON_MIST, (int) pEffect.getX());
-                }
-                pSkill = SkillFactory.getSkill(FirePoisonArchMage.IFRIT);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    terR += pSkill.getEffect(nSLV).getTERRate();
-                }
-                pSkill = SkillFactory.getSkill(FirePoisonArchMage.BUFF_MASTERY_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    magic += pSkill.getEffect(nSLV).getMagicX();
-                }
-                pSkill = SkillFactory.getSkill(FirePoisonArchMage.ARCANE_AIM);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    dam_r += pEffect.getX() * pEffect.getY();
-                    bossdam_r += pEffect.getX() * pEffect.getY();
-                    ignoreTargetDEF += pEffect.getIgnoreMob();
-                }
-                break;
-            }
-            case 220:
-            case 221:
-            case 222: { // Ice Lightning
-                pSkill = SkillFactory.getSkill(IceLightningWizard.HIGH_WISDOM_7);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    localint_ += pSkill.getEffect(nSLV).getIntX();
-                }
-                pSkill = SkillFactory.getSkill(IceLightningMage.STORM_MAGIC);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    dot += pSkill.getEffect(nSLV).getZ();
-                }
-                pSkill = SkillFactory.getSkill(IceLightningMage.ELEMENT_AMPLIFICATION);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    mpconPercent += pEffect.getX() - 100;
-                    dam_r += pEffect.getY();
-                    bossdam_r += pEffect.getY();
-                }
-                pSkill = SkillFactory.getSkill(IceLightningArchMage.ELQUINES);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    terR += pSkill.getEffect(nSLV).getTERRate();
-                }
-                pSkill = SkillFactory.getSkill(IceLightningArchMage.BUFF_MASTERY_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    magic += pSkill.getEffect(nSLV).getMagicX();
-                }
-                pSkill = SkillFactory.getSkill(IceLightningArchMage.ARCANE_AIM_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    dam_r += pEffect.getX() * pEffect.getY();
-                    bossdam_r += pEffect.getX() * pEffect.getY();
-                    ignoreTargetDEF += pEffect.getIgnoreMob();
-                }
-                break;
-            }
-            case 230:
-            case 231:
-            case 232: { // Bishop
-                pSkill = SkillFactory.getSkill(Cleric.HIGH_WISDOM);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    localint_ += pSkill.getEffect(nSLV).getIntX();
-                }
-                pSkill = SkillFactory.getSkill(Priest.HOLY_FOCUS);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    crit_rate += pSkill.getEffect(nSLV).getCr();
-                }
-                pSkill = SkillFactory.getSkill(Bishop.BUFF_MASTERY_5);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    magic += pSkill.getEffect(nSLV).getMagicX();
-                }
-                pSkill = SkillFactory.getSkill(Bishop.ARCANE_AIM_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    dam_r += pEffect.getX() * pEffect.getY();
-                    bossdam_r += pEffect.getX() * pEffect.getY();
-                    ignoreTargetDEF += pEffect.getIgnoreMob();
-                }
-                break;
-            }
-            case 300:
-            case 310:
-            case 311:
-            case 312: { // Bowmaster
-                pSkill = SkillFactory.getSkill(Archer.ARCHERY_MASTERY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    defRange += pSkill.getEffect(nSLV).getRange();
-                }
-                pSkill = SkillFactory.getSkill(Hunter.BOW_MASTERY_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    trueMastery += pSkill.getEffect(nSLV).getMastery();
-                }
-                pSkill = SkillFactory.getSkill(Hunter.PHYSICAL_TRAINING_8);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    localstr += pSkill.getEffect(nSLV).getStrX();
-                    localdex += pSkill.getEffect(nSLV).getDexX();
-                }
-                pSkill = SkillFactory.getSkill(Ranger.MARKSMANSHIP_3);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    ignoreTargetDEF += pSkill.getEffect(nSLV).getIgnoreMob();
-                    watk += pSkill.getEffect(nSLV).getAttackX();
-                }
-                pSkill = SkillFactory.getSkill(Ranger.FOCUSED_FURY_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    asrR += pSkill.getEffect(nSLV).getASRRate();
-                    terR += pSkill.getEffect(nSLV).getTERRate();
-                }
-                pSkill = SkillFactory.getSkill(Bowmaster.ADVANCED_FINAL_ATTACK_3);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    watk += pSkill.getEffect(nSLV).getAttackX();
-                }
-                pSkill = SkillFactory.getSkill(Ranger.EVASION_BOOST_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    avoidabilityRate += pSkill.getEffect(nSLV).getER();
-                }
-                pSkill = SkillFactory.getSkill(Bowmaster.BOW_EXPERT);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    trueMastery += pEffect.getMastery();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin(); // TODO: Double check these, Min/Max Crit was removed in v179.
-                    watk += pSkill.getEffect(nSLV).getX();
-                }
-                pSkill = SkillFactory.getSkill(Bowmaster.MARKSMANSHIP);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_hp += pEffect.getPercentHP();
-                    ignoreTargetDEF += pEffect.getIgnoreMob();
-                }
-                pSkill = SkillFactory.getSkill(Bowmaster.SPIRIT_LINK_PHOENIX);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0 && pPlayer.getBuffedValue(CharacterTemporaryStat.SpiritLink) != null) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_hp += pEffect.getX();
-                    dam_r += pEffect.getDamage();
-                    bossdam_r += pEffect.getDamage();
-                }
-                break;
-            }
-            case 320:
-            case 321:
-            case 322: { // Marksman
-                pSkill = SkillFactory.getSkill(Crossbowman.PHYSICAL_TRAINING_70_7);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(Archer.ARROW_BLOW, pEffect.getX());
-                    damageIncrease.put(Archer.DOUBLE_SHOT_1, pEffect.getY());
-                    localstr += pEffect.getStrX();
-                    localdex += pEffect.getDexX();
-                }
-                pSkill = SkillFactory.getSkill(Marksman.ULTIMATE_STRAFE);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    damageIncrease.put(Sniper.STRAFE_2, pSkill.getEffect(nSLV).getDamage() - 150);
-                }
-                pSkill = SkillFactory.getSkill(Sniper.EVASION_BOOST);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    avoidabilityRate += pSkill.getEffect(nSLV).getER();
-                }
-                pSkill = SkillFactory.getSkill(Marksman.CROSSBOW_EXPERT_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    watk += pEffect.getX();
-                    trueMastery += pEffect.getMastery();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                }
-                pSkill = SkillFactory.getSkill(Marksman.MARKSMANSHIP_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_hp += pEffect.getPercentHP();
-                    ignoreTargetDEF += pEffect.getIgnoreMob();
-                }
-                pSkill = SkillFactory.getSkill(Marksman.SPIRIT_LINK_FROSTPREY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0 && pPlayer.getBuffedValue(CharacterTemporaryStat.SpiritLink) != null) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_hp += pEffect.getX();
-                    dam_r += pEffect.getDamage();
-                    bossdam_r += pEffect.getDamage();
-                }
-                break;
-            }
-            case 400: {// Thief
-                pSkill = SkillFactory.getSkill(Thief.HASTE_4);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    speed += pEffect.getSpeed();
-                }
-                break;
-            }
-            case 410: // Assassin
-            case 411: // Hermit
-            case 412: {// Night Lord
-                pSkill = SkillFactory.getSkill(NightLord.DARK_HARMONY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    ignoreTargetDEF += pEffect.getIgnoreMob();
-                }
-                pSkill = SkillFactory.getSkill(Assassin.PHYSICAL_TRAINING_50_5);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    localluk += pEffect.getLukX();
-                    localdex += pEffect.getDexX();
-                }
-                pSkill = SkillFactory.getSkill(Hermit.ENVELOPING_DARKNESS_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_hp += pEffect.getPercentHP();
-                    asrR += pEffect.getASRRate();
-                    terR += pEffect.getTERRate();
-                }
-                pSkill = SkillFactory.getSkill(Hermit.EXPERT_THROWING_STAR_HANDLING);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(Thief.LUCKY_SEVEN, pEffect.getDAMRate());
-                    damageIncrease.put(Assassin.SHURIKEN_BURST_1, pEffect.getDAMRate());
-                    damageIncrease.put(Assassin.GUST_CHARM_1, pEffect.getDAMRate());
-                }
-                pSkill = SkillFactory.getSkill(Hermit.ALCHEMIC_ADRENALINE_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    RecoveryUP += pEffect.getX() - 100;
-                }
-                break;
-            }
-            case 420: 
-            case 421: 
-            case 422: { // Shadower
-                pSkill = SkillFactory.getSkill(Shadower.BOOMERANG_STAB);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) { // Savage Blow, Steal, and Assaulter
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(Bandit.SAVAGE_BLOW, (int) pEffect.getDAMRate());
-                    damageIncrease.put(Bandit.STEAL, (int) pEffect.getDAMRate());
-                    damageIncrease.put(ChiefBandit.PHASE_DASH, (int) pEffect.getDAMRate());
-                }
-                pSkill = SkillFactory.getSkill(ChiefBandit.MESO_MASTERY_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    mesoBuff *= (pEffect.getMesoRate() + 100.0) / 100.0;
-                    pickRate += pEffect.getU();
-                    mesoGuard -= pEffect.getV();
-                    mesoGuardMeso -= pEffect.getW();
-                    damageIncrease.put(4211006, pEffect.getX());
-                }
-                pSkill = SkillFactory.getSkill(ChiefBandit.ENVELOPING_DARKNESS_3);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_hp += pEffect.getPercentHP() + 27;
-                    asrR += pEffect.getASRRate();
-                    terR += pEffect.getTERRate();
-                }
-                pSkill = SkillFactory.getSkill(Bandit.SHADOW_RESISTANCE);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_hp += pEffect.getPercentHP();
-                    asrR += pEffect.getASRRate();
-                    terR += pEffect.getTERRate();
-                }
-                pSkill = SkillFactory.getSkill(ChiefBandit.SHIELD_MASTERY_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_wdef += pEffect.getX();
-                    percent_mdef += pEffect.getX();
-                }
-                break;
-            }
-            case 430:
-            case 431:
-            case 432:
-            case 433:
-            case 434: { // Dual Blade
-                pSkill = SkillFactory.getSkill(DualBlade.LIFE_DRAIN);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    hpRecoverProp += pEffect.getProb();
-                    hpRecoverPercent += pEffect.getX();
-                }
-                pSkill = SkillFactory.getSkill(DualBlade.FINAL_CUT);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) { // Fatal Blow, Slash Storm, Tornado Spin, Bloody Storm, Upper Stab, and Flying Assaulter
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(DualBlade.FATAL_BLOW, (int) pEffect.getDAMRate());
-                    damageIncrease.put(DualBlade.SLASH_STORM, (int) pEffect.getDAMRate());
-                    damageIncrease.put(DualBlade.TORNADO_SPIN_2, (int) pEffect.getDAMRate());
-                    damageIncrease.put(DualBlade.TORNADO_SPIN_3, (int) pEffect.getDAMRate());
-                    damageIncrease.put(DualBlade.BLOODY_STORM, (int) pEffect.getDAMRate());
-                    damageIncrease.put(DualBlade.UPPER_STAB, (int) pEffect.getDAMRate());
-                    damageIncrease.put(DualBlade.FLYING_ASSAULTER, (int) pEffect.getDAMRate());
-                }
-                pSkill = SkillFactory.getSkill(DualBlade.MIRRORED_TARGET);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    avoidabilityRate += pSkill.getEffect(nSLV).getER();
-                }
-                pSkill = SkillFactory.getSkill(DualBlade.SELF_HASTE);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    speed += pEffect.getSpeed();
-                }
-                pSkill = SkillFactory.getSkill(DualBlade.SHADOW_RESISTANCE_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_hp += pEffect.getPercentHP();
-                    asrR += pEffect.getASRRate();
-                    terR += pEffect.getTERRate();
-                }
-                pSkill = SkillFactory.getSkill(DualBlade.MIRRORED_TARGET);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_wdef += pEffect.getPDDRate();
-                    percent_mdef += pEffect.getMDDRate();
-                }
-                break;
-            }
-            case 500:
-            case 501:
-            case 510:
-            case 511:
-            case 512: { // Buccaneer
-                pSkill = SkillFactory.getSkill(Marauder.BRAWLING_MASTERY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) { // Backspin Blow, Double Uppercut, and Corkscrew Blow
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(Brawler.BACKSPIN_BLOW_1, pEffect.getX());
-                    damageIncrease.put(Brawler.DOUBLE_UPPERCUT_1, pEffect.getY());
-                    damageIncrease.put(Brawler.CORKSCREW_BLOW_2, pEffect.getZ());
-                }
-                pSkill = SkillFactory.getSkill(Brawler.HP_BOOST_5);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += pSkill.getEffect(nSLV).getPercentHP();
-                }
-                break;
-            }
-            case 520:
-            case 521:
-            case 522: { // Corsair
-                pSkill = SkillFactory.getSkill(Corsair.ELEMENTAL_BOOST_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) { // Flamethrower and Ice Splitter
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(Outlaw.FLAMETHROWER, (int) pEffect.getDamage());
-                    damageIncrease.put(Outlaw.ICE_SPLITTER, (int) pEffect.getDamage());
-                }
-                break;
-            }
-            case 530:
-            case 531:
-            case 532: {// Cannoneer
-                pSkill = SkillFactory.getSkill(Cannoneer.CANNON_BOOST);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    watk += pSkill.getEffect(nSLV).getAttackX();
-                }
-                pSkill = SkillFactory.getSkill(Cannoneer.PIRATE_TRAINING);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    localstr += pEffect.getStrX();
-                    localdex += pEffect.getDexX();
-                }
-                pSkill = SkillFactory.getSkill(CannonBlaster.MONKEY_MADNESS);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    damageIncrease.put(Cannoneer.BARREL_BOMB, (int) pSkill.getEffect(nSLV).getDAMRate());
-                }
-                pSkill = SkillFactory.getSkill(CannonBlaster.PIRATE_RUSH);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_hp += pEffect.getHpR();
-                    asrR += pEffect.getASRRate();
-                    percent_wdef += pEffect.getPDDRate();
-                }
-                pSkill = SkillFactory.getSkill(CannonBlaster.REINFORCED_CANNON);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    watk += pSkill.getEffect(nSLV).getAttackX();
-                }
-                break;
-            }
-            case 508:
-            case 570:
-            case 571:
-            case 572: { // Jett
-                pSkill = SkillFactory.getSkill(Jett.QUICK_MOTION_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    accuracy += pEffect.getAccX();
-                    jump += pEffect.getPassiveJump();
-                    speed += pSkill.getEffect(nSLV).getSpeed();
-                }
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    crit_rate += pEffect.getCr();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                }
-                pSkill = SkillFactory.getSkill(Jett.PHYSICAL_TRAINING_7);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    localstr += pEffect.getStrX();
-                    localdex += pEffect.getDexX();
-                }
-                pSkill = SkillFactory.getSkill(Jett.HIGH_LIFE);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_wdef += pEffect.getPDDRate();
-                    percent_mdef += pEffect.getMDDRate();
-                    localmaxhp_ += pEffect.getMaxHpX();
-                    localmaxmp_ += pEffect.getMaxMpX();
-                }
-                pSkill = SkillFactory.getSkill(Jett.CUTTING_EDGE);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    crit_rate += pEffect.getCr();
-                    ignoreTargetDEF += pEffect.getIgnoreMob();
-                }
-                pSkill = SkillFactory.getSkill(Jett.COLLATERAL_DAMAGE);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    crit_rate += pEffect.getCr();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                    passive_sharpeye_percent += pEffect.getCriticalMax();
-                    bossdam_r += pEffect.getBossDamage();
-                }
-                break;
-            }
-            case 1100:
-            case 1110:
-            case 1111:
-            case 1112: {
-                pSkill = SkillFactory.getSkill(DawnWarrior.HP_BOOST_3);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += pSkill.getEffect(nSLV).getPercentHP();
-                }
-                break;
-            }
-            case 1200:
-            case 1210:
-            case 1211:
-            case 1212: { // Blaze Wizard
-                pSkill = SkillFactory.getSkill(BlazeWizard.MP_BOOST_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_mp += pSkill.getEffect(nSLV).getPercentMP();
-                }
-                pSkill = SkillFactory.getSkill(BlazeWizard.MAGIC_CRITICAL);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    terR += pSkill.getEffect(nSLV).getX();
-                }
-                pSkill = SkillFactory.getSkill(BlazeWizard.ELEMENT_AMPLIFICATION_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    mpconPercent += pEffect.getX() - 100;
-                    dam_r += pEffect.getY();
-                    bossdam_r += pEffect.getY();
-                }
-                pSkill = SkillFactory.getSkill(BlazeWizard.IFRIT_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    terR += pSkill.getEffect(nSLV).getTERRate();
-                }
-                break;
-            }
-            case 1300:
-            case 1310:
-            case 1311:
-            case 1312: { // Wind Archer
-                pSkill = SkillFactory.getSkill(WindArcher.ARCHERY_MASTERY_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    defRange += pSkill.getEffect(nSLV).getRange();
-                }
-                pSkill = SkillFactory.getSkill(WindArcher.EVASION_BOOST_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    avoidabilityRate += pSkill.getEffect(nSLV).getER();
-                }
-                pSkill = SkillFactory.getSkill(WindArcher.BOW_EXPERT_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    trueMastery += pEffect.getMastery();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                }
-                break;
-            }
-            case 1400:
-            case 1410:
-            case 1411:
-            case 1412: { // Night Walker
-                pSkill = SkillFactory.getSkill(NightWalker.ALCHEMIST);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    RecoveryUP += pEffect.getX() - 100;
-                    BuffUP += pEffect.getY() - 100;
-                }
-                pSkill = SkillFactory.getSkill(NightWalker.KEEN_EYES);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    defRange += pSkill.getEffect(nSLV).getRange();
-                }
-                break;
-            }
-            case 1500:
-            case 1510:
-            case 1511:
-            case 1512: { // Thunder Breaker
-                pSkill = SkillFactory.getSkill(ThunderBreaker.HP_BOOST_6);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += pSkill.getEffect(nSLV).getPercentHP();
-                }
-                break;
-            }
-            case 2100:
-            case 2110:
-            case 2111:
-            case 2112: { //Aran
-                pSkill = SkillFactory.getSkill(Aran.HIGH_MASTERY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    watk += pEffect.getX();
-                    trueMastery += pEffect.getMastery();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                }
-                pSkill = SkillFactory.getSkill(Aran.SNOW_CHARGE_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    dam_r += pEffect.getDAMRate();
-                    bossdam_r += pEffect.getDAMRate();
-                }
-                pSkill = SkillFactory.getSkill(Aran.FULL_SWING_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    damageIncrease.put(Aran.SMASH_WAVE, pSkill.getEffect(nSLV).getW());
-                }
-                pSkill = SkillFactory.getSkill(Aran.OVER_SWING);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    damageIncrease.put(Aran.COMBO_FENRIR, pSkill.getEffect(nSLV).getZ());
-                }
-                pSkill = SkillFactory.getSkill(Aran.SUDDEN_STRIKE_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(Aran.FINAL_CHARGE_1, (int) pEffect.getDAMRate());
-                    damageIncrease.put(Aran.FINAL_TOSS_2, (int) pEffect.getDAMRate());
-                }
-                pSkill = SkillFactory.getSkill(Aran.DRAIN);        // Aran Drain grants +% Max HP
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += pSkill.getEffect(nSLV).getPercentHP();
-                }
-                pSkill = SkillFactory.getSkill(Aran.HIGH_DEFENSE); // Aran High Defense Grants +% Max HP
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += pSkill.getEffect(nSLV).getPercentHP();
-                }
-                break;
-            }
-            case 2001:
-            case 2200:
-            case 2210:
-            case 2211:
-            case 2212:
-            case 2213:
-            case 2214:
-            case 2215:
-            case 2216:
-            case 2217:
-            case 2218: {
-                pSkill = SkillFactory.getSkill(Evan.MAGIC_AMPLIFICATION);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    mpconPercent += pEffect.getX() - 100;
-                    dam_r += pEffect.getY();
-                    bossdam_r += pEffect.getY();
-                }
-                pSkill = SkillFactory.getSkill(Evan.DRAGON_FURY_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    dam_r += pEffect.getDamage();
-                    bossdam_r += pEffect.getDamage();
-                }
-                pSkill = SkillFactory.getSkill(Evan.MAGIC_MASTERY); // This is an invisible skill.
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    magic += pEffect.getX();
-                    trueMastery += pEffect.getMastery();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                }
-                pSkill = SkillFactory.getSkill(Global.MAGIC_LINK); // High Life
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    //localmaxmp_ += eff.getMaxMpX();
-                    percent_mp += pEffect.getMpR();
-                    localmaxmp_ += (120 * pPlayer.getLevel());
-                }
-                break;
-            }
-            case 2002:
-            case 2300:
-            case 2310:
-            case 2311:
-            case 2312: { // Mercedes
-                pSkill = SkillFactory.getSkill(Mercedes.ELVEN_GRACE);
-                nSLV = pPlayer.getSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pPlayer.getTrait(MapleTraitType.charm).addLocalExp(GameConstants.getTraitExpNeededForLevel(30));
-                }
-                pSkill = SkillFactory.getSkill(Mercedes.POTENTIAL_POWER);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    avoidabilityRate += pSkill.getEffect(nSLV).getER();
-                }
-                pSkill = SkillFactory.getSkill(Mercedes.PHYSICAL_TRAINING_6);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    localstr += pEffect.getStrX();
-                    localdex += pEffect.getDexX();
-                }
-                pSkill = SkillFactory.getSkill(23110004); // TODO: Wrong Buff ID
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    avoidabilityRate += pSkill.getEffect(nSLV).getProb();
-                    damageIncrease.put(Mercedes.RISING_RUSH, (int) pSkill.getEffect(nSLV).getDAMRate());
-                }
-                pSkill = SkillFactory.getSkill(Mercedes.ANCIENT_WARDING);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    avoidabilityRate += pSkill.getEffect(nSLV).getProb();
-                }
-                pSkill = SkillFactory.getSkill(Mercedes.DUAL_BOWGUNS_EXPERT);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    watk += pSkill.getEffect(nSLV).getX();
-                }
-                pSkill = SkillFactory.getSkill(Mercedes.DEFENSE_BREAK);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    ignoreTargetDEF += pSkill.getEffect(nSLV).getX();
-                }
-                pSkill = SkillFactory.getSkill(Mercedes.ROLLING_MOONSAULT);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    damageIncrease.put(23101001, (int) pSkill.getEffect(nSLV).getDAMRate());
-                }
-                pSkill = SkillFactory.getSkill(Mercedes.ADVANCED_FINAL_ATTACK);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    watk += pSkill.getEffect(nSLV).getAttackX();
-                }
-                break;
-            }
-            case 2003: { // Phantom Noob // TODO: Check
-                pSkill = SkillFactory.getSkill(Phantom.PHANTOM_INSTINCT_1); // +10% Crit Rate
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    crit_rate += pEffect.getCr();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                }
-                pSkill = SkillFactory.getSkill(Phantom.DEXTEROUS_TRAINING); // +40 DEX, Base Avoidability: +20%
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    localdex += pEffect.getDexX();
-                    avoidabilityRate += pEffect.getER();
-                }
-                break;
-            }
-            case 2400:
-            case 2410:
-            case 2411:
-            case 2412: { // Phantom
-                pSkill = SkillFactory.getSkill(Phantom.PHANTOM_SWIFTNESS);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    speed += pEffect.getPassiveSpeed();
-                    jump += pEffect.getPassiveJump();
-                }
-                pSkill = SkillFactory.getSkill(Phantom.FEATHER_FOOT);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    avoidabilityRate += pEffect.getX();
-                }
-                pSkill = SkillFactory.getSkill(Phantom.DEVILS_LUCK);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    localluk += pEffect.getLukX();
-                }
-                pSkill = SkillFactory.getSkill(Phantom.PIERCING_VISION);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    crit_rate += pEffect.getCr();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                }
-                pSkill = SkillFactory.getSkill(Phantom.FINAL_FEINT);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    localluk += pEffect.getLukX();
-                }
-                break;
-            }
-            case 2005:
-            case 2500:
-            case 2510:
-            case 2511:
-            case 2512: { // Shade
-                // TODO
-                break;
-            }
-            case 2004:
-            case 2700:
-            case 2710:
-            case 2711:
-            case 2712: { // Luminous
-                pSkill = SkillFactory.getSkill(Luminous.STANDARD_MAGIC_GUARD);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
+        // TODO: Shade Passives
 
-                    float percentDamageAffectsMP = pEffect.getX() / 100.0f;
-                    standardMagicGuard = percentDamageAffectsMP;
+        // Luminous
+        pSkill = SkillFactory.getSkill(Luminous.STANDARD_MAGIC_GUARD);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
 
-                }
-                pSkill = SkillFactory.getSkill(Luminous.MANA_WELL);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_mp += pEffect.getPercentMP();
-                }
-                break;
-            }
-            case 3001:
-            case 3100:
-            case 3110:
-            case 3111:
-            case 3112: { // Demon Slayer
-                mpRecoverProp = 100;
-                pSkill = SkillFactory.getSkill(DemonSlayer.HP_BOOST_7);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += pSkill.getEffect(nSLV).getHpR();
-                }
-                pSkill = SkillFactory.getSkill(DemonSlayer.BARBED_LASH);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(DemonSlayer.DEMON_LASH, (int) pEffect.getDAMRate());
-                    damageIncrease.put(DemonSlayer.DEMON_LASH_1, (int) pEffect.getDAMRate());
-                    damageIncrease.put(DemonSlayer.DEMON_LASH_2, (int) pEffect.getDAMRate());
-                    damageIncrease.put(DemonSlayer.DEMON_LASH_3, (int) pEffect.getDAMRate());
-                }
-                pSkill = SkillFactory.getSkill(DemonSlayer.PHYSICAL_TRAINING_10);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    localstr += pEffect.getStrX();
-                    localdex += pEffect.getDexX();
-                }
-                pSkill = SkillFactory.getSkill(DemonSlayer.POSSESSED_AEGIS);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    avoidabilityRate += pEffect.getX();
-                    // HACK: shouldn't be here
-                    hpRecoverPercent += pEffect.getY();
-                    hpRecoverProp += pEffect.getX();
-                    //mpRecover += eff.getY(); // handle in takeDamage
-                    //mpRecoverProp += eff.getX();
-                }
-                pSkill = SkillFactory.getSkill(DemonSlayer.MAX_FURY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    mpRecover += 1;
-                    mpRecoverProp += pEffect.getProb();
-                }
-                pSkill = SkillFactory.getSkill(DemonSlayer.BINDING_DARKNESS);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    ignoreTargetDEF += pSkill.getEffect(nSLV).getIgnoreMob();
-                }
-                pSkill = SkillFactory.getSkill(DemonSlayer.DEMON_THRASH);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(DemonSlayer.DEMON_LASH, (int) pEffect.getX());
-                    damageIncrease.put(DemonSlayer.DEMON_LASH_1, (int) pEffect.getX());
-                    damageIncrease.put(DemonSlayer.DEMON_LASH_2, (int) pEffect.getX());
-                    damageIncrease.put(DemonSlayer.DEMON_LASH_3, (int) pEffect.getX());
-                }
-                pSkill = SkillFactory.getSkill(DemonSlayer.BARRICADE_MASTERY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    watk += pEffect.getAttackX();
-                    trueMastery += pEffect.getMastery();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                }
-                pSkill = SkillFactory.getSkill(DemonSlayer.FURY_UNLEASHED_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    bossdam_r += pEffect.getBossDamage();
-                    mpRecover += pEffect.getX();
-                    mpRecoverProp += pEffect.getBossDamage();
-                }
-                pSkill = SkillFactory.getSkill(DemonSlayer.DEMONIC_BLOOD);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    pPlayer.getTrait(MapleTraitType.will).addLocalExp(GameConstants.getTraitExpNeededForLevel(pEffect.getY()));
-                    pPlayer.getTrait(MapleTraitType.charisma).addLocalExp(GameConstants.getTraitExpNeededForLevel(pEffect.getZ()));
-                }
-                pSkill = SkillFactory.getSkill(DemonSlayer.CURSE_OF_FURY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    hpRecoverPercent += pEffect.getX();
-                    hpRecoverProp += pEffect.getProb(); //yes
-                }
-                pSkill = SkillFactory.getSkill(DemonSlayer.MAX_FURY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    localmaxmp_ += pEffect.getMaxDemonFury();
-                }
-                break;
-            }
-            case 3101:
-            case 3120:
-            case 3121:
-            case 3122: { // Demon Avenger
-                pSkill = SkillFactory.getSkill(DemonAvenger.MAPLE_WARRIOR_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += (int) nSLV / 2;
-                }
-                pSkill = SkillFactory.getSkill(DemonAvenger.RAGE_WITHIN);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    localmaxhp_ += 100 + (nSLV * 100);
-                    def += nSLV * 100;
-                }
-                break;
-            }
-            case 3200:
-            case 3210:
-            case 3211:
-            case 3212: { // Battle Mage
-                pSkill = SkillFactory.getSkill(BattleMage.ADVANCED_BLUE_AURA_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    asrR += pSkill.getEffect(nSLV).getASRRate();
-                    terR += pSkill.getEffect(nSLV).getTERRate();
-                }
-                pSkill = SkillFactory.getSkill(BattleMage.BATTLE_MASTERY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    dam_r += pEffect.getDAMRate();
-                    bossdam_r += pEffect.getDAMRate();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                }
-                pSkill = SkillFactory.getSkill(BattleMage.ADVANCED_DARK_AURA);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    magic += pSkill.getEffect(nSLV).getMagicX();
-                }
-                pSkill = SkillFactory.getSkill(BattleMage.ADVANCED_YELLOW_AURA);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    avoidabilityRate += pSkill.getEffect(nSLV).getER();
-                }
-                pSkill = SkillFactory.getSkill(BattleMage.ENERGIZE);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += pSkill.getEffect(nSLV).getPercentHP();
-                }
-                pSkill = SkillFactory.getSkill(BattleMage.ORDINARY_CONVERSION);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += pSkill.getEffect(nSLV).getPercentHP();
-                }
-                pSkill = SkillFactory.getSkill(BattleMage.BATTLE_RAGE);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += pSkill.getEffect(nSLV).getPercentHP();
-                    percent_mp += pSkill.getEffect(nSLV).getPercentMP();
-                }
-                break;
-            }
-            case 3300:
-            case 3310:
-            case 3311:
-            case 3312: { // Wild Hunter
-                pSkill = SkillFactory.getSkill(WildHunter.CROSSBOW_EXPERT);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    watk += pEffect.getX();
-                    trueMastery += pEffect.getMastery();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                }
-                pSkill = SkillFactory.getSkill(WildHunter.JAGUAR_BOOST);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    dam_r += pEffect.getDamage();
-                    bossdam_r += pEffect.getDamage();
-                }
-                pSkill = SkillFactory.getSkill(WildHunter.WILD_INSTINCT);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    ignoreTargetDEF += pEffect.getIgnoreMob();
-                    avoidabilityRate += pEffect.getER();
-                }
-                break;
-            }
-            case 3500:
-            case 3510:
-            case 3511:
-            case 3512: { // Mechanic
-                pSkill = SkillFactory.getSkill(Mechanic.MECHANIC_MASTERY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    watk += pSkill.getEffect(nSLV).getAttackX();
-                }
-                pSkill = SkillFactory.getSkill(Mechanic.EXTREME_MECH);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    trueMastery += pSkill.getEffect(nSLV).getMastery();
-                }
-                pSkill = SkillFactory.getSkill(Mechanic.METAL_FIST_MASTERY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) { // ME-07 Drillhands, Atomic Hammer
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(Mechanic.ME07_DRILLHANDS, (int) pEffect.getDAMRate());
-                    damageIncrease.put(Mechanic.ATOMIC_HAMMER, (int) pEffect.getDAMRate());
-                }
-                pSkill = SkillFactory.getSkill(Mechanic.SATELLITE_SAFETY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) { // Satellite
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(Mechanic.SATELLITE_2, (int) pEffect.getDAMRate());
-                    //damageIncrease.put(35111009, (int) eff.getDAMRate());
-                    //damageIncrease.put(35111010, (int) eff.getDAMRate());
-                }
-                pSkill = SkillFactory.getSkill(Mechanic.ROBOT_MASTERY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) { //Satellite
-                    pEffect = pSkill.getEffect(nSLV);
-                    damageIncrease.put(Mechanic.ACCELERATION_BOT_EX7, pEffect.getX());
-                    damageIncrease.put(Mechanic.HEALING_ROBOT_HLX, pEffect.getX());
-                    damageIncrease.put(Mechanic.BOTS_N_TOTS_1, pEffect.getX());
-                    damageIncrease.put(Mechanic.AMPLIFIER_ROBOT_AF11, pEffect.getX());
-                    damageIncrease.put(Mechanic.BOTS_N_TOTS, pEffect.getX());
-                    BuffUP_Summon += pEffect.getY();
-                }
-                break;
-            }
-            case 3002:
-            case 3600:
-            case 3610:
-            case 3611:
-            case 3612: { // Xenon
-                // Xenon's Multilateral have only one level, so no need to get the effect from the skill.
-                // Just give the correct increase based on skill description. -Mazen
-                pSkill = SkillFactory.getSkill(Xenon.FORTUNE_10_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    if (pPlayer.getStr() >= 20 && pPlayer.getDex() >= 20 && pPlayer.getLuk() >= 20) {
-                        percent_atk = +3; // +3%
-                    }
-                }
-                pSkill = SkillFactory.getSkill(Xenon.MULTILATERAL_II);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    if (pPlayer.getStr() >= 40 && pPlayer.getDex() >= 40 && pPlayer.getLuk() >= 40) {
-                        percent_hp += 5; // +5%
-                        percent_mp += 5; // +5%
-                    }
-                }
-                pSkill = SkillFactory.getSkill(Xenon.MULTILATERAL_III);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    if (pPlayer.getStr() >= 90 && pPlayer.getDex() >= 90 && pPlayer.getLuk() >= 90) {
-                        percent_hp += 5; // +5%
-                        percent_mp += 5; // +5%
-                    }
-                }
-                pSkill = SkillFactory.getSkill(Xenon.MULTILATERAL_IV);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    if (pPlayer.getStr() >= 150 && pPlayer.getDex() >= 150 && pPlayer.getLuk() >= 150) {
-                        percent_hp += 10; // +10%
-                        percent_mp += 10; // +10%
-                    }
-                }
-                pSkill = SkillFactory.getSkill(Xenon.MULTILATERAL_V);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    if (pPlayer.getStr() >= 150 && pPlayer.getDex() >= 150 && pPlayer.getLuk() >= 150) {
-                        percent_hp += 10; // +10%
-                        percent_mp += 10; // +10%
-                    }
-                }
-                pSkill = SkillFactory.getSkill(Xenon.MULTILATERAL_VI);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    targetPlus += pSkill.getEffect(nSLV).gettargetPlus();
-                }
-                pSkill = SkillFactory.getSkill(Xenon.EFFICIENCY_STREAMLINE);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    localmaxhp_ += pSkill.getEffect(nSLV).getMaxHpX();
-                    localmaxmp_ += pSkill.getEffect(nSLV).getMaxMpX();
-                }
-                break;
-            }
-            case 3700:
-            case 3710:
-            case 3711:
-            case 3712: { // Blaster
-                break;
-            }
-            case 4001:
-            case 4100:
-            case 4110:
-            case 4111:
-            case 4112: { // Hayato
-                pSkill = SkillFactory.getSkill(Hayato.JINSOKU); // Willow Dodge 2
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    avoidabilityRate += pEffect.getPercentAvoid(); //dodgeChance += eff.getER();
-                }
-                pSkill = SkillFactory.getSkill(Hayato.UNFALTERING_BLADE); // Unfaltering Blade
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    accuracy += pEffect.getX();
-                    passive_sharpeye_percent += pEffect.getCriticalMax();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                }
-                pSkill = SkillFactory.getSkill(Hayato.CENTER_KI_1); // Center Ki
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    localstr += pEffect.getStrX();
-                    localdex += pEffect.getDexX();
-                }
-                break;
-            }
-            case 4002:
-            case 4200:
-            case 4210:
-            case 4211:
-            case 4212: { // Kanna
-                pSkill = SkillFactory.getSkill(Kanna.ELEMENTAL_BLESSING);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += pSkill.getEffect(nSLV).getPercentHP();
-                    magic += pSkill.getEffect(nSLV).getMagicX();
-                }
-                break;
-            }
-            case 5000:
-            case 5100:
-            case 5110:
-            case 5111:
-            case 5112: { // Mihille
-                // Mihile 1st Job Passive Skills
-                pSkill = SkillFactory.getSkill(Mihile.HP_BOOST);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += pSkill.getEffect(nSLV).getPercentHP();
-                }
-                pSkill = SkillFactory.getSkill(Mihile.SOUL_SHIELD);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    percent_wdef += pEffect.getX();
-                    percent_mdef += pEffect.getX();
-                }
-                pSkill = SkillFactory.getSkill(Mihile.SOUL_DEVOTION);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    accuracy += pEffect.getAccX();
-                    speed += pEffect.getPassiveSpeed();
-                    jump += pEffect.getPassiveJump();
-                }
-                // Mihile 2nd Job Passive Skills
-                pSkill = SkillFactory.getSkill(Mihile.PHYSICAL_TRAINING_90_9);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    localstr += pEffect.getStrX();
-                    localdex += pEffect.getDexX();
-                }
-                pSkill = SkillFactory.getSkill(Mihile.ADVANCED_FINAL_ATTACK_1);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    watk += pEffect.getAttackX();
-                    damageIncrease.put(Mihile.FINAL_ATTACK_5, (int) pEffect.getDamage());
-                }
+            float percentDamageAffectsMP = pEffect.getX() / 100.0f;
+            standardMagicGuard = percentDamageAffectsMP;
 
-                // Mihile 3rd Job Passive Skills
-                pSkill = SkillFactory.getSkill(Mihile.SELF_RECOVERY_2);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    hpRecoverProp += pEffect.getProb();
-                    hpRecover += pEffect.getX();
-                    mpRecoverProp += pEffect.getProb();
-                    mpRecover += pEffect.getX();
-                }
-                pSkill = SkillFactory.getSkill(Mihile.INTENSE_FOCUS);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    localstr += pEffect.getStrX();
-                    // Add Attack Speed here
-                }
-                pSkill = SkillFactory.getSkill(Mihile.RIGHTEOUS_INDIGNATION);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    asrR += pEffect.getX();
-                    percent_atk += pEffect.getX();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                }
-                // Mihile 4th Job Passive Skills
-                pSkill = SkillFactory.getSkill(Mihile.COMBAT_MASTERY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    ignoreTargetDEF += pEffect.getIgnoreMob();
-                }
-                pSkill = SkillFactory.getSkill(Mihile.EXPERT_SWORD_MASTERY);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    pEffect = pSkill.getEffect(nSLV);
-                    watk += pSkill.getEffect(nSLV).getX();
-                    trueMastery += pEffect.getMastery();
-                    passive_sharpeye_min_percent += pEffect.getCriticalMin();
-                }
-                pSkill = SkillFactory.getSkill(Mihile.SOUL_ASYLUM);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_wdef += pSkill.getEffect(nSLV).getT();
-                }
-                break;
-            }
-            case 6000:
-            case 6100:
-            case 6110:
-            case 6111:
-            case 6112: { // Kaiser
-                pSkill = SkillFactory.getSkill(Kaiser.INNER_BLAZE);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += pSkill.getEffect(nSLV).getPercentHP();
-                }
-                pSkill = SkillFactory.getSkill(Kaiser.ADVANCED_INNER_BLAZE);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += pSkill.getEffect(nSLV).getPercentHP();
-                }
-                pSkill = SkillFactory.getSkill(Kaiser.IRON_WILL);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += pSkill.getEffect(nSLV).getPercentHP();
-                }
+        }
+        pSkill = SkillFactory.getSkill(Luminous.MANA_WELL);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_mp += pEffect.getPercentMP();
+        }
 
-                break;
-            }
-            case 6001:
-            case 6500:
-            case 6510:
-            case 6511:
-            case 6512: { // Angelic Buster
-                break;
-            }
-            case 10000:
-            case 10100:
-            case 10110:
-            case 10111:
-            case 10112: { // Zero
-                break;
-            }
-            case 11200:
-            case 11210:
-            case 11211:
-            case 11212: { // Beast Tamer
-                break;
-            }
-            case 14000:
-            case 14200:
-            case 14210:
-            case 14211:
-            case 14212: {// Kinesis
-                pSkill = SkillFactory.getSkill(Kinesis.MENTAL_STRENGTH);
-                nSLV = pPlayer.getTotalSkillLevel(pSkill);
-                if (nSLV > 0) {
-                    percent_hp += nSLV * 4;
-                }
-                break;
+        // Demon Slayer
+        mpRecoverProp = 100;
+        pSkill = SkillFactory.getSkill(DemonSlayer.HP_BOOST_7);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += pSkill.getEffect(nSLV).getHpR();
+        }
+        pSkill = SkillFactory.getSkill(DemonSlayer.BARBED_LASH);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(DemonSlayer.DEMON_LASH, (int) pEffect.getDAMRate());
+            damageIncrease.put(DemonSlayer.DEMON_LASH_1, (int) pEffect.getDAMRate());
+            damageIncrease.put(DemonSlayer.DEMON_LASH_2, (int) pEffect.getDAMRate());
+            damageIncrease.put(DemonSlayer.DEMON_LASH_3, (int) pEffect.getDAMRate());
+        }
+        pSkill = SkillFactory.getSkill(DemonSlayer.PHYSICAL_TRAINING_10);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            localstr += pEffect.getStrX();
+            localdex += pEffect.getDexX();
+        }
+        pSkill = SkillFactory.getSkill(DemonSlayer.POSSESSED_AEGIS);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            avoidabilityRate += pEffect.getX();
+            // HACK: shouldn't be here
+            hpRecoverPercent += pEffect.getY();
+            hpRecoverProp += pEffect.getX();
+            //mpRecover += eff.getY(); // handle in takeDamage
+            //mpRecoverProp += eff.getX();
+        }
+        pSkill = SkillFactory.getSkill(DemonSlayer.MAX_FURY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            mpRecover += 1;
+            mpRecoverProp += pEffect.getProb();
+        }
+        pSkill = SkillFactory.getSkill(DemonSlayer.BINDING_DARKNESS);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            ignoreTargetDEF += pSkill.getEffect(nSLV).getIgnoreMob();
+        }
+        pSkill = SkillFactory.getSkill(DemonSlayer.DEMON_THRASH);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(DemonSlayer.DEMON_LASH, (int) pEffect.getX());
+            damageIncrease.put(DemonSlayer.DEMON_LASH_1, (int) pEffect.getX());
+            damageIncrease.put(DemonSlayer.DEMON_LASH_2, (int) pEffect.getX());
+            damageIncrease.put(DemonSlayer.DEMON_LASH_3, (int) pEffect.getX());
+        }
+        pSkill = SkillFactory.getSkill(DemonSlayer.BARRICADE_MASTERY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            watk += pEffect.getAttackX();
+            trueMastery += pEffect.getMastery();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+        }
+        pSkill = SkillFactory.getSkill(DemonSlayer.FURY_UNLEASHED_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            bossdam_r += pEffect.getBossDamage();
+            mpRecover += pEffect.getX();
+            mpRecoverProp += pEffect.getBossDamage();
+        }
+        pSkill = SkillFactory.getSkill(DemonSlayer.DEMONIC_BLOOD);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            pPlayer.getTrait(MapleTraitType.will).addLocalExp(GameConstants.getTraitExpNeededForLevel(pEffect.getY()));
+            pPlayer.getTrait(MapleTraitType.charisma).addLocalExp(GameConstants.getTraitExpNeededForLevel(pEffect.getZ()));
+        }
+        pSkill = SkillFactory.getSkill(DemonSlayer.CURSE_OF_FURY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            hpRecoverPercent += pEffect.getX();
+            hpRecoverProp += pEffect.getProb(); //yes
+        }
+        pSkill = SkillFactory.getSkill(DemonSlayer.MAX_FURY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            localmaxmp_ += pEffect.getMaxDemonFury();
+        }
+
+        // Demon Avenger
+        pSkill = SkillFactory.getSkill(DemonAvenger.MAPLE_WARRIOR_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += (int) nSLV / 2;
+        }
+        pSkill = SkillFactory.getSkill(DemonAvenger.RAGE_WITHIN);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            localmaxhp_ += 100 + (nSLV * 100);
+            def += nSLV * 100;
+        }
+
+        // Battle Mage
+        pSkill = SkillFactory.getSkill(BattleMage.ADVANCED_BLUE_AURA_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            asrR += pSkill.getEffect(nSLV).getASRRate();
+            terR += pSkill.getEffect(nSLV).getTERRate();
+        }
+        pSkill = SkillFactory.getSkill(BattleMage.BATTLE_MASTERY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            dam_r += pEffect.getDAMRate();
+            bossdam_r += pEffect.getDAMRate();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+        }
+        pSkill = SkillFactory.getSkill(BattleMage.ADVANCED_DARK_AURA);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            magic += pSkill.getEffect(nSLV).getMagicX();
+        }
+        pSkill = SkillFactory.getSkill(BattleMage.ADVANCED_YELLOW_AURA);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            avoidabilityRate += pSkill.getEffect(nSLV).getER();
+        }
+        pSkill = SkillFactory.getSkill(BattleMage.ENERGIZE);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+        }
+        pSkill = SkillFactory.getSkill(BattleMage.ORDINARY_CONVERSION);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+        }
+        pSkill = SkillFactory.getSkill(BattleMage.BATTLE_RAGE);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+            percent_mp += pSkill.getEffect(nSLV).getPercentMP();
+        }
+        // Wild Hunter
+        pSkill = SkillFactory.getSkill(WildHunter.CROSSBOW_EXPERT);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            watk += pEffect.getX();
+            trueMastery += pEffect.getMastery();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+        }
+        pSkill = SkillFactory.getSkill(WildHunter.JAGUAR_BOOST);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            dam_r += pEffect.getDamage();
+            bossdam_r += pEffect.getDamage();
+        }
+        pSkill = SkillFactory.getSkill(WildHunter.WILD_INSTINCT);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            ignoreTargetDEF += pEffect.getIgnoreMob();
+            avoidabilityRate += pEffect.getER();
+        }
+
+        // Mechanic
+        pSkill = SkillFactory.getSkill(Mechanic.MECHANIC_MASTERY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            watk += pSkill.getEffect(nSLV).getAttackX();
+        }
+        pSkill = SkillFactory.getSkill(Mechanic.EXTREME_MECH);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            trueMastery += pSkill.getEffect(nSLV).getMastery();
+        }
+        pSkill = SkillFactory.getSkill(Mechanic.METAL_FIST_MASTERY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) { // ME-07 Drillhands, Atomic Hammer
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(Mechanic.ME07_DRILLHANDS, (int) pEffect.getDAMRate());
+            damageIncrease.put(Mechanic.ATOMIC_HAMMER, (int) pEffect.getDAMRate());
+        }
+        pSkill = SkillFactory.getSkill(Mechanic.SATELLITE_SAFETY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) { // Satellite
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(Mechanic.SATELLITE_2, (int) pEffect.getDAMRate());
+            //damageIncrease.put(35111009, (int) eff.getDAMRate());
+            //damageIncrease.put(35111010, (int) eff.getDAMRate());
+        }
+        pSkill = SkillFactory.getSkill(Mechanic.ROBOT_MASTERY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) { //Satellite
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(Mechanic.ACCELERATION_BOT_EX7, pEffect.getX());
+            damageIncrease.put(Mechanic.HEALING_ROBOT_HLX, pEffect.getX());
+            damageIncrease.put(Mechanic.BOTS_N_TOTS_1, pEffect.getX());
+            damageIncrease.put(Mechanic.AMPLIFIER_ROBOT_AF11, pEffect.getX());
+            damageIncrease.put(Mechanic.BOTS_N_TOTS, pEffect.getX());
+            BuffUP_Summon += pEffect.getY();
+        }
+
+        // Xenon
+        // Xenon's Multilateral have only one level, so no need to get the effect from the skill.
+        // Just give the correct increase based on skill description. -Mazen
+        pSkill = SkillFactory.getSkill(Xenon.FORTUNE_10_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            if (pPlayer.getStr() >= 20 && pPlayer.getDex() >= 20 && pPlayer.getLuk() >= 20) {
+                percent_atk = +3; // +3%
             }
         }
+        pSkill = SkillFactory.getSkill(Xenon.MULTILATERAL_II);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            if (pPlayer.getStr() >= 40 && pPlayer.getDex() >= 40 && pPlayer.getLuk() >= 40) {
+                percent_hp += 5; // +5%
+                percent_mp += 5; // +5%
+            }
+        }
+        pSkill = SkillFactory.getSkill(Xenon.MULTILATERAL_III);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            if (pPlayer.getStr() >= 90 && pPlayer.getDex() >= 90 && pPlayer.getLuk() >= 90) {
+                percent_hp += 5; // +5%
+                percent_mp += 5; // +5%
+            }
+        }
+        pSkill = SkillFactory.getSkill(Xenon.MULTILATERAL_IV);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            if (pPlayer.getStr() >= 150 && pPlayer.getDex() >= 150 && pPlayer.getLuk() >= 150) {
+                percent_hp += 10; // +10%
+                percent_mp += 10; // +10%
+            }
+        }
+        pSkill = SkillFactory.getSkill(Xenon.MULTILATERAL_V);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            if (pPlayer.getStr() >= 150 && pPlayer.getDex() >= 150 && pPlayer.getLuk() >= 150) {
+                percent_hp += 10; // +10%
+                percent_mp += 10; // +10%
+            }
+        }
+        pSkill = SkillFactory.getSkill(Xenon.MULTILATERAL_VI);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            targetPlus += pSkill.getEffect(nSLV).gettargetPlus();
+        }
+        pSkill = SkillFactory.getSkill(Xenon.EFFICIENCY_STREAMLINE);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            localmaxhp_ += pSkill.getEffect(nSLV).getMaxHpX();
+            localmaxmp_ += pSkill.getEffect(nSLV).getMaxMpX();
+        }
+
+        // TODO: Blaster
+
+        // Hayato
+        pSkill = SkillFactory.getSkill(Hayato.JINSOKU); // Willow Dodge 2
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            avoidabilityRate += pEffect.getPercentAvoid(); //dodgeChance += eff.getER();
+        }
+        pSkill = SkillFactory.getSkill(Hayato.UNFALTERING_BLADE); // Unfaltering Blade
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            accuracy += pEffect.getX();
+            passive_sharpeye_percent += pEffect.getCriticalMax();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+        }
+        pSkill = SkillFactory.getSkill(Hayato.CENTER_KI_1); // Center Ki
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            localstr += pEffect.getStrX();
+            localdex += pEffect.getDexX();
+        }
+
+        // Kanna
+        pSkill = SkillFactory.getSkill(Kanna.ELEMENTAL_BLESSING);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+            magic += pSkill.getEffect(nSLV).getMagicX();
+        }
+
+        // Mihille
+        // Mihile 1st Job Passive Skills
+        pSkill = SkillFactory.getSkill(Mihile.HP_BOOST);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+        }
+        pSkill = SkillFactory.getSkill(Mihile.SOUL_SHIELD);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            percent_wdef += pEffect.getX();
+            percent_mdef += pEffect.getX();
+        }
+        pSkill = SkillFactory.getSkill(Mihile.SOUL_DEVOTION);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            accuracy += pEffect.getAccX();
+            speed += pEffect.getPassiveSpeed();
+            jump += pEffect.getPassiveJump();
+        }
+        // Mihile 2nd Job Passive Skills
+        pSkill = SkillFactory.getSkill(Mihile.PHYSICAL_TRAINING_90_9);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            localstr += pEffect.getStrX();
+            localdex += pEffect.getDexX();
+        }
+        pSkill = SkillFactory.getSkill(Mihile.ADVANCED_FINAL_ATTACK_1);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            watk += pEffect.getAttackX();
+            damageIncrease.put(Mihile.FINAL_ATTACK_5, (int) pEffect.getDamage());
+        }
+        // Mihile 3rd Job Passive Skills
+        pSkill = SkillFactory.getSkill(Mihile.SELF_RECOVERY_2);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            hpRecoverProp += pEffect.getProb();
+            hpRecover += pEffect.getX();
+            mpRecoverProp += pEffect.getProb();
+            mpRecover += pEffect.getX();
+        }
+        pSkill = SkillFactory.getSkill(Mihile.INTENSE_FOCUS);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            localstr += pEffect.getStrX();
+            // Add Attack Speed here
+        }
+        pSkill = SkillFactory.getSkill(Mihile.RIGHTEOUS_INDIGNATION);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            asrR += pEffect.getX();
+            percent_atk += pEffect.getX();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+        }
+        // Mihile 4th Job Passive Skills
+        pSkill = SkillFactory.getSkill(Mihile.COMBAT_MASTERY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            ignoreTargetDEF += pEffect.getIgnoreMob();
+        }
+        pSkill = SkillFactory.getSkill(Mihile.EXPERT_SWORD_MASTERY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            pEffect = pSkill.getEffect(nSLV);
+            watk += pSkill.getEffect(nSLV).getX();
+            trueMastery += pEffect.getMastery();
+            passive_sharpeye_min_percent += pEffect.getCriticalMin();
+        }
+        pSkill = SkillFactory.getSkill(Mihile.SOUL_ASYLUM);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_wdef += pSkill.getEffect(nSLV).getT();
+        }
+
+        // Kaiser
+        pSkill = SkillFactory.getSkill(Kaiser.INNER_BLAZE);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+        }
+        pSkill = SkillFactory.getSkill(Kaiser.ADVANCED_INNER_BLAZE);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+        }
+        pSkill = SkillFactory.getSkill(Kaiser.IRON_WILL);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+        }
+
+        // TODO: Angelic Buster
+        // TODO: Zero
+        // TODO: Beast Tamer
+
+        // Kinesis
+        pSkill = SkillFactory.getSkill(Kinesis.MENTAL_STRENGTH);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            percent_hp += nSLV * 4;
+        }
+                
+        // Global
         pSkill = SkillFactory.getSkill(Global.PIRATE_BLESSING_1);
         nSLV = pPlayer.getSkillLevel(pSkill);
-        if (nSLV > 0) {
+        if (nSLV >0) {
             pEffect = pSkill.getEffect(nSLV);
             localstr += pEffect.getStrX();
             localdex += pEffect.getDexX();
@@ -2161,38 +1973,38 @@ public class PlayerStats implements Serializable {
         }
         pSkill = SkillFactory.getSkill(Global.FURY_UNLEASHED);
         nSLV = pPlayer.getSkillLevel(pSkill);
-        if (nSLV > 0) {
+        if (nSLV >0) {
             pEffect = pSkill.getEffect(nSLV);
             bossdam_r += pEffect.getBossDamage();
         }
         if (GameConstants.isExplorer(pPlayer.getJob())) {
             pSkill = SkillFactory.getSkill(74);
             nSLV = pPlayer.getSkillLevel(pSkill);
-            if (nSLV > 0) {
+            if (nSLV >0) {
                 levelBonus += pSkill.getEffect(nSLV).getX();
             }
 
             pSkill = SkillFactory.getSkill(80);
             nSLV = pPlayer.getSkillLevel(pSkill);
-            if (nSLV > 0) {
+            if (nSLV >0) {
                 levelBonus += pSkill.getEffect(nSLV).getX();
             }
 
             pSkill = SkillFactory.getSkill(10074);
             nSLV = pPlayer.getSkillLevel(pSkill);
-            if (nSLV > 0) {
+            if (nSLV >0) {
                 levelBonus += pSkill.getEffect(nSLV).getX();
             }
 
             pSkill = SkillFactory.getSkill(10080);
             nSLV = pPlayer.getSkillLevel(pSkill);
-            if (nSLV > 0) {
+            if (nSLV >0) {
                 levelBonus += pSkill.getEffect(nSLV).getX();
             }
 
             pSkill = SkillFactory.getSkill(110);
             nSLV = pPlayer.getSkillLevel(pSkill);
-            if (nSLV > 0) {
+            if (nSLV >0) {
                 pEffect = pSkill.getEffect(nSLV);
                 localstr += pEffect.getStrX();
                 localdex += pEffect.getDexX();
@@ -2204,7 +2016,7 @@ public class PlayerStats implements Serializable {
 
             pSkill = SkillFactory.getSkill(10110);
             nSLV = pPlayer.getSkillLevel(pSkill);
-            if (nSLV > 0) {
+            if (nSLV >0) {
                 pEffect = pSkill.getEffect(nSLV);
                 localstr += pEffect.getStrX();
                 localdex += pEffect.getDexX();
@@ -2216,28 +2028,26 @@ public class PlayerStats implements Serializable {
         }
         pSkill = SkillFactory.getSkill(GameConstants.getBOF_ForJob(pPlayer.getJob()));
         nSLV = pPlayer.getSkillLevel(pSkill);
-        if (nSLV > 0) {
+        if (nSLV >0) {
             pEffect = pSkill.getEffect(nSLV);
             watk += pEffect.getX();
             magic += pEffect.getY();
             accuracy += pEffect.getX();
         }
-
+        pSkill = SkillFactory.getSkill(Citizen.POTION_MASTERY_5);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV >0) {
+            RecoveryUP += pSkill.getEffect(nSLV).getX() - 100;
+        }
         pSkill = SkillFactory.getSkill(GameConstants.getEmpress_ForJob(pPlayer.getJob()));
         nSLV = pPlayer.getSkillLevel(pSkill);
-        if (nSLV > 0) {
+        if (nSLV >0) {
             pEffect = pSkill.getEffect(nSLV);
             watk += pEffect.getX();
             magic += pEffect.getY();
             accuracy += pEffect.getZ();
         }
-        if (GameConstants.isResistance(pPlayer.getJob())) {
-            pSkill = SkillFactory.getSkill(Citizen.POTION_MASTERY_5);
-            nSLV = pPlayer.getTotalSkillLevel(pSkill);
-            if (nSLV > 0) {
-                RecoveryUP += pSkill.getEffect(nSLV).getX() - 100;
-            }
-        }
+        
     }
 
     private void OnHyperStatPassiveRequest(User pPlayer) {
