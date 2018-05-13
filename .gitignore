@@ -10,3 +10,4 @@
 /bin/
 *.iml
 *.jar
+Nox/Core/database.properties

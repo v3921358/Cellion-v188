@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Cellion Development
  */
 package handling.game;
 
@@ -11,8 +9,6 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.ModifyInventory;
 import client.inventory.ModifyInventoryOperation;
-import constants.ItemConstants;
-import constants.ServerConstants;
 import java.util.ArrayList;
 import java.util.List;
 import net.InPacket;
@@ -20,14 +16,13 @@ import net.ProcessPacket;
 import server.MapleInventoryManipulator;
 import server.Randomizer;
 import server.maps.objects.User;
-import server.potentials.ItemPotentialProvider;
-import static server.potentials.ItemPotentialProvider.generateBonusPotential;
+import server.potentials.Cube;
 import server.potentials.ItemPotentialTierType;
 import tools.packet.CField;
 import tools.packet.WvsContext;
 
 /**
- *
+ * Bonus Potential Scroll Request
  * @author Mazen Massoud
  */
 public class UseBonusPotentialScrollHandler implements ProcessPacket<ClientSocket> {
@@ -58,9 +53,9 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<ClientSocke
         List<ModifyInventory> aModifications = new ArrayList<>();
 
         //boolean bPotential = ItemPotentialProvider.useBonusPotentialScroll(pEquip, pTier);
-        pEquip.setBonusPotential1(generateBonusPotential(pEquip));
-        pEquip.setBonusPotential2(generateBonusPotential(pEquip));
-        pEquip.setBonusPotential3(generateBonusPotential(pEquip));
+        pEquip.setBonusPotential1(Cube.generateBonusPotential(pEquip));
+        pEquip.setBonusPotential2(Cube.generateBonusPotential(pEquip));
+        pEquip.setBonusPotential3(Cube.generateBonusPotential(pEquip));
         /*pEquip.setBonusPotential1(generateBonusPotential(pEquip, pTier));
         pEquip.setBonusPotential2(generateBonusPotential(pEquip, pTier));
         pEquip.setBonusPotential3(generateBonusPotential(pEquip, pTier));*/

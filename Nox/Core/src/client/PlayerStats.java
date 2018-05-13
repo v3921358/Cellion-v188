@@ -702,7 +702,7 @@ public class PlayerStats implements Serializable {
                 pPlayer.updatePartyMemberHP();
             }
             
-            updatePrimaryStats(pPlayer); // Call Update Stat Packet
+            //updatePrimaryStats(pPlayer); // Call Update Stat Packet
         } finally {
             reLock.unlock();
         }
