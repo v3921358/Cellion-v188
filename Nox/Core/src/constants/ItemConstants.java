@@ -8,8 +8,12 @@ import server.potentials.ItemPotentialTierType;
  */
 public class ItemConstants {
 
-    // Item required for pet vac to be active.
-    public static final int PET_VAC = 4032031; // Lucky Charm
+    /**
+     * Item References
+     */
+    public static final int PET_VAC = 4032031, // Lucky Charm, required for Pet Vac to function.
+                            ITEM_MEGAPHONE = 5076000
+    ; 
 
     // Equips
     public static final int CRUSADER_CODEX = 1172000;
@@ -110,6 +114,7 @@ public class ItemConstants {
             MIRACLE_CUBE = 5062000,
             SUPER_MIRACLE_CUBE = 5062002,
             RED_CUBE = 5062009,
+            PLATINUM_MIRACLE_CUBE = 5062006,
             BLACK_CUBE = 5062010,
             VIOLET_CUBE = 5062024,
             MEMORY_CUBE = 5062090,

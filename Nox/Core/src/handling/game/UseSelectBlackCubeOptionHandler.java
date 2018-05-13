@@ -11,7 +11,7 @@ import net.InPacket;
 import server.maps.objects.User.CharacterTemporaryValues;
 import tools.Pair;
 import tools.packet.WvsContext;
-import tools.packet.MiracleCubePacket;
+import tools.packet.CubePacket;
 import net.ProcessPacket;
 
 /**
@@ -54,7 +54,7 @@ public class UseSelectBlackCubeOptionHandler implements ProcessPacket<ClientSock
                 c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
                 if (temporaryKeyValue == CharacterTemporaryValues.KEY_MEMORIAL_CUBE) {
-                    c.SendPacket(MiracleCubePacket.memorialCubeModified(false, eq_originalRef.getPosition(), ItemConstants.MEMORY_CUBE, eq_originalRef));
+                    c.SendPacket(CubePacket.memorialCubeModified(false, eq_originalRef.getPosition(), ItemConstants.MEMORY_CUBE, eq_originalRef));
                 }
                 return;
             }

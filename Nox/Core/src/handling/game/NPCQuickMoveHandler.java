@@ -2,15 +2,17 @@ package handling.game;
 
 import client.ClientSocket;
 import constants.QuickMove;
+import constants.ServerConstants;
 import java.util.LinkedList;
 import java.util.List;
 import scripting.provider.NPCScriptManager;
 import net.InPacket;
 import net.ProcessPacket;
+import server.maps.objects.User;
 
 /**
- *
- * @author
+ * Quick Move
+ * @author 
  */
 public class NPCQuickMoveHandler implements ProcessPacket<ClientSocket> {
 
@@ -21,22 +23,30 @@ public class NPCQuickMoveHandler implements ProcessPacket<ClientSocket> {
 
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
-        final int npcid = iPacket.DecodeInt();
-        if (c.getPlayer().hasBlockedInventory() || c.getPlayer().isInBlockedMap() || c.getPlayer().getLevel() < 10) {
+        User pPlayer = c.getPlayer();
+        final int nNPC = iPacket.DecodeInt();
+        
+        if (pPlayer.hasBlockedInventory() || pPlayer.isInBlockedMap() || pPlayer.getLevel() < 10) {
             return;
         }
-        for (QuickMove qm : QuickMove.values()) {
-            if (qm.getMap() != c.getPlayer().getMapId()) {
-                List<QuickMove.QuickMoveNPC> qmn = new LinkedList();
-                int npcs = qm.getNPCFlag();
-                for (QuickMove.QuickMoveNPC npc : QuickMove.QuickMoveNPC.values()) {
-                    if ((npcs & npc.getValue()) != 0 && npc.getId() == npcid) {
-                        NPCScriptManager.getInstance().start(c, npcid, null);
+        
+        if (pPlayer.getMapId() == ServerConstants.JAIL_MAP) {
+            pPlayer.dropMessage(5, "Sorry, you may not do that here.");
+            pPlayer.completeDispose();
+            return;
+        }
+        
+        for (QuickMove pQM : QuickMove.values()) {
+            if (pQM.getMap() != pPlayer.getMapId()) {
+                List<QuickMove.QuickMoveNPC> aQM = new LinkedList();
+                int nFlag = pQM.getNPCFlag();
+                for (QuickMove.QuickMoveNPC pNPC : QuickMove.QuickMoveNPC.values()) {
+                    if ((nFlag & pNPC.getValue()) != 0 && pNPC.getId() == nNPC) {
+                        NPCScriptManager.getInstance().start(c, nNPC, null);
                         break;
                     }
                 }
             }
         }
     }
-
 }

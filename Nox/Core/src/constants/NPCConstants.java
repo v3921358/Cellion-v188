@@ -10,8 +10,14 @@ import java.util.List;
 public class NPCConstants {
 
     public static final int PlayerNPC_REMOVECS = 9901000,
-            NPC_DivineBird = 2143002,
-            NPC_BigHeadward_Ruins = 2142003;
+                            NPC_DivineBird = 2143002,
+                            NPC_BigHeadward_Ruins = 2142003,
+                            QuickMove_NPC = 9001001,
+                            JobAdvance_NPC = 9000386,
+                            DonorShop_NPC = 9010002,
+                            VoteShop_NPC = 9010003,
+                            CashItemDrop_NPC = 9010017
+    ;
 
     public static final String[] LIMITED_NPC = {
         "buroo", // Inkie

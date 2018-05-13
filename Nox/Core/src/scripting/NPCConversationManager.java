@@ -2524,7 +2524,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
         c.SendPacket(CField.UIPacket.IntroEnableUI(false));
         while (c.getPlayer().getLevel() < 2) {
-            c.getPlayer().levelUp();
+            c.getPlayer().OnLevelUp();
         }
         c.getPlayer().setExp(0);
         warp(913070001, 0);

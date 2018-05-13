@@ -21,7 +21,7 @@ import server.Randomizer;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CField;
-import tools.packet.MiracleCubePacket;
+import tools.packet.CubePacket;
 import tools.packet.WvsContext;
 
 /**
@@ -45,7 +45,7 @@ public class Cube extends ItemPotentialProvider {
         }
         
         ItemPotentialTierType pMaxTier, pPreviousTier = pEquip.getPotentialTier();
-        int nTierDownRate, nTierUpRate, nFragmentID = 0;
+        int nTierDownRate, nTierUpRate, nFragmentID = 0, nMesoCost = 0;
         boolean bHidePotentialAfterReset = false;
         
         switch (nCubeID) {
@@ -63,12 +63,13 @@ public class Cube extends ItemPotentialProvider {
             case ItemConstants.OCCULT_CUBE_UNTRADEABLE:
             case ItemConstants.OCCULT_CUBE_UNTRADEABLE2:
             case ItemConstants.MAPLE_SAINT_WEAPON_CUBE:
-            case ItemConstants.MASTER_CRAFTMANS_CUBE:
+            case ItemConstants.MASTER_CRAFTMANS_CUBE: // This cube is available to players.
             case ItemConstants.MASTER_CRAFTMANS_CUBE2:
             case ItemConstants.MASTER_CRAFTMANS_CUBE_UNTRADEABLE:
                 pMaxTier = ItemPotentialTierType.Unique;
                 nTierUpRate = ItemPotentialProvider.RATE_GAMECUBE_TIERUP;
                 nTierDownRate = 0;
+                nMesoCost = 1000;
                 break;
             case ItemConstants.MEISTER_CUBE:
             case ItemConstants.MEISTER_CUBE2:
@@ -79,17 +80,25 @@ public class Cube extends ItemPotentialProvider {
                 break;
                 
             // Special Cubes
-            case ItemConstants.RED_CUBE:
+            case ItemConstants.RED_CUBE: // This cube is available to players.
                 pMaxTier = ItemPotentialTierType.Legendary;
                 nFragmentID = ItemConstants.RED_CUBE_FRAGMENT;
                 nTierUpRate = 10;
                 nTierDownRate = 10;
+                nMesoCost = 10000;
                 break;
-            case ItemConstants.BONUS_POTENTIAL_CUBE:  
+            case ItemConstants.PLATINUM_MIRACLE_CUBE: // This cube is available to players.
+                pMaxTier = ItemPotentialTierType.Legendary; 
+                nTierUpRate = 10;
+                nTierDownRate = 10;
+                nMesoCost = 10000;
+                break;
+            case ItemConstants.BONUS_POTENTIAL_CUBE: // This cube is available to players.
                 pMaxTier = ItemPotentialTierType.Legendary;
                 nFragmentID = ItemConstants.BONUS_POTENTIAL_CUBE_FRAGMENT;
                 nTierUpRate = 10;
                 nTierDownRate = 10;
+                nMesoCost = 30000;
                 break;
             default:
                 pPlayer.SendPacket(CField.enchantResult(0));
@@ -108,12 +117,19 @@ public class Cube extends ItemPotentialProvider {
             return;
         }
         
+        if (pPlayer.getMeso() < nMesoCost) {
+            pPlayer.dropMessage(5, "Sorry, you do not have enough mesos to perform this action.");
+            return;
+        }
+        
         final boolean bCubeResult = OnCubeResult(pEquip, nCubeID, nTierUpRate, nTierDownRate, pMaxTier, bHidePotentialAfterReset);
         
         if (bCubeResult) {
             
             if (nFragmentID > 0) MapleInventoryManipulator.addById(pPlayer.getClient(), nFragmentID, (short) 1, "Cube on " + LocalDateTime.now());
-
+            if (nMesoCost > 0) pPlayer.gainMeso(nMesoCost, true, true); // Cube Meso Cost
+            pPlayer.gainItem(nCubeID, -1);
+            
             // Update Inventory Equipment 
             List<ModifyInventory> modifications = new ArrayList<>();
             modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, pEquip));
@@ -135,13 +151,16 @@ public class Cube extends ItemPotentialProvider {
                     case ItemConstants.MEISTER_CUBE:
                     case ItemConstants.MEISTER_CUBE2:
                     case ItemConstants.MEISTER_CUBE_UNTRADEABLE:
-                        pPlayer.SendPacket(MiracleCubePacket.onInGameCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
+                        pPlayer.SendPacket(CubePacket.OnInGameCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
+                        break;
+                    case ItemConstants.PLATINUM_MIRACLE_CUBE:
+                        pPlayer.SendPacket(CubePacket.OnRedCubeResult/*OnPlatinumCubeResult*/(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
                         break;
                     case ItemConstants.RED_CUBE:
-                        pPlayer.SendPacket(MiracleCubePacket.onRedCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
+                        pPlayer.SendPacket(CubePacket.OnRedCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
                         break;
                     case ItemConstants.BONUS_POTENTIAL_CUBE:
-                        pPlayer.SendPacket(MiracleCubePacket.onBonusCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
+                        pPlayer.SendPacket(CubePacket.OnBonusCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
                         break;
                 }
             }
@@ -221,6 +240,19 @@ public class Cube extends ItemPotentialProvider {
                 }
                 if (pEquip.getPotential3() != 0) {
                     pEquip.setPotential3(generatePotential(pEquip, pPotentialTier));
+                }
+                break;
+            
+            // All Legendary Potential Lines
+            case ItemConstants.PLATINUM_MIRACLE_CUBE: 
+                if (pEquip.getPotential1() != 0) {
+                    pEquip.setPotential1(generatePotential(pEquip, ItemPotentialTierType.Legendary));
+                }
+                if (pEquip.getPotential2() != 0) {
+                    pEquip.setPotential2(generatePotential(pEquip, ItemPotentialTierType.Legendary));
+                }
+                if (pEquip.getPotential3() != 0) {
+                    pEquip.setPotential3(generatePotential(pEquip, ItemPotentialTierType.Legendary));
                 }
                 break;
                 

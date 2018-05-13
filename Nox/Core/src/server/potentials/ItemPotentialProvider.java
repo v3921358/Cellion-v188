@@ -26,7 +26,7 @@ import server.maps.objects.User;
 import tools.LogHelper;
 import tools.Pair;
 import tools.packet.CField;
-import tools.packet.MiracleCubePacket;
+import tools.packet.CubePacket;
 import tools.packet.WvsContext;
 
 /**
