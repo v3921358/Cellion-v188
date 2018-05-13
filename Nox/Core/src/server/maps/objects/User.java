@@ -38,6 +38,7 @@ import database.Database;
 import handling.game.AndroidEmotionChanger;
 import client.jobs.Explorer.ShadowerHandler;
 import constants.ItemConstants;
+import constants.NPCConstants;
 import handling.login.LoginInformationProvider.JobType;
 import handling.world.*;
 import net.OutPacket;
@@ -420,9 +421,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * Fully dispose a character through enable actions and clearing clicked NPC.
      */
     public void completeDispose() {
-        getClient().removeClickedNPC();
-        NPCScriptManager.getInstance().dispose(getClient());
-        SendPacket(WvsContext.enableActions());
+        client.removeClickedNPC();
+        NPCScriptManager.getInstance().dispose(client);
+        SendPacket(WvsContext.oldEnableActions());
     }
     
     /**
@@ -1139,7 +1140,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     ps.setInt(1, ret.accountid);
                     ResultSet rs = ps.executeQuery();
                     if (rs.next()) {
-                        ret.getClient().setAccountName(rs.getString("name"));
+                        ret.client.setAccountName(rs.getString("name"));
                         ret.nxcredit = rs.getInt("nxCredit");
                         ret.acash = rs.getInt("ACash");
                         ret.maplepoints = rs.getInt("mPoints");
@@ -1155,7 +1156,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                         if (rs.getInt("banned") > 0) {
                             rs.close();
                             ps.close();
-                            ret.getClient().Close();
+                            ret.client.Close();
                             throw new RuntimeException("Loading a banned character");
                         }
                         rs.close();
@@ -4476,7 +4477,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 if (partychar != null && partychar.getMapid() == getMapId() && partychar.getChannel() == channel) {
                     final User other = client.getChannelServer().getPlayerStorage().getCharacterByName(partychar.getName());
                     if (other != null) {
-                        other.getClient().SendPacket(CField.updatePartyMemberHP(getId(), stats.getHp(), stats.getCurrentMaxHp()));
+                        other.client.SendPacket(CField.updatePartyMemberHP(getId(), stats.getHp(), stats.getCurrentMaxHp()));
                     }
                 }
             }
@@ -4659,11 +4660,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                         setExp(exp - getNeededExp());
 
                         if (this.isBurning && currLevel >= 10 && currLevel <= 150) {
-                            levelUp();
-                            levelUp();
+                            OnLevelUp();
+                            OnLevelUp();
                         }
 
-                        levelUp();
+                        OnLevelUp();
                         leveled = true;
                     }
                 }
@@ -5113,6 +5114,247 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         updateSingleStat(Stat.LUK, 4);
     }
 
+    /**
+     * Calculate flat HP gain per level based on job.
+     * @return 
+     */
+    public int calculateFlatHPGain() {
+        int nIncrease = 0;
+        
+        if (GameConstants.isBeginnerJob(job)) { // Beginner
+            nIncrease += Randomizer.rand(12, 16);
+        } else if (job >= 3100 && job <= 3112) { // Warrior
+            nIncrease += Randomizer.rand(48, 52);
+        } else if ((job >= 100 && job <= 132) || (job >= 1100 && job <= 1111)) { // Warrior
+            nIncrease += Randomizer.rand(48, 52);
+        } else if ((job >= 200 && job <= 232) || (job >= 1200 && job <= 1211)) { // Magician
+            nIncrease += Randomizer.rand(10, 14);
+        } else if (job >= 3200 && job <= 3212) { // Battle Mage
+            nIncrease += Randomizer.rand(20, 24);
+        } else if ((job >= 300 && job <= 322) || (job >= 400 && job <= 434) || (job >= 1300 && job <= 1311) || (job >= 1400 && job <= 1411) || (job >= 3300 && job <= 3312) || (job >= 2300 && job <= 2312)) { // Bowman, Thief, Wind Breaker and Night Walker
+            nIncrease += Randomizer.rand(20, 24);
+        } else if ((job >= 510 && job <= 512) || (job >= 1510 && job <= 1512)) { // Pirate
+            nIncrease += Randomizer.rand(37, 41);
+        } else if ((job >= 500 && job <= 532) || (job >= 3500 && job <= 3512) || job == 1500) { // Pirate
+            nIncrease += Randomizer.rand(20, 24);
+        } else if (job >= 2100 && job <= 2112) { // Aran
+            nIncrease += Randomizer.rand(50, 52);
+        } else if (job >= 2200 && job <= 2218) { // Evan
+            nIncrease += Randomizer.rand(12, 16);
+        } else if (job >= 5100 && job <= 5112) { // Evan
+            nIncrease += Randomizer.rand(48, 52);
+        } else { // Game Master
+            nIncrease += Randomizer.rand(50, 100);
+        }
+        
+        return nIncrease;
+    }
+    
+    /**
+     * Calculate flat MP gain per level based on job.
+     * @return 
+     */
+    public int calculateFlatMPGain() {
+        int nIncrease = 0;
+        
+        if (GameConstants.isBeginnerJob(job)) { // Beginner
+            nIncrease += Randomizer.rand(10, 12);
+        } else if ((job >= 100 && job <= 132) || (job >= 1100 && job <= 1111)) { // Warrior
+            nIncrease += Randomizer.rand(4, 6);
+        } else if ((job >= 200 && job <= 232) || (job >= 1200 && job <= 1211)) { // Magician
+            nIncrease += Randomizer.rand(48, 52);
+        } else if (job >= 3200 && job <= 3212) { // Battle Mage
+            nIncrease += Randomizer.rand(42, 44);
+        } else if ((job >= 300 && job <= 322) || (job >= 400 && job <= 434) || (job >= 1300 && job <= 1311) || (job >= 1400 && job <= 1411) || (job >= 3300 && job <= 3312) || (job >= 2300 && job <= 2312)) { // Bowman, Thief, Wind Breaker and Night Walker
+            nIncrease += Randomizer.rand(14, 16);
+        } else if ((job >= 510 && job <= 512) || (job >= 1510 && job <= 1512)) { // Pirate
+            nIncrease += Randomizer.rand(18, 22);
+        } else if ((job >= 500 && job <= 532) || (job >= 3500 && job <= 3512) || job == 1500) { // Pirate
+            nIncrease += Randomizer.rand(18, 22);
+        } else if (job >= 2100 && job <= 2112) { // Aran
+            nIncrease += Randomizer.rand(4, 6);
+        } else if (job >= 2200 && job <= 2218) { // Evan
+            nIncrease += Randomizer.rand(50, 52);
+        } else if (job >= 5100 && job <= 5112) { // Evan
+            nIncrease += Randomizer.rand(4, 6);
+        } else { // Game Master
+            nIncrease += Randomizer.rand(50, 100);
+        }
+        
+        return nIncrease;
+    }
+    
+    /**
+     * OnJobAdvanceRequest
+     * @author Mazen Massoud
+     */
+    public void OnJobAdvanceRequest() {
+        client.removeClickedNPC();
+        NPCScriptManager.getInstance().start(client, NPCConstants.JobAdvance_NPC, null);
+    }
+    
+    /**
+     * OnPlayerLevelUp
+     * @author Mazen Massoud
+     * 
+     * @purpose Levels up the character and increases all the stats accordingly.
+     */
+    public void OnLevelUp() {
+        if (getLevel() >= GameConstants.maxLevel) {
+            return;
+        }
+        
+        level++;
+        
+        /*Character Stat Distribution*/
+        final Map<Stat, Long> pStat = new EnumMap<>(Stat.class);
+        int nMaxHP = stats.getMaxHp() + calculateFlatHPGain(); // Flat HP Gain
+        int nMaxMP = stats.getMaxMp() + calculateFlatMPGain(); // Flat MP Gain
+        int nSP;
+        
+        if (ServerConstants.BUFFED_HP_GAIN) nMaxHP += Randomizer.rand(40, 65);              // Bonus HP Gain for lower need of HP washing.
+        
+        nMaxHP += stats.getTotalStr() / 30;                                                 // Increased HP Gain based on STR.
+        nMaxMP += 15 + (stats.getTotalInt() * 0.1) + (Utility.resultSuccess(50) ? 1 : -1);  // Increased MP Gain based on INT.
+        
+        nMaxHP = Math.min(GameConstants.maxHP, Math.abs(nMaxHP));
+        nMaxMP = Math.min(GameConstants.maxMP, Math.abs(nMaxMP));
+        
+        /*AP Distribution*/
+        if (level < 10) {         // Automatically place AP in STR until level 10.
+            stats.str += 5;
+            remainingAp = 0;
+            pStat.put(Stat.STR, (long) stats.getStr());
+        } else if (level == 10) { // Automatically reset AP when hitting level 10.
+            remainingAp += 5;
+            resetAp();
+        } else {
+            remainingAp += 5;
+        }
+        
+        /*SP Distribution*/
+        if (level <= 110) {
+            nSP = 3;
+        } else if (level <= 120) {
+            nSP = 4;
+        } else if (level <= 130) {
+            nSP = 5;
+        } else if (level <= 140) {
+            nSP = 6;
+        } else {
+            nSP = 0;
+        }
+        
+        if (GameConstants.isZero(job)) {
+            gainSP(3, 0); // Alpha
+            gainSP(3, 1); // Beta
+        } else {
+            
+            /* Job Advancement & Bonus SP Gain*/
+            switch(level) { 
+                case 11: // First level up to attempt job advancement selection.
+                    OnJobAdvanceRequest();
+                    break;
+                case 20:
+                    if (GameConstants.isDualBlade(job)) gainSP(nSP);
+                    OnJobAdvanceRequest();
+                    break;
+                case 30:
+                    gainSP(nSP);
+                    OnJobAdvanceRequest();
+                    break;
+                case 45:
+                    if (GameConstants.isDualBlade(job)) gainSP(nSP);
+                    OnJobAdvanceRequest();
+                    break;
+                case 60:
+                    gainSP(nSP);
+                    OnJobAdvanceRequest();
+                    break;
+                case 100:
+                    gainSP(nSP);
+                    OnJobAdvanceRequest();
+                    break;
+            }
+            
+            // Basic SP Gain
+            gainSP(nSP);
+        }
+        
+        /*Character Stat Update*/
+        pStat.put(Stat.MaxHP, (long) nMaxHP);
+        pStat.put(Stat.MaxMP, (long) nMaxMP);
+        pStat.put(Stat.HP, (long) nMaxHP);
+        pStat.put(Stat.MP, (long) nMaxMP);
+        pStat.put(Stat.EXP, exp);
+        pStat.put(Stat.Level, (long) level);
+        pStat.put(Stat.AP, (long) remainingAp);
+        pStat.put(Stat.SP, (long) remainingSp[GameConstants.getSkillBook(job, level)]);
+        stats.setInfo(nMaxHP, nMaxMP, nMaxHP, nMaxMP);
+        client.SendPacket(WvsContext.OnPlayerStatChanged(this, pStat));
+        characterCard.recalcLocalStats(this);
+        stats.recalcLocalStats(this);
+        
+        /*Effect Packet & Value Updates*/
+        client.SendPacket(EffectPacket.showForeignEffect(getId(), UserEffectCodes.LevelUp));
+        AndroidEmotionChanger.changeEmotion(this, 10);
+        silentPartyUpdate();
+        guildUpdate();
+        familyUpdate();
+        
+        /*Update Skills*/
+        addLevelSkills();
+        hyperSkillRequest();
+        handleResolutionTime();
+        
+        /*Update Rewards*/
+        userRewardRequest(level);
+
+        /*Zero*/
+        if (GameConstants.isZero(job)) {
+            checkZeroWeapon();
+            checkZeroTranscendent();
+        }
+        
+        /*Max Level Announcement*/
+        if (level == GameConstants.maxLevel) {
+            setExp(0);
+            StringBuilder sb = new StringBuilder();
+            sb.append("[" + ServerConstants.SERVER_NAME + "] ");
+            addMedalString(client.getPlayer(), sb);
+            sb.append(getName()).append(" has reached Level ").append(level).append("!");
+            World.Broadcast.broadcastMessage(CField.getGameMessage(sb.toString(), (short) 7));
+        }
+    }
+    
+    /**
+     * Handle Resolution Time Skill Level Up for Zero
+     */
+    public void handleResolutionTime() { 
+        if (GameConstants.isZero(job)) {
+            switch (level) {
+                case 120:
+                    changeSkillLevel(SkillFactory.getSkill(Zero.RESOLUTION_TIME), (byte) 1, (byte) 5);
+                    break;
+                case 140:
+                    changeSkillLevel(SkillFactory.getSkill(Zero.RESOLUTION_TIME), (byte) 2, (byte) 5);
+                    break;
+                case 160:
+                    changeSkillLevel(SkillFactory.getSkill(Zero.RESOLUTION_TIME), (byte) 3, (byte) 5);
+                    break;
+                case 180:
+                    changeSkillLevel(SkillFactory.getSkill(Zero.RESOLUTION_TIME), (byte) 4, (byte) 5);
+                    break;
+                case 200:
+                    changeSkillLevel(SkillFactory.getSkill(Zero.RESOLUTION_TIME), (byte) 5, (byte) 5);
+                    break;
+            }
+        }
+    }
+    
+    /**
+     * Previous LevelUp method.
+     */
     public void levelUp() {
         if (getLevel() >= GameConstants.maxLevel) {
             return;
@@ -5123,11 +5365,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         // Max HP and MP allocation
         int maxhp = stats.getMaxHp();
         int maxmp = stats.getMaxMp();
-
-        // Bonus HP Gain
-        if (ServerConstants.BUFFED_HP_GAIN) {
-            maxhp += Randomizer.rand(40, 65);
-        }
 
         if (GameConstants.isBeginnerJob(job)) { // Beginner
             maxhp += Randomizer.rand(12, 16);
@@ -5140,7 +5377,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if ((job >= 200 && job <= 232) || (job >= 1200 && job <= 1211)) { // Magician
             maxhp += Randomizer.rand(10, 14);
             maxmp += Randomizer.rand(48, 52);
-        } else if (job >= 3200 && job <= 3212) { //battle mages get their own little neat thing
+        } else if (job >= 3200 && job <= 3212) { // Battle Mage
             maxhp += Randomizer.rand(20, 24);
             maxmp += Randomizer.rand(42, 44);
         } else if ((job >= 300 && job <= 322) || (job >= 400 && job <= 434) || (job >= 1300 && job <= 1311) || (job >= 1400 && job <= 1411) || (job >= 3300 && job <= 3312) || (job >= 2300 && job <= 2312)) { // Bowman, Thief, Wind Breaker and Night Walker
@@ -5161,7 +5398,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (job >= 5100 && job <= 5112) { // Evan
             maxhp += Randomizer.rand(48, 52);
             maxmp += Randomizer.rand(4, 6);
-        } else { // GameMaster
+        } else { // Game Master
             maxhp += Randomizer.rand(50, 100);
             maxmp += Randomizer.rand(50, 100);
         }
@@ -5312,28 +5549,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     break;
             }
         }
-
-        // Handle Resolution Time (Skill Level Up)
-        if (GameConstants.isZero(job)) {
-            switch (level) {
-                case 120:
-                    changeSkillLevel(SkillFactory.getSkill(Zero.RESOLUTION_TIME), (byte) 1, (byte) 5);
-                    break;
-                case 140:
-                    changeSkillLevel(SkillFactory.getSkill(Zero.RESOLUTION_TIME), (byte) 2, (byte) 5);
-                    break;
-                case 160:
-                    changeSkillLevel(SkillFactory.getSkill(Zero.RESOLUTION_TIME), (byte) 3, (byte) 5);
-                    break;
-                case 180:
-                    changeSkillLevel(SkillFactory.getSkill(Zero.RESOLUTION_TIME), (byte) 4, (byte) 5);
-                    break;
-                case 200:
-                    changeSkillLevel(SkillFactory.getSkill(Zero.RESOLUTION_TIME), (byte) 5, (byte) 5);
-                    break;
-            }
-        }
-
+        handleResolutionTime();
         // Hyper Skill Distribution
         hyperSkillRequest();
         /*if (level == 200) {
@@ -6145,6 +6361,19 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
+    /**
+     * Auto Inventory Sort Check
+     */
+    private long tLastInventorySort;
+    
+    public long getLastInventorySort() {
+        return tLastInventorySort;
+    }
+    
+    public void setLastInventorySort() {
+        tLastInventorySort = System.currentTimeMillis();
+    }
+    
     /*
      *  Inventory Sort/Consolidate Items
      *  @author Mazen Massoud
@@ -7466,7 +7695,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
             // Sent packet
             if (!cooldowns_packet.isEmpty()) {
-                getClient().SendPacket(CField.skillCooldown(cooldowns_packet));
+                client.SendPacket(CField.skillCooldown(cooldowns_packet));
             }
         }
     }
@@ -8122,9 +8351,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         int possessed = getInventory(type).countById(id);
 
         if (possessed > 0) {
-            MapleInventoryManipulator.removeById(getClient(), type, id, possessed, true, false);
+            MapleInventoryManipulator.removeById(client, type, id, possessed, true, false);
             if (show) {
-                getClient().SendPacket(InfoPacket.getShowItemGain(id, (short) -possessed, true));
+                client.SendPacket(InfoPacket.getShowItemGain(id, (short) -possessed, true));
             }
         }
         /*
@@ -8133,9 +8362,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
          * getInventory(type).countById(id);
          *
          * if (possessed > 0) {
-         * MapleInventoryManipulator.removeById(getClient(), type, id,
+         * MapleInventoryManipulator.removeById(client, type, id,
          * possessed, true, false);
-         * getClient().write(CField.getShowItemGain(id,
+         * client.write(CField.getShowItemGain(id,
          * (short)-possessed, true)); } }
          */
     }
@@ -8651,7 +8880,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         client.SendPacket(CField.getFollowMessage("Follow canceled."));
         if (tt != null) {
             tt.setFollowId(0);
-            tt.getClient().SendPacket(CField.getFollowMessage("Follow canceled."));
+            tt.client.SendPacket(CField.getFollowMessage("Follow canceled."));
         }
         setFollowId(0);
     }
@@ -8963,10 +9192,10 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void removeDoor() {
         final Door door = getDoors().iterator().next();
         for (final User chr : door.getTarget().getCharacters()) {
-            door.sendDestroyData(chr.getClient());
+            door.sendDestroyData(chr.client);
         }
         for (final User chr : door.getTown().getCharacters()) {
-            door.sendDestroyData(chr.getClient());
+            door.sendDestroyData(chr.client);
         }
         for (final Door destroyDoor : getDoors()) {
             door.getTarget().removeMapObject(destroyDoor);
@@ -8978,7 +9207,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void removeMechDoor() {
         for (final MechDoor destroyDoor : getMechDoors()) {
             for (final User chr : getMap().getCharacters()) {
-                destroyDoor.sendDestroyData(chr.getClient());
+                destroyDoor.sendDestroyData(chr.client);
             }
             getMap().removeMapObject(destroyDoor);
         }
@@ -9733,7 +9962,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                                     attacker.damage(this, theDmg, true);
                                     checkMonsterAggro(attacker);
                                     if (!attacker.isAlive()) {
-                                        getClient().SendPacket(MobPacket.killMonster(attacker.getObjectId(), 1, false));
+                                        client.SendPacket(MobPacket.killMonster(attacker.getObjectId(), 1, false));
                                     }
                                 } else {
                                     final User chr = (User) attacke;
@@ -9896,13 +10125,13 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (GameConstants.isDemonSlayer(getJob())) {
             addMP(extraForce > 0 ? extraForce : forceGain, true);
         }
-        getClient().SendPacket(CField.gainForce(oid, this.force, forceGain));
+        client.SendPacket(CField.gainForce(oid, this.force, forceGain));
         if (GameConstants.isDemonSlayer(getJob())
                 && this.stats.mpRecoverProp > 0 && extraForce <= 0
                 && Randomizer.nextInt(100) <= this.stats.mpRecoverProp) {
             this.force = (short) (this.force + 1);
             addMP(this.stats.mpRecover, true);
-            getClient().SendPacket(CField.gainForce(oid, this.force, this.stats.mpRecover));
+            client.SendPacket(CField.gainForce(oid, this.force, this.stats.mpRecover));
         }
     }
 
@@ -10577,8 +10806,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void sendWelcome() {
-        getClient().SendPacket(CField.startMapEffect("Welcome to " + getClient().getChannelServer().getServerName() + "!", 5122000, true));
-        dropMessage(1, "Welcome to " + getClient().getChannelServer().getServerName() + ", " + getName() + " ! \r\nUse @npc to collect your Item Of Appreciation once you're level 10! \r\nUse @help for commands. \r\nGood luck and have fun!");
+        client.SendPacket(CField.startMapEffect("Welcome to " + client.getChannelServer().getServerName() + "!", 5122000, true));
+        dropMessage(1, "Welcome to " + client.getChannelServer().getServerName() + ", " + getName() + " ! \r\nUse @npc to collect your Item Of Appreciation once you're level 10! \r\nUse @help for commands. \r\nGood luck and have fun!");
         dropMessage(5, "Your EXP Rate will be set to 1x until you finish the tutorial.");
         dropMessage(5, "Use @npc to collect your Item Of Appreciation once you're level 10! Use @help for commands. Good luck and have fun!");
         dropMessage(1, "Use @help for additional commands.");
@@ -11448,7 +11677,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         try (Connection con = Database.GetConnection()) {
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO ipvotes (`ip`, `accid`, `lastvote`) VALUES (?, ?, ?)")) {
-                ps.setString(1, getClient().GetIP().split(":")[0].replaceAll("/", ""));
+                ps.setString(1, client.GetIP().split(":")[0].replaceAll("/", ""));
                 ps.setInt(2, getAccountID());
                 ps.setLong(3, System.currentTimeMillis() / 1000);
                 ps.executeUpdate();
@@ -11843,23 +12072,23 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void changeLuminousMode() {
         final User chr = this;
-        chr.getClient().SendPacket(JobPacket.LuminousPacket.giveLuminousState(20040220, chr.getLightGauge(), chr.getDarkGauge(), 10000));
+        chr.client.SendPacket(JobPacket.LuminousPacket.giveLuminousState(20040220, chr.getLightGauge(), chr.getDarkGauge(), 10000));
         Timer.WorldTimer.getInstance().schedule(() -> {
             chr.dispelBuff(20040220);
             switch (chr.getLuminousState()) {
                 case 20040217:
-                    chr.getClient().SendPacket(JobPacket.LuminousPacket.giveLuminousState(20040216, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
+                    chr.client.SendPacket(JobPacket.LuminousPacket.giveLuminousState(20040216, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
                     chr.runningLight--;
                     chr.setLuminousState(20040216);
                     break;
                 case 20040216:
-                    chr.getClient().SendPacket(JobPacket.LuminousPacket.giveLuminousState(20040217, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
+                    chr.client.SendPacket(JobPacket.LuminousPacket.giveLuminousState(20040217, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
                     chr.runningDark--;
                     chr.setLuminousState(20040217);
                     break;
                 default:
                     //In case used when not in any stance to avoid perma Equilibrium
-                    chr.getClient().SendPacket(JobPacket.LuminousPacket.giveLuminousState(20040216, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
+                    chr.client.SendPacket(JobPacket.LuminousPacket.giveLuminousState(20040216, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
                     chr.setLuminousState(20040216);
                     break;
             }
@@ -11968,12 +12197,12 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         final Skill lunar = SkillFactory.getSkill(27110007);
         int critical = this.getSkillLevel(lunar);
         if ((this.getStat().getHp() / this.getStat().getMaxHp()) * 100 < (this.getStat().getMp() / this.getStat().getMaxMp()) * 100) {
-            this.getClient().SendPacket(JobPacket.LuminousPacket.giveLifeTidal(false, lunar.getEffect(critical).getX()));
+            this.client.SendPacket(JobPacket.LuminousPacket.giveLifeTidal(false, lunar.getEffect(critical).getX()));
         } else if ((this.getStat().getHp() / this.getStat().getMaxHp()) * 100 > (this.getStat().getMp() / this.getStat().getMaxHp()) * 100) {
             if (critical > 0) {
                 this.getStat().crit_rate += lunar.getEffect(critical).getProb();
                 this.getStat().passive_sharpeye_min_percent += lunar.getEffect(critical).getCriticalMin();
-                this.getClient().SendPacket(JobPacket.LuminousPacket.giveLifeTidal(true, lunar.getEffect(critical).getProb()));
+                this.client.SendPacket(JobPacket.LuminousPacket.giveLifeTidal(true, lunar.getEffect(critical).getProb()));
             }
         }
     }
@@ -12531,8 +12760,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         for (int i = 0; i < clones.length; i++) {
             if (clones[i].get() != null) {
                 map.removePlayer(clones[i].get());
-                if (clones[i].get().getClient() != null) {
-                    clones[i].get().getClient().setPlayer(null);
+                if (clones[i].get().client != null) {
+                    clones[i].get().client.setPlayer(null);
                     clones[i].get().client = null;
                 }
                 clones[i] = new WeakReference<>(null);
@@ -12667,6 +12896,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 // </editor-fold> 
 
     public void SendPacket(OutPacket oPacket) {
-        this.getClient().SendPacket(oPacket);
+        this.client.SendPacket(oPacket);
     }
 }

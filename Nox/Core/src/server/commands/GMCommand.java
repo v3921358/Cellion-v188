@@ -291,7 +291,7 @@ public class GMCommand {
         public int execute(ClientSocket c, String[] splitted) {
             while (c.getPlayer().getLevel() < Integer.parseInt(splitted[1])) {
                 if (c.getPlayer().getLevel() < 255) {
-                    c.getPlayer().levelUp();
+                    c.getPlayer().OnLevelUp();
                 }
             }
             return 1;

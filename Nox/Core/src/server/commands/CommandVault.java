@@ -1332,5 +1332,14 @@ public class CommandVault {
         }
     }*/
     
-    
+    public static class Memory extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            long currentUsage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000000;
+
+            c.getPlayer().dropMessage(6, "REXION Memory Usage (" + currentUsage + " MB)");
+            return 1;
+        }
+    }
 }

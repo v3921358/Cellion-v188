@@ -758,6 +758,31 @@ public class GameConstants {
         return 0;
     }
 
+    public static boolean isWarrior(int nJobID) {
+        nJobID = nJobID % 1000;
+        return (nJobID >= 100  && nJobID < 200) || (nJobID >= 700 && nJobID < 800);
+    }
+
+    public static boolean isMagician(int nJobID) {
+        nJobID = nJobID % 1000;
+        return nJobID >= 200 &&  nJobID < 300 ;
+    }
+
+    public static boolean isArcher(int nJobID) {
+        nJobID = nJobID % 1000;
+         return nJobID >= 300  && nJobID < 400;
+    }
+
+    public static boolean isThief(int nJobID) {
+        nJobID = nJobID % 1000;
+         return nJobID >= 400  && nJobID < 500;
+    }
+
+    public static boolean isPirate(int nJobID) {
+        nJobID = nJobID % 1000;
+        return nJobID > 500 && nJobID < 600;
+    }
+    
     public static boolean isExplorer(final int job) {
         return job >= 0 && job < 1000;
     }

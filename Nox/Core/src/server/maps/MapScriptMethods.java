@@ -1610,7 +1610,7 @@ public class MapScriptMethods {
                     c.getPlayer().changeMap(mapto, mapto.getPortal(3));
 
                     while (c.getPlayer().getLevel() < 10) {
-                        c.getPlayer().levelUp();
+                        c.getPlayer().OnLevelUp();
                     }
                 }
                 showIntro(c, "Effect/Direction4.img/cannonshooter/Scene00");
@@ -1900,7 +1900,7 @@ public class MapScriptMethods {
             }
             case merTutorSleep01: {
                 while (c.getPlayer().getLevel() < 10) {
-                    c.getPlayer().levelUp();
+                    c.getPlayer().OnLevelUp();
                 }
                 c.getPlayer().changeJob((short) 2300);
                 showIntro(c, "Effect/Direction5.img/mersedesTutorial/Scene1");
@@ -1920,7 +1920,7 @@ public class MapScriptMethods {
             }
             case merTutorDrecotion10: {
                 while (c.getPlayer().getLevel() < 10) {
-                    c.getPlayer().levelUp();
+                    c.getPlayer().OnLevelUp();
                 }
 //                c.getPlayer().changeJob((short) 2300);
                 final MapleMap mapto = c.getChannelServer().getMapFactory().getMap(101050000);
@@ -2407,7 +2407,7 @@ public class MapScriptMethods {
                     c.SendPacket(UIPacket.IntroLock(true));
                     showIntro(c, "Effect/Direction7.img/mikhail/1st_Job");
                     while (c.getPlayer().getLevel() < 10) {
-                        c.getPlayer().levelUp();
+                        c.getPlayer().OnLevelUp();
                     }
                     c.getPlayer().changeJob((short) 5100);
                     Thread.sleep(4000);
@@ -2499,7 +2499,7 @@ public class MapScriptMethods {
             case PTjob1: {
                 if (c.getPlayer().getLevel() < 10) {
                     while (c.getPlayer().getLevel() < (short) 10) {
-                        c.getPlayer().levelUp();
+                        c.getPlayer().OnLevelUp();
                     }
 //                    c.getPlayer().changeJob((short) 2400);
                     c.getPlayer().setExp(0);
@@ -2571,7 +2571,7 @@ public class MapScriptMethods {
             case angelic_tuto0://for now TODO real tut
                 if (c.getPlayer().getJob() == 6001) {
                     while (c.getPlayer().getLevel() < 10) {
-                        c.getPlayer().levelUp();
+                        c.getPlayer().OnLevelUp();
                     }
                     c.getPlayer().changeJob((short) 6500);
                     c.getPlayer().gainItem(1142495, 1);//Nova Contractor
@@ -2585,14 +2585,14 @@ public class MapScriptMethods {
                     c.getPlayer().changeJob((short) 508);
 
                     while (c.getPlayer().getLevel() < 10) {
-                        c.getPlayer().levelUp();
+                        c.getPlayer().OnLevelUp();
                     }
                 }
                 break;
             case kaiser_tuto_0_0://for now TODO real tut
                 if (c.getPlayer().getJob() == 6000) {
                     while (c.getPlayer().getLevel() < 10) {
-                        c.getPlayer().levelUp();
+                        c.getPlayer().OnLevelUp();
                     }
                     c.getPlayer().setExp(0);
                     c.getPlayer().gainItem(1142495, 1);//Nova Contractor
@@ -2611,7 +2611,7 @@ public class MapScriptMethods {
                     c.getPlayer().changeSingleSkillLevel(SkillFactory.getSkill(27000207), (byte) 0, (byte) 5, -1);//Dark Affinity
                     c.getPlayer().gainItem(1142479, 1);//In both Darkness and Light - emblem
                     while (c.getPlayer().getLevel() < 10) {
-                        c.getPlayer().levelUp();
+                        c.getPlayer().OnLevelUp();
                     }
                     c.getPlayer().setExp(0);
                     c.SendPacket(UIPacket.playMovie("Luminous.avi", true));
@@ -2621,7 +2621,7 @@ public class MapScriptMethods {
             case xn_tuto_0_0://for now TODO real tut
                 if (c.getPlayer().getJob() == 3002) {
                     while (c.getPlayer().getLevel() < 10) {
-                        c.getPlayer().levelUp();
+                        c.getPlayer().OnLevelUp();
                     }
                     c.getPlayer().setExp(0);
                     c.getPlayer().gainItem(1142575, 1);//memory seeker - emblem 
@@ -2635,7 +2635,7 @@ public class MapScriptMethods {
             case onUserEnter_866191000://Beast skip tut
                 if (c.getPlayer().getJob() == 11212 && c.getPlayer().getLevel() < 10) {
                     while (c.getPlayer().getLevel() < 10) {
-                        c.getPlayer().levelUp();
+                        c.getPlayer().OnLevelUp();
                     }
                     c.getPlayer().gainItem(1142673, 1);//Sprout Guardian - emblem 
                     c.getPlayer().gainItem(2000001, 50);//Orange potion
@@ -2652,7 +2652,7 @@ public class MapScriptMethods {
                     c.getPlayer().changeSingleSkillLevel(SkillFactory.getSkill(25001000), (byte) 0, (byte) 25, -1);
                     c.getPlayer().changeSingleSkillLevel(SkillFactory.getSkill(25001002), (byte) 0, (byte) 25, -1);
                     while (c.getPlayer().getLevel() < 10) {
-                        c.getPlayer().levelUp();
+                        c.getPlayer().OnLevelUp();
                     }
                     c.getPlayer().setExp(0);
                 }
@@ -3387,7 +3387,7 @@ public class MapScriptMethods {
                         c.SendPacket(CField.showEffect("JPHayato/text1"));
                         c.SendPacket(CField.showEffect("JPHayato/text2"));
                         while (c.getPlayer().getLevel() < 10) {
-                            c.getPlayer().levelUp();
+                            c.getPlayer().OnLevelUp();
                         }
                         c.getPlayer().setExp(0);
                         if (c.getPlayer().getQuestStatus(28862) == QuestState.Started) {
@@ -3401,7 +3401,7 @@ public class MapScriptMethods {
                         c.SendPacket(CField.showEffect("JPKanna/text1"));
                         c.SendPacket(CField.showEffect("JPKanna/text2"));
                         while (c.getPlayer().getLevel() < 10) {
-                            c.getPlayer().levelUp();
+                            c.getPlayer().OnLevelUp();
                         }
                         c.getPlayer().setExp(0);
                         if (c.getPlayer().getQuestStatus(28862) == QuestState.Started) {
@@ -4012,7 +4012,7 @@ public class MapScriptMethods {
                 //hack
                 case 931050300:
                     while (chr.getLevel() < 10) {
-                        chr.levelUp();
+                        chr.OnLevelUp();
                     }
                     final MapleMap mapto = c.getChannelServer().getMapFactory().getMap(931050000);
                     chr.changeMap(mapto, mapto.getPortal(0));

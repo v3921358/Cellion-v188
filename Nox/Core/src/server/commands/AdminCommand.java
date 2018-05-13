@@ -207,7 +207,7 @@ public class AdminCommand {
             }
             while (pUser.getLevel() < Integer.parseInt(splitted[1])) {
                 if (pUser.getLevel() < 255) {
-                    pUser.levelUp();
+                    pUser.OnLevelUp();
                 }
             }
             c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") is now level " + pUser.getLevel() + ".");

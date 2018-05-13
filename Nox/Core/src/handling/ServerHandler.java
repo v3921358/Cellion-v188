@@ -3,6 +3,7 @@
  */
 package handling;
 
+import handling.game.FreeMarketTransferRequest;
 import handling.game.GroupMessageHandler;
 import handling.game.BossMatchmakingHandler;
 import client.ClientSocket;
@@ -170,7 +171,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserSetDressChangedRequest.getValue()] = new SetDressChangedRequest();
         handlers[RecvPacketOpcode.UserSkillLearnItemUseRequest.getValue()] = new UseSkillBookHandler();
         handlers[RecvPacketOpcode.QuickslotKeyMappedModified.getValue()] = new QuickSlot();
-
+        handlers[RecvPacketOpcode.UserTransferFreeMarketRequest.getValue()] = new FreeMarketTransferRequest();
+        
         /**
          * Android Handlers
          */
