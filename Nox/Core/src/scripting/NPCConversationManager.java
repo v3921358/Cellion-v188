@@ -1466,7 +1466,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         statup.put(Stat.MaxHP, Long.valueOf(500000));
         statup.put(Stat.MP, Long.valueOf(overrDemon));
         statup.put(Stat.MaxMP, Long.valueOf(overrDemon));
-        c.getPlayer().getStat().recalcLocalStats(c.getPlayer());
+        c.getPlayer().getStat().OnCalculateLocalStats(c.getPlayer());
         c.SendPacket(WvsContext.OnPlayerStatChanged(c.getPlayer(), statup));
         //c.write(CWvsContext.updatePlayerStats(statup, c.getPlayer().getJob()));
     }

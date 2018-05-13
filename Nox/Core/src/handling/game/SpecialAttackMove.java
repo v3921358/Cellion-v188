@@ -778,7 +778,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             }
         }
 
-        c.getPlayer().getStat().recalcLocalStats(c.getPlayer());
+        c.getPlayer().getStat().OnCalculateLocalStats(c.getPlayer());
         c.SendPacket(WvsContext.enableActions());
     }
 }

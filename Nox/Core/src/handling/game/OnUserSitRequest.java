@@ -6,6 +6,10 @@ import net.InPacket;
 import tools.packet.CField;
 import net.ProcessPacket;
 
+/**
+ * UserSitRequest
+ * @author Mazen Massoud
+ */
 public final class OnUserSitRequest implements ProcessPacket<ClientSocket> {
 
     @Override
@@ -15,23 +19,22 @@ public final class OnUserSitRequest implements ProcessPacket<ClientSocket> {
 
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
-        final User chr = c.getPlayer();
-
-        if (chr.getMap().getSharedMapResources().noChair) {
+        final User pPlayer = c.getPlayer();
+        int nChairID = iPacket.DecodeShort();
+        
+        if (pPlayer.getMap().getSharedMapResources().noChair) {
             return;
         }
-
-        int chairId = iPacket.DecodeShort();
-
-        if (chairId == -1) {
-            chr.cancelFishingTask();
-            chr.setChair(0);
-            c.SendPacket(CField.cancelChair(chr.getId(), -1));
-
-            chr.getMap().broadcastPacket(chr, CField.showChair(chr.getId(), 0), false);
+        
+        if (nChairID == -1) {
+            pPlayer.cancelFishingTask();
+            pPlayer.setChair(0);
+            c.SendPacket(CField.cancelChair(pPlayer.getId(), -1));
+            pPlayer.getMap().broadcastPacket(pPlayer, CField.OnShowChair(pPlayer.getId(), nChairID), false);
+            pPlayer.completeDispose();
         } else {
-            chr.setChair(chairId);
-            c.SendPacket(CField.cancelChair(chr.getId(), chairId));
+            pPlayer.setChair(nChairID);
+            c.SendPacket(CField.cancelChair(pPlayer.getId(), nChairID));
         }
     }
 }

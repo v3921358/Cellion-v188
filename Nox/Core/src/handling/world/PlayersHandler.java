@@ -664,7 +664,7 @@ public class PlayersHandler {
             return;
         }
         c.getPlayer().changeMap(c.getPlayer().getMapId(), 0);
-        c.getPlayer().getStat().recalcLocalStats(c.getPlayer());
+        c.getPlayer().getStat().OnCalculateLocalStats(c.getPlayer());
         c.getPlayer().getStat().heal(c.getPlayer());
     }
 

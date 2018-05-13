@@ -423,7 +423,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void completeDispose() {
         client.removeClickedNPC();
         NPCScriptManager.getInstance().dispose(client);
-        SendPacket(WvsContext.oldEnableActions());
+        SendPacket(WvsContext.enableActions());
     }
     
     /**
@@ -823,7 +823,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         ret.shopRepurchases = ct.rebuy;
         ret.mount = new MapleMount(ret, ct.mount_itemid, PlayerStats.getSkillByJob(1004, ret.job), ct.mount_Fatigue, ct.mount_level, ct.mount_exp);
         ret.expirationTask(false, false);
-        ret.stats.recalcLocalStats(true, ret);
+        ret.stats.OnCalculateLocalStats(true, ret);
         client.setTempIP(ct.tempIP);
         ret.isZeroBeta = ct.isZeroBeta;
         ret.isAngelicDressup = ct.isAngelicDressup;
@@ -1495,7 +1495,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     ex.printStackTrace();
                 }
 
-                ret.stats.recalcLocalStats(true, ret);
+                ret.stats.OnCalculateLocalStats(true, ret);
             } else { // Not channel server
                 for (Pair<Item, MapleInventoryType> mit : ItemLoader.INVENTORY.loadItems(true, charid, con).values()) {
                     ret.getInventory(mit.getRight()).addFromDB(mit.getLeft());
@@ -2664,7 +2664,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             }
         }
         if (!silent) {
-            stats.recalcLocalStats(this);
+            stats.OnCalculateLocalStats(this);
         }
     }
 
@@ -2894,7 +2894,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     return; //don't write anything
                 }
             } else if (write) {
-                stats.recalcLocalStats(this);
+                stats.OnCalculateLocalStats(this);
             }
             client.SendPacket(BuffPacket.cancelBuff(buffstats));
         } catch (Exception ex) {
@@ -3761,7 +3761,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 to.addPlayer(this, nowmapid);
                 stats.relocHeal(this);
                 if (to.getSharedMapResources().starForceBarrier > 0) {
-                    stats.recalcLocalStats(this);
+                    stats.OnCalculateLocalStats(this);
                 }
 
                 if (shouldState) {
@@ -3940,7 +3940,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             statup.put(Stat.MP, Long.valueOf(maxmp));
 
             characterCard.recalcLocalStats(this);
-            stats.recalcLocalStats(this);
+            stats.OnCalculateLocalStats(this);
             client.SendPacket(WvsContext.OnPlayerStatChanged(this, statup));
             //map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), UserEffectCodes.JobChanged), false); // Bugged, displays for all players.
             client.SendPacket(EffectPacket.showForeignEffect(getId(), UserEffectCodes.JobChanged));
@@ -4299,7 +4299,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             stats.relocHeal(this);
         }
         if (recalculate) {
-            stats.recalcLocalStats(this);
+            stats.OnCalculateLocalStats(this);
         }
     }
 
@@ -5293,7 +5293,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         stats.setInfo(nMaxHP, nMaxMP, nMaxHP, nMaxMP);
         client.SendPacket(WvsContext.OnPlayerStatChanged(this, pStat));
         characterCard.recalcLocalStats(this);
-        stats.recalcLocalStats(this);
+        stats.OnCalculateLocalStats(this);
         
         /*Effect Packet & Value Updates*/
         client.SendPacket(EffectPacket.showForeignEffect(getId(), UserEffectCodes.LevelUp));
@@ -5566,7 +5566,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         //map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), UserEffectCodes.LevelUp), true); // lol this is buggy.
         client.SendPacket(EffectPacket.showForeignEffect(getId(), UserEffectCodes.LevelUp));
         characterCard.recalcLocalStats(this);
-        stats.recalcLocalStats(this);
+        stats.OnCalculateLocalStats(this);
 
         // Etc!
         silentPartyUpdate();
@@ -5731,7 +5731,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void JobAdvanceSp(int i) {
         remainingSp[i] += 5;
-        stats.recalcLocalStats(this);
+        stats.OnCalculateLocalStats(this);
     }
 
     public void autoJobAdvance() {
@@ -6836,7 +6836,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             return;
         }
         map.broadcastPacket(this, CField.updateCharLook(this, false), false);
-        stats.recalcLocalStats(this);
+        stats.OnCalculateLocalStats(this);
         if (getMessenger() != null) {
             World.Messenger.updateMessenger(getMessenger().getId(), getName(), client.getChannel());
         }
@@ -8691,7 +8691,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         stats.luk = (int) luk;
 
         setRemainingAp((int) total);
-        stats.recalcLocalStats(this);
+        stats.OnCalculateLocalStats(this);
         stat.put(Stat.STR, (long) str);
         stat.put(Stat.DEX, (long) dex);
         stat.put(Stat.INT, (long) int_);
@@ -10340,7 +10340,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void setStr(int str) {
         this.str = str;
-        stats.recalcLocalStats(this);
+        stats.OnCalculateLocalStats(this);
     }
 
     public int getInt() {
@@ -10349,7 +10349,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void setInt(int int_) {
         this.int_ = int_;
-        stats.recalcLocalStats(this);
+        stats.OnCalculateLocalStats(this);
     }
 
     public int getLuk() {
@@ -10362,12 +10362,12 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void setLuk(int luk) {
         this.luk = luk;
-        stats.recalcLocalStats(this);
+        stats.OnCalculateLocalStats(this);
     }
 
     public void setDex(int dex) {
         this.dex = dex;
-        stats.recalcLocalStats(this);
+        stats.OnCalculateLocalStats(this);
     }
 
     public void gainVPoints(int amount) {

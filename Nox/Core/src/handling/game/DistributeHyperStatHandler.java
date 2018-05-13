@@ -42,7 +42,7 @@ public class DistributeHyperStatHandler implements ProcessPacket<ClientSocket> {
             if (remainingHyperStat > 0 && remainingHyperStat >= requiredHyperStat && nextSkillLevel <= skill.getMaxLevel()) {
                 chr.changeSkillLevel(skill, nextSkillLevel, (byte) skill.getMaxLevel());
                 chr.changed_skills = true;
-                chr.getStat().recalcLocalStats(chr);
+                chr.getStat().OnCalculateLocalStats(chr);
                 return;
             }
 

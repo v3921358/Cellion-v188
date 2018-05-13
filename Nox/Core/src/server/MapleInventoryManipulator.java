@@ -75,7 +75,7 @@ public class MapleInventoryManipulator {
             return newSlot;
         }
         if (GameConstants.isHarvesting(item.getItemId())) {
-            c.getPlayer().getStat().handleProfessionTool(c.getPlayer());
+            c.getPlayer().getStat().OnProfessionToolRequest(c.getPlayer());
         }
 
         List<ModifyInventory> mod = new ArrayList<>();
@@ -222,7 +222,7 @@ public class MapleInventoryManipulator {
                 mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, nEquip));
                 c.SendPacket(WvsContext.inventoryOperation(true, mod));
                 if (GameConstants.isHarvesting(itemId)) {
-                    c.getPlayer().getStat().handleProfessionTool(c.getPlayer());
+                    c.getPlayer().getStat().OnProfessionToolRequest(c.getPlayer());
                 }
             } else {
                 throw new InventoryException("Trying to create equip with non-one quantity");
@@ -447,7 +447,7 @@ public class MapleInventoryManipulator {
                 mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
                 c.SendPacket(WvsContext.inventoryOperation(true, mod));
                 if (GameConstants.isHarvesting(item.getItemId())) {
-                    c.getPlayer().getStat().handleProfessionTool(c.getPlayer());
+                    c.getPlayer().getStat().OnProfessionToolRequest(c.getPlayer());
                 }
             } else {
                 throw new RuntimeException("Trying to create equip with non-one quantity");
@@ -517,7 +517,7 @@ public class MapleInventoryManipulator {
             final boolean allowZero = consume && GameConstants.isRechargable(item.getItemId());
             c.getPlayer().getInventory(type).removeItem(slot, quantity, allowZero);
             if (GameConstants.isHarvesting(item.getItemId())) {
-                c.getPlayer().getStat().handleProfessionTool(c.getPlayer());
+                c.getPlayer().getStat().OnProfessionToolRequest(c.getPlayer());
             }
 
             List<ModifyInventory> mod = new ArrayList<>();
@@ -628,7 +628,7 @@ public class MapleInventoryManipulator {
         final short slotMax = ii.getSlotMax(source.getItemId());
         c.getPlayer().getInventory(type).move(src, dst, slotMax);
         if (GameConstants.isHarvesting(source.getItemId())) {
-            c.getPlayer().getStat().handleProfessionTool(c.getPlayer());
+            c.getPlayer().getStat().OnProfessionToolRequest(c.getPlayer());
         }
         List<ModifyInventory> mod = new ArrayList<>();
         if (!type.equals(MapleInventoryType.EQUIP) && initialTarget != null
@@ -638,7 +638,7 @@ public class MapleInventoryManipulator {
                 && !GameConstants.isRechargable(source.getItemId())
                 && !type.equals(MapleInventoryType.CASH)) {
             if (GameConstants.isHarvesting(initialTarget.getItemId())) {
-                c.getPlayer().getStat().handleProfessionTool(c.getPlayer());
+                c.getPlayer().getStat().OnProfessionToolRequest(c.getPlayer());
             }
             if ((olddstQ + oldsrcQ) > slotMax) {
                 mod.add(new ModifyInventory(ModifyInventoryOperation.UpdateQuantity, source));
@@ -924,7 +924,7 @@ public class MapleInventoryManipulator {
         } else {
             c.getPlayer().getInventory(type).removeSlot(src);
             if (GameConstants.isHarvesting(source.getItemId())) {
-                c.getPlayer().getStat().handleProfessionTool(c.getPlayer());
+                c.getPlayer().getStat().OnProfessionToolRequest(c.getPlayer());
             }
             List<ModifyInventory> mod = new ArrayList<>();
             mod.add(new ModifyInventory(ModifyInventoryOperation.Remove, source));

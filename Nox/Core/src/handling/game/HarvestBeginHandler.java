@@ -30,7 +30,7 @@ public final class HarvestBeginHandler implements ProcessPacket<ClientSocket> {
         }
         Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((short) c.getPlayer().getStat().harvestingTool);
         if (item == null || ((Equip) item).getDurability() == 0) {
-            c.getPlayer().getStat().handleProfessionTool(c.getPlayer());
+            c.getPlayer().getStat().OnProfessionToolRequest(c.getPlayer());
             return;
         }
         QuestStatus marr = c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.HARVEST_TIME));

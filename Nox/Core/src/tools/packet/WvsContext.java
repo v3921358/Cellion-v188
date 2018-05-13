@@ -370,7 +370,7 @@ public class WvsContext {
     }
     
     public static OutPacket enableActions() {
-        return OnPlayerStatChanged(null, new EnumMap<>(Stat.class));
+        return OnPlayerStatChanged(null, new EnumMap<>(Stat.class), true, (byte) 0, (byte) 0, (byte) 0, (byte) 0, false, 0, 0); 
     }
     
     /**

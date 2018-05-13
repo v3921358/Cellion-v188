@@ -2178,6 +2178,34 @@ public class CField {
         return oPacket;
     }
 
+    public static OutPacket OnShowChair(int nCharacterID, int nChairID) {
+        return OnShowChair(nCharacterID, nChairID, 0, 0);
+    }
+    
+    public static OutPacket OnShowChair(int nCharacterID, int nChairID, int nTowerChair, int bMessage) {
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetActivePortableChair.getValue());
+
+        oPacket.EncodeInt(nCharacterID);
+        oPacket.EncodeInt(nChairID);
+        
+        oPacket.EncodeInt(bMessage);
+        if (bMessage > 0) {
+            oPacket.EncodeString(""); // sMessage
+        }
+        
+        oPacket.EncodeInt(nTowerChair);
+        if (nTowerChair > 0) {
+            oPacket.EncodeInt(0); // nTowerChairSize
+        }
+        
+        oPacket.EncodeInt(0); // nMesoChairCount
+        
+        oPacket.EncodeInt(0); // nUnk GMS
+        oPacket.EncodeInt(0); // nUnk GMS
+
+        return oPacket;
+    }
+    
     public static OutPacket showChair(int characterid, int itemid) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetActivePortableChair.getValue());

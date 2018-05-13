@@ -55,7 +55,7 @@ public final class LeavePvpHandler implements ProcessPacket<ClientSocket> {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         c.SendPacket(WvsContext.clearMidMsg());
         c.getPlayer().changeMap(c.getChannelServer().getMapFactory().getMap(960000000));
-        c.getPlayer().getStat().recalcLocalStats(c.getPlayer());
+        c.getPlayer().getStat().OnCalculateLocalStats(c.getPlayer());
         c.getPlayer().getStat().heal(c.getPlayer());
     }
 

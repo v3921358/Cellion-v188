@@ -28,7 +28,7 @@ import net.InPacket;
 import net.ProcessPacket;
 
 /**
- *
+ * KaiserSkillShortcut
  * @author Mazen Massoud
  */
 public final class KaiserSkillShortcut implements ProcessPacket<ClientSocket> {
@@ -40,10 +40,10 @@ public final class KaiserSkillShortcut implements ProcessPacket<ClientSocket> {
 
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
-        final User chr = c.getPlayer();
-        if ((chr == null) || (chr.getMap() == null)) {
+        final User pPlayer = c.getPlayer();
+        if ((pPlayer == null) || (pPlayer.getMap() == null)) {
             return;
         }
-        PlayerHandler.KaiserSkillShortcut(iPacket, chr);
+        PlayerHandler.KaiserSkillShortcut(iPacket, pPlayer);
     }
 }
