@@ -1497,9 +1497,8 @@ public class PlayerStats implements Serializable {
                 pSkill = SkillFactory.getSkill(Warrior.IRON_BODY);
                 nSLV = pPlayer.getTotalSkillLevel(pSkill);
                 if (nSLV > 0) {
-                    localmaxhp_ += pSkill.getEffect(nSLV).getPercentHP();
+                    percent_hp += pSkill.getEffect(nSLV).getPercentHP();
                     def += pSkill.getEffect(nSLV).getPDDX();
-                    System.out.println(def);
                 }
                 pSkill = SkillFactory.getSkill(Warrior.WARRIOR_MASTERY);
                 nSLV = pPlayer.getTotalSkillLevel(pSkill);
