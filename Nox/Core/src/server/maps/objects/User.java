@@ -1581,7 +1581,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         try (Connection con = Database.GetConnection()) {
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO characters (level, str, dex, luk, `int`, hp, mp, maxhp, maxmp, sp, hsp, ap, skincolor, gender, job, hair, face, zeroBetaHair, zeroBetaFace, angelicDressupHair, angelicDressupFace, angelicDressupSuit, faceMarking, ears, tail, map, meso, party, buddyCapacity, pets, subcategory, elf, friendshippoints, gm, accountid, name, world, starterquest, starterquestid, evoentry, position)"
-                    + "                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", RETURN_GENERATED_KEYS)) {
+                    + "                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", RETURN_GENERATED_KEYS)) {
                 int index = 0;
                 ps.setInt(++index, chr.level); // Level
                 final PlayerStats stat = chr.stats;

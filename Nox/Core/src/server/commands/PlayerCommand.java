@@ -41,6 +41,7 @@ public class PlayerCommand {
         public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().yellowMessage("----------------- PLAYER COMMANDS -----------------");
             c.getPlayer().yellowMessage("@support <message> : Send a message to availible staff members.");
+            c.getPlayer().yellowMessage("@job : Job advance, applicable if you have missed an advancement and meet the requirement.");
             c.getPlayer().yellowMessage("@wallet : Displays account currency information.");
             c.getPlayer().yellowMessage("@dispose : Enables your character's actions when stuck.");
             c.getPlayer().yellowMessage("@event : Quick travel to the current event, if available.");
