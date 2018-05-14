@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS `bosstime` (
+  `nIncrementKey` int(11) NOT NULL AUTO_INCREMENT,
+  `dwAccountID` int(11) NOT NULL DEFAULT '0',
+  `tHila` bigint(20) NOT NULL DEFAULT '0',
+  `tZakum` bigint(20) NOT NULL DEFAULT '0',
+  `tHorntail` bigint(20) NOT NULL DEFAULT '0',
+  `tRanmaru` bigint(20) NOT NULL DEFAULT '0',
+  `tCrimsonQueen` bigint(20) NOT NULL DEFAULT '0',
+  `tPierre` bigint(20) NOT NULL DEFAULT '0',
+  `tVonBon` bigint(20) NOT NULL DEFAULT '0',
+  `tVellum` bigint(20) NOT NULL DEFAULT '0',
+  `tLotus` bigint(20) NOT NULL DEFAULT '0',
+  `tUrsus` bigint(20) NOT NULL DEFAULT '0',
+  `tArkarium` bigint(20) NOT NULL DEFAULT '0',
+  `tCygnus` bigint(20) NOT NULL DEFAULT '0',
+  `tMagnus` bigint(20) NOT NULL DEFAULT '0',
+  `tLucid` bigint(20) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`nIncrementKey`),
+  KEY `dwAccountID` (`dwAccountID`),
+  CONSTRAINT `bosstime_ibfk_1` FOREIGN KEY (`dwAccountID`) REFERENCES `accounts` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2543 DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;

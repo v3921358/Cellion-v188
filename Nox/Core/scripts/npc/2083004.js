@@ -2,7 +2,7 @@
 	Mark of the Squad
 	Horntail Pre-Boss Arena NPC
     
-	@author Mazen
+	@author Mazen Massoud
 */
 
 load("nashorn:mozilla_compat.js");
@@ -19,7 +19,7 @@ function action(mode, type, selection) {
 			var sendString = "\r\nWelcome #h #, to the #bCave of Life#k!\r\n\tBefore you lays the almighty Horntail, a power-hungry\r\n\tdragon who distorts his surroundings with evil.\r\n\tWhat would you like to do?\r\n"
 							+ "#r#L0#(Solo Boss Fight) #dEnter the depths of Horntail's Lair alone!#k\r\n"
 							+ "#r#L1#(Party Boss Fight) #dTake on the mighty Horntail with your squad!#k\r\n"
-							+ "#r#L2#(Leave) #dRetreat to Henesys!#k\r\n";
+							+ "#r#L2#(Leave) #dRetreat to Free Market!#k\r\n";
 			
 			cm.sendSimple(sendString);
 		} else if (status == 1) {
@@ -29,12 +29,18 @@ function action(mode, type, selection) {
 			}
 			switch(selection) {
 				case 0: // Solo
-					if (cm.getPlayerCount(240060200) == 0) {
-						cm.resetMap(240060200);
-						cm.warp(240060200, 0);
-						cm.dispose();
+					if (cm.getPlayer().canAttemptBoss("HORNTAIL")) {
+						if (cm.getPlayerCount(240060200) == 0) {
+							cm.getPlayer().setBossAttempt("HORNTAIL");
+							cm.resetMap(240060200);
+							cm.warp(240060200, 0);
+							cm.dispose();
+						} else {
+							cm.sendOk("Sorry, looks like another expedition squad is currently fighting Horntail on this channel. You will be able to enter once they are finished or you can attempt the expedition on another channel.");
+							cm.dispose();
+						}
 					} else {
-						cm.sendOk("Sorry, looks like another expedition squad is currently fighting Horntail on this channel. You will be able to enter once they are finished or you can attempt the expedition on another channel.");
+						cm.sendOk("\tSorry, looks like you have fought Horntail recently.\r\n\t#bPlease try again later.");
 						cm.dispose();
 					}
 					break;
@@ -45,9 +51,15 @@ function action(mode, type, selection) {
 								cm.sendOk("The leader of your party must be the one to start the expedition.");
 								cm.dispose();
 							} else {
-								cm.resetMap(240060200);
-								cm.warpParty(240060200);
-								cm.dispose();
+								if (cm.getPlayer().canPartyAttemptBoss("HORNTAIL")) {
+									cm.getPlayer().setPartyBossAttempt("HORNTAIL");
+									cm.resetMap(240060200);
+									cm.warpParty(240060200);
+									cm.dispose();
+								} else {
+									cm.sendOk("\tSorry, looks like you have fought Horntail recently.\r\n\t#bPlease try again later.");
+									cm.dispose();
+								}
 							}
 						} else {
 							cm.sendOk("All party members must be here in order to start the expedition.\r\n#rPlease make sure you are in a party before starting the expedition.");
@@ -59,7 +71,7 @@ function action(mode, type, selection) {
 					}
 					break;
 				case 2: // Home
-					cm.warp(100000000, 0);
+					cm.warp(910000000, 0);
 					cm.dispose();
 					break;
 				default:

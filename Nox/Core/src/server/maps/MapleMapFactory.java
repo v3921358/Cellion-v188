@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 import constants.NPCConstants;
+import constants.ServerConstants;
 import provider.MapleData;
 import provider.wz.nox.NoxBinaryReader;
 import provider.wz.cache.WzDataStorage;

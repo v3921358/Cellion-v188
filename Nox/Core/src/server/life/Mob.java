@@ -38,6 +38,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.OutPacket;
+import tools.Utility;
 
 public class Mob extends AbstractLoadedMapleLife {
 
@@ -212,21 +213,9 @@ public class Mob extends AbstractLoadedMapleLife {
                 case 8240099: // Lotus
                 case 8930000: // Chaos Vellum
                     from.dropMessage(-1, "Developer Instant Kill");
-                    damage = 2100000000;
+                    getStats().setHp(1);
                     break;
             }
-        }
-
-        // Lotus Buffed Damage Reduction
-        if (this.getId() == 8240099) {
-            damage /= 10;
-        }
-
-        //Buffed Bosses & Monsters
-        boolean buffedMob = this.getId() == 8880000 //Magnus
-                || this.getId() == 8880001;
-        if (buffedMob && ServerConstants.BUFFED_BOSSES) {
-            damage /= 5;
         }
 
         if (ServerConstants.DEVELOPER_DEBUG_MODE) {
@@ -409,64 +398,65 @@ public class Mob extends AbstractLoadedMapleLife {
      * Gives experience to a player after a monster has been killed. This also handles the additional EXP acquired through other variables
      * such as item buff, map, party bonus, etc
      *
-     * @param attacker
-     * @param lastskillID
-     * @param baseEXP
-     * @param partybonusMultiplier -- The party bonus in percentage to give to this character for being in a party
-     * @param highestDamage
-     * @param numExpSharers
+     * @param pPlayer
+     * @param nLastSkillID
+     * @param nBaseEXP
+     * @param nPartybonusMultiplier -- The party bonus in percentage to give to this character for being in a party
+     * @param bHighestDamage
+     * @param nExpSharers
      * @param PartyBonusPercentage
-     * @param Class_Bonus_EXP_PERCENT
-     * @param Premium_Bonus_EXP_PERCENT
-     * @param burningFieldBonusEXPRate - The burning field bonus EXP in percentage (eg: 20%, 30%) [This parameter is pushed to avoid
+     * @param nClassBonusEXPPercentage
+     * @param nPremiumBonusEXPPercentage
+     * @param nBurningFieldBonusEXPRate - The burning field bonus EXP in percentage (eg: 20%, 30%) [This parameter is pushed to avoid
      * multiple calls to MapleMap.getBurningFieldBonus() per character, since its all the same]
-     * @param isKiller - Determines if this character receiving the EXP is the one who had the last hit.
+     * @param bKiller - Determines if this character receiving the EXP is the one who had the last hit.
      */
-    private void giveExpToCharacter(User attacker, boolean isKiller, long baseEXP,
-            int partybonusMultiplier, boolean highestDamage, int numExpSharers, byte partySize, int fieldPartyBonusPercentage,
-            byte Class_Bonus_EXP_PERCENT, byte Premium_Bonus_EXP_PERCENT, int burningFieldBonusEXPRate,
-            int lastskillID) {
+    private void giveExpToCharacter(User pPlayer, boolean bKiller, long nBaseEXP,
+            int nPartybonusMultiplier, boolean bHighestDamage, int nExpSharers, byte nPartySize, int nFieldPartyBonusEXPPercentage,
+            byte nClassBonusEXPPercentage, byte nPremiumBonusEXPPercentage, int nBurningFieldBonusEXPRate,
+            int nLastSkillID) {
 
-        monsterNxGainResult(attacker, isKiller);
+        OnNxGainRequest(pPlayer, bKiller);
+        OnMesoDropRequest(pPlayer);
 
-        if (highestDamage) {
+        if (bHighestDamage) {
             if (eventInstance != null) {
-                eventInstance.monsterKilled(attacker, this);
+                eventInstance.monsterKilled(pPlayer, this);
             } else {
-                EventInstanceManager em = attacker.getEventInstance();
+                EventInstanceManager em = pPlayer.getEventInstance();
                 if (em != null) {
-                    em.monsterKilled(attacker, this);
+                    em.monsterKilled(pPlayer, this);
                 }
             }
-            highestDamageChar = attacker.getId();
+            highestDamageChar = pPlayer.getId();
         }
 
-        if (baseEXP > 0) {
+        if (nBaseEXP > 0) {
             EnumMap<ExpGainTypes, Integer> expIncreaseStats = new EnumMap<>(ExpGainTypes.class);
 
             // Server EXP Rate
-            double expRate_Server = ChannelServer.getInstance(map.getChannel()).getExpRate(attacker.getWorld());
+            double expRate_Server = ChannelServer.getInstance(map.getChannel()).getExpRate(pPlayer.getWorld());
 
             if (expRate_Server > 1) {
-                baseEXP *= expRate_Server;
+                nBaseEXP *= expRate_Server;
             }
 
-            long totalEXPGained = baseEXP;
+            long totalEXPGained = nBaseEXP;
             long bonusEXPGained = 0; //bonus EXP do not get shown to the user via the main EXP gained.
 
             ///
             ///  Accounting for additional EXP gain here. These orders are according to ExpGainTypes, as acquired from the client.
             ///
             // Exp Coupons
-            if (attacker.haveItem(GameConstants._200PercentExpBoost)) {
+            if (pPlayer.haveItem(GameConstants._200PercentExpBoost)) {
                 totalEXPGained *= 2;
-            } else if (attacker.haveItem(GameConstants._150PercentExpBoost)) {
+            } else if (pPlayer.haveItem(GameConstants._150PercentExpBoost)) {
                 totalEXPGained *= 1.5;
             }
 
             // 2x coupons rate
-            if (attacker.getStat().expMod > 1.0f) {
-                totalEXPGained *= attacker.getStat().expMod;
+            if (pPlayer.getStat().expMod > 1.0f) {
+                totalEXPGained *= pPlayer.getStat().expMod;
             }
             // Double time rate
             if (ServerConstants.DOUBLE_TIME) {
@@ -475,106 +465,106 @@ public class Mob extends AbstractLoadedMapleLife {
             // Showdown skill
             MonsterStatusEffect ms = stati.get(MonsterStatus.SHOWDOWN);
             if (ms != null) {
-                totalEXPGained += (int) (baseEXP * (ms.getX() / 100.0));
+                totalEXPGained += (int) (nBaseEXP * (ms.getX() / 100.0));
 
             }
 
             // Party bonus
-            if (partybonusMultiplier > 0) {
-                int partyBonusAdditionalEXP = (int) (baseEXP * (partybonusMultiplier / 100f));
+            if (nPartybonusMultiplier > 0) {
+                int partyBonusAdditionalEXP = (int) (nBaseEXP * (nPartybonusMultiplier / 100f));
                 bonusEXPGained += partyBonusAdditionalEXP;
 
                 expIncreaseStats.put(ExpGainTypes.PartyBonus, partyBonusAdditionalEXP);
-                expIncreaseStats.put(ExpGainTypes.PartyBonusPercentage, partybonusMultiplier);
+                expIncreaseStats.put(ExpGainTypes.PartyBonusPercentage, nPartybonusMultiplier);
             }
 
             // Holy symbol
-            Integer holySymbol = attacker.getBuffedValue(CharacterTemporaryStat.HolySymbol);
+            Integer holySymbol = pPlayer.getBuffedValue(CharacterTemporaryStat.HolySymbol);
             if (holySymbol != null) {
                 double partybonusPercentage = (holySymbol.doubleValue() / 100.0f);
-                int holySymbolAdditionalEXP = (int) (baseEXP * partybonusPercentage);
+                int holySymbolAdditionalEXP = (int) (nBaseEXP * partybonusPercentage);
                 bonusEXPGained += holySymbolAdditionalEXP;
 
                 expIncreaseStats.put(ExpGainTypes.BaseAddExp, holySymbolAdditionalEXP);
             }
 
             // Equipment bonus EXP [fairy]
-            if (attacker.getStat().equippedFairy > 0 && attacker.getFairyExp() > 0) {          //  Equipment_Bonus_EXP = (int) ((exp / 100.0) * attacker.getStat().equipmentBonusExp);
-                int fairyBonusEXP = (int) ((baseEXP / 100.0) * attacker.getFairyExp());
+            if (pPlayer.getStat().equippedFairy > 0 && pPlayer.getFairyExp() > 0) {          //  Equipment_Bonus_EXP = (int) ((exp / 100.0) * attacker.getStat().equipmentBonusExp);
+                int fairyBonusEXP = (int) ((nBaseEXP / 100.0) * pPlayer.getFairyExp());
                 bonusEXPGained += fairyBonusEXP;
 
                 expIncreaseStats.put(ExpGainTypes.ItemBonus, fairyBonusEXP);
             }
 
             // Exp buff bonus
-            if (attacker.getStat().expBuff > 100) {
-                int bonusAdditionalEXP = (int) (baseEXP * (attacker.getStat().expBuff / 100.0f));
+            if (pPlayer.getStat().expBuff > 100) {
+                int bonusAdditionalEXP = (int) (nBaseEXP * (pPlayer.getStat().expBuff / 100.0f));
                 bonusEXPGained += bonusAdditionalEXP;
 
                 expIncreaseStats.put(ExpGainTypes.ExpBuffBonus, bonusAdditionalEXP);
             }
 
             // Class bonus EXP
-            if (Class_Bonus_EXP_PERCENT > 0) {
-                int psdBonusExp = (int) ((baseEXP / 100.0) * Class_Bonus_EXP_PERCENT);
+            if (nClassBonusEXPPercentage > 0) {
+                int psdBonusExp = (int) ((nBaseEXP / 100.0) * nClassBonusEXPPercentage);
                 bonusEXPGained += psdBonusExp;
 
                 expIncreaseStats.put(ExpGainTypes.PsdBonus, psdBonusExp);
             }
 
-            if (attacker.getStat().expMod_ElveBlessing >= 1.0) {
-                int psdBonusExp = (int) (baseEXP * (attacker.getStat().expMod_ElveBlessing - 1.0f));
+            if (pPlayer.getStat().expMod_ElveBlessing >= 1.0) {
+                int psdBonusExp = (int) (nBaseEXP * (pPlayer.getStat().expMod_ElveBlessing - 1.0f));
                 bonusEXPGained += psdBonusExp;
 
                 expIncreaseStats.put(ExpGainTypes.PsdBonus, psdBonusExp);
             }
 
             // premium bonus
-            if (Premium_Bonus_EXP_PERCENT > 0) {
-                int premiumBonusExp = (int) ((baseEXP / 100.0) * Premium_Bonus_EXP_PERCENT);
+            if (nPremiumBonusEXPPercentage > 0) {
+                int premiumBonusExp = (int) ((nBaseEXP / 100.0) * nPremiumBonusEXPPercentage);
                 bonusEXPGained += premiumBonusExp;
 
                 expIncreaseStats.put(ExpGainTypes.PremiumIpBonus, premiumBonusExp);
             }
 
             // Indie EXP rate [rune]
-            if (attacker.getStat().indieExpBuff > 100) {
-                int indieExpAdditionalEXP = (int) (baseEXP * ((attacker.getStat().indieExpBuff - 100) / 100.0f));
+            if (pPlayer.getStat().indieExpBuff > 100) {
+                int indieExpAdditionalEXP = (int) (nBaseEXP * ((pPlayer.getStat().indieExpBuff - 100) / 100.0f));
                 bonusEXPGained += indieExpAdditionalEXP;
 
                 expIncreaseStats.put(ExpGainTypes.IndieBonus, indieExpAdditionalEXP);
             }
 
             // Burning field bonus EXP
-            if (burningFieldBonusEXPRate > 0) {
-                int burningFieldBonusEXP = (int) (baseEXP * (burningFieldBonusEXPRate / 100f));
+            if (nBurningFieldBonusEXPRate > 0) {
+                int burningFieldBonusEXP = (int) (nBaseEXP * (nBurningFieldBonusEXPRate / 100f));
                 bonusEXPGained += burningFieldBonusEXP;
 
                 expIncreaseStats.put(ExpGainTypes.RestFieldBonus, burningFieldBonusEXP);
             }
 
             // Map bonus EXP
-            if (fieldPartyBonusPercentage >= 0) {
-                int fieldPartyMapBonusEXP = (int) (baseEXP * (fieldPartyBonusPercentage / 100f));
+            if (nFieldPartyBonusEXPPercentage >= 0) {
+                int fieldPartyMapBonusEXP = (int) (nBaseEXP * (nFieldPartyBonusEXPPercentage / 100f));
                 bonusEXPGained += fieldPartyMapBonusEXP;
 
                 expIncreaseStats.put(ExpGainTypes.FieldBonus, fieldPartyMapBonusEXP);
             }
 
             //////////////// Cursed, put this last.
-            if (attacker.hasDisease(MapleDisease.CURSE)) {
+            if (pPlayer.hasDisease(MapleDisease.CURSE)) {
                 totalEXPGained /= 2;
                 bonusEXPGained /= 2;
             }
-            attacker.gainExp(totalEXPGained, bonusEXPGained, true, highestDamage, false, burningFieldBonusEXPRate, expIncreaseStats);
+            pPlayer.gainExp(totalEXPGained, bonusEXPGained, true, bHighestDamage, false, nBurningFieldBonusEXPRate, expIncreaseStats);
 
             // Others - Trait
-            attacker.getTrait(MapleTraitType.charisma).addExp(stats.getCharismaEXP(), attacker);
+            pPlayer.getTrait(MapleTraitType.charisma).addExp(stats.getCharismaEXP(), pPlayer);
 
         }
 
         // For quest kills
-        attacker.mobKilled(stats.getName(), getId(), lastskillID);
+        pPlayer.mobKilled(stats.getName(), getId(), nLastSkillID);
     }
 
     public int killBy(User killer, int lastSkill) {
@@ -1537,35 +1527,48 @@ public class Mob extends AbstractLoadedMapleLife {
         return temporaryStat;
     }
 
-    /*
-     *  Monster NX Drop System
-     *  @author Mazen Massoud
-     *
-     *  @purpose Provide the player will NX upon killing a monster, 
-     *  with the value varrying based on multiple factors.
+    /**
+     * Monster Meso Drop System
+     * @author Mazen Massoud
+     * 
+     * @param pPlayer
+     * @purpose Request to drop bag of Mesos, used for Global Meso Drops without database clutter.
      */
-    public void monsterNxGainResult(User pPlayer, boolean bKiller) {
-
-        long nMobHp = getMobMaxHp();
-        short nMobLv = stats.getLevel();
-
-        if (nMobHp > 175000000) { // Caps the the HP at this value for the calculation.
-            nMobHp = 175000000;
+    public void OnMesoDropRequest(User pPlayer) {
+        long nMobLv = stats.getLevel();
+        
+        int nMinRange = (int) nMobLv * 100; // Meso Drop Formula
+        int nMaxRange = (int) Math.round(nMinRange * 1.25); // Amount Meso Drop can randomize up to.
+        int nResultMeso = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1))); // Formula to produce a value between the specified range.
+        
+        if(Utility.resultSuccess(40)) {
+            // TODO: Drop Meso Bag
         }
+    }
+    
+    /**
+     * Monster NX Drop System
+     * @author Mazen Massoud
+     *
+     * @param pPlayer
+     * @param bKiller
+     * @purpose Provide the player will NX upon killing a monster, 
+     * with the value based on multiple factors.
+     */
+    public void OnNxGainRequest(User pPlayer, boolean bKiller) {
 
-        int nMinRange = (int) (nMobHp * 0.00000105) + (nMobLv / 3) + 1; // NX Gain Formula
-        int nMaxRange = (int) Math.round(nMinRange * 1.25); // Amount NX Gain can go up to.
-        int nResultNx = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1))); // Formula to produce a value between the specified range.
+        long nMobHP = getMobMaxHp();
+        short nMobLV = stats.getLevel();
+        if (nMobHP > 1000000000L) nMobHP = 1000000000L;                                         // Caps the the HP at this value for the calculation.
 
-        int nGainChance = 40; // Base NX Drop Chance %
+        int nMinRange = (int) (nMobHP / 200000) + (nMobLV * 5);                                 // NX Gain Formula
+        int nMaxRange = (int) Math.round(nMinRange * 1.25);                                     // Amount NX Gain can go up to.
+        int nResultNx = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1)));    // Formula to produce a value between the specified range.
 
-        if (!bKiller) { // Leechers Gain
-            nResultNx *= 0.4; // Cap at 40%
-        }
+        int nGainChance = 40;                                                                   // Base NX Drop Chance %
 
-        if (Randomizer.nextInt(100) < nGainChance) {
-            pPlayer.gainNX(nResultNx, true);
-        }
+        if (!bKiller) nResultNx *= 0.4;                                                         // Reduce amount gained if Player is not the killer of the mob.
+        if (Utility.resultSuccess(nGainChance)) pPlayer.gainNX(nResultNx, true);                // Award the Player with the NX gained if chance succeeds.
     }
 
     // <editor-fold defaultstate="visible" desc="Attacks & EXP Handling"> 
