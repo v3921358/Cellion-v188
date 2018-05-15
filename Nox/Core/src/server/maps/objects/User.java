@@ -1581,7 +1581,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         try (Connection con = Database.GetConnection()) {
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO characters (level, str, dex, luk, `int`, hp, mp, maxhp, maxmp, sp, hsp, ap, skincolor, gender, job, hair, face, zeroBetaHair, zeroBetaFace, angelicDressupHair, angelicDressupFace, angelicDressupSuit, faceMarking, ears, tail, map, meso, party, buddyCapacity, pets, subcategory, elf, friendshippoints, gm, accountid, name, world, starterquest, starterquestid, evoentry, position)"
-                    + "                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", RETURN_GENERATED_KEYS)) {
+                                                           + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", RETURN_GENERATED_KEYS)) {
                 int index = 0;
                 ps.setInt(++index, chr.level); // Level
                 final PlayerStats stat = chr.stats;
@@ -1655,7 +1655,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 ps.setInt(++index, chr.starterquestid);
                 ps.setInt(++index, chr.evoentry);
                 ps.setInt(++index, chr.charListPosition);
-                ps.setInt(++index, 0);
                 ps.executeUpdate();
 
                 ResultSet rs = ps.getGeneratedKeys();
@@ -1669,6 +1668,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 }
                 rs.close();
             } catch (SQLException e) {
+                System.out.println("issue....");
                 LogHelper.SQL.get().info("Could not save character:\n{}", e);
             }
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO queststatus (`queststatusid`, `characterid`, `quest`, `status`, `time`, `forfeited`, `customData`) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?)", RETURN_GENERATED_KEYS)) {

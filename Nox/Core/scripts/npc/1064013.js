@@ -23,7 +23,7 @@ function action(mode, type, selection) {
 							+ "#r#L1#(Party Boss Fight) #dFight Von Bon with your squad!#l#k\r\n"
 							+ "\r\n\r\n\r\n \t\t\t\t\t\t\t\t\t\t #v03994442# \r\n#r#L2#(Solo Boss Fight) #dFace Chaos Von Bon alone!#l#k\r\n"
 							+ "#r#L3#(Party Boss Fight) #dFight Chaos Von Bon together!#l#k\r\n\r\n"
-							+ "\r\n#r#L4#(Leave) #dRetreat to Henesys.#l#k\r\n";
+							+ "\r\n#r#L4#(Leave) #dRetreat to Free Market!#l#k\r\n";
 			
 			cm.sendSimple(sendString);
 		} else if (status == 1) {
@@ -33,13 +33,19 @@ function action(mode, type, selection) {
 			}
 			switch(selection) {
 				case 0: // Solo
-					if (cm.getPlayerCount(105200120) == 0) {
-						cm.resetMap(105200120);
-						cm.warp(105200120, 0);
-						cm.spawnMonsterInMap(105200120, 8910100, 326, 245); // Map, Mob, Pos X, Pos Y.
-						cm.dispose();
+					if (cm.getPlayer().canAttemptBoss("VONBON")) {
+						if (cm.getPlayerCount(105200120) == 0) {
+							cm.getPlayer().setBossAttempt("VONBON");
+							cm.resetMap(105200120);
+							cm.warp(105200120, 0);
+							cm.spawnMonsterInMap(105200120, 8910100, 326, 245); // Map, Mob, Pos X, Pos Y.
+							cm.dispose();
+						} else {
+							cm.sendOk("Sorry, looks like another expedition squad is currently fighting Von Bon on this channel. You will be able to enter once they are finished or you can attempt the expedition on another channel.");
+							cm.dispose();
+						}
 					} else {
-						cm.sendOk("Sorry, looks like another expedition squad is currently fighting Von Bon on this channel. You will be able to enter once they are finished or you can attempt the expedition on another channel.");
+						cm.sendOk("\tSorry, looks like you have fought Von Bon recently.\r\n\t#bPlease try again later.");
 						cm.dispose();
 					}
 					break;
@@ -50,10 +56,16 @@ function action(mode, type, selection) {
 								cm.sendOk("The leader of your party must be the one to start the expedition.");
 								cm.dispose();
 							} else {
-								cm.resetMap(105200120);
-								cm.warpParty(105200120);
-								cm.spawnMonsterInMap(105200120, 8910100, 326, 245); // Map, Mob, Pos X, Pos Y.
-								cm.dispose();
+								if (cm.getPlayer().canPartyAttemptBoss("VONBON")) {
+									cm.getPlayer().setPartyBossAttempt("VONBON");
+									cm.resetMap(105200120);
+									cm.warpParty(105200120);
+									cm.spawnMonsterInMap(105200120, 8910100, 326, 245); // Map, Mob, Pos X, Pos Y.
+									cm.dispose();
+								} else {
+									cm.sendOk("\tSorry, looks like you have fought Von Bon recently.\r\n\t#bPlease try again later.");
+									cm.dispose();
+								}
 							}
 						} else {
 							cm.sendOk("All party members must be here in order to start the expedition.\r\n#rPlease make sure you are in a party before starting the expedition.");
@@ -65,13 +77,19 @@ function action(mode, type, selection) {
 					}
 					break;
 				case 2: // Chaos - Solo
-					if (cm.getPlayerCount(105200520) == 0) {
-						cm.resetMap(105200520);
-						cm.warp(105200520, 0);
-						cm.spawnMonsterInMap(105200520, 8910000, 326, 245); // Map, Mob, Pos X, Pos Y.
-						cm.dispose();
+					if (cm.getPlayer().canAttemptBoss("VONBON")) {
+						if (cm.getPlayerCount(105200520) == 0) {
+							cm.getPlayer().setBossAttempt("VONBON");
+							cm.resetMap(105200520);
+							cm.warp(105200520, 0);
+							cm.spawnMonsterInMap(105200520, 8910000, 326, 245); // Map, Mob, Pos X, Pos Y.
+							cm.dispose();
+						} else {
+							cm.sendOk("Sorry, looks like another expedition squad is currently fighting Von Bon on this channel. You will be able to enter once they are finished or you can attempt the expedition on another channel.");
+							cm.dispose();
+						}
 					} else {
-						cm.sendOk("Sorry, looks like another expedition squad is currently fighting Von Bon on this channel. You will be able to enter once they are finished or you can attempt the expedition on another channel.");
+						cm.sendOk("\tSorry, looks like you have fought Von Bon recently.\r\n\t#bPlease try again later.");
 						cm.dispose();
 					}
 					break;
@@ -82,10 +100,16 @@ function action(mode, type, selection) {
 								cm.sendOk("The leader of your party must be the one to start the expedition.");
 								cm.dispose();
 							} else {
-								cm.resetMap(105200520);
-								cm.warpParty(105200520);
-								cm.spawnMonsterInMap(105200520, 8910000, 326, 245); // Map, Mob, Pos X, Pos Y.
-								cm.dispose();
+								if (cm.getPlayer().canPartyAttemptBoss("VONBON")) {
+									cm.getPlayer().setPartyBossAttempt("VONBON");
+									cm.resetMap(105200520);
+									cm.warpParty(105200520);
+									cm.spawnMonsterInMap(105200520, 8910000, 326, 245); // Map, Mob, Pos X, Pos Y.
+									cm.dispose();
+								} else {
+									cm.sendOk("\tSorry, looks like you have fought Von Bon recently.\r\n\t#bPlease try again later.");
+									cm.dispose();
+								}
 							}
 						} else {
 							cm.sendOk("All party members must be here in order to start the expedition.\r\n#rPlease make sure you are in a party before starting the expedition.");
@@ -97,7 +121,7 @@ function action(mode, type, selection) {
 					}
 					break;
 				case 4: // Home
-					cm.warp(100000000, 0);
+					cm.warp(910000000, 0);
 					cm.dispose();
 					break;
 				default:
