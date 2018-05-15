@@ -17,6 +17,7 @@
 9040008 - Guild Rank Board
 
 2500000 - Boss Warper (Skylark Rita)
+
 2083004 - Horntail Pre-Boss Arena NPC
 2041024 - Papulatus Pre-Boss Arena NPC
 2159355 - Magnus Pre-Boss Arena NPC

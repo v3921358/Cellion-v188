@@ -37,13 +37,19 @@ function action(mode, type, selection) {
 			}
 			switch(selection) {
 				case 0: // Solo
-					if (cm.getPlayerCount(807300210) == 0) {
-						cm.resetMap(807300210);
-						cm.warp(807300210, 0);
-						cm.spawnMonsterInMap(807300210, 9421581, -315, -123); 
-						cm.dispose();
+					if (cm.getPlayer().canAttemptBoss("RANMARU")) {
+						if (cm.getPlayerCount(807300210) == 0) {
+							cm.getPlayer().setBossAttempt("RANMARU");
+							cm.resetMap(807300210);
+							cm.warp(807300210, 0);
+							cm.spawnMonsterInMap(807300210, 9421581, -315, -123); 
+							cm.dispose();
+						} else {
+							cm.sendOk("Sorry, looks like another expedition squad is currently fighting Lotus on this channel. You will be able to enter once they are finished or you can attempt the expedition on another channel.");
+							cm.dispose();
+						}
 					} else {
-						cm.sendOk("Sorry, looks like another expedition squad is currently fighting Lotus on this channel. You will be able to enter once they are finished or you can attempt the expedition on another channel.");
+						cm.sendOk("\tSorry, looks like you have fought Ranmaru recently.\r\n\t#bPlease try again later.");
 						cm.dispose();
 					}
 					break;
@@ -54,10 +60,16 @@ function action(mode, type, selection) {
 								cm.sendOk("The leader of your party must be the one to start the expedition.");
 								cm.dispose();
 							} else {
-								cm.resetMap(807300210);
-								cm.warpParty(807300210); 
-								cm.spawnMonsterInMap(807300210, 9421581, -315, 123); 
-								cm.dispose();
+								if (cm.getPlayer().canPartyAttemptBoss("RANMARU")) {
+									cm.getPlayer().setPartyBossAttempt("RANMARU");
+									cm.resetMap(807300210);
+									cm.warpParty(807300210); 
+									cm.spawnMonsterInMap(807300210, 9421581, -315, 123); 
+									cm.dispose();
+								} else {
+									cm.sendOk("\tSorry, looks like you have fought Ranmaru recently.\r\n\t#bPlease try again later.");
+									cm.dispose();
+								}
 							}
 						} else {
 							cm.sendOk("All party members must be here in order to start the expedition.\r\n#rPlease make sure you are in a party before starting the expedition.");

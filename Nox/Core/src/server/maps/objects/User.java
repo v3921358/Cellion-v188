@@ -36,13 +36,11 @@ import constants.skills.WildHunter;
 import constants.skills.Zero;
 import database.Database;
 import handling.game.AndroidEmotionChanger;
-import client.jobs.Explorer.ShadowerHandler;
 import constants.ItemConstants;
 import constants.NPCConstants;
 import handling.login.LoginInformationProvider.JobType;
 import handling.world.*;
 import net.OutPacket;
-
 import scripting.EventInstanceManager;
 import scripting.provider.NPCScriptManager;
 import server.*;
@@ -77,7 +75,6 @@ import tools.packet.JobPacket.AvengerPacket;
 import tools.packet.JobPacket.LuminousPacket;
 import tools.packet.JobPacket.PhantomPacket;
 import tools.packet.JobPacket.XenonPacket;
-
 import java.awt.*;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -93,13 +90,11 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import server.BossTimer;
 import server.skills.VMatrixRecord;
 import server.maps.objects.StopForceAtom;
 import static tools.packet.WvsContext.OnLoadAccountIDOfCharacterFriendResult;
-import static tools.packet.WvsContext.OnPlayerStatChanged;
 
 public class User extends AnimatedMapleMapObject implements Serializable, MapleCharacterLook {
 
@@ -277,6 +272,34 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      *  V: Matrix
      */
     public List<VMatrixRecord> aVMatrixRecord = new ArrayList<>();
+    
+    public boolean getVMatrixRequirement() {
+        return level > 200;
+    }
+    
+    public boolean hasVMatrix() {
+        return (getQuestStatus(34330).getValue() == 2);
+    }
+    
+    /**
+     * Gives the Player the VMatrix.
+     */
+    public void OnUserVMatrix() {
+        Quest.getInstance(2241).forceComplete(this, 0);
+        Quest.getInstance(33565).forceComplete(this, 0);
+        Quest.getInstance(31833).forceComplete(this, 0);
+        Quest.getInstance(30007).forceComplete(this, 0);
+        Quest.getInstance(3157).forceComplete(this, 0);
+        Quest.getInstance(7313).forceComplete(this, 0);
+        Quest.getInstance(31179).forceComplete(this, 0);
+        Quest.getInstance(3521).forceComplete(this, 0);
+        Quest.getInstance(31152).forceComplete(this, 0);
+        Quest.getInstance(33294).forceComplete(this, 0);
+        Quest.getInstance(34015).forceComplete(this, 0);
+        Quest.getInstance(17523).forceComplete(this, 0);
+        Quest.getInstance(58955).forceComplete(this, 0);
+        Quest.getInstance(34330).forceComplete(this, 0);
+    }
 
     /**
      * Pet Features
@@ -285,11 +308,12 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return haveItem(ItemConstants.PET_VAC);
     }
 
-    /*
-     *  Staff Variables
+    /**
+     * Staff Variables
      */
     private boolean bDisableStaffChat; // Disables special coloured chat for staff members.
     private boolean bGodMode;
+    private boolean bExtraDebug;
 
     public boolean usingStaffChat() {
         return !bDisableStaffChat;
@@ -306,37 +330,43 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void toggleGodMode(boolean bEnabled) {
         bGodMode = bEnabled;
     }
+    
+    public boolean usingExtraDebug() {
+        return bExtraDebug;
+    }
+    
+    public void setExtraDebug(boolean bEnabled) {
+        bExtraDebug = bEnabled;
+    }
 
-    /*
-     *   Boss Variables
+    /**
+     * Boss Attempt Timer System Variables/Methods
      */
-    private long nMagnusTime; // Last Magnus boss attempt.
-
-    public long getLastMagnusTime() {
-        return nMagnusTime;
+    public long tHila, tZakum, tHorntail, tRanmaru, tCrimsonQueen, tPierre, tVonBon, tVellum, tLotus, tUrsus, tArkarium, tCygnus, tMagnus, tLucid;
+    
+    public void setBossAttempt(String sBossName) {
+        BossTimer.OnSetBossAttempt(this, sBossName);
     }
-
-    public void setLastMagnusTime() {
-        if (getParty() == null) { // If player is in a party, sets the entry time for all players in the party.
-            for (MaplePartyCharacter z : getParty().getMembers()) {
-                User pPlayer = getMap().getCharacterById(z.getId());
-                pPlayer.nMagnusTime = System.currentTimeMillis();
+    
+    public void setPartyBossAttempt(String sBossName) {
+        BossTimer.OnSetBossAttempt(this, sBossName);
+        if (getParty() != null) {
+            for (MaplePartyCharacter pUser : getParty().getMembers()) {
+                User pPlayer = Utility.requestCharacter(pUser.getId());
+                BossTimer.OnSetBossAttempt(pPlayer, sBossName);
             }
-            return;
         }
-        nMagnusTime = System.currentTimeMillis();
-        saveToDB(false, false);
     }
-
-    public boolean canFightMagnus() {
-        return (System.currentTimeMillis() > nMagnusTime + 86400000);
+    
+    public boolean canAttemptBoss(String sBossName) {
+        return BossTimer.UserBossAttemptRequest(this, sBossName);
     }
-
-    public boolean canPartyFightMagnus() {
-        for (MaplePartyCharacter z : getParty().getMembers()) {
-            User pPlayer = getMap().getCharacterById(z.getId());
-            if (!pPlayer.canFightMagnus()) {
-                return false;
+    
+    public boolean canPartyAttemptBoss(String sBossName) {
+        if (getParty() != null) {
+            for (MaplePartyCharacter pUser : getParty().getMembers()) {
+                User pPlayer = Utility.requestCharacter(pUser.getId());
+                if (!pPlayer.canAttemptBoss(sBossName)) return false;
             }
         }
         return true;
@@ -720,10 +750,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
          * End of Custom Feature
          */
 
-        /*Start of Boss Features*/
-        ret.nMagnusTime = ct.magnusTime;
-        /*End of Boss Features*/
-
         ret.makeMFC(ct.familyid, ct.seniorid, ct.junior1, ct.junior2);
         if (ret.guildid > 0) {
             ret.mgc = new MapleGuildCharacter(ret);
@@ -829,6 +855,20 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         ret.isAngelicDressup = ct.isAngelicDressup;
         ret.isBurning = ct.isBurning;
         ret.aVMatrixRecord = ct.aVMatrixRecord;
+        
+        /*Boss Time Variables*/
+        ret.tHila = ct.tHila;
+        ret.tZakum = ct.tZakum;
+        ret.tHorntail = ct.tHorntail;
+        ret.tRanmaru = ct.tRanmaru;
+        ret.tCrimsonQueen = ct.tCrimsonQueen;
+        ret.tPierre = ct.tPierre;
+        ret.tVonBon = ct.tVonBon;
+        ret.tVellum = ct.tVellum;
+        ret.tArkarium = ct.tArkarium;
+        ret.tCygnus = ct.tCygnus;
+        ret.tMagnus = ct.tMagnus;
+        ret.tLucid = ct.tLucid;
         return ret;
     }
 
@@ -929,7 +969,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 ret.evoentry = rs.getInt("evoentry");
                 ret.reborns = rs.getInt("reborns");
                 ret.apstorage = rs.getInt("apstorage");
-                ret.nMagnusTime = rs.getLong("magnusTime");
                 ret.charListPosition = rs.getInt("position");
                 ret.isBurning = rs.getBoolean("isBurning");
                 for (MapleTrait t : ret.traits.values()) {
@@ -1020,6 +1059,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 ret.characterCard.loadCards(client, channelserver, con);
             }
 
+            // Load Next Available Boss Attempt Times
+            BossTimer.UserLoadBossTime(ret);
+            
             // Load VMatrix
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM vmatrix WHERE characterid = ?")) {
                 ps.setInt(1, charid);
@@ -1538,8 +1580,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public static void saveNewCharToDB(final User chr, final JobType type, short db) {
         try (Connection con = Database.GetConnection()) {
 
-            try (PreparedStatement ps = con.prepareStatement("INSERT INTO characters (level, str, dex, luk, `int`, hp, mp, maxhp, maxmp, sp, hsp, ap, skincolor, gender, job, hair, face, zeroBetaHair, zeroBetaFace, angelicDressupHair, angelicDressupFace, angelicDressupSuit, faceMarking, ears, tail, map, meso, party, buddyCapacity, pets, subcategory, elf, friendshippoints, gm, accountid, name, world, starterquest, starterquestid, evoentry, position, magnusTime)"
-                    + "                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement ps = con.prepareStatement("INSERT INTO characters (level, str, dex, luk, `int`, hp, mp, maxhp, maxmp, sp, hsp, ap, skincolor, gender, job, hair, face, zeroBetaHair, zeroBetaFace, angelicDressupHair, angelicDressupFace, angelicDressupSuit, faceMarking, ears, tail, map, meso, party, buddyCapacity, pets, subcategory, elf, friendshippoints, gm, accountid, name, world, starterquest, starterquestid, evoentry, position)"
+                                                           + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", RETURN_GENERATED_KEYS)) {
                 int index = 0;
                 ps.setInt(++index, chr.level); // Level
                 final PlayerStats stat = chr.stats;
@@ -1613,7 +1655,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 ps.setInt(++index, chr.starterquestid);
                 ps.setInt(++index, chr.evoentry);
                 ps.setInt(++index, chr.charListPosition);
-                ps.setInt(++index, 0);
                 ps.executeUpdate();
 
                 ResultSet rs = ps.getGeneratedKeys();
@@ -1627,6 +1668,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 }
                 rs.close();
             } catch (SQLException e) {
+                System.out.println("issue....");
                 LogHelper.SQL.get().info("Could not save character:\n{}", e);
             }
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO queststatus (`queststatusid`, `characterid`, `quest`, `status`, `time`, `forfeited`, `customData`) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?)", RETURN_GENERATED_KEYS)) {
@@ -1814,7 +1856,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
         try (Connection con = Database.GetConnection()) {
 
-            try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, hsp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, zeroBetaHair = ?, zeroBetaFace = ?, angelicDressupHair = ?, angelicDressupFace = ?, angelicDressupSuit = ?, faceMarking = ?, ears = ?, tail = ?, map = ?, meso = ?, hpApUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, pets = ?, subcategory = ?, currentrep = ?, totalrep = ?, gachexp = ?, fatigue = ?, charm = ?, charisma = ?, craft = ?, insight = ?, sense = ?, will = ?, totalwins = ?, totallosses = ?, pvpExp = ?, pvpPoints = ?, reborns = ?, apstorage = ?, magnusTime = ?, elf = ?, honourExp = ?, honourLevel = ?, friendshippoints = ?, friendshiptoadd = ?, name = ?, starterquest = ?, starterquestid = ?, evoentry = ?, position = ?, isBurning = ? WHERE id = ?", RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, hsp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, zeroBetaHair = ?, zeroBetaFace = ?, angelicDressupHair = ?, angelicDressupFace = ?, angelicDressupSuit = ?, faceMarking = ?, ears = ?, tail = ?, map = ?, meso = ?, hpApUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, pets = ?, subcategory = ?, currentrep = ?, totalrep = ?, gachexp = ?, fatigue = ?, charm = ?, charisma = ?, craft = ?, insight = ?, sense = ?, will = ?, totalwins = ?, totallosses = ?, pvpExp = ?, pvpPoints = ?, reborns = ?, apstorage = ?, elf = ?, honourExp = ?, honourLevel = ?, friendshippoints = ?, friendshiptoadd = ?, name = ?, starterquest = ?, starterquestid = ?, evoentry = ?, position = ?, isBurning = ? WHERE id = ?", RETURN_GENERATED_KEYS)) {
                 int index = 0;
                 ps.setInt(++index, level);
                 ps.setInt(++index, fame);
@@ -1910,18 +1952,13 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 ps.setInt(++index, pvpExp);
                 ps.setInt(++index, pvpPoints);
                 /*
-             * Start of Custom Features
+                 * Start of Custom Features
                  */
                 ps.setInt(++index, reborns);
                 ps.setInt(++index, apstorage);
                 /*
-             * End of Custom Features
+                 * End of Custom Features
                  */
-
- /*Start of Boss Features*/
-                ps.setLong(++index, nMagnusTime);
-                /*End of Boss Features*/
-
                 ps.setInt(++index, elf);
                 ps.setInt(++index, honourExp);
                 ps.setInt(++index, honorLevel);
@@ -2058,6 +2095,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 }
             }
 
+            // Save Next Available Boss Attempt Times
+            BossTimer.UserSaveBossTime(this);
+            
             // Save VMatrix (Song SAYS THIS DOESNT LOOP RIGHT NIGGA)
             deleteWhereCharacterId(con, "DELETE FROM vmatrix WHERE characterid = ?");
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO vmatrix (characterid, state, coreid, skillid, skillid2, skillid3, level, masterlevel, experience) "
@@ -2412,7 +2452,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             ex.printStackTrace();
         }
     }
-
+    
     public void saveInventory(Connection con) {
         List<Pair<Item, MapleInventoryType>> listing = new ArrayList<>();
         for (final MapleInventory iv : inventory) {

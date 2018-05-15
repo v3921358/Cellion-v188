@@ -78,6 +78,33 @@ public class GMCommand {
             return 0;
         }
     }
+    
+    public static class Set extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            User pPlayer = c.getPlayer();
+            String sType = splitted[1].toUpperCase();
+            int nID = Integer.parseInt(splitted[1]);
+            
+            switch (sType) {
+                case "HAIR":
+                    pPlayer.setHair(nID);
+                    pPlayer.updateSingleStat(Stat.Hair, 0);
+                    break;
+                case "FACE":
+                    pPlayer.setFace(nID);
+                    pPlayer.updateSingleStat(Stat.Face, 0);
+                    break;
+                case "SKIN":
+                    pPlayer.setSkinColor((byte) nID);
+                    pPlayer.updateSingleStat(Stat.Skin, 0);
+                    break;
+            }
+            c.getPlayer().equipChanged();
+            return 1;
+        }
+    }
 
     public static class Info extends CommandExecute {
 

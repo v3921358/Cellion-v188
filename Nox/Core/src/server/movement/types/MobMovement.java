@@ -117,7 +117,7 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
                 break;
         }
 
-        if (chr.isAdmin()) {
+        if (chr.isDeveloper() && chr.usingExtraDebug()) {
             chr.yellowMessage(String.format("[Mob Movement Debug] nAction: %s | BaseNum: %s | nForcedAttackIdx: %s", nAttackIdx, nSkillID, nForcedAttackIdx));
         }
 
@@ -147,7 +147,7 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
 
                 if (tLastUsed == 0 || ((tNow - tLastUsed) > skill.getCoolTime())) {
 
-                    if (chr.isAdmin()) {
+                    if (chr.isDeveloper() && chr.usingExtraDebug()) {
                         chr.yellowMessage(String.format("[Mob Movement Debug] nSkill: %s", nextSkill.getSkillId()));
                     }
 

@@ -77,6 +77,17 @@ public class DeveloperCommands {
         }
     }
     
+    public static class ExtraDebug extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            User pPlayer = c.getPlayer();
+            pPlayer.setExtraDebug(!pPlayer.usingExtraDebug());
+            pPlayer.dropMessage(6, "Extra server debug will" + (pPlayer.usingExtraDebug() ? " now be displayed." : " no longer be displayed."));
+            return 1;
+        }
+    }
+    
     public static class SetBurningField extends CommandExecute {
 
         @Override

@@ -2,7 +2,7 @@
 	Adobis
 	Zakum Pre-Boss Arena NPC
     
-	@author Mazen
+	@author Mazen Massoud
 */
 
 load("nashorn:mozilla_compat.js");
@@ -19,7 +19,7 @@ function action(mode, type, selection) {
 			var sendString = "\r\nWelcome #h #, to #bThe Door to Zakum#k!\r\nAhead, you'll find Zakum, a corrupted spirit sealed in a tree deep in the mines of El Nath. What would you like to do?\r\n"
 							+ "#r#L0#(Solo Boss Fight) #dFight the mighty Zakum!#k\r\n"
 							//+ "#r#L1#(Party Boss Fight) #dOvercome Papulatus' rule with your squad!#k\r\n" // Zakum can d/c multiple people, keep it as a solo fight for now.
-							+ "#r#L2#(Leave) #dRetreat to Henesys!#k\r\n";
+							+ "#r#L2#(Leave) #dRetreat to Free Market!#k\r\n";
 			
 			cm.sendNextPrevS(sendString, 2);
 		} else if (status == 1) {
@@ -29,12 +29,21 @@ function action(mode, type, selection) {
 			}
 			switch(selection) {
 				case 0: // Solo
-					if (cm.getPlayerCount(280030100) == 0) {
-						cm.resetMap(280030100);
-						cm.warp(280030100, 0);
-						cm.dispose();
+					if (cm.getPlayer().canAttemptBoss("ZAKUM")) {
+						if (cm.getPlayerCount(280030100) == 0) {
+							if (!cm.haveItem(4001017)) {
+								cm.gainItem(4001017, 1);
+							}
+							cm.getPlayer().setBossAttempt("ZAKUM");
+							cm.resetMap(280030100);
+							cm.warp(280030100, 0);
+							cm.dispose();
+						} else {
+							cm.sendOk("Sorry, looks like another expedition squad is currently fighting Papulatus on this channel. You will be able to enter once they are finished or you can attempt the expedition on another channel.");
+							cm.dispose();
+						}
 					} else {
-						cm.sendOk("Sorry, looks like another expedition squad is currently fighting Papulatus on this channel. You will be able to enter once they are finished or you can attempt the expedition on another channel.");
+						cm.sendOk("\tSorry, looks like you have fought Zakum recently.\r\n\t#bPlease try again later.");
 						cm.dispose();
 					}
 					break;
@@ -59,7 +68,7 @@ function action(mode, type, selection) {
 					}
 					break;
 				case 2: // Home
-					cm.warp(100000000, 0);
+					cm.warp(910000000, 0);
 					cm.dispose();
 					break;
 				default:

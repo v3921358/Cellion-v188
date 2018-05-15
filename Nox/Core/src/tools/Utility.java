@@ -8,6 +8,9 @@ import client.QuestStatus;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +32,19 @@ import tools.packet.WvsContext;
  */
 public class Utility {
 
+    /**
+     * Run SQL Prepared Statement
+     * 
+     * @param Con
+     * @param sSQL 
+     * @throws java.sql.SQLException 
+     */
+    public static void runSQL(Connection Con, String sSQL) throws SQLException {
+        try (PreparedStatement pStatement = Con.prepareStatement(sSQL)) {
+            pStatement.executeUpdate();
+        }
+    }
+    
     /**
      * Character Retriever
      *

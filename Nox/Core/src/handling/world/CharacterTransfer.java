@@ -75,7 +75,7 @@ public class CharacterTransfer {
     public boolean bigBrother;
 
     /*Boss Timed Variables*/
-    public long magnusTime;
+    public long tHila, tZakum, tHorntail, tRanmaru, tCrimsonQueen, tPierre, tVonBon, tVellum, tLotus, tUrsus, tArkarium, tCygnus, tMagnus, tLucid;
 
     /*End of Custom Feature*/
     public CharacterTransfer() {
@@ -90,102 +90,102 @@ public class CharacterTransfer {
         mbook = new LinkedHashMap<>();
     }
 
-    public CharacterTransfer(final User chr) {
-        this.characterid = chr.getId();
-        this.accountid = chr.getAccountID();
-        this.accountname = chr.getClient().getAccountName();
-        this.channel = (byte) chr.getClient().getChannel();
-        this.nxCredit = chr.getCSPoints(1);
-        this.ACash = chr.getCSPoints(4);
-        this.MaplePoints = chr.getCSPoints(2);
+    public CharacterTransfer(final User pPlayer) {
+        this.characterid = pPlayer.getId();
+        this.accountid = pPlayer.getAccountID();
+        this.accountname = pPlayer.getClient().getAccountName();
+        this.channel = (byte) pPlayer.getClient().getChannel();
+        this.nxCredit = pPlayer.getCSPoints(1);
+        this.ACash = pPlayer.getCSPoints(4);
+        this.MaplePoints = pPlayer.getCSPoints(2);
         // this.stolenSkills = chr.getStolenSkills();
         for (int i = 1; i <= 5; i++) {
             for (int j = 0; j < GameConstants.getNumSteal(i); j++) {
-                this.aStealMemory[i][j] = chr.aStealMemory[i][j];
+                this.aStealMemory[i][j] = pPlayer.aStealMemory[i][j];
             }
         }
-        for (Map.Entry<Integer, Integer> mStealSkill : chr.mStealSkillInfo.entrySet()) {
+        for (Map.Entry<Integer, Integer> mStealSkill : pPlayer.mStealSkillInfo.entrySet()) {
             this.mStealSkillInfo.put(mStealSkill.getKey(), mStealSkill.getValue());
         }
-        this.vpoints = chr.getVPoints();
-        this.name = chr.getName();
-        this.fame = chr.getFame();
-        this.gender = (byte) chr.getGender();
-        this.level = chr.getLevel();
-        this.str = chr.getStat().getStr();
-        this.dex = chr.getStat().getDex();
-        this.int_ = chr.getStat().getInt();
-        this.luk = chr.getStat().getLuk();
-        this.hp = chr.getStat().getHp();
-        this.mp = chr.getStat().getMp();
-        this.maxhp = chr.getStat().getMaxHp();
-        this.maxmp = chr.getStat().getMaxMp();
-        this.exp = chr.getExp();
-        this.hpApUsed = chr.getHpApUsed();
-        this.remainingAp = chr.getRemainingAp();
-        this.remainingSp = chr.getRemainingSps();
-        this.remainingHSp = chr.getRemainingHSps();
-        this.meso = chr.getMeso();
-        this.pvpExp = chr.getTotalBattleExp();
-        this.pvpPoints = chr.getBattlePoints();
+        this.vpoints = pPlayer.getVPoints();
+        this.name = pPlayer.getName();
+        this.fame = pPlayer.getFame();
+        this.gender = (byte) pPlayer.getGender();
+        this.level = pPlayer.getLevel();
+        this.str = pPlayer.getStat().getStr();
+        this.dex = pPlayer.getStat().getDex();
+        this.int_ = pPlayer.getStat().getInt();
+        this.luk = pPlayer.getStat().getLuk();
+        this.hp = pPlayer.getStat().getHp();
+        this.mp = pPlayer.getStat().getMp();
+        this.maxhp = pPlayer.getStat().getMaxHp();
+        this.maxmp = pPlayer.getStat().getMaxMp();
+        this.exp = pPlayer.getExp();
+        this.hpApUsed = pPlayer.getHpApUsed();
+        this.remainingAp = pPlayer.getRemainingAp();
+        this.remainingSp = pPlayer.getRemainingSps();
+        this.remainingHSp = pPlayer.getRemainingHSps();
+        this.meso = pPlayer.getMeso();
+        this.pvpExp = pPlayer.getTotalBattleExp();
+        this.pvpPoints = pPlayer.getBattlePoints();
         /*
          * Start of Custom Feature
          */
-        this.reborns = chr.getReborns();
-        this.apstorage = chr.getAPS();
+        this.reborns = pPlayer.getReborns();
+        this.apstorage = pPlayer.getAPS();
         /*
          * End of Custom Feature
          */
-        this.skinColor = chr.getSkinColor();
-        this.job = chr.getJob();
-        this.hair = chr.getHair();
-        this.face = chr.getFace();
-        this.zeroBetaHair = chr.getZeroBetaHair();
-        this.zeroBetaFace = chr.getZeroBetaFace();
-        this.angelicDressupHair = chr.getAngelicDressupHair();
-        this.angelicDressupFace = chr.getAngelicDressupFace();
-        this.angelicDressupSuit = chr.getAngelicDressupSuit();
-        this.faceMarking = chr.getFaceMarking();
-        this.ears = chr.getEars();
-        this.tail = chr.getTail();
-        this.elf = chr.getElf();
-        this.mapid = chr.getMapId();
-        this.initialSpawnPoint = chr.getInitialSpawnpoint();
-        this.marriageId = chr.getMarriageId();
-        this.marriage = chr.getMarriage();
-        this.world = chr.getWorld();
-        this.guildid = chr.getGuildId();
-        this.guildrank = (byte) chr.getGuildRank();
-        this.guildContribution = chr.getGuildContribution();
-        this.alliancerank = (byte) chr.getAllianceRank();
-        this.gmLevel = (byte) chr.getGMLevel();
-        this.points = chr.getPoints();
-        this.dpoints = chr.getDPoints();
-        this.epoints = chr.getEPoints();
-        this.fairyExp = chr.getFairyExp();
-        this.cardStack = chr.getCardStack();
-        this.petStore = chr.getPetStores();
-        this.subcategory = chr.getSubcategory();
-        this.imps = chr.getImps();
-        this.fatigue = (short) chr.getFatigue();
-        this.currentrep = chr.getCurrentRep();
-        this.totalrep = chr.getTotalRep();
-        this.familyid = chr.getFamilyId();
-        this.totalWins = chr.getTotalWins();
-        this.totalLosses = chr.getTotalLosses();
-        this.seniorid = chr.getSeniorId();
-        this.junior1 = chr.getJunior1();
-        this.junior2 = chr.getJunior2();
-        this.battleshipHP = chr.currentBattleshipHP();
-        this.gachexp = chr.getGachExp();
-        this.familiars = chr.getFamiliars();
-        chr.getCheatTracker().dispose();
-        this.anticheat = chr.getCheatTracker();
-        this.tempIP = chr.getClient().getTempIP();
-        this.rebuy = chr.getShopRepurchases();
+        this.skinColor = pPlayer.getSkinColor();
+        this.job = pPlayer.getJob();
+        this.hair = pPlayer.getHair();
+        this.face = pPlayer.getFace();
+        this.zeroBetaHair = pPlayer.getZeroBetaHair();
+        this.zeroBetaFace = pPlayer.getZeroBetaFace();
+        this.angelicDressupHair = pPlayer.getAngelicDressupHair();
+        this.angelicDressupFace = pPlayer.getAngelicDressupFace();
+        this.angelicDressupSuit = pPlayer.getAngelicDressupSuit();
+        this.faceMarking = pPlayer.getFaceMarking();
+        this.ears = pPlayer.getEars();
+        this.tail = pPlayer.getTail();
+        this.elf = pPlayer.getElf();
+        this.mapid = pPlayer.getMapId();
+        this.initialSpawnPoint = pPlayer.getInitialSpawnpoint();
+        this.marriageId = pPlayer.getMarriageId();
+        this.marriage = pPlayer.getMarriage();
+        this.world = pPlayer.getWorld();
+        this.guildid = pPlayer.getGuildId();
+        this.guildrank = (byte) pPlayer.getGuildRank();
+        this.guildContribution = pPlayer.getGuildContribution();
+        this.alliancerank = (byte) pPlayer.getAllianceRank();
+        this.gmLevel = (byte) pPlayer.getGMLevel();
+        this.points = pPlayer.getPoints();
+        this.dpoints = pPlayer.getDPoints();
+        this.epoints = pPlayer.getEPoints();
+        this.fairyExp = pPlayer.getFairyExp();
+        this.cardStack = pPlayer.getCardStack();
+        this.petStore = pPlayer.getPetStores();
+        this.subcategory = pPlayer.getSubcategory();
+        this.imps = pPlayer.getImps();
+        this.fatigue = (short) pPlayer.getFatigue();
+        this.currentrep = pPlayer.getCurrentRep();
+        this.totalrep = pPlayer.getTotalRep();
+        this.familyid = pPlayer.getFamilyId();
+        this.totalWins = pPlayer.getTotalWins();
+        this.totalLosses = pPlayer.getTotalLosses();
+        this.seniorid = pPlayer.getSeniorId();
+        this.junior1 = pPlayer.getJunior1();
+        this.junior2 = pPlayer.getJunior2();
+        this.battleshipHP = pPlayer.currentBattleshipHP();
+        this.gachexp = pPlayer.getGachExp();
+        this.familiars = pPlayer.getFamiliars();
+        pPlayer.getCheatTracker().dispose();
+        this.anticheat = pPlayer.getCheatTracker();
+        this.tempIP = pPlayer.getClient().getTempIP();
+        this.rebuy = pPlayer.getShopRepurchases();
         boolean uneq = false;
         for (int i = 0; i < this.petStore.length; i++) {
-            final Pet pet = chr.getPet(i);
+            final Pet pet = pPlayer.getPet(i);
             if (this.petStore[i] == 0) {
                 this.petStore[i] = (byte) -1;
             }
@@ -196,76 +196,91 @@ public class CharacterTransfer {
 
         }
         if (uneq) {
-            chr.unequipAllPets();
+            pPlayer.unequipAllPets();
         }
 
         for (MapleTraitType t : MapleTraitType.values()) {
-            this.traits.put(t, chr.getTrait(t).getTotalExp());
+            this.traits.put(t, pPlayer.getTrait(t).getTotalExp());
         }
-        for (final BuddylistEntry qs : chr.getBuddylist().getBuddies()) {
+        for (final BuddylistEntry qs : pPlayer.getBuddylist().getBuddies()) {
             this.buddies.put(new CharacterNameAndId(qs.getCharacterId(), qs.getName()), new BuddyTransfer(qs.isPending(), qs.getNickname(), qs.isAccountFriend(), qs.getMemo()));
         }
-        for (final Entry<ReportType, Integer> ss : chr.getReports().entrySet()) {
+        for (final Entry<ReportType, Integer> ss : pPlayer.getReports().entrySet()) {
             this.reports.put(ss.getKey().i, ss.getValue());
         }
-        this.buddysize = chr.getBuddyCapacity();
+        this.buddysize = pPlayer.getBuddyCapacity();
 
-        this.partyid = chr.getParty() == null ? -1 : chr.getParty().getId();
+        this.partyid = pPlayer.getParty() == null ? -1 : pPlayer.getParty().getId();
 
-        if (chr.getMessenger() != null) {
-            this.messengerid = chr.getMessenger().getId();
+        if (pPlayer.getMessenger() != null) {
+            this.messengerid = pPlayer.getMessenger().getId();
         } else {
             this.messengerid = 0;
         }
 
-        this.finishedAchievements = chr.getFinishedAchievements();
-        this.InfoQuest = chr.getInfoQuestMap();
+        this.finishedAchievements = pPlayer.getFinishedAchievements();
+        this.InfoQuest = pPlayer.getInfoQuestMap();
 
-        for (Entry<Quest, QuestStatus> qs : chr.getQuestMap().entrySet()) {
+        for (Entry<Quest, QuestStatus> qs : pPlayer.getQuestMap().entrySet()) {
             this.Quest.put(qs.getKey().getId(), qs.getValue());
         }
 
-        this.mbook = chr.getMonsterBook().getCards();
-        this.inventorys = chr.getInventorys();
+        this.mbook = pPlayer.getMonsterBook().getCards();
+        this.inventorys = pPlayer.getInventorys();
 
-        for (Entry<Skill, SkillEntry> qs : chr.getSkills().entrySet()) {
+        for (Entry<Skill, SkillEntry> qs : pPlayer.getSkills().entrySet()) {
             this.Skills.put(qs.getKey().getId(), qs.getValue());
         }
-        for (Entry<Integer, CardData> ii : chr.getCharacterCard().getCards().entrySet()) {
+        for (Entry<Integer, CardData> ii : pPlayer.getCharacterCard().getCards().entrySet()) {
             this.cardsInfo.put(ii.getKey(), ii.getValue());
         }
 
-        this.BlessOfFairy = chr.getBlessOfFairyOrigin();
-        this.BlessOfEmpress = chr.getBlessOfEmpressOrigin();
-        this.chalkboard = chr.getChalkboard();
-        this.skillmacro = chr.getMacros();
-        this.keymap = chr.getKeyLayout().getLayout();
-        this.savedlocation = chr.getSavedLocations();
-        this.wishlist = chr.getWishlist();
-        this.rocks = chr.getRocks();
-        this.regrocks = chr.getRegRocks();
-        this.hyperrocks = chr.getHyperRocks();
-        this.famedcharacters = chr.getFamedCharacters();
-        this.battledaccs = chr.getBattledCharacters();
-        this.lastfametime = chr.getLastFameTime();
-        this.storage = chr.getStorage();
-        this.cs = chr.getCashInventory();
-        this.extendedSlots = chr.getExtendedSlots();
-        this.honourexp = chr.getHonourExp();
-        this.honourlevel = chr.getHonorLevel();
-        this.innerSkills = chr.getInnerSkills();
-        this.azwanShopList = chr.getAzwanShop();
-        final MapleMount mount = chr.getMount();
+        this.BlessOfFairy = pPlayer.getBlessOfFairyOrigin();
+        this.BlessOfEmpress = pPlayer.getBlessOfEmpressOrigin();
+        this.chalkboard = pPlayer.getChalkboard();
+        this.skillmacro = pPlayer.getMacros();
+        this.keymap = pPlayer.getKeyLayout().getLayout();
+        this.savedlocation = pPlayer.getSavedLocations();
+        this.wishlist = pPlayer.getWishlist();
+        this.rocks = pPlayer.getRocks();
+        this.regrocks = pPlayer.getRegRocks();
+        this.hyperrocks = pPlayer.getHyperRocks();
+        this.famedcharacters = pPlayer.getFamedCharacters();
+        this.battledaccs = pPlayer.getBattledCharacters();
+        this.lastfametime = pPlayer.getLastFameTime();
+        this.storage = pPlayer.getStorage();
+        this.cs = pPlayer.getCashInventory();
+        this.extendedSlots = pPlayer.getExtendedSlots();
+        this.honourexp = pPlayer.getHonourExp();
+        this.honourlevel = pPlayer.getHonorLevel();
+        this.innerSkills = pPlayer.getInnerSkills();
+        this.azwanShopList = pPlayer.getAzwanShop();
+        final MapleMount mount = pPlayer.getMount();
         this.mount_itemid = mount.getItemId();
         this.mount_Fatigue = mount.getFatigue();
         this.mount_level = mount.getLevel();
         this.mount_exp = mount.getExp();
-        this.isZeroBeta = chr.isZeroBetaState();
-        this.isAngelicDressup = chr.isAngelicDressupState();
-        this.isBurning = chr.isBurning();
-        this.aVMatrixRecord = chr.aVMatrixRecord;
-        /*Boss Timed Variables*/
-        this.magnusTime = chr.getLastMagnusTime();
+        this.isZeroBeta = pPlayer.isZeroBetaState();
+        this.isAngelicDressup = pPlayer.isAngelicDressupState();
+        this.isBurning = pPlayer.isBurning();
+        this.aVMatrixRecord = pPlayer.aVMatrixRecord;
+        
         TranferTime = System.currentTimeMillis();
+        
+        /*Boss Timed Variables*/
+        tHila = pPlayer.tHila;
+        tZakum = pPlayer.tZakum;
+        tHorntail = pPlayer.tHorntail;
+        tRanmaru = pPlayer.tRanmaru;
+        tCrimsonQueen = pPlayer.tCrimsonQueen;
+        tPierre = pPlayer.tPierre;
+        tVonBon = pPlayer.tVonBon;
+        tVellum = pPlayer.tVellum;
+        tLotus = pPlayer.tLotus;
+        tUrsus = pPlayer.tUrsus;
+        tArkarium = pPlayer.tArkarium;
+        tCygnus = pPlayer.tCygnus;
+        tMagnus = pPlayer.tMagnus;
+        tLucid = pPlayer.tLucid;
     }
 }

@@ -131,7 +131,7 @@ public class InternCommand {
         }
     }
 
-    public static class MOB extends CommandExecute {
+    public static class Monster extends CommandExecute {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {

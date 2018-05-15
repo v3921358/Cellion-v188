@@ -1,5 +1,6 @@
 package server.life;
 
+import constants.NPCConstants;
 import constants.ServerConstants;
 import database.Database;
 import provider.MapleData;
@@ -13,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,6 +36,51 @@ public class LifeFactory {
         loadAllNPCsFromBinWZ();
         loadAllMobsFromBinWZ();
         loadAllCustomLifeFromDatabase();
+        if (ServerConstants.CUSTOM_LIFE) OnLoadCustomLife();
+    }
+    
+    /**
+     * Java - Load Custom Life
+     * @author Mazen Massoud
+     * 
+     * @purpose This method is used to load in certain NPCs or Mobs into the server that are required for server structure to be functional.
+     * Instead of loading from a database which can be tedious during development, the data for these Life objects is defined here.
+     */
+    private static void OnLoadCustomLife() {
+        
+        /*Tutorial Intro NPCs*/
+        int[] pTutorial = {331003400, NPCConstants.Tutorial_NPC, 165, 57, 20, 57, 165, 165, 0, 0, -1, 0, 0};
+        
+        /*FM NPCs*/
+        int[] pEventShop = {910000000, NPCConstants.EventShop_NPC, -10, 34, 66, 34 ,-10, -10, 0, 0, -1, 0, 0};
+        int[] pDonorShop = {910000000, NPCConstants.DonorShop_NPC, 102, 34, 63, 34, 102, 102, 0, 0, -1, 0, 0};
+        int[] pVoteShop = {910000000, NPCConstants.VoteShop_NPC, 207, 34, 60, 34, 207, 207, 0, 0, -1, 0, 0};
+        int[] aEquipmentShop = {910000000, 9201082, 580, 4, 30, 4, 580, 580, 0, 0, -1, 0, 1};
+        int[] aCustomCashShop = {910000000, 9010034, 762, -266, 44, -266, 812, 712, 0, 0, -1, 0, 0};
+        int[] aMerchantShop = {910000000, 1500028, 611, -266, 87, -266, 611, 611, 0, 0, -1, 0, 0};
+        
+        List<int[]> aCustomLifeData = Arrays.asList(pTutorial, aCustomCashShop, pDonorShop, pVoteShop, pEventShop, aEquipmentShop, aMerchantShop);
+        
+        for (int nIndex = 0; nIndex < aCustomLifeData.size(); nIndex++) {
+            int[] aData = aCustomLifeData.get(nIndex);
+            
+            int nMapID = aData[0];
+            int nID = aData[1];
+            int nX = aData[2];
+            int nY = aData[3];
+            int nFH = aData[4];
+            int nCY = aData[5];
+            int nRX0 = aData[6];
+            int nRX1 = aData[7];
+            int tMob = aData[8];
+            int nF = aData[9];
+            int nTeam = aData[10];
+            String sType = (aData[11] > 0) ? "m" : "n";
+            boolean bHide = (aData[12] > 0);
+
+            final SharedMapResources pResources = SharedMapResources.getAndGetSMR(nMapID);
+            pResources.LifeStorage.add(new SharedMapResources.TemporaryStorage_Life(nID, nX, nY, nFH, nCY, nRX0, nRX1, tMob, nF, nTeam, sType, "", bHide));
+        }
     }
 
     private static void loadAllNPCsFromBinWZ() {

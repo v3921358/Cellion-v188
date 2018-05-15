@@ -10,9 +10,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import server.life.LifeFactory;
+import server.life.Mob;
 import server.maps.MapleMap;
+import server.maps.MapleMapObject;
+import server.maps.MapleMapObjectType;
 import server.maps.SavedLocationType;
 import server.maps.objects.User;
 import tools.LogHelper;
@@ -36,6 +41,7 @@ public class PlayerCommand {
         public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().yellowMessage("----------------- PLAYER COMMANDS -----------------");
             c.getPlayer().yellowMessage("@support <message> : Send a message to availible staff members.");
+            c.getPlayer().yellowMessage("@job : Job advance, applicable if you have missed an advancement and meet the requirement.");
             c.getPlayer().yellowMessage("@wallet : Displays account currency information.");
             c.getPlayer().yellowMessage("@dispose : Enables your character's actions when stuck.");
             c.getPlayer().yellowMessage("@event : Quick travel to the current event, if available.");
@@ -113,13 +119,20 @@ public class PlayerCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            User pPlayer = Utility.requestCharacter("Haste");
-            if (pPlayer != null) {
-                pPlayer.dropMessage(5, "Job ID : " + pPlayer.getJob());
-                c.getPlayer().dropMessage(5, "Job ID : " + pPlayer.getJob());
-            }
-            
             c.getPlayer().dropMessage(5, "Your characters actions have been enabled.");
+            c.getPlayer().completeDispose();
+            
+            c.getPlayer().dropMessage(5, "tServer  : " + System.currentTimeMillis());
+            c.getPlayer().dropMessage(5, "tHorntail : " + c.getPlayer().tHorntail);
+            return 1;
+        }
+    }
+    
+    public static class Job extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            c.getPlayer().OnJobAdvanceRequest();
             c.getPlayer().completeDispose();
             return 1;
         }

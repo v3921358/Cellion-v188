@@ -165,9 +165,10 @@ public class EvanEffect extends AbstractEffect {
             case Evan.DRAGON_FURY_1:
                 break;
             case Evan.DRAGON_MASTER:
-                pEffect.statups.put(CharacterTemporaryStat.RideVehicleExpire, 1932193);
+                pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932193); // For now.
                 pEffect.statups.put(CharacterTemporaryStat.NotDamaged, 1);
-                //pEffect.statups.put(CharacterTemporaryStat.NewFlying, 1);
+                //pEffect.statups.put(CharacterTemporaryStat.RideVehicleExpire, 1932193); // TODO: Fix e38 on RideVehicleExpire twoState
+                //pEffect.statups.put(CharacterTemporaryStat.NewFlying, 1); // TODO: Fix e38 on NewFlying
                 break;
             case Evan.DRAGON_MASTER_1:
                 pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932193);
