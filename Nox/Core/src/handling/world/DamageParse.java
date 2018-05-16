@@ -140,7 +140,8 @@ public class DamageParse {
                 int fixeddmg = monsterstats.getFixedDamage();
                 boolean Tempest = monster.getStatusSourceID(MonsterStatus.FREEZE) == Paladin.HEAVENS_HAMMER;
 
-                if (!Tempest && !pPlayer.isGM()) {
+                if (!Tempest && pPlayer.isGM()) {
+                    
                     if ((pPlayer.getJob() >= MapleJob.BATTLE_MAGE_1.getId() && pPlayer.getJob() <= MapleJob.BATTLE_MAGE_4.getId() && !monster.isBuffed(MonsterStatus.DAMAGE_IMMUNITY)
                             && !monster.isBuffed(MonsterStatus.MAGIC_IMMUNITY)
                             && !monster.isBuffed(MonsterStatus.MAGIC_DAMAGE_REFLECT)) || attack.skill == Marksman.SNIPE
@@ -178,7 +179,7 @@ public class DamageParse {
                         }
                     } else if (monsterstats.getOnlyNoramlAttack()) {
                         eachd = attack.skill != 0 ? 0 : Math.min(eachd, (int) maxDamagePerHit);
-                    } else if (!pPlayer.isGM()) {
+                    } else if (!pPlayer.isGM() && attack.skill != Global.LEVEL_UP) {
                         if (Tempest) {
                             if (eachd > monster.getMobMaxHp()) {
                                 eachd = (int) Math.min(monster.getMobMaxHp(), Integer.MAX_VALUE);
@@ -954,7 +955,7 @@ public class DamageParse {
                 if ((GameConstants.getAttackDelay(attack.skill, theSkill) >= 100) && (!GameConstants.isNoDelaySkill(attack.skill)) && !GameConstants.isMismatchingBulletSkill(attack.skill) && (!monster.getStats().isBoss()) && (pPlayer.getTruePosition().distanceSq(monster.getTruePosition()) > GameConstants.getAttackRange(effect, pPlayer.getStat().defRange))) {
                     pPlayer.getCheatTracker().registerOffense(CheatingOffense.ATTACK_FARAWAY_MONSTER, new StringBuilder().append("[Distance: ").append(pPlayer.getTruePosition().distanceSq(monster.getTruePosition())).append(", Expected Distance: ").append(GameConstants.getAttackRange(effect, pPlayer.getStat().defRange)).append(" Job: ").append(pPlayer.getJob()).append("]").toString());
                     //pPlayer.yellowMessage("[AntiCheat] Please remember hacking goes against our Terms of Service. Skill (" + attack.skill + ")");
-                    return;
+                    //return;
                 }
                 if ((attack.skill == 2301002) && (!monsterstats.getUndead())) {
                     pPlayer.getCheatTracker().registerOffense(CheatingOffense.HEAL_ATTACKING_UNDEAD);

@@ -10,20 +10,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import server.Trade;
 import server.life.LifeFactory;
 import server.life.Mob;
 import server.maps.MapleMap;
-import server.maps.MapleMapObject;
-import server.maps.MapleMapObjectType;
 import server.maps.SavedLocationType;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.StringUtil;
-import tools.Utility;
 import tools.packet.WvsContext;
 
 /**
@@ -36,6 +31,33 @@ public class PlayerCommand {
         return PlayerGMRank.NORMAL;
     }
 
+    /**
+     * Personal command I modify while debugging to do different operations.
+     */
+    public static class Debug extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            if (!c.isGm()) return 0; // Requires a GM Account, but not a GM Character ;).
+            
+            int nType = Integer.parseInt(splitted[1]);
+            switch (nType) {
+                case 1: 
+                    Mob pMob = LifeFactory.getMonster(100100);
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(pMob, c.getPlayer().getPosition());
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(pMob, c.getPlayer().getPosition());
+                    break;
+                case 2:
+                    c.getPlayer().OnLevelUp();
+                    break;
+                case 3:
+                    c.getPlayer().setGM((byte) 5);
+                    break;
+            }
+            return 1;
+        }
+    }
+    
     public static class Help extends CommandExecute {
 
         @Override

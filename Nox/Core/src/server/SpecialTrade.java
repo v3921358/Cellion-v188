@@ -182,23 +182,16 @@ public class SpecialTrade {
      * OnSpecialTradeNotification
      * Notify the player of the available special trade commands.
      * 
-     * @param pPlayer 
+     * @param pPlayer
+     * @param bPlayerTwo
      */
-    public static void OnPlayerOneNotification(User pPlayer) {
-        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" Trade Commands", 1));
-        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" /offernx <amount> : NX ", 1));
-        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" /offervp <amount> : Vote Points", 1));
-        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" /offerdp <amount> : Donor Points", 1));
-        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" /offerep <amount> : Event Points", 1));
-        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" ", 1));
-    }
-    
-    public static void OnPlayerTwoNotification(User pPlayer) {
-        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" Trade Commands", 0));
-        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" /offernx <amount> : NX", 0));
-        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" /offervp <amount> : Vote Points", 0));
-        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" /offerdp <amount> : Donor Points", 0));
-        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" /offerep <amount> : Event Points", 0));
-        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" ", 0));
+    public static void OnTradeInfoNotification(User pPlayer, boolean bPlayerTwo) {
+        int nType = bPlayerTwo ? 0 : 1;
+        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" Trade Commands", nType));
+        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" /offernx <amount> : NX ", nType));
+        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" /offervp <amount> : Vote Points", nType));
+        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" /offerdp <amount> : Donor Points", nType));
+        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" /offerep <amount> : Event Points", nType));
+        pPlayer.getClient().SendPacket(PlayerShopPacket.shopChat(" ", nType));
     }
 }

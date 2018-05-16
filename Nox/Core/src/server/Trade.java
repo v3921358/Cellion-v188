@@ -322,8 +322,8 @@ public class Trade {
             c1.getClient().SendPacket(CField.InteractionPacket.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 1));
             
             // Notify the players of the special trade commands.
-            SpecialTrade.OnPlayerOneNotification(c1);
-            SpecialTrade.OnPlayerTwoNotification(c2);
+            SpecialTrade.OnTradeInfoNotification(c1, false);
+            SpecialTrade.OnTradeInfoNotification(c2, true);
         } else {
             c1.getClient().SendPacket(WvsContext.broadcastMsg(5, "The other player has already closed the trade"));
         }

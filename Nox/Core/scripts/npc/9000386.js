@@ -17,13 +17,14 @@ function action(mode, type, selection) {
 		}
         status -= 1;
 	}
+	
 	if (status == 0) {
 		// 0 is Beginner, 1000 is Cygnus Knight & 2000 is Legend
 		if (cm.getPlayer().getLevel() >= 10 && (cm.getPlayer().getJob() == 0 || cm.getPlayer().getJob() == 1000 || cm.getPlayer().getJob() == 2000 || cm.getPlayer().getJob() == 3000 || cm.getPlayer().getJob() == 3001)) {
 			switch (cm.getPlayer().getJob()) {
 				//Beginner
 				case 0:
-					cm.sendSimple("You are currently a #bBeginner#k.\r\n"
+					cm.sendNextNoESC("You are currently a #bBeginner#k.\r\n"
 					+ "Please choose your job advancement.\r\n"
 					+ "#r#L1#Warrior#l\r\n"
 					+ "#r#L2#Magician#l\r\n"
@@ -34,7 +35,7 @@ function action(mode, type, selection) {
 				//Cygnus Knight
 				case 1000:
 					cm.getPlayer().dropMessage(5, " Cygnus advancement ");
-					cm.sendSimple("You are currently a #bCygnus Knight#k.\r\n"
+					cm.sendNextNoESC("You are currently a #bCygnus Knight#k.\r\n"
 					+ "Please choose your job advancement.\r\n"
 					+ "#r#L1#Dawn Warrior#l\r\n"
 					+ "#r#L2#Blaze Wizard#l\r\n"
@@ -50,7 +51,7 @@ function action(mode, type, selection) {
 						break;
 				//Citizen
 				case 3000:
-					cm.sendSimple("You are currently a #bCitizen#k.\r\n"
+					cm.sendNextNoESC("You are currently a #bCitizen#k.\r\n"
 					+ "Please choose your job advancement.\r\n"
 					+ "#r#L2#Battle Mage#l\r\n"
 					+ "#r#L3#Wild Hunter#l\r\n"
@@ -59,7 +60,7 @@ function action(mode, type, selection) {
 					break;
 				//Demon
 				case 3001:
-					cm.sendSimple("You are currently a #bDemon#k.\r\n"
+					cm.sendNextNoESC("You are currently a #bDemon#k.\r\n"
 					+ "Please choose your job advancement.\r\n"
 					+ "#r#L99#Demon Slayer#l\r\n"
 					+ "#r#L100#Demon Avenger#l\r\n");
@@ -80,33 +81,33 @@ function action(mode, type, selection) {
 				} else {
 					switch(cm.getPlayer().getJob()){
 						//Warrior
-						case 100:cm.sendSimple("You are currently a #bWarrior#k.\r\n"
+						case 100:cm.sendNextNoESC("You are currently a #bWarrior#k.\r\n"
 							+ "Please choose your job advancement.\r\n"
 							+ "#r#L1#Fighter#l\r\n"
 							+ "#r#L2#Page#l\r\n"
 							+ "#r#L3#Spearman#l\r\n");
 							break;
 						//Magician
-						case 200:cm.sendSimple("You are currently a #bMagician#k.\r\n"
+						case 200:cm.sendNextNoESC("You are currently a #bMagician#k.\r\n"
 							+ "Please choose your job advancement.\r\n"
 							+ "#r#L1#Wizard (Fire/Poison)#l\r\n"
 							+ "#r#L2#Wizard (Ice/Lightning)#l\r\n"
 							+ "#r#L3#Cleric#l\r\n");
 							break;
 						//Archer
-						case 300:cm.sendSimple("You are currently an #bArcher#k.\r\n"
+						case 300:cm.sendNextNoESC("You are currently an #bArcher#k.\r\n"
 							+ "Please choose your job advancement.\r\n"
 							+ "#r#L1#Hunter#l\r\n"
 							+ "#r#L2#Crossbowman#l\r\n");
 							break;
 						//Thief
-						case 400:cm.sendSimple("You are currently a #bThief#k.\r\n"
+						case 400:cm.sendNextNoESC("You are currently a #bThief#k.\r\n"
 							+ "Please choose your job advancement.\r\n"
 							+ "#r#L1#Assassin#l\r\n"
 							+ "#r#L2#Bandit#l\r\n");
 							break;
 						//Pirate
-						case 500:cm.sendSimple("You are currently a #bPirate#k.\r\n"
+						case 500:cm.sendNextNoESC("You are currently a #bPirate#k.\r\n"
 							+ "Please choose your job advancement.\r\n"
 							+ "#r#L1#Brawler#l\r\n"
 							+ "#r#L2#Gunslinger#l\r\n");
@@ -138,7 +139,7 @@ function action(mode, type, selection) {
 					}
 				}
 			} else {
-			cm.sendSimple("You need 30 of #i4001126##t4001126# to proceed to job advancement.\r\n"
+			cm.sendNextNoESC("You need 30 of #i4001126##t4001126# to proceed to job advancement.\r\n"
 						+ "Please come back when you have enough");
 			}
 		} else if(cm.getPlayer().getLevel() >= 45 && cm.getPlayer().getJob() == 431){
@@ -159,7 +160,7 @@ function action(mode, type, selection) {
 					cm.dispose();
 				}
 			} else {
-				cm.sendSimple("You need 60 of #i4001126##t4001126# to proceed to job advancement.\r\n"
+				cm.sendNextNoESC("You need 60 of #i4001126##t4001126# to proceed to job advancement.\r\n"
 							+ "Please come back when you have enough");
 			}
 		} else if (cm.getPlayer().getLevel() >= 100 && (cm.getPlayer().getJob()%2 == 1 || cm.getPlayer().getJob() == 2214)){
@@ -174,13 +175,13 @@ function action(mode, type, selection) {
 					cm.dispose();
 				}
 			} else {
-				cm.sendSimple("You need 100 of #i4001126##t4001126# to proceed to job advancement.\r\n"
+				cm.sendNextNoESC("You need 100 of #i4001126##t4001126# to proceed to job advancement.\r\n"
 							+ "Please come back when you have enough");
 			}
 		}
 	} else if (status == 1) {
+		cm.getPlayer().dropMessage(5, " Just before the switch ");
 		if (selection > 0) {
-			cm.getPlayer().dropMessage(5, " Just before the switch ");
 			switch(cm.getPlayer().getJob()) {
 				//Beginner
 				case 0:

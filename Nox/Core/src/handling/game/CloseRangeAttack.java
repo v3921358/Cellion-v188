@@ -190,7 +190,7 @@ public final class CloseRangeAttack {
             if (GameConstants.isEventMap(pPlayer.getMapId())) {
                 for (MapleEventType t : MapleEventType.values()) {
                     MapleEvent e = ChannelServer.getInstance(pPlayer.getClient().getChannel()).getEvent(t);
-                    if ((e.isRunning()) /*&& (!pPlayer.isGM()*)*/) {
+                    if ((e.isRunning()) && (!pPlayer.isGM())) {
                         for (int i : e.getType().mapids) {
                             if (pPlayer.getMapId() == i) {
                                 pPlayer.dropMessage(5, "You may not use that here.");
