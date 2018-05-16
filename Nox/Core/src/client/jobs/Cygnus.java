@@ -112,13 +112,13 @@ public class Cygnus {
                                 int inc = ForceAtomType.WA_ARROW_2.getInc();
                                 int type = ForceAtomType.WA_ARROW_2.getForceAtomType();
                                 ForceAtom pAtom = new ForceAtom(1, inc, nFirstImpact, nSecondImpact, nAngle, 0, (int) System.currentTimeMillis(), 1, 0, new Point(0, 0)); 
-                                pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, 0, pPlayer.getId(), type, true, mobID, WindArcher.TRIFLING_WIND_I_1, pAtom, new Rectangle(), 0, 300, pMob.getPosition(), nTriflingWindAtom, pMob.getPosition()));
+                                pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, 0, pPlayer.getId(), type, true, mobID, WindArcher.TRIFLING_WIND_I_1, pAtom, new Rectangle(), 0, 300, pMob.getPosition(), WindArcher.TRIFLING_WIND_I_1, pMob.getPosition()));
                             } else {
                                 int mobID = pAttackMob.getMonsterId();
                                 int inc = ForceAtomType.WA_ARROW_1.getInc();
                                 int type = ForceAtomType.WA_ARROW_1.getForceAtomType();
                                 ForceAtom pAtom = new ForceAtom(1, inc, nFirstImpact, nSecondImpact, nAngle, 0, (int) System.currentTimeMillis(), 1, 0, new Point(0, 0)); 
-                                pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, 0, pPlayer.getId(), type, true, mobID, WindArcher.TRIFLING_WIND_I_1, pAtom, new Rectangle(), 0, 300, pMob.getPosition(), nTriflingWindAtom, pMob.getPosition()));
+                                pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, 0, pPlayer.getId(), type, true, mobID, WindArcher.TRIFLING_WIND_I_1, pAtom, new Rectangle(), 0, 300, pMob.getPosition(), WindArcher.TRIFLING_WIND_I_1, pMob.getPosition()));
                             }
                         }
                     }

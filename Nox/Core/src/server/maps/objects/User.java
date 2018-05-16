@@ -273,12 +273,42 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      */
     public List<VMatrixRecord> aVMatrixRecord = new ArrayList<>();
     
+    /**
+     * Requirement 
+     * @return 
+     */
     public boolean getVMatrixRequirement() {
         return level > 200;
     }
     
+    /**
+     * Checks if player has V Matrix.
+     * @return 
+     */
     public boolean hasVMatrix() {
         return (getQuestStatus(34330).getValue() == 2);
+    }
+    
+    /**
+     * Increases kill count for V Matrix quest.
+     * @param nMonsterID
+     */
+    public void incrementVMatrixKills(int nMonsterID) {
+        if (!hasVMatrix() && nMonsterID == 123456789) { // Mushmom Kills
+            String sQuest = getInfoQuest(13337);
+            if (sQuest.isEmpty()) sQuest = "0";
+            int nVal = Integer.parseInt(sQuest);
+            nVal++;
+            updateInfoQuest(13337, Integer.toString(nVal));
+        }
+    }   
+    
+    /**
+     * Checks kill count for V Matrix quest.
+     * @return 
+     */
+    public int getVMatrixKills() {
+        return Integer.parseInt(getInfoQuest(13337));
     }
     
     /**
@@ -7628,7 +7658,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     }
 
-    public void incrementKillQuestAlpha() {
+    /*public void incrementKillQuestAlpha() {
         String quest = getInfoQuest(13337);
         if (quest.isEmpty()) {
             quest = "0";
@@ -7638,7 +7668,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         questkillnum++;
 
         updateInfoQuest(13337, Integer.toString(questkillnum));
-    }
+    }*/
 
     public static enum FameStatus {
 
@@ -11056,7 +11086,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     }
                     break;
                 case 100:
-                    givePinnacleGear();
+                    //givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1190301, 0, 0, 0, "You have been rewarded with a Gold Maple Leaf Emblem for reaching Lv. " + level + "!");
                     if (GameConstants.isWarriorHero(job)) {
@@ -11113,7 +11143,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     addReward(1, 1190800, 0, 0, 0, "You have been rewarded with a Silver Cygnus Emblem for reaching Lv. " + level + "!");
                     break;
                 case 100:
-                    givePinnacleGear();
+                    ////givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     if (!GameConstants.isMihile(job)) {
                         addReward(1, 1352972, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
@@ -11139,7 +11169,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     addReward(1, 1190700, 0, 0, 0, "You have been rewarded with a Silver Demon Emblem for reaching Lv. " + level + "!");
                     break;
                 case 100:
-                    givePinnacleGear();
+                    ////givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1190701, 0, 0, 0, "You have been rewarded with a Gold Demon Emblem for reaching Lv. " + level + "!");
                     break;
@@ -11166,7 +11196,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     addReward(1, 1190200, 0, 0, 0, "You have been rewarded with a Silver Hybrid Heart for reaching Lv. " + level + "!");
                     break;
                 case 100:
-                    givePinnacleGear();
+                    ////givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1353003, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1190201, 0, 0, 0, "You have been rewarded with a Gold Hybrid Heart for reaching Lv. " + level + "!");
@@ -11218,7 +11248,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     }
                     break;
                 case 100:
-                    givePinnacleGear();
+                    ////givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1190601, 0, 0, 0, "You have been rewarded with a Gold Resistance Emblem for reaching Lv. " + level + "!");
                     if (GameConstants.isMechanic(job)) {
@@ -11295,7 +11325,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     }
                     break;
                 case 100:
-                    givePinnacleGear();
+                    ////givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     if (GameConstants.isAran(job)) {
                         addReward(1, 1190513, 0, 0, 0, "You have been rewarded with a Silver Heroes Emblem for reaching Lv. " + level + "!");
@@ -11340,7 +11370,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     addReward(1, 1191106, 0, 0, 0, "You have been rewarded with a Silver Astro Emblem for reaching Lv. " + level + "!");
                     break;
                 case 100:
-                    givePinnacleGear();
+                    ////givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1352823, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1191107, 0, 0, 0, "You have been rewarded with a Gold Astro Emblem for reaching Lv. " + level + "!");
@@ -11365,7 +11395,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     addReward(1, 1190000, 0, 0, 0, "You have been rewarded with a Lesser Dragon Emblem for reaching Lv. " + level + "!");
                     break;
                 case 100:
-                    givePinnacleGear();
+                    ////givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1190001, 0, 0, 0, "You have been rewarded with a Dragon Emblem for reaching Lv. " + level + "!");
                     break;
@@ -11389,7 +11419,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     addReward(1, 1190100, 0, 0, 0, "You have been rewarded with a Lesser Angel Emblem for reaching Lv. " + level + "!");
                     break;
                 case 100:
-                    givePinnacleGear();
+                    ////givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1190101, 0, 0, 0, "You have been rewarded with an Angel Emblem for reaching Lv. " + level + "!");
                     break;
@@ -11416,7 +11446,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     addReward(1, 1191100, 0, 0, 0, "You have been rewarded with a Silver Crescent Emblem for reaching Lv. " + level + "!");
                     break;
                 case 100:
-                    givePinnacleGear();
+                    //givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1352803, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1191101, 0, 0, 0, "You have been rewarded with a Gold Crescent Emblem for reaching Lv. " + level + "!");
@@ -11442,7 +11472,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     addReward(1, 1191102, 0, 0, 0, "You have been rewarded with a Silver Blossom Emblem for reaching Lv. " + level + "!");
                     break;
                 case 100:
-                    givePinnacleGear();
+                    //givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1191103, 0, 0, 0, "You have been rewarded with a Gold Blossom Emblem for reaching Lv. " + level + "!");
                     break;
@@ -11469,7 +11499,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     addReward(1, 1191108, 0, 0, 0, "You have been rewarded with a Silver Forest Emblem for reaching Lv. " + level + "!");
                     break;
                 case 100:
-                    givePinnacleGear();
+                    //givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1352813, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1191109, 0, 0, 0, "You have been rewarded with a Gold Forest Emblem for reaching Lv. " + level + "!");
@@ -11497,7 +11527,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     addReward(1, 1191000, 0, 0, 0, "You have been rewarded with a Silver Kinesis Emblem for reaching Lv. " + level + "!");
                     break;
                 case 100:
-                    givePinnacleGear();
+                    //givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 1353203, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1191001, 0, 0, 0, "You have been rewarded with a Gold Kinesis Emblem for reaching Lv. " + level + "!");
@@ -11512,7 +11542,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isZero(job)) {
             switch (nLevel) {
                 case 105:
-                    givePinnacleGear();
+                    //givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     addReward(1, 1190530, 0, 0, 0, "You have been rewarded with an Eternal Time Emblem for reaching Lv. " + level + "!");
