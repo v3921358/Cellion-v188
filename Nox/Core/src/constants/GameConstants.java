@@ -1369,6 +1369,9 @@ public class GameConstants {
 
     public static int getLinkedAttackSkill(final int id) {
         switch (id) {
+            case 13110022: // TW 3
+            case 13120003: // TW 2
+                return 13101022; // Trfiling Wind
             case 37001001:
             case 37000010:
             case 37121004:

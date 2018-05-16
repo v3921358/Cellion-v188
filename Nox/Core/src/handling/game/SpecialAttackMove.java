@@ -130,7 +130,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 if (pPlayer.isDeveloper()) {
                     pPlayer.dropMessage(5, "[SpecialAttackMove] Returning Early / Skill ID : " + nSkill);
                 }
-                return;
+                //return;
             }
             if (GameConstants.isMulungSkill(nSkill)) {
                 if (pPlayer.getMapId() / 10000 != 92502) {

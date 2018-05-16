@@ -315,6 +315,11 @@ public class Trade {
             c1.getClient().SendPacket(WvsContext.broadcastMsg(5, "Sorry, the trade feature is not available for the Zero class."));
             return;
         }
+        
+        if (((c1.getGMLevel() == 3 && !c2.isGM()) || (c2.getGMLevel() == 3 && !c1.isGM())) && !ServerConstants.GM_TRADING) {
+            c1.dropMessage(5, "Sorry, Game Masters may not trade with players.");
+            return;
+        }
 
         if (c2 != null && c1.getTrade() != null && c1.getTrade().getPartner() == c2.getTrade() && c2.getTrade() != null && c2.getTrade().getPartner() == c1.getTrade()) {
             c1.getTrade().inTrade = true;

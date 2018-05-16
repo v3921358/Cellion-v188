@@ -27,6 +27,7 @@ import client.inventory.ModifyInventoryOperation;
 import client.inventory.RingSet;
 import constants.GameConstants;
 import constants.InventoryConstants;
+import constants.ServerConstants;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataTool;
@@ -878,6 +879,12 @@ public class MapleInventoryManipulator {
         }
         final Item source = c.getPlayer().getInventory(type).getItem(src);
         if (quantity < 0 || source == null || src == -55 || (!npcInduced && InventoryConstants.isPet(source.getItemId())) || (quantity == 0 && !GameConstants.isRechargable(source.getItemId())) || c.getPlayer().inPVP()) {
+            c.SendPacket(WvsContext.enableActions());
+            return false;
+        }
+        
+        if (!ServerConstants.GM_TRADING && c.getPlayer().getGMLevel() == 3) { // Regular GMs can't drop items for players, just delete from inventory.
+            removeFromSlot(c, type, src, quantity, false);
             c.SendPacket(WvsContext.enableActions());
             return false;
         }

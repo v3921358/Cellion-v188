@@ -5,6 +5,8 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.ModifyInventory;
 import client.inventory.ModifyInventoryOperation;
+import client.jobs.Cygnus;
+import client.jobs.Cygnus.WindArcherHandler;
 import constants.GameConstants;
 import constants.skills.Outlaw;
 import constants.skills.Ranger;
@@ -118,48 +120,9 @@ public final class RangedAttack implements ProcessPacket<ClientSocket> {
             }
 
             if (GameConstants.isWindArcher(pPlayer.getJob())) {
-                int percent = 0, count = 0, skillid = 0, type = 0;
-                if (c.getPlayer().getSkillLevel(SkillFactory.getSkill(13120003)) > 0) {
-                    if (Randomizer.nextInt(100) < 85) {
-                        skillid = 13120003;
-                        type = 1;
-                    } else {
-                        skillid = 13120010;
-                        type = 1;
-                    }
-                    count = Randomizer.rand(1, 5);
-                    percent = 20;
-                } else if (c.getPlayer().getSkillLevel(SkillFactory.getSkill(13110022)) > 0) {
-                    if (Randomizer.nextInt(100) < 90) {
-                        skillid = 13110022;
-                        type = 1;
-                    } else {
-                        skillid = 13110027;
-                        type = 1;
-                    }
-                    count = Randomizer.rand(1, 4);
-                    percent = 10;
-                } else if (c.getPlayer().getSkillLevel(SkillFactory.getSkill(13100022)) > 0) {
-                    if (Randomizer.nextInt(100) < 95) {
-                        skillid = 13100022;
-                        type = 1;
-                    } else {
-                        skillid = 13100027;
-                        type = 1;
-                    }
-                    count = Randomizer.rand(1, 3);
-                    percent = 5;
-                }
-                for (AttackMonster at : pAttack.allDamage) {
-                    Mob mob = pPlayer.getMap().getMonsterByOid(at.getObjectId());
-                    if (Randomizer.nextInt(100) < percent) {
-                        if (mob != null) {
-                            c.getPlayer().getMap().broadcastPacket(c.getPlayer(), JobPacket.WindArcherPacket.TrifleWind(c.getPlayer().getId(), skillid, count, mob.getObjectId(), type), false);
-                            c.SendPacket(JobPacket.WindArcherPacket.TrifleWind(c.getPlayer().getId(), skillid, count, mob.getObjectId(), type));
-                        }
-                    }
-                }
+                WindArcherHandler.OnTriflingWind(pPlayer, pAttack);
             }
+            
             switch (pAttack.skill) {
                 case 21001009: // Aran Smash Wave
                 case 13101005:

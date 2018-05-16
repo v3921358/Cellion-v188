@@ -5,17 +5,29 @@ package client.jobs;
 
 import client.CharacterTemporaryStat;
 import client.ClientSocket;
+import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
 import constants.skills.DawnWarrior;
 import constants.skills.NightWalker;
 import constants.skills.ThunderBreaker;
+import constants.skills.WindArcher;
+import handling.world.AttackInfo;
+import handling.world.AttackMonster;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.Random;
 import java.util.concurrent.ScheduledFuture;
+import javax.swing.text.Position;
 import server.StatEffect;
 import server.StatInfo;
 import server.Timer;
+import server.life.Mob;
+import server.life.MobAttackInfo;
+import server.maps.objects.ForceAtom;
+import server.maps.objects.ForceAtomType;
 import server.maps.objects.User;
+import tools.Utility;
 import tools.packet.BuffPacket;
 import tools.packet.CField;
 
@@ -70,7 +82,50 @@ public class Cygnus {
     }
 
     public static class WindArcherHandler {
+        
+        public static void OnTriflingWind(User pPlayer, AttackInfo pAttack) {
+            
+            Skill pTrifling;
+            if (pPlayer.hasSkill(WindArcher.TRIFLING_WIND_III_1)) pTrifling = SkillFactory.getSkill(WindArcher.TRIFLING_WIND_III_1);
+            else if (pPlayer.hasSkill(WindArcher.TRIFLING_WIND_II_1)) pTrifling = SkillFactory.getSkill(WindArcher.TRIFLING_WIND_II_1);
+            else if (pPlayer.hasSkill(WindArcher.TRIFLING_WIND_I)) pTrifling = SkillFactory.getSkill(WindArcher.TRIFLING_WIND_I);
+            else return;
+            
+            int nMaxTriflingCount = pTrifling.getEffect(pPlayer.getTotalSkillLevel(pTrifling.getId())).info.get(StatInfo.x);
+            int nProp = pTrifling.getEffect(pPlayer.getTotalSkillLevel(pTrifling.getId())).info.get(StatInfo.prop);
+            int nSubProp = pTrifling.getEffect(pPlayer.getTotalSkillLevel(pTrifling.getId())).info.get(StatInfo.subProp);
+            
+            if (pPlayer.hasBuff(CharacterTemporaryStat.TriflingWhimOnOff)) {
+                for (int i = 0; i < nMaxTriflingCount; i++) {
+                    int nFirstImpact = 36;
+                    int nSecondImpact = 6;
+                    int nAngle;
 
+                    if (new Random().nextBoolean()) nAngle = 0;
+                    else nAngle = 180;
+
+                    for (AttackMonster pAttackMob : pAttack.allDamage) {
+                        Mob pMob = (Mob) pPlayer.getMap().getMonsterByOid(pAttackMob.getObjectId());
+                        if (Utility.resultSuccess(nProp)) {
+                            if (Utility.resultSuccess(nSubProp)) {
+                                int mobID = pAttackMob.getObjectId();
+                                int inc = ForceAtomType.WA_ARROW_2.getInc();
+                                int type = ForceAtomType.WA_ARROW_2.getForceAtomType();
+                                ForceAtom pAtom = new ForceAtom(1, inc, nFirstImpact, nSecondImpact, nAngle, 0, (int) System.currentTimeMillis(), 1, 0, new Point(0, 0)); 
+                                pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, 0, pPlayer.getId(), type, true, mobID, WindArcher.TRIFLING_WIND_I_1, pAtom, new Rectangle(), 0, 300, pMob.getPosition(), nTriflingWindAtom, pMob.getPosition()));
+                            } else {
+                                int mobID = pAttackMob.getMonsterId();
+                                int inc = ForceAtomType.WA_ARROW_1.getInc();
+                                int type = ForceAtomType.WA_ARROW_1.getForceAtomType();
+                                ForceAtom pAtom = new ForceAtom(1, inc, nFirstImpact, nSecondImpact, nAngle, 0, (int) System.currentTimeMillis(), 1, 0, new Point(0, 0)); 
+                                pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, 0, pPlayer.getId(), type, true, mobID, WindArcher.TRIFLING_WIND_I_1, pAtom, new Rectangle(), 0, 300, pMob.getPosition(), nTriflingWindAtom, pMob.getPosition()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
     }
 
     public static class NightWalkerHandler {

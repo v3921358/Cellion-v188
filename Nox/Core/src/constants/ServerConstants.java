@@ -59,6 +59,7 @@ public class ServerConstants {
     public static final int LOGIN_ATTEMPTS = 5; //Amount of login attempts before game will close.
     public static boolean GLOBAL_GM_ACC = true; //True = Shares the account GM level on new characters.
     public static boolean DEV_DEFAULT_CD = true; //True = Accounts GM Level 5+ have skill cooldowns toggled off by default.
+    public static boolean GM_TRADING = false; //If false, GMs can no longer drop items or trade with regular players.
     
     /*Extra-Client Configuration*/
     public static boolean ANTI_CHEAT = true; // Enables Cellion Anti-Cheat. (THIS HAS NOT BEEN CODED YET)

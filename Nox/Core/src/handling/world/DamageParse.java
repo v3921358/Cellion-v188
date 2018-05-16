@@ -85,7 +85,7 @@ public class DamageParse {
                     //TODO: Do something here
                 }
             } else if (attack.mobCount > effect.getMobCount() && !GameConstants.isMismatchingBulletSkill(attack.skill)) { //&& attack.skill != Paladin.ADVANCED_CHARGE && attack.skill != 22110025) {
-                pPlayer.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
+                //pPlayer.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
                 if (pPlayer.isIntern()) {
                     pPlayer.yellowMessage("[Warning] Mismatching bullet count for skill ID " + attack.skill + ".");
                 }
@@ -93,9 +93,8 @@ public class DamageParse {
             }
         }
 
-        if (ServerConstants.ADMIN_MODE) {
-            pPlayer.dropMessage(-1, new StringBuilder().append("Animation: ").append(Integer.toHexString((attack.display & 0x8000) != 0 ? attack.display - 32768 : attack.display)).toString());
-        }
+        if (ServerConstants.ADMIN_MODE) pPlayer.dropMessage(-1, new StringBuilder().append("Animation: ").append(Integer.toHexString((attack.display & 0x8000) != 0 ? attack.display - 32768 : attack.display)).toString());
+        
         boolean useAttackCount = attack.skill != Marksman.SNIPE && attack.skill != Mercedes.LIGHTNING_EDGE;
 
         if (attack.numberOfHits > 0 && attack.mobCount > 0) {
@@ -826,10 +825,12 @@ public class DamageParse {
         if (effect != null) {
             if (effect.getBulletCount() > 1) {
                 if ((attack.numberOfHits > effect.getBulletCount()) || (attack.mobCount > effect.getMobCount())) {
+                    if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at line " + Thread.currentThread().getStackTrace()[2].getLineNumber() + ".");
                     pPlayer.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
                     return;
                 }
             } else if (((attack.numberOfHits > effect.getAttackCount()) && (effect.getAttackCount() != 0)) || (attack.mobCount > effect.getMobCount())) {
+                if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at line " + Thread.currentThread().getStackTrace()[2].getLineNumber() + ".");
                 pPlayer.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
                 return;
             }
@@ -954,8 +955,8 @@ public class DamageParse {
 
                 if ((GameConstants.getAttackDelay(attack.skill, theSkill) >= 100) && (!GameConstants.isNoDelaySkill(attack.skill)) && !GameConstants.isMismatchingBulletSkill(attack.skill) && (!monster.getStats().isBoss()) && (pPlayer.getTruePosition().distanceSq(monster.getTruePosition()) > GameConstants.getAttackRange(effect, pPlayer.getStat().defRange))) {
                     pPlayer.getCheatTracker().registerOffense(CheatingOffense.ATTACK_FARAWAY_MONSTER, new StringBuilder().append("[Distance: ").append(pPlayer.getTruePosition().distanceSq(monster.getTruePosition())).append(", Expected Distance: ").append(GameConstants.getAttackRange(effect, pPlayer.getStat().defRange)).append(" Job: ").append(pPlayer.getJob()).append("]").toString());
-                    //pPlayer.yellowMessage("[AntiCheat] Please remember hacking goes against our Terms of Service. Skill (" + attack.skill + ")");
-                    //return;
+                    if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at line " + Thread.currentThread().getStackTrace()[2].getLineNumber() + ".");
+                    return;
                 }
                 if ((attack.skill == 2301002) && (!monsterstats.getUndead())) {
                     pPlayer.getCheatTracker().registerOffense(CheatingOffense.HEAL_ATTACKING_UNDEAD);
