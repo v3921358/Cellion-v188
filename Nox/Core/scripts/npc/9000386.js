@@ -33,6 +33,7 @@ function action(mode, type, selection) {
 					break;
 				//Cygnus Knight
 				case 1000:
+					cm.getPlayer().dropMessage(5, " Cygnus advancement ");
 					cm.sendSimple("You are currently a #bCygnus Knight#k.\r\n"
 					+ "Please choose your job advancement.\r\n"
 					+ "#r#L1#Dawn Warrior#l\r\n"
@@ -179,14 +180,18 @@ function action(mode, type, selection) {
 		}
 	} else if (status == 1) {
 		if (selection > 0) {
+			cm.getPlayer().dropMessage(5, " Just before the switch ");
 			switch(cm.getPlayer().getJob()) {
 				//Beginner
 				case 0:
+				cm.getPlayer().dropMessage(5, " Beginner advance ");
 				//Cygnus Knight
 				case 1000:
+				cm.getPlayer().dropMessage(5, " Cygnus advance ");
 				//Citizen
 				case 3000:
 					cm.getPlayer().changeJob(cm.getPlayer().getJob() + (100*selection));
+					cm.getPlayer().dropMessage(5, " You should have advanced from your basic job ");
 					break;
 				//Warrior
 				case 100:
@@ -199,13 +204,18 @@ function action(mode, type, selection) {
 				//Pirate
 				case 500:
 					cm.getPlayer().changeJob(cm.getPlayer().getJob() + (10*selection));
+					cm.getPlayer().dropMessage(5, " You are now 2nd job! ");
 					break;
 				//Demons
 				case 3001:
 					cm.getPlayer().changeJob(cm.getPlayer().getJob() + selection);
+					cm.getPlayer().dropMessage(5, " You are now a true demon ");
 					break;
 			}
 			cm.dispose();
+		}
+		else {
+			cm.getPlayer().dropMessage(5, " Invalid Selection ");
 		}
 	}
 }

@@ -1253,27 +1253,6 @@ public class CommandVault {
         }
     }
     
-    public static class Online extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            int nSize = 0;
-            for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
-                nSize += ChannelServer.getInstance(i).getPlayerStorage().getAllCharacters().size();
-            }
-
-            String sMessage = "#d" + ServerConstants.SERVER_NAME + " MapleStory Server#k\r\n"
-                    + "There are currently #e#r" + nSize + "#k#n user(s) online.\r\n\r\n#r";
-
-            for (int i = 1; i <= ChannelServer.getChannelCount(); i++) {
-                sMessage += ChannelServer.getInstance(i).getPlayerStorage().formatOnlinePlayers(true);
-            }
-
-            c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage, NPCChatByType.NPC_Cancellable));
-            return 1;
-        }
-    }
-    
     public static class FM extends CommandExecute {
 
         @Override

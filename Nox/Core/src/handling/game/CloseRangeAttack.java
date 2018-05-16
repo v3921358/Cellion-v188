@@ -190,7 +190,7 @@ public final class CloseRangeAttack {
             if (GameConstants.isEventMap(pPlayer.getMapId())) {
                 for (MapleEventType t : MapleEventType.values()) {
                     MapleEvent e = ChannelServer.getInstance(pPlayer.getClient().getChannel()).getEvent(t);
-                    if ((e.isRunning()) && (!pPlayer.isGM())) {
+                    if ((e.isRunning()) /*&& (!pPlayer.isGM()*)*/) {
                         for (int i : e.getType().mapids) {
                             if (pPlayer.getMapId() == i) {
                                 pPlayer.dropMessage(5, "You may not use that here.");
@@ -255,7 +255,19 @@ public final class CloseRangeAttack {
             }
         }
         
-        DamageParse.applyAttack(pAttack, pSkill, c.getPlayer(), nAttackCount, nMaxDamage, pEffect, bMirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
+        DamageParse.applyAttack(pAttack, pSkill, pPlayer, nAttackCount, nMaxDamage, pEffect, bMirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
+        
+        /*int nBullet = 1;
+        switch (pAttack.skill) {
+            case Page.FLAME_CHARGE_1:
+                nBullet = pEffect.getAttackCount();
+                DamageParse.applyAttack(pAttack, pSkill, pPlayer, nAttackCount, nMaxDamage, pEffect, AttackType.NON_RANGED);
+                break;
+            default:
+                DamageParse.applyAttack(pAttack, pSkill, pPlayer, nAttackCount, nMaxDamage, pEffect, AttackType.NON_RANGED);
+                break;
+        }*/
+        
         pAttack.cleanupMemory(); // Clean up memory references.
     }
 }

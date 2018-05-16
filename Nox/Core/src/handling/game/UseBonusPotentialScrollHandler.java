@@ -17,6 +17,7 @@ import server.MapleInventoryManipulator;
 import server.Randomizer;
 import server.maps.objects.User;
 import server.potentials.Cube;
+import server.potentials.ItemPotentialProvider;
 import server.potentials.ItemPotentialTierType;
 import tools.packet.CField;
 import tools.packet.WvsContext;
@@ -38,8 +39,7 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<ClientSocke
         pPlayer.updateTick(iPacket.DecodeInt());
         short nSlot = iPacket.DecodeShort();
         short nDestination = iPacket.DecodeShort();
-        pPlayer.yellowMessage("Slot: " + nSlot + " / nDestination: " + nDestination);
-
+        
         Item pScroll = pPlayer.getInventory(MapleInventoryType.USE).getItem(nSlot);
         Equip pEquip = (Equip) pPlayer.getInventory(MapleInventoryType.EQUIP).getItem(nDestination);
         ItemPotentialTierType pTier = pEquip.getPotentialBonusTier();

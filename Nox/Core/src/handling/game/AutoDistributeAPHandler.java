@@ -10,11 +10,10 @@ import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.WvsContext;
 import net.ProcessPacket;
-import server.Randomizer;
 
 /**
- *
- * @author
+ * UserAbilityMassUpRequest
+ * @author Mazen Massoud
  */
 public class AutoDistributeAPHandler implements ProcessPacket<ClientSocket> {
 
@@ -25,97 +24,70 @@ public class AutoDistributeAPHandler implements ProcessPacket<ClientSocket> {
 
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
-        User chr = c.getPlayer();
-
-        chr.updateTick(iPacket.DecodeInt());
+        User pPlayer = c.getPlayer();
+        pPlayer.updateTick(iPacket.DecodeInt()); // tTick
+        int nType = iPacket.DecodeInt();
+        Stat pStat = null;
+        
+        if (nType == 1) {
+            pStat = Stat.getByValue(iPacket.DecodeShort());
+        } else if (nType == 2) {
+            iPacket.DecodeInt();
+            iPacket.DecodeInt();
+            iPacket.DecodeInt();
+            pStat = Stat.getByValue(iPacket.DecodeShort());
+        }
+        
         iPacket.DecodeInt();
-        long primaryStat = iPacket.DecodeLong();
-        int amount = iPacket.DecodeInt();
-        long secondaryStat = 0;
-        int amount2 = 0;
-
-        PlayerStats playerst = chr.getStat();
-        Map<Stat, Long> statupdate = new EnumMap<>(Stat.class);
-
-        if (!GameConstants.isXenon(chr.getJob())) {
-            secondaryStat = iPacket.DecodeLong();
-            amount2 = iPacket.DecodeInt();
-        }
-
-        if (GameConstants.isDemonAvenger(chr.getJob()) && Stat.MaxHP.getValue() != 0) {
-            if (chr.getRemainingAp() >= amount + amount2) {
-                int maxhp = playerst.getMaxHp();
-                if (chr.getHpApUsed() >= 10000 || maxhp >= 500000) {
-                    return;
-                }
-                maxhp += Randomizer.rand(36, 42) * chr.getRemainingAp();
-                maxhp = Math.min(500000, Math.abs(maxhp));
-                chr.setHpApUsed((short) (chr.getHpApUsed() + chr.getRemainingAp()));
-                playerst.setMaxHp(maxhp, chr);
-                statupdate.put(Stat.MaxHP, (long) maxhp);
-
-                chr.setRemainingAp((short) (chr.getRemainingAp() - (amount)));
-                statupdate.put(Stat.AP, (long) chr.getRemainingAp());
-
-                c.SendPacket(WvsContext.OnPlayerStatChanged(chr, statupdate));
-            }
-        }
-
-        if ((amount < 0) || (amount2 < 0)) {
+        iPacket.DecodeShort();
+        short nAmount = iPacket.DecodeShort();
+        short addStat = nAmount;
+        
+        if (pPlayer.getRemainingAp() < nAmount) {
             return;
         }
-
-        if (chr.getRemainingAp() >= amount + amount2) {
-            if ((primaryStat & Stat.STR.getValue()) != 0) {
-                playerst.setStr((short) (playerst.getStr() + amount), chr);
-                statupdate.put(Stat.STR, Long.valueOf(playerst.getStr()));
+        
+        if (pStat == Stat.MaxMP || pStat == Stat.MaxHP) {
+            addStat *= 20;
+            
+            if (GameConstants.isDemonAvenger(pPlayer.getJob())) {
+                pPlayer.setHpApUsed((short) (pPlayer.getHpApUsed() + pPlayer.getRemainingAp()));
             }
-            if ((primaryStat & Stat.DEX.getValue()) != 0) {
-                playerst.setDex((short) (playerst.getDex() + amount), chr);
-                statupdate.put(Stat.DEX, Long.valueOf(playerst.getDex()));
+        }
+        
+        Map<Stat, Long> pStatUpdate = new EnumMap<>(Stat.class);
+        PlayerStats pCharStat = pPlayer.getStat();
+        
+        if (pPlayer.getRemainingAp() >= nAmount) {
+            if (pStat == Stat.STR) {
+                pCharStat.setStr((short) (pCharStat.getStr() + nAmount), pPlayer);
+                pStatUpdate.put(Stat.STR, Long.valueOf(pCharStat.getStr()));
             }
-            if ((primaryStat & Stat.INT.getValue()) != 0) {
-                playerst.setInt((short) (playerst.getInt() + amount), chr);
-                statupdate.put(Stat.INT, Long.valueOf(playerst.getInt()));
+            if (pStat == Stat.DEX) {
+                pCharStat.setDex((short) (pCharStat.getDex() + nAmount), pPlayer);
+                pStatUpdate.put(Stat.DEX, Long.valueOf(pCharStat.getDex()));
             }
-            if ((primaryStat & Stat.LUK.getValue()) != 0) {
-                playerst.setLuk((short) (playerst.getLuk() + amount), chr);
-                statupdate.put(Stat.LUK, Long.valueOf(playerst.getLuk()));
+            if (pStat == Stat.INT) {
+                pCharStat.setInt((short) (pCharStat.getInt() + nAmount), pPlayer);
+                pStatUpdate.put(Stat.INT, Long.valueOf(pCharStat.getInt()));
             }
-            if ((primaryStat & Stat.MaxHP.getValue()) != 0) {
-                if (playerst.getMaxHp() + (amount * 30) > 500000) {
+            if (pStat == Stat.LUK) {
+                pCharStat.setLuk((short) (pCharStat.getLuk() + nAmount), pPlayer);
+                pStatUpdate.put(Stat.LUK, Long.valueOf(pCharStat.getLuk()));
+            }
+            if (pStat == Stat.MaxHP) {
+                if (pCharStat.getMaxHp() + (nAmount * 30) > 500000) {
                     return;
                 }
-                playerst.setMaxHp((short) (playerst.getMaxHp() + amount * 30), chr);
-                statupdate.put(Stat.MaxHP, Long.valueOf(playerst.getMaxHp()));
+                pCharStat.setMaxHp((short) (pCharStat.getMaxHp() + nAmount * 30), pPlayer);
+                pStatUpdate.put(Stat.MaxHP, Long.valueOf(pCharStat.getMaxHp()));
             }
-            if ((secondaryStat & Stat.STR.getValue()) != 0) {
-                playerst.setStr((short) (playerst.getStr() + amount2), chr);
-                statupdate.put(Stat.STR, Long.valueOf(playerst.getStr()));
-            }
-            if ((secondaryStat & Stat.DEX.getValue()) != 0) {
-                playerst.setDex((short) (playerst.getDex() + amount2), chr);
-                statupdate.put(Stat.DEX, Long.valueOf(playerst.getDex()));
-            }
-            if ((secondaryStat & Stat.INT.getValue()) != 0) {
-                playerst.setInt((short) (playerst.getInt() + amount2), chr);
-                statupdate.put(Stat.INT, Long.valueOf(playerst.getInt()));
-            }
-            if ((secondaryStat & Stat.LUK.getValue()) != 0) {
-                playerst.setLuk((short) (playerst.getLuk() + amount2), chr);
-                statupdate.put(Stat.LUK, Long.valueOf(playerst.getLuk()));
-            }
-            if ((secondaryStat & Stat.MaxHP.getValue()) != 0) {
-                if (playerst.getMaxHp() + (amount2 * 30) > 500000) {
-                    return;
-                }
-                playerst.setMaxHp((short) (playerst.getMaxHp() + amount2 * 30), chr);
-                statupdate.put(Stat.MaxHP, Long.valueOf(playerst.getMaxHp()));
-            }
-            chr.setRemainingAp((short) (chr.getRemainingAp() - (amount + amount2)));
-            statupdate.put(Stat.AP, (long) chr.getRemainingAp());
-            c.SendPacket(WvsContext.OnPlayerStatChanged(chr, statupdate));
+            
+            pPlayer.setRemainingAp(pPlayer.getRemainingAp() - nAmount);
+            //pStatUpdate.put(pStat, (long) addStat);
+            pStatUpdate.put(Stat.AP, (long) pPlayer.getRemainingAp());
+            c.SendPacket(WvsContext.OnPlayerStatChanged(pPlayer, pStatUpdate));
+            c.SendPacket(WvsContext.enableActions());
         }
     }
-
 }

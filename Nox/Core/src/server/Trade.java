@@ -20,9 +20,9 @@ import tools.packet.CField;
 import tools.packet.WvsContext;
 import tools.packet.PlayerShopPacket;
 
-public class MapleTrade {
+public class Trade {
 
-    private MapleTrade partner = null;
+    private Trade partner = null;
     private List<Item> items = new LinkedList<>();
     private List<Item> exchangeItems;
     private long meso = 0;
@@ -31,12 +31,12 @@ public class MapleTrade {
     private boolean inTrade = false;
     private User chr;
     private byte tradingslot;
-
-    public MapleTrade(byte tradingslot, User chr) {
+    
+    public Trade(byte tradingslot, User chr) {
         this.tradingslot = tradingslot;
         this.chr = chr;
     }
-
+    
     public void completeTrade() {
         if (exchangeItems != null) {
             List<Item> itemz = new LinkedList<>(exchangeItems);
@@ -57,6 +57,8 @@ public class MapleTrade {
         }
         exchangeMeso = 0;
         chr.getClient().SendPacket(CField.InteractionPacket.TradeMessage(tradingslot, (byte) 7));
+        
+        SpecialTrade.OnSpecialTradeResult(chr, partner.getCharacter());
     }
 
     public void cancel(ClientSocket c, User chr) {
@@ -77,6 +79,8 @@ public class MapleTrade {
         meso = 0;
 
         c.SendPacket(CField.InteractionPacket.getTradeCancel(tradingslot));
+        
+        SpecialTrade.OnSpecialTradeReset(chr, partner.getCharacter()); // Reset Special Trade Offers
     }
 
     public boolean isLocked() {
@@ -109,6 +113,11 @@ public class MapleTrade {
     }
 
     public void chat(String message) throws Exception {
+        
+        if (partner != null) { 
+            if(SpecialTrade.OnSpecialTradeRequest(chr, partner.getCharacter(), message)) return; // Check if using special trade command.
+        }
+        
         if (!CommandProcessor.processCommand(chr.getClient(), message, ServerConstants.CommandType.TRADE)) {
             chr.dropMessage(-2, chr.getName() + " : " + message);
             if (partner != null) {
@@ -134,11 +143,11 @@ public class MapleTrade {
         }
     }
 
-    public MapleTrade getPartner() {
+    public Trade getPartner() {
         return partner;
     }
 
-    public void setPartner(MapleTrade partner) {
+    public void setPartner(Trade partner) {
         if (locked) {
             return;
         }
@@ -228,8 +237,8 @@ public class MapleTrade {
     }
 
     public static void completeTrade(User c) {
-        MapleTrade local = c.getTrade();
-        MapleTrade partner = local.getPartner();
+        Trade local = c.getTrade();
+        Trade partner = local.getPartner();
 
         if (partner == null || local.locked) {
             return;
@@ -255,10 +264,10 @@ public class MapleTrade {
         }
     }
 
-    public static void cancelTrade(MapleTrade trade, ClientSocket c, User chr) {
+    public static void cancelTrade(Trade trade, ClientSocket c, User chr) {
         trade.cancel(c, chr);
 
-        MapleTrade partner = trade.getPartner();
+        Trade partner = trade.getPartner();
         if (partner != null && partner.getCharacter() != null) {
             partner.cancel(partner.getCharacter().getClient(), partner.getCharacter());
             partner.getCharacter().setTrade(null);
@@ -273,7 +282,7 @@ public class MapleTrade {
         }
 
         if (c.getTrade() == null) {
-            c.setTrade(new MapleTrade((byte) 0, c));
+            c.setTrade(new Trade((byte) 0, c));
             c.getClient().SendPacket(CField.InteractionPacket.getTradeStart(c.getClient(), c.getTrade(), (byte) 0));
         } else {
             c.getClient().SendPacket(WvsContext.broadcastMsg(5, "You are already in a trade window."));
@@ -291,7 +300,7 @@ public class MapleTrade {
             return;
         }
         if (c2 != null && c2.getTrade() == null) {
-            c2.setTrade(new MapleTrade((byte) 1, c2));
+            c2.setTrade(new Trade((byte) 1, c2));
             c2.getTrade().setPartner(c1.getTrade());
             c1.getTrade().setPartner(c2.getTrade());
             c2.getClient().SendPacket(CField.InteractionPacket.getTradeInvite(c1));
@@ -311,13 +320,17 @@ public class MapleTrade {
             c1.getTrade().inTrade = true;
             c2.getClient().SendPacket(PlayerShopPacket.shopVisitorAdd(c1, 1));
             c1.getClient().SendPacket(CField.InteractionPacket.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 1));
+            
+            // Notify the players of the special trade commands.
+            SpecialTrade.OnPlayerOneNotification(c1);
+            SpecialTrade.OnPlayerTwoNotification(c2);
         } else {
             c1.getClient().SendPacket(WvsContext.broadcastMsg(5, "The other player has already closed the trade"));
         }
     }
 
     public static void declineTrade(User c) {
-        MapleTrade trade = c.getTrade();
+        Trade trade = c.getTrade();
         if (trade != null) {
             if (trade.getPartner() != null) {
                 User other = trade.getPartner().getCharacter();

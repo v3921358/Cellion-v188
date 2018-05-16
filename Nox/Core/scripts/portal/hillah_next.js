@@ -1,17 +1,8 @@
-/*
- * 퓨어온라인 소스 스크립트 입니다.
- * 
- * 포탈위치 : 
- * 포탈설명 : 
- * 
- * 제작 : 주크블랙
- * 
- */
-importPackage(java.lang);
-importPackage(Packages.packet.creators);
-
 function enter(pi) {
-    var eim = pi.getPlayer().getEventInstance();
+	pi.openNpc(1402401);
+	//pi.warp(240040600, 0);
+	
+	/*var eim = pi.getPlayer().getEventInstance();
     if (eim == null) {
         pi.warp(262031200);
         return true;
@@ -30,5 +21,5 @@ function enter(pi) {
     } else {
         pi.warp(curmap);
         return true;
-    }
+    }*/
 }

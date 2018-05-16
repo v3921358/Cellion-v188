@@ -84,7 +84,7 @@ public class DawnWarriorEffect extends AbstractEffect {
             case DawnWarrior.SOUL_RUSH:
                 break;
             case DawnWarrior.SOUL_SPEED:
-                pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, -pEffect.info.get(StatInfo.x));
                 break;
             case DawnWarrior.SWORD_BOOSTER:
                 break;

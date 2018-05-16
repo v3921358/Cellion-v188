@@ -107,7 +107,8 @@ public class DistributeAPHandler implements ProcessPacket<ClientSocket> {
             statupdate.put(Stat.AP, (long) chr.getRemainingAp());
             c.SendPacket(WvsContext.OnPlayerStatChanged(chr, statupdate));
         }
-
+        
+        c.SendPacket(WvsContext.enableActions());
     }
 
 }

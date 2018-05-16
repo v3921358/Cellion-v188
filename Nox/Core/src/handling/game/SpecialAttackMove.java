@@ -340,7 +340,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 break;
             }
             case DawnWarrior.SOUL_SPEED:{
-                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, 20);
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, -20);
                 break;
             }
             case DawnWarrior.FALLING_MOON:{

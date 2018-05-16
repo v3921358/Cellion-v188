@@ -162,7 +162,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private transient RockPaperScissors rps;
     private Map<Integer, MonsterFamiliar> familiars;
     private MapleStorage storage;
-    private transient MapleTrade trade;
+    private transient Trade trade;
     private MapleMount mount;
     private List<Integer> finishedAchievements;
     private MapleMessenger messenger;
@@ -342,7 +342,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     /**
      * Boss Attempt Timer System Variables/Methods
      */
-    public long tHila, tZakum, tHorntail, tRanmaru, tCrimsonQueen, tPierre, tVonBon, tVellum, tLotus, tUrsus, tArkarium, tCygnus, tMagnus, tLucid;
+    public long tHilla, tZakum, tHorntail, tRanmaru, tCrimsonQueen, tPierre, tVonBon, tVellum, tLotus, tUrsus, tArkarium, tCygnus, tVonLeon, tPrincessNo, tGollux, tDamien, tPinkBean, tMagnus, tLucid;
     
     public void setBossAttempt(String sBossName) {
         BossTimer.OnSetBossAttempt(this, sBossName);
@@ -447,6 +447,12 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         pStopForceAtom = pNew;
     }
 
+    /**
+     * Wallet Trade - Temporary Variables
+     * Used for trading NX, Vote Points, Donor Points, and Event Points.
+     */
+    public int nOfferNX, nOfferVP, nOfferDP, nOfferEP;
+    
     /**
      * Fully dispose a character through enable actions and clearing clicked NPC.
      */
@@ -857,7 +863,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         ret.aVMatrixRecord = ct.aVMatrixRecord;
         
         /*Boss Time Variables*/
-        ret.tHila = ct.tHila;
+        ret.tHilla = ct.tHilla;
         ret.tZakum = ct.tZakum;
         ret.tHorntail = ct.tHorntail;
         ret.tRanmaru = ct.tRanmaru;
@@ -867,6 +873,16 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         ret.tVellum = ct.tVellum;
         ret.tArkarium = ct.tArkarium;
         ret.tCygnus = ct.tCygnus;
+        ret.tPierre = ct.tPierre;
+        ret.tVonBon = ct.tVonBon;
+        ret.tVellum = ct.tVellum;
+        ret.tArkarium = ct.tArkarium;
+        ret.tCygnus = ct.tCygnus;
+        ret.tVonLeon = ct.tVonLeon;
+        ret.tPrincessNo = ct.tPrincessNo;
+        ret.tGollux = ct.tGollux;
+        ret.tDamien = ct.tDamien;
+        ret.tPinkBean = ct.tPinkBean;
         ret.tMagnus = ct.tMagnus;
         ret.tLucid = ct.tLucid;
         return ret;
@@ -3856,7 +3872,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
         cancelMapTimeLimitTask();
         if (getTrade() != null) {
-            MapleTrade.cancelTrade(getTrade(), client, this);
+            Trade.cancelTrade(getTrade(), client, this);
         }
         //antiMacro.reset(); // reset lie detector
     }
@@ -4142,6 +4158,16 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         updateSingleStat(Stat.AP, this.remainingAp);
     }
 
+    public void OnGainSP(int nAmount) {
+        this.remainingSp[GameConstants.getSkillBook(job, 0)] += nAmount; // Get Skill Book Auto
+        updateSingleStat(Stat.SP, 0); // Value doesn't matter here.
+    }
+    
+    public void OnGainSP(int nAmount, int nSkillBook) {
+        this.remainingSp[nSkillBook] += nAmount; // Get Skill Book Auto
+        updateSingleStat(Stat.SP, 0); // Value doesn't matter here.
+    }
+    
     public void gainSP(int sp) {
         this.remainingSp[GameConstants.getSkillBook(job, 0)] += sp; //default
         updateSingleStat(Stat.SP, 0); // we don't care the value here
@@ -5286,8 +5312,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
         
         if (GameConstants.isZero(job)) {
-            gainSP(3, 0); // Alpha
-            gainSP(3, 1); // Beta
+            OnGainSP(3, 0); // Alpha
+            OnGainSP(3, 1); // Beta
         } else {
             
             /* Job Advancement & Bonus SP Gain*/
@@ -5296,29 +5322,29 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     OnJobAdvanceRequest();
                     break;
                 case 20:
-                    if (GameConstants.isDualBlade(job)) gainSP(nSP);
+                    if (GameConstants.isDualBlade(job)) OnGainSP(nSP);
                     OnJobAdvanceRequest();
                     break;
                 case 30:
-                    gainSP(nSP);
+                    OnGainSP(nSP);
                     OnJobAdvanceRequest();
                     break;
                 case 45:
-                    if (GameConstants.isDualBlade(job)) gainSP(nSP);
+                    if (GameConstants.isDualBlade(job)) OnGainSP(nSP);
                     OnJobAdvanceRequest();
                     break;
                 case 60:
-                    gainSP(nSP);
+                    OnGainSP(nSP);
                     OnJobAdvanceRequest();
                     break;
                 case 100:
-                    gainSP(nSP);
+                    OnGainSP(nSP);
                     OnJobAdvanceRequest();
                     break;
             }
             
             // Basic SP Gain
-            gainSP(nSP);
+            OnGainSP(nSP);
         }
         
         /*Character Stat Update*/
@@ -7080,11 +7106,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         this.party = party;
     }
 
-    public MapleTrade getTrade() {
+    public Trade getTrade() {
         return trade;
     }
 
-    public void setTrade(MapleTrade trade) {
+    public void setTrade(Trade trade) {
         this.trade = trade;
     }
 
@@ -7367,7 +7393,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         //MapleFamily.setOfflineFamilyStatus(familyid, seniorid, junior1, junior2, currentrep, totalrep, id);
     }
 
-    public long getNX() {
+    public int getNX() {
         return maplepoints;
     }
     

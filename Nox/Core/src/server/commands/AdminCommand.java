@@ -205,7 +205,7 @@ public class AdminCommand {
                 c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") could not be found.");
                 return 0;
             }
-            while (pUser.getLevel() < Integer.parseInt(splitted[1])) {
+            while (pUser.getLevel() < Integer.parseInt(splitted[2])) {
                 if (pUser.getLevel() < 255) {
                     pUser.OnLevelUp();
                 }

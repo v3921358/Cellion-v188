@@ -30,7 +30,7 @@ public final class OnUserSitRequest implements ProcessPacket<ClientSocket> {
             pPlayer.cancelFishingTask();
             pPlayer.setChair(0);
             c.SendPacket(CField.cancelChair(pPlayer.getId(), -1));
-            pPlayer.getMap().broadcastPacket(pPlayer, CField.OnShowChair(pPlayer.getId(), nChairID), false);
+            pPlayer.getMap().broadcastPacket(pPlayer, CField.showChair(pPlayer.getId(), nChairID), false);
             pPlayer.completeDispose();
         } else {
             pPlayer.setChair(nChairID);

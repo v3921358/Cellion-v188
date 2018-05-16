@@ -10,7 +10,7 @@ import handling.world.World;
 import java.util.Arrays;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.MapleTrade;
+import server.Trade;
 import server.maps.FieldLimitType;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -178,7 +178,7 @@ public class PlayerInteractionHandler implements ProcessPacket<ClientSocket> {
                 }
                 final byte createType = iPacket.DecodeByte();
                 if (createType == 4) { // trade//was 3
-                    MapleTrade.startTrade(chr);
+                    Trade.startTrade(chr);
                 } else if (createType == 1 || createType == 2 || createType == 3 || createType == 5 || createType == 6) { // shop
                     //if (createType == 4 && !chr.isIntern()) { //not hired merch... blocked playershop
                     //    c.write(CWvsContext.enableActions());
@@ -243,11 +243,11 @@ public class PlayerInteractionHandler implements ProcessPacket<ClientSocket> {
                     c.SendPacket(WvsContext.enableActions());
                     return;
                 }
-                MapleTrade.inviteTrade(chr, chrr);
+                Trade.inviteTrade(chr, chrr);
                 break;
             }
             case DENY_TRADE: {
-                MapleTrade.declineTrade(chr);
+                Trade.declineTrade(chr);
                 break;
             }
             case VISIT: {
@@ -256,7 +256,7 @@ public class PlayerInteractionHandler implements ProcessPacket<ClientSocket> {
                     return;
                 }
                 if (chr.getTrade() != null && chr.getTrade().getPartner() != null && !chr.getTrade().inTrade()) {
-                    MapleTrade.visitTrade(chr, chr.getTrade().getPartner().getCharacter());
+                    Trade.visitTrade(chr, chr.getTrade().getPartner().getCharacter());
                 } else if (chr.getMap() != null && chr.getTrade() == null) {
                     final int obid = iPacket.DecodeInt();
                     MapleMapObject ob = chr.getMap().getMapObject(obid, MapleMapObjectType.HIRED_MERCHANT);
@@ -375,7 +375,7 @@ public class PlayerInteractionHandler implements ProcessPacket<ClientSocket> {
             }
             case EXIT: {
                 if (chr.getTrade() != null) {
-                    MapleTrade.cancelTrade(chr.getTrade(), chr.getClient(), chr);
+                    Trade.cancelTrade(chr.getTrade(), chr.getClient(), chr);
                 } else {
                     final IMaplePlayerShop ips = chr.getPlayerShop();
                     if (ips == null) { //should be null anyway for owners of hired merchants (maintenance_off)
@@ -450,7 +450,7 @@ public class PlayerInteractionHandler implements ProcessPacket<ClientSocket> {
             case SET_MESO3:
             case SET_MESO2:
             case UPDATE_MESO: {
-                final MapleTrade trade = chr.getTrade();
+                final Trade trade = chr.getTrade();
                 if (trade != null) {
                     trade.setMeso((int) iPacket.DecodeLong());
                 }
@@ -536,7 +536,7 @@ public class PlayerInteractionHandler implements ProcessPacket<ClientSocket> {
             case BUY_ITEM_STORE1:
             case BUY_ITEM_HIREDMERCHANT: { // Buy and Merchant buy
                 if (chr.getTrade() != null) {
-                    MapleTrade.completeTrade(chr);
+                    Trade.completeTrade(chr);
                     break;
                 }
                 final int item = iPacket.DecodeByte();

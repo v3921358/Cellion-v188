@@ -1531,10 +1531,10 @@ public class Mob extends AbstractLoadedMapleLife {
      * Monster Meso Drop System
      * @author Mazen Massoud
      * 
-     * @param pPlayer
+     * @param pDropOwner
      * @purpose Request to drop bag of Mesos, used for Global Meso Drops without database clutter.
      */
-    public void OnMesoDropRequest(User pPlayer) {
+    public void OnMesoDropRequest(User pDropOwner) {
         long nMobLv = stats.getLevel();
         
         int nMinRange = (int) nMobLv * 100; // Meso Drop Formula
@@ -1542,7 +1542,7 @@ public class Mob extends AbstractLoadedMapleLife {
         int nResultMeso = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1))); // Formula to produce a value between the specified range.
         
         if(Utility.resultSuccess(40)) {
-            // TODO: Drop Meso Bag
+            pDropOwner.getMap().spawnMesoDrop(nResultMeso, this.getTruePosition(), this, pDropOwner, false, (byte) 0);
         }
     }
     

@@ -7,7 +7,7 @@ import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
 import service.ChannelServer;
 import server.MapleItemInformationProvider;
-import server.MapleTrade;
+import server.Trade;
 import server.maps.objects.User;
 
 public class BigBrother {
@@ -113,7 +113,7 @@ public class BigBrother {
         }
     }
 
-    public static void logTrade(MapleTrade trade1, MapleTrade trade2) {
+    public static void logTrade(Trade trade1, Trade trade2) {
         String name1 = trade1.getCharacter().getName();
         String name2 = trade2.getCharacter().getName();
         String log = "TRADE BETWEEN " + name1 + " AND " + name2 + "\r\n";

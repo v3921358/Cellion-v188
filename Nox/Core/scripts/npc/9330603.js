@@ -235,7 +235,7 @@ function action(mode, type, selection) {
 		cm.sendNextNoESC("You are now a #b" + jobName +"#k! I trust you will do well with your newfound skills. I've also given you some #bequipment#k to get you started and #bpotions#k to aid you in battle. Good luck in Cellion!");
 	} else if(status == 3) {
 		cm.getPlayer().sortInventory(2);
-		cm.warp(101071300, 0);
+		cm.warp(100000000, 0);
 		cm.dispose();
 	}
 }

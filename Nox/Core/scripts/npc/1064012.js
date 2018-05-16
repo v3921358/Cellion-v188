@@ -23,7 +23,7 @@ function action(mode, type, selection) {
 							+ "#r#L1#(Party Boss Fight) #dFight Pierre with your squad!#l#k\r\n"
 							+ "\r\n\r\n\r\n \t\t\t\t\t\t\t\t\t\t #v03994442# \r\n#r#L2#(Solo Boss Fight) #dFace Chaos Pierre alone!#l#k\r\n"
 							+ "#r#L3#(Party Boss Fight) #dFight Chaos Pierre together!#l#k\r\n\r\n"
-							+ "\r\n#r#L4#(Leave) #dReturn to Free Market#l#k\r\n";
+							+ "\r\n#r#L4#(Leave) #dReturn to Free Market!#l#k\r\n";
 			
 			cm.sendSimple(sendString);
 		} else if (status == 1) {

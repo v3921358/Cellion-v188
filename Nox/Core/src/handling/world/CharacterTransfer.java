@@ -75,7 +75,7 @@ public class CharacterTransfer {
     public boolean bigBrother;
 
     /*Boss Timed Variables*/
-    public long tHila, tZakum, tHorntail, tRanmaru, tCrimsonQueen, tPierre, tVonBon, tVellum, tLotus, tUrsus, tArkarium, tCygnus, tMagnus, tLucid;
+    public long tHilla, tZakum, tHorntail, tRanmaru, tCrimsonQueen, tPierre, tVonBon, tVellum, tLotus, tUrsus, tArkarium, tCygnus, tVonLeon, tPrincessNo, tGollux, tDamien, tPinkBean, tMagnus, tLucid;
 
     /*End of Custom Feature*/
     public CharacterTransfer() {
@@ -268,7 +268,7 @@ public class CharacterTransfer {
         TranferTime = System.currentTimeMillis();
         
         /*Boss Timed Variables*/
-        tHila = pPlayer.tHila;
+        tHilla = pPlayer.tHilla;
         tZakum = pPlayer.tZakum;
         tHorntail = pPlayer.tHorntail;
         tRanmaru = pPlayer.tRanmaru;
@@ -280,6 +280,11 @@ public class CharacterTransfer {
         tUrsus = pPlayer.tUrsus;
         tArkarium = pPlayer.tArkarium;
         tCygnus = pPlayer.tCygnus;
+        tVonLeon = pPlayer.tVonLeon;
+        tPrincessNo = pPlayer.tPrincessNo;
+        tGollux = pPlayer.tGollux;
+        tDamien = pPlayer.tDamien;
+        tPinkBean = pPlayer.tPinkBean;
         tMagnus = pPlayer.tMagnus;
         tLucid = pPlayer.tLucid;
     }

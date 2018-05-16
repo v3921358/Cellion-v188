@@ -25,26 +25,25 @@ public class BossTimer {
      * These constants control how many hours a player must wait before attempting the specified boss again.
      * 1 Week = 168 Hours
      */
-    public static final int HILA_COOLDOWN = 2,              // TODO: Handle, Script, Make Available
-            
+    public static final int HILLA_COOLDOWN = 2,             // TODO: Hila           - TODO: Fix Error 38 on TemporaryStatSet
                             ZAKUM_COOLDOWN = 2,             // Complete
                             HORNTAIL_COOLDOWN = 2,          // Complete
-            
-                            RANMARU_COOLDOWN = 24,          // TODO: Item Drops
-            
-                            CRIMSONQUEEN_COOLDOWN = 24,     // Complete // TODO: Update Script
-                            PIERRE_COOLDOWN = 24,           // Complete // TODO: Update Script
-                            VONBON_COOLDOWN = 24,           // Complete // TODO: Update Script
-                            VELLUM_COOLDOWN = 24,           // Complete // TODO: Update Script
-            
-                            URSUS_COOLDOWN = 24,            // TODO: Handle, Script, Make Available
-                            LOTUS_COOLDOWN = 24,            // TODO: Handle, Script, Make Available
-                            ARKARIUM_COOLDOWN = 24,         // TODO: Handle, Script, Make Available
-                            CYGNUS_COOLDOWN = 24,           // TODO: Handle, Script, Make Available
-            
+                            RANMARU_COOLDOWN = 24,          // Complete             - TODO: Item Drops
+                            CRIMSONQUEEN_COOLDOWN = 24,     // Complete
+                            PIERRE_COOLDOWN = 24,           // Complete
+                            VONBON_COOLDOWN = 24,           // Complete
+                            VELLUM_COOLDOWN = 24,           // Complete
+                            URSUS_COOLDOWN = 24,            // TODO: Ursus          - TODO: Doesn't Take Damage
+                            LOTUS_COOLDOWN = 24,            // TODO: Lotus          - TODO: Handle Different Forms
+                            ARKARIUM_COOLDOWN = 24,         // Complete             - TODO: Item Drops
+                            CYGNUS_COOLDOWN = 24,           // TODO: Cygnus         - TODO: Fix Standing Still After Few Attacks
+                            VONLEON_COOLDOWN = 24,          // TODO: Von Leon       - TODO: Fix Standing Still After Few Attacks
+                            PRINCESSNO_COOLDOWN = 24,       // TODO: Princess No    - TODO: Fix Standing Still After Few Attacks
+                            GOLLUX_COOLDOWN = 24,           // TODO: Gollux
+                            DAMIEN_COOLDOWN = 24,           // Complete             - TODO: Item Drops
+                            PINKBEAN_COOLDOWN = 24,         // TODO: Pink Bean
                             MAGNUS_COOLDOWN = 24,           // Complete
-            
-                            LUCID_COOLDOWN = 168;           // TODO: Handle & Script, Make Available
+                            LUCID_COOLDOWN = 168;           // TODO: Lucid
     
     /**
      * OnSetBossAttempt
@@ -55,8 +54,8 @@ public class BossTimer {
      */
     public static void OnSetBossAttempt(User pPlayer, String sBossName) {
         switch (sBossName) {
-            case "HILA":
-                pPlayer.tHila = System.currentTimeMillis() + (HILA_COOLDOWN * 60 * 60 * 1000);
+            case "HILLA":
+                pPlayer.tHilla = System.currentTimeMillis() + (HILLA_COOLDOWN * 60 * 60 * 1000);
             case "ZAKUM":                                                                   
                 pPlayer.tZakum = System.currentTimeMillis() + (ZAKUM_COOLDOWN * 60 * 60 * 1000);
                 break;
@@ -90,6 +89,21 @@ public class BossTimer {
             case "CYGNUS":
                 pPlayer.tCygnus = System.currentTimeMillis() + (CYGNUS_COOLDOWN * 60 * 60 * 1000); 
                 break;
+            case "VONLEON":
+                pPlayer.tVonLeon = System.currentTimeMillis() + (VONLEON_COOLDOWN * 60 * 60 * 1000);  
+                break;
+            case "PRINCESSNO":
+                pPlayer.tPrincessNo = System.currentTimeMillis() + (PRINCESSNO_COOLDOWN * 60 * 60 * 1000); 
+                break;
+            case "GOLLUX":
+                pPlayer.tGollux = System.currentTimeMillis() + (GOLLUX_COOLDOWN * 60 * 60 * 1000); 
+                break;
+            case "DAMIEN":
+                pPlayer.tDamien = System.currentTimeMillis() + (DAMIEN_COOLDOWN * 60 * 60 * 1000); 
+                break;
+            case "PINKBEAN":
+                pPlayer.tPinkBean = System.currentTimeMillis() + (PINKBEAN_COOLDOWN * 60 * 60 * 1000); 
+                break;
             case "MAGNUS":
                 pPlayer.tMagnus = System.currentTimeMillis() + (MAGNUS_COOLDOWN * 60 * 60 * 1000);        
                 break;
@@ -114,8 +128,8 @@ public class BossTimer {
         long tRemaining = 0;
         
         switch (sBossName) {
-            case "HILA":
-                tRemaining = pPlayer.tHila - System.currentTimeMillis();
+            case "HILLA":
+                tRemaining = pPlayer.tHilla - System.currentTimeMillis();
                 break;
             case "ZAKUM":
                 tRemaining = pPlayer.tZakum - System.currentTimeMillis();
@@ -149,6 +163,21 @@ public class BossTimer {
                 break;
             case "CYGNUS":
                 tRemaining = pPlayer.tCygnus - System.currentTimeMillis();
+                break;
+            case "VONLEON":
+                tRemaining = pPlayer.tVonLeon - System.currentTimeMillis();
+                break;
+            case "PRINCESSNO":
+                tRemaining = pPlayer.tPrincessNo - System.currentTimeMillis();
+                break;
+            case "GOLLUX":
+                tRemaining = pPlayer.tGollux - System.currentTimeMillis();
+                break;
+            case "DAMIEN":
+                tRemaining = pPlayer.tDamien - System.currentTimeMillis();
+                break;
+            case "PINKBEAN":
+                tRemaining = pPlayer.tPinkBean - System.currentTimeMillis();
                 break;
             case "MAGNUS":
                 tRemaining = pPlayer.tMagnus - System.currentTimeMillis();     
@@ -186,11 +215,12 @@ public class BossTimer {
             Utility.runSQL(con, "DELETE FROM bosstime WHERE dwAccountID = " + dwAccID);
             
             try (PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO bosstime (dwAccountID, `tHila`, `tZakum`, `tHorntail`, `tRanmaru`, `tCrimsonQueen`, `tPierre`, `tVonBon`, `tVellum`, `tLotus`, `tUrsus`, `tArkarium`, `tCygnus`, `tMagnus`, `tLucid`) "
-                  + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                    "INSERT INTO bosstime (dwAccountID, `tHilla`, `tZakum`, `tHorntail`, `tRanmaru`, `tCrimsonQueen`, `tPierre`, `tVonBon`,"
+                                        + "`tVellum`, `tLotus`, `tUrsus`, `tArkarium`, `tCygnus`, `tVonLeon`, `tPrincessNo`, `tGollux`, `tDamien`, `tPinkBean`, `tMagnus`, `tLucid`) "
+                                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                 
                 ps.setInt(1, dwAccID);
-                ps.setLong(2, pPlayer.tHila);
+                ps.setLong(2, pPlayer.tHilla);
                 ps.setLong(3, pPlayer.tZakum);
                 ps.setLong(4, pPlayer.tHorntail);
                 ps.setLong(5, pPlayer.tRanmaru);
@@ -202,8 +232,13 @@ public class BossTimer {
                 ps.setLong(11, pPlayer.tUrsus);
                 ps.setLong(12, pPlayer.tArkarium);
                 ps.setLong(13, pPlayer.tCygnus);
-                ps.setLong(14, pPlayer.tMagnus);
-                ps.setLong(15, pPlayer.tLucid);
+                ps.setLong(14, pPlayer.tVonLeon);
+                ps.setLong(15, pPlayer.tPrincessNo);
+                ps.setLong(16, pPlayer.tGollux);
+                ps.setLong(17, pPlayer.tDamien);
+                ps.setLong(18, pPlayer.tPinkBean);
+                ps.setLong(19, pPlayer.tMagnus);
+                ps.setLong(20, pPlayer.tLucid);
                 ps.execute();
                 ps.close();
             } catch (SQLException e) {
@@ -225,7 +260,7 @@ public class BossTimer {
                 runStatement.setInt(1, dwAccID);
                 ResultSet Result = runStatement.executeQuery();
                 while (Result.next()) {
-                    pPlayer.tHila = Result.getLong("tHila");
+                    pPlayer.tHilla = Result.getLong("tHilla");
                     pPlayer.tZakum = Result.getLong("tZakum");
                     pPlayer.tHorntail = Result.getLong("tHorntail");
                     pPlayer.tRanmaru = Result.getLong("tRanmaru");
@@ -237,6 +272,11 @@ public class BossTimer {
                     pPlayer.tUrsus = Result.getLong("tArkarium");
                     pPlayer.tArkarium = Result.getLong("tArkarium");
                     pPlayer.tCygnus = Result.getLong("tCygnus");
+                    pPlayer.tVonLeon = Result.getLong("tVonLeon");
+                    pPlayer.tPrincessNo = Result.getLong("tPrincessNo");
+                    pPlayer.tGollux = Result.getLong("tGollux");
+                    pPlayer.tDamien = Result.getLong("tDamien");
+                    pPlayer.tPinkBean = Result.getLong("tPinkBean");
                     pPlayer.tMagnus = Result.getLong("tMagnus");
                     pPlayer.tLucid = Result.getLong("tLucid");
                 }

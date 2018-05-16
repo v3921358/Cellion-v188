@@ -15,6 +15,7 @@ import client.inventory.Equip;
 import client.inventory.ItemType;
 import client.inventory.MapleInventoryIdentifier;
 import constants.InventoryConstants;
+import constants.ItemConstants;
 import handling.world.MaplePartyCharacter;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
@@ -157,6 +158,14 @@ public class ItemPickupHandler implements ProcessPacket<ClientSocket> {
             }
         } finally {
             lock.unlock();
+        }
+        
+        switch (mapitem.getItemId()) { // Dispose after picking up Exp orbs.
+            case ItemConstants.COMBO_PARADE1:
+            case ItemConstants.COMBO_PARADE2:
+            case ItemConstants.COMBO_PARADE3:
+                c.getPlayer().completeDispose();
+                break;
         }
     }
 

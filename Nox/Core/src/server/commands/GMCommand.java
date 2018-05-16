@@ -160,17 +160,22 @@ public class GMCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
+            
             if (splitted.length < 3) {
-                c.getPlayer().dropMessage(6, "Need playername and amount.");
+                c.getPlayer().dropMessage(6, "Syntax: !giveevp <character> <amount>");
                 return 0;
             }
-            User chrs = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
-            if (chrs == null) {
-                c.getPlayer().dropMessage(6, "Make sure they are in the correct channel");
-            } else {
-                chrs.setPoints(chrs.getPoints() + Integer.parseInt(splitted[2]));
-                c.getPlayer().dropMessage(6, splitted[1] + " has " + chrs.getPoints() + " points, after giving " + splitted[2] + ".");
+            
+            User pPlayer = Utility.requestCharacter(splitted[1]);
+            int nAmount = Integer.parseInt(splitted[2]);
+            
+            if (pPlayer == null) {
+                c.getPlayer().dropMessage(5, "The specified player was not found.");
+                return 0;
             }
+            
+            pPlayer.setEPoints(pPlayer.getEPoints() + nAmount);
+            c.getPlayer().dropMessage(6, pPlayer.getName() + " now has " + pPlayer.getEPoints() + " Event Points, after giving " + nAmount + ".");
             return 1;
         }
     }

@@ -38,7 +38,7 @@ import net.OutPacket;
 import scripting.provider.NPCChatByType;
 import scripting.provider.NPCChatType;
 import server.MaplePackageActions;
-import server.MapleTrade;
+import server.Trade;
 import server.Randomizer;
 import server.events.MapleSnowball;
 import server.life.Mob;
@@ -3270,7 +3270,7 @@ public class CField {
             return oPacket;
         }
 
-        public static OutPacket getTradeStart(ClientSocket c, MapleTrade trade, byte number) {
+        public static OutPacket getTradeStart(ClientSocket c, Trade trade, byte number) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.MiniRoom.getValue());
 //            oPacket.encode(PlayerInteractionHandler.Interaction.START_TRADE.action);
@@ -4699,6 +4699,8 @@ DC 05 00 00  // floating value
             }
             oPacket.EncodeByte(UserEffectCodes.IncDecHPEffect_EX.getEffectId());
             oPacket.EncodeInt(amount);
+            
+            oPacket.Fill(0, 19); // Avoid DC
 
             return oPacket;
         }

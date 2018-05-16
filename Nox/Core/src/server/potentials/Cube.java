@@ -83,21 +83,21 @@ public class Cube extends ItemPotentialProvider {
             case ItemConstants.RED_CUBE: // This cube is available to players.
                 pMaxTier = ItemPotentialTierType.Legendary;
                 nFragmentID = ItemConstants.RED_CUBE_FRAGMENT;
-                nTierUpRate = 10;
-                nTierDownRate = 10;
+                nTierUpRate = 5;
+                nTierDownRate = 0;
                 nMesoCost = 10000;
                 break;
             case ItemConstants.PLATINUM_MIRACLE_CUBE: // This cube is available to players.
                 pMaxTier = ItemPotentialTierType.Legendary; 
                 nTierUpRate = 10;
-                nTierDownRate = 10;
+                nTierDownRate = 0;
                 nMesoCost = 10000;
                 break;
             case ItemConstants.BONUS_POTENTIAL_CUBE: // This cube is available to players.
                 pMaxTier = ItemPotentialTierType.Legendary;
                 nFragmentID = ItemConstants.BONUS_POTENTIAL_CUBE_FRAGMENT;
-                nTierUpRate = 10;
-                nTierDownRate = 10;
+                nTierUpRate = 5;
+                nTierDownRate = 0;
                 nMesoCost = 30000;
                 break;
             default:
@@ -126,9 +126,9 @@ public class Cube extends ItemPotentialProvider {
         
         if (bCubeResult) {
             
+            MapleInventoryManipulator.removeById(pPlayer.getClient(), MapleInventoryType.USE, nCubeID, (short) 1, false, true);
             if (nFragmentID > 0) MapleInventoryManipulator.addById(pPlayer.getClient(), nFragmentID, (short) 1, "Cube on " + LocalDateTime.now());
-            if (nMesoCost > 0) pPlayer.gainMeso(nMesoCost, true, true); // Cube Meso Cost
-            pPlayer.gainItem(nCubeID, -1);
+            if (nMesoCost > 0) pPlayer.gainMeso(-nMesoCost, true, true); // Cube Meso Cost
             
             // Update Inventory Equipment 
             List<ModifyInventory> modifications = new ArrayList<>();
