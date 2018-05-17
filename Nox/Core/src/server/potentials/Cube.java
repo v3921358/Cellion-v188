@@ -37,16 +37,17 @@ public class Cube extends ItemPotentialProvider {
      * @param pPlayer
      * @param pEquip
      * @param nCubeID 
+     * @return
      */
-    public static void OnCubeRequest(User pPlayer, Equip pEquip, int nCubeID) {
+    public static boolean OnCubeRequest(User pPlayer, Equip pEquip, int nCubeID) {
         if (pEquip == null || pPlayer.getInventory(MapleInventoryType.USE).getNumFreeSlot() < 1) {
             pPlayer.completeDispose();
-            return;
+            return false;
         }
         
         ItemPotentialTierType pMaxTier, pPreviousTier = pEquip.getPotentialTier();
         int nTierDownRate, nTierUpRate, nFragmentID = 0, nMesoCost = 0;
-        boolean bHidePotentialAfterReset = false, bCubeFromUSE = false;
+        boolean bHidePotentialAfterReset = false;
        
         switch (nCubeID) {
             
@@ -56,7 +57,6 @@ public class Cube extends ItemPotentialProvider {
                 pMaxTier = ItemPotentialTierType.Epic;
                 nTierUpRate = ItemPotentialProvider.RATE_GAMECUBE_TIERUP;
                 nTierDownRate = 0;
-                bCubeFromUSE = true;
                 break;
             case ItemConstants.TIMIC_CUBE:
             case ItemConstants.HERMES_CUBE:
@@ -71,7 +71,6 @@ public class Cube extends ItemPotentialProvider {
                 nTierUpRate = ItemPotentialProvider.RATE_GAMECUBE_TIERUP;
                 nTierDownRate = 0;
                 nMesoCost = 1000;
-                bCubeFromUSE = true;
                 break;
             case ItemConstants.MEISTER_CUBE:
             case ItemConstants.MEISTER_CUBE2:
@@ -79,7 +78,6 @@ public class Cube extends ItemPotentialProvider {
                 pMaxTier = ItemPotentialTierType.Legendary;
                 nTierUpRate = ItemPotentialProvider.RATE_GAMECUBE_TIERUP;
                 nTierDownRate = 0;
-                bCubeFromUSE = true;
                 break;
                 
             // Special Cubes
@@ -106,7 +104,7 @@ public class Cube extends ItemPotentialProvider {
             default:
                 pPlayer.SendPacket(CField.enchantResult(0));
                 System.err.println("[Error] Attempting to handle an uncoded Cube potential request.");
-                return;
+                return false;
         }
 
         if (pPreviousTier.getValue() > pMaxTier.getValue()) { // Exploit Check
@@ -117,20 +115,17 @@ public class Cube extends ItemPotentialProvider {
                 pPreviousTier.toString(),
                 pEquip.getItemId(), nCubeID));
             pPlayer.getClient().Close();
-            return;
+            return false;
         }
         
         if (pPlayer.getMeso() < nMesoCost) {
             pPlayer.dropMessage(5, "Sorry, you do not have enough mesos to perform this action.");
-            return;
+            return false;
         }
         
         final boolean bCubeResult = OnCubeResult(pEquip, nCubeID, nTierUpRate, nTierDownRate, pMaxTier, bHidePotentialAfterReset);
         
         if (bCubeResult) {
-            
-            if (bCubeFromUSE) MapleInventoryManipulator.removeById(pPlayer.getClient(), MapleInventoryType.USE, nCubeID, (short) 1, false, true);
-            else MapleInventoryManipulator.removeById(pPlayer.getClient(), MapleInventoryType.CASH, nCubeID, (short) 1, false, true);
             
             if (nFragmentID > 0) MapleInventoryManipulator.addById(pPlayer.getClient(), nFragmentID, (short) 1, "Cube on " + LocalDateTime.now());
             if (nMesoCost > 0) pPlayer.gainMeso(-nMesoCost, true, true); // Cube Meso Cost
@@ -171,6 +166,7 @@ public class Cube extends ItemPotentialProvider {
             }
         } else {
             pPlayer.dropMessage(5, "The potential of this item cannot be reset.");
+            return false;
         }
 
         pPlayer.getMap().broadcastPacket(CField.showPotentialReset(pPlayer.getId(), bCubeResult, pEquip.getItemId()));
@@ -181,6 +177,7 @@ public class Cube extends ItemPotentialProvider {
             pPlayer.yellowMessage("[Potential Debug] Second Line ID :" + pEquip.getPotential2());
             pPlayer.yellowMessage("[Potential Debug] Third Line ID : " + pEquip.getPotential3());
         }
+        return true;
     }
     
     /**
