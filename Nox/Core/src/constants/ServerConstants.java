@@ -103,7 +103,6 @@ public class ServerConstants {
     public static final boolean CONTROLLED_POTENTIAL_RESULTS = true; // Uses our customizable potential tables instead, this is configured to be GMS-like.
     public static final float MIRACLE_CUBE_RATE = 1; //cube tier up rateng range
     
-    
     /*Monster Configuration*/
     public static final boolean MONSTER_CASH_DROP = true; // NX Gain
     public static final boolean BUFFED_BOSSES = true; //Buffs the damage resistance on certain bosses to make them more challenging.

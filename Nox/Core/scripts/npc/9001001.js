@@ -29,12 +29,12 @@ var lockedText2 = "";
 
 // Exchange System Definitions
 var exchangeItemMeso = 4001619; // Golden Maple Leaf
-var purchaseCostMeso = 1000000000; // Mesos Needed to Buy
-var sellCostMeso = 850000000; // Mesos Gained when Sold
+var purchaseCostMeso = 1100000000; // Mesos Needed to Buy
+var sellCostMeso = 1000000000; // Mesos Gained when Sold
 
-var exchangeItemNX = 4430000; // Maple Leaf Gold
-var purchaseCostNX = 1000000; // NX Needed to Buy
-var sellCostNX = 850000; // NX Gained when Sold
+var exchangeItemNX = 4034995; // Maple Leaf Gold
+var purchaseCostNX = 1100000; // NX Needed to Buy
+var sellCostNX = 1000000; // NX Gained when Sold
 
 var fifthJobText = "";
 var eventText = "";
@@ -86,7 +86,7 @@ function action(mode, type, selection) {
 			cm.sendNextPrevS("Welcome to the #dCELLION Quick Access#k Menu!\r\n" 
 						+ "What exactly would you like to do?#r\r\n" 
 						
-						+ fifthJobText
+						//+ fifthJobText
 						//+ eventText
 						
 						+ "#L100##fs13#Travel Around the Maple World#fs11##l\r\n\r\n" 
@@ -122,10 +122,10 @@ function action(mode, type, selection) {
 					break;
 				case 102:
 					cm.sendNextPrev("What would you like to exchange?\r\n"
-						+ "#d#L300#1,000,000,000 Mesos - Buy a Golden Maple Leaf#l\r\n"
-						+ "#r#L301#850,000,000 Mesos - Sell a Golden Maple Leaf#l\r\n\r\n"
-						+ "#d#L302#1,000,000 NX - Buy Maple Leaf Gold#l\r\n"
-						+ "#r#L303#850,000 NX - Sell Maple Leaf Gold#l");
+						+ "#d#L300#1,100,000,000 Mesos - Buy a Golden Maple Leaf#l\r\n"
+						+ "#r#L301#1,000,000,000 Mesos - Sell a Golden Maple Leaf#l\r\n\r\n"
+						+ "#d#L302#1,100,000 NX - Buy a Treasure Basket#l\r\n"
+						+ "#r#L303#1,000,000 NX - Sell a Treasure Basket#l");
 					break;
 				case 103:
 					cm.dispose();
@@ -270,7 +270,7 @@ function action(mode, type, selection) {
 				
 				// Map Warper
 				case 200:
-					var selStr = "Where exactly would you like to go?#d";
+					var selStr = "Where exactly would you like to go?#b#fs12#";
 					for (var i = 0; i < townMaps.length; i++) {
 						if (townMaps[i] != cm.getMapId()) {
 							selStr += "\r\n#L" + i + "##m" + townMaps[i] + "# #l";
@@ -282,7 +282,7 @@ function action(mode, type, selection) {
 					break;	
 				case 201:
 					if (cm.getLevel() >= monsterMapReqLevel) {
-						var selStr = "Where exactly would you like to go?#d";
+						var selStr = "Where exactly would you like to go?#b#fs12#";
 						for (var i = 0; i < monsterMaps.length; i++) {
 							if (monsterMaps[i] != cm.getMapId()) {
 								selStr += "\r\n#L" + i + "##m" + monsterMaps[i] + "# #l";

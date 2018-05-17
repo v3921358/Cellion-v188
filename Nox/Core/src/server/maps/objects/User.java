@@ -279,7 +279,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @return 
      */
     public boolean getVMatrixRequirement() {
-        return level > 200;
+        return level > 200 && !hasVMatrix();
     }
     
     /**
@@ -294,8 +294,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * Increases kill count for V Matrix quest.
      * @param nMonsterID
      */
-    public void incrementVMatrixKills(int nMonsterID) {
-        if (!hasVMatrix() && nMonsterID == 123456789) { // Mushmom Kills
+    public void incrementVMatrixKills(Mob pMob) {
+        if (!hasVMatrix() && pMob.getStats().getLevel() > 200) { // Mushmom Kills
             String sQuest = getInfoQuest(13337);
             if (sQuest.isEmpty()) sQuest = "0";
             int nVal = Integer.parseInt(sQuest);
@@ -5285,7 +5285,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * OnJobAdvanceNotify
      */
     public void OnJobAdvanceNotify() {
-        dropMessage(-1, "Job Advancement Available!");
         yellowMessage("You are ready for your next job advancement, you can advance by speaking to the Slime in the Free Market. Remember that you can use @fm to get there quickly.");
     }
     
