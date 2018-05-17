@@ -53,14 +53,19 @@ public class LifeFactory {
         
         /*FM NPCs*/
         int[] pJobAdvance = {910000000, NPCConstants.JobAdvance_NPC, -193, 34, 67, 34, -193, -193, 0, 0, -1, 0, 0};
+        int[] aVMatrixAdvance = {910000000, NPCConstants.VMatrixAdvance_NPC, -839, 34, 76, 34, -839, -839, 0, 0, -1, 0, 0};
         int[] pEventShop = {910000000, NPCConstants.EventShop_NPC, -10, 34, 66, 34 ,-10, -10, 0, 0, -1, 0, 0};
         int[] pDonorShop = {910000000, NPCConstants.DonorShop_NPC, 102, 34, 63, 34, 102, 102, 0, 0, -1, 0, 0};
         int[] pVoteShop = {910000000, NPCConstants.VoteShop_NPC, 207, 34, 60, 34, 207, 207, 0, 0, -1, 0, 0};
         int[] aEquipmentShop = {910000000, 9201082, 580, 4, 30, 4, 580, 580, 0, 0, -1, 0, 1};
         int[] aCustomCashShop = {910000000, 9010034, 762, -266, 44, -266, 812, 712, 0, 0, -1, 0, 0};
         int[] aMerchantShop = {910000000, 1500028, 611, -266, 87, -266, 611, 611, 0, 0, -1, 0, 0};
-        
-        List<int[]> aCustomLifeData = Arrays.asList(pJobAdvance, pTutorial, aCustomCashShop, pDonorShop, pVoteShop, pEventShop, aEquipmentShop, aMerchantShop);
+        int[] aGuildBoard = {910000000, 9040008, 1578, 34, 47, 34, 1578, 1578, 0, 0, -1, 0, 0};
+        int[] aPerryNPC = {910000000, 9110008, -1014, 34, 77, 34, -1014, -1014, 0, 0, -1, 0, 0};
+        int[] aMasteryBookNPC = {910000000, 2080008, 723, 34, 56, 34, 723, 723, 0, 0, -1, 0, 0};
+
+        List<int[]> aCustomLifeData = Arrays.asList(pJobAdvance, aVMatrixAdvance, pTutorial, aCustomCashShop, pDonorShop, pVoteShop, 
+                                                    pEventShop, aEquipmentShop, aMerchantShop, aGuildBoard, aPerryNPC, aMasteryBookNPC);
         
         for (int nIndex = 0; nIndex < aCustomLifeData.size(); nIndex++) {
             int[] aData = aCustomLifeData.get(nIndex);

@@ -71,16 +71,16 @@ public final class CashShopPurchase implements ProcessPacket<ClientSocket> {
                 break;
             case WISHLIST_INCREASE: //one of these should be wishlist related.
             case INVENTORY_INCREASE:
-                SlotIncrease.inventory(iPacket, c, chr);
+                SlotIncrease.OnInventoryRequest(iPacket, c, chr);
                 break;
             case STORAGE_INCREASE:
-                SlotIncrease.storage(iPacket, c, chr);
+                SlotIncrease.OnStorageRequest(iPacket, c, chr);
                 break;
             case CHARSLOT_INCREASE:
-                SlotIncrease.charSlots(iPacket, c, chr);
+                SlotIncrease.OnCharacterSlotRequest(iPacket, c, chr);
                 break;
             case PENDANTSLOT_INCREASE:
-                SlotIncrease.pendantSlots(iPacket, c, chr);
+                SlotIncrease.OnPendantSlotRequest(iPacket, c, chr);
                 break;
             case INVENTORY_RETRIEVE:
                 CSInventoryAction.RetrieveItem(iPacket, c, chr);

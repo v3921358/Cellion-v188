@@ -1,6 +1,8 @@
 package server.commands;
 
 import client.ClientSocket;
+import client.inventory.MapleInventory;
+import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
@@ -12,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import server.MapleInventoryManipulator;
+import server.MapleItemInformationProvider;
 import server.life.LifeFactory;
 import server.life.Mob;
 import server.maps.MapleMap;
@@ -63,6 +67,7 @@ public class PlayerCommand {
         @Override
         public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().yellowMessage("----------------- PLAYER COMMANDS -----------------");
+            c.getPlayer().yellowMessage("@sell <from slot> <to slot> : Sell specific item slots instantly.");
             c.getPlayer().yellowMessage("@support <message> : Send a message to availible staff members.");
             c.getPlayer().yellowMessage("@wallet : Displays account currency information.");
             c.getPlayer().yellowMessage("@dispose : Enables your character's actions when stuck.");
@@ -135,6 +140,48 @@ public class PlayerCommand {
         }
     }
 
+    public static class Sell extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            User player = c.getPlayer();
+            if (splitted.length < 3 || player.hasBlockedInventory()) {
+                c.getPlayer().dropMessage(6, "Syntax: @sell <eq/use/setup/etc> <start slot> <end slot>");
+                return 0;
+            } else {
+                MapleInventoryType type;
+                if (splitted[1].equalsIgnoreCase("eq")) {
+                    type = MapleInventoryType.EQUIP;
+                } else if (splitted[1].equalsIgnoreCase("use")) {
+                    type = MapleInventoryType.USE;
+                } else if (splitted[1].equalsIgnoreCase("setup")) {
+                    type = MapleInventoryType.SETUP;
+                } else if (splitted[1].equalsIgnoreCase("etc")) {
+                    type = MapleInventoryType.ETC;
+                } else {
+                    c.getPlayer().dropMessage(5, "Invalid Syntax. @sell <eq/use/setup/etc>");
+                    return 0;
+                }
+                MapleInventory inv = c.getPlayer().getInventory(type);
+                byte start = Byte.parseByte(splitted[2]);
+                byte end = Byte.parseByte(splitted[3]);
+                int totalMesosGained = 0;
+                for (byte i = start; i <= end; i++) {
+                    if (inv.getItem(i) != null) {
+                        MapleItemInformationProvider iii = MapleItemInformationProvider.getInstance();
+                        int itemPrice = (int) iii.getPrice(inv.getItem(i).getItemId());
+                        totalMesosGained += itemPrice;
+                        player.gainMeso(itemPrice < 0 ? 0 : itemPrice, true);
+                        MapleInventoryManipulator.removeFromSlot(c, type, i, inv.getItem(i).getQuantity(), true);
+                    }
+                }
+                c.getPlayer().dropMessage(5, "You sold items in slots " + start + " to " + end + ", and gained " + totalMesosGained + " mesos.");
+            }
+            return 1;
+        }
+    }
+
+    
     public static class EA extends Dispose {
     }
     

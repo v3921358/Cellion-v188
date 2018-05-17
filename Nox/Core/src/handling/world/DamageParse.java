@@ -1061,7 +1061,7 @@ public class DamageParse {
                     player.gainExp(totalEXPGained, false, false, false);
 
                     //player.incrementKillQuestAlpha();
-                    if (player.getLevel() >= 200) player.incrementVMatrixKills(mob.get().getMonsterId()); // For VMatrix Quest
+                    if (player.getLevel() >= 200) player.incrementVMatrixKills(mob.get().getMonster()); // For VMatrix Quest
                     
                     player.getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessageType.MultiKill, totalEXPGained, numMultiKills)));
                 }

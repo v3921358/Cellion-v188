@@ -15,6 +15,7 @@ public class NPCConstants {
             
                             Tutorial_NPC = 9330603,
                             JobAdvance_NPC = 9000386,
+                            VMatrixAdvance_NPC = 1057006,
                             QuickMove_NPC = 9001001,
             
                             EventShop_NPC = 9010001,

@@ -251,15 +251,12 @@ public class World {
                 return;
             }
 
-            short nPacketID = oPacket.nPacketID;
-            byte[] aData = oPacket.GetDataAndClose();
-
             for (MaplePartyCharacter partychar : party.getMembers()) {
                 int ch = Find.findChannel(partychar.getName());
                 if (ch > 0 && (exception == null || partychar.getId() != exception.getId())) {
                     User chr = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(partychar.getName());
                     if (chr != null) { //Extra check just in case
-                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+                        chr.getClient().SendPacket(oPacket);
                     }
                 }
             }
@@ -1288,15 +1285,13 @@ public class World {
             if (targetIds == exception) {
                 return;
             }
-            short nPacketID = oPacket.nPacketID;
-            byte[] aData = oPacket.GetDataAndClose();
             int ch = Find.findChannel(targetIds);
             if (ch < 0) {
                 return;
             }
             final User c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetIds);
             if (c != null && c.getGuildId() == guildid) {
-                c.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+                c.getClient().SendPacket(oPacket);
             }
         }
 
@@ -1304,15 +1299,13 @@ public class World {
             if (targetIds == exception) {
                 return;
             }
-            short nPacketID = oPacket.nPacketID;
-            byte[] aData = oPacket.GetDataAndClose();
             int ch = Find.findChannel(targetIds);
             if (ch < 0) {
                 return;
             }
             final User c = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterById(targetIds);
             if (c != null && c.getFamilyId() == guildid) {
-                c.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+                c.getClient().SendPacket(oPacket);
             }
         }
     }

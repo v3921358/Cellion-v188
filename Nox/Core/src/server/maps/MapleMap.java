@@ -2507,10 +2507,8 @@ public final class MapleMap {
                                 } else {
                                     oPacket = CField.showHorntailShrine(spawned, 0); //chaoshorntail message is weird
                                 }
-                                short nPacketID = oPacket.nPacketID;
-                                byte[] aData = oPacket.GetDataAndClose();
                                 for (User chr : getCharacters()) { //warp all in map
-                                    chr.getClient().SendPacket((new OutPacket(nPacketID).Encode(aData)));
+                                    chr.getClient().SendPacket(oPacket);
                                     chr.changeMap(returnMapz, returnMapz.getPortal(0)); //hopefully event will still take care of everything once warp out
                                 }
                                 checkStates("");
@@ -2534,10 +2532,8 @@ public final class MapleMap {
                             } else {
                                 oPacket = CField.showHorntailShrine(spawned, 0); //chaoshorntail message is weird
                             }
-                            short nPacketID = oPacket.nPacketID;
-                            byte[] aData = oPacket.GetDataAndClose();
                             for (User chr : getCharacters()) { //warp all in map
-                                chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+                                chr.getClient().SendPacket(oPacket);
                                 chr.changeMap(returnMapz, returnMapz.getPortal(0)); //hopefully event will still take care of everything once warp out
                             }
                             checkStates("");
@@ -2791,8 +2787,6 @@ public final class MapleMap {
     public void broadcastPacket(final User source, final OutPacket oPacket, final double rangeSq, final Point rangedFrom) {
         charactersLock.readLock().lock();
         try {
-            short nPacketID = oPacket.nPacketID;
-            byte[] aData = oPacket.GetDataAndClose();
             for (User chr : characters) {
                 if (chr != source) {
                     if (rangeSq < Double.POSITIVE_INFINITY) {
@@ -2800,13 +2794,13 @@ public final class MapleMap {
                             if (ServerConstants.DEVELOPER_DEBUG_MODE) {
                                 System.err.println("[Debug] Sending Ranged Broadcast Packet (" + chr.getName() + ")");
                             }
-                            chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+                            chr.getClient().SendPacket(oPacket);
                         }
                     } else {
                         if (ServerConstants.DEVELOPER_DEBUG_MODE) {
                             System.err.println("[Debug] Sending Broadcast Packet (" + chr.getName() + ")");
                         }
-                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+                        chr.getClient().SendPacket(oPacket);
                     }
                 }
             }
@@ -2822,15 +2816,13 @@ public final class MapleMap {
     private void broadcastGMMessage(User source, OutPacket oPacket) {
         charactersLock.readLock().lock();
         try {
-            short nPacketID = oPacket.nPacketID;
-            byte[] aData = oPacket.GetDataAndClose();
             if (source == null) {
                 for (User chr : characters) {
                     if (ServerConstants.DEVELOPER_DEBUG_MODE) {
                         System.err.println("[Debug] Sending GM Broadcast Packet to (" + chr.getName() + ")");
                     }
                     if (chr.isGM()) {
-                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+                        chr.getClient().SendPacket(oPacket);
                     }
                 }
             } else {
@@ -2839,7 +2831,7 @@ public final class MapleMap {
                         System.err.println("[Debug] Sending GM Broadcast Packet to (" + chr.getName() + ")");
                     }
                     if (chr != source && (chr.isGM())) {
-                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+                        chr.getClient().SendPacket(oPacket);
                     }
                 }
             }
@@ -2855,18 +2847,16 @@ public final class MapleMap {
     private void broadcastNONGMMessage(User source, OutPacket oPacket) {
         charactersLock.readLock().lock();
         try {
-            short nPacketID = oPacket.nPacketID;
-            byte[] aData = oPacket.GetDataAndClose();
             if (source == null) {
                 for (User chr : characters) {
                     if (!chr.isGM()) {
-                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+                        chr.getClient().SendPacket(oPacket);
                     }
                 }
             } else {
                 for (User chr : characters) {
                     if (chr != source && (!chr.isGM())) {
-                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+                        chr.getClient().SendPacket(oPacket);
                     }
                 }
             }
@@ -2888,15 +2878,13 @@ public final class MapleMap {
     private void broadcastWhisper(User source, OutPacket oPacket, String msgDestination) {
         charactersLock.readLock().lock();
         try {
-            short nPacketID = oPacket.nPacketID;
-            byte[] aData = oPacket.GetDataAndClose();
             if (source == null) {
                 for (User chr : characters) {
                     if (ServerConstants.DEVELOPER_DEBUG_MODE) {
                         System.err.println("[Debug] Sending Whisper Broadcast Packet to (" + chr.getName() + ")");
                     }
                     if (chr == c.getChannelServer().getPlayerStorage().getCharacterByName(msgDestination)) {
-                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+                        chr.getClient().SendPacket(oPacket);
                     }
                 }
             } else {
@@ -2905,7 +2893,7 @@ public final class MapleMap {
                         System.err.println("[Debug] Sending Whisper Broadcast Packet to (" + chr.getName() + ")");
                     }
                     if (chr != source && chr == c.getChannelServer().getPlayerStorage().getCharacterByName(msgDestination)) {
-                        chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+                        chr.getClient().SendPacket(oPacket);
                     }
                 }
             }

@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,6 +39,8 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.OutPacket;
 import provider.data.HexTool;
 import scripting.EventInstanceManager;
@@ -1040,22 +1043,23 @@ public class AdminCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+            User pVictim = Utility.requestCharacter(splitted[1]);
+            int dwID = pVictim.getId();
             if (splitted.length < 2) {
                 c.getPlayer().dropMessage(6, "Syntax: setname <player> <new name>");
                 return 0;
             }
-            if (victim == null) {
+            if (pVictim == null) {
                 c.getPlayer().dropMessage(0, "Could not find the player.");
                 return 0;
             }
-            if (c.getPlayer().getGMLevel() < 6 && !victim.isGM()) {
+            if (c.getPlayer().getGMLevel() < 6 && !pVictim.isGM()) {
                 c.getPlayer().dropMessage(6, "Only an Admin can change player's name.");
                 return 0;
             }
-            victim.getClient().Close();
-            victim.getClient().disconnect(true, false);
-            victim.setName(splitted[2]);
+            pVictim.getClient().Close();
+            pVictim.getClient().disconnect(true, false);
+            pVictim.setName(splitted[2]);
             return 1;
         }
     }

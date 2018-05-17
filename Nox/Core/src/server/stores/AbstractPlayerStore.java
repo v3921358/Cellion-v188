@@ -91,28 +91,24 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     }
 
     public void broadcastToVisitors(OutPacket oPacket, boolean owner) {
-        short nPacketID = oPacket.nPacketID;
-        byte[] aData = oPacket.GetDataAndClose();
         for (WeakReference<User> chr : chrs) {
             if (chr != null && chr.get() != null) {
-                chr.get().getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+                chr.get().getClient().SendPacket(oPacket);
             }
         }
         if (getShopType() != IMaplePlayerShop.HIRED_MERCHANT && owner && getMCOwner() != null) {
-            getMCOwner().getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+            getMCOwner().getClient().SendPacket(oPacket);
         }
     }
 
     public void broadcastToVisitors(OutPacket oPacket, int exception) {
-        short nPacketID = oPacket.nPacketID;
-        byte[] aData = oPacket.GetDataAndClose();
         for (WeakReference<User> chr : chrs) {
             if (chr != null && chr.get() != null && getVisitorSlot(chr.get()) != exception) {
-                chr.get().getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+                chr.get().getClient().SendPacket(oPacket);
             }
         }
         if (getShopType() != IMaplePlayerShop.HIRED_MERCHANT && getMCOwner() != null && exception != ownerId) {
-            getMCOwner().getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
+            getMCOwner().getClient().SendPacket(oPacket);
         }
     }
 

@@ -39,6 +39,11 @@ public class OutPacket {
         pSendBuff.writeShortLE(nPacketID);
     }
     
+    public OutPacket(byte[] aData) {
+        this.pSendBuff = Unpooled.buffer();
+        pSendBuff.writeBytes(aData);
+    }
+    
     public final OutPacket EncodeByte(int nValue) {
         pSendBuff.writeByte(nValue);
         return this;
@@ -149,16 +154,6 @@ public class OutPacket {
     public byte[] GetData() {
         byte[] aData = new byte[pSendBuff.readableBytes()];
         pSendBuff.getBytes(pSendBuff.readerIndex(), aData);
-        //pSendBuff.readBytes(aData);
-        //pSendBuff.release();
-        return aData;
-    }
-    
-    public byte[] GetDataAndClose() {
-        pSendBuff.readShortLE();//Skip already encoded opcode.
-        byte[] aData = new byte[pSendBuff.readableBytes()];
-        pSendBuff.readBytes(aData);
-        pSendBuff.release();
         return aData;
     }
 }

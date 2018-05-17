@@ -221,11 +221,10 @@ public class Mob extends AbstractLoadedMapleLife {
             }
         }
 
-        if (ServerConstants.DEVELOPER_DEBUG_MODE) {
-            System.err.println("[Damage Operation] Mob Damage Received (" + damage + ")");
-        }
+        if (ServerConstants.DEVELOPER_DEBUG_MODE) System.err.println("[Damage Operation] Mob Damage Received (" + damage + ")");
 
         AttackerEntry attacker;
+        
         /*if (this.getId() == 9400551 && from.getMapId() == 109010104) {
             //this.getStats().setHp(damage + 1);
             OverrideMonsterStats newstat = new OverrideMonsterStats(damage + 1, this.getMp(), this.getMobExp());

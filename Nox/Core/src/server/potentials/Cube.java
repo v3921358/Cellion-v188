@@ -37,17 +37,18 @@ public class Cube extends ItemPotentialProvider {
      * @param pPlayer
      * @param pEquip
      * @param nCubeID 
+     * @return
      */
-    public static void OnCubeRequest(User pPlayer, Equip pEquip, int nCubeID) {
+    public static boolean OnCubeRequest(User pPlayer, Equip pEquip, int nCubeID) {
         if (pEquip == null || pPlayer.getInventory(MapleInventoryType.USE).getNumFreeSlot() < 1) {
             pPlayer.completeDispose();
-            return;
+            return false;
         }
         
         ItemPotentialTierType pMaxTier, pPreviousTier = pEquip.getPotentialTier();
         int nTierDownRate, nTierUpRate, nFragmentID = 0, nMesoCost = 0;
         boolean bHidePotentialAfterReset = false;
-        
+       
         switch (nCubeID) {
             
             // Crafted Cubes
@@ -103,7 +104,7 @@ public class Cube extends ItemPotentialProvider {
             default:
                 pPlayer.SendPacket(CField.enchantResult(0));
                 System.err.println("[Error] Attempting to handle an uncoded Cube potential request.");
-                return;
+                return false;
         }
 
         if (pPreviousTier.getValue() > pMaxTier.getValue()) { // Exploit Check
@@ -114,19 +115,18 @@ public class Cube extends ItemPotentialProvider {
                 pPreviousTier.toString(),
                 pEquip.getItemId(), nCubeID));
             pPlayer.getClient().Close();
-            return;
+            return false;
         }
         
         if (pPlayer.getMeso() < nMesoCost) {
             pPlayer.dropMessage(5, "Sorry, you do not have enough mesos to perform this action.");
-            return;
+            return false;
         }
         
         final boolean bCubeResult = OnCubeResult(pEquip, nCubeID, nTierUpRate, nTierDownRate, pMaxTier, bHidePotentialAfterReset);
         
         if (bCubeResult) {
             
-            MapleInventoryManipulator.removeById(pPlayer.getClient(), MapleInventoryType.CASH, nCubeID, (short) 1, false, true);
             if (nFragmentID > 0) MapleInventoryManipulator.addById(pPlayer.getClient(), nFragmentID, (short) 1, "Cube on " + LocalDateTime.now());
             if (nMesoCost > 0) pPlayer.gainMeso(-nMesoCost, true, true); // Cube Meso Cost
             
@@ -154,7 +154,7 @@ public class Cube extends ItemPotentialProvider {
                         pPlayer.SendPacket(CubePacket.OnInGameCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
                         break;
                     case ItemConstants.PLATINUM_MIRACLE_CUBE:
-                        //pPlayer.SendPacket(CubePacket.OnRedCubeResult/*OnPlatinumCubeResult*/(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
+                        //pPlayer.SendPacket(CubePacket.OnPlatinumCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
                         break;
                     case ItemConstants.RED_CUBE:
                         pPlayer.SendPacket(CubePacket.OnRedCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
@@ -166,6 +166,7 @@ public class Cube extends ItemPotentialProvider {
             }
         } else {
             pPlayer.dropMessage(5, "The potential of this item cannot be reset.");
+            return false;
         }
 
         pPlayer.getMap().broadcastPacket(CField.showPotentialReset(pPlayer.getId(), bCubeResult, pEquip.getItemId()));
@@ -176,6 +177,7 @@ public class Cube extends ItemPotentialProvider {
             pPlayer.yellowMessage("[Potential Debug] Second Line ID :" + pEquip.getPotential2());
             pPlayer.yellowMessage("[Potential Debug] Third Line ID : " + pEquip.getPotential3());
         }
+        return true;
     }
     
     /**

@@ -8,6 +8,7 @@ import client.QuestStatus;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
+import database.Database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -39,9 +40,12 @@ public class Utility {
      * @param sSQL 
      * @throws java.sql.SQLException 
      */
-    public static void runSQL(Connection Con, String sSQL) throws SQLException {
-        try (PreparedStatement pStatement = Con.prepareStatement(sSQL)) {
-            pStatement.executeUpdate();
+    public static void runSQL(String sSQL) throws SQLException {
+        try (Connection Con = Database.GetConnection()) {
+            try (PreparedStatement pStatement = Con.prepareStatement(sSQL)) {
+                pStatement.executeUpdate();
+                pStatement.closeOnCompletion();
+            }
         }
     }
     
