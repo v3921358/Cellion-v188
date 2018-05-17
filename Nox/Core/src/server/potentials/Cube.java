@@ -126,7 +126,7 @@ public class Cube extends ItemPotentialProvider {
         
         if (bCubeResult) {
             
-            MapleInventoryManipulator.removeById(pPlayer.getClient(), MapleInventoryType.USE, nCubeID, (short) 1, false, true);
+            MapleInventoryManipulator.removeById(pPlayer.getClient(), MapleInventoryType.CASH, nCubeID, (short) 1, false, true);
             if (nFragmentID > 0) MapleInventoryManipulator.addById(pPlayer.getClient(), nFragmentID, (short) 1, "Cube on " + LocalDateTime.now());
             if (nMesoCost > 0) pPlayer.gainMeso(-nMesoCost, true, true); // Cube Meso Cost
             
@@ -154,7 +154,7 @@ public class Cube extends ItemPotentialProvider {
                         pPlayer.SendPacket(CubePacket.OnInGameCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
                         break;
                     case ItemConstants.PLATINUM_MIRACLE_CUBE:
-                        pPlayer.SendPacket(CubePacket.OnRedCubeResult/*OnPlatinumCubeResult*/(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
+                        //pPlayer.SendPacket(CubePacket.OnRedCubeResult/*OnPlatinumCubeResult*/(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
                         break;
                     case ItemConstants.RED_CUBE:
                         pPlayer.SendPacket(CubePacket.OnRedCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));

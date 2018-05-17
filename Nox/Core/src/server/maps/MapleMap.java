@@ -58,6 +58,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.OutPacket;
 import scripting.provider.MapScriptManager;
+import server.life.mob.BuffedMob;
 import tools.LogHelper;
 
 public final class MapleMap {
@@ -1470,7 +1471,7 @@ public final class MapleMap {
 
     public void spawnMonster_sSack(final Mob mob, final Point pos, final int spawnType) {
         mob.setPosition(calcPointBelow(new Point(pos.x, pos.y - 1)));
-        spawnMonster(mob, spawnType);
+        OnSpawnMonster(mob, spawnType);
     }
 
     public void spawnObtacleAtom() {
@@ -1519,7 +1520,7 @@ public final class MapleMap {
             final Mob part = LifeFactory.getMonster(i);
             part.setPosition(spos);
 
-            spawnMonster(part, -2);
+            OnSpawnMonster(part, -2);
         }
         if (squadSchedule != null) {
             cancelSquadSchedule(false);
@@ -1543,7 +1544,7 @@ public final class MapleMap {
             final Mob part = LifeFactory.getMonster(i);
             part.setPosition(spos);
 
-            spawnMonster(part, -2);
+            OnSpawnMonster(part, -2);
         }
         if (squadSchedule != null) {
             cancelSquadSchedule(false);
@@ -1567,7 +1568,7 @@ public final class MapleMap {
             final Mob part = LifeFactory.getMonster(i);
             part.setPosition(spos);
 
-            spawnMonster(part, -2);
+            OnSpawnMonster(part, -2);
         }
         if (squadSchedule != null) {
             cancelSquadSchedule(false);
@@ -1591,7 +1592,7 @@ public final class MapleMap {
             final Mob part = LifeFactory.getMonster(i);
             part.setPosition(spos);
 
-            spawnMonster(part, -2);
+            OnSpawnMonster(part, -2);
         }
         if (squadSchedule != null) {
             cancelSquadSchedule(false);
@@ -1613,6 +1614,11 @@ public final class MapleMap {
         }
     }
 
+    /**
+     * Mob Respawning
+     * @param monster
+     * @param oid 
+     */
     public void spawnRevives(final Mob monster, final int oid) {
         monster.setMap(this);
         checkRemoveAfter(monster);
@@ -1620,6 +1626,7 @@ public final class MapleMap {
         spawnAndAddRangedMapObject(monster, new DelayedPacketCreation() {
             @Override
             public final void sendPackets(ClientSocket c) {
+                
                 if (GameConstants.isAzwanMap(c.getPlayer().getMapId())) {
                     c.SendPacket(MobPacket.spawnMonster(monster, monster.getStats().getSummonType() <= 1 ? -3 : monster.getStats().getSummonType(), oid, true)); // TODO effect
                 } else {
@@ -1632,77 +1639,51 @@ public final class MapleMap {
         spawnedMonstersOnMap.incrementAndGet();
     }
 
-    /*    public final void spawnMonster(final MapleMonster monster, final int spawnType) {
-     spawnMonster(monster, spawnType, false);
-     }
-
-     public final void spawnMonster(final MapleMonster monster, final int spawnType, final boolean overwrite) {
-     monster.setMap(this);
-     checkRemoveAfter(monster);
-
-     spawnAndAddRangedMapObject(monster, new DelayedPacketCreation() {
-
-     public final void sendPackets(ClientSocket c) {
-     c.write(MobPacket.spawnMonster(monster, monster.getStats().getSummonType() <= 1 || monster.getStats().getSummonType() == 27 || overwrite ? spawnType : monster.getStats().getSummonType(), 0));
-     }
-     });
-     updateMonsterController(monster);
-
-     spawnedMonstersOnMap.incrementAndGet();
-     }
-     */
-    public final void spawnMonster(Mob monster, int spawnType) {
-        spawnMonster(monster, spawnType, false, null);
+    public final void OnSpawnMonster(Mob pMob, int nSpawnType) {
+        OnSpawnMonster(pMob, nSpawnType, false, null);
     }
 
-    /* 
-    public final MapleCharacter getLevel() {
-        return getLevel();
-    }*/
-    public final void spawnMonster(final Mob monster, final int spawnType, final boolean overwrite, final User chr) {
-        //  ClientSocket c;
-        //  MapleCharacter chr = (MapleCharacter);
-        if (this.getId() == 109010100 && monster.getId() != 9300166) {
-            return;
-        }
+    /**
+     * OnSpawnMonster
+     * 
+     * @param pMob
+     * @param nSpawnType
+     * @param bOverwrite
+     * @param pPlayer 
+     */
+    public final void OnSpawnMonster(final Mob pMob, final int nSpawnType, final boolean bOverwrite, final User pPlayer) {
+        
+        boolean bBuffedMonster = BuffedMob.OnBuffedMobRequest(pMob, this.channel);
+        final Mob pMonster = bBuffedMonster ? BuffedMob.OnBuffedMobResult(pMob) : pMob;
+        
+        if (this.getId() == 109010100 && pMonster.getId() != 9300166) return;
 
-        /*//Spawn Buffed Mobs for Buffed Channel System
-        if (ServerConstants.BUFFED_SYSTEM && (channel >= ServerConstants.START_RANGE) && (channel <= ServerConstants.END_RANGE)) {
-            monster.buffedChangeLevel(monster.getStats().getLevel() * ServerConstants.BUFFED_LEVEL, ServerConstants.BUFFED_HP, ServerConstants.BUFFED_BOSSHP);
-        }*/
-        monster.setMap(this);
-        checkRemoveAfter(monster);
+        pMonster.setMap(this);
+        checkRemoveAfter(pMonster);
 
-        if (monster.getId() == 9300166) {
+        if (pMonster.getId() == 9300166) {
             MapTimer.getInstance().schedule(new Runnable() {
                 @Override
                 public void run() {
-                    broadcastPacket(MobPacket.killMonster(monster.getObjectId(), 2, false));
-                    removeMapObject(monster);
+                    broadcastPacket(MobPacket.killMonster(pMonster.getObjectId(), 2, false));
+                    removeMapObject(pMonster);
                 }
             }, this.getId() == 109010100 ? 1500 /*Bomberman*/ : this.getId() == 910025200 ? 200 /*The Dragon's Shout*/ : 3000);
         }
-        /*if (MoonlightRevamp.MoonlightRevamp) {
-         MonsterStats stats = LifeFactory.getMonsterStats(monster.getId());
-         OverrideMonsterStats overrideStats = new OverrideMonsterStats(monster.getHp() / MoonlightRevamp.monsterHpDivision, monster.getMp(), stats.getExp());
-         monster.setOverrideStats(overrideStats);
-         //monster.setHp(monster.getHp() / MoonlightRevamp.monsterHpDivision); //Isn't needed because of override stats
-         stats.setPDRate(stats.isBoss() ? MoonlightRevamp.getBossPDRateMultipy(stats.getPDRate()) : (byte) (stats.getPDRate() + MoonlightRevamp.getPDRateAddition(stats.getPDRate())));
-         stats.setMDRate(stats.isBoss() ? MoonlightRevamp.getBossMDRateMultipy(stats.getMDRate()) : (byte) (stats.getMDRate() + MoonlightRevamp.getMDRateAddition(stats.getMDRate())));
-         }*/
-        spawnAndAddRangedMapObject(monster, new DelayedPacketCreation() {
+        
+        spawnAndAddRangedMapObject(pMonster, new DelayedPacketCreation() {
             @Override
             public final void sendPackets(ClientSocket c) {
                 if (GameConstants.isAzwanMap(c.getPlayer().getMapId())) {
-                    c.SendPacket(MobPacket.spawnMonster(monster, monster.getStats().getSummonType() <= 1 || monster.getStats().getSummonType() == 27 || overwrite ? spawnType : monster.getStats().getSummonType(), 0, true));
-                } else if (GameConstants.isChangeable(monster.getId())) {
-                    c.SendPacket(MobPacket.spawnMonster(monster, monster.getStats().getSummonType() <= 1 || monster.getStats().getSummonType() == 27 || true ? spawnType : monster.getStats().getSummonType(), 0, false));
+                    c.SendPacket(MobPacket.spawnMonster(pMonster, pMonster.getStats().getSummonType() <= 1 || pMonster.getStats().getSummonType() == 27 || bOverwrite ? nSpawnType : pMonster.getStats().getSummonType(), 0, true));
+                } else if (GameConstants.isChangeable(pMonster.getId())) {
+                    c.SendPacket(MobPacket.spawnMonster(pMonster, pMonster.getStats().getSummonType() <= 1 || pMonster.getStats().getSummonType() == 27 || true ? nSpawnType : pMonster.getStats().getSummonType(), 0, false));
                 } else {
-                    c.SendPacket(MobPacket.spawnMonster(monster, monster.getStats().getSummonType() <= 1 || monster.getStats().getSummonType() == 27 || overwrite ? spawnType : monster.getStats().getSummonType(), 0, false));
+                    c.SendPacket(MobPacket.spawnMonster(pMonster, pMonster.getStats().getSummonType() <= 1 || pMonster.getStats().getSummonType() == 27 || bOverwrite ? nSpawnType : pMonster.getStats().getSummonType(), 0, false));
                 }
             }
         });
-        updateMonsterController(monster);
+        updateMonsterController(pMonster);
 
         this.spawnedMonstersOnMap.incrementAndGet();
     }

@@ -33,7 +33,8 @@ function action(mode, type, selection){
 			 
 			 + "\r\n________________________________________________\r\n\r\n"
 			 
-			 + "#d #i5530340##L5530340# 10,000 NX - Potential Scroll (50%)#l\r\n#k"
+			 + "#d#i5062300# #L5062300# 10,000 NX - Potential Stamp#l\r\n#k"
+			 + " #d #i5530340 ##L5530340# 10,000 NX - Potential Scroll (40%)#l\r\n#k"
 			 + "#d#i2048306##L2048306# 200,000 NX - Bonus Potential Scroll (70%)#l\r\n#k"
 			 
 			 + "\r\n________________________________________________\r\n\r\n"
@@ -59,6 +60,9 @@ function action(mode, type, selection){
 				break;
 			case 5062500: // Bonus Cube
 				nCost = 30000 * nQuantity;
+				break;
+			case 5062300: // Potential Stamp
+				nCost = 10000 * nQuantity;
 				break;
 			case 5530340: // Potential Scroll
 				nCost = 10000 * nQuantity;

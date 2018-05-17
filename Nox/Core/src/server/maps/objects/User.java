@@ -89,6 +89,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 import server.BossTimer;
@@ -5281,12 +5282,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
     
     /**
-     * OnJobAdvanceRequest
-     * @author Mazen Massoud
+     * OnJobAdvanceNotify
      */
-    public void OnJobAdvanceRequest() {
-        client.removeClickedNPC();
-        NPCScriptManager.getInstance().start(client, NPCConstants.JobAdvance_NPC, null);
+    public void OnJobAdvanceNotify() {
+        dropMessage(-1, "Job Advancement Available!");
+        yellowMessage("You are ready for your next job advancement, you can advance by speaking to the Slime in the Free Market. Remember that you can use @fm to get there quickly.");
     }
     
     /**
@@ -5348,28 +5348,25 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             
             /* Job Advancement & Bonus SP Gain*/
             switch(level) { 
-                case 11: // First level up to attempt job advancement selection.
-                    OnJobAdvanceRequest();
-                    break;
                 case 20:
                     if (GameConstants.isDualBlade(job)) OnGainSP(nSP);
-                    OnJobAdvanceRequest();
+                    //if (GameConstants.isDualBlade(job))OnJobAdvanceNotify();
                     break;
                 case 30:
                     OnGainSP(nSP);
-                    OnJobAdvanceRequest();
+                    OnJobAdvanceNotify();
                     break;
                 case 45:
                     if (GameConstants.isDualBlade(job)) OnGainSP(nSP);
-                    OnJobAdvanceRequest();
+                    if (GameConstants.isDualBlade(job))OnJobAdvanceNotify();
                     break;
                 case 60:
                     OnGainSP(nSP);
-                    OnJobAdvanceRequest();
+                    OnJobAdvanceNotify();
                     break;
                 case 100:
                     OnGainSP(nSP);
-                    OnJobAdvanceRequest();
+                    OnJobAdvanceNotify();
                     break;
             }
             
@@ -6379,8 +6376,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 case 11:
                     changeJob((short) 2500);
                     JobAdvanceSp(1);
-                    changeSingleSkillLevel(SkillFactory.getSkill(25001002), (byte) 1, (byte) 25); // Flash Fist
-                    changeSingleSkillLevel(SkillFactory.getSkill(25001000), (byte) 1, (byte) 25); // Swift Strike
                     break;
                 case 30:
                     changeJob((short) 2510);

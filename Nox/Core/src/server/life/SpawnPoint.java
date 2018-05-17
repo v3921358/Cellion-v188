@@ -130,7 +130,7 @@ public class SpawnPoint extends Spawns {
             spawnedMonsters.decrementAndGet();
         });
 
-        map.spawnMonster(mob, -2);
+        map.OnSpawnMonster(mob, -2);
         if (carnivalTeam > -1) {
             for (MapleMapObject o : map.getAllMapObjects(MapleMapObjectType.REACTOR)) { //parsing through everytime a monster is spawned? not good idea
                 final Reactor r = (Reactor) o;

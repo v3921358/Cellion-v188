@@ -178,7 +178,9 @@ public class DamageParse {
                         }
                     } else if (monsterstats.getOnlyNoramlAttack()) {
                         eachd = attack.skill != 0 ? 0 : Math.min(eachd, (int) maxDamagePerHit);
-                    } else if (!pPlayer.isGM() && attack.skill != Global.LEVEL_UP) {
+                    } else if (!pPlayer.isGM() 
+                            && attack.skill != Global.LEVEL_UP) { // Add exceptions here when a skill doesn't do damage, but is being parsed correctly. -Mazen
+                        
                         if (Tempest) {
                             if (eachd > monster.getMobMaxHp()) {
                                 eachd = (int) Math.min(monster.getMobMaxHp(), Integer.MAX_VALUE);
@@ -192,18 +194,19 @@ public class DamageParse {
                                 }
                                 if (eachd > maxDamagePerHit * 2.0D) {
                                     pPlayer.getCheatTracker().registerOffense(CheatingOffense.HIGH_DAMAGE_2, new StringBuilder().append("[Damage: ").append(eachd).append(", Expected: ").append(maxDamagePerHit).append(", Mob: ").append(monster.getId()).append("] [Job: ").append(pPlayer.getJob()).append(", Level: ").append(pPlayer.getLevel()).append(", Skill: ").append(attack.skill).append("]").toString());
-                                    eachd = (int) (maxDamagePerHit * 2.0D);
+                                    if (maxDamagePerHit != 0) {
+                                        eachd = (int) (maxDamagePerHit * 2.0D);
+                                    }
                                     if (eachd >= playerDamageCap) {
                                         pPlayer.getClient().Close();
                                     }
                                 }
                             }
-
-                        } else if (eachd > maxDamagePerHit) {
+                        } else if (eachd > maxDamagePerHit && maxDamagePerHit != 0) {
                             eachd = (int) maxDamagePerHit;
                         }
-
                     }
+                    
                     totDamageToOneMonster += eachd;
 
                     if ((eachd == 0 || monster.getId() == 9700021) && pPlayer.getPyramidSubway() != null) {

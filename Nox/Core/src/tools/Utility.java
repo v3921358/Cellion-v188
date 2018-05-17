@@ -120,7 +120,7 @@ public class Utility {
 
     /**
      * Remove Buff from Player's Map
-     *
+     * @author Mazen Massoud
      * @param pPlayer The function checks all users that are on the same map as this character object.
      * @param pStat The temporary stat that will be removed from this map.
      */
@@ -137,29 +137,38 @@ public class Utility {
 
     /**
      * Auto Pet Loot
-     *
+     * @author Mazen Massoud
      * @param pPlayer Character object of which the pet loot is requested from.
      */
     public static void petLootRequest(User pPlayer) {
         ReentrantLock petSafety = new ReentrantLock();
         petSafety.lock();
-        final List<MapleMapObject> mItemsInRange = pPlayer.getMap().getMapObjectsInRange(pPlayer.getPosition(), 2500, Arrays.asList(MapleMapObjectType.ITEM));
+        
         MapleMapItem pMapLoot;
+        final List<MapleMapObject> mItemsInRange = pPlayer.getMap().getMapObjectsInRange(pPlayer.getPosition(), 2500, Arrays.asList(MapleMapObjectType.ITEM));
+        
         boolean bHasPet = false;
-
         for (int i = 0; i <= 3; i++) {
             Pet pet = pPlayer.getPet(i);
             if (pet != null) {
                 bHasPet = true; // Checks all pet slots to confirm if player has a pet active.
             }
         }
-
+        
+        List<MapleMapObject> mItemsToLoot = new ArrayList<>();
+        for (MapleMapObject pObject : mItemsInRange) {
+            MapleMapItem pLoot = (MapleMapItem) pObject;
+            if (pLoot.getOwner() == pPlayer.getId() && !pLoot.isPlayerDrop()) {
+                mItemsToLoot.add(pLoot);
+            }
+        }
+        
         List<MapleMapObject> mItems = new ArrayList<>();
-        if (mItemsInRange.size() <= 10) {
-            mItems = mItemsInRange;
+        if (mItemsToLoot.size() <= 5) {
+            mItems = mItemsToLoot;
         } else {
-            for (int i = 1; i <= 10; i++) {
-                mItems.add(mItemsInRange.get(i));
+            for (int i = 1; i <= 5; i++) {
+                mItems.add(mItemsToLoot.get(i));
             }
         }
 
@@ -220,32 +229,41 @@ public class Utility {
 
     /**
      * Auto Pet Vacuum
-     *
+     * @author Mazen Massoud
      * @param pPlayer Character object requesting to vacuum all of it's respected item loot on the map.
      */
     public static void petVacuumRequest(User pPlayer) {
         ReentrantLock petSafety = new ReentrantLock();
         petSafety.lock();
-        final List<MapleMapObject> mAllMapItems = pPlayer.getMap().getAllMapObjects(MapleMapObjectType.ITEM);
+        
         MapleMapItem pMapLoot;
-        boolean bHasPet = false;
+        final List<MapleMapObject> mAllMapItems = pPlayer.getMap().getAllMapObjects(MapleMapObjectType.ITEM);
 
+        boolean bHasPet = false;
         for (int i = 0; i <= 3; i++) {
             Pet pet = pPlayer.getPet(i);
             if (pet != null) {
                 bHasPet = true; // Checks all pet slots to confirm if player has a pet active.
             }
         }
-
-        List<MapleMapObject> mItems = new ArrayList<>();
-        if (mAllMapItems.size() <= 10) {
-            mItems = mAllMapItems;
-        } else {
-            for (int i = 1; i <= 10; i++) {
-                mItems.add(mAllMapItems.get(i));
+        
+        List<MapleMapObject> mItemsToLoot = new ArrayList<>();
+        for (MapleMapObject pObject : mAllMapItems) {
+            MapleMapItem pLoot = (MapleMapItem) pObject;
+            if (pLoot.getOwner() == pPlayer.getId() && !pLoot.isPlayerDrop()) {
+                mItemsToLoot.add(pLoot);
             }
         }
 
+        List<MapleMapObject> mItems = new ArrayList<>();
+        if (mAllMapItems.size() <= 10) {
+            mItems = mItemsToLoot;
+        } else {
+            for (int i = 1; i <= 10; i++) {
+                mItems.add(mItemsToLoot.get(i));
+            }
+        }
+        
         if (bHasPet) {
             for (MapleMapObject item : mItems) {
                 pMapLoot = (MapleMapItem) item;

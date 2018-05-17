@@ -1,5 +1,6 @@
 package server.life;
 
+import server.life.mob.BuffedMob;
 import server.life.mob.MobTemporaryStat;
 import server.life.mob.ForcedMobStat;
 import client.*;
@@ -95,11 +96,13 @@ public class Mob extends AbstractLoadedMapleLife {
             usedSkills = new HashMap<>();
         }
     }
-
+    
     public final void buffedChangeLevel(final double newLevel, final int hpBuff, final int bossHpBuff) { //Buffed channels
         this.ostats = new ChangeableStats(stats, newLevel, hpBuff, bossHpBuff);
         this.hp = ostats.getHp();
         this.mp = ostats.getMp();
+        
+        getStats().setHp(0);
     }
 
     public ArrayList<AttackerEntry> getAttackers() {
@@ -418,6 +421,18 @@ public class Mob extends AbstractLoadedMapleLife {
 
         OnNxGainRequest(pPlayer, bKiller);
         OnMesoDropRequest(pPlayer);
+        
+        if (BuffedMob.OnBuffedChannel(Utility.requestChannel(pPlayer.getId()))) {
+            if (!BuffedMob.BUFFED_BOSSES) {
+                if (!getStats().isBoss()) {
+                    nBaseEXP /= BuffedMob.HP_BUFF; // Corrects the original base exp calculation from increasing the HP.
+                    nBaseEXP *= 2;
+                }   
+            } else {
+                nBaseEXP /= BuffedMob.HP_BUFF;
+                nBaseEXP *= 2;
+            }
+        }
 
         if (bHighestDamage) {
             if (eventInstance != null) {
@@ -725,7 +740,7 @@ public class Mob extends AbstractLoadedMapleLife {
                     }
                 }
                 if (spongy != null && map.getMonsterById(spongy.getId()) == null) {
-                    map.spawnMonster(spongy, -2);
+                    map.OnSpawnMonster(spongy, -2);
                     for (MapleMapObject mon : map.getAllMapObjects(MapleMapObjectType.MONSTER)) {
                         Mob mons = (Mob) mon;
                         if (mons.getObjectId() != spongy.getObjectId() && (mons.getSponge() == this || mons.getLinkOid() == this.getObjectId())) { //sponge was this, please update
@@ -771,10 +786,10 @@ public class Mob extends AbstractLoadedMapleLife {
                     }
                 }
                 if (spongy != null && map.getMonsterById(spongy.getId()) == null) {
-                    map.spawnMonster(spongy, -2);
+                    map.OnSpawnMonster(spongy, -2);
 
                     for (Mob i : mobs) {
-                        map.spawnMonster(i, -2);
+                        map.OnSpawnMonster(i, -2);
                         i.setSponge(spongy);
                     }
                 }
@@ -791,7 +806,7 @@ public class Mob extends AbstractLoadedMapleLife {
                     if (dropsDisabled()) {
                         mob.disableDrops();
                     }
-                    map.spawnMonster(mob, -2);
+                    map.OnSpawnMonster(mob, -2);
                 }
                 break;
             }
@@ -1535,15 +1550,27 @@ public class Mob extends AbstractLoadedMapleLife {
      * @purpose Request to drop bag of Mesos, used for Global Meso Drops without database clutter.
      */
     public void OnMesoDropRequest(User pDropOwner) {
-        long nMobLv = stats.getLevel();
+        long nMobHP = getMobMaxHp();
+        short nMobLV = stats.getLevel();
+        if (nMobHP > 1000000000L) nMobHP = 1000000000L;                                             // Caps the the HP at this value for the calculation.
         
-        int nMinRange = (int) nMobLv * 100; // Meso Drop Formula
-        int nMaxRange = (int) Math.round(nMinRange * 1.25); // Amount Meso Drop can randomize up to.
-        int nResultMeso = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1))); // Formula to produce a value between the specified range.
+        int nMinRange = (int) (nMobHP / 250000) + (nMobLV * 4);                                     // Meso Drop Formula
+        int nMaxRange = (int) Math.round(nMinRange * 1.25);                                         // Amount Meso Drop can randomize up to.
+        int nResultMeso = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1)));      // Formula to produce a value between the specified range.
         
-        if(Utility.resultSuccess(40)) {
-            pDropOwner.getMap().spawnMesoDrop(nResultMeso, this.getTruePosition(), this, pDropOwner, false, (byte) 0);
+        int nGainChance = 80;                                                                       // Base Meso Drop Chance %
+        
+        if (BuffedMob.OnBuffedChannel(Utility.requestChannel(pDropOwner.getId()))) {                // Increase Meso Rates from Buffed Monsters.
+            if (!BuffedMob.BUFFED_BOSSES) {
+                if (!getStats().isBoss()) {                                     
+                    nResultMeso *= BuffedMob.MESO_BUFF;
+                }
+            } else {
+                nResultMeso *= BuffedMob.MESO_BUFF;
+            }
         }
+        
+        if(Utility.resultSuccess(nGainChance)) pDropOwner.getMap().spawnMesoDrop(nResultMeso, this.getTruePosition(), this, pDropOwner, false, (byte) 0);
     }
     
     /**
@@ -1563,12 +1590,22 @@ public class Mob extends AbstractLoadedMapleLife {
 
         int nMinRange = (int) (nMobHP / 200000) + (nMobLV * 5);                                 // NX Gain Formula
         int nMaxRange = (int) Math.round(nMinRange * 1.25);                                     // Amount NX Gain can go up to.
-        int nResultNx = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1)));    // Formula to produce a value between the specified range.
+        int nResultNX = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1)));    // Formula to produce a value between the specified range.
 
         int nGainChance = 40;                                                                   // Base NX Drop Chance %
 
-        if (!bKiller) nResultNx *= 0.4;                                                         // Reduce amount gained if Player is not the killer of the mob.
-        if (Utility.resultSuccess(nGainChance)) pPlayer.gainNX(nResultNx, true);                // Award the Player with the NX gained if chance succeeds.
+        if (BuffedMob.OnBuffedChannel(Utility.requestChannel(pPlayer.getId()))) {               // Increase NX Rates from Buffed Monsters.
+            if (!BuffedMob.BUFFED_BOSSES) {
+                if (!getStats().isBoss()) {                                     
+                    nResultNX *= BuffedMob.NX_BUFF;
+                }
+            } else {
+                nResultNX *= BuffedMob.NX_BUFF;
+            }
+        }
+        
+        if (!bKiller) nResultNX *= 0.4;                                                         // Reduce amount gained if Player is not the killer of the mob.
+        if (Utility.resultSuccess(nGainChance)) pPlayer.gainNX(nResultNX, true);                // Award the Player with the NX gained if chance succeeds.
     }
 
     // <editor-fold defaultstate="visible" desc="Attacks & EXP Handling"> 

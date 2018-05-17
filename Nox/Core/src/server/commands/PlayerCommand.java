@@ -38,7 +38,7 @@ public class PlayerCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            if (!c.isGm()) return 0; // Requires a GM Account, but not a GM Character ;).
+            if (!ServerConstants.DEVELOPER_DEBUG_MODE) return 0;
             
             int nType = Integer.parseInt(splitted[1]);
             switch (nType) {
@@ -143,16 +143,6 @@ public class PlayerCommand {
         @Override
         public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().dropMessage(5, "Your characters actions have been enabled.");
-            c.getPlayer().completeDispose();
-            return 1;
-        }
-    }
-    
-    public static class Job extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            c.getPlayer().OnJobAdvanceRequest();
             c.getPlayer().completeDispose();
             return 1;
         }

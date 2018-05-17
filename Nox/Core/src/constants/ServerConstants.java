@@ -84,9 +84,10 @@ public class ServerConstants {
 
     /*Server Structure Configuration*/
     public static final boolean CUSTOM_LIFE = true; //If true, automatically loads the scripted NPCs for the tutorial and FM, without the need for updating the database.
+    public static final boolean BUFFED_CHANNELS = true; //If true, enables the buffed channels system which makes some channels spawn harder, more rewarding monsters.
     public static final boolean UNIVERSAL_START = true; //If true, all classes start in the custom tutorial intro.
     public static final int UNIVERSAL_START_MAP = 331003400; //All classes start on this map if the boolean above is true.
-    public static final int JAIL_MAP = 931050960; //Map ID used for the server jail, a map where characters may not leave from.
+    public static final int JAIL_MAP = 693000006; //Map ID used for the server jail, a map where characters may not leave from.
     
     /*Miscellaneous Configuration*/
     public static final long MAX_MESOS = Long.MAX_VALUE;
