@@ -27,8 +27,7 @@ public class CashShopFiller {
 
     private class CashCategoryItem {
 
-        public int itemid, category, subcategory, parent, expire, quantity, flag, discount, price;
-        public long sn;
+        public int itemid, category, subcategory, parent, expire, quantity, flag, discount, price, likes, sn;
         public byte gender;
     }
 
@@ -99,18 +98,19 @@ public class CashShopFiller {
         try (Connection con = Database.GetConnection(); ResultSet rs = con.prepareStatement("SELECT * FROM cashshop_items").executeQuery()) {
             while (rs.next()) {
                 CashCategoryItem cItem = new CashCategoryItem();
-                cItem.category = rs.getInt("subcategory");
+                cItem.category = rs.getInt("category");
+                cItem.subcategory = rs.getInt("subcategory");
                 cItem.discount = rs.getInt("discountPrice");
                 cItem.expire = rs.getInt("expire");
                 cItem.flag = rs.getInt("flag");
                 cItem.gender = rs.getByte("gender");
                 cItem.itemid = rs.getInt("itemid");
-                cItem.parent = rs.getInt("parent") - (rs.getInt("parent")%10);
+                cItem.parent = rs.getInt("parent") - (rs.getInt("parent") % 10); //fixes wrong parents!
                 cItem.price = rs.getInt("price");
                 cItem.quantity = rs.getInt("quantity");
                 cItem.sn = rs.getInt("sn");
-                //cItem.subcategory = rs.getInt("");
-                mItems.put(cItem.itemid, cItem);
+                cItem.likes = rs.getInt("likes");
+                mItems.put(cItem.sn, cItem);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -141,15 +141,13 @@ public class CashShopFiller {
                 }
             }
         });
-*/
-
+         */
         dumpSQL();
     }
 
     private void dumpSQL() throws IOException {
         mItems.forEach((key, cItem) -> {
-            sql.add("INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) "
-                    + "VALUES (" + cItem.category + ", " + cItem.parent + ", '', " + cItem.sn + ", " + cItem.itemid + ", " + cItem.flag + ", " + cItem.price + ", " + cItem.discount + ", " + cItem.quantity + ", " + cItem.expire + ", " + cItem.gender + ", " + 0 + ");");
+            sql.add("(" + cItem.category + ", " + cItem.subcategory+ ", " + cItem.parent + ", '', " + cItem.sn + ", " + cItem.itemid + ", " + cItem.flag + ", " + cItem.price + ", " + cItem.discount + ", " + cItem.quantity + ", " + cItem.expire + ", " + cItem.gender + ", " + cItem.likes + "),");
 
         });
         FileWriter fw = new FileWriter("output.sql");
@@ -164,6 +162,7 @@ public class CashShopFiller {
         sql.add("CREATE TABLE IF NOT EXISTS `cashshop_items` (");
         sql.add("  `id` int(11) NOT NULL AUTO_INCREMENT,");
         sql.add("  `category` int(11) NOT NULL,");
+        sql.add("  `subcategory` int(11) NOT NULL,");
         sql.add("  `parent` int(11) NOT NULL,");
         sql.add("  `image` varchar(255) NOT NULL,");
         sql.add("  `sn` int(11) NOT NULL,");
@@ -177,6 +176,8 @@ public class CashShopFiller {
         sql.add("  `likes` int(11) NOT NULL,");
         sql.add("  PRIMARY KEY (`id`)");
         sql.add(") ENGINE=InnoDB AUTO_INCREMENT=1228 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;");
+        sql.add("");
+        sql.add("INSERT INTO `cashshop_items` (`category`, `subcategory`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES");
         sql.add("");
     }
 

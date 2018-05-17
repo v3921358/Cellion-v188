@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS `cashshop_items`;
 CREATE TABLE IF NOT EXISTS `cashshop_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `category` int(11) NOT NULL,
+  `subcategory` int(11) NOT NULL,
   `parent` int(11) NOT NULL,
   `image` varchar(255) NOT NULL,
   `sn` int(11) NOT NULL,
@@ -16,942 +17,959 @@ CREATE TABLE IF NOT EXISTS `cashshop_items` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1228 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070500, 1070500, '', 100000086, 5800000, 2, 7500, 7500, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1051000, 1051000, '', 100001182, 5501002, 4, 500, 500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070500, 1070500, '', 100000087, 5800001, 2, 7500, 7500, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1051000, 1051000, '', 100001181, 5501001, 4, 300, 300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070500, 1070500, '', 100000088, 5800002, 2, 7500, 7500, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1030400, 1030400, '', 50200214, 5202002, 5, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1030400, 1030400, '', 50200213, 5202001, 5, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1030400, 1030400, '', 50200210, 5202000, 5, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900048, 1112113, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900052, 1112114, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900025, 1112115, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900043, 1112117, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900062, 1112122, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900067, 1112123, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900069, 1112124, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900071, 1112125, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900087, 1112126, 0, 4200, 4200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900009, 1112100, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900010, 1112101, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900011, 1112102, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1090100, 1090100, '', 100001325, 5030010, 4, 20000, 20000, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900020, 1112104, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000015, 5030004, 0, 1700, 1700, 1, 1, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900012, 1112105, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900013, 1112106, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1090100, 1090100, '', 100001324, 5030006, 4, 20000, 20000, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900016, 1112107, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900024, 1112108, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1090100, 1090100, '', 50100009, 5030000, 4, 5900, 5900, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900022, 1112109, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100160, 1802366, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 10003371, 1802365, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800029, 1702003, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800028, 1702002, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100001059, 1802352, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800000, 1702004, 0, 3900, 3900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061600, 1061600, '', 100002877, 1022048, 5, 1700, 1700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100200, 1100200, '', 30100014, 5075004, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000021, 5460000, 0, 2500, 2500, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100200, 1100200, '', 30100008, 5075001, 0, 1200, 1200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100200, 1100200, '', 30100006, 5075000, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100151, 1802349, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100200, 1100200, '', 30100012, 5075003, 0, 1900, 1900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100200, 1100200, '', 30100010, 5075002, 0, 1400, 1400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 10003401, 1802337, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 10003347, 1802343, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100156, 1802342, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100155, 1802341, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100154, 1802340, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900017, 1112208, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000402, 1802395, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000399, 1802394, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800066, 1702042, 0, 4300, 4300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900006, 1112211, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000091, 1802392, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900023, 1112212, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900036, 1112215, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000404, 1802396, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900035, 1112216, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100165, 1802387, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900038, 1112217, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000314, 1802386, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000312, 1802385, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900021, 1112219, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000310, 1802384, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000773, 1802391, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000772, 1802390, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000638, 1802389, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900041, 1112223, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100166, 1802388, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800564, 1702027, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000082, 1802382, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000079, 1802381, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000076, 1802380, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900037, 1112201, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000807, 1802368, 2, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000071, 1802375, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800015, 1702020, 0, 4100, 4100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500026, 1061005, 0, 1800, 1800, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900014, 1112206, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 10003661, 1802373, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900015, 1112207, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 10003665, 1802372, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000492, 1802427, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000567, 1802426, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800322, 1702075, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000563, 1802425, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000559, 1802424, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800103, 1702079, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000500, 1802429, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100003, 1102007, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000497, 1802428, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100004, 1102008, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100007, 1102009, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900050, 1112225, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900117, 1112226, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900044, 1112227, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800089, 1702062, 0, 5000, 5000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061203, 1061200, '', 20900063, 1112232, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800050, 1702048, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900073, 1112233, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900075, 1112234, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900077, 1112235, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900088, 1112236, 0, 4200, 4200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800109, 1702055, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000852, 1802459, 2, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100001024, 1802458, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100500, 1100500, '', 50200067, 5370000, 0, 6000, 6000, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000845, 1802461, 2, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000849, 1802460, 2, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000548, 1802449, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800585, 1702101, 0, 4300, 4300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100011, 1102044, 0, 4300, 4300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100010, 1102045, 0, 4300, 4300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800233, 1702091, 0, 4100, 4100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100001521, 1802447, 4, 5000, 5000, 1, 0, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000687, 1802446, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100100, 1100100, '', 30100000, 5071000, 0, 300, 300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000686, 1802445, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000685, 1802444, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800102, 1702081, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000616, 1802435, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800101, 1702080, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000613, 1802434, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800176, 1702083, 0, 4300, 4300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000609, 1802433, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060901, 1060900, '', 20500034, 1061067, 0, 2100, 2100, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050800, 1050800, '', 100000468, 5062800, 4, 1900, 1900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100030, 1102065, 0, 4100, 4100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100025, 1102066, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500112, 1061107, 0, 2800, 2800, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100028, 1102067, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800161, 1702141, 0, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100026, 1102068, 0, 4100, 4100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800229, 1702143, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100031, 1102070, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100001582, 1802493, 4, 5000, 5000, 1, 0, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050200, 1050200, '', 10002894, 5710000, 4, 2500, 2500, 1, 10, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060901, 1060900, '', 20500089, 1061111, 0, 1500, 1500, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800127, 1702129, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100070, 1102072, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800128, 1702128, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100035, 1102073, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100033, 1102074, 0, 4200, 4200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000920, 1802481, 2, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800126, 1702130, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000919, 1802480, 2, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100048, 1102076, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100080, 1102077, 0, 3400, 3400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800138, 1702121, 0, 4600, 4600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100001224, 1802475, 4, 5000, 5000, 1, 0, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800182, 1702120, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100018, 1102049, 0, 4100, 4100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100001057, 1802474, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100019, 1102050, 0, 4100, 4100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100016, 1102051, 0, 4100, 4100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000918, 1802479, 2, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800142, 1702124, 0, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100001229, 1802477, 4, 5000, 5000, 1, 0, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800124, 1702126, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100001227, 1802476, 4, 5000, 5000, 1, 0, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100000776, 1802467, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800180, 1702119, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100032, 1102062, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800184, 1702118, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100024, 1102063, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800247, 1702168, 0, 5000, 5000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800194, 1702171, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100044, 1102098, 0, 3600, 3600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800197, 1702173, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060903, 1060900, '', 20500140, 1061140, 0, 2500, 2500, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800199, 1702174, 0, 4400, 4400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800245, 1702160, 0, 4800, 4800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100041, 1102108, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100039, 1102111, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800219, 1702153, 0, 5000, 5000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800149, 1702152, 0, 5000, 5000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800198, 1702155, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800191, 1702154, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800162, 1702157, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800214, 1702144, 0, 4400, 4400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100034, 1102092, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800232, 1702148, 0, 4800, 4800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800158, 1702151, 0, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800576, 1702203, 0, 4800, 4800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800254, 1702202, 0, 5000, 5000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800270, 1702204, 0, 4300, 4300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800260, 1702207, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100030, 1012009, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100008, 1012006, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800252, 1702195, 0, 6000, 6000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100071, 1102138, 0, 3600, 3600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100215, 1012003, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800253, 1702196, 0, 5000, 5000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100049, 1102141, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100023, 1012001, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100046, 1102142, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800209, 1702185, 0, 5000, 5000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100046, 1012031, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100042, 1102112, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800210, 1702184, 0, 5000, 5000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100000, 1012029, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100004, 1012028, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100025, 1012027, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080600, 1080600, '', 100001131, 5190011, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800213, 1702188, 0, 5000, 5000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080600, 1080600, '', 100001130, 5190010, 4, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800251, 1702191, 0, 7000, 7000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100068, 1012025, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080600, 1080600, '', 100001281, 5190009, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100051, 1012022, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080600, 1080600, '', 100001129, 5190006, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800203, 1702179, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100050, 1012021, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080600, 1080600, '', 100001128, 5190005, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080600, 1080600, '', 100001127, 5190004, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080600, 1080600, '', 100001126, 5190003, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800200, 1702180, 0, 4800, 4800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080600, 1080600, '', 100001125, 5190002, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080600, 1080600, '', 100001124, 5190001, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800212, 1702182, 0, 5200, 5200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800285, 1702233, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100073, 1102164, 0, 3600, 3600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1020200, 1020200, '', 100001321, 5450006, 4, 400, 400, 1, 1, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1020200, 1020200, '', 100001305, 5450005, 4, 1000, 1000, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100094, 1012041, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1020200, 1020200, '', 100001304, 5450004, 4, 1000, 1000, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100082, 1012039, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100081, 1012038, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100074, 1102169, 0, 3600, 3600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100080, 1012037, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1020200, 1020200, '', 100001322, 5450008, 4, 400, 400, 1, 1, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800286, 1702226, 0, 4200, 4200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100079, 1012036, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800284, 1702229, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100078, 1012035, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100077, 1012034, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800288, 1702230, 0, 4300, 4300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100040, 1012032, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100076, 1102175, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800269, 1702217, 0, 4600, 4600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100072, 1012063, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100075, 1102144, 0, 3900, 3900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800618, 1702216, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061600, 1061600, '', 100002879, 1702220, 5, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100045, 1102150, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061600, 1061600, '', 100002878, 1012057, 5, 1700, 1700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100053, 1012056, 0, 2300, 2300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100049, 1012055, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100183, 1102152, 0, 3800, 3800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100043, 1012054, 0, 2200, 2200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100062, 1102153, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800617, 1702211, 0, 4400, 4400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100044, 1012053, 0, 2200, 2200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100047, 1012052, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100064, 1102155, 0, 3400, 3400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100063, 1102157, 0, 3800, 3800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100069, 1102158, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100081, 1102196, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100098, 1012074, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100083, 1102203, 0, 3400, 3400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800310, 1702261, 0, 4200, 4200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800313, 1702263, 0, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800298, 1702249, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070101, 1070100, '', 50000335, 5151036, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800299, 1702250, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800619, 1702253, 0, 4600, 4600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100070, 1012090, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100077, 1102185, 0, 3800, 3800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100065, 1012085, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100078, 1102186, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100060, 1012083, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100059, 1012082, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800294, 1702246, 0, 4200, 4200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100100, 1102224, 0, 3600, 3600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800599, 1702296, 0, 4200, 4200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300010, 1051028, 0, 3500, 3500, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800604, 1702303, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100109, 1012105, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800593, 1702289, 0, 4800, 4800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100192, 1102232, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100097, 1012100, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800605, 1702293, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100101, 1012099, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100074, 1012097, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100076, 1012096, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100092, 1012127, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100091, 1012126, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100089, 1012124, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100194, 1102211, 0, 4200, 4200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100088, 1012123, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100087, 1012122, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100185, 1102213, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100086, 1012121, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100108, 1102214, 0, 3800, 3800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100093, 1102215, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100088, 1102216, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100197, 1102217, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800315, 1702275, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100090, 1102218, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800586, 1702277, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100084, 1012113, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100083, 1012112, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100095, 1102223, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800615, 1702330, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300207, 1051060, 0, 3900, 3900, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100202, 1102261, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100108, 1012137, 0, 2300, 2300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100103, 1012134, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800606, 1702324, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100095, 1012129, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100106, 1102245, 0, 2200, 2200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100212, 1102288, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040702, 1040700, '', 80000769, 5061001, 0, 300000, 300000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040702, 1040700, '', 80000768, 5061000, 0, 100000, 100000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040702, 1040700, '', 30000046, 5061003, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040702, 1040700, '', 80000770, 5061002, 0, 500000, 500000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100210, 1102296, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100116, 1012166, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800283, 1092062, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060101, 1060100, '', 100001686, 1092063, 4, 4000, 4000, 1, 0, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800613, 1702345, 0, 3800, 3800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050300, 1050300, '', 50200050, 5360000, 4, 4000, 4000, 1, 1, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800611, 1702344, 0, 3800, 3800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800297, 1092039, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060100, 1060100, '', 20800259, 1092040, 0, 3600, 3600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100120, 1012180, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100207, 1102285, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100208, 1102286, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300226, 1051124, 0, 3200, 3200, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100218, 1102326, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100121, 1012192, 0, 2200, 2200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061600, 1061600, '', 100002880, 1092067, 5, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040701, 1040700, '', 10003080, 5700000, 0, 1200, 1200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050300, 1050300, '', 50200070, 5360042, 4, 1500, 1500, 1, 1, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300229, 1051160, 0, 3500, 3500, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300270, 1051163, 0, 4600, 4600, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300291, 1051164, 0, 3800, 3800, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300293, 1051167, 0, 3800, 3800, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050800, 1050800, '', 100000065, 5821000, 4, 1200, 1200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500077, 5010013, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500011, 5010014, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300239, 1051142, 0, 4700, 4700, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061300, 1061300, '', 21100213, 1102344, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500010, 5010005, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500005, 5010006, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300342, 1051149, 0, 3900, 3900, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500002, 5010002, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500050, 5010028, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300371, 1051185, 0, 3800, 3800, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500048, 5010029, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500049, 5010030, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500008, 5010031, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500013, 5010024, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500006, 5010025, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500007, 5010026, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300375, 1051192, 0, 3400, 3400, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500061, 5010022, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 100000299, 5010023, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500014, 5010017, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500020, 5010018, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500021, 5010019, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 10101270, 5010044, 4, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500029, 5010045, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300302, 1051170, 0, 4500, 4500, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050100, 1050100, '', 100001303, 5051001, 4, 4000, 4000, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300341, 1051173, 0, 3300, 3300, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500024, 5010041, 0, 1900, 1900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500099, 5010043, 0, 3600, 3600, 1, 0, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500018, 5010038, 0, 2200, 2200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300345, 1051179, 0, 3300, 3300, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500098, 5010039, 0, 4800, 4800, 1, 0, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300351, 1051180, 0, 3400, 3400, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500009, 5010032, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500096, 5010033, 0, 4800, 4800, 1, 0, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000463, 1000013, 0, 3300, 3300, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300616, 1051219, 0, 3300, 3300, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060201, 1060200, '', 20000163, 1000010, 0, 2900, 2900, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060201, 1060200, '', 20000162, 1000009, 0, 2900, 2900, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060200, 1060200, '', 20000736, 1000007, 0, 5400, 5400, 1, 0, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060202, 1060200, '', 20000056, 1000000, 0, 3000, 3000, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300602, 1051200, 0, 3700, 3700, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000053, 1000020, 0, 4100, 4100, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000136, 1000018, 0, 4300, 4300, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061600, 1061600, '', 100000897, 1342069, 2, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20001099, 1000043, 0, 2500, 2500, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300666, 1051255, 0, 3000, 3000, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070101, 1200300, '', 80000003, 4031063, 0, 1, 1, 1, 0, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061600, 1061600, '', 100000912, 5012000, 2, 1500, 1500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061600, 1061600, '', 100000913, 5012001, 2, 1500, 1500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000018, 5133000, 0, 200, 200, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040700, 1040700, '', 100000000, 5530334, 0, 500, 500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300657, 1051271, 0, 3600, 3600, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050400, 1050400, '', 50200083, 5430000, 4, 6900, 6900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040300, 1040300, '', 100001488, 5530360, 4, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040300, 1040300, '', 100001138, 5530340, 4, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040300, 1040300, '', 100001489, 5530342, 4, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050500, 1050500, '', 40000070, 5772000, 0, 4800, 4800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500055, 5010060, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500056, 5010061, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500043, 5010056, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000010, 5530257, 0, 2400, 2400, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500045, 5010057, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000011, 5530258, 0, 2800, 2800, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000012, 5530259, 0, 1000, 1000, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500054, 5010059, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700012, 1082077, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000013, 5520000, 0, 3000, 3000, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000014, 5520001, 0, 4000, 4000, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500075, 5010073, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000044, 1002201, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500076, 5010074, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 10102930, 5010068, 4, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500073, 5010070, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500065, 5010064, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500063, 5010065, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500064, 5010066, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061202, 1061200, '', 20900118, 1112816, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400068, 1041134, 0, 3500, 3500, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400113, 1041130, 0, 3700, 3700, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061600, 1061600, '', 100002875, 1082102, 5, 1700, 1700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400101, 1041127, 0, 3100, 3100, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100401, 1200300, '', 80000001, 4031191, 0, 1, 1, 1, 0, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400067, 1041125, 0, 3100, 3100, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070300, 1070300, '', 50500131, 5010081, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061202, 1061200, '', 20900056, 1112800, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061202, 1061200, '', 20900057, 1112801, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061202, 1061200, '', 20900058, 1112802, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060202, 1060200, '', 20000071, 1002236, 0, 4300, 4300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060202, 1060200, '', 20000070, 1002235, 0, 4300, 4300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060202, 1060200, '', 20000062, 1002234, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061204, 1061200, '', 20900026, 1112808, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400232, 1041142, 0, 3000, 3000, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000063, 1002229, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400120, 1041137, 0, 3100, 3100, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001177, 5000012, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001161, 5000008, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060202, 1060200, '', 20000072, 1002250, 0, 4100, 4100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001164, 5000009, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001163, 5000010, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001165, 5000011, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001160, 5000004, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001162, 5000006, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001174, 5000007, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001157, 5000000, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001158, 5000001, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001172, 5000002, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060205, 1060200, '', 20000325, 1002240, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001159, 5000003, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001168, 5000028, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700025, 1082113, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050600, 1050600, '', 100001307, 5512000, 4, 1000, 1000, 1, 1, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001167, 5000024, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001166, 5000025, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060211, 1060210, '', 20000334, 1002265, 0, 3400, 3400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001170, 5000026, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001176, 5000020, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 60000023, 5000022, 0, 4900, 4900, 1, 0, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001175, 5000023, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080300, 1080300, '', 60200000, 5170000, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700028, 1082161, 0, 2300, 2300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700026, 1082162, 0, 2300, 2300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001169, 5000047, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000016, 5510000, 0, 500, 500, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080100, 1080100, '', 100001171, 5000042, 4, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700029, 1082170, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700043, 1082172, 0, 2300, 2300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700030, 1082173, 0, 2300, 2300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000065, 5553000, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061206, 1061200, '', 20900101, 1112916, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050500, 1050500, '', 40000069, 5770000, 0, 1500, 1500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060205, 1060200, '', 20000186, 1002311, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000109, 1002307, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061206, 1061200, '', 20900065, 1112900, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061206, 1061200, '', 20900064, 1112901, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061206, 1061200, '', 20900091, 1112902, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061206, 1061200, '', 20900066, 1112903, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061206, 1061200, '', 20900079, 1112904, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061206, 1061200, '', 20900082, 1112905, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061206, 1061200, '', 20900083, 1112906, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061201, 1061200, '', 20900081, 1112908, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000051, 1112910, 0, 5000, 5000, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700045, 1082229, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000330, 1002345, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000101, 1002344, 0, 3900, 3900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700046, 1082231, 0, 2600, 2600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060202, 1060200, '', 20000076, 1002343, 0, 4100, 4100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060202, 1060200, '', 20000075, 1002342, 0, 4100, 4100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700047, 1082233, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060211, 1060210, '', 20000173, 1002396, 0, 3900, 3900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700050, 1082249, 0, 1300, 1300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600029, 1072010, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600057, 1072058, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000132, 1002429, 0, 4100, 4100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100401, 1100400, '', 30200032, 5121016, 0, 300, 300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700098, 1082282, 0, 4500, 4500, 1, 0, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20000199, 1002435, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700099, 1082312, 0, 1400, 1400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050800, 1050800, '', 50200273, 5680015, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050200, 1050200, '', 100003133, 5211048, 0, 1800, 1800, 1, 1, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000071, 5252025, 5, 400, 400, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050200, 1050200, '', 100003132, 5211046, 0, 3600, 3600, 1, 1, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000075, 5252030, 2, 300, 300, 1, 14, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060202, 1060200, '', 20000237, 1002486, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060202, 1060200, '', 20000236, 1002485, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000030, 5530543, 0, 4900, 4900, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000288, 1002484, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300019, 5160014, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 100001870, 5160015, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300021, 5160012, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300016, 5160013, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300013, 5160010, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300015, 5160011, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300014, 5160008, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300006, 5160009, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300011, 5160006, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300012, 5160007, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300004, 5160004, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300005, 5160005, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000241, 1002499, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300002, 5160002, 1, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300003, 5160003, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300009, 5160000, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 50300010, 5160001, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060201, 1060200, '', 20000350, 1002526, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060205, 1060200, '', 20000313, 1002523, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000302, 1002521, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1090200, 1090200, '', 100004076, 5680193, 2, 50000, 50000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 100001871, 5160016, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 100001872, 5160017, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600015, 1072181, 0, 1200, 1200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600013, 1072186, 0, 1200, 1200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 100001869, 5160036, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 100001873, 5160034, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600007, 1072189, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070200, 1070200, '', 100001868, 5160035, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600034, 1072190, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040900, 1040900, '', 100001233, 5500002, 4, 275, 275, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040900, 1040900, '', 100001232, 5500001, 4, 100, 100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000304, 1002557, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040900, 1040900, '', 100001235, 5500006, 4, 1300, 1300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040900, 1040900, '', 100001234, 5500005, 4, 675, 675, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700100, 1082408, 0, 2300, 2300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050800, 1050800, '', 100000066, 5500010, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1090200, 1090200, '', 100004075, 5680150, 2, 30000, 30000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1090200, 1090200, '', 100004074, 5680149, 2, 10000, 10000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000252, 1002568, 0, 2200, 2200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600014, 1072200, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060211, 1060210, '', 20000514, 1002582, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000315, 1002576, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060211, 1060210, '', 20000488, 1002605, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500019, 1062003, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1041000, 1041000, '', 100001239, 5502007, 4, 250, 250, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1041000, 1041000, '', 100001238, 5502006, 4, 250, 250, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1041000, 1041000, '', 100001237, 5502005, 4, 500, 500, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1041000, 1041000, '', 100001236, 5502004, 4, 250, 250, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1041000, 1041000, '', 100001243, 5502011, 4, 375, 375, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060211, 1060210, '', 20000442, 1002599, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1041000, 1041000, '', 100001242, 5502010, 4, 375, 375, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000532, 1002598, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060901, 1060900, '', 20500030, 1062009, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1041000, 1041000, '', 100001241, 5502009, 4, 750, 750, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000328, 1002597, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1041000, 1041000, '', 100001240, 5502008, 4, 375, 375, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000470, 1002596, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1041000, 1041000, '', 100001247, 5502015, 4, 550, 550, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1041000, 1041000, '', 100001246, 5502014, 4, 550, 550, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1041000, 1041000, '', 100001245, 5502013, 4, 1000, 1000, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1041000, 1041000, '', 100001244, 5502012, 4, 550, 550, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500027, 1062015, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600070, 1072233, 0, 2300, 2300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600066, 1072235, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600142, 1072276, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500061, 1062038, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500066, 1062039, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500071, 1062040, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500098, 1062042, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060901, 1060900, '', 20500122, 1062047, 0, 2600, 2600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600082, 1072257, 0, 1200, 1200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500028, 1062018, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600089, 1072258, 0, 1200, 1200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600083, 1072259, 0, 1200, 1200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600088, 1072260, 0, 1200, 1200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500173, 1062024, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500020, 1062025, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600266, 1072265, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600267, 1072266, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060901, 1060900, '', 20500051, 1062029, 0, 1200, 1200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500136, 1062066, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20000356, 1002667, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040700, 1040700, '', 50200297, 5750001, 0, 500, 500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060901, 1060900, '', 20500197, 1062073, 0, 1900, 1900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000396, 1002660, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500195, 1062075, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500082, 1060001, 0, 2100, 2100, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500096, 1062052, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060901, 1060900, '', 20500097, 1062053, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060901, 1060900, '', 20500135, 1062054, 0, 2200, 2200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500123, 1062060, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500124, 1062061, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500129, 1062063, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600229, 1072336, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600197, 1072337, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500187, 1062098, 0, 1900, 1900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500194, 1062101, 0, 2200, 2200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600201, 1072347, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600199, 1072348, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070101, 1070100, '', 100003908, 5530776, 2, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500215, 1062109, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060901, 1060900, '', 20500232, 1062110, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600146, 1072323, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500171, 1062084, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500172, 1062085, 0, 2300, 2300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600388, 1072330, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060901, 1060900, '', 20500176, 1062091, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600393, 1072331, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060901, 1060900, '', 20500189, 1062094, 0, 2200, 2200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600227, 1072334, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600228, 1072335, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000533, 1002735, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600226, 1072370, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060900, 1060900, '', 10003540, 1062134, 0, 1600, 1600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060211, 1060210, '', 20000418, 1002724, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060900, 1060900, '', 10003539, 1062139, 0, 1900, 1900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600208, 1072380, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060211, 1060210, '', 20000419, 1002722, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060901, 1060900, '', 20500370, 1062112, 0, 1900, 1900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060901, 1060900, '', 20500378, 1062114, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060211, 1060210, '', 20000435, 1002747, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060901, 1060900, '', 20500231, 1062116, 0, 1900, 1900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500233, 1062119, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500240, 1062121, 0, 2600, 2600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500391, 1062123, 0, 2300, 2300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060211, 1060210, '', 20000431, 1002738, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000529, 1002736, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060102, 1060100, '', 100001989, 5021006, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060902, 1060900, '', 20500060, 1060114, 0, 1800, 1800, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060102, 1060100, '', 100001986, 5021000, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060102, 1060100, '', 100001987, 5021001, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060102, 1060100, '', 100001988, 5021002, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000004, 5064000, 0, 5500, 5500, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000008, 5064003, 0, 6000, 6000, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060102, 1060100, '', 100001997, 5021020, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600235, 1072384, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060102, 1060100, '', 100001999, 5021022, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060102, 1060100, '', 100001994, 5021016, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600248, 1072388, 0, 1900, 1900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060102, 1060100, '', 100001995, 5021017, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070101, 1070100, '', 50000284, 5150040, 4, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060102, 1060100, '', 100001996, 5021019, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060102, 1060100, '', 100001992, 5021013, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20000566, 1002774, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060102, 1060100, '', 100001993, 5021014, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600236, 1072395, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060102, 1060100, '', 100001990, 5021008, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060211, 1060210, '', 20000471, 1002771, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060102, 1060100, '', 100001991, 5021010, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070101, 1070100, '', 50000359, 5150061, 5, 3000, 3000, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600261, 1072437, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060102, 1060100, '', 100001998, 5021024, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040100, 1040100, '', 100000779, 5062009, 4, 36000, 36000, 33, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100007, 1011003, 0, 2400, 2400, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060300, 1060300, '', 20100003, 1011002, 0, 2700, 2700, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000003, 5062010, 0, 2200, 2200, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600382, 1072426, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060205, 1060200, '', 20000511, 1002804, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600410, 1072466, 0, 1600, 1600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600395, 1072469, 0, 1900, 1900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060202, 1060200, '', 20000521, 1002821, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000510, 1002820, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600412, 1072478, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20001091, 1002846, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600384, 1072457, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300297, 1052027, 0, 3900, 3900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600418, 1072507, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300298, 1052028, 0, 3900, 3900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600414, 1072509, 0, 1500, 1500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000520, 1002849, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300050, 1052030, 0, 4100, 4100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600407, 1072482, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600411, 1072483, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600409, 1072484, 0, 1200, 1200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000587, 1002890, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20001013, 1002888, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000582, 1002887, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600420, 1072536, 0, 2200, 2200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300397, 1052057, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20000650, 1002885, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300398, 1052058, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300399, 1052059, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600416, 1072514, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600419, 1072515, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050700, 1050700, '', 100001329, 5250500, 4, 5000, 5000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060205, 1060200, '', 20000562, 1002907, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600435, 1072517, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300201, 1052038, 0, 4100, 4100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300584, 1052042, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300294, 1052084, 0, 4200, 4200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000568, 1002922, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300232, 1052089, 0, 4900, 4900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20000563, 1002913, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300400, 1052064, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300401, 1052065, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060205, 1060200, '', 20000569, 1002953, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000574, 1002952, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000572, 1002950, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000642, 1002974, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000617, 1002973, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000640, 1002969, 0, 2600, 2600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20000645, 1002962, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20000646, 1002960, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300284, 1052144, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600429, 1072628, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000005, 5064100, 0, 2800, 2800, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040701, 1040700, '', 30000007, 5060000, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300084, 1050110, 0, 3900, 3900, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000613, 1002976, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300099, 1050085, 0, 3700, 3700, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1030300, 1030300, '', 100000374, 5060017, 5, 2600, 2600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300356, 1052142, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300340, 1052143, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300337, 1052176, 0, 3900, 3900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000609, 1003022, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300161, 1050136, 0, 4500, 4500, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300162, 1050137, 0, 4500, 4500, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060202, 1060200, '', 20000643, 1003013, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300290, 1050141, 0, 3800, 3800, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000007, 5064300, 0, 2400, 2400, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300372, 1052209, 0, 3900, 3900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000648, 1003050, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20001069, 1003071, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300301, 1050146, 0, 4500, 4500, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050800, 1050800, '', 100000064, 5820000, 4, 700, 700, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300350, 1050152, 0, 3400, 3400, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20000662, 1003060, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300373, 1052203, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000049, 5521000, 0, 3000, 3000, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300403, 1050156, 0, 3700, 3700, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20000213, 1001009, 0, 3000, 3000, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20000654, 1003057, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060205, 1060200, '', 20000289, 1001037, 0, 3100, 3100, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20000664, 1003084, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000006, 5064200, 0, 6000, 6000, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000216, 1001032, 0, 2500, 2500, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20000214, 1001031, 0, 2500, 2500, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20000658, 1003077, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20000655, 1003072, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080300, 1080300, '', 100001608, 5781000, 5, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300620, 1050179, 0, 3500, 3500, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080300, 1080300, '', 100001506, 5781004, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20000392, 1001048, 0, 3000, 3000, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300391, 1052234, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060211, 1060210, '', 20000232, 1001043, 0, 3900, 3900, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400034, 1042001, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400096, 1042031, 0, 1200, 1200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060211, 1060210, '', 20001130, 1001069, 0, 3200, 3200, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400055, 1042027, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300627, 1052283, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300628, 1052284, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1090100, 1090100, '', 50100000, 5140000, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20001107, 1003132, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400051, 1042037, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400049, 1042036, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300396, 1052268, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300656, 1050221, 0, 3600, 3600, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400062, 1042032, 0, 1200, 1200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060202, 1060200, '', 20001103, 1003149, 0, 3400, 3400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300649, 1052306, 0, 3800, 3800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20001079, 1003146, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400117, 1042049, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400164, 1042075, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400130, 1042074, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000009, 5064400, 0, 5520, 5520, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050500, 1050500, '', 40000067, 5771000, 0, 300, 300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400154, 1042095, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050500, 1050500, '', 40000068, 5771001, 0, 1300, 1300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300629, 1052338, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400165, 1042082, 0, 3400, 3400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400201, 1042110, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050800, 1050800, '', 50200320, 5220092, 0, 7500, 7500, 1, 0, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400508, 1042108, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400180, 1042105, 0, 3400, 3400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400225, 1042104, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050100, 1050100, '', 100001302, 5050100, 4, 4000, 4000, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300633, 1052330, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400172, 1042101, 0, 4800, 4800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700019, 1081002, 0, 2400, 2400, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050800, 1050800, '', 50200289, 5220084, 0, 5500, 5500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300634, 1052331, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700015, 1081003, 0, 2400, 2400, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050800, 1050800, '', 50200288, 5220083, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400171, 1042099, 0, 3400, 3400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700017, 1081004, 0, 2400, 2400, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400188, 1042098, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061100, 1061100, '', 20700096, 1081006, 0, 2500, 2500, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400153, 1042096, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060700, 1060700, '', 20300638, 1052368, 0, 4000, 4000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400219, 1042125, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400214, 1042122, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400216, 1042119, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400215, 1042118, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1040300, 1040300, '', 100001487, 5062300, 4, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050100, 1050100, '', 100000911, 5050015, 2, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050100, 1050100, '', 100001146, 5050004, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20001112, 1003222, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20001111, 1003221, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050100, 1050100, '', 100001143, 5050001, 4, 750, 750, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050100, 1050100, '', 100001142, 5050000, 4, 500, 500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400230, 1042130, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050100, 1050100, '', 100001145, 5050003, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400222, 1042129, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050100, 1050100, '', 100001144, 5050002, 4, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060206, 1060200, '', 20001113, 1003216, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100200, 1100200, '', 30100018, 5390000, 0, 1700, 1700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1030200, 1030200, '', 10103943, 5222060, 4, 3400, 3400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400253, 1042156, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100200, 1100200, '', 30100026, 5390001, 0, 1700, 1700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400247, 1042155, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100200, 1100200, '', 30100042, 5390006, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100200, 1100200, '', 30100052, 5390007, 0, 1700, 1700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400244, 1042152, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100200, 1100200, '', 30100044, 5390005, 0, 1700, 1700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400249, 1042149, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400023, 1040101, 0, 2100, 2100, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1100200, 1100200, '', 30100053, 5390008, 0, 1700, 1700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400238, 1042147, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400237, 1042146, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060203, 1060200, '', 20001122, 1003233, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400236, 1042145, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400070, 1040125, 0, 3500, 3500, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400505, 1042165, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400263, 1042164, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400254, 1042161, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000090, 5689000, 2, 2400, 2400, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 10000835, 1802011, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100019, 1802010, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400518, 1042189, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 10000834, 1802009, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400476, 1042188, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100001, 1802008, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400284, 1040139, 0, 2100, 2100, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100021, 1802015, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100005, 1802014, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 10000299, 1802013, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100061, 1802012, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400277, 1042183, 0, 3700, 3700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100013, 1802003, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400272, 1042182, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 10000179, 1802002, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400274, 1042181, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400116, 1040133, 0, 3500, 3500, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100011, 1802001, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 10000076, 1802000, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400079, 1040131, 0, 4300, 4300, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100007, 1802007, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400078, 1040130, 0, 4300, 4300, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400512, 1042178, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100006, 1802006, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400084, 1040129, 0, 4700, 4700, 1, 90, 0, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100015, 1802005, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100014, 1802004, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400522, 1042206, 0, 2600, 2600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400516, 1042203, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1300200, 1300200, '', 100000395, 2023178, 2, 790, 790, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1300200, 1300200, '', 100000397, 2023179, 2, 5100, 5100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1300200, 1300200, '', 100000396, 2023176, 2, 2600, 2600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1300100, 1300100, '', 100000394, 2023177, 2, 2600, 2600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1300100, 1300100, '', 100000393, 2023175, 2, 1900, 1900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060802, 1060800, '', 20400483, 1042194, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100050, 1802042, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400527, 1042220, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100052, 1802047, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100138, 1802046, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100047, 1802045, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100001056, 1802044, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100048, 1802035, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400525, 1042214, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100043, 1802034, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100037, 1802033, 0, 3500, 3500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100071, 1802038, 0, 2300, 2300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 100001055, 1802036, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100035, 1802026, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100031, 1802030, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060801, 1060800, '', 20400528, 1042232, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 10001432, 1802019, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100024, 1802017, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100034, 1802023, 0, 2800, 2800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100150, 1802073, 0, 1800, 1800, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100149, 1802072, 0, 2000, 2000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100148, 1802079, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100153, 1802078, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100137, 1802066, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100136, 1802064, 0, 3200, 3200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100144, 1802071, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1041100, 1041100, '', 10003615, 5062400, 4, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1041100, 1041100, '', 100000073, 5062402, 4, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100065, 1802059, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060600, 1060600, '', 20100009, 1032029, 0, 3300, 3300, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100135, 1802063, 0, 3000, 3000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100131, 1802062, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100067, 1802061, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061600, 1061600, '', 100002876, 1032024, 5, 1700, 1700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100055, 1802051, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000050, 1122121, 0, 3000, 3000, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100059, 1802050, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1050600, 1050600, '', 100001306, 5130004, 4, 1000, 1000, 1, 1, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100053, 1802049, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100051, 1802048, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100062, 1802055, 0, 3100, 3100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100128, 1802054, 0, 1900, 1900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000017, 5130000, 0, 700, 700, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100057, 1802053, 0, 2600, 2600, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100060, 1802052, 0, 2900, 2900, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060204, 1060200, '', 20001139, 1003367, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060600, 1060600, '', 20100119, 1032063, 0, 2100, 2100, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1070400, 1070400, '', 50200007, 5300000, 0, 500, 500, 1, 7, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060202, 1060200, '', 20001128, 1003387, 0, 2700, 2700, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060600, 1060600, '', 20100062, 1032054, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060600, 1060600, '', 20100063, 1032053, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100152, 1802081, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060600, 1060600, '', 20100064, 1032052, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080200, 1080200, '', 60100164, 1802080, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060600, 1060600, '', 20100069, 1032051, 0, 2500, 2500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060600, 1060600, '', 20100118, 1032074, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060600, 1060600, '', 20100104, 1032072, 0, 2400, 2400, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1060600, 1060600, '', 20100099, 1032071, 0, 2200, 2200, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600137, 1071005, 0, 2100, 2100, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061000, 1061000, '', 20600126, 1071008, 0, 2100, 2100, 1, 90, 1, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1080400, 1080400, '', 100001315, 5249000, 4, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000019, 5040004, 0, 1500, 1500, 1, 1, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061200, 1061200, '', 10000101, 1112001, 0, 6000, 6000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061200, 1061200, '', 10001033, 1112002, 0, 6000, 6000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061200, 1061200, '', 10000948, 1112003, 0, 6000, 6000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000066, 5552000, 0, 1000, 1000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061200, 1061200, '', 10001106, 1112005, 0, 6000, 6000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061200, 1061200, '', 10001115, 1112006, 0, 6000, 6000, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1061200, 1061200, '', 10002553, 1112015, 0, 4500, 4500, 1, 90, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000058, 5550000, 0, 3200, 3200, 1, 30, 2, 0);
-INSERT INTO `cashshop_items` (`category`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES (1011700, 1011700, '', 99000022, 5380000, 0, 1000, 1000, 1, 7, 2, 0);
+INSERT INTO `cashshop_items` (`category`, `subcategory`, `parent`, `image`, `sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES
+
+(1000000, 1060700, 1060700, '', 20300084, 1050110, 0, 3900, 3900, 1, 90, 0, 7),
+(1000000, 1060204, 1060200, '', 20001079, 1003146, 0, 2900, 2900, 1, 90, 2, 86),
+(1000000, 1070300, 1070300, '', 10102930, 5010068, 4, 4000, 4000, 1, 90, 2, 0),
+(1000000, 1060203, 1060200, '', 20001069, 1003071, 0, 2900, 2900, 1, 90, 2, 71),
+(1000000, 1041000, 1041000, '', 100001237, 5502005, 4, 500, 500, 1, 30, 2, 0),
+(1000000, 1041000, 1041000, '', 100001236, 5502004, 4, 250, 250, 1, 30, 2, 0),
+(1000000, 1050500, 1050500, '', 40000067, 5771000, 0, 300, 300, 1, 90, 2, 36),
+(1000000, 1041000, 1041000, '', 100001239, 5502007, 4, 250, 250, 1, 30, 2, 0),
+(1000000, 1041000, 1041000, '', 100001238, 5502006, 4, 250, 250, 1, 30, 2, 0),
+(1000000, 1040900, 1040900, '', 100001233, 5500002, 4, 275, 275, 1, 90, 2, 0),
+(1000000, 1050500, 1050500, '', 40000070, 5772000, 0, 4800, 4800, 1, 90, 2, 19),
+(1000000, 1040900, 1040900, '', 100001232, 5500001, 4, 100, 100, 1, 90, 2, 0),
+(1000000, 1040900, 1040900, '', 100001235, 5500006, 4, 1300, 1300, 1, 90, 2, 0),
+(1000000, 1050500, 1050500, '', 40000068, 5771001, 0, 1300, 1300, 1, 90, 2, 23),
+(1000000, 1040900, 1040900, '', 100001234, 5500005, 4, 675, 675, 1, 90, 2, 0),
+(1000000, 1050500, 1050500, '', 40000069, 5770000, 0, 1500, 1500, 1, 90, 2, 22),
+(1000000, 1060700, 1060700, '', 20300050, 1052030, 0, 4100, 4100, 1, 90, 2, 18),
+(1000000, 1041000, 1041000, '', 100001245, 5502013, 4, 1000, 1000, 1, 30, 2, 0),
+(1000000, 1061202, 1061200, '', 20900118, 1112816, 0, 4000, 4000, 1, 90, 2, 251),
+(1000000, 1041000, 1041000, '', 100001244, 5502012, 4, 550, 550, 1, 30, 2, 0),
+(1000000, 1041000, 1041000, '', 100001247, 5502015, 4, 550, 550, 1, 30, 2, 0),
+(1000000, 1041000, 1041000, '', 100001246, 5502014, 4, 550, 550, 1, 30, 2, 0),
+(1000000, 1061204, 1061200, '', 20900117, 1112226, 0, 4000, 4000, 1, 90, 2, 55),
+(1000000, 1041000, 1041000, '', 100001241, 5502009, 4, 750, 750, 1, 30, 2, 0),
+(1000000, 1041000, 1041000, '', 100001240, 5502008, 4, 375, 375, 1, 30, 2, 0),
+(1000000, 1041000, 1041000, '', 100001243, 5502011, 4, 375, 375, 1, 30, 2, 0),
+(1000000, 1041000, 1041000, '', 100001242, 5502010, 4, 375, 375, 1, 30, 2, 0),
+(1000000, 1080200, 1080200, '', 100001229, 1802477, 4, 5000, 5000, 1, 0, 2, 0),
+(1000000, 1061206, 1061200, '', 20900101, 1112916, 0, 4500, 4500, 1, 90, 2, 34),
+(1000000, 1080200, 1080200, '', 100001224, 1802475, 4, 5000, 5000, 1, 0, 2, 0),
+(1000000, 1080200, 1080200, '', 100001227, 1802476, 4, 5000, 5000, 1, 0, 2, 0),
+(1000000, 1060204, 1060200, '', 20001139, 1003367, 0, 2500, 2500, 1, 90, 2, 72),
+(1000000, 1060802, 1060800, '', 20400508, 1042108, 0, 2800, 2800, 1, 90, 2, 11),
+(1000000, 1060802, 1060800, '', 20400505, 1042165, 0, 2900, 2900, 1, 90, 2, 51),
+(1000000, 1060203, 1060200, '', 20001122, 1003233, 0, 3000, 3000, 1, 90, 2, 38),
+(1000000, 1060802, 1060800, '', 20400483, 1042194, 0, 3000, 3000, 1, 90, 2, 16),
+(1000000, 1060202, 1060200, '', 20001128, 1003387, 0, 2700, 2700, 1, 90, 2, 215),
+(1000000, 1060211, 1060210, '', 20001130, 1001069, 0, 3200, 3200, 1, 90, 1, 29),
+(1000000, 1080100, 1080100, '', 100001172, 5000002, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1060203, 1060200, '', 20001107, 1003132, 0, 3100, 3100, 1, 90, 2, 54),
+(1000000, 1080100, 1080100, '', 100001175, 5000023, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1080100, 1080100, '', 100001174, 5000007, 4, 4900, 4900, 1, 90, 2, 1),
+(1000000, 1080100, 1080100, '', 100001169, 5000047, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1080100, 1080100, '', 100001168, 5000028, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1060203, 1060200, '', 20001111, 1003221, 0, 3000, 3000, 1, 90, 2, 68),
+(1000000, 1080100, 1080100, '', 100001171, 5000042, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1080100, 1080100, '', 100001170, 5000026, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1051000, 1051000, '', 100001181, 5501001, 4, 300, 300, 1, 90, 2, 0),
+(1000000, 1060206, 1060200, '', 20001113, 1003216, 0, 2500, 2500, 1, 90, 2, 53),
+(1000000, 1060203, 1060200, '', 20001112, 1003222, 0, 3000, 3000, 1, 90, 2, 86),
+(1000000, 1051000, 1051000, '', 100001182, 5501002, 4, 500, 500, 1, 90, 2, 0),
+(1000000, 1060802, 1060800, '', 20400476, 1042188, 0, 2800, 2800, 1, 90, 2, 40),
+(1000000, 1080100, 1080100, '', 100001177, 5000012, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1080100, 1080100, '', 100001176, 5000020, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1080100, 1080100, '', 100001157, 5000000, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1060206, 1060200, '', 20001091, 1002846, 0, 3300, 3300, 1, 90, 2, 91),
+(1000000, 1080100, 1080100, '', 100001159, 5000003, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1080100, 1080100, '', 100001158, 5000001, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1060700, 1060700, '', 20300099, 1050085, 0, 3700, 3700, 1, 90, 0, 12),
+(1000000, 1080100, 1080100, '', 100001165, 5000011, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1080100, 1080100, '', 100001164, 5000009, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1060206, 1060200, '', 20001099, 1000043, 0, 2500, 2500, 1, 90, 0, 24),
+(1000000, 1080100, 1080100, '', 100001167, 5000024, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1080100, 1080100, '', 100001166, 5000025, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1080100, 1080100, '', 100001161, 5000008, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1080100, 1080100, '', 100001160, 5000004, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1060202, 1060200, '', 20001103, 1003149, 0, 3400, 3400, 1, 90, 2, 42),
+(1000000, 1080100, 1080100, '', 100001163, 5000010, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1080100, 1080100, '', 100001162, 5000006, 4, 4900, 4900, 1, 90, 2, 0),
+(1000000, 1050100, 1050100, '', 100001143, 5050001, 4, 750, 750, 1, 90, 2, 0),
+(1000000, 1050100, 1050100, '', 100001142, 5050000, 4, 500, 500, 1, 90, 2, 0),
+(1000000, 1040300, 1040300, '', 100001138, 5530340, 4, 3000, 3000, 1, 90, 2, 0),
+(1000000, 1050100, 1050100, '', 100001145, 5050003, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1050100, 1050100, '', 100001144, 5050002, 4, 2000, 2000, 1, 90, 2, 0),
+(1000000, 1050100, 1050100, '', 100001146, 5050004, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1080600, 1080600, '', 100001125, 5190002, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1080600, 1080600, '', 100001124, 5190001, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1080600, 1080600, '', 100001127, 5190004, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1080600, 1080600, '', 100001126, 5190003, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1060700, 1060700, '', 20300207, 1051060, 0, 3900, 3900, 1, 90, 1, 5),
+(1000000, 1060700, 1060700, '', 20300201, 1052038, 0, 4100, 4100, 1, 90, 2, 2),
+(1000000, 1080600, 1080600, '', 100001129, 5190006, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1080600, 1080600, '', 100001128, 5190005, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1080600, 1080600, '', 100001131, 5190011, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1080600, 1080600, '', 100001130, 5190010, 4, 3500, 3500, 1, 90, 2, 0),
+(1000000, 1060801, 1060800, '', 20400528, 1042232, 0, 3200, 3200, 1, 90, 2, 46),
+(1000000, 1060802, 1060800, '', 20400518, 1042189, 0, 3200, 3200, 1, 90, 2, 15),
+(1000000, 1060802, 1060800, '', 20400516, 1042203, 0, 3100, 3100, 1, 90, 2, 48),
+(1000000, 1060700, 1060700, '', 20300161, 1050136, 0, 4500, 4500, 1, 90, 0, 15),
+(1000000, 1060700, 1060700, '', 20300162, 1050137, 0, 4500, 4500, 1, 90, 0, 10),
+(1000000, 1060802, 1060800, '', 20400512, 1042178, 0, 2700, 2700, 1, 90, 2, 39),
+(1000000, 1060801, 1060800, '', 20400527, 1042220, 0, 3000, 3000, 1, 90, 2, 7),
+(1000000, 1060801, 1060800, '', 20400525, 1042214, 0, 3500, 3500, 1, 90, 2, 44),
+(1000000, 1060801, 1060800, '', 20400522, 1042206, 0, 2600, 2600, 1, 90, 2, 27),
+(1000000, 1100401, 1200300, '', 80000001, 4031191, 0, 1, 1, 1, 0, 2, 350),
+(1000000, 1070101, 1200300, '', 80000003, 4031063, 0, 1, 1, 1, 0, 2, 1003),
+(1000000, 1050200, 1050200, '', 100003133, 5211048, 0, 1800, 1800, 1, 1, 2, 0),
+(1000000, 1050200, 1050200, '', 100003132, 5211046, 0, 3600, 3600, 1, 1, 2, 0),
+(1000000, 1060700, 1060700, '', 20300284, 1052144, 0, 2900, 2900, 1, 90, 2, 28),
+(1000000, 1080200, 1080200, '', 100001057, 1802474, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1080200, 1080200, '', 100001056, 1802044, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1080200, 1080200, '', 100001059, 1802352, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060700, 1060700, '', 20300270, 1051163, 0, 4600, 4600, 1, 90, 1, 107),
+(1000000, 1061200, 1061200, '', 10002553, 1112015, 0, 4500, 4500, 1, 90, 2, 55),
+(1000000, 1080200, 1080200, '', 100001055, 1802036, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060700, 1060700, '', 20300229, 1051160, 0, 3500, 3500, 1, 90, 1, 54),
+(1000000, 1080200, 1080200, '', 100001024, 1802458, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060700, 1060700, '', 20300226, 1051124, 0, 3200, 3200, 1, 90, 1, 3),
+(1000000, 1060700, 1060700, '', 20300239, 1051142, 0, 4700, 4700, 1, 90, 1, 30),
+(1000000, 1060700, 1060700, '', 20300232, 1052089, 0, 4900, 4900, 1, 90, 2, 9),
+(1000000, 1070300, 1070300, '', 50500098, 5010039, 0, 4800, 4800, 1, 0, 2, 0),
+(1000000, 1070300, 1070300, '', 50500099, 5010043, 0, 3600, 3600, 1, 0, 2, 0),
+(1000000, 1070300, 1070300, '', 50500096, 5010033, 0, 4800, 4800, 1, 0, 2, 0),
+(1000000, 1060802, 1060800, '', 20400180, 1042105, 0, 3400, 3400, 1, 90, 2, 21),
+(1000000, 1060801, 1060800, '', 20400188, 1042098, 0, 3700, 3700, 1, 90, 2, 26),
+(1000000, 1060801, 1060800, '', 20400165, 1042082, 0, 3400, 3400, 1, 90, 2, 95),
+(1000000, 1060802, 1060800, '', 20400164, 1042075, 0, 2700, 2700, 1, 90, 2, 9),
+(1000000, 1060802, 1060800, '', 20400172, 1042101, 0, 4800, 4800, 1, 90, 2, 46),
+(1000000, 1060801, 1060800, '', 20400171, 1042099, 0, 3400, 3400, 1, 90, 2, 155),
+(1000000, 1070300, 1070300, '', 50500131, 5010081, 0, 2500, 2500, 1, 90, 2, 28),
+(1000000, 1100401, 1100400, '', 30200032, 5121016, 0, 300, 300, 1, 90, 2, 7),
+(1000000, 1060801, 1060800, '', 20400154, 1042095, 0, 3500, 3500, 1, 90, 2, 75),
+(1000000, 1060801, 1060800, '', 20400153, 1042096, 0, 1800, 1800, 1, 90, 2, 33),
+(1000000, 1060801, 1060800, '', 20400130, 1042074, 0, 3300, 3300, 1, 90, 2, 4),
+(1000000, 1060801, 1060800, '', 20400247, 1042155, 0, 3000, 3000, 1, 90, 2, 16),
+(1000000, 1060801, 1060800, '', 20400244, 1042152, 0, 3200, 3200, 1, 90, 2, 31),
+(1000000, 1060802, 1060800, '', 20400254, 1042161, 0, 2900, 2900, 1, 90, 2, 27),
+(1000000, 1060802, 1060800, '', 20400253, 1042156, 0, 2800, 2800, 1, 90, 2, 28),
+(1000000, 1060801, 1060800, '', 20400249, 1042149, 0, 3000, 3000, 1, 90, 2, 123),
+(1000000, 1060802, 1060800, '', 20400230, 1042130, 0, 3100, 3100, 1, 90, 2, 12),
+(1000000, 1060802, 1060800, '', 20400225, 1042104, 0, 3100, 3100, 1, 90, 2, 13),
+(1000000, 1060801, 1060800, '', 20400238, 1042147, 0, 3000, 3000, 1, 90, 2, 115),
+(1000000, 1060801, 1060800, '', 20400237, 1042146, 0, 3200, 3200, 1, 90, 2, 15),
+(1000000, 1080200, 1080200, '', 10000834, 1802009, 0, 2400, 2400, 1, 90, 2, 0),
+(1000000, 1060801, 1060800, '', 20400236, 1042145, 0, 3000, 3000, 1, 90, 2, 32),
+(1000000, 1080200, 1080200, '', 10000835, 1802011, 0, 3100, 3100, 1, 90, 2, 0),
+(1000000, 1060802, 1060800, '', 20400232, 1041142, 0, 3000, 3000, 1, 90, 1, 99),
+(1000000, 1060801, 1060800, '', 20400215, 1042118, 0, 2500, 2500, 1, 90, 2, 257),
+(1000000, 1060801, 1060800, '', 20400214, 1042122, 0, 2700, 2700, 1, 90, 2, 60),
+(1000000, 1080200, 1080200, '', 100000919, 1802480, 2, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1080200, 1080200, '', 100000918, 1802479, 2, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1061600, 1061600, '', 100000913, 5012001, 2, 1500, 1500, 1, 90, 2, 0),
+(1000000, 1061600, 1061600, '', 100000912, 5012000, 2, 1500, 1500, 1, 90, 2, 0),
+(1000000, 1060802, 1060800, '', 20400222, 1042129, 0, 3000, 3000, 1, 90, 2, 189),
+(1000000, 1060801, 1060800, '', 20400219, 1042125, 0, 2700, 2700, 1, 90, 2, 49),
+(1000000, 1080200, 1080200, '', 100000920, 1802481, 2, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060801, 1060800, '', 20400216, 1042119, 0, 2700, 2700, 1, 90, 2, 53),
+(1000000, 1061600, 1061600, '', 100000897, 1342069, 2, 2000, 2000, 1, 90, 2, 0),
+(1000000, 1050100, 1050100, '', 100000911, 5050015, 2, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1060801, 1060800, '', 20400201, 1042110, 0, 3000, 3000, 1, 90, 2, 138),
+(1000000, 1061204, 1061200, '', 20900026, 1112808, 0, 4500, 4500, 1, 90, 2, 10),
+(1000000, 1061203, 1061200, '', 20900024, 1112108, 0, 4000, 4000, 1, 90, 2, 27),
+(1000000, 1061203, 1061200, '', 20900025, 1112115, 0, 4000, 4000, 1, 90, 2, 14),
+(1000000, 1061203, 1061200, '', 20900022, 1112109, 0, 4000, 4000, 1, 90, 2, 16),
+(1000000, 1061204, 1061200, '', 20900023, 1112212, 0, 4500, 4500, 1, 90, 2, 13),
+(1000000, 1061203, 1061200, '', 20900020, 1112104, 0, 4000, 4000, 1, 90, 2, 22),
+(1000000, 1061204, 1061200, '', 20900021, 1112219, 0, 4500, 4500, 1, 90, 2, 12),
+(1000000, 1061203, 1061200, '', 20900016, 1112107, 0, 4000, 4000, 1, 90, 2, 39),
+(1000000, 1061204, 1061200, '', 20900017, 1112208, 0, 4500, 4500, 1, 90, 2, 16),
+(1000000, 1061204, 1061200, '', 20900014, 1112206, 0, 4500, 4500, 1, 90, 2, 11),
+(1000000, 1061204, 1061200, '', 20900015, 1112207, 0, 4500, 4500, 1, 90, 2, 14),
+(1000000, 1061203, 1061200, '', 20900012, 1112105, 0, 4000, 4000, 1, 90, 2, 29),
+(1000000, 1061203, 1061200, '', 20900013, 1112106, 0, 4000, 4000, 1, 90, 2, 22),
+(1000000, 1061203, 1061200, '', 20900010, 1112101, 0, 4000, 4000, 1, 90, 2, 22),
+(1000000, 1061203, 1061200, '', 20900011, 1112102, 0, 4000, 4000, 1, 90, 2, 13),
+(1000000, 1061203, 1061200, '', 20900009, 1112100, 0, 4000, 4000, 1, 90, 2, 141),
+(1000000, 1061204, 1061200, '', 20900006, 1112211, 0, 4500, 4500, 1, 90, 2, 11),
+(1000000, 1080200, 1080200, '', 100000852, 1802459, 2, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060802, 1060800, '', 20400277, 1042183, 0, 3700, 3700, 1, 90, 2, 54),
+(1000000, 1080200, 1080200, '', 100000849, 1802460, 2, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060801, 1060800, '', 20400274, 1042181, 0, 2800, 2800, 1, 90, 2, 79),
+(1000000, 1060802, 1060800, '', 20400272, 1042182, 0, 2800, 2800, 1, 90, 2, 45),
+(1000000, 1060802, 1060800, '', 20400284, 1040139, 0, 2100, 2100, 1, 90, 0, 2),
+(1000000, 1060802, 1060800, '', 20400263, 1042164, 0, 2800, 2800, 1, 90, 2, 49),
+(1000000, 1061600, 1061600, '', 100002880, 1092067, 5, 2000, 2000, 1, 90, 2, 0),
+(1000000, 1080200, 1080200, '', 100000845, 1802461, 2, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060204, 1060200, '', 20001013, 1002888, 0, 2500, 2500, 1, 90, 2, 40),
+(1000000, 1061206, 1061200, '', 20900091, 1112902, 0, 4500, 4500, 1, 90, 2, 45),
+(1000000, 1061204, 1061200, '', 20900088, 1112236, 0, 4200, 4200, 1, 90, 2, 11),
+(1000000, 1061600, 1061600, '', 100002877, 1022048, 5, 1700, 1700, 1, 90, 2, 0),
+(1000000, 1061203, 1061200, '', 20900087, 1112126, 0, 4200, 4200, 1, 90, 2, 27),
+(1000000, 1061600, 1061600, '', 100002876, 1032024, 5, 1700, 1700, 1, 90, 2, 0),
+(1000000, 1061600, 1061600, '', 100002879, 1702220, 5, 3000, 3000, 1, 90, 2, 0),
+(1000000, 1061600, 1061600, '', 100002878, 1012057, 5, 1700, 1700, 1, 90, 2, 0),
+(1000000, 1061206, 1061200, '', 20900082, 1112905, 0, 4500, 4500, 1, 90, 2, 74),
+(1000000, 1061206, 1061200, '', 20900083, 1112906, 0, 4500, 4500, 1, 90, 2, 43),
+(1000000, 1061600, 1061600, '', 100002875, 1082102, 5, 1700, 1700, 1, 90, 2, 0),
+(1000000, 1061201, 1061200, '', 20900081, 1112908, 0, 3300, 3300, 1, 90, 2, 57),
+(1000000, 1061206, 1061200, '', 20900079, 1112904, 0, 3300, 3300, 1, 90, 2, 29),
+(1000000, 1080200, 1080200, '', 100000807, 1802368, 2, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1061204, 1061200, '', 20900077, 1112235, 0, 4500, 4500, 1, 90, 2, 6),
+(1000000, 1061204, 1061200, '', 20900075, 1112234, 0, 4500, 4500, 1, 90, 2, 7),
+(1000000, 1061204, 1061200, '', 20900073, 1112233, 0, 4500, 4500, 1, 90, 2, 6),
+(1000000, 1061203, 1061200, '', 20900071, 1112125, 0, 4000, 4000, 1, 90, 2, 10),
+(1000000, 1061203, 1061200, '', 20900069, 1112124, 0, 4000, 4000, 1, 90, 2, 10),
+(1000000, 1061206, 1061200, '', 20900066, 1112903, 0, 3300, 3300, 1, 90, 2, 29),
+(1000000, 1061203, 1061200, '', 20900067, 1112123, 0, 4000, 4000, 1, 90, 2, 10),
+(1000000, 1061206, 1061200, '', 20900064, 1112901, 0, 3100, 3100, 1, 90, 2, 42),
+(1000000, 1060700, 1060700, '', 20300010, 1051028, 0, 3500, 3500, 1, 90, 1, 4),
+(1000000, 1061206, 1061200, '', 20900065, 1112900, 0, 3000, 3000, 1, 90, 2, 59),
+(1000000, 1061203, 1061200, '', 20900062, 1112122, 0, 4000, 4000, 1, 90, 2, 39),
+(1000000, 1061203, 1061200, '', 20900063, 1112232, 0, 4500, 4500, 1, 90, 2, 32),
+(1000000, 1061202, 1061200, '', 20900058, 1112802, 0, 4500, 4500, 1, 90, 2, 75),
+(1000000, 1061202, 1061200, '', 20900056, 1112800, 0, 4500, 4500, 1, 90, 2, 46),
+(1000000, 1061202, 1061200, '', 20900057, 1112801, 0, 4500, 4500, 1, 90, 2, 48),
+(1000000, 1061203, 1061200, '', 20900052, 1112114, 0, 4000, 4000, 1, 90, 2, 30),
+(1000000, 1061204, 1061200, '', 20900050, 1112225, 0, 4500, 4500, 1, 90, 2, 17),
+(1000000, 1061203, 1061200, '', 20900048, 1112113, 0, 4000, 4000, 1, 90, 2, 5),
+(1000000, 1080200, 1080200, '', 100000773, 1802391, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1080200, 1080200, '', 100000772, 1802390, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1061204, 1061200, '', 20900044, 1112227, 0, 4500, 4500, 1, 90, 2, 16),
+(1000000, 1061203, 1061200, '', 20900043, 1112117, 0, 4000, 4000, 1, 90, 2, 31),
+(1000000, 1061204, 1061200, '', 20900041, 1112223, 0, 4500, 4500, 1, 90, 2, 6),
+(1000000, 1061204, 1061200, '', 20900038, 1112217, 0, 4500, 4500, 1, 90, 2, 11),
+(1000000, 1061204, 1061200, '', 20900036, 1112215, 0, 4500, 4500, 1, 90, 2, 11),
+(1000000, 1061204, 1061200, '', 20900037, 1112201, 0, 4500, 4500, 1, 90, 2, 16),
+(1000000, 1040100, 1040100, '', 100000777, 5062009, 4, 1200, 1200, 1, 90, 2, 1337),
+(1000000, 1061204, 1061200, '', 20900035, 1112216, 0, 4500, 4500, 1, 90, 2, 20),
+(1000000, 1080200, 1080200, '', 100000776, 1802467, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1040100, 1040100, '', 100000779, 5062009, 4, 36000, 36000, 33, 90, 2, 69),
+(1000000, 1040100, 1040100, '', 100000778, 5062009, 4, 12000, 12000, 11, 90, 2, 69),
+(1000000, 1060100, 1060100, '', 20800313, 1702263, 0, 4900, 4900, 1, 90, 2, 56),
+(1000000, 1060100, 1060100, '', 20800315, 1702275, 0, 4500, 4500, 1, 90, 2, 21),
+(1000000, 1060100, 1060100, '', 20800310, 1702261, 0, 4200, 4200, 1, 90, 2, 39),
+(1000000, 1060700, 1060700, '', 20300602, 1051200, 0, 3700, 3700, 1, 90, 1, 51),
+(1000000, 1040701, 1040700, '', 10003080, 5700000, 0, 1200, 1200, 1, 90, 2, 145),
+(1000000, 1061200, 1061200, '', 10001033, 1112002, 0, 6000, 6000, 1, 90, 2, 35),
+(1000000, 1060100, 1060100, '', 20800297, 1092039, 0, 4000, 4000, 1, 90, 2, 7),
+(1000000, 1060100, 1060100, '', 20800299, 1702250, 0, 4000, 4000, 1, 90, 2, 7),
+(1000000, 1060100, 1060100, '', 20800298, 1702249, 0, 4500, 4500, 1, 90, 2, 60),
+(1000000, 1060100, 1060100, '', 20800294, 1702246, 0, 4200, 4200, 1, 90, 2, 33),
+(1000000, 1060100, 1060100, '', 20800288, 1702230, 0, 4300, 4300, 1, 90, 2, 11),
+(1000000, 1060700, 1060700, '', 20300584, 1052042, 0, 3100, 3100, 1, 90, 2, 1),
+(1000000, 1060100, 1060100, '', 20800285, 1702233, 0, 4000, 4000, 1, 90, 2, 66),
+(1000000, 1060100, 1060100, '', 20800284, 1702229, 0, 4500, 4500, 1, 90, 2, 115),
+(1000000, 1060100, 1060100, '', 20800286, 1702226, 0, 4200, 4200, 1, 90, 2, 39),
+(1000000, 1060100, 1060100, '', 20800283, 1092062, 0, 4000, 4000, 1, 90, 2, 8),
+(1000000, 1060100, 1060100, '', 20800269, 1702217, 0, 4600, 4600, 1, 90, 2, 20),
+(1000000, 1060100, 1060100, '', 20800270, 1702204, 0, 4300, 4300, 1, 90, 2, 14),
+(1000000, 1060100, 1060100, '', 20800260, 1702207, 0, 4500, 4500, 1, 90, 2, 43),
+(1000000, 1060100, 1060100, '', 20800259, 1092040, 0, 3600, 3600, 1, 90, 2, 29),
+(1000000, 1061100, 1061100, '', 20700026, 1082162, 0, 2300, 2300, 1, 90, 2, 145),
+(1000000, 1061100, 1061100, '', 20700025, 1082113, 0, 2700, 2700, 1, 90, 2, 10),
+(1000000, 1061200, 1061200, '', 10001115, 1112006, 0, 6000, 6000, 1, 90, 2, 66),
+(1000000, 1060700, 1060700, '', 20300657, 1051271, 0, 3600, 3600, 1, 90, 1, 15),
+(1000000, 1060700, 1060700, '', 20300656, 1050221, 0, 3600, 3600, 1, 90, 0, 6),
+(1000000, 1061100, 1061100, '', 20700030, 1082173, 0, 2300, 2300, 1, 90, 2, 75),
+(1000000, 1061100, 1061100, '', 20700029, 1082170, 0, 2800, 2800, 1, 90, 2, 18),
+(1000000, 1061100, 1061100, '', 20700028, 1082161, 0, 2300, 2300, 1, 90, 2, 94),
+(1000000, 1061100, 1061100, '', 20700019, 1081002, 0, 2400, 2400, 1, 90, 1, 15),
+(1000000, 1061100, 1061100, '', 20700017, 1081004, 0, 2400, 2400, 1, 90, 1, 18),
+(1000000, 1061200, 1061200, '', 10001106, 1112005, 0, 6000, 6000, 1, 90, 2, 132),
+(1000000, 1040701, 1040700, '', 30000007, 5060000, 0, 1800, 1800, 1, 90, 2, 75),
+(1000000, 1060700, 1060700, '', 20300666, 1051255, 0, 3000, 3000, 1, 90, 1, 36),
+(1000000, 1061100, 1061100, '', 20700015, 1081003, 0, 2400, 2400, 1, 90, 1, 16),
+(1000000, 1061100, 1061100, '', 20700012, 1082077, 0, 2800, 2800, 1, 90, 2, 38),
+(1000000, 1060700, 1060700, '', 20300649, 1052306, 0, 3800, 3800, 1, 90, 2, 115),
+(1000000, 1060700, 1060700, '', 20300629, 1052338, 0, 3100, 3100, 1, 90, 2, 43),
+(1000000, 1060700, 1060700, '', 20300628, 1052284, 0, 3000, 3000, 1, 90, 2, 18),
+(1000000, 1060101, 1060100, '', 100001686, 1092063, 4, 4000, 4000, 1, 0, 2, 0),
+(1000000, 1060700, 1060700, '', 20300627, 1052283, 0, 3000, 3000, 1, 90, 2, 75),
+(1000000, 1040702, 1040700, '', 30000046, 5061003, 0, 3100, 3100, 1, 90, 2, 69),
+(1000000, 1060700, 1060700, '', 20300638, 1052368, 0, 4000, 4000, 1, 90, 2, 16),
+(1000000, 1060700, 1060700, '', 20300633, 1052330, 0, 3500, 3500, 1, 90, 2, 27),
+(1000000, 1060700, 1060700, '', 20300634, 1052331, 0, 3500, 3500, 1, 90, 2, 14),
+(1000000, 1060700, 1060700, '', 20300620, 1050179, 0, 3500, 3500, 1, 90, 0, 6),
+(1000000, 1060700, 1060700, '', 20300616, 1051219, 0, 3300, 3300, 1, 90, 1, 76),
+(1000000, 1060100, 1060100, '', 20800322, 1702075, 0, 4500, 4500, 1, 90, 2, 5),
+(1000000, 1060300, 1060300, '', 20100023, 1012001, 0, 2100, 2100, 1, 90, 2, 3),
+(1000000, 1060300, 1060300, '', 20100025, 1012027, 0, 3300, 3300, 1, 90, 2, 138),
+(1000000, 1060300, 1060300, '', 20100030, 1012009, 0, 2700, 2700, 1, 90, 2, 25),
+(1000000, 1070300, 1070300, '', 10101270, 5010044, 4, 4000, 4000, 1, 90, 2, 0),
+(1000000, 1060300, 1060300, '', 20100003, 1011002, 0, 2700, 2700, 1, 90, 1, 59),
+(1000000, 1060300, 1060300, '', 20100000, 1012029, 0, 2700, 2700, 1, 90, 2, 55),
+(1000000, 1060300, 1060300, '', 20100007, 1011003, 0, 2400, 2400, 1, 90, 1, 21),
+(1000000, 1060300, 1060300, '', 20100004, 1012028, 0, 2400, 2400, 1, 90, 2, 314),
+(1000000, 1060300, 1060300, '', 20100008, 1012006, 0, 2900, 2900, 1, 90, 2, 164),
+(1000000, 1060600, 1060600, '', 20100009, 1032029, 0, 3300, 3300, 1, 90, 2, 46),
+(1000000, 1070300, 1070300, '', 50500002, 5010002, 0, 2700, 2700, 1, 90, 2, 46),
+(1000000, 1070300, 1070300, '', 50500006, 5010025, 0, 3200, 3200, 1, 90, 2, 17),
+(1000000, 1070300, 1070300, '', 50500007, 5010026, 0, 3000, 3000, 1, 90, 2, 31),
+(1000000, 1070300, 1070300, '', 50500005, 5010006, 0, 3500, 3500, 1, 90, 2, 18),
+(1000000, 1070300, 1070300, '', 50500010, 5010005, 0, 3500, 3500, 1, 90, 2, 10),
+(1000000, 1061100, 1061100, '', 20700050, 1082249, 0, 1300, 1300, 1, 90, 2, 454),
+(1000000, 1070300, 1070300, '', 50500011, 5010014, 0, 3500, 3500, 1, 90, 2, 15),
+(1000000, 1070300, 1070300, '', 50500008, 5010031, 0, 2700, 2700, 1, 90, 2, 11),
+(1000000, 1070300, 1070300, '', 50500009, 5010032, 0, 2700, 2700, 1, 90, 2, 9),
+(1000000, 1061200, 1061200, '', 10000948, 1112003, 0, 6000, 6000, 1, 90, 2, 54),
+(1000000, 1070300, 1070300, '', 50500014, 5010017, 0, 2400, 2400, 1, 90, 2, 13),
+(1000000, 1070300, 1070300, '', 50500013, 5010024, 0, 3000, 3000, 1, 90, 2, 27),
+(1000000, 1061100, 1061100, '', 20700043, 1082172, 0, 2300, 2300, 1, 90, 2, 18),
+(1000000, 1070300, 1070300, '', 50500018, 5010038, 0, 2200, 2200, 1, 90, 2, 14),
+(1000000, 1061100, 1061100, '', 20700047, 1082233, 0, 2400, 2400, 1, 90, 2, 35),
+(1000000, 1061100, 1061100, '', 20700046, 1082231, 0, 2600, 2600, 1, 90, 2, 138),
+(1000000, 1061100, 1061100, '', 20700045, 1082229, 0, 2400, 2400, 1, 90, 2, 146),
+(1000000, 1070300, 1070300, '', 50500020, 5010018, 0, 2400, 2400, 1, 90, 2, 14),
+(1000000, 1070300, 1070300, '', 50500021, 5010019, 0, 2400, 2400, 1, 90, 2, 16),
+(1000000, 1070300, 1070300, '', 50500024, 5010041, 0, 1900, 1900, 1, 90, 2, 46),
+(1000000, 1080300, 1080300, '', 100001608, 5781000, 5, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1070300, 1070300, '', 50500029, 5010045, 0, 3000, 3000, 1, 90, 2, 11),
+(1000000, 1040300, 1040300, '', 100001589, 5064000, 4, 5500, 5500, 1, 90, 2, 0),
+(1000000, 1060300, 1060300, '', 20100082, 1012039, 0, 1800, 1800, 1, 90, 2, 6),
+(1000000, 1060300, 1060300, '', 20100083, 1012112, 0, 1800, 1800, 1, 90, 2, 2),
+(1000000, 1040300, 1040300, '', 100001591, 5064200, 4, 6000, 6000, 1, 90, 2, 0),
+(1000000, 1060300, 1060300, '', 20100080, 1012037, 0, 1800, 1800, 1, 90, 2, 5),
+(1000000, 1040300, 1040300, '', 100001590, 5064100, 4, 2800, 2800, 1, 90, 2, 0),
+(1000000, 1060300, 1060300, '', 20100081, 1012038, 0, 1800, 1800, 1, 90, 2, 7),
+(1000000, 1060300, 1060300, '', 20100086, 1012121, 0, 1800, 1800, 1, 90, 2, 3),
+(1000000, 1060300, 1060300, '', 20100087, 1012122, 0, 1800, 1800, 1, 90, 2, 5),
+(1000000, 1060300, 1060300, '', 20100084, 1012113, 0, 1800, 1800, 1, 90, 2, 15),
+(1000000, 1040300, 1040300, '', 100001596, 5530258, 4, 2800, 2800, 1, 90, 2, 0),
+(1000000, 1060300, 1060300, '', 20100091, 1012126, 0, 1800, 1800, 1, 90, 2, 14),
+(1000000, 1070300, 1070300, '', 50500043, 5010056, 0, 2700, 2700, 1, 90, 2, 21),
+(1000000, 1060300, 1060300, '', 20100088, 1012123, 0, 1800, 1800, 1, 90, 2, 5),
+(1000000, 1060300, 1060300, '', 20100089, 1012124, 0, 1800, 1800, 1, 90, 2, 5),
+(1000000, 1040300, 1040300, '', 100001593, 5064003, 4, 6000, 6000, 1, 90, 2, 0),
+(1000000, 1060300, 1060300, '', 20100094, 1012041, 0, 1800, 1800, 1, 90, 2, 18),
+(1000000, 1040300, 1040300, '', 100001592, 5064300, 4, 2400, 2400, 1, 90, 2, 0),
+(1000000, 1060300, 1060300, '', 20100095, 1012129, 0, 1800, 1800, 1, 90, 2, 17),
+(1000000, 1040300, 1040300, '', 100001595, 5530257, 4, 2400, 2400, 1, 90, 2, 0),
+(1000000, 1060300, 1060300, '', 20100092, 1012127, 0, 1800, 1800, 1, 90, 2, 5),
+(1000000, 1040300, 1040300, '', 100001594, 5064400, 4, 5520, 5520, 1, 90, 2, 0),
+(1000000, 1070300, 1070300, '', 50500045, 5010057, 0, 2800, 2800, 1, 90, 2, 20),
+(1000000, 1070300, 1070300, '', 50500050, 5010028, 0, 2800, 2800, 1, 90, 2, 25),
+(1000000, 1060600, 1060600, '', 20100064, 1032052, 0, 2400, 2400, 1, 90, 2, 23),
+(1000000, 1070300, 1070300, '', 50500048, 5010029, 0, 2800, 2800, 1, 90, 2, 28),
+(1000000, 1060300, 1060300, '', 20100065, 1012085, 0, 2400, 2400, 1, 90, 2, 37),
+(1000000, 1070300, 1070300, '', 50500049, 5010030, 0, 2800, 2800, 1, 90, 2, 25),
+(1000000, 1060300, 1060300, '', 20100070, 1012090, 0, 2500, 2500, 1, 90, 2, 31),
+(1000000, 1070300, 1070300, '', 50500054, 5010059, 0, 3100, 3100, 1, 90, 2, 33),
+(1000000, 1070300, 1070300, '', 50500055, 5010060, 0, 3000, 3000, 1, 90, 2, 12),
+(1000000, 1060300, 1060300, '', 20100068, 1012025, 0, 2700, 2700, 1, 90, 2, 67),
+(1000000, 1060600, 1060600, '', 20100069, 1032051, 0, 2500, 2500, 1, 90, 2, 27),
+(1000000, 1060300, 1060300, '', 20100074, 1012097, 0, 2500, 2500, 1, 90, 2, 8),
+(1000000, 1060300, 1060300, '', 20100072, 1012063, 0, 2500, 2500, 1, 90, 2, 37),
+(1000000, 1070300, 1070300, '', 50500056, 5010061, 0, 3000, 3000, 1, 90, 2, 6),
+(1000000, 1080200, 1080200, '', 100001582, 1802493, 4, 5000, 5000, 1, 0, 2, 0),
+(1000000, 1060300, 1060300, '', 20100078, 1012035, 0, 1800, 1800, 1, 90, 2, 11),
+(1000000, 1060300, 1060300, '', 20100079, 1012036, 0, 1800, 1800, 1, 90, 2, 7),
+(1000000, 1070300, 1070300, '', 50500063, 5010065, 0, 3000, 3000, 1, 90, 2, 10),
+(1000000, 1060300, 1060300, '', 20100076, 1012096, 0, 2400, 2400, 1, 90, 2, 18),
+(1000000, 1060300, 1060300, '', 20100077, 1012034, 0, 1800, 1800, 1, 90, 2, 3),
+(1000000, 1070300, 1070300, '', 50500061, 5010022, 0, 2900, 2900, 1, 90, 2, 20),
+(1000000, 1060300, 1060300, '', 20100050, 1012021, 0, 2500, 2500, 1, 90, 2, 6),
+(1000000, 1060300, 1060300, '', 20100051, 1012022, 0, 2500, 2500, 1, 90, 2, 5),
+(1000000, 1011700, 1011700, '', 99000071, 5252025, 5, 400, 400, 1, 30, 2, 0),
+(1000000, 1070300, 1070300, '', 50500064, 5010066, 0, 3100, 3100, 1, 90, 2, 7),
+(1000000, 1060300, 1060300, '', 20100049, 1012055, 0, 2000, 2000, 1, 90, 2, 457),
+(1000000, 1070300, 1070300, '', 50500065, 5010064, 0, 3200, 3200, 1, 90, 2, 12),
+(1000000, 1011700, 1011700, '', 99000066, 5552000, 0, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1060300, 1060300, '', 20100053, 1012056, 0, 2300, 2300, 1, 90, 2, 8),
+(1000000, 1011700, 1011700, '', 99000065, 5553000, 0, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1020400, 1020400, '', 100001564, 5252025, 5, 400, 400, 1, 30, 2, 0),
+(1000000, 1060300, 1060300, '', 20100059, 1012082, 0, 2400, 2400, 1, 90, 2, 235),
+(1000000, 1070300, 1070300, '', 50500075, 5010073, 0, 3300, 3300, 1, 90, 2, 42),
+(1000000, 1070300, 1070300, '', 50500073, 5010070, 0, 3000, 3000, 1, 90, 2, 72),
+(1000000, 1060600, 1060600, '', 20100062, 1032054, 0, 2400, 2400, 1, 90, 2, 28),
+(1000000, 1060600, 1060600, '', 20100063, 1032053, 0, 2400, 2400, 1, 90, 2, 21),
+(1000000, 1011700, 1011700, '', 99000075, 5252030, 2, 300, 300, 1, 14, 2, 0),
+(1000000, 1060300, 1060300, '', 20100060, 1012083, 0, 2500, 2500, 1, 90, 2, 251),
+(1000000, 1070300, 1070300, '', 50500076, 5010074, 0, 3300, 3300, 1, 90, 2, 42),
+(1000000, 1070300, 1070300, '', 50500077, 5010013, 0, 3000, 3000, 1, 90, 2, 31),
+(1000000, 1061100, 1061100, '', 20700099, 1082312, 0, 1400, 1400, 1, 90, 2, 115),
+(1000000, 1060300, 1060300, '', 20100043, 1012054, 0, 2200, 2200, 1, 90, 2, 14),
+(1000000, 1061100, 1061100, '', 20700098, 1082282, 0, 4500, 4500, 1, 0, 2, 63),
+(1000000, 1060300, 1060300, '', 20100040, 1012032, 0, 1800, 1800, 1, 90, 2, 58),
+(1000000, 1061100, 1061100, '', 20700096, 1081006, 0, 2500, 2500, 1, 90, 1, 15),
+(1000000, 1060300, 1060300, '', 20100046, 1012031, 0, 1800, 1800, 1, 90, 2, 64),
+(1000000, 1011700, 1011700, '', 99000090, 5689000, 2, 2400, 2400, 1, 30, 2, 1),
+(1000000, 1060300, 1060300, '', 20100047, 1012052, 0, 2400, 2400, 1, 90, 2, 11),
+(1000000, 1060300, 1060300, '', 20100044, 1012053, 0, 2200, 2200, 1, 90, 2, 10),
+(1000000, 1061100, 1061100, '', 20700100, 1082408, 0, 2300, 2300, 1, 90, 2, 24),
+(1000000, 1060700, 1060700, '', 20300341, 1051173, 0, 3300, 3300, 1, 90, 1, 26),
+(1000000, 1060700, 1060700, '', 20300340, 1052143, 0, 4000, 4000, 1, 90, 2, 2),
+(1000000, 1060700, 1060700, '', 20300342, 1051149, 0, 3900, 3900, 1, 90, 1, 58),
+(1000000, 1060700, 1060700, '', 20300337, 1052176, 0, 3900, 3900, 1, 90, 2, 14),
+(1000000, 1080200, 1080200, '', 100001521, 1802447, 4, 5000, 5000, 1, 0, 2, 0),
+(1000000, 1060700, 1060700, '', 20300351, 1051180, 0, 3400, 3400, 1, 90, 1, 77),
+(1000000, 1060700, 1060700, '', 20300350, 1050152, 0, 3400, 3400, 1, 90, 0, 18),
+(1000000, 1080200, 1080200, '', 10003347, 1802343, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060700, 1060700, '', 20300345, 1051179, 0, 3300, 3300, 1, 90, 1, 55),
+(1000000, 1060100, 1060100, '', 20800050, 1702048, 0, 4000, 4000, 1, 90, 2, 3),
+(1000000, 1011700, 1011700, '', 99000050, 1122121, 0, 3000, 3000, 1, 30, 2, 0),
+(1000000, 1011700, 1011700, '', 99000051, 1112910, 0, 5000, 5000, 1, 30, 2, 0),
+(1000000, 1080300, 1080300, '', 100001506, 5781004, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1011700, 1011700, '', 99000049, 5521000, 0, 3000, 3000, 1, 7, 2, 0),
+(1000000, 1011700, 1011700, '', 99000058, 5550000, 0, 3200, 3200, 1, 30, 2, 0),
+(1000000, 1070101, 1070100, '', 50000359, 5150061, 5, 3000, 3000, 1, 30, 2, 0),
+(1000000, 1060100, 1060100, '', 20800029, 1702003, 0, 3700, 3700, 1, 90, 2, 8),
+(1000000, 1011700, 1011700, '', 99000006, 5064200, 0, 6000, 6000, 1, 7, 2, 0),
+(1000000, 1060100, 1060100, '', 20800028, 1702002, 0, 3700, 3700, 1, 90, 2, 7),
+(1000000, 1011700, 1011700, '', 99000007, 5064300, 0, 2400, 2400, 1, 7, 2, 0),
+(1000000, 1011700, 1011700, '', 99000004, 5064000, 0, 5500, 5500, 1, 7, 2, 0),
+(1000000, 1011700, 1011700, '', 99000005, 5064100, 0, 2800, 2800, 1, 7, 2, 0),
+(1000000, 1040300, 1040300, '', 100001489, 5530342, 4, 2000, 2000, 1, 90, 2, 0),
+(1000000, 1011700, 1011700, '', 99000002, 5062009, 0, 1200, 1200, 1, 7, 2, 0),
+(1000000, 1040300, 1040300, '', 100001488, 5530360, 4, 3000, 3000, 1, 90, 2, 0),
+(1000000, 1011700, 1011700, '', 99000003, 5062010, 0, 2200, 2200, 1, 7, 2, 0),
+(1000000, 1011700, 1011700, '', 99000014, 5520001, 0, 4000, 4000, 1, 7, 2, 0),
+(1000000, 1011700, 1011700, '', 99000015, 5030004, 0, 1700, 1700, 1, 1, 2, 0),
+(1000000, 1011700, 1011700, '', 99000012, 5530259, 0, 1000, 1000, 1, 7, 2, 0),
+(1000000, 1011700, 1011700, '', 99000013, 5520000, 0, 3000, 3000, 1, 7, 2, 0),
+(1000000, 1011700, 1011700, '', 99000010, 5530257, 0, 2400, 2400, 1, 7, 2, 0),
+(1000000, 1011700, 1011700, '', 99000011, 5530258, 0, 2800, 2800, 1, 7, 2, 0),
+(1000000, 1011700, 1011700, '', 99000008, 5064003, 0, 6000, 6000, 1, 7, 2, 0),
+(1000000, 1011700, 1011700, '', 99000009, 5064400, 0, 5520, 5520, 1, 7, 2, 0),
+(1000000, 1060700, 1060700, '', 20300293, 1051167, 0, 3800, 3800, 1, 90, 1, 208),
+(1000000, 1011700, 1011700, '', 99000022, 5380000, 0, 1000, 1000, 1, 7, 2, 0),
+(1000000, 1060100, 1060100, '', 20800015, 1702020, 0, 4100, 4100, 1, 90, 2, 16),
+(1000000, 1060700, 1060700, '', 20300294, 1052084, 0, 4200, 4200, 1, 90, 2, 9),
+(1000000, 1080200, 1080200, '', 10003371, 1802365, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1011700, 1011700, '', 99000021, 5460000, 0, 2500, 2500, 1, 30, 2, 0),
+(1000000, 1070101, 1070100, '', 50000335, 5151036, 0, 4500, 4500, 1, 90, 2, 388),
+(1000000, 1060700, 1060700, '', 20300291, 1051164, 0, 3800, 3800, 1, 90, 1, 51),
+(1000000, 1011700, 1011700, '', 99000016, 5510000, 0, 500, 500, 1, 7, 2, 0),
+(1000000, 1060700, 1060700, '', 20300290, 1050141, 0, 3800, 3800, 1, 90, 0, 26),
+(1000000, 1060700, 1060700, '', 20300301, 1050146, 0, 4500, 4500, 1, 90, 0, 15),
+(1000000, 1011700, 1011700, '', 99000030, 5530543, 0, 4900, 4900, 1, 7, 2, 0),
+(1000000, 1040300, 1040300, '', 100001487, 5062300, 4, 2000, 2000, 1, 90, 2, 0),
+(1000000, 1060700, 1060700, '', 20300302, 1051170, 0, 4500, 4500, 1, 90, 1, 83),
+(1000000, 1060700, 1060700, '', 20300297, 1052027, 0, 3900, 3900, 1, 90, 2, 15),
+(1000000, 1060100, 1060100, '', 20800000, 1702004, 0, 3900, 3900, 1, 90, 2, 22),
+(1000000, 1060700, 1060700, '', 20300298, 1052028, 0, 3900, 3900, 1, 90, 2, 7),
+(1000000, 1060100, 1060100, '', 20800124, 1702126, 0, 4500, 4500, 1, 90, 2, 16),
+(1000000, 1060100, 1060100, '', 20800127, 1702129, 0, 4500, 4500, 1, 90, 2, 15),
+(1000000, 1060100, 1060100, '', 20800126, 1702130, 0, 4500, 4500, 1, 90, 2, 16),
+(1000000, 1060700, 1060700, '', 20300401, 1052065, 0, 3700, 3700, 1, 90, 2, 1),
+(1000000, 1060700, 1060700, '', 20300400, 1052064, 0, 3700, 3700, 1, 90, 2, 3),
+(1000000, 1060700, 1060700, '', 20300403, 1050156, 0, 3700, 3700, 1, 90, 0, 7),
+(1000000, 1060100, 1060100, '', 20800109, 1702055, 0, 3700, 3700, 1, 90, 2, 10),
+(1000000, 1080200, 1080200, '', 10003401, 1802337, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060700, 1060700, '', 20300391, 1052234, 0, 3700, 3700, 1, 90, 2, 72),
+(1000000, 1060100, 1060100, '', 20800101, 1702080, 0, 4500, 4500, 1, 90, 2, 15),
+(1000000, 1060700, 1060700, '', 20300397, 1052057, 0, 3700, 3700, 1, 90, 2, 3),
+(1000000, 1060700, 1060700, '', 20300396, 1052268, 0, 3200, 3200, 1, 90, 2, 17),
+(1000000, 1060100, 1060100, '', 20800103, 1702079, 0, 4500, 4500, 1, 90, 2, 20),
+(1000000, 1060700, 1060700, '', 20300399, 1052059, 0, 3700, 3700, 1, 90, 2, 1),
+(1000000, 1060100, 1060100, '', 20800102, 1702081, 0, 4500, 4500, 1, 90, 2, 24),
+(1000000, 1060700, 1060700, '', 20300398, 1052058, 0, 3700, 3700, 1, 90, 2, 1),
+(1000000, 1060700, 1060700, '', 20300373, 1052203, 0, 3200, 3200, 1, 90, 2, 31),
+(1000000, 1060700, 1060700, '', 20300372, 1052209, 0, 3900, 3900, 1, 90, 2, 66),
+(1000000, 1060700, 1060700, '', 20300375, 1051192, 0, 3400, 3400, 1, 90, 1, 53),
+(1000000, 1060100, 1060100, '', 20800089, 1702062, 0, 5000, 5000, 1, 90, 2, 21),
+(1000000, 1060700, 1060700, '', 20300371, 1051185, 0, 3800, 3800, 1, 90, 1, 28),
+(1000000, 1070101, 1070100, '', 50000284, 5150040, 4, 3300, 3300, 1, 90, 2, 1789),
+(1000000, 1060700, 1060700, '', 20300356, 1052142, 0, 3500, 3500, 1, 90, 2, 63),
+(1000000, 1060100, 1060100, '', 20800066, 1702042, 0, 4300, 4300, 1, 90, 2, 4),
+(1000000, 1100200, 1100200, '', 30100042, 5390006, 0, 2000, 2000, 1, 90, 2, 6),
+(1000000, 1060100, 1060100, '', 20800191, 1702154, 0, 4500, 4500, 1, 90, 2, 26),
+(1000000, 1060100, 1060100, '', 20800184, 1702118, 0, 4500, 4500, 1, 90, 2, 117),
+(1000000, 1100200, 1100200, '', 30100044, 5390005, 0, 1700, 1700, 1, 90, 2, 6),
+(1000000, 1060100, 1060100, '', 20800180, 1702119, 0, 4500, 4500, 1, 90, 2, 79),
+(1000000, 1060100, 1060100, '', 20800182, 1702120, 0, 4500, 4500, 1, 90, 2, 127),
+(1000000, 1060100, 1060100, '', 20800176, 1702083, 0, 4300, 4300, 1, 90, 2, 3),
+(1000000, 1060100, 1060100, '', 20800161, 1702141, 0, 4900, 4900, 1, 90, 2, 14),
+(1000000, 1100200, 1100200, '', 30100053, 5390008, 0, 1700, 1700, 1, 90, 2, 5),
+(1000000, 1060100, 1060100, '', 20800162, 1702157, 0, 4500, 4500, 1, 90, 2, 8),
+(1000000, 1100200, 1100200, '', 30100052, 5390007, 0, 1700, 1700, 1, 90, 2, 5),
+(1000000, 1060100, 1060100, '', 20800158, 1702151, 0, 4900, 4900, 1, 90, 2, 33),
+(1000000, 1060100, 1060100, '', 20800149, 1702152, 0, 5000, 5000, 1, 90, 2, 9),
+(1000000, 1060100, 1060100, '', 20800142, 1702124, 0, 4900, 4900, 1, 90, 2, 30),
+(1000000, 1060100, 1060100, '', 20800138, 1702121, 0, 4600, 4600, 1, 90, 2, 269),
+(1000000, 1060100, 1060100, '', 20800128, 1702128, 0, 4500, 4500, 1, 90, 2, 13),
+(1000000, 1060100, 1060100, '', 20800253, 1702196, 0, 5000, 5000, 1, 90, 2, 21),
+(1000000, 1040300, 1040300, '', 100001332, 5530259, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1060100, 1060100, '', 20800252, 1702195, 0, 6000, 6000, 1, 90, 2, 11),
+(1000000, 1060100, 1060100, '', 20800254, 1702202, 0, 5000, 5000, 1, 90, 2, 43),
+(1000000, 1040702, 1040700, '', 80000768, 5061000, 0, 100000, 100000, 1, 90, 2, 81),
+(1000000, 1050700, 1050700, '', 100001329, 5250500, 4, 5000, 5000, 1, 90, 2, 0),
+(1000000, 1040702, 1040700, '', 80000769, 5061001, 0, 300000, 300000, 1, 90, 2, 71),
+(1000000, 1040702, 1040700, '', 80000770, 5061002, 0, 500000, 500000, 1, 90, 2, 120),
+(1000000, 1060100, 1060100, '', 20800251, 1702191, 0, 7000, 7000, 1, 90, 2, 28),
+(1000000, 1060100, 1060100, '', 20800245, 1702160, 0, 4800, 4800, 1, 90, 2, 12),
+(1000000, 1060100, 1060100, '', 20800247, 1702168, 0, 5000, 5000, 1, 90, 2, 9),
+(1000000, 1060100, 1060100, '', 20800233, 1702091, 0, 4100, 4100, 1, 90, 2, 5),
+(1000000, 1060100, 1060100, '', 20800232, 1702148, 0, 4800, 4800, 1, 90, 2, 6),
+(1000000, 1080400, 1080400, '', 100001315, 5249000, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1060100, 1060100, '', 20800229, 1702143, 0, 4000, 4000, 1, 90, 2, 14),
+(1000000, 1090100, 1090100, '', 100001325, 5030010, 4, 20000, 20000, 1, 30, 2, 0),
+(1000000, 1090100, 1090100, '', 100001324, 5030006, 4, 20000, 20000, 1, 30, 2, 0),
+(1000000, 1020200, 1020200, '', 100001321, 5450006, 4, 400, 400, 1, 1, 2, 0),
+(1000000, 1080300, 1080300, '', 100001323, 5380000, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1020200, 1020200, '', 100001322, 5450008, 4, 400, 400, 1, 1, 2, 0),
+(1000000, 1100200, 1100200, '', 30100010, 5075002, 0, 1400, 1400, 1, 90, 2, 6),
+(1000000, 1050100, 1050100, '', 100001303, 5051001, 4, 4000, 4000, 1, 30, 2, 0),
+(1000000, 1050100, 1050100, '', 100001302, 5050100, 4, 4000, 4000, 1, 30, 2, 0),
+(1000000, 1100200, 1100200, '', 30100008, 5075001, 0, 1200, 1200, 1, 90, 2, 6),
+(1000000, 1100200, 1100200, '', 30100014, 5075004, 0, 2000, 2000, 1, 90, 2, 6),
+(1000000, 1060100, 1060100, '', 20800219, 1702153, 0, 5000, 5000, 1, 90, 2, 25),
+(1000000, 1100200, 1100200, '', 30100012, 5075003, 0, 1900, 1900, 1, 90, 2, 6),
+(1000000, 1060100, 1060100, '', 20800213, 1702188, 0, 5000, 5000, 1, 90, 2, 31),
+(1000000, 1060100, 1060100, '', 20800212, 1702182, 0, 5200, 5200, 1, 90, 2, 37),
+(1000000, 1060100, 1060100, '', 20800214, 1702144, 0, 4400, 4400, 1, 90, 2, 7),
+(1000000, 1100100, 1100100, '', 30100000, 5071000, 0, 300, 300, 1, 90, 2, 79),
+(1000000, 1020200, 1020200, '', 100001305, 5450005, 4, 1000, 1000, 1, 30, 2, 0),
+(1000000, 1060100, 1060100, '', 20800209, 1702185, 0, 5000, 5000, 1, 90, 2, 42),
+(1000000, 1020200, 1020200, '', 100001304, 5450004, 4, 1000, 1000, 1, 30, 2, 0),
+(1000000, 1100200, 1100200, '', 30100006, 5075000, 0, 1000, 1000, 1, 90, 2, 13),
+(1000000, 1050600, 1050600, '', 100001307, 5512000, 4, 1000, 1000, 1, 1, 2, 0),
+(1000000, 1060100, 1060100, '', 20800210, 1702184, 0, 5000, 5000, 1, 90, 2, 60),
+(1000000, 1100200, 1100200, '', 30100026, 5390001, 0, 1700, 1700, 1, 90, 2, 13),
+(1000000, 1080600, 1080600, '', 100001281, 5190009, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1060100, 1060100, '', 20800200, 1702180, 0, 4800, 4800, 1, 90, 2, 109),
+(1000000, 1060100, 1060100, '', 20800203, 1702179, 0, 4500, 4500, 1, 90, 2, 47),
+(1000000, 1060100, 1060100, '', 20800197, 1702173, 0, 4500, 4500, 1, 90, 2, 18),
+(1000000, 1100200, 1100200, '', 30100018, 5390000, 0, 1700, 1700, 1, 90, 2, 6),
+(1000000, 1060100, 1060100, '', 20800199, 1702174, 0, 4400, 4400, 1, 90, 2, 43),
+(1000000, 1060100, 1060100, '', 20800198, 1702155, 0, 4500, 4500, 1, 90, 2, 77),
+(1000000, 1060100, 1060100, '', 20800194, 1702171, 0, 4500, 4500, 1, 90, 2, 3),
+(1000000, 1060204, 1060200, '', 20000053, 1000020, 0, 4100, 4100, 1, 90, 0, 21),
+(1000000, 1061000, 1061000, '', 20600126, 1071008, 0, 2100, 2100, 1, 90, 1, 7),
+(1000000, 1041100, 1041100, '', 10003615, 5062400, 4, 2700, 2700, 1, 90, 2, 705),
+(1000000, 1060202, 1060200, '', 20000056, 1000000, 0, 3000, 3000, 1, 90, 0, 32),
+(1000000, 1060206, 1060200, '', 20000063, 1002229, 0, 2100, 2100, 1, 90, 2, 2),
+(1000000, 1060202, 1060200, '', 20000062, 1002234, 0, 3500, 3500, 1, 90, 2, 53),
+(1000000, 1040700, 1040700, '', 50200297, 5750001, 0, 500, 500, 1, 90, 2, 46),
+(1000000, 1050800, 1050800, '', 50200289, 5220084, 0, 5500, 5500, 1, 90, 2, 38),
+(1000000, 1030200, 1030200, '', 10103943, 5222060, 4, 3400, 3400, 1, 90, 2, 2009),
+(1000000, 1050800, 1050800, '', 50200288, 5220083, 0, 2500, 2500, 1, 90, 2, 205),
+(1000000, 1060206, 1060200, '', 20000044, 1002201, 0, 1800, 1800, 1, 90, 2, 4),
+(1000000, 1040500, 1040500, '', 50200287, 5521000, 0, 3000, 3000, 1, 90, 2, 339),
+(1000000, 1061000, 1061000, '', 20600088, 1072260, 0, 1200, 1200, 1, 90, 2, 257),
+(1000000, 1061000, 1061000, '', 20600089, 1072258, 0, 1200, 1200, 1, 90, 2, 213),
+(1000000, 1061000, 1061000, '', 20600082, 1072257, 0, 1200, 1200, 1, 90, 2, 59),
+(1000000, 1061000, 1061000, '', 20600083, 1072259, 0, 1200, 1200, 1, 90, 2, 58),
+(1000000, 1050800, 1050800, '', 50200273, 5680015, 0, 2500, 2500, 1, 90, 2, 12),
+(1000000, 1061000, 1061000, '', 20600066, 1072235, 0, 1800, 1800, 1, 90, 2, 72),
+(1000000, 1061000, 1061000, '', 20600070, 1072233, 0, 2300, 2300, 1, 90, 2, 9),
+(1000000, 1080200, 1080200, '', 10003665, 1802372, 0, 2500, 2500, 1, 90, 2, 8),
+(1000000, 1060206, 1060200, '', 20000101, 1002344, 0, 3900, 3900, 1, 90, 2, 3),
+(1000000, 1080200, 1080200, '', 10003661, 1802373, 0, 2500, 2500, 1, 90, 2, 11),
+(1000000, 1060204, 1060200, '', 20000109, 1002307, 0, 1800, 1800, 1, 90, 2, 5),
+(1000000, 1030400, 1030400, '', 50200213, 5202001, 5, 3000, 3000, 1, 90, 2, 0),
+(1000000, 1061000, 1061000, '', 20600146, 1072323, 0, 1800, 1800, 1, 90, 2, 21),
+(1000000, 1030400, 1030400, '', 50200214, 5202002, 5, 2000, 2000, 1, 90, 2, 0),
+(1000000, 1030400, 1030400, '', 50200210, 5202000, 5, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1061000, 1061000, '', 20600137, 1071005, 0, 2100, 2100, 1, 90, 1, 6),
+(1000000, 1061000, 1061000, '', 20600142, 1072276, 0, 2500, 2500, 1, 90, 2, 8),
+(1000000, 1060202, 1060200, '', 20000071, 1002236, 0, 4300, 4300, 1, 90, 2, 45),
+(1000000, 1060202, 1060200, '', 20000070, 1002235, 0, 4300, 4300, 1, 90, 2, 68),
+(1000000, 1060202, 1060200, '', 20000072, 1002250, 0, 4100, 4100, 1, 90, 2, 58),
+(1000000, 1060202, 1060200, '', 20000075, 1002342, 0, 4100, 4100, 1, 90, 2, 68),
+(1000000, 1060202, 1060200, '', 20000076, 1002343, 0, 4100, 4100, 1, 90, 2, 357),
+(1000000, 1080200, 1080200, '', 10001432, 1802019, 0, 2800, 2800, 1, 90, 2, 0),
+(1000000, 1040500, 1040500, '', 50200188, 5520001, 0, 4000, 4000, 1, 90, 2, 434),
+(1000000, 1061000, 1061000, '', 20600248, 1072388, 0, 1900, 1900, 1, 90, 2, 20),
+(1000000, 1080100, 1080100, '', 60000023, 5000022, 0, 4900, 4900, 1, 0, 2, 2),
+(1000000, 1060205, 1060200, '', 20000186, 1002311, 0, 2400, 2400, 1, 90, 2, 14),
+(1000000, 1061000, 1061000, '', 20600235, 1072384, 0, 2000, 2000, 1, 90, 2, 18),
+(1000000, 1060201, 1060200, '', 20000163, 1000010, 0, 2900, 2900, 1, 90, 0, 25),
+(1000000, 1060201, 1060200, '', 20000162, 1000009, 0, 2900, 2900, 1, 90, 0, 20),
+(1000000, 1061000, 1061000, '', 20600236, 1072395, 0, 2000, 2000, 1, 90, 2, 68),
+(1000000, 1061000, 1061000, '', 20600226, 1072370, 0, 2000, 2000, 1, 90, 2, 5),
+(1000000, 1061000, 1061000, '', 20600227, 1072334, 0, 2000, 2000, 1, 90, 2, 39),
+(1000000, 1060211, 1060210, '', 20000173, 1002396, 0, 3900, 3900, 1, 90, 2, 38),
+(1000000, 1061000, 1061000, '', 20600228, 1072335, 0, 2100, 2100, 1, 90, 2, 14),
+(1000000, 1061000, 1061000, '', 20600229, 1072336, 0, 2100, 2100, 1, 90, 2, 3),
+(1000000, 1061300, 1061300, '', 21100003, 1102007, 0, 3100, 3100, 1, 90, 2, 5),
+(1000000, 1070500, 1070500, '', 100000087, 5800001, 2, 7500, 7500, 1, 90, 1, 92),
+(1000000, 1070500, 1070500, '', 100000086, 5800000, 2, 7500, 7500, 1, 90, 1, 193),
+(1000000, 1061300, 1061300, '', 21100004, 1102008, 0, 3100, 3100, 1, 90, 2, 3),
+(1000000, 1061300, 1061300, '', 21100007, 1102009, 0, 3100, 3100, 1, 90, 2, 4),
+(1000000, 1080200, 1080200, '', 100000082, 1802382, 0, 2500, 2500, 1, 90, 2, 33),
+(1000000, 1061000, 1061000, '', 20600208, 1072380, 0, 1800, 1800, 1, 90, 2, 17),
+(1000000, 1061300, 1061300, '', 21100011, 1102044, 0, 4300, 4300, 1, 90, 2, 2),
+(1000000, 1061300, 1061300, '', 21100010, 1102045, 0, 4300, 4300, 1, 90, 2, 3),
+(1000000, 1070500, 1070500, '', 100000088, 5800002, 2, 7500, 7500, 1, 90, 1, 133),
+(1000000, 1080200, 1080200, '', 100000091, 1802392, 0, 2500, 2500, 1, 90, 2, 21),
+(1000000, 1061300, 1061300, '', 21100016, 1102051, 0, 4100, 4100, 1, 90, 2, 7),
+(1000000, 1061300, 1061300, '', 21100019, 1102050, 0, 4100, 4100, 1, 90, 2, 7),
+(1000000, 1080200, 1080200, '', 100000071, 1802375, 0, 2500, 2500, 1, 90, 2, 53),
+(1000000, 1061000, 1061000, '', 20600201, 1072347, 0, 2000, 2000, 1, 90, 2, 74),
+(1000000, 1061300, 1061300, '', 21100018, 1102049, 0, 4100, 4100, 1, 90, 2, 9),
+(1000000, 1050800, 1050800, '', 100000065, 5821000, 4, 1200, 1200, 1, 90, 2, 46),
+(1000000, 1050800, 1050800, '', 100000064, 5820000, 4, 700, 700, 1, 30, 2, 297),
+(1000000, 1060206, 1060200, '', 20000132, 1002429, 0, 4100, 4100, 1, 90, 2, 11),
+(1000000, 1050800, 1050800, '', 100000066, 5500010, 4, 1000, 1000, 1, 90, 2, 48),
+(1000000, 1061300, 1061300, '', 21100025, 1102066, 0, 4500, 4500, 1, 90, 2, 89),
+(1000000, 1060206, 1060200, '', 20000136, 1000018, 0, 4300, 4300, 1, 90, 0, 4),
+(1000000, 1061300, 1061300, '', 21100024, 1102063, 0, 4500, 4500, 1, 90, 2, 67),
+(1000000, 1080200, 1080200, '', 100000076, 1802380, 0, 2500, 2500, 1, 90, 2, 20),
+(1000000, 1080200, 1080200, '', 100000079, 1802381, 0, 2500, 2500, 1, 90, 2, 59),
+(1000000, 1061300, 1061300, '', 21100026, 1102068, 0, 4100, 4100, 1, 90, 2, 35),
+(1000000, 1041100, 1041100, '', 100000073, 5062402, 4, 2500, 2500, 1, 90, 2, 191),
+(1000000, 1061000, 1061000, '', 20600199, 1072348, 0, 2100, 2100, 1, 90, 2, 33),
+(1000000, 1061300, 1061300, '', 21100028, 1102067, 0, 3500, 3500, 1, 90, 2, 47),
+(1000000, 1061300, 1061300, '', 21100031, 1102070, 0, 3500, 3500, 1, 90, 2, 26),
+(1000000, 1061000, 1061000, '', 20600197, 1072337, 0, 2000, 2000, 1, 90, 2, 28),
+(1000000, 1061300, 1061300, '', 21100030, 1102065, 0, 4100, 4100, 1, 90, 2, 8),
+(1000000, 1060206, 1060200, '', 20000241, 1002499, 0, 3500, 3500, 1, 90, 2, 13),
+(1000000, 1040500, 1040500, '', 50200117, 5520000, 0, 3000, 3000, 1, 90, 2, 495),
+(1000000, 1060900, 1060900, '', 10003539, 1062139, 0, 1900, 1900, 1, 90, 2, 43),
+(1000000, 1060900, 1060900, '', 10003540, 1062134, 0, 1600, 1600, 1, 90, 2, 14),
+(1000000, 1060204, 1060200, '', 20000252, 1002568, 0, 2200, 2200, 1, 90, 2, 127),
+(1000000, 1060211, 1060210, '', 20000232, 1001043, 0, 3900, 3900, 1, 90, 1, 46),
+(1000000, 1060202, 1060200, '', 20000237, 1002486, 0, 3100, 3100, 1, 90, 2, 32),
+(1000000, 1060202, 1060200, '', 20000236, 1002485, 0, 3100, 3100, 1, 90, 2, 202),
+(1000000, 1060203, 1060200, '', 20000213, 1001009, 0, 3000, 3000, 1, 90, 1, 48),
+(1000000, 1060204, 1060200, '', 20000214, 1001031, 0, 2500, 2500, 1, 90, 1, 23),
+(1000000, 1060204, 1060200, '', 20000216, 1001032, 0, 2500, 2500, 1, 90, 1, 26),
+(1000000, 1050400, 1050400, '', 50200084, 5550001, 3, 30000, 30000, 1, 7, 2, 6969),
+(1000000, 1050400, 1050400, '', 50200083, 5430000, 4, 6900, 6900, 1, 90, 2, 795),
+(1000000, 1061000, 1061000, '', 20600266, 1072265, 0, 2000, 2000, 1, 90, 2, 3),
+(1000000, 1061000, 1061000, '', 20600267, 1072266, 0, 2000, 2000, 1, 90, 2, 2),
+(1000000, 1040700, 1040700, '', 100000000, 5530334, 0, 500, 500, 1, 90, 2, 57),
+(1000000, 1060203, 1060200, '', 20000199, 1002435, 0, 3700, 3700, 1, 90, 2, 170),
+(1000000, 1100500, 1100500, '', 50200067, 5370000, 0, 6000, 6000, 1, 7, 2, 1),
+(1000000, 1061000, 1061000, '', 20600261, 1072437, 0, 2000, 2000, 1, 90, 2, 105),
+(1000000, 1080300, 1080300, '', 100004093, 5689000, 2, 2400, 2400, 1, 90, 2, 0),
+(1000000, 1060100, 1060100, '', 20800564, 1702027, 0, 4500, 4500, 1, 90, 2, 16),
+(1000000, 1090200, 1090200, '', 100004076, 5680193, 2, 50000, 50000, 1, 90, 2, 0),
+(1000000, 1090200, 1090200, '', 100004075, 5680150, 2, 30000, 30000, 1, 90, 2, 0),
+(1000000, 1090200, 1090200, '', 100004074, 5680149, 2, 10000, 10000, 1, 90, 2, 0),
+(1000000, 1060600, 1060600, '', 20100118, 1032074, 0, 2400, 2400, 1, 90, 2, 52),
+(1000000, 1060600, 1060600, '', 20100119, 1032063, 0, 2100, 2100, 1, 90, 2, 159),
+(1000000, 1060300, 1060300, '', 20100116, 1012166, 0, 2100, 2100, 1, 90, 2, 81),
+(1000000, 1060300, 1060300, '', 20100120, 1012180, 0, 2400, 2400, 1, 90, 2, 20),
+(1000000, 1060300, 1060300, '', 20100121, 1012192, 0, 2200, 2200, 1, 90, 2, 70),
+(1000000, 1060102, 1060100, '', 100001989, 5021006, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060300, 1060300, '', 20100098, 1012074, 0, 2400, 2400, 1, 90, 2, 132),
+(1000000, 1060102, 1060100, '', 100001988, 5021002, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060600, 1060600, '', 20100099, 1032071, 0, 2200, 2200, 1, 90, 2, 6),
+(1000000, 1060102, 1060100, '', 100001991, 5021010, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060102, 1060100, '', 100001990, 5021008, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060300, 1060300, '', 20100097, 1012100, 0, 2500, 2500, 1, 90, 2, 68),
+(1000000, 1060300, 1060300, '', 20100103, 1012134, 0, 2400, 2400, 1, 90, 2, 10),
+(1000000, 1060102, 1060100, '', 100001987, 5021001, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060102, 1060100, '', 100001986, 5021000, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060300, 1060300, '', 20100101, 1012099, 0, 2500, 2500, 1, 90, 2, 12),
+(1000000, 1060102, 1060100, '', 100001997, 5021020, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060102, 1060100, '', 100001996, 5021019, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060102, 1060100, '', 100001999, 5021022, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060600, 1060600, '', 20100104, 1032072, 0, 2400, 2400, 1, 90, 2, 31),
+(1000000, 1060102, 1060100, '', 100001998, 5021024, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060102, 1060100, '', 100001993, 5021014, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060102, 1060100, '', 100001992, 5021013, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060102, 1060100, '', 100001995, 5021017, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060300, 1060300, '', 20100108, 1012137, 0, 2300, 2300, 1, 90, 2, 99),
+(1000000, 1060102, 1060100, '', 100001994, 5021016, 4, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060300, 1060300, '', 20100109, 1012105, 0, 2000, 2000, 1, 90, 2, 93),
+(1000000, 1040400, 1040400, '', 100004022, 5530543, 0, 4900, 4900, 1, 90, 2, 119),
+(1000000, 1060300, 1060300, '', 20100215, 1012003, 0, 2400, 2400, 1, 90, 2, 11),
+(1000000, 1060100, 1060100, '', 20800617, 1702211, 0, 4400, 4400, 1, 90, 2, 86),
+(1000000, 1060100, 1060100, '', 20800619, 1702253, 0, 4600, 4600, 1, 90, 2, 31),
+(1000000, 1060100, 1060100, '', 20800618, 1702216, 0, 4500, 4500, 1, 90, 2, 18),
+(1000000, 1060100, 1060100, '', 20800613, 1702345, 0, 3800, 3800, 1, 90, 2, 30),
+(1000000, 1060100, 1060100, '', 20800615, 1702330, 0, 4000, 4000, 1, 90, 2, 98),
+(1000000, 1060100, 1060100, '', 20800611, 1702344, 0, 3800, 3800, 1, 90, 2, 37),
+(1000000, 1060100, 1060100, '', 20800605, 1702293, 0, 4000, 4000, 1, 90, 2, 24),
+(1000000, 1060100, 1060100, '', 20800604, 1702303, 0, 4000, 4000, 1, 90, 2, 34),
+(1000000, 1060100, 1060100, '', 20800606, 1702324, 0, 4000, 4000, 1, 90, 2, 157),
+(1000000, 1060100, 1060100, '', 20800599, 1702296, 0, 4200, 4200, 1, 90, 2, 46),
+(1000000, 1060100, 1060100, '', 20800593, 1702289, 0, 4800, 4800, 1, 90, 2, 21),
+(1000000, 1060100, 1060100, '', 20800585, 1702101, 0, 4300, 4300, 1, 90, 2, 10),
+(1000000, 1060100, 1060100, '', 20800586, 1702277, 0, 4500, 4500, 1, 90, 2, 39),
+(1000000, 1060100, 1060100, '', 20800576, 1702203, 0, 4800, 4800, 1, 90, 2, 10),
+(1000000, 1080200, 1080200, '', 60100149, 1802072, 0, 2000, 2000, 1, 90, 2, 14),
+(1000000, 1080200, 1080200, '', 60100148, 1802079, 0, 3000, 3000, 1, 90, 2, 4),
+(1000000, 1080200, 1080200, '', 60100151, 1802349, 0, 2000, 2000, 1, 90, 2, 8),
+(1000000, 1080200, 1080200, '', 60100150, 1802073, 0, 1800, 1800, 1, 90, 2, 5),
+(1000000, 1070200, 1070200, '', 100001873, 5160034, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1070200, 1070200, '', 100001872, 5160017, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1080200, 1080200, '', 60100144, 1802071, 0, 3000, 3000, 1, 90, 2, 3),
+(1000000, 1080200, 1080200, '', 60100156, 1802342, 0, 2500, 2500, 1, 90, 2, 4),
+(1000000, 1080200, 1080200, '', 60100153, 1802078, 0, 2500, 2500, 1, 90, 2, 11),
+(1000000, 1080200, 1080200, '', 60100152, 1802081, 0, 2500, 2500, 1, 90, 2, 10),
+(1000000, 1080200, 1080200, '', 60100155, 1802341, 0, 2500, 2500, 1, 90, 2, 5),
+(1000000, 1080200, 1080200, '', 60100154, 1802340, 0, 2500, 2500, 1, 90, 2, 5),
+(1000000, 1070101, 1070100, '', 100003908, 5530776, 2, 2100, 2100, 1, 90, 2, 0),
+(1000000, 1080200, 1080200, '', 60100135, 1802063, 0, 3000, 3000, 1, 90, 2, 30),
+(1000000, 1080200, 1080200, '', 60100128, 1802054, 0, 1900, 1900, 1, 90, 2, 18),
+(1000000, 1080200, 1080200, '', 60100131, 1802062, 0, 2700, 2700, 1, 90, 2, 9),
+(1000000, 1070200, 1070200, '', 100001869, 5160036, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1070200, 1070200, '', 100001868, 5160035, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1070200, 1070200, '', 100001871, 5160016, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1070200, 1070200, '', 100001870, 5160015, 4, 1000, 1000, 1, 90, 2, 0),
+(1000000, 1080200, 1080200, '', 60100137, 1802066, 0, 3000, 3000, 1, 90, 2, 3),
+(1000000, 1080200, 1080200, '', 60100136, 1802064, 0, 3200, 3200, 1, 90, 2, 8),
+(1000000, 1080200, 1080200, '', 60100138, 1802046, 0, 3000, 3000, 1, 90, 2, 4),
+(1000000, 1061000, 1061000, '', 20600057, 1072058, 0, 2100, 2100, 1, 90, 2, 62),
+(1000000, 1080200, 1080200, '', 60100165, 1802387, 0, 2500, 2500, 1, 90, 2, 4),
+(1000000, 1080200, 1080200, '', 60100164, 1802080, 0, 2500, 2500, 1, 90, 2, 14),
+(1000000, 1080200, 1080200, '', 60100166, 1802388, 0, 2500, 2500, 1, 90, 2, 3),
+(1000000, 1080200, 1080200, '', 60100160, 1802366, 0, 2500, 2500, 1, 90, 2, 8),
+(1000000, 1090100, 1090100, '', 50100009, 5030000, 4, 5900, 5900, 1, 7, 2, 180),
+(1000000, 1061000, 1061000, '', 20600034, 1072190, 0, 1800, 1800, 1, 90, 2, 6),
+(1000000, 1090100, 1090100, '', 50100000, 5140000, 0, 1800, 1800, 1, 90, 2, 1578),
+(1000000, 1061000, 1061000, '', 20600029, 1072010, 0, 1000, 1000, 1, 90, 2, 40),
+(1000000, 1070101, 1070100, '', 100001817, 5553000, 4, 1000, 1000, 1, 0, 2, 0),
+(1000000, 1061000, 1061000, '', 20600014, 1072200, 0, 1800, 1800, 1, 90, 2, 9),
+(1000000, 1061000, 1061000, '', 20600015, 1072181, 0, 1200, 1200, 1, 90, 2, 21),
+(1000000, 1061000, 1061000, '', 20600013, 1072186, 0, 1200, 1200, 1, 90, 2, 58),
+(1000000, 1050800, 1050800, '', 50200320, 5220092, 0, 7500, 7500, 1, 0, 2, 118),
+(1000000, 1061000, 1061000, '', 20600007, 1072189, 0, 1800, 1800, 1, 90, 2, 178),
+(1000000, 1060203, 1060200, '', 20000563, 1002913, 0, 2800, 2800, 1, 90, 2, 25),
+(1000000, 1060205, 1060200, '', 20000562, 1002907, 0, 3000, 3000, 1, 90, 2, 34),
+(1000000, 1060203, 1060200, '', 20000566, 1002774, 0, 2800, 2800, 1, 90, 2, 102),
+(1000000, 1060205, 1060200, '', 20000569, 1002953, 0, 3000, 3000, 1, 90, 2, 22),
+(1000000, 1060206, 1060200, '', 20000568, 1002922, 0, 2800, 2800, 1, 90, 2, 6),
+(1000000, 1060204, 1060200, '', 20000572, 1002950, 0, 2800, 2800, 1, 90, 2, 57),
+(1000000, 1060204, 1060200, '', 20000574, 1002952, 0, 2800, 2800, 1, 90, 2, 35),
+(1000000, 1060206, 1060200, '', 20000529, 1002736, 0, 3000, 3000, 1, 90, 2, 59),
+(1000000, 1080200, 1080200, '', 60100021, 1802015, 0, 3100, 3100, 1, 90, 2, 6),
+(1000000, 1060206, 1060200, '', 20000533, 1002735, 0, 3000, 3000, 1, 90, 2, 44),
+(1000000, 1060204, 1060200, '', 20000532, 1002598, 0, 2900, 2900, 1, 90, 2, 140),
+(1000000, 1080200, 1080200, '', 60100019, 1802010, 0, 3100, 3100, 1, 90, 2, 6),
+(1000000, 1060902, 1060900, '', 20500240, 1062121, 0, 2600, 2600, 1, 90, 2, 6),
+(1000000, 1080200, 1080200, '', 60100031, 1802030, 0, 2100, 2100, 1, 90, 2, 12),
+(1000000, 1080200, 1080200, '', 60100024, 1802017, 0, 3100, 3100, 1, 90, 2, 5),
+(1000000, 1060901, 1060900, '', 20500232, 1062110, 0, 1800, 1800, 1, 90, 2, 12),
+(1000000, 1080200, 1080200, '', 60100005, 1802014, 0, 2400, 2400, 1, 90, 2, 9),
+(1000000, 1060902, 1060900, '', 20500233, 1062119, 0, 2000, 2000, 1, 90, 2, 29),
+(1000000, 1080200, 1080200, '', 60100007, 1802007, 0, 2400, 2400, 1, 90, 2, 14),
+(1000000, 1060211, 1060210, '', 20000514, 1002582, 0, 3200, 3200, 1, 90, 2, 16),
+(1000000, 1080200, 1080200, '', 60100006, 1802006, 0, 2400, 2400, 1, 90, 2, 14),
+(1000000, 1080200, 1080200, '', 60100001, 1802008, 0, 2400, 2400, 1, 90, 2, 0),
+(1000000, 1060202, 1060200, '', 20000521, 1002821, 0, 2900, 2900, 1, 90, 2, 50),
+(1000000, 1080200, 1080200, '', 60100013, 1802003, 0, 2000, 2000, 1, 90, 2, 4),
+(1000000, 1060206, 1060200, '', 20000520, 1002849, 0, 3100, 3100, 1, 90, 2, 148),
+(1000000, 1080200, 1080200, '', 60100015, 1802005, 0, 2100, 2100, 1, 90, 2, 6),
+(1000000, 1080200, 1080200, '', 60100014, 1802004, 0, 2100, 2100, 1, 90, 2, 5),
+(1000000, 1080200, 1080200, '', 60100011, 1802001, 0, 2000, 2000, 1, 90, 2, 10),
+(1000000, 1060901, 1060900, '', 20500231, 1062116, 0, 1900, 1900, 1, 90, 2, 12),
+(1000000, 1080200, 1080200, '', 60100053, 1802049, 0, 2900, 2900, 1, 90, 2, 10),
+(1000000, 1080200, 1080200, '', 60100052, 1802047, 0, 2900, 2900, 1, 90, 2, 5),
+(1000000, 1080200, 1080200, '', 60100055, 1802051, 0, 2900, 2900, 1, 90, 2, 10),
+(1000000, 1080200, 1080200, '', 60100048, 1802035, 0, 3000, 3000, 1, 90, 2, 5),
+(1000000, 1080200, 1080200, '', 60100051, 1802048, 0, 2900, 2900, 1, 90, 2, 13),
+(1000000, 1080200, 1080200, '', 60100050, 1802042, 0, 2700, 2700, 1, 90, 2, 11),
+(1000000, 1080200, 1080200, '', 60100061, 1802012, 0, 2700, 2700, 1, 90, 2, 4),
+(1000000, 1080200, 1080200, '', 60100060, 1802052, 0, 2900, 2900, 1, 90, 2, 9),
+(1000000, 1080200, 1080200, '', 60100062, 1802055, 0, 3100, 3100, 1, 90, 2, 3),
+(1000000, 1080200, 1080200, '', 60100057, 1802053, 0, 2600, 2600, 1, 90, 2, 17),
+(1000000, 1080200, 1080200, '', 60100059, 1802050, 0, 2900, 2900, 1, 90, 2, 8),
+(1000000, 1060204, 1060200, '', 20000609, 1003022, 0, 2800, 2800, 1, 90, 2, 35),
+(1000000, 1080200, 1080200, '', 60100037, 1802033, 0, 3500, 3500, 1, 90, 2, 14),
+(1000000, 1060204, 1060200, '', 20000613, 1002976, 0, 2900, 2900, 1, 90, 2, 38),
+(1000000, 1080200, 1080200, '', 10000076, 1802000, 0, 2000, 2000, 1, 90, 2, 35),
+(1000000, 1080200, 1080200, '', 60100035, 1802026, 0, 3200, 3200, 1, 90, 2, 15),
+(1000000, 1080200, 1080200, '', 60100034, 1802023, 0, 2800, 2800, 1, 90, 2, 4),
+(1000000, 1060204, 1060200, '', 20000617, 1002973, 0, 3000, 3000, 1, 90, 2, 41),
+(1000000, 1080200, 1080200, '', 100000685, 1802444, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1080200, 1080200, '', 100000687, 1802446, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1080200, 1080200, '', 60100047, 1802045, 0, 2900, 2900, 1, 90, 2, 13),
+(1000000, 1080200, 1080200, '', 100000686, 1802445, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1080200, 1080200, '', 60100043, 1802034, 0, 3000, 3000, 1, 90, 2, 6),
+(1000000, 1080200, 1080200, '', 60100071, 1802038, 0, 2300, 2300, 1, 90, 2, 7),
+(1000000, 1080200, 1080200, '', 60100065, 1802059, 0, 3000, 3000, 1, 90, 2, 4),
+(1000000, 1080200, 1080200, '', 60100067, 1802061, 0, 2900, 2900, 1, 90, 2, 4),
+(1000000, 1060204, 1060200, '', 20000582, 1002887, 0, 2500, 2500, 1, 90, 2, 52),
+(1000000, 1060204, 1060200, '', 20000587, 1002890, 0, 2500, 2500, 1, 90, 2, 54),
+(1000000, 1061200, 1061200, '', 10000101, 1112001, 0, 6000, 6000, 1, 90, 2, 84),
+(1000000, 1060802, 1060800, '', 20400055, 1042027, 0, 1800, 1800, 1, 90, 2, 25),
+(1000000, 1060801, 1060800, '', 20400051, 1042037, 0, 3700, 3700, 1, 90, 2, 89),
+(1000000, 1060801, 1060800, '', 20400049, 1042036, 0, 3700, 3700, 1, 90, 2, 51),
+(1000000, 1060801, 1060800, '', 20400062, 1042032, 0, 1200, 1200, 1, 90, 2, 3),
+(1000000, 1070200, 1070200, '', 50300021, 5160012, 0, 1000, 1000, 1, 90, 2, 81),
+(1000000, 1080200, 1080200, '', 100000638, 1802389, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1070200, 1070200, '', 50300019, 5160014, 0, 1000, 1000, 1, 90, 2, 101),
+(1000000, 1070200, 1070200, '', 50300016, 5160013, 0, 1000, 1000, 1, 90, 2, 77),
+(1000000, 1070200, 1070200, '', 50300015, 5160011, 0, 1000, 1000, 1, 90, 2, 64),
+(1000000, 1080200, 1080200, '', 100000613, 1802434, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1070200, 1070200, '', 50300014, 5160008, 0, 1000, 1000, 1, 90, 2, 191),
+(1000000, 1070200, 1070200, '', 50300013, 5160010, 0, 1000, 1000, 1, 90, 2, 55),
+(1000000, 1070200, 1070200, '', 50300012, 5160007, 0, 1000, 1000, 1, 90, 2, 184),
+(1000000, 1070200, 1070200, '', 50300011, 5160006, 0, 1000, 1000, 1, 90, 2, 417),
+(1000000, 1080200, 1080200, '', 100000609, 1802433, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060802, 1060800, '', 20400034, 1042001, 0, 3700, 3700, 1, 90, 2, 36),
+(1000000, 1070200, 1070200, '', 50300010, 5160001, 0, 1000, 1000, 1, 90, 2, 96),
+(1000000, 1070200, 1070200, '', 50300009, 5160000, 0, 1000, 1000, 1, 90, 2, 98),
+(1000000, 1070200, 1070200, '', 50300006, 5160009, 0, 1000, 1000, 1, 90, 2, 168),
+(1000000, 1070200, 1070200, '', 50300005, 5160005, 0, 1000, 1000, 1, 90, 2, 74),
+(1000000, 1070200, 1070200, '', 50300004, 5160004, 0, 1000, 1000, 1, 90, 2, 250),
+(1000000, 1070200, 1070200, '', 50300003, 5160003, 0, 1000, 1000, 1, 90, 2, 328),
+(1000000, 1070200, 1070200, '', 50300002, 5160002, 1, 1000, 1000, 1, 90, 2, 315),
+(1000000, 1080200, 1080200, '', 100000616, 1802435, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060902, 1060900, '', 20500391, 1062123, 0, 2300, 2300, 1, 90, 2, 14),
+(1000000, 1060802, 1060800, '', 20400023, 1040101, 0, 2100, 2100, 1, 90, 0, 24),
+(1000000, 1060901, 1060900, '', 20500378, 1062114, 0, 3100, 3100, 1, 90, 2, 8),
+(1000000, 1060206, 1060200, '', 20000658, 1003077, 0, 3000, 3000, 1, 90, 2, 7),
+(1000000, 1060203, 1060200, '', 20000662, 1003060, 0, 3100, 3100, 1, 90, 2, 22),
+(1000000, 1060203, 1060200, '', 20000664, 1003084, 0, 3200, 3200, 1, 90, 2, 28),
+(1000000, 1060901, 1060900, '', 20500370, 1062112, 0, 1900, 1900, 1, 90, 2, 146),
+(1000000, 1060204, 1060200, '', 20000640, 1002969, 0, 2600, 2600, 1, 90, 2, 32),
+(1000000, 1060202, 1060200, '', 20000643, 1003013, 0, 2800, 2800, 1, 90, 2, 74),
+(1000000, 1060206, 1060200, '', 20000642, 1002974, 0, 2900, 2900, 1, 90, 2, 30),
+(1000000, 1060203, 1060200, '', 20000645, 1002962, 0, 2700, 2700, 1, 90, 2, 48),
+(1000000, 1060203, 1060200, '', 20000646, 1002960, 0, 3000, 3000, 1, 90, 2, 29),
+(1000000, 1060204, 1060200, '', 20000648, 1003050, 0, 2500, 2500, 1, 90, 2, 105),
+(1000000, 1060203, 1060200, '', 20000650, 1002885, 0, 3100, 3100, 1, 90, 2, 82),
+(1000000, 1060203, 1060200, '', 20000655, 1003072, 0, 2800, 2800, 1, 90, 2, 66),
+(1000000, 1060203, 1060200, '', 20000654, 1003057, 0, 3100, 3100, 1, 90, 2, 19),
+(1000000, 1060801, 1060800, '', 20400117, 1042049, 0, 3500, 3500, 1, 90, 2, 18),
+(1000000, 1080200, 1080200, '', 100000567, 1802426, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060802, 1060800, '', 20400116, 1040133, 0, 3500, 3500, 1, 90, 0, 8),
+(1000000, 1060802, 1060800, '', 20400113, 1041130, 0, 3700, 3700, 1, 90, 1, 44),
+(1000000, 1080200, 1080200, '', 100000563, 1802425, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060802, 1060800, '', 20400120, 1041137, 0, 3100, 3100, 1, 90, 1, 100),
+(1000000, 1060200, 1060200, '', 20000736, 1000007, 0, 5400, 5400, 1, 0, 0, 0),
+(1000000, 1080200, 1080200, '', 100000548, 1802449, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060802, 1060800, '', 20400101, 1041127, 0, 3100, 3100, 1, 90, 1, 20),
+(1000000, 1060802, 1060800, '', 20400096, 1042031, 0, 1200, 1200, 1, 90, 2, 20),
+(1000000, 1080200, 1080200, '', 100000559, 1802424, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060801, 1060800, '', 20400084, 1040129, 0, 4700, 4700, 1, 90, 0, 50),
+(1000000, 1060801, 1060800, '', 20400070, 1040125, 0, 3500, 3500, 1, 90, 0, 18),
+(1000000, 1060801, 1060800, '', 20400068, 1041134, 0, 3500, 3500, 1, 90, 1, 4),
+(1000000, 1060801, 1060800, '', 20400067, 1041125, 0, 3100, 3100, 1, 90, 1, 80),
+(1000000, 1060801, 1060800, '', 20400079, 1040131, 0, 4300, 4300, 1, 90, 0, 65),
+(1000000, 1060801, 1060800, '', 20400078, 1040130, 0, 4300, 4300, 1, 90, 0, 1),
+(1000000, 1060206, 1060200, '', 20000304, 1002557, 0, 3500, 3500, 1, 90, 2, 12),
+(1000000, 1080200, 1080200, '', 100000500, 1802429, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060902, 1060900, '', 20500026, 1061005, 0, 1800, 1800, 1, 90, 1, 36),
+(1000000, 1060902, 1060900, '', 20500027, 1062015, 0, 2100, 2100, 1, 90, 2, 66),
+(1000000, 1060902, 1060900, '', 20500028, 1062018, 0, 2100, 2100, 1, 90, 2, 63),
+(1000000, 1061000, 1061000, '', 20600382, 1072426, 0, 2000, 2000, 1, 90, 2, 48),
+(1000000, 1080200, 1080200, '', 100000497, 1802428, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1061300, 1061300, '', 21100100, 1102224, 0, 3600, 3600, 1, 90, 2, 29),
+(1000000, 1060901, 1060900, '', 20500030, 1062009, 0, 1800, 1800, 1, 90, 2, 12),
+(1000000, 1060205, 1060200, '', 20000313, 1002523, 0, 3100, 3100, 1, 90, 2, 12),
+(1000000, 1060204, 1060200, '', 20000315, 1002576, 0, 2800, 2800, 1, 90, 2, 58),
+(1000000, 1060902, 1060900, '', 20500019, 1062003, 0, 2700, 2700, 1, 90, 2, 19),
+(1000000, 1061300, 1061300, '', 21100106, 1102245, 0, 2200, 2200, 1, 90, 2, 15),
+(1000000, 1060902, 1060900, '', 20500020, 1062025, 0, 2400, 2400, 1, 90, 2, 11),
+(1000000, 1061300, 1061300, '', 21100108, 1102214, 0, 3800, 3800, 1, 90, 2, 43),
+(1000000, 1050300, 1050300, '', 50200050, 5360000, 4, 4000, 4000, 1, 1, 2, 65),
+(1000000, 1060205, 1060200, '', 20000289, 1001037, 0, 3100, 3100, 1, 90, 1, 6),
+(1000000, 1060206, 1060200, '', 20000288, 1002484, 0, 2500, 2500, 1, 90, 2, 22),
+(1000000, 1080200, 1080200, '', 100000492, 1802427, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060204, 1060200, '', 20000302, 1002521, 0, 2700, 2700, 1, 90, 2, 13),
+(1000000, 1080200, 1080200, '', 10000299, 1802013, 0, 2400, 2400, 1, 90, 2, 8),
+(1000000, 1070400, 1070400, '', 50200007, 5300000, 0, 500, 500, 1, 7, 2, 25),
+(1000000, 1061300, 1061300, '', 21100033, 1102074, 0, 4200, 4200, 1, 90, 2, 36),
+(1000000, 1060901, 1060900, '', 20500089, 1061111, 0, 1500, 1500, 1, 90, 1, 10),
+(1000000, 1061300, 1061300, '', 21100032, 1102062, 0, 4500, 4500, 1, 90, 2, 6),
+(1000000, 1061300, 1061300, '', 21100035, 1102073, 0, 3300, 3300, 1, 90, 2, 25),
+(1000000, 1061300, 1061300, '', 21100034, 1102092, 0, 3000, 3000, 1, 90, 2, 16),
+(1000000, 1061300, 1061300, '', 21100039, 1102111, 0, 3100, 3100, 1, 90, 2, 23),
+(1000000, 1061300, 1061300, '', 21100041, 1102108, 0, 3200, 3200, 1, 90, 2, 228),
+(1000000, 1061000, 1061000, '', 20600435, 1072517, 0, 1800, 1800, 1, 90, 2, 261),
+(1000000, 1060902, 1060900, '', 20500082, 1060001, 0, 2100, 2100, 1, 90, 0, 27),
+(1000000, 1061300, 1061300, '', 21100042, 1102112, 0, 3300, 3300, 1, 90, 2, 104),
+(1000000, 1061300, 1061300, '', 21100045, 1102150, 0, 4000, 4000, 1, 90, 2, 12),
+(1000000, 1061300, 1061300, '', 21100044, 1102098, 0, 3600, 3600, 1, 90, 2, 20),
+(1000000, 1061300, 1061300, '', 21100046, 1102142, 0, 3500, 3500, 1, 90, 2, 38),
+(1000000, 1061300, 1061300, '', 21100049, 1102141, 0, 2900, 2900, 1, 90, 2, 37),
+(1000000, 1061300, 1061300, '', 21100048, 1102076, 0, 3300, 3300, 1, 90, 2, 10),
+(1000000, 1060203, 1060200, '', 20000356, 1002667, 0, 3200, 3200, 1, 90, 2, 100),
+(1000000, 1061000, 1061000, '', 20600429, 1072628, 0, 1800, 1800, 1, 90, 2, 9),
+(1000000, 1061000, 1061000, '', 20600418, 1072507, 0, 2000, 2000, 1, 90, 2, 123),
+(1000000, 1061000, 1061000, '', 20600419, 1072515, 0, 1800, 1800, 1, 90, 2, 34),
+(1000000, 1060902, 1060900, '', 20500066, 1062039, 0, 2700, 2700, 1, 90, 2, 35),
+(1000000, 1061000, 1061000, '', 20600416, 1072514, 0, 1800, 1800, 1, 90, 2, 49),
+(1000000, 1061000, 1061000, '', 20600420, 1072536, 0, 2200, 2200, 1, 90, 2, 14),
+(1000000, 1061300, 1061300, '', 21100063, 1102157, 0, 3800, 3800, 1, 90, 2, 51),
+(1000000, 1060902, 1060900, '', 20500071, 1062040, 0, 2700, 2700, 1, 90, 2, 43),
+(1000000, 1061300, 1061300, '', 21100062, 1102153, 0, 3500, 3500, 1, 90, 2, 35),
+(1000000, 1061000, 1061000, '', 20600410, 1072466, 0, 1600, 1600, 1, 90, 2, 55),
+(1000000, 1061000, 1061000, '', 20600411, 1072483, 0, 1800, 1800, 1, 90, 2, 10),
+(1000000, 1061300, 1061300, '', 21100064, 1102155, 0, 3400, 3400, 1, 90, 2, 24),
+(1000000, 1080200, 1080200, '', 100000404, 1802396, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1061000, 1061000, '', 20600409, 1072484, 0, 1200, 1200, 1, 90, 2, 115),
+(1000000, 1060902, 1060900, '', 20500060, 1060114, 0, 1800, 1800, 1, 90, 0, 21),
+(1000000, 1061000, 1061000, '', 20600414, 1072509, 0, 1500, 1500, 1, 90, 2, 17),
+(1000000, 1061300, 1061300, '', 21100069, 1102158, 0, 3500, 3500, 1, 90, 2, 25),
+(1000000, 1060902, 1060900, '', 20500061, 1062038, 0, 2700, 2700, 1, 90, 2, 3),
+(1000000, 1061000, 1061000, '', 20600412, 1072478, 0, 1800, 1800, 1, 90, 2, 10),
+(1000000, 1061300, 1061300, '', 21100071, 1102138, 0, 3600, 3600, 1, 90, 2, 13),
+(1000000, 1061300, 1061300, '', 21100070, 1102072, 0, 3300, 3300, 1, 90, 2, 24),
+(1000000, 1080200, 1080200, '', 100000402, 1802395, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1061300, 1061300, '', 21100073, 1102164, 0, 3600, 3600, 1, 90, 2, 29),
+(1000000, 1061300, 1061300, '', 21100075, 1102144, 0, 3900, 3900, 1, 90, 2, 9),
+(1000000, 1060901, 1060900, '', 20500051, 1062029, 0, 1200, 1200, 1, 90, 2, 11),
+(1000000, 1061300, 1061300, '', 21100074, 1102169, 0, 3600, 3600, 1, 90, 2, 12),
+(1000000, 1061300, 1061300, '', 21100077, 1102185, 0, 3800, 3800, 1, 90, 2, 28),
+(1000000, 1061000, 1061000, '', 20600407, 1072482, 0, 1800, 1800, 1, 90, 2, 240),
+(1000000, 1061300, 1061300, '', 21100076, 1102175, 0, 4000, 4000, 1, 90, 2, 11),
+(1000000, 1060201, 1060200, '', 20000350, 1002526, 0, 3300, 3300, 1, 90, 2, 5),
+(1000000, 1061300, 1061300, '', 21100078, 1102186, 0, 3500, 3500, 1, 90, 2, 87),
+(1000000, 1061300, 1061300, '', 21100081, 1102196, 0, 3100, 3100, 1, 90, 2, 105),
+(1000000, 1061000, 1061000, '', 20600395, 1072469, 0, 1900, 1900, 1, 90, 2, 13),
+(1000000, 1061300, 1061300, '', 21100080, 1102077, 0, 3400, 3400, 1, 90, 2, 9),
+(1000000, 1061300, 1061300, '', 21100083, 1102203, 0, 3400, 3400, 1, 90, 2, 12),
+(1000000, 1061000, 1061000, '', 20600393, 1072331, 0, 2000, 2000, 1, 90, 2, 29),
+(1000000, 1060205, 1060200, '', 20000325, 1002240, 0, 2700, 2700, 1, 90, 2, 11),
+(1000000, 1300200, 1300200, '', 100000397, 2023179, 2, 5100, 5100, 1, 90, 2, 3),
+(1000000, 1060206, 1060200, '', 20000328, 1002597, 0, 3500, 3500, 1, 90, 2, 39),
+(1000000, 1061300, 1061300, '', 21100088, 1102216, 0, 3000, 3000, 1, 90, 2, 76),
+(1000000, 1300200, 1300200, '', 100000396, 2023176, 2, 2600, 2600, 1, 90, 2, 2),
+(1000000, 1060901, 1060900, '', 20500034, 1061067, 0, 2100, 2100, 1, 90, 1, 384),
+(1000000, 1061000, 1061000, '', 20600384, 1072457, 0, 2000, 2000, 1, 90, 2, 35),
+(1000000, 1080200, 1080200, '', 100000399, 1802394, 0, 2500, 2500, 1, 90, 2, 0),
+(1000000, 1060206, 1060200, '', 20000330, 1002345, 0, 2400, 2400, 1, 90, 2, 3),
+(1000000, 1061300, 1061300, '', 21100090, 1102218, 0, 3500, 3500, 1, 90, 2, 69),
+(1000000, 1061300, 1061300, '', 21100093, 1102215, 0, 3000, 3000, 1, 90, 2, 55),
+(1000000, 1300100, 1300100, '', 100000393, 2023175, 2, 1900, 1900, 1, 90, 2, 2),
+(1000000, 1061000, 1061000, '', 20600388, 1072330, 0, 2000, 2000, 1, 90, 2, 103),
+(1000000, 1061300, 1061300, '', 21100095, 1102223, 0, 3000, 3000, 1, 90, 2, 95),
+(1000000, 1300200, 1300200, '', 100000395, 2023178, 2, 790, 790, 1, 90, 2, 2),
+(1000000, 1060211, 1060210, '', 20000334, 1002265, 0, 3400, 3400, 1, 90, 2, 5),
+(1000000, 1300100, 1300100, '', 100000394, 2023177, 2, 2600, 2600, 1, 90, 2, 1),
+(1000000, 1060211, 1060210, '', 20000435, 1002747, 0, 3300, 3300, 1, 90, 2, 84),
+(1000000, 1030300, 1030300, '', 100000374, 5060017, 4, 2600, 2600, 1, 90, 2, 0),
+(1000000, 1060211, 1060210, '', 20000442, 1002599, 0, 3300, 3300, 1, 90, 2, 6),
+(1000000, 1060902, 1060900, '', 20500136, 1062066, 0, 2400, 2400, 1, 90, 2, 13),
+(1000000, 1060211, 1060210, '', 20000419, 1002722, 0, 2800, 2800, 1, 90, 2, 39),
+(1000000, 1060211, 1060210, '', 20000418, 1002724, 0, 3000, 3000, 1, 90, 2, 85),
+(1000000, 1060903, 1060900, '', 20500140, 1061140, 0, 2500, 2500, 1, 90, 1, 122),
+(1000000, 1060902, 1060900, '', 20500129, 1062063, 0, 2500, 2500, 1, 90, 2, 6),
+(1000000, 1060211, 1060210, '', 20000431, 1002738, 0, 2800, 2800, 1, 90, 2, 108),
+(1000000, 1060901, 1060900, '', 20500135, 1062054, 0, 2200, 2200, 1, 90, 2, 24),
+(1000000, 1060901, 1060900, '', 20500122, 1062047, 0, 2600, 2600, 1, 90, 2, 110),
+(1000000, 1060902, 1060900, '', 20500123, 1062060, 0, 2500, 2500, 1, 90, 2, 42),
+(1000000, 1060902, 1060900, '', 20500124, 1062061, 0, 2500, 2500, 1, 90, 2, 34),
+(1000000, 1060902, 1060900, '', 20500112, 1061107, 0, 2800, 2800, 1, 90, 1, 24),
+(1000000, 1080200, 1080200, '', 10000179, 1802002, 0, 2000, 2000, 1, 90, 2, 0),
+(1000000, 1060902, 1060900, '', 20500096, 1062052, 0, 2700, 2700, 1, 90, 2, 13),
+(1000000, 1060203, 1060200, '', 20000392, 1001048, 0, 3000, 3000, 1, 90, 1, 64),
+(1000000, 1060901, 1060900, '', 20500097, 1062053, 0, 2400, 2400, 1, 90, 2, 17),
+(1000000, 1060902, 1060900, '', 20500098, 1062042, 0, 2700, 2700, 1, 90, 2, 17),
+(1000000, 1060206, 1060200, '', 20000396, 1002660, 0, 2900, 2900, 1, 90, 2, 2),
+(1000000, 1080200, 1080200, '', 100000310, 1802384, 0, 2500, 2500, 1, 90, 2, 4),
+(1000000, 1080200, 1080200, '', 100000312, 1802385, 0, 2500, 2500, 1, 90, 2, 4),
+(1000000, 1060205, 1060200, '', 20000511, 1002804, 0, 2900, 2900, 1, 90, 2, 19),
+(1000000, 1060204, 1060200, '', 20000510, 1002820, 0, 3100, 3100, 1, 90, 2, 24),
+(1000000, 1060902, 1060900, '', 20500215, 1062109, 0, 2100, 2100, 1, 90, 2, 11),
+(1000000, 1080200, 1080200, '', 100000314, 1802386, 0, 2500, 2500, 1, 90, 2, 4),
+(1000000, 1061300, 1061300, '', 21100183, 1102152, 0, 3800, 3800, 1, 90, 2, 23),
+(1000000, 1080300, 1080300, '', 60200000, 5170000, 0, 2100, 2100, 1, 90, 2, 121),
+(1000000, 1061300, 1061300, '', 21100185, 1102213, 0, 2100, 2100, 1, 90, 2, 27),
+(1000000, 1060211, 1060210, '', 20000488, 1002605, 0, 2900, 2900, 1, 90, 2, 40),
+(1000000, 1060902, 1060900, '', 20500194, 1062101, 0, 2200, 2200, 1, 90, 2, 25),
+(1000000, 1060902, 1060900, '', 20500195, 1062075, 0, 2100, 2100, 1, 90, 2, 73),
+(1000000, 1060901, 1060900, '', 20500197, 1062073, 0, 1900, 1900, 1, 90, 2, 19),
+(1000000, 1070300, 1070300, '', 100000299, 5010023, 0, 3000, 3000, 1, 90, 2, 13),
+(1000000, 1061300, 1061300, '', 21100192, 1102232, 0, 3500, 3500, 1, 90, 2, 96),
+(1000000, 1060902, 1060900, '', 20500187, 1062098, 0, 1900, 1900, 1, 90, 2, 30),
+(1000000, 1061300, 1061300, '', 21100194, 1102211, 0, 4200, 4200, 1, 90, 2, 171),
+(1000000, 1061300, 1061300, '', 21100197, 1102217, 0, 3300, 3300, 1, 90, 2, 76),
+(1000000, 1060901, 1060900, '', 20500189, 1062094, 0, 2200, 2200, 1, 90, 2, 14),
+(1000000, 1060211, 1060210, '', 20000471, 1002771, 0, 3100, 3100, 1, 90, 2, 51),
+(1000000, 1060206, 1060200, '', 20000470, 1002596, 0, 3000, 3000, 1, 90, 2, 28),
+(1000000, 1060901, 1060900, '', 20500176, 1062091, 0, 2400, 2400, 1, 90, 2, 95),
+(1000000, 1061300, 1061300, '', 21100202, 1102261, 0, 3500, 3500, 1, 90, 2, 61),
+(1000000, 1061300, 1061300, '', 21100207, 1102285, 0, 3000, 3000, 1, 90, 2, 30),
+(1000000, 1061300, 1061300, '', 21100208, 1102286, 0, 3000, 3000, 1, 90, 2, 41),
+(1000000, 1060902, 1060900, '', 20500171, 1062084, 0, 2500, 2500, 1, 90, 2, 25),
+(1000000, 1061300, 1061300, '', 21100210, 1102296, 0, 2500, 2500, 1, 90, 2, 282),
+(1000000, 1080300, 1080300, '', 60200037, 5460000, 0, 2500, 2500, 1, 90, 2, 49),
+(1000000, 1060902, 1060900, '', 20500172, 1062085, 0, 2300, 2300, 1, 90, 2, 14),
+(1000000, 1061300, 1061300, '', 21100213, 1102344, 0, 3000, 3000, 1, 90, 2, 25),
+(1000000, 1060902, 1060900, '', 20500173, 1062024, 0, 2100, 2100, 1, 90, 2, 5),
+(1000000, 1061300, 1061300, '', 21100212, 1102288, 0, 3200, 3200, 1, 90, 2, 69),
+(1000000, 1061300, 1061300, '', 21100218, 1102326, 0, 3200, 3200, 1, 90, 2, 279),
+(1000000, 1060206, 1060200, '', 20000463, 1000013, 0, 3300, 3300, 1, 90, 0, 4);

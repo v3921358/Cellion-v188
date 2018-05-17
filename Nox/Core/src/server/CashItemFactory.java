@@ -152,14 +152,14 @@ public class CashItemFactory {
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM cashshop_menuitems"); ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    CashItem item = new CashItem(rs.getInt("category"), rs.getInt("parent"), rs.getString("image"), rs.getInt("sn"), rs.getInt("itemid"), rs.getInt("flag"), rs.getInt("price"), rs.getInt("discountPrice"), rs.getInt("quantity"), rs.getInt("expire"), rs.getInt("gender"), rs.getInt("likes"));
+                    CashItem item = new CashItem(rs.getInt("category"),rs.getInt("subcategory"), rs.getInt("parent"), rs.getString("image"), rs.getInt("sn"), rs.getInt("itemid"), rs.getInt("flag"), rs.getInt("price"), rs.getInt("discountPrice"), rs.getInt("quantity"), rs.getInt("expire"), rs.getInt("gender"), rs.getInt("likes"));
                     menuItems.put(item.getSN(), item);
                 }
             }
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM cashshop_items"); ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    CashItem item = new CashItem(rs.getInt("category"), rs.getInt("parent"), rs.getString("image"), rs.getInt("sn"), rs.getInt("itemid"), rs.getInt("flag"), rs.getInt("price"), rs.getInt("discountPrice"), rs.getInt("quantity"), rs.getInt("expire"), rs.getInt("gender"), rs.getInt("likes"));
+                    CashItem item = new CashItem(rs.getInt("category"),rs.getInt("subcategory"), rs.getInt("parent"), rs.getString("image"), rs.getInt("sn"), rs.getInt("itemid"), rs.getInt("flag"), rs.getInt("price"), rs.getInt("discountPrice"), rs.getInt("quantity"), rs.getInt("expire"), rs.getInt("gender"), rs.getInt("likes"));
                     categoryItems.put(item.getSN(), item);
                 }
             }
@@ -230,7 +230,7 @@ public class CashItemFactory {
     public final List<CashItem> getMenuItems(int type) {
         List<CashItem> items = new LinkedList<>();
         for (CashItem ci : menuItems.values()) {
-            if (ci.getCategory() / 10000 == type) {
+            if (ci.getSubCategory() / 10000 == type) {
                 items.add(ci);
             }
         }
@@ -248,7 +248,7 @@ public class CashItemFactory {
     public final List<CashItem> getAllItems(int type) {
         List<CashItem> items = new LinkedList<>();
         for (CashItem ci : categoryItems.values()) {
-            if (ci.getCategory() / 10000 == type) {
+            if (ci.getSubCategory() / 10000 == type) {
                 items.add(ci);
             }
         }
@@ -267,7 +267,7 @@ public class CashItemFactory {
         List<CashItem> items = new LinkedList<>();
         for (CashItem ci : categoryItems.values()) {
             //Other servers don't do the child cats (+1~9) lmao
-            if (ci.getCategory() == category || ci.getParent() == category) {
+            if (ci.getSubCategory() == category || ci.getParent() == category) {
                 items.add(ci);
             }
         }

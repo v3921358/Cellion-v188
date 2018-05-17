@@ -117,8 +117,8 @@ public class CSPacket {
     }
 
     public static void addCSItemInfo(OutPacket oPacket, CashItem item) {
-        oPacket.EncodeInt(1000000);//General categories start at 1000000... MenuItems maybe not..
-        oPacket.EncodeInt(item.getCategory()); //4000000 + 10000 + page * 10000
+        oPacket.EncodeInt(item.getCategory());//General categories start at 1000000... MenuItems maybe not..
+        oPacket.EncodeInt(item.getSubCategory()); //4000000 + 10000 + page * 10000
         oPacket.EncodeInt(item.getParent()); //1000000 + 70000 + page * 100 + item on page
         oPacket.EncodeString(item.getImage()); //jpeg img url
         oPacket.EncodeInt(item.getSN());
