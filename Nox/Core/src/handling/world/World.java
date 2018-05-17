@@ -252,7 +252,7 @@ public class World {
             }
 
             short nPacketID = oPacket.nPacketID;
-            byte[] aData = oPacket.CloneData();
+            byte[] aData = oPacket.GetDataAndClose();
 
             for (MaplePartyCharacter partychar : party.getMembers()) {
                 int ch = Find.findChannel(partychar.getName());
@@ -1289,7 +1289,7 @@ public class World {
                 return;
             }
             short nPacketID = oPacket.nPacketID;
-            byte[] aData = oPacket.CloneData();
+            byte[] aData = oPacket.GetDataAndClose();
             int ch = Find.findChannel(targetIds);
             if (ch < 0) {
                 return;
@@ -1305,7 +1305,7 @@ public class World {
                 return;
             }
             short nPacketID = oPacket.nPacketID;
-            byte[] aData = oPacket.CloneData();
+            byte[] aData = oPacket.GetDataAndClose();
             int ch = Find.findChannel(targetIds);
             if (ch < 0) {
                 return;

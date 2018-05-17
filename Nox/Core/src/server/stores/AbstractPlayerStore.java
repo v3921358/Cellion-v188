@@ -92,7 +92,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
 
     public void broadcastToVisitors(OutPacket oPacket, boolean owner) {
         short nPacketID = oPacket.nPacketID;
-        byte[] aData = oPacket.CloneData();
+        byte[] aData = oPacket.GetDataAndClose();
         for (WeakReference<User> chr : chrs) {
             if (chr != null && chr.get() != null) {
                 chr.get().getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
@@ -105,7 +105,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
 
     public void broadcastToVisitors(OutPacket oPacket, int exception) {
         short nPacketID = oPacket.nPacketID;
-        byte[] aData = oPacket.CloneData();
+        byte[] aData = oPacket.GetDataAndClose();
         for (WeakReference<User> chr : chrs) {
             if (chr != null && chr.get() != null && getVisitorSlot(chr.get()) != exception) {
                 chr.get().getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));

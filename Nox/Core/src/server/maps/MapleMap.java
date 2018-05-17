@@ -2508,7 +2508,7 @@ public final class MapleMap {
                                     oPacket = CField.showHorntailShrine(spawned, 0); //chaoshorntail message is weird
                                 }
                                 short nPacketID = oPacket.nPacketID;
-                                byte[] aData = oPacket.CloneData();
+                                byte[] aData = oPacket.GetDataAndClose();
                                 for (User chr : getCharacters()) { //warp all in map
                                     chr.getClient().SendPacket((new OutPacket(nPacketID).Encode(aData)));
                                     chr.changeMap(returnMapz, returnMapz.getPortal(0)); //hopefully event will still take care of everything once warp out
@@ -2535,7 +2535,7 @@ public final class MapleMap {
                                 oPacket = CField.showHorntailShrine(spawned, 0); //chaoshorntail message is weird
                             }
                             short nPacketID = oPacket.nPacketID;
-                            byte[] aData = oPacket.CloneData();
+                            byte[] aData = oPacket.GetDataAndClose();
                             for (User chr : getCharacters()) { //warp all in map
                                 chr.getClient().SendPacket((new OutPacket(nPacketID)).Encode(aData));
                                 chr.changeMap(returnMapz, returnMapz.getPortal(0)); //hopefully event will still take care of everything once warp out
@@ -2792,7 +2792,7 @@ public final class MapleMap {
         charactersLock.readLock().lock();
         try {
             short nPacketID = oPacket.nPacketID;
-            byte[] aData = oPacket.CloneData();
+            byte[] aData = oPacket.GetDataAndClose();
             for (User chr : characters) {
                 if (chr != source) {
                     if (rangeSq < Double.POSITIVE_INFINITY) {
@@ -2823,7 +2823,7 @@ public final class MapleMap {
         charactersLock.readLock().lock();
         try {
             short nPacketID = oPacket.nPacketID;
-            byte[] aData = oPacket.CloneData();
+            byte[] aData = oPacket.GetDataAndClose();
             if (source == null) {
                 for (User chr : characters) {
                     if (ServerConstants.DEVELOPER_DEBUG_MODE) {
@@ -2856,7 +2856,7 @@ public final class MapleMap {
         charactersLock.readLock().lock();
         try {
             short nPacketID = oPacket.nPacketID;
-            byte[] aData = oPacket.CloneData();
+            byte[] aData = oPacket.GetDataAndClose();
             if (source == null) {
                 for (User chr : characters) {
                     if (!chr.isGM()) {
@@ -2889,7 +2889,7 @@ public final class MapleMap {
         charactersLock.readLock().lock();
         try {
             short nPacketID = oPacket.nPacketID;
-            byte[] aData = oPacket.CloneData();
+            byte[] aData = oPacket.GetDataAndClose();
             if (source == null) {
                 for (User chr : characters) {
                     if (ServerConstants.DEVELOPER_DEBUG_MODE) {

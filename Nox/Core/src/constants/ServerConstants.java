@@ -31,8 +31,8 @@ public class ServerConstants {
     
     /*Standard Login or API Configuration*/
    /*These values will be overwritten by the configuration.ini file.*/
-    public static boolean USE_API = false; // If false, use the standard login methods and database communications.
-    public static boolean DEVMODE = false;
+    public static boolean USE_API = true; // If false, use the standard login methods and database communications.
+    public static boolean DEVMODE = true;
 
     /*Server Debug*/
    /*These values will be overwritten by the configuration.ini file.*/

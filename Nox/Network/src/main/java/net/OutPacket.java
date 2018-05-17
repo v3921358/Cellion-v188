@@ -148,12 +148,13 @@ public class OutPacket {
 
     public byte[] GetData() {
         byte[] aData = new byte[pSendBuff.readableBytes()];
-        pSendBuff.readBytes(aData);
-        pSendBuff.release();
+        pSendBuff.getBytes(pSendBuff.readerIndex(), aData);
+        //pSendBuff.readBytes(aData);
+        //pSendBuff.release();
         return aData;
     }
     
-    public byte[] CloneData() {
+    public byte[] GetDataAndClose() {
         pSendBuff.readShortLE();//Skip already encoded opcode.
         byte[] aData = new byte[pSendBuff.readableBytes()];
         pSendBuff.readBytes(aData);

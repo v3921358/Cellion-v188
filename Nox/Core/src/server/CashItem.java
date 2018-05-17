@@ -10,12 +10,11 @@ package server;
  */
 public class CashItem {
 
-    private final int category, subcategory, parent, sn, itemid, flag, price, discountPrice, quantity, expire, gender, likes;
+    private final int category, parent, sn, itemid, flag, price, discountPrice, quantity, expire, gender, likes;
     private final String image;
 
-    public CashItem(int category, int subcategory, int parent, String image, int sn, int itemid, int flag, int price, int discountPrice, int quantity, int expire, int gender, int likes) {
+    public CashItem(int category, int parent, String image, int sn, int itemid, int flag, int price, int discountPrice, int quantity, int expire, int gender, int likes) {
         this.category = category;
-        this.subcategory = subcategory;
         this.parent = parent;
         this.image = image;
         this.sn = sn;
@@ -31,10 +30,6 @@ public class CashItem {
 
     public int getCategory() {
         return category;
-    }
-
-    public int getSubCategory() {
-        return subcategory;
     }
 
     public int getParent() {
