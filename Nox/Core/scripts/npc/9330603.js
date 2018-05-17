@@ -176,6 +176,10 @@ function action(mode, type, selection) {
 	    switch(jobId) {
 		case 430: //DUAL BLADE
 		jobName = "Dual Blade";
+		cm.gainItem(1332007, 1); //8 dagger
+		cm.gainItem(1332009, 1); //30 dagger
+		cm.gainItem(1342000, 1); //
+		cm.gainItem(1342001, 1); //
 		break;
 		case 501: //CANNONEER
 		jobName = "Cannoneer";
@@ -214,24 +218,36 @@ function action(mode, type, selection) {
 		jobName = "Mihile";
 		break;
 		case 2005: //SHADE
+		case 2500: //SHADE1
 		jobName = "Shade";
+		cm.changeJob(2500);
+		cm.teachSkill(25001002, 1);
+		cm.teachSkill(25001000, 1);
 		break;
-		case 2400: //PHANTOM
+		case 2003: //PHANTOM
+		case 2400: //PHANTOM1
 		jobName = "Phantom";
+		cm.changeJob(2400);
 		break;
 		case 2002: //MERCEDES
+		case 2300: //MERCEDES1
 		jobName = "Mercedes";
+		cm.changeJob(2300);
 		break;
-		case 2210: //EVAN
-		jobName = "Evan";
+		case 2001: //EVAN
+		case 2210: //EVAN1
+		jobName = "Evan"; // 
+		cm.changeJob(2210);
 		break;
-		case 2100: //ARAN
+		case 2000: //ARAN
+		case 2100: //ARAN1
 		jobName = "Aran";
+		cm.changeJob(2100);
 		break;
 		}
 		}
-		cm.gainItem(2000004, 100); //100 elixirs
-		cm.gainItem(2000005, 50); //50 power elixirs
+		cm.gainItem(2000004, 75); //100 elixirs
+		cm.gainItem(2000005, 25); //50 power elixirs
 		cm.sendNextNoESC("You are now a #b" + jobName +"#k! I trust you will do well with your newfound skills. I've also given you some #bequipment#k to get you started and #bpotions#k to aid you in battle. Good luck in Cellion!");
 	} else if(status == 3) {
 		cm.getPlayer().sortInventory(2);

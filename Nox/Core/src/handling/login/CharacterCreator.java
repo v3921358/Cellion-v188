@@ -4,13 +4,11 @@ import client.*;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
-import constants.GameConstants;
 import constants.JobConstants;
 import constants.ServerConstants;
 import constants.skills.Aran;
 import constants.skills.DanceMoves;
 import constants.skills.Hayato;
-import constants.skills.Global;
 import constants.skills.Kaiser;
 import constants.skills.Shade;
 import constants.skills.Xenon;
@@ -402,95 +400,60 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
 
         // Balance changes and custom tutorial preparation.
         if (ServerConstants.UNIVERSAL_START) {
+            
+            if (pJob == LoginInformationProvider.JobType.Zero) {
+                pNewCharacter.setLevel((short) 100);
+                pNewCharacter.getStat().str = 500;
+                pNewCharacter.getStat().maxhp = 7000;
+                pNewCharacter.getStat().hp = 7000;
+                pNewCharacter.setRemainingSp(5, 0); // Alpha
+                pNewCharacter.setRemainingSp(5, 1); // Beta
+            } else {
+                if (pJob == LoginInformationProvider.JobType.Kinesis) {
+                    pNewCharacter.getStat().maxmp = 5;
+                    pNewCharacter.getStat().mp = 5;
+                } else {
+                    pNewCharacter.getStat().maxmp = 300;
+                    pNewCharacter.getStat().mp = 300;
+                }
+                pNewCharacter.getStat().maxhp = 300;
+                pNewCharacter.getStat().hp = 300;
+                pNewCharacter.setLevel((short) 10);
+                pNewCharacter.setRemainingAp(50);
+                pNewCharacter.setRemainingSp(5);
+                pNewCharacter.gainSP(3);
+            }
+            
             switch (pJob) {
                 case DualBlade:
                     pNewCharacter.setJob((short) 430);
-                    pNewCharacter.setLevel((short) 10);
-                    pNewCharacter.getStat().maxmp = 300;
-                    pNewCharacter.getStat().mp = 300;
-                    pNewCharacter.setRemainingAp(40);
-                    pNewCharacter.setRemainingSp(35, 0);
                     break;
                 case Cannoneer:
                     pNewCharacter.setJob((short) 501);
-                    pNewCharacter.setLevel((short) 10);
-                    pNewCharacter.getStat().maxmp = 230;
-                    pNewCharacter.getStat().mp = 230;
-                    pNewCharacter.setRemainingAp(40);
                     break;
                 case Jett:
                     pNewCharacter.setJob((short) 508);
-                    pNewCharacter.setLevel((short) 10);
-                    pNewCharacter.getStat().maxmp = 200;
-                    pNewCharacter.getStat().mp = 200;
-                    pNewCharacter.setRemainingAp(40);
                     break;
-                case AngelicBuster:
-                    pNewCharacter.setJob((short) 6500);
-                    pNewCharacter.setLevel((short) 10);
-                    pNewCharacter.getStat().dex = 68;
-                    pNewCharacter.getStat().maxhp = 1000;
-                    pNewCharacter.getStat().hp = 1000;
-                    pNewCharacter.setRemainingSp(5);
+                case Phantom:
+                    pNewCharacter.setJob((short) 2400);
                     break;
-                case Zero:
-                    pNewCharacter.setLevel((short) 100);
-                    pNewCharacter.getStat().str = 518;
-                    pNewCharacter.getStat().maxhp = 6910;
-                    pNewCharacter.getStat().hp = 6910;
-                    pNewCharacter.getStat().maxmp = 100;
-                    pNewCharacter.getStat().mp = 100;
-                    pNewCharacter.setRemainingSp(5, 0); //alpha
-                    pNewCharacter.setRemainingSp(5, 1); //beta
-                    break;
-                case Kinesis:
-                    pNewCharacter.setJob((short) 14200);
-                    pNewCharacter.setLevel((short) 10);
-                    pNewCharacter.getStat().str = 4;
-                    pNewCharacter.getStat().int_ = 52;
-                    pNewCharacter.getStat().maxhp = 374;
-                    pNewCharacter.getStat().hp = 374;
-                    pNewCharacter.getStat().maxmp = 5;
-                    pNewCharacter.getStat().mp = 5;
-                    pNewCharacter.setRemainingSp(5);
+                case Shade:
+                    pNewCharacter.setJob((short) 2500);
                     break;
                 case Luminous:
                     pNewCharacter.setJob((short) 2700);
-                    pNewCharacter.setLevel((short) 10);
-                    pNewCharacter.getStat().str = 4;
-                    pNewCharacter.getStat().int_ = 57;
-                    pNewCharacter.getStat().maxhp = 500;
-                    pNewCharacter.getStat().hp = 500;
-                    pNewCharacter.getStat().maxmp = 1000;
-                    pNewCharacter.getStat().mp = 1000;
-                    pNewCharacter.setRemainingSp(5);
                     break;
-                case BeastTamer:
-                    pNewCharacter.setLevel((short) 10);
-                    pNewCharacter.getStat().maxhp = 567;
-                    pNewCharacter.getStat().hp = 551;
-                    pNewCharacter.getStat().maxmp = 270;
-                    pNewCharacter.getStat().mp = 263;
-                    pNewCharacter.setRemainingAp(45);
-                    pNewCharacter.setRemainingSp(5, 0);
+                case Mihile:
+                    pNewCharacter.setJob((short) 5100);
                     break;
                 case Kaiser:
                     pNewCharacter.setJob((short) 6100); 
-                    pNewCharacter.setLevel((short) 10);
-                    pNewCharacter.getStat().str = 4;
-                    pNewCharacter.getStat().int_ = 10;
-                    pNewCharacter.getStat().maxhp = 500;
-                    pNewCharacter.getStat().hp = 500;
-                    pNewCharacter.getStat().maxmp = 300;
-                    pNewCharacter.getStat().mp = 300;
-                    pNewCharacter.setRemainingSp(10);
                     break;
-                default:
-                    pNewCharacter.setLevel((short) 10);
-                    pNewCharacter.setRemainingAp(40);
-                    pNewCharacter.setRemainingSp(5, 0);
-                    pNewCharacter.getStat().maxmp = 350;
-                    pNewCharacter.getStat().mp = 350;
+                case AngelicBuster:
+                    pNewCharacter.setJob((short) 6500);
+                    break;
+                case Kinesis:
+                    pNewCharacter.setJob((short) 14200);
                     break;
             }
         }

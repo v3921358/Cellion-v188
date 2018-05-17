@@ -12,7 +12,7 @@ function action(mode, type, selection) {
 		status++;
 	} else {
 		if (status == 0) {
-			cm.sendNextS("Enjoy your adventure.",5);
+			cm.sendNextS("Enjoy your adventure.", 5);
 			cm.dispose();
 		}
 		status -= 1;
@@ -180,8 +180,17 @@ function action(mode, type, selection) {
 				cm.sendSimple("You need 100 of #i4001126##t4001126# to proceed to job advancement.\r\n"
 							+ "Please come back when you have enough");
 			}
+		} else {
+			var sText = "Hey there #b#h ##k,\r\nI can help you Job Advance and get stronger!\r\n"
+					  + "Come talk to me if you want to advance and meet the requirements!\r\n\r\n"
+					  + "\t#bStandard Requirements#k : \r\n\tAdvancement available at #rLv. 30#k, #rLv. 60#k, and #rLv. 100#k.\r\n\rn"
+					  + "\t#dDual Blade Requirements#k : \r\n\tAdvancement available at #rLv. 30#k, #rLv. 45#k, #rLv. 60#k, and #rLv. 100#k.\r\n"
+					  + "";
+			cm.sendOk(sText);
+			cm.dispose();
 		}
 	}
+	
 	if (status == 1) {
 		if (selection > 0) {
 			cm.getPlayer().dropMessage(5, " Just before the switch ");

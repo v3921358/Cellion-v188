@@ -124,7 +124,7 @@ public class MonsterStats {
             tagColor, tagBgColor,
             selfDestruction_action;
     private long hp, mp, finalmaxHP;
-    private final int id, wzDirectoryCRC, link, exp, removeAfter, buffToGive, fixedDamage, dropItemPeriod, point, eva, acc,
+    private int id, wzDirectoryCRC, link, exp, removeAfter, buffToGive, fixedDamage, dropItemPeriod, point, eva, acc,
             PADamage, MADamage,
             PhysicalDefense, MagicDefense,
             hpRecovery, mpRecovery,
@@ -317,8 +317,8 @@ public class MonsterStats {
         this.HPDisplayType = MonsterHpDisplayType.getFromInt((byte) data.readByte());
     }
 
-    public void setChange(boolean invin) {
-        this.changeableMob = invin;
+    public void setChange(boolean bEnabled) {
+        this.changeableMob = bEnabled;
     }
 
     public int getId() {
@@ -336,6 +336,10 @@ public class MonsterStats {
     public int getExp() {
         return exp;
     }
+    
+    public void setExp(int nVal) {
+        exp = nVal;
+    }
 
     public long getHp() {
         return hp;
@@ -345,8 +349,12 @@ public class MonsterStats {
         this.hp = hp;//(hp * 3L / 2L);
     }
 
-    public long getFinalmaxHP() {
+    public long getFinalMaxHp() {
         return finalmaxHP;
+    }
+    
+    public void setFinalMaxHp(long nVal) {
+        this.finalmaxHP = nVal;
     }
 
     public long getMp() {
@@ -392,6 +400,14 @@ public class MonsterStats {
     public int getMagicDefense() {
         return MagicDefense;
     }
+    
+    public void setPhysicalDefense(int nVal) {
+        this.PhysicalDefense = nVal;
+    }
+    
+    public void setMagicDefense(int nVal) {
+        this.MagicDefense = nVal;
+    }
 
     public int getPushed() {
         return pushed;
@@ -407,6 +423,10 @@ public class MonsterStats {
 
     public final int getSpeed() {
         return speed;
+    }
+    
+    public void setSpeed(int nVal) {
+        speed = nVal;
     }
 
     public boolean getOnlyNoramlAttack() {

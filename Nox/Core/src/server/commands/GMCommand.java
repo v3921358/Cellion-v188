@@ -250,7 +250,8 @@ public class GMCommand {
                 MapleMap pTargetMap = ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(ServerConstants.JAIL_MAP);
                 pTarget.getQuestNAdd(Quest.getInstance(GameConstants.JAIL_QUEST)).setCustomData(String.valueOf(tDuration * 60));
                 pTarget.changeMap(pTargetMap, pTargetMap.getPortal(0));
-                c.getPlayer().dropMessage(6, "Character (" + pTarget.getName() + ") has been jailed" + ((tDuration == 0) ? " forever " : (" for " + tDuration + " minutes.")));
+                c.getPlayer().dropMessage(6, "Character (" + pTarget.getName() + ") has been jailed" + ((tDuration == 0) ? " forever." : (" for " + tDuration + " minutes.")));
+                pTarget.yellowMessage("[Notice] Your character has been jailed " + ((tDuration == 0) ? "forever." : ("for " + tDuration + " minutes.")));
             } else {
                 c.getPlayer().dropMessage(6, "Please go to the same channel as the targeted character / Character not found.");
                 return 0;

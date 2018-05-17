@@ -103,7 +103,7 @@ public class SpawnPointAreaBoss extends Spawns {
                 spawned.set(false);
             }
         });
-        map.spawnMonster(mob, -2);
+        map.OnSpawnMonster(mob, -2);
 
         if (msg != null) {
             map.broadcastPacket(WvsContext.broadcastMsg(6, msg));
