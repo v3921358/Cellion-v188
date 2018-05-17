@@ -40,7 +40,7 @@ function action(mode, type, selection) {
         }
         if (readyToAdvance) {
             if (cm.getPlayer().getVMatrixKills() >= 1000 && cm.haveItem(hmagbossDrop, 1) && cm.haveItem(cra1stbossDrop, 1) && cm.haveItem(cra2ndbossDrop, 1) && cm.haveItem(cra3rdbossDrop, 1) && cm.haveItem(cra4thbossDrop, 1)) {
-                cm.gainItem(hmagbossDrop, -1) && cm.gainItem(cra1stbossDrop, -1) && cm.gainItem(cra2ndbossDrop, -1) && cm.gainItem(cra3rdbossDrop, -1) && cm.gainItem(cra4thbossDrop, -1) && cm.gainItem(globalDrop, -300);
+                cm.gainItem(hmagbossDrop, -1) && cm.gainItem(cra1stbossDrop, -1) && cm.gainItem(cra2ndbossDrop, -1) && cm.gainItem(cra3rdbossDrop, -1) && cm.gainItem(cra4thbossDrop, -1);
                 cm.getPlayer().OnUserVMatrix();
                 cm.sendOk("I have given you your final job advancement. You can now activate nodestones to unlock your 5th job skills.");
                 cm.dispose();
