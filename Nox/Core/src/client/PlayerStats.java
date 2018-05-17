@@ -2059,17 +2059,86 @@ public class PlayerStats implements Serializable {
             percent_hp += pSkill.getEffect(nSLV).getPercentHP();
         }
 
-        // TODO: Angelic Buster
-        // TODO: Zero
-        // TODO: Beast Tamer
+        // Angelic Buster
+        pSkill = SkillFactory.getSkill(AngelicBuster.MELODY_CROSS);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV > 0) {
+            localmaxhp_ += pSkill.getEffect(nSLV).getIndieMHp();
+        }
+        pSkill = SkillFactory.getSkill(AngelicBuster.BEAUTIFUL_SOUL);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV > 0) {
+            localdex  += pSkill.getEffect(nSLV).getDexX();
+        }
+        pSkill = SkillFactory.getSkill(AngelicBuster.LOVE_ME_HEART);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV > 0) {
+            localmaxhp_ += pSkill.getEffect(nSLV).getIndieMHp();
+        }
+
+        // Zero
+        pSkill = SkillFactory.getSkill(Zero.RESOLUTION_TIME);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV > 0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+            localstr += pSkill.getEffect(nSLV).getStrX();
+        }
+        pSkill = SkillFactory.getSkill(Zero.REINFORCE_BODY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV > 0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+        }
+
+        // Beast Tamer
+        pSkill = SkillFactory.getSkill(BeastTamer.GROWTH_SPURT);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV > 0) {
+            localint_ += pSkill.getEffect(nSLV).getIntX();
+            localluk += pSkill.getEffect(nSLV).getLukX();
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+            percent_mp += pSkill.getEffect(nSLV).getEnhancedMP();
+        }
+        pSkill = SkillFactory.getSkill(BeastTamer.WELL_FED);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV > 0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+            localint_ += pSkill.getEffect(nSLV).getIntX();
+        }
+        pSkill = SkillFactory.getSkill(BeastTamer.RIPPLING_FELINE_MUSCLES);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV > 0) {
+            localint_ += pSkill.getEffect(nSLV).getIntX();
+        }
+        pSkill = SkillFactory.getSkill(BeastTamer.CAT_WIT);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV > 0) {
+            localint_ += pSkill.getEffect(nSLV).getIntX();
+        }
+        pSkill = SkillFactory.getSkill(BeastTamer.KITTY_TREATS);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV > 0) {
+            localmaxhp_ += pSkill.getEffect(nSLV).getIndieMHp();
+            localmaxmp_ += pSkill.getEffect(nSLV).getIndieMMp();
+        }
 
         // Kinesis
+        pSkill = SkillFactory.getSkill(Kinesis.MENTAL_FORTITUDE);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV > 0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
+        }
+        // Kinesis Second Job
+        pSkill = SkillFactory.getSkill(Kinesis.ESP_MASTERY);
+        nSLV = pPlayer.getTotalSkillLevel(pSkill);
+        if (nSLV > 0) {
+            localint_ += pSkill.getEffect(nSLV).getIntX();
+        }
         pSkill = SkillFactory.getSkill(Kinesis.MENTAL_STRENGTH);
         nSLV = pPlayer.getTotalSkillLevel(pSkill);
-        if (nSLV >0) {
-            percent_hp += nSLV * 4;
+        if (nSLV > 0) {
+            percent_hp += pSkill.getEffect(nSLV).getPercentHP();
         }
-                
+
         // Global
         pSkill = SkillFactory.getSkill(Global.PIRATE_BLESSING_1);
         nSLV = pPlayer.getSkillLevel(pSkill);
