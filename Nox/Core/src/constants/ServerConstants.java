@@ -31,12 +31,12 @@ public class ServerConstants {
     
     /*Standard Login or API Configuration*/
    /*These values will be overwritten by the configuration.ini file.*/
-    public static boolean USE_API = true; // If false, use the standard login methods and database communications.
+    public static boolean USE_API = false; // If false, use the standard login methods and database communications.
     public static boolean DEVMODE = true;
 
     /*Server Debug*/
    /*These values will be overwritten by the configuration.ini file.*/
-    public static boolean DEVELOPER_DEBUG_MODE = false;
+    public static boolean DEVELOPER_DEBUG_MODE = true;
     public static boolean REDUCED_DEBUG_SPAM = true;
 
     /*General Rate Configuration*/
@@ -88,6 +88,7 @@ public class ServerConstants {
     public static final boolean UNIVERSAL_START = true; //If true, all classes start in the custom tutorial intro.
     public static final int UNIVERSAL_START_MAP = 331003400; //All classes start on this map if the boolean above is true.
     public static final int JAIL_MAP = 693000006; //Map ID used for the server jail, a map where characters may not leave from.
+    public static final boolean INCREASED_HP_GAIN = true; //Players gain increased HP per level.
     
     /*Miscellaneous Configuration*/
     public static final long MAX_MESOS = Long.MAX_VALUE;
@@ -106,7 +107,6 @@ public class ServerConstants {
     /*Monster Configuration*/
     public static final boolean MONSTER_CASH_DROP = true; // NX Gain
     public static final boolean BUFFED_BOSSES = true; //Buffs the damage resistance on certain bosses to make them more challenging.
-    public static final boolean BUFFED_HP_GAIN = true; //Players gain increased HP per level.
     
     /*Spawn Rate Configuration*/
     public static final boolean MODIFY_SPAWN_RATE = true; //Enables spawn rate multiplier.

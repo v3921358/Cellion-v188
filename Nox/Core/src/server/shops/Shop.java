@@ -72,12 +72,12 @@ public class Shop {
 
     public void sendShop(ClientSocket c) {
         c.getPlayer().setShop(this);
-        c.SendPacket(CField.NPCPacket.getNPCShop(getNpcId(), this, c));
+        c.SendPacket(CField.NPCPacket.OnShopRequest(getNpcId(), this, c));
     }
 
     public void sendShop(ClientSocket c, int customNpc) {
         c.getPlayer().setShop(this);
-        c.SendPacket(CField.NPCPacket.getNPCShop(customNpc, this, c));
+        c.SendPacket(CField.NPCPacket.OnShopRequest(customNpc, this, c));
     }
 
     public void buy(ClientSocket c, short slot, int itemId, short quantity) {
@@ -139,7 +139,7 @@ public class Shop {
                     } else {
                         MapleInventoryManipulator.addById(c, itemId, totalQuantity, "Bought from shop " + this.id + ", " + this.npcId + " on " + LocalDateTime.now());
                     }
-                    c.SendPacket(CField.NPCPacket.confirmShopTransaction(ShopOperationType.Buy, this, c, -1));
+                    c.SendPacket(CField.NPCPacket.OnShopTransaction(ShopOperationType.Buy, this, c, -1));
                     return; // stop,
                 }
             } else { // this shop item is to be bought with another item such as coin
@@ -165,7 +165,7 @@ public class Shop {
                     } else {
                         MapleInventoryManipulator.addById(c, itemId, totalQuantity, "Bought from shop " + this.id + ", " + this.npcId + " on " + LocalDateTime.now());
                     }
-                    c.SendPacket(CField.NPCPacket.confirmShopTransaction(ShopOperationType.Buy, this, c, -1));
+                    c.SendPacket(CField.NPCPacket.OnShopTransaction(ShopOperationType.Buy, this, c, -1));
                     return; // stop,
                 }
             }
@@ -215,7 +215,7 @@ public class Shop {
                                 } else {
                                     MapleInventoryManipulator.addById(c, rePurchaseItemId, rePurchaseQuantity, "Bought from shop " + this.id + ", " + this.npcId + " on " + LocalDateTime.now());
                                 }
-                                c.SendPacket(CField.NPCPacket.confirmShopTransaction(ShopOperationType.Buy, this, c, indexFrom));
+                                c.SendPacket(CField.NPCPacket.OnShopTransaction(ShopOperationType.Buy, this, c, indexFrom));
                                 return; // stop completely.
                             }
                         } else {
@@ -308,7 +308,7 @@ public class Shop {
         addShopRepurchaseItem(c, item_fromInventory, quantity, recvMesos);
 
         // Sent packet to client
-        c.SendPacket(CField.NPCPacket.confirmShopTransaction(ShopOperationType.Sell, this, c, -1)); // LOL?? wasn't me i promise :monkaS:
+        c.SendPacket(CField.NPCPacket.OnShopTransaction(ShopOperationType.Sell, this, c, -1));
     }
 
     /**
@@ -357,7 +357,7 @@ public class Shop {
                 mod.add(new ModifyInventory(ModifyInventoryOperation.UpdateQuantity, item));
                 c.SendPacket(WvsContext.inventoryOperation(true, mod));
 
-                c.SendPacket(CField.NPCPacket.confirmShopTransaction(ShopOperationType.Buy, this, c, -1));
+                c.SendPacket(CField.NPCPacket.OnShopTransaction(ShopOperationType.Buy, this, c, -1));
             }
         }
     }

@@ -3742,20 +3742,75 @@ public class CField {
             return oPacket;
         }
 
-        public static OutPacket getNPCShop(int shopNPCId, Shop shop, ClientSocket c) {
+        /**
+         * OnShopRequest
+         * @param shopNPCId
+         * @param shop
+         * @param c
+         * @return 
+         */
+        public static OutPacket OnShopRequest(int shopNPCId, Shop shop, ClientSocket c) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.OpenShopDlg.getValue());
-            oPacket.EncodeByte(0); //if this is true then send a int with m_dwPetTemplateID (pet item id)
+            oPacket.EncodeByte(0); // If True, EncodeInt nPetItemID (m_dwPetTemplateID)
             PacketHelper.addShopInfo(oPacket, shop, c);
 
             return oPacket;
         }
 
-        public static OutPacket confirmShopTransaction(ShopOperationType code, Shop shop, ClientSocket c, int indexBought) {
+        /**
+         * OnShopTransaction
+         * @param pType
+         * @param pShop
+         * @param c
+         * @param nPurchasedIndex
+         * @return 
+         */
+        public static OutPacket OnShopTransaction(ShopOperationType pType, Shop pShop, ClientSocket c, int nPurchasedIndex) {
+
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.ShopResult.getValue());
+            oPacket.EncodeByte(pType.getOp());
+            
+            if (pType == ShopOperationType.Sell) {
+                PacketHelper.addShopInfo(oPacket, pShop, c);
+            } else {
+                oPacket.EncodeBool(nPurchasedIndex >= 0);
+                if (nPurchasedIndex >= 0) {
+                    oPacket.EncodeInt(nPurchasedIndex);
+                } else {
+                  oPacket.EncodeByte(0);
+                  oPacket.EncodeByte(0);
+                  oPacket.EncodeByte(0);
+                  oPacket.EncodeShort(0); // nUnk
+                }
+            }
+            
+            return oPacket;
+        }
+        
+        /**
+         * Old Packet for OnShopTransaction, just here for reference. -Mazen
+         */
+        public static OutPacket sconfirmShopTransaction(ShopOperationType code, Shop shop, ClientSocket c, int indexBought) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.ShopResult.getValue());
             oPacket.EncodeByte(code.getOp());
+            
             if (code == ShopOperationType.Sell) {
+                PacketHelper.addShopInfo(oPacket, shop, c);
+            } else {
+                oPacket.EncodeBool(indexBought >= 0);
+                if (indexBought >= 0) {
+                    oPacket.EncodeInt(indexBought);
+                } else {
+                  oPacket.EncodeByte(0);
+                  oPacket.EncodeByte(0);
+                  oPacket.EncodeByte(0);
+                  oPacket.EncodeShort(0); // nUnk
+                }
+            }
+            
+            /*if (code == ShopOperationType.Sell) {
                 PacketHelper.addShopInfo(oPacket, shop, c);
             } else {
                 oPacket.EncodeBool(indexBought >= 0);
@@ -3767,7 +3822,7 @@ public class CField {
                     oPacket.EncodeByte(0);
                     oPacket.EncodeInt(0);
                 }
-            }
+            }*/
 
             return oPacket;
         }

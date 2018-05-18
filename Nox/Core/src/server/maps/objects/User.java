@@ -5307,7 +5307,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         int nMaxMP = stats.getMaxMp() + calculateFlatMPGain(); // Flat MP Gain
         int nSP;
         
-        if (ServerConstants.BUFFED_HP_GAIN) nMaxHP += Randomizer.rand(40, 65);              // Bonus HP Gain for lower need of HP washing.
+        if (ServerConstants.INCREASED_HP_GAIN) nMaxHP += Randomizer.rand(40, 65);              // Bonus HP Gain for lower need of HP washing.
         
         nMaxHP += stats.getTotalStr() / 30;                                                 // Increased HP Gain based on STR.
         nMaxMP += 15 + (stats.getTotalInt() * 0.1) + (Utility.resultSuccess(50) ? 1 : -1);  // Increased MP Gain based on INT.

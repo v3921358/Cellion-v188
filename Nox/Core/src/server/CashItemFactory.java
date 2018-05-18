@@ -146,21 +146,21 @@ public class CashItemFactory {
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM cashshop_categories"); ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     CashCategory cat = new CashCategory(rs.getInt("categoryid"), rs.getString("name"), rs.getInt("parent"), rs.getInt("flag"), rs.getInt("sold"));
-                    categories.add(cat);
+                    if (!(rs.getInt("sold") > 0)) categories.add(cat); // Hides sold out categories.
                 }
             }
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM cashshop_menuitems"); ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     CashItem item = new CashItem(rs.getInt("category"),rs.getInt("subcategory"), rs.getInt("parent"), rs.getString("image"), rs.getInt("sn"), rs.getInt("itemid"), rs.getInt("flag"), rs.getInt("price"), rs.getInt("discountPrice"), rs.getInt("quantity"), rs.getInt("expire"), rs.getInt("gender"), rs.getInt("likes"));
-                    menuItems.put(item.getSN(), item);
+                    if (!(rs.getInt("sold") > 0)) menuItems.put(item.getSN(), item); // Hides sold out sub categories.
                 }
             }
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM cashshop_items"); ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     CashItem item = new CashItem(rs.getInt("category"),rs.getInt("subcategory"), rs.getInt("parent"), rs.getString("image"), rs.getInt("sn"), rs.getInt("itemid"), rs.getInt("flag"), rs.getInt("price"), rs.getInt("discountPrice"), rs.getInt("quantity"), rs.getInt("expire"), rs.getInt("gender"), rs.getInt("likes"));
-                    categoryItems.put(item.getSN(), item);
+                    if (rs.getInt("price") > 0) categoryItems.put(item.getSN(), item); // Hides items when price is set to zero.
                 }
             }
         } catch (SQLException e) {
