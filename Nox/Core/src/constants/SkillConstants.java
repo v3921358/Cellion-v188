@@ -7,7 +7,7 @@ package constants;
 public class SkillConstants {
 
     public static final int COMBO_KILL_BLESSING = 20000297,
-            L_COMBO_KILL_BLESSING = 80000370;
+                            L_COMBO_KILL_BLESSING = 80000370;
 
     /**
      * Gets the link skill for the character.

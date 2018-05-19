@@ -130,6 +130,7 @@ public class ClientSocket extends Socket {
 
     @Override
     public void SendPacket(OutPacket oPacket) {
+        
         if (ServerConstants.DEVELOPER_DEBUG_MODE) {
             if (SendPacketOpcode.eOp != null) {
                 switch (SendPacketOpcode.eOp) {
@@ -138,9 +139,7 @@ public class ClientSocket extends Socket {
                     case StatChanged:
                     case NpcMove:
                     case MobMove:
-                        if (ServerConstants.REDUCED_DEBUG_SPAM) {
-                            break;
-                        }
+                        if (ServerConstants.REDUCED_DEBUG_SPAM) break;
                     default:
                         System.err.println(String.format("[Send Operation] %s (%d) : %s", SendPacketOpcode.eOp.toString(), SendPacketOpcode.eOp.getValue(), oPacket.toString()));
                         break;

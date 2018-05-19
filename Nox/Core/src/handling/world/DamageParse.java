@@ -1740,7 +1740,7 @@ public class DamageParse {
                 }
                 iPacket.DecodeByte(); // Unknown
                 if (ret.skill == 142120001) {
-                    iPacket.DecodeLong(); // haxfix?
+                    //iPacket.DecodeLong(); // haxfix? Refer back here once testing some Kinesis skills. -Mazen
                 }
                 final Mob monster = chr.getMap().getMonsterByOid(dwMobID);//CHECK WHY THIS NULLS (no oid)
                 if (monster == null) {
@@ -1748,6 +1748,45 @@ public class DamageParse {
                 }
                 ret.allDamage.add(new AttackMonster(monster, dwMobID, monster.getId(), dwMobCRC, ptHit, ptPosPrev, damageNumbers));
             }
+            /*if (eType == RecvPacketOpcode.UserMeleeAttack) {
+                if (ret.skill == 61121052 || ret.skill == 36121052 || Skill.isScreenCenterAttackSkill(ret.skill)) {
+                    iPacket.DecodeShort(); // tTime
+                    iPacket.DecodeShort(); // nMobCount 
+                } else {
+                    if (Skill.isSupernovaSkill(ret.skill) || ret.skill == 101000102) {
+                        iPacket.DecodeShort(); // m_repeatSkill.ptAttackRefPoint.x
+                        iPacket.DecodeShort(); // m_repeatSkill.ptAttackRefPoint.y
+                        
+                        if(Skill.isAranFallingStopSkill(ret.skill)) {
+                            iPacket.DecodeByte(); // Unkown
+                        }
+                        if (ret.skill == 21120019 || ret.skill == 37121052) {
+                            iPacket.DecodeInt(); // m_teleport.pt.x
+                            iPacket.DecodeInt(); // m_teleport.pt.y
+                        }
+                        if (ret.skill == 61121105 || ret.skill == 61121222 || ret.skill == 24121052) {
+                            iPacket.DecodeShort(); // nMaxCount
+                        }
+                        
+                        //if ( ZArray<tagPOINT>::GetCount(&nVx) ) {
+                        //  do {
+                        //    COutPacket::Encode2(&nMaxCount[1], *(nVx + 8 * v753));
+                        //    COutPacket::Encode2(&nMaxCount[1], *(nVx + 8 * v753++ + 4));
+                        //  } while ( v753 < ZArray<tagPOINT>::GetCount(&nVx) );
+                        //}
+                        
+                        if (ret.skill == 101120104) {
+                            // TODO: CUser::EncodeAdvancedEarthBreak
+                        }
+                        if (ret.skill == 14111006) {
+                            iPacket.DecodeShort(); // nMaxCount
+                            iPacket.DecodeShort(); // nDamagePerMob
+                        }
+                    }
+                    iPacket.DecodeShort(); // Unk
+                    iPacket.DecodeShort(); // nSkillID
+                }
+            }*/
         }
         // TODO: See if can parse with just this.. the rest is so much and i dont think u use any of the vars
 

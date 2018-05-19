@@ -20,6 +20,7 @@ import client.inventory.MapleRing;
 import constants.GameConstants;
 import constants.QuickMove.QuickMoveNPC;
 import constants.ServerConstants;
+import constants.SkillConstants;
 import constants.skills.DualBlade;
 import constants.skills.Blaster;
 import constants.skills.Kinesis;
@@ -60,6 +61,7 @@ import server.shops.ShopOperationType;
 import handling.world.AttackMonster;
 import handling.game.PlayerDamageHandler;
 import handling.game.WhisperHandler.WhisperFlag;
+import handling.world.AttackInfo;
 import java.awt.Rectangle;
 import server.maps.Map_MaplePlatform;
 import server.maps.objects.ForceAtom;
@@ -1909,10 +1911,8 @@ public class CField {
         oPacket.EncodeInt(cid);
         oPacket.EncodeByte(0);
         oPacket.EncodeByte(tbyte);
-        byte mobCount = (byte) (tbyte >> 4);
-        byte damagePerMob = (byte) (tbyte & 0xF);
-        oPacket.EncodeByte(lvl);//moblvl
-        oPacket.EncodeByte(level);//skillvl
+        oPacket.EncodeByte(lvl);
+        oPacket.EncodeByte(level);
         if (level > 0) {
             oPacket.EncodeInt(skill);
         }
@@ -1931,7 +1931,7 @@ public class CField {
         if (type == 2) {
             oPacket.EncodeByte(ultLevel);
             if (ultLevel > 0) {
-                oPacket.EncodeInt(3220010);
+                oPacket.EncodeInt(3220010); // this should be 5XXXXXX fuckwit
             }
         }
 
@@ -1948,8 +1948,7 @@ public class CField {
         // bRepeatAttack = v20 & 4
         // bShadowPartner = v20 & 8
 
-        byte v22 = 0;
-        oPacket.EncodeByte(v22); //v22
+        oPacket.EncodeByte(0); //v22
         oPacket.EncodeInt(0); //nOption3
         oPacket.EncodeInt(0); //nBySummonedID
 
@@ -1963,9 +1962,10 @@ public class CField {
             oPacket.encode(0);//nPassiveAttackCount
         }
          */
+        
         oPacket.EncodeShort(display);
         if (display <= 1616) {
-            oPacket.EncodeByte(-1);//v30 bDragon ataack and move action?
+            oPacket.EncodeByte(-1); //v30 bDragon ataack and move action?
             oPacket.EncodeShort(0); // ptAttackRefPoint.x (Dragon specific)
             oPacket.EncodeShort(0); // ptAttackRefPoint.y (Dragon specific)
             oPacket.EncodeByte(0); //bShowFixedDamage
@@ -1976,13 +1976,14 @@ public class CField {
             for (AttackMonster monster : damage) {
                 if (monster.getAttacks() != null) {
                     oPacket.EncodeInt(monster.getObjectId());
-                    oPacket.EncodeByte(0);//v38-38)*
-                    oPacket.EncodeByte(0);//v38*
+                    oPacket.EncodeByte(0);// hitacton
+                    oPacket.EncodeByte(0);// bleft
                     oPacket.EncodeByte(0);//v38[1]
-                    oPacket.EncodeShort(0);//v40
+                    oPacket.EncodeShort(0);//tdelay
                     if (skill == 80001835 || skill == 42111002 || skill == 80011050) {
-                        oPacket.EncodeByte(0);//bKeyDown
-                        //if bKeyDown annoying loop about how long and other shit
+                        for (Pair<Long, Boolean> hits : monster.getAttacks()) {
+                            oPacket.EncodeLong(hits.left); //Iterate over damage.
+                        }
                     } else {
                         for (Pair<Long, Boolean> hits : monster.getAttacks()) {
                             oPacket.EncodeBool(hits.right);//bCrit
@@ -2008,9 +2009,10 @@ public class CField {
 
             //if is_keydown_skill_rect_move_xyz : encode new position (2 shorts)
             if (Skill.isKeydownSkillRectMoveXY(skill)) {
-                oPacket.EncodeShort(0);
-                oPacket.EncodeShort(0);
+                oPacket.EncodeShort(0); 
+                oPacket.EncodeShort(0); 
             }
+            
             if (skill == 51121009) {
                 oPacket.EncodeByte(0); //bEncodeFixedDamage
             } else if (skill == 112110003) {
@@ -2033,7 +2035,9 @@ public class CField {
                 oPacket.EncodeBool(false); // Unknown
             }
         }
-
+        
+        oPacket.Fill(0, 29); // Please for the love of god.
+        
         return oPacket;
     }
 // </editor-fold>
@@ -2046,13 +2050,7 @@ public class CField {
         oPacket.EncodeByte(level);
         oPacket.EncodeShort(display);
         oPacket.EncodeByte(unk);
-        if (skillId == 13111020) {
-            oPacket.EncodePosition(from.getPosition()); // Position
-        }
-        if (skillId == 27101202) {
-            oPacket.EncodePosition(from.getPosition()); // Position
-        }
-
+        oPacket.EncodePosition(from.getPosition()); // Position
         return oPacket;
     }
 
@@ -2172,31 +2170,31 @@ public class CField {
     public static OutPacket OnShowChair(int nCharacterID, int nChairID) {
         return OnShowChair(nCharacterID, nChairID, 0, 0);
     }
-    
+
     public static OutPacket OnShowChair(int nCharacterID, int nChairID, int nTowerChair, int bMessage) {
         OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetActivePortableChair.getValue());
 
         oPacket.EncodeInt(nCharacterID);
         oPacket.EncodeInt(nChairID);
-        
+
         oPacket.EncodeInt(bMessage);
         if (bMessage > 0) {
             oPacket.EncodeString(""); // sMessage
         }
-        
+
         oPacket.EncodeInt(nTowerChair);
         if (nTowerChair > 0) {
             oPacket.EncodeInt(0); // nTowerChairSize
         }
-        
+
         oPacket.EncodeInt(0); // nMesoChairCount
-        
+
         oPacket.EncodeInt(0); // nUnk GMS
         oPacket.EncodeInt(0); // nUnk GMS
 
         return oPacket;
     }
-    
+
     public static OutPacket showChair(int characterid, int itemid) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetActivePortableChair.getValue());
@@ -3744,10 +3742,11 @@ public class CField {
 
         /**
          * OnShopRequest
+         *
          * @param shopNPCId
          * @param shop
          * @param c
-         * @return 
+         * @return
          */
         public static OutPacket OnShopRequest(int shopNPCId, Shop shop, ClientSocket c) {
 
@@ -3760,17 +3759,18 @@ public class CField {
 
         /**
          * OnShopTransaction
+         *
          * @param pType
          * @param pShop
          * @param c
          * @param nPurchasedIndex
-         * @return 
+         * @return
          */
         public static OutPacket OnShopTransaction(ShopOperationType pType, Shop pShop, ClientSocket c, int nPurchasedIndex) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.ShopResult.getValue());
             oPacket.EncodeByte(pType.getOp());
-            
+
             if (pType == ShopOperationType.Sell) {
                 PacketHelper.addShopInfo(oPacket, pShop, c);
             } else {
@@ -3778,16 +3778,16 @@ public class CField {
                 if (nPurchasedIndex >= 0) {
                     oPacket.EncodeInt(nPurchasedIndex);
                 } else {
-                  oPacket.EncodeByte(0);
-                  oPacket.EncodeByte(0);
-                  oPacket.EncodeByte(0);
-                  oPacket.EncodeShort(0); // nUnk
+                    oPacket.EncodeByte(0);
+                    oPacket.EncodeByte(0);
+                    oPacket.EncodeByte(0);
+                    oPacket.EncodeShort(0); // nUnk
                 }
             }
-            
+
             return oPacket;
         }
-        
+
         /**
          * Old Packet for OnShopTransaction, just here for reference. -Mazen
          */
@@ -3795,7 +3795,7 @@ public class CField {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.ShopResult.getValue());
             oPacket.EncodeByte(code.getOp());
-            
+
             if (code == ShopOperationType.Sell) {
                 PacketHelper.addShopInfo(oPacket, shop, c);
             } else {
@@ -3803,13 +3803,13 @@ public class CField {
                 if (indexBought >= 0) {
                     oPacket.EncodeInt(indexBought);
                 } else {
-                  oPacket.EncodeByte(0);
-                  oPacket.EncodeByte(0);
-                  oPacket.EncodeByte(0);
-                  oPacket.EncodeShort(0); // nUnk
+                    oPacket.EncodeByte(0);
+                    oPacket.EncodeByte(0);
+                    oPacket.EncodeByte(0);
+                    oPacket.EncodeShort(0); // nUnk
                 }
             }
-            
+
             /*if (code == ShopOperationType.Sell) {
                 PacketHelper.addShopInfo(oPacket, shop, c);
             } else {
@@ -3823,7 +3823,6 @@ public class CField {
                     oPacket.EncodeInt(0);
                 }
             }*/
-
             return oPacket;
         }
 
@@ -4745,7 +4744,7 @@ DC 05 00 00  // floating value
             }
             oPacket.EncodeByte(UserEffectCodes.IncDecHPEffect_EX.getEffectId());
             oPacket.EncodeInt(amount);
-            
+
             oPacket.Fill(0, 19); // Avoid DC
 
             return oPacket;

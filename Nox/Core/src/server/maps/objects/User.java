@@ -287,15 +287,17 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @return 
      */
     public boolean hasVMatrix() {
-        return (getQuestStatus(34330).getValue() == 2);
+        dropMessage(5, "WHAT THE FUCK IS THE QUEST STATUS? " + getQuestStatus(1460).getValue());
+        dropMessage(5, "YEAH RIGHT");
+        return (getQuestStatus(1460).getValue() == 2);
     }
     
     /**
      * Increases kill count for V Matrix quest.
-     * @param nMonsterID
+     * @param pMob
      */
     public void incrementVMatrixKills(Mob pMob) {
-        if (!hasVMatrix() && pMob.getStats().getLevel() > 200) { // Mushmom Kills
+        if (!hasVMatrix() && pMob.getStats().getLevel() > 200) { // Lv. 200 Mob Kills
             String sQuest = getInfoQuest(13337);
             if (sQuest.isEmpty()) sQuest = "0";
             int nVal = Integer.parseInt(sQuest);
@@ -309,6 +311,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @return 
      */
     public int getVMatrixKills() {
+        String sQuestInfo = getInfoQuest(13337);
+        if (sQuestInfo.equals("")) return 0;
         return Integer.parseInt(getInfoQuest(13337));
     }
     
@@ -316,20 +320,27 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * Gives the Player the VMatrix.
      */
     public void OnUserVMatrix() {
-        Quest.getInstance(2241).forceComplete(this, 0);
-        Quest.getInstance(33565).forceComplete(this, 0);
-        Quest.getInstance(31833).forceComplete(this, 0);
-        Quest.getInstance(30007).forceComplete(this, 0);
-        Quest.getInstance(3157).forceComplete(this, 0);
-        Quest.getInstance(7313).forceComplete(this, 0);
-        Quest.getInstance(31179).forceComplete(this, 0);
-        Quest.getInstance(3521).forceComplete(this, 0);
-        Quest.getInstance(31152).forceComplete(this, 0);
-        Quest.getInstance(33294).forceComplete(this, 0);
-        Quest.getInstance(34015).forceComplete(this, 0);
-        Quest.getInstance(17523).forceComplete(this, 0);
-        Quest.getInstance(58955).forceComplete(this, 0);
-        Quest.getInstance(34330).forceComplete(this, 0);
+        Quest.getInstance(1460).forceComplete(this, 0);
+        Quest.getInstance(1461).forceComplete(this, 0);
+        Quest.getInstance(1462).forceComplete(this, 0);
+        Quest.getInstance(1463).forceComplete(this, 0);
+        Quest.getInstance(1464).forceComplete(this, 0);
+        Quest.getInstance(1465).forceComplete(this, 0);
+        Quest.getInstance(1466).forceComplete(this, 0);
+        Quest.getInstance(1467).forceComplete(this, 0);
+        Quest.getInstance(1468).forceComplete(this, 0);
+        Quest.getInstance(1469).forceComplete(this, 0);
+        Quest.getInstance(1470).forceComplete(this, 0);
+        Quest.getInstance(1471).forceComplete(this, 0);
+        Quest.getInstance(1472).forceComplete(this, 0);
+        Quest.getInstance(1472).forceComplete(this, 0);
+        Quest.getInstance(1473).forceComplete(this, 0);
+        Quest.getInstance(1474).forceComplete(this, 0);
+        Quest.getInstance(1475).forceComplete(this, 0);
+        Quest.getInstance(1476).forceComplete(this, 0);
+        Quest.getInstance(1477).forceComplete(this, 0);
+        Quest.getInstance(1478).forceComplete(this, 0);
+        Quest.getInstance(1479).forceComplete(this, 0);
     }
 
     /**

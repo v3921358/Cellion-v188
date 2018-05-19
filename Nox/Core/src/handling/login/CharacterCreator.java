@@ -20,7 +20,6 @@ import server.MapleItemInformationProvider;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CLogin;
-
 import java.util.HashMap;
 import java.util.Map;
 

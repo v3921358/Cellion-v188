@@ -242,14 +242,14 @@ public final class CloseRangeAttack {
         
         switch (pAttack.skill) {
             case Aran.MAHAS_DOMAIN: {
-                pPlayer.write(CField.closeRangeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge));
+                pPlayer.write(CField.closeRangeAttack(pPlayer.getId(), pAttack.numberOfHits | 16 * pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge));
                 break;
             }
             default: {
                 if (!pPlayer.isHidden()) {
-                    pPlayer.getMap().broadcastPacket(pPlayer, CField.closeRangeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge), pPlayer.getTruePosition());
+                    pPlayer.getMap().broadcastPacket(pPlayer, CField.closeRangeAttack(pPlayer.getId(), pAttack.numberOfHits | 16 * pAttack.tbyte , pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge), pPlayer.getTruePosition());
                 } else {
-                    pPlayer.getMap().broadcastGMMessage(pPlayer, CField.closeRangeAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge), false);
+                    pPlayer.getMap().broadcastGMMessage(pPlayer, CField.closeRangeAttack(pPlayer.getId(), pAttack.numberOfHits | 16 * pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, pAttack.allDamage, bPassiveAttack, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag, pAttack.charge), false);
                 }
                 break;
             }
