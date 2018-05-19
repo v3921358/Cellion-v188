@@ -212,7 +212,7 @@ public class BossTimer {
     public static void UserSaveBossTime(User pPlayer) {
         int dwAccID = pPlayer.getClient().getAccID();
         try (Connection con = Database.GetConnection()) {
-            Utility.runSQL("DELETE FROM bosstime WHERE dwAccountID = " + dwAccID);
+            Utility.runSQL(con, "DELETE FROM bosstime WHERE dwAccountID = " + dwAccID);
             
             try (PreparedStatement ps = con.prepareStatement(
                     "INSERT INTO bosstime (dwAccountID, `tHilla`, `tZakum`, `tHorntail`, `tRanmaru`, `tCrimsonQueen`, `tPierre`, `tVonBon`,"

@@ -40,12 +40,10 @@ public class Utility {
      * @param sSQL 
      * @throws java.sql.SQLException 
      */
-    public static void runSQL(String sSQL) throws SQLException {
-        try (Connection Con = Database.GetConnection()) {
-            try (PreparedStatement pStatement = Con.prepareStatement(sSQL)) {
-                pStatement.executeUpdate();
-                pStatement.closeOnCompletion();
-            }
+    public static void runSQL(Connection Con, String sSQL) throws SQLException {
+        try (PreparedStatement pStatement = Con.prepareStatement(sSQL)) {
+            pStatement.executeUpdate();
+            pStatement.closeOnCompletion();
         }
     }
     
