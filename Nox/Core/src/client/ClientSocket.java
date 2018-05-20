@@ -149,7 +149,7 @@ public class ClientSocket extends Socket {
 
         // Have to write the packet after checking for debug
         // Just incase the pipeline encodes it before the log printed lol. (that happens)
-        super.SendPacket(oPacket);
+        super.SendPacket(oPacket.Clone());
     }
 
     public final Lock getNPCLock() {

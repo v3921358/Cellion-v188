@@ -156,4 +156,10 @@ public class OutPacket {
         pSendBuff.getBytes(pSendBuff.readerIndex(), aData);
         return aData;
     }
+    
+    public OutPacket Clone() {
+        byte[] aData = new byte[pSendBuff.readableBytes()];
+        pSendBuff.getBytes(pSendBuff.readerIndex(), aData);
+        return new OutPacket(aData);
+    }
 }
