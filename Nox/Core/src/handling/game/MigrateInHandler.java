@@ -35,6 +35,7 @@ import tools.packet.WvsContext.GuildPacket;
 import tools.packet.JobPacket.AvengerPacket;
 import client.jobs.Hero.PhantomHandler;
 import net.ProcessPacket;
+import server.skills.LinkedSkill;
 
 /**
  * MigrateIn 
@@ -188,9 +189,10 @@ public final class MigrateInHandler implements ProcessPacket<ClientSocket> {
         pPlayer.getClient().SendPacket(WvsContext.broadcastMsg(pChannelServer.getServerMessage()));
 
         // Skills
-        pPlayer.baseSkills(); //fix people who've lost skills.
+        pPlayer.baseSkills(); // Fix people who've lost skills.
         pPlayer.updateHyperSPAmount();
-        c.SendPacket(WvsContext.updateSkills(c.getPlayer().getSkills(), false));//skill to 0 "fix"
+        c.SendPacket(WvsContext.updateSkills(c.getPlayer().getSkills(), false)); // Update Skill so they don't appear level zero.
+        LinkedSkill.OnLinkedSkillRequest(pPlayer); // Add applicable linked skills.
         //c.write(JobPacket.addStolenSkill());
 
         // Pendant Slot Expansion

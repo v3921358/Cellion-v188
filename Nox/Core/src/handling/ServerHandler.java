@@ -286,6 +286,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserSkillPrepareRequest.getValue()] = new SkillEffectHandler();
         handlers[RecvPacketOpcode.UserMacroSysDataModified.getValue()] = new SkillMacroHandler();
         handlers[RecvPacketOpcode.FuncKeyMappedModified.getValue()] = new KeyMap();
+        handlers[RecvPacketOpcode.SetSonOfLinkedSkillRequest.getValue()] = new LinkedSkillRequest();
         
         /**
          * Aran Combo Handler
@@ -341,8 +342,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.CashShopCheckCouponRequest.getValue()] = new CashCouponHandler();
         handlers[RecvPacketOpcode.CASH_CATEGORY.getValue()] = new CashCategorySwitch();
         handlers[RecvPacketOpcode.CS_UPDATE.getValue()] = new UpdatePlayerCashInfo();
-        
-        
         
     }
 
