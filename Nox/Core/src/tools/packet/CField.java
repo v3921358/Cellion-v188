@@ -612,6 +612,10 @@ public class CField {
         oPacket.EncodeInt(0); //dwEventBestFriendAID
         oPacket.EncodeInt(0);
 
+        // Okay so there is more data to write here for certain maps such as Von Bon's boss arena. 
+        // Need to check IDA later for this, fill for now. -Mazen
+        oPacket.Fill(0, 29);
+        
         return oPacket;
     }
 

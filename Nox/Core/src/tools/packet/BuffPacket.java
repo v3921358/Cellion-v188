@@ -805,7 +805,7 @@ public class BuffPacket {
         //oPacket.Encode(1);
         oPacket.EncodeByte(0);
         //oPacket.Encode(1);
-        oPacket.Fill(0, 69);
+        oPacket.Fill(0, 99);
         //System.out.println(HexTool.toString(oPacket.getPacket()));
         return oPacket;
     }

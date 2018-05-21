@@ -5318,7 +5318,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         int nMaxMP = stats.getMaxMp() + calculateFlatMPGain(); // Flat MP Gain
         int nSP;
         
-        if (ServerConstants.INCREASED_HP_GAIN) nMaxHP += Randomizer.rand(40, 65);              // Bonus HP Gain for lower need of HP washing.
+        if (ServerConstants.INCREASED_HP_GAIN) nMaxHP += Randomizer.rand(40, 65);           // Bonus HP Gain for lower need of HP washing.
         
         nMaxHP += stats.getTotalStr() / 30;                                                 // Increased HP Gain based on STR.
         nMaxMP += 15 + (stats.getTotalInt() * 0.1) + (Utility.resultSuccess(50) ? 1 : -1);  // Increased MP Gain based on INT.
@@ -5326,62 +5326,70 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         nMaxHP = Math.min(GameConstants.maxHP, Math.abs(nMaxHP));
         nMaxMP = Math.min(GameConstants.maxMP, Math.abs(nMaxMP));
         
-        /*AP Distribution*/
-        if (level < 10) {         // Automatically place AP in STR until level 10.
+        /*Ability Point Distribution*/
+        if (level < 10) {                                                                   // Automatically place AP in STR until level 10.
             stats.str += 5;
             remainingAp = 0;
             pStat.put(Stat.STR, (long) stats.getStr());
-        } else if (level == 10) { // Automatically reset AP when hitting level 10.
+        } else if (level == 10) {                                                           // Automatically reset AP when hitting level 10.
             remainingAp += 5;
             resetAp();
         } else {
             remainingAp += 5;
         }
         
-        /*SP Distribution*/
-        if (level <= 110) {
-            nSP = 3;
-        } else if (level <= 120) {
-            nSP = 4;
-        } else if (level <= 130) {
-            nSP = 5;
-        } else if (level <= 140) {
-            nSP = 6;
-        } else {
-            nSP = 0;
-        }
-        
+        /*Skill Point Distribtuion*/
+       /*Automatically assigns to the job they're supposed to be, so no missed out SP.*/
         if (GameConstants.isZero(job)) {
             OnGainSP(3, 0); // Alpha
             OnGainSP(3, 1); // Beta
+        } else if (GameConstants.isBeastTamer(job)) {
+            OnGainSP(3);
+        } else if (GameConstants.isDualBlade(job)) {
+            if (level >= 100) {
+                OnGainSP(3, 5);
+            } else if (level >= 60) {
+                OnGainSP(3, 4);
+            } else if (level >= 45) {
+                OnGainSP(3, 3);
+            } else if (level >= 30) {
+                OnGainSP(3, 2);
+            } else if (level >= 20) {
+                OnGainSP(3, 1);
+            } else {
+                OnGainSP(3, 0);
+            }
         } else {
-            
-            /* Job Advancement & Bonus SP Gain*/
+            if (level >= 100) {
+                OnGainSP(3, 3);
+            } else if (level >= 60) {
+                OnGainSP(3, 2);
+            } else if (level >= 30) {
+                OnGainSP(3, 1);
+            } else {
+                OnGainSP(3, 0);
+            }
+        }
+        
+        /* Job Advancement & Bonus SP Gain*/
+        if (!GameConstants.isZero(job) && !GameConstants.isBeastTamer(job)) {
             switch(level) { 
                 case 20:
-                    if (GameConstants.isDualBlade(job)) OnGainSP(nSP);
                     //if (GameConstants.isDualBlade(job))OnJobAdvanceNotify();
                     break;
                 case 30:
-                    OnGainSP(nSP);
                     OnJobAdvanceNotify();
                     break;
                 case 45:
-                    if (GameConstants.isDualBlade(job)) OnGainSP(nSP);
                     if (GameConstants.isDualBlade(job))OnJobAdvanceNotify();
                     break;
                 case 60:
-                    OnGainSP(nSP);
                     OnJobAdvanceNotify();
                     break;
                 case 100:
-                    OnGainSP(nSP);
                     OnJobAdvanceNotify();
                     break;
             }
-            
-            // Basic SP Gain
-            OnGainSP(nSP);
         }
         
         /*Character Stat Update*/

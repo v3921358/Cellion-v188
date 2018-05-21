@@ -522,7 +522,15 @@ public class MapScriptMethods {
                 }
             }
             case pierre_Summon: {
-                if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0) {
+                if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0 
+                        && (c.getPlayer().getMap().getId() >= 105200210 && c.getPlayer().getMap().getId() <= 105200219)) { // Spawn Normal Pierre
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8900100), new Point(497, 551));
+                    c.getPlayer().getMap().startMapEffect("From the bottom of my heart, welcome to the tea party!", 5120098);
+                    c.SendPacket(CField.showEffect("rootabyss/firework"));
+                    c.SendPacket(CField.playSound("rootabyss/firework"));
+                    c.SendPacket(CUserLocal.updateDeathCount(6));
+                    break;
+                } else if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0) {
                     c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8900000), new Point(497, 551));
                     c.getPlayer().getMap().startMapEffect("From the bottom of my heart, welcome to the tea party!", 5120098);
                     c.SendPacket(CField.showEffect("rootabyss/firework"));
@@ -532,7 +540,14 @@ public class MapScriptMethods {
                 }
             }
             case pierre_Summon1: {
-                if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0) {
+                if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0 
+                        && (c.getPlayer().getMap().getId() >= 105200210 && c.getPlayer().getMap().getId() <= 105200219)) { // Spawn Normal Pierre
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8900100), new Point(497, 551));
+                    c.getPlayer().getMap().startMapEffect("From the bottom of my heart, welcome to the tea party!", 5120098);
+                    c.SendPacket(CField.showEffect("rootabyss/firework"));
+                    c.SendPacket(CField.playSound("rootabyss/firework"));
+                    c.SendPacket(CUserLocal.updateDeathCount(6));
+                } else if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0) {
                     c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8900000), new Point(497, 551));
                     c.getPlayer().getMap().startMapEffect("From the bottom of my heart, welcome to the tea party!", 5120098);
                     c.SendPacket(CField.showEffect("rootabyss/firework"));
@@ -558,7 +573,12 @@ public class MapScriptMethods {
                 }
             }
             case banban_Summon: {
-                if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0) {
+                if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0 
+                        && (c.getPlayer().getMap().getId() >= 105200110 && c.getPlayer().getMap().getId() <= 105200119)) { // Spawn Normal Von Bon
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8910100), new Point(256, 443));
+                    c.SendPacket(CUserLocal.updateDeathCount(6));
+                    break;
+                } else if (c.getPlayer().getMap().getAllMapObjectSize(MapleMapObjectType.MONSTER) == 0) { // Chaos
                     c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8910000), new Point(256, 443));
                     c.SendPacket(CUserLocal.updateDeathCount(6));
                     break;
