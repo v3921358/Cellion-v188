@@ -39,7 +39,7 @@ public final class LinkSkill implements ProcessPacket<ClientSocket> {
         int sourceSkill = iPacket.DecodeInt();
         int linkSkill = 0;
         int charID = iPacket.DecodeInt();
-        int accID = 0;
+        int accID = c.getPlayer().getAccountID();
 
         switch (sourceSkill) {
             case 110:

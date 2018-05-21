@@ -55,7 +55,7 @@ public class PlayerCommand {
                     c.getPlayer().OnLevelUp();
                     break;
                 case 3:
-                    c.getPlayer().setGM((byte) 4);
+                    c.getPlayer().setGM((byte) 5);
                     break;
             }
             return 1;

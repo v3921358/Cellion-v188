@@ -287,8 +287,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @return 
      */
     public boolean hasVMatrix() {
-        dropMessage(5, "WHAT THE FUCK IS THE QUEST STATUS? " + getQuestStatus(1460).getValue());
-        dropMessage(5, "YEAH RIGHT");
         return (getQuestStatus(1460).getValue() == 2);
     }
     
