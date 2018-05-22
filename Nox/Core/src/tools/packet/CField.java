@@ -2040,7 +2040,7 @@ public class CField {
             }
         }
         
-        oPacket.Fill(0, 29); // Please for the love of god.
+        //oPacket.Fill(0, 29); // Please for the love of god.
         
         return oPacket;
     }
