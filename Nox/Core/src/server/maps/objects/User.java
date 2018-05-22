@@ -95,6 +95,8 @@ import java.util.stream.Collectors;
 import server.BossTimer;
 import server.skills.VMatrixRecord;
 import server.maps.objects.StopForceAtom;
+import server.skills.LinkedSkill;
+import static server.skills.LinkedSkill.OnGiveLinkedSkill;
 import static tools.packet.WvsContext.OnLoadAccountIDOfCharacterFriendResult;
 
 public class User extends AnimatedMapleMapObject implements Serializable, MapleCharacterLook {
@@ -1314,7 +1316,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
-
+                
                 ret.expirationTask(false, true);
 
                 try (PreparedStatement ps = con.prepareStatement("SELECT * FROM coreauras WHERE cid = ?")) {
@@ -2138,7 +2140,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     ps.setInt(1, id);
 
                     for (final Entry<Skill, SkillEntry> skill : skills.entrySet()) {
-                        if (GameConstants.isApplicableSkill(skill.getKey().getId())) { //do not save additional skills
+                        if (GameConstants.isApplicableSkill(skill.getKey().getId()) || GameConstants.isLinkedSkill(skill.getKey().getId())) { //do not save additional skills
                             ps.setInt(2, skill.getKey().getId());
                             ps.setInt(3, skill.getValue().skillevel);
                             ps.setByte(4, skill.getValue().masterlevel);

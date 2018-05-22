@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import server.maps.objects.User;
+import tools.Utility;
 
 /**
  * Global Linked Skill Handler
@@ -21,27 +22,27 @@ public class LinkedSkill {
     /**
      * Linked Skill IDs
      */
-    public static int ZERO = 80000110,
-                      LUMINOUS = 80000005,
-                      KANNA = 80000004,
-                      DEMON_AVENGER = 80000050,
-                      DEMON_SLAYER = 80000001,
-                      ANGELIC_BUSTER = 80001155,
-                      HAYATO = 80000003,
-                      CANNONEER = 80000000,
-                      XENON = 80000047,
-                      PHANTOM = 80000002,
-                      BEAST_TAMER = 80010006,
-                      MERCEDES = 80001040,
-                      ARAN = 80000370,
-                      EVAN = 80000369,
-                      SHADE = 80000169,
-                      KINESIS = 80000188,
-                      JETT = 80001151,
-                      KAISER = 80000006,
-                      MIHILE = 80001140,
-                      CYGNUS = 80000055,
-                      RESISTANCE = 80000329;
+    public final static int ZERO = 80000110,
+                            LUMINOUS = 80000005,
+                            KANNA = 80000004,
+                            DEMON_AVENGER = 80000050,
+                            DEMON_SLAYER = 80000001,
+                            ANGELIC_BUSTER = 80001155,
+                            HAYATO = 80000003,
+                            CANNONEER = 80000000,
+                            XENON = 80000047,
+                            PHANTOM = 80000002,
+                            BEAST_TAMER = 80010006,
+                            MERCEDES = 80001040,
+                            ARAN = 80000370,
+                            EVAN = 80000369,
+                            SHADE = 80000169,
+                            KINESIS = 80000188,
+                            JETT = 80001151,
+                            KAISER = 80000006,
+                            MIHILE = 80001140,
+                            CYGNUS = 80000055,
+                            RESISTANCE = 80000329;
     
     /**
      * OnLinkedSkillRequest
@@ -119,13 +120,6 @@ public class LinkedSkill {
         } else if (GameConstants.isDemonSlayer(nLinkedJobID)) {
             
             nLinkedSkillID = DEMON_SLAYER;
-            nMasterSLV = 3;
-            if (nLinkedLevel >= 210) nSLV = 3;
-            else if (nLinkedLevel >= 120) nSLV = 2;
-            else if (nLinkedLevel >= 70) nSLV = 1;
-        } else if (GameConstants.isPhantom(nLinkedJobID)) {
-            
-            nLinkedSkillID = PHANTOM;
             nMasterSLV = 3;
             if (nLinkedLevel >= 210) nSLV = 3;
             else if (nLinkedLevel >= 120) nSLV = 2;
@@ -250,5 +244,31 @@ public class LinkedSkill {
         
         if (nSLV > nMasterSLV) nSLV = nMasterSLV;
         pPlayer.changeSingleSkillLevel(getSkill(nLinkedSkillID), nSLV, nMasterSLV);
+        //OnGiveLinkedSkill(pPlayer.getId(), nLinkedSkillID, nSLV, nMasterSLV);
+    }
+    
+    /**
+     * OnGiveLinkedSkill
+     * @param dwCharacterID
+     * @param nSkillID
+     * @param nSLV
+     * @param nMasterSLV 
+     */
+    public static void OnGiveLinkedSkill(int dwCharacterID, int nSkillID, byte nSLV, byte nMasterSLV)  {
+        User pPlayer = Utility.requestCharacter(dwCharacterID);
+        
+        try (Connection con = Database.GetConnection()) {
+
+            Utility.runSQL(con, "DELETE FROM skills WHERE skillid = " + nSkillID + " AND characterid = " + dwCharacterID);
+            try (PreparedStatement ps = con.prepareStatement("INSERT INTO skills (skillid, characterid, skilllevel, masterlevel, expiration, victimid) VALUES (?, ?, ?, ?, ?, ?)")) {
+                ps.setInt(1, nSkillID);
+                ps.setInt(2, dwCharacterID);
+                ps.setInt(3, nSLV);
+                ps.setByte(4, nMasterSLV);
+                ps.setLong(5, -1);
+                ps.setInt(6, 0);
+                ps.execute();
+            }
+        } catch (SQLException ex) {}
     }
 }

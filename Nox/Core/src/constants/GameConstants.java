@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import server.skills.LinkedSkill;
 import client.CharacterTemporaryStat;
 import client.MonsterStatus;
 import client.PlayerStats;
@@ -4084,6 +4085,34 @@ public class GameConstants {
         return itemId / 10000 == 133;
     }
 
+    public static boolean isLinkedSkill(int nSkillID) {
+        switch (nSkillID) {
+            case LinkedSkill.ZERO:
+            case LinkedSkill.LUMINOUS:
+            case LinkedSkill.KANNA:
+            case LinkedSkill.DEMON_AVENGER:
+            case LinkedSkill.DEMON_SLAYER:
+            case LinkedSkill.ANGELIC_BUSTER:
+            case LinkedSkill.HAYATO:
+            case LinkedSkill.CANNONEER:
+            case LinkedSkill.XENON:
+            case LinkedSkill.PHANTOM:
+            case LinkedSkill.BEAST_TAMER:
+            case LinkedSkill.MERCEDES:
+            case LinkedSkill.ARAN:
+            case LinkedSkill.EVAN:
+            case LinkedSkill.SHADE:
+            case LinkedSkill.KINESIS:
+            case LinkedSkill.JETT:
+            case LinkedSkill.KAISER:
+            case LinkedSkill.MIHILE:
+            case LinkedSkill.CYGNUS:
+            case LinkedSkill.RESISTANCE:
+                return true;
+        }
+        return false;
+    }
+    
     public static boolean isApplicableSkill(int skil) {
         return ((skil < 80000000 || skil >= 100000000) && (skil % 10000 < 8000 || skil % 10000 > 8006) && !isAngel(skil)) || skil >= 92000000 || (skil >= 80000000 && skil < 80010000); //no additional/decent skills
     }
