@@ -437,7 +437,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final void respawn(final boolean force) {
-        c.getPlayer().getMap().respawn(force, System.currentTimeMillis());
+        c.getPlayer().getMap().OnRespawn(force, System.currentTimeMillis());
     }
 
     public final void forceStartReactor(final int mapid, final int id) {
@@ -1362,7 +1362,7 @@ public abstract class AbstractPlayerInteraction {
         }
 //        map.setChangeableMobUsing(true);
         map.killAllMonsters(false);
-        map.respawn(true, System.currentTimeMillis());
+        map.OnRespawn(true, System.currentTimeMillis());
     }
 
     public final void startAswanOffSeason(final User leader) {

@@ -1398,7 +1398,7 @@ public class AdminCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            c.getPlayer().getMap().respawn(true, System.currentTimeMillis());
+            c.getPlayer().getMap().OnRespawn(true, System.currentTimeMillis());
             c.getPlayer().dropMessage(5, "Monster on the current map have been respawned.");
             return 1;
         }

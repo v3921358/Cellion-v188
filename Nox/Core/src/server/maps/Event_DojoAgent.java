@@ -31,7 +31,7 @@ public class Event_DojoAgent {
             if (map.getCharactersSize() == 0) {
                 clearMap(map, false);
                 c.changeMap(map, map.getPortal(0));
-                map.respawn(true, System.currentTimeMillis());
+                map.OnRespawn(true, System.currentTimeMillis());
                 return true;
             }
         }
@@ -67,7 +67,7 @@ public class Event_DojoAgent {
                 c.updateInfoQuest(7214, "15");
                 c.updateInfoQuest(7215, "stage=" + (thisStage + 1) + ";type=1;token=3");
                 c.updateInfoQuest(7215, "stage=" + (thisStage + 1) + ";type=1;token=3");
-                map.respawn(true, System.currentTimeMillis());
+                map.OnRespawn(true, System.currentTimeMillis());
                 return true;
             }
         }

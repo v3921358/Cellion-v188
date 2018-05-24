@@ -5794,6 +5794,22 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         SendPacket(OnLoadAccountIDOfCharacterFriendResult(getBuddylist()));
     }
     
+    /**
+     * OnAggrovateNearby
+     * @author Mazen Massoud
+     * @purpose Aggro nearby monsters surrounding the player.
+     */
+    public void OnMonsterAggressionRequest() {
+        Mob pAggro;
+        final List<MapleMapObject> aMobsToAggro = getMap().getMapObjectsInRange(getPosition(), 400000, Arrays.asList(MapleMapObjectType.MONSTER));
+        for (MapleMapObject pObject : aMobsToAggro) {
+            pAggro = (Mob) pObject;
+            pAggro.setController(this);
+            pAggro.setControllerHasAggro(true);
+            controlMonster(pAggro, true);
+        }
+    }
+    
     /*
      *  Mastery Book Handling
      *  @author Mazen Massoud

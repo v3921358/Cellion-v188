@@ -109,10 +109,8 @@ public class ServerConstants {
     public static final boolean BUFFED_BOSSES = true; //Buffs the damage resistance on certain bosses to make them more challenging.
     
     /*Spawn Rate Configuration*/
-    public static final boolean MODIFY_SPAWN_RATE = true; //Enables spawn rate multiplier.
-    public static final float SPAWN_RATE_MULTIPLIER = 3.00F; //Multipy the spawn rate globally by this variable.
-    public static final boolean CUSTOM_MAP_BUFFED_SPAWN = true; // Enables custom spawn rate increase on some maps to improve player gameplay experience.
-    public static final float CUSTOM_MAP_BUFFED_SPAWN_RATE = 4.45F; //Multiply the custom buffed maps spawn rate by this variable.
+    public static final boolean MODIFY_GLOBAL_SPAWN_RATE = true; //Enables spawn rate multiplier.
+    public static final float SPAWN_RATE_MULTIPLIER = 3.50F; //Multipy the spawn rate globally by this variable.
 
     /*Pet Configuration*/
     public static final boolean AUTO_PET_LOOT = true; //Enables automatic pet loot whenever a pet is equipped.
