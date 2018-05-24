@@ -4635,7 +4635,7 @@ public class CField {
                     break;
             }
 
-            oPacket.Fill(0, 69);//I really can't be fucked rn..
+            oPacket.Fill(0, 59);//I really can't be fucked rn..
 
             return oPacket;
         }
@@ -4749,7 +4749,7 @@ DC 05 00 00  // floating value
             oPacket.EncodeByte(UserEffectCodes.IncDecHPEffect_EX.getEffectId());
             oPacket.EncodeInt(amount);
 
-            oPacket.Fill(0, 19); // Avoid DC
+            oPacket.Fill(0, 39); // Avoid DC
 
             return oPacket;
         }
@@ -4832,7 +4832,7 @@ DC 05 00 00  // floating value
             if (skillid == 30001062) {
                 oPacket.EncodeInt(0);
             }
-            oPacket.Fill(0, 10);
+            oPacket.Fill(0, 19);
 
             return oPacket;
         }

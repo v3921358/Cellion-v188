@@ -5313,10 +5313,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         level++;
         
         /*Character Stat Distribution*/
+        int nSP = 3;                                                                        // SP Gain
+        boolean bDoubleSP = false;                                                          // Double SP Bool
         final Map<Stat, Long> pStat = new EnumMap<>(Stat.class);
-        int nMaxHP = stats.getMaxHp() + calculateFlatHPGain(); // Flat HP Gain
-        int nMaxMP = stats.getMaxMp() + calculateFlatMPGain(); // Flat MP Gain
-        int nSP;
+        int nMaxHP = stats.getMaxHp() + calculateFlatHPGain();                              // Flat HP Gain
+        int nMaxMP = stats.getMaxMp() + calculateFlatMPGain();                              // Flat MP Gain
         
         if (ServerConstants.INCREASED_HP_GAIN) nMaxHP += Randomizer.rand(40, 65);           // Bonus HP Gain for lower need of HP washing.
         
@@ -5337,37 +5338,48 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else {
             remainingAp += 5;
         }
+       
+        /*Double Skill Point Check*/
+       /*Check if players should gain double SP this level up.*/
+        switch (Utility.getLastDigit(level)) {
+            case 0:
+            case 3:
+            case 6:
+            case 9:
+                bDoubleSP = true;
+                break;
+        }
         
         /*Skill Point Distribtuion*/
        /*Automatically assigns to the job they're supposed to be, so no missed out SP.*/
         if (GameConstants.isZero(job)) {
-            OnGainSP(3, 0); // Alpha
-            OnGainSP(3, 1); // Beta
+            OnGainSP(nSP, 0); // Alpha
+            OnGainSP(nSP, 1); // Beta
         } else if (GameConstants.isBeastTamer(job)) {
-            OnGainSP(3);
+            OnGainSP(nSP);
         } else if (GameConstants.isDualBlade(job)) {
             if (level >= 100) {
-                OnGainSP(3, 5);
+                OnGainSP(bDoubleSP ? (nSP * 2) : nSP, 5);
             } else if (level >= 60) {
-                OnGainSP(3, 4);
+                OnGainSP(nSP, 4);
             } else if (level >= 45) {
-                OnGainSP(3, 3);
+                OnGainSP(nSP, 3);
             } else if (level >= 30) {
-                OnGainSP(3, 2);
+                OnGainSP(nSP, 2);
             } else if (level >= 20) {
-                OnGainSP(3, 1);
+                OnGainSP(nSP, 1);
             } else {
-                OnGainSP(3, 0);
+                OnGainSP(nSP, 0);
             }
         } else {
             if (level >= 100) {
-                OnGainSP(3, 3);
+                OnGainSP(bDoubleSP ? (nSP * 2) : nSP, 3);
             } else if (level >= 60) {
-                OnGainSP(3, 2);
+                OnGainSP(nSP, 2);
             } else if (level >= 30) {
-                OnGainSP(3, 1);
+                OnGainSP(nSP, 1);
             } else {
-                OnGainSP(3, 0);
+                OnGainSP(nSP, 0);
             }
         }
         
@@ -5416,7 +5428,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         /*Update Skills*/
         addLevelSkills();
         hyperSkillRequest();
-        handleResolutionTime();
         
         /*Update Rewards*/
         userRewardRequest(level);
@@ -5425,6 +5436,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (GameConstants.isZero(job)) {
             checkZeroWeapon();
             checkZeroTranscendent();
+            handleResolutionTime();
         }
         
         /*Max Level Announcement*/

@@ -29,8 +29,8 @@ function action(mode, type, selection) {
 			}
 			switch(selection) {
 				case 0: // Solo
-					if (cm.getPlayerCount(401060200) == 0) {
-						if (cm.getPlayer().canAttemptBoss("MAGNUS")) {
+					if (!cm.getPlayerCount(401060200) == 0) {
+						if (!cm.getPlayer().canAttemptBoss("MAGNUS")) {
 							cm.getPlayer().setBossAttempt("MAGNUS");
 							cm.resetMap(401060200);
 							cm.warp(401060200, 0);

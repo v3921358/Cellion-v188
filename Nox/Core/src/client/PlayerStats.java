@@ -1589,7 +1589,7 @@ public class PlayerStats implements Serializable {
         pSkill = SkillFactory.getSkill(Mercedes.ELVEN_BLESSING_1);
         nSLV = pPlayer.getSkillLevel(pSkill);
         if (nSLV >0) {
-            this.expMod_ElveBlessing += pSkill.getEffect(nSLV).getX() / 100f;
+            this.expMod_ElveBlessing += pSkill.getEffect(nSLV).getEXPRate()/ 100f;
         }
         if (pPlayer.getBuffedValue(CharacterTemporaryStat.BullsEye) != null) {
             crit_rate += pSkill.getEffect(nSLV).getX();

@@ -789,14 +789,14 @@ public class StatEffect implements Serializable {
                 applyfrom.addCooldown(sourceid, System.currentTimeMillis(), getCooldown(applyfrom));
                 applyfrom.getMap().broadcastPacket(CField.teslaTriangle(applyfrom.getId(), count.get(0), count.get(1), count.get(2)));
             } else if (sourceid == NightWalker.SHADOW_ILLUSION) {
-                final Summon illusion = new Summon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
+                /*final Summon illusion = new Summon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
                 final Summon illusion2 = new Summon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
                 illusion.setPosition(pos);
                 illusion2.setPosition(pos);
                 applyfrom.getMap().spawnSummon(illusion);
                 applyfrom.getMap().spawnSummon(illusion2);
                 applyfrom.getSummons().put(14121055, illusion);
-                applyfrom.getSummons().put(14121056, illusion2);
+                applyfrom.getSummons().put(14121056, illusion2);*/
             } else if (sourceid == NightWalker.SHADOW_BAT) {
                 final Summon bat = new Summon(applyfrom, this, applyfrom.getTruePosition(), summonMovementType, newDuration);
                 bat.setPosition(pos);

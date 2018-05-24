@@ -805,7 +805,7 @@ public class BuffPacket {
         //oPacket.Encode(1);
         oPacket.EncodeByte(0);
         //oPacket.Encode(1);
-        oPacket.Fill(0, 99);
+        oPacket.Fill(0, 350);
         //System.out.println(HexTool.toString(oPacket.getPacket()));
         return oPacket;
     }
@@ -964,7 +964,9 @@ public class BuffPacket {
         oPacket.EncodeByte(1);
         oPacket.EncodeByte(1);
         oPacket.EncodeByte(0);//v112
-        oPacket.Fill(0, 20);
+        
+        oPacket.Fill(0, 69); // For now, missing some data for boss debuffs I think. -Mazen
+        
         return oPacket;
     }
 

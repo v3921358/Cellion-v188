@@ -119,6 +119,15 @@ public class Utility {
     public static boolean isNumber(String sString) {
         return sString.matches("-?\\d+(\\.\\d+)?");
     }
+    
+    /**
+     * Get Last Digit of a Number
+     * @param nNumber
+     * @return 
+     */
+    public static int getLastDigit(int nNumber) { 
+        return nNumber % 10; 
+    }
 
     /**
      * Remove Buff from Player's Map

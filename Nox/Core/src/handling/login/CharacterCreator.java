@@ -4,11 +4,12 @@ import client.*;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
+import constants.GameConstants;
 import constants.JobConstants;
 import constants.ServerConstants;
 import constants.skills.Aran;
 import constants.skills.DanceMoves;
-import constants.skills.Hayato;
+import constants.skills.Global;
 import constants.skills.Kaiser;
 import constants.skills.Shade;
 import constants.skills.Xenon;
@@ -20,6 +21,7 @@ import server.MapleItemInformationProvider;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CLogin;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,10 +63,10 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
         int[][] nGuideBookCollection = new int[][]{{4161001, 0}, {4161047, 1}, {4161048, 2000}, {4161052, 2001}, {4161054, 3}, {4161079, 2002}};
         int nGuideBook = 0;
         int nIndex = 0;
-        User pNewCharacter = User.getDefault(c, pJob);
+        User oNewCharacter = User.getDefault(c, pJob);
         int nCharacterPos = c.loadCharacters(c.getWorld()).size();
-        final MapleItemInformationProvider pItemProvider = MapleItemInformationProvider.getInstance();
-        final MapleInventory pEquip = pNewCharacter.getInventory(MapleInventoryType.EQUIPPED);
+        final MapleItemInformationProvider oItemProvider = MapleItemInformationProvider.getInstance();
+        final MapleInventory pEquip = oNewCharacter.getInventory(MapleInventoryType.EQUIPPED);
         Item pItem;
 
         if (pJob == null) {
@@ -81,25 +83,40 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             }
         }
 
-        /**
-         * Receive Appearance Data from Client
-         */
-        if (pJob.hasHairColor()) nHairColour = iPacket.DecodeInt();
-        if (pJob.hasSkinColor()) iPacket.DecodeInt();
-        if (pJob.hasFaceMark()) nFaceMark = iPacket.DecodeInt();
-        if (pJob.hasEars()) nEars = iPacket.DecodeInt();
-        if (pJob.hasTail()) nTail = iPacket.DecodeInt();
-        
-        /**
-         * Receive Equipment Data from Client
-         */
-        if (pJob.hasHat()) nHat = iPacket.DecodeInt();
+        if (pJob.hasHairColor()) {
+            nHairColour = iPacket.DecodeInt();
+        }
+        if (pJob.hasSkinColor()) {
+            iPacket.DecodeInt();
+        }
+        if (pJob.hasFaceMark()) {
+            nFaceMark = iPacket.DecodeInt();
+        }
+        if (pJob.hasEars()) {
+            nEars = iPacket.DecodeInt();
+        }
+        if (pJob.hasTail()) {
+            nTail = iPacket.DecodeInt();
+        }
+        if (pJob.hasHat()) {
+            nHat = iPacket.DecodeInt();
+        }
+
         nTop = iPacket.DecodeInt();
-        if (pJob.hasBottom()) nBottom = iPacket.DecodeInt();
-        if (pJob.hasCape()) nCape = iPacket.DecodeInt();
+
+        if (pJob.hasBottom()) {
+            nBottom = iPacket.DecodeInt();
+        }
+        if (pJob.hasCape()) {
+            nCape = iPacket.DecodeInt();
+        }
+
         nShoes = iPacket.DecodeInt();
         nWeapon = iPacket.DecodeInt();
-        if (iPacket.GetRemainder() >= 4) nShield = iPacket.DecodeInt();
+
+        if (iPacket.GetRemainder() >= 4) {
+            nShield = iPacket.DecodeInt();
+        }
 
         int[] nItems = new int[]{nFace, nHair, nHairColour, bNoSkin ? -1 : nSkin, nFaceMark, nEars, nTail, nHat, nTop, nBottom, nCape, nShoes, nWeapon, nShield};
         if (pJob != LoginInformationProvider.JobType.BeastTamer) {
@@ -129,10 +146,15 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
          * Brown 36487 (36494 color : 7)
          * Missing Orange (36489 color : 2)
          **/
-        if (nHairColour < 0) nHairColour = 0;
-        if (pJob != LoginInformationProvider.JobType.Mihile) nHair += nHairColour;
-        if (nFaceMark < 0) nFaceMark = 0;
-        
+        if (nHairColour < 0) {
+            nHairColour = 0;
+        }
+        if (pJob != LoginInformationProvider.JobType.Mihile) {
+            nHair += nHairColour;
+        }
+        if (nFaceMark < 0) {
+            nFaceMark = 0;
+        }
         for (int i = 0; i < wrongEars.length; i++) {
             if (nEars == wrongEars[i]) {
                 nEars = correctEars[i];
@@ -143,25 +165,80 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
                 nTail = correctTails[i];
             }
         }
-        
-        if (nEars < 0) nEars = 0;
-        if (nTail < 0) nTail = 0;
+        if (nEars < 0) {
+            nEars = 0;
+        }
+        if (nTail < 0) {
+            nTail = 0;
+        }
 
-        pNewCharacter.setWorld((byte) c.getWorld());
-        pNewCharacter.setFace(nFace);
-        pNewCharacter.setCharListPosition(nCharacterPos);
-        pNewCharacter.setHair(nHair);
-        pNewCharacter.setZeroBetaHair(37623);
-        pNewCharacter.setZeroBetaFace(21290);
-        pNewCharacter.setAngelicDressupFace(21173);
-        pNewCharacter.setAngelicDressupHair(37141);
-        pNewCharacter.setAngelicDressupSuit(5010094);
-        pNewCharacter.setGender(nGender);
-        pNewCharacter.setName(name);
-        pNewCharacter.setSkinColor(nSkin);
-        pNewCharacter.setFaceMarking(nFaceMark);
-        pNewCharacter.setEars(nEars);
-        pNewCharacter.setTail(nTail);
+        oNewCharacter.setWorld((byte) c.getWorld());
+        oNewCharacter.setFace(nFace);
+        oNewCharacter.setCharListPosition(nCharacterPos);
+        oNewCharacter.setHair(nHair);
+        oNewCharacter.setZeroBetaHair(37623);
+        oNewCharacter.setZeroBetaFace(21290);
+        oNewCharacter.setAngelicDressupFace(21173);
+        oNewCharacter.setAngelicDressupHair(37141);
+        oNewCharacter.setAngelicDressupSuit(5010094);
+        oNewCharacter.setGender(nGender);
+        oNewCharacter.setName(name);
+        oNewCharacter.setSkinColor(nSkin);
+        oNewCharacter.setFaceMarking(nFaceMark);
+        oNewCharacter.setEars(nEars);
+        oNewCharacter.setTail(nTail);
+
+        switch (pJob) {
+            case AngelicBuster:
+                oNewCharacter.setJob((short) 6500);
+                oNewCharacter.setLevel((short) 10);
+                oNewCharacter.getStat().dex = 68;
+                oNewCharacter.getStat().maxhp = 1000;
+                oNewCharacter.getStat().hp = 1000;
+                oNewCharacter.setRemainingSp(3);
+                break;
+            case Zero:
+                oNewCharacter.setLevel((short) 100);
+                oNewCharacter.getStat().str = 518;
+                oNewCharacter.getStat().maxhp = 6910;
+                oNewCharacter.getStat().hp = 6910;
+                oNewCharacter.getStat().maxmp = 100;
+                oNewCharacter.getStat().mp = 100;
+                oNewCharacter.setRemainingSp(3, 0); // Alpha
+                oNewCharacter.setRemainingSp(3, 1); // Beta
+                break;
+            case Kinesis:
+                oNewCharacter.setLevel((short) 10);
+                oNewCharacter.getStat().str = 4;
+                oNewCharacter.getStat().int_ = 52;
+                oNewCharacter.getStat().maxhp = 374;
+                oNewCharacter.getStat().hp = 374;
+                oNewCharacter.getStat().maxmp = 5; // PP
+                oNewCharacter.getStat().mp = 5;
+                break;
+            case Luminous:
+                oNewCharacter.setJob((short) 2700);
+                oNewCharacter.setLevel((short) 10);
+                oNewCharacter.getStat().str = 4;
+                oNewCharacter.getStat().int_ = 57;
+                oNewCharacter.getStat().maxhp = 500;
+                oNewCharacter.getStat().hp = 500;
+                oNewCharacter.getStat().maxmp = 1000;
+                oNewCharacter.getStat().mp = 1000;
+                oNewCharacter.setRemainingSp(3);
+                break;
+            case BeastTamer:
+                oNewCharacter.setLevel((short) 10);
+                oNewCharacter.getStat().maxhp = 567;
+                oNewCharacter.getStat().hp = 551;
+                oNewCharacter.getStat().maxmp = 270;
+                oNewCharacter.getStat().mp = 263;
+                oNewCharacter.setRemainingAp(45);
+                oNewCharacter.setRemainingSp(3, 0);
+                break;
+            default:
+                break;
+        }
 
         /* Reference
          * -1 Hat | -2 Face | -3 Eye acc | -4 Ear acc | -5 Topwear 
@@ -170,28 +247,16 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
         int[][] equips = new int[][]{{nHat, -1}, {nTop, -5}, {nBottom, -6}, {nCape, -9}, {nShoes, -7}, {nWeapon, -11}, {nShield, -10}};
         for (int[] i : equips) {
             if (i[0] > 0) {
-                pItem = pItemProvider.getEquipById(i[0]);
+                pItem = oItemProvider.getEquipById(i[0]);
                 pItem.setPosition((byte) i[1]);
                 pItem.setGMLog("Character Creation");
                 pEquip.addFromDB(pItem);
             }
         }
         if (pJob == LoginInformationProvider.JobType.AngelicBuster || pJob == LoginInformationProvider.JobType.Kaiser) {
-            pItem = pItemProvider.getEquipById(pJob == LoginInformationProvider.JobType.Kaiser ? 1352500 : 1352601);
+            pItem = oItemProvider.getEquipById(pJob == LoginInformationProvider.JobType.Kaiser ? 1352500 : 1352601);
             pItem.setPosition((byte) -10);
             pItem.setGMLog("Nova Shield");
-            pEquip.addFromDB(pItem);
-        }
-        if (pJob == LoginInformationProvider.JobType.AngelicBuster) {
-            pItem = pItemProvider.getEquipById(1352600);
-            pItem.setPosition((byte) -10);
-            pItem.setGMLog("Secondary Weapon");
-            pEquip.addFromDB(pItem);
-        }
-        if (pJob == LoginInformationProvider.JobType.Kinesis) {
-            pItem = pItemProvider.getEquipById(1353200);
-            pItem.setPosition((byte) -10);
-            pItem.setGMLog("Chess Piece");
             pEquip.addFromDB(pItem);
         }
 
@@ -215,17 +280,17 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             {100000279, 100000282, 100001263, 100001264, 100001265, 100001266, 10000168}, //Zero (Removed 100001262 - Temple Recall, don't want it used yet)
             {20051284, 20050285, 20050286}, // Shade
             {228, 80001151}, //Jett - core aura doesn't work?
-            {Hayato.QUICK_DRAW, Hayato.SUMMER_RAIN, Hayato.MASTER_OF_BLADES, Hayato.SHIMADA_HEART}, //Hayato
+            {}, //Hayato
             {40020000, 40020001, 40020002, 40020109}, //Kanna
-            {80001152, 110001251, 110001510, 110001501, 110001502, 110001503, 110001504}, //Beast Tamer
+            {80001152, 110001251}, //Beast Tamer
             {80001152}, //Pink Bean
             {} //Kinesis
-            /*Not sure which of these we need to add
+        /* Not sure which of these we need to add
              140001289 - Psychic Attack
              140001290 - Return
              140000291 - ESP
-             140000292 - Judgment*/
-        };
+             140000292 - Judgment
+         */};
 
         if (skills[pJob.getType()].length > 0) {
             final Map<Skill, SkillEntry> mSkill = new HashMap<>();
@@ -241,7 +306,7 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
                 }
             }
             if (pJob == LoginInformationProvider.JobType.Aran) {
-                mSkill.put(SkillFactory.getSkill(Aran.COMBAT_STEP), new SkillEntry((byte) 1, (byte) 1, -1)); 
+                mSkill.put(SkillFactory.getSkill(Aran.COMBAT_STEP), new SkillEntry((byte) 1, (byte) 1, -1)); // Aran Flash Jump
             }
             if (pJob == LoginInformationProvider.JobType.Zero) {
                 // Shared Zero Skills - All except Resolton Time, which we'll handle in MapleCharacter levelUp().
@@ -252,6 +317,7 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
                 mSkill.put(SkillFactory.getSkill(Zero.BURST_JUMP), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Zero.BURST_STEP), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Zero.RHINNES_PROTECTION), new SkillEntry((byte) 1, (byte) 1, -1));
+                // Alpha/Beta Skills
                 mSkill.put(SkillFactory.getSkill(Zero.HEAVY_SWORD_MASTERY), new SkillEntry((byte) 8, (byte) 10, -1));
                 mSkill.put(SkillFactory.getSkill(Zero.LONG_SWORD_MASTERY), new SkillEntry((byte) 8, (byte) 10, -1));
             }
@@ -260,11 +326,6 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
                 mSkill.put(SkillFactory.getSkill(110001512), new SkillEntry((byte) 0, (byte) 5, -1));
                 mSkill.put(SkillFactory.getSkill(110000513), new SkillEntry((byte) 0, (byte) 30, -1));
                 mSkill.put(SkillFactory.getSkill(110000515), new SkillEntry((byte) 0, (byte) 10, -1));
-                mSkill.put(SkillFactory.getSkill(110001510), new SkillEntry((byte) 1, (byte) 1, -1));
-                mSkill.put(SkillFactory.getSkill(110001501), new SkillEntry((byte) 1, (byte) 1, -1));
-                mSkill.put(SkillFactory.getSkill(110001502), new SkillEntry((byte) 1, (byte) 1, -1));
-                mSkill.put(SkillFactory.getSkill(110001503), new SkillEntry((byte) 1, (byte) 1, -1));
-                mSkill.put(SkillFactory.getSkill(110001504), new SkillEntry((byte) 1, (byte) 1, -1));
             }
             if (pJob == LoginInformationProvider.JobType.Resistance) { // Mechanic (Hack Fix)
                 mSkill.put(SkillFactory.getSkill(35120000), new SkillEntry((byte) 1, (byte) 10, -1));
@@ -287,91 +348,112 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
                 mSkill.put(SkillFactory.getSkill(Shade.SPIRIT_BOND_1), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Shade.CLOSE_CALL), new SkillEntry((byte) 1, (byte) 1, -1));
             }
-            if (pJob == LoginInformationProvider.JobType.Hayato) {
-                mSkill.put(SkillFactory.getSkill(Hayato.QUICK_DRAW), new SkillEntry((byte) 1, (byte) 1, -1));
-                mSkill.put(SkillFactory.getSkill(Hayato.SUMMER_RAIN), new SkillEntry((byte) 1, (byte) 1, -1));
-                mSkill.put(SkillFactory.getSkill(Hayato.MASTER_OF_BLADES), new SkillEntry((byte) 1, (byte) 1, -1));
-                mSkill.put(SkillFactory.getSkill(Hayato.SHIMADA_HEART), new SkillEntry((byte) 1, (byte) 1, -1));
-            }
 
             mSkill.put(SkillFactory.getSkill(80001436), new SkillEntry((byte) 1, (byte) 1, -1));// Actions Skill (Allows Dancing)
             for (DanceMoves moves : DanceMoves.values()) {
                 mSkill.put(SkillFactory.getSkill(moves.getSkillid()), new SkillEntry((byte) 1, (byte) 1, -1));
             }
-            pNewCharacter.changeSkillLevelSkip(mSkill, false);
+            oNewCharacter.changeSkillLevelSkip(mSkill, false);
         }
 
         for (int[] i : nGuideBookCollection) {
-            if (pNewCharacter.getJob() == i[1]) {
+            if (oNewCharacter.getJob() == i[1]) {
                 nGuideBook = i[0];
-            } else if (pNewCharacter.getJob() / 1000 == i[1]) {
+            } else if (oNewCharacter.getJob() / 1000 == i[1]) {
                 nGuideBook = i[0];
             }
         }
-        
-        if (nGuideBook > 0) pNewCharacter.getInventory(MapleInventoryType.ETC).addItem(new Item(nGuideBook, (byte) 0, (short) 1, (byte) 0));
-
-        if (pJob == LoginInformationProvider.JobType.Zero) {
-            pNewCharacter.setLevel((short) 100);
-            pNewCharacter.getStat().maxhp = 7000;
-            pNewCharacter.getStat().hp = 7000;
-            pNewCharacter.getStat().str = 500;
-            pNewCharacter.setRemainingSp(5, 0); // Alpha
-            pNewCharacter.setRemainingSp(5, 1); // Beta
-        } else {
-            if (pJob == LoginInformationProvider.JobType.Kinesis) {
-                pNewCharacter.getStat().maxmp = 5;
-                pNewCharacter.getStat().mp = 5;
-            } else {
-                pNewCharacter.getStat().maxmp = 300;
-                pNewCharacter.getStat().mp = 300;
-            }
-            pNewCharacter.setLevel((short) 10);
-            pNewCharacter.getStat().maxhp = 300;
-            pNewCharacter.getStat().hp = 300;
-            pNewCharacter.setRemainingAp(50);
-            pNewCharacter.setRemainingSp(5);
+        if (nGuideBook > 0) {
+            oNewCharacter.getInventory(MapleInventoryType.ETC).addItem(new Item(nGuideBook, (byte) 0, (short) 1, (byte) 0));
         }
 
+        // Balance changes and custom tutorial preparation.
         if (ServerConstants.UNIVERSAL_START) {
             switch (pJob) {
                 case DualBlade:
-                    pNewCharacter.setJob((short) 430);
+                    oNewCharacter.setJob((short) 430);
+                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.getStat().maxmp = 300;
+                    oNewCharacter.getStat().mp = 300;
+                    oNewCharacter.setRemainingAp(40);
+                    oNewCharacter.setRemainingSp(35, 0);
                     break;
                 case Cannoneer:
-                    pNewCharacter.setJob((short) 501);
+                    oNewCharacter.setJob((short) 501);
+                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.getStat().maxmp = 230;
+                    oNewCharacter.getStat().mp = 230;
+                    oNewCharacter.setRemainingAp(40);
                     break;
                 case Jett:
-                    pNewCharacter.setJob((short) 508);
-                    break;
-                case Phantom:
-                    pNewCharacter.setJob((short) 2400);
-                    break;
-                case Shade:
-                    pNewCharacter.setJob((short) 2500);
-                    break;
-                case Luminous:
-                    pNewCharacter.setJob((short) 2700);
-                    break;
-                case Mihile:
-                    pNewCharacter.setJob((short) 5100);
-                    break;
-                case Kaiser:
-                    pNewCharacter.setJob((short) 6100); 
+                    oNewCharacter.setJob((short) 508);
+                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.getStat().maxmp = 200;
+                    oNewCharacter.getStat().mp = 200;
+                    oNewCharacter.setRemainingAp(40);
                     break;
                 case AngelicBuster:
-                    pNewCharacter.setJob((short) 6500);
+                    oNewCharacter.setJob((short) 6500);
+                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.getStat().dex = 68;
+                    oNewCharacter.getStat().maxhp = 1000;
+                    oNewCharacter.getStat().hp = 1000;
+                    oNewCharacter.setRemainingSp(5);
+                    break;
+                case Zero:
+                    oNewCharacter.setLevel((short) 100);
+                    oNewCharacter.getStat().str = 518;
+                    oNewCharacter.getStat().maxhp = 6910;
+                    oNewCharacter.getStat().hp = 6910;
+                    oNewCharacter.getStat().maxmp = 100;
+                    oNewCharacter.getStat().mp = 100;
+                    oNewCharacter.setRemainingSp(5, 0); //alpha
+                    oNewCharacter.setRemainingSp(5, 1); //beta
                     break;
                 case Kinesis:
-                    pNewCharacter.setJob((short) 14200);
+                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.getStat().str = 4;
+                    oNewCharacter.getStat().int_ = 52;
+                    oNewCharacter.getStat().maxhp = 374;
+                    oNewCharacter.getStat().hp = 374;
+                    oNewCharacter.getStat().maxmp = 5;
+                    oNewCharacter.getStat().mp = 5;
+                    oNewCharacter.setRemainingSp(5);
+                    break;
+                case Luminous:
+                    oNewCharacter.setJob((short) 2700);
+                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.getStat().str = 4;
+                    oNewCharacter.getStat().int_ = 57;
+                    oNewCharacter.getStat().maxhp = 500;
+                    oNewCharacter.getStat().hp = 500;
+                    oNewCharacter.getStat().maxmp = 1000;
+                    oNewCharacter.getStat().mp = 1000;
+                    oNewCharacter.setRemainingSp(5);
+                    break;
+                case BeastTamer:
+                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.getStat().maxhp = 567;
+                    oNewCharacter.getStat().hp = 551;
+                    oNewCharacter.getStat().maxmp = 270;
+                    oNewCharacter.getStat().mp = 263;
+                    oNewCharacter.setRemainingAp(45);
+                    oNewCharacter.setRemainingSp(5, 0);
+                    break;
+                default:
+                    oNewCharacter.setLevel((short) 9);
+                    oNewCharacter.setRemainingAp(40);
+                    oNewCharacter.setRemainingSp(5, 0);
+                    oNewCharacter.getStat().maxmp = 350;
+                    oNewCharacter.getStat().mp = 350;
                     break;
             }
         }
 
         // Save Character
-        User.saveNewCharToDB(pNewCharacter, pJob, subcategory);
-        c.SendPacket(CLogin.addNewCharEntry(pNewCharacter, 0));
-        c.createdChar(pNewCharacter.getId());
-        pNewCharacter.newCharRewards();
+        User.saveNewCharToDB(oNewCharacter, pJob, subcategory);
+        c.SendPacket(CLogin.addNewCharEntry(oNewCharacter, 0));
+        c.createdChar(oNewCharacter.getId());
+        oNewCharacter.newCharRewards();
     }
 }

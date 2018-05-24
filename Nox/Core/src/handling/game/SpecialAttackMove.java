@@ -2,13 +2,11 @@ package handling.game;
 
 import client.*;
 import server.maps.objects.StopForceAtom;
-import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.skills.*;
 import client.jobs.Explorer.*;
 import client.jobs.Hero.*;
 import client.jobs.Kinesis.KinesisHandler;
-import client.jobs.Nova;
 import client.jobs.Resistance.*;
 import net.InPacket;
 import net.ProcessPacket;
@@ -17,8 +15,6 @@ import server.Randomizer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
 import server.life.Mob;
-import server.maps.FieldLimitType;
-import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
@@ -28,26 +24,25 @@ import tools.packet.*;
 import tools.packet.CField.EffectPacket.UserEffectCodes;
 
 import java.awt.*;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import org.w3c.dom.css.Rect;
 import server.StatInfo;
 import server.Timer;
-import server.Timer.MapTimer;
 import server.life.mob.MobStat;
 import server.life.mob.MobTemporaryStat;
 import server.maps.SummonMovementType;
 import server.maps.objects.Summon;
 import tools.packet.JobPacket.BeastTamerPacket;
-import tools.packet.JobPacket.BlasterPacket;
-import tools.packet.JobPacket.HayatoPacket;
 import tools.packet.BuffPacket;
 import tools.packet.CField.SummonPacket;
 
@@ -315,13 +310,6 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             case NightWalker.DARK_SERVANT: {
                 pEffect.statups.put(CharacterTemporaryStat.ShadowServant, 1);
                 pEffect.info.put(StatInfo.time, 180000);
-                break;
-            }
-            case NightWalker.SHADOW_ILLUSION:
-            case NightWalker.SHADOW_ILLUSION_1:
-            case NightWalker.SHADOW_ILLUSION_2: {
-                pEffect.statups.put(CharacterTemporaryStat.ShadowIllusion, 1);
-                pEffect.info.put(StatInfo.time, 30000);
                 break;
             }
             case Kaiser.FINAL_FORM:
@@ -706,7 +694,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                     c.write(CWvsContext.enableActions());
                     return;
                 }*/
-                pEffect.applyTo(c.getPlayer(), pPOS);
+                pEffect.applyTo(pPlayer, pPOS);
             }
         }
 
