@@ -1848,7 +1848,7 @@ public class World {
         if (map.getCharactersSize() > 0 || map.getId() == 931000500) { //jaira hack
             // Respawns
             if (map.canSpawn(currentTime)) {
-                map.respawn(false, currentTime);
+                map.OnRespawn(false, currentTime);
                 map.respawnRune(false);
             }
 

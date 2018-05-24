@@ -44,7 +44,7 @@ public class Event_PyramidSubway {
                     energybar -= (c.getParty() != null && c.getParty().getMembers().size() > 1 ? 5 : 2);
                     if (broaded) {
                         //broadcastUpdate(c);
-                        c.getMap().respawn(true, System.currentTimeMillis());
+                        c.getMap().OnRespawn(true, System.currentTimeMillis());
                     } else {
                         broaded = true;
                     }

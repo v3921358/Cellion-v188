@@ -67,28 +67,6 @@ public class GameConstants {
     // Cash Weapon Item IDs, used for addCharLook packet. Hack fix for now. -Mazen
     public static final int aCashWeapons[] = {1702696, 1702716, 1702709, 1702701, 1702475, 1702469, 1702375, 1702687, 1702680, 1702682, 1702649, 1702651, 1702645, 1702643, 1702632, 1702634, 1702395, 1702399, 1702457, 1702467, 1702436, 1702480, 1702565, 1702613, 1702586, 1702624, 1702653, 1702224, 1702235, 1702374, 1702409, 1702556, 1702585, 1702526, 1702710};
 
-    /**
-     * Custom Map Spawn Rate Buffs
-     *
-     * @note Requires ServerConstants boolean to be enabled.
-     */
-    public static boolean isCustomMapForBuffedSpawn(int nMapID) {
-        switch (nMapID) {
-            case 272000300: // Leafre in Flames 3 
-            case 860000032: // Dangerous Deep Sea 3 
-            case 240093100: // Inside the Stone Colossus 2
-            case 273040100: // Forsaken Excavation Site 2
-            case 211060830: // Very Tall Castle Walls
-            case 106031504: // Galley    
-            case 120040300: // Beachgrass Dunes 3 
-            case 551030000: // Fantasy Theme Park 3
-            case 105200900: // Neglected Garden
-                return true;
-            default:
-                return false;
-        }
-    }
-
     public static boolean GetAdvancedAttackCountHyperSkill(int nSkillID) {
         switch (nSkillID) {
             case Shade.SPIRIT_CLAW:

@@ -85,6 +85,10 @@ public class Mob extends AbstractLoadedMapleLife {
         forcedMobStat = new ForcedMobStat();
         temporaryStat = new MobTemporaryStat(this);
     }
+    
+    public ForcedMobStat getForcedMobStat() {
+        return forcedMobStat;
+    }
 
     private void initWithStats(MonsterStats stats) {
         setStance(5);

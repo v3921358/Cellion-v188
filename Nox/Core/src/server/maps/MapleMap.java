@@ -3182,7 +3182,7 @@ public final class MapleMap {
         cancelSquadSchedule(true);
         environment.clear();
         if (respawn) {
-            respawn(true, System.currentTimeMillis());
+            OnRespawn(true, System.currentTimeMillis());
         }
     }
 
@@ -3349,87 +3349,78 @@ public final class MapleMap {
     /**
      * Respawns the monsters of this field. This function also updates
      *
-     * @param force
-     * @param currentTime
+     * @param bForce
+     * @param tCurrent Current time.
      */
-    public void respawn(boolean force, final long currentTime) {
-        final int spawnedSize = spawnedMonstersOnMap.get();
+    public void OnRespawn(boolean bForce, final long tCurrent) {
+        final int nSpawnedSize = spawnedMonstersOnMap.get();
+        
+        if (bForce) {
+            int nShouldSpawn = maxRegularSpawn.get() - nSpawnedSize;
 
-        // System.out.printf("SpawnedMonsterOnMap: (%s), MaxRegularSpawn: (%s), MaxRegularSpawnAtOnce: (%s), \r\n", spawnedMonstersOnMap.get(), maxRegularSpawn.get(), smr.maxRegularSpawnAtOnce);
-        if (force) {
-            int numShouldSpawn = maxRegularSpawn.get() - spawnedSize;
+            if (nShouldSpawn > 0) {
+                for (final Spawns pSpawnPoint : bossSpawn) {
+                    pSpawnPoint.spawnMonster(this);
+                    nShouldSpawn--;
 
-            if (numShouldSpawn > 0) {
-                for (final Spawns spawnPoint : bossSpawn) {
-                    spawnPoint.spawnMonster(this);
-                    numShouldSpawn--;
-
-                    if (numShouldSpawn <= 0) {
+                    if (nShouldSpawn <= 0) {
                         return;
                     }
                 }
-                for (final Spawns spawnPoint : monsterSpawn) {
-                    spawnPoint.spawnMonster(this);
-                    numShouldSpawn--;
+                for (final Spawns pSpawnPoint : monsterSpawn) {
+                    pSpawnPoint.spawnMonster(this);
+                    nShouldSpawn--;
 
-                    if (numShouldSpawn <= 0) {
+                    if (nShouldSpawn <= 0) {
                         return;
                     }
                 }
             }
         } else {
-            int max = maxRegularSpawn.get();
-            if (smr.partyBonusR > 0) { // LHC/ Cygnus Stronghold, more player = more spawn
-                max *= 1.0f + (0.07f * (float) (this.getCharactersSize() - 1)); // 2 player = 7% more spawn, 3 = 14% and so on..
+            int nMax = maxRegularSpawn.get();
+            if (smr.partyBonusR > 0) {                                                                          // LHC/Cygnus Stronghold, More players = higher spawn rate.
+                nMax *= 1.0f + (0.07f * (float) (this.getCharactersSize() - 1));                                // 2 player = 7% more spawn, 3 = 14% and so on..
             }
 
-            float spawnRate = 1f; // TODO: Find something to do with this, such as kanna 
+            float nSpawnRate = 1f;                                                                              // Base spawn rate.
 
-            if (ServerConstants.MODIFY_SPAWN_RATE) {
-                spawnRate *= ServerConstants.SPAWN_RATE_MULTIPLIER;
-            }
+            if (ServerConstants.MODIFY_GLOBAL_SPAWN_RATE) nSpawnRate *= ServerConstants.SPAWN_RATE_MULTIPLIER;  // Adjust global spawn rate.
+            nSpawnRate *= TrainingMap.OnBalanceSpawnRate(nMax);                                                 // Adjust spawn rate for training maps.
 
-            if (ServerConstants.CUSTOM_MAP_BUFFED_SPAWN) {
-                if (GameConstants.isCustomMapForBuffedSpawn(getId())) {
-                    spawnRate *= ServerConstants.CUSTOM_MAP_BUFFED_SPAWN_RATE;
-                }
-            }
-
-            int numShouldSpawn = (int) (Math.min(smr.maxRegularSpawnAtOnce, Math.max(0, max - spawnedSize)) * spawnRate);
+            int nShouldSpawn = (int) (Math.min(smr.maxRegularSpawnAtOnce, Math.max(0, nMax - nSpawnedSize)) * nSpawnRate);
 
             if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) {
-                System.out.println("[Debug] Monster Spawn Rate (" + spawnRate + "), Amount Spawning (" + numShouldSpawn + ")");
+                System.out.printf("[Debug] SpawnedMonsterOnMap (%s), MaxRegularSpawn (%s), MaxRegularSpawnAtOnce (%s)\r\n", spawnedMonstersOnMap.get(), maxRegularSpawn.get(), smr.maxRegularSpawnAtOnce);
             }
-            // System.out.printf("SpawnedMonsterOnMap: (%s), MaxRegularSpawn: (%s), MaxRegularSpawnAtOnce: (%s), \r\n", spawnedMonstersOnMap.get(), maxRegularSpawn.get(), smr.maxRegularSpawnAtOnce);
-
-            if (numShouldSpawn > 0) {
+            
+            if (nShouldSpawn > 0) {
                 for (final Spawns spawnPoint : bossSpawn) {
-                    if (spawnPoint.shouldSpawn(currentTime, 1f)) {
+                    if (spawnPoint.shouldSpawn(tCurrent, 1f)) {
                         spawnPoint.spawnMonster(this);
-                        numShouldSpawn--;
+                        nShouldSpawn--;
 
-                        if (numShouldSpawn <= 0) {
+                        if (nShouldSpawn <= 0) {
                             return;
                         }
                     }
                 }
                 Collections.shuffle(monsterSpawn);
                 for (final Spawns spawnPoint : monsterSpawn) {
-                    if (spawnPoint.shouldSpawn(currentTime, spawnRate)) {
+                    if (spawnPoint.shouldSpawn(tCurrent, nSpawnRate)) {
                         spawnPoint.spawnMonster(this);
-                        numShouldSpawn--;
+                        nShouldSpawn--;
 
-                        if (numShouldSpawn <= 0) {
+                        if (nShouldSpawn <= 0) {
                             return;
                         }
-                        /*   } else if (!spawnPoint.getLastSpawnedMonster_IsRareMonster()
+                        /*} else if (!spawnPoint.getLastSpawnedMonster_IsRareMonster()
                             && channel.getRareMonstertracking().canSpawnRareMonster(getId(), cTime, spawnPoint.getSpawnedTime())) {
                         //make it rare here
                         spawnPoint.getLastSpawnedRealMonster().setRareMonster(true, MobConstant.RareMonsterAppearPeriod);*/
                     }
                 }
             }
-            lastRespawnTime = currentTime;
+            lastRespawnTime = tCurrent;
         }
     }
     // </editor-fold>
