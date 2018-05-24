@@ -40,6 +40,7 @@ import server.maps.objects.Reactor;
 import server.messages.GiveBuffMessage;
 import server.quest.Quest;
 import tools.Pair;
+import tools.Utility;
 import tools.packet.CField;
 import tools.packet.CField.EffectPacket;
 import tools.packet.CField.EffectPacket.UserEffectCodes;
@@ -485,7 +486,7 @@ public abstract class AbstractPlayerInteraction {
                 inv = c.getPlayer().getInventory(MapleInventoryType.USE);
                 break;
             case "ETC":
-                inv = c.getPlayer().getInventory(MapleInventoryType.SETUP);
+                inv = c.getPlayer().getInventory(MapleInventoryType.ETC);
                 break;
             case "SETUP":
                 inv = c.getPlayer().getInventory(MapleInventoryType.SETUP);
@@ -500,6 +501,42 @@ public abstract class AbstractPlayerInteraction {
         }
         String items = sb.toString();
         return items;
+    }
+
+        public String accessInventory(String sCharacter, byte invType){
+        User pPlayer = Utility.requestCharacter(sCharacter);
+        if (pPlayer == null) {
+            c.getPlayer().dropMessage(5,"There was a problem accessing the inventory of Character (" + sCharacter + ")");
+            return "";
+        }
+        MapleInventory pInv = null;
+        pInv = pPlayer.getInventory(MapleInventoryType.getByType(invType));
+        StringBuilder sb = new StringBuilder();
+        for (Item pItem : pInv.list()) {
+            sb.append("#L" + pItem.getPosition() + "##v" + pItem.getItemId() + "##t" + pItem.getItemId() + "##l \r\n");
+        }
+        String sItem = sb.toString();
+        return sItem;
+    }
+
+    public void deleteItemBySlot(String sCharacter, MapleInventoryType invType, int slot, int quantity) {
+        User pPlayer = Utility.requestCharacter(sCharacter);
+        ClientSocket targetSocket = pPlayer.getClient();
+        if (pPlayer == null) {
+            c.getPlayer().dropMessage(5,"There was a problem accessing the inventory of Character (" + sCharacter + ")");
+            return;
+        }
+        MapleInventoryManipulator.removeFromSlot(targetSocket, invType, (short) slot, (short) quantity, false); //fromDrop? change this if needed
+    }
+
+    public void deleteItemById(String sCharacter, MapleInventoryType invType, int itemId, int quantity) {
+        User pPlayer = Utility.requestCharacter(sCharacter);
+        ClientSocket targetSocket = pPlayer.getClient();
+        if (pPlayer == null) {
+            c.getPlayer().dropMessage(5,"There was a problem accessing the inventory of Character (" + sCharacter + ")");
+            return;
+        }
+        MapleInventoryManipulator.removeById(targetSocket, invType, itemId, quantity, false, false); //fromDrop? change this if needed
     }
 
     public final int getJob() {
