@@ -28,8 +28,7 @@ public class BuffedMob {
     /**
      * Buffed Mob Stat Multipliers.
      */
-    public static double LEVEL_BUFF = 1.75,
-                         HP_BUFF = 10,
+    public static double HP_BUFF = 10,
                          DEFENCE_BUFF = 2,
                          SPEED_BUFF = 2,
                          EXP_BUFF = 2,
@@ -69,7 +68,26 @@ public class BuffedMob {
      */
     public static Mob OnBuffedMobResult(Mob pMob) {
         
-        short nLV = (short) (pMob.getStats().getLevel() * LEVEL_BUFF);
+        short nLV = pMob.getStats().getLevel();
+        
+        if (nLV > 200) {
+            nLV *= 1.2;
+        } else if (nLV > 180) {
+            nLV *= 1.3;
+        } else if (nLV > 160) {
+            nLV *= 1.4;
+        } else if (nLV > 140) {
+            nLV *= 1.5;
+        } else if (nLV > 120) {
+            nLV *= 1.6;
+        } else if (nLV > 100) {
+            nLV *= 1.7;
+        } else if (nLV > 80) {
+            nLV *= 1.8;
+        } else {
+            nLV *= 2;
+        }
+        
         long nHP = (long) (pMob.getStats().getHp() * HP_BUFF); 
         long nMaxHP = (long) (pMob.getStats().getFinalMaxHp() * HP_BUFF);
         int nPhysDefence = (int) (pMob.getStats().getPhysicalDefense() * DEFENCE_BUFF);
