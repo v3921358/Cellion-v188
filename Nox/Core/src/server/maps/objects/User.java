@@ -298,8 +298,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @param pMob
      */
     public void incrementVMatrixKills(Mob pMob) {
-        if (!hasVMatrix()) {
-            if (pMob.getStats().getLevel() > 200) nMobKillsV += 1; // Lv. 200 Mob Kills
+        if (getVMatrixRequirement()) {
+            if (pMob.getStats().getLevel() > 0) nMobKillsV += 1; // Lv. 200 Mob Kills
             if (pMob.getId() == 0) nMagnusKillsV += 1;
             if (pMob.getId() == 0) nVellumKillsV += 1;
             if (pMob.getId() == 0) nCrimsonQueenKillsV += 1;
@@ -341,26 +341,23 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      */
     public void UserSaveVMatrixQuest() {
         if (!getVMatrixRequirement()) return;
-        int dwCharacterID = getId();
         try (Connection con = Database.GetConnection()) {
-            Utility.runSQL(con, "DELETE FROM bosstime WHERE dwCharacterID = " + dwCharacterID);
-            
-            try (PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO vmatrix_quest (dwCharacterID, `nMobKills`, `nMagnusKills`, `nVellumKills`, `nCrimsonQueenKills`, `nVonBonKills`, `nPierreKills`)"
-                  + " VALUES (?, ?, ?, ?, ?, ?, ?)")) {
-                
-                ps.setInt(1, dwCharacterID);
-                ps.setLong(2, nMobKillsV);
-                ps.setLong(3, nMagnusKillsV);
-                ps.setLong(4, nVellumKillsV);
-                ps.setLong(5, nCrimsonQueenKillsV);
-                ps.setLong(6, nVonBonKillsV);
-                ps.setLong(7, nPierreKillsV);
+            deleteWhereCharacterId(con, "DELETE FROM vmatrix_quest WHERE dwCharacterID = ?");
+            try (PreparedStatement ps = con.prepareStatement("INSERT INTO vmatrix_quest (dwCharacterID, nMobKills, nMagnusKills, nVellumKills, nCrimsonQueenKills, nVonBonKills, nPierreKills) "
+                                                           + "VALUES (?, ?, ?, ?, ?, ?, ?)")) {
+                ps.setInt(1, id);
+                ps.setInt(2, nMobKillsV);
+                ps.setInt(3, nMagnusKillsV);
+                ps.setInt(4, nVellumKillsV);
+                ps.setInt(5, nCrimsonQueenKillsV);
+                ps.setInt(6, nVonBonKillsV);
+                ps.setInt(7, nPierreKillsV);
                 ps.execute();
-                ps.close();
-            } catch (SQLException e) {
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
-        } catch (SQLException e) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
     
@@ -377,16 +374,18 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 ResultSet Result = runStatement.executeQuery();
                 while (Result.next()) {
                     nMobKillsV = Result.getInt("nMobKills");
-                    nMagnusKillsV = Result.getInt("nMagnusKillsV");
-                    nVellumKillsV = Result.getInt("nVellumKillsV");
-                    nCrimsonQueenKillsV = Result.getInt("nCrimsonQueenKillsV");
-                    nVonBonKillsV = Result.getInt("nVonBonKillsV");
-                    nPierreKillsV = Result.getInt("nPierreKillsV");
+                    nMagnusKillsV = Result.getInt("nMagnusKills");
+                    nVellumKillsV = Result.getInt("nVellumKills");
+                    nCrimsonQueenKillsV = Result.getInt("nCrimsonQueenKills");
+                    nVonBonKillsV = Result.getInt("nVonBonKills");
+                    nPierreKillsV = Result.getInt("nPierreKills");
                 }
                 Result.close();
             } catch (SQLException e) {
+                System.err.println("[Warning] There was a problem saving V Matrix Quest data.");
             }
         } catch (SQLException e) {
+            System.err.println("[Warning] There was a problem saving V Matrix Quest data.");
         }
     }
 

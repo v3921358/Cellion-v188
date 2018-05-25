@@ -424,6 +424,7 @@ public class Mob extends AbstractLoadedMapleLife {
 
         OnNxGainRequest(pPlayer, bKiller);
         OnMesoDropRequest(pPlayer);
+        pPlayer.incrementVMatrixKills(this); // For VMatrix Quest
         
         if (BuffedMob.OnBuffedChannel(Utility.requestChannel(pPlayer.getId()))) {
             if (!BuffedMob.BUFFED_BOSSES) {
