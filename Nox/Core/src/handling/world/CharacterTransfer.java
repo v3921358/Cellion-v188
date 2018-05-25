@@ -77,6 +77,9 @@ public class CharacterTransfer {
     /*Boss Timed Variables*/
     public long tHilla, tZakum, tHorntail, tRanmaru, tCrimsonQueen, tPierre, tVonBon, tVellum, tLotus, tUrsus, tArkarium, tCygnus, tVonLeon, tPrincessNo, tGollux, tDamien, tPinkBean, tMagnus, tLucid;
 
+    /*Varialbes for V Matrix custom quest data*/
+    public int nMobKillsV, nMagnusKillsV, nVellumKillsV, nCrimsonQueenKillsV, nVonBonKillsV, nPierreKillsV; 
+    
     /*End of Custom Feature*/
     public CharacterTransfer() {
         finishedAchievements = new ArrayList<>();
@@ -287,5 +290,15 @@ public class CharacterTransfer {
         tPinkBean = pPlayer.tPinkBean;
         tMagnus = pPlayer.tMagnus;
         tLucid = pPlayer.tLucid;
+        
+        /*V Matrix Quest Data*/
+        if (pPlayer.getVMatrixRequirement()) {
+            nMobKillsV = pPlayer.nMobKillsV;
+            nMagnusKillsV = pPlayer.nMagnusKillsV;
+            nVellumKillsV = pPlayer.nVellumKillsV;
+            nCrimsonQueenKillsV = pPlayer.nCrimsonQueenKillsV;
+            nVonBonKillsV = pPlayer.nVonBonKillsV;
+            nPierreKillsV = pPlayer.nPierreKillsV;
+        }
     }
 }

@@ -299,10 +299,6 @@ public class HayatoEffect extends AbstractEffect {
             case Hayato.POWER_EXPLOSION_3:
                 break;
             case Hayato.QUICK_DRAW:
-                pEffect.statups.put(CharacterTemporaryStat.BladeStance, 1);
-                //pEffect.statups.put(CharacterTemporaryStat.HayatoStance, 2);
-                //pEffect.statups.put(CharacterTemporaryStat.HayatoStanceBonus, 2);
-                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Hayato.QUICK_DRAW_STANCE_BONUS_:
                 break;

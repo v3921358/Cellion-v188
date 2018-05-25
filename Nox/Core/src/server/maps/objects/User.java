@@ -275,13 +275,14 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      *  V: Matrix
      */
     public List<VMatrixRecord> aVMatrixRecord = new ArrayList<>();
+    public int nMobKillsV, nMagnusKillsV, nVellumKillsV, nCrimsonQueenKillsV, nVonBonKillsV, nPierreKillsV; // Varialbes for V Matrix custom quest data.
     
     /**
      * Requirement 
      * @return 
      */
     public boolean getVMatrixRequirement() {
-        return level > 200 && !hasVMatrix();
+        return level >= 200 && !hasVMatrix();
     }
     
     /**
@@ -297,24 +298,15 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @param pMob
      */
     public void incrementVMatrixKills(Mob pMob) {
-        if (!hasVMatrix() && pMob.getStats().getLevel() > 200) { // Lv. 200 Mob Kills
-            String sQuest = getInfoQuest(13337);
-            if (sQuest.isEmpty()) sQuest = "0";
-            int nVal = Integer.parseInt(sQuest);
-            nVal++;
-            updateInfoQuest(13337, Integer.toString(nVal));
+        if (!hasVMatrix()) {
+            if (pMob.getStats().getLevel() > 200) nMobKillsV += 1; // Lv. 200 Mob Kills
+            if (pMob.getId() == 0) nMagnusKillsV += 1;
+            if (pMob.getId() == 0) nVellumKillsV += 1;
+            if (pMob.getId() == 0) nCrimsonQueenKillsV += 1;
+            if (pMob.getId() == 0) nVonBonKillsV += 1;
+            if (pMob.getId() == 0) nPierreKillsV += 1;
         }
     }   
-    
-    /**
-     * Checks kill count for V Matrix quest.
-     * @return 
-     */
-    public int getVMatrixKills() {
-        String sQuestInfo = getInfoQuest(13337);
-        if (sQuestInfo.equals("")) return 0;
-        return Integer.parseInt(getInfoQuest(13337));
-    }
     
     /**
      * Gives the Player the VMatrix.
@@ -341,6 +333,61 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         Quest.getInstance(1477).forceComplete(this, 0);
         Quest.getInstance(1478).forceComplete(this, 0);
         Quest.getInstance(1479).forceComplete(this, 0);
+    }
+    
+    /**
+     * UserSaveVMatrixQuest
+     * @purpose Save the VMatrix Quest data if applicable.
+     */
+    public void UserSaveVMatrixQuest() {
+        if (!getVMatrixRequirement()) return;
+        int dwCharacterID = getId();
+        try (Connection con = Database.GetConnection()) {
+            Utility.runSQL(con, "DELETE FROM bosstime WHERE dwCharacterID = " + dwCharacterID);
+            
+            try (PreparedStatement ps = con.prepareStatement(
+                    "INSERT INTO vmatrix_quest (dwCharacterID, `nMobKills`, `nMagnusKills`, `nVellumKills`, `nCrimsonQueenKills`, `nVonBonKills`, `nPierreKills`)"
+                  + " VALUES (?, ?, ?, ?, ?, ?, ?)")) {
+                
+                ps.setInt(1, dwCharacterID);
+                ps.setLong(2, nMobKillsV);
+                ps.setLong(3, nMagnusKillsV);
+                ps.setLong(4, nVellumKillsV);
+                ps.setLong(5, nCrimsonQueenKillsV);
+                ps.setLong(6, nVonBonKillsV);
+                ps.setLong(7, nPierreKillsV);
+                ps.execute();
+                ps.close();
+            } catch (SQLException e) {
+            }
+        } catch (SQLException e) {
+        }
+    }
+    
+    /**
+     * UserLoadVMatrixQuest
+     * @purpose Load the VMatrix Quest data if applicable.
+     */
+    public void UserLoadVMatrixQuest() {
+        if (!getVMatrixRequirement()) return;
+        int dwCharacterID = getId();
+        try (Connection Connection = Database.GetConnection()) {
+            try (PreparedStatement runStatement = Connection.prepareStatement("SELECT * from vmatrix_quest WHERE dwCharacterID = ?")) {
+                runStatement.setInt(1, dwCharacterID);
+                ResultSet Result = runStatement.executeQuery();
+                while (Result.next()) {
+                    nMobKillsV = Result.getInt("nMobKills");
+                    nMagnusKillsV = Result.getInt("nMagnusKillsV");
+                    nVellumKillsV = Result.getInt("nVellumKillsV");
+                    nCrimsonQueenKillsV = Result.getInt("nCrimsonQueenKillsV");
+                    nVonBonKillsV = Result.getInt("nVonBonKillsV");
+                    nPierreKillsV = Result.getInt("nPierreKillsV");
+                }
+                Result.close();
+            } catch (SQLException e) {
+            }
+        } catch (SQLException e) {
+        }
     }
 
     /**
@@ -927,6 +974,17 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         ret.tPinkBean = ct.tPinkBean;
         ret.tMagnus = ct.tMagnus;
         ret.tLucid = ct.tLucid;
+        
+        /*V Matrix Quest Data*/
+        if (ret.getVMatrixRequirement()) {
+            ret.nMobKillsV = ct.nMobKillsV;
+            ret.nMagnusKillsV = ct.nMagnusKillsV;
+            ret.nVellumKillsV = ct.nVellumKillsV;
+            ret.nCrimsonQueenKillsV = ct.nCrimsonQueenKillsV;
+            ret.nVonBonKillsV = ct.nVonBonKillsV;
+            ret.nPierreKillsV = ct.nPierreKillsV;
+        }
+        
         return ret;
     }
 
@@ -1119,6 +1177,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
             // Load Next Available Boss Attempt Times
             BossTimer.UserLoadBossTime(ret);
+            
+            // Load V Matrix Quest Data
+            ret.UserLoadVMatrixQuest();
             
             // Load VMatrix
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM vmatrix WHERE characterid = ?")) {
@@ -2155,6 +2216,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
             // Save Next Available Boss Attempt Times
             BossTimer.UserSaveBossTime(this);
+            
+            // Save V Matrix Quest Data
+            UserSaveVMatrixQuest();
             
             // Save VMatrix (Song SAYS THIS DOESNT LOOP RIGHT NIGGA)
             deleteWhereCharacterId(con, "DELETE FROM vmatrix WHERE characterid = ?");
@@ -4609,14 +4673,14 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void healHP(int delta) {
         addHP(delta);
-        client.SendPacket(EffectPacket.showOwnHpHealed(delta));
-        getMap().broadcastPacket(this, EffectPacket.showHpHealed(getId(), delta), false);
+        //client.SendPacket(EffectPacket.showOwnHpHealed(delta));
+        //getMap().broadcastPacket(this, EffectPacket.showHpHealed(getId(), delta), false);
     }
 
     public void healMP(int delta) {
         addMP(delta);
-        client.SendPacket(EffectPacket.showOwnHpHealed(delta));
-        getMap().broadcastPacket(this, EffectPacket.showHpHealed(getId(), delta), false);
+        //client.SendPacket(EffectPacket.showOwnHpHealed(delta));
+        //getMap().broadcastPacket(this, EffectPacket.showHpHealed(getId(), delta), false);
     }
 
     public int getCurrentHP() {

@@ -4635,7 +4635,7 @@ public class CField {
                     break;
             }
 
-            oPacket.Fill(0, 59);//I really can't be fucked rn..
+            oPacket.Fill(0, 99);//I really can't be fucked rn..
 
             return oPacket;
         }
@@ -4648,26 +4648,25 @@ public class CField {
          */
         public static OutPacket showBurningFieldTextEffect(String bannerText) {
 
-
             /*3D 
-4F 00 
-23 66 6E B3 AA B4 AE B0 ED B5 F1 20 45 78 74 72 
-61 42 6F 6C 64 23 23 66 73 32 36 23 20 20 20 20 
-20 20 20 20 20 20 42 75 72 6E 69 6E 67 20 53 74 
-61 67 65 20 31 3A 20 31 30 25 20 42 6F 6E 75 73 
-20 45 58 50 21 20 20 20 20 20 20 20 20 20 20 
+            4F 00 
+            23 66 6E B3 AA B4 AE B0 ED B5 F1 20 45 78 74 72 
+            61 42 6F 6C 64 23 23 66 73 32 36 23 20 20 20 20 
+            20 20 20 20 20 20 42 75 72 6E 69 6E 67 20 53 74 
+            61 67 65 20 31 3A 20 31 30 25 20 42 6F 6E 75 73 
+            20 45 58 50 21 20 20 20 20 20 20 20 20 20 20 
 
-32 00 00 00 // floating value
-DC 05 00 00  // floating value
+            32 00 00 00 // floating value
+            DC 05 00 00  // floating value
 
-04 00 00 00 
-00 00 00 00 
-38 FF FF FF 
-01 00 00 00 
-04 00 00 00 
-02 00 00 00 // v640
-00 00 00 00 
-00 00 00 00*/
+            04 00 00 00 
+            00 00 00 00 
+            38 FF FF FF 
+            01 00 00 00 
+            04 00 00 00 
+            02 00 00 00 // v640
+            00 00 00 00 
+            00 00 00 00*/
             OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
             oPacket.EncodeByte(UserEffectCodes.TextEffect.getEffectId());
             //oPacket.encodeString("#fn³ª´®°íµñ ExtraBold##fs26#          Burning Stage 1: 10% Bonus EXP!  ");
@@ -4749,7 +4748,7 @@ DC 05 00 00  // floating value
             oPacket.EncodeByte(UserEffectCodes.IncDecHPEffect_EX.getEffectId());
             oPacket.EncodeInt(amount);
 
-            oPacket.Fill(0, 39); // Avoid DC
+            oPacket.Fill(0, 99); // Avoid DC
 
             return oPacket;
         }
@@ -4832,7 +4831,7 @@ DC 05 00 00  // floating value
             if (skillid == 30001062) {
                 oPacket.EncodeInt(0);
             }
-            oPacket.Fill(0, 19);
+            oPacket.Fill(0, 29);
 
             return oPacket;
         }

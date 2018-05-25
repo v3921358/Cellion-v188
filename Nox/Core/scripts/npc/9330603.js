@@ -187,8 +187,10 @@ function action(mode, type, selection) {
 		case 508: //JETT
 		jobName = "Jett";
 		break;
+		case 6001:
 		case 6500: //ANGELIC BUSTER
 		jobName = "Angelic Buster";
+		cm.changeJob(6500);
 		break;
 		case 10000: //ZERO
 		jobName = "Zero";
@@ -199,23 +201,35 @@ function action(mode, type, selection) {
 		case 14200: //KINESIS
 		jobName = "Kinesis";
 		break;
+		case 2004:
 		case 2700: //LUMINOUS
 		jobName = "Luminous";
+		cm.changeJob(2700);
 		break;
+		case 4001:
 		case 4100: //HAYATO
 		jobName = "Hayato";
+		cm.changeJob(4100);
 		break;
+		case 4002:
 		case 4200: //KANNA
 		jobName = "Kanna";
+		cm.changeJob(4200);
 		break;
+		case 3002:
 		case 3600: //XENON
 		jobName = "Xenon";
+		cm.changeJob(3600);
 		break;
+		case 6000:
 		case 6100: //KAISER
 		jobName = "Kaiser";
+		cm.changeJob(6100);
 		break;
+		case 5000:
 		case 5100: //MIHILE
 		jobName = "Mihile";
+		cm.changeJob(5100);
 		break;
 		case 2005: //SHADE
 		case 2500: //SHADE1
