@@ -198,13 +198,18 @@ function action(mode, type, selection) {
 		case 11200://BEAST TAMER
 		jobName = "Beast Tamer";
 		break;
+		case 14000:
 		case 14200: //KINESIS
 		jobName = "Kinesis";
+		cm.changeJob(14200);
+		cm.gainItem(1262001)
 		break;
 		case 2004:
 		case 2700: //LUMINOUS
 		jobName = "Luminous";
 		cm.changeJob(2700);
+		cm.gainItem(1352400);
+		cm.gainItem(1212002);
 		break;
 		case 4001:
 		case 4100: //HAYATO

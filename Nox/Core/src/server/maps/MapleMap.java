@@ -2791,11 +2791,11 @@ public final class MapleMap {
                 if (chr != source) {
                     if (rangeSq < Double.POSITIVE_INFINITY) {
                         if (rangedFrom.distanceSq(chr.getTruePosition()) <= rangeSq) {
-                            if (ServerConstants.DEVELOPER_DEBUG_MODE) System.err.println("[Debug] Sending Ranged Broadcast Packet (" + chr.getName() + ")");
+                            if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) System.err.println("[Debug] Sending Ranged Broadcast Packet (" + chr.getName() + ")");
                             chr.getClient().SendPacket(oPacket);
                         }
                     } else {
-                        if (ServerConstants.DEVELOPER_DEBUG_MODE) System.err.println("[Debug] Sending Broadcast Packet (" + chr.getName() + ")");
+                        if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) System.err.println("[Debug] Sending Broadcast Packet (" + chr.getName() + ")");
                         chr.getClient().SendPacket(oPacket);
                     }
                 }

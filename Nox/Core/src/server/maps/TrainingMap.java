@@ -59,17 +59,24 @@ public class TrainingMap {
      * @param pPlayer
      */
     public static void OnMonsterAggressionRequest(User pPlayer) {
-        Mob pAggro;
-        ReentrantLock pLock = new ReentrantLock();
-        
+        ReentrantLock pLock = new ReentrantLock(true);
         pLock.lock();
         try {
-            final List<MapleMapObject> aMobsToAggro = pPlayer.getMap().getMapObjectsInRange(pPlayer.getPosition(), 800000, Arrays.asList(MapleMapObjectType.MONSTER));
+            final List<MapleMapObject> aMobsToAggro = pPlayer.getMap().getMapObjectsInRange(pPlayer.getPosition(), 6000.0D, Arrays.asList(MapleMapObjectType.MONSTER));
             for (MapleMapObject pObject : aMobsToAggro) {
-                pAggro = (Mob) pObject;
-                pAggro.setController(pPlayer);
-                pAggro.setControllerHasAggro(true);
-                pPlayer.controlMonster(pAggro, true);
+                Mob pMob = (Mob) pObject;
+                if (pMob != null && pPlayer.getTruePosition().distanceSq(pMob.getTruePosition()) < 6000.0D && pMob.getLinkCID() <= 0) {
+                    if (pMob.getController() != null) {
+                        if (pPlayer.getMap().getCharacterById(pMob.getController().getId()) == null) {
+                            pMob.switchController(pPlayer, true);
+                            pPlayer.controlMonster(pMob, true);
+                        } else {
+                            pMob.switchController(pMob.getController(), true);
+                        }
+                    } else {
+                        pMob.switchController(pPlayer, true);
+                    }
+                }
             }
         } finally {
             pLock.unlock();

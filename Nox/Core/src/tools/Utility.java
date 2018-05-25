@@ -247,38 +247,37 @@ public class Utility {
         ReentrantLock petSafety = new ReentrantLock();
         petSafety.lock();
         
-        MapleMapItem pMapLoot;
-        final List<MapleMapObject> mAllMapItems = pPlayer.getMap().getAllMapObjects(MapleMapObjectType.ITEM);
+        try {
+            MapleMapItem pMapLoot;
+            final List<MapleMapObject> mAllMapItems = pPlayer.getMap().getAllMapObjects(MapleMapObjectType.ITEM);
 
-        boolean bHasPet = false;
-        for (int i = 0; i <= 3; i++) {
-            Pet pet = pPlayer.getPet(i);
-            if (pet != null) {
-                bHasPet = true; // Checks all pet slots to confirm if player has a pet active.
+            boolean bHasPet = false;
+            for (int i = 0; i <= 3; i++) {
+                Pet pet = pPlayer.getPet(i);
+                if (pet != null) {
+                    bHasPet = true; // Checks all pet slots to confirm if player has a pet active.
+                }
             }
-        }
-        
-        List<MapleMapObject> mItemsToLoot = new ArrayList<>();
-        for (MapleMapObject pObject : mAllMapItems) {
-            MapleMapItem pLoot = (MapleMapItem) pObject;
-            if (pLoot.getOwner() == pPlayer.getId() && !pLoot.isPlayerDrop()) {
-                mItemsToLoot.add(pLoot);
-            }
-        }
 
-        List<MapleMapObject> mItems = new ArrayList<>();
-        if (mAllMapItems.size() <= 10) {
-            mItems = mItemsToLoot;
-        } else {
-            for (int i = 1; i <= 10; i++) {
-                mItems.add(mItemsToLoot.get(i));
+            List<MapleMapObject> mItemsToLoot = new ArrayList<>();
+            for (MapleMapObject pObject : mAllMapItems) {
+                MapleMapItem pLoot = (MapleMapItem) pObject;
+                if (pLoot.getOwner() == pPlayer.getId() && !pLoot.isPlayerDrop()) {
+                    mItemsToLoot.add(pLoot);
+                }
             }
-        }
-        
-        if (bHasPet) {
-            for (MapleMapObject item : mItems) {
 
-                try {
+            List<MapleMapObject> mItems = new ArrayList<>();
+            if (mAllMapItems.size() <= 10) {
+                mItems = mItemsToLoot;
+            } else {
+                for (int i = 1; i <= 10; i++) {
+                    mItems.add(mItemsToLoot.get(i));
+                }
+            }
+
+            if (bHasPet) {
+                for (MapleMapObject item : mItems) {
                     pMapLoot = (MapleMapItem) item;
 
                     if (pMapLoot.getMeso() > 0) { // Meso Drops
@@ -308,7 +307,7 @@ public class Utility {
                                 && pMapLoot.getItemId() != 0) {
                             continue;
                         }*/
-                        
+
                         if (!pPlayer.haveItem((pMapLoot.getItemId()))) { // Only pick up items the player already has.
                             continue;
                         }
@@ -321,10 +320,10 @@ public class Utility {
                     pMapLoot.setPickedUp(true);
                     pPlayer.getMap().broadcastPacket(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
                     pPlayer.getMap().removeMapObject(item);
-                } finally {
-                    petSafety.unlock();
                 }
             }
+        } finally {
+            petSafety.unlock();
         }
     }
 }

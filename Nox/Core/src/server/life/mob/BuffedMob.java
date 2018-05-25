@@ -69,7 +69,14 @@ public class BuffedMob {
     public static Mob OnBuffedMobResult(Mob pMob) {
         
         short nLV = pMob.getStats().getLevel();
+        long nHP = pMob.getStats().getHp();
         
+        /*Modify Monster HP*/
+        if (nLV < 20) {
+            nHP *= 100;
+        } 
+        
+        /*Modify Monster Level*/
         if (nLV > 200) {
             nLV *= 1.2;
         } else if (nLV > 180) {
@@ -88,7 +95,6 @@ public class BuffedMob {
             nLV *= 2;
         }
         
-        long nHP = (long) (pMob.getStats().getHp() * HP_BUFF); 
         long nMaxHP = (long) (pMob.getStats().getFinalMaxHp() * HP_BUFF);
         int nPhysDefence = (int) (pMob.getStats().getPhysicalDefense() * DEFENCE_BUFF);
         int nMagicDefence = (int) (pMob.getStats().getMagicDefense() * DEFENCE_BUFF);

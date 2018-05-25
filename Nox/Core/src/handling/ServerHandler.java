@@ -440,9 +440,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                         case "AliveAck":
                         case "UserQuestRequest":
                         case "UserMove":
-                        case "NpcMove":
-                        case "MobMove":
                         case "SummonedMove":
+                        case "NpcMove":
+                        case "MobMove": 
                         case "UserChangeStatRequest":
                         case "UserActivateDamageSkin":
                         case "UpdateClientEnvironment":

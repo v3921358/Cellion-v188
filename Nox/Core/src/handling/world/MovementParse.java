@@ -284,12 +284,18 @@ public class MovementParse {
     }
 
     public static void updatePosition(List<LifeMovementFragment> movement, AnimatedMapleMapObject target) {
-        for (LifeMovementFragment move : movement) {
-            if (move instanceof LifeMovement) {
-                Point position = ((LifeMovement) move).getPosition();
-                target.setPosition(position);
-                target.setStance(((LifeMovement) move).getStance());
+        target.pLock.lock();
+       
+        try {
+            for (LifeMovementFragment move : movement) {
+                if (move instanceof LifeMovement) {
+                    Point position = ((LifeMovement) move).getPosition();
+                    target.setPosition(position);
+                    target.setStance(((LifeMovement) move).getStance());
+                }
             }
+        } finally {
+            target.pLock.unlock();
         }
     }
 

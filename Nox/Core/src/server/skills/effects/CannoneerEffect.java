@@ -33,11 +33,11 @@ public class CannoneerEffect extends AbstractEffect {
             case Cannoneer.CRITICAL_FIRE:
                 break;
             case Cannoneer.MONKEY_MAGIC:
-                pEffect.statups.put(CharacterTemporaryStat.IndieAllStat, pEffect.info.get(StatInfo.indieAllStat));
-                pEffect.statups.put(CharacterTemporaryStat.IndieJump, pEffect.info.get(StatInfo.indieJump));
-                pEffect.statups.put(CharacterTemporaryStat.IndieMHP, pEffect.info.get(StatInfo.indieMhp));
-                pEffect.statups.put(CharacterTemporaryStat.IndieMMP, pEffect.info.get(StatInfo.indieMmp));
-                pEffect.statups.put(CharacterTemporaryStat.IndieSpeed, pEffect.info.get(StatInfo.indieSpeed));
+                /*pEffect.statups.put(CharacterTemporaryStat.IndieAllStat, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieJump, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMHP, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMMP, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieSpeed, pEffect.info.get(StatInfo.x));*/
                 break;
             case Cannoneer.PIRATE_TRAINING:
                 break;

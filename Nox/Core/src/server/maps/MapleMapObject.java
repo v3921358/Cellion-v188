@@ -24,9 +24,11 @@ import java.awt.Point;
 
 import client.ClientSocket;
 import constants.GameConstants;
+import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class MapleMapObject {
 
+    public ReentrantLock pLock = new ReentrantLock(true);
     private final Point position = new Point();
     private int objectId;
     private short vxCS;

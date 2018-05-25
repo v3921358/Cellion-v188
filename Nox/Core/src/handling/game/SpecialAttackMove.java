@@ -350,6 +350,17 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 pEffect.info.put(StatInfo.time, 210000000);
                 break;
             }
+            case Cannoneer.MONKEY_MAGIC: 
+            case CannonMaster.MEGA_MONKEY_MAGIC: {
+                pEffect.statups.put(CharacterTemporaryStat.IndieMHP, pEffect.info.get(StatInfo.indieMhp));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMMP, pEffect.info.get(StatInfo.indieMmp));
+                pEffect.statups.put(CharacterTemporaryStat.IndieJump, pEffect.info.get(StatInfo.indieJump));
+                pEffect.statups.put(CharacterTemporaryStat.IndieSpeed, pEffect.info.get(StatInfo.indieSpeed));
+                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, 1);
+                pEffect.statups.put(CharacterTemporaryStat.IndieAllStat, -100);
+                pEffect.info.put(StatInfo.time, 20000);
+                break;
+            }
             default: {
                 bApplyStats = false;
                 break;
@@ -762,7 +773,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 c.SendPacket(JobPacket.AngelicPacket.lockSkill(nSkill));
             }
         }
-
+        
         c.getPlayer().getStat().OnCalculateLocalStats(c.getPlayer());
         c.SendPacket(WvsContext.enableActions());
     }
