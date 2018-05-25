@@ -467,7 +467,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                                 break; // Doesn't display these packets, prevents major console spam.
                             }
                         default:
-                            System.out.println("[Unhandled Operation] " + head + " (" + nPacketID + ") : The respected receive operation is currently unhandled.");
+                            System.out.println("[Unhandled Operation] " + head + " (" + nPacketID + ") " + iPacket.toString() + " : The respected receive operation is currently unhandled.");
                             break;
                     }
                 }
