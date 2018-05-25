@@ -185,6 +185,76 @@ public class QueueWorker extends Thread {
                         }
                     }
                     break;
+                case GIVE_VP:
+                    String vpPayloadRaw = item.payload.replaceAll("\\\\", "");
+                    VPPayload vpPayload = ApiFactory.getFactory().getGson().fromJson(vpPayloadRaw, VPPayload.class);
+                    int[] charIdListVp = new int[16];
+                    try (PreparedStatement ps = con.prepareStatement("SELECT id FROM `accounts` WHERE `authID` = ?")) {
+                        ps.setInt(1, vpPayload.lumiere_id);
+                        ResultSet rs = ps.executeQuery();
+
+                        if (!rs.next()) // The account doesn't exist in the game database yet.
+                        {
+                            return false;
+                        }
+                        rs.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    try (PreparedStatement ps = con.prepareStatement("SELECT `characters`.`id` FROM `characters` "
+                            + "LEFT JOIN `accounts` ON `accounts`.`id` = `characters`.`accountid` "
+                            + "WHERE `accounts`.`authID` = ?")) {
+                        ps.setInt(1, vpPayload.lumiere_id);
+                        ResultSet rs = ps.executeQuery();
+
+                        int i = 0;
+                        while (rs.next()) {
+                            charIdListVp[i] = rs.getInt("id");
+                            i++;
+                            if (i > 15) {
+                                break;
+                            }
+                        }
+
+                        rs.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    boolean onlinevp = false;
+
+                    worldSearch:
+                    { // TODO: Clean this up a bit..
+                        for (ChannelServer w : ChannelServer.getAllInstances()) {
+                            for (int id : charIdListVp) {
+                                if (id == 0) {
+                                    break;
+                                }
+
+                                chr = w.getPlayerStorage().getCharacterById(id);
+
+                                if (chr != null) {
+                                    break worldSearch;
+                                }
+                            }
+                        }
+                    }
+                    if (chr != null) {
+                        // Ok, so the player is online. Just give them the points and send them the message.
+                        chr.gainVPoints(vpPayload.amount);
+                        chr.dropMessage(5, "Thank you for voting for Cellion. You have gained " + vpPayload.amount + " VP.");
+                    } else {
+                        // So the player is offline. Lets just update the database and give them the amount.
+                        try (PreparedStatement ps = con.prepareStatement("UPDATE `accounts` SET `vpoints` = `vpoints` + ? WHERE `authID` = ?;")) {
+                            ps.setInt(1, vpPayload.amount);
+                            ps.setInt(2, vpPayload.lumiere_id);
+                            ps.execute();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    break;
                 case SEND_NOTICE: // Not implemented.
                     break;
                 case PIC_RESET:
@@ -234,7 +304,7 @@ public class QueueWorker extends Thread {
 
     public enum QueueCommand {
 
-        GIVE_NX, PIC_RESET, DISCONNECT_USER,
+        GIVE_NX, GIVE_VP, PIC_RESET, DISCONNECT_USER,
         SEND_NOTICE, SET_EXP_MULTIPLIER, RELOAD_CS
     }
 
@@ -255,6 +325,11 @@ public class QueueWorker extends Thread {
         public int nx_amount;
     }
 
+    private class VPPayload {
+        public int lumiere_id;
+        public int amount;
+    }
+    
     private class EventPayload {
 
         public int multiplier;
