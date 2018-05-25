@@ -1607,7 +1607,7 @@ public class Mob extends AbstractLoadedMapleLife {
             }
         }
         
-        if (!bKiller) nResultNX *= 0.4;                                                         // Reduce amount gained if Player is not the killer of the mob.
+        if (!bKiller) nResultNX *= 0.3;                                                         // Reduce amount gained if Player is not the killer of the mob.
         if (Utility.resultSuccess(nGainChance)) pPlayer.gainNX(nResultNX, true);                // Award the Player with the NX gained if chance succeeds.
     }
 
