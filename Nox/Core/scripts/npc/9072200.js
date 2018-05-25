@@ -28,10 +28,10 @@ function action(mode, type, selection) {
         targetName = cm.getText();
     } else if (status == 1) {
         cm.sendGetText("Enter the inventory type # you'd like to access #r#n1=EQUIP#r#n2=USE#r#n3=ETC#r#n4=SETUP#r#n5=CASH");
-        targetSlot = cm.getText();  
+        invType = cm.getText();  
     } else if (status == 2) {
         fullInv = cm.accessInventory(targetName, invType);
-        cm.sendSimple("Select an item to remove for " + targetName + "#r#n" + fullinv);
+        cm.sendSimple("Select an item to remove for " + targetName + "#r#n" + fullInv);
     } else if (status == 3) {
         if (selection > 0) {
             itemId = cm.getItemFromSlot(invType, selection);
