@@ -38,24 +38,32 @@ public final class WorldInfoRequestHandler implements ProcessPacket<ClientSocket
             }
         }
         c.SendPacket(CLogin.getEndOfServerList());
-        boolean hasCharacters = false;
-        for (int world = 0; world < WorldConstants.WorldOption.values().length; world++) {
-            final List<User> chars = c.loadCharacters(world);
-            if (chars != null) {
-                hasCharacters = true;
-                break;
+
+        if (c.isLoggedIn()) {
+            boolean hasCharacters = false;
+            for (int world = 0; world < WorldConstants.WorldOption.values().length; world++) {
+                final List<User> chars = c.loadCharacters(world);
+                if (chars != null) {
+                    hasCharacters = true;
+                    break;
+                }
             }
-        }
-        if (ServerConstants.TESPIA) {
-            for (WorldConstants.TespiaWorldOption value : WorldConstants.TespiaWorldOption.values()) {
-                String world = value.getWorld();
+            if (ServerConstants.TESPIA) {
+                for (WorldConstants.TespiaWorldOption value : WorldConstants.TespiaWorldOption.values()) {
+                    String world = value.getWorld();
+                }
             }
-        }
-        if (!hasCharacters) {
+            if (!hasCharacters) {
+                c.SendPacket(CLogin.enableRecommended(WorldConstants.WorldOption.recommended));
+            }
+            if (WorldConstants.WorldOption.recommended >= 0) {
+                c.SendPacket(CLogin.sendRecommended(WorldConstants.WorldOption.recommended, WorldConstants.WorldOption.recommendedmsg));
+            }
+        } else { //Token login, world list is requested before account validation.
             c.SendPacket(CLogin.enableRecommended(WorldConstants.WorldOption.recommended));
-        }
-        if (WorldConstants.WorldOption.recommended >= 0) {
-            c.SendPacket(CLogin.sendRecommended(WorldConstants.WorldOption.recommended, WorldConstants.WorldOption.recommendedmsg));
+            if (WorldConstants.WorldOption.recommended >= 0) {
+                c.SendPacket(CLogin.sendRecommended(WorldConstants.WorldOption.recommended, WorldConstants.WorldOption.recommendedmsg));
+            }
         }
     }
 
