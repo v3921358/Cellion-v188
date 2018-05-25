@@ -277,55 +277,53 @@ public class Utility {
         
         if (bHasPet) {
             for (MapleMapObject item : mItems) {
-                pMapLoot = (MapleMapItem) item;
 
-                if (pMapLoot.getMeso() > 0) { // Meso Drops
-                    pPlayer.gainMeso(pMapLoot.getMeso(), true);
+                try {
+                    pMapLoot = (MapleMapItem) item;
+
+                    if (pMapLoot.getMeso() > 0) { // Meso Drops
+                        pPlayer.gainMeso(pMapLoot.getMeso(), true);
+                        pMapLoot.setPickedUp(true);
+                        pPlayer.getMap().removeMapObject(item);
+                        pPlayer.getMap().broadcastPacket(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
+                    } else { // Item Drops
+                        if (pMapLoot.isPickedUp()) {
+                            pPlayer.getClient().SendPacket(WvsContext.enableActions());
+                            continue;
+                        }
+                        if (pMapLoot.getQuest() > 0 && pPlayer.getQuestStatus(pMapLoot.getQuest()) != QuestStatus.QuestState.Started) {
+                            pPlayer.getClient().SendPacket(WvsContext.enableActions());
+                            continue;
+                        }
+                        if (pMapLoot.getOwner() != pPlayer.getId() && ((!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 0)
+                                || (pMapLoot.isPlayerDrop() && pPlayer.getMap().getSharedMapResources().everlast))) {
+                            pPlayer.getClient().SendPacket(WvsContext.enableActions());
+                            continue;
+                        }
+                        if (!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 1 && pMapLoot.getOwner() != pPlayer.getId() && (pPlayer.getParty() == null || pPlayer.getParty().getMemberById(pMapLoot.getOwner()) == null)) {
+                            pPlayer.getClient().SendPacket(WvsContext.enableActions());
+                            continue;
+                        }
+                        /*if (GameConstants.getInventoryType(pMapLoot.getItemId()) == MapleInventoryType.EQUIP
+                                && pMapLoot.getItemId() != 0) {
+                            continue;
+                        }*/
+                        
+                        if (!pPlayer.haveItem((pMapLoot.getItemId()))) { // Only pick up items the player already has.
+                            continue;
+                        }
+
+                        if (pMapLoot.getItem() == null || !MapleInventoryManipulator.addFromDrop(pPlayer.getClient(), pMapLoot.getItem(), true)) {
+                            continue;
+                        }
+                    }
+
                     pMapLoot.setPickedUp(true);
-                    pPlayer.getMap().removeMapObject(item);
                     pPlayer.getMap().broadcastPacket(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
-                } else { // Item Drops
-                    if (pMapLoot.isPickedUp()) {
-                        pPlayer.getClient().SendPacket(WvsContext.enableActions());
-                        continue;
-                    }
-                    if (pMapLoot.getQuest() > 0 && pPlayer.getQuestStatus(pMapLoot.getQuest()) != QuestStatus.QuestState.Started) {
-                        pPlayer.getClient().SendPacket(WvsContext.enableActions());
-                        continue;
-                    }
-                    if (pMapLoot.getOwner() != pPlayer.getId() && ((!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 0)
-                            || (pMapLoot.isPlayerDrop() && pPlayer.getMap().getSharedMapResources().everlast))) {
-                        pPlayer.getClient().SendPacket(WvsContext.enableActions());
-                        continue;
-                    }
-                    if (!pMapLoot.isPlayerDrop() && pMapLoot.getDropType() == 1 && pMapLoot.getOwner() != pPlayer.getId() && (pPlayer.getParty() == null || pPlayer.getParty().getMemberById(pMapLoot.getOwner()) == null)) {
-                        pPlayer.getClient().SendPacket(WvsContext.enableActions());
-                        continue;
-                    }
-
-                    /*if (GameConstants.getInventoryType(pMapLoot.getItemId()) == MapleInventoryType.EQUIP
-                            && pMapLoot.getItemId() != 0) {
-                        continue;
-                    }*/
-                    if (!pPlayer.haveItem((pMapLoot.getItemId()))) { // Only pick up items the player already has.
-                        continue;
-                    }
-
-                    if (pMapLoot.getItem() == null || !MapleInventoryManipulator.addFromDrop(pPlayer.getClient(), pMapLoot.getItem(), true)) {
-                        continue;
-                    }
+                    pPlayer.getMap().removeMapObject(item);
+                } finally {
+                    petSafety.unlock();
                 }
-
-                pMapLoot.setPickedUp(true);
-                pPlayer.getMap().broadcastPacket(CField.removeItemFromMap(pMapLoot.getObjectId(), 5, pPlayer.getId()), pMapLoot.getPosition());
-                pPlayer.getMap().removeMapObject(item);
-            }
-            try {
-                if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) {
-                    System.out.println("[Debug] Pet Vacume Loot Size (" + mItems.size() + ")");
-                }
-            } finally {
-                petSafety.unlock();
             }
         }
     }

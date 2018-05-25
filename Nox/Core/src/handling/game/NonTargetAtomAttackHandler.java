@@ -87,13 +87,13 @@ public final class NonTargetAtomAttackHandler implements ProcessPacket<ClientSoc
                 //   case 36101009:
                 //     case 36111010:
                 bulletCount = effect.getAttackCount();
-                DamageParse.applyAttack(attack, skill, chr, skillLevel, GameConstants.damageCap, effect, AttackType.RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
+                DamageParse.OnWeaponAttackRequest(attack, skill, chr, skillLevel, GameConstants.damageCap, effect, AttackType.RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
                 break;
             default:
-                DamageParse.applyAttackMagic(attack, skill, chr, effect);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
+                DamageParse.OnMagicAttackRequest(attack, skill, chr, effect);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
                 break;
         }
-        DamageParse.modifyCriticalAttack(attack, chr, 3, effect);
+        DamageParse.OnCriticalAttack(attack, chr, 3, effect);
 
         if (GameConstants.isEventMap(chr.getMapId())) {
             for (MapleEventType t : MapleEventType.values()) {

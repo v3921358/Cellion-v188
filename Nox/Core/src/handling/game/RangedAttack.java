@@ -207,7 +207,7 @@ public final class RangedAttack implements ProcessPacket<ClientSocket> {
                 nBulletCount = pEffect.getAttackCount();
             }
         }
-        DamageParse.modifyCriticalAttack(pAttack, pPlayer, 2, pEffect);
+        DamageParse.OnCriticalAttack(pAttack, pPlayer, 2, pEffect);
         Integer ShadowPartner = pPlayer.getBuffedValue(CharacterTemporaryStat.ShadowPartner);
         boolean bMirror = pPlayer.hasBuff(CharacterTemporaryStat.ShadowPartner) || pPlayer.hasBuff(CharacterTemporaryStat.ShadowServant);
         if (bMirror) {
@@ -338,7 +338,7 @@ public final class RangedAttack implements ProcessPacket<ClientSocket> {
             pPlayer.getMap().broadcastGMMessage(pPlayer, CField.rangedAttack(pPlayer.getId(), pAttack.tbyte, pAttack.skill, nSLV, pAttack.display, pAttack.speed, visProjectile, pAttack.allDamage, pAttack.position, pPlayer.getLevel(), pPlayer.getStat().passive_mastery(), pAttack.attackFlag), false);
         }
 
-        DamageParse.applyAttack(pAttack, pSkill, pPlayer, nBulletCount, basedamage, pEffect, bMirror ? AttackType.RANGED_WITH_ShadowPartner : AttackType.RANGED);
+        DamageParse.OnWeaponAttackRequest(pAttack, pSkill, pPlayer, nBulletCount, basedamage, pEffect, bMirror ? AttackType.RANGED_WITH_ShadowPartner : AttackType.RANGED);
         pAttack.cleanupMemory(); // Clean up memory references.
     }
 

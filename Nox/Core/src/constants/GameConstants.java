@@ -1031,26 +1031,8 @@ public class GameConstants {
     }
 
     /*
-     *  Damage Corrections & Modfications
-     *  @purpose This value is added to the damage lines for certain skills, used to fix or modify the result.
-     */
-    public static long damageCorrectRequest(User pPlayer, int nSkill, long nDamage) {
-        long nDamageChange = 0;
-        switch (nSkill) {
-            case DemonAvenger.EXCEED_DEMON_STRIKE:
-            case DemonAvenger.EXCEED_DEMON_STRIKE_1:
-            case DemonAvenger.EXCEED_DEMON_STRIKE_2:
-            case DemonAvenger.EXCEED_DEMON_STRIKE_3:
-            case DemonAvenger.EXCEED_DEMON_STRIKE_4:
-                nDamageChange = (long) (nDamage * (pPlayer.getSkillLevel(DemonAvenger.NETHER_SLICE) * 0.05));
-                break;
-        }
-        return nDamageChange;
-    }
-
-    /*
     *   Checks if Superior Equip for Star Force.
-     */
+    */
     public static boolean isSuperiorEquip(int nItemID) {
         switch (nItemID) {
             case 1122241:
@@ -4672,7 +4654,9 @@ public class GameConstants {
     public static boolean isMismatchingBulletSkill(final int nSkillId) { // Just anti-cheat exceptions.
         switch (nSkillId) {
             case constants.skills.Hero.RAGING_BLOW:
-            case 21120025: // Aran Skill
+            case Phantom.CARTE_BLANCHE:
+            case Phantom.CARTE_NOIR:
+            case Aran.FINAL_BLOW_6: // Aran Skill
             case Aran.AERO_SWING_1:
             case IceLightningArchMage.FROZEN_ORB:
             case DualBlade.BLADE_FURY:

@@ -36,6 +36,7 @@ import tools.packet.JobPacket.AvengerPacket;
 import client.jobs.Hero.PhantomHandler;
 import net.ProcessPacket;
 import server.skills.LinkedSkill;
+import tools.packet.CSPacket;
 
 /**
  * MigrateIn 
@@ -233,6 +234,7 @@ public final class MigrateInHandler implements ProcessPacket<ClientSocket> {
         c.SendPacket(WvsContext.updateCrowns(new int[]{-1, -1, -1, -1, -1}));
         c.SendPacket(WvsContext.getFamiliarInfo(pPlayer));
         c.SendPacket(WvsContext.shopDiscount(ServerConstants.SHOP_DISCOUNT));
+        c.SendPacket(WvsContext.updateMaplePoint(pPlayer.getNX()));
         
         // Developer Skill Cooldown Toggle
         if (ServerConstants.DEV_DEFAULT_CD && pPlayer.isDeveloper()) {

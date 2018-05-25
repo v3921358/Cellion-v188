@@ -3,6 +3,12 @@
  */
 package server.maps;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
+import server.life.Mob;
+import server.maps.objects.User;
+
 /**
  * Training Map Handler
  * @author Mazen Massoud
@@ -27,6 +33,12 @@ public class TrainingMap {
     };
     
     /**
+     * bFullMapAggression
+     * @purpose All monsters on the map will be aggressive towards attackers, rather than just nearby monsters.
+     */
+    public static boolean bFullMapAggression = true;
+    
+    /**
      * OnBalanceSpawnRate
      * @param nMapID
      * @return 
@@ -39,5 +51,28 @@ public class TrainingMap {
             }
         }
         return nMultiplier;
+    }
+    
+    /**
+     * OnAggrovateNearby
+     * @purpose Aggro nearby monsters surrounding the player.
+     * @param pPlayer
+     */
+    public static void OnMonsterAggressionRequest(User pPlayer) {
+        Mob pAggro;
+        ReentrantLock pLock = new ReentrantLock();
+        
+        pLock.lock();
+        try {
+            final List<MapleMapObject> aMobsToAggro = pPlayer.getMap().getMapObjectsInRange(pPlayer.getPosition(), 800000, Arrays.asList(MapleMapObjectType.MONSTER));
+            for (MapleMapObject pObject : aMobsToAggro) {
+                pAggro = (Mob) pObject;
+                pAggro.setController(pPlayer);
+                pAggro.setControllerHasAggro(true);
+                pPlayer.controlMonster(pAggro, true);
+            }
+        } finally {
+            pLock.unlock();
+        }
     }
 }

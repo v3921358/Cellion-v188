@@ -7,7 +7,7 @@ import net.InPacket;
 import net.ProcessPacket;
 
 /**
- *
+ * AutoAggroHandler
  * @author
  */
 public class AutoAggroHandler implements ProcessPacket<ClientSocket> {
@@ -19,23 +19,20 @@ public class AutoAggroHandler implements ProcessPacket<ClientSocket> {
 
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
-        User chr = c.getPlayer();
-        if ((chr == null) || (chr.getMap() == null) || (chr.isHidden())) {
-            return;
-        }
-        Mob monster = chr.getMap().getMonsterByOid(iPacket.DecodeInt());
-
-        if (monster != null && chr.getTruePosition().distanceSq(monster.getTruePosition()) < 200000.0D && monster.getLinkCID() <= 0) {
-            if (monster.getController() != null) {
-                if (chr.getMap().getCharacterById(monster.getController().getId()) == null) {
-                    monster.switchController(chr, true);
+        User pPlayer = c.getPlayer();
+        if ((pPlayer == null) || (pPlayer.getMap() == null) || (pPlayer.isHidden())) return;
+        
+        Mob pMob = pPlayer.getMap().getMonsterByOid(iPacket.DecodeInt());
+        if (pMob != null && pPlayer.getTruePosition().distanceSq(pMob.getTruePosition()) < 200000.0D && pMob.getLinkCID() <= 0) {
+            if (pMob.getController() != null) {
+                if (pPlayer.getMap().getCharacterById(pMob.getController().getId()) == null) {
+                    pMob.switchController(pPlayer, true);
                 } else {
-                    monster.switchController(monster.getController(), true);
+                    pMob.switchController(pMob.getController(), true);
                 }
             } else {
-                monster.switchController(chr, true);
+                pMob.switchController(pPlayer, true);
             }
         }
     }
-
 }

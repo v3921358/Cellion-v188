@@ -126,13 +126,13 @@ public final class AtomCollisionHandler implements ProcessPacket<ClientSocket> {
                 //   case 36101009:
                 //     case 36111010:
                 bulletCount = effect.getAttackCount();
-                DamageParse.applyAttack(attack, skill, pPlayer, skillLevel, GameConstants.damageCap, effect, AttackType.RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
+                DamageParse.OnWeaponAttackRequest(attack, skill, pPlayer, skillLevel, GameConstants.damageCap, effect, AttackType.RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
                 break;
             default:
-                DamageParse.applyAttackMagic(attack, skill, pPlayer, effect);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
+                DamageParse.OnMagicAttackRequest(attack, skill, pPlayer, effect);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
                 break;
         }
-        DamageParse.modifyCriticalAttack(attack, pPlayer, 3, effect);
+        DamageParse.OnCriticalAttack(attack, pPlayer, 3, effect);
 
         if (GameConstants.isEventMap(pPlayer.getMapId())) {
             for (MapleEventType t : MapleEventType.values()) {

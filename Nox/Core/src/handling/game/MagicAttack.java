@@ -95,13 +95,13 @@ public final class MagicAttack implements ProcessPacket<ClientSocket> {
                 //   case 36101009:
                 //     case 36111010:
                 bulletCount = pEffect.getAttackCount();
-                DamageParse.applyAttack(pAttack, pSkill, pPlayer, nSkillLevel, GameConstants.damageCap, pEffect, AttackType.RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
+                DamageParse.OnWeaponAttackRequest(pAttack, pSkill, pPlayer, nSkillLevel, GameConstants.damageCap, pEffect, AttackType.RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
                 break;
             default:
-                DamageParse.applyAttackMagic(pAttack, pSkill, pPlayer, pEffect);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
+                DamageParse.OnMagicAttackRequest(pAttack, pSkill, pPlayer, pEffect);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
                 break;
         }
-        DamageParse.modifyCriticalAttack(pAttack, pPlayer, 3, pEffect);
+        DamageParse.OnCriticalAttack(pAttack, pPlayer, 3, pEffect);
 
         if (GameConstants.isEventMap(pPlayer.getMapId())) {
             for (MapleEventType t : MapleEventType.values()) {

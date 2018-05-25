@@ -1266,7 +1266,7 @@ public class WvsContext {
         OutPacket oPacket = new OutPacket(SendPacketOpcode.BrodcastMsg.getValue());
         oPacket.EncodeByte(8);
         oPacket.EncodeString(sMessage);
-        oPacket.EncodeByte(nChannelID - 1);
+        oPacket.EncodeByte(nChannelID);
         oPacket.EncodeBool(bWhisper);
         PacketHelper.addItemPosition(oPacket, pItem, true, false);
         if (pItem != null) {

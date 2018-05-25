@@ -210,7 +210,7 @@ public final class CloseRangeAttack {
             }
         }
 
-        DamageParse.modifyCriticalAttack(pAttack, pPlayer, 1, pEffect);
+        DamageParse.OnCriticalAttack(pAttack, pPlayer, 1, pEffect);
         nAttackCount *= (bMirror ? 2 : 1);
         pPlayer.checkFollow();
         
@@ -248,7 +248,7 @@ public final class CloseRangeAttack {
             }
         }
         
-        DamageParse.applyAttack(pAttack, pSkill, pPlayer, nAttackCount, nMaxDamage, pEffect, bMirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
+        DamageParse.OnWeaponAttackRequest(pAttack, pSkill, pPlayer, nAttackCount, nMaxDamage, pEffect, bMirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
         
         pAttack.cleanupMemory(); // Clean up memory references.
     }

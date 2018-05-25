@@ -83,9 +83,9 @@ public class CashShopOperation {
         c.SendPacket(CSPacket.warpCS(c));
         c.SendPacket(CSPacket.loadCategories());
         c.SendPacket(CSPacket.SetCashShopBannerPicture());
-        c.SendPacket(CSPacket.CS_Top_Items());
-        c.SendPacket(CSPacket.CS_Special_Item());
-        c.SendPacket(CSPacket.CS_Featured_Item());
+        //c.SendPacket(CSPacket.CS_Top_Items());
+        //c.SendPacket(CSPacket.CS_Special_Item());
+        //c.SendPacket(CSPacket.CS_Featured_Item());
         c.SendPacket(CSPacket.showNXMapleTokens(c.getPlayer()));
         playerCashShopInfo(c);
         CashShop mci = c.getPlayer().getCashInventory();
