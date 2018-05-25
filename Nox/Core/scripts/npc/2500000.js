@@ -35,9 +35,15 @@ function action(mode, type, selection) {
 			}
 			
 			if (cm.getPlayer().getLevel() >= 120) {
-				sendString += "#L4#(Lv. 120+) Portal to Mori Ranmaru, in the Dead Mine #l\r\n";
+				sendString += "#L4#(Lv. 120+) Portal to Mori Ranmaru, in the Dead Mine#l\r\n";
 			} else {
 				sendString += "#L1004##r(Lv. 120 Required) Portal to Mori Ranmaru, in the Dead Mine#l#d\r\n"
+			}
+			
+			if (cm.getPlayer().getLevel() >= 130) {
+				sendString += "#L8#(Lv. 130+) Portal to Hilla, in Hilla's Tower#l\r\n";
+			} else {
+				sendString += "#L1004##r(Lv. 130 Required) Portal to Hilla, in Hilla's Tower#l#d\r\n"
 			}
 			
 			if (cm.getPlayer().getLevel() >= 140) {
@@ -91,6 +97,9 @@ function action(mode, type, selection) {
 					break;
 				case 7: // Damien
 					cm.warp(350141000, 0);
+					break;
+				case 8: // Hilla
+					cm.warp(262031200, 0); // Hilla
 					break;
 				
 				//cm.warp(262031200, 0); // Hilla

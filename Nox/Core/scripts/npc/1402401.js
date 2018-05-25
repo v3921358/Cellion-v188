@@ -37,7 +37,7 @@ function action(mode, type, selection) {
 							cm.getPlayer().setBossAttempt("HILLA");
 							cm.resetMap(262031300);
 							cm.warp(262031300, 0);
-							cm.spawnMonsterInMap(262031300, 8870000, 160, 195); 
+							//cm.spawnMonsterInMap(262031300, 8870000, 160, 195); 
 							cm.dispose();
 						} else {
 							cm.sendOk("Sorry, looks like another expedition squad is currently fighting Lotus on this channel. You will be able to enter once they are finished or you can attempt the expedition on another channel.");
@@ -59,7 +59,7 @@ function action(mode, type, selection) {
 									cm.getPlayer().setPartyBossAttempt("HILLA");
 									cm.resetMap(262031300);
 									cm.warpParty(262031300); 
-									cm.spawnMonsterInMap(262031300, 8870000, 160, 195); 
+									//cm.spawnMonsterInMap(262031300, 8870000, 160, 195); 
 									cm.dispose();
 								} else {
 									cm.sendOk("\tSorry, looks like you have fought Hilla recently.\r\n\t#bPlease try again later.");
