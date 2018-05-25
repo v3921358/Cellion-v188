@@ -22,17 +22,12 @@ import server.quest.Quest;
 import service.ChannelServer;
 import tools.packet.*;
 import tools.packet.CField.EffectPacket.UserEffectCodes;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -70,11 +65,11 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
         if (nSkill == Mercedes.ELEMENTAL_KNIGHTS_2) {
             nSkill += Randomizer.nextInt(2);
         }
-        int xy1 = 0;
-        int xy2 = 0;
+        int nXY1 = 0;
+        int nXY2 = 0;
         if (nSkill == AngelicBuster.SOUL_SEEKER) {
-            xy1 = iPacket.DecodeShort();
-            xy2 = iPacket.DecodeShort();
+            nXY1 = iPacket.DecodeShort();
+            nXY2 = iPacket.DecodeShort();
             int soulnum = iPacket.DecodeByte();
             int scheck = 0;
             int scheck2 = 0;
@@ -98,7 +93,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
         Skill pSkill = SkillFactory.getSkill(nSkill);
         nSkillLevel = pPlayer.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(nSkill));
         StatEffect pEffect = pPlayer.inPVP() ? pSkill.getPVPEffect(nSkillLevel) : pSkill.getEffect(nSkillLevel);
-        int nMob;
+        int nMobID;
         Mob pMob;
 
         if (((GameConstants.isAngel(nSkill)) && (pPlayer.getStat().equippedSummon % 10000 != nSkill % 10000)) || ((pPlayer.inPVP()) && (pSkill.isPVPDisabled()))) {
@@ -170,7 +165,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
         }
 
         /*Check & Debug*/
- /*Return early for broken skills and display debug output for other skills cast.*/
+       /*Return early for broken skills and display debug output for other skills cast.*/
         switch (nSkill) {
             case Mechanic.OPEN_PORTAL_GX9:
                 c.SendPacket(WvsContext.enableActions());
@@ -182,7 +177,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
         }
 
         /*Buff Handler*/
- /*Add Character Temporary Stats & Apply Buff.*/
+       /*Add Character Temporary Stats & Apply Buff.*/
         boolean bApplyStats = true;
         switch (nSkill) {
             case Phantom.VOL_DAME: {
@@ -576,8 +571,8 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 break;
             }
             case Citizen.CAPTURE_4:
-                nMob = iPacket.DecodeInt();
-                pMob = pPlayer.getMap().getMonsterByOid(nMob);
+                nMobID = iPacket.DecodeInt();
+                pMob = pPlayer.getMap().getMonsterByOid(nMobID);
                 if (pMob != null) {
                     boolean success = true; // (pMob.getHp() <= pMob.getMobMaxHp() / 2L) && (pMob.getId() >= 9304000) && (pMob.getId() < 9305000);
                     pPlayer.getMap().broadcastPacket(pPlayer, CField.EffectPacket.showBuffeffect(pPlayer.getId(), nSkill, UserEffectCodes.SkillUse, pPlayer.getLevel(), nSkillLevel, (byte) (success ? 1 : 0)), pPlayer.getTruePosition());
@@ -620,8 +615,8 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 break;
             }
             case WildHunter.CALL_OF_THE_WILD:
-                nMob = pPlayer.getFirstLinkMid();
-                pMob = pPlayer.getMap().getMonsterByOid(nMob);
+                nMobID = pPlayer.getFirstLinkMid();
+                pMob = pPlayer.getMap().getMonsterByOid(nMobID);
                 pPlayer.setKeyDownSkillTime(0L);
                 pPlayer.getMap().broadcastPacket(pPlayer, CField.skillCancel(pPlayer, nSkill), false);
                 if (pMob != null) {
@@ -688,12 +683,6 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 if ((iPacket.GetRemainder() == 5L) || (iPacket.GetRemainder() == 7L)) {
                     pPOS = iPacket.DecodePosition();
                 }
-                /*if ((pEffect.isMagicDoor() && !FieldLimitType.UnableToUseMysticDoor.check(pPlayer.getMap())) // check magic door
-                        // check mount req
-                        || ((!c.getPlayer().isIntern()) && (c.getPlayer().getBuffedValue(CharacterTemporaryStat.RideVehicle) == null) && (c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -122) == null))) {
-                    c.write(CWvsContext.enableActions());
-                    return;
-                }*/
                 pEffect.applyTo(pPlayer, pPOS);
             }
         }

@@ -296,89 +296,6 @@ public class DamageParse {
                     }
                 }
 
-                // Additional Skill Monster Status Handling
-                switch (pAttack.skill) {
-                    case 4001002:
-                    case 4001334:
-                    case 4001344:
-                    case 4111005:
-                    case 4121007:
-                    case 4201005:
-                    case 4211002:
-                    case 4221001:
-                    case 4221007:
-                    case 4301001:
-                    case 4311002:
-                    case 4311003:
-                    case 4331000:
-                    case 4331004:
-                    case 4331005:
-                    case 4331006:
-                    case 4341002:
-                    case 4341004:
-                    case 4341005:
-                    case 4341009:
-                    case 14001004:
-                    case 14111022:
-                    case 14111023:
-                    case 14121001:
-                    case 14121004:
-                    case 14111002:
-                    case 14111005:
-                        int[] skills = {4120005, 4220005, 4340001, 14110004};
-                        for (int i : skills) {
-                            Skill skill = SkillFactory.getSkill(i);
-                            if (pPlayer.getTotalSkillLevel(skill) > 0) {
-                                StatEffect venomEffect = skill.getEffect(pPlayer.getTotalSkillLevel(skill));
-                                if (!venomEffect.makeChanceResult()) {
-                                    break;
-                                }
-                                pTarget.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.POISON, 1, i, null, false), true, venomEffect.getDuration(), true, venomEffect);
-                                break;
-                            }
-                        }
-                        break;
-                    case 4121017:
-                        Skill skill = SkillFactory.getSkill(4121017);
-                        if (pPlayer.getTotalSkillLevel(skill) > 0) {
-                            StatEffect showdown = skill.getEffect(pPlayer.getTotalSkillLevel(skill));
-                            pTarget.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.SHOWDOWN, showdown.getX(), 4121017, null, false), false, showdown.getDuration(), false, showdown);
-                        }
-                        break;
-                    case 4201004:
-                        pTarget.handleSteal(pPlayer);
-                        break;
-                    case 21000002:
-                    case 21100001:
-                    case 21100002:
-                    case 21100004:
-                    case 21110002:
-                    case 21110003:
-                    case 21110004:
-                    case 21110006:
-                    case 21110007:
-                    case 21110008:
-                    case 21120002:
-                    case 21120005:
-                    case 21120006:
-                    case 21120009:
-                    case 21120010:
-                        if ((pPlayer.getBuffedValue(CharacterTemporaryStat.WeaponCharge) != null) && (!pTarget.getStats().isBoss())) {
-                            StatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.WeaponCharge);
-                            if (eff != null) {
-                                pTarget.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.SPEED, eff.getX(), eff.getSourceId(), null, false), false, eff.getY() * 1000, true, eff);
-                            }
-                        }
-                        if ((pPlayer.getBuffedValue(CharacterTemporaryStat.BodyPressure) != null) && (!pTarget.getStats().isBoss())) {
-                            StatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.BodyPressure);
-
-                            if ((eff != null) && (eff.makeChanceResult()) && (!pTarget.isBuffed(MonsterStatus.NEUTRALISE))) {
-                                pTarget.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.NEUTRALISE, 1, eff.getSourceId(), null, false), false, eff.getX() * 1000, true, eff);
-                            }
-                        }
-                        break;
-                }
-
                 // Megido Flame Custom Handling
                 if (pPlayer.getSkillLevel(SkillFactory.getSkill(2121055)) > 0 || pPlayer.getSkillLevel(SkillFactory.getSkill(2121052)) > 0/* || player.getJob() == 1211 || player.getJob() == 1212*/) {
                     int percent = 45;
@@ -403,7 +320,6 @@ public class DamageParse {
 
                 if ((nTotalDamageToOneMonster > 0) || (pAttack.skill == 1221011) || (pAttack.skill == 21120006)) {
                     
-                    // Kinesis Psychic Points handling.
                     if (GameConstants.isKinesis(pPlayer.getJob())) {
                         KinesisHandler.handlePsychicPoint(pPlayer, pAttack.skill);
                     }
@@ -434,22 +350,18 @@ public class DamageParse {
                     }
                     if ((GameConstants.isPhantom(pPlayer.getJob())) && (pAttack.skill != 24120002) && (pAttack.skill != 24100003)) {
                         if (pPlayer.hasSkill(Phantom.CARTE_BLANCHE)) {
-                            //for (AttackMonster at : attack.allDamage) {
                             if (Randomizer.nextInt(100) < 20) {
                                 pPlayer.getMap().broadcastPacket(JobPacket.PhantomPacket.ThrowCarte(pPlayer, 0/*at.getObjectId()*/));
                                 PhantomHandler.handleDeck(pPlayer);
                             }
-                            //}
                         }
                     }
                     if (GameConstants.isXenon(pPlayer.getJob())) {
-                        //for (AttackMonster at : attack.allDamage) {
                         if (pPlayer.hasBuff(CharacterTemporaryStat.HollowPointBullet)) {
                             if (Randomizer.nextInt(100) < 30) {
                                 pPlayer.getMap().broadcastPacket(JobPacket.XenonPacket.EazisSystem(pPlayer.getId(), 0));
                             }
                         }
-                        //}
                     }
                     if (GameConstants.isKaiser(pPlayer.getJob())) {
                         for (int i = 0; i < pAttack.mobCount; i++) {
@@ -482,112 +394,6 @@ public class DamageParse {
                     
                     pPlayer.onAttack(pTarget.getMobMaxHp(), pTarget.getMobMaxMp(), pAttack.skill, pTarget.getObjectId(), nTotalDamage, 0);
                     
-                    switch (pAttack.skill) {
-                        case 4001002:
-                        case 4001334:
-                        case 4001344:
-                        case 4111005:
-                        case 4121007:
-                        case 4201005:
-                        case 4211002:
-                        case 4221001:
-                        case 4221007:
-                        case 4301001:
-                        case 4311002:
-                        case 4311003:
-                        case 4331000:
-                        case 4331004:
-                        case 4331005:
-                        case 4331006:
-                        case 4341002:
-                        case 4341004:
-                        case 4341005:
-                        case 4341009:
-                        case 14001004:
-                        case 14111002:
-                        case 14111005:
-                            int[] skills = {4120005, 4220005, 4340001, 14110004};
-                            for (int i : skills) {
-                                Skill skill = SkillFactory.getSkill(i);
-                                if (pPlayer.getTotalSkillLevel(skill) > 0) {
-                                    StatEffect venomEffect = skill.getEffect(pPlayer.getTotalSkillLevel(skill));
-                                    if (!venomEffect.makeChanceResult()) {
-                                        break;
-                                    }
-                                    pTarget.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.POISON, Integer.valueOf(1), i, null, false), true, venomEffect.getDuration(), true, venomEffect);
-                                    break;
-                                }
-
-                            }
-
-                            break;
-                        case 4201004:
-                            pTarget.handleSteal(pPlayer);
-                            break;
-                        case 21000002:
-                        case 21100001:
-                        case 21100002:
-                        case 21100004:
-                        case 21110002:
-                        case 21110003:
-                        case 21110004:
-                        case 21110006:
-                        case 21110007:
-                        case 21110008:
-                        case 21120002:
-                        case 21120005:
-                        case 21120006:
-                        case 21120009:
-                        case 21120010:
-                            if ((pPlayer.getBuffedValue(CharacterTemporaryStat.WeaponCharge) != null) && (!pTarget.getStats().isBoss())) {
-                                StatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.WeaponCharge);
-                                if (eff != null) {
-                                    pTarget.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.SPEED, Integer.valueOf(eff.getX()), eff.getSourceId(), null, false), false, eff.getY() * 1000, true, eff);
-                                }
-                            }
-                            if ((pPlayer.getBuffedValue(CharacterTemporaryStat.BodyPressure) != null) && (!pTarget.getStats().isBoss())) {
-                                StatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.BodyPressure);
-
-                                if ((eff != null) && (eff.makeChanceResult()) && (!pTarget.isBuffed(MonsterStatus.NEUTRALISE))) {
-                                    pTarget.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.NEUTRALISE, Integer.valueOf(1), eff.getSourceId(), null, false), false, eff.getX() * 1000, true, eff);
-                                }
-                            }
-                            break;
-                    }
-                    
-                    if (nTotalDamageToOneMonster > 0) {
-                        Item weapon_ = pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11);
-                        if (weapon_ != null) {
-                            MonsterStatus stat = GameConstants.getStatFromWeapon(weapon_.getItemId());
-                            if ((stat != null) && (Randomizer.nextInt(100) < GameConstants.getStatChance())) {
-                                MonsterStatusEffect monsterStatusEffect = new MonsterStatusEffect(stat, Integer.valueOf(GameConstants.getXForStat(stat)), GameConstants.getSkillForStat(stat), null, false);
-                                pTarget.applyStatus(pPlayer, monsterStatusEffect, false, 10000L, false, null);
-                            }
-                        }
-                        if (pPlayer.getBuffedValue(CharacterTemporaryStat.Blind) != null) {
-                            StatEffect eff = pPlayer.getStatForBuff(CharacterTemporaryStat.Blind);
-
-                            if ((eff != null) && (eff.makeChanceResult())) {
-                                MonsterStatusEffect monsterStatusEffect = new MonsterStatusEffect(MonsterStatus.ACC, Integer.valueOf(eff.getX()), eff.getSourceId(), null, false);
-                                pTarget.applyStatus(pPlayer, monsterStatusEffect, false, eff.getY() * 1000, true, eff);
-                            }
-                        }
-                        if ((pPlayer.getJob() == 121) || (pPlayer.getJob() == 122)) {
-                            Skill skill = SkillFactory.getSkill(1211006);
-                            if (pPlayer.isBuffFrom(CharacterTemporaryStat.WeaponCharge, skill)) {
-                                StatEffect eff = skill.getEffect(pPlayer.getTotalSkillLevel(skill));
-                                MonsterStatusEffect monsterStatusEffect = new MonsterStatusEffect(MonsterStatus.FREEZE, Integer.valueOf(1), skill.getId(), null, false);
-                                pTarget.applyStatus(pPlayer, monsterStatusEffect, false, eff.getY() * 2000, true, eff);
-                            }
-                        }
-                    }
-                    if ((pEffect != null) && (pEffect.getMonsterStati().size() > 0) && (pEffect.makeChanceResult())) {
-                        for (Map.Entry z : pEffect.getMonsterStati().entrySet()) {
-                            pTarget.applyStatus(pPlayer, new MonsterStatusEffect((MonsterStatus) z.getKey(), (Integer) z.getValue(), pSkill.getId(), null, false), pEffect.isPoison(), pEffect.getDuration(), true, pEffect);
-                        }
-                    }
-                }
-
                 if (GameConstants.getAttackDelay(pAttack.skill, pSkill) >= 300 // Originally 100
                         && !GameConstants.isNoDelaySkill(pAttack.skill) && (pAttack.skill != 3101005) && (!pTarget.getStats().isBoss()) && (pPlayer.getTruePosition().distanceSq(pTarget.getTruePosition()) > GameConstants.getAttackRange(pEffect, pPlayer.getStat().defRange))) {
                     pPlayer.getCheatTracker().registerOffense(CheatingOffense.ATTACK_FARAWAY_MONSTER, new StringBuilder().append("[Distance: ").append(pPlayer.getTruePosition().distanceSq(pTarget.getTruePosition())).append(", Expected Distance: ").append(GameConstants.getAttackRange(pEffect, pPlayer.getStat().defRange)).append(" Job: ").append(pPlayer.getJob()).append("]").toString());
@@ -598,7 +404,7 @@ public class DamageParse {
         OnMultiKill(pAttack, pPlayer); // Handle multi kills
 
         
-        
+        // TODO: Clean up the stuff below later. -Mazen
         if (GameConstants.isDemonAvenger(pPlayer.getJob())) {
             if (pPlayer.getSkillLevel(31010002) > 0) {
                 StatEffect eff = SkillFactory.getSkill(31010002).getEffect(pPlayer.getSkillLevel(31010002));

@@ -7458,8 +7458,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     
     public void gainNX(int nAmount, boolean bNotification) {
         maplepoints += nAmount;
-        if (bNotification) dropMessage(-1,  ((nAmount > 0) ? "Gained" : "Lost") + nAmount + " NX.");
-        //if (bNotification) dropMessage(-1, "You have" + ((nAmount > 0) ? " gained " : " lost ") + nAmount + " NX!");
+        if (bNotification) dropMessage(-1,  ((nAmount > 0) ? "+ " : "- ") + nAmount + " NX");
     }
     
     public void modifyCSPoints(int type, int quantity) {
