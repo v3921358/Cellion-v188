@@ -102,7 +102,7 @@ public class MercedesEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
                 break;
             case Mercedes.HEROIC_MEMORIES_1:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case Mercedes.HEROS_WILL_500_50_5:
                 break;

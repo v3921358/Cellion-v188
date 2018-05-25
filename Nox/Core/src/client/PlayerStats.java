@@ -1537,7 +1537,47 @@ public class PlayerStats implements Serializable {
             localmaxmp_ += (120 * pPlayer.getLevel());
         }
 
+
         // Mercedes
+        pSkill = SkillFactory.getSkill(Mercedes.ISHTARS_RING_REINFORCE);
+        nSLV = pPlayer.getSkillLevel(pSkill);
+        if (nSLV > 0) {
+            pEffect = pSkill.getEffect(nSLV);
+            dam_r += pEffect.getDAMRate();
+        }
+        pSkill = SkillFactory.getSkill(Mercedes.ISHTARS_RING_BOSS_RUSH);
+        nSLV = pPlayer.getSkillLevel(pSkill);
+        if (nSLV > 0) {
+            pEffect = pSkill.getEffect(nSLV);
+            bossdam_r += pEffect.getBossDamage();
+        }
+        pSkill = SkillFactory.getSkill(Mercedes.ISHTARS_RING_GUARDBREAK);
+        nSLV = pPlayer.getSkillLevel(pSkill);
+        if (nSLV > 0) {
+            pEffect = pSkill.getEffect(nSLV);
+            ignoreTargetDEF += pEffect.getIgnoreMob();
+        }
+
+       /* pSkill = SkillFactory.getSkill(Mercedes.SPIKES_ROYALE_ARMORBREAK);
+        nSLV = pPlayer.getSkillLevel(pSkill);
+        if (nSLV > 0) {
+            pEffect = pSkill.getEffect(nSLV);
+            ignoreTargetDEF += pEffect.getX();
+        }*/
+
+        pSkill = SkillFactory.getSkill(Mercedes.SPIKES_ROYALE_TEMPER_LINK);
+        nSLV = pPlayer.getSkillLevel(pSkill);
+        if (nSLV > 0) {
+            pEffect = pSkill.getEffect(nSLV);
+            damageIncrease.put(Mercedes.LEAP_TORNADO, pEffect.getDAMRate());
+        }
+
+        pSkill = SkillFactory.getSkill(Mercedes.SPIKES_ROYALE_REINFORCE);
+        nSLV = pPlayer.getSkillLevel(pSkill);
+        if (nSLV > 0) {
+            pEffect = pSkill.getEffect(nSLV);
+            dam_r += pEffect.getDAMRate();
+        }
         pSkill = SkillFactory.getSkill(Mercedes.ELVEN_GRACE);
         nSLV = pPlayer.getSkillLevel(pSkill);
         if (nSLV >0) {
