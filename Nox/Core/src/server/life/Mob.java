@@ -430,11 +430,11 @@ public class Mob extends AbstractLoadedMapleLife {
             if (!BuffedMob.BUFFED_BOSSES) {
                 if (!getStats().isBoss()) {
                     nBaseEXP /= BuffedMob.HP_BUFF; // Corrects the original base exp calculation from increasing the HP.
-                    nBaseEXP *= 2;
+                    nBaseEXP *= BuffedMob.EXP_BUFF;
                 }   
             } else {
                 nBaseEXP /= BuffedMob.HP_BUFF;
-                nBaseEXP *= 2;
+                nBaseEXP *= BuffedMob.EXP_BUFF;
             }
         }
 
@@ -1590,14 +1590,14 @@ public class Mob extends AbstractLoadedMapleLife {
 
         long nMobHP = getMobMaxHp();
         short nMobLV = stats.getLevel();
-        if (nMobHP > 1000000000L) nMobHP = 1000000000L;                                         // Caps the the HP at this value for the calculation.
+        if (nMobHP > 800000000L) nMobHP = 800000000L;                                           // Caps the the HP at this value for the calculation.
         if (nMobLV < 60) nMobLV /= 3;
         
-        int nMinRange = (int) (nMobHP / 350000) + (nMobLV * 4);                                 // NX Gain Formula
+        int nMinRange = (int) (nMobHP / 500000) + (nMobLV * 3);                                 // NX Gain Formula
         int nMaxRange = (int) Math.round(nMinRange * 1.25);                                     // Amount NX Gain can go up to.
         int nResultNX = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1)));    // Formula to produce a value between the specified range.
 
-        int nGainChance = 30;                                                                   // Base NX Drop Chance %
+        int nGainChance = 20;                                                                   // Base NX Drop Chance %
 
         if (BuffedMob.OnBuffedChannel(Utility.requestChannel(pPlayer.getId()))) {               // Increase NX Rates from Buffed Monsters.
             if (!BuffedMob.BUFFED_BOSSES) {

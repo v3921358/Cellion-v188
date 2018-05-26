@@ -625,7 +625,7 @@ public class ClientSocket extends Socket {
                                 loginok = 7;
                             }
                         } else {
-                            if (ServerConstants.DEVMODE && !gm) {
+                            if (ServerConstants.GM_ONLY && !gm) {
                                 loginok = 5;
                             } else {
                                 loginok = 0;

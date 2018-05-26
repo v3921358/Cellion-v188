@@ -12,6 +12,7 @@ import handling.world.AttackInfo;
 import handling.world.AttackType;
 import handling.world.DamageParse;
 import client.jobs.Kinesis.*;
+import constants.skills.Magician;
 import service.ChannelServer;
 import server.StatEffect;
 import server.Timer;
@@ -71,6 +72,8 @@ public final class MagicAttack implements ProcessPacket<ClientSocket> {
 
         int bulletCount = 1;
         switch (pAttack.skill) {
+            case Magician.ENERGY_BOLT:
+            case Magician.ENERGY_BOLT_1:
             case 140001289: // Psychic Attack
             case 27101100: // Sylvan Lance
             case 27101202: // Pressure Void

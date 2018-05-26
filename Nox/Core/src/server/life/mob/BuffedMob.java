@@ -17,8 +17,8 @@ public class BuffedMob {
     /**
      * The channel range for Buffed Channels.
      */
-    static int BUFFED_CHANNEL_START = 5,
-               BUFFED_CHANNEL_END = 10;
+    static int BUFFED_CHANNEL_START = 8,
+               BUFFED_CHANNEL_END = 20;
     
     /**
      * Allows boss monsters to be Buffed in addition to normal monster.
@@ -31,7 +31,7 @@ public class BuffedMob {
     public static double HP_BUFF = 100,
                          DEFENCE_BUFF = 4,
                          SPEED_BUFF = 3,
-                         EXP_BUFF = 4,
+                         EXP_BUFF = 10,
                          MESO_BUFF = 4,
                          NX_BUFF = 4,
                          DAMAGE_BUFF = 4;

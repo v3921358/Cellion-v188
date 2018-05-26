@@ -39,8 +39,13 @@ function action(mode, type, selection){
 			 
 			 + "\r\n________________________________________________\r\n\r\n"
 			 
+			 + "#d #i5520000# #L5520000# 2,000 NX - Scissors of Karma#l\r\n#k"
+			 + "#d#i5520001# #L5520001# 5,000 NX - Platinum Scissors of Karma#l\r\n#k"
+			 
+			 + "\r\n________________________________________________\r\n\r\n"
+			 
 			 + "#d #i5076000# #L5076000# 2,000 NX - Item Megaphone#l\r\n#k"
-			 + "#d#i5040004##L5040004# 250,000 NX - Hyper Teleport Rock (3 Days)#l\r\n#k"
+			 + "#d#i5040004##L5040004# 30,000 NX - Hyper Teleport Rock (3 Days)#l\r\n#k"
 		;
 		cm.sendSimple(text);
 	} else if (status == 1) {
@@ -70,11 +75,17 @@ function action(mode, type, selection){
 			case 2048306: // Bonus Potential Scroll
 				nCost = 200000 * nQuantity;
 				break;
+			case 5520000: // Scissors of Karma
+				nCost = 25000 * nQuantity;
+				break;
+			case 5520001: // Platinum Scissors of Karma
+				nCost = 50000 * nQuantity;
+				break;
 			case 5076000: // Item Megaphone
 				nCost = 2000 * nQuantity;
 				break;
 			case 5040004: // Hyper Teleport Rock
-				nCost = 250000 * nQuantity;
+				nCost = 30000 * nQuantity;
 				break;
 		}
 		if (nQuantity > 0 && nQuantity <= 1000) {

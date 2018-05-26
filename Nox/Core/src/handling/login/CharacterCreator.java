@@ -330,7 +330,8 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             pNewCharacter.getStat().maxhp = 300;
             pNewCharacter.getStat().hp = 300;
             pNewCharacter.setRemainingAp(50);
-            pNewCharacter.setRemainingSp(5);
+            pNewCharacter.setRemainingSp(5, 0);
+            pNewCharacter.setRemainingSp(5, 1);
         }
 
         if (ServerConstants.UNIVERSAL_START) {

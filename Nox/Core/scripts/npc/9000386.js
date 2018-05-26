@@ -142,8 +142,17 @@ function action(mode, type, selection) {
 			cm.sendSimple("You need 30 of #i4001126##t4001126# to proceed to job advancement.\r\n"
 						+ "Please come back when you have enough");
 			}
+		} else if(cm.getPlayer().getLevel() >= 100 && cm.getPlayer().getJob() == 433){
+			cm.getPlayer().changeJob(434);
+			cm.dispose();
+		} else if(cm.getPlayer().getLevel() >= 60 && cm.getPlayer().getJob() == 432){
+			cm.getPlayer().changeJob(433);
+			cm.dispose();
 		} else if(cm.getPlayer().getLevel() >= 45 && cm.getPlayer().getJob() == 431){
 			cm.getPlayer().changeJob(432);
+			cm.dispose();
+		} else if(cm.getPlayer().getLevel() >= 30 && cm.getPlayer().getJob() == 430){
+			cm.getPlayer().changeJob(431);
 			cm.dispose();
 		} else if(cm.getPlayer().getLevel() >= 60 && (cm.getPlayer().getJob()%10 == 0 || cm.getPlayer().getJob() == 2212 || cm.getPlayer().getJob() == 432)){
 			if (freeAdvance || cm.haveItem(4001126, 60)) {
