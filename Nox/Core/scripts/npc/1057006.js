@@ -16,12 +16,12 @@ function action(mode, type, selection) {
         if (cm.getPlayer().getVMatrixRequirement() && cm.getPlayer().nMobKillsV < 1) {
             cm.sendYesNo("Huh? You look pretty strong, but have you heard of the #bV Matrix#k? It allows you to crush #dNodestones#k and access the #r5#kth Job of your class to raise your strength to new heights!\r\n\r\nDo you have what it takes to start your #r5#kth Job Quest?");
         } else if (cm.getPlayer().getVMatrixRequirement() && cm.getPlayer().nMobKillsV > 0 && cm.getPlayer().nMobKillsV < 1000 || cm.getPlayer().getVMatrixRequirement() && cm.getPlayer().nMagnusKillsV < 1 || cm.getPlayer().getVMatrixRequirement() && cm.getPlayer().nVellumKillsV < 1 || cm.getPlayer().getVMatrixRequirement() && cm.getPlayer().nCrimsonQueenKillsV < 1 || cm.getPlayer().getVMatrixRequirement() && cm.getPlayer().nVonBonKillsV < 1 || cm.getPlayer().getVMatrixRequirement() && cm.getPlayer().nPierreKillsV < 1) {
-			cm.sendOk("I see you still haven't completed my tasks... Here is your progress #r#n " + cm.getPlayer().nMobKillsV + "/" + "1000 monster kills(level 200+)#r#nI also need you to kill Magnus, Von Bon, Crimson Queen, Pierre, and Vellum. #r#nTalk to me once you've done all of this, and don't waste my time!");
+            cm.sendOk("I see you still haven't completed my tasks... Here is your progress #r#n " + cm.getPlayer().nMobKillsV + "/" + "1000 monster kills(level 200+)#r#nI also need you to kill Magnus, Von Bon, Crimson Queen, Pierre, and Vellum. #r#nTalk to me once you've done all of this, and don't waste my time!");
             cm.dispose();
         } else if (cm.getPlayer().hasVMatrix()) {
             cm.sendOk("You have already received your 5th job advancement. Congratulations, and keep up the hard work!");
             cm.dispose();
-        } else if (!cm.hasVMatrix() && cm.getPlayer().nMobKillsV > 999 && cm.getPlayer().nMagnusKillsV > 0 && cm.getPlayer().nVellumKillsV > 0 && cm.getPlayer().nCrimsonQueenKillsV > 0 && cm.getPlayer().nVonBonKillsV > 0 && cm.getPlayer().nPierreKillsV > 0) {
+        } else if (!cm.getPlayer().hasVMatrix() && cm.getPlayer().nMobKillsV > 999 && cm.getPlayer().nMagnusKillsV > 0 && cm.getPlayer().nVellumKillsV > 0 && cm.getPlayer().nCrimsonQueenKillsV > 0 && cm.getPlayer().nVonBonKillsV > 0 && cm.getPlayer().nPierreKillsV > 0) {
             cm.sendYesNo("Looks like you've finally completed my tasks. You're not so bad after all. #r#n Are you ready to proceed with your 5th job advancement?");
             readyToAdvance = true;
         } else {

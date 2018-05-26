@@ -290,7 +290,12 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @return 
      */
     public boolean hasVMatrix() {
-        return (getQuestStatus(1460).getValue() == 2);
+        boolean has = false;
+        int status = getQuestStatus(1460).getValue();
+        if (status == 0 || status == 1) { has = false; }
+        if(status == 2) { has = true; }
+        return has;
+
     }
     
     /**
