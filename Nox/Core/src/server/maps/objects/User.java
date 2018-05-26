@@ -290,12 +290,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @return 
      */
     public boolean hasVMatrix() {
-        boolean has = false;
-        int status = getQuestStatus(1460).getValue();
-        if (status == 0 || status == 1) { has = false; }
-        if(status == 2) { has = true; }
-        return has;
-
+        boolean bVMatrix = false;
+        int nStatus = getQuestStatus(1460).getValue();
+        if (nStatus == 0 || nStatus == 1) { bVMatrix = false; }
+        if(nStatus == 2) { bVMatrix = true; }
+        return bVMatrix;
     }
     
     /**
@@ -304,7 +303,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      */
     public void incrementVMatrixKills(Mob pMob) {
         if (getVMatrixRequirement()) {
-            if (pMob.getStats().getLevel() > 0) nMobKillsV += 1; // Lv. 200 Mob Kills
+            if (pMob.getStats().getLevel() > 200) nMobKillsV += 1; // Lv. 200 Mob Kills
             if (pMob.getId() == 0) nMagnusKillsV += 1;
             if (pMob.getId() == 0) nVellumKillsV += 1;
             if (pMob.getId() == 0) nCrimsonQueenKillsV += 1;

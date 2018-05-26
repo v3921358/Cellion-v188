@@ -3384,9 +3384,12 @@ public final class MapleMap {
 
             float nSpawnRate = 1f;                                                                              // Base spawn rate.
 
-            if (ServerConstants.MODIFY_GLOBAL_SPAWN_RATE) nSpawnRate *= ServerConstants.SPAWN_RATE_MULTIPLIER;  // Adjust global spawn rate.
-            nSpawnRate *= TrainingMap.OnBalanceSpawnRate(nMax);                                                 // Adjust spawn rate for training maps.
-
+            if (TrainingMap.OnBalanceSpawnRate(getId()) > 1) {
+                nSpawnRate *= TrainingMap.OnBalanceSpawnRate(getId());                                          // Adjust spawn rate for training maps.
+            } else if (ServerConstants.MODIFY_GLOBAL_SPAWN_RATE) {
+                nSpawnRate *= ServerConstants.SPAWN_RATE_MULTIPLIER;                                            // Adjust global spawn rate.
+            }
+            
             int nShouldSpawn = (int) (Math.min(smr.maxRegularSpawnAtOnce, Math.max(0, nMax - nSpawnedSize)) * nSpawnRate);
 
             if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) {

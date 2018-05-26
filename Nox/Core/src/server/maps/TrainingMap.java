@@ -21,15 +21,21 @@ public class TrainingMap {
      * @syntax {nMapID, nSpawnRateMultiplier}
      */
     public static float[][] aTrainingMaps = new float[][]{
-        {272000300, 5}, // Leafre in Flames 3 
-        {860000032, 5}, // Dangerous Deep Sea 3 
-        {240093100, 5}, // Inside the Stone Colossus 2
-        {273040100, 5}, // Forsaken Excavation Site 2
-        {211060830, 5}, // Very Tall Castle Walls
-        {106031504, 5}, // Galley    
-        {120040300, 5}, // Beachgrass Dunes 3 
-        {551030000, 5}, // Fantasy Theme Park 3
-        {105200900, 5}, // Neglected Garden
+        {610040000, 0.0002F}, // Alien Base Corridor
+        {610040100, 0.0002F}, // Alien Base Corridor 2
+        {610040200, 0.0002F}, // Alien Base Corridor 3
+        {610040210, 0.0002F}, // Alien Base Corridor 4
+        {610040220, 0.0002F}, // Alien Base Corridor 5
+        {610040230, 0.0002F}, // Alien Base Corridor 6
+        {272000300, 10}, // Leafre in Flames 3 
+        {860000032, 10}, // Dangerous Deep Sea 3 
+        {240093100, 10}, // Inside the Stone Colossus 2
+        {273040100, 10}, // Forsaken Excavation Site 2
+        {211060830, 10}, // Very Tall Castle Walls
+        {106031504, 10}, // Galley    
+        {120040300, 10}, // Beachgrass Dunes 3 
+        {551030000, 10}, // Fantasy Theme Park 3
+        {105200900, 10}, // Neglected Garden
     };
     
     /**

@@ -32,6 +32,7 @@ import tools.packet.CField;
 import tools.packet.WvsContext;
 import tools.packet.JobPacket;
 import net.ProcessPacket;
+import server.life.mob.BuffedMob;
 import server.maps.objects.User;
 
 public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
@@ -247,6 +248,8 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
         pPlayer.getCheatTracker().checkTakeDamage(damage);
         Pair modify = pPlayer.modifyDamageTaken(damage, attacker);
         damage = ((Double) modify.left).intValue();
+        
+        if (BuffedMob.OnBuffedChannel(pPlayer.getClient().getChannel())) damage *= BuffedMob.DAMAGE_BUFF; // Buffed Channel Damage 
 
         if (damage > 0) {
             pPlayer.getCheatTracker().setAttacksWithoutHit(false);

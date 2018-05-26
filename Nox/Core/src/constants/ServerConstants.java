@@ -110,7 +110,7 @@ public class ServerConstants {
     
     /*Spawn Rate Configuration*/
     public static final boolean MODIFY_GLOBAL_SPAWN_RATE = true; //Enables spawn rate multiplier.
-    public static final float SPAWN_RATE_MULTIPLIER = 7.0F; //Multipy the spawn rate globally by this variable.
+    public static final float SPAWN_RATE_MULTIPLIER = 12.0F; //Multipy the spawn rate globally by this variable.
 
     /*Pet Configuration*/
     public static final boolean AUTO_PET_LOOT = true; //Enables automatic pet loot whenever a pet is equipped.

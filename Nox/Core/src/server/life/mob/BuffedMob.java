@@ -17,7 +17,7 @@ public class BuffedMob {
     /**
      * The channel range for Buffed Channels.
      */
-    static int BUFFED_CHANNEL_START = 4,
+    static int BUFFED_CHANNEL_START = 5,
                BUFFED_CHANNEL_END = 10;
     
     /**
@@ -28,12 +28,13 @@ public class BuffedMob {
     /**
      * Buffed Mob Stat Multipliers.
      */
-    public static double HP_BUFF = 10,
-                         DEFENCE_BUFF = 2,
-                         SPEED_BUFF = 2,
-                         EXP_BUFF = 2,
-                         MESO_BUFF = 2,
-                         NX_BUFF = 2;
+    public static double HP_BUFF = 100,
+                         DEFENCE_BUFF = 4,
+                         SPEED_BUFF = 3,
+                         EXP_BUFF = 4,
+                         MESO_BUFF = 4,
+                         NX_BUFF = 4,
+                         DAMAGE_BUFF = 4;
     
     /**
      * OnBuffedChannel
@@ -69,12 +70,7 @@ public class BuffedMob {
     public static Mob OnBuffedMobResult(Mob pMob) {
         
         short nLV = pMob.getStats().getLevel();
-        long nHP = pMob.getStats().getHp();
-        
-        /*Modify Monster HP*/
-        if (nLV < 20) {
-            nHP *= 100;
-        } 
+        long nHP = (long) (pMob.getStats().getHp() * HP_BUFF);
         
         /*Modify Monster Level*/
         if (nLV > 200) {
@@ -95,14 +91,13 @@ public class BuffedMob {
             nLV *= 2;
         }
         
-        long nMaxHP = (long) (pMob.getStats().getFinalMaxHp() * HP_BUFF);
         int nPhysDefence = (int) (pMob.getStats().getPhysicalDefense() * DEFENCE_BUFF);
         int nMagicDefence = (int) (pMob.getStats().getMagicDefense() * DEFENCE_BUFF);
         int nSpeed = (int) (pMob.getStats().getSpeed() * SPEED_BUFF);
         
         pMob.changeLevel(nLV);
         pMob.setHp(nHP);
-        pMob.getStats().setFinalMaxHp(nMaxHP);
+        pMob.getStats().setFinalMaxHp(nHP);
         pMob.getStats().setPhysicalDefense(nPhysDefence);
         pMob.getStats().setMagicDefense(nMagicDefence);
         pMob.getStats().setSpeed(nSpeed);
