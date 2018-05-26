@@ -1935,6 +1935,129 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     /**
+     * Save Character Info
+     *
+     * @author Mazen Massoud
+     * @purpose Prevent roll back.
+     */
+    public void saveCharacterInfo() {
+        if (isClone()) {
+            return;
+        }
+        try (Connection con = Database.GetConnection()) {
+            try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, hsp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, zeroBetaHair = ?, zeroBetaFace = ?, angelicDressupHair = ?, angelicDressupFace = ?, angelicDressupSuit = ?, faceMarking = ?, ears = ?, tail = ?, map = ?, meso = ?, hpApUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, pets = ?, subcategory = ?, currentrep = ?, totalrep = ?, gachexp = ?, fatigue = ?, charm = ?, charisma = ?, craft = ?, insight = ?, sense = ?, will = ?, totalwins = ?, totallosses = ?, pvpExp = ?, pvpPoints = ?, reborns = ?, apstorage = ?, elf = ?, honourExp = ?, honourLevel = ?, friendshippoints = ?, friendshiptoadd = ?, name = ?, starterquest = ?, starterquestid = ?, evoentry = ?, position = ?, isBurning = ? WHERE id = ?", RETURN_GENERATED_KEYS)) {
+                int index = 0;
+                ps.setInt(++index, level);
+                ps.setInt(++index, fame);
+                ps.setInt(++index, stats.getStr());
+                ps.setInt(++index, stats.getDex());
+                ps.setInt(++index, stats.getLuk());
+                ps.setInt(++index, stats.getInt());
+                ps.setLong(++index, level >= GameConstants.maxLevel ? 0 : exp);
+                ps.setInt(++index, stats.getHp() < 1 ? 50 : stats.getHp());
+                ps.setInt(++index, stats.getMp());
+                ps.setInt(++index, stats.getMaxHp());
+                ps.setInt(++index, stats.getMaxMp());
+                final StringBuilder sps = new StringBuilder();
+                for (int i = 0; i < remainingSp.length; i++) {
+                    sps.append(remainingSp[i]);
+                    sps.append(",");
+                }
+                final String skillpoints = sps.toString();
+                ps.setString(++index, skillpoints.substring(0, skillpoints.length() - 1));
+
+                final StringBuilder hsps = new StringBuilder();
+                for (int i = 0; i < remainingHSp.length; i++) {
+                    hsps.append(remainingHSp[i]);
+                    hsps.append(",");
+                }
+                final String hskillpoints = hsps.toString();
+                ps.setString(++index, hskillpoints.substring(0, hskillpoints.length() - 1));
+                ps.setInt(++index, remainingAp);
+                ps.setByte(++index, gmLevel);
+                ps.setByte(++index, skinColor);
+                ps.setByte(++index, gender);
+                ps.setInt(++index, job);
+                ps.setInt(++index, hair);
+                ps.setInt(++index, face);
+                ps.setInt(++index, zeroBetaHair);
+                ps.setInt(++index, zeroBetaFace);
+                ps.setInt(++index, angelicDressupHair);
+                ps.setInt(++index, angelicDressupFace);
+                ps.setInt(++index, angelicDressupSuit);
+                ps.setInt(++index, faceMarking);
+                ps.setInt(++index, ears);
+                ps.setInt(++index, tail);
+                ps.setInt(++index, mapid);
+                ps.setLong(++index, meso);
+                ps.setShort(++index, hpApUsed);
+                if (map == null) {
+                    ps.setByte(++index, (byte) 0);
+                } else {
+                    final MaplePortal closest = map.findClosestSpawnpoint(getTruePosition());
+                    ps.setByte(++index, (byte) (closest != null ? closest.getId() : 0));
+                }
+                ps.setInt(++index, party == null ? -1 : party.getId());
+                ps.setShort(++index, buddylist.getCapacity());
+                final StringBuilder petz = new StringBuilder();
+                int petLength = 0;
+                for (final Pet pet : pets) {
+                    if (pet.getSummoned()) {
+                        pet.saveToDb();
+                        petz.append(pet.getItem().getPosition());
+                        petz.append(",");
+                        petLength++;
+                    }
+                }
+                while (petLength < 3) {
+                    petz.append("-1,");
+                    petLength++;
+                }
+                final String petstring = petz.toString();
+                ps.setString(++index, petstring.substring(0, petstring.length() - 1));
+                ps.setByte(++index, subcategory);
+                ps.setInt(++index, currentrep);
+                ps.setInt(++index, totalrep);
+                ps.setInt(++index, gachexp);
+                ps.setShort(++index, fatigue);
+                ps.setInt(++index, traits.get(MapleTraitType.charm).getTotalExp());
+                ps.setInt(++index, traits.get(MapleTraitType.charisma).getTotalExp());
+                ps.setInt(++index, traits.get(MapleTraitType.craft).getTotalExp());
+                ps.setInt(++index, traits.get(MapleTraitType.insight).getTotalExp());
+                ps.setInt(++index, traits.get(MapleTraitType.sense).getTotalExp());
+                ps.setInt(++index, traits.get(MapleTraitType.will).getTotalExp());
+                ps.setInt(++index, totalWins);
+                ps.setInt(++index, totalLosses);
+                ps.setInt(++index, pvpExp);
+                ps.setInt(++index, pvpPoints);
+                ps.setInt(++index, reborns);
+                ps.setInt(++index, apstorage);
+                ps.setInt(++index, elf);
+                ps.setInt(++index, honourExp);
+                ps.setInt(++index, honorLevel);
+                ps.setString(++index, friendshippoints[0] + "," + friendshippoints[1] + "," + friendshippoints[2] + "," + friendshippoints[3]);
+                ps.setInt(++index, friendshiptoadd);
+                ps.setString(++index, name);
+                ps.setInt(++index, starterquest);
+                ps.setInt(++index, starterquestid);
+                ps.setInt(++index, evoentry);
+                ps.setInt(++index, charListPosition);
+                ps.setBoolean(++index, isBurning);
+                ps.setInt(++index, id);
+
+                if (ps.executeUpdate() < 1) {
+                    ps.close();
+                    throw new SQLException("Character not in database (" + id + ")");
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    /**
      * Save Inventory and Equips of a Character
      *
      * @author Mazen Massoud
@@ -5380,7 +5503,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         level++;
         
         /*Character Stat Distribution*/
-        int nSP = 3;                                                                        // SP Gain
+        int nSP = 5;                                                                        // SP Gain
         boolean bDoubleSP = false;                                                          // Double SP Bool
         final Map<Stat, Long> pStat = new EnumMap<>(Stat.class);
         int nMaxHP = stats.getMaxHp() + calculateFlatHPGain();                              // Flat HP Gain
@@ -5515,6 +5638,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             sb.append(getName()).append(" has reached Level ").append(level).append("!");
             World.Broadcast.broadcastMessage(CField.getGameMessage(sb.toString(), (short) 7));
         }
+        
+        saveCharacterInfo(); // Save progress to avoid rollback.
     }
     
     /**

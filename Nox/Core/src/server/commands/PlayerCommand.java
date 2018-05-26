@@ -181,6 +181,16 @@ public class PlayerCommand {
         }
     }
 
+    public static class Save extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            c.getPlayer().dropMessage(-1, "Saved Successfully");
+            c.getPlayer().saveToDB(false, false);
+            c.getPlayer().completeDispose();
+            return 1;
+        }
+    }
     
     public static class EA extends Dispose {
     }

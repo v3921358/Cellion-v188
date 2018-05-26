@@ -25,19 +25,20 @@ public class ServerConstants {
     public static final String SOURCE_REVISION = "1.0";
     
     /*Server IP Address*/
-    public static final String HOST = "cellion.org"; // Server IP Address
+    public static final String HOST = "rexion.dynu.net"; // Server IP Address 
     public static final byte[] NEXON_IP = new byte[]{(byte) 8, (byte) 31, (byte) 99, (byte) 141}; // 8.31.99.141
     public static final byte[] NEXON_CHAT_IP = new byte[]{(byte) 8, (byte) 31, (byte) 99, (byte) 133}; // Chat Server
     
     /*Standard Login or API Configuration*/
    /*These values will be overwritten by the configuration.ini file.*/
-    public static boolean USE_API = false; // If false, use the standard login methods and database communications.
-    public static boolean DEVMODE = true;
-
+    public static boolean USE_API = true; // If false, use the standard login methods and database communications.
+    public static boolean DEVMODE = false; // Dev mode for API stuff?
+    public static boolean GM_ONLY = false; // Only allow GMs to login.
+    
     /*Server Debug*/
    /*These values will be overwritten by the configuration.ini file.*/
-    public static boolean DEVELOPER_DEBUG_MODE = true;
-    public static boolean REDUCED_DEBUG_SPAM = true;
+    public static boolean DEVELOPER_DEBUG_MODE = false;
+    public static boolean REDUCED_DEBUG_SPAM = false;
 
     /*General Rate Configuration*/
    /*These values will be overwritten by the configuration.ini file.*/
@@ -69,8 +70,8 @@ public class ServerConstants {
     
     /*Server Configuration*/
     public static final int FLAGS = 3;
-    public static final int CHANNEL_COUNT = 10;
-    public static final int USER_LIMIT = 200;
+    public static final int CHANNEL_COUNT = 20;
+    public static final int USER_LIMIT = 500;
     public static final int CHARACTER_LIMIT = 16;
     public static final String SERVER_MESSAGE = "";
     public static final String EVENT_MESSAGE = "Cellion MapleStory (Beta)";

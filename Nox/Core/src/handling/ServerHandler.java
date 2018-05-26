@@ -254,7 +254,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.SummonedAttack.getValue()] = new SummonAttackHandler();
         handlers[RecvPacketOpcode.Remove.getValue()] = new RemoveSummonHandler();
         handlers[RecvPacketOpcode.SummonedSkill.getValue()] = new SubSummonHandler();
-        handlers[RecvPacketOpcode.MobApplyCtrl.getValue()] = new AutoAggroHandler();
+        //handlers[RecvPacketOpcode.MobApplyCtrl.getValue()] = new AutoAggroHandler();
         
         /**
          * Inventory Operations Handlers

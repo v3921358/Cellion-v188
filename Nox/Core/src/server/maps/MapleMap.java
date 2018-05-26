@@ -2275,7 +2275,7 @@ public final class MapleMap {
             pPlayer.updatePartyMemberHP();
             pPlayer.receivePartyMemberHP();
         }
-        if (!pPlayer.isInBlockedMap() && pPlayer.getLevel() > 10) {
+        if (!pPlayer.isInBlockedMap() && pPlayer.getLevel() >= 10) {
             for (QuickMove qm : QuickMove.values()) {
                 if (qm.getMap() == pPlayer.getMapId() || ServerConstants.QUICKMOVE_EVERYWHERE) {
                     List<QuickMoveNPC> qmn = new LinkedList<>();
