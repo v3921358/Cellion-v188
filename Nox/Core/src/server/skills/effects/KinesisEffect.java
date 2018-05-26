@@ -22,7 +22,7 @@ public class KinesisEffect extends AbstractEffect {
     public void SetEffect(StatEffect pEffect, int nSourceID) {
         switch (nSourceID) {
             case Kinesis.ESP_BOOSTER:
-                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieBooster, pEffect.info.get(StatInfo.indieBooster));
                 break;
             case Kinesis.MENTAL_SHIELD:
                 pEffect.statups.put(CharacterTemporaryStat.KinesisPsychicShield, 1);
@@ -183,7 +183,7 @@ public class KinesisEffect extends AbstractEffect {
             case Kinesis.PSYCHIC_GRAB:
                 break;
             case Kinesis.PSYCHIC_REINFORCEMENT:
-                pEffect.statups.put(CharacterTemporaryStat.IndieMADR, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMADR, pEffect.info.get(StatInfo.indieMadR));
                 break;
             case Kinesis.PSYCHIC_SMASH:
                 break;

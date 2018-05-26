@@ -171,9 +171,6 @@ function action(mode, type, selection) {
 				cm.gainItem(1232001, 1); //10 da
 				cm.gainItem(1232002, 1); //30 da
 				break;
-		}
-		} else {
-	    switch(jobId) {
 		case 430: //DUAL BLADE
 		jobName = "Dual Blade";
 		cm.gainItem(1332007, 1); //8 dagger
@@ -183,13 +180,19 @@ function action(mode, type, selection) {
 		break;
 		case 501: //CANNONEER
 		jobName = "Cannoneer";
+		cm.gainItem(1532000, 1); //10 cannoneer
+		cm.gainItem(1532004, 1); //30 cannoneer
 		break;
 		case 508: //JETT
 		jobName = "Jett";
+		cm.gainItem(1492000, 1);
+		cm.gainItem(1492004, 1);
 		break;
 		case 6001:
 		case 6500: //ANGELIC BUSTER
 		jobName = "Angelic Buster";
+		cm.gainItem(1222001, 1);
+		cm.gainItem(1222002, 1);
 		cm.changeJob(6500);
 		break;
 		case 10000: //ZERO
@@ -197,6 +200,8 @@ function action(mode, type, selection) {
 		break;
 		case 11200://BEAST TAMER
 		jobName = "Beast Tamer";
+		cm.gainItem(1252001, 1);
+		cm.gainItem(1252002, 1);
 		break;
 		case 14000:
 		case 14200: //KINESIS
@@ -208,8 +213,9 @@ function action(mode, type, selection) {
 		case 2700: //LUMINOUS
 		jobName = "Luminous";
 		cm.changeJob(2700);
-		cm.gainItem(1352400);
+		cm.gainItem(1212001);
 		cm.gainItem(1212002);
+		cm.gainItem(1352400);
 		break;
 		case 4001:
 		case 4100: //HAYATO
@@ -219,26 +225,36 @@ function action(mode, type, selection) {
 		case 4002:
 		case 4200: //KANNA
 		jobName = "Kanna";
+		cm.gainItem(1552000, 1);
+		cm.gainItem(1552002, 1);
 		cm.changeJob(4200);
 		break;
 		case 3002:
 		case 3600: //XENON
 		jobName = "Xenon";
+		cm.gainItem(1242001, 1);
+		cm.gainItem(1242002, 1);
 		cm.changeJob(3600);
 		break;
 		case 6000:
 		case 6100: //KAISER
 		jobName = "Kaiser";
+		cm.gainItem(1402001, 1);
+		cm.gainItem(1402002, 1);
 		cm.changeJob(6100);
 		break;
 		case 5000:
 		case 5100: //MIHILE
 		jobName = "Mihile";
+		cm.gainItem(1302001, 1);
+		cm.gainItem(1302002, 1);
 		cm.changeJob(5100);
 		break;
 		case 2005: //SHADE
 		case 2500: //SHADE1
 		jobName = "Shade";
+		cm.gainItem(1482000, 1);
+		cm.gainItem(1482004, 1);
 		cm.changeJob(2500);
 		cm.teachSkill(25001002, 1);
 		cm.teachSkill(25001000, 1);
@@ -246,28 +262,38 @@ function action(mode, type, selection) {
 		case 2003: //PHANTOM
 		case 2400: //PHANTOM1
 		jobName = "Phantom";
+		cm.gainItem(1362001, 1);
+		cm.gainItem(1362005, 1);
 		cm.changeJob(2400);
 		break;
 		case 2002: //MERCEDES
 		case 2300: //MERCEDES1
 		jobName = "Mercedes";
+		cm.gainItem(1522000, 1);
+		cm.gainItem(1522004, 1);
 		cm.changeJob(2300);
 		break;
 		case 2001: //EVAN
 		case 2210: //EVAN1
 		jobName = "Evan"; // 
+		cm.gainItem(1372005, 1); //8 wand
+				cm.gainItem(1372003, 1); //28 wand
+				cm.gainItem(1382000, 1); //10 staff
+				cm.gainItem(1382017, 1); //30 staff
 		cm.changeJob(2210);
 		break;
 		case 2000: //ARAN
 		case 2100: //ARAN1
 		jobName = "Aran";
+		cm.gainItem(1442000, 1);
+		cm.gainItem(1442001, 1);
 		cm.changeJob(2100);
 		break;
-		}
 		}
 		cm.gainItem(2000004, 75); //100 elixirs
 		cm.gainItem(2000005, 25); //50 power elixirs
 		cm.sendNextNoESC("You are now a #b" + jobName +"#k! I trust you will do well with your newfound skills. I've also given you some #bequipment#k to get you started and #bpotions#k to aid you in battle. Good luck in Cellion!");
+	}
 	} else if(status == 3) {
 		cm.getPlayer().sortInventory(2);
 		cm.warp(100000000, 0);
