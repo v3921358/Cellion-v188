@@ -11330,9 +11330,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     } else if (GameConstants.isWarriorDarkKnight(job)) {
                         addReward(1, 1352220, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isMagicianIceLightning(job)) {
-                        addReward(1, 1352230, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    } else if (GameConstants.isMagicianFirePoison(job)) {
                         addReward(1, 1352240, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    } else if (GameConstants.isMagicianFirePoison(job)) {
+                        addReward(1, 1352230, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isMagicianBishop(job)) {
                         addReward(1, 1352250, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isArcherBowmaster(job)) {
