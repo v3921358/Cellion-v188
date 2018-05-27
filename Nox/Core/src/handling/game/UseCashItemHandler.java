@@ -32,7 +32,6 @@ import constants.ItemConstants;
 import constants.ServerConstants;
 import static handling.game.UseRewardItemHandler.UseRewardItem;
 import static handling.game.UseScrollsHandler.UseUpgradeScroll;
-import static handling.game._CommonPlayerOperationHandler.UsePetFood;
 import static handling.game._CommonPlayerOperationHandler.UseTeleRock;
 
 import handling.world.World;
@@ -73,6 +72,7 @@ import server.NebuliteGrade;
 import server.maps.objects.Pet.PetFlag;
 import server.potentials.Cube;
 import server.potentials.ItemPotentialOption;
+import static handling.game._CommonPlayerOperationHandler.UseCashPetFood;
 
 /**
  * UserCashItemRequest
@@ -1768,7 +1768,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
             }
             default: {
                 if (nItemID / 10000 == 524 || nItemID / 10000 == 546) { // Pet food & snacks
-                    bUsed = UsePetFood(c, nItemID);
+                    bUsed = UseCashPetFood(c, nItemID);
                     break;
                 }
                 if (nItemID / 10000 == 512) {
