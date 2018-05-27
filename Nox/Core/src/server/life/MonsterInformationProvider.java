@@ -103,7 +103,7 @@ public class MonsterInformationProvider {
 
     public void tempDrop() {
         ArrayList<String> array = new ArrayList<String>();
-        try (BufferedReader br = new BufferedReader(new FileReader("drops.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("monsterDrops.txt"))) {
             String line;
 
             while ((line = br.readLine()) != null) {
