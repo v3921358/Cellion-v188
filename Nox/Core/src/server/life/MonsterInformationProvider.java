@@ -1,5 +1,7 @@
 package server.life;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -97,6 +99,41 @@ public class MonsterInformationProvider {
 
     public List<MonsterDropEntry> retrieveDrop(int monsterId) {
         return drops.get(monsterId);
+    }
+
+    public void tempDrop() {
+        ArrayList<String> array = new ArrayList<String>();
+        try (BufferedReader br = new BufferedReader(new FileReader("drops.txt"))) {
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String mobId;
+                String dropId;
+                String chance;
+                String minQuantity;
+                String maxQuantity;
+                String questId;
+                if (!line.contains(" ") && !line.isEmpty()) {
+                    mobId = line;
+                }
+                if (line.contains(" ")) {
+                    //append to mobId somehow
+                    String[] dropData = line.split(" ");
+                    dropId = dropData[0];
+                    chance = dropData[1];
+                    minQuantity = dropData[2];
+                    maxQuantity = dropData[3];
+                    questId = dropData[4];
+                    //array.add(line); //not needed if you load value each time
+                }
+                if (line.isEmpty() || line.contains("\\r?\\n")) {
+                    //do nothing
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void loadDrop(int monsterId) {
