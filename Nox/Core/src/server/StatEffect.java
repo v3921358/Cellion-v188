@@ -478,11 +478,7 @@ public class StatEffect implements Serializable {
             }
             //short converting needs math.min cuz of overflow
             if ((mpchange < 0 && GameConstants.isDemonSlayer(applyto.getJob())) || !GameConstants.isDemonSlayer(applyto.getJob())) { // heal
-                
-                /*Here is currently where we currently calculate MP costs, but this causes issues for players when hitting multiple mobs,
-                I'm going to be handling this elsewhere to avoid that issue and clean this up a little. -Mazen*/
-                
-                //stat.setMp(stat.getMp() + mpchange, applyto);
+                stat.setMp(stat.getMp() + mpchange, applyto);
             }
             hpmpupdate.put(Stat.MP, Long.valueOf(stat.getMp()));
         }
@@ -1521,7 +1517,7 @@ public class StatEffect implements Serializable {
         }
         if (primary) {
             if (info.get(StatInfo.mpCon) != 0 && !GameConstants.isDemonSlayer(applyfrom.getJob())) {
-                boolean free = false;
+                boolean free = true; // Should be false, but handling elsewhere to fix mana issues.
                 if (applyfrom.getJob() == 411 || applyfrom.getJob() == 412) {
                     final Skill expert = SkillFactory.getSkill(4110012);
                     if (applyfrom.getTotalSkillLevel(expert) > 0) {
@@ -1551,10 +1547,6 @@ public class StatEffect implements Serializable {
                     }
                 }
             }
-        }
-
-        if (applyfrom.hasGodMode()) {
-            mpchange = 0; // God mode, no mana cost.
         }
         return mpchange;
     }

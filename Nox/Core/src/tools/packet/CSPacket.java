@@ -265,7 +265,7 @@ public class CSPacket {
         oPacket.EncodeByte(0);
         oPacket.EncodeByte(0);
         
-        oPacket.Fill(0, 19);
+        oPacket.Fill(0, 39);
         
         return oPacket;
     }

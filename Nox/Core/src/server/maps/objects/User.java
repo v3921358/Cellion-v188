@@ -563,47 +563,33 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @param nSkillID 
      */
     public void OnSkillCostRequest(int nSkillID) {
-        StatEffect pEffect = SkillFactory.getSkill(nSkillID).getEffect(getTotalSkillLevel(nSkillID));
-        int nMPCost = pEffect.info.get(StatInfo.mpCon);
-        int nPPCost = pEffect.info.get(StatInfo.ppCon);
-        int nHPCost = pEffect.info.get(StatInfo.hpCon);
-        int nFuryCost = pEffect.info.get(StatInfo.forceCon);
         
-        if (isDeveloper() && bExtraDebug) {
-            dropMessage(5, "MP Cost: " + nMPCost);
-            dropMessage(5, "PP Cost: " + nPPCost);
-            dropMessage(5, "HP Cost: " + nHPCost);
-            dropMessage(5, "Fury Cost: " + nFuryCost);
-        }
-        
+        StatEffect pEffect = SkillFactory.getSkill(nSkillID).getEffect(1);
         //TODO: Calculate extra stuff like mp cost reductions, if needed.
         //double mpcalc = (pEffect.info.get(StatInfo.mpCon) - (pEffect.info.get(StatInfo.mpCon) * getStat().mpconReduce / 100)) * (getStat().mpconPercent / 100.0);
         
-        if (hasBuff(CharacterTemporaryStat.Infinity) || hasBuff(CharacterTemporaryStat.InfinityForce)) {
-            nMPCost = 0;
-            nPPCost = 0;
-            nHPCost = 0;
-            nFuryCost = 0;
-        }
+        if (!bGodMode && !hasBuff(CharacterTemporaryStat.Infinity) && !hasBuff(CharacterTemporaryStat.InfinityForce)) {
         
-        // General MP Costs
-        if (nMPCost != 0 && !GameConstants.isDemon(job) && !GameConstants.isZero(job) && !GameConstants.isKanna(job) && !GameConstants.isKinesis(job)) {
-            setMp(getStat().getMp() - nMPCost);
-            updateSingleStat(Stat.MP, getStat().getMp() - nMPCost);
-        }  
-        // Kinesis Psychic Point Handling
-        else if (GameConstants.isKinesis(job)) {
-            // TODO: Move Kinesis PP handling to here.
-        }
-        // Demon Avenger HP Costs
-        else if (GameConstants.isDemonAvenger(job)) {
-            setHp(getStat().getHp() - nHPCost);
-            updateSingleStat(Stat.HP, getStat().getMp() - nMPCost);
-        }
-        // Demon Slayer Fury Costs
-        else if (nFuryCost != 0 && GameConstants.isDemonSlayer(job)) {
-            setMp(getStat().getMp() - nFuryCost);
-            updateSingleStat(Stat.MP, getStat().getMp() - nMPCost);
+            if (!GameConstants.isDemon(job) && !GameConstants.isZero(job) && !GameConstants.isKanna(job) && !GameConstants.isKinesis(job)) {
+                
+                int nMPCost = pEffect.info.get(StatInfo.mpCon);
+                setMp(getStat().getMp() - nMPCost);
+                updateSingleStat(Stat.MP, getStat().getMp() - nMPCost);
+            } else if (GameConstants.isKinesis(job)) {
+                
+                //int nPPCost = pEffect.info.get(StatInfo.ppCon);
+                // TODO: Move Kinesis PP handling to here.
+            } else if (GameConstants.isDemonAvenger(job)) {
+                
+                //int nHPCost = pEffect.info.get(StatInfo.hpCon);
+                //setHp(getStat().getHp() - nHPCost);
+                //updateSingleStat(Stat.HP, getStat().getMp() - nMPCost);
+            } else if (GameConstants.isDemonSlayer(job)) {
+                
+                int nFuryCost = pEffect.info.get(StatInfo.forceCon);
+                setMp(getStat().getMp() - nFuryCost);
+                updateSingleStat(Stat.MP, getStat().getMp() - nFuryCost);
+            }
         }
     }
     
