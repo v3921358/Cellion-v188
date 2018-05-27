@@ -58,7 +58,7 @@ public class PetPickupHandler implements ProcessPacket<ClientSocket> {
         final MapleMapObject ob = chr.getMap().getMapObject(iPacket.DecodeInt(), MapleMapObjectType.ITEM);
 
         if (ob == null || pet == null) {
-            c.getPlayer().dropMessage(5, "The item pickup has failed due to an unknown reason.");
+            //c.getPlayer().dropMessage(5, "The item pickup has failed due to an unknown reason.");
             return;
         }
         final MapleMapItem mapitem = (MapleMapItem) ob;

@@ -429,7 +429,7 @@ public class MobPacket {
         oPacket.EncodeByte(1);// 1 = Control normal, 5 = Control none?
         oPacket.EncodeInt(life.getId());
         SetMobStat(oPacket, life);
-        oPacket.Fill(0, 200);
+        oPacket.Fill(0, 149);
 
         return oPacket;
     }
@@ -454,6 +454,8 @@ public class MobPacket {
             SetMobStat(oPacket, life);
             MobInit(oPacket, life, 0, 0, false, false);
         }
+        
+        oPacket.Fill(0, 69);
         return oPacket;
     }
 

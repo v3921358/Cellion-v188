@@ -1215,7 +1215,7 @@ public class CField {
         oPacket.EncodeInt(0);
         oPacket.EncodeInt(0); //sub_15B8CB0
 
-        oPacket.Fill(0, 29);
+        oPacket.Fill(0, 499);
         
         return oPacket;
     }

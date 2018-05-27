@@ -93,7 +93,7 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
             pull = skil.isPull();
             if (chr.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(skillid)) <= 0) {
                 if (!GameConstants.isIceKnightSkill(skillid) && chr.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(skillid)) <= 0) {
-                    c.Close();
+                    //c.Close();
                     return;
                 }
                 if (GameConstants.isIceKnightSkill(skillid) && chr.getBuffSource(CharacterTemporaryStat.Morph) % 10000 != 1105) {

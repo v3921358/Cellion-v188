@@ -485,6 +485,9 @@ public class BuffPacket {
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.BladeStance)) { //BladeStance -THINK ITS THE HAYATO ONE, IDK DO
             oPacket.EncodeByte(1);
             oPacket.EncodeInt(2);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.Battoujutsu)) {
@@ -903,7 +906,7 @@ public class BuffPacket {
         oPacket.Fill(0, 13);
         oPacket.EncodeShort(600);
 
-        oPacket.Fill(0, 20);
+        oPacket.Fill(0, 39);
 
         return oPacket;
     }
@@ -918,6 +921,8 @@ public class BuffPacket {
         oPacket.EncodeShort(0); // tDelay
         oPacket.EncodeByte(0);
 
+        oPacket.Fill(0, 69);
+        
         return oPacket;
     }
 
