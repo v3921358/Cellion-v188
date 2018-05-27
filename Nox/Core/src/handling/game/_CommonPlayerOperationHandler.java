@@ -13,6 +13,7 @@ import server.maps.MapleMap;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
 import net.InPacket;
+import server.MapleInventoryManipulator;
 import tools.packet.CField;
 import tools.packet.WvsContext;
 import tools.packet.PetPacket;
@@ -378,45 +379,63 @@ public class _CommonPlayerOperationHandler {
         }
     }
 
-    public static final boolean UsePetFood(ClientSocket c, int itemId) {
-        Pet pet = c.getPlayer().getPet(0);
-        if (pet == null) {
+    public static final boolean UseCashPetFood(ClientSocket c, int itemId) {
+        int previousFullness = 100;
+        Pet pet = null;
+
+        if (c.getPlayer() == null) {
             return false;
         }
-        if (!pet.canConsume(itemId)) {
-            pet = c.getPlayer().getPet(1);
-            if (pet != null) {
-                if (!pet.canConsume(itemId)) {
-                    pet = c.getPlayer().getPet(2);
-                    if (pet != null) {
-                        if (!pet.canConsume(itemId)) {
-                            return false;
-                        }
-                    } else {
-                        return false;
-                    }
+        for (final Pet pets : c.getPlayer().getPets()) {
+            if (pets.getSummoned()) {
+                if (pets.getFullness() < previousFullness) {
+                    previousFullness = pets.getFullness();
+                    pet = pets;
                 }
-            } else {
-                return false;
             }
         }
-        final byte petindex = c.getPlayer().getPetIndex(pet);
-        pet.setFullness(100);
-        if (pet.getCloseness() < 30000) {
-            if (pet.getCloseness() + (100 * c.getChannelServer().getTraitRate()) > 30000) {
-                pet.setCloseness(30000);
-            } else {
-                pet.setCloseness((int) (pet.getCloseness() + (100 * c.getChannelServer().getTraitRate())));
-            }
-            if (pet.getCloseness() >= GameConstants.getClosenessNeededForLevel(pet.getLevel() + 1)) {
-                pet.setLevel(pet.getLevel() + 1);
-                c.SendPacket(CField.EffectPacket.showOwnPetLevelUp(null, c.getPlayer().getPetIndex(pet)));
-                c.getPlayer().getMap().broadcastPacket(PetPacket.showPetLevelUp(c.getPlayer(), petindex));
-            }
+        if (pet == null) {
+            c.getPlayer().dropMessage(5, "Your pet is not hungry.");
+            c.SendPacket(WvsContext.enableActions());
+            return false;
         }
-        // c.getPlayer().forceUpdateItem(pet.getItem());
-        c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
-        c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, petindex, true, true), true);
+
+        if (pet.getFullness() < 100) {
+            int newFullness = pet.getFullness() + 30;
+            if (newFullness > 100) {
+                newFullness = 100;
+            }
+            pet.setFullness(newFullness);
+            final byte index = c.getPlayer().getPetIndex(pet);
+
+            if (pet.getCloseness() < 30000) {
+                int newCloseness = pet.getCloseness() + 100;
+                if (newCloseness > 30000) {
+                    newCloseness = 30000;
+                }
+                pet.setCloseness(newCloseness);
+                if (newCloseness >= GameConstants.getClosenessNeededForLevel(pet.getLevel() + 1)) {
+                    pet.setLevel(pet.getLevel() + 1);
+                    c.SendPacket(CField.EffectPacket.showOwnPetLevelUp(null, index));
+                    c.getPlayer().dropMessage(6, "Your pet has leveled up! " + pet.getName() + " is now level " + pet.getLevel() + "." + " Pet Closeness: " + pet.getCloseness());
+                    c.getPlayer().getMap().broadcastPacket(CField.EffectPacket.showOwnPetLevelUp(c.getPlayer(), index));
+                }
+            }
+            c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+            c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, index, true, true), true);
+        } else {
+            int newCloseness = pet.getCloseness() - 1;
+            if (newCloseness < 0) {
+                newCloseness = 0;
+            }
+            pet.setCloseness(newCloseness);
+            if (newCloseness < GameConstants.getClosenessNeededForLevel(pet.getLevel())) {
+                pet.setLevel(pet.getLevel() - 1);
+            }
+            c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+            c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, c.getPlayer().getPetIndex(pet), false, true), true);
+        }
+        c.SendPacket(WvsContext.enableActions());
         return true;
     }
 }
