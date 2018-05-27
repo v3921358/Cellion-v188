@@ -11375,9 +11375,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     } else if (GameConstants.isWarriorDarkKnight(job)) {
                         addReward(1, 1352221, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isMagicianIceLightning(job)) {
-                        addReward(1, 1352231, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    } else if (GameConstants.isMagicianFirePoison(job)) {
                         addReward(1, 1352241, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    } else if (GameConstants.isMagicianFirePoison(job)) {
+                        addReward(1, 1352231, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isMagicianBishop(job)) {
                         addReward(1, 1352251, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isArcherBowmaster(job)) {
@@ -11407,25 +11407,25 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     } else if (GameConstants.isWarriorDarkKnight(job)) {
                         addReward(1, 1352221, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isMagicianIceLightning(job)) {
-                        addReward(1, 1352231, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352232, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isMagicianFirePoison(job)) {
-                        addReward(1, 1352241, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352242, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isMagicianBishop(job)) {
-                        addReward(1, 1352251, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352252, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isArcherBowmaster(job)) {
-                        addReward(1, 1352261, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352262, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isArcherMarksman(job)) {
-                        addReward(1, 1352271, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352272, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isThiefShadower(job)) {
-                        addReward(1, 1352281, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352282, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isThiefNightLord(job)) {
-                        addReward(1, 1352291, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352292, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isPirateBuccaneer(job)) {
-                        addReward(1, 1352901, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352902, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isPirateCorsair(job)) {
-                        addReward(1, 1352911, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352912, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isCannoneer(job)) {
-                        addReward(1, 1352921, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352922, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     }
                     break;
                 case 150:
@@ -11494,22 +11494,22 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isXenon(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(1, 1353000, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(1, 1353001, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
-                    addReward(1, 1353001, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(1, 1353002, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     break;
                 case 60:
                     addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
-                    addReward(1, 1353002, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(1, 1353003, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1190200, 0, 0, 0, "You have been rewarded with a Silver Hybrid Heart for reaching Lv. " + level + "!");
                     break;
                 case 100:
                     ////givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
-                    addReward(1, 1353003, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(1, 1353004, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1190201, 0, 0, 0, "You have been rewarded with a Gold Hybrid Heart for reaching Lv. " + level + "!");
                     break;
                 case 150:
