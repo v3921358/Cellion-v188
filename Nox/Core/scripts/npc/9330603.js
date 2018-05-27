@@ -45,8 +45,9 @@ function action(mode, type, selection) {
             cm.sendYesNo("Are you ready to start your adventure?");
         }
     } else if (status == 2) {
-        if (selectedJob > 0 && jobId != selectedJob) { //job check
+        if (selectedJob > 0 && jobId != selectedJob) { //selected job check
             cm.changeJob(selectedJob);
+        }
             switch (selectedJob) {
                 case 100: //WARRIOR
                     jobName = "Warrior";
@@ -171,6 +172,8 @@ function action(mode, type, selection) {
                     cm.gainItem(1232001, 1); //10 da
                     cm.gainItem(1232002, 1); //30 da
                     break;
+                }
+                switch (jobId) {
                 case 430: //DUAL BLADE
                     jobName = "Dual Blade";
                     cm.gainItem(1332007, 1); //8 dagger
@@ -293,7 +296,6 @@ function action(mode, type, selection) {
             cm.gainItem(2000004, 75); //100 elixirs
             cm.gainItem(2000005, 25); //50 power elixirs
             cm.sendNextNoESC("You are now a #b" + jobName + "#k! I trust you will do well with your newfound skills. I've also given you some #bequipment#k to get you started and #bpotions#k to aid you in battle. Good luck in Cellion!");
-        }
     } else if (status == 3) {
         cm.getPlayer().sortInventory(2);
         cm.warp(100000000, 0);
