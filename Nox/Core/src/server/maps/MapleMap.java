@@ -313,29 +313,31 @@ public final class MapleMap {
         }
         return ret;
     }
-
+ 
     private void dropFromMonster(final User pPlayer, final Mob pMob, final boolean bInstanced) {
         if (pMob == null || pPlayer == null || ChannelServer.getInstance(channel) == null || dropsDisabled || pMob.dropsDisabled() || pPlayer.getPyramidSubway() != null) { //no drops in pyramid ok? no cash either
             return;
         }
 
-        final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-        final byte nDropType = (byte) (pMob.getStats().isExplosiveReward() ? 3 : pMob.getStats().isFfaLoot() ? 2 : pPlayer.getParty() != null ? 1 : 0);
-        final int nMobPOS = pMob.getTruePosition().x;
-        final float nMesoRate = ChannelServer.getInstance(channel).getMesoRate(pPlayer.getWorld());
-        final float nDropRate = ChannelServer.getInstance(channel).getDropRate(pPlayer.getWorld());
-        final float caServerrate = ChannelServer.getInstance(channel).getCashRate();
-        
         // Global Meso Drop
         pMob.OnMesoDropRequest(pPlayer); 
         
-        Item idrop;
-        byte d = 1;
-        Point pos = new Point(0, pMob.getTruePosition().y);
-        double showdown = 100.0;
-        final MonsterStatusEffect mse = pMob.getBuff(MonsterStatus.SHOWDOWN);
-        if (mse != null) {
-            showdown += mse.getX();
+        final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        final byte droptype = (byte) (pMob.getStats().isExplosiveReward() ? 3 : pMob.getStats().isFfaLoot() ? 2 : pPlayer.getParty() != null ? 1 : 0);
+        final int mobpos = pMob.getTruePosition().x;
+        final float cmServerrate = ChannelServer.getInstance(channel).getMesoRate(pPlayer.getWorld());
+        final float chServerrate = ChannelServer.getInstance(channel).getDropRate(pPlayer.getWorld());
+        final float caServerrate = ChannelServer.getInstance(channel).getCashRate();
+        final int cashz = (int) ((pMob.getStats().isBoss() && pMob.getStats().getHPDisplayType() == MonsterHpDisplayType.BossHP ? 20 : 1) * caServerrate);
+        final int cashModifier = (int) ((pMob.getStats().isBoss() ? (pMob.getStats().isPartyBonus() ? (pMob.getMobExp() / 1000) : 0) : (pMob.getMobExp() / 1000 + pMob.getMobMaxHp() / 20000))); //no rate
+        
+        Item pItemDrop;
+        byte nD = 1;
+        Point nPOS = new Point(0, pMob.getTruePosition().y);
+        double nShowdown = 100.0;
+        final MonsterStatusEffect pMobEffect = pMob.getBuff(MonsterStatus.SHOWDOWN);
+        if (pMobEffect != null) {
+            nShowdown += pMobEffect.getX();
         }
 
         final MonsterInformationProvider mi = MonsterInformationProvider.getInstance();
@@ -354,8 +356,8 @@ public final class MapleMap {
             if (de.itemId != 0 && !ii.itemExists(de.itemId)) {
                 continue;
             }
-            if (Randomizer.nextInt(999999) < (int) (de.chance * nDropRate * pPlayer.getDropMod() * pPlayer.getStat().dropBuff / 100.0 * (showdown / 100.0))) {
-                if (mesoDropped && nDropType != 3 && de.itemId == 0) { //not more than 1 sack of meso
+            if (Randomizer.nextInt(999999) < (int) (de.chance * chServerrate * pPlayer.getDropMod() * pPlayer.getStat().dropBuff / 100.0 * (nShowdown / 100.0))) {
+                if (mesoDropped && droptype != 3 && de.itemId == 0) { //not more than 1 sack of meso
                     continue;
                 }
                 if (de.questid > 0 && pPlayer.getQuestStatus(de.questid) != QuestState.Started) {
@@ -364,29 +366,29 @@ public final class MapleMap {
                 if (de.itemId / 10000 == 238 && !pMob.getStats().isBoss() && pPlayer.getMonsterBook().getLevelByCard(ii.getCardMobId(de.itemId)) >= 2) {
                     continue;
                 }
-                if (nDropType == 3) {
-                    pos.x = (nMobPOS + (d % 2 == 0 ? (40 * (d + 1) / 2) : -(40 * (d / 2))));
+                if (droptype == 3) {
+                    nPOS.x = (mobpos + (nD % 2 == 0 ? (40 * (nD + 1) / 2) : -(40 * (nD / 2))));
                 } else {
-                    pos.x = (nMobPOS + ((d % 2 == 0) ? (25 * (d + 1) / 2) : -(25 * (d / 2))));
+                    nPOS.x = (mobpos + ((nD % 2 == 0) ? (25 * (nD + 1) / 2) : -(25 * (nD / 2))));
                 }
                 if (de.itemId == 0) { // meso
                     int mesos = Randomizer.nextInt(1 + Math.abs(de.Maximum - de.Minimum)) + de.Minimum;
                     if (mesos > 0) {
-                        int calcMesoAmount = (int) (mesos * (pPlayer.getStat().mesoBuff / 100.0) * pPlayer.getDropMod() * nMesoRate);
-                        spawnMesoDrop(calcMesoAmount, calcDropPos(pos, pMob.getTruePosition()), pMob, pPlayer, false, nDropType);
+                        int calcMesoAmount = (int) (mesos * (pPlayer.getStat().mesoBuff / 100.0) * pPlayer.getDropMod() * cmServerrate);
+                        spawnMesoDrop(calcMesoAmount, calcDropPos(nPOS, pMob.getTruePosition()), pMob, pPlayer, false, droptype);
                         mesoDropped = true;
                     }
                 } else {
                     if (GameConstants.getInventoryType(de.itemId) == MapleInventoryType.EQUIP) {
-                        idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
+                        pItemDrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
                     } else {
                         final int range = Math.abs(de.Maximum - de.Minimum);
-                        idrop = new Item(de.itemId, (byte) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(range <= 0 ? 1 : range) + de.Minimum : 1), (byte) 0);
+                        pItemDrop = new Item(de.itemId, (byte) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(range <= 0 ? 1 : range) + de.Minimum : 1), (byte) 0);
                     }
-                    idrop.setGMLog("Dropped from monster " + pMob.getId() + " on " + smr.mapid);
-                    spawnMobDrop(idrop, calcDropPos(pos, pMob.getTruePosition()), pMob, pPlayer, nDropType, de.questid, false);
+                    pItemDrop.setGMLog("Dropped from monster " + pMob.getId() + " on " + smr.mapid);
+                    spawnMobDrop(pItemDrop, calcDropPos(nPOS, pMob.getTruePosition()), pMob, pPlayer, droptype, de.questid, false);
                 }
-                d++;
+                nD++;
             }
         }
         final List<MonsterGlobalDropEntry> globalEntry = new ArrayList<>(mi.getGlobalDrop());
@@ -398,30 +400,22 @@ public final class MapleMap {
                     continue;
                 }
                 if (de.itemId == 0) {
-
-                    // Handling NX Gain in MapleMonster instead.
-                    /*int calcNxAmount = (int) ((Randomizer.nextInt(cashz) + cashz + cashModifier) * (chr.getStat().cashBuff / 100.0) * chr.getCashMod());
-                    // Paragon Level Bonus
-                    if (ServerConstants.PARAGON_SYSTEM) {
-                        if (chr.getReborns() >= 5) { // Paragon Level 5+
-                            calcNxAmount *= 1.10; // +10% Increased NX Gain 
-                        }
-                    }
-                    chr.modifyCSPoints(2, calcNxAmount, true); // Global NX Drop*/
+                    //int calcNxAmount = (int) ((Randomizer.nextInt(cashz) + cashz + cashModifier) * (pPlayer.getStat().cashBuff / 100.0) * pPlayer.getCashMod());
+                    //pPlayer.modifyCSPoints(2, calcNxAmount, true); // Global NX Drop
                 } else if (!gDropsDisabled) {
-                    if (nDropType == 3) {
-                        pos.x = (nMobPOS + (d % 2 == 0 ? (40 * (d + 1) / 2) : -(40 * (d / 2))));
+                    if (droptype == 3) {
+                        nPOS.x = (mobpos + (nD % 2 == 0 ? (40 * (nD + 1) / 2) : -(40 * (nD / 2))));
                     } else {
-                        pos.x = (nMobPOS + ((d % 2 == 0) ? (25 * (d + 1) / 2) : -(25 * (d / 2))));
+                        nPOS.x = (mobpos + ((nD % 2 == 0) ? (25 * (nD + 1) / 2) : -(25 * (nD / 2))));
                     }
                     if (GameConstants.getInventoryType(de.itemId) == MapleInventoryType.EQUIP) {
-                        idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
+                        pItemDrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
                     } else {
-                        idrop = new Item(de.itemId, (byte) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : 1), (byte) 0);
+                        pItemDrop = new Item(de.itemId, (byte) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : 1), (byte) 0);
                     }
-                    idrop.setGMLog("Dropped from monster " + pMob.getId() + " on " + smr.mapid + " (Global)");
-                    spawnMobDrop(idrop, calcDropPos(pos, pMob.getTruePosition()), pMob, pPlayer, de.onlySelf ? 0 : nDropType, de.questid, true);
-                    d++;
+                    pItemDrop.setGMLog("Dropped from monster " + pMob.getId() + " on " + smr.mapid + " (Global)");
+                    spawnMobDrop(pItemDrop, calcDropPos(nPOS, pMob.getTruePosition()), pMob, pPlayer, de.onlySelf ? 0 : droptype, de.questid, true);
+                    nD++;
                 }
             }
         }
@@ -3355,8 +3349,13 @@ public final class MapleMap {
     public void OnRespawn(boolean bForce, final long tCurrent) {
         final int nSpawnedSize = spawnedMonstersOnMap.get();
         
+        int nMaximumSpawnCount = maxRegularSpawn.get();
+        if (TrainingMap.OnBalanceSpawnCount(getId()) > 1) {
+            nMaximumSpawnCount = TrainingMap.OnBalanceSpawnCount(getId());
+        }
+        
         if (bForce) {
-            int nShouldSpawn = maxRegularSpawn.get() - nSpawnedSize;
+            int nShouldSpawn = nMaximumSpawnCount - nSpawnedSize;
 
             if (nShouldSpawn > 0) {
                 for (final Spawns pSpawnPoint : bossSpawn) {
@@ -3377,13 +3376,13 @@ public final class MapleMap {
                 }
             }
         } else {
-            int nMax = maxRegularSpawn.get();
+            int nMax = nMaximumSpawnCount;
             if (smr.partyBonusR > 0) {                                                                          // LHC/Cygnus Stronghold, More players = higher spawn rate.
                 nMax *= 1.0f + (0.07f * (float) (this.getCharactersSize() - 1));                                // 2 player = 7% more spawn, 3 = 14% and so on..
             }
 
             float nSpawnRate = 1f;                                                                              // Base spawn rate.
-
+            
             if (TrainingMap.OnBalanceSpawnRate(getId()) > 1) {
                 nSpawnRate *= TrainingMap.OnBalanceSpawnRate(getId());                                          // Adjust spawn rate for training maps.
             } else if (ServerConstants.MODIFY_GLOBAL_SPAWN_RATE) {
@@ -3391,7 +3390,7 @@ public final class MapleMap {
             }
             
             int nShouldSpawn = (int) (Math.min(smr.maxRegularSpawnAtOnce, Math.max(0, nMax - nSpawnedSize)) * nSpawnRate);
-
+            
             if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) {
                 System.out.printf("[Debug] SpawnedMonsterOnMap (%s), MaxRegularSpawn (%s), MaxRegularSpawnAtOnce (%s)\r\n", spawnedMonstersOnMap.get(), maxRegularSpawn.get(), smr.maxRegularSpawnAtOnce);
             }

@@ -215,14 +215,7 @@ public class Mob extends AbstractLoadedMapleLife {
 
         // Setup to instant kill bosses while testing/debugging.
         if (from.isDeveloper()) {
-            switch (this.getId()) {
-                case 8880000: // Magnus
-                case 8240099: // Lotus
-                case 8930000: // Chaos Vellum
-                    from.dropMessage(-1, "Developer Instant Kill");
-                    getStats().setHp(1);
-                    break;
-            }
+            
         }
 
         if (ServerConstants.DEVELOPER_DEBUG_MODE) System.err.println("[Damage Operation] Mob Damage Received (" + damage + ")");

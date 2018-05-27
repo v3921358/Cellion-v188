@@ -14,15 +14,11 @@ var nCost;
 var nChoice;
 
 function action(mode, type, selection){
-	if (mode == 1) {
-		status++;
-	} else {
-		if (status == 0){
-			cm.sendNextS("Enjoy your adventure!", 5);
-            cm.dispose();
-		}
-        status -= 1;
-	}
+	if (mode != 1) {
+        cm.dispose();
+        return;
+    }
+	status++;
 	
 	if (status == 0) {
 		text = "What are you interested in purchasing?\r\n\r\n#r"
@@ -111,7 +107,7 @@ function action(mode, type, selection){
 			
 			if (cm.getPlayer().getCSPoints(2) >= nCost) {
 				cm.getPlayer().modifyCSPoints(2, -nCost, true);
-				cm.gainCube(nChoice, nQuantity);
+				cm.gainItem(nChoice, nQuantity);
 				cm.sendOk("You have successfully purchased #b" + nQuantity + "#k #i" + nChoice + "# .");
 				cm.dispose();
 			} else {

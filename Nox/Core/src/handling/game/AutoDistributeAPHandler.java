@@ -47,44 +47,40 @@ public class AutoDistributeAPHandler implements ProcessPacket<ClientSocket> {
             return;
         }
         
-        if (pStat == Stat.MaxMP || pStat == Stat.MaxHP) {
-            addStat *= 20;
-            
-            if (GameConstants.isDemonAvenger(pPlayer.getJob())) {
-                pPlayer.setHpApUsed((short) (pPlayer.getHpApUsed() + pPlayer.getRemainingAp()));
-            }
-        }
-        
         Map<Stat, Long> pStatUpdate = new EnumMap<>(Stat.class);
         PlayerStats pCharStat = pPlayer.getStat();
         
         if (pPlayer.getRemainingAp() >= nAmount) {
             if (pStat == Stat.STR) {
-                pCharStat.setStr((short) (pCharStat.getStr() + nAmount), pPlayer);
+                pCharStat.setStr((short) (pCharStat.getStr() + addStat), pPlayer);
                 pStatUpdate.put(Stat.STR, Long.valueOf(pCharStat.getStr()));
             }
             if (pStat == Stat.DEX) {
-                pCharStat.setDex((short) (pCharStat.getDex() + nAmount), pPlayer);
+                pCharStat.setDex((short) (pCharStat.getDex() + addStat), pPlayer);
                 pStatUpdate.put(Stat.DEX, Long.valueOf(pCharStat.getDex()));
             }
             if (pStat == Stat.INT) {
-                pCharStat.setInt((short) (pCharStat.getInt() + nAmount), pPlayer);
+                pCharStat.setInt((short) (pCharStat.getInt() + addStat), pPlayer);
                 pStatUpdate.put(Stat.INT, Long.valueOf(pCharStat.getInt()));
             }
             if (pStat == Stat.LUK) {
-                pCharStat.setLuk((short) (pCharStat.getLuk() + nAmount), pPlayer);
+                pCharStat.setLuk((short) (pCharStat.getLuk() + addStat), pPlayer);
                 pStatUpdate.put(Stat.LUK, Long.valueOf(pCharStat.getLuk()));
             }
             if (pStat == Stat.MaxHP) {
-                if (pCharStat.getMaxHp() + (nAmount * 30) > 500000) {
+                addStat *= 30;
+                if (pCharStat.getMaxHp() + addStat > 500000) {
+                    c.SendPacket(WvsContext.enableActions());
                     return;
                 }
-                pCharStat.setMaxHp((short) (pCharStat.getMaxHp() + nAmount * 30), pPlayer);
+                pCharStat.setMaxHp(pCharStat.getMaxHp() + addStat, pPlayer);
                 pStatUpdate.put(Stat.MaxHP, Long.valueOf(pCharStat.getMaxHp()));
+                if (GameConstants.isDemonAvenger(pPlayer.getJob())) {
+                    pPlayer.setHpApUsed((short) (pPlayer.getHpApUsed() + pPlayer.getRemainingAp()));
+                }
             }
             
             pPlayer.setRemainingAp(pPlayer.getRemainingAp() - nAmount);
-            //pStatUpdate.put(pStat, (long) addStat);
             pStatUpdate.put(Stat.AP, (long) pPlayer.getRemainingAp());
             c.SendPacket(WvsContext.OnPlayerStatChanged(pPlayer, pStatUpdate));
             c.SendPacket(WvsContext.enableActions());

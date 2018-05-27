@@ -62,6 +62,7 @@ public class BeastTamerEffect extends AbstractEffect {
                 break;
             case BeastTamer.FLY:
                 pEffect.statups.put(CharacterTemporaryStat.NewFlying, 1);
+                pEffect.info.put(StatInfo.time, 40000);
                 break;
             case BeastTamer.FOCUSED_TIME_1:
                 break;

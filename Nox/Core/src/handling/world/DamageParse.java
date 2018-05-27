@@ -588,12 +588,12 @@ public class DamageParse {
                 if ((pAttack.numberOfHits > pEffect.getBulletCount()) || (pAttack.mobCount > pEffect.getMobCount())) {
                     if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at line " + Thread.currentThread().getStackTrace()[2].getLineNumber() + ".");
                     pPlayer.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
-                    return;
+                    //return;
                 }
             } else if (((pAttack.numberOfHits > pEffect.getAttackCount()) && (pEffect.getAttackCount() != 0)) || (pAttack.mobCount > pEffect.getMobCount())) {
                 if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at line " + Thread.currentThread().getStackTrace()[2].getLineNumber() + ".");
                 pPlayer.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
-                return;
+                //return;
             }
 
         }
@@ -703,9 +703,9 @@ public class DamageParse {
 
                 nTotalDamage += nTotalDamageToOneMonster;
 
-                if ((GameConstants.getAttackDelay(pAttack.skill, pSkill) >= 100) && (!GameConstants.isNoDelaySkill(pAttack.skill)) && !GameConstants.isMismatchingBulletSkill(pAttack.skill) && (!pMob.getStats().isBoss()) && (pPlayer.getTruePosition().distanceSq(pMob.getTruePosition()) > GameConstants.getAttackRange(pEffect, pPlayer.getStat().defRange))) {
+                if ((GameConstants.getAttackDelay(pAttack.skill, pSkill) >= 150) && (!GameConstants.isNoDelaySkill(pAttack.skill)) && !GameConstants.isMismatchingBulletSkill(pAttack.skill) && (!pMob.getStats().isBoss()) && (pPlayer.getTruePosition().distanceSq(pMob.getTruePosition()) > GameConstants.getAttackRange(pEffect, pPlayer.getStat().defRange))) {
                     pPlayer.getCheatTracker().registerOffense(CheatingOffense.ATTACK_FARAWAY_MONSTER, new StringBuilder().append("[Distance: ").append(pPlayer.getTruePosition().distanceSq(pMob.getTruePosition())).append(", Expected Distance: ").append(GameConstants.getAttackRange(pEffect, pPlayer.getStat().defRange)).append(" Job: ").append(pPlayer.getJob()).append("]").toString());
-                    if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at line " + Thread.currentThread().getStackTrace()[2].getLineNumber() + ".");
+                    if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at attack delay check.");
                     return;
                 }
                 if ((pAttack.skill == 2301002) && (!pMobStat.getUndead())) {

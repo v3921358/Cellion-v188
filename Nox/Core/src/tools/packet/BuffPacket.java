@@ -175,6 +175,8 @@ public class BuffPacket {
             oPacket.EncodeByte(0);
         }
 
+        oPacket.Fill(0, 19);
+        
         //todo: if (newFireBomb) write(0);
         return oPacket;
     }
@@ -906,7 +908,7 @@ public class BuffPacket {
         oPacket.Fill(0, 13);
         oPacket.EncodeShort(600);
 
-        oPacket.Fill(0, 39);
+        oPacket.Fill(0, 69);
 
         return oPacket;
     }

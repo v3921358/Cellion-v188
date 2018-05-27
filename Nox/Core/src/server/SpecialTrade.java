@@ -3,7 +3,6 @@
  */
 package server;
 
-import java.util.concurrent.locks.ReentrantLock;
 import server.maps.objects.User;
 import tools.packet.PlayerShopPacket;
 
@@ -104,13 +103,13 @@ public class SpecialTrade {
     public static void OnSpecialTradeResult(User pPlayerOne, User pPlayerTwo) {
         
         if (pPlayerOne.nOfferNX > 0) { // Handle Player One Offers
-            pPlayerOne.gainNX(pPlayerOne.nOfferNX, false);
+            pPlayerOne.gainNX(-pPlayerOne.nOfferNX, false);
             pPlayerOne.yellowMessage("[Trade ->] You have sent " + pPlayerTwo.getName() + " " + pPlayerOne.nOfferNX + " NX!");
             pPlayerTwo.gainNX(pPlayerOne.nOfferNX, false);
             pPlayerTwo.yellowMessage("[Trade <-] You have received " + pPlayerOne.nOfferNX + " NX from "+ pPlayerOne.getName() + "!");
         }
         if (pPlayerTwo.nOfferNX > 0) { // Handle Player Two Offers
-            pPlayerTwo.gainNX(pPlayerTwo.nOfferNX, false);
+            pPlayerTwo.gainNX(-pPlayerTwo.nOfferNX, false);
             pPlayerTwo.yellowMessage("[Trade ->] You have sent " + pPlayerOne.getName() + " " + pPlayerTwo.nOfferNX + " NX!");
             pPlayerOne.gainNX(pPlayerTwo.nOfferNX, false);
             pPlayerOne.yellowMessage("[Trade <-] You have received " + pPlayerTwo.nOfferNX + " NX from "+ pPlayerTwo.getName() + "!");

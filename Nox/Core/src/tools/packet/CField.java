@@ -2216,6 +2216,8 @@ public class CField {
         oPacket.EncodeBool(false);
         oPacket.EncodeInt(0);
         oPacket.EncodeBool(false);
+        
+        oPacket.Fill(0, 29);
 
         return oPacket;
     }
@@ -4111,6 +4113,9 @@ public class CField {
             oPacket.EncodeShort(0); // X (Spirit Bond?)
             oPacket.EncodeShort(0); // Y (Spirit Bond?)
             oPacket.EncodeInt(0); // SkillID?
+            
+            oPacket.Fill(0, 29);
+            
             return oPacket;
         }
 

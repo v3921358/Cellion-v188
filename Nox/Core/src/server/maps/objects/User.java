@@ -5581,7 +5581,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         level++;
         
         /*Character Stat Distribution*/
-        int nSP = 5;                                                                        // SP Gain
+        int nSP = 4;                                                                        // SP Gain
         boolean bDoubleSP = false;                                                          // Double SP Bool
         final Map<Stat, Long> pStat = new EnumMap<>(Stat.class);
         int nMaxHP = stats.getMaxHp() + calculateFlatHPGain();                              // Flat HP Gain

@@ -67,8 +67,6 @@ public class MonsterInformationProvider {
                     if (!mobIds.contains(rs.getInt("dropperid"))) {
                         loadDrop(rs.getInt("dropperid"));
                         mobIds.add(rs.getInt("dropperid"));
-                        
-                        OnLoadBossDrop(rs.getInt("dropperid"));
                     }
                 }
                 rs.close();
@@ -85,76 +83,22 @@ public class MonsterInformationProvider {
     }
 
     public void loadCustom() {
-        //globaldrops.add(new MonsterGlobalDropEntry(2290285, (int) (0.2 * 10000), -1, (byte) 0, 1, 1, 0)); //Mystery Mastery Book
-        globaldrops.add(new MonsterGlobalDropEntry(2435902, (int) (0.1 * 10000), -1, (byte) 0, 1, 1, 0)); //Nodes
-        globaldrops.add(new MonsterGlobalDropEntry(5062009, (int) (0.05 * 10000), -1, (byte) 0, 1, 1, 0)); //Red cube
-        globaldrops.add(new MonsterGlobalDropEntry(4001832, (int) (0.2 * 10000), -1, (byte) 0, 1, 1, 0)); //Spell trace
-        globaldrops.add(new MonsterGlobalDropEntry(2049700, (int) (0.04 * 10000), -1, (byte) 0, 1, 1, 0)); //Epic potential scroll scroll
+        globaldrops.add(new MonsterGlobalDropEntry(2290285, (int) (0.2 * 10000), -1, (byte) 0, 1, 1, 0)); // Mystery Mastery Book
+        globaldrops.add(new MonsterGlobalDropEntry(2435902, (int) (0.1 * 10000), -1, (byte) 0, 1, 1, 0)); // Nodes
+        globaldrops.add(new MonsterGlobalDropEntry(5062009, (int) (0.4 * 10000), -1, (byte) 0, 1, 1, 0)); // Red cube
+        globaldrops.add(new MonsterGlobalDropEntry(4001832, (int) (0.4 * 10000), -1, (byte) 0, 1, 1, 0)); // Spell trace
+        globaldrops.add(new MonsterGlobalDropEntry(2049700, (int) (0.4 * 10000), -1, (byte) 0, 1, 1, 0)); // Epic potential scroll scroll
 
         //globaldrops.add(new MonsterGlobalDropEntry(4001126, (int) (5 * 10000), -1, (byte) 0, 1, 3, 0)); //Maple Leaf
         //globaldrops.add(new MonsterGlobalDropEntry(4310050, (int) (1 * 10000), -1, (byte) 0, 1, 1, 0)); //Old Maple Coin
         //globaldrops.add(new MonsterGlobalDropEntry(4000524, (int) (5 * 10000), -1, (byte) 0, 1, 1, 0));
-        //MapleMonsterStats mons = LifeFactory.getMonsterStats(f.mob);
+        //MonsterStats mons = LifeFactory.getMonsterStats(f.mob);
     }
 
     public List<MonsterDropEntry> retrieveDrop(int monsterId) {
         return drops.get(monsterId);
     }
 
-    private void OnLoadBossDrop(int nMonsterID) {
-        final ArrayList<MonsterDropEntry> aRet = new ArrayList<>();
-        PreparedStatement SQL = null;
-        ResultSet Result = null;
-        try (Connection con = Database.GetConnection()) {
-            final MonsterStats pMobStats = LifeFactory.getMonsterStats(nMonsterID);
-            if (pMobStats == null) {
-                return;
-            }
-            SQL = con.prepareStatement("SELECT * FROM drop_data_boss WHERE dropperid = ?");
-            SQL.setInt(1, nMonsterID);
-            Result = SQL.executeQuery();
-            int itemid;
-            int chance;
-            boolean doneMesos = false;
-            while (Result.next()) {
-                itemid = Result.getInt("itemid");
-                chance = Result.getInt("chance");
-                if (GameConstants.getInventoryType(itemid) == MapleInventoryType.EQUIP) {
-                    chance *= 10; //in GMS/SEA it was raised
-                }
-                aRet.add(new MonsterDropEntry(
-                        itemid,
-                        chance,
-                        Result.getInt("minimum_quantity"),
-                        Result.getInt("maximum_quantity"),
-                        Result.getInt("questid")));
-                if (itemid == 0) {
-                    doneMesos = true;
-                }
-            }
-            if (!doneMesos) {
-                addMeso(pMobStats, aRet);
-            }
-
-        } catch (SQLException e) {
-            LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
-        } finally {
-
-            try {
-                if (SQL != null) {
-                    SQL.close();
-                }
-                if (Result != null) {
-                    Result.close();
-                }
-            } catch (SQLException e) {
-                LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
-                return;
-            }
-        }
-        drops.put(nMonsterID, aRet);
-    }
-    
     private void loadDrop(int monsterId) {
         final ArrayList<MonsterDropEntry> ret = new ArrayList<>();
 

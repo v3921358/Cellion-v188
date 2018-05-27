@@ -215,9 +215,10 @@ public class Utility {
                             && pMapLoot.getItemId() != 0) {
                         continue;
                     }*/
-                    if (!pPlayer.haveItem((pMapLoot.getItemId()))) { // Only pick up items the player already has.
+                    
+                    /*if (!pPlayer.haveItem((pMapLoot.getItemId()))) { // Only pick up items the player already has.
                         continue;
-                    }
+                    }*/
 
                     if (pMapLoot.getItem() == null || !MapleInventoryManipulator.addFromDrop(pPlayer.getClient(), pMapLoot.getItem(), true)) {
                         continue;
@@ -307,10 +308,9 @@ public class Utility {
                                 && pMapLoot.getItemId() != 0) {
                             continue;
                         }*/
-
-                        if (!pPlayer.haveItem((pMapLoot.getItemId()))) { // Only pick up items the player already has.
+                        /*if (!pPlayer.haveItem((pMapLoot.getItemId()))) { // Only pick up items the player already has.
                             continue;
-                        }
+                        }*/
 
                         if (pMapLoot.getItem() == null || !MapleInventoryManipulator.addFromDrop(pPlayer.getClient(), pMapLoot.getItem(), true)) {
                             continue;

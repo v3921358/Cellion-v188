@@ -3431,6 +3431,8 @@ public class WvsContext {
             oPacket.EncodeInt(mgc.getId());
             oPacket.EncodeString(mgc.getName());
 
+            oPacket.Fill(0, 19);
+            
             return oPacket;
         }
 
@@ -3708,6 +3710,8 @@ public class WvsContext {
                 oPacket.EncodeString("");
             }
 
+            oPacket.Fill(0, 29);
+            
             return oPacket;
         }
 

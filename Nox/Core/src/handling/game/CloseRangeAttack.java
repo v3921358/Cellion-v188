@@ -74,10 +74,12 @@ public final class CloseRangeAttack {
                 return;
             }
 
-            if (GameConstants.isDemonAvenger(c.getPlayer().getJob())) {
+            if (GameConstants.isDemonAvenger(pPlayer.getJob())) {
                 
-                int nSkillCost = (c.getPlayer().getMaxHP() / 150); // 1% of Maximum HP as Skill Cost.
-                c.getPlayer().addHP(-nSkillCost);
+                int nSkillCost = (pPlayer.getMaxHP() / 150); // 1% of Maximum HP as Skill Cost.
+                if ((pPlayer.getStat().getHp() - nSkillCost) > 1) {
+                    pPlayer.addHP(-nSkillCost);
+                }
                 
                 // Demon Avenger Overload Stacks
                 int nMaxExceed = c.getPlayer().getSkillLevel(31220044) > 0 ? 18 : 20; 

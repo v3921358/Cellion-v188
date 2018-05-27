@@ -1,0 +1,31 @@
+public static final void UseChair(final int itemId, final MapleClient c, final MapleCharacter chr) {
+        if (chr == null || chr.getMap() == null) {
+            return;
+        }
+        final Item toUse = chr.getInventory(MapleInventoryType.SETUP).findById(itemId);
+        if (toUse == null) {
+            chr.getCheatTracker().registerOffense(CheatingOffense.USING_UNAVAILABLE_ITEM, Integer.toString(itemId));
+            return;
+        }
+
+        if (itemId == 3010432) {  //낚시의자코드
+            chr.getFishing();
+        }
+
+        chr.setChair(itemId);
+        chr.getMap().broadcastMessage(chr, MaplePacketCreator.showChair(chr.getId(), itemId), false);
+        c.getSession().write(MaplePacketCreator.enableActions());
+    }
+
+    public static final void CancelChair(final short id, final MapleClient c, final MapleCharacter chr) {
+        if (id == -1) { // Cancel Chair
+            chr.setChair(0);
+            chr.cancelFishing1();
+            c.getSession().write(MaplePacketCreator.cancelChair(-1));
+            if (chr.getMap() != null) {
+                chr.getMap().broadcastMessage(chr, MaplePacketCreator.showChair(chr.getId(), 0), false);
+            }
+        } else { // Use In-Map Chair
+            chr.setChair(id);
+            c.getSession().write(MaplePacketCreator.cancelChair(id));
+        }

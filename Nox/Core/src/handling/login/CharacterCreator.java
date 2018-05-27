@@ -266,8 +266,8 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
                 mSkill.put(SkillFactory.getSkill(110001503), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(110001504), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(110001506), new SkillEntry((byte) 1, (byte) 1, -1));
-                mSkill.put(SkillFactory.getSkill(110000515), new SkillEntry((byte) 1, (byte) 1, -1));
-                mSkill.put(SkillFactory.getSkill(110000513), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(110000515), new SkillEntry((byte) 10, (byte) 10, -1));
+                mSkill.put(SkillFactory.getSkill(110000513), new SkillEntry((byte) 30, (byte) 30, -1));
             }
             if (pJob == LoginInformationProvider.JobType.Resistance) { // Mechanic (Hack Fix)
                 mSkill.put(SkillFactory.getSkill(35120000), new SkillEntry((byte) 1, (byte) 10, -1));
