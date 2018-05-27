@@ -35,6 +35,8 @@ public class MobPacket {
         if (hasMovementStat) {
             oPacket.EncodeByte(0); // ?
         }
+        
+        oPacket.Fill(0, 29);
 
         return oPacket;
     }

@@ -17,7 +17,7 @@ public class BuffedMob {
     /**
      * The channel range for Buffed Channels.
      */
-    static int BUFFED_CHANNEL_START = 8,
+    static int BUFFED_CHANNEL_START = 10,
                BUFFED_CHANNEL_END = 20;
     
     /**

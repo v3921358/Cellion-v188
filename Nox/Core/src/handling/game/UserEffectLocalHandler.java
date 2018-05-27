@@ -47,9 +47,9 @@ public class UserEffectLocalHandler implements ProcessPacket<ClientSocket> {
         );
 
         if (GameConstants.isMechanic(chr.getJob())) { //incorrect disconnect
-            return;
+            //return;
         } else {
-            c.Close(); // hacker
+            //c.Close(); // hacker
         }
     }
 

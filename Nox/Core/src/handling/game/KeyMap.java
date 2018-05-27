@@ -1,23 +1,5 @@
 /*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Cellion Development
  */
 package handling.game;
 
@@ -30,7 +12,11 @@ import server.quest.Quest;
 import net.InPacket;
 import net.ProcessPacket;
 
-public final class KeyMap implements ProcessPacket<ClientSocket> { // oh here it is
+/**
+ * Player Key Map Handling
+ * @author Mazen
+ */
+public final class KeyMap implements ProcessPacket<ClientSocket> {
 
     @Override
     public boolean ValidateState(ClientSocket c) {
@@ -39,48 +25,48 @@ public final class KeyMap implements ProcessPacket<ClientSocket> { // oh here it
 
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
-        final User chr = c.getPlayer();
-        if (chr == null) {
-            return;
-        }
+        final User pPlayer = c.getPlayer();
+        if (pPlayer == null) return;
 
         if (iPacket.GetRemainder() > 8L) {
             iPacket.Skip(4);
             int numChanges = iPacket.DecodeInt();
 
             for (int i = 0; i < numChanges; i++) {
-                int key = iPacket.DecodeInt();
-                byte type = iPacket.DecodeByte();
-                int action = iPacket.DecodeInt();
+                int nKey = iPacket.DecodeInt();
+                byte nType = iPacket.DecodeByte();
+                int nAction = iPacket.DecodeInt();
 
-                if ((type == 1) && (action >= 1000)) {
-                    Skill skil = SkillFactory.getSkill(action);
-                    if ((skil != null) && (((!skil.isFourthJob()) && (!skil.isBeginnerSkill()) && (skil.isInvisible()) && (chr.getSkillLevel(skil) < -1)) || (GameConstants.isLinkedAttackSkill(action)) || (action % 10000 < 1000))) {
+                if ((nType == 1) && (nAction >= 1000)) {
+                    Skill skil = SkillFactory.getSkill(nAction);
+                    if ((skil != null) && (((!skil.isFourthJob()) && (!skil.isBeginnerSkill()) && (skil.isInvisible()) && (pPlayer.getSkillLevel(skil) < -1)) || (GameConstants.isLinkedAttackSkill(nAction)) || (nAction % 10000 < 1000))) {
                         continue;
                     }
                 }
-                chr.changeKeybinding(key, type, action);
+                pPlayer.changeKeybinding(nKey, nType, nAction);
             }
         } else {
-            int type = iPacket.DecodeInt();
-            int data = iPacket.DecodeInt();
-            switch (type) {
+            int nType = iPacket.DecodeInt();
+            int nData = iPacket.DecodeInt();
+            switch (nType) {
                 case 1:
-                    if (data <= 0) {
-                        chr.getQuestRemove(Quest.getInstance(GameConstants.HP_ITEM));
+                    if (nData <= 0) {
+                        pPlayer.getQuestRemove(Quest.getInstance(GameConstants.HP_ITEM));
                     } else {
-                        chr.getQuestNAdd(Quest.getInstance(GameConstants.HP_ITEM)).setCustomData(String.valueOf(data));
+                        pPlayer.getQuestNAdd(Quest.getInstance(GameConstants.HP_ITEM)).setCustomData(String.valueOf(nData));
                     }
                     break;
                 case 2:
-                    if (data <= 0) {
-                        chr.getQuestRemove(Quest.getInstance(GameConstants.MP_ITEM));
+                    if (nData <= 0) {
+                        pPlayer.getQuestRemove(Quest.getInstance(GameConstants.MP_ITEM));
                     } else {
-                        chr.getQuestNAdd(Quest.getInstance(GameConstants.MP_ITEM)).setCustomData(String.valueOf(data));
+                        pPlayer.getQuestNAdd(Quest.getInstance(GameConstants.MP_ITEM)).setCustomData(String.valueOf(nData));
                     }
                     break;
             }
         }
+        
+        pPlayer.saveKeyboardData(); // Save Keymap.
     }
 }
 

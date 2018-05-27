@@ -478,7 +478,11 @@ public class StatEffect implements Serializable {
             }
             //short converting needs math.min cuz of overflow
             if ((mpchange < 0 && GameConstants.isDemonSlayer(applyto.getJob())) || !GameConstants.isDemonSlayer(applyto.getJob())) { // heal
-                stat.setMp(stat.getMp() + mpchange, applyto);
+                
+                /*Here is currently where we currently calculate MP costs, but this causes issues for players when hitting multiple mobs,
+                I'm going to be handling this elsewhere to avoid that issue and clean this up a little. -Mazen*/
+                
+                //stat.setMp(stat.getMp() + mpchange, applyto);
             }
             hpmpupdate.put(Stat.MP, Long.valueOf(stat.getMp()));
         }

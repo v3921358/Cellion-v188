@@ -3629,6 +3629,10 @@ public class PlayerStats implements Serializable {
         }
     }
 
+    /**
+     * THIS IS WHERE IT PUSHES CHANGES TO CLIENT BOYS, EASY PEASY. -Mazen
+     * @param oPacket 
+     */
     public void connectData(OutPacket oPacket) {
         oPacket.EncodeShort(str);
         oPacket.EncodeShort(dex);

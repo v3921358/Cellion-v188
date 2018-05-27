@@ -66,7 +66,7 @@ public class LinkedSkill {
                         
                         if (GameConstants.isCygnusKnight(nJobID) && !bDeleted) {
                             if (nLevel >= 120) nCygnusCount += 2;
-                            else if (nLevel >= 120) nCygnusCount += 1;
+                            else nCygnusCount += 1;
                         }
                         if (GameConstants.isResistance(nJobID) && !bDeleted) {
                             nResistanceCount += 1;
@@ -110,6 +110,7 @@ public class LinkedSkill {
             if (nLinkedLevel >= 210) nSLV = 3;
             else if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isMercedes(nLinkedJobID)) {
             
             nLinkedSkillID = MERCEDES;
@@ -117,13 +118,15 @@ public class LinkedSkill {
             if (nLinkedLevel >= 210) nSLV = 3;
             else if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
-        } else if (GameConstants.isDemonSlayer(nLinkedJobID)) {
+            else return;
+        } else if (GameConstants.isDemonSlayer(nLinkedJobID) && nLinkedJobID != 3001) {
             
             nLinkedSkillID = DEMON_SLAYER;
             nMasterSLV = 3;
             if (nLinkedLevel >= 210) nSLV = 3;
             else if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isPhantom(nLinkedJobID)) {
             
             nLinkedSkillID = PHANTOM;
@@ -131,6 +134,7 @@ public class LinkedSkill {
             if (nLinkedLevel >= 210) nSLV = 3;
             else if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isMihile(nLinkedJobID)) {
             
             nLinkedSkillID = MIHILE;
@@ -138,11 +142,13 @@ public class LinkedSkill {
             if (nLinkedLevel >= 210) nSLV = 3;
             else if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isJett(nLinkedJobID)) {
             
             nLinkedSkillID = JETT;
             nMasterSLV = 1;
             if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isLuminous(nLinkedJobID)) {
             
             nLinkedSkillID = LUMINOUS;
@@ -150,6 +156,7 @@ public class LinkedSkill {
             if (nLinkedLevel >= 210) nSLV = 3;
             else if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isKaiser(nLinkedJobID)) {
             
             nLinkedSkillID = KAISER;
@@ -157,6 +164,7 @@ public class LinkedSkill {
             if (nLinkedLevel >= 210) nSLV = 3;
             else if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isAngelicBuster(nLinkedJobID)) {
             
             nLinkedSkillID = ANGELIC_BUSTER;
@@ -164,31 +172,36 @@ public class LinkedSkill {
             if (nLinkedLevel >= 210) nSLV = 3;
             else if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
-        } else if (GameConstants.isDemonAvenger(nLinkedJobID)) {
+            else return;
+        } else if (GameConstants.isDemonAvenger(nLinkedJobID) && nLinkedJobID != 3001) {
             
             nLinkedSkillID = DEMON_AVENGER;
             nMasterSLV = 3;
             if (nLinkedLevel >= 210) nSLV = 3;
             else if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isXenon(nLinkedJobID)) {
             
             nLinkedSkillID = XENON;
             nMasterSLV = 2;
             if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isHayato(nLinkedJobID)) {
             
             nLinkedSkillID = HAYATO;
             nMasterSLV = 2;
             if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isKanna(nLinkedJobID)) {
             
             nLinkedSkillID = KANNA;
             nMasterSLV = 2;
             if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isCygnusKnight(nLinkedJobID)) {
             
             nLinkedSkillID = CYGNUS;
@@ -201,6 +214,7 @@ public class LinkedSkill {
             if (nLinkedLevel >= 210) nSLV = 3;
             else if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isZero(nLinkedJobID)) {
             
             nLinkedSkillID = ZERO;
@@ -209,23 +223,27 @@ public class LinkedSkill {
             else if (nLinkedLevel >= 138) nSLV = 3;
             else if (nLinkedLevel >= 128) nSLV = 2;
             else if (nLinkedLevel >= 118) nSLV = 1;
+            else return;
         } else if (GameConstants.isShade(nLinkedJobID)) {
             
             nLinkedSkillID = SHADE;
             nMasterSLV = 2;
             if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isResistance(nLinkedJobID)) {
             
             nLinkedSkillID = RESISTANCE;
             nMasterSLV = 8;
-            nSLV = (byte) nResistanceCount;
+            if (nLinkedLevel >= 70) nSLV = (byte) nResistanceCount;
+            else return;
         } else if (GameConstants.isKinesis(nLinkedJobID)) {
             
             nLinkedSkillID = KINESIS;
             nMasterSLV = 2;
             if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isAran(nLinkedJobID)) {
             
             nLinkedSkillID = ARAN;
@@ -233,6 +251,7 @@ public class LinkedSkill {
             if (nLinkedLevel >= 210) nSLV = 3;
             else if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         } else if (GameConstants.isEvan(nLinkedJobID)) {
             
             nLinkedSkillID = EVAN;
@@ -240,6 +259,7 @@ public class LinkedSkill {
             if (nLinkedLevel >= 210) nSLV = 3;
             else if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
+            else return;
         }
         
         if (nSLV > nMasterSLV) nSLV = nMasterSLV;

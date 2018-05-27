@@ -204,7 +204,7 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             {20010022, 20010194}, //Evan
             {20020109, 20021110, 20020111, 20020112}, //Mercedes
             {30010112, 30010110, 30010111, 30010185}, //Demon
-            {20031251, 20030204, 20030206, 20031208, 20031207, 20031203}, //Phantom2
+            {20031251, 20030204, 20030206, 20031208, 20031207, 20031203, 20031205}, //Phantom2
             {80001152, 1281}, //Dual Blader
             {50001214}, //Mihile
             {20040216, 20040217, 20040218, 20040219, 20040220, 20040221, 20041222, 27001100, 27000207, 27001201}, //Luminous
@@ -217,7 +217,7 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             {228, 80001151}, //Jett - core aura doesn't work?
             {Hayato.QUICK_DRAW, Hayato.SUMMER_RAIN, Hayato.MASTER_OF_BLADES, Hayato.SHIMADA_HEART}, //Hayato
             {40020000, 40020001, 40020002, 40020109}, //Kanna
-            {80001152, 110001251, 110001510, 110001501, 110001502, 110001503, 110001504}, //Beast Tamer
+            {80001152, 110001251, 110001510, 110001501, 110001502, 110001503, 110001504, 110001506, 110000515, 110000513}, //Beast Tamer
             {80001152}, //Pink Bean
             {} //Kinesis
             /*Not sure which of these we need to add
@@ -265,6 +265,9 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
                 mSkill.put(SkillFactory.getSkill(110001502), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(110001503), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(110001504), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(110001506), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(110000515), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(110000513), new SkillEntry((byte) 1, (byte) 1, -1));
             }
             if (pJob == LoginInformationProvider.JobType.Resistance) { // Mechanic (Hack Fix)
                 mSkill.put(SkillFactory.getSkill(35120000), new SkillEntry((byte) 1, (byte) 10, -1));
@@ -329,6 +332,10 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             pNewCharacter.setLevel((short) 10);
             pNewCharacter.getStat().maxhp = 300;
             pNewCharacter.getStat().hp = 300;
+            pNewCharacter.getStat().str = 4;
+            pNewCharacter.getStat().dex = 4;
+            pNewCharacter.getStat().int_ = 4;
+            pNewCharacter.getStat().luk = 4;
             pNewCharacter.setRemainingAp(50);
             pNewCharacter.setRemainingSp(5, 0);
             pNewCharacter.setRemainingSp(5, 1);

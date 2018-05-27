@@ -38,6 +38,7 @@ import database.Database;
 import handling.game.AndroidEmotionChanger;
 import constants.ItemConstants;
 import constants.NPCConstants;
+import constants.skills.Shade;
 import handling.login.LoginInformationProvider.JobType;
 import handling.world.*;
 import net.OutPacket;
@@ -552,6 +553,58 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         client.removeClickedNPC();
         NPCScriptManager.getInstance().dispose(client);
         SendPacket(WvsContext.enableActions());
+    }
+    
+    /**
+     * OnSkillCostRequest
+     * @author Mazen Massoud
+     * @purpose Calculate and handle MP cost of skills.
+     * 
+     * @param nSkillID 
+     */
+    public void OnSkillCostRequest(int nSkillID) {
+        StatEffect pEffect = SkillFactory.getSkill(nSkillID).getEffect(getTotalSkillLevel(nSkillID));
+        int nMPCost = pEffect.info.get(StatInfo.mpCon);
+        int nPPCost = pEffect.info.get(StatInfo.ppCon);
+        int nHPCost = pEffect.info.get(StatInfo.hpCon);
+        int nFuryCost = pEffect.info.get(StatInfo.forceCon);
+        
+        if (isDeveloper() && bExtraDebug) {
+            dropMessage(5, "MP Cost: " + nMPCost);
+            dropMessage(5, "PP Cost: " + nPPCost);
+            dropMessage(5, "HP Cost: " + nHPCost);
+            dropMessage(5, "Fury Cost: " + nFuryCost);
+        }
+        
+        //TODO: Calculate extra stuff like mp cost reductions, if needed.
+        //double mpcalc = (pEffect.info.get(StatInfo.mpCon) - (pEffect.info.get(StatInfo.mpCon) * getStat().mpconReduce / 100)) * (getStat().mpconPercent / 100.0);
+        
+        if (hasBuff(CharacterTemporaryStat.Infinity) || hasBuff(CharacterTemporaryStat.InfinityForce)) {
+            nMPCost = 0;
+            nPPCost = 0;
+            nHPCost = 0;
+            nFuryCost = 0;
+        }
+        
+        // General MP Costs
+        if (nMPCost != 0 && !GameConstants.isDemon(job) && !GameConstants.isZero(job) && !GameConstants.isKanna(job) && !GameConstants.isKinesis(job)) {
+            setMp(getStat().getMp() - nMPCost);
+            updateSingleStat(Stat.MP, getStat().getMp() - nMPCost);
+        }  
+        // Kinesis Psychic Point Handling
+        else if (GameConstants.isKinesis(job)) {
+            // TODO: Move Kinesis PP handling to here.
+        }
+        // Demon Avenger HP Costs
+        else if (GameConstants.isDemonAvenger(job)) {
+            setHp(getStat().getHp() - nHPCost);
+            updateSingleStat(Stat.HP, getStat().getMp() - nMPCost);
+        }
+        // Demon Slayer Fury Costs
+        else if (nFuryCost != 0 && GameConstants.isDemonSlayer(job)) {
+            setMp(getStat().getMp() - nFuryCost);
+            updateSingleStat(Stat.MP, getStat().getMp() - nMPCost);
+        }
     }
     
     /**
@@ -2052,6 +2105,37 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    /**
+     * saveKeyboardData
+     * @purpose Saves the player key map info.
+     */
+    public void saveKeyboardData() {
+        if (isClone()) {
+            return;
+        }
+        try (Connection con = Database.GetConnection()) {
+            /*Keyboard settings*/
+            int[] array1 = {2, 3, 64, 4, 65, 5, 6, 7, 8, 13, 17, 16, 19, 18, 21, 20, 23, 22, 25, 24, 27, 26, 29, 31, 34, 35, 33, 38, 39, 37, 43, 40, 41, 46, 47, 44, 45, 51, 50, 49, 48, 59, 57, 56, 63, 62, 61, 60};
+            int[] array2 = {4, 4, 6, 4, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 4, 4, 4, 4, 6, 5, 5, 6, 6, 6, 6};
+            int[] array3 = {10, 12, 105, 13, 106, 18, 24, 21, 29, 33, 5, 8, 4, 0, 31, 28, 1, 34, 19, 25, 15, 14, 52, 2, 17, 11, 26, 20, 27, 3, 9, 16, 23, 6, 32, 50, 51, 35, 7, 22, 30, 100, 54, 53, 104, 103, 102, 101};
+            try (PreparedStatement ps = con.prepareStatement("INSERT INTO keymap (characterid, `key`, `type`, `action`) VALUES (?, ?, ?, ?)")) {
+                ps.setInt(1, id);
+                for (int i = 0; i < array1.length; i++) {
+                    ps.setInt(2, array1[i]);
+                    ps.setInt(3, array2[i]);
+                    ps.setInt(4, array3[i]);
+                    ps.execute();
+                }
+                ps.close();
+            } catch (SQLException e) {
+                LogHelper.SQL.get().info("Could not save character:\n{}", e);
+            }
+            
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -4326,6 +4410,14 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (GameConstants.isKinesis(job)) {
             if (level >= 10 && !hasSkill(Kinesis.ESP)) { // ESP
                 changeSkillLevel(SkillFactory.getSkill(Kinesis.ESP), (byte) 6, (byte) 6);
+            }
+        }
+        if (GameConstants.isShade(job)) {
+            if (level >= 10 && !hasSkill(Shade.SWIFT_STRIKE)) {
+                changeSkillLevel(SkillFactory.getSkill(Shade.SWIFT_STRIKE), (byte) 1, (byte) SkillFactory.getSkill(Shade.SWIFT_STRIKE).getMasterLevel());
+            }
+            if (level >= 10 && !hasSkill(Shade.FLASH_FIST_1)) {
+                changeSkillLevel(SkillFactory.getSkill(Shade.FLASH_FIST_1), (byte) 1, (byte) SkillFactory.getSkill(Shade.FLASH_FIST_1).getMasterLevel());
             }
         }
     }
@@ -7646,10 +7738,12 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     
     public void setNX(int nAmount) {
         maplepoints = nAmount;
+        SendPacket(WvsContext.updateMaplePoint(getNX()));
     }
     
     public void gainNX(int nAmount, boolean bNotification) {
         maplepoints += nAmount;
+        SendPacket(WvsContext.updateMaplePoint(getNX()));
         if (bNotification) dropMessage(-1,  ((nAmount > 0) ? "+ " : "- ") + nAmount + " NX");
     }
     
