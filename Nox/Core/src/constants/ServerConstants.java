@@ -38,7 +38,7 @@ public class ServerConstants {
     /*Server Debug*/
    /*These values will be overwritten by the configuration.ini file.*/
     public static boolean DEVELOPER_DEBUG_MODE = false;
-    public static boolean REDUCED_DEBUG_SPAM = false;
+    public static boolean REDUCED_DEBUG_SPAM = true;
 
     /*General Rate Configuration*/
    /*These values will be overwritten by the configuration.ini file.*/

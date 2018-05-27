@@ -857,7 +857,7 @@ public class GMCommand {
                     item = new Item(itemId, (byte) 0, quantity, (byte) 0);
                 }
                 item.setOwner(c.getPlayer().getName());
-                item.setGMLog(c.getPlayer().getName() + " used !getitem");
+                item.setGMLog(c.getPlayer().getName() + " used !item");
                 if (MapleItemInformationProvider.getInstance().isCash(itemId)) {
                     if (InventoryConstants.isPet(item.getItemId())) {
                         final Pet pet = Pet.createPet(item.getItemId(), MapleInventoryManipulator.getUniqueId(itemId, null));

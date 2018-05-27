@@ -17,6 +17,7 @@ import client.SkillFactory;
 import constants.GameConstants;
 import server.Timer.CheatTimer;
 import server.maps.objects.User;
+import tools.LogHelper;
 import tools.StringUtil;
 
 public class CheatTracker {
@@ -213,7 +214,7 @@ public class CheatTracker {
             dropsPerSecond++;
             if (dropsPerSecond >= (dc ? 32 : 16) && chr.get() != null && !chr.get().isGM()) {
                 if (dc) {
-                    chr.get().getClient().Close();
+                    //chr.get().getClient().Close();
                 } else {
                     chr.get().getClient().setMonitored(true);
                 }
@@ -315,7 +316,8 @@ public class CheatTracker {
     public void updateTick(int newTick) {
         if (newTick <= lastTickCount) { //definitely packet spamming or the added feature in many PEs which is to generate random tick
             if (tickSame >= 500 && chr.get() != null && !chr.get().isGM()) { //this might be one of the d/c issues. -originally 5
-                chr.get().getClient().Close();
+                //chr.get().getClient().Close();
+                LogHelper.ANTI_HACK.get().info(String.format("[Improper Tick Count] Same Tick Count : %s, Character: %s\r\n", tickSame, chr.get().getName()));
             } else {
                 tickSame++;
             }

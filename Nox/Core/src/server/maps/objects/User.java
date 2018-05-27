@@ -38,6 +38,7 @@ import database.Database;
 import handling.game.AndroidEmotionChanger;
 import constants.ItemConstants;
 import constants.NPCConstants;
+import constants.skills.Shade;
 import handling.login.LoginInformationProvider.JobType;
 import handling.world.*;
 import net.OutPacket;
@@ -552,6 +553,44 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         client.removeClickedNPC();
         NPCScriptManager.getInstance().dispose(client);
         SendPacket(WvsContext.enableActions());
+    }
+    
+    /**
+     * OnSkillCostRequest
+     * @author Mazen Massoud
+     * @purpose Calculate and handle MP cost of skills.
+     * 
+     * @param nSkillID 
+     */
+    public void OnSkillCostRequest(int nSkillID) {
+        
+        StatEffect pEffect = SkillFactory.getSkill(nSkillID).getEffect(1);
+        //TODO: Calculate extra stuff like mp cost reductions, if needed.
+        //double mpcalc = (pEffect.info.get(StatInfo.mpCon) - (pEffect.info.get(StatInfo.mpCon) * getStat().mpconReduce / 100)) * (getStat().mpconPercent / 100.0);
+        
+        if (!bGodMode && !hasBuff(CharacterTemporaryStat.Infinity) && !hasBuff(CharacterTemporaryStat.InfinityForce)) {
+        
+            if (!GameConstants.isDemon(job) && !GameConstants.isZero(job) && !GameConstants.isKanna(job) && !GameConstants.isKinesis(job)) {
+                
+                int nMPCost = pEffect.info.get(StatInfo.mpCon);
+                setMp(getStat().getMp() - nMPCost);
+                updateSingleStat(Stat.MP, getStat().getMp() - nMPCost);
+            } else if (GameConstants.isKinesis(job)) {
+                
+                //int nPPCost = pEffect.info.get(StatInfo.ppCon);
+                // TODO: Move Kinesis PP handling to here.
+            } else if (GameConstants.isDemonAvenger(job)) {
+                
+                //int nHPCost = pEffect.info.get(StatInfo.hpCon);
+                //setHp(getStat().getHp() - nHPCost);
+                //updateSingleStat(Stat.HP, getStat().getMp() - nMPCost);
+            } else if (GameConstants.isDemonSlayer(job)) {
+                
+                int nFuryCost = pEffect.info.get(StatInfo.forceCon);
+                setMp(getStat().getMp() - nFuryCost);
+                updateSingleStat(Stat.MP, getStat().getMp() - nFuryCost);
+            }
+        }
     }
     
     /**
@@ -2052,6 +2091,37 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    /**
+     * saveKeyboardData
+     * @purpose Saves the player key map info.
+     */
+    public void saveKeyboardData() {
+        if (isClone()) {
+            return;
+        }
+        try (Connection con = Database.GetConnection()) {
+            /*Keyboard settings*/
+            int[] array1 = {2, 3, 64, 4, 65, 5, 6, 7, 8, 13, 17, 16, 19, 18, 21, 20, 23, 22, 25, 24, 27, 26, 29, 31, 34, 35, 33, 38, 39, 37, 43, 40, 41, 46, 47, 44, 45, 51, 50, 49, 48, 59, 57, 56, 63, 62, 61, 60};
+            int[] array2 = {4, 4, 6, 4, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 4, 4, 4, 4, 6, 5, 5, 6, 6, 6, 6};
+            int[] array3 = {10, 12, 105, 13, 106, 18, 24, 21, 29, 33, 5, 8, 4, 0, 31, 28, 1, 34, 19, 25, 15, 14, 52, 2, 17, 11, 26, 20, 27, 3, 9, 16, 23, 6, 32, 50, 51, 35, 7, 22, 30, 100, 54, 53, 104, 103, 102, 101};
+            try (PreparedStatement ps = con.prepareStatement("INSERT INTO keymap (characterid, `key`, `type`, `action`) VALUES (?, ?, ?, ?)")) {
+                ps.setInt(1, id);
+                for (int i = 0; i < array1.length; i++) {
+                    ps.setInt(2, array1[i]);
+                    ps.setInt(3, array2[i]);
+                    ps.setInt(4, array3[i]);
+                    ps.execute();
+                }
+                ps.close();
+            } catch (SQLException e) {
+                LogHelper.SQL.get().info("Could not save character:\n{}", e);
+            }
+            
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -4326,6 +4396,14 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (GameConstants.isKinesis(job)) {
             if (level >= 10 && !hasSkill(Kinesis.ESP)) { // ESP
                 changeSkillLevel(SkillFactory.getSkill(Kinesis.ESP), (byte) 6, (byte) 6);
+            }
+        }
+        if (GameConstants.isShade(job)) {
+            if (level >= 10 && !hasSkill(Shade.SWIFT_STRIKE)) {
+                changeSkillLevel(SkillFactory.getSkill(Shade.SWIFT_STRIKE), (byte) 1, (byte) SkillFactory.getSkill(Shade.SWIFT_STRIKE).getMasterLevel());
+            }
+            if (level >= 10 && !hasSkill(Shade.FLASH_FIST_1)) {
+                changeSkillLevel(SkillFactory.getSkill(Shade.FLASH_FIST_1), (byte) 1, (byte) SkillFactory.getSkill(Shade.FLASH_FIST_1).getMasterLevel());
             }
         }
     }
@@ -7646,10 +7724,12 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     
     public void setNX(int nAmount) {
         maplepoints = nAmount;
+        SendPacket(WvsContext.updateMaplePoint(getNX()));
     }
     
     public void gainNX(int nAmount, boolean bNotification) {
         maplepoints += nAmount;
+        SendPacket(WvsContext.updateMaplePoint(getNX()));
         if (bNotification) dropMessage(-1,  ((nAmount > 0) ? "+ " : "- ") + nAmount + " NX");
     }
     
@@ -11250,9 +11330,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     } else if (GameConstants.isWarriorDarkKnight(job)) {
                         addReward(1, 1352220, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isMagicianIceLightning(job)) {
-                        addReward(1, 1352230, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    } else if (GameConstants.isMagicianFirePoison(job)) {
                         addReward(1, 1352240, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    } else if (GameConstants.isMagicianFirePoison(job)) {
+                        addReward(1, 1352230, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isMagicianBishop(job)) {
                         addReward(1, 1352250, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isArcherBowmaster(job)) {
@@ -11281,9 +11361,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     } else if (GameConstants.isWarriorDarkKnight(job)) {
                         addReward(1, 1352221, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isMagicianIceLightning(job)) {
-                        addReward(1, 1352231, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
-                    } else if (GameConstants.isMagicianFirePoison(job)) {
                         addReward(1, 1352241, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    } else if (GameConstants.isMagicianFirePoison(job)) {
+                        addReward(1, 1352231, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isMagicianBishop(job)) {
                         addReward(1, 1352251, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isArcherBowmaster(job)) {
@@ -11313,25 +11393,25 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     } else if (GameConstants.isWarriorDarkKnight(job)) {
                         addReward(1, 1352221, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isMagicianIceLightning(job)) {
-                        addReward(1, 1352231, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352232, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isMagicianFirePoison(job)) {
-                        addReward(1, 1352241, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352242, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isMagicianBishop(job)) {
-                        addReward(1, 1352251, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352252, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isArcherBowmaster(job)) {
-                        addReward(1, 1352261, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352262, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isArcherMarksman(job)) {
-                        addReward(1, 1352271, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352272, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isThiefShadower(job)) {
-                        addReward(1, 1352281, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352282, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isThiefNightLord(job)) {
-                        addReward(1, 1352291, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352292, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isPirateBuccaneer(job)) {
-                        addReward(1, 1352901, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352902, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isPirateCorsair(job)) {
-                        addReward(1, 1352911, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352912, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     } else if (GameConstants.isCannoneer(job)) {
-                        addReward(1, 1352921, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                        addReward(1, 1352922, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     }
                     break;
                 case 150:
@@ -11400,22 +11480,22 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else if (GameConstants.isXenon(job)) {
             switch (nLevel) {
                 case 15:
-                    addReward(1, 1353000, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(1, 1353001, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 5530448, 0, 0, 0, "You have been rewarded with some power elixir for reaching Lv. " + level + "!");
                     break;
                 case 30:
-                    addReward(1, 1353001, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(1, 1353002, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1142747, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
                     break;
                 case 60:
                     addReward(1, 1142748, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
-                    addReward(1, 1353002, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(1, 1353003, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1190200, 0, 0, 0, "You have been rewarded with a Silver Hybrid Heart for reaching Lv. " + level + "!");
                     break;
                 case 100:
                     ////givePinnacleGear();
                     addReward(1, 1142749, 0, 0, 0, "You have been rewarded with a new medal for reaching Lv. " + level + "!");
-                    addReward(1, 1353003, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
+                    addReward(1, 1353004, 0, 0, 0, "You have been rewarded with a new secondary weapon for reaching Lv. " + level + "!");
                     addReward(1, 1190201, 0, 0, 0, "You have been rewarded with a Gold Hybrid Heart for reaching Lv. " + level + "!");
                     break;
                 case 150:

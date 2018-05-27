@@ -5,6 +5,8 @@ import java.util.List;
 
 import client.ClientSocket;
 import handling.world.MovementParse;
+import java.awt.Point;
+import java.util.Arrays;
 import java.util.Random;
 import net.InPacket;
 import server.Randomizer;
@@ -18,6 +20,8 @@ import server.movement.LifeMovementFragment;
 import tools.packet.MobPacket;
 import net.ProcessPacket;
 import server.life.LifeFactory;
+import server.maps.MapleMapObject;
+import server.maps.MapleMapObjectType;
 
 /**
  * @author Steven
@@ -185,7 +189,18 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
         pMob.setvXCS(iPacket.DecodeShort());
         pMob.setvYCS(iPacket.DecodeShort());
         List<LifeMovementFragment> res = MovementParse.parseMovement(iPacket);
-        c.SendPacket(MobPacket.moveMonsterResponse(oid, nMobControlSN, (int) pMob.getMp(), pMob.isControllerHasAggro(), nSkill1, nSkill2, nForcedAttackIdx));
+        
+        //if ((Math.abs(c.getPlayer().getPosition().x - pMob.getPosition().x) < 2000) 
+        //    && (Math.abs(c.getPlayer().getPosition().y - pMob.getPosition().y) < 700) ) {
+        
+            for (LifeMovementFragment m : res) {
+                Point nPOS = m.getPosition();
+                pMob.setPosition(nPOS);
+                pMob.setFh(m.getFoothold());
+                if (res.size() > 0) c.SendPacket(MobPacket.moveMonsterResponse(oid, nMobControlSN, (int) pMob.getMp(), pMob.isControllerHasAggro(), nSkill1, nSkill2, nForcedAttackIdx));
+            }
+        //}
+        
         MapleMap map = c.getPlayer().getMap();
         MovementParse.updatePosition(res, pMob);
         map.moveMonster(pMob, pMob.getPosition());

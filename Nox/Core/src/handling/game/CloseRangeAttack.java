@@ -251,6 +251,8 @@ public final class CloseRangeAttack {
         DamageParse.OnWeaponAttackRequest(pAttack, pSkill, pPlayer, nAttackCount, nMaxDamage, pEffect, bMirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
         
         pAttack.cleanupMemory(); // Clean up memory references.
+        
+        pPlayer.OnSkillCostRequest(pAttack.skill);
     }
 
 }

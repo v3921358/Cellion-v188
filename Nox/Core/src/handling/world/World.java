@@ -1934,7 +1934,7 @@ public class World {
                 pPlayer.addHP((int) pPlayer.getStat().getHealHP());
             }
             if (pPlayer.canMPRecover(tNow)) {
-                pPlayer.addMP((int) pPlayer.getStat().getHealMP());
+                pPlayer.addMP((int) Math.abs(pPlayer.getStat().getHealMP()));
             }
             if (pPlayer.canFairy(tNow)) {
                 pPlayer.doFairy();

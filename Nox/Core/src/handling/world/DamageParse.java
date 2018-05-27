@@ -221,7 +221,8 @@ public class DamageParse {
                                         nDamageLine = (int) (nMaxDamagePerHit * 2.0D);
                                     }
                                     if (nDamageLine >= nPlayerDamageCap) {
-                                        pPlayer.getClient().Close();
+                                        return;
+                                        //pPlayer.getClient().Close();
                                     }
                                 }
                             }
@@ -243,7 +244,7 @@ public class DamageParse {
                 pTarget.damage(pPlayer, nTotalDamageToOneMonster, true, pAttack.skill); // Apply attack to the monster hit.
 
                 if (pTarget.isAlive()) { // Monster is still alive after being hit.
-                    pPlayer.checkMonsterAggro(pTarget);
+                    //pPlayer.checkMonsterAggro(pTarget);
                 } else {
                     pAttack.after_NumMobsKilled++;
                 }
@@ -687,7 +688,8 @@ public class DamageParse {
                                     nDamageLine = (int) (nMaxDamagePerHit * 2.0D);
 
                                     if (nDamageLine >= nPlayerDamageCap) {
-                                        pPlayer.getClient().Close();
+                                        return;
+                                        //pPlayer.getClient().Close();
                                     }
                                 }
                             }
@@ -714,7 +716,7 @@ public class DamageParse {
                 pMob.damage(pPlayer, nTotalDamageToOneMonster, true, pAttack.skill); // Apply damage to monster
 
                 if (pMob.isAlive()) { // Monster is still alive after being hit.
-                    pPlayer.checkMonsterAggro(pMob);
+                    //pPlayer.checkMonsterAggro(pMob);
                 } else {
                     pAttack.after_NumMobsKilled++;
                 }
@@ -1167,7 +1169,7 @@ public class DamageParse {
      */
     public static AttackInfo OnAttack(RecvPacketOpcode eType, InPacket iPacket, User pPlayer) {
         
-        TrainingMap.OnMonsterAggressionRequest(pPlayer); // Aggro surrounding monsters.
+        //TrainingMap.OnMonsterAggressionRequest(pPlayer); // Aggro surrounding monsters.
         
         AttackInfo pAttack = new AttackInfo();
         if (eType == RecvPacketOpcode.UserShootAttack) {

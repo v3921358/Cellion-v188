@@ -81,6 +81,7 @@ import server.maps.Event_PyramidSubway;
 import server.maps.MapleMap;
 import server.maps.objects.User;
 import server.life.NPCLife;
+import server.potentials.Cube;
 import server.quest.Quest;
 import server.shops.ShopFactory;
 import tools.LogHelper;
@@ -3019,5 +3020,15 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             return false;
         }
         return true;
+    }
+    
+    /**
+     * Handles the Cube entirely, for use in cubing NPCs.
+     * @param nSlot
+     * @param nCubeID 
+     */
+    public void OnCubeRequest(int nSlot, int nCubeID) {
+        final Equip pEquip = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) nCubeID);
+        Cube.OnCubeRequest(c.getPlayer(), pEquip, nCubeID);
     }
 }

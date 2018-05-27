@@ -350,17 +350,6 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 pEffect.info.put(StatInfo.time, 210000000);
                 break;
             }
-            case Cannoneer.MONKEY_MAGIC: 
-            case CannonMaster.MEGA_MONKEY_MAGIC: {
-                pEffect.statups.put(CharacterTemporaryStat.IndieMHP, pEffect.info.get(StatInfo.indieMhp));
-                pEffect.statups.put(CharacterTemporaryStat.IndieMMP, pEffect.info.get(StatInfo.indieMmp));
-                pEffect.statups.put(CharacterTemporaryStat.IndieJump, pEffect.info.get(StatInfo.indieJump));
-                pEffect.statups.put(CharacterTemporaryStat.IndieSpeed, pEffect.info.get(StatInfo.indieSpeed));
-                pEffect.statups.put(CharacterTemporaryStat.IndieStatR, 1);
-                pEffect.statups.put(CharacterTemporaryStat.IndieAllStat, -100);
-                pEffect.info.put(StatInfo.time, 20000);
-                break;
-            }
             default: {
                 bApplyStats = false;
                 break;
@@ -462,6 +451,23 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 pPlayer.registerEffect(pEffect, System.currentTimeMillis(), tBuffSchedule, mMorphStat, false, pEffect.info.get(StatInfo.time), pPlayer.getId());
                 pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, pEffect.info.get(StatInfo.time), mMorphStat, pEffect));
                 break;
+            }
+            case Cannoneer.MONKEY_MAGIC: 
+            case CannonMaster.MEGA_MONKEY_MAGIC: {
+                final EnumMap<CharacterTemporaryStat, Integer> mBuffStat = new EnumMap<>(CharacterTemporaryStat.class);
+                
+                mBuffStat.put(CharacterTemporaryStat.IndieMHP, pEffect.info.get(StatInfo.indieMhp));
+                mBuffStat.put(CharacterTemporaryStat.IndieMMP, pEffect.info.get(StatInfo.indieMmp));
+                mBuffStat.put(CharacterTemporaryStat.IndieJump, pEffect.info.get(StatInfo.indieJump));
+                mBuffStat.put(CharacterTemporaryStat.IndieSpeed, pEffect.info.get(StatInfo.indieSpeed));
+                mBuffStat.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
+                
+                final StatEffect.CancelEffectAction pCancelAction = new StatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), mBuffStat);
+                final ScheduledFuture<?> tBuffSchedule = Timer.BuffTimer.getInstance().schedule(pCancelAction, 20000);
+                pPlayer.registerEffect(pEffect, System.currentTimeMillis(), tBuffSchedule, mBuffStat, false, 20000, pPlayer.getId());
+                pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, 20000, mBuffStat, null));
+                pPlayer.completeDispose();
+                return;
             }
             case BeastTamer.BEAR_MODE:
             case BeastTamer.SNOW_LEOPARD_MODE:

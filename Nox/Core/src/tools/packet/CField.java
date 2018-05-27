@@ -614,7 +614,7 @@ public class CField {
 
         // Okay so there is more data to write here for certain maps such as Von Bon's boss arena. 
         // Need to check IDA later for this, fill for now. -Mazen
-        oPacket.Fill(0, 29);
+        oPacket.Fill(0, 39);
         
         return oPacket;
     }
@@ -1215,6 +1215,8 @@ public class CField {
         oPacket.EncodeInt(0);
         oPacket.EncodeInt(0); //sub_15B8CB0
 
+        oPacket.Fill(0, 499);
+        
         return oPacket;
     }
 
@@ -1873,6 +1875,8 @@ public class CField {
         oPacket.EncodeInt(chr.getId());
         PacketHelper.serializeMovementList(oPacket, chr, moves, 0);
 
+        oPacket.Fill(0, 19);
+        
         return oPacket;
     }
 

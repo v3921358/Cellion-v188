@@ -138,6 +138,8 @@ public final class MagicAttack implements ProcessPacket<ClientSocket> {
 
         // Cleanup memory refs
         pAttack.cleanupMemory();
+        
+        pPlayer.OnSkillCostRequest(pAttack.skill);
     }
 
     public static void handleLuminousState(User chr, AttackInfo attack) {

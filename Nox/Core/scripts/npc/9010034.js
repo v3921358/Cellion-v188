@@ -111,7 +111,7 @@ function action(mode, type, selection){
 			
 			if (cm.getPlayer().getCSPoints(2) >= nCost) {
 				cm.getPlayer().modifyCSPoints(2, -nCost, true);
-				cm.gainItem(nChoice, nQuantity);
+				cm.gainCube(nChoice, nQuantity);
 				cm.sendOk("You have successfully purchased #b" + nQuantity + "#k #i" + nChoice + "# .");
 				cm.dispose();
 			} else {

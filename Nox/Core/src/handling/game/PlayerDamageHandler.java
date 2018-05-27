@@ -105,12 +105,13 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
         }
 
         if (GameConstants.isKinesis(pPlayer.getJob())) {
-            if (pPlayer.hasBuff(CharacterTemporaryStat.KinesisPsychicShield)) {
-                pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.KinesisPsychicShield); // Use Shield
+            if (pPlayer.hasBuff(CharacterTemporaryStat.KinesisPsychicEnergeShield)) {
                 KinesisHandler.psychicPointResult(pPlayer, pPlayer.getPrimaryStack() - 1); // Consume PP
                 //damage *= 0.4; // Apply 60% Damage Reduction
             } else if (pPlayer.getPrimaryStack() > 0) {
                 KinesisHandler.requestMentalShield(pPlayer); // Give Shield
+            } else if (pPlayer.getPrimaryStack() < 1) {
+                pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.KinesisPsychicEnergeShield); //Remove Shield
             }
         }
         if (GameConstants.isBlaster(pPlayer.getJob())) {

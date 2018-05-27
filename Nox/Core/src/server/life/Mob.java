@@ -1558,11 +1558,11 @@ public class Mob extends AbstractLoadedMapleLife {
         short nMobLV = stats.getLevel();
         if (nMobHP > 1000000000L) nMobHP = 1000000000L;                                             // Caps the the HP at this value for the calculation.
         
-        int nMinRange = (int) (nMobHP / 350000) + (nMobLV * 2);                                     // Meso Drop Formula
+        int nMinRange = (int) (nMobHP / 250000) + (nMobLV * 3);                                     // Meso Drop Formula
         int nMaxRange = (int) Math.round(nMinRange * 1.25);                                         // Amount Meso Drop can randomize up to.
         int nResultMeso = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1)));      // Formula to produce a value between the specified range.
         
-        int nGainChance = 30;                                                                       // Base Meso Drop Chance %
+        int nGainChance = 42;                                                                       // Base Meso Drop Chance %
         
         if (BuffedMob.OnBuffedChannel(Utility.requestChannel(pDropOwner.getId()))) {                // Increase Meso Rates from Buffed Monsters.
             if (!BuffedMob.BUFFED_BOSSES) {
@@ -1593,11 +1593,11 @@ public class Mob extends AbstractLoadedMapleLife {
         if (nMobHP > 800000000L) nMobHP = 800000000L;                                           // Caps the the HP at this value for the calculation.
         if (nMobLV < 60) nMobLV /= 3;
         
-        int nMinRange = (int) (nMobHP / 500000) + (nMobLV * 3);                                 // NX Gain Formula
+        int nMinRange = (int) (nMobHP / 550000) + (nMobLV * 3);                                 // NX Gain Formula
         int nMaxRange = (int) Math.round(nMinRange * 1.25);                                     // Amount NX Gain can go up to.
         int nResultNX = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1)));    // Formula to produce a value between the specified range.
 
-        int nGainChance = 20;                                                                   // Base NX Drop Chance %
+        int nGainChance = 15;                                                                   // Base NX Drop Chance %
 
         if (BuffedMob.OnBuffedChannel(Utility.requestChannel(pPlayer.getId()))) {               // Increase NX Rates from Buffed Monsters.
             if (!BuffedMob.BUFFED_BOSSES) {

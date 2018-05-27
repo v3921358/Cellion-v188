@@ -75,6 +75,7 @@ public enum StatInfo {
     indieEva(0, null), // Avoidability +
     indieJump(0, CharacterTemporaryStat.IndieJump), // Jump Increase +
     indieMad(0, CharacterTemporaryStat.IndieMAD), // Magic Damage Increase
+    indieMadR(0, CharacterTemporaryStat.IndieMADR), // Magic Damage Increase %
     indieMhp(0, CharacterTemporaryStat.IndieMHP), // Max HP Increase +
     indiePdd(0, CharacterTemporaryStat.IndiePDD),// ??
     indieMdd(0, null),//MDD?

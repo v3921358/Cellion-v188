@@ -24,7 +24,9 @@ public class CannonMasterEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.PUPPET, 1);
                 break;
             case CannonMaster.BUCKSHOT:
-                pEffect.statups.put(CharacterTemporaryStat.AttackCountX, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.BuckShot, 1);
+                pEffect.statups.put(CharacterTemporaryStat.FinalAttackProp, 1);
+                //pEffect.statups.put(CharacterTemporaryStat.AttackCountX, pEffect.info.get(StatInfo.x));
                 break;
             case CannonMaster.CANNON_BARRAGE:
                 break;

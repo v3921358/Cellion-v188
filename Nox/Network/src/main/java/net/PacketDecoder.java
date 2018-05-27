@@ -54,7 +54,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
                 short uSeqBase = (short) ((uSeqRcv >> 16) ^ uRawSeq);
                 if (uSeqBase != AESCipher.nVersion) {
                     System.out.println("Recv packet sequence mismatch.");
-                    pSocket.Close();
+                    //pSocket.Close();
                     return;
                 }
 

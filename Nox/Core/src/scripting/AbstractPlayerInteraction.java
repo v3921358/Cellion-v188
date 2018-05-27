@@ -576,6 +576,12 @@ public abstract class AbstractPlayerInteraction {
         return pItem.getItemId();
     }
 
+    public void gainCube(int itemId, short nQuantity) {
+            Item item;
+            item = new Item(itemId, (byte) 0, nQuantity, (byte) 0);
+            MapleInventoryManipulator.addbyItem(c, item);
+    }
+
     public final int getJob() {
         return c.getPlayer().getJob();
     }
