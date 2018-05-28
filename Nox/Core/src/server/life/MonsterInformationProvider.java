@@ -138,6 +138,7 @@ public class MonsterInformationProvider {
                             sLine = buffRead.readLine();
                         } else {
                             drops.put(Integer.parseInt(nMobID), aDropData);
+                            aDropData.clear();
                             break;
                         }
                     }
