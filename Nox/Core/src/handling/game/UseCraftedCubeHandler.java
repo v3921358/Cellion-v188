@@ -52,7 +52,7 @@ public class UseCraftedCubeHandler implements ProcessPacket<ClientSocket> {
             return;
         }
         
-        boolean bUsed = Cube.OnCubeRequest(pPlayer, pEquip, pCube.getItemId()); // Handle the Cube
+        boolean bUsed = Cube.OnCubeRequest(pPlayer, pEquip, pCube.getItemId(), true); // Handle the Cube
         if (bUsed) MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, nCubeSlot, (short) 1, false, true);
     }
 }

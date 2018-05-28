@@ -5037,6 +5037,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
                         if (this.isBurning && currLevel >= 10 && currLevel <= 150) {
                             OnLevelUp();
+                            OnLevelUp();
                         }
                         OnLevelUp();
                         leveled = true;
@@ -5572,9 +5573,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @purpose Levels up the character and increases all the stats accordingly.
      */
     public void OnLevelUp() {
-        if (getLevel() >= GameConstants.maxLevel) {
-            return;
-        }
+        if (getLevel() >= GameConstants.maxLevel) return;
         
         level++;
         
@@ -5593,6 +5592,10 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         nMaxHP = Math.min(GameConstants.maxHP, Math.abs(nMaxHP));
         nMaxMP = Math.min(GameConstants.maxMP, Math.abs(nMaxMP));
         
+        /*MP Modifiers for speciic classes*/
+        if (GameConstants.isDemonSlayer(job)) nMaxMP = GameConstants.getMPByJob(job);      // Update Demon Fury
+        if (GameConstants.isZero(job) || GameConstants.isKanna(job)) nMaxMP = 100;
+        
         /*Ability Point Distribution*/
         if (level < 10) {                                                                   // Automatically place AP in STR until level 10.
             stats.str += 5;
@@ -5604,8 +5607,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else {
             remainingAp += 5;
         }
-
-
 
         /*Double Skill Point Check*/
        /*Check if players should gain double SP this level up.*/
@@ -5672,14 +5673,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             }
         }
 
-        /*MP Modifiers for speciic classes (eg.Demon Slayer uses Demon Fury)*/
-        if (GameConstants.isDemonSlayer(job)) {
-            nMaxMP = GameConstants.getMPByJob(job);
-        }
-        if (GameConstants.isZero(job) || GameConstants.isKanna(job)) {
-            nMaxMP = 100;
-        }
-        
         /*Character Stat Update*/
         pStat.put(Stat.MaxHP, (long) nMaxHP);
         pStat.put(Stat.MaxMP, (long) nMaxMP);
