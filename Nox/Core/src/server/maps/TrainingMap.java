@@ -3,6 +3,7 @@
  */
 package server.maps;
 
+import constants.ServerConstants;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
@@ -17,26 +18,10 @@ import server.maps.objects.User;
 public class TrainingMap {
     
     /**
-     * aTrainingMaps
-     * @syntax {nMapID, nMaximumSpawnCount, nSpawnRateMultiplier}
+     * bEnabled
+     * @purpose Enables or disables the training map system.
      */
-    public static float[][] aTrainingMaps = new float[][]{
-        {610040000, 1, 1}, // Alien Base Corridor
-        {610040100, 1, 1}, // Alien Base Corridor 2
-        {610040200, 1, 1}, // Alien Base Corridor 3
-        {610040210, 1, 1}, // Alien Base Corridor 4
-        {610040220, 1, 1}, // Alien Base Corridor 5
-        {610040230, 1, 1}, // Alien Base Corridor 6
-        {272000300, 12, 1}, // Leafre in Flames 3 
-        {860000032, 12, 1}, // Dangerous Deep Sea 3 
-        {240093100, 12, 1}, // Inside the Stone Colossus 2
-        {273040100, 12, 1}, // Forsaken Excavation Site 2
-        {211060830, 12, 1}, // Very Tall Castle Walls
-        {106031504, 12, 1}, // Galley    
-        {120040300, 12, 1}, // Beachgrass Dunes 3 
-        {551030000, 12, 1}, // Fantasy Theme Park 3
-        {105200900, 12, 1}, // Neglected Garden
-    };
+    public static boolean bEnabled = true;
     
     /**
      * bFullMapAggression
@@ -45,33 +30,60 @@ public class TrainingMap {
     public static boolean bFullMapAggression = true;
     
     /**
-     * OnBalanceSpawnCount
-     * @param nMapID
-     * @return 
+     * bGlobalSpawnIncrease & bGlobalSpawnMultiplier 
+     * @purpose Increases the spawn rate globally for all maps that are *not* a part of the aTrainingMaps array below.
      */
-    public static int OnBalanceSpawnCount(int nMapID) {
-        float nMaximumMobCount = 0;
-        for (int i = 0; i < aTrainingMaps.length; i++) {
-            for (int j = 0; j < aTrainingMaps[i].length; j++) {
-                if(Float.valueOf(aTrainingMaps[i][j]).equals(nMapID)) nMaximumMobCount = aTrainingMaps[i][1];
-            }
-        }
-        return (int) nMaximumMobCount;
-    }
+    public static boolean bGlobalSpawnIncrease = true;
+    public static float bGlobalSpawnMultiplier = 2.25F;
     
     /**
-     * OnBalanceSpawnRate
-     * @param nMapID
+     * aTrainingMaps
+     * @syntax {nMapID, nMaximumSpawnCount}
+     */
+    public static int[][] aTrainingMaps = new int[][]{
+        
+        /*Nerfed Maps*/
+        {682010201, 8}, // Chimney Possessed by the Skeleton
+        {682010202, 8}, // Chimney Possessed by the Scarecrow
+        {682010203, 8}, // Chimney Possessed by the Clown
+        
+        {610040000, 10}, // Alien Base Corridor
+        {610040000, 10}, // Alien Base Corridor
+        {610040100, 10}, // Alien Base Corridor 2
+        {610040200, 10}, // Alien Base Corridor 3
+        {610040210, 10}, // Alien Base Corridor 4
+        {610040220, 10}, // Alien Base Corridor 5
+        {610040230, 10}, // Alien Base Corridor 6
+        
+        /*Buffed Mobs*/
+        {272000300, 22}, // Leafre in Flames 3 
+        {860000032, 22}, // Dangerous Deep Sea 3 
+        {240093100, 22}, // Inside the Stone Colossus 2
+        {273040100, 22}, // Forsaken Excavation Site 2
+        {211060830, 22}, // Very Tall Castle Walls
+        {106031504, 22}, // Galley    
+        {120040300, 22}, // Beachgrass Dunes 3 
+        {551030000, 22}, // Fantasy Theme Park 3
+        {105200900, 22}, // Neglected Garden
+    };
+    
+    /**
+     * OnBalanceSpawnCount
+     * @param pMap
      * @return 
      */
-    public static float OnBalanceSpawnRate(int nMapID) {
-        float nMultiplier = 1;
+    public static int OnBalanceSpawnCount(MapleMap pMap) {
         for (int i = 0; i < aTrainingMaps.length; i++) {
             for (int j = 0; j < aTrainingMaps[i].length; j++) {
-                if(Float.valueOf(aTrainingMaps[i][j]).equals(nMapID)) nMultiplier = aTrainingMaps[i][2];
+                if(Integer.valueOf(aTrainingMaps[i][j]).equals(pMap.getId())) {
+                    return aTrainingMaps[i][1];
+                }
             }
         }
-        return nMultiplier;
+        if (bGlobalSpawnIncrease) {
+            return (int) (pMap.getMaximumSpawnCount() * bGlobalSpawnMultiplier);
+        }
+        return pMap.getMaximumSpawnCount();
     }
     
     /**

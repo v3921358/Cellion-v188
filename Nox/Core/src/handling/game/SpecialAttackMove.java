@@ -350,6 +350,11 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 pEffect.info.put(StatInfo.time, 210000000);
                 break;
             }
+            case BeastTamer.FLY: {
+                pEffect.statups.put(CharacterTemporaryStat.NewFlying, 1);
+                pEffect.info.put(StatInfo.time, 40000);
+                break;
+            }
             default: {
                 bApplyStats = false;
                 break;
@@ -460,11 +465,11 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 mBuffStat.put(CharacterTemporaryStat.IndieMMP, pEffect.info.get(StatInfo.indieMmp));
                 mBuffStat.put(CharacterTemporaryStat.IndieJump, pEffect.info.get(StatInfo.indieJump));
                 mBuffStat.put(CharacterTemporaryStat.IndieSpeed, pEffect.info.get(StatInfo.indieSpeed));
-                mBuffStat.put(CharacterTemporaryStat.IndieStatR, pEffect.info.get(StatInfo.x));
+                //mBuffStat.put(CharacterTemporaryStat.IndieAllStat, 30);
                 
-                final StatEffect.CancelEffectAction pCancelAction = new StatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), mBuffStat);
-                final ScheduledFuture<?> tBuffSchedule = Timer.BuffTimer.getInstance().schedule(pCancelAction, 20000);
-                pPlayer.registerEffect(pEffect, System.currentTimeMillis(), tBuffSchedule, mBuffStat, false, 20000, pPlayer.getId());
+                //final StatEffect.CancelEffectAction pCancelAction = new StatEffect.CancelEffectAction(pPlayer, null, System.currentTimeMillis(), mBuffStat);
+                //final ScheduledFuture<?> tBuffSchedule = Timer.BuffTimer.getInstance().schedule(pCancelAction, 20000);
+                //pPlayer.registerEffect(null, System.currentTimeMillis(), tBuffSchedule, mBuffStat, false, 20000, pPlayer.getId());
                 pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, 20000, mBuffStat, null));
                 pPlayer.completeDispose();
                 return;

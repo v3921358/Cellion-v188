@@ -142,6 +142,10 @@ public final class MapleMap {
         this.c = c;
     }
 
+    public final int getMaximumSpawnCount() {
+        return maxRegularSpawn.get();
+    }
+    
     public final void setSpawns(final boolean fm) {
         this.isSpawns = fm;
     }
@@ -3350,9 +3354,7 @@ public final class MapleMap {
         final int nSpawnedSize = spawnedMonstersOnMap.get();
         
         int nMaximumSpawnCount = maxRegularSpawn.get();
-        if (TrainingMap.OnBalanceSpawnCount(getId()) > 1) {
-            nMaximumSpawnCount = TrainingMap.OnBalanceSpawnCount(getId());
-        }
+        if(TrainingMap.bEnabled) nMaximumSpawnCount = TrainingMap.OnBalanceSpawnCount(this);
         
         if (bForce) {
             int nShouldSpawn = nMaximumSpawnCount - nSpawnedSize;
@@ -3383,13 +3385,12 @@ public final class MapleMap {
 
             float nSpawnRate = 1f;                                                                              // Base spawn rate.
             
-            if (TrainingMap.OnBalanceSpawnRate(getId()) > 1) {
-                nSpawnRate *= TrainingMap.OnBalanceSpawnRate(getId());                                          // Adjust spawn rate for training maps.
-            } else if (ServerConstants.MODIFY_GLOBAL_SPAWN_RATE) {
+            if (ServerConstants.MODIFY_GLOBAL_SPAWN_RATE) {
                 nSpawnRate *= ServerConstants.SPAWN_RATE_MULTIPLIER;                                            // Adjust global spawn rate.
             }
             
-            int nShouldSpawn = (int) (Math.min(smr.maxRegularSpawnAtOnce, Math.max(0, nMax - nSpawnedSize)) * nSpawnRate);
+            //int nShouldSpawn = (int) (Math.min(smr.maxRegularSpawnAtOnce, Math.max(0, nMax - nSpawnedSize)) * nSpawnRate); // Original
+            int nShouldSpawn = nMax - nSpawnedSize; 
             
             if (ServerConstants.DEVELOPER_DEBUG_MODE && !ServerConstants.REDUCED_DEBUG_SPAM) {
                 System.out.printf("[Debug] SpawnedMonsterOnMap (%s), MaxRegularSpawn (%s), MaxRegularSpawnAtOnce (%s)\r\n", spawnedMonstersOnMap.get(), maxRegularSpawn.get(), smr.maxRegularSpawnAtOnce);
