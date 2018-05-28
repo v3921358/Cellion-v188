@@ -40,6 +40,7 @@ public class MonsterInformationProvider {
     }
 
     public void load() {
+        
         try (Connection con = Database.GetConnection()) {
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM drop_data_global WHERE chance > 0")) {
@@ -105,7 +106,6 @@ public class MonsterInformationProvider {
         ArrayList<String> array = new ArrayList<String>();
         try (BufferedReader br = new BufferedReader(new FileReader("monsterDrops.txt"))) {
             String line;
-
             while ((line = br.readLine()) != null) {
                 String mobId;
                 String dropId;
@@ -115,6 +115,7 @@ public class MonsterInformationProvider {
                 String questId;
                 if (!line.contains(" ") && !line.isEmpty()) {
                     mobId = line;
+                    //loadMonsterDrops(Integer.parseInt(mobId));
                 }
                 if (line.contains(" ")) {
                     //append to mobId somehow
@@ -133,7 +134,26 @@ public class MonsterInformationProvider {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+    }
+    
+    /**
+     * loadMonsterDrops
+     * @author Mazen Massoud
+     * @author aa
+     * 
+     * @param nMonsterID
+     * @param nItemID
+     * @param nDropChance
+     * @param nMinimumQuantity
+     * @param nMaximumQuantity
+     * @param nQuestID 
+     */
+    public void loadMonsterDrops(int nMonsterID, int nItemID, int nDropChance, int nMinimumQuantity, int nMaximumQuantity, int nQuestID) {
+        final ArrayList<MonsterDropEntry> aDropData = new ArrayList<>();
+        
+        aDropData.add(new MonsterDropEntry(nItemID, nDropChance, nMinimumQuantity, nMaximumQuantity, nQuestID));
+        
+        drops.put(nMonsterID, aDropData);
     }
 
     private void loadDrop(int monsterId) {

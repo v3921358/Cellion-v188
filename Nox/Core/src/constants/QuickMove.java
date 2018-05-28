@@ -54,18 +54,25 @@ public enum QuickMove {
     public enum QuickMoveNPC {
 
         PVP(0x1, 0, false, 9070004, 30, "Move to the Battle Mode zone #cBattle Square#, where you can fight against other users.\n#cLv. 30 or above can participate in Battle Square."),
-        MIRROR(0x2, 2, true, 9010022, 10, "Use the #cDimensional Mirror# to move to a variety of party quests."),
-        MONSTER_PARK(0x4, 1, true, 9071003, 20, "Move to the party zone \n#cMonster Park#, where you can fight against strong monsters with your party members.\n#cOnly Lv. 20 or above can participate in the Monster Park."),
-        WORLD_TRANSPORT(0x8, 5, true, 9001001, 0, "Move to different maps or exchange Mesos and Nexon Cash."), //Warping npc, Lolo
-        ISLAND_TRANSPORT(0x10, 6, true, 9000089, 0, "Take the #cTaxi# to move to major areas quickly."), //Taxi, Camel
+        MIRROR(0x2, 2, false, 9010022, 10, "Use the #cDimensional Mirror# to move to a variety of party quests."),
+        MONSTER_PARK(0x4, 1, false, 9071003, 20, "Move to the party zone \n#cMonster Park#, where you can fight against strong monsters with your party members.\n#cOnly Lv. 20 or above can participate in the Monster Park."),
+        
+        WORLD_TRANSPORT(0x8, 5, true, 9001001, 0, "Travel to different maps and access useful shortcuts."), //Warping npc, Lolo
+        
+        ISLAND_TRANSPORT(0x10, 6, false, 9000089, 0, "Take the #cTaxi# to move to major areas quickly."), //Taxi, Camel
+        
         MARKET(0x20, 3, true, 9000087, 0, "Move to the #cFree Market#, where you can trade items with other users."),
-        CRAFTING(0x40, 4, true, 9000088, 30, "Move to #cArdentmill#, the town of Professions.\n#cOnly Lv. 30 or above can move to Ardentmill"),
+        
+        CRAFTING(0x40, 4, false, 9000088, 30, "Move to #cArdentmill#, the town of Professions.\n#cOnly Lv. 30 or above can move to Ardentmill"),
         RANDOLF(0x80, 7, false, 0, 10, ""),
         LUCIA(0x100, 8, false, 0, 10, ""),
         CONOR(0x200, 9, false, 0, 10, ""),
-        PART_TIME(0x400, 10, true, 9010041, 30, "Receive Part-Time Job reward."),
-        HAIR_STYLE(0x800, 13, true, 9000123, 0, "You can get a stylish haircut from Big Headward."),
-        FACE_STYLE(0x1000, 14, true, 9201252, 0, "You can get plastic surgery from Nurse Pretty.");
+        PART_TIME(0x400, 10, false, 9010041, 30, "Receive Part-Time Job reward."),
+        
+        HAIR_STYLE(0x800, 13, true, 9000123, 0, "Change your characters appears for NX."),
+        
+        FACE_STYLE(0x1000, 14, false, 9201252, 0, "You can get plastic surgery from Nurse Pretty.");
+       
         private final int value, type, id, level;
         private final String desc;
         private final boolean show;

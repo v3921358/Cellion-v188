@@ -202,7 +202,7 @@ public class Cube extends ItemPotentialProvider {
         if (nReqLevel < 10) return false;
         
 
-        if (Randomizer.nextInt(100) < nTierDownRate) { // Potential Tier Decrease Chance
+        if ((Randomizer.nextInt(100) < nTierDownRate)) { // Potential Tier Decrease Chance
             ItemPotentialTierType pNewTier = ItemPotentialTierType.getItemPotentialTierTypeFromInt(pPotentialTier.getValue() - 1);
             if (pNewTier != ItemPotentialTierType.None && !pNewTier.isHiddenType()) {
                 pPotentialTier = pNewTier;
@@ -274,15 +274,17 @@ public class Cube extends ItemPotentialProvider {
                 return false;
         }
         
-        if (bHidePotential) {
-            ItemPotentialTierType pHiddenTier = ItemPotentialTierType.getHiddenPotentialTier(pPotentialTier);
-            if (pHiddenTier != ItemPotentialTierType.None) {
-                pEquip.setPotentialTier(pHiddenTier);
+        if (nTierDownRate != 0 || nTierUpRate != 0) {
+            if (bHidePotential) {
+                ItemPotentialTierType pHiddenTier = ItemPotentialTierType.getHiddenPotentialTier(pPotentialTier);
+                if (pHiddenTier != ItemPotentialTierType.None) {
+                    pEquip.setPotentialTier(pHiddenTier);
+                } else {
+                    pEquip.setPotentialTier(pPotentialTier);
+                }
             } else {
                 pEquip.setPotentialTier(pPotentialTier);
             }
-        } else {
-            pEquip.setPotentialTier(pPotentialTier);
         }
         return true;
     }
