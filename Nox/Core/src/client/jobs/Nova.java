@@ -5,8 +5,13 @@ package client.jobs;
 
 import client.CharacterTemporaryStat;
 import client.SkillFactory;
+import constants.GameConstants;
+import constants.skills.AngelicBuster;
 import constants.skills.Kaiser;
+import server.Randomizer;
+import server.StatEffect;
 import server.maps.objects.User;
+import tools.packet.JobPacket;
 
 /**
  * Nova Class Handlers
@@ -47,4 +52,28 @@ public class Nova {
         }
     }
 
+    public static class AngelicBusterHandler {
+        
+        public static void handleRecharge(User pPlayer, int nSkillID) {
+            if (!GameConstants.isAngelicBuster(pPlayer.getJob())) return;
+            
+            if  (pPlayer.hasSkill(AngelicBuster.AFFINITY_HEART_IV)) {
+                pPlayer.SendPacket(JobPacket.AngelicPacket.unlockSkill());
+                pPlayer.SendPacket(JobPacket.AngelicPacket.showRechargeEffect());
+                return;
+            }
+            
+            int Recharge = SkillFactory.getSkill(nSkillID).getEffect(pPlayer.getTotalSkillLevel(nSkillID)).getOnActive();
+            if (Recharge > -1) {
+                if (Randomizer.isSuccess(Recharge)) {
+                    pPlayer.SendPacket(JobPacket.AngelicPacket.unlockSkill());
+                    pPlayer.SendPacket(JobPacket.AngelicPacket.showRechargeEffect());
+                } else {
+                    pPlayer.SendPacket(JobPacket.AngelicPacket.lockSkill(nSkillID));
+                }
+            } else {
+                pPlayer.SendPacket(JobPacket.AngelicPacket.lockSkill(nSkillID));
+            }
+        }
+    }
 }

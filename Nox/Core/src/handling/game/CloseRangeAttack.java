@@ -18,6 +18,7 @@ import constants.skills.NightWalker;
 import constants.skills.Page;
 import constants.skills.Zero;
 import client.jobs.Explorer;
+import client.jobs.Nova;
 import client.jobs.Resistance;
 import client.jobs.Sengoku;
 import client.jobs.Sengoku.HayatoHandler;
@@ -152,19 +153,7 @@ public final class CloseRangeAttack {
                 
             } else if (GameConstants.isAngelicBuster(pPlayer.getJob())) {
                 
-                if (pEffect != null) {
-                    int Recharge = pEffect.getOnActive();
-                    if (Recharge > -1) {
-                        if (Randomizer.isSuccess(Recharge)) {
-                            c.SendPacket(JobPacket.AngelicPacket.unlockSkill());
-                            c.SendPacket(JobPacket.AngelicPacket.showRechargeEffect());
-                        } else {
-                            c.SendPacket(JobPacket.AngelicPacket.lockSkill(pAttack.skill));
-                        }
-                    } else {
-                        c.SendPacket(JobPacket.AngelicPacket.lockSkill(pAttack.skill));
-                    }
-                }
+                Nova.AngelicBusterHandler.handleRecharge(pPlayer, pAttack.skill);
             } else if (GameConstants.isZero(pPlayer.getJob())) {
                 
                 switch (pAttack.skill) {

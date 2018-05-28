@@ -60,31 +60,35 @@ function action(mode, type, selection){
 		}
 		cm.sendSimple(selStr + "#k");
 	} else if (status == 2) {
-		inv = cm.getInventory(1);
-		var it = inv.getItem(selection);
-		
-		cm.getPlayer().yellowMessage("selection: " + selection + " / cube: " + aCubeID[nSelectedCube]);
-		if (cm.haveItem(aCubeID[nSelectedCube])) {
-			cm.OnCubeRequest(selection, aCubeID[nSelectedCube]);
-			cm.gainItem(aCubeID[nSelectedCube], -1);
-		} else if (cm.getPlayer().getCSPoints(2) > aCubeCosts[nSelectedCube]) {
-			cm.OnCubeRequest(selection, aCubeID[nSelectedCube]);
-			cm.getPlayer().gainNX(-(aCubeCosts[nSelectedCube]), true);
-		}
-		if (aCubeID[nSelectedCube] != 5062500) { // Not Bonus Potential
-			sResults = "Potential Cube Results#r\r\n\r\n\t" 
-						+ it.getPotential1() + "\r\n\t" 
-						+ it.getPotential2() + "\r\n\t" 
-						+ it.getPotential3();
-		} else {
-			sResults = "Potential Cube Results#d\r\n\r\n\t" 
-						+ it.getBonusPotential1() + "\r\n\t" 
-						+ it.getBonusPotential2() + "\r\n\t" 
-						+ it.getBonusPotential3();
-		}
-		cm.sendYesNo(sResults);
+		cube: 
+		OnCubeResult(selection, aCubeID[nSelectedCube]);
 	} else if (status == 3) {
-		cm.sendOk("hmmm");
-		
+		continue cube;
 	}
+}
+
+function OnCubeResult(nEquipSlot, nSelectedCube) {
+	inv = cm.getInventory(1);
+	var it = inv.getItem(nEquipSlot);
+	
+	cm.getPlayer().yellowMessage("selection: " + nEquipSlot + " / cube: " + aCubeID[nSelectedCube]);
+	if (cm.haveItem(aCubeID[nSelectedCube])) {
+		cm.OnCubeRequest(nEquipSlot, aCubeID[nSelectedCube]);
+		cm.gainItem(aCubeID[nSelectedCube], -1);
+	} else if (cm.getPlayer().getCSPoints(2) > aCubeCosts[nSelectedCube]) {
+		cm.OnCubeRequest(nEquipSlot, aCubeID[nSelectedCube]);
+		cm.getPlayer().gainNX(-(aCubeCosts[nSelectedCube]), true);
+	}
+	if (aCubeID[nSelectedCube] != 5062500) { // Not Bonus Potential
+		sResults = "Potential Cube Results#r\r\n\r\n\t" 
+					+ it.getPotential1() + "\r\n\t" 
+					+ it.getPotential2() + "\r\n\t" 
+					+ it.getPotential3();
+	} else {
+		sResults = "Potential Cube Results#d\r\n\r\n\t" 
+					+ it.getBonusPotential1() + "\r\n\t" 
+					+ it.getBonusPotential2() + "\r\n\t" 
+					+ it.getBonusPotential3();
+	}
+	cm.sendYesNo(sResults);
 }

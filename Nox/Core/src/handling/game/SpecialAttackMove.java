@@ -7,6 +7,8 @@ import constants.skills.*;
 import client.jobs.Explorer.*;
 import client.jobs.Hero.*;
 import client.jobs.Kinesis.KinesisHandler;
+import client.jobs.Nova;
+import client.jobs.Nova.AngelicBusterHandler;
 import client.jobs.Resistance.*;
 import net.InPacket;
 import net.ProcessPacket;
@@ -772,17 +774,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             }
         }
         if (GameConstants.isAngelicBuster(pPlayer.getJob())) {
-            int Recharge = pEffect.getOnActive();
-            if (Recharge > -1) {
-                if (Randomizer.isSuccess(Recharge)) {
-                    c.SendPacket(JobPacket.AngelicPacket.unlockSkill());
-                    c.SendPacket(JobPacket.AngelicPacket.showRechargeEffect());
-                } else {
-                    c.SendPacket(JobPacket.AngelicPacket.lockSkill(nSkill));
-                }
-            } else {
-                c.SendPacket(JobPacket.AngelicPacket.lockSkill(nSkill));
-            }
+            AngelicBusterHandler.handleRecharge(pPlayer, nSkill);
         }
         
         c.getPlayer().getStat().OnCalculateLocalStats(c.getPlayer());

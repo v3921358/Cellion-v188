@@ -7,6 +7,7 @@ import client.inventory.ModifyInventory;
 import client.inventory.ModifyInventoryOperation;
 import client.jobs.Cygnus;
 import client.jobs.Cygnus.WindArcherHandler;
+import client.jobs.Nova;
 import constants.GameConstants;
 import constants.skills.Outlaw;
 import constants.skills.Ranger;
@@ -106,17 +107,7 @@ public final class RangedAttack implements ProcessPacket<ClientSocket> {
                 }
             }
             if (GameConstants.isAngelicBuster(pPlayer.getJob())) {
-                int Recharge = pEffect.getOnActive();
-                if (Recharge > -1) {
-                    if (Randomizer.isSuccess(Recharge)) {
-                        c.SendPacket(JobPacket.AngelicPacket.unlockSkill());
-                        c.SendPacket(JobPacket.AngelicPacket.showRechargeEffect());
-                    } else {
-                        c.SendPacket(JobPacket.AngelicPacket.lockSkill(pAttack.skill));
-                    }
-                } else {
-                    c.SendPacket(JobPacket.AngelicPacket.lockSkill(pAttack.skill));
-                }
+                Nova.AngelicBusterHandler.handleRecharge(pPlayer, pAttack.skill);
             }
 
             if (GameConstants.isWindArcher(pPlayer.getJob())) {
