@@ -23,7 +23,7 @@ public class NPCConstants {
                             DonorShop_NPC = 9010003,
             
                             Cubing_NPC = 2060100,
-                            Secondary_NPC = 9072000,
+                            Secondary_NPC = 9072100,
                             CashItem_NPC = 9010034,
             
                             CashItemDrop_NPC = 9010017

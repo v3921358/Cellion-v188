@@ -117,7 +117,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                     pPlayer.setLastInventorySort();
                 }
                 final Equip pEquip = (Equip) pPlayer.getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
-                bUsed = Cube.OnCubeRequest(pPlayer, pEquip, nItemID);
+                bUsed = Cube.OnCubeRequest(pPlayer, pEquip, nItemID, true);
                 break;
             }
             

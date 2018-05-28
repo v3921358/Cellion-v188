@@ -1555,7 +1555,7 @@ public class Mob extends AbstractLoadedMapleLife {
         int nMaxRange = (int) Math.round(nMinRange * 1.25);                                         // Amount Meso Drop can randomize up to.
         int nResultMeso = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1)));      // Formula to produce a value between the specified range.
         
-        int nGainChance = 42;                                                                       // Base Meso Drop Chance %
+        int nGainChance = 65;                                                                       // Base Meso Drop Chance %
         
         if (BuffedMob.OnBuffedChannel(Utility.requestChannel(pDropOwner.getId()))) {                // Increase Meso Rates from Buffed Monsters.
             if (!BuffedMob.BUFFED_BOSSES) {

@@ -7730,7 +7730,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void gainNX(int nAmount, boolean bNotification) {
         maplepoints += nAmount;
         SendPacket(WvsContext.updateMaplePoint(getNX()));
-        if (bNotification) dropMessage(-1,  ((nAmount > 0) ? "+ " : "- ") + nAmount + " NX");
+        if (bNotification) dropMessage(-1,  ((nAmount > 0) ? "+ " : " ") + nAmount + " NX");
     }
     
     public void modifyCSPoints(int type, int quantity) {
@@ -7780,7 +7780,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 break;
         }
         if (show && quantity != 0) {
-            dropMessage(-1, "You have " + (quantity > 0 ? "gained " : "lost ") + quantity + (type == 1 ? " NX Cash!" : " Maple Points!"));
+            dropMessage(-1,  ((quantity > 0) ? "+ " : " ") + quantity + " NX");
+            //dropMessage(-1, "You have " + (quantity > 0 ? "gained " : "lost ") + quantity + (type == 1 ? " NX Cash!" : " Maple Points!"));
         }
     }
 

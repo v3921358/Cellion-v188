@@ -37,9 +37,10 @@ public class Cube extends ItemPotentialProvider {
      * @param pPlayer
      * @param pEquip
      * @param nCubeID 
+     * @param bDisplayUI
      * @return
      */
-    public static boolean OnCubeRequest(User pPlayer, Equip pEquip, int nCubeID) {
+    public static boolean OnCubeRequest(User pPlayer, Equip pEquip, int nCubeID, boolean bDisplayUI) {
         if (pEquip == null || pPlayer.getInventory(MapleInventoryType.USE).getNumFreeSlot() < 1) {
             pPlayer.completeDispose();
             return false;
@@ -151,16 +152,16 @@ public class Cube extends ItemPotentialProvider {
                     case ItemConstants.MEISTER_CUBE:
                     case ItemConstants.MEISTER_CUBE2:
                     case ItemConstants.MEISTER_CUBE_UNTRADEABLE:
-                        pPlayer.SendPacket(CubePacket.OnInGameCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
+                        if (bDisplayUI) pPlayer.SendPacket(CubePacket.OnInGameCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
                         break;
                     case ItemConstants.PLATINUM_MIRACLE_CUBE:
                         //pPlayer.SendPacket(CubePacket.OnPlatinumCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
                         break;
                     case ItemConstants.RED_CUBE:
-                        pPlayer.SendPacket(CubePacket.OnRedCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
+                        if (bDisplayUI) pPlayer.SendPacket(CubePacket.OnRedCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
                         break;
                     case ItemConstants.BONUS_POTENTIAL_CUBE:
-                        pPlayer.SendPacket(CubePacket.OnBonusCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
+                        if (bDisplayUI) pPlayer.SendPacket(CubePacket.OnBonusCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
                         break;
                 }
             }

@@ -3028,7 +3028,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * @param nCubeID 
      */
     public void OnCubeRequest(int nSlot, int nCubeID) {
-        final Equip pEquip = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) nCubeID);
-        Cube.OnCubeRequest(c.getPlayer(), pEquip, nCubeID);
+        
+        final Equip pEquip = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) nSlot);
+        Cube.OnCubeRequest(c.getPlayer(), pEquip, nCubeID, false);
     }
 }
