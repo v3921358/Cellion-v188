@@ -118,17 +118,18 @@ public class MonsterInformationProvider {
                     nMobID = sLine;
                     sLine = buffRead.readLine();
                 }
+                ArrayList<MonsterDropEntry> aDropData = new ArrayList<>();
                 while(sLine.length() > 0) {
                     if (nMobID != null) {
-                        if (sLine.contains(" ") && !sLine.contains("//")) {
 
+                        if (sLine.contains(" ") && !sLine.contains("//")) {
                             String[] dropData = sLine.split(" ");
                             nDropID = dropData[0];
                             nDropChance = dropData[1];
                             nMinQuantity = dropData[2];
                             nMaxQuantity = dropData[3];
                             nRequiredQuestID = dropData[4];
-
+                            aDropData.add(new MonsterDropEntry(Integer.parseInt(nDropID), Integer.parseInt(nDropChance), Integer.parseInt(nMinQuantity), Integer.parseInt(nMaxQuantity), Integer.parseInt(nRequiredQuestID)));
                             int nRawDropChance = Integer.parseInt(nDropChance) * 100000; 
                             
                             if (!ServerConstants.REDUCED_DEBUG_SPAM) System.err.printf("%s, %s , %s , %s , %s, %s \n", Integer.parseInt(nMobID), Integer.parseInt(nDropID), nRawDropChance, Integer.parseInt(nMinQuantity), Integer.parseInt(nMaxQuantity), Integer.parseInt(nRequiredQuestID));
@@ -136,6 +137,7 @@ public class MonsterInformationProvider {
                             if (Integer.parseInt(nMobID) > 0) OnAddMonsterDrop(Integer.parseInt(nMobID), Integer.parseInt(nDropID), Integer.parseInt(nDropChance), Integer.parseInt(nMinQuantity), Integer.parseInt(nMaxQuantity), Integer.parseInt(nRequiredQuestID));
                             sLine = buffRead.readLine();
                         } else {
+                            drops.put(Integer.parseInt(nMobID), aDropData);
                             break;
                         }
                     }
