@@ -32,6 +32,7 @@ public class MonsterInformationProvider {
      * @purpose If enabled, drops will be loaded from the "monsterDrops.txt" file, rather than the database.
      */
     private static final boolean bLoadFromFile = true;
+    private static final boolean bLoadFromDatabase = true;
     
     private static final MonsterInformationProvider instance = new MonsterInformationProvider();
     private final Map<Integer, ArrayList<MonsterDropEntry>> drops = new HashMap<>();
@@ -44,14 +45,14 @@ public class MonsterInformationProvider {
     public List<MonsterGlobalDropEntry> getGlobalDrop() {
         return globaldrops;
     }
-    
+
     public List<MonsterDropEntry> retrieveDrop(int monsterId) {
         return drops.get(monsterId);
     }
 
     public void load() {
-        
-        if (!bLoadFromFile) {
+
+        if (bLoadFromDatabase) {
             try (Connection con = Database.GetConnection()) {
                 try (PreparedStatement ps = con.prepareStatement("SELECT * FROM drop_data_global WHERE chance > 0")) {
                     ResultSet rs = ps.executeQuery();
@@ -89,7 +90,9 @@ public class MonsterInformationProvider {
                 LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             }
             loadCustomLevelDrops();
-        } else {
+        } 
+        
+        if (bLoadFromFile) {
             OnLoadMonsterDrops();
         }
 
@@ -101,7 +104,7 @@ public class MonsterInformationProvider {
      * OnLoadMonsterDrops
      * @author aa
      * @author Mazen Massoud
-     * 
+     *
      * @purpose Retrieve monster drop data from the "monsterDrops.txt" file. 
      */
     public void OnLoadMonsterDrops() {
@@ -118,30 +121,34 @@ public class MonsterInformationProvider {
                     nMobID = sLine;
                     sLine = buffRead.readLine();
                 }
-                ArrayList<MonsterDropEntry> aDropData = new ArrayList<>();
-                while(sLine.length() > 0) {
-                    if (nMobID != null) {
 
-                        if (sLine.contains(" ") && !sLine.contains("//")) {
+                ArrayList<MonsterDropEntry> aMonsterDropData = new ArrayList<>();
+
+                while(sLine.length() > 0) {
+                    while (nMobID != null) {
+                        if (sLine.contains(" ")) {
+
                             String[] dropData = sLine.split(" ");
                             nDropID = dropData[0];
                             nDropChance = dropData[1];
                             nMinQuantity = dropData[2];
                             nMaxQuantity = dropData[3];
                             nRequiredQuestID = dropData[4];
-                            aDropData.add(new MonsterDropEntry(Integer.parseInt(nDropID), Integer.parseInt(nDropChance), Integer.parseInt(nMinQuantity), Integer.parseInt(nMaxQuantity), Integer.parseInt(nRequiredQuestID)));
-                            int nRawDropChance = Integer.parseInt(nDropChance) * 100000; 
-                            
-                            if (!ServerConstants.REDUCED_DEBUG_SPAM) System.err.printf("%s, %s , %s , %s , %s, %s \n", Integer.parseInt(nMobID), Integer.parseInt(nDropID), nRawDropChance, Integer.parseInt(nMinQuantity), Integer.parseInt(nMaxQuantity), Integer.parseInt(nRequiredQuestID));
 
-                            if (Integer.parseInt(nMobID) > 0) OnAddMonsterDrop(Integer.parseInt(nMobID), Integer.parseInt(nDropID), Integer.parseInt(nDropChance), Integer.parseInt(nMinQuantity), Integer.parseInt(nMaxQuantity), Integer.parseInt(nRequiredQuestID));
+                            int nRawDropChance = (int) (Integer.parseInt(nDropChance) * (1000 / ServerConstants.DROP_RATE));
+                            if (bLoadFromDatabase) nRawDropChance /= 1.5;
+
+                            if (!ServerConstants.REDUCED_DEBUG_SPAM) System.err.printf("%s, %s, %s, %s, %s, %s \n", Integer.parseInt(nMobID), Integer.parseInt(nDropID), nRawDropChance, Integer.parseInt(nMinQuantity), Integer.parseInt(nMaxQuantity), Integer.parseInt(nRequiredQuestID));
+
+                            aMonsterDropData.add(new MonsterDropEntry(Integer.parseInt(nDropID), nRawDropChance, Integer.parseInt(nMinQuantity), Integer.parseInt(nMaxQuantity), Integer.parseInt(nRequiredQuestID)));
                             sLine = buffRead.readLine();
                         } else {
-                            drops.put(Integer.parseInt(nMobID), aDropData);
-                            aDropData.clear();
                             break;
                         }
                     }
+                    drops.put(Integer.parseInt(nMobID), aMonsterDropData);
+                    nMobID = null;
+                    sLine = "";
                 }
                 if (sLine.isEmpty() || sLine.contains("\n")) {
                     //do nothing
@@ -152,30 +159,10 @@ public class MonsterInformationProvider {
     }
 
     /**
-     * OnAddMonsterDrops
-     * @author aa
-     * @author Mazen Massoud
-     * @purpose Add the monster's drop information into the server's drop data.
-     * 
-     * @param nMonsterID
-     * @param nItemID
-     * @param nDropChance
-     * @param nMinimumQuantity
-     * @param nMaximumQuantity
-     * @param nQuestID 
-     */
-    public void OnAddMonsterDrop(int nMonsterID, int nItemID, int nDropChance, int nMinimumQuantity, int nMaximumQuantity, int nQuestID) {
-        final ArrayList<MonsterDropEntry> aDropData = new ArrayList<>();
-        aDropData.add(new MonsterDropEntry(nItemID, nDropChance * 10, nMinimumQuantity, nMaximumQuantity, nQuestID));
-        
-        drops.put(nMonsterID, aDropData);
-    }
-
-    /**
      * loadDrop
-     * 
+     *
      * @purpose SQL method to load drop data.
-     * @param monsterId 
+     * @param monsterId
      */
     private void loadDrop(int monsterId) {
         final ArrayList<MonsterDropEntry> ret = new ArrayList<>();
@@ -200,6 +187,7 @@ public class MonsterInformationProvider {
                 if (GameConstants.getInventoryType(itemid) == MapleInventoryType.EQUIP) {
                     chance *= 10; //in GMS/SEA it was raised
                 }
+                if (bLoadFromFile) chance /= 3; // Lower drop chance if we're using both our drop tables.
                 ret.add(new MonsterDropEntry(
                         itemid,
                         chance,
@@ -239,7 +227,7 @@ public class MonsterInformationProvider {
         globaldrops.add(new MonsterGlobalDropEntry(4001832, (int) (0.4 * 10000), -1, (byte) 0, 1, 1, 0)); // Spell trace
         globaldrops.add(new MonsterGlobalDropEntry(2049700, (int) (0.3 * 10000), -1, (byte) 0, 1, 1, 0)); // Epic potential scroll scroll
     }
-    
+
     public void addExtra() {
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         for (Entry<Integer, ArrayList<MonsterDropEntry>> e : drops.entrySet()) {

@@ -218,7 +218,7 @@ public class Mob extends AbstractLoadedMapleLife {
             
         }
 
-        if (ServerConstants.DEVELOPER_DEBUG_MODE) System.err.println("[Damage Operation] Mob Damage Received (" + damage + ")");
+        if (ServerConstants.DEVELOPER_DEBUG_MODE) System.err.println("[Damage Operation] Mob Damage Received (" + damage + "), Mob ID (" + getId() + ")");
 
         AttackerEntry attacker;
         

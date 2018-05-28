@@ -4771,7 +4771,6 @@
 2870308 40 1 1 0
 
 2600425
-//Nothing drops from this as it's a job advancement quest to kill it
 
 2600500
 1942001 40 1 1 0
@@ -9563,7 +9562,6 @@
 4310029 40 1 1 0
 
 2600800
-//Nothing drops from this boss
 
 2600900
 1942001 40 1 1 0
@@ -13563,7 +13561,6 @@
 4021035 40 1 1 0
 
 5100001
-//Not supposed to drop anything
 
 5100002
 4000081 40 1 1 0
@@ -13900,7 +13897,6 @@
 4021035 40 1 1 0
 
 5100105
-//After killing, it spawns into 5100109
 
 5100106
 1942001 40 1 1 0
