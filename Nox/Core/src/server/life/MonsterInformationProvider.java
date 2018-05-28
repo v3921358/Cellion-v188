@@ -2,6 +2,10 @@ package server.life;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,6 +44,7 @@ public class MonsterInformationProvider {
     }
 
     public void load() {
+
         try (Connection con = Database.GetConnection()) {
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM drop_data_global WHERE chance > 0")) {
@@ -102,38 +107,64 @@ public class MonsterInformationProvider {
     }
 
     public void tempDrop() {
-        ArrayList<String> array = new ArrayList<String>();
+
+        //ArrayList<String> array = new ArrayList<String>();
+
         try (BufferedReader br = new BufferedReader(new FileReader("monsterDrops.txt"))) {
             String line;
-
             while ((line = br.readLine()) != null) {
-                String mobId;
+                String mobId = null;
                 String dropId;
                 String chance;
                 String minQuantity;
                 String maxQuantity;
                 String questId;
-                if (!line.contains(" ") && !line.isEmpty()) {
+                if (!line.contains(" ") && line.length() > 0) {
                     mobId = line;
+                    line = br.readLine();
                 }
-                if (line.contains(" ")) {
-                    //append to mobId somehow
-                    String[] dropData = line.split(" ");
-                    dropId = dropData[0];
-                    chance = dropData[1];
-                    minQuantity = dropData[2];
-                    maxQuantity = dropData[3];
-                    questId = dropData[4];
-                    //array.add(line); //not needed if you load value each time
+                while(line.length() > 0) {
+                    if (line.contains(" ")) {
+                        String[] dropData = line.split(" ");
+                        dropId = dropData[0];
+                        chance = dropData[1];
+                        minQuantity = dropData[2];
+                        maxQuantity = dropData[3];
+                        questId = dropData[4];
+                        loadMonsterDrops(Integer.parseInt(mobId), Integer.parseInt(dropId), Integer.parseInt(chance), Integer.parseInt(minQuantity), Integer.parseInt(maxQuantity), Integer.parseInt(questId));
+                        line = br.readLine();
+                    } else {
+                        break;
+                    }
                 }
-                if (line.isEmpty() || line.contains("\\r?\\n")) {
+                if (line.isEmpty() || line.contains("\n")) {
                     //do nothing
                 }
             }
+            br.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * loadMonsterDrops
+     * @author Mazen Massoud
+     * @author aa
+     *
+     * @param nMonsterID
+     * @param nItemID
+     * @param nDropChance
+     * @param nMinimumQuantity
+     * @param nMaximumQuantity
+     * @param nQuestID
+     */
+    public void loadMonsterDrops(int nMonsterID, int nItemID, int nDropChance, int nMinimumQuantity, int nMaximumQuantity, int nQuestID) {
+        final ArrayList<MonsterDropEntry> aDropData = new ArrayList<>();
+
+        aDropData.add(new MonsterDropEntry(nItemID, nDropChance, nMinimumQuantity, nMaximumQuantity, nQuestID));
+
+        drops.put(nMonsterID, aDropData);
     }
 
     private void loadDrop(int monsterId) {
@@ -321,7 +352,7 @@ public class MonsterInformationProvider {
                 //e.getValue().add(new MonsterDropEntry(2430028, 5000, 20, 50, 0)); 
                 List<Integer> items;
                 Integer[] itemArray = {3010000, 3010001, 3010002, 3010003, 3010004, 3010005, 3010006, 3010007, 3010008, 3010009, 3010010, 3010011, 3010012, 3010013, 3010014, 3010015, 3010016, 3010017, 3010018, 3010019, 3010021, 3010025, 3010035, 3010036, 3010038, 3010039, 3010040, 3010041, 3010043, 3010044, 3010045, 3010046, 3010047, 3010049, 3010052, 3010053, 3010054, 3010055, 3010057, 3010058,
-                    3010196, 3010253, 3010255, 3010060, 3010061, 3010062, 3010063, 3010064, 3010065, 3010066, 3010067, 3010068, 3010069, 3010071, 3010072, 3010073, 3010075, 3010077, 3010080, 3010085, 3010092, 3010093, 3010095, 3010096, 3010098, 3010099, 3010101, 3010106, 3010107, 3010108, 3010109, 3010110, 3010111, 3010112, 3010113, 3010114, 3010115, 3010116, 3010117, 3010118, 3010119, 301020};
+                        3010196, 3010253, 3010255, 3010060, 3010061, 3010062, 3010063, 3010064, 3010065, 3010066, 3010067, 3010068, 3010069, 3010071, 3010072, 3010073, 3010075, 3010077, 3010080, 3010085, 3010092, 3010093, 3010095, 3010096, 3010098, 3010099, 3010101, 3010106, 3010107, 3010108, 3010109, 3010110, 3010111, 3010112, 3010113, 3010114, 3010115, 3010116, 3010117, 3010118, 3010119, 301020};
                 items = Arrays.asList(itemArray);
                 int item = Randomizer.nextInt(items.size());
                 e.getValue().add(new MonsterDropEntry(item, 10000, 1, 1, 0));// 60%  
