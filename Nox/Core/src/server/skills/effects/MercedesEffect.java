@@ -74,7 +74,7 @@ public class MercedesEffect extends AbstractEffect {
                 break;
             case Mercedes.IGNIS_ROAR:
                 pEffect.statups.put(CharacterTemporaryStat.IgnisRore, 1);
-                pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(StatInfo.indiePad));
                 break;
             case Mercedes.LEAP_TORNADO:
                 break;
@@ -100,6 +100,7 @@ public class MercedesEffect extends AbstractEffect {
                 break;
             case Mercedes.ELVISH_BLESSING:
                 pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.KnockBack, pEffect.info.get(StatInfo.x));
                 break;
             case Mercedes.HEROIC_MEMORIES_1:
                 pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));

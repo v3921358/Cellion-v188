@@ -659,7 +659,7 @@ public class PlayerStats implements Serializable {
             pPlayer.changeSkillLevelSkip(aData, false);
             
             if (GameConstants.isDemonSlayer(pPlayer.getJob())) {
-                localmaxmp = GameConstants.getMPByJob(pPlayer.getJob()) + dark_force;
+                localmaxmp = GameConstants.getMPByJob(pPlayer.getJob()) + dark_force; //?
             } else if (GameConstants.isZero(pPlayer.getJob())) {
                 localmaxmp = 100;
             }

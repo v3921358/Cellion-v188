@@ -5037,9 +5037,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
                         if (this.isBurning && currLevel >= 10 && currLevel <= 150) {
                             OnLevelUp();
-                            OnLevelUp();
                         }
-
                         OnLevelUp();
                         leveled = true;
                     }
@@ -5606,7 +5604,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         } else {
             remainingAp += 5;
         }
-       
+
+
+
         /*Double Skill Point Check*/
        /*Check if players should gain double SP this level up.*/
         switch (Utility.getLastDigit(level)) {
@@ -5670,6 +5670,14 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     OnJobAdvanceNotify();
                     break;
             }
+        }
+
+        /*MP Modifiers for speciic classes (eg.Demon Slayer uses Demon Fury)*/
+        if (GameConstants.isDemonSlayer(job)) {
+            nMaxMP = GameConstants.getMPByJob(job);
+        }
+        if (GameConstants.isZero(job) || GameConstants.isKanna(job)) {
+            nMaxMP = 100;
         }
         
         /*Character Stat Update*/
