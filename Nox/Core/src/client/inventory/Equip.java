@@ -545,6 +545,10 @@ public class Equip extends Item {
     public void setPotentialTier(ItemPotentialTierType potentialState) {
         this.potentialState = potentialState;
     }
+    
+    public boolean hasLegendaryPotential() {
+        return (potentialState.equals(ItemPotentialTierType.Legendary) || potentialState.equals(ItemPotentialTierType.Legendary_Hidden));
+    }
 
     /**
      * Gets the potential bonus tier state of this equipment (None, rare, epic, unique, legendary)
@@ -557,6 +561,10 @@ public class Equip extends Item {
 
     public void setPotentialBonusTier(ItemPotentialTierType potentialBonusState) {
         this.potentialBonusState = potentialBonusState;
+    }
+    
+    public boolean hasLegendaryBonusPotential() {
+        return (potentialBonusState.equals(ItemPotentialTierType.Legendary) || potentialBonusState.equals(ItemPotentialTierType.Legendary_Hidden));
     }
 
     public int getPotential1() {

@@ -433,7 +433,8 @@ public class DamageParse {
                 if (pPlayer.hasSkill(DemonAvenger.ADVANCED_LIFE_SAP)) {
                     nLifeGain *= 2;
                 }
-                pPlayer.addHP(nLifeGain);
+                nLifeGain = Math.abs(nLifeGain);
+                if (pPlayer.getStat().getHp() + nLifeGain > 0) pPlayer.addHP(nLifeGain);
             }
 
             if (pPlayer.getJob() == 422) { // Prime Critical
@@ -1420,7 +1421,7 @@ public class DamageParse {
                 }
                 pAttack.allDamage.add(new AttackMonster(monster, dwMobID, monster.getId(), dwMobCRC, ptHit, ptPosPrev, damageNumbers));
             }
-            if (eType == RecvPacketOpcode.UserMeleeAttack) {
+            /*if (eType == RecvPacketOpcode.UserMeleeAttack) {
                 if (pAttack.skill == 61121052 || pAttack.skill == 36121052 || Skill.isScreenCenterAttackSkill(pAttack.skill)) {
                     iPacket.DecodeShort(); // tTime
                     iPacket.DecodeShort(); // nMobCount 
@@ -1458,7 +1459,7 @@ public class DamageParse {
                     iPacket.DecodeShort(); // Unk
                     iPacket.DecodeShort(); // nSkillID
                 }
-            }
+            }*/
         }
         // TODO: See if can parse with just this.. the rest is so much and i dont think u use any of the vars
 

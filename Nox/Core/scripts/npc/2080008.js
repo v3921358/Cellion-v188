@@ -18,8 +18,8 @@ function start() {
 		text += "#r#fs13##L1002##i" + nMasteryBook30 + "# Activate Lv. 30 Mastery Book#l\r\n\r\n"
 	}
 	
-	text += "#r#fs11##L1003#5,000,000 Meso#k - #dPurchase Lv. 20 Mastery Book#l\r\n"
-		+ "#r#L1004#7,000,000 Meso#k - #dPurchase Lv. 30 Mastery Book#l"
+	text += "#r#fs11##L1003#3,000,000 Meso#k - #dPurchase Lv. 20 Mastery Book#l\r\n"
+		+ "#r#L1004#4,000,000 Meso#k - #dPurchase Lv. 30 Mastery Book#l"
 	
     cm.sendSimple(text);
 	status = -1;
@@ -44,8 +44,8 @@ function action(mode, type, selection){
 	if (selection == 1002) {
 		bLv30Book = true;
 	} else if (selection == 1003) {
-		if (cm.getMeso() >= 5000000) {
-			cm.gainMeso(-5000000);
+		if (cm.getMeso() >= 3000000) {
+			cm.gainMeso(-3000000);
 			cm.gainItem(nMasteryBook20, 1);
 			cm.sendOk("#rYou have successfully purchased a #rLv. 20 Mastery Book#k.")
 			cm.dispose();
@@ -55,8 +55,8 @@ function action(mode, type, selection){
 		}
 		return;
 	} else if (selection == 1004) {
-		if (cm.getMeso() >= 7000000) {
-			cm.gainMeso(-7000000);
+		if (cm.getMeso() >= 4000000) {
+			cm.gainMeso(-4000000);
 			cm.gainItem(nMasteryBook30, 1);
 			cm.sendOk("#rYou have successfully purchased a #rLv. 30 Mastery Book#k.")
 			cm.dispose();

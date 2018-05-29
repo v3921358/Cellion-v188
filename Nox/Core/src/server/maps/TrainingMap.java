@@ -43,28 +43,37 @@ public class TrainingMap {
     public static int[][] aTrainingMaps = new int[][]{
         
         /*Nerfed Maps*/
-        {682010201, 8}, // Chimney Possessed by the Skeleton
-        {682010202, 8}, // Chimney Possessed by the Scarecrow
-        {682010203, 8}, // Chimney Possessed by the Clown
+        {682010201, 13}, // Chimney Possessed by the Skeleton
+        {682010202, 13}, // Chimney Possessed by the Scarecrow
+        {682010203, 13}, // Chimney Possessed by the Clown
+        {610040000, 15}, // Alien Base Corridor
+        {610040000, 15}, // Alien Base Corridor
+        {610040100, 15}, // Alien Base Corridor 2
+        {610040200, 15}, // Alien Base Corridor 3
+        {610040210, 15}, // Alien Base Corridor 4
+        {610040220, 15}, // Alien Base Corridor 5
+        {610040230, 15}, // Alien Base Corridor 6
         
-        {610040000, 10}, // Alien Base Corridor
-        {610040000, 10}, // Alien Base Corridor
-        {610040100, 10}, // Alien Base Corridor 2
-        {610040200, 10}, // Alien Base Corridor 3
-        {610040210, 10}, // Alien Base Corridor 4
-        {610040220, 10}, // Alien Base Corridor 5
-        {610040230, 10}, // Alien Base Corridor 6
-        
-        /*Buffed Mobs*/
-        {272000300, 22}, // Leafre in Flames 3 
-        {860000032, 22}, // Dangerous Deep Sea 3 
-        {240093100, 22}, // Inside the Stone Colossus 2
-        {273040100, 22}, // Forsaken Excavation Site 2
-        {211060830, 22}, // Very Tall Castle Walls
-        {106031504, 22}, // Galley    
-        {120040300, 22}, // Beachgrass Dunes 3 
-        {551030000, 22}, // Fantasy Theme Park 3
-        {105200900, 22}, // Neglected Garden
+        /*Primary Monster Maps*/
+        {106030200, 45}, // Mushroom Castle: Castle Corridor 1  
+	{106030201, 45}, // Mushroom Castle: Castle Corridor 2 
+	{106030700, 45}, // Viking Airship: Galley 
+	{211060830, 45}, // Lion King’s Castle: Very Tall Castle Walls 
+	{401020000, 45}, // Forbidden Forest: Twisted Forest Border
+	{401052102, 45}, // Treglow’s Laboratory: Laboratory B2 Area 3
+	{401050001, 45}, // Tyrant’s Castle: Tyrant’s Castle Foyer
+	{272000300, 45}, // Leafre of Past: Leafre in Flames 3 
+	{272000400, 45}, // Leafre of Past: Leafre in Flames 4
+			 // TODO: Find map to fit here in progression.
+	{860000032, 45}, // Dangerous Deep Sea 3
+	{240093100, 45}, // Inside the Stone Colossus 2
+	{541020400, 45}, // Along Ulu City 
+			 // TODO: Find map to fit here in progression. 
+	{273020200, 45}, // Lonely Rocky Road
+	{273040100, 45}, // Forsaken Excavation Site 2
+	{272020000, 45}, // Distorted Temple of Time 1
+	{272020100, 45}, // Distorted Temple of Time 2 
+	{273060300, 45}  // Warrior Grounds
     };
     
     /**

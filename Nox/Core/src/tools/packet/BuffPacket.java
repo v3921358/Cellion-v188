@@ -414,6 +414,7 @@ public class BuffPacket {
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.KnockBack)) {//KnockBack
             oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.ShieldAttack)) {//ShieldAttack

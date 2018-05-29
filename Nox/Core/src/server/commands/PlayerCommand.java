@@ -12,6 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import server.MapleInventoryManipulator;
@@ -19,6 +21,8 @@ import server.MapleItemInformationProvider;
 import server.life.LifeFactory;
 import server.life.Mob;
 import server.maps.MapleMap;
+import server.maps.MapleMapObject;
+import server.maps.MapleMapObjectType;
 import server.maps.SavedLocationType;
 import server.maps.objects.User;
 import tools.LogHelper;
@@ -188,6 +192,27 @@ public class PlayerCommand {
             c.getPlayer().dropMessage(-1, "Saved Successfully");
             c.getPlayer().saveToDB(false, false);
             c.getPlayer().completeDispose();
+            return 1;
+        }
+    }
+    
+    public static class Monster extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            User pPlayer = c.getPlayer();
+            pPlayer.yellowMessage("----------- NEARBY MONSTER DATA -----------");
+            final List<MapleMapObject> aMobsToAggro = pPlayer.getMap().getAllMapObjects(MapleMapObjectType.MONSTER);
+            for (MapleMapObject pObject : aMobsToAggro) {
+                Mob pMob = (Mob) pObject;
+                if (pMob.isAlive()) {
+                    pPlayer.yellowMessage("Monster Name : " + pMob.getName());
+                    pPlayer.yellowMessage("ID : " + pMob.getStats().getId());
+                    pPlayer.yellowMessage("Maximum HP (" + pMob.getStats().getHp()+ ")");
+                    pPlayer.yellowMessage("Current HP (" + pMob.getHPPercent()+ ")");
+                    break;
+                }
+            }
             return 1;
         }
     }

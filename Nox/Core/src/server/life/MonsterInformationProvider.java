@@ -96,7 +96,7 @@ public class MonsterInformationProvider {
             OnLoadMonsterDrops();
         }
 
-        loadCustom();
+        OnLoadGlobalDrops();
         System.out.println(String.format("[Info] Loaded %d Drops.", drops.size()));
     }
 
@@ -221,11 +221,15 @@ public class MonsterInformationProvider {
         drops.put(monsterId, ret);
     }
 
-    public void loadCustom() {
+    /**
+     * OnLoadGlobalDrops
+     */
+    public void OnLoadGlobalDrops() {
+        globaldrops.add(new MonsterGlobalDropEntry(4001126, (int) (1.5 * 10000), -1, (byte) 0, 1, 1, 0));   // Maple Leaf
+        globaldrops.add(new MonsterGlobalDropEntry(4001832, (int) (5 * 10000), -1, (byte) 0, 1, 1, 0));     // Spell trace
+        globaldrops.add(new MonsterGlobalDropEntry(2049700, (int) (0.4 * 10000), -1, (byte) 0, 1, 1, 0));   // Epic {otential Scroll
+        globaldrops.add(new MonsterGlobalDropEntry(5062009, (int) (0.4 * 10000), -1, (byte) 0, 1, 1, 0));   // Red Cube
         globaldrops.add(new MonsterGlobalDropEntry(2435902, (int) (0.075 * 10000), -1, (byte) 0, 1, 1, 0)); // Nodes
-        globaldrops.add(new MonsterGlobalDropEntry(5062009, (int) (0.4 * 10000), -1, (byte) 0, 1, 1, 0)); // Red cube
-        globaldrops.add(new MonsterGlobalDropEntry(4001832, (int) (0.4 * 10000), -1, (byte) 0, 1, 1, 0)); // Spell trace
-        globaldrops.add(new MonsterGlobalDropEntry(2049700, (int) (0.3 * 10000), -1, (byte) 0, 1, 1, 0)); // Epic potential scroll scroll
     }
 
     public void addExtra() {

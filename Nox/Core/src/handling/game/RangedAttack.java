@@ -332,7 +332,7 @@ public final class RangedAttack implements ProcessPacket<ClientSocket> {
         DamageParse.OnWeaponAttackRequest(pAttack, pSkill, pPlayer, nBulletCount, basedamage, pEffect, bMirror ? AttackType.RANGED_WITH_ShadowPartner : AttackType.RANGED);
         pAttack.cleanupMemory(); // Clean up memory references.
         
-        pPlayer.OnSkillCostRequest(pAttack.skill);
+        pPlayer.OnSkillCostRequest(pEffect);
     }
 
 }

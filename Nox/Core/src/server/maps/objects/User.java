@@ -305,11 +305,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void incrementVMatrixKills(Mob pMob) {
         if (getVMatrixRequirement()) {
             if (pMob.getStats().getLevel() > 200) nMobKillsV += 1; // Lv. 200 Mob Kills
-            if (pMob.getId() == 0) nMagnusKillsV += 1;
-            if (pMob.getId() == 0) nVellumKillsV += 1;
-            if (pMob.getId() == 0) nCrimsonQueenKillsV += 1;
-            if (pMob.getId() == 0) nVonBonKillsV += 1;
-            if (pMob.getId() == 0) nPierreKillsV += 1;
+            if (pMob.getId() == 8880000) nMagnusKillsV += 1;
+            if (pMob.getId() == 8930100) nVellumKillsV += 1;
+            if (pMob.getId() == 8920100) nCrimsonQueenKillsV += 1;
+            if (pMob.getId() == 8910100) nVonBonKillsV += 1;
+            if (pMob.getId() == 8900100) nPierreKillsV += 1;
         }
     }   
     
@@ -560,21 +560,22 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @author Mazen Massoud
      * @purpose Calculate and handle MP cost of skills.
      * 
-     * @param nSkillID 
+     * @param pEffect 
      */
-    public void OnSkillCostRequest(int nSkillID) {
-        
-        StatEffect pEffect = SkillFactory.getSkill(nSkillID).getEffect(1);
+    public void OnSkillCostRequest(StatEffect pEffect) {
+        if (pEffect == null) return;
         //TODO: Calculate extra stuff like mp cost reductions, if needed.
         //double mpcalc = (pEffect.info.get(StatInfo.mpCon) - (pEffect.info.get(StatInfo.mpCon) * getStat().mpconReduce / 100)) * (getStat().mpconPercent / 100.0);
         
         if (!bGodMode && !hasBuff(CharacterTemporaryStat.Infinity) && !hasBuff(CharacterTemporaryStat.InfinityForce)) {
         
             if (!GameConstants.isDemon(job) && !GameConstants.isZero(job) && !GameConstants.isKanna(job) && !GameConstants.isKinesis(job)) {
-                
-                int nMPCost = pEffect.info.get(StatInfo.mpCon);
-                setMp(getStat().getMp() - nMPCost);
-                updateSingleStat(Stat.MP, getStat().getMp() - nMPCost);
+                if (pEffect.info.get(StatInfo.mpCon) != null) {
+                    
+                    int nMPCost = pEffect.info.get(StatInfo.mpCon);
+                    setMp(getStat().getMp() - nMPCost);
+                    updateSingleStat(Stat.MP, getStat().getMp() - nMPCost);
+                }
             } else if (GameConstants.isKinesis(job)) {
                 
                 //int nPPCost = pEffect.info.get(StatInfo.ppCon);
@@ -585,12 +586,23 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 //setHp(getStat().getHp() - nHPCost);
                 //updateSingleStat(Stat.HP, getStat().getMp() - nMPCost);
             } else if (GameConstants.isDemonSlayer(job)) {
-                
-                int nFuryCost = pEffect.info.get(StatInfo.forceCon);
-                setMp(getStat().getMp() - nFuryCost);
-                updateSingleStat(Stat.MP, getStat().getMp() - nFuryCost);
+                if (pEffect.info.get(StatInfo.forceCon) != null) {
+                    
+                    int nFuryCost = pEffect.info.get(StatInfo.forceCon);
+                    setMp(getStat().getMp() - nFuryCost);
+                    updateSingleStat(Stat.MP, getStat().getMp() - nFuryCost);
+                }
             }
         }
+    }
+    
+    /**
+     * Cubing NPC Variables
+     */
+    public int nEquipSlotForCube, nSelectedCubeID;
+    public void OnSetCubeInfo(int nEquipSlot, int nCubeID) {
+        nEquipSlotForCube = nEquipSlot;
+        nSelectedCubeID = nCubeID;
     }
     
     /**

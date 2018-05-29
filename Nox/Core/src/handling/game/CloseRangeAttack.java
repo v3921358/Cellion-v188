@@ -243,7 +243,7 @@ public final class CloseRangeAttack {
         
         pAttack.cleanupMemory(); // Clean up memory references.
         
-        pPlayer.OnSkillCostRequest(pAttack.skill);
+        pPlayer.OnSkillCostRequest(pEffect);
     }
 
 }

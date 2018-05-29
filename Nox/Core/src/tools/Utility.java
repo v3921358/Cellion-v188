@@ -155,16 +155,17 @@ public class Utility {
         ReentrantLock petSafety = new ReentrantLock();
         petSafety.lock();
         
-        MapleMapItem pMapLoot;
-        final List<MapleMapObject> mItemsInRange = pPlayer.getMap().getMapObjectsInRange(pPlayer.getPosition(), 2500, Arrays.asList(MapleMapObjectType.ITEM));
-        
         boolean bHasPet = false;
-        for (int i = 0; i <= 3; i++) {
+        for (int i = 0; i < 3; i++) {
             Pet pet = pPlayer.getPet(i);
             if (pet != null) {
                 bHasPet = true; // Checks all pet slots to confirm if player has a pet active.
             }
         }
+        
+        if (!bHasPet) return;
+        MapleMapItem pMapLoot;
+        final List<MapleMapObject> mItemsInRange = pPlayer.getMap().getMapObjectsInRange(pPlayer.getPet(0).getPos(), 9500, Arrays.asList(MapleMapObjectType.ITEM));
         
         List<MapleMapObject> mItemsToLoot = new ArrayList<>();
         for (MapleMapObject pObject : mItemsInRange) {
@@ -175,10 +176,10 @@ public class Utility {
         }
         
         List<MapleMapObject> mItems = new ArrayList<>();
-        if (mItemsToLoot.size() <= 5) {
+        if (mItemsToLoot.size() <= 4) {
             mItems = mItemsToLoot;
         } else {
-            for (int i = 1; i <= 5; i++) {
+            for (int i = 1; i <= 4; i++) {
                 mItems.add(mItemsToLoot.get(i));
             }
         }

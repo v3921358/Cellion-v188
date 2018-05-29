@@ -16,11 +16,11 @@ function action(mode, type, selection) {
 		if (status == 0) {
 			var sendString = "\r\n#d";
 			
-			if (cm.getPlayer().getLevel() >= 50) {
+			/*if (cm.getPlayer().getLevel() >= 50) {
 				sendString += "#L0#(Lv.  50+ ) Portal to Zakum, in the Mines of El Nath#l\r\n";
 			} else {
 				sendString += "#L1000##r(Lv.  50  Required) Portal to Zakum, in Mines of El Nath#d\r\n"
-			}
+			}*/
 			
 			if (cm.getPlayer().getLevel() >= 70) {
 				sendString += "#L1#(Lv.  70+ ) Portal to Horntail, in the Cave of Life#l\r\n";

@@ -115,7 +115,7 @@ public class Cube extends ItemPotentialProvider {
                 pMaxTier.toString(),
                 pPreviousTier.toString(),
                 pEquip.getItemId(), nCubeID));
-            pPlayer.getClient().Close();
+            //pPlayer.getClient().Close();
             return false;
         }
         

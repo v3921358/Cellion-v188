@@ -69,6 +69,7 @@ import server.StatEffect;
 import server.MapleStringInformationProvider;
 import server.Randomizer;
 import server.SpeedRunner;
+import server.StructItemOption;
 import server.potentials.ItemPotentialOption;
 import server.potentials.ItemPotentialProvider;
 import server.Timer.CloneTimer;
@@ -3031,5 +3032,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         
         final Equip pEquip = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) nSlot);
         Cube.OnCubeRequest(c.getPlayer(), pEquip, nCubeID, false);
+    }
+    
+    public String OnReadPotential(int nPotentialID){ 
+        return GameConstants.getPotentialInfo(nPotentialID);
     }
 }

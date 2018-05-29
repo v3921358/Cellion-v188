@@ -318,6 +318,8 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             pNewCharacter.setLevel((short) 100);
             pNewCharacter.getStat().maxhp = 7000;
             pNewCharacter.getStat().hp = 7000;
+            pNewCharacter.getStat().maxmp = 100;
+            pNewCharacter.getStat().mp = 100;
             pNewCharacter.getStat().str = 500;
             pNewCharacter.setRemainingSp(5, 0); // Alpha
             pNewCharacter.setRemainingSp(5, 1); // Beta

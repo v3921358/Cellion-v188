@@ -357,6 +357,11 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 pEffect.info.put(StatInfo.time, 40000);
                 break;
             }
+            case Mercedes.ELVISH_BLESSING:{
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(StatInfo.x));
+                pEffect.info.put(StatInfo.time, 60000);
+                break;
+            }
             default: {
                 bApplyStats = false;
                 break;
@@ -777,6 +782,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             AngelicBusterHandler.handleRecharge(pPlayer, nSkill);
         }
         
+        pPlayer.OnSkillCostRequest(pEffect);
         c.getPlayer().getStat().OnCalculateLocalStats(c.getPlayer());
         c.SendPacket(WvsContext.enableActions());
     }

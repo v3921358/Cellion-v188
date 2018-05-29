@@ -13,15 +13,42 @@ var mapForm = 0;
 
 // Map Warper Selection
 var townMaps = Array(300000000, 680000000, 230000000, 910001000, 260000000, 541000000, 540000000, 211060010, 863100000, 105300000, 310000000, 211000000, 101072000, 101000000, 101050000, 130000000, 820000000, 223000000, 410000000, 141000000, 120040000, 209000000, 682000000, 310070000, 401000000, 100000000, 271010000, 251000000, 744000000, 551000000, 103000000, 222000000, 240000000, 104000000, 220000000, 150000000, 261000000, 807000000, 250000000, 800000000, 600000000, 120000000, 200000000, 800040000, 400000000, 102000000, 914040000, 200100000, 865000000, 801000000, 105000000, 866000000, 693000020, 270000000, 860000000, 273000000, 320000000);
-var monsterMaps = Array(240070300,800020110,610040000,270030000,211060000, 240040500,551030100,271000300,211061000,211041100,240010501,330002019,270020000,910170000,390009999,610030010,863000100,910180100,272000100,682010200,541000300,241000200,327090040,102040200,240010700,241000210,241000220,270010100,910028600,706041000,706041005,273050000,231040400,401050000,541020400, 224000015, 273040100, 272000300, 860000032, 240093100, 211060830, 106030700, 120040300, 551030000, 105200900);
-var bossMaps = Array(211070000, 262000000, 105100100, 240050000, 240040700, 105100100, 350060300, 271040000, 211041700, 240050400);
+
+
+
+
+// Training Maps
+var monsterMaps = Array(
+	106030200, // Mushroom Castle: Castle Corridor 1  
+	106030201, // Mushroom Castle: Castle Corridor 2 
+	106030700, // Viking Airship: Galley 
+	211060830, // Lion King’s Castle: Very Tall Castle Walls 
+	401020000, // Forbidden Forest: Twisted Forest Border
+	401052102, // Treglow’s Laboratory: Laboratory B2 Area 3
+	401050001, // Tyrant’s Castle: Tyrant’s Castle Foyer
+	272000300, // Leafre of Past: Leafre in Flames 3 
+	272000400, // Leafre of Past: Leafre in Flames 4
+			   // TODO: Find map to fit here in progression.
+	860000032, // Dangerous Deep Sea 3
+	240093100, // Inside the Stone Colossus 2
+	541020400, // Along Ulu City 
+			   // TODO: Find map to fit here in progression. 
+	273020200, // Lonely Rocky Road
+	273040100, // Forsaken Excavation Site 2
+	272020000, // Distorted Temple of Time 1
+	272020100, // Distorted Temple of Time 2 
+	273060300  // Warrior Grounds
+);
+
+//var monsterMaps = Array(240070300,800020110,610040000,270030000,211060000, 240040500,551030100,271000300,211061000,211041100,240010501,330002019,270020000,910170000,390009999,610030010,863000100,910180100,272000100,682010200,541000300,241000200,327090040,102040200,240010700,241000210,241000220,270010100,910028600,706041000,706041005,273050000,231040400,401050000,541020400, 224000015, 273040100, 272000300, 860000032, 240093100, 211060830, 106030700, 120040300, 551030000, 105200900);
+//var bossMaps = Array(211070000, 262000000, 105100100, 240050000, 240040700, 105100100, 350060300, 271040000, 211041700, 240050400);
 
 // Map Warper Definitions
 var townMapCost = 0; // Price in Mesos
 var monsterMapCost = 0; // Price in NX
 var bossMapCost = 0; // Price in NX
 
-var monsterMapReqLevel = 15;
+var monsterMapReqLevel = 10;
 var bossMapReqLevel = 30;
 
 var lockedText1 = "";
@@ -270,7 +297,7 @@ function action(mode, type, selection) {
 				
 				// Map Warper
 				case 200:
-					var selStr = "Where exactly would you like to go?#b#fs12#";
+					var selStr = "Where exactly would you like to go?#b#fs13#";
 					for (var i = 0; i < townMaps.length; i++) {
 						if (townMaps[i] != cm.getMapId()) {
 							selStr += "\r\n#L" + i + "##m" + townMaps[i] + "# #l";
@@ -282,7 +309,7 @@ function action(mode, type, selection) {
 					break;	
 				case 201:
 					if (cm.getLevel() >= monsterMapReqLevel) {
-						var selStr = "Where exactly would you like to go?#b#fs12#";
+						var selStr = "Where exactly would you like to go?#b#fs13#";
 						for (var i = 0; i < monsterMaps.length; i++) {
 							if (monsterMaps[i] != cm.getMapId()) {
 								selStr += "\r\n#L" + i + "##m" + monsterMaps[i] + "# #l";
