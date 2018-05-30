@@ -2,6 +2,9 @@ package service;
 
 public enum RecvPacketOpcode {
 
+    /**
+     * Login - Received Operation Codes
+     */
     DummyCode(100),// Version 188
     BeginSocket(101),// Version 188
     SecurityPacket(102),// Version 188
@@ -56,7 +59,9 @@ public enum RecvPacketOpcode {
     MapLogin(183), // Version 188
     EndSocket(184),// Version 188
     
-    // Start Game RECV Ops
+    /**
+     * Game - Received Operation Codes
+     */
     BeginUser(183),// Version 188
     UserTransferFieldRequest(184),// Version 188
     UserTransferChannelRequest(185),// Version 188

@@ -632,7 +632,7 @@ public class CField {
 
     public static OutPacket setMapObjectVisible(List<Pair<String, Byte>> objects) {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.SET_MAP_OBJECT_VISIBLE.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SetMapTaggedObjectVisible.getValue());
         oPacket.EncodeByte(objects.size());
         for (Pair<String, Byte> object : objects) {
             oPacket.EncodeString(object.getLeft());
@@ -5021,7 +5021,7 @@ public class CField {
      */
     public static OutPacket zeroTagState(User chr) {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.ZERO_TAG_STATE.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ZeroTag.getValue());
         oPacket.EncodeInt(chr.getId());
 
         return oPacket;

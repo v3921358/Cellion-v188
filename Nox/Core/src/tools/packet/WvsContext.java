@@ -1712,7 +1712,7 @@ public class WvsContext {
 
     public static OutPacket GMPoliceMessage(boolean dc) {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.GM_POLICE.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.GMPolice.getValue());
         oPacket.EncodeByte(dc ? 10 : 0);
 
         return oPacket;
@@ -4060,7 +4060,7 @@ public class WvsContext {
 
         public static OutPacket updateReward(int id, byte mode, List<MapleReward> rewards, int option) {
 
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.REWARD.getValue());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.RewardResult.getValue());
             oPacket.EncodeByte(mode); // mode
             switch (mode) { // mode
                 case 9:
