@@ -206,10 +206,10 @@ public class PlayerCommand {
             for (MapleMapObject pObject : aMobsToAggro) {
                 Mob pMob = (Mob) pObject;
                 if (pMob.isAlive()) {
-                    pPlayer.yellowMessage("Monster Name : " + pMob.getName());
-                    pPlayer.yellowMessage("ID : " + pMob.getStats().getId());
-                    pPlayer.yellowMessage("Maximum HP (" + pMob.getStats().getHp()+ ")");
-                    pPlayer.yellowMessage("Current HP (" + pMob.getHPPercent()+ ")");
+                    pPlayer.yellowMessage("Level : " + pMob.getStats().getLevel());
+                    pPlayer.yellowMessage("Name : " + pMob.getName());
+                    if (pPlayer.isIntern()) pPlayer.yellowMessage("Monster ID : " + pMob.getStats().getId());
+                    pPlayer.yellowMessage("Maximum HP :" + pMob.getStats().getHp());
                     break;
                 }
             }

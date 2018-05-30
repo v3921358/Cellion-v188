@@ -30,71 +30,69 @@ public class DistributeSPHandler implements ProcessPacket<ClientSocket> {
 
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
-        User chr = c.getPlayer();
-
-        c.getPlayer().updateTick(iPacket.DecodeInt());
-        final int skillid = iPacket.DecodeInt();
-        final int amount = iPacket.DecodeInt();
-        boolean isBeginnerSkill = false;
-        final int remainingSp;
-        if (!GameConstants.isBeastTamer(chr.getJob()) && GameConstants.isBeginnerJob(skillid / 10000) && (skillid % 10000 == 1000 || skillid % 10000 == 1001 || skillid % 10000 == 1002 || skillid % 10000 == 2)) {
-            final boolean resistance = skillid / 10000 == 3000 || skillid / 10000 == 3001;
-            final int snailsLevel = chr.getSkillLevel(SkillFactory.getSkill(((skillid / 10000) * 10000) + 1000));
-            final int recoveryLevel = chr.getSkillLevel(SkillFactory.getSkill(((skillid / 10000) * 10000) + 1001));
-            final int nimbleFeetLevel = chr.getSkillLevel(SkillFactory.getSkill(((skillid / 10000) * 10000) + (resistance ? 2 : 1002)));
-            remainingSp = Math.min((chr.getLevel() - 1), resistance ? 9 : 6) - snailsLevel - recoveryLevel - nimbleFeetLevel;
-            isBeginnerSkill = true;
+        User pPlayer = c.getPlayer();
+        pPlayer.updateTick(iPacket.DecodeInt());
+        final int nSkillID = iPacket.DecodeInt();
+        final int nAmount = iPacket.DecodeInt();
+        boolean bBeginnerSkill = false;
+        final int nRemainingSP;
+        if (!GameConstants.isBeastTamer(pPlayer.getJob()) && GameConstants.isBeginnerJob(nSkillID / 10000) && (nSkillID % 10000 == 1000 || nSkillID % 10000 == 1001 || nSkillID % 10000 == 1002 || nSkillID % 10000 == 2)) {
+            final boolean bResistance = nSkillID / 10000 == 3000 || nSkillID / 10000 == 3001;
+            final int nSnailsLevel = pPlayer.getSkillLevel(SkillFactory.getSkill(((nSkillID / 10000) * 10000) + 1000));
+            final int bRecoveryLevel = pPlayer.getSkillLevel(SkillFactory.getSkill(((nSkillID / 10000) * 10000) + 1001));
+            final int nNimbleFeetLevel = pPlayer.getSkillLevel(SkillFactory.getSkill(((nSkillID / 10000) * 10000) + (bResistance ? 2 : 1002)));
+            nRemainingSP = Math.min((pPlayer.getLevel() - 1), bResistance ? 9 : 6) - nSnailsLevel - bRecoveryLevel - nNimbleFeetLevel;
+            bBeginnerSkill = true;
         } else {
-            remainingSp = chr.getRemainingSp(GameConstants.getSkillBookForSkill(skillid));
-            if (chr.isDeveloper()) {
-                chr.dropMessage(5, "[DistributeSP Debug] Skill Book : " + GameConstants.getSkillBookForSkill(skillid));
-            }
+            nRemainingSP = pPlayer.getRemainingSp(GameConstants.getSkillBookForSkill(nSkillID));
+            if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[DistributeSP Debug] Skill Book : " + GameConstants.getSkillBookForSkill(nSkillID));
         }
-        Skill skill = SkillFactory.getSkill(skillid);
-        for (Pair<String, Integer> ski : skill.getRequiredSkills()) {
+        Skill pSkill = SkillFactory.getSkill(nSkillID);
+        for (Pair<String, Integer> ski : pSkill.getRequiredSkills()) {
             if (ski.left.equals("level")) {
-                if (chr.getLevel() < ski.right) {
+                if (pPlayer.getLevel() < ski.right) {
                     return;
                 }
             } else {
-                if (!GameConstants.isBeastTamer(chr.getJob())) {
+                if (!GameConstants.isBeastTamer(pPlayer.getJob())) {
                     int left = Integer.parseInt(ski.left);
-                    if (chr.getSkillLevel(SkillFactory.getSkill(left)) < ski.right && !chr.isGM()) {
-                        AutobanManager.getInstance().addPoints(c, 1000, 0, "Trying to learn a skill without the required skill (" + skillid + ")");
+                    if (pPlayer.getSkillLevel(SkillFactory.getSkill(left)) < ski.right && !pPlayer.isGM()) {
+                        AutobanManager.getInstance().addPoints(c, 1000, 0, "Trying to learn a skill without the required skill (" + nSkillID + ")");
                         return;
                     }
                 }
             }
         }
-        final int maxlevel = skill.isFourthJob() ? chr.getMasterLevel(skill) : skill.getMaxLevel();
-        final int curLevel = chr.getSkillLevel(skill);
+        final int nMaxSLV = pSkill.isFourthJob() ? pPlayer.getMasterLevel(pSkill) : pSkill.getMaxLevel();
+        final int nCurrentSLV = pPlayer.getSkillLevel(pSkill);
 
-        if (skill.isInvisible() && chr.getSkillLevel(skill) == 0 && !chr.isGM()) {
-            if ((skill.isFourthJob() && chr.getMasterLevel(skill) == 0) || (!skill.isFourthJob() && maxlevel < 10 && !GameConstants.isDualBlade(chr.getJob()) && !isBeginnerSkill && chr.getMasterLevel(skill) <= 0)) {
+        if (pSkill.isInvisible() && pPlayer.getSkillLevel(pSkill) == 0 && !pPlayer.isGM()) {
+            if ((pSkill.isFourthJob() && pPlayer.getMasterLevel(pSkill) == 0) || (!pSkill.isFourthJob() && nMaxSLV < 10 && !GameConstants.isDualBlade(pPlayer.getJob()) && !bBeginnerSkill && pPlayer.getMasterLevel(pSkill) <= 0)) {
                 c.SendPacket(WvsContext.enableActions());
-                AutobanManager.getInstance().addPoints(c, 1000, 0, "Illegal distribution of SP to invisible skills (" + skillid + ")");
+                AutobanManager.getInstance().addPoints(c, 1000, 0, "Illegal distribution of SP to invisible skills (" + nSkillID + ")");
                 return;
             }
         }
         for (int i : GameConstants.blockedSkills) {
-            if (skill.getId() == i) {
+            if (pSkill.getId() == i) {
                 c.SendPacket(WvsContext.enableActions());
-                chr.dropMessage(1, "This skill has been blocked and may not be added.");
+                pPlayer.dropMessage(1, "This skill has been blocked and may not be added.");
                 return;
             }
         }
-        if ((remainingSp >= amount && curLevel + amount <= maxlevel) && skill.canBeLearnedBy(chr.getJob()) || chr.isGM()) {
-            final int skillbook = GameConstants.getSkillBookForSkill(skillid);
-            if (!isBeginnerSkill) {
-                chr.setRemainingSp(chr.getRemainingSp(skillbook) - amount, skillbook);
+        if ((nRemainingSP >= nAmount && nCurrentSLV + nAmount <= nMaxSLV) && pSkill.canBeLearnedBy(pPlayer.getJob()) || pPlayer.isGM()) {
+            final int skillbook = GameConstants.getSkillBookForSkill(nSkillID);
+            if (!bBeginnerSkill) {
+                pPlayer.setRemainingSp(pPlayer.getRemainingSp(skillbook) - nAmount, skillbook);
             }
             /*if (GameConstants.isBeastTamer(chr.getJob())) {
                 chr.setRemainingSp(chr.getRemainingSp(skillbook) - amount, skillbook);
             }*/
-            chr.updateSingleStat(Stat.SP, chr.getRemainingSp(skillbook));
-            chr.changeSingleSkillLevel(skill, (byte) (curLevel + amount), chr.getMasterLevel(skill));
-        } else if (!skill.canBeLearnedBy(chr.getJob()) && !chr.isGM()) {
-            AutobanManager.getInstance().addPoints(c, 1000, 0, "Trying to learn a skill for a different job (" + skillid + ")");
+            pPlayer.updateSingleStat(Stat.SP, pPlayer.getRemainingSp(skillbook));
+            pPlayer.changeSingleSkillLevel(pSkill, (byte) (nCurrentSLV + nAmount), pPlayer.getMasterLevel(pSkill));
+            pPlayer.OnUpdateSkillData(nSkillID, (nCurrentSLV + nAmount), nMaxSLV); // Save skill info to database.
+        } else if (!pSkill.canBeLearnedBy(pPlayer.getJob()) && !pPlayer.isGM()) {
+            AutobanManager.getInstance().addPoints(c, 1000, 0, "Trying to learn a skill for a different job (" + nSkillID + ")");
         }
         c.SendPacket(WvsContext.enableActions());
     }

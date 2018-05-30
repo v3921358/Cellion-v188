@@ -1986,9 +1986,58 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     /**
-     * Save Character Info
-     *
+     * updateSkillData
      * @author Mazen Massoud
+     * @purpose Save specific skill information
+     * 
+     * @param nSkillID
+     * @param nSLV
+     * @param nMasterSLV 
+     */
+    public void OnUpdateSkillData(int nSkillID, int nSLV, int nMasterSLV) {
+        boolean bHasSkill = false;
+        try (Connection con = Database.GetConnection()) {
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM skills WHERE characterid = " + id + " AND skillid = " + nSkillID)) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        bHasSkill = true;
+                        rs.close();
+                    }
+                }
+                ps.close();
+            } catch (SQLException e) {}
+            
+            if (bHasSkill) {
+                try (PreparedStatement ps = con.prepareStatement("UPDATE skills SET skilllevel = ?, masterlevel = ?, expiration = ? WHERE characterid = " + id + " AND skillid = " + nSkillID)) {
+                    ps.setInt(1, nSLV);
+                    ps.setByte(2, (byte) nMasterSLV);
+                    ps.setLong(3, -1);
+                    ps.execute();
+                    ps.close();
+                } catch (SQLException e) {
+                    LogHelper.SQL.get().info("Could not save skill data:\n{}", e);
+                }
+            } else {
+                try (PreparedStatement ps = con.prepareStatement("INSERT INTO skills (characterid, skillid, skilllevel, masterlevel, expiration) VALUES (?, ?, ?, ?, ?)")) {
+                    ps.setInt(1, id);
+                    ps.setInt(2, nSkillID);
+                    ps.setInt(3, nSLV);
+                    ps.setByte(4, (byte) nMasterSLV);
+                    ps.setLong(5, -1);
+                    ps.execute();
+                    ps.close();
+                } catch (SQLException e) {
+                    LogHelper.SQL.get().info("Could not save skill data:\n{}", e);
+                }
+            }
+        } catch (SQLException ex) {
+        } 
+    }
+    
+    /**
+     * Save Character Info
+     * @author Mazen Massoud
+     * 
      * @purpose Prevent roll back.
      */
     public void saveCharacterInfo() {
