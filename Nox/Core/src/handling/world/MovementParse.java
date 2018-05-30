@@ -21,9 +21,7 @@ import tools.LogHelper;
 public class MovementParse {
 
     public static List<LifeMovementFragment> parseMovement(InPacket iPacket) {
-        // A list of LifeMovementFragment which will contain each movement command that will
-        // will be written
-
+        
         List<LifeMovementFragment> res = new ArrayList<>();
         byte numberOfCommands = iPacket.DecodeByte();
         for (byte index = 0; index < numberOfCommands; index++) {
@@ -34,26 +32,25 @@ public class MovementParse {
                 case FallDown:
                 case DragDown:
                 case Wings:
+                case MobAttackRush:
+                case MobAttackRushStop:
                 case MobAttackLeap:
-                case BattlePvPMugongSomerSault:
-                case BattlePvPHelenaStepShot: {
+                case Unknown70:
+                case Unknown71: {
                     short xpos = iPacket.DecodeShort();
                     short ypos = iPacket.DecodeShort();
-                    short vx = iPacket.DecodeShort(); // not sure what this is. Maybe a wobble?
-                    short vy = iPacket.DecodeShort(); // not sure what this is. Maybe a wobble?
+                    short vx = iPacket.DecodeShort(); 
+                    short vy = iPacket.DecodeShort(); 
                     short foothold = iPacket.DecodeShort();
-
                     short footholdFallStart = 0;
                     if (command == FallDown || command == DragDown) {
-                        footholdFallStart = iPacket.DecodeShort(); // not entirely sure what this is used for
+                        footholdFallStart = iPacket.DecodeShort(); 
                     }
-
                     short xoffset = iPacket.DecodeShort();
                     short yoffset = iPacket.DecodeShort();
-
-                    byte bmoveAction = iPacket.DecodeByte(); // not sure the purpose of this either
-                    short tElapse = iPacket.DecodeShort(); // not sure the purpose of this either
-                    byte bForcedStop = iPacket.DecodeByte(); // not sure the purpose of this either
+                    byte bmoveAction = iPacket.DecodeByte(); 
+                    short tElapse = iPacket.DecodeShort();
+                    byte bForcedStop = iPacket.DecodeByte(); 
 
                     MovementTypeA movement = new MovementTypeA();
                     movement.setCommand(command);
@@ -69,19 +66,18 @@ public class MovementParse {
                     res.add(movement);
                     break;
                 }
-                case AngleImpact:
-                case MobAttackRushStop:
-                case Unknown86: {
+                case ImpactIgnoreMovepath:
+                case MobTeleport:
+                case Unknown90: {
                     // Not sure if the information here is correct but structure is right
                     short xpos = iPacket.DecodeShort();
                     short ypos = iPacket.DecodeShort();
-                    short vx = iPacket.DecodeShort(); // not sure what this is. Maybe a wobble?
-                    short vy = iPacket.DecodeShort(); // not sure what this is. Maybe a wobble?
+                    short vx = iPacket.DecodeShort(); 
+                    short vy = iPacket.DecodeShort(); 
                     short foothold = iPacket.DecodeShort();
-                    // This part is definitely right
-                    byte moveAction = iPacket.DecodeByte(); // not sure the purpose of this either
-                    short tElapse = iPacket.DecodeShort(); // not sure the purpose of this either
-                    byte bForceStop = iPacket.DecodeByte(); // not sure the purpose of this either
+                    byte moveAction = iPacket.DecodeByte(); 
+                    short tElapse = iPacket.DecodeShort(); 
+                    byte bForceStop = iPacket.DecodeByte(); 
 
                     MovementTypeB movement = new MovementTypeB();
                     movement.setCommand(command);
@@ -100,23 +96,22 @@ public class MovementParse {
                 case MobToss:
                 case MobTossSlowDown:
                 case DashSlide:
+                case MobLadder:
+                case MobRightAngle:
                 case MobStopNodeStart:
-                case MobBeforeNode:
-                case MobTeleport:
-                case MobAttackRush: {
+                case MobBeforeNode: {
                     // Right structure, not sure if information is right
-                    short vx = iPacket.DecodeShort(); // not sure what this is. Maybe a wobble?
-                    short vy = iPacket.DecodeShort(); // not sure what this is. Maybe a wobble?
+                    short vx = iPacket.DecodeShort(); 
+                    short vy = iPacket.DecodeShort(); 
 
                     short footholdFallStart = 0;
                     if (command == MobToss || command == MobTossSlowDown) {
                         footholdFallStart = iPacket.DecodeShort();
                     }
 
-                    // This part is definitely right
-                    byte moveAction = iPacket.DecodeByte(); // not sure the purpose of this either
-                    short tElapse = iPacket.DecodeShort(); // not sure the purpose of this either
-                    byte bForceStop = iPacket.DecodeByte(); // not sure the purpose of this either
+                    byte moveAction = iPacket.DecodeByte(); 
+                    short tElapse = iPacket.DecodeShort(); 
+                    byte bForceStop = iPacket.DecodeByte(); 
 
                     MovementTypeC movement = new MovementTypeC();
                     movement.setCommand(command);
@@ -128,6 +123,7 @@ public class MovementParse {
                     res.add(movement);
                     break;
                 }
+                case FlashJump:
                 case DoubleJump:
                 case DoubleJumpDown:
                 case TripleJump:
@@ -149,22 +145,24 @@ public class MovementParse {
                 case StylishRope:
                 case StrikerUppercut:
                 case Crawl:
-                case ImpactIgnoreMovepath:
+                case DbBladeAscension:
+                case AngleImpact:
                 case StarplanetRidingBooster:
                 case UserToss:
                 case SlashJump:
-                case MobLadder:
+                case BattlePvPMugongSomerSault:
+                case BattlePvPHelenaStepShot:
                 case SunOfGlory:
-                case HookshotStart:
                 case Hookshot:
-                case PinkbeanPogoStick:
+                case FinalToss:
                 case NightlordShadowWeb:
                 case RwExplosionCannon:
-                case Unknown83: // Unknown
-                case Unknown84: {
-                    byte moveAction = iPacket.DecodeByte(); // not sure the purpose of this either
-                    short tElapse = iPacket.DecodeShort(); // not sure the purpose of this either
-                    byte bForcedStop = iPacket.DecodeByte(); // not sure the purpose of this either
+                case Unknown86:
+                case Unknown87:
+                case Unknown88: {
+                    byte moveAction = iPacket.DecodeByte(); 
+                    short tElapse = iPacket.DecodeShort(); 
+                    byte bForcedStop = iPacket.DecodeByte(); 
 
                     MovementTypeD movement = new MovementTypeD();
                     movement.setCommand(command);
@@ -185,21 +183,22 @@ public class MovementParse {
                 case SitDown:
                 case BlinkLight:
                 case TeleportZero1:
+                case TeleportByMobSkillArea:
                 case ZeroTag:
                 case RetreatShot:
-                case DbBladeAscension:
-                case MobRightAngle:
+                case Unknown61:
+                case PinkbeanPogoStick:
+                case PinkbeanPogoStickEnd:
                 case PinkbeanRollingAir:
-                case FinalToss:
                 case TeleportKinesis1:
                 case TeleportAran1:
-                case Unknown82: {
+                case Unknown91: {
                     short xpos = iPacket.DecodeShort();
                     short ypos = iPacket.DecodeShort();
                     short foothold = iPacket.DecodeShort();
-                    byte moveAction = iPacket.DecodeByte(); // not sure the purpose of this either
-                    short tElapse = iPacket.DecodeShort(); // not sure the purpose of this either
-                    byte bForcedStop = iPacket.DecodeByte(); // not sure the purpose of this either
+                    byte moveAction = iPacket.DecodeByte(); 
+                    short tElapse = iPacket.DecodeShort(); 
+                    byte bForcedStop = iPacket.DecodeByte(); 
 
                     MovementTypeE movement = new MovementTypeE();
                     movement.setCommand(command);
@@ -217,10 +216,9 @@ public class MovementParse {
                     short vx = iPacket.DecodeShort();
                     short vy = iPacket.DecodeShort();
                     short footholdFallStart = iPacket.DecodeShort();
-                    // This part is definitely right
-                    byte moveAction = iPacket.DecodeByte(); // not sure the purpose of this either
-                    short tElapse = iPacket.DecodeShort(); // not sure the purpose of this either
-                    byte bForcedStop = iPacket.DecodeByte(); // not sure the purpose of this either
+                    byte moveAction = iPacket.DecodeByte(); 
+                    short tElapse = iPacket.DecodeShort();
+                    byte bForcedStop = iPacket.DecodeByte(); 
 
                     MovementTypeF movement = new MovementTypeF();
                     movement.setCommand(command);
@@ -235,12 +233,11 @@ public class MovementParse {
                 case FlyingBlock: {
                     short xpos = iPacket.DecodeShort();
                     short ypos = iPacket.DecodeShort();
-                    short vx = iPacket.DecodeShort(); // not sure what this is. Maybe a wobble?
-                    short vy = iPacket.DecodeShort(); // not sure what this is. Maybe a wobble?
-                    // This part is definitely right
-                    byte moveAction = iPacket.DecodeByte(); // not sure the purpose of this either
-                    short tElapse = iPacket.DecodeShort(); // not sure the purpose of this either
-                    byte bForcedStop = iPacket.DecodeByte(); // not sure the purpose of this either
+                    short vx = iPacket.DecodeShort(); 
+                    short vy = iPacket.DecodeShort(); 
+                    byte moveAction = iPacket.DecodeByte(); 
+                    short tElapse = iPacket.DecodeShort(); 
+                    byte bForcedStop = iPacket.DecodeByte(); 
 
                     MovementTypeG movement = new MovementTypeG();
                     movement.setCommand(command);
@@ -267,7 +264,7 @@ public class MovementParse {
                     res.add(movement);
                     break;
                 }
-                case StatChange: { // Stat Change (probably chair)
+                case StatChange: {
                     byte bStat = iPacket.DecodeByte();
                     MovementTypeH movement = new MovementTypeH();
                     movement.setCommand(command);
@@ -276,7 +273,7 @@ public class MovementParse {
                     break;
                 }
                 default:
-                    LogHelper.UNCODED.get().info("Movement case: " + command + ", this means that MPA info needs to be added.");
+                    LogHelper.UNCODED.get().info("Unhandled Move Path Attribute: " + command + "");
                     break;
             }
         }
@@ -300,91 +297,96 @@ public class MovementParse {
     }
 
     public static final byte // MovePathAttr
-            Normal = 0,
-            Jump = 1,
-            Impact = 2,
-            Immediate = 3,
-            Teleport = 4,
-            RandomTeleport = 5,
-            DemonTraceTeleport = 6,
-            ReturnTeleport = 7,
-            HangOnBack = 8,
-            Assaulter = 9,
-            Assassination = 10,
-            Rush = 11,
-            StatChange = 12,
-            SitDown = 13,
-            StartFallDown = 14,
-            FallDown = 15,
-            StartDragDown = 16,
-            DragDown = 17,
-            StartWings = 18,
-            Wings = 19,
-            AranAdjust = 20,
-            MobToss = 21,
-            MobTossSlowDown = 22,
-            FlyingBlock = 23,
-            DashSlide = 24,
-            BmageAdjust = 25,
-            BlinkLight = 26,
-            TeleportZero1 = 27,
-            FlashJump = 28,
-            DoubleJump = 29,
-            DoubleJumpDown = 30,
-            TripleJump = 31,
-            FlashJumpChangeEff = 32,
-            RocketBooster = 33,
-            BackstepShot = 34,
-            CannonJump = 35,
-            QuickSilverJump = 36,
-            MobPowerKnockback = 37,
-            VerticalJump = 38,
-            CustomImpact = 39,
-            CustomImpact2 = 40,
-            CombatStep = 41,
-            Hit = 42,
-            TimeBombAttack = 43,
-            SnowballTouch = 44,
-            BuffZoneEffect = 45,
-            LeafTornado = 46,
-            StylishRope = 47,
-            RopeConnect = 48,
-            StrikerUppercut = 49,
-            Crawl = 50,
-            TeleportByMobSkillArea = 51,
-            ZeroTag = 52,
-            RetreatShot = 53,
-            DbBladeAscension = 54,
-            ImpactIgnoreMovepath = 55,
-            AngleImpact = 56,
-            StarplanetRidingBooster = 57,
-            UserToss = 58,
-            SlashJump = 59,
-            MobLadder = 60,
-            MobRightAngle = 61,
-            MobStopNodeStart = 62,
-            MobBeforeNode = 63,
-            MobTeleport = 64,
-            MobAttackRush = 65,
-            MobAttackRushStop = 66,
-            MobAttackLeap = 67,
-            BattlePvPMugongSomerSault = 68,
-            BattlePvPHelenaStepShot = 69,
-            SunOfGlory = 70,
-            HookshotStart = 71,
-            Hookshot = 72,
-            HookshotEnd = 73,
-            PinkbeanPogoStick = 74,
-            PinkbeanPogoStickEnd = 75,
-            PinkbeanRollingAir = 76,
-            FinalToss = 77,
-            TeleportKinesis1 = 78,
-            NightlordShadowWeb = 79,
-            TeleportAran1 = 80,
-            RwExplosionCannon = 81,
-            Unknown82 = 82,
-            Unknown83 = 83,
-            Unknown84 = 84,
-            Unknown85 = 85,
-            Unknown86 = 86;
+        Normal = 0,
+        Jump = 1,
+        Impact = 2,
+        Immediate = 3,
+        Teleport = 4,
+        RandomTeleport = 5,
+        DemonTraceTeleport = 6,
+        ReturnTeleport = 7,
+        HangOnBack = 8,
+        Assaulter = 9,
+        Assassination = 10,
+        Rush = 11,
+        StatChange = 12,
+        SitDown = 13,
+        StartFallDown = 14,
+        FallDown = 15,
+        StartDragDown = 16,
+        DragDown = 17,
+        StartWings = 18,
+        Wings = 19,
+        AranAdjust = 20,
+        MobToss = 21,
+        MobTossSlowDown = 22,
+        FlyingBlock = 23,
+        DashSlide = 24,
+        BmageAdjust = 25,
+        BlinkLight = 26,
+        TeleportZero1 = 27,
+        Unknown28 = 28,
+        FlashJump = 29,
+        DoubleJump = 30,
+        DoubleJumpDown = 31,
+        TripleJump = 32,
+        FlashJumpChangeEff = 33,
+        RocketBooster = 34,
+        BackstepShot = 35,
+        CannonJump = 36,
+        QuickSilverJump = 37,
+        MobPowerKnockback = 38,
+        VerticalJump = 39,
+        CustomImpact = 40,
+        CustomImpact2 = 41,
+        CombatStep = 42,
+        Hit = 43,
+        TimeBombAttack = 44,
+        SnowballTouch = 45,
+        BuffZoneEffect = 46,
+        LeafTornado = 47,
+        StylishRope = 48,
+        RopeConnect = 49,
+        StrikerUppercut = 50,
+        Crawl = 51,
+        TeleportByMobSkillArea = 52,
+        ZeroTag = 53,
+        RetreatShot = 54,
+        DbBladeAscension = 55,
+        ImpactIgnoreMovepath = 56,
+        AngleImpact = 57,
+        StarplanetRidingBooster = 58,
+        UserToss = 59,
+        SlashJump = 60,
+        Unknown61 = 61,
+        MobLadder = 62,
+        MobRightAngle = 63,
+        MobStopNodeStart = 64,
+        MobBeforeNode = 65,
+        MobTeleport = 66,
+        MobAttackRush = 67,
+        MobAttackRushStop = 68,
+        MobAttackLeap = 69,
+        Unknown70 = 70, // Unknown Mob Action
+        Unknown71 = 71, // Unknown Mob Action
+        BattlePvPMugongSomerSault = 72,
+        BattlePvPHelenaStepShot = 73,
+        SunOfGlory = 74,
+        HookshotStart = 75,
+        Hookshot = 76,
+        HookshotEnd = 77,
+        PinkbeanPogoStick = 78,
+        PinkbeanPogoStickEnd = 79,
+        PinkbeanRollingAir = 80,
+        FinalToss = 81,
+        TeleportKinesis1 = 82,
+        NightlordShadowWeb = 83,
+        TeleportAran1 = 84,
+        RwExplosionCannon = 85,
+        Unknown86 = 86,
+        Unknown87 = 87,
+        Unknown88 = 88,
+        Unknown89 = 89,
+        Unknown90 = 90,
+        Unknown91 = 91;
 }
