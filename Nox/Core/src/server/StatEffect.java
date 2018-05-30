@@ -1455,7 +1455,7 @@ public class StatEffect implements Serializable {
             case DarkKnight.SACRIFICE_1: { //Sacrifice
                 info.put(StatInfo.time, 40000);
                 effects.put(CharacterTemporaryStat.IgnoreTargetDEF, info.get(StatInfo.ignoreMobpdpR));
-                effects.put(CharacterTemporaryStat.BdR, info.get(StatInfo.indieBDR));
+                effects.put(CharacterTemporaryStat.BDR, info.get(StatInfo.indieBDR));
                 applyto.addHP((int) ((applyto.getStat().getCurrentMaxHp() * (level / 100.0D)) * (getX() / 100.0D)));
                 applyfrom.getClient().SendPacket(WvsContext.enableActions());
                 break;

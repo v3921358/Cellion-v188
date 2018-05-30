@@ -76,7 +76,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.AlbaRequest.getValue()] = new PartTimeJobHandler();
         handlers[RecvPacketOpcode.CheckSPWRequest.getValue()] = new PicCheck();
         handlers[RecvPacketOpcode.UpdateCharacterCard.getValue()] = new UpdateCharacterCards();
-        handlers[RecvPacketOpcode.CharacterBurning.getValue()] = new CharacterBurnRequestHandler();
+        //handlers[RecvPacketOpcode.CharacterBurning.getValue()] = new CharacterBurnRequestHandler(); // IDK
         handlers[RecvPacketOpcode.UserPortalTeleportRequest.getValue()] = new OnUserPortalTeleportRequest();
         handlers[RecvPacketOpcode.UserMapTransferRequest.getValue()] = new OnUserMapTransferRequest();
         handlers[RecvPacketOpcode.UserGivePopularityRequest.getValue()] = new OnUserGivePopularityRequest();
@@ -85,8 +85,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserParcelRequest.getValue()] = new OnUserParcelRequest();
         handlers[RecvPacketOpcode.UserEntrustedShopRequest.getValue()] = new OnUserEntrustedShopRequest();
         handlers[RecvPacketOpcode.UserStoreBankRequest.getValue()] = new OnUserStoreBankRequest();
-        handlers[RecvPacketOpcode.SnowBallHit.getValue()] = new OnSnowBallHit();
-        handlers[RecvPacketOpcode.CoconutHit.getValue()] = new OnCoconutHit();
+        //handlers[RecvPacketOpcode.SnowBallHit.getValue()] = new OnSnowBallHit(); // IDK
+        //handlers[RecvPacketOpcode.CoconutHit.getValue()] = new OnCoconutHit(); // IDK
         handlers[RecvPacketOpcode.ZeroTag.getValue()] = new OnZeroTag();
         handlers[RecvPacketOpcode.PartyAdverRequest.getValue()] = new OnPartyAdverRequest();
         handlers[RecvPacketOpcode.ExpeditionRequest.getValue()] = new OnExpeditionRequest();
@@ -100,15 +100,15 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
          */
         handlers[RecvPacketOpcode.UserMigrateToPvpRequest.getValue()] = new EnterPvpHandler();
         handlers[RecvPacketOpcode.UserMigrateToPveRequest.getValue()] = new LeavePvpHandler();
-        handlers[RecvPacketOpcode.UserAttackUser.getValue()] = new AttackPvpHandler();
+        //handlers[RecvPacketOpcode.UserAttackUser.getValue()] = new AttackPvpHandler(); // IDK
         handlers[RecvPacketOpcode.SummonedAttackPvP.getValue()] = new SummonPvpHandler();
         
         /**
          * Azwan Handlers
          */
-        handlers[RecvPacketOpcode.UserTransferAswanRequest.getValue()] = new EnterAzwanHandler();
-        handlers[RecvPacketOpcode.UserTransferAswanReadyRequest.getValue()] = new EnterAzwanEventHandler();
-        handlers[RecvPacketOpcode.AswanRetireRequest.getValue()] = new LeaveAzwanHandler();
+        //handlers[RecvPacketOpcode.UserTransferAswanRequest.getValue()] = new EnterAzwanHandler();
+        //handlers[RecvPacketOpcode.UserTransferAswanReadyRequest.getValue()] = new EnterAzwanEventHandler();
+        //handlers[RecvPacketOpcode.AswanRetireRequest.getValue()] = new LeaveAzwanHandler();
         
         /**
          * Movement Handlers
@@ -144,8 +144,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         /**
          * MonsterBook Handlers
          */
-        handlers[RecvPacketOpcode.GET_BOOK_INFO.getValue()] = new MonsterBookInfoRequest();
-        handlers[RecvPacketOpcode.MONSTER_BOOK_DROPS.getValue()] = new MonsterBookDropsRequest();
+        handlers[RecvPacketOpcode.MonsterBookCodeRequest.getValue()] = new MonsterBookInfoRequest();
+        handlers[RecvPacketOpcode.MonsterBookCardDropRequest.getValue()] = new MonsterBookDropsRequest();
 
         /**
          * Crafting Handlers
@@ -216,7 +216,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserAbilityMassUpRequest.getValue()] = new AutoDistributeAPHandler();
         handlers[RecvPacketOpcode.UserSkillUpRequest.getValue()] = new DistributeSPHandler();
         handlers[RecvPacketOpcode.UserHyperSkillUpRequest.getValue()] = new DistributeHyperHandler();
-        handlers[RecvPacketOpcode.UserHyperSkillResetRequset.getValue()] = new ResetHyperHandler();
+        handlers[RecvPacketOpcode.UserHyperSkillResetRequest.getValue()] = new ResetHyperHandler();
         
         /**
          * Player Operation Handlers
@@ -230,7 +230,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.PartyInvitableSet.getValue()] = new AllowPartyInviteHandler();
         handlers[RecvPacketOpcode.MiniRoom.getValue()] = new PlayerInteractionHandler();
         handlers[RecvPacketOpcode.GetRewardRequest.getValue()] = new OnUserRewardClaimRequest();
-        handlers[RecvPacketOpcode.BeginEventRanking.getValue()] = new BossMatchmakingHandler();
+        handlers[RecvPacketOpcode.BeginPartyMatch.getValue()] = new BossMatchmakingHandler(); // IDK
+        
         // handlers[RecvPacketOpcode.SaveDamageSkinRequest.getValue()] = new SaveDamageSkinRequest(); // TODO
         // handlers[672] = new BossMatchmakingHandler(); // TODO
         
@@ -279,7 +280,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserFreeMiracleCubeItemUseRequest.getValue()] = new UseCraftedCubeHandler();
         handlers[RecvPacketOpcode.UserMemorialCubeOptionRequest.getValue()] = new UseSelectBlackCubeOptionHandler();
         handlers[RecvPacketOpcode.UserMapTransferItemUseRequest.getValue()] = new UseTeleRockHandler();
-        handlers[RecvPacketOpcode.PAM_SONG.getValue()] = new UsePamSongHandler();
+        //handlers[RecvPacketOpcode.PAM_SONG.getValue()] = new UsePamSongHandler(); // IDK
         
         /**
          * Skill Handlers
@@ -298,13 +299,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
          * Blaze Wizard Handlers
          */
         handlers[RecvPacketOpcode.UserFlameOrbRequest.getValue()] = new OrbitalFlameHandler();
-        handlers[RecvPacketOpcode.UserNonTargetForceAtomAttack.getValue()] = new NonTargetAtomAttackHandler(); 
+        handlers[RecvPacketOpcode.UserMovingShootAttackPrepare.getValue()] = new NonTargetAtomAttackHandler(); // IDK
         handlers[RecvPacketOpcode.UserForceAtomCollision.getValue()] = new AtomCollisionHandler();
         
         /**
          * Kaiser Handlers
          */
-        handlers[RecvPacketOpcode.KAISER_SKILL_SHORTCUT.getValue()] = new KaiserSkillShortcut();
+        handlers[RecvPacketOpcode.KaiserSkillShortcut.getValue()] = new KaiserSkillShortcut();
         handlers[RecvPacketOpcode.UserRequestFlyingSwordStart.getValue()] = new ReleaseTempestBlades();
         
         /**
@@ -339,10 +340,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         /**
          * Cash Shop Handlers
          */
-        handlers[RecvPacketOpcode.BUY_CS_ITEM.getValue()] = new CashShopPurchase();
-        handlers[RecvPacketOpcode.CashShopCheckCouponRequest.getValue()] = new CashCouponHandler();
-        handlers[RecvPacketOpcode.CASH_CATEGORY.getValue()] = new CashCategorySwitch();
-        handlers[RecvPacketOpcode.CS_UPDATE.getValue()] = new UpdatePlayerCashInfo();
+        //handlers[RecvPacketOpcode.BUY_CS_ITEM.getValue()] = new CashShopPurchase();
+        //handlers[RecvPacketOpcode.CashShopCheckCouponRequest.getValue()] = new CashCouponHandler();
+        //handlers[RecvPacketOpcode.CASH_CATEGORY.getValue()] = new CashCategorySwitch();
+        //handlers[RecvPacketOpcode.CS_UPDATE.getValue()] = new UpdatePlayerCashInfo();
         
     }
 

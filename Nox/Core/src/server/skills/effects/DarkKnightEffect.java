@@ -112,7 +112,7 @@ public class DarkKnightEffect extends AbstractEffect {
                 break;
             case DarkKnight.SACRIFICE_1:
                 pEffect.statups.put(CharacterTemporaryStat.IgnoreTargetDEF, pEffect.info.get(StatInfo.ignoreMobpdpR));
-                pEffect.statups.put(CharacterTemporaryStat.BdR, pEffect.info.get(StatInfo.indieBDR));
+                pEffect.statups.put(CharacterTemporaryStat.BDR, pEffect.info.get(StatInfo.indieBDR));
                 break;
 
         }

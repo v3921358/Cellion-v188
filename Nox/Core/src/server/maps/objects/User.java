@@ -1986,7 +1986,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     /**
-     * updateSkillData
+     * OnUpdateSkillData
      * @author Mazen Massoud
      * @purpose Save specific skill information
      * 

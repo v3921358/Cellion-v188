@@ -341,7 +341,7 @@ public class BuffPacket {
             oPacket.EncodeByte(0);
         }
 
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BdR)) {//Bdr
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BDR)) {//Bdr
             oPacket.EncodeByte(0);
         }
 
@@ -1863,12 +1863,12 @@ public class BuffPacket {
             uFlagData.add(new Pair<>(chr.getBuffedValue(CharacterTemporaryStat.Stigma), 2));
             uFlagData.add(new Pair<>(chr.getTrueBuffSource(CharacterTemporaryStat.Stigma), 4));
         }
-        if (chr.getBuffedValue(CharacterTemporaryStat.Unknown474) != null) {
-            uFlagTemp[CharacterTemporaryStat.Unknown474.getPosition()] |= CharacterTemporaryStat.Unknown474.getValue();
-            uFlagData.add(new Pair<>(chr.getBuffedValue(CharacterTemporaryStat.Unknown474), 4));
+        if (chr.getBuffedValue(CharacterTemporaryStat.LightningCascade) != null) {
+            uFlagTemp[CharacterTemporaryStat.LightningCascade.getPosition()] |= CharacterTemporaryStat.LightningCascade.getValue();
+            uFlagData.add(new Pair<>(chr.getBuffedValue(CharacterTemporaryStat.LightningCascade), 4));
         } else {
             //default buffstat always on
-            uFlagTemp[CharacterTemporaryStat.Unknown474.getPosition()] |= CharacterTemporaryStat.Unknown474.getValue();
+            uFlagTemp[CharacterTemporaryStat.LightningCascade.getPosition()] |= CharacterTemporaryStat.LightningCascade.getValue();
             uFlagData.add(new Pair<>(0, 4));
         }
         if (chr.getBuffedValue(CharacterTemporaryStat.PoseType) != null) {

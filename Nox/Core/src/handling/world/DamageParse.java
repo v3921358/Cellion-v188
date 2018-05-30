@@ -1176,7 +1176,7 @@ public class DamageParse {
         if (eType == RecvPacketOpcode.UserShootAttack) {
             iPacket.DecodeByte();
         }
-        if (eType == RecvPacketOpcode.UserNonTargetForceAtomAttack) {
+        if (eType == RecvPacketOpcode.UserMovingShootAttackPrepare) {
             iPacket.DecodeInt(); // nSkillID
             iPacket.DecodeInt(); // Unknown
             iPacket.DecodeInt(); // Unknown
@@ -1204,7 +1204,7 @@ public class DamageParse {
         int nShootRange = 0;
 
         int dwMobCRC = iPacket.DecodeInt();
-        if (eType != RecvPacketOpcode.UserNonTargetForceAtomAttack) { // This is actually a sub, not sure what it does yet
+        if (eType != RecvPacketOpcode.UserMovingShootAttackPrepare) { // This is actually a sub, not sure what it does yet
             iPacket.DecodeByte(); // Unknown
             nBulletItemPos = iPacket.DecodeShort();
             iPacket.DecodeInt(); // Unknown
@@ -1303,7 +1303,7 @@ public class DamageParse {
                 iPacket.DecodeLong();
             }
         }
-        if (eType == RecvPacketOpcode.UserNonTargetForceAtomAttack) {
+        if (eType == RecvPacketOpcode.UserMovingShootAttackPrepare) {
             iPacket.DecodeInt(); // Always 0
         }
 
@@ -1371,7 +1371,7 @@ public class DamageParse {
                 List<Pair<Long, Boolean>> damageNumbers = new ArrayList<>();
                 if (pAttack.skill == 80001835 || pAttack.skill == 42111002 || pAttack.skill == 80011050) {
                     int nAttackCount = iPacket.DecodeByte();
-                    if (eType != RecvPacketOpcode.UserNonTargetForceAtomAttack) {
+                    if (eType != RecvPacketOpcode.UserMovingShootAttackPrepare) {
                         for (int j = 0; j < nAttackCount; j++) {
                             long nDamage = iPacket.DecodeLong();
                             damageNumbers.add(new Pair(nDamage, false));
@@ -1379,7 +1379,7 @@ public class DamageParse {
                     }
                 } else {
                     tDelay = iPacket.DecodeShort();
-                    if (eType != RecvPacketOpcode.UserNonTargetForceAtomAttack) {
+                    if (eType != RecvPacketOpcode.UserMovingShootAttackPrepare) {
                         for (int j = 0; j < pAttack.numberOfHits; j++) {
                             long nDamage = iPacket.DecodeLong();
                             damageNumbers.add(new Pair(nDamage, false));
@@ -1389,7 +1389,7 @@ public class DamageParse {
                         }
                     }
                 }
-                if (eType != RecvPacketOpcode.UserNonTargetForceAtomAttack) {
+                if (eType != RecvPacketOpcode.UserMovingShootAttackPrepare) {
                     iPacket.DecodeInt(); // pMob.GetMobUpDownYRange
                     iPacket.DecodeInt(); // pMob.GetCrc
                 }

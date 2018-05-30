@@ -17,7 +17,7 @@ public enum MapleDisease implements Serializable, TemporaryStat {
     SEDUCE(CharacterTemporaryStat.Attract, 128),
     REVERSE_DIRECTION(CharacterTemporaryStat.ReverseInput, 132),
     ZOMBIFY(CharacterTemporaryStat.Undead, 133),
-    POTION(CharacterTemporaryStat.POTION_CURSE, 134),
+    POTION(CharacterTemporaryStat.Unknown516, 134),
     SHADOW(CharacterTemporaryStat.SHADOW, 135), //receiving damage/moving
     BLIND(CharacterTemporaryStat.Blind, 136),
     FREEZE(CharacterTemporaryStat.Frozen, 137), // I think this is right...?

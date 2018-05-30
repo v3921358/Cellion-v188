@@ -40,7 +40,7 @@ public final class NonTargetAtomAttackHandler implements ProcessPacket<ClientSoc
         }
 
         //AttackInfo attack = DamageParse.parseDmgMa(iPacket, chr);
-        AttackInfo attack = DamageParse.OnAttack(RecvPacketOpcode.UserNonTargetForceAtomAttack, iPacket, chr); // Not sure if parse will work on this
+        AttackInfo attack = DamageParse.OnAttack(RecvPacketOpcode.UserMovingShootAttackPrepare, iPacket, chr); // Not sure if parse will work on this
         if (attack == null) {
             c.SendPacket(WvsContext.enableActions());
             return;

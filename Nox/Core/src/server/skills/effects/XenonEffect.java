@@ -197,7 +197,7 @@ public class XenonEffect extends AbstractEffect {
             case Xenon.OFFENSIVE_MATRIX_1:
                 break;
             case Xenon.OOPARTS_CODE:
-                pEffect.statups.put(CharacterTemporaryStat.BdR, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.BDR, pEffect.info.get(StatInfo.x));
                 pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case Xenon.ORBITAL_CATACLYSM:

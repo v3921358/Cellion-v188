@@ -151,7 +151,7 @@ public class KaiserEffect extends AbstractEffect {
             case Kaiser.RAGE_OF_PHARAOH_50_5:
                 break;
             case Kaiser.REALIGN_ATTACKER_MODE:
-                pEffect.statups.put(CharacterTemporaryStat.BdR, pEffect.info.get(StatInfo.bdR));
+                pEffect.statups.put(CharacterTemporaryStat.BDR, pEffect.info.get(StatInfo.bdR));
                 pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(StatInfo.cr));
                 pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(StatInfo.padX));
                 pEffect.statups.put(CharacterTemporaryStat.ReshuffleSwitch, 0);
