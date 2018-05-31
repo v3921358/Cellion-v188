@@ -8,12 +8,14 @@ import constants.ServerConstants;
 import constants.WorldConstants;
 import constants.WorldConstants.WorldOption;
 import handling.world.World;
+import java.util.Calendar;
 import service.ChannelServer;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.WvsContext;
 import tools.packet.CLogin;
 import net.ProcessPacket;
+import tools.packet.PacketHelper;
 
 public final class CharListRequestHandler implements ProcessPacket<ClientSocket> {
 
@@ -24,13 +26,15 @@ public final class CharListRequestHandler implements ProcessPacket<ClientSocket>
 
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
-        if (!c.isLoggedIn()) {
-            c.Close();
-            return;
-        }
-        iPacket.DecodeByte(); //2?
+        iPacket.DecodeByte();
+        iPacket.DecodeByte();
+        String sPassport = iPacket.DecodeString(); // u nid 2 add passport 2 sql n get acct from this instead of user/pw in checkloginhandler
+        iPacket.Decode(16); // MachineID
+        iPacket.DecodeInt();
+        iPacket.DecodeByte();
         final int server = iPacket.DecodeByte();
         final int channel = iPacket.DecodeByte() + 1;
+        int dwIP = iPacket.DecodeInt();
 
         if (!World.isChannelAvailable(channel, server) || !WorldConstants.WorldOption.isExists(server)) {
             c.SendPacket(CLogin.getLoginFailed(10)); //cannot process so many
@@ -44,6 +48,44 @@ public final class CharListRequestHandler implements ProcessPacket<ClientSocket>
             c.SendPacket(CLogin.getLoginFailed(1)); //Shows no message, but it is used to unstuck
             return;
         }
+
+        final boolean ipBan = c.hasBannedIP();
+        final boolean macBan = c.hasBannedMac();
+
+        int loginok = c.LoginPassword(sPassport);
+
+        final Calendar tempbannedTill = c.getTempBanCalendar();
+
+        if (loginok == 0 && (ipBan || macBan) && !c.isGm()) {
+            loginok = 3;
+            if (macBan) {
+                // this is only an ipban o.O" - maybe we should refactor this a bit so it's more readable
+                User.ban(c.GetIP().split(":")[0], "Enforcing account ban, account " + c.getAccountName(), false, 4, false);
+                return;
+            }
+        }
+        if (loginok != 0) {
+            if (loginok == 3) {
+                c.SendPacket(WvsContext.broadcastMsg(1, c.showBanReason(c.getAccountName(), true)));
+                c.SendPacket(CLogin.getLoginFailed(1)); //Shows no message, used for unstuck the login button
+                return;
+            } else {
+                c.SendPacket(CLogin.getLoginFailed(loginok));
+                return;
+            }
+        } else if (tempbannedTill.getTimeInMillis() > Calendar.getInstance().getTimeInMillis()) {
+            c.clearInformation();
+            c.SendPacket(CLogin.getTempBan(PacketHelper.getTime(tempbannedTill.getTimeInMillis()), c.getBanReason()));
+            return;
+        } else {
+            c.loginAttempt = 0;
+            LoginWorker.registerClient(c);
+        }
+
+        //if (!c.isLoggedIn()) {
+        //    c.Close();
+        //    return;
+        //}
         final List<User> chars = c.loadCharacters(server);
         if (chars != null && ChannelServer.getInstance(channel) != null) {
             c.setWorld(server);

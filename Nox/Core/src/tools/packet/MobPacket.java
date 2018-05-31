@@ -35,7 +35,7 @@ public class MobPacket {
         if (hasMovementStat) {
             oPacket.EncodeByte(0); // ?
         }
-        
+
         oPacket.Fill(0, 29);
 
         return oPacket;
@@ -130,12 +130,7 @@ public class MobPacket {
 
     public static OutPacket killMonster(int oid, int animation, boolean azwan) {
 
-        OutPacket oPacket;
-        if (azwan) {
-            oPacket = new OutPacket(SendPacketOpcode.MinionLeaveField.getValue());
-        } else {
-            oPacket = new OutPacket(SendPacketOpcode.MobLeaveField.getValue());
-        }
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MobLeaveField.getValue());
         boolean a = false; //idk
         boolean b = false; //idk
         if (azwan) {
@@ -257,7 +252,7 @@ public class MobPacket {
 
     public static OutPacket showBossHP(Mob mob) {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.BossEnvironment.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FieldEffect.getValue());
         oPacket.EncodeByte(6);
         oPacket.EncodeInt(mob.getId() == 9400589 ? 9300184 : mob.getId());
         oPacket.EncodeLong(mob.getHp()); // Version 180 
@@ -270,7 +265,7 @@ public class MobPacket {
     public static OutPacket showBossHP(int monsterId, long currentHp, long maxHp) {
         Mob mob = LifeFactory.getMonster(monsterId);
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.BossEnvironment.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FieldEffect.getValue());
         oPacket.EncodeByte(6);
         oPacket.EncodeInt(monsterId);
         oPacket.EncodeLong(currentHp <= 0 ? -1 : currentHp); // Version 180 
@@ -418,13 +413,8 @@ public class MobPacket {
 
     public static OutPacket controlMonster(Mob life, boolean newSpawn, boolean aggro, boolean azwan) {
 
-        OutPacket oPacket;
-        if (azwan) {
-            oPacket = new OutPacket(SendPacketOpcode.MinionChangeController.getValue());
-        } else {
-            oPacket = new OutPacket(SendPacketOpcode.MobChangeController.getValue());
-            oPacket.EncodeByte(aggro ? 2 : 1); // 0 = not moving at all, 1 = only attack when nearby, 2 = chasing + attack
-        }
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MobChangeController.getValue());
+        oPacket.EncodeByte(aggro ? 2 : 1); // 0 = not moving at all, 1 = only attack when nearby, 2 = chasing + attack
         oPacket.EncodeInt(life.getObjectId());
         oPacket.EncodeByte(1);// 1 = Control normal, 5 = Control none?
         oPacket.EncodeInt(life.getId());
@@ -436,13 +426,8 @@ public class MobPacket {
 
     public static OutPacket stopControllingMonster(Mob life, boolean azwan) {
 
-        OutPacket oPacket;
-        if (azwan) {
-            oPacket = new OutPacket(SendPacketOpcode.MinionChangeController.getValue());
-        } else {
-            oPacket = new OutPacket(SendPacketOpcode.MobChangeController.getValue());
-            oPacket.EncodeByte(0);
-        }
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MobChangeController.getValue());
+        oPacket.EncodeByte(0);
 
         oPacket.EncodeInt(life.getObjectId());
         oPacket.EncodeByte(0);
@@ -454,7 +439,7 @@ public class MobPacket {
             SetMobStat(oPacket, life);
             MobInit(oPacket, life, 0, 0, false, false);
         }
-        
+
         oPacket.Fill(0, 69);
         return oPacket;
     }
@@ -484,7 +469,7 @@ public class MobPacket {
 
         return oPacket;
     }
-    
+
     public static OutPacket SmartMobNotice(int nMessageType, int nMobID, int nMessageOpt, int nKey, String sMessage) {
         OutPacket oPacket = new OutPacket(SendPacketOpcode.SmartMobNoticeMsg.getValue());
         oPacket.EncodeInt(nMessageType); //0: white (Normal), 1: yellow (Aggro), 2: blue (Warning)

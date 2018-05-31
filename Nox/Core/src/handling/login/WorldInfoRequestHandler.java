@@ -24,20 +24,13 @@ public final class WorldInfoRequestHandler implements ProcessPacket<ClientSocket
 
     public static void sendServerList(InPacket iPacket, ClientSocket c) {
         //c.write(LoginPacket.changeBackground());
-        if (ServerConstants.TESPIA) {
-            for (WorldConstants.TespiaWorldOption tespiaservers : WorldConstants.TespiaWorldOption.values()) {
-                if (WorldConstants.TespiaWorldOption.getById(tespiaservers.getWorld()).show() && WorldConstants.TespiaWorldOption.getById(tespiaservers.getWorld()) != null) {
-                    c.SendPacket(CLogin.getServerList(Integer.parseInt(tespiaservers.getWorld().replace("t", ""))));
-                }
-            }
-        } else {
-            for (WorldConstants.WorldOption servers : WorldConstants.WorldOption.values()) {
-                if (WorldConstants.WorldOption.getById(servers.getWorld()).show() && servers != null) {
-                    c.SendPacket(CLogin.getServerList(servers.getWorld()));
-                }
+
+        for (WorldConstants.WorldOption servers : WorldConstants.WorldOption.values()) {
+            if (WorldConstants.WorldOption.getById(servers.getWorld()).show() && servers != null) {
+                c.SendPacket(CLogin.OnWorldInformation(servers.getWorld()));
             }
         }
-        c.SendPacket(CLogin.getEndOfServerList());
+        c.SendPacket(CLogin.OnWorldInformation(-1));
 
         if (c.isLoggedIn()) {
             boolean hasCharacters = false;

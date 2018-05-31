@@ -361,6 +361,8 @@ public enum SendPacketOpcode {
     Whisper(463),// Version 188
     MobSummonItemUseResult(464),// Version 188
     FieldEffect(465),// Version 188
+    MoveEnvironment(467), // ???
+    UpdateEnvironment(468), // ???
     BlowWeather(473),// Version 188
     PlayJukeBox(474),// Version 188
     AdminResult(475),// Version 188
@@ -534,6 +536,7 @@ public enum SendPacketOpcode {
     SkillPetLoadExceptionList(648),// Version 188
     SkillPetTransferField(649),// Version 188
     EndSkillPet(650),// Version 188
+    ShowNebuliteEffect(652), // todo confirm
     BeginFamiliar(661),// Version 188
     FamiliarEnterField(661),// Version 188
     FamiliarMove(662),// Version 188
@@ -756,6 +759,7 @@ public enum SendPacketOpcode {
     UserDamageSkinSaveResult(889),// Version 188
     UserLocalStigmaStackDuration(890),// Version 188
     FamiliarRegister(903),// Version 187
+    KaiserSkillShortcut(930), // Guess
     SalonResult(942),// Version 188
     ModHayatoCombo(946),// Version 188
     SkillCooltimeSet(962),// Version 188
@@ -925,6 +929,67 @@ public enum SendPacketOpcode {
     EndPersonalMapObject(1129),// Version 188
     RuneEnterField(1206),// Version 187
     RuneLeaveField(1207),// Version 187
+    BeginEtcFieldObj(1051),// Version 177
+    SnowBallState(1051),// Version 177
+    SnowBallHit(1052),// Version 177
+    SnowBallMsg(1053),// Version 177
+    SnowBallTouch(1054),// Version 177
+    CoconutHit(1055),// Version 177
+    CoconutScore(1056),// Version 177
+    HealerMove(1057),// Version 177
+    PulleyStateChange(1058),// Version 177
+    MCarnivalEnter(1059),// Version 177
+    MCarnivalPersonalCP(1060),// Version 177
+    MCarnivalTeamCScore(1061),// Version 177
+    MCarnivalSpellCooltime(1062),// Version 177
+    MCarnivalResultSuccess(1063),// Version 177
+    MCarnivalResultFail(1064),// Version 177
+    MCarnivalDeath(1065),// Version 177
+    MCarnivalMemberOut(1066),// Version 177
+    MCarnivalGameResult(1067),// Version 177
+    MCarnivalUpdateRankInfo(1068),// Version 177
+    ArenaScore(1069),// Version 177
+    BattlefieldEnter(1070),// Version 177
+    BattlefieldScore(1071),// Version 177
+    BattlefieldTeamChanged(1072),// Version 177
+    WitchtowerScore(1073),// Version 177
+    BossSummonTimer(1074),// Version 177
+    PVPFieldEnter(1075),// Version 177
+    PVPTeamChange(1076),// Version 177
+    PVPModeChange(1077),// Version 177
+    PVPStateChange(1078),// Version 177
+    PVPUpdateCount(1079),// Version 177
+    PVPModeResult(1080),// Version 177
+    PVPUpdateTeamInfo(1081),// Version 177
+    PVPUpdateRankInfo(1082),// Version 177
+    PVPHPChanged(1083),// Version 177
+    PVPTeamScore(1084),// Version 177
+    PVPReviveMessage(1085),// Version 177
+    PVPScreenEffect(1086),// Version 177
+    PVPIceKnightHPChange(1087),// Version 177
+    DefenseWave(1088),// Version 177
+    DefenseLife(1089),// Version 177
+    DefensePoint(1090),// Version 177
+    DefenseScoreRank(1091),// Version 177
+    DefenseResult(1092),// Version 177
+    RandomDropPicked(1093),// Version 177
+    BroadCastRandomDropPicked(1094),// Version 177
+    BroadCastRandomDropPhase(1095),// Version 177
+    RandomDropResult(1096),// Version 177
+    RandomDropPointEffect(1097),// Version 177
+    PVPHardCoreMigrate(1098),// Version 177
+    PVPHardCoreDead(1099),// Version 177
+    PVPHardCoreKill(1100),// Version 177
+    PVPHardcoreGauge(1101),// Version 177
+    PVPHardcoreFieldInfo(1102),// Version 177
+    PVPHardcoreEnter(1103),// Version 177
+    PVPHardcoreFieldChange(1104),// Version 177
+    PVPHardcoreShutDown(1105),// Version 177
+    PVPHardcoreChampionEffect(1106),// Version 177
+    MultiStage_StageSet(1107),// Version 177
+    MultiStage_MobCount(1108),// Version 177
+    Cook_SetRecipes(1109),// Version 177
+    EndEtcFieldObj(1294),// Version 177
     BeginScript(1409),// Version 188
     ScriptMessage(1409),// Version 188
     EndScript(1409),// Version 188
@@ -946,6 +1011,7 @@ public enum SendPacketOpcode {
     MiniRoom(1443),// Version 188
     SetCashShopInitialItem(1444),// Version 188
     TryMigrateCashShop(1445),// Version 188
+    Parcel(1460), // lulz not gonna be right todo fix
     BeginFuncKeyMapped(1576),// Version 188
     FuncKeyMappedInit(1576),// Version 188
     PetConsumeItemInit(1577),// Version 188
@@ -989,7 +1055,89 @@ public enum SendPacketOpcode {
     BattleRecordSkillDamageLog(1628),// Version 188
     EndBattleRecord(1629),// Version 188
     SocketCreateResult(1632),// Version 188
-    ViciousHammerResult(1634);// Version 188
+    ViciousHammerResult(1634),
+    BOOSTER_PACK(1641), // guess
+    
+    // yolo guess check 188t
+    CS_UPDATE(1476), //355
+    CS_OPERATION(1477), //356
+    CS_MESO_UPDATE(1478), //359
+    //0x314 int itemid int sn
+    CASH_SHOP(1501), // VERSION 176
+    CASH_SHOP_UPDATE(1502), // VERSION 176
+
+    GACHAPON_STAMPS(595),
+    FREE_CASH_ITEM(596),
+    CS_SURPRISE(597),
+    XMAS_SURPRISE(598),
+    ONE_A_DAY(600),
+    NX_SPEND_GIFT(602),
+    RECEIVE_GIFT(602), //new v145
+    
+    // Dumb Mazen Odin Shit
+    FARM_PACKET1(860),
+    FARM_ITEM_PURCHASED(861),
+    FARM_ITEM_GAIN(856),
+    HARVEST_WARU(858),
+    FARM_MONSTER_GAIN(859),
+    FARM_INFO(872),
+    FARM_MONSTER_INFO(873),
+    FARM_QUEST_DATA(874),
+    FARM_QUEST_INFO(875),
+    FARM_MESSAGE(876), //36C
+    UPDATE_MONSTER(877),
+    AESTHETIC_POINT(878),
+    UPDATE_WARU(879),
+    FARM_EXP(884),
+    FARM_PACKET4(885),
+    QUEST_ALERT(887),
+    FARM_PACKET8(888),
+    FARM_FRIENDS_BUDDY_REQUEST(891),
+    FARM_FRIENDS(892),
+    FARM_USER_INFO(904),
+    FARM_AVATAR(906),
+    FRIEND_INFO(909),
+    FARM_RANKING(911), //+69
+    SPAWN_FARM_MONSTER1(915),
+    SPAWN_FARM_MONSTER2(916),
+    RENAME_MONSTER(917),
+    
+    HORNTAIL_SHRINE(1207), // VERSION 170
+    PINK_ZAKUM_SHRINE(1199), // VERSION 170
+    ZAKUM_SHRINE(993), // VERSION 170
+    CHAOS_ZAKUM_SHRINE(1211), // VERSION 170
+    MONSTER_CARNIVAL_OBTAINED_CP(1047), //296
+    MONSTER_CARNIVAL_STATS(1048), ////297
+    MONSTER_CARNIVAL_SUMMON(1049), //299
+    MONSTER_CARNIVAL_MESSAGE(1051), //29A
+    MONSTER_CARNIVAL_DIED(1052), //29B
+    MONSTER_CARNIVAL_LEAVE(1053), //29C
+    MONSTER_CARNIVAL_RESULT(1054), //29D
+    MONSTER_CARNIVAL_RANKING(1055), //29E
+    MOVE_SCREEN_X(409), //199
+    MOVE_SCREEN_DOWN(410), //19A
+    SHOW_MAP_NAME(730), // VERSION 169 - guess
+    RUNE_STONE_CLEAR_AND_ALL_REGISTER(1156),
+    RUNE_STONE_DISAPPEAR(1157),
+    RUNE_STONE_APPEAR(1158),
+    KINESIS_PSYCHIC_ENERGY_SHIELD_EFFECT(674), // VERSION 170
+    ZERO_TAG(668), //VERSION 170
+    ZERO_TAG_STATE(670), //VERSION 170
+    PET_CHAT(582), // VERSION 170
+    PET_SIZE(586), // VERSION 170
+    SHOW_FUSION_EFFECT(615), // VERSION 170
+    // CMapLoadable::OnPacket
+    SET_MAP_OBJECT_VISIBLE(303), //112
+    // There are 6 news ones under CMapLoadable
+    GM_EFFECT(450), // VERSION 170
+    OX_QUIZ(451), // VERSION 170
+    GMEVENT_INSTRUCTIONS(452), // VERSION 170
+    TREASURE_BOX(399), // VERSION 170 
+    NEW_YEAR_CARD(400), // VERSION 170 
+    BLESSING_BOX(401), // VERSION 170 
+    CREW_BOX(403), // VERSION 170. I don't know if the name is right. 
+    RANDOM_Morph(404), // VERSION 170 
+    CANCEL_NAME_CHANGE_2(405);//:v;// Version 188
     
     private short code;
     public static SendPacketOpcode eOp;

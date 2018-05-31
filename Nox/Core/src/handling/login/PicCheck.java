@@ -28,8 +28,9 @@ public final class PicCheck implements ProcessPacket<ClientSocket> {
         final int charId = iPacket.DecodeInt();
 
         c.setWorld(iPacket.DecodeByte());
-        if (!c.isLoggedIn() || loginFailCount(c) || c.getSecondPassword() == null || !c.login_Auth(charId) || ChannelServer.getInstance(c.getChannel()) == null || !WorldConstants.WorldOption.isExists(c.getWorld())) {
+        if (c.getSecondPassword() == null || !c.login_Auth(charId) || ChannelServer.getInstance(c.getChannel()) == null || !WorldConstants.WorldOption.isExists(c.getWorld())) {
             c.Close();
+            //System.err.println("Logged in? " + c.isLoggedIn());
             return;
         }
         c.updateMacs(iPacket.DecodeString());

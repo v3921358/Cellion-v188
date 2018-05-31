@@ -174,7 +174,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private transient IMaplePlayerShop playerShop;
     private boolean invincible, canTalk, followinitiator, followon, smega, hasSummon, clone;
     private MapleGuildCharacter mgc;
-    private MapleFamilyCharacter mfc;
     private transient EventInstanceManager eventInstance;
     private MapleInventory[] inventory;
     private SkillMacro[] skillMacros = new SkillMacro[5];
@@ -899,7 +898,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
          * End of Custom Feature
          */
 
-        ret.makeMFC(ct.familyid, ct.seniorid, ct.junior1, ct.junior2);
         if (ret.guildid > 0) {
             ret.mgc = new MapleGuildCharacter(ret);
         }
@@ -1115,7 +1113,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 ret.totalLosses = rs.getInt("totalLosses");
                 ret.currentrep = rs.getInt("currentrep");
                 ret.totalrep = rs.getInt("totalrep");
-                ret.makeMFC(rs.getInt("familyid"), rs.getInt("seniorid"), rs.getInt("junior1"), rs.getInt("junior2"));
                 if (ret.guildid > 0) {
                     ret.mgc = new MapleGuildCharacter(ret);
                 }
@@ -4365,7 +4362,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             client.SendPacket(EffectPacket.showForeignEffect(getId(), UserEffectCodes.JobChanged));
             silentPartyUpdate();
             guildUpdate();
-            familyUpdate();
 
             if (dragon != null) {
                 map.broadcastPacket(CField.removeDragon(this.id));
@@ -5025,25 +5021,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         this.gmLevel = level;
     }
 
-    public void familyRep(long prevexp, long needed, boolean leveled) {
-        if (mfc != null) {
-            long onepercent = needed / 100;
-            if (onepercent <= 0) {
-                return;
-            }
-            int percentrep = (int) (getExp() / onepercent - prevexp / onepercent);
-            if (leveled) {
-                percentrep = 100 - percentrep + (level / 2);
-            }
-            if (percentrep > 0) {
-                int sensen = World.Family.setRep(mfc.getFamilyId(), mfc.getSeniorId(), percentrep * 10, level, name);
-                if (sensen > 0) {
-                    World.Family.setRep(mfc.getFamilyId(), sensen, percentrep * 5, level, name); //and we stop here
-                }
-            }
-        }
-    }
-
     /**
      * Proxy method for obtaining EXP -- quests, etc
      *
@@ -5105,7 +5082,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     }
                 }
             }
-            familyRep(getNeededExp(), needed, leveled);
         }
         if (totalEXPGained != 0) {
             updateSingleStat(Stat.EXP, getExp());
@@ -5753,7 +5729,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         AndroidEmotionChanger.changeEmotion(this, 10);
         silentPartyUpdate();
         guildUpdate();
-        familyUpdate();
         
         /*Update Skills*/
         addLevelSkills();
@@ -6026,7 +6001,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         // Etc!
         silentPartyUpdate();
         guildUpdate();
-        familyUpdate();
         autoJobAdvance();
         AndroidEmotionChanger.changeEmotion(this, 10);
 
@@ -7604,56 +7578,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return MapleMapObjectType.PLAYER;
     }
 
-    public int getFamilyId() {
-        if (mfc == null) {
-            return 0;
-        }
-        return mfc.getFamilyId();
-    }
-
-    public int getSeniorId() {
-        if (mfc == null) {
-            return 0;
-        }
-        return mfc.getSeniorId();
-    }
-
-    public int getJunior1() {
-        if (mfc == null) {
-            return 0;
-        }
-        return mfc.getJunior1();
-    }
-
-    public int getJunior2() {
-        if (mfc == null) {
-            return 0;
-        }
-        return mfc.getJunior2();
-    }
-
-    public int getCurrentRep() {
-        return currentrep;
-    }
-
-    public int getTotalRep() {
-        return totalrep;
-    }
-
-    public void setCurrentRep(int _rank) {
-        currentrep = _rank;
-        if (mfc != null) {
-            mfc.setCurrentRep(_rank);
-        }
-    }
-
-    public void setTotalRep(int _rank) {
-        totalrep = _rank;
-        if (mfc != null) {
-            mfc.setTotalRep(_rank);
-        }
-    }
-
     public int getTotalWins() {
         return totalWins;
     }
@@ -7747,37 +7671,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void saveGuildStatus() {
         MapleGuild.setOfflineGuildStatus(guildid, guildrank, guildContribution, allianceRank, id);
-    }
-
-    public void familyUpdate() {
-        if (mfc == null) {
-            return;
-        }
-        World.Family.memberFamilyUpdate(mfc, this);
-    }
-
-    public void saveFamilyStatus() {
-        try (Connection con = Database.GetConnection()) {
-
-            try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET familyid = ?, seniorid = ?, junior1 = ?, junior2 = ? WHERE id = ?")) {
-                if (mfc == null) {
-                    ps.setInt(1, 0);
-                    ps.setInt(2, 0);
-                    ps.setInt(3, 0);
-                    ps.setInt(4, 0);
-                } else {
-                    ps.setInt(1, mfc.getFamilyId());
-                    ps.setInt(2, mfc.getSeniorId());
-                    ps.setInt(3, mfc.getJunior1());
-                    ps.setInt(4, mfc.getJunior2());
-                }
-                ps.setInt(5, id);
-                ps.executeUpdate();
-            }
-        } catch (SQLException se) {
-            LogHelper.SQL.get().info("Error saving family status ", se);
-        }
-        //MapleFamily.setOfflineFamilyStatus(familyid, seniorid, junior1, junior2, currentrep, totalrep, id);
     }
 
     public int getNX() {
@@ -9709,33 +9602,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         anticheat.updateTick(newTick);
     }
 
-    public boolean canUseFamilyBuff(MapleFamilyBuff buff) {
-        final QuestStatus stat = getQuestNoAdd(Quest.getInstance(buff.questID));
-        if (stat == null) {
-            return true;
-        }
-        if (stat.getCustomData() == null) {
-            stat.setCustomData("0");
-        }
-        return Long.parseLong(stat.getCustomData()) + (24 * 3600000) < System.currentTimeMillis();
-    }
-
-    public void useFamilyBuff(MapleFamilyBuff buff) {
-        final QuestStatus stat = getQuestNAdd(Quest.getInstance(buff.questID));
-        stat.setCustomData(String.valueOf(System.currentTimeMillis()));
-    }
-
-    public List<Integer> usedBuffs() {
-        //assume count = 1
-        List<Integer> used = new ArrayList<>();
-        MapleFamilyBuff[] z = MapleFamilyBuff.values();
-        for (int i = 0; i < z.length; i++) {
-            if (!canUseFamilyBuff(z[i])) {
-                used.add(i);
-            }
-        }
-        return used;
-    }
+    
 
     public String getTeleportName() {
         return teleportname;
@@ -9743,48 +9610,6 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void setTeleportName(final String tname) {
         teleportname = tname;
-    }
-
-    public int getNoJuniors() {
-        if (mfc == null) {
-            return 0;
-        }
-        return mfc.getNoJuniors();
-    }
-
-    public MapleFamilyCharacter getMFC() {
-        return mfc;
-    }
-
-    public void makeMFC(final int familyid, final int seniorid, final int junior1, final int junior2) {
-        if (familyid > 0) {
-            MapleFamily f = World.Family.getFamily(familyid);
-            if (f == null) {
-                mfc = null;
-            } else {
-                mfc = f.getMFC(id);
-                if (mfc == null) {
-                    mfc = f.addFamilyMemberInfo(this, seniorid, junior1, junior2);
-                }
-                if (mfc.getSeniorId() != seniorid) {
-                    mfc.setSeniorId(seniorid);
-                }
-                if (mfc.getJunior1() != junior1) {
-                    mfc.setJunior1(junior1);
-                }
-                if (mfc.getJunior2() != junior2) {
-                    mfc.setJunior2(junior2);
-                }
-            }
-        } else {
-            mfc = null;
-        }
-    }
-
-    public void setFamily(final int newf, final int news, final int newj1, final int newj2) {
-        if (mfc == null || newf != mfc.getFamilyId() || news != mfc.getSeniorId() || newj1 != mfc.getJunior1() || newj2 != mfc.getJunior2()) {
-            makeMFC(newf, news, newj1, newj2);
-        }
     }
 
     public int maxBattleshipHP(int skillid) {

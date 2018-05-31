@@ -572,69 +572,6 @@ public class PlayersHandler {
         }
     }
 
-    public static void UpdatePlayerInformation(final InPacket iPacket, final ClientSocket c) {
-        byte mode = iPacket.DecodeByte(); //01 open ui 03 save info
-        if (mode == 1) {
-            if (c.getPlayer().getQuestStatus(GameConstants.PLAYER_INFORMATION) != QuestState.NotStarted) {
-                try {
-                    String[] info = c.getPlayer().getQuest(Quest.getInstance(GameConstants.PLAYER_INFORMATION)).getCustomData().split(";");
-                    c.SendPacket(WvsContext.loadInformation((byte) 2, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), Integer.parseInt(info[3]), true));
-                } catch (NumberFormatException ex) {
-                    c.SendPacket(WvsContext.loadInformation((byte) 4, 0, 0, 0, 0, false));
-                    System.out.println("Failed to update account information: " + ex);
-                }
-            }
-            c.SendPacket(WvsContext.enableActions());
-            return;
-        }
-        if (mode != 3) {
-            System.out.println("New account information mode found: " + mode);
-            c.SendPacket(WvsContext.enableActions());
-            return;
-        }
-        int country = iPacket.DecodeInt();
-        int birthday = iPacket.DecodeInt();
-        int favoriteAction = iPacket.DecodeInt(); //kind of mask
-        int favoriteLocation = iPacket.DecodeInt(); //kind of mask
-        c.getPlayer().getQuestNAdd(Quest.getInstance(GameConstants.PLAYER_INFORMATION)).setCustomData("location=" + country + ";birthday=" + birthday + ";favoriteaction=" + favoriteAction + ";favoritelocation=" + favoriteLocation);
-    }
-
-    public static void FindFriends(final InPacket iPacket, final ClientSocket c) {
-        byte mode = iPacket.DecodeByte();
-        switch (mode) {
-            case 5:
-                if (c.getPlayer().getQuestStatus(GameConstants.PLAYER_INFORMATION) == QuestState.NotStarted) {
-                    c.SendPacket(WvsContext.findFriendResult((byte) 6, null, 0, null));
-                    c.SendPacket(WvsContext.enableActions());
-                    return;
-                }
-            case 7:
-                List<User> characters = new LinkedList();
-                for (User chr : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                    if (chr != c.getPlayer()) {
-                        if (c.getPlayer().getQuestStatus(GameConstants.PLAYER_INFORMATION) == QuestState.NotStarted || characters.isEmpty()) {
-                            characters.add(chr);
-                        } else {
-                            if (chr.getQuestStatus(GameConstants.PLAYER_INFORMATION) == QuestState.NotStarted && characters.isEmpty()) {
-                                continue;
-                            }
-                            String[] info = c.getPlayer().getQuest(Quest.getInstance(GameConstants.PLAYER_INFORMATION)).getCustomData().split(";");
-                            String[] info2 = chr.getQuest(Quest.getInstance(GameConstants.PLAYER_INFORMATION)).getCustomData().split(";");
-                            if (info[0].equals(info2[0]) || info[1].equals(info2[1]) || info[2].equals(info2[2]) || info[3].equals(info2[3])) {
-                                characters.add(chr);
-                            }
-                        }
-                    }
-                }
-                if (characters.isEmpty()) {
-                    c.SendPacket(WvsContext.findFriendResult((byte) 9, null, 12, null));
-                } else {
-                    c.SendPacket(WvsContext.findFriendResult((byte) 8, characters, 0, null));
-                }
-                break;
-        }
-    }
-
     public static void LinkSkill(final InPacket iPacket, final ClientSocket c, final User chr) {
         //iPacket: [76 7F 31 01] [35 00 00 00]
         c.getPlayer().dropMessage(1, "Beginning link skill.");

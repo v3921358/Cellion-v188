@@ -167,9 +167,6 @@ public final class MigrateInHandler implements ProcessPacket<ClientSocket> {
                     pPlayer.saveGuildStatus();
                 }
             }
-            if (pPlayer.getFamilyId() > 0) {
-                World.Family.setFamilyMemberOnline(pPlayer.getMFC(), true, c.getChannel());
-            }
             
             //c.SendPacket(FamilyPacket.getFamilyData());
             //c.SendPacket(FamilyPacket.getFamilyInfo(player));
@@ -232,7 +229,7 @@ public final class MigrateInHandler implements ProcessPacket<ClientSocket> {
         pPlayer.updatePartyMemberHP();
         pPlayer.startFairySchedule(false);
         c.SendPacket(WvsContext.updateCrowns(new int[]{-1, -1, -1, -1, -1}));
-        c.SendPacket(WvsContext.getFamiliarInfo(pPlayer));
+        //c.SendPacket(WvsContext.getFamiliarInfo(pPlayer));
         c.SendPacket(WvsContext.shopDiscount(ServerConstants.SHOP_DISCOUNT));
         c.SendPacket(WvsContext.updateMaplePoint(pPlayer.getNX()));
         

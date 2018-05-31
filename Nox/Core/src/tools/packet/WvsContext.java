@@ -1127,7 +1127,7 @@ public class WvsContext {
         return oPacket;
     }
 
-    public static OutPacket echoMegaphone(String name, String message) {
+    /*public static OutPacket echoMegaphone(String name, String message) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.ECHO_MESSAGE.getValue());
         oPacket.EncodeByte(0);
@@ -1136,7 +1136,7 @@ public class WvsContext {
         oPacket.EncodeString(message);
 
         return oPacket;
-    }
+    }*/
 
     public static OutPacket showQuestMsg(String msg) {
         return broadcastMsg(5, msg);
@@ -1521,7 +1521,7 @@ public class WvsContext {
 
     public static OutPacket getCardDrops(int cardid, List<Integer> drops) {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.CARD_DROPS.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MonsterBookCardData.getValue());
         oPacket.EncodeInt(cardid);
         oPacket.EncodeShort(drops == null ? 0 : drops.size());
         if (drops != null) {
@@ -1533,7 +1533,7 @@ public class WvsContext {
         return oPacket;
     }
 
-    public static OutPacket getFamiliarInfo(User chr) {
+    /*public static OutPacket getFamiliarInfo(User chr) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.JournalAvatar.getValue());
         oPacket.EncodeInt(chr.getFamiliars().size());
@@ -1559,7 +1559,7 @@ public class WvsContext {
         size.clear();
 
         return oPacket;
-    }
+    }*/
 
     public static OutPacket updateWebBoard(boolean result) {
 
@@ -1793,73 +1793,6 @@ public class WvsContext {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.WildHunterInfo.getValue());
         PacketHelper.addJaguarInfo(oPacket, from);
-
-        return oPacket;
-    }
-
-    public static OutPacket loadInformation(byte mode, int location, int birthday, int favoriteAction, int favoriteLocation, boolean success) {
-
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.AswanStateInfo.getValue());
-        oPacket.EncodeByte(mode);
-        if (mode == 2) {
-            oPacket.EncodeInt(location);
-            oPacket.EncodeInt(birthday);
-            oPacket.EncodeInt(favoriteAction);
-            oPacket.EncodeInt(favoriteLocation);
-        } else if (mode == 4) {
-            oPacket.EncodeByte(success ? 1 : 0);
-        }
-
-        return oPacket;
-    }
-
-    public static OutPacket saveInformation(boolean fail) {
-
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.AswanStateInfo.getValue());
-        oPacket.EncodeByte(4);
-        oPacket.EncodeByte(fail ? 0 : 1);
-
-        return oPacket;
-    }
-
-    public static OutPacket myInfoResult() {
-
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.AswanResult.getValue());
-        oPacket.EncodeByte(6);
-        oPacket.EncodeInt(0);
-        oPacket.EncodeInt(0);
-
-        return oPacket;
-    }
-
-    public static OutPacket findFriendResult(byte mode, List<User> friends, int error, User chr) {
-
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.AswanResult.getValue());
-        oPacket.EncodeByte(mode);
-        switch (mode) {
-            case 6:
-                oPacket.EncodeInt(0);
-                oPacket.EncodeInt(0);
-                break;
-            case 8:
-                oPacket.EncodeShort(friends.size());
-                for (User mc : friends) {
-                    oPacket.EncodeInt(mc.getId());
-                    oPacket.EncodeString(mc.getName());
-                    oPacket.EncodeByte(mc.getLevel());
-                    oPacket.EncodeShort(mc.getJob());
-                    oPacket.EncodeInt(0);
-                    oPacket.EncodeInt(0);
-                }
-                break;
-            case 9:
-                oPacket.EncodeByte(error);
-                break;
-            case 11:
-                oPacket.EncodeInt(chr.getId());
-                CField.writeCharacterLook(oPacket, chr);
-                break;
-        }
 
         return oPacket;
     }
@@ -2347,287 +2280,6 @@ public class WvsContext {
             oPacket.EncodeInt(allianceid);
             oPacket.EncodeInt(player.getId());
             oPacket.EncodeInt(player.getAllianceRank());
-
-            return oPacket;
-        }
-    }
-
-    public static class FamilyPacket {
-
-        public static OutPacket getFamilyData() {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FamilyPrivilegeList.getValue());
-            MapleFamilyBuff[] entries = MapleFamilyBuff.values();
-            oPacket.EncodeInt(entries.length);
-
-            for (MapleFamilyBuff entry : entries) {
-                oPacket.EncodeByte(entry.type);
-                oPacket.EncodeInt(entry.rep);
-                oPacket.EncodeInt(1);
-                oPacket.EncodeString(entry.name);
-                oPacket.EncodeString(entry.desc);
-            }
-            return oPacket;
-        }
-
-        public static OutPacket getFamilyInfo(User chr) {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FamilyChartResult.getValue());
-            oPacket.EncodeInt(chr.getCurrentRep());
-            oPacket.EncodeInt(chr.getTotalRep());
-            oPacket.EncodeInt(chr.getTotalRep());
-            oPacket.EncodeShort(chr.getNoJuniors());
-            oPacket.EncodeShort(2);
-            oPacket.EncodeShort(chr.getNoJuniors());
-            MapleFamily family = World.Family.getFamily(chr.getFamilyId());
-            if (family != null) {
-                oPacket.EncodeInt(family.getLeaderId());
-                oPacket.EncodeString(family.getLeaderName());
-                oPacket.EncodeString(family.getNotice());
-            } else {
-                oPacket.EncodeLong(0L);
-            }
-            List<?> b = chr.usedBuffs();
-            oPacket.EncodeInt(b.size());
-            for (Iterator<?> i$ = b.iterator(); i$.hasNext();) {
-                int ii = ((Integer) i$.next()).intValue();
-                oPacket.EncodeInt(ii);
-                oPacket.EncodeInt(1);
-            }
-
-            return oPacket;
-        }
-
-        public static void addFamilyCharInfo(MapleFamilyCharacter ldr, OutPacket oPacket) {
-            oPacket.EncodeInt(ldr.getId());
-            oPacket.EncodeInt(ldr.getSeniorId());
-            oPacket.EncodeShort(ldr.getJobId());
-            oPacket.EncodeShort(0);
-            oPacket.EncodeByte(ldr.getLevel());
-            oPacket.EncodeByte(ldr.isOnline() ? 1 : 0);
-            oPacket.EncodeInt(ldr.getCurrentRep());
-            oPacket.EncodeInt(ldr.getTotalRep());
-            oPacket.EncodeInt(ldr.getTotalRep());
-            oPacket.EncodeInt(ldr.getTotalRep());
-            oPacket.EncodeInt(Math.max(ldr.getChannel(), 0));
-            oPacket.EncodeInt(0);
-            oPacket.EncodeString(ldr.getName());
-        }
-
-        public static OutPacket getFamilyPedigree(User chr) {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FamilyPrivilegeList.getValue());
-            oPacket.EncodeInt(chr.getId());
-            MapleFamily family = World.Family.getFamily(chr.getFamilyId());
-
-            int descendants = 2;
-            int gens = 0;
-            int generations = 0;
-            if (family == null) {
-                oPacket.EncodeInt(2);
-                addFamilyCharInfo(new MapleFamilyCharacter(chr, 0, 0, 0, 0), oPacket);
-            } else {
-                oPacket.EncodeInt(family.getMFC(chr.getId()).getPedigree().size() + 1);
-                addFamilyCharInfo(family.getMFC(family.getLeaderId()), oPacket);
-
-                if (chr.getSeniorId() > 0) {
-                    MapleFamilyCharacter senior = family.getMFC(chr.getSeniorId());
-                    if (senior != null) {
-                        if (senior.getSeniorId() > 0) {
-                            addFamilyCharInfo(family.getMFC(senior.getSeniorId()), oPacket);
-                        }
-                        addFamilyCharInfo(senior, oPacket);
-                    }
-                }
-            }
-            addFamilyCharInfo(chr.getMFC() == null ? new MapleFamilyCharacter(chr, 0, 0, 0, 0) : chr.getMFC(), oPacket);
-            if (family != null) {
-                if (chr.getSeniorId() > 0) {
-                    MapleFamilyCharacter senior = family.getMFC(chr.getSeniorId());
-                    if (senior != null) {
-                        if ((senior.getJunior1() > 0) && (senior.getJunior1() != chr.getId())) {
-                            addFamilyCharInfo(family.getMFC(senior.getJunior1()), oPacket);
-                        } else if ((senior.getJunior2() > 0) && (senior.getJunior2() != chr.getId())) {
-                            addFamilyCharInfo(family.getMFC(senior.getJunior2()), oPacket);
-                        }
-
-                    }
-
-                }
-
-                if (chr.getJunior1() > 0) {
-                    MapleFamilyCharacter junior = family.getMFC(chr.getJunior1());
-                    if (junior != null) {
-                        addFamilyCharInfo(junior, oPacket);
-                    }
-                }
-                if (chr.getJunior2() > 0) {
-                    MapleFamilyCharacter junior = family.getMFC(chr.getJunior2());
-                    if (junior != null) {
-                        addFamilyCharInfo(junior, oPacket);
-                    }
-                }
-                if (chr.getJunior1() > 0) {
-                    MapleFamilyCharacter junior = family.getMFC(chr.getJunior1());
-                    if (junior != null) {
-                        if ((junior.getJunior1() > 0) && (family.getMFC(junior.getJunior1()) != null)) {
-                            gens++;
-                            addFamilyCharInfo(family.getMFC(junior.getJunior1()), oPacket);
-                        }
-                        if ((junior.getJunior2() > 0) && (family.getMFC(junior.getJunior2()) != null)) {
-                            gens++;
-                            addFamilyCharInfo(family.getMFC(junior.getJunior2()), oPacket);
-                        }
-                    }
-                }
-                if (chr.getJunior2() > 0) {
-                    MapleFamilyCharacter junior = family.getMFC(chr.getJunior2());
-                    if (junior != null) {
-                        if ((junior.getJunior1() > 0) && (family.getMFC(junior.getJunior1()) != null)) {
-                            gens++;
-                            addFamilyCharInfo(family.getMFC(junior.getJunior1()), oPacket);
-                        }
-                        if ((junior.getJunior2() > 0) && (family.getMFC(junior.getJunior2()) != null)) {
-                            gens++;
-                            addFamilyCharInfo(family.getMFC(junior.getJunior2()), oPacket);
-                        }
-                    }
-                }
-                generations = family.getMemberSize();
-            }
-            oPacket.EncodeLong(gens);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(-1);
-            oPacket.EncodeInt(generations);
-
-            if (family != null) {
-                if (chr.getJunior1() > 0) {
-                    MapleFamilyCharacter junior = family.getMFC(chr.getJunior1());
-                    if (junior != null) {
-                        if ((junior.getJunior1() > 0) && (family.getMFC(junior.getJunior1()) != null)) {
-                            oPacket.EncodeInt(junior.getJunior1());
-                            oPacket.EncodeInt(family.getMFC(junior.getJunior1()).getDescendants());
-                        } else {
-                            oPacket.EncodeInt(0);
-                        }
-                        if ((junior.getJunior2() > 0) && (family.getMFC(junior.getJunior2()) != null)) {
-                            oPacket.EncodeInt(junior.getJunior2());
-                            oPacket.EncodeInt(family.getMFC(junior.getJunior2()).getDescendants());
-                        } else {
-                            oPacket.EncodeInt(0);
-                        }
-                    }
-                }
-                if (chr.getJunior2() > 0) {
-                    MapleFamilyCharacter junior = family.getMFC(chr.getJunior2());
-                    if (junior != null) {
-                        if ((junior.getJunior1() > 0) && (family.getMFC(junior.getJunior1()) != null)) {
-                            oPacket.EncodeInt(junior.getJunior1());
-                            oPacket.EncodeInt(family.getMFC(junior.getJunior1()).getDescendants());
-                        } else {
-                            oPacket.EncodeInt(0);
-                        }
-                        if ((junior.getJunior2() > 0) && (family.getMFC(junior.getJunior2()) != null)) {
-                            oPacket.EncodeInt(junior.getJunior2());
-                            oPacket.EncodeInt(family.getMFC(junior.getJunior2()).getDescendants());
-                        } else {
-                            oPacket.EncodeInt(0);
-                        }
-                    }
-                }
-            }
-
-            List<?> b = chr.usedBuffs();
-            oPacket.EncodeInt(b.size());
-            for (Iterator<?> i$ = b.iterator(); i$.hasNext();) {
-                int ii = ((Integer) i$.next()).intValue();
-                oPacket.EncodeInt(ii);
-                oPacket.EncodeInt(1);
-            }
-            oPacket.EncodeShort(2);
-
-            return oPacket;
-        }
-
-        public static OutPacket getFamilyMsg(byte type, int meso) {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FamilyInfoResult.getValue());
-            oPacket.EncodeInt(type);
-            oPacket.EncodeInt(meso);
-
-            return oPacket;
-        }
-
-        public static OutPacket sendFamilyInvite(int cid, int otherLevel, int otherJob, String inviter) {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FamilyResult.getValue());
-            oPacket.EncodeInt(cid);
-            oPacket.EncodeInt(otherLevel);
-            oPacket.EncodeInt(otherJob);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeString(inviter);
-            return oPacket;
-        }
-
-        public static OutPacket sendFamilyJoinResponse(boolean accepted, String added) {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FamilyJoinRequest.getValue());
-            oPacket.EncodeByte(accepted ? 1 : 0);
-            oPacket.EncodeString(added);
-
-            return oPacket;
-        }
-
-        public static OutPacket getSeniorMessage(String name) {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FamilyJoinAccepted.getValue());
-            oPacket.EncodeString(name);
-
-            return oPacket;
-        }
-
-        public static OutPacket changeRep(int r, String name) {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FamilyFamousPointIncResult.getValue());
-            oPacket.EncodeInt(r);
-            oPacket.EncodeString(name);
-
-            return oPacket;
-        }
-
-        public static OutPacket familyLoggedIn(boolean online, String name) {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FamilyNotifyLoginOrLogout.getValue());
-            oPacket.EncodeByte(online ? 1 : 0);
-            oPacket.EncodeString(name);
-
-            return oPacket;
-        }
-
-        public static OutPacket familyBuff(int type, int buffnr, int amount, int time) {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FamilySetPrivilege.getValue());
-            oPacket.EncodeByte(type);
-            if ((type >= 2) && (type <= 4)) {
-                oPacket.EncodeInt(buffnr);
-
-                oPacket.EncodeInt(type == 3 ? 0 : amount);
-                oPacket.EncodeInt(type == 2 ? 0 : amount);
-                oPacket.EncodeByte(0);
-                oPacket.EncodeInt(time);
-            }
-            return oPacket;
-        }
-
-        public static OutPacket cancelFamilyBuff() {
-            return familyBuff(0, 0, 0, 0);
-        }
-
-        public static OutPacket familySummonRequest(String name, String mapname) {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.FamilySummonRequest.getValue());
-            oPacket.EncodeString(name);
-            oPacket.EncodeString(mapname);
 
             return oPacket;
         }
@@ -3964,7 +3616,7 @@ public class WvsContext {
 
     public static OutPacket magicWheel(int type, List<Integer> items, String data, int endSlot) {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.MAGIC_WHEEL.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MagicWheelResult.getValue());
         oPacket.EncodeByte(type);
         switch (type) {
             case 3:
@@ -4007,7 +3659,7 @@ public class WvsContext {
         public static OutPacket receiveReward(int id, byte mode, int quantity) {
             System.out.println("[Debug] REWARD MODE: " + mode);
 
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.REWARD.getValue());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.RewardResult.getValue());
             oPacket.EncodeByte(mode); // mode
             switch (mode) { // mode
                 case 9:

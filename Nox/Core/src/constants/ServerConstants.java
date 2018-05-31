@@ -25,13 +25,13 @@ public class ServerConstants {
     public static final String SOURCE_REVISION = "1.0";
     
     /*Server IP Address*/
-    public static final String HOST = "rexion.dynu.net"; // Server IP Address "10.147.17.88"; //
+    public static final String HOST = "127.0.0.1"; // Server IP Address "10.147.17.88"; //
     public static final byte[] NEXON_IP = new byte[]{(byte) 8, (byte) 31, (byte) 99, (byte) 141}; // 8.31.99.141
     public static final byte[] NEXON_CHAT_IP = new byte[]{(byte) 8, (byte) 31, (byte) 99, (byte) 133}; // Chat Server
     
     /*Standard Login or API Configuration*/
    /*These values will be overwritten by the configuration.ini file.*/
-    public static boolean USE_API = true; // If false, use the standard login methods and database communications.
+    public static boolean USE_API = false; // If false, use the standard login methods and database communications.
     public static boolean DEVMODE = false; // Dev mode for API stuff?
     public static boolean GM_ONLY = false; // Only allow GMs to login.
     
@@ -48,7 +48,7 @@ public class ServerConstants {
 
     /*Client Information*/
     public static final boolean TESPIA = false; // Used for activating GMST.
-    public static final short MAPLE_VERSION = (short) 180;
+    public static final short MAPLE_VERSION = (short) 188;
     public static final String SERVER_NAME = "Cellion"; //Shorter reference of just the server name.
     public static final String MAPLE_PATCH = "2";
     public static final int MAPLE_LOCALE = 8;

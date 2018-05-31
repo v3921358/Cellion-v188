@@ -479,7 +479,7 @@ public class PacketHelper {
     public static void addCharStats(OutPacket oPacket, User chr) {
         oPacket.EncodeInt(chr.getId());
         oPacket.EncodeInt(chr.getId()); // dwCharacterIDForLog
-        oPacket.EncodeInt(0); //dwWorldIDForLog
+        oPacket.EncodeInt(chr.getWorld()); //dwWorldIDForLog
         oPacket.EncodeString(chr.getName(), 13);
         oPacket.EncodeByte(chr.getGender());
         oPacket.EncodeByte(chr.getSkinColor());
@@ -507,7 +507,7 @@ public class PacketHelper {
         }
         oPacket.EncodeLong(chr.getExp());
         oPacket.EncodeInt(chr.getFame());
-        oPacket.EncodeInt(0); // F3 4F 11 00
+        oPacket.EncodeInt(0); // WaruPoints
         oPacket.EncodeInt(chr.getGachExp());
         oPacket.EncodeInt(chr.getMapId());
         oPacket.EncodeByte(chr.getInitialSpawnpoint());
@@ -519,7 +519,7 @@ public class PacketHelper {
         }
 
         // Professions
-        oPacket.EncodeByte(chr.getFatigue());
+        oPacket.EncodeShort(chr.getFatigue());
         oPacket.EncodeInt(GameConstants.getTimeAsInt());
         for (MapleTrait.MapleTraitType t : MapleTrait.MapleTraitType.values()) {
             oPacket.EncodeInt(chr.getTrait(t).getTotalExp());
@@ -536,8 +536,6 @@ public class PacketHelper {
         oPacket.EncodeByte(5); // nPvPModeLevel
         oPacket.EncodeByte(6); //nPvPModeType
         oPacket.EncodeInt(0); //nEventPoint
-
-        addPartTimeJob(oPacket, User.getPartTime(chr.getId()));
 
         // Character card
         for (int i = 0; i < 9; i++) {
@@ -671,6 +669,7 @@ public class PacketHelper {
         Integer Shield = equip.get(-10);
         oPacket.EncodeInt(!zero && Shield != null ? Shield : 0);
         oPacket.EncodeByte(GameConstants.isMercedes(chr.getJob()) ? 1 : 0); // Mercedes/Elf Ears
+        oPacket.EncodeByte(0);
         oPacket.Encode(new byte[12]);
         if (GameConstants.isDemonSlayer(chr.getJob()) || GameConstants.isXenon(chr.getJob()) || GameConstants.isDemonAvenger(chr.getJob()) || GameConstants.isBeastTamer(chr.getJob())) {
             oPacket.EncodeInt(chr.getFaceMarking());

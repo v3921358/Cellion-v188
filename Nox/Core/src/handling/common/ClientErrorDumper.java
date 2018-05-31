@@ -51,7 +51,11 @@ public final class ClientErrorDumper implements ProcessPacket<ClientSocket> {
         iPacket.Skip(4);
         short opcodeheader = iPacket.DecodeShort();
 
-        System.err.println("[Error 38] Thrown by Operation Code Header (" + opcodeheader + ") for Character Name (" + c.getPlayer().getName() + ")");
+        if (c.getPlayer() == null) {
+            System.err.println("[Error 38] Thrown by Operation Code Header (" + opcodeheader + ") at login");
+        } else {
+            System.err.println("[Error 38] Thrown by Operation Code Header (" + opcodeheader + ") for Character Name (" + c.getPlayer().getName() + ")");
+        }
 
         LogHelper.GENERAL_EXCEPTION.get().info(String.format("Error Type: %d, Data Length: %d\r\nAccount: %s, Field: %d, Charname: %s\r\nOpcode: 0x%s/ %d\r\nData: %s",
                 errortype, data_length,

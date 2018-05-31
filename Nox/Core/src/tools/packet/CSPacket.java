@@ -744,7 +744,7 @@ public class CSPacket {
 
     public static OutPacket useAlienSocket(boolean start) {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.ALIEN_SOCKET_CREATOR.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SocketCreateResult.getValue());
         oPacket.EncodeByte(start ? 0 : 2);
 
         return oPacket;
@@ -771,7 +771,7 @@ public class CSPacket {
 
     public static OutPacket GoldenHammer(byte mode, int success) {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.GOLDEN_HAMMER.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.ViciousHammerResult.getValue());
 
         oPacket.EncodeByte(mode);
         oPacket.EncodeInt(success);
@@ -1044,17 +1044,8 @@ public class CSPacket {
 
     public static OutPacket sendMesobagSuccess(int mesos) {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.MesoGiveSucceeded.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MesoGiveSuceeded.getValue());
         oPacket.EncodeInt(mesos);
-        return oPacket;
-    }
-
-    public static OutPacket sendRandomMesobagSuccess(int size, int mesos) {
-
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.RandomMesoGiveSucceeded.getValue());
-        oPacket.EncodeByte(size); // 1 = small, 2 = adequete, 3 = large, 4 = huge
-        oPacket.EncodeInt(mesos);
-
         return oPacket;
     }
 }

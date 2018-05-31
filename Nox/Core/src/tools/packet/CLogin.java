@@ -22,15 +22,23 @@ import service.ChannelServer;
 public class CLogin {
 
     public static OutPacket Handshake(int sendIv, int recvIv) {
-        OutPacket oPacket = new OutPacket((short) 15);
+        OutPacket oPacket = new OutPacket((short) 44);
 
         oPacket.EncodeShort(ServerConstants.MAPLE_VERSION);
         oPacket.EncodeString(ServerConstants.MAPLE_PATCH);
         oPacket.EncodeInt(recvIv);
         oPacket.EncodeInt(sendIv);
         oPacket.EncodeByte(ServerConstants.MAPLE_LOCALE);
-        oPacket.EncodeByte(0);
-
+        oPacket.EncodeByte(0); // bLoadSingleThread
+        oPacket.EncodeShort(ServerConstants.MAPLE_VERSION);
+        oPacket.EncodeInt(ServerConstants.MAPLE_VERSION);
+        oPacket.EncodeInt(recvIv);
+        oPacket.EncodeInt(sendIv);
+        oPacket.EncodeByte(ServerConstants.MAPLE_LOCALE);
+        oPacket.EncodeInt(Integer.parseInt(ServerConstants.MAPLE_PATCH));
+        oPacket.EncodeInt(Integer.parseInt(ServerConstants.MAPLE_PATCH));
+        oPacket.EncodeInt(0);
+        oPacket.EncodeShort(1);
         return oPacket;
     }
 
@@ -128,7 +136,7 @@ public class CLogin {
      */
     public static final void getJobList(OutPacket oPacket) {
         oPacket.EncodeByte(ServerConstants.HIDE_STAR_PLANET_WORLD_UI ? 1 : 0); //toggle star planet world UI
-        oPacket.EncodeByte(4); // Doesn't appear to write job order anymore... (totes does tho ya cunt)
+        oPacket.EncodeByte(8); // Doesn't appear to write job order anymore... (totes does tho ya cunt)
         for (LoginJob j : LoginJob.values()) {
             oPacket.EncodeByte(j.getFlag());
             oPacket.EncodeShort(1);
@@ -339,6 +347,41 @@ public class CLogin {
         return oPacket;
     }
 
+    public static OutPacket OnWorldInformation(int dwWorldID) {
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.WorldInformation.getValue());
+        oPacket.EncodeByte(dwWorldID);
+        if (dwWorldID >= 0) {
+            oPacket.EncodeString(LoginServer.getInstance().getTrueServerName());
+            oPacket.EncodeByte(WorldOption.getById(dwWorldID).getFlag());
+            oPacket.EncodeString(ServerConstants.EVENT_MESSAGE);
+            oPacket.EncodeByte(0); // block char creation
+
+            Set<Integer> aChannel = LoginServer.getInstance().getLoad().keySet();
+            oPacket.EncodeByte(aChannel.size());
+            for (int nChannel : aChannel) {
+                oPacket.EncodeString(String.format("%s-%d", LoginServer.getInstance().getTrueServerName(), nChannel));
+                oPacket.EncodeInt(Math.max(2, ChannelServer.getChannelLoad().get(nChannel) * 64 / (ServerConstants.USER_LIMIT / ServerConstants.CHANNEL_COUNT)) + 3);
+                oPacket.EncodeByte(dwWorldID);
+                oPacket.EncodeByte(nChannel);
+                oPacket.EncodeBool(false); // bAdultChannel
+            }
+            oPacket.EncodeShort(GameConstants.getBalloons().size());
+            for (Balloon balloon : GameConstants.getBalloons()) {
+                oPacket.EncodeShort(balloon.nX);
+                oPacket.EncodeShort(balloon.nY);
+                oPacket.EncodeString(balloon.sMessage);
+            }
+            oPacket.EncodeInt(0);
+            oPacket.EncodeBool(false);
+        } else {
+            oPacket.EncodeByte(0); // Size
+            oPacket.EncodeBool(false);
+            oPacket.EncodeByte(0);
+        }
+        
+        return oPacket;
+    }
+
     public static OutPacket getServerList(int serverId) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.WorldInformation.getValue());
@@ -348,8 +391,6 @@ public class CLogin {
         oPacket.EncodeString(worldName);
         oPacket.EncodeByte(WorldOption.getById(serverId).getFlag());
         oPacket.EncodeString(ServerConstants.EVENT_MESSAGE);
-        oPacket.EncodeShort(100); // event EXP
-        oPacket.EncodeShort(100); // event drop
         oPacket.EncodeByte(0); // block char creation
 
         Set<Integer> channels = LoginServer.getInstance().getLoad().keySet();
@@ -365,7 +406,8 @@ public class CLogin {
             oPacket.EncodeInt(Math.max(2, ChannelServer.getChannelLoad().get(channel) * 64 / (ServerConstants.USER_LIMIT / ServerConstants.CHANNEL_COUNT)) + 3);
 
             oPacket.EncodeByte(serverId);
-            oPacket.EncodeShort(channelId - 1);
+            oPacket.EncodeByte(channelId - 1);
+            oPacket.EncodeByte(0); // bAdultChannel
         }
 
         oPacket.EncodeShort(GameConstants.getBalloons().size());
@@ -407,7 +449,7 @@ public class CLogin {
      */
     public static OutPacket changeBackground() {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.BackgroundEffect.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SetMapTaggedObjectVisible.getValue());
         oPacket.EncodeByte(WorldServerBackgroundHandler.values().length);
 
         for (WorldServerBackgroundHandler backgrounds : WorldServerBackgroundHandler.values()) {
@@ -484,6 +526,8 @@ public class CLogin {
         oPacket.EncodeLong(PacketHelper.getTime(currentTime));
         oPacket.EncodeByte(0);//Enables Name Change UI. (click it to change charname :)
         oPacket.EncodeByte(0);
+        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(0);
         oPacket.EncodeInt(0);
 
         return oPacket;
@@ -519,30 +563,11 @@ public class CLogin {
 
     private static void addCharEntry(OutPacket oPacket, User chr) {
         PacketHelper.addCharStats(oPacket, chr);
+        oPacket.EncodeInt(0);
         PacketHelper.addCharLook(oPacket, chr, true, false);
         if (GameConstants.isZero(chr.getJob())) {
             PacketHelper.addCharLook(oPacket, chr, true, true);
         }
-    }
-
-    public static OutPacket partTimeJob(int cid, short type, long time) {
-        //1) 0A D2 CD 01 70 59 9F EA
-        //2) 0B D2 CD 01 B0 6B 9C 18
-        PartTimeJob job = new PartTimeJob(cid);
-        job.setJob((byte) type);
-        job.setTime(time);
-
-        return updatePartTimeJob(job);
-    }
-
-    public static OutPacket updatePartTimeJob(PartTimeJob partTime) {
-
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.AlbaRequestResult.getValue());
-        oPacket.EncodeInt(partTime.getCharacterId());
-        oPacket.EncodeByte(0);
-        PacketHelper.addPartTimeJob(oPacket, partTime);
-
-        return oPacket;
     }
 
     /**

@@ -23,7 +23,7 @@ public final class AESCipher {
 
     private static final AES pCipher;
 
-    public static final short nVersion = 180;
+    public static final short nVersion = 188;
     private static final byte[] aKey = new byte[]{
         (byte) 0x29, (byte) 0x00, (byte) 0x00, (byte) 0x00,
         (byte) 0xF6, (byte) 0x00, (byte) 0x00, (byte) 0x00,

@@ -2062,14 +2062,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                     if (chr.getGuildId() > 0) {
                         World.Guild.guildPacket(chr.getGuildId(), WvsContext.sendMarriage(false, chr.getName()));
                     }
-                    if (chr.getFamilyId() > 0) {
-                        World.Family.familyPacket(chr.getFamilyId(), WvsContext.sendMarriage(true, chr.getName()), chr.getId());
-                    }
                     if (player.getGuildId() > 0) {
                         World.Guild.guildPacket(player.getGuildId(), WvsContext.sendMarriage(false, player.getName()));
-                    }
-                    if (player.getFamilyId() > 0) {
-                        World.Family.familyPacket(player.getFamilyId(), WvsContext.sendMarriage(true, chr.getName()), player.getId());
                     }
                 }
             }

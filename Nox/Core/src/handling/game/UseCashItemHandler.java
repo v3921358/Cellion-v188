@@ -1267,7 +1267,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 }
                 break;
             }
-            case 5079004: { // Heart Megaphone
+            /*case 5079004: { // Heart Megaphone
                 if (c.getPlayer().getLevel() < 10) {
                     c.getPlayer().dropMessage(5, "Must be level 10 or higher.");
                     break;
@@ -1292,7 +1292,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                     c.getPlayer().dropMessage(5, "The usage of Megaphone is currently disabled.");
                 }
                 break;
-            }
+            }*/
             case 5073000: { // Heart Megaphone
                 if (c.getPlayer().getLevel() < 10) {
                     c.getPlayer().dropMessage(5, "Must be level 10 or higher.");

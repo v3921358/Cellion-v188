@@ -32,7 +32,6 @@ import handling.world.MapleParty;
 import handling.world.MaplePartyCharacter;
 import handling.world.PartyOperation;
 import handling.world.World;
-import handling.world.MapleFamilyCharacter;
 import handling.world.MapleGuildCharacter;
 import io.netty.channel.Channel;
 import java.util.concurrent.TimeUnit;
@@ -654,13 +653,13 @@ public class ClientSocket extends Socket {
         return loginok;
     }
 
-    public int LoginPassword(String name, String password) {
+    public int LoginPassword(String passport) {
         int loginok = 5;
 
         try (Connection con = Database.GetConnection()) {
 
-            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM accounts WHERE name = ?")) {
-                ps.setString(1, name);
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM accounts WHERE passport = ?")) {
+                ps.setString(1, passport);
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()) {
@@ -668,7 +667,7 @@ public class ClientSocket extends Socket {
                     final String oldSession = rs.getString("SessionIP");
                     final String hashedPassword = rs.getString("password");
 
-                    accountName = name;
+                    accountName = rs.getString("name");
                     accId = rs.getInt("id");
                     secondPassword = rs.getString("2ndpassword");
                     gm = rs.getInt("gm") > 1;
@@ -686,7 +685,7 @@ public class ClientSocket extends Socket {
                         if (loginstate.getState() > MapleClientLoginState.Login_NotLoggedIn.getState()) { // already loggedin
                             if (getSessionIPAddress().equals(oldSession) && oldSession != null && getPlayer() == null && CashShopServer.getPlayerStorage().getCharacterById(accId) == null) {
                                 try (PreparedStatement ps2 = con.prepareStatement("UPDATE accounts SET loggedin = 0 WHERE name = ?")) {
-                                    ps2.setString(1, name);
+                                    ps2.setString(1, accountName);
                                     ps2.executeUpdate();
                                     ps2.close();
                                     disconnect(true, false);
@@ -702,7 +701,7 @@ public class ClientSocket extends Socket {
                         } else {
                             if (ServerConstants.DEVMODE && !gm) {
                                 loginok = 5;
-                            } else if (crypto.BCrypt.checkpw(password, hashedPassword)) {
+                            } else {
                                 loginok = 0;
                             }
                         }
@@ -1164,12 +1163,11 @@ public class ClientSocket extends Socket {
             MapleMap map = player.getMap();
             final MapleParty party = player.getParty();
             final String namez = player.getName();
-            final int idz = player.getId(), messengerid = player.getMessenger() == null ? 0 : player.getMessenger().getId(), gid = player.getGuildId(), fid = player.getFamilyId();
+            final int idz = player.getId(), messengerid = player.getMessenger() == null ? 0 : player.getMessenger().getId(), gid = player.getGuildId();
             final BuddyList bl = player.getBuddylist();
             final MaplePartyCharacter chrp = new MaplePartyCharacter(player);
             final MapleMessengerCharacter chrm = new MapleMessengerCharacter(player);
             final MapleGuildCharacter chrg = player.getMGC();
-            final MapleFamilyCharacter chrf = player.getMFC();
             player.changeRemoval();
             removalTask(shutdown);
             LoginServer.getLoginAuth(player.getId());
@@ -1220,9 +1218,6 @@ public class ClientSocket extends Socket {
                     if (gid > 0 && chrg != null) {
                         World.Guild.setGuildMemberOnline(chrg, false, -1);
                     }
-                    if (fid > 0 && chrf != null) {
-                        World.Family.setFamilyMemberOnline(chrf, false, -1);
-                    }
                 } catch (final Exception e) {
                     LogHelper.GENERAL_EXCEPTION.get().info("There was an account is currently stuck:\n{}", e);
                 } finally {
@@ -1249,9 +1244,6 @@ public class ClientSocket extends Socket {
                     }
                     if (gid > 0 && chrg != null) {
                         World.Guild.setGuildMemberOnline(chrg, false, -1);
-                    }
-                    if (fid > 0 && chrf != null) {
-                        World.Family.setFamilyMemberOnline(chrf, false, -1);
                     }
                     if (player != null) {
                         player.setMessenger(null);

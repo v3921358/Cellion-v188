@@ -18,7 +18,6 @@ import handling.world.MapleDojoRanking;
 import handling.world.MapleGuildRanking;
 import handling.login.LoginInformationProvider;
 import handling.world.World;
-import handling.world.MapleFamily;
 import handling.world.MapleGuild;
 import java.io.FileInputStream;
 import java.sql.Connection;
@@ -128,7 +127,7 @@ public class Start {
             throw new RuntimeException("Runtime Exception - Could not connect to MySql Server.");
         }
 
-        System.out.println("\nLoading " + ServerConstants.SERVER_NAME + ": MAPLESTORY VERSION " + ServerConstants.MAPLE_VERSION);
+        System.out.println(String.format("Loading %s: %d.%s", ServerConstants.SERVER_NAME, ServerConstants.MAPLE_VERSION, ServerConstants.MAPLE_PATCH));
 
         World.init();
         System.out.println("\nHost IP: " + ServerConstants.HOST);
@@ -201,7 +200,6 @@ public class Start {
         r = new ServerStartupRunnable(atomicInteger, ()
                 -> {
             MapleGuild.loadAll();
-            MapleFamily.loadAll();
         }, "Guilds");
         es.submit(r);
 

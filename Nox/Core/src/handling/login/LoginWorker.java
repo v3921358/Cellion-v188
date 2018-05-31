@@ -52,7 +52,7 @@ public class LoginWorker {
             lastUpdate = System.currentTimeMillis();
         }
 
-        if (c.finishLogin() == 0) {
+        /*if (c.finishLogin() == 0) {
             c.SendPacket(CLogin.CheckPasswordResult(c));
             //start temp fix
 
@@ -70,6 +70,6 @@ public class LoginWorker {
             }, 10 * 60 * 10000));
         } else {
             c.SendPacket(CLogin.getLoginFailed(7));
-        }
+        }*/
     }
 }

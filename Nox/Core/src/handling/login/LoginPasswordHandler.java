@@ -106,7 +106,8 @@ public final class LoginPasswordHandler implements ProcessPacket<ClientSocket> {
     }
 
     public static void PasswordLogin(ClientSocket c, String name, String password) {
-
+        // not used anymore
+/*
         final boolean ipBan = c.hasBannedIP();
         final boolean macBan = c.hasBannedMac();
 
@@ -138,6 +139,6 @@ public final class LoginPasswordHandler implements ProcessPacket<ClientSocket> {
         } else {
             c.loginAttempt = 0;
             LoginWorker.registerClient(c);
-        }
+        }*/
     }
 }

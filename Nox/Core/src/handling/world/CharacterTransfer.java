@@ -171,14 +171,8 @@ public class CharacterTransfer {
         this.subcategory = pPlayer.getSubcategory();
         this.imps = pPlayer.getImps();
         this.fatigue = (short) pPlayer.getFatigue();
-        this.currentrep = pPlayer.getCurrentRep();
-        this.totalrep = pPlayer.getTotalRep();
-        this.familyid = pPlayer.getFamilyId();
         this.totalWins = pPlayer.getTotalWins();
         this.totalLosses = pPlayer.getTotalLosses();
-        this.seniorid = pPlayer.getSeniorId();
-        this.junior1 = pPlayer.getJunior1();
-        this.junior2 = pPlayer.getJunior2();
         this.battleshipHP = pPlayer.currentBattleshipHP();
         this.gachexp = pPlayer.getGachExp();
         this.familiars = pPlayer.getFamiliars();

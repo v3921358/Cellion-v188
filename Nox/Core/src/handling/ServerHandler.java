@@ -73,7 +73,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.DeleteCharacter.getValue()] = new CharacterDeletor();
         handlers[RecvPacketOpcode.ChangeSPWRequest.getValue()] = new PicChangeHandler();
         handlers[RecvPacketOpcode.SetSPW.getValue()] = new CharSelectSetPICHandler();
-        handlers[RecvPacketOpcode.AlbaRequest.getValue()] = new PartTimeJobHandler();
         handlers[RecvPacketOpcode.CheckSPWRequest.getValue()] = new PicCheck();
         handlers[RecvPacketOpcode.UpdateCharacterCard.getValue()] = new UpdateCharacterCards();
         //handlers[RecvPacketOpcode.CharacterBurning.getValue()] = new CharacterBurnRequestHandler(); // IDK

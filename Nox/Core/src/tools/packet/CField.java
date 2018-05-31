@@ -63,6 +63,7 @@ import handling.game.PlayerDamageHandler;
 import handling.game.WhisperHandler.WhisperFlag;
 import handling.world.AttackInfo;
 import java.awt.Rectangle;
+import java.util.Random;
 import server.maps.Map_MaplePlatform;
 import server.maps.objects.ForceAtom;
 import tools.Pair;
@@ -96,20 +97,19 @@ public class CField {
         oPacket.EncodeInt(0);
         oPacket.EncodeShort(0);
 
-        oPacket.Encode(ServerConstants.NEXON_CHAT_IP); // another ip address
-        oPacket.EncodeShort(0); // another port
-
+        oPacket.EncodeInt(Randomizer.nextInt());
         oPacket.EncodeInt(clientId);
 
         oPacket.EncodeByte(0);
         oPacket.EncodeInt(0);
         oPacket.EncodeByte(0);
+        oPacket.EncodeInt(0);
         oPacket.EncodeByte(0);
 
         byte[] interServerAuthBuffer = new byte[8];
         Randomizer.nextBytes(interServerAuthBuffer);
         oPacket.Encode(interServerAuthBuffer); // TODO: Check on this when the client sends PLAYER_LOGGEDIN on the channel servers
-
+        oPacket.EncodeByte(0);
         return oPacket;
     }
 
@@ -621,7 +621,7 @@ public class CField {
 
     public static OutPacket removeBGLayer(boolean remove, int map, byte layer, int duration) {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.REMOVE_BG_LAYER.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.SetMapTaggedObjectVisible.getValue());
         oPacket.EncodeByte(remove ? 1 : 0); //Boolean show or remove
         oPacket.EncodeInt(map);
         oPacket.EncodeByte(layer); //Layer to show/remove
@@ -695,7 +695,7 @@ public class CField {
 
     public static OutPacket environmentChange(String env, int mode, int delay) {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.BossEnvironment.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FieldEffect.getValue());
         oPacket.EncodeByte(mode);
         oPacket.EncodeString(env);
         oPacket.EncodeInt(delay); // 0x64
@@ -705,7 +705,7 @@ public class CField {
 
     public static OutPacket trembleEffect(int type, int delay) {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.BossEnvironment.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.FieldEffect.getValue());
         oPacket.EncodeByte(1);
         oPacket.EncodeByte(type);
         oPacket.EncodeInt(delay);
@@ -2337,7 +2337,7 @@ public class CField {
 
     public static OutPacket sendHint(String hint, int width, int height) {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserHint.getValue());
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserBalloonMsg.getValue()); // todo guesss?
         oPacket.EncodeString(hint);
         oPacket.EncodeShort(width < 1 ? Math.max(hint.length() * 10, 40) : width);
         oPacket.EncodeShort(Math.max(height, 5));
@@ -3185,25 +3185,6 @@ public class CField {
             oPacket.EncodeInt(ring.getPartnerChrId());
             oPacket.EncodeInt(ring.getItemId());
         }
-    }
-
-    public static OutPacket getBuffBar(long millis) {
-
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.BUFF_BAR.getValue());
-        oPacket.EncodeLong(millis);
-
-        return oPacket;
-    }
-
-    public static OutPacket getBoosterFamiliar(int cid, int familiar, int id) {
-
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.BOOSTER_FAMILIAR.getValue());
-        oPacket.EncodeInt(cid);
-        oPacket.EncodeInt(familiar);
-        oPacket.EncodeLong(id);
-        oPacket.EncodeByte(0);
-
-        return oPacket;
     }
 
     public static OutPacket viewSkills(User chr) {
@@ -4258,7 +4239,7 @@ public class CField {
 
         public static OutPacket IntroLock(boolean enable) {
 
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.INTRO_LOCK.getValue());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetDirectionMode.getValue());
             oPacket.EncodeByte(enable ? 1 : 0);
             oPacket.EncodeInt(0);
 
@@ -4273,7 +4254,7 @@ public class CField {
          */
         public static OutPacket IntroEnableUI(boolean enable) {
 
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.INTRO_ENABLE_UI.getValue());
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetInGameDirectionMode.getValue());
             oPacket.EncodeByte(enable ? 1 : 0);
             oPacket.EncodeByte(1);
             if (enable) {
