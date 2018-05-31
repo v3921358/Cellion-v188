@@ -22,7 +22,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.Stat;
+import enums.Stat;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.WvsContext;

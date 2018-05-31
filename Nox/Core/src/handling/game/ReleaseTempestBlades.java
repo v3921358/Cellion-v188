@@ -23,7 +23,7 @@ import java.util.List;
 import org.w3c.dom.css.Rect;
 import server.life.Mob;
 import server.maps.objects.ForceAtom;
-import server.maps.objects.ForceAtomType;
+import enums.ForceAtomType;
 import tools.Pair;
 import server.maps.objects.User;
 

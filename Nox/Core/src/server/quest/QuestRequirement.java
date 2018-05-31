@@ -1,5 +1,6 @@
 package server.quest;
 
+import enums.QuestRequirementType;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,11 +10,11 @@ import java.util.List;
 
 import client.QuestStatus;
 import client.QuestStatus.QuestState;
-import client.MapleTrait.MapleTraitType;
+import client.Trait.MapleTraitType;
 import client.Skill;
 import client.SkillFactory;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
@@ -131,7 +132,7 @@ public class QuestRequirement implements Serializable {
                 }
                 return true;
             case item:
-                MapleInventoryType iType;
+                InventoryType iType;
                 int itemId;
                 short quantity;
 

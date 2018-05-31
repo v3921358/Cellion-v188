@@ -16,7 +16,7 @@ import javax.script.ScriptException;
 
 import client.ClientSocket;
 import client.QuestStatus;
-import client.MapleTrait.MapleTraitType;
+import client.Trait.MapleTraitType;
 import constants.GameConstants;
 import client.SkillFactory;
 import handling.world.MapleParty;

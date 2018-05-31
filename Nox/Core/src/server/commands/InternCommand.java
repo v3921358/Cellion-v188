@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import client.MapleCharacterUtil;
+import client.CharacterUtil;
 import client.ClientSocket;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -18,8 +18,8 @@ import java.awt.Point;
 import java.util.Arrays;
 import java.util.Map.Entry;
 import service.ChannelServer;
-import scripting.provider.NPCChatByType;
-import scripting.provider.NPCChatType;
+import enums.NPCInterfaceType;
+import enums.NPCChatType;
 import server.MaplePortal;
 import server.MapleSquad.MapleSquadType;
 import server.MapleStringInformationProvider;
@@ -126,7 +126,7 @@ public class InternCommand {
                 }
             }
 
-            c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage, NPCChatByType.NPC_Cancellable));
+            c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage, NPCInterfaceType.NPC_Cancellable));
             return 1;
         }
     }
@@ -513,7 +513,7 @@ public class InternCommand {
                             c.getPlayer().dropMessage(6, "Sorry, that search call is unavailable");
                             break;
                     }
-                    c.SendPacket(NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sb.toString(), NPCChatByType.NPC_Cancellable));
+                    c.SendPacket(NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sb.toString(), NPCInterfaceType.NPC_Cancellable));
                     break;
             }
             return 0;
@@ -528,7 +528,7 @@ public class InternCommand {
             List<Pair<String, Long>> players = new ArrayList<>();
             for (User chr : c.getPlayer().getMap().getCharacters()) {
                 if (!chr.isIntern()) {
-                    players.add(new Pair<>(MapleCharacterUtil.makeMapleReadable(chr.getName()) + (currentTime - chr.getCheatTracker().getLastAttack() > 600000 ? " (AFK)" : ""), chr.getChangeTime()));
+                    players.add(new Pair<>(CharacterUtil.makeMapleReadable(chr.getName()) + (currentTime - chr.getCheatTracker().getLastAttack() > 600000 ? " (AFK)" : ""), chr.getChangeTime()));
                 }
             }
             Collections.sort(players, new WhoComparator());

@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import client.QuestStatus;
 import net.OutPacket;
 import tools.packet.PacketHelper;
@@ -21,7 +22,7 @@ public class QuestStatusMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.QuestStatus.getType()); //MessageType
+        oPacket.EncodeByte(MessageOpcodesType.QuestStatus.getType()); //MessageType
         oPacket.EncodeInt(quest.getQuest().getId());
         oPacket.EncodeByte(quest.getStatus().getValue());
 

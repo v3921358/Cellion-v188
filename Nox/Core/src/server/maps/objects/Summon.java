@@ -11,7 +11,7 @@ import server.StatEffect;
 import server.maps.AnimatedMapleMapObject;
 import server.maps.MapleMap;
 import server.maps.MapleMapObjectType;
-import server.maps.SummonMovementType;
+import enums.SummonMovementType;
 import tools.packet.CField.SummonPacket;
 
 public class Summon extends AnimatedMapleMapObject {

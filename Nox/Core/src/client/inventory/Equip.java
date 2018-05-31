@@ -1,10 +1,13 @@
 package client.inventory;
 
+import enums.SocketFlag;
+import enums.ItemType;
+import enums.ItemFlag;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import server.MapleItemInformationProvider;
 import server.maps.objects.Android;
-import server.potentials.ItemPotentialTierType;
+import enums.ItemPotentialTierType;
 
 public class Equip extends Item {
 

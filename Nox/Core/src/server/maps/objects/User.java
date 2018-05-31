@@ -1,15 +1,24 @@
 package server.maps.objects;
 
+import enums.ExpType;
+import enums.SummonMovementType;
+import enums.SavedLocationType;
+import enums.FieldLimitType;
+import enums.StatInfo;
+import enums.ModifyInventoryOperation;
+import enums.InventoryType;
+import enums.ItemFlag;
+import enums.Stat;
 import client.*;
 import client.QuestStatus.QuestState;
-import client.MapleSpecialStats.MapleSpecialStatUpdateType;
-import client.MapleTrait.MapleTraitType;
+import client.SpecialStats.MapleSpecialStatUpdateType;
+import client.Trait.MapleTraitType;
 import client.anticheat.CheatTracker;
 import client.anticheat.ReportType;
 import client.buddy.Buddy;
-import client.buddy.BuddyFlags;
+import enums.BuddyFlags;
 import client.buddy.BuddyList;
-import client.buddy.BuddyResult;
+import enums.BuddyResult;
 import client.buddy.BuddylistEntry;
 import server.StatEffect;
 import client.inventory.*;
@@ -55,7 +64,7 @@ import server.maps.*;
 import server.messages.*;
 import server.movement.LifeMovementFragment;
 import server.potentials.ItemPotentialProvider;
-import server.potentials.ItemPotentialTierType;
+import enums.ItemPotentialTierType;
 import server.quest.Quest;
 import server.shops.Shop;
 import server.shops.ShopFactory;
@@ -145,8 +154,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private final Map<String, String> CustomValues = new HashMap<>();
     private transient List<Summon> summons;
     private transient Map<Integer, Summon> summonss;
-    private transient Map<Integer, MapleCoolDownValueHolder> coolDowns;
-    private transient Map<MapleDisease, MapleDiseaseValueHolder> diseases;
+    private transient Map<Integer, CoolDownValueHolder> coolDowns;
+    private transient Map<Disease, DiseaseValueHolder> diseases;
     private Map<ReportType, Integer> reports;
     private CashShop cs;
     private transient Deque<MapleCarnivalChallenge> pendingCarnivalRequests;
@@ -157,7 +166,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private ClientSocket client;
     private transient MapleParty party;
     private PlayerStats stats;
-    private final MapleCharacterCards characterCard;
+    private final CharacterCards characterCard;
     private transient MapleMap map;
     private transient Shop shop;
     private transient EvanDragon dragon;
@@ -177,8 +186,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private transient EventInstanceManager eventInstance;
     private MapleInventory[] inventory;
     private SkillMacro[] skillMacros = new SkillMacro[5];
-    private final EnumMap<MapleTraitType, MapleTrait> traits;
-    private MapleKeyLayout keylayout;
+    private final EnumMap<MapleTraitType, Trait> traits;
+    private KeyLayout keylayout;
     private transient ScheduledFuture<?> mapTimeLimitTask;
     private transient Event_PyramidSubway pyramidSubway = null;
     private transient List<Integer> pendingExpiration = null;
@@ -207,10 +216,10 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     private int friendshiptoadd;
     private int wheelItem = 0;
     public transient static ScheduledFuture<?> XenonSupplyTask = null;
-    private MapleCoreAura coreAura;
+    private CoreAura coreAura;
     private List<MaplePotionPot> potionPots;
     private int deathCount = 0;
-    private MapleMarriage marriage;
+    private Marriage marriage;
     private int charListPosition;
     private boolean isZeroBeta = false;
     private boolean isAngelicDressup = false;
@@ -627,8 +636,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         setPosition(new Point(0, 0));
 
         temporaryValues = new CharacterTemporaryValues();
-        inventory = new MapleInventory[MapleInventoryType.values().length];
-        for (MapleInventoryType type : MapleInventoryType.values()) {
+        inventory = new MapleInventory[InventoryType.values().length];
+        for (InventoryType type : InventoryType.values()) {
             inventory[type.ordinal()] = new MapleInventory(type);
         }
         quests = new LinkedHashMap<>(); // Stupid erev quest.
@@ -637,7 +646,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         stats = new PlayerStats();
         innerSkills = new LinkedList<>();
         azwanShopList = null;
-        characterCard = new MapleCharacterCards();
+        characterCard = new CharacterCards();
         for (int i = 0; i < remainingSp.length; i++) {
             remainingSp[i] = 0;
         }
@@ -646,7 +655,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
         traits = new EnumMap<>(MapleTraitType.class);
         for (MapleTraitType t : MapleTraitType.values()) {
-            traits.put(t, new MapleTrait(t));
+            traits.put(t, new Trait(t));
         }
         charListPosition = 0;
         if (ChannelServer) {
@@ -720,11 +729,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             familiars = new LinkedHashMap<>();
             extendedSlots = new ArrayList<>();
             effects = new EnumMap<>(CharacterTemporaryStat.class);
-            diseases = new EnumMap<>(MapleDisease.class);
+            diseases = new EnumMap<>(Disease.class);
             coolDowns = new LinkedHashMap<>();
             conversationType = MapleCharacterConversationType.None;
             insd = new AtomicInteger(-1);
-            keylayout = new MapleKeyLayout();
+            keylayout = new KeyLayout();
             doors = new ArrayList<>();
             mechDoors = new ArrayList<>();
             controlled = new LinkedHashSet<>();
@@ -742,7 +751,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             questinfo = new LinkedHashMap<>();
             pets = new ArrayList<>();
             friendshippoints = new int[4];
-            coreAura = new MapleCoreAura(id, 24 * 60);
+            coreAura = new CoreAura(id, 24 * 60);
             potionPots = new ArrayList<>();
             this.mStealSkillInfo.put(24001001, 0);
             this.mStealSkillInfo.put(24101001, 0);
@@ -969,7 +978,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         ret.blessingOfEmpress = ct.BlessOfEmpress;
         ret.skillMacros = (SkillMacro[]) ct.skillmacro;
         ret.petStore = ct.petStore;
-        ret.keylayout = new MapleKeyLayout(ct.keymap);
+        ret.keylayout = new KeyLayout(ct.keymap);
         ret.questinfo = ct.InfoQuest;
         ret.familiars = ct.familiars;
         ret.savedLocations = ct.savedlocation;
@@ -1138,7 +1147,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 ret.apstorage = rs.getInt("apstorage");
                 ret.charListPosition = rs.getInt("position");
                 ret.isBurning = rs.getBoolean("isBurning");
-                for (MapleTrait t : ret.traits.values()) {
+                for (Trait t : ret.traits.values()) {
                     t.setExp(rs.getInt(t.getType().name()));
                 }
 
@@ -1207,7 +1216,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
                     int partnerId = rs.getInt("id");
 
-                    ret.marriage = new MapleMarriage(partnerId, ret.marriageItemId);
+                    ret.marriage = new Marriage(partnerId, ret.marriageItemId);
                     ret.marriage.setHusbandId(ret.gender == 0 ? ret.id : partnerId);
                     ret.marriage.setWifeId(ret.gender == 1 ? ret.id : partnerId);
                     String partnerName = rs.getString("name");
@@ -1329,11 +1338,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                         ps.close();
                         throw new RuntimeException("No Inventory slot column found in SQL. [inventoryslot]");
                     } else {
-                        ret.getInventory(MapleInventoryType.EQUIP).setSlotLimit(rs.getByte("equip"));
-                        ret.getInventory(MapleInventoryType.USE).setSlotLimit(rs.getByte("use"));
-                        ret.getInventory(MapleInventoryType.SETUP).setSlotLimit(rs.getByte("setup"));
-                        ret.getInventory(MapleInventoryType.ETC).setSlotLimit(rs.getByte("etc"));
-                        ret.getInventory(MapleInventoryType.CASH).setSlotLimit(rs.getByte("cash"));
+                        ret.getInventory(InventoryType.EQUIP).setSlotLimit(rs.getByte("equip"));
+                        ret.getInventory(InventoryType.USE).setSlotLimit(rs.getByte("use"));
+                        ret.getInventory(InventoryType.SETUP).setSlotLimit(rs.getByte("setup"));
+                        ret.getInventory(InventoryType.ETC).setSlotLimit(rs.getByte("etc"));
+                        ret.getInventory(InventoryType.CASH).setSlotLimit(rs.getByte("cash"));
                     }
                     ps.close();
                     rs.close();
@@ -1341,7 +1350,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     ex.printStackTrace();
                 }
 
-                for (Pair<Item, MapleInventoryType> mit : ItemLoader.INVENTORY.loadItems(false, charid, con).values()) {
+                for (Pair<Item, InventoryType> mit : ItemLoader.INVENTORY.loadItems(false, charid, con).values()) {
                     ret.getInventory(mit.getRight()).addFromDB(mit.getLeft());
                     if (mit.getLeft().getPet() != null) {
                         ret.pets.add(mit.getLeft().getPet());
@@ -1435,7 +1444,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     ps.setInt(1, ret.id);
                     ResultSet rs = ps.executeQuery();
                     if (rs.next()) {
-                        ret.coreAura = new MapleCoreAura(ret.id, rs.getInt("expire"));
+                        ret.coreAura = new CoreAura(ret.id, rs.getInt("expire"));
                         ret.coreAura.setStr(rs.getInt("str"));
                         ret.coreAura.setDex(rs.getInt("dex"));
                         ret.coreAura.setInt(rs.getInt("int"));
@@ -1444,7 +1453,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                         ret.coreAura.setMagic(rs.getInt("magic"));
                         ret.coreAura.setTotal(rs.getInt("total"));
                     } else {
-                        ret.coreAura = new MapleCoreAura(ret.id, 24 * 60);
+                        ret.coreAura = new CoreAura(ret.id, 24 * 60);
                     }
                     rs.close();
                 } catch (SQLException ex) {
@@ -1700,7 +1709,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     if (!rs.next()) {
                         throw new RuntimeException("No mount data found on SQL column");
                     }
-                    final Item mount = ret.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -18);
+                    final Item mount = ret.getInventory(InventoryType.EQUIPPED).getItem((byte) -18);
                     ret.mount = new MapleMount(ret, mount != null ? mount.getItemId() : 0, 80001000, rs.getByte("Fatigue"), rs.getByte("Level"), rs.getInt("Exp"));
                     rs.close();
                 } catch (SQLException ex) {
@@ -1709,7 +1718,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
                 ret.stats.OnCalculateLocalStats(true, ret);
             } else { // Not channel server
-                for (Pair<Item, MapleInventoryType> mit : ItemLoader.INVENTORY.loadItems(true, charid, con).values()) {
+                for (Pair<Item, InventoryType> mit : ItemLoader.INVENTORY.loadItems(true, charid, con).values()) {
                     ret.getInventory(mit.getRight()).addFromDB(mit.getLeft());
                 }
                 ret.stats.recalcPVPRank(ret);
@@ -1953,7 +1962,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 LogHelper.SQL.get().info("Could not save character:\n{}", e);
             }
 
-            List<Pair<Item, MapleInventoryType>> listing = new ArrayList<>();
+            List<Pair<Item, InventoryType>> listing = new ArrayList<>();
             for (final MapleInventory iv : chr.inventory) {
                 for (final Item item : iv.list()) {
                     listing.add(new Pair<>(item, iv.getType()));
@@ -2201,11 +2210,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             deleteWhereCharacterId(con, "DELETE FROM inventoryslot WHERE characterid = ?");
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO inventoryslot (characterid, `equip`, `use`, `setup`, `etc`, `cash`) VALUES (?, ?, ?, ?, ?, ?)")) {
                 ps.setInt(1, id);
-                ps.setByte(2, getInventory(MapleInventoryType.EQUIP).getSlotLimit());
-                ps.setByte(3, getInventory(MapleInventoryType.USE).getSlotLimit());
-                ps.setByte(4, getInventory(MapleInventoryType.SETUP).getSlotLimit());
-                ps.setByte(5, getInventory(MapleInventoryType.ETC).getSlotLimit());
-                ps.setByte(6, getInventory(MapleInventoryType.CASH).getSlotLimit());
+                ps.setByte(2, getInventory(InventoryType.EQUIP).getSlotLimit());
+                ps.setByte(3, getInventory(InventoryType.USE).getSlotLimit());
+                ps.setByte(4, getInventory(InventoryType.SETUP).getSlotLimit());
+                ps.setByte(5, getInventory(InventoryType.ETC).getSlotLimit());
+                ps.setByte(6, getInventory(InventoryType.CASH).getSlotLimit());
                 ps.execute();
                 ps.close();
             } catch (SQLException e) {
@@ -2392,11 +2401,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO inventoryslot (characterid, `equip`, `use`, `setup`, `etc`, `cash`) VALUES (?, ?, ?, ?, ?, ?)")) {
                 ps.setInt(1, id);
-                ps.setByte(2, getInventory(MapleInventoryType.EQUIP).getSlotLimit());
-                ps.setByte(3, getInventory(MapleInventoryType.USE).getSlotLimit());
-                ps.setByte(4, getInventory(MapleInventoryType.SETUP).getSlotLimit());
-                ps.setByte(5, getInventory(MapleInventoryType.ETC).getSlotLimit());
-                ps.setByte(6, getInventory(MapleInventoryType.CASH).getSlotLimit());
+                ps.setByte(2, getInventory(InventoryType.EQUIP).getSlotLimit());
+                ps.setByte(3, getInventory(InventoryType.USE).getSlotLimit());
+                ps.setByte(4, getInventory(InventoryType.SETUP).getSlotLimit());
+                ps.setByte(5, getInventory(InventoryType.ETC).getSlotLimit());
+                ps.setByte(6, getInventory(InventoryType.CASH).getSlotLimit());
                 ps.execute();
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -2576,11 +2585,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 }
             }
 
-            List<MapleCoolDownValueHolder> cd = getCooldowns();
+            List<CoolDownValueHolder> cd = getCooldowns();
             if (dc && cd.size() > 0) {
                 try (PreparedStatement ps = con.prepareStatement("INSERT INTO skills_cooldowns (charid, SkillID, StartTime, length) VALUES (?, ?, ?, ?)")) {
                     ps.setInt(1, getId());
-                    for (final MapleCoolDownValueHolder cooling : cd) {
+                    for (final CoolDownValueHolder cooling : cd) {
                         ps.setInt(2, cooling.skillId);
                         ps.setLong(3, cooling.startTime);
                         ps.setLong(4, cooling.length);
@@ -2778,7 +2787,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             if (changed_extendedSlots) {
                 deleteWhereCharacterId(con, "DELETE FROM extendedSlots WHERE characterid = ?");
                 for (int i : extendedSlots) {
-                    if (getInventory(MapleInventoryType.ETC).findById(i) != null) { //just in case
+                    if (getInventory(InventoryType.ETC).findById(i) != null) { //just in case
                         try (PreparedStatement ps = con.prepareStatement("INSERT INTO extendedSlots(characterid, itemId) VALUES(?, ?) ")) {
                             ps.setInt(1, getId());
                             ps.setInt(2, i);
@@ -2830,7 +2839,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
     
     public void saveInventory(Connection con) {
-        List<Pair<Item, MapleInventoryType>> listing = new ArrayList<>();
+        List<Pair<Item, InventoryType>> listing = new ArrayList<>();
         for (final MapleInventory iv : inventory) {
             for (final Item item : iv.list()) {
                 listing.add(new Pair<>(item, iv.getType()));
@@ -3006,7 +3015,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public int getItemQuantity(int itemid, boolean checkEquipped) {
         int possesed = inventory[GameConstants.getInventoryType(itemid).ordinal()].countById(itemid);
         if (checkEquipped) {
-            possesed += inventory[MapleInventoryType.EQUIPPED.ordinal()].countById(itemid);
+            possesed += inventory[InventoryType.EQUIPPED.ordinal()].countById(itemid);
         }
         return possesed;
     }
@@ -3546,7 +3555,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             cancelFishingTask();
             return;
         }
-        MapleInventoryManipulator.removeById(client, MapleInventoryType.USE, 2270008, 1, false, false);
+        MapleInventoryManipulator.removeById(client, InventoryType.USE, 2270008, 1, false, false);
         boolean passed = false;
         while (!passed) {
             int randval = RandomRewards.getFishingReward();
@@ -3927,7 +3936,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public String getJobName(short id) {
-        return MapleJob.getName(MapleJob.getById(id));
+        return Jobs.getName(Jobs.getById(id));
     }
 
     @Override
@@ -4861,7 +4870,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (!GameConstants.isBeginnerJob(job) && !inPVP() && !GameConstants.isAzwanMap(getMapId())) {
             int charms = getItemQuantity(5130000, false);
             if (charms > 0) {
-                MapleInventoryManipulator.removeById(client, MapleInventoryType.CASH, 5130000, 1, true, false);
+                MapleInventoryManipulator.removeById(client, InventoryType.CASH, 5130000, 1, true, false);
                 charms--;
                 if (charms > 0xFF) {
                     charms = 0xFF;
@@ -5030,7 +5039,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @param highestDamage
      */
     public void gainExp(final long totalEXPGained, boolean show, boolean bOnQuest, boolean highestDamage) {
-        EnumMap<ExpGainTypes, Integer> expIncreaseStats = new EnumMap<>(ExpGainTypes.class);
+        EnumMap<ExpType, Integer> expIncreaseStats = new EnumMap<>(ExpType.class);
 
         gainExp(totalEXPGained, 0, show, highestDamage, bOnQuest, 0, expIncreaseStats);
     }
@@ -5047,7 +5056,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @param expIncreaseStats
      */
     public void gainExp(final long totalEXPGained, final long bonusEXPGained, boolean show, boolean highestDamage, boolean bOnQuest,
-            int burningFieldBonusEXPRate, EnumMap<ExpGainTypes, Integer> expIncreaseStats) {
+            int burningFieldBonusEXPRate, EnumMap<ExpType, Integer> expIncreaseStats) {
         if (!isAlive() || totalEXPGained <= 0 || bonusEXPGained < 0) { // dead or long overflow.
             return;
         }
@@ -5102,15 +5111,15 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    public void forceReAddItemNoUpdate(Item item, MapleInventoryType type) {
+    public void forceReAddItemNoUpdate(Item item, InventoryType type) {
         getInventory(type).removeSlot(item.getPosition());
         getInventory(type).addFromDB(item);
     }
 
-    public void forceReAddItem(Item item, MapleInventoryType type) { //used for stuff like durability, item exp/level, probably owner?
+    public void forceReAddItem(Item item, InventoryType type) { //used for stuff like durability, item exp/level, probably owner?
         forceReAddItemNoUpdate(item, type);
-        type = MapleInventoryType.EQUIP;
-        if (type != MapleInventoryType.UNDEFINED) {
+        type = InventoryType.EQUIP;
+        if (type != InventoryType.UNDEFINED) {
 
             List<ModifyInventory> mod = new ArrayList<>();
             mod.add(new ModifyInventory(ModifyInventoryOperation.Remove, item));
@@ -5119,9 +5128,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    public void forceReAddItemFlag(Item item, MapleInventoryType type) { //used for flags
+    public void forceReAddItemFlag(Item item, InventoryType type) { //used for flags
         forceReAddItemNoUpdate(item, type);
-        if (type != MapleInventoryType.UNDEFINED) {
+        if (type != InventoryType.UNDEFINED) {
 
             List<ModifyInventory> mod = new ArrayList<>();
             mod.add(new ModifyInventory(ModifyInventoryOperation.Remove, item));
@@ -5130,9 +5139,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    public void forceReAddItemBook(Item item, MapleInventoryType type) { //used for mbook
+    public void forceReAddItemBook(Item item, InventoryType type) { //used for mbook
         forceReAddItemNoUpdate(item, type);
-        if (type != MapleInventoryType.UNDEFINED) {
+        if (type != InventoryType.UNDEFINED) {
             client.SendPacket(WvsContext.upgradeBook(item, this));
         }
     }
@@ -5167,11 +5176,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return gmLevel >= level;
     }
 
-    public final void expandInventoryRequest(MapleInventoryType nType, int nAmount) {
+    public final void expandInventoryRequest(InventoryType nType, int nAmount) {
 
     }
 
-    public final MapleInventory getInventory(MapleInventoryType type) {
+    public final MapleInventory getInventory(InventoryType type) {
         return inventory[type.ordinal()];
     }
 
@@ -5215,10 +5224,10 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         long expiration;
         final List<Integer> ret = new ArrayList<>();
         final long currenttime = System.currentTimeMillis();
-        final List<Triple<MapleInventoryType, Item, Boolean>> toberemove = new ArrayList<>(); // This is here to prevent deadlock.
+        final List<Triple<InventoryType, Item, Boolean>> toberemove = new ArrayList<>(); // This is here to prevent deadlock.
         final List<Item> tobeunlock = new ArrayList<>(); // This is here to prevent deadlock.
 
-        for (final MapleInventoryType inv : MapleInventoryType.values()) {
+        for (final InventoryType inv : InventoryType.values()) {
             for (final Item item : getInventory(inv)) {
                 expiration = item.getExpiration();
 
@@ -5238,7 +5247,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             }
         }
         Item item;
-        for (final Triple<MapleInventoryType, Item, Boolean> itemz : toberemove) {
+        for (final Triple<InventoryType, Item, Boolean> itemz : toberemove) {
             item = itemz.getMid();
             getInventory(itemz.getLeft()).removeItem(item.getPosition(), item.getQuantity(), false);
             if (itemz.getRight() && getInventory(GameConstants.getInventoryType(item.getItemId())).getNextFreeSlot() > -1) {
@@ -5251,7 +5260,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 final Pair<Integer, String> replace = ii.replaceItemInfo(item.getItemId());
                 if (replace != null && replace.left > 0) {
                     Item theNewItem;
-                    if (GameConstants.getInventoryType(replace.left) == MapleInventoryType.EQUIP) {
+                    if (GameConstants.getInventoryType(replace.left) == InventoryType.EQUIP) {
                         theNewItem = ii.getEquipById(replace.left);
                         theNewItem.setPosition(item.getPosition());
                     } else {
@@ -5429,7 +5438,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public final List<Pair<Integer, Long>> getCompletedMedals() {
         List<Pair<Integer, Long>> ret = new ArrayList<>();
-        quests.values().stream().filter((q) -> (q.getStatus() == QuestState.Completed && !q.getQuest().isBlocked() && q.getQuest().getMedalItem() > 0 && GameConstants.getInventoryType(q.getQuest().getMedalItem()) == MapleInventoryType.EQUIP)).forEach((q) -> {
+        quests.values().stream().filter((q) -> (q.getStatus() == QuestState.Completed && !q.getQuest().isBlocked() && q.getQuest().getMedalItem() > 0 && GameConstants.getInventoryType(q.getQuest().getMedalItem()) == InventoryType.EQUIP)).forEach((q) -> {
             ret.add(new Pair<>(q.getQuest().getId(), q.getCompletionTime()));
         });
         return ret;
@@ -5790,7 +5799,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             return;
         }
 
-        final MapleJob currentJob = MapleJob.getById(job);
+        final Jobs currentJob = Jobs.getById(job);
 
         // Max HP and MP allocation
         int maxhp = stats.getMaxHp();
@@ -6810,7 +6819,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      */
     public void sortInventory(byte nType) { // nType : 1 = Equipment, 2 = Use, 3 = Setup, 4 = Etc, 5 = Cash.
         // Gather Handler
-        final MapleInventoryType invType = MapleInventoryType.getByType((nType));
+        final InventoryType invType = InventoryType.getByType((nType));
         MapleInventory Inv = getInventory(invType);
 
         final List<Item> itemMap = new LinkedList<>();
@@ -6831,7 +6840,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
         // Sort Handler
         setScrolledPosition((short) 0);
-        final MapleInventoryType pInvType = MapleInventoryType.getByType((byte) nType);
+        final InventoryType pInvType = InventoryType.getByType((byte) nType);
 
         final MapleInventory pInv = getInventory(pInvType); // MapleInventoryType
         boolean sorted = false;
@@ -7442,7 +7451,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     }
 
-    public final MapleKeyLayout getKeyLayout() {
+    public final KeyLayout getKeyLayout() {
         return this.keylayout;
     }
 
@@ -7760,14 +7769,14 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public final boolean hasEquipped(int itemid) {
-        return inventory[MapleInventoryType.EQUIPPED.ordinal()].countById(itemid) >= 1;
+        return inventory[InventoryType.EQUIPPED.ordinal()].countById(itemid) >= 1;
     }
 
     public final boolean haveItem(int itemid, int quantity, boolean checkEquipped, boolean greaterOrEquals) {
-        final MapleInventoryType type = GameConstants.getInventoryType(itemid);
+        final InventoryType type = GameConstants.getInventoryType(itemid);
         int possesed = inventory[type.ordinal()].countById(itemid);
-        if (checkEquipped && type == MapleInventoryType.EQUIP) {
-            possesed += inventory[MapleInventoryType.EQUIPPED.ordinal()].countById(itemid);
+        if (checkEquipped && type == InventoryType.EQUIP) {
+            possesed += inventory[InventoryType.EQUIPPED.ordinal()].countById(itemid);
         }
         if (greaterOrEquals) {
             return possesed >= quantity;
@@ -7952,7 +7961,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void clearAllCooldowns() {
         List<Pair<Integer, Integer>> cooldowns = new ArrayList<>();
 
-        for (MapleCoolDownValueHolder m : getCooldowns()) {
+        for (CoolDownValueHolder m : getCooldowns()) {
             final int skil = m.skillId;
             removeCooldown(skil);
 
@@ -7989,7 +7998,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
         client.SendPacket(CField.skillCooldown(skillId, length));
 
-        coolDowns.put(skillId, new MapleCoolDownValueHolder(skillId, startTime, length * 1000));
+        coolDowns.put(skillId, new CoolDownValueHolder(skillId, startTime, length * 1000));
     }
 
     public void removeCooldown(int skillId) {
@@ -8007,9 +8016,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      *
      * @param cooldowns
      */
-    public void giveCoolDowns(final List<MapleCoolDownValueHolder> cooldowns) {
+    public void giveCoolDowns(final List<CoolDownValueHolder> cooldowns) {
         if (cooldowns != null) {
-            for (MapleCoolDownValueHolder cooldown : cooldowns) {
+            for (CoolDownValueHolder cooldown : cooldowns) {
                 coolDowns.put(cooldown.skillId, cooldown);
             }
         } else {
@@ -8030,7 +8039,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                         long startTime = rs.getLong("StartTime");
                         long length = rs.getLong("length");
 
-                        coolDowns.put(skillId, new MapleCoolDownValueHolder(skillId, startTime, length));
+                        coolDowns.put(skillId, new CoolDownValueHolder(skillId, startTime, length));
 
                         cooldowns_packet.add(new Pair<>(skillId, (int) (length / 1000)));
                     }
@@ -8057,9 +8066,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return diseases.size();
     }
 
-    public List<MapleCoolDownValueHolder> getCooldowns() {
-        List<MapleCoolDownValueHolder> ret = new ArrayList<>();
-        for (MapleCoolDownValueHolder mc : coolDowns.values()) {
+    public List<CoolDownValueHolder> getCooldowns() {
+        List<CoolDownValueHolder> ret = new ArrayList<>();
+        for (CoolDownValueHolder mc : coolDowns.values()) {
             if (mc != null) {
                 ret.add(mc);
             }
@@ -8069,17 +8078,17 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Diseases">
-    public final List<MapleDiseaseValueHolder> getAllDiseases() {
+    public final List<DiseaseValueHolder> getAllDiseases() {
         return diseases.values().stream().collect(Collectors.toList());
     }
 
-    public final boolean hasDisease(final MapleDisease dis) {
+    public final boolean hasDisease(final Disease dis) {
         return diseases.containsKey(dis);
     }
 
-    public void giveDebuff(MapleDisease disease, MobSkill skill) {
+    public void giveDebuff(Disease disease, MobSkill skill) {
         if ((this.map != null) && (!hasDisease(disease))) {
-            if ((disease != MapleDisease.SEDUCE) && (disease != MapleDisease.STUN) && (disease != MapleDisease.FLAG)
+            if ((disease != Disease.SEDUCE) && (disease != Disease.STUN) && (disease != Disease.FLAG)
                     && (getBuffedValue(CharacterTemporaryStat.AdvancedBless) != null)) {
                 return;
             }
@@ -8092,17 +8101,17 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 return;
             }
 
-            this.diseases.put(disease, new MapleDiseaseValueHolder(disease, System.currentTimeMillis(), skill.getDuration() - this.stats.decreaseDebuff));
+            this.diseases.put(disease, new DiseaseValueHolder(disease, System.currentTimeMillis(), skill.getDuration() - this.stats.decreaseDebuff));
             this.client.SendPacket(BuffPacket.giveDebuff(disease, skill));
             this.map.broadcastPacket(this, BuffPacket.giveForeignDebuff(this.id, disease, skill), false);
 
-            if ((skill.getX() > 0) && (disease == MapleDisease.POISON)) {
+            if ((skill.getX() > 0) && (disease == Disease.POISON)) {
                 addHP((int) (-(skill.getX() * ((skill.getDuration() - this.stats.decreaseDebuff) / 1000L))));
             }
         }
     }
 
-    public final void giveSilentDebuff(final List<MapleDiseaseValueHolder> ld) {
+    public final void giveSilentDebuff(final List<DiseaseValueHolder> ld) {
         if (ld != null) {
             ld.stream().forEach((disease) -> {
                 diseases.put(disease.disease, disease);
@@ -8110,7 +8119,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    public void dispelDebuff(MapleDisease debuff) {
+    public void dispelDebuff(Disease debuff) {
         if (hasDisease(debuff)) {
             client.SendPacket(BuffPacket.cancelDebuff(debuff));
             map.broadcastPacket(this, BuffPacket.cancelForeignDebuff(id, debuff), false);
@@ -8139,11 +8148,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void sendNote(String to, String msg, int fame) {
-        MapleCharacterUtil.sendNote(to, getName(), msg, fame);
+        CharacterUtil.sendNote(to, getName(), msg, fame);
     }
 
     public void sendMapleGMNote(String to, String msg, int fame) {
-        MapleCharacterUtil.sendNote(to, "MapleGM", msg, fame);
+        CharacterUtil.sendNote(to, "MapleGM", msg, fame);
     }
 
     public void showNote() {
@@ -8696,7 +8705,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void removeAll(int id, boolean show) {
-        MapleInventoryType type = GameConstants.getInventoryType(id);
+        InventoryType type = GameConstants.getInventoryType(id);
         int possessed = getInventory(type).countById(id);
 
         if (possessed > 0) {
@@ -8719,7 +8728,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public Triple<List<MapleRing>, List<MapleRing>, List<MapleRing>> getRings(boolean equip) {
-        MapleInventory iv = getInventory(MapleInventoryType.EQUIPPED);
+        MapleInventory iv = getInventory(InventoryType.EQUIPPED);
         List<Item> equipped = iv.newList();
         Collections.sort(equipped);
         List<MapleRing> crings = new ArrayList<>(), frings = new ArrayList<>(), mrings = new ArrayList<>();
@@ -8750,7 +8759,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             }
         }
         if (equip) {
-            iv = getInventory(MapleInventoryType.EQUIP);
+            iv = getInventory(InventoryType.EQUIP);
             for (Item ite : iv.list()) {
                 Equip item = (Equip) ite;
                 if (item.getRing() != null && GameConstants.isCrushRing(item.getItemId())) {
@@ -8873,7 +8882,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void spawnPet(byte slot, boolean lead, boolean broadcast) {
-        final Item item = getInventory(MapleInventoryType.CASH).getItem(slot);
+        final Item item = getInventory(InventoryType.CASH).getItem(slot);
         if (item == null || item.getItemId() >= 5010000 || item.getItemId() < 5000000) {
             return;
         }
@@ -8886,7 +8895,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     MapleInventoryManipulator.removeFromSlot(client, MapleInventoryType.CASH, slot, (short) 1, false);
                 }*/
                 getMap().spawnItemDrop(this, this, new client.inventory.Item(item.getItemId() + 1, (byte) 0, (short) 1, (byte) 0), this.getPosition(), true, true, false);
-                MapleInventoryManipulator.removeFromSlot(client, MapleInventoryType.CASH, slot, (short) 1, false);
+                MapleInventoryManipulator.removeFromSlot(client, InventoryType.CASH, slot, (short) 1, false);
                 break;
             }
             default: {
@@ -8934,7 +8943,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                         addPet(pet);
                         pet.setSummoned(getPetIndex(pet) + 1); // Get the Pet's Index
                         if (broadcast && getMap() != null) {
-                            client.SendPacket(PetPacket.updatePet(pet, getInventory(MapleInventoryType.CASH).getItem(slot), false));
+                            client.SendPacket(PetPacket.updatePet(pet, getInventory(InventoryType.CASH).getItem(slot), false));
                             //List<ModifyInventory> aMod = new ArrayList<>();
                             //Item pItem = pet.getItem();
                             //aMod.add(new ModifyInventory(ModifyInventoryOperation.Remove, pItem));
@@ -9180,7 +9189,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void expandInventory(byte type, int amount) {
-        final MapleInventory inv = getInventory(MapleInventoryType.getByType(type));
+        final MapleInventory inv = getInventory(InventoryType.getByType(type));
         inv.addSlot((byte) amount);
         client.SendPacket(WvsContext.getSlotUpdate(type, (byte) inv.getSlotLimit()));
     }
@@ -9261,11 +9270,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         this.marriageItemId = mi;
     }
 
-    public MapleMarriage getMarriage() {
+    public Marriage getMarriage() {
         return marriage;
     }
 
-    public void setMarriage(MapleMarriage marriage) {
+    public void setMarriage(Marriage marriage) {
         this.marriage = marriage;
     }
 
@@ -9856,7 +9865,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         this.scrolledPosition = s;
     }
 
-    public MapleTrait getTrait(MapleTraitType t) {
+    public Trait getTrait(MapleTraitType t) {
         return traits.get(t);
     }
 
@@ -10027,13 +10036,13 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void disease(int type, int level) {
-        if (MapleDisease.getBySkill(type) == null) {
+        if (Disease.getBySkill(type) == null) {
             return;
         }
         chair = 0;
         client.SendPacket(CField.cancelChair(id, -1));
         map.broadcastPacket(this, CField.showChair(id, 0), false);
-        giveDebuff(MapleDisease.getBySkill(type), MobSkillFactory.getMobSkill(type, level));
+        giveDebuff(Disease.getBySkill(type), MobSkillFactory.getMobSkill(type, level));
     }
 
     public boolean inPVP() {
@@ -10223,7 +10232,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                         if (getBuffSource(CharacterTemporaryStat.Guard) == 31101003) {
                             StatEffect eff = this.getStatForBuff(CharacterTemporaryStat.Guard);
                             if (eff.makeChanceResult()) {
-                                attacker.disease(MapleDisease.STUN.getDisease(), 1);
+                                attacker.disease(Disease.STUN.getDisease(), 1);
                             }
                         }
                     }
@@ -10483,7 +10492,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     @Override
     public Map<Short, Integer> getEquips(boolean fusionAnvil) {
         final Map<Short, Integer> eq = new HashMap<>();
-        for (final Item item : inventory[MapleInventoryType.EQUIPPED.ordinal()].newList()) {
+        for (final Item item : inventory[InventoryType.EQUIPPED.ordinal()].newList()) {
             int itemId = item.getItemId();
             if (item instanceof Equip && fusionAnvil) {
                 if (((Equip) item).getFusionAnvil() != 0) {
@@ -10498,7 +10507,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     @Override
     public Map<Short, Integer> getSecondaryEquips(boolean fusionAnvil) {
         final Map<Short, Integer> eq = new HashMap<>();
-        for (final Item item : inventory[MapleInventoryType.EQUIPPED.ordinal()].newList()) {
+        for (final Item item : inventory[InventoryType.EQUIPPED.ordinal()].newList()) {
             int itemId = item.getItemId();
             if (item instanceof Equip) {
                 if (fusionAnvil) {
@@ -10524,7 +10533,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     @Override
     public Map<Short, Integer> getTotems() {
         final Map<Short, Integer> eq = new HashMap<>();
-        for (final Item item : inventory[MapleInventoryType.EQUIPPED.ordinal()].newList()) {
+        for (final Item item : inventory[InventoryType.EQUIPPED.ordinal()].newList()) {
             eq.put((short) (item.getPosition() + 5000), item.getItemId());
         }
         return eq;
@@ -10588,7 +10597,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      return cardStack;
      } // running id plox
      */
-    public final MapleCharacterCards getCharacterCard() {
+    public final CharacterCards getCharacterCard() {
         return characterCard;
     }
 
@@ -11095,7 +11104,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     private static void addMedalString(final User c, final StringBuilder sb) {
-        final Item medal = c.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -46);
+        final Item medal = c.getInventory(InventoryType.EQUIPPED).getItem((byte) -46);
         if (medal != null) { // Medal
             sb.append("<");
             if (medal.getItemId() == 1142257 && GameConstants.isExplorer(c.getJob())) {
@@ -11114,7 +11123,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void updateReward() {
-        List<MapleReward> rewards = new LinkedList<>();
+        List<Rewards> rewards = new LinkedList<>();
         try (Connection con = Database.GetConnection()) {
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM rewards WHERE `cid`=?")) {
@@ -11125,7 +11134,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     //rewards.first();
                     //client.write(Reward.updateReward(rewards.getInt("id"), (byte) 9, rewards, size, 9));
                     while (rs.next()) {
-                        rewards.add(new MapleReward(
+                        rewards.add(new Rewards(
                                 rs.getInt("id"),
                                 rs.getLong("start"),
                                 rs.getLong("end"),
@@ -11145,15 +11154,15 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         client.SendPacket(Reward.updateReward(0, (byte) 9, rewards, 9));
     }
 
-    public MapleReward getReward(int id) {
-        MapleReward reward = null;
+    public Rewards getReward(int id) {
+        Rewards reward = null;
         try (Connection con = Database.GetConnection()) {
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM rewards WHERE `id` = ?")) {
                 ps.setInt(1, id);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        reward = new MapleReward(rs.getInt("id"), rs.getLong("start"), rs.getLong("end"), rs.getInt("type"), rs.getInt("itemId"), rs.getInt("mp"), rs.getInt("meso"), rs.getInt("exp"), rs.getString("desc"));
+                        reward = new Rewards(rs.getInt("id"), rs.getLong("start"), rs.getLong("end"), rs.getInt("type"), rs.getInt("itemId"), rs.getInt("mp"), rs.getInt("meso"), rs.getInt("exp"), rs.getString("desc"));
                     }
                 }
             }
@@ -12572,7 +12581,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         return false;
     }
 
-    public MapleCoreAura getCoreAura() {
+    public CoreAura getCoreAura() {
         return coreAura;
     }
 
@@ -12737,7 +12746,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             equip.setPosition((short) -10);
             equip.setQuantity((short) 1);
             equip.setGMLog("Job Advance");
-            forceReAddItemNoUpdate(equip, MapleInventoryType.EQUIPPED);
+            forceReAddItemNoUpdate(equip, InventoryType.EQUIPPED);
 
             List<ModifyInventory> mod = new ArrayList<>();
             mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, equip));
@@ -12751,8 +12760,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (level < 100) {
             return;
         }
-        int lazuli = getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11).getItemId();
-        int lapis = getInventory(MapleInventoryType.EQUIPPED).getItem((short) -10).getItemId();
+        int lazuli = getInventory(InventoryType.EQUIPPED).getItem((short) -11).getItemId();
+        int lapis = getInventory(InventoryType.EQUIPPED).getItem((short) -10).getItemId();
         if (lazuli == getZeroWeapon(false) && lapis == getZeroWeapon(true)) {
             return;
         }
@@ -12763,7 +12772,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             equip.setPosition((short) (i == 0 ? -11 : -10));
             equip.setQuantity((short) 1);
             equip.setGMLog("Zero Weapon Advance");
-            forceReAddItemNoUpdate(equip, MapleInventoryType.EQUIPPED);
+            forceReAddItemNoUpdate(equip, InventoryType.EQUIPPED);
 
             List<ModifyInventory> mod = new ArrayList<>();
             mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, equip));
@@ -12835,7 +12844,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             equip.setPosition((short) item[1]);
             equip.setQuantity((short) 1);
             equip.setGMLog("Female Mihile");
-            forceReAddItemNoUpdate(equip, MapleInventoryType.EQUIPPED);
+            forceReAddItemNoUpdate(equip, InventoryType.EQUIPPED);
 
             List<ModifyInventory> mod = new ArrayList<>();
             mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, equip));
@@ -12993,8 +13002,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         ret.guildContribution = guildContribution;
         ret.allianceRank = allianceRank;
         ret.setPosition(getTruePosition());
-        for (Item equip : getInventory(MapleInventoryType.EQUIPPED).newList()) {
-            ret.getInventory(MapleInventoryType.EQUIPPED).addFromDB(equip.copy());
+        for (Item equip : getInventory(InventoryType.EQUIPPED).newList()) {
+            ret.getInventory(InventoryType.EQUIPPED).addFromDB(equip.copy());
         }
         ret.skillMacros = skillMacros;
         ret.keylayout = keylayout;

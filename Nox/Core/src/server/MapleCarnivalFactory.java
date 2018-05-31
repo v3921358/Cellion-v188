@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import client.MapleDisease;
+import client.Disease;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
@@ -65,11 +65,11 @@ public class MapleCarnivalFactory {
             return MobSkillFactory.getMobSkill(skillid, 1); //level?
         }
 
-        public MapleDisease getDisease() {
+        public Disease getDisease() {
             if (skillid <= 0) {
-                return MapleDisease.getRandom();
+                return Disease.getRandom();
             }
-            return MapleDisease.getBySkill(skillid);
+            return Disease.getBySkill(skillid);
         }
     }
 }

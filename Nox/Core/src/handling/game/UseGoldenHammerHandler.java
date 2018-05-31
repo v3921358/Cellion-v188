@@ -3,7 +3,7 @@ package handling.game;
 import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.MapleInventoryManipulator;
 import server.Randomizer;
 import net.InPacket;
@@ -30,8 +30,8 @@ public class UseGoldenHammerHandler implements ProcessPacket<ClientSocket> {
         int itemId = iPacket.DecodeInt();
         iPacket.Skip(4);
         byte equipslot = (byte) iPacket.DecodeInt();
-        Item toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
-        Equip equip = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(equipslot);
+        Item toUse = c.getPlayer().getInventory(InventoryType.USE).getItem(slot);
+        Equip equip = (Equip) c.getPlayer().getInventory(InventoryType.EQUIP).getItem(equipslot);
 
         if (toUse == null || toUse.getItemId() != itemId || toUse.getQuantity() < 1) {
             c.SendPacket(WvsContext.enableActions());
@@ -52,7 +52,7 @@ public class UseGoldenHammerHandler implements ProcessPacket<ClientSocket> {
         }
         c.SendPacket(CSPacket.GoldenHammer((byte) 2, success));
         equip.setViciousHammer((byte) 1);
-        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, true);
+        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, true);
     }
 
 }

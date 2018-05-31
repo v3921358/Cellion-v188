@@ -3,7 +3,7 @@ package handling.game;
 import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import java.util.Map;
 import server.MapleItemInformationProvider;
 import net.InPacket;
@@ -26,7 +26,7 @@ public class NPCItemRepairHandler implements ProcessPacket<ClientSocket> {
             return;
         }
         final int position = iPacket.DecodeInt(); //who knows why this is a int
-        final MapleInventoryType type = position < 0 ? MapleInventoryType.EQUIPPED : MapleInventoryType.EQUIP;
+        final InventoryType type = position < 0 ? InventoryType.EQUIPPED : InventoryType.EQUIP;
         final Item item = c.getPlayer().getInventory(type).getItem((byte) position);
         if (item == null) {
             return;

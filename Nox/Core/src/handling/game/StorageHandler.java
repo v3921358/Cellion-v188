@@ -2,8 +2,8 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.ItemFlag;
-import client.inventory.MapleInventoryType;
+import enums.ItemFlag;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import server.MapleInventoryManipulator;
@@ -41,7 +41,7 @@ public class StorageHandler implements ProcessPacket<ClientSocket> {
         switch (mode) {
             case 4: {
                 byte type = iPacket.DecodeByte();
-                byte slot = storage.getSlot(MapleInventoryType.getByType(type), iPacket.DecodeByte());
+                byte slot = storage.getSlot(InventoryType.getByType(type), iPacket.DecodeByte());
                 Item item = storage.takeOut(slot);
 
                 if (item != null) {
@@ -60,7 +60,7 @@ public class StorageHandler implements ProcessPacket<ClientSocket> {
             case 5: {
                 byte slot = (byte) iPacket.DecodeShort();
                 int itemId = iPacket.DecodeInt();
-                MapleInventoryType type = GameConstants.getInventoryType(itemId);
+                InventoryType type = GameConstants.getInventoryType(itemId);
                 short quantity = iPacket.DecodeShort();
                 MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                 if (quantity < 1) {

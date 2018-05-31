@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.MapleSpecialStats.MapleSpecialStatUpdateType;
+import client.SpecialStats.MapleSpecialStatUpdateType;
 import net.InPacket;
 import tools.packet.WvsContext;
 import net.ProcessPacket;

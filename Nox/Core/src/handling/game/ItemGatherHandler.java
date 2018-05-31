@@ -3,7 +3,7 @@ package handling.game;
 import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -36,7 +36,7 @@ public class ItemGatherHandler implements ProcessPacket<ClientSocket> {
             return;
         }
         final byte mode = iPacket.DecodeByte();
-        final MapleInventoryType invType = MapleInventoryType.getByType(mode);
+        final InventoryType invType = InventoryType.getByType(mode);
         MapleInventory Inv = c.getPlayer().getInventory(invType);
 
         final List<Item> itemMap = new LinkedList<>();

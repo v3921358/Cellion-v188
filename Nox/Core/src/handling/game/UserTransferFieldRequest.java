@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import handling.cashshop.CashShopOperation;
 import service.ChannelServer;
@@ -65,9 +65,9 @@ public final class UserTransferFieldRequest implements ProcessPacket<ClientSocke
                         MapleMap to = chr.getMap().getReturnMap();
                         chr.changeMap(to, to.getPortal(0));
                     } else {
-                        c.SendPacket(CField.EffectPacket.useWheel((byte) (chr.getInventory(MapleInventoryType.CASH).countById(5510000) - 1)));
+                        c.SendPacket(CField.EffectPacket.useWheel((byte) (chr.getInventory(InventoryType.CASH).countById(5510000) - 1)));
                         chr.getStat().setHp(chr.getStat().getMaxHp() / 100 * 40, chr);
-                        MapleInventoryManipulator.removeById(c, MapleInventoryType.CASH, 5510000, 1, true, false);
+                        MapleInventoryManipulator.removeById(c, InventoryType.CASH, 5510000, 1, true, false);
 
                         MapleMap to = chr.getMap();
                         chr.changeMap(to, to.getPortal(0));

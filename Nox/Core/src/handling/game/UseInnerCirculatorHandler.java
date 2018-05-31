@@ -4,7 +4,7 @@ import client.InnerAbillity;
 import client.InnerSkillValueHolder;
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import java.util.LinkedList;
 import java.util.List;
 import server.MapleInventoryManipulator;
@@ -28,7 +28,7 @@ public class UseInnerCirculatorHandler implements ProcessPacket<ClientSocket> {
     public void Process(ClientSocket c, InPacket iPacket) {
         int itemid = iPacket.DecodeInt();
         short slot = (short) iPacket.DecodeInt();
-        Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
+        Item item = c.getPlayer().getInventory(InventoryType.USE).getItem(slot);
         if (item.getItemId() == itemid) {
             List<InnerSkillValueHolder> newValues = new LinkedList<>();
             int i = 0;
@@ -53,7 +53,7 @@ public class UseInnerCirculatorHandler implements ProcessPacket<ClientSocket> {
                 ability++;
                 //c.getPlayer().changeSkillLevel(SkillFactory.getSkill(isvh.getSkillId()), isvh.getSkillLevel(), isvh.getSkillLevel());
             }
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
+            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
 
             //c.write(CField.gameMsg("Inner Potential has been reconfigured.")); //not sure if it's working
             c.getPlayer().dropMessage(5, "Inner Potential has been reconfigured.");

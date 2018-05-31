@@ -4,9 +4,9 @@ import java.util.Collections;
 
 import client.ClientSocket;
 import client.inventory.Equip;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.ModifyInventory;
-import client.inventory.ModifyInventoryOperation;
+import enums.ModifyInventoryOperation;
 import constants.GameConstants;
 import server.maps.objects.User;
 import net.InPacket;
@@ -38,7 +38,7 @@ public class ZeroCashItemShare implements ProcessPacket<ClientSocket> {
         int position = iPacket.DecodeInt();
         boolean isShared = iPacket.DecodeByte() > 0;
         byte pos = (byte) (-100 - position);
-        Equip alpha = (Equip) chr.getInventory(MapleInventoryType.EQUIPPED).getItem(pos);
+        Equip alpha = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem(pos);
         if (alpha != null) {
             alpha.setBetaShare(isShared);
         }

@@ -1,5 +1,7 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
+import enums.ExpType;
 import java.util.EnumMap;
 import java.util.Map.Entry;
 import net.OutPacket;
@@ -14,9 +16,9 @@ public class ExpIncreaseMessage implements MessageInterface {
     private final int nIncExp, restFieldEXPRate;
     private final boolean bOnQuest;
     private final byte questBonusEXPRate;
-    private final EnumMap<ExpGainTypes, Integer> expIncreaseStats;
+    private final EnumMap<ExpType, Integer> expIncreaseStats;
 
-    public ExpIncreaseMessage(boolean bIsLastHit, int nIncExp, boolean bOnQuest, byte questBonusEXPRate, int restFieldEXPRate, EnumMap<ExpGainTypes, Integer> expIncreaseStats) {
+    public ExpIncreaseMessage(boolean bIsLastHit, int nIncExp, boolean bOnQuest, byte questBonusEXPRate, int restFieldEXPRate, EnumMap<ExpType, Integer> expIncreaseStats) {
         this.bIsLastHit = bIsLastHit;
         this.nIncExp = nIncExp;
         this.bOnQuest = bOnQuest; // TODO: Find out where this comes from :( a quest? which one
@@ -30,14 +32,14 @@ public class ExpIncreaseMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.ExpIncrease.getType());
+        oPacket.EncodeByte(MessageOpcodesType.ExpIncrease.getType());
         oPacket.EncodeByte(bIsLastHit ? 1 : 0);//bIsLastHit [White message]
         oPacket.EncodeInt(nIncExp);//nIncExp
         oPacket.EncodeByte(bOnQuest ? 1 : 0);//bOnQuest
 
         int flag = 0;
-        for (Entry<ExpGainTypes, Integer> v : expIncreaseStats.entrySet()) {
-            ExpGainTypes gainType = v.getKey();
+        for (Entry<ExpType, Integer> v : expIncreaseStats.entrySet()) {
+            ExpType gainType = v.getKey();
 
             flag |= gainType.getValue(); // add to total flag value
         }
@@ -47,11 +49,11 @@ public class ExpIncreaseMessage implements MessageInterface {
         /// Write EXP given to each individual message
         /// >> We could also use a loop here, however it would be much easier to keep the same order as it is on client.exe
         /// >> if anything gets changed in future
-        if (expIncreaseStats.containsKey(ExpGainTypes.MobBonus)) {//if ((flag & ExpGainTypes.MobBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.MobBonus));
+        if (expIncreaseStats.containsKey(ExpType.MobBonus)) {//if ((flag & ExpGainTypes.MobBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.MobBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.PartyBonusPercentage)) {//if ((flag & ExpGainTypes.PartyBonusPercentage.getValue()) != 0) {
-            oPacket.EncodeByte(expIncreaseStats.get(ExpGainTypes.PartyBonusPercentage));
+        if (expIncreaseStats.containsKey(ExpType.PartyBonusPercentage)) {//if ((flag & ExpGainTypes.PartyBonusPercentage.getValue()) != 0) {
+            oPacket.EncodeByte(expIncreaseStats.get(ExpType.PartyBonusPercentage));
         }
 
         if (bOnQuest) {
@@ -61,83 +63,83 @@ public class ExpIncreaseMessage implements MessageInterface {
             oPacket.EncodeByte(questBonusEXPRate); // quest bonus rate
         }
 
-        if (expIncreaseStats.containsKey(ExpGainTypes.WeddingBonus)) {//if ((flag & ExpGainTypes.WeddingBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.WeddingBonus));
+        if (expIncreaseStats.containsKey(ExpType.WeddingBonus)) {//if ((flag & ExpGainTypes.WeddingBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.WeddingBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.PartyBonus)) {//if ((flag & ExpGainTypes.PartyBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.PartyBonus));
+        if (expIncreaseStats.containsKey(ExpType.PartyBonus)) {//if ((flag & ExpGainTypes.PartyBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.PartyBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.ItemBonus)) {//if ((flag & ExpGainTypes.ItemBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.ItemBonus));
+        if (expIncreaseStats.containsKey(ExpType.ItemBonus)) {//if ((flag & ExpGainTypes.ItemBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.ItemBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.PremiumIpBonus)) {//if ((flag & ExpGainTypes.PremiumIpBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.PremiumIpBonus));
+        if (expIncreaseStats.containsKey(ExpType.PremiumIpBonus)) {//if ((flag & ExpGainTypes.PremiumIpBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.PremiumIpBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.RainbowWeekBonus)) {//if ((flag & ExpGainTypes.RainbowWeekBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.RainbowWeekBonus));
+        if (expIncreaseStats.containsKey(ExpType.RainbowWeekBonus)) {//if ((flag & ExpGainTypes.RainbowWeekBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.RainbowWeekBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.BoomUpBonus)) {//if ((flag & ExpGainTypes.BoomUpBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.BoomUpBonus));
+        if (expIncreaseStats.containsKey(ExpType.BoomUpBonus)) {//if ((flag & ExpGainTypes.BoomUpBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.BoomUpBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.ExpBuffBonus)) {//if ((flag & ExpGainTypes.ExpBuffBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.ExpBuffBonus));
+        if (expIncreaseStats.containsKey(ExpType.ExpBuffBonus)) {//if ((flag & ExpGainTypes.ExpBuffBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.ExpBuffBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.PsdBonus)) {//if ((flag & ExpGainTypes.PsdBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.PsdBonus));
+        if (expIncreaseStats.containsKey(ExpType.PsdBonus)) {//if ((flag & ExpGainTypes.PsdBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.PsdBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.IndieBonus)) {//if ((flag & ExpGainTypes.IndieBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.IndieBonus));
+        if (expIncreaseStats.containsKey(ExpType.IndieBonus)) {//if ((flag & ExpGainTypes.IndieBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.IndieBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.RelaxBonus)) {//if ((flag & ExpGainTypes.RelaxBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.RelaxBonus));
+        if (expIncreaseStats.containsKey(ExpType.RelaxBonus)) {//if ((flag & ExpGainTypes.RelaxBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.RelaxBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.InstallItemBonus)) {//if ((flag & ExpGainTypes.InstallItemBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.InstallItemBonus));
+        if (expIncreaseStats.containsKey(ExpType.InstallItemBonus)) {//if ((flag & ExpGainTypes.InstallItemBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.InstallItemBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.AzwanWinnerBonus)) {//if ((flag & ExpGainTypes.AzwanWinnerBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.AzwanWinnerBonus));
+        if (expIncreaseStats.containsKey(ExpType.AzwanWinnerBonus)) {//if ((flag & ExpGainTypes.AzwanWinnerBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.AzwanWinnerBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.IncExpR)) {//if ((flag & ExpGainTypes.IncExpR.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.IncExpR));
+        if (expIncreaseStats.containsKey(ExpType.IncExpR)) {//if ((flag & ExpGainTypes.IncExpR.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.IncExpR));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.ValuePackBonus)) {//if ((flag & ExpGainTypes.ValuePackBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.ValuePackBonus));
+        if (expIncreaseStats.containsKey(ExpType.ValuePackBonus)) {//if ((flag & ExpGainTypes.ValuePackBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.ValuePackBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.IncPQExpR)) {//if ((flag & ExpGainTypes.IncPQExpR.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.IncPQExpR));
+        if (expIncreaseStats.containsKey(ExpType.IncPQExpR)) {//if ((flag & ExpGainTypes.IncPQExpR.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.IncPQExpR));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.BaseAddExp)) {//if ((flag & ExpGainTypes.BaseAddExp.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.BaseAddExp));
+        if (expIncreaseStats.containsKey(ExpType.BaseAddExp)) {//if ((flag & ExpGainTypes.BaseAddExp.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.BaseAddExp));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.BloodAllianceBonus)) {//if ((flag & ExpGainTypes.BloodAllianceBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.BloodAllianceBonus));
+        if (expIncreaseStats.containsKey(ExpType.BloodAllianceBonus)) {//if ((flag & ExpGainTypes.BloodAllianceBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.BloodAllianceBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.FreezeEventBonus)) {//if ((flag & ExpGainTypes.FreezeEventBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.FreezeEventBonus));
+        if (expIncreaseStats.containsKey(ExpType.FreezeEventBonus)) {//if ((flag & ExpGainTypes.FreezeEventBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.FreezeEventBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.RestFieldBonus)) {//if ((flag & ExpGainTypes.RestFieldBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.RestFieldBonus));// bonus exp
+        if (expIncreaseStats.containsKey(ExpType.RestFieldBonus)) {//if ((flag & ExpGainTypes.RestFieldBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.RestFieldBonus));// bonus exp
             oPacket.EncodeInt(restFieldEXPRate);//rate
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.HpRateBonus)) {//if ((flag & ExpGainTypes.HpRateBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.HpRateBonus));
+        if (expIncreaseStats.containsKey(ExpType.HpRateBonus)) {//if ((flag & ExpGainTypes.HpRateBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.HpRateBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.FieldBonus)) {//if ((flag & ExpGainTypes.FieldBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.FieldBonus));
+        if (expIncreaseStats.containsKey(ExpType.FieldBonus)) {//if ((flag & ExpGainTypes.FieldBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.FieldBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.MobKillBonus)) {//if ((flag & ExpGainTypes.MobKillBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.MobKillBonus));
+        if (expIncreaseStats.containsKey(ExpType.MobKillBonus)) {//if ((flag & ExpGainTypes.MobKillBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.MobKillBonus));
         }
-        if (expIncreaseStats.containsKey(ExpGainTypes.LiveEventBonus)) {//if ((flag & ExpGainTypes.LiveEventBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.LiveEventBonus));
+        if (expIncreaseStats.containsKey(ExpType.LiveEventBonus)) {//if ((flag & ExpGainTypes.LiveEventBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.LiveEventBonus));
         }
         // Extra on global
-        if (expIncreaseStats.containsKey(ExpGainTypes.PartyRingBonus)) {//if ((flag & ExpGainTypes.PartyRingBonus.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.PartyRingBonus));
+        if (expIncreaseStats.containsKey(ExpType.PartyRingBonus)) {//if ((flag & ExpGainTypes.PartyRingBonus.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.PartyRingBonus));
         }
         // this should be last
-        if (expIncreaseStats.containsKey(ExpGainTypes.MonsterCardSetCompletionBonus)) {//if ((flag & ExpGainTypes.UNK1.getValue()) != 0) {
-            oPacket.EncodeInt(expIncreaseStats.get(ExpGainTypes.MonsterCardSetCompletionBonus));
+        if (expIncreaseStats.containsKey(ExpType.MonsterCardSetCompletionBonus)) {//if ((flag & ExpGainTypes.UNK1.getValue()) != 0) {
+            oPacket.EncodeInt(expIncreaseStats.get(ExpType.MonsterCardSetCompletionBonus));
         }
     }
 

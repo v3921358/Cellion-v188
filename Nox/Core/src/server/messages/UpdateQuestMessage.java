@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -21,7 +22,7 @@ public class UpdateQuestMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.QuestInfoEx.getType()); //messageType
+        oPacket.EncodeByte(MessageOpcodesType.QuestInfoEx.getType()); //messageType
         oPacket.EncodeInt(questId);
         oPacket.EncodeString(data);
     }

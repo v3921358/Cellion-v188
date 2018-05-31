@@ -2,13 +2,13 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Equip;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import handling.world.MaplePartyCharacter;
 import java.awt.Rectangle;
 import server.MapleItemInformationProvider;
 import server.StatEffect;
-import server.maps.FieldLimitType;
+import enums.FieldLimitType;
 import server.maps.MapleMap;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
@@ -421,7 +421,7 @@ public class _CommonPlayerOperationHandler {
                     c.getPlayer().getMap().broadcastPacket(CField.EffectPacket.showOwnPetLevelUp(c.getPlayer(), index));
                 }
             }
-            c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+            c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(InventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
             c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, index, true, true), true);
         } else {
             int newCloseness = pet.getCloseness() - 1;
@@ -432,7 +432,7 @@ public class _CommonPlayerOperationHandler {
             if (newCloseness < GameConstants.getClosenessNeededForLevel(pet.getLevel())) {
                 pet.setLevel(pet.getLevel() - 1);
             }
-            c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+            c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(InventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
             c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, c.getPlayer().getPetIndex(pet), false, true), true);
         }
         c.SendPacket(WvsContext.enableActions());

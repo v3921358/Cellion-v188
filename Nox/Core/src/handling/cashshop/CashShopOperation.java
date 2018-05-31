@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import client.ClientSocket;
 import client.ClientSocket.MapleClientLoginState;
 import client.buddy.Buddy;
-import client.buddy.BuddyResult;
+import enums.BuddyResult;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.ServerConstants;
 import handling.world.CharacterTransfer;
 import handling.world.World;
@@ -96,18 +96,18 @@ public class CashShopOperation {
         }
     }
 
-    private static MapleInventoryType getInventoryType(final int id) {
+    private static InventoryType getInventoryType(final int id) {
         switch (id) {
             case 50200093:
-                return MapleInventoryType.EQUIP;
+                return InventoryType.EQUIP;
             case 50200094:
-                return MapleInventoryType.USE;
+                return InventoryType.USE;
             case 50200197:
-                return MapleInventoryType.SETUP;
+                return InventoryType.SETUP;
             case 50200095:
-                return MapleInventoryType.ETC;
+                return InventoryType.ETC;
             default:
-                return MapleInventoryType.UNDEFINED;
+                return InventoryType.UNDEFINED;
         }
     }
 

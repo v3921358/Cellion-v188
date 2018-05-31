@@ -3,8 +3,8 @@ package handling.game;
 import client.ClientSocket;
 import client.anticheat.CheatingOffense;
 import client.inventory.Equip;
-import client.inventory.ItemType;
-import client.inventory.MapleInventoryType;
+import enums.ItemType;
+import enums.InventoryType;
 import client.inventory.ModifyInventory;
 import static handling.game._CommonPlayerOperationHandler.useItem;
 import handling.world.MaplePartyCharacter;
@@ -44,7 +44,7 @@ public class PetPickupHandler implements ProcessPacket<ClientSocket> {
             return;
         }
 
-        if (c.getPlayer().getInventory(MapleInventoryType.SETUP).getNumFreeSlot() < 1 || c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() < 1 || c.getPlayer().getInventory(MapleInventoryType.ETC).getNumFreeSlot() < 1 || c.getPlayer().getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() < 1 || c.getPlayer().getInventory(MapleInventoryType.CASH).getNumFreeSlot() < 1) {
+        if (c.getPlayer().getInventory(InventoryType.SETUP).getNumFreeSlot() < 1 || c.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() < 1 || c.getPlayer().getInventory(InventoryType.ETC).getNumFreeSlot() < 1 || c.getPlayer().getInventory(InventoryType.EQUIP).getNumFreeSlot() < 1 || c.getPlayer().getInventory(InventoryType.CASH).getNumFreeSlot() < 1) {
             c.getPlayer().dropMessage(5, "Your inventory appears to be full.");
             return;
         }

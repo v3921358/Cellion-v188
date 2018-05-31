@@ -3,7 +3,7 @@ package handling.game;
 import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import java.util.ArrayList;
 import server.MapleInventoryManipulator;

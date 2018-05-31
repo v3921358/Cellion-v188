@@ -2,7 +2,7 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.MapleInventoryManipulator;
 import net.InPacket;
 import tools.packet.WvsContext;
@@ -23,9 +23,9 @@ public class ItemSortHandler implements ProcessPacket<ClientSocket> {
     public void Process(ClientSocket c, InPacket iPacket) {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
-        final MapleInventoryType pInvType = MapleInventoryType.getByType(iPacket.DecodeByte());
+        final InventoryType pInvType = InventoryType.getByType(iPacket.DecodeByte());
 
-        if (pInvType == MapleInventoryType.UNDEFINED || c.getPlayer().hasBlockedInventory()) {
+        if (pInvType == InventoryType.UNDEFINED || c.getPlayer().hasBlockedInventory()) {
             c.SendPacket(WvsContext.enableActions());
             return;
         }

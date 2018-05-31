@@ -1,5 +1,6 @@
 package client.inventory;
 
+import enums.EnchantmentStats;
 import java.util.EnumMap;
 import java.util.Map;
 

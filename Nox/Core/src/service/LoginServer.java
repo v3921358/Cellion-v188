@@ -14,7 +14,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import service.ServerMode.MapleServerMode;
+import enums.ServerMode.MapleServerMode;
 import net.PacketDecoder;
 import net.PacketEncoder;
 import server.LoginAuthorization;

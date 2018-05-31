@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.PetCommand;
 import client.inventory.PetDataFactory;
 import constants.GameConstants;
@@ -53,7 +53,7 @@ public class PetCommandHandler implements ProcessPacket<ClientSocket> {
                     chr.getMap().broadcastPacket(PetPacket.showPetLevelUp(chr, petIndex));
                 }
                 //  chr.forceUpdateItem(pet.getItem());
-                c.SendPacket(PetPacket.updatePet(pet, chr.getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+                c.SendPacket(PetPacket.updatePet(pet, chr.getInventory(InventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
             }
         }
         chr.getMap().broadcastPacket(PetPacket.commandResponse(chr.getId(), (byte) petCommand.getSkillId(), petIndex, success, false));

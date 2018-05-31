@@ -5,7 +5,7 @@
  */
 package handling.cashshop;
 
-import client.MapleCharacterUtil;
+import client.CharacterUtil;
 import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleRing;
@@ -128,7 +128,7 @@ public class ItemPurchase {
             playerCashShopInfo(c);
             return;
         }
-        Triple CaseInfo = MapleCharacterUtil.getInfoByName(partnerName, c.getPlayer().getWorld());
+        Triple CaseInfo = CharacterUtil.getInfoByName(partnerName, c.getPlayer().getWorld());
         if ((CaseInfo == null) || (((Integer) CaseInfo.getLeft()) <= 0) || (((Integer) CaseInfo.getLeft()) == c.getPlayer().getId())) {
             playerCashShopInfo(c);
             return;

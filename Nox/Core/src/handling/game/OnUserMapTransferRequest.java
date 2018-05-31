@@ -23,7 +23,7 @@ package handling.game;
 
 import client.ClientSocket;
 import net.InPacket;
-import server.maps.FieldLimitType;
+import enums.FieldLimitType;
 import server.maps.objects.User;
 import tools.packet.CSPacket;
 import net.ProcessPacket;

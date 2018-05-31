@@ -7,11 +7,11 @@ import java.util.Random;
 
 import client.ClientSocket;
 import client.inventory.Enchant;
-import client.inventory.EnchantmentActions;
+import enums.EnchantmentActions;
 import client.inventory.EnchantmentScroll;
-import client.inventory.EnchantmentStats;
+import enums.EnchantmentStats;
 import client.inventory.Equip;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import net.InPacket;
 import server.MapleInventoryManipulator;
 import server.maps.objects.User;
@@ -82,9 +82,9 @@ public class EnchantmentHandler implements ProcessPacket<ClientSocket> {
                 pos = (short) iPacket.DecodeInt();
                 break;
         }
-        Equip equip = (Equip) chr.getInventory(MapleInventoryType.EQUIP).getItem(pos);
+        Equip equip = (Equip) chr.getInventory(InventoryType.EQUIP).getItem(pos);
         if (equip == null && enchant.getAction() != EnchantmentActions.TRANSFER_HAMMER_RESULT) {
-            equip = (Equip) chr.getInventory(MapleInventoryType.EQUIPPED).getItem(pos);
+            equip = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem(pos);
         }
         if (equip != null) {
             Equip copy = (Equip) equip.copy();
@@ -200,15 +200,15 @@ public class EnchantmentHandler implements ProcessPacket<ClientSocket> {
                     break;
                 case TRANSFER_HAMMER_RESULT:
                     short tracePos = iPacket.DecodeShort();
-                    Equip trace = (Equip) chr.getInventory(MapleInventoryType.EQUIP).getItem(tracePos);
+                    Equip trace = (Equip) chr.getInventory(InventoryType.EQUIP).getItem(tracePos);
                     if (trace == null) {
-                        trace = (Equip) chr.getInventory(MapleInventoryType.EQUIPPED).getItem(tracePos);
+                        trace = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem(tracePos);
                     }
                     trace.setSpellTrace((short) 0);
                     //trace.getStats().remove(EquipStat.SPELL_TRACE);
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.EQUIP, pos, (short) 1, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, pos, (short) 1, false);
                     trace.setPosition(pos);
-                    MapleInventoryManipulator.move(c, MapleInventoryType.EQUIP, tracePos, pos);
+                    MapleInventoryManipulator.move(c, InventoryType.EQUIP, tracePos, pos);
                     chr.forceUpdateItem(trace);
                     enchant.setNewEquip(trace);
                     break;

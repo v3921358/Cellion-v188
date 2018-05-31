@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -19,7 +20,7 @@ public class SystemMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.System.getType());
+        oPacket.EncodeByte(MessageOpcodesType.System.getType());
         oPacket.EncodeString(systemMessage);
     }
 

@@ -32,9 +32,9 @@ import server.maps.objects.User;
 import net.InPacket;
 import net.ProcessPacket;
 import server.StatEffect;
-import server.StatInfo;
+import enums.StatInfo;
 import server.maps.objects.ForceAtom;
-import server.maps.objects.ForceAtomType;
+import enums.ForceAtomType;
 import tools.packet.CField;
 
 public final class OrbitalFlameHandler implements ProcessPacket<ClientSocket> {

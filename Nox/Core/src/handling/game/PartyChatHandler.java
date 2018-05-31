@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleCharacterUtil;
+import client.CharacterUtil;
 import client.ClientSocket;
 import constants.ServerConstants;
 import handling.PacketThrottleLimits;
@@ -77,7 +77,7 @@ public class PartyChatHandler implements ProcessPacket<ClientSocket> {
                     c.Close();
                     break;
             }
-            World.Broadcast.broadcastGMMessage(WvsContext.broadcastMsg(6, "[GM Message] " + MapleCharacterUtil.makeMapleReadable(chr.getName())
+            World.Broadcast.broadcastGMMessage(WvsContext.broadcastMsg(6, "[GM Message] " + CharacterUtil.makeMapleReadable(chr.getName())
                             + " said (" + chattype + "): " + chattext));
 
         }

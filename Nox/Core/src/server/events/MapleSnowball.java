@@ -2,7 +2,7 @@ package server.events;
 
 import java.util.concurrent.ScheduledFuture;
 
-import client.MapleDisease;
+import client.Disease;
 import server.Timer.EventTimer;
 import server.life.MobSkillFactory;
 import server.maps.MapleMap;
@@ -232,7 +232,7 @@ public class MapleSnowball extends MapleEvent {
                             }, 10000);
                             for (User chrz : chr.getMap().getCharacters()) {
                                 if ((ball.getTeam() == 0 && chr.getTruePosition().y < -80) || (ball.getTeam() == 1 && chr.getTruePosition().y > -80)) {
-                                    chrz.giveDebuff(MapleDisease.SEDUCE, MobSkillFactory.getMobSkill(128, 1)); //go left
+                                    chrz.giveDebuff(Disease.SEDUCE, MobSkillFactory.getMobSkill(128, 1)); //go left
                                 }
                             }
                         }

@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.Stat;
+import enums.Stat;
 import client.PlayerStats;
 import constants.GameConstants;
 import java.util.EnumMap;

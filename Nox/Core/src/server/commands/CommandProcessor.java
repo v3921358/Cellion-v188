@@ -34,8 +34,8 @@ import constants.ServerConstants.CommandType;
 import constants.ServerConstants.PlayerGMRank;
 import database.Database;
 import java.sql.Connection;
-import scripting.provider.NPCChatByType;
-import scripting.provider.NPCChatType;
+import enums.NPCInterfaceType;
+import enums.NPCChatType;
 import service.ChannelServer;
 import server.maps.objects.User;
 import tools.LogHelper;
@@ -142,7 +142,7 @@ public class CommandProcessor {
             }
         }
 
-        c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage.toString(), NPCChatByType.NPC_Cancellable));
+        c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage.toString(), NPCInterfaceType.NPC_Cancellable));
     }
 
     public static boolean processCommand(ClientSocket c, String line, CommandType type) {

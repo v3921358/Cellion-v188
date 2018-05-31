@@ -3,7 +3,7 @@ package handling.game;
 import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.ModifyInventory;
-import client.inventory.ModifyInventoryOperation;
+import enums.ModifyInventoryOperation;
 import constants.ItemConstants;
 import java.util.ArrayList;
 import java.util.List;

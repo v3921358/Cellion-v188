@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -19,7 +20,7 @@ public class CoreInventoryMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.CoreInventory.getType());
+        oPacket.EncodeByte(MessageOpcodesType.CoreInventory.getType());
         oPacket.EncodeByte(mode);
         switch (mode) {
             case 0x16:

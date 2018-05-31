@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import java.util.List;
 
 import net.OutPacket;
@@ -21,7 +22,7 @@ public class ItemProtectExpireMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.ItemProtectExpire.getType());
+        oPacket.EncodeByte(MessageOpcodesType.ItemProtectExpire.getType());
         oPacket.EncodeByte(items.size());
         for (Integer item : items) {
             oPacket.EncodeInt(item);

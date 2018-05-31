@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -16,7 +17,7 @@ public class CommitmentMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.Commitment.getType());
+        oPacket.EncodeByte(MessageOpcodesType.Commitment.getType());
         oPacket.EncodeInt(0);
         oPacket.EncodeByte(0);
     }

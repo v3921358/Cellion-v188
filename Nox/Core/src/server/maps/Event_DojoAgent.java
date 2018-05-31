@@ -2,7 +2,7 @@ package server.maps;
 
 import java.awt.Point;
 
-import client.MapleTrait.MapleTraitType;
+import client.Trait.MapleTraitType;
 import constants.GameConstants;
 import handling.world.MaplePartyCharacter;
 import service.ChannelServer;

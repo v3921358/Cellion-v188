@@ -4,12 +4,12 @@
 package server.commands;
 
 import client.ClientSocket;
-import client.MapleDisease;
-import client.Stat;
+import client.Disease;
+import enums.Stat;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryIdentifier;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.MapleRing;
 import constants.GameConstants;
 import constants.ServerConstants;
@@ -24,8 +24,8 @@ import net.OutPacket;
 import provider.data.HexTool;
 import scripting.EventInstanceManager;
 import scripting.EventManager;
-import scripting.provider.NPCChatByType;
-import scripting.provider.NPCChatType;
+import enums.NPCInterfaceType;
+import enums.NPCChatType;
 import scripting.provider.NPCScriptManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
@@ -40,7 +40,7 @@ import server.life.MonsterInformationProvider;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.SavedLocationType;
+import enums.SavedLocationType;
 import server.maps.objects.Pet;
 import server.maps.objects.User;
 import server.quest.Quest;
@@ -414,7 +414,7 @@ public class CommandVault {
                 for (User chr : player.getMap().getCharacters()) {
                     if (!chr.isIntern()) {
                         chr.cancelAllBuffs();
-                        chr.giveDebuff(MapleDisease.SEAL, MobSkillFactory.getMobSkill(120, 1));
+                        chr.giveDebuff(Disease.SEAL, MobSkillFactory.getMobSkill(120, 1));
                         //MapleInventoryManipulator.removeById(chr.getClient(), MapleInventoryType.USE, 2100067, chr.getItemQuantity(2100067, false), true, true);
                         //chr.gainItem(2100067, 30);
                         //MapleInventoryManipulator.removeById(chr.getClient(), MapleInventoryType.ETC, 4031868, chr.getItemQuantity(4031868, false), true, true);
@@ -700,7 +700,7 @@ public class CommandVault {
                             c.getPlayer().dropMessage(6, "Sorry, that search call is unavailable");
                             break;
                     }
-                    c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sb.toString(), NPCChatByType.NPC_Cancellable));
+                    c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sb.toString(), NPCInterfaceType.NPC_Cancellable));
                     break;
             }
             return 0;
@@ -1050,14 +1050,14 @@ public class CommandVault {
                         result += singleRetItem;
                     } else {
                         result += "\r\n#bCouldn't load all items, there are too many results.#k";
-                        c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, result, NPCChatByType.NPC_Cancellable));
+                        c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, result, NPCInterfaceType.NPC_Cancellable));
                         return 1;
                     }
                 }
             } else {
                 result = "No Items Found";
             }
-            c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OnAskMenu, result, NPCChatByType.NPC_Cancellable));
+            c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OnAskMenu, result, NPCInterfaceType.NPC_Cancellable));
             return 1;
         }
     }
@@ -1083,7 +1083,7 @@ public class CommandVault {
                 c.getPlayer().dropMessage(5, itemName + " does not exist");
             } else {
                 Item toDrop;
-                if (GameConstants.getInventoryType(itemId) == MapleInventoryType.EQUIP) {
+                if (GameConstants.getInventoryType(itemId) == InventoryType.EQUIP) {
 
                     toDrop = (Equip) ii.getEquipById(itemId);
                 } else {

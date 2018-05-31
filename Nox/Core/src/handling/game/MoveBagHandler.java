@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.MapleInventoryManipulator;
 import net.InPacket;
 import tools.packet.WvsContext;
@@ -32,6 +32,6 @@ public class MoveBagHandler implements ProcessPacket<ClientSocket> {
             return;
         }
         short src = iPacket.DecodeShort();                                             //00 00
-        MapleInventoryManipulator.move(c, MapleInventoryType.ETC, srcFirst ? dst : src, srcFirst ? src : dst);
+        MapleInventoryManipulator.move(c, InventoryType.ETC, srcFirst ? dst : src, srcFirst ? src : dst);
     }
 }

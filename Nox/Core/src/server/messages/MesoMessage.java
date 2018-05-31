@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import client.ClientSocket;
 import net.OutPacket;
 
@@ -24,7 +25,7 @@ public class MesoMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.Meso.getType());
+        oPacket.EncodeByte(MessageOpcodesType.Meso.getType());
         oPacket.EncodeInt(income);
         oPacket.EncodeInt(action);
         if (action != -1 && action != 24) {

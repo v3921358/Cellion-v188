@@ -18,7 +18,7 @@ import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.SummonMovementType;
+import enums.SummonMovementType;
 import server.maps.objects.User;
 import server.maps.objects.Summon;
 import tools.Pair;

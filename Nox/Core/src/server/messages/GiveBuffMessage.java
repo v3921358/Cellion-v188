@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -19,7 +20,7 @@ public class GiveBuffMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.GiveBuff.getType());
+        oPacket.EncodeByte(MessageOpcodesType.GiveBuff.getType());
         oPacket.EncodeInt(itemId);
     }
 

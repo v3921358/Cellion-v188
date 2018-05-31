@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
 import client.ClientSocket;
-import client.MapleCharacterUtil;
-import client.Stat;
+import client.CharacterUtil;
+import enums.Stat;
 import client.Skill;
 import client.SkillFactory;
 import client.anticheat.CheatingOffense;
@@ -18,7 +18,7 @@ import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryIdentifier;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.MapleRing;
 import constants.GameConstants;
 import constants.ServerConstants;
@@ -48,8 +48,8 @@ import scripting.EventManager;
 import scripting.provider.AbstractScriptManager;
 import service.ChannelServer;
 
-import scripting.provider.NPCChatByType;
-import scripting.provider.NPCChatType;
+import enums.NPCInterfaceType;
+import enums.NPCChatType;
 import scripting.provider.NPCScriptManager;
 import scripting.provider.ReactorScriptManager;
 import scripting.provider.ScriptType;
@@ -293,7 +293,7 @@ public class AdminCommand {
         @Override
         public int execute(final ClientSocket c, String[] splitted) {
             short slot = Short.parseShort(splitted[1]);
-            Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
+            Item item = c.getPlayer().getInventory(InventoryType.USE).getItem(slot);
             if (item == null) {
                 return 0;
             }
@@ -398,8 +398,8 @@ public class AdminCommand {
                 if (c.getPlayer().isGM()) {
                     continue;
                 }
-                MapleInventory equipped = mchr.getInventory(MapleInventoryType.EQUIPPED);
-                MapleInventory equip = mchr.getInventory(MapleInventoryType.EQUIP);
+                MapleInventory equipped = mchr.getInventory(InventoryType.EQUIPPED);
+                MapleInventory equip = mchr.getInventory(InventoryType.EQUIP);
                 List<Short> ids = new ArrayList<>();
                 for (Item item : equipped.newList()) {
                     ids.add(item.getPosition());
@@ -417,8 +417,8 @@ public class AdminCommand {
         @Override
         public int execute(ClientSocket c, String[] splitted) {
             User victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
-            MapleInventory equipped = victim.getInventory(MapleInventoryType.EQUIPPED);
-            MapleInventory equip = victim.getInventory(MapleInventoryType.EQUIP);
+            MapleInventory equipped = victim.getInventory(InventoryType.EQUIPPED);
+            MapleInventory equip = victim.getInventory(InventoryType.EQUIP);
             List<Short> ids = new ArrayList<>();
             for (Item item : equipped.newList()) {
                 ids.add(item.getPosition());
@@ -466,7 +466,7 @@ public class AdminCommand {
                 for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
                     if (c.canClickNPC()) {
                         mch.gainItem(Integer.parseInt(splitted[1]), 1);
-                        mch.getClient().SendPacket(CField.NPCPacket.getNPCTalk(9010010, NPCChatType.OK, "You got the #t" + Integer.parseInt(splitted[1]) + "#, right? Click it to see what's inside. Go ahead and check your item inventory now, if you're curious.", NPCChatByType.NPC_UnCancellable, 9010010));
+                        mch.getClient().SendPacket(CField.NPCPacket.getNPCTalk(9010010, NPCChatType.OK, "You got the #t" + Integer.parseInt(splitted[1]) + "#, right? Click it to see what's inside. Go ahead and check your item inventory now, if you're curious.", NPCInterfaceType.NPC_UnCancellable, 9010010));
                     }
                 }
             }
@@ -1125,7 +1125,7 @@ public class AdminCommand {
                 c.getPlayer().dropMessage(5, itemId + " does not exist");
             } else {
                 Item toDrop;
-                if (GameConstants.getInventoryType(itemId) == MapleInventoryType.EQUIP) {
+                if (GameConstants.getInventoryType(itemId) == InventoryType.EQUIP) {
 
                     toDrop = ii.randomizeStats((Equip) ii.getEquipById(itemId));
                 } else {
@@ -1326,7 +1326,7 @@ public class AdminCommand {
             try {
                 c.getPlayer().dropMessage(6, "Making playerNPC...");
                 ClientSocket cs = new ClientSocket(null, 0, 0);
-                User chhr = User.loadCharFromDB(MapleCharacterUtil.getIdByName(splitted[1]), cs, false);
+                User chhr = User.loadCharFromDB(CharacterUtil.getIdByName(splitted[1]), cs, false);
                 if (chhr == null) {
                     c.getPlayer().dropMessage(6, splitted[1] + " does not exist");
                     return 0;

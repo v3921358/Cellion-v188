@@ -3,7 +3,7 @@ package server.maps;
 import java.util.concurrent.ScheduledFuture;
 
 import client.QuestStatus;
-import client.MapleTrait.MapleTraitType;
+import client.Trait.MapleTraitType;
 import handling.world.MaplePartyCharacter;
 import handling.world.World;
 import handling.world.PartySearch;

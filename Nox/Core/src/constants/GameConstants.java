@@ -16,14 +16,14 @@ import client.MonsterStatus;
 import client.PlayerStats;
 import client.Skill;
 import client.SkillFactory;
-import client.inventory.MapleInventoryType;
-import client.inventory.MapleWeaponType;
+import enums.InventoryType;
+import enums.WeaponType;
 import constants.skills.*;
 import handling.login.Balloon;
 import server.MapleItemInformationProvider;
 import server.StatEffect;
 import server.MapleStringInformationProvider;
-import server.NebuliteGrade;
+import enums.NebuliteGrade;
 import server.Randomizer;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
@@ -1882,69 +1882,69 @@ public class GameConstants {
         return itemId >= 2060000 && itemId < 2061000;
     }
 
-    public static MapleInventoryType getInventoryType(final int itemId) {
+    public static InventoryType getInventoryType(final int itemId) {
         final byte type = (byte) (itemId / 1000000);
         if (type < 1 || type > 5) {
-            return MapleInventoryType.UNDEFINED;
+            return InventoryType.UNDEFINED;
         }
-        return MapleInventoryType.getByType(type);
+        return InventoryType.getByType(type);
     }
 
-    public static MapleWeaponType getWeaponType(final int itemId) {
+    public static WeaponType getWeaponType(final int itemId) {
         int cat = itemId / 10000;
         cat = cat % 100;
         switch (cat) { // 39, 50, 51 ??
             case 21:
-                return MapleWeaponType.ROD;
+                return WeaponType.ROD;
             case 30:
-                return MapleWeaponType.SWORD1H;
+                return WeaponType.SWORD1H;
             case 31:
-                return MapleWeaponType.AXE1H;
+                return WeaponType.AXE1H;
             case 32:
-                return MapleWeaponType.BLUNT1H;
+                return WeaponType.BLUNT1H;
             case 33:
-                return MapleWeaponType.DAGGER;
+                return WeaponType.DAGGER;
             case 34:
-                return MapleWeaponType.KATARA;
+                return WeaponType.KATARA;
             case 35:
-                return MapleWeaponType.MAGIC_ARROW; // can be magic arrow or cards
+                return WeaponType.MAGIC_ARROW; // can be magic arrow or cards
             case 36:
-                return MapleWeaponType.CANE;
+                return WeaponType.CANE;
             case 37:
-                return MapleWeaponType.WAND;
+                return WeaponType.WAND;
             case 38:
-                return MapleWeaponType.STAFF;
+                return WeaponType.STAFF;
             case 40:
-                return MapleWeaponType.SWORD2H;
+                return WeaponType.SWORD2H;
             case 41:
-                return MapleWeaponType.AXE2H;
+                return WeaponType.AXE2H;
             case 42:
-                return MapleWeaponType.BLUNT2H;
+                return WeaponType.BLUNT2H;
             case 43:
-                return MapleWeaponType.SPEAR;
+                return WeaponType.SPEAR;
             case 44:
-                return MapleWeaponType.POLE_ARM;
+                return WeaponType.POLE_ARM;
             case 45:
-                return MapleWeaponType.BOW;
+                return WeaponType.BOW;
             case 46:
-                return MapleWeaponType.CROSSBOW;
+                return WeaponType.CROSSBOW;
             case 47:
-                return MapleWeaponType.CLAW;
+                return WeaponType.CLAW;
             case 48:
-                return MapleWeaponType.KNUCKLE;
+                return WeaponType.KNUCKLE;
             case 49:
-                return MapleWeaponType.GUN;
+                return WeaponType.GUN;
             case 52:
-                return MapleWeaponType.DUAL_BOW;
+                return WeaponType.DUAL_BOW;
             case 53:
-                return MapleWeaponType.CANNON;
+                return WeaponType.CANNON;
             case 56:
-                return MapleWeaponType.LAPIS;
+                return WeaponType.LAPIS;
             case 57:
-                return MapleWeaponType.LAZULI;
+                return WeaponType.LAZULI;
         }
         //System.out.println("Found new Weapon: " + cat + ", ItemId: " + itemId);
-        return MapleWeaponType.NOT_A_WEAPON;
+        return WeaponType.NOT_A_WEAPON;
     }
 
     public static boolean isEquip(final int itemId) {
@@ -3663,7 +3663,7 @@ public class GameConstants {
     }
 
     public static boolean isInBag(final int slot, final byte type) {
-        return ((slot >= 101 && slot <= 512) && type == MapleInventoryType.ETC.getType());
+        return ((slot >= 101 && slot <= 512) && type == InventoryType.ETC.getType());
     }
 
     public static int getSkillForStat(MonsterStatus stat) {

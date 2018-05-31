@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import client.ClientSocket;
-import server.maps.FieldLimitType;
+import enums.FieldLimitType;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.WvsContext;

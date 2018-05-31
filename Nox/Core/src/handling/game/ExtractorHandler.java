@@ -2,7 +2,7 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import net.InPacket;
 import server.maps.objects.User;
 import server.maps.objects.Extractor;
@@ -26,7 +26,7 @@ public final class ExtractorHandler implements ProcessPacket<ClientSocket> {
 
         final int itemId = iPacket.DecodeInt();
         final int fee = iPacket.DecodeInt();
-        final Item toUse = chr.getInventory(MapleInventoryType.SETUP).findById(itemId);
+        final Item toUse = chr.getInventory(InventoryType.SETUP).findById(itemId);
 
         if (toUse == null || toUse.getQuantity() < 1
                 || itemId / 10000 != 304

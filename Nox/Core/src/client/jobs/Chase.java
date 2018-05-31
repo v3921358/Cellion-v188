@@ -11,7 +11,7 @@ import constants.skills.*;
 import java.util.Random;
 import java.util.concurrent.ScheduledFuture;
 import server.StatEffect;
-import server.StatInfo;
+import enums.StatInfo;
 import server.Randomizer;
 import server.Timer;
 import server.maps.objects.User;

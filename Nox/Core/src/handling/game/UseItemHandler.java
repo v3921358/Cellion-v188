@@ -1,12 +1,12 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.MapleDisease;
+import client.Disease;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.maps.FieldLimitType;
+import enums.FieldLimitType;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.WvsContext;
@@ -27,7 +27,7 @@ public class UseItemHandler implements ProcessPacket<ClientSocket> {
     public void Process(ClientSocket c, InPacket iPacket) {
         User chr = c.getPlayer();
 
-        if (chr == null || !chr.isAlive() || chr.getMapId() == 749040100 || chr.getMap() == null || chr.hasDisease(MapleDisease.POTION) || chr.hasBlockedInventory() || chr.inPVP()) {
+        if (chr == null || !chr.isAlive() || chr.getMapId() == 749040100 || chr.getMap() == null || chr.hasDisease(Disease.POTION) || chr.hasBlockedInventory() || chr.inPVP()) {
             c.SendPacket(WvsContext.enableActions());
             return;
         }
@@ -40,7 +40,7 @@ public class UseItemHandler implements ProcessPacket<ClientSocket> {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         final byte slot = (byte) iPacket.DecodeShort();
         final int itemId = iPacket.DecodeInt();
-        final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
+        final Item toUse = chr.getInventory(InventoryType.USE).getItem(slot);
 
         if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId) {
             c.SendPacket(WvsContext.enableActions());
@@ -49,7 +49,7 @@ public class UseItemHandler implements ProcessPacket<ClientSocket> {
 
         if (!FieldLimitType.UnableToConsumeStatChangeItem.check(chr.getMap())) { //cwk quick hack
             if (MapleItemInformationProvider.getInstance().getItemEffect(toUse.getItemId()).applyTo(chr)) {
-                MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
+                MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
                 if (chr.getMap().getSharedMapResources().consumeItemCoolTime > 0) {
                     chr.setNextConsume(time + (chr.getMap().getSharedMapResources().consumeItemCoolTime * 1000));
                 }

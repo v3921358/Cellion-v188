@@ -1,5 +1,6 @@
 package handling.world;
 
+import enums.GuildResponseType;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import client.MapleCharacterUtil;
+import client.CharacterUtil;
 import client.ClientSocket;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -758,7 +759,7 @@ public class MapleGuild implements java.io.Serializable {
                     if (mgc.isOnline()) {
                         World.Guild.setGuildAndRank(cid, 0, 5, 0, 5);
                     } else {
-                        MapleCharacterUtil.sendNote(mgc.getName(), initiator.getName(), "You have been expelled from the guild.", 0);
+                        CharacterUtil.sendNote(mgc.getName(), initiator.getName(), "You have been expelled from the guild.", 0);
                         setOfflineGuildStatus((short) 0, (byte) 5, 0, (byte) 5, cid);
                     }
                     members.remove(mgc);
@@ -1097,13 +1098,13 @@ public class MapleGuild implements java.io.Serializable {
     // keep in mind that this will be called by a handler most of the time
     // so this will be running mostly on a channel server, unlike the rest
     // of the class
-    public static final MapleGuildResponse sendInvite(final ClientSocket c, final String targetName) {
+    public static final GuildResponseType sendInvite(final ClientSocket c, final String targetName) {
         final User mc = c.getChannelServer().getPlayerStorage().getCharacterByName(targetName);
         if (mc == null) {
-            return MapleGuildResponse.NOT_IN_CHANNEL;
+            return GuildResponseType.NOT_IN_CHANNEL;
         }
         if (mc.getGuildId() > 0) {
-            return MapleGuildResponse.ALREADY_IN_GUILD;
+            return GuildResponseType.ALREADY_IN_GUILD;
         }
         mc.getClient().SendPacket(GuildPacket.guildInvite(c.getPlayer().getGuildId(), c.getPlayer().getName(), c.getPlayer().getLevel(), c.getPlayer().getJob()));
         return null;

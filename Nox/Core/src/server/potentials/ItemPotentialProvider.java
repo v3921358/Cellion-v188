@@ -1,10 +1,12 @@
 package server.potentials;
 
+import enums.ItemPotentialTierType;
+import enums.ItemPotentialSkill;
 import client.inventory.Equip;
-import client.inventory.EquipSlotType;
-import client.inventory.MapleInventoryType;
+import enums.EquipSlotType;
+import enums.InventoryType;
 import client.inventory.ModifyInventory;
-import client.inventory.ModifyInventoryOperation;
+import enums.ModifyInventoryOperation;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import constants.ItemConstants;
@@ -20,7 +22,7 @@ import provider.wz.cache.WzDataStorage;
 import provider.wz.nox.NoxBinaryReader;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.NebuliteGrade;
+import enums.NebuliteGrade;
 import server.Randomizer;
 import server.maps.objects.User;
 import tools.LogHelper;

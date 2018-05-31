@@ -1,8 +1,8 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.MapleSpecialStats.MapleHyperStats;
-import client.MapleSpecialStats.MapleSpecialStatUpdateType;
+import client.SpecialStats.MapleHyperStats;
+import client.SpecialStats.MapleSpecialStatUpdateType;
 import constants.ServerConstants;
 import net.InPacket;
 import server.maps.objects.User;

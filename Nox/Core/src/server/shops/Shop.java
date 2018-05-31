@@ -1,5 +1,9 @@
 package server.shops;
 
+import enums.ShopOperationType;
+import enums.ModifyInventoryOperation;
+import enums.InventoryType;
+import enums.ItemType;
 import client.ClientSocket;
 import client.SkillFactory;
 import client.inventory.*;
@@ -248,7 +252,7 @@ public class Shop {
         return true;
     }
 
-    public void sell(ClientSocket c, MapleInventoryType type, byte slot, short quantity) {
+    public void sell(ClientSocket c, InventoryType type, byte slot, short quantity) {
         switch (type) {
             case UNDEFINED:
             case EQUIPPED:
@@ -335,7 +339,7 @@ public class Shop {
     }
 
     public void recharge(ClientSocket c, byte slot) {
-        Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem((short) slot);
+        Item item = c.getPlayer().getInventory(InventoryType.USE).getItem((short) slot);
 
         if (item == null || (!GameConstants.isThrowingStar(item.getItemId()) && !GameConstants.isBullet(item.getItemId()))) {
             return;

@@ -1,5 +1,6 @@
 package scripting;
 
+import enums.InventoryType;
 import client.inventory.*;
 import scripting.provider.NPCScriptManager;
 import java.awt.Point;
@@ -7,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import client.ClientSocket;
 import client.QuestStatus;
-import client.MapleTrait.MapleTraitType;
+import client.Trait.MapleTraitType;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -18,8 +19,8 @@ import handling.world.MaplePartyCharacter;
 import handling.world.World;
 import java.util.Map;
 import service.ChannelServer;
-import scripting.provider.NPCChatByType;
-import scripting.provider.NPCChatType;
+import enums.NPCInterfaceType;
+import enums.NPCChatType;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MapleStringInformationProvider;
@@ -33,7 +34,7 @@ import server.maps.Event_DojoAgent;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.SavedLocationType;
+import enums.SavedLocationType;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
 import server.maps.objects.Reactor;
@@ -84,7 +85,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final boolean isInventoryFull(User pPlayer, int nInventoryType) {
-        MapleInventoryType pInventory = MapleInventoryType.getByType((byte) nInventoryType);
+        InventoryType pInventory = InventoryType.getByType((byte) nInventoryType);
         if (pPlayer.getInventory(pInventory).isFull()) {
             return true;
         }
@@ -344,7 +345,7 @@ public abstract class AbstractPlayerInteraction {
 
     public final boolean canHold() {
         for (int i = 1; i <= 5; i++) {
-            if (c.getPlayer().getInventory(MapleInventoryType.getByType((byte) i)).getNextFreeSlot() <= -1) {
+            if (c.getPlayer().getInventory(InventoryType.getByType((byte) i)).getNextFreeSlot() <= -1) {
                 return false;
             }
         }
@@ -353,7 +354,7 @@ public abstract class AbstractPlayerInteraction {
 
     public final boolean canHoldSlots(final int slot) {
         for (int i = 1; i <= 5; i++) {
-            if (c.getPlayer().getInventory(MapleInventoryType.getByType((byte) i)).isFull(slot)) {
+            if (c.getPlayer().getInventory(InventoryType.getByType((byte) i)).isFull(slot)) {
                 return false;
             }
         }
@@ -480,19 +481,19 @@ public abstract class AbstractPlayerInteraction {
         MapleInventory inv = null;
         switch (type) {
             case "EQUIP":
-                inv = c.getPlayer().getInventory(MapleInventoryType.EQUIP);
+                inv = c.getPlayer().getInventory(InventoryType.EQUIP);
                 break;
             case "USE":
-                inv = c.getPlayer().getInventory(MapleInventoryType.USE);
+                inv = c.getPlayer().getInventory(InventoryType.USE);
                 break;
             case "ETC":
-                inv = c.getPlayer().getInventory(MapleInventoryType.ETC);
+                inv = c.getPlayer().getInventory(InventoryType.ETC);
                 break;
             case "SETUP":
-                inv = c.getPlayer().getInventory(MapleInventoryType.SETUP);
+                inv = c.getPlayer().getInventory(InventoryType.SETUP);
                 break;
             case "CASH":
-                inv = c.getPlayer().getInventory(MapleInventoryType.CASH);
+                inv = c.getPlayer().getInventory(InventoryType.CASH);
                 break;
         }
         StringBuilder sb = new StringBuilder();
@@ -517,7 +518,7 @@ public abstract class AbstractPlayerInteraction {
             return "";
         }
         MapleInventory pInv = null;
-        pInv = pPlayer.getInventory(MapleInventoryType.getByType(invType));
+        pInv = pPlayer.getInventory(InventoryType.getByType(invType));
         StringBuilder sb = new StringBuilder();
         for (Item pItem : pInv.list()) {
             sb.append("#L" + pItem.getPosition() + "##v" + pItem.getItemId() + "##t" + pItem.getItemId() + "##l \r\n");
@@ -536,7 +537,7 @@ public abstract class AbstractPlayerInteraction {
 
     public void deleteItemBySlot(String sCharacter, byte invType, short slot, short quantity) {
         User pPlayer = Utility.requestCharacter(sCharacter);
-        MapleInventoryType type = MapleInventoryType.getByType(invType);
+        InventoryType type = InventoryType.getByType(invType);
         ClientSocket targetSocket = pPlayer.getClient();
         if (pPlayer == null) {
             c.getPlayer().dropMessage(5,"There was a problem accessing the inventory of Character (" + sCharacter + ")");
@@ -554,7 +555,7 @@ public abstract class AbstractPlayerInteraction {
      */
     public void deleteItemById(String sCharacter, byte invType, int itemId, int quantity) {
         User pPlayer = Utility.requestCharacter(sCharacter);
-        MapleInventoryType type = MapleInventoryType.getByType(invType);
+        InventoryType type = InventoryType.getByType(invType);
         ClientSocket targetSocket = pPlayer.getClient();
         if (pPlayer == null) {
             c.getPlayer().dropMessage(5,"There was a problem accessing the inventory of Character (" + sCharacter + ")");
@@ -571,7 +572,7 @@ public abstract class AbstractPlayerInteraction {
      */
 
     public int getItemFromSlot(byte nInventoryType, short nSlot) {
-        MapleInventoryType pType = MapleInventoryType.getByType(nInventoryType);
+        InventoryType pType = InventoryType.getByType(nInventoryType);
         Item pItem = c.getPlayer().getInventory(pType).getItem(nSlot);
         return pItem.getItemId();
     }
@@ -644,12 +645,12 @@ public abstract class AbstractPlayerInteraction {
     public final void gainItem(final int id, final short quantity, final boolean randomStats, final long period, boolean hours, final int slots, final String owner, final ClientSocket cg, final boolean show) {
         if (quantity >= 0) {
             final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-            final MapleInventoryType type = GameConstants.getInventoryType(id);
+            final InventoryType type = GameConstants.getInventoryType(id);
 
             if (!MapleInventoryManipulator.checkSpace(cg, id, quantity, "")) {
                 return;
             }
-            if (type.equals(MapleInventoryType.EQUIP) && !GameConstants.isThrowingStar(id) && !GameConstants.isBullet(id)) {
+            if (type.equals(InventoryType.EQUIP) && !GameConstants.isThrowingStar(id) && !GameConstants.isBullet(id)) {
                 final Equip item = (Equip) (randomStats ? ii.randomizeStats((Equip) ii.getEquipById(id)) : ii.getEquipById(id));
                 if (period > 0) {
                     item.setExpiration(System.currentTimeMillis() + (period * (hours ? 1 : 24) * 60 * 60 * 1000));
@@ -1013,7 +1014,7 @@ public abstract class AbstractPlayerInteraction {
         if (pet != null) {
             pet.setCloseness((int) (pet.getCloseness() + (closeness * getChannelServer().getTraitRate())));
             //  getClient().getPlayer().forceUpdateItem(pet.getItem());
-            getClient().SendPacket(PetPacket.updatePet(pet, getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), true));
+            getClient().SendPacket(PetPacket.updatePet(pet, getPlayer().getInventory(InventoryType.CASH).getItem((byte) pet.getItem().getPosition()), true));
         }
     }
 
@@ -1022,7 +1023,7 @@ public abstract class AbstractPlayerInteraction {
             if (pet != null && pet.getSummoned()) {
                 pet.setCloseness(pet.getCloseness() + closeness);
                 getClient().getPlayer().forceUpdateItem(pet.getItem());
-                getClient().SendPacket(PetPacket.updatePet(pet, getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+                getClient().SendPacket(PetPacket.updatePet(pet, getPlayer().getInventory(InventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
             }
         }
     }
@@ -1257,8 +1258,8 @@ public abstract class AbstractPlayerInteraction {
         c.SendPacket(UIPacket.IntroLock(enabled));
     }
 
-    public MapleInventoryType getInvType(int i) {
-        return MapleInventoryType.getByType((byte) i);
+    public InventoryType getInvType(int i) {
+        return InventoryType.getByType((byte) i);
     }
 
     public String getItemName(final int id) {
@@ -1361,7 +1362,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public void sendNPCText(final String text, final int npc) {
-        getMap().broadcastPacket(NPCPacket.getNPCTalk(npc, NPCChatType.OK, text, NPCChatByType.NPC_Cancellable, npc));
+        getMap().broadcastPacket(NPCPacket.getNPCTalk(npc, NPCChatType.OK, text, NPCInterfaceType.NPC_Cancellable, npc));
     }
 
     public boolean getTempFlag(final int flag) {
@@ -1393,7 +1394,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final MapleInventory getInventory(int type) {
-        return c.getPlayer().getInventory(MapleInventoryType.getByType((byte) type));
+        return c.getPlayer().getInventory(InventoryType.getByType((byte) type));
     }
 
     public final void prepareAswanMob(int mapid, EventManager eim) {

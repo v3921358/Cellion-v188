@@ -24,7 +24,7 @@ package handling.game;
 import client.ClientSocket;
 import client.anticheat.CheatingOffense;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import server.maps.objects.User;
 import net.InPacket;
@@ -46,7 +46,7 @@ public final class OnUserPortableChairSitRequest implements ProcessPacket<Client
             return;
         }
         int chairItem = iPacket.DecodeInt();
-        final Item toUse = chr.getInventory(MapleInventoryType.SETUP).findById(chairItem);
+        final Item toUse = chr.getInventory(InventoryType.SETUP).findById(chairItem);
         if (toUse == null) {
             chr.getCheatTracker().registerOffense(CheatingOffense.USING_UNAVAILABLE_ITEM, Integer.toString(chairItem));
             return;

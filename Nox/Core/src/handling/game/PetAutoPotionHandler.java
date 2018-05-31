@@ -1,13 +1,13 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.MapleDisease;
+import client.Disease;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import net.InPacket;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
-import server.maps.FieldLimitType;
+import enums.FieldLimitType;
 import server.maps.objects.User;
 import tools.packet.WvsContext;
 import net.ProcessPacket;
@@ -30,10 +30,10 @@ public class PetAutoPotionHandler implements ProcessPacket<ClientSocket> {
         iPacket.Skip(9);
         chr.updateTick(iPacket.DecodeInt());
         final short slot = iPacket.DecodeShort();
-        if (!chr.isAlive() || chr.getMapId() == 749040100 || chr.getMap() == null || chr.hasDisease(MapleDisease.POTION)) {
+        if (!chr.isAlive() || chr.getMapId() == 749040100 || chr.getMap() == null || chr.hasDisease(Disease.POTION)) {
             return;
         }
-        final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
+        final Item toUse = chr.getInventory(InventoryType.USE).getItem(slot);
 
         if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != iPacket.DecodeInt()) {
             c.SendPacket(WvsContext.enableActions());
@@ -47,7 +47,7 @@ public class PetAutoPotionHandler implements ProcessPacket<ClientSocket> {
         }
         if (!FieldLimitType.UnableToConsumeStatChangeItem.check(chr.getMap())) { //cwk quick hack
             if (MapleItemInformationProvider.getInstance().getItemEffect(toUse.getItemId()).applyTo(chr)) {
-                MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
+                MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
                 if (chr.getMap().getSharedMapResources().consumeItemCoolTime > 0) {
                     chr.setNextConsume(time + (chr.getMap().getSharedMapResources().consumeItemCoolTime * 1000));
                 }

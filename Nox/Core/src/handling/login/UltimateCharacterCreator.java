@@ -1,6 +1,6 @@
 package handling.login;
 
-import client.MapleCharacterCreationUtil;
+import client.CharacterCreationUtil;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +10,7 @@ import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import server.MapleItemInformationProvider;
 import server.maps.objects.User;
@@ -30,7 +30,7 @@ public final class UltimateCharacterCreator implements ProcessPacket<ClientSocke
     public void Process(ClientSocket c, InPacket iPacket) {
         if (!c.getPlayer().isGM()
                 && (!c.isLoggedIn() || c.getPlayer() == null || c.getPlayer().getLevel() < 120 || c.getPlayer().getMapId() != 130000000
-                || c.getPlayer().getQuestStatus(20734) != QuestState.NotStarted || c.getPlayer().getQuestStatus(20616) != QuestState.Completed || !GameConstants.isCygnusKnight(c.getPlayer().getJob()) || !MapleCharacterCreationUtil.canMakeCharacter(c.getWorld(), c.getAccID()))) {
+                || c.getPlayer().getQuestStatus(20734) != QuestState.NotStarted || c.getPlayer().getQuestStatus(20616) != QuestState.Completed || !GameConstants.isCygnusKnight(c.getPlayer().getJob()) || !CharacterCreationUtil.canMakeCharacter(c.getWorld(), c.getAccID()))) {
             c.SendPacket(CField.createUltimate(2));
             //Character slots are full. Please purchase another slot from the Cash Shop.
             return;
@@ -131,11 +131,11 @@ public final class UltimateCharacterCreator implements ProcessPacket<ClientSocke
         for (byte i = 0; i < items.length; i++) {
             Item item = li.getEquipById(items[i]);
             item.setPosition((byte) (i + 1));
-            newchar.getInventory(MapleInventoryType.EQUIP).addFromDB(item);
+            newchar.getInventory(InventoryType.EQUIP).addFromDB(item);
         }
 
-        newchar.getInventory(MapleInventoryType.USE).addItem(new Item(2000004, (byte) 0, (short) 200, (byte) 0));
-        if (MapleCharacterCreationUtil.canCreateChar(name, c.isGm()) && (!LoginInformationProvider.getInstance().isForbiddenName(name) || c.isGm())) {
+        newchar.getInventory(InventoryType.USE).addItem(new Item(2000004, (byte) 0, (short) 200, (byte) 0));
+        if (CharacterCreationUtil.canCreateChar(name, c.isGm()) && (!LoginInformationProvider.getInstance().isForbiddenName(name) || c.isGm())) {
             User.saveNewCharToDB(newchar, jobType, (short) 0);
             Quest.getInstance(20734).forceComplete(c.getPlayer(), 1101000);
             c.SendPacket(CField.createUltimate(0));

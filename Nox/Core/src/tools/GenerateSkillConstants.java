@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import client.MapleJob;
+import client.Jobs;
 import client.SkillFactory;
 
 public class GenerateSkillConstants {
@@ -24,7 +24,7 @@ public class GenerateSkillConstants {
         f.mkdirs();
         try {
             List<String> pastSkills = new LinkedList<String>();
-            for (MapleJob job : MapleJob.values()) {
+            for (Jobs job : Jobs.values()) {
                 String jobName = StringUtil.makeEnumHumanReadable(job.name().replaceAll("\\d+.*", "")).replace(" ", "");
                 List<Integer> skills = SkillFactory.getSkillsByJob(job.getId());
                 if (!lastJob.equals(jobName) && fw != null) {

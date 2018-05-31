@@ -1,5 +1,7 @@
 package server.quest;
 
+import enums.QuestRequirementType;
+import enums.QuestActionType;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

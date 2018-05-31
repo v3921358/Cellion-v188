@@ -5,8 +5,8 @@
  */
 package tools.export;
 
-import client.inventory.EquipSlotType;
-import client.inventory.ItemType;
+import enums.EquipSlotType;
+import enums.ItemType;
 import database.Database;
 import java.io.FileWriter;
 import java.io.IOException;

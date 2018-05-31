@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import provider.data.HexTool;
 import net.OutPacket;
 
@@ -24,7 +25,7 @@ public class StylishKillMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.StylishKill.getType());
+        oPacket.EncodeByte(MessageOpcodesType.StylishKill.getType());
         oPacket.EncodeByte(mode.getType());
 
         switch (mode) {

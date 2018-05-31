@@ -13,8 +13,8 @@ import java.time.ZonedDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import scripting.provider.NPCChatByType;
-import scripting.provider.NPCChatType;
+import enums.NPCInterfaceType;
+import enums.NPCChatType;
 import server.maps.objects.User;
 import service.ChannelServer;
 import tools.packet.CField;
@@ -51,7 +51,7 @@ public class MapleHotTime {
             for (User mch : cserv.getPlayerStorage().getAllCharacters()) {
                 if (mch.getClient().canClickNPC()) {
                     mch.gainItem(item, 1);
-                    mch.getClient().SendPacket(CField.NPCPacket.getNPCTalk(9010010, NPCChatType.OK, "You got the #t" + item + "#, right? Click it to see what's inside. Go ahead and check your item inventory now, if you're curious.", NPCChatByType.NPC_UnCancellable, 9010010));
+                    mch.getClient().SendPacket(CField.NPCPacket.getNPCTalk(9010010, NPCChatType.OK, "You got the #t" + item + "#, right? Click it to see what's inside. Go ahead and check your item inventory now, if you're curious.", NPCInterfaceType.NPC_UnCancellable, 9010010));
                     mch.getClient().SendPacket(CField.EffectPacket.showRewardItemAnimation(item, ""));
                 }
             }

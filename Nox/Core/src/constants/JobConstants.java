@@ -9,39 +9,39 @@ public class JobConstants {
 
     /*Class Creation Configuration*/
  /*These values will be overwritten by the configuration.ini file.*/
-    public static boolean enableResistance = true;
-    public static boolean enableAdventurer = true;
-    public static boolean enableCygnus = true;
-    public static boolean enableAran = true;
-    public static boolean enableEvan = true;
-    public static boolean enableMercedes = true;
-    public static boolean enableDemon = true;
-    public static boolean enablePhantom = true;
-    public static boolean enableDualBlade = true;
-    public static boolean enableMihile = true;
-    public static boolean enableLuminous = true;
-    public static boolean enableKaiser = true;
-    public static boolean enableAngelicBuster = true;
-    public static boolean enableCannoneer = true;
-    public static boolean enableXenon = true;
-    public static boolean enableZero = true;
-    public static boolean enableShade = true;
-    public static boolean enableJett = true;
-    public static boolean enableHayato = true;
-    public static boolean enableKanna = true;
-    public static boolean enableBeastTamer = true;
-    public static boolean enableKinesis = true;
+    public static boolean enableResistance = true,
+                          enableAdventurer = true,
+                          enableCygnus = true,
+                          enableAran = true,
+                          enableEvan = true,
+                          enableMercedes = true,
+                          enableDemon = true,
+                          enablePhantom = true,
+                          enableDualBlade = true,
+                          enableMihile = true,
+                          enableLuminous = true,
+                          enableKaiser = true,
+                          enableAngelicBuster = true,
+                          enableCannoneer = true,
+                          enableXenon = true,
+                          enableZero = true,
+                          enableShade = true,
+                          enableJett = true,
+                          enableHayato = true,
+                          enableKanna = true,
+                          enableBeastTamer = true,
+                          enableKinesis = true;
 
     // General Job Advancement Levels
     public static final int _1stJobAdvancementLv = 10,
-            _2ndJobAdvancementLv = 30,
-            _3rdJobAdvancementLv = 60,
-            _4thJobAdvancementLv = 100,
-            _5thJobAdvancementLv = 200;
+                            _2ndJobAdvancementLv = 30,
+                            _3rdJobAdvancementLv = 60,
+                            _4thJobAdvancementLv = 100,
+                            _5thJobAdvancementLv = 200;
 
     // Dual Blade Special Advancement Levels
     public static final int DualBlade_1stJobPlusAdvancementLv = 20,
-            DualBlade_2ndJobPlusAdvancementLv = 45;
+                            DualBlade_2ndJobPlusAdvancementLv = 45;
 
     public enum LoginJob {
 

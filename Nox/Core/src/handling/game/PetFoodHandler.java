@@ -2,7 +2,7 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import net.InPacket;
 import server.MapleInventoryManipulator;
@@ -52,7 +52,7 @@ public class PetFoodHandler implements ProcessPacket<ClientSocket> {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         short slot = iPacket.DecodeShort();
         final int itemId = iPacket.DecodeInt();
-        Item petFood = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
+        Item petFood = c.getPlayer().getInventory(InventoryType.USE).getItem(slot);
         if (petFood == null || petFood.getItemId() != itemId || petFood.getQuantity() <= 0 || itemId / 10000 != 212) {
             c.getPlayer().dropMessage(-1, "Wrong item" + itemId);
             c.SendPacket(WvsContext.enableActions());
@@ -84,7 +84,7 @@ public class PetFoodHandler implements ProcessPacket<ClientSocket> {
                     c.getPlayer().getMap().broadcastPacket(CField.EffectPacket.showOwnPetLevelUp(c.getPlayer(), index));
                 }
             }
-            c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+            c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(InventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
             c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, index, true, true), true);
         } else {
             if (gainCloseness) {
@@ -97,10 +97,10 @@ public class PetFoodHandler implements ProcessPacket<ClientSocket> {
                     pet.setLevel(pet.getLevel() - 1);
                 }
             }
-            c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+            c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(InventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
             c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PetPacket.commandResponse(c.getPlayer().getId(), (byte) 1, c.getPlayer().getPetIndex(pet), false, true), true);
         }
-        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, true, false);
+        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, true, false);
         c.SendPacket(WvsContext.enableActions());
     }
 

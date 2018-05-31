@@ -10,7 +10,7 @@ import client.ClientSocket;
 import client.QuestStatus.QuestState;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import service.ChannelServer;
 import server.MapleCarnivalFactory;
@@ -84,7 +84,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
                 reactor.getMap().spawnMesoDrop((int) mesoDrop, dropPos, reactor, getPlayer(), false, (byte) 0);
             } else {
                 Item drop;
-                if (GameConstants.getInventoryType(d.itemId) != MapleInventoryType.EQUIP) {
+                if (GameConstants.getInventoryType(d.itemId) != InventoryType.EQUIP) {
                     drop = new Item(d.itemId, (byte) 0, (short) 1, (byte) 0);
                 } else {
                     drop = ii.randomizeStats((Equip) ii.getEquipById(d.itemId));
@@ -98,7 +98,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
 
     public void dropSingleItem(int itemId) {
         Item drop;
-        if (GameConstants.getInventoryType(itemId) != MapleInventoryType.EQUIP) {
+        if (GameConstants.getInventoryType(itemId) != InventoryType.EQUIP) {
             drop = new Item(itemId, (byte) 0, (short) 1, (byte) 0);
         } else {
             drop = MapleItemInformationProvider.getInstance().randomizeStats((Equip) MapleItemInformationProvider.getInstance().getEquipById(itemId));

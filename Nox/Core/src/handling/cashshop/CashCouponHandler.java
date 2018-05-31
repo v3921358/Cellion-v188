@@ -21,7 +21,7 @@
  */
 package handling.cashshop;
 
-import client.MapleCharacterUtil;
+import client.CharacterUtil;
 import client.ClientSocket;
 import client.inventory.Item;
 import static handling.cashshop.CashShopOperation.playerCashShopInfo;
@@ -65,7 +65,7 @@ public final class CashCouponHandler implements ProcessPacket<ClientSocket> {
         }
         Triple<Boolean, Integer, Integer> info = null;
         try {
-            info = MapleCharacterUtil.getNXCodeInfo(code);
+            info = CharacterUtil.getNXCodeInfo(code);
         } catch (SQLException e) {
             LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
             c.SendPacket(CSPacket.sendCSFail(49));
@@ -75,7 +75,7 @@ public final class CashCouponHandler implements ProcessPacket<ClientSocket> {
             if (!CouponCodeAttempt(c)) {
                 int type = info.mid, item = info.right;
                 try {
-                    MapleCharacterUtil.setNXCodeUsed(c.getPlayer().getName(), code);
+                    CharacterUtil.setNXCodeUsed(c.getPlayer().getName(), code);
                 } catch (SQLException e) {
                     LogHelper.SQL.get().info("[SQL] There was an issue with something from the database:\n", e);
                     c.SendPacket(CSPacket.sendCSFail(49));

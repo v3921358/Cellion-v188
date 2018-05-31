@@ -5,10 +5,10 @@ import java.util.List;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.ItemFlag;
-import client.inventory.MapleInventoryType;
+import enums.ItemFlag;
+import enums.InventoryType;
 import client.inventory.ModifyInventory;
-import client.inventory.ModifyInventoryOperation;
+import enums.ModifyInventoryOperation;
 import server.MapleItemInformationProvider;
 import server.StatEffect;
 import server.maps.objects.User;
@@ -31,12 +31,12 @@ public final class CraftingBagHandler implements ProcessPacket<ClientSocket> {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         final byte slot = (byte) iPacket.DecodeShort();
         final int itemId = iPacket.DecodeInt();
-        final MapleInventoryType inventoryType = MapleInventoryType.getByType(iPacket.DecodeByte());
+        final InventoryType inventoryType = InventoryType.getByType(iPacket.DecodeByte());
 
         final Item toUse = chr.getInventory(inventoryType).getItem(slot);
 
         if (!chr.isAlive() || chr.getMap() == null
-                || chr.hasBlockedInventory() || toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId || inventoryType == MapleInventoryType.UNDEFINED) {
+                || chr.hasBlockedInventory() || toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId || inventoryType == InventoryType.UNDEFINED) {
             c.SendPacket(WvsContext.enableActions());
             return;
         }

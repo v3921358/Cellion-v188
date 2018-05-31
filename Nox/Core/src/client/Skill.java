@@ -13,9 +13,9 @@ import javax.script.ScriptException;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.StatEffect;
-import server.StatInfo;
+import enums.StatInfo;
 import server.Randomizer;
-import server.life.Element;
+import enums.ElementType;
 import tools.Pair;
 import tools.Utility;
 
@@ -26,7 +26,7 @@ public class Skill implements Comparator<Skill> {
     private List<StatEffect> pvpEffects = null;
     private List<Integer> animation = null;
     private final List<Pair<String, Integer>> requiredSkill = new ArrayList<>();
-    private Element element = Element.NEUTRAL;
+    private ElementType element = ElementType.NEUTRAL;
     private int id, animationTime = 0, masterLevel = 0, maxLevel = 0, delay = 0, trueMax = 0, eventTamingMob = 0, skillTamingMob = 0, skillType = 0, psd = 0, psdSkill = 0; //4 is alert
     private boolean invisible = false, chargeskill = false, timeLimited = false, combatOrders = false, pvpDisabled = false, magic = false, casterMove = false, pushTarget = false, pullTarget = false;
     private int hyper = 0;
@@ -45,7 +45,7 @@ public class Skill implements Comparator<Skill> {
         final int skillType = MapleDataTool.getInt("skillType", data, -1);
         final String elem = MapleDataTool.getString("elemAttr", data, null);
         if (elem != null) {
-            ret.element = Element.getFromChar(elem.charAt(0));
+            ret.element = ElementType.getFromChar(elem.charAt(0));
         }
         ret.skillType = skillType;
         ret.invisible = MapleDataTool.getInt("invisible", data, 0) > 0;
@@ -354,7 +354,7 @@ public class Skill implements Comparator<Skill> {
     public int getJobCode(int jobid) {
         boolean isBeginnerJob = isBeginnerSkill();
         int result;
-        if (isBeginnerJob || jobid % 100 == 0 || jobid == MapleJob.PIRATE_CS.getId() || jobid == MapleJob.DEMON_AVENGER1.getId() || jobid == MapleJob.JETT1.getId()) {
+        if (isBeginnerJob || jobid % 100 == 0 || jobid == Jobs.PIRATE_CS.getId() || jobid == Jobs.DEMON_AVENGER1.getId() || jobid == Jobs.JETT1.getId()) {
             result = 1;
         } else {
             int v4 = jobid / 10 == 43 ? jobid % 10 / 2 : jobid % 10;
@@ -371,7 +371,7 @@ public class Skill implements Comparator<Skill> {
         int jobid = id / 10000;
         boolean beginner = isBeginnerSkill();
 
-        if (beginner || (jobid / 100 == MapleJob.HERO.getId() || jobid == 11000)) {
+        if (beginner || (jobid / 100 == Jobs.HERO.getId() || jobid == 11000)) {
             return false;
         }
         int jobCode = getJobCode(jobid);
@@ -497,7 +497,7 @@ public class Skill implements Comparator<Skill> {
         return isMasterySkill;
     }
 
-    public Element getElement() {
+    public ElementType getElement() {
         return element;
     }
 

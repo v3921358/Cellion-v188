@@ -3,7 +3,7 @@ package handling.world;
 import java.util.List;
 
 import client.ClientSocket;
-import client.MapleDisease;
+import client.Disease;
 import java.util.Map;
 import server.MapleCarnivalFactory;
 import server.MapleCarnivalFactory.MCSkill;
@@ -66,7 +66,7 @@ public class MonsterCarnivalHandler {
                     c.SendPacket(WvsContext.enableActions());
                     return;
                 }
-                final MapleDisease dis = skil.getDisease();
+                final Disease dis = skil.getDisease();
                 boolean found = false;
                 for (User chr : c.getPlayer().getMap().getCharacters()) {
                     if (chr.getParty() == null || (c.getPlayer().getParty() != null && chr.getParty().getId() != c.getPlayer().getParty().getId())) {

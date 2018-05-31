@@ -1,6 +1,6 @@
 package handling.farm;
 
-import client.MapleCharacterCreationUtil;
+import client.CharacterCreationUtil;
 import client.ClientSocket;
 import server.farm.MapleFarm;
 import net.InPacket;
@@ -17,7 +17,7 @@ public final class FarmCreator implements ProcessPacket<ClientSocket> {
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
         String name = iPacket.DecodeString();
-        if (!MapleCharacterCreationUtil.canCreateChar(name, c.isGm())) {
+        if (!CharacterCreationUtil.canCreateChar(name, c.isGm())) {
             return;
         }
         MapleFarm farm = MapleFarm.getDefault(35549721, c, name);

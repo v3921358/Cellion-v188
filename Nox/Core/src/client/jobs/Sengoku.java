@@ -13,7 +13,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import server.StatEffect;
-import server.StatInfo;
+import enums.StatInfo;
 import server.Timer;
 import server.maps.objects.User;
 import tools.packet.BuffPacket;

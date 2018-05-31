@@ -3,7 +3,7 @@ package handling.login;
 import client.*;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.JobConstants;
 import constants.ServerConstants;
 import constants.skills.Aran;
@@ -64,7 +64,7 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
         User pNewCharacter = User.getDefault(c, pJob);
         int nCharacterPos = c.loadCharacters(c.getWorld()).size();
         final MapleItemInformationProvider pItemProvider = MapleItemInformationProvider.getInstance();
-        final MapleInventory pEquip = pNewCharacter.getInventory(MapleInventoryType.EQUIPPED);
+        final MapleInventory pEquip = pNewCharacter.getInventory(InventoryType.EQUIPPED);
         Item pItem;
 
         if (pJob == null) {
@@ -116,9 +116,9 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
         }
 
         // Make character should come last in this statement, else 'canMakeCharacter' will get spam updated.
-        if (!MapleCharacterCreationUtil.canCreateChar(name, c.isGm())
+        if (!CharacterCreationUtil.canCreateChar(name, c.isGm())
                 || (LoginInformationProvider.getInstance().isForbiddenName(name) && !c.isGm())
-                || (!MapleCharacterCreationUtil.canMakeCharacter(c.getWorld(), c.getAccID()) && !c.isGm())) {
+                || (!CharacterCreationUtil.canMakeCharacter(c.getWorld(), c.getAccID()) && !c.isGm())) {
             c.SendPacket(CLogin.addNewCharEntry(null, 10));
             return;
         }
@@ -312,7 +312,7 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             }
         }
         
-        if (nGuideBook > 0) pNewCharacter.getInventory(MapleInventoryType.ETC).addItem(new Item(nGuideBook, (byte) 0, (short) 1, (byte) 0));
+        if (nGuideBook > 0) pNewCharacter.getInventory(InventoryType.ETC).addItem(new Item(nGuideBook, (byte) 0, (short) 1, (byte) 0));
 
         if (pJob == LoginInformationProvider.JobType.Zero) {
             pNewCharacter.setLevel((short) 100);

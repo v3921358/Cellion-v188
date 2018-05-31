@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.ItemConstants;
 import database.Database;
@@ -172,7 +172,7 @@ public class DumpItems {
             if (id == 5010141) {
                 return;
             }
-            if (doneIds.contains(id) || GameConstants.getInventoryType(id) == MapleInventoryType.UNDEFINED) {
+            if (doneIds.contains(id) || GameConstants.getInventoryType(id) == InventoryType.UNDEFINED) {
                 return;
             }
             doneIds.add(id);
@@ -193,7 +193,7 @@ public class DumpItems {
             short ret = 0;
             final MapleData smEntry = iz.getChildByPath("info/slotMax");
             if (smEntry == null) {
-                if (GameConstants.getInventoryType(id) == MapleInventoryType.EQUIP) {
+                if (GameConstants.getInventoryType(id) == InventoryType.EQUIP) {
                     ret = 1;
                 } else {
                     ret = 100;

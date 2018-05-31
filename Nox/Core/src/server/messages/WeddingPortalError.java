@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -75,7 +76,7 @@ LABEL_7:
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.WeddingPortal.getType());
+        oPacket.EncodeByte(MessageOpcodesType.WeddingPortal.getType());
         oPacket.EncodeByte(type);
     }
 

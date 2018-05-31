@@ -27,7 +27,7 @@ import client.inventory.Item;
 import client.inventory.MapleImp;
 import client.inventory.MapleImp.ImpFlag;
 import constants.GameConstants;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
@@ -51,7 +51,7 @@ public class ItemMakerHandler {
 
     public static final void UsePot(final InPacket iPacket, final ClientSocket c) {
         final int itemid = iPacket.DecodeInt();
-        final Item slot = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(iPacket.DecodeShort());
+        final Item slot = c.getPlayer().getInventory(InventoryType.USE).getItem(iPacket.DecodeShort());
         if (slot == null || slot.getQuantity() <= 0 || slot.getItemId() != itemid || itemid / 10000 != 244 || MapleItemInformationProvider.getInstance().getPot(itemid) == null) {
             c.SendPacket(WvsContext.enableActions());
             return;
@@ -61,7 +61,7 @@ public class ItemMakerHandler {
             if (c.getPlayer().getImps()[i] == null) {
                 c.getPlayer().getImps()[i] = new MapleImp(itemid);
                 c.SendPacket(WvsContext.updateImp(c.getPlayer().getImps()[i], ImpFlag.SUMMONED.getValue(), i, false));
-                MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot.getPosition(), (short) 1, false, false);
+                MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot.getPosition(), (short) 1, false, false);
                 return;
             }
         }
@@ -85,8 +85,8 @@ public class ItemMakerHandler {
             c.SendPacket(WvsContext.enableActions());
             return;
         }
-        final int level = GameConstants.getInventoryType(itemid) == MapleInventoryType.ETC ? MapleItemInformationProvider.getInstance().getItemMakeLevel(itemid) : MapleItemInformationProvider.getInstance().getReqLevel(itemid);
-        if (level <= 0 || level < (Math.min(120, c.getPlayer().getLevel()) - 50) || (GameConstants.getInventoryType(itemid) != MapleInventoryType.ETC && GameConstants.getInventoryType(itemid) != MapleInventoryType.EQUIP)) {
+        final int level = GameConstants.getInventoryType(itemid) == InventoryType.ETC ? MapleItemInformationProvider.getInstance().getItemMakeLevel(itemid) : MapleItemInformationProvider.getInstance().getReqLevel(itemid);
+        if (level <= 0 || level < (Math.min(120, c.getPlayer().getLevel()) - 50) || (GameConstants.getInventoryType(itemid) != InventoryType.ETC && GameConstants.getInventoryType(itemid) != InventoryType.EQUIP)) {
             c.getPlayer().dropMessage(1, "The item must be within 50 levels of you.");
             c.SendPacket(WvsContext.enableActions());
             return;
@@ -101,10 +101,10 @@ public class ItemMakerHandler {
         mask |= ImpFlag.UPDATE_TIME.getValue();
         mask |= ImpFlag.AWAKE_TIME.getValue();
         //this is where the magic happens
-        c.getPlayer().getImps()[index].setFullness(c.getPlayer().getImps()[index].getFullness() + (100 * (GameConstants.getInventoryType(itemid) == MapleInventoryType.EQUIP ? 2 : 1)));
+        c.getPlayer().getImps()[index].setFullness(c.getPlayer().getImps()[index].getFullness() + (100 * (GameConstants.getInventoryType(itemid) == InventoryType.EQUIP ? 2 : 1)));
         if (Randomizer.nextBoolean()) {
             mask |= ImpFlag.CLOSENESS.getValue();
-            c.getPlayer().getImps()[index].setCloseness(c.getPlayer().getImps()[index].getCloseness() + 1 + (Randomizer.nextInt(5 * (GameConstants.getInventoryType(itemid) == MapleInventoryType.EQUIP ? 2 : 1))));
+            c.getPlayer().getImps()[index].setCloseness(c.getPlayer().getImps()[index].getCloseness() + 1 + (Randomizer.nextInt(5 * (GameConstants.getInventoryType(itemid) == InventoryType.EQUIP ? 2 : 1))));
         } else if (Randomizer.nextInt(5) == 0) { //1/10 chance of sickness
             c.getPlayer().getImps()[index].setState(4); //sick
             mask |= ImpFlag.STATE.getValue();
@@ -124,7 +124,7 @@ public class ItemMakerHandler {
 
     public static final void CurePot(final InPacket iPacket, final ClientSocket c) {
         final int itemid = iPacket.DecodeInt();
-        final Item slot = c.getPlayer().getInventory(MapleInventoryType.ETC).getItem((short) iPacket.DecodeInt());
+        final Item slot = c.getPlayer().getInventory(InventoryType.ETC).getItem((short) iPacket.DecodeInt());
         if (slot == null || slot.getQuantity() <= 0 || slot.getItemId() != itemid || itemid / 10000 != 434) {
             c.SendPacket(WvsContext.enableActions());
             return;
@@ -136,7 +136,7 @@ public class ItemMakerHandler {
         }
         c.getPlayer().getImps()[index].setState(1);
         c.SendPacket(WvsContext.updateImp(c.getPlayer().getImps()[index], ImpFlag.STATE.getValue(), index, false));
-        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.ETC, slot.getPosition(), (short) 1, false, false);
+        MapleInventoryManipulator.removeFromSlot(c, InventoryType.ETC, slot.getPosition(), (short) 1, false, false);
     }
 
     public static final void RewardPot(final InPacket iPacket, final ClientSocket c) {

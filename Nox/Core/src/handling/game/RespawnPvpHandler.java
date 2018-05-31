@@ -27,7 +27,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import client.ClientSocket;
-import client.Stat;
+import enums.Stat;
 import server.maps.objects.User;
 import tools.Pair;
 import net.InPacket;

@@ -12,7 +12,7 @@ import client.ClientSocket;
 import client.QuestStatus.QuestState;
 import client.anticheat.CheatingOffense;
 import client.inventory.Equip;
-import client.inventory.ItemType;
+import enums.ItemType;
 import client.inventory.MapleInventoryIdentifier;
 import constants.InventoryConstants;
 import constants.ItemConstants;

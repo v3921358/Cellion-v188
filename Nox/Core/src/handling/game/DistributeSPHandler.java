@@ -6,7 +6,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.Stat;
+import enums.Stat;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;

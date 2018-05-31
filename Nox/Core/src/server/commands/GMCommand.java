@@ -1,5 +1,11 @@
 package server.commands;
 
+import enums.NPCChatType;
+import enums.NPCInterfaceType;
+import enums.ModifyInventoryOperation;
+import enums.InventoryType;
+import enums.ItemFlag;
+import enums.Stat;
 import client.*;
 import client.anticheat.ReportType;
 import client.inventory.*;
@@ -126,7 +132,7 @@ public class GMCommand {
                 nOnline += ChannelServer.getInstance(i).getPlayerStorage().getAllCharacters().size();
             }
             if (pUser.getGMLevel() > c.getPlayer().getGMLevel()) {
-                c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, "You do not have permission to perform this action.", NPCChatByType.NPC_Cancellable));
+                c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, "You do not have permission to perform this action.", NPCInterfaceType.NPC_Cancellable));
                 return 0;
             }
             
@@ -135,7 +141,7 @@ public class GMCommand {
                 + "Account Username: #r" + pUser.getClient().getAccountName() + "#k\r\n" // Ping (" + oUser.getClient().getLatency() + ")" 
                 + "IP Address: #r" + pUser.getClient().getSessionIPAddress() + "#k\r\n\r\n"
                 + "Character: #r" + pUser.getName() + "#k\r\n"
-                + "Job: #r" + MapleJob.getName(MapleJob.getById(pUser.getJob())) + " (" + pUser.getJob() + ")#k\r\n\r\n"
+                + "Job: #r" + Jobs.getName(Jobs.getById(pUser.getJob())) + " (" + pUser.getJob() + ")#k\r\n\r\n"
                 + "Location: #r#m" + pUser.getMap().getId() + "##k\r\n"
                 + "Map ID: #r" + pUser.getMap().getId() + "#k\r\n"
                 + "Pos. X: #r" + pUser.getPosition().x + "#k / Pos. Y: #r" + pUser.getPosition().y + "#k\r\n\r\n"
@@ -151,7 +157,7 @@ public class GMCommand {
                 + "Mesos: #r" + pUser.getMeso() + "#k\r\n"
                 + "Vote Points: #r" + pUser.getVPoints() + "#k / Donor Credits: #r" + pUser.getDPoints() + "#k\r\n"
                 + "Maple Points: #r" + pUser.getCSPoints(2) + "#k / Currently Trading: #r" + (pUser.getTrade() != null) + "#k\r\n";
-            c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage, NPCChatByType.NPC_Cancellable));
+            c.SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sMessage, NPCInterfaceType.NPC_Cancellable));
             return 1;
         }
     }
@@ -408,14 +414,14 @@ public class GMCommand {
             if (oPlayer == null) {
                 c.getPlayer().dropMessage(5, "The character name you have entered was not found.");
                 return 0;
-            } else if (!MapleJob.isExist(nJob)) {
+            } else if (!Jobs.isExist(nJob)) {
                 c.getPlayer().dropMessage(5, "You have entered an invalid Job ID.");
                 return 0;
             }
 
             oPlayer.changeJob((short) nJob);
             oPlayer.setSubcategory(oPlayer.getSubcategory());
-            c.getPlayer().dropMessage(5, "Character (" + oPlayer.getName() + ") has had their job changed to " + MapleJob.getName(MapleJob.getById(nJob)) + ".");
+            c.getPlayer().dropMessage(5, "Character (" + oPlayer.getName() + ") has had their job changed to " + Jobs.getName(Jobs.getById(nJob)) + ".");
             return 1;
         }
     }
@@ -475,17 +481,17 @@ public class GMCommand {
                 c.getPlayer().dropMessage(5, "!clearinv <eq / use / setup / etc / cash / all >");
                 return 0;
             } else {
-                MapleInventoryType type;
+                InventoryType type;
                 if (splitted[1].equalsIgnoreCase("eq")) {
-                    type = MapleInventoryType.EQUIP;
+                    type = InventoryType.EQUIP;
                 } else if (splitted[1].equalsIgnoreCase("use")) {
-                    type = MapleInventoryType.USE;
+                    type = InventoryType.USE;
                 } else if (splitted[1].equalsIgnoreCase("setup")) {
-                    type = MapleInventoryType.SETUP;
+                    type = InventoryType.SETUP;
                 } else if (splitted[1].equalsIgnoreCase("etc")) {
-                    type = MapleInventoryType.ETC;
+                    type = InventoryType.ETC;
                 } else if (splitted[1].equalsIgnoreCase("cash")) {
-                    type = MapleInventoryType.CASH;
+                    type = InventoryType.CASH;
                 } else if (splitted[1].equalsIgnoreCase("all")) {
                     type = null;
                 } else {
@@ -493,8 +499,8 @@ public class GMCommand {
                     return 0;
                 }
                 if (type == null) { //All, a bit hacky, but it's okay 
-                    MapleInventoryType[] invs = {MapleInventoryType.EQUIP, MapleInventoryType.USE, MapleInventoryType.SETUP, MapleInventoryType.ETC, MapleInventoryType.CASH};
-                    for (MapleInventoryType t : invs) {
+                    InventoryType[] invs = {InventoryType.EQUIP, InventoryType.USE, InventoryType.SETUP, InventoryType.ETC, InventoryType.CASH};
+                    for (InventoryType t : invs) {
                         type = t;
                         MapleInventory inv = c.getPlayer().getInventory(type);
                         byte start = -1;
@@ -851,7 +857,7 @@ public class GMCommand {
                 c.getPlayer().dropMessage(5, itemId + " does not exist");
             } else {
                 Item item;
-                if (GameConstants.getInventoryType(itemId) == MapleInventoryType.EQUIP) {
+                if (GameConstants.getInventoryType(itemId) == InventoryType.EQUIP) {
                     item = ii.getEquipById(itemId);
                 } else {
                     item = new Item(itemId, (byte) 0, quantity, (byte) 0);
@@ -929,7 +935,7 @@ public class GMCommand {
                 return 0;
             }
             int itemid = Integer.parseInt(splitted[2]);
-            MapleInventoryType type = GameConstants.getInventoryType(itemid);
+            InventoryType type = GameConstants.getInventoryType(itemid);
             for (Item item : chr.getInventory(type).listById(itemid)) {
                 item.setFlag((byte) (item.getFlag() | ItemFlag.LOCK.getValue()));
 
@@ -938,8 +944,8 @@ public class GMCommand {
                 mod.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
                 c.SendPacket(WvsContext.inventoryOperation(true, mod));
             }
-            if (type == MapleInventoryType.EQUIP) {
-                type = MapleInventoryType.EQUIPPED;
+            if (type == InventoryType.EQUIP) {
+                type = InventoryType.EQUIPPED;
                 for (Item item : chr.getInventory(type).listById(itemid)) {
                     item.setFlag((byte) (item.getFlag() | ItemFlag.LOCK.getValue()));
                     //chr.getClient().write(CField.updateSpecialItemUse(item, type.getType()));
@@ -971,7 +977,7 @@ public class GMCommand {
                     c.getPlayer().dropMessage(6, builder.toString());
                     builder = new StringBuilder();
                 }
-                builder.append(MapleCharacterUtil.makeMapleReadable(chr.getName()));
+                builder.append(CharacterUtil.makeMapleReadable(chr.getName()));
                 builder.append(", ");
                 }
             }
@@ -1222,10 +1228,10 @@ public class GMCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            java.util.Map<Item, MapleInventoryType> eqs = new HashMap<>();
+            java.util.Map<Item, InventoryType> eqs = new HashMap<>();
             boolean add = false;
             if (splitted.length < 2 || splitted[1].equals("all")) {
-                for (MapleInventoryType type : MapleInventoryType.values()) {
+                for (InventoryType type : InventoryType.values()) {
                     for (Item item : c.getPlayer().getInventory(type)) {
                         if (ItemFlag.LOCK.check(item.getFlag())) {
                             item.setFlag((byte) (item.getFlag() - ItemFlag.LOCK.getValue()));
@@ -1244,7 +1250,7 @@ public class GMCommand {
                     }
                 }
             } else if (splitted[1].equals("eqp")) {
-                for (Item item : c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).newList()) {
+                for (Item item : c.getPlayer().getInventory(InventoryType.EQUIPPED).newList()) {
                     if (ItemFlag.LOCK.check(item.getFlag())) {
                         item.setFlag((byte) (item.getFlag() - ItemFlag.LOCK.getValue()));
                         add = true;
@@ -1256,12 +1262,12 @@ public class GMCommand {
                         //c.write(CField.updateSpecialItemUse(item, type.getType()));
                     }
                     if (add) {
-                        eqs.put(item, MapleInventoryType.EQUIP);
+                        eqs.put(item, InventoryType.EQUIP);
                     }
                     add = false;
                 }
             } else if (splitted[1].equals("eq")) {
-                for (Item item : c.getPlayer().getInventory(MapleInventoryType.EQUIP)) {
+                for (Item item : c.getPlayer().getInventory(InventoryType.EQUIP)) {
                     if (ItemFlag.LOCK.check(item.getFlag())) {
                         item.setFlag((byte) (item.getFlag() - ItemFlag.LOCK.getValue()));
                         add = true;
@@ -1273,12 +1279,12 @@ public class GMCommand {
                         //c.write(CField.updateSpecialItemUse(item, type.getType()));
                     }
                     if (add) {
-                        eqs.put(item, MapleInventoryType.EQUIP);
+                        eqs.put(item, InventoryType.EQUIP);
                     }
                     add = false;
                 }
             } else if (splitted[1].equals("u")) {
-                for (Item item : c.getPlayer().getInventory(MapleInventoryType.USE)) {
+                for (Item item : c.getPlayer().getInventory(InventoryType.USE)) {
                     if (ItemFlag.LOCK.check(item.getFlag())) {
                         item.setFlag((byte) (item.getFlag() - ItemFlag.LOCK.getValue()));
                         add = true;
@@ -1290,12 +1296,12 @@ public class GMCommand {
                         //c.write(CField.updateSpecialItemUse(item, type.getType()));
                     }
                     if (add) {
-                        eqs.put(item, MapleInventoryType.USE);
+                        eqs.put(item, InventoryType.USE);
                     }
                     add = false;
                 }
             } else if (splitted[1].equals("s")) {
-                for (Item item : c.getPlayer().getInventory(MapleInventoryType.SETUP)) {
+                for (Item item : c.getPlayer().getInventory(InventoryType.SETUP)) {
                     if (ItemFlag.LOCK.check(item.getFlag())) {
                         item.setFlag((byte) (item.getFlag() - ItemFlag.LOCK.getValue()));
                         add = true;
@@ -1307,12 +1313,12 @@ public class GMCommand {
                         //c.write(CField.updateSpecialItemUse(item, type.getType()));
                     }
                     if (add) {
-                        eqs.put(item, MapleInventoryType.SETUP);
+                        eqs.put(item, InventoryType.SETUP);
                     }
                     add = false;
                 }
             } else if (splitted[1].equals("e")) {
-                for (Item item : c.getPlayer().getInventory(MapleInventoryType.ETC)) {
+                for (Item item : c.getPlayer().getInventory(InventoryType.ETC)) {
                     if (ItemFlag.LOCK.check(item.getFlag())) {
                         item.setFlag((byte) (item.getFlag() - ItemFlag.LOCK.getValue()));
                         add = true;
@@ -1324,12 +1330,12 @@ public class GMCommand {
                         //c.write(CField.updateSpecialItemUse(item, type.getType()));
                     }
                     if (add) {
-                        eqs.put(item, MapleInventoryType.ETC);
+                        eqs.put(item, InventoryType.ETC);
                     }
                     add = false;
                 }
             } else if (splitted[1].equals("c")) {
-                for (Item item : c.getPlayer().getInventory(MapleInventoryType.CASH)) {
+                for (Item item : c.getPlayer().getInventory(InventoryType.CASH)) {
                     if (ItemFlag.LOCK.check(item.getFlag())) {
                         item.setFlag((byte) (item.getFlag() - ItemFlag.LOCK.getValue()));
                         add = true;
@@ -1341,7 +1347,7 @@ public class GMCommand {
                         //c.write(CField.updateSpecialItemUse(item, type.getType()));
                     }
                     if (add) {
-                        eqs.put(item, MapleInventoryType.CASH);
+                        eqs.put(item, InventoryType.CASH);
                     }
                     add = false;
                 }
@@ -1349,7 +1355,7 @@ public class GMCommand {
                 c.getPlayer().dropMessage(6, "[all/eqp/eq/u/s/e/c]");
             }
 
-            for (Entry<Item, MapleInventoryType> eq : eqs.entrySet()) {
+            for (Entry<Item, InventoryType> eq : eqs.entrySet()) {
                 c.getPlayer().forceReAddItemNoUpdate(eq.getKey().copy(), eq.getValue());
             }
             return 1;
@@ -1367,7 +1373,7 @@ public class GMCommand {
                 c.getPlayer().dropMessage(5, itemId + " does not exist");
             } else {
                 Item toDrop;
-                if (GameConstants.getInventoryType(itemId) == MapleInventoryType.EQUIP) {
+                if (GameConstants.getInventoryType(itemId) == InventoryType.EQUIP) {
 
                     toDrop = ii.randomizeStats((Equip) ii.getEquipById(itemId));
                 } else {
@@ -1404,7 +1410,7 @@ public class GMCommand {
                 c.getPlayer().dropMessage(5, itemName + " does not exist");
             } else {
                 Item toDrop;
-                if (GameConstants.getInventoryType(itemId) == MapleInventoryType.EQUIP) {
+                if (GameConstants.getInventoryType(itemId) == InventoryType.EQUIP) {
 
                     toDrop = (Equip) ii.getEquipById(itemId);
                 } else {

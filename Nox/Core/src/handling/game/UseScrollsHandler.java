@@ -8,10 +8,10 @@ import client.PlayerStats;
 import client.SkillFactory;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.ItemFlag;
-import client.inventory.MapleInventoryType;
+import enums.ItemFlag;
+import enums.InventoryType;
 import client.inventory.ModifyInventory;
-import client.inventory.ModifyInventoryOperation;
+import enums.ModifyInventoryOperation;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import constants.ItemConstants;
@@ -19,7 +19,7 @@ import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.maps.objects.User;
 import net.InPacket;
-import server.potentials.ItemPotentialTierType;
+import enums.ItemPotentialTierType;
 import tools.packet.CField;
 import tools.packet.WvsContext;
 import net.ProcessPacket;
@@ -56,9 +56,9 @@ public class UseScrollsHandler implements ProcessPacket<ClientSocket> {
         }
         Equip toScroll;
         if (dst < 0) {
-            toScroll = (Equip) chr.getInventory(MapleInventoryType.EQUIPPED).getItem(dst);
+            toScroll = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem(dst);
         } else {
-            toScroll = (Equip) chr.getInventory(MapleInventoryType.EQUIP).getItem(dst);
+            toScroll = (Equip) chr.getInventory(InventoryType.EQUIP).getItem(dst);
         }
 
         final byte oldLevel = toScroll.getLevel();
@@ -67,9 +67,9 @@ public class UseScrollsHandler implements ProcessPacket<ClientSocket> {
         final short oldFlag = toScroll.getFlag();
         final short oldSlots = toScroll.getUpgradeSlots();
 
-        Item scroll = chr.getInventory(MapleInventoryType.USE).getItem(slot);
+        Item scroll = chr.getInventory(InventoryType.USE).getItem(slot);
         if (scroll == null) {
-            scroll = chr.getInventory(MapleInventoryType.CASH).getItem(slot);
+            scroll = chr.getInventory(InventoryType.CASH).getItem(slot);
             if (scroll == null) {
                 c.SendPacket(WvsContext.inventoryOperation(true, new ArrayList<>()));
                 c.SendPacket(WvsContext.enableActions());
@@ -133,7 +133,7 @@ public class UseScrollsHandler implements ProcessPacket<ClientSocket> {
         }
 
         if (whiteScroll) {
-            wscroll = chr.getInventory(MapleInventoryType.USE).findById(2340000);
+            wscroll = chr.getInventory(InventoryType.USE).findById(2340000);
             if (wscroll == null) {
                 whiteScroll = false;
             }
@@ -203,10 +203,10 @@ public class UseScrollsHandler implements ProcessPacket<ClientSocket> {
         } else if ((GameConstants.isCleanSlate(scroll.getItemId()) && scrolled.getUpgradeSlots() > oldSlots)) {
             scrollSuccess = Equip.ScrollResult.SUCCESS;
         }
-        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, scroll.getPosition(), (short) 1, false);
+        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, scroll.getPosition(), (short) 1, false);
         if (whiteScroll) {
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, wscroll.getPosition(), (short) 1, false, false);
-        } else if (scrollSuccess == Equip.ScrollResult.FAIL && scrolled.getUpgradeSlots() < oldSlots && c.getPlayer().getInventory(MapleInventoryType.CASH).findById(5640000) != null) {
+            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, wscroll.getPosition(), (short) 1, false, false);
+        } else if (scrollSuccess == Equip.ScrollResult.FAIL && scrolled.getUpgradeSlots() < oldSlots && c.getPlayer().getInventory(InventoryType.CASH).findById(5640000) != null) {
             chr.setScrolledPosition(scrolled.getPosition());
             if (vegas == 0) {
                 c.SendPacket(WvsContext.pamSongUI());
@@ -217,9 +217,9 @@ public class UseScrollsHandler implements ProcessPacket<ClientSocket> {
         if (scrollSuccess == Equip.ScrollResult.CURSE) {
             modifications.add(new ModifyInventory(ModifyInventoryOperation.Remove, toScroll));
             if (dst < 0) {
-                chr.getInventory(MapleInventoryType.EQUIPPED).removeItem(toScroll.getPosition());
+                chr.getInventory(InventoryType.EQUIPPED).removeItem(toScroll.getPosition());
             } else {
-                chr.getInventory(MapleInventoryType.EQUIP).removeItem(toScroll.getPosition());
+                chr.getInventory(InventoryType.EQUIP).removeItem(toScroll.getPosition());
             }
         }
         modifications.add(new ModifyInventory(ModifyInventoryOperation.Remove, scrolled));

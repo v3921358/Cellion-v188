@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -19,7 +20,7 @@ public class OnLimitNonCombatExpIncreaseMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.LimitNonCombatExpIncrease.getType());
+        oPacket.EncodeByte(MessageOpcodesType.LimitNonCombatExpIncrease.getType());
         oPacket.EncodeLong(flag);
         /*
 		  if ( !(v21 & 0x100000) )

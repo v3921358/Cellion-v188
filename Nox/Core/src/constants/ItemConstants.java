@@ -1,6 +1,6 @@
 package constants;
 
-import server.potentials.ItemPotentialTierType;
+import enums.ItemPotentialTierType;
 
 /**
  *

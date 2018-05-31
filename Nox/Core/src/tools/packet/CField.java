@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import client.ClientSocket;
-import client.MapleKeyLayout;
+import client.KeyLayout;
 import client.QuestStatus;
 import client.Skill;
 import client.SkillMacro;
 import client.inventory.Equip.ScrollResult;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.MapleRing;
 import constants.GameConstants;
 import constants.QuickMove.QuickMoveNPC;
@@ -33,8 +33,8 @@ import handling.world.MapleGuildAlliance;
 import service.SendPacketOpcode;
 import provider.data.HexTool;
 import net.OutPacket;
-import scripting.provider.NPCChatByType;
-import scripting.provider.NPCChatType;
+import enums.NPCInterfaceType;
+import enums.NPCChatType;
 import server.MaplePackageActions;
 import server.Trade;
 import server.Randomizer;
@@ -57,7 +57,7 @@ import server.maps.objects.MonsterFamiliar;
 import server.movement.LifeMovementFragment;
 import server.quest.Quest;
 import server.shops.Shop;
-import server.shops.ShopOperationType;
+import enums.ShopOperationType;
 import handling.world.AttackMonster;
 import handling.game.PlayerDamageHandler;
 import handling.game.WhisperHandler.WhisperFlag;
@@ -273,7 +273,7 @@ public class CField {
 
         oPacket.EncodeInt(nSkill); // nSkillId
         oPacket.EncodeInt(nFinalSkill); // nFinalSkillId
-        oPacket.EncodeInt(pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11).getItemId()); // nWeaponId
+        oPacket.EncodeInt(pPlayer.getInventory(InventoryType.EQUIPPED).getItem((short) -11).getItemId()); // nWeaponId
         oPacket.EncodeInt(nDelay); // nDelay
         oPacket.EncodeInt(nMob); // nMobId
         oPacket.EncodeInt(nRequestTime); // nReqTime
@@ -1130,7 +1130,7 @@ public class CField {
 
         oPacket.EncodeInt(0); //m_dwDriverID
         oPacket.EncodeInt(0); //m_dwPassenserID
-        oPacket.EncodeInt(Math.min(250, chr.getInventory(MapleInventoryType.CASH).countById(5110000))); //nChocoCount
+        oPacket.EncodeInt(Math.min(250, chr.getInventory(InventoryType.CASH).countById(5110000))); //nChocoCount
         oPacket.EncodeInt(chr.getItemEffect()); //nActiveEffectItemID
         //oPacket.EncodeInt(0); //nMonkeyEffectItemID
         //MapleQuestStatus stat = chr.getQuestNoAdd(MapleQuest.getInstance(124000));
@@ -1142,7 +1142,7 @@ public class CField {
         oPacket.EncodeInt(0); //nKaiserTailID
         oPacket.EncodeInt(0); //m_nCompletedSetItemID
         oPacket.EncodeShort(-1); //m_nFieldSeatID
-        oPacket.EncodeInt(GameConstants.getInventoryType(chr.getChair()) == MapleInventoryType.SETUP ? chr.getChair() : 0); //m_nPortableChairID
+        oPacket.EncodeInt(GameConstants.getInventoryType(chr.getChair()) == InventoryType.SETUP ? chr.getChair() : 0); //m_nPortableChairID
         oPacket.EncodeInt(0);// if (int > 0), decodestr
         oPacket.EncodeInt(0);
         oPacket.EncodeInt(0);
@@ -1694,7 +1694,7 @@ public class CField {
         oPacket.EncodeShort(android.getFace() - 20000);
         oPacket.EncodeString(android.getName());
         for (short i = -1200; i > -1207; i = (short) (i - 1)) {
-            Item item = chr.getInventory(MapleInventoryType.EQUIPPED).getItem(i);
+            Item item = chr.getInventory(InventoryType.EQUIPPED).getItem(i);
             oPacket.EncodeInt(item != null ? item.getItemId() : 0);
         }
 
@@ -1729,7 +1729,7 @@ public class CField {
         oPacket.EncodeByte(itemOnly ? 1 : 0);
         if (itemOnly) {
             for (short i = -1200; i > -1207; i = (short) (i - 1)) {
-                Item item = cid.getInventory(MapleInventoryType.EQUIPPED).getItem(i);
+                Item item = cid.getInventory(InventoryType.EQUIPPED).getItem(i);
                 oPacket.EncodeInt(item != null ? item.getItemId() : 0);
             }
         } else {
@@ -3125,7 +3125,7 @@ public class CField {
      * @param jobid
      * @return
      */
-    public static OutPacket getKeymap(MapleKeyLayout layout, int jobid) {
+    public static OutPacket getKeymap(KeyLayout layout, int jobid) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.FuncKeyMappedInit.getValue());
         layout.writeData(oPacket, jobid);
@@ -3450,11 +3450,11 @@ public class CField {
             return oPacket;
         }
 
-        public static OutPacket getNPCTalk(int npc, NPCChatType msgType, String talk, NPCChatByType type) {
+        public static OutPacket getNPCTalk(int npc, NPCChatType msgType, String talk, NPCInterfaceType type) {
             return getNPCTalk(npc, msgType, talk, type, npc);
         }
 
-        public static OutPacket getNPCTalk(int npc, NPCChatType msgType, String talk, NPCChatByType type, int overrideNpcId) {
+        public static OutPacket getNPCTalk(int npc, NPCChatType msgType, String talk, NPCInterfaceType type, int overrideNpcId) {
             return getNPCTalk(npc, msgType, talk, type.getValue(), overrideNpcId); // legacy compatible for now, there are just too many scripts.. my god
         }
 
@@ -3873,7 +3873,7 @@ public class CField {
             return oPacket;
         }
 
-        public static OutPacket storeStorage(byte slots, MapleInventoryType type, Collection<Item> items) {
+        public static OutPacket storeStorage(byte slots, InventoryType type, Collection<Item> items) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.TrunkResult.getValue());
             oPacket.EncodeByte(13);
@@ -3888,7 +3888,7 @@ public class CField {
             return oPacket;
         }
 
-        public static OutPacket takeOutStorage(byte slots, MapleInventoryType type, Collection<Item> items) {
+        public static OutPacket takeOutStorage(byte slots, InventoryType type, Collection<Item> items) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.TrunkResult.getValue());
             oPacket.EncodeByte(9);

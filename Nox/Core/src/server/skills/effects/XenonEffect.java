@@ -2,11 +2,11 @@ package server.skills.effects;
 
 import server.skills.effects.manager.AbstractEffect;
 import client.CharacterTemporaryStat;
-import client.MapleJob;
+import client.Jobs;
 import client.MonsterStatus;
 import constants.skills.Xenon;
 import server.StatEffect;
-import server.StatInfo;
+import enums.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**

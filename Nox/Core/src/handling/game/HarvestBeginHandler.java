@@ -4,7 +4,7 @@ import client.ClientSocket;
 import client.QuestStatus;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import server.maps.objects.User;
 import server.maps.objects.Reactor;
@@ -28,7 +28,7 @@ public final class HarvestBeginHandler implements ProcessPacket<ClientSocket> {
         if (reactor == null || !reactor.isAlive() || reactor.getReactorId() > 200011 || chr.getStat().harvestingTool <= 0 || reactor.getTruePosition().distanceSq(chr.getTruePosition()) > 10000 || c.getPlayer().getFatigue() >= 200) {
             return;
         }
-        Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((short) c.getPlayer().getStat().harvestingTool);
+        Item item = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((short) c.getPlayer().getStat().harvestingTool);
         if (item == null || ((Equip) item).getDurability() == 0) {
             c.getPlayer().getStat().OnProfessionToolRequest(c.getPlayer());
             return;

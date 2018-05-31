@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import client.inventory.Equip;
-import client.inventory.EquipSlotType;
-import client.inventory.MapleInventoryType;
+import enums.EquipSlotType;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.ItemConstants;
 import database.Database;
@@ -60,16 +60,16 @@ public final class MonsterBook
     }
 
     public void applyBook(User chr, boolean first_login) {
-        Equip item = (Equip) chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) EquipSlotType.MonsterBook.getSlot());
+        Equip item = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem((short) EquipSlotType.MonsterBook.getSlot());
         if (item == null) {
             item = (Equip) MapleItemInformationProvider.getInstance().getEquipById(ItemConstants.CRUSADER_CODEX);
             item.setPosition((short) EquipSlotType.MonsterBook.getSlot());
         }
         modifyBook(item);
         if (first_login) {
-            chr.getInventory(MapleInventoryType.EQUIPPED).addFromDB(item);
+            chr.getInventory(InventoryType.EQUIPPED).addFromDB(item);
         } else {
-            chr.forceReAddItemBook(item, MapleInventoryType.EQUIPPED);
+            chr.forceReAddItemBook(item, InventoryType.EQUIPPED);
             chr.equipChanged();
         }
     }

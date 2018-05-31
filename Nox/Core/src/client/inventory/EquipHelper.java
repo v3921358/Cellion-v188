@@ -1,5 +1,7 @@
 package client.inventory;
 
+import enums.EquipStat;
+import enums.EquipSpecialStat;
 import java.util.ArrayList;
 import java.util.List;
 

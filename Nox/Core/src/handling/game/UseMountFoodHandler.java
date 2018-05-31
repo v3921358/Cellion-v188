@@ -2,7 +2,7 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.MapleMount;
 import constants.GameConstants;
 import server.MapleInventoryManipulator;
@@ -29,7 +29,7 @@ public class UseMountFoodHandler implements ProcessPacket<ClientSocket> {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         final byte slot = (byte) iPacket.DecodeShort();
         final int itemid = iPacket.DecodeInt(); //2260000 usually
-        final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
+        final Item toUse = chr.getInventory(InventoryType.USE).getItem(slot);
         final MapleMount mount = chr.getMount();
 
         if (itemid / 10000 == 226 && toUse != null && toUse.getQuantity() > 0 && toUse.getItemId() == itemid && mount != null && !c.getPlayer().hasBlockedInventory()) {
@@ -47,7 +47,7 @@ public class UseMountFoodHandler implements ProcessPacket<ClientSocket> {
                 }
             }
             chr.getMap().broadcastPacket(WvsContext.updateMount(chr, levelup));
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
+            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
         }
         c.SendPacket(WvsContext.enableActions());
     }

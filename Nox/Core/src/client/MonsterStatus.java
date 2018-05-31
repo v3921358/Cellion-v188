@@ -100,23 +100,23 @@ public enum MonsterStatus implements Serializable, TemporaryStat {
         return i;
     }
 
-    public static final MapleDisease getLinkedDisease(final MonsterStatus skill) {
+    public static final Disease getLinkedDisease(final MonsterStatus skill) {
         switch (skill) {
             case STUN:
             case SHADOW_WEB:
-                return MapleDisease.STUN;
+                return Disease.STUN;
             case POISON:
             case VENOMOUS_WEAPON:
-                return MapleDisease.POISON;
+                return Disease.POISON;
             case SEAL:
             case MAGIC_CRASH:
-                return MapleDisease.SEAL;
+                return Disease.SEAL;
             case FREEZE:
-                return MapleDisease.FREEZE;
+                return Disease.FREEZE;
             case DARKNESS:
-                return MapleDisease.DARKNESS;
+                return Disease.DARKNESS;
             case SPEED:
-                return MapleDisease.SLOW;
+                return Disease.SLOW;
         }
         return null;
     }

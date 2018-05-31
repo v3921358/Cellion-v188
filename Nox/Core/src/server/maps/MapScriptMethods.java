@@ -1,5 +1,6 @@
 package server.maps;
 
+import enums.SavedLocationType;
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;

@@ -1,5 +1,8 @@
 package server.life;
 
+import enums.MonsterCategory;
+import enums.MonsterHPType;
+import enums.ElementType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,110 +17,7 @@ import server.MapleStringInformationProvider;
 
 public class MonsterStats {
 
-    /*
-    public enum MobStat {
-
-    PAD(0),
-    PDR(1),
-    MAD(2),
-    MDR(3),
-    ACC(4),
-    EVA(5),
-    Speed(6),
-    Stun(7),
-    Freeze(8),
-    Poison(9),
-    Seal(10),
-    Darkness(11),
-    PowerUp(12),
-    MagicUp(13),
-    PGuardUp(14),
-    MGuardUp(15),
-    PImmune(16),
-    MImmune(17),
-    Web(18),
-    HardSkin(19),
-    Ambush(20),
-    Venom(21),
-    Blind(22),
-    SealSkill(23),
-    Dazzle(24),
-    PCounter(25),
-    MCounter(26),
-    RiseByToss(27),
-    BodyPressure(28),
-    Weakness(29),
-    Showdown(30),
-    MagicCrash(31),
-    DamagedElemAttr(32),
-    Dark(33),
-    Mystery(34),
-    AddDamParty(35),
-    HitCriDamR(36),
-    Fatality(37),
-    Lifting(38),
-    DeadlyCharge(39),
-    Smite(40),
-    AddDamSkill(41),
-    Incizing(42),
-    DodgeBodyAttack(43),
-    DebuffHealing(44),
-    AddDamSkill2(45),
-    BodyAttack(46),
-    TempMoveAbility(47),
-    FixDamRBuff(48),
-    ElementDarkness(49),
-    AreaInstallByHit(50),
-    BMageDebuff(51),
-    JaguarProvoke(52),
-    JaguarBleeding(53),
-    DarkLightning(54),
-    PinkbeanFlowerPot(55),
-    BattlePvP_Helena_Mark(56),
-    PsychicLock(57),
-    PsychicLockCoolTime(58),
-    PsychicGroundMark(59),
-    PowerImmune(60),
-    PsychicForce(61),
-    MultiPMDR(62),
-    ElementResetBySummon(63),
-    BahamutLightElemAddDam(64),
-    BossPropPlus(65),
-    MultiDamSkill(66),
-    RWLiftPress(67),
-    RWChoppingHammer(68),
-    Unknown(69), // 2 Unknowns, not sure where they start between here and HangOver
-    Unknown2(70),
-    TimeBomb(71),
-    Treasure(72),
-    AddEffect(73),
-    Invincible(74),
-    Explosion(75),
-    HangOver(76),
-    Burned(77),
-    BalogDisable(78),
-    ExchangeAttack(79),
-    AddBuffStat(80),
-    LinkTeam(81),
-    SoulExplosion(82),
-    SeperateSoulP(83),
-    SeperateSoulC(84),
-    Ember(85),
-    TrueSight(86),
-    Laser(87),
-    StatResetSkill(88),
-    COUNT(89);
-    
-    private final int nValue;
-    private final int nIndex;
-    
-    private MobStat(int uFlag) {
-            this.nValue = 1 << (0x1F - (uFlag & 0x1F));
-            this.nIndex = 3 - (uFlag >> 5);
-    }
-}
-     */
-    private final MonsterHpDisplayType HPDisplayType;
+    private final MonsterHPType HPDisplayType;
     private final byte cp, rareItemDropLevel, summonType;
     private final MonsterCategory category;
     private short level,
@@ -136,7 +36,7 @@ public class MonsterStats {
             mobile, fly, onlyNormalAttack, friendly, noDoom, partyBonusMob, changeableMob, escort,
             unknownDefaultMaxHP, unknownDefaultMaxMP,
             showNotRemoteDam, ignoreMoveImpact, individualReward, isRemoteRange, useReaction;
-    private final EnumMap<Element, ElementalEffectiveness> resistance = new EnumMap<>(Element.class);
+    private final EnumMap<ElementType, ElementalEffectiveness> resistance = new EnumMap<>(ElementType.class);
     private final List<Integer> revives = new ArrayList<>();
 
     private final int fs;
@@ -221,8 +121,7 @@ public class MonsterStats {
 
         final String ElementStr = data.readAsciiString();
         for (int i = 0; i < ElementStr.length(); i += 2) {
-            resistance.put(
-                    Element.getFromChar(ElementStr.charAt(i)),
+            resistance.put(ElementType.getFromChar(ElementStr.charAt(i)),
                     ElementalEffectiveness.getByNumber(Integer.valueOf(String.valueOf(ElementStr.charAt(i + 1)))));
         }
 
@@ -314,7 +213,7 @@ public class MonsterStats {
 
         data.readShort(); // Movement speed, not handled for now
 
-        this.HPDisplayType = MonsterHpDisplayType.getFromInt((byte) data.readByte());
+        this.HPDisplayType = MonsterHPType.getFromInt((byte) data.readByte());
     }
 
     public void setChange(boolean bEnabled) {
@@ -493,19 +392,19 @@ public class MonsterStats {
         return MDRate;
     }
 
-    public EnumMap<Element, ElementalEffectiveness> getElements() {
+    public EnumMap<ElementType, ElementalEffectiveness> getElements() {
         return resistance;
     }
 
-    public void setEffectiveness(Element e, ElementalEffectiveness ee) {
+    public void setEffectiveness(ElementType e, ElementalEffectiveness ee) {
         resistance.put(e, ee);
     }
 
-    public void removeEffectiveness(Element e) {
+    public void removeEffectiveness(ElementType e) {
         resistance.remove(e);
     }
 
-    public ElementalEffectiveness getEffectiveness(Element e) {
+    public ElementalEffectiveness getEffectiveness(ElementType e) {
         ElementalEffectiveness elementalEffectiveness = resistance.get(e);
         if (elementalEffectiveness == null) {
             return ElementalEffectiveness.NORMAL;
@@ -572,7 +471,7 @@ public class MonsterStats {
         return buffToGive;
     }
 
-    public MonsterHpDisplayType getHPDisplayType() {
+    public MonsterHPType getHPDisplayType() {
         return HPDisplayType;
     }
 
@@ -663,4 +562,106 @@ public class MonsterStats {
     public boolean getIsUseReaction() {
         return useReaction;
     }
+    
+    /*public enum MobStat {
+
+        PAD(0),
+        PDR(1),
+        MAD(2),
+        MDR(3),
+        ACC(4),
+        EVA(5),
+        Speed(6),
+        Stun(7),
+        Freeze(8),
+        Poison(9),
+        Seal(10),
+        Darkness(11),
+        PowerUp(12),
+        MagicUp(13),
+        PGuardUp(14),
+        MGuardUp(15),
+        PImmune(16),
+        MImmune(17),
+        Web(18),
+        HardSkin(19),
+        Ambush(20),
+        Venom(21),
+        Blind(22),
+        SealSkill(23),
+        Dazzle(24),
+        PCounter(25),
+        MCounter(26),
+        RiseByToss(27),
+        BodyPressure(28),
+        Weakness(29),
+        Showdown(30),
+        MagicCrash(31),
+        DamagedElemAttr(32),
+        Dark(33),
+        Mystery(34),
+        AddDamParty(35),
+        HitCriDamR(36),
+        Fatality(37),
+        Lifting(38),
+        DeadlyCharge(39),
+        Smite(40),
+        AddDamSkill(41),
+        Incizing(42),
+        DodgeBodyAttack(43),
+        DebuffHealing(44),
+        AddDamSkill2(45),
+        BodyAttack(46),
+        TempMoveAbility(47),
+        FixDamRBuff(48),
+        ElementDarkness(49),
+        AreaInstallByHit(50),
+        BMageDebuff(51),
+        JaguarProvoke(52),
+        JaguarBleeding(53),
+        DarkLightning(54),
+        PinkbeanFlowerPot(55),
+        BattlePvP_Helena_Mark(56),
+        PsychicLock(57),
+        PsychicLockCoolTime(58),
+        PsychicGroundMark(59),
+        PowerImmune(60),
+        PsychicForce(61),
+        MultiPMDR(62),
+        ElementResetBySummon(63),
+        BahamutLightElemAddDam(64),
+        BossPropPlus(65),
+        MultiDamSkill(66),
+        RWLiftPress(67),
+        RWChoppingHammer(68),
+        Unknown(69), // 2 Unknowns, not sure where they start between here and HangOver
+        Unknown2(70),
+        TimeBomb(71),
+        Treasure(72),
+        AddEffect(73),
+        Invincible(74),
+        Explosion(75),
+        HangOver(76),
+        Burned(77),
+        BalogDisable(78),
+        ExchangeAttack(79),
+        AddBuffStat(80),
+        LinkTeam(81),
+        SoulExplosion(82),
+        SeperateSoulP(83),
+        SeperateSoulC(84),
+        Ember(85),
+        TrueSight(86),
+        Laser(87),
+        StatResetSkill(88),
+        COUNT(89);
+
+        private final int nValue;
+        private final int nIndex;
+
+        private MobStat(int uFlag) {
+                this.nValue = 1 << (0x1F - (uFlag & 0x1F));
+                this.nIndex = 3 - (uFlag >> 5);
+        }
+    }*/
 }

@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.MapleInventoryManipulator;
 import net.InPacket;
 import net.ProcessPacket;
@@ -24,12 +24,12 @@ public class ItemMoveHandler implements ProcessPacket<ClientSocket> {
         }
         c.getPlayer().setScrolledPosition((short) 0);
         c.getPlayer().updateTick(iPacket.DecodeInt());
-        MapleInventoryType type = MapleInventoryType.getByType(iPacket.DecodeByte());
+        InventoryType type = InventoryType.getByType(iPacket.DecodeByte());
         final short src = iPacket.DecodeShort();
         final short dst = iPacket.DecodeShort();
         final short quantity = iPacket.DecodeShort();
         if (src < 0 && dst < 0) {
-            type = MapleInventoryType.getByType((byte) -1);
+            type = InventoryType.getByType((byte) -1);
         }
         if (src < 0 && dst > 0) {
             MapleInventoryManipulator.unequip(c, src, dst);

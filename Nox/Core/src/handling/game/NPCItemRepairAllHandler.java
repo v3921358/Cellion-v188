@@ -3,7 +3,7 @@ package handling.game;
 import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import java.util.HashMap;
 import java.util.Map;
 import server.MapleItemInformationProvider;
@@ -29,8 +29,8 @@ public class NPCItemRepairAllHandler implements ProcessPacket<ClientSocket> {
         Map<String, Integer> eqStats;
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         final Map<Equip, Integer> eqs = new HashMap<>();
-        final MapleInventoryType[] types = {MapleInventoryType.EQUIP, MapleInventoryType.EQUIPPED};
-        for (MapleInventoryType type : types) {
+        final InventoryType[] types = {InventoryType.EQUIP, InventoryType.EQUIPPED};
+        for (InventoryType type : types) {
             for (Item item : c.getPlayer().getInventory(type).newList()) {
                 if (item instanceof Equip) { //redundant
                     eq = (Equip) item;
@@ -53,7 +53,7 @@ public class NPCItemRepairAllHandler implements ProcessPacket<ClientSocket> {
         for (Map.Entry<Equip, Integer> eqqz : eqs.entrySet()) {
             ez = eqqz.getKey();
             ez.setDurability(eqqz.getValue());
-            c.getPlayer().forceReAddItem(ez.copy(), ez.getPosition() < 0 ? MapleInventoryType.EQUIPPED : MapleInventoryType.EQUIP);
+            c.getPlayer().forceReAddItem(ez.copy(), ez.getPosition() < 0 ? InventoryType.EQUIPPED : InventoryType.EQUIP);
         }
     }
 }

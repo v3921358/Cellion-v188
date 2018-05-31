@@ -1,13 +1,15 @@
 package server.life;
 
+import enums.MonsterHPType;
+import enums.ElementType;
 import server.life.mob.BuffedMob;
 import server.life.mob.MobTemporaryStat;
 import server.life.mob.ForcedMobStat;
 import client.*;
-import client.MapleTrait.MapleTraitType;
+import client.Trait.MapleTraitType;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.ServerConstants;
 import constants.GameConstants;
 import constants.ServerConstants;
@@ -27,7 +29,7 @@ import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
-import server.messages.ExpGainTypes;
+import enums.ExpType;
 import service.ChannelServer;
 import tools.ConcurrentEnumMap;
 import tools.packet.CField;
@@ -347,7 +349,7 @@ public class Mob extends AbstractLoadedMapleLife {
                 }
 
                 if (hp <= 0) {
-                    if (stats.getHPDisplayType() == MonsterHpDisplayType.BossHP) {
+                    if (stats.getHPDisplayType() == MonsterHPType.BossHP) {
                         map.broadcastPacket(MobPacket.showBossHP(getId(), -1, getMobMaxHp()), this.getTruePosition());
                     }
                     // Spawn revives - This must be called before broadcasting killMonster, otherwise the position will be incorrectly spawned
@@ -444,7 +446,7 @@ public class Mob extends AbstractLoadedMapleLife {
         }
 
         if (nBaseEXP > 0) {
-            EnumMap<ExpGainTypes, Integer> expIncreaseStats = new EnumMap<>(ExpGainTypes.class);
+            EnumMap<ExpType, Integer> expIncreaseStats = new EnumMap<>(ExpType.class);
 
             // Server EXP Rate
             double expRate_Server = ChannelServer.getInstance(map.getChannel()).getExpRate(pPlayer.getWorld());
@@ -486,8 +488,8 @@ public class Mob extends AbstractLoadedMapleLife {
                 int partyBonusAdditionalEXP = (int) (nBaseEXP * (nPartybonusMultiplier / 100f));
                 bonusEXPGained += partyBonusAdditionalEXP;
 
-                expIncreaseStats.put(ExpGainTypes.PartyBonus, partyBonusAdditionalEXP);
-                expIncreaseStats.put(ExpGainTypes.PartyBonusPercentage, nPartybonusMultiplier);
+                expIncreaseStats.put(ExpType.PartyBonus, partyBonusAdditionalEXP);
+                expIncreaseStats.put(ExpType.PartyBonusPercentage, nPartybonusMultiplier);
             }
 
             // Holy symbol
@@ -497,7 +499,7 @@ public class Mob extends AbstractLoadedMapleLife {
                 int holySymbolAdditionalEXP = (int) (nBaseEXP * partybonusPercentage);
                 bonusEXPGained += holySymbolAdditionalEXP;
 
-                expIncreaseStats.put(ExpGainTypes.BaseAddExp, holySymbolAdditionalEXP);
+                expIncreaseStats.put(ExpType.BaseAddExp, holySymbolAdditionalEXP);
             }
 
             // Equipment bonus EXP [fairy]
@@ -505,7 +507,7 @@ public class Mob extends AbstractLoadedMapleLife {
                 int fairyBonusEXP = (int) ((nBaseEXP / 100.0) * pPlayer.getFairyExp());
                 bonusEXPGained += fairyBonusEXP;
 
-                expIncreaseStats.put(ExpGainTypes.ItemBonus, fairyBonusEXP);
+                expIncreaseStats.put(ExpType.ItemBonus, fairyBonusEXP);
             }
 
             // Exp buff bonus
@@ -513,7 +515,7 @@ public class Mob extends AbstractLoadedMapleLife {
                 int bonusAdditionalEXP = (int) (nBaseEXP * (pPlayer.getStat().expBuff / 100.0f));
                 bonusEXPGained += bonusAdditionalEXP;
 
-                expIncreaseStats.put(ExpGainTypes.ExpBuffBonus, bonusAdditionalEXP);
+                expIncreaseStats.put(ExpType.ExpBuffBonus, bonusAdditionalEXP);
             }
 
             // Class bonus EXP
@@ -521,14 +523,14 @@ public class Mob extends AbstractLoadedMapleLife {
                 int psdBonusExp = (int) ((nBaseEXP / 100.0) * nClassBonusEXPPercentage);
                 bonusEXPGained += psdBonusExp;
 
-                expIncreaseStats.put(ExpGainTypes.PsdBonus, psdBonusExp);
+                expIncreaseStats.put(ExpType.PsdBonus, psdBonusExp);
             }
 
             if (pPlayer.getStat().expMod_ElveBlessing >= 1.0) {
                 int psdBonusExp = (int) (nBaseEXP * (pPlayer.getStat().expMod_ElveBlessing - 1.0f));
                 bonusEXPGained += psdBonusExp;
 
-                expIncreaseStats.put(ExpGainTypes.PsdBonus, psdBonusExp);
+                expIncreaseStats.put(ExpType.PsdBonus, psdBonusExp);
             }
 
             // premium bonus
@@ -536,7 +538,7 @@ public class Mob extends AbstractLoadedMapleLife {
                 int premiumBonusExp = (int) ((nBaseEXP / 100.0) * nPremiumBonusEXPPercentage);
                 bonusEXPGained += premiumBonusExp;
 
-                expIncreaseStats.put(ExpGainTypes.PremiumIpBonus, premiumBonusExp);
+                expIncreaseStats.put(ExpType.PremiumIpBonus, premiumBonusExp);
             }
 
             // Indie EXP rate [rune]
@@ -544,7 +546,7 @@ public class Mob extends AbstractLoadedMapleLife {
                 int indieExpAdditionalEXP = (int) (nBaseEXP * ((pPlayer.getStat().indieExpBuff - 100) / 100.0f));
                 bonusEXPGained += indieExpAdditionalEXP;
 
-                expIncreaseStats.put(ExpGainTypes.IndieBonus, indieExpAdditionalEXP);
+                expIncreaseStats.put(ExpType.IndieBonus, indieExpAdditionalEXP);
             }
 
             // Burning field bonus EXP
@@ -552,7 +554,7 @@ public class Mob extends AbstractLoadedMapleLife {
                 int burningFieldBonusEXP = (int) (nBaseEXP * (nBurningFieldBonusEXPRate / 100f));
                 bonusEXPGained += burningFieldBonusEXP;
 
-                expIncreaseStats.put(ExpGainTypes.RestFieldBonus, burningFieldBonusEXP);
+                expIncreaseStats.put(ExpType.RestFieldBonus, burningFieldBonusEXP);
             }
 
             // Map bonus EXP
@@ -560,11 +562,11 @@ public class Mob extends AbstractLoadedMapleLife {
                 int fieldPartyMapBonusEXP = (int) (nBaseEXP * (nFieldPartyBonusEXPPercentage / 100f));
                 bonusEXPGained += fieldPartyMapBonusEXP;
 
-                expIncreaseStats.put(ExpGainTypes.FieldBonus, fieldPartyMapBonusEXP);
+                expIncreaseStats.put(ExpType.FieldBonus, fieldPartyMapBonusEXP);
             }
 
             //////////////// Cursed, put this last.
-            if (pPlayer.hasDisease(MapleDisease.CURSE)) {
+            if (pPlayer.hasDisease(Disease.CURSE)) {
                 totalEXPGained /= 2;
                 bonusEXPGained /= 2;
             }
@@ -1008,7 +1010,7 @@ public class Mob extends AbstractLoadedMapleLife {
         return -1;
     }
 
-    public ElementalEffectiveness getEffectiveness(Element e) {
+    public ElementalEffectiveness getEffectiveness(ElementType e) {
         if (stati.size() > 0 && stati.containsKey(MonsterStatus.DOOM)) {
             return ElementalEffectiveness.NORMAL; // like blue snails
         }
@@ -1036,7 +1038,7 @@ public class Mob extends AbstractLoadedMapleLife {
         int statusSkill = status.getSkill();
         switch (statusSkill) {
             case 2111006: { // FP compo
-                switch (stats.getEffectiveness(Element.POISON)) {
+                switch (stats.getEffectiveness(ElementType.POISON)) {
                     case IMMUNE:
                     case STRONG:
                         return;
@@ -1044,7 +1046,7 @@ public class Mob extends AbstractLoadedMapleLife {
                 break;
             }
             case 2211006: { // IL compo
-                switch (stats.getEffectiveness(Element.ICE)) {
+                switch (stats.getEffectiveness(ElementType.ICE)) {
                     case IMMUNE:
                     case STRONG:
                         return;
@@ -1054,7 +1056,7 @@ public class Mob extends AbstractLoadedMapleLife {
             case 4120005:
             case 4220005:
             case 14110004: {
-                switch (stats.getEffectiveness(Element.POISON)) {
+                switch (stats.getEffectiveness(ElementType.POISON)) {
                     case IMMUNE:
                     case STRONG:
                         return;
@@ -1221,7 +1223,7 @@ public class Mob extends AbstractLoadedMapleLife {
         }
     }
 
-    public void setTempEffectiveness(Element e, long milli) {
+    public void setTempEffectiveness(ElementType e, long milli) {
         stats.setEffectiveness(e, ElementalEffectiveness.WEAK);
 
         EtcTimer.getInstance().schedule(() -> {
@@ -1383,7 +1385,7 @@ public class Mob extends AbstractLoadedMapleLife {
             Item idrop;
             for (MonsterDropEntry d : dropEntry) { //set to 4x rate atm, 40% chance + 10x
                 if (d.itemId > 0 && d.questid == 0 && d.itemId / 10000 != 238 && Randomizer.nextInt(999999) < (int) (10 * d.chance * chServerrate * chr.getDropMod() * chr.getStat().dropBuff / 100.0 * (showdown / 100.0))) { //kinda op
-                    if (GameConstants.getInventoryType(d.itemId) == MapleInventoryType.EQUIP) {
+                    if (GameConstants.getInventoryType(d.itemId) == InventoryType.EQUIP) {
                         Equip eq = (Equip) MapleItemInformationProvider.getInstance().getEquipById(d.itemId);
                         idrop = MapleItemInformationProvider.getInstance().randomizeStats(eq);
                     } else {

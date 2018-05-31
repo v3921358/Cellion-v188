@@ -1,5 +1,9 @@
 package server.maps;
 
+import enums.SummonMovementType;
+import enums.MapItemType;
+import enums.FieldLimitType;
+import enums.MonsterHPType;
 import server.life.NPCLife;
 import client.CharacterTemporaryStat;
 import client.ClientSocket;
@@ -9,7 +13,7 @@ import client.MonsterStatusEffect;
 import client.anticheat.AntiCheat;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.QuickMove;
 import constants.QuickMove.QuickMoveNPC;
@@ -332,7 +336,7 @@ public final class MapleMap {
         final float cmServerrate = ChannelServer.getInstance(channel).getMesoRate(pPlayer.getWorld());
         final float chServerrate = ChannelServer.getInstance(channel).getDropRate(pPlayer.getWorld());
         final float caServerrate = ChannelServer.getInstance(channel).getCashRate();
-        final int cashz = (int) ((pMob.getStats().isBoss() && pMob.getStats().getHPDisplayType() == MonsterHpDisplayType.BossHP ? 20 : 1) * caServerrate);
+        final int cashz = (int) ((pMob.getStats().isBoss() && pMob.getStats().getHPDisplayType() == MonsterHPType.BossHP ? 20 : 1) * caServerrate);
         final int cashModifier = (int) ((pMob.getStats().isBoss() ? (pMob.getStats().isPartyBonus() ? (pMob.getMobExp() / 1000) : 0) : (pMob.getMobExp() / 1000 + pMob.getMobMaxHp() / 20000))); //no rate
         
         Item pItemDrop;
@@ -383,7 +387,7 @@ public final class MapleMap {
                         mesoDropped = true;
                     }
                 } else {
-                    if (GameConstants.getInventoryType(de.itemId) == MapleInventoryType.EQUIP) {
+                    if (GameConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
                         pItemDrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
                     } else {
                         final int range = Math.abs(de.Maximum - de.Minimum);
@@ -412,7 +416,7 @@ public final class MapleMap {
                     } else {
                         nPOS.x = (mobpos + ((nD % 2 == 0) ? (25 * (nD + 1) / 2) : -(25 * (nD / 2))));
                     }
-                    if (GameConstants.getInventoryType(de.itemId) == MapleInventoryType.EQUIP) {
+                    if (GameConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
                         pItemDrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
                     } else {
                         pItemDrop = new Item(de.itemId, (byte) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : 1), (byte) 0);
@@ -1900,12 +1904,12 @@ public final class MapleMap {
         final Point droppos = calcDropPos(position, position);
         final MapleMapItem mdrop = new MapleMapItem(meso, droppos, owner, droptype);
         if (playerDrop) {
-            mdrop.setProperties(MapleMapItemProperties.IsPlayerDrop);
+            mdrop.setProperties(MapItemType.IsPlayerDrop);
         }
 
         if (dropper != null) {
             if (dropper instanceof Mob) {
-                mdrop.setProperties(MapleMapItemProperties.IsPickpocketDrop);
+                mdrop.setProperties(MapItemType.IsPickpocketDrop);
             }
         }
         spawnAndAddRangedMapObject(mdrop, (ClientSocket c1) -> {
@@ -1933,10 +1937,10 @@ public final class MapleMap {
     public final void spawnMobDrop(Item idrop, Point dropPos, Mob mob, User chr, byte droptype, int questid, boolean global_drop) {
         final MapleMapItem mdrop = new MapleMapItem(idrop, dropPos, chr, droptype, questid);
         if (mob.getStats().isBoss()) {
-            mdrop.setProperties(MapleMapItemProperties.IsBossDrop);
+            mdrop.setProperties(MapItemType.IsBossDrop);
         }
         if (global_drop) {
-            mdrop.setProperties(MapleMapItemProperties.IsGlobalDrop);
+            mdrop.setProperties(MapItemType.IsGlobalDrop);
         }
         // if mob is elite boss
         // mdrop.setProperties(MapleMapItemProperties.IsEliteBossDrop);
@@ -1975,10 +1979,10 @@ public final class MapleMap {
         final Point droppos = calcDropPos(pos, pos);
         final MapleMapItem drop = new MapleMapItem(item, droppos, owner, (byte) 2, -1);
         if (playerDrop) {
-            drop.setProperties(MapleMapItemProperties.IsPlayerDrop);
+            drop.setProperties(MapItemType.IsPlayerDrop);
         }
         if (isCollisionPickUp) {
-            drop.setProperties(MapleMapItemProperties.IsCollisionPickUp);
+            drop.setProperties(MapItemType.IsCollisionPickUp);
         }
 
         spawnAndAddRangedMapObject(drop, (ClientSocket c1) -> {
@@ -2033,7 +2037,7 @@ public final class MapleMap {
     public final void spawnAutoDrop(final int itemid, final Point pos) {
         Item idrop = null;
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-        if (GameConstants.getInventoryType(itemid) == MapleInventoryType.EQUIP) {
+        if (GameConstants.getInventoryType(itemid) == InventoryType.EQUIP) {
             idrop = ii.randomizeStats((Equip) ii.getEquipById(itemid));
         } else {
             idrop = new Item(itemid, (byte) 0, (short) 1, (byte) 0);

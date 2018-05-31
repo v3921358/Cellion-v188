@@ -8,8 +8,8 @@ import java.util.Map.Entry;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.ItemFlag;
-import client.inventory.MapleInventoryType;
+import enums.ItemFlag;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import constants.ServerConstants;
@@ -178,7 +178,7 @@ public class Trade {
     public boolean setItems(ClientSocket c, Item item, byte targetSlot, int quantity) {
         int target = getNextTargetSlot();
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-        if (partner == null || target == -1 || InventoryConstants.isPet(item.getItemId()) || isLocked() || (GameConstants.getInventoryType(item.getItemId()) == MapleInventoryType.EQUIP) && (quantity != 1)) {
+        if (partner == null || target == -1 || InventoryConstants.isPet(item.getItemId()) || isLocked() || (GameConstants.getInventoryType(item.getItemId()) == InventoryType.EQUIP) && (quantity != 1)) {
             return false;
         }
         short flag = item.getFlag();
@@ -219,16 +219,16 @@ public class Trade {
         if (chr.getMeso() + exchangeMeso < 0) {
             return false;
         }
-        Map<MapleInventoryType, Integer> neededSlots = new LinkedHashMap<>();
+        Map<InventoryType, Integer> neededSlots = new LinkedHashMap<>();
         for (Item item : exchangeItems) {
-            MapleInventoryType type = MapleItemInformationProvider.getInventoryType(item.getItemId());
+            InventoryType type = MapleItemInformationProvider.getInventoryType(item.getItemId());
             if (neededSlots.get(type) == null) {
                 neededSlots.put(type, 1);
             } else {
                 neededSlots.put(type, neededSlots.get(type) + 1);
             }
         }
-        for (Entry<MapleInventoryType, Integer> entry : neededSlots.entrySet()) {
+        for (Entry<InventoryType, Integer> entry : neededSlots.entrySet()) {
             if (chr.getInventory(entry.getKey()).isFull(entry.getValue() - 1)) {
                 return false;
             }

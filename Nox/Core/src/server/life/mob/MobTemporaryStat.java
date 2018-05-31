@@ -5,6 +5,7 @@
  */
 package server.life.mob;
 
+import enums.MobStat;
 import client.Skill;
 import client.SkillFactory;
 import java.util.ArrayList;
@@ -20,12 +21,12 @@ import net.OutPacket;
 import scripting.EventManager;
 import server.StatEffect;
 import server.life.Mob;
-import static server.StatInfo.dot;
-import static server.StatInfo.dotInterval;
-import static server.StatInfo.dotSuperpos;
-import static server.StatInfo.dotTime;
-import static server.life.mob.MobStat.*;
-import static server.life.mob.MobStat.BurnedInfo;
+import static enums.StatInfo.dot;
+import static enums.StatInfo.dotInterval;
+import static enums.StatInfo.dotSuperpos;
+import static enums.StatInfo.dotTime;
+import static enums.MobStat.*;
+import static enums.MobStat.BurnedInfo;
 import server.skills.Option;
 import tools.Utility;
 import tools.packet.MobPacket;

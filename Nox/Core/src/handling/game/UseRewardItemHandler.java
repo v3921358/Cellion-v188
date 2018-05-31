@@ -2,7 +2,7 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import handling.world.World;
 import java.time.LocalDateTime;
@@ -44,7 +44,7 @@ public class UseRewardItemHandler implements ProcessPacket<ClientSocket> {
         final Item toUse = c.getPlayer().getInventory(GameConstants.getInventoryType(itemId)).getItem(slot);
         c.SendPacket(WvsContext.enableActions());
         if (toUse != null && toUse.getQuantity() >= 1 && toUse.getItemId() == itemId && !chr.hasBlockedInventory()) {
-            if (chr.getInventory(MapleInventoryType.EQUIP).getNextFreeSlot() > -1 && chr.getInventory(MapleInventoryType.USE).getNextFreeSlot() > -1 && chr.getInventory(MapleInventoryType.SETUP).getNextFreeSlot() > -1 && chr.getInventory(MapleInventoryType.ETC).getNextFreeSlot() > -1) {
+            if (chr.getInventory(InventoryType.EQUIP).getNextFreeSlot() > -1 && chr.getInventory(InventoryType.USE).getNextFreeSlot() > -1 && chr.getInventory(InventoryType.SETUP).getNextFreeSlot() > -1 && chr.getInventory(InventoryType.ETC).getNextFreeSlot() > -1) {
                 final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                 final Pair<Integer, List<StructRewardItem>> rewards = ii.getRewardItem(itemId);
 
@@ -118,7 +118,7 @@ public class UseRewardItemHandler implements ProcessPacket<ClientSocket> {
                         World.Broadcast.broadcastMessage(CField.getGameMessage("SMB.", (short) 8));
                         if (MapleItemInformationProvider.getInstance().itemExists(itemid) && !MapleItemInformationProvider.getInstance().getName(itemid).contains("Special") && !MapleItemInformationProvider.getInstance().getName(itemid).contains("Event")) {
                             MapleInventoryManipulator.addById(c, itemid, (short) 1, "Reward item: " + toUse.getItemId() + " on " + LocalDateTime.now());
-                            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                         }
                         break;
                 }
@@ -126,7 +126,7 @@ public class UseRewardItemHandler implements ProcessPacket<ClientSocket> {
                     while (true) {
                         for (StructRewardItem reward : rewards.getRight()) {
                             if (reward.prob > 0 && Randomizer.nextInt(rewards.getLeft()) < reward.prob) { // Total prob
-                                if (GameConstants.getInventoryType(reward.itemid) == MapleInventoryType.EQUIP) {
+                                if (GameConstants.getInventoryType(reward.itemid) == InventoryType.EQUIP) {
                                     final Item item = ii.getEquipById(reward.itemid);
                                     if (reward.period > 0) {
                                         item.setExpiration(System.currentTimeMillis() + (reward.period * 60 * 60 * 10));

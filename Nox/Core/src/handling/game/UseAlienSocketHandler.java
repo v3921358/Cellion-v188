@@ -3,7 +3,7 @@ package handling.game;
 import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.ModifyInventory;
 import java.util.ArrayList;
 import server.MapleInventoryManipulator;
@@ -27,9 +27,9 @@ public class UseAlienSocketHandler implements ProcessPacket<ClientSocket> {
     public void Process(ClientSocket c, InPacket iPacket) {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         c.getPlayer().setScrolledPosition((short) 0);
-        final Item alienSocket = c.getPlayer().getInventory(MapleInventoryType.USE).getItem((byte) iPacket.DecodeShort());
+        final Item alienSocket = c.getPlayer().getInventory(InventoryType.USE).getItem((byte) iPacket.DecodeShort());
         final int alienSocketId = iPacket.DecodeInt();
-        final Item toMount = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeShort());
+        final Item toMount = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) iPacket.DecodeShort());
 
         if (alienSocket == null || alienSocketId != alienSocket.getItemId() || toMount == null || c.getPlayer().hasBlockedInventory()) {
             c.SendPacket(WvsContext.inventoryOperation(true, new ArrayList<>()));
@@ -39,8 +39,8 @@ public class UseAlienSocketHandler implements ProcessPacket<ClientSocket> {
         if (eqq.getSocketState() < 1) { // Used before
             c.SendPacket(CSPacket.useAlienSocket(true));
             eqq.setSocket1(0);
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, alienSocket.getPosition(), (short) 1, false);
-            c.getPlayer().forceReAddItem(toMount, MapleInventoryType.EQUIP);
+            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, alienSocket.getPosition(), (short) 1, false);
+            c.getPlayer().forceReAddItem(toMount, InventoryType.EQUIP);
         }
         c.SendPacket(CSPacket.useAlienSocket(false));
     }

@@ -16,7 +16,7 @@ import java.util.Map;
 import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.ItemLoader;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import database.Database;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
@@ -33,7 +33,7 @@ public class MapleStorage implements Serializable {
     private int lastNPC = 0;
     private byte slots;
     private boolean changed = false;
-    private final Map<MapleInventoryType, List<Item>> typeItems = new EnumMap<>(MapleInventoryType.class);
+    private final Map<InventoryType, List<Item>> typeItems = new EnumMap<>(InventoryType.class);
 
     private MapleStorage(int id, byte slots, long meso, int accountId) {
         this.id = id;
@@ -82,7 +82,7 @@ public class MapleStorage implements Serializable {
                 rs.close();
                 ps.close();
 
-                for (Pair<Item, MapleInventoryType> mit : ItemLoader.STORAGE.loadItems(false, id, con).values()) {
+                for (Pair<Item, InventoryType> mit : ItemLoader.STORAGE.loadItems(false, id, con).values()) {
                     ret.items.add(mit.getLeft());
                 }
             } else {
@@ -111,7 +111,7 @@ public class MapleStorage implements Serializable {
             ex.printStackTrace();
         }
 
-        List<Pair<Item, MapleInventoryType>> listing = new ArrayList<>();
+        List<Pair<Item, InventoryType>> listing = new ArrayList<>();
         for (final Item item : items) {
             listing.add(new Pair<>(item, GameConstants.getInventoryType(item.getItemId())));
         }
@@ -124,7 +124,7 @@ public class MapleStorage implements Serializable {
         }
         changed = true;
         Item ret = items.remove(slot);
-        MapleInventoryType type = GameConstants.getInventoryType(ret.getItemId());
+        InventoryType type = GameConstants.getInventoryType(ret.getItemId());
         typeItems.put(type, filterItems(type));
         return ret;
     }
@@ -132,7 +132,7 @@ public class MapleStorage implements Serializable {
     public void store(Item item) {
         changed = true;
         items.add(item);
-        MapleInventoryType type = GameConstants.getInventoryType(item.getItemId());
+        InventoryType type = GameConstants.getInventoryType(item.getItemId());
         typeItems.put(type, filterItems(type));
     }
 
@@ -150,7 +150,7 @@ public class MapleStorage implements Serializable {
                 }
             }
         });
-        for (MapleInventoryType type : MapleInventoryType.values()) {
+        for (InventoryType type : InventoryType.values()) {
             typeItems.put(type, items);
         }
     }
@@ -159,7 +159,7 @@ public class MapleStorage implements Serializable {
         return Collections.unmodifiableList(items);
     }
 
-    private List<Item> filterItems(MapleInventoryType type) {
+    private List<Item> filterItems(InventoryType type) {
         List<Item> ret = new ArrayList<>();
 
         for (Item item : items) {
@@ -170,7 +170,7 @@ public class MapleStorage implements Serializable {
         return ret;
     }
 
-    public byte getSlot(MapleInventoryType type, byte slot) {
+    public byte getSlot(InventoryType type, byte slot) {
         // MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         byte ret = 0;
         final List<Item> it = typeItems.get(type);
@@ -202,7 +202,7 @@ public class MapleStorage implements Serializable {
                 }
             }
         });
-        for (MapleInventoryType type : MapleInventoryType.values()) {
+        for (InventoryType type : InventoryType.values()) {
             typeItems.put(type, items);
         }
         c.SendPacket(NPCPacket.getStorage(npcId, slots, items, meso));
@@ -212,11 +212,11 @@ public class MapleStorage implements Serializable {
         c.SendPacket(NPCPacket.arrangeStorage(slots, items, true));
     }
 
-    public void sendStored(ClientSocket c, MapleInventoryType type) {
+    public void sendStored(ClientSocket c, InventoryType type) {
         c.SendPacket(NPCPacket.storeStorage(slots, type, typeItems.get(type)));
     }
 
-    public void sendTakenOut(ClientSocket c, MapleInventoryType type) {
+    public void sendTakenOut(ClientSocket c, InventoryType type) {
         c.SendPacket(NPCPacket.takeOutStorage(slots, type, typeItems.get(type)));
     }
 

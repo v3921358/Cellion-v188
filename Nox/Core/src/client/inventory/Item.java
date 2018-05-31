@@ -1,5 +1,7 @@
 package client.inventory;
 
+import enums.ItemType;
+import enums.ItemFlag;
 import server.maps.objects.Pet;
 
 public class Item implements Comparable<Item> {

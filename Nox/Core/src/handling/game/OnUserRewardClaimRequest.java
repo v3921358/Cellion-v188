@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.MapleReward;
+import client.Rewards;
 import constants.GameConstants;
 import net.InPacket;
 import server.MapleInventoryManipulator;
@@ -44,7 +44,7 @@ public final class OnUserRewardClaimRequest implements ProcessPacket<ClientSocke
                 c.SendPacket(WvsContext.enableActions());
                 return;
             }
-            MapleReward reward = c.getPlayer().getReward(id);
+            Rewards reward = c.getPlayer().getReward(id);
             if (reward == null) {
                 c.SendPacket(WvsContext.Reward.receiveReward(id, (byte) 0x15, 0));
                 c.SendPacket(WvsContext.enableActions());

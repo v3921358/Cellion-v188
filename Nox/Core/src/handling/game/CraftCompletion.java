@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import client.ClientSocket;
-import client.MapleTrait;
+import client.Trait;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.ItemFlag;
-import client.inventory.MapleInventoryType;
+import enums.ItemFlag;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import handling.world.ItemMakerHandler.CraftRanking;
@@ -60,8 +60,8 @@ public final class CraftCompletion implements ProcessPacket<ClientSocket> {
                 final int itemId = iPacket.DecodeInt();
                 final long invId = iPacket.DecodeLong();
                 final int reqLevel = ii.getReqLevel(itemId);
-                final Item item = chr.getInventory(MapleInventoryType.EQUIP).findByInventoryId(invId, itemId);
-                if (item == null || chr.getInventory(MapleInventoryType.ETC).isFull()) {
+                final Item item = chr.getInventory(InventoryType.EQUIP).findByInventoryId(invId, itemId);
+                if (item == null || chr.getInventory(InventoryType.ETC).isFull()) {
                     return;
                 }
                 if (extractorId <= 0 && (theLevl == 0 || theLevl < (reqLevel > 130 ? 6 : ((reqLevel - 30) / 20)))) {
@@ -106,7 +106,7 @@ public final class CraftCompletion implements ProcessPacket<ClientSocket> {
                 }
                 fatigue = 3;
                 MapleInventoryManipulator.addById(c, toGet, quantity, "Made by disassemble " + itemId + " on " + LocalDateTime.now());
-                MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.EQUIP, item.getPosition(), (byte) 1, false);
+                MapleInventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, item.getPosition(), (byte) 1, false);
                 break;
             }
             case 92049001: {
@@ -115,10 +115,10 @@ public final class CraftCompletion implements ProcessPacket<ClientSocket> {
                 final long invId1 = iPacket.DecodeLong();
                 final long invId2 = iPacket.DecodeLong();
                 final int reqLevel = ii.getReqLevel(itemId);
-                Equip item1 = (Equip) chr.getInventory(MapleInventoryType.EQUIP).findByInventoryIdOnly(invId1, itemId);
-                Equip item2 = (Equip) chr.getInventory(MapleInventoryType.EQUIP).findByInventoryIdOnly(invId2, itemId);
-                for (short i = 0; i < chr.getInventory(MapleInventoryType.EQUIP).getSlotLimit(); i++) {
-                    Item item = chr.getInventory(MapleInventoryType.EQUIP).getItem(i);
+                Equip item1 = (Equip) chr.getInventory(InventoryType.EQUIP).findByInventoryIdOnly(invId1, itemId);
+                Equip item2 = (Equip) chr.getInventory(InventoryType.EQUIP).findByInventoryIdOnly(invId2, itemId);
+                for (short i = 0; i < chr.getInventory(InventoryType.EQUIP).getSlotLimit(); i++) {
+                    Item item = chr.getInventory(InventoryType.EQUIP).getItem(i);
                     if (item != null && item.getItemId() == itemId && item != item1 && item != item2) {
                         if (item1 == null) {
                             item1 = (Equip) item;
@@ -160,8 +160,8 @@ public final class CraftCompletion implements ProcessPacket<ClientSocket> {
                 toGet = newEquip.getItemId();
                 expGain = (60 - ((theLevl - 1) * 2)) * 2;
                 fatigue = 3;
-                MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.EQUIP, item1.getPosition(), (byte) 1, false);
-                MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.EQUIP, item2.getPosition(), (byte) 1, false);
+                MapleInventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, item1.getPosition(), (byte) 1, false);
+                MapleInventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, item2.getPosition(), (byte) 1, false);
                 MapleInventoryManipulator.addbyItem(c, newEquip);
                 break;
             }
@@ -191,7 +191,7 @@ public final class CraftCompletion implements ProcessPacket<ClientSocket> {
                                 toGet = i.left;
                                 quantity = i.mid.shortValue();
                                 Item receive;
-                                if (GameConstants.getInventoryType(toGet) == MapleInventoryType.EQUIP) {
+                                if (GameConstants.getInventoryType(toGet) == InventoryType.EQUIP) {
                                     Equip first = (Equip) ii.getEquipById(toGet);
                                     if (Randomizer.nextInt(100) < (theLevl * 2)) {
                                         first = (Equip) ii.randomizeStats(first);
@@ -223,7 +223,7 @@ public final class CraftCompletion implements ProcessPacket<ClientSocket> {
                                 }
                                 fatigue = ce.incFatigability;
                                 expGain = ce.incSkillProficiency == 0 ? (((fatigue * 20) - (ce.reqSkillLevel - theLevl) * 2) * 2) : ce.incSkillProficiency;
-                                chr.getTrait(MapleTrait.MapleTraitType.craft).addExp(cr.craft, chr);
+                                chr.getTrait(Trait.MapleTraitType.craft).addExp(cr.craft, chr);
                                 passed = true;
                                 break;
                             }
@@ -241,7 +241,7 @@ public final class CraftCompletion implements ProcessPacket<ClientSocket> {
         }
         if (expGain > 0 && theLevl < 10) {
             expGain *= chr.getClient().getChannelServer().getTraitRate();
-            if (Randomizer.nextInt(100) < chr.getTrait(MapleTrait.MapleTraitType.craft).getLevel() / 5) {
+            if (Randomizer.nextInt(100) < chr.getTrait(Trait.MapleTraitType.craft).getLevel() / 5) {
                 expGain *= 2;
             }
             String s = "Alchemy";

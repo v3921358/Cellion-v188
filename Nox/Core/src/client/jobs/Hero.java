@@ -14,7 +14,7 @@ import java.util.Random;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import server.StatEffect;
-import server.StatInfo;
+import enums.StatInfo;
 import server.Timer;
 import server.maps.objects.User;
 import tools.packet.BuffPacket;

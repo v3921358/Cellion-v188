@@ -2,7 +2,7 @@ package server.commands;
 
 import client.ClientSocket;
 import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
@@ -23,7 +23,7 @@ import server.life.Mob;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.SavedLocationType;
+import enums.SavedLocationType;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.StringUtil;
@@ -153,15 +153,15 @@ public class PlayerCommand {
                 c.getPlayer().dropMessage(6, "Syntax: @sell <eq/use/setup/etc> <start slot> <end slot>");
                 return 0;
             } else {
-                MapleInventoryType type;
+                InventoryType type;
                 if (splitted[1].equalsIgnoreCase("eq")) {
-                    type = MapleInventoryType.EQUIP;
+                    type = InventoryType.EQUIP;
                 } else if (splitted[1].equalsIgnoreCase("use")) {
-                    type = MapleInventoryType.USE;
+                    type = InventoryType.USE;
                 } else if (splitted[1].equalsIgnoreCase("setup")) {
-                    type = MapleInventoryType.SETUP;
+                    type = InventoryType.SETUP;
                 } else if (splitted[1].equalsIgnoreCase("etc")) {
-                    type = MapleInventoryType.ETC;
+                    type = InventoryType.ETC;
                 } else {
                     c.getPlayer().dropMessage(5, "Invalid Syntax. @sell <eq/use/setup/etc>");
                     return 0;

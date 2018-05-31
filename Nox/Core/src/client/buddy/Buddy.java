@@ -1,5 +1,6 @@
 package client.buddy;
 
+import enums.BuddyResult;
 import java.util.ArrayList;
 import java.util.List;
 

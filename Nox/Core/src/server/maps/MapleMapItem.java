@@ -1,5 +1,6 @@
 package server.maps;
 
+import enums.MapItemType;
 import java.awt.Point;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -44,32 +45,32 @@ public class MapleMapItem extends MapleMapObject {
         this.character_ownerid = 0;
         this.type = 2;
 
-        setProperties(MapleMapItemProperties.IsRandomDrop);
+        setProperties(MapItemType.IsRandomDrop);
     }
 
     // <editor-fold defaultstate="visible" desc="Map item properties"> 
-    public void setProperties(MapleMapItemProperties properties) {
+    public void setProperties(MapItemType properties) {
         itemPropertiesBits |= 1 << properties.getBitvalue();
     }
 
     public boolean isPlayerDrop() {
-        return (itemPropertiesBits & (1 << MapleMapItemProperties.IsPlayerDrop.getBitvalue())) != 0;
+        return (itemPropertiesBits & (1 << MapItemType.IsPlayerDrop.getBitvalue())) != 0;
     }
 
     public boolean isRandomDrop() {
-        return (itemPropertiesBits & (1 << MapleMapItemProperties.IsRandomDrop.getBitvalue())) != 0;
+        return (itemPropertiesBits & (1 << MapItemType.IsRandomDrop.getBitvalue())) != 0;
     }
 
     public boolean isBossDrop() {
-        return (itemPropertiesBits & (1 << MapleMapItemProperties.IsBossDrop.getBitvalue())) != 0;
+        return (itemPropertiesBits & (1 << MapItemType.IsBossDrop.getBitvalue())) != 0;
     }
 
     public boolean isEliteBossDrop() {
-        return (itemPropertiesBits & (1 << MapleMapItemProperties.IsEliteBossDrop.getBitvalue())) != 0;
+        return (itemPropertiesBits & (1 << MapItemType.IsEliteBossDrop.getBitvalue())) != 0;
     }
 
     public boolean isPickpocketDrop() {
-        return (itemPropertiesBits & (1 << MapleMapItemProperties.IsPickpocketDrop.getBitvalue())) != 0;
+        return (itemPropertiesBits & (1 << MapItemType.IsPickpocketDrop.getBitvalue())) != 0;
     }
 
     /**
@@ -78,11 +79,11 @@ public class MapleMapItem extends MapleMapObject {
      * @return
      */
     public boolean isNoMoveItem() {
-        return (itemPropertiesBits & (1 << MapleMapItemProperties.IsCollisionPickUp.getBitvalue())) != 0;
+        return (itemPropertiesBits & (1 << MapItemType.IsCollisionPickUp.getBitvalue())) != 0;
     }
 
     public boolean isCollisionPickUpDrop() {
-        return (itemPropertiesBits & (1 << MapleMapItemProperties.IsCollisionPickUp.getBitvalue())) != 0;
+        return (itemPropertiesBits & (1 << MapItemType.IsCollisionPickUp.getBitvalue())) != 0;
     }
     // </editor-fold> 
 

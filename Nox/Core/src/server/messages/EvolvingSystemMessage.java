@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -21,7 +22,7 @@ public class EvolvingSystemMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.EvolvingSystem.getType());
+        oPacket.EncodeByte(MessageOpcodesType.EvolvingSystem.getType());
         oPacket.EncodeByte(unk);
         oPacket.EncodeByte(type);
     }

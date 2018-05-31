@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import client.CharacterTemporaryStat;
 import client.ClientSocket;
-import client.MapleDisease;
+import client.Disease;
 import client.MonsterStatus;
 import client.PlayerStats;
 import client.Skill;
@@ -20,7 +20,7 @@ import client.SkillFactory;
 import client.anticheat.CheatTracker;
 import client.anticheat.CheatingOffense;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import handling.world.PlayerHandler;
 import server.MapleItemInformationProvider;
@@ -66,8 +66,8 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
         chr.checkFollow();
         Rectangle box;
 
-        final Item weapon = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11);
-        final Item shield = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -10);
+        final Item weapon = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -11);
+        final Item shield = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -10);
         final boolean katara = shield != null && shield.getItemId() / 10000 == 134;
         final boolean aran = weapon != null && weapon.getItemId() / 10000 == 144 && GameConstants.isAran(chr.getJob());
         iPacket.Skip(1); //skill level
@@ -208,12 +208,12 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
         } else if (GameConstants.isCannoneer(chr.getJob())) {
             visProjectile = 2333001;
         } else if (!GameConstants.isMercedes(chr.getJob()) && chr.getBuffedValue(CharacterTemporaryStat.SoulArrow) == null && slot > 0) {
-            Item ipp = chr.getInventory(MapleInventoryType.USE).getItem((short) slot);
+            Item ipp = chr.getInventory(InventoryType.USE).getItem((short) slot);
             if (ipp == null) {
                 return;
             }
             if (csstar > 0) {
-                ipp = chr.getInventory(MapleInventoryType.CASH).getItem((short) csstar);
+                ipp = chr.getInventory(InventoryType.CASH).getItem((short) csstar);
                 if (ipp == null) {
                     return;
                 }
@@ -247,12 +247,12 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
                             double ourDamage = Randomizer.nextInt((int) Math.abs(Math.round(rawDamage - min)) + 2) + min;
                             if (attacked.getStat().avoidabilityRate > 0 && Randomizer.nextInt(100) < attacked.getStat().avoidabilityRate) {
                                 ourDamage = 0;
-                            } else if (attacked.hasDisease(MapleDisease.DARKNESS) && Randomizer.nextInt(100) < 50) {
+                            } else if (attacked.hasDisease(Disease.DARKNESS) && Randomizer.nextInt(100) < 50) {
                                 ourDamage = 0;
                                 //i dont think level actually matters or it'd be too op
                                 //} else if (attacked.getLevel() > chr.getLevel() && Randomizer.nextInt(100) < (attacked.getLevel() - chr.getLevel())) {
                                 //	ourDamage = 0;
-                            } else if (attacked.getJob() == 122 && attacked.getTotalSkillLevel(1220006) > 0 && attacked.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -10) != null) {
+                            } else if (attacked.getJob() == 122 && attacked.getTotalSkillLevel(1220006) > 0 && attacked.getInventory(InventoryType.EQUIPPED).getItem((byte) -10) != null) {
                                 final StatEffect eff = SkillFactory.getSkill(1220006).getEffect(attacked.getTotalSkillLevel(1220006));
                                 if (eff.makeChanceResult()) {
                                     ourDamage = 0;
@@ -308,7 +308,7 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
                             ThreadLock.lock();
                             try {
                                 for (Map.Entry<MonsterStatus, Integer> z : effect.getMonsterStati().entrySet()) {
-                                    MapleDisease d = MonsterStatus.getLinkedDisease(z.getKey());
+                                    Disease d = MonsterStatus.getLinkedDisease(z.getKey());
                                     if (d != null) {
                                         MobSkill skill = new MobSkill(d.getDisease(), 1);
                                         skill.setX(z.getValue());
@@ -326,19 +326,19 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
                         if (chr.getBuffSource(CharacterTemporaryStat.WeaponCharge) == 1211006 || chr.getBuffSource(CharacterTemporaryStat.WeaponCharge) == 21101006) {
                             final StatEffect eff = chr.getStatForBuff(CharacterTemporaryStat.WeaponCharge);
                             if (eff.makeChanceResult()) {
-                                MobSkill skill = new MobSkill(MapleDisease.FREEZE.getDisease(), 1);
+                                MobSkill skill = new MobSkill(Disease.FREEZE.getDisease(), 1);
                                 skill.setX(1);
                                 skill.setDuration(eff.getDuration());
-                                attacked.giveDebuff(MapleDisease.FREEZE, skill);
+                                attacked.giveDebuff(Disease.FREEZE, skill);
                             }
                         }
                     } else if (chr.getBuffedValue(CharacterTemporaryStat.Slow) != null) {
                         final StatEffect eff = chr.getStatForBuff(CharacterTemporaryStat.Slow);
                         if (eff != null && eff.makeChanceResult()) {
-                            MobSkill skill = new MobSkill(MapleDisease.SLOW.getDisease(), 1);
+                            MobSkill skill = new MobSkill(Disease.SLOW.getDisease(), 1);
                             skill.setX(100 - Math.abs(eff.getX()));
                             skill.setDuration(eff.getDuration());
-                            attacked.giveDebuff(MapleDisease.SLOW, skill);
+                            attacked.giveDebuff(Disease.SLOW, skill);
                         }
                     } else if (chr.getJob() == 412 || chr.getJob() == 422 || chr.getJob() == 434 || chr.getJob() == 1411 || chr.getJob() == 1412) {
                         int[] skills = {4120005, 4220005, 4340001, 14110004};
@@ -349,10 +349,10 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
                                 if (chr.getTotalSkillLevel(skill) > 0) {
                                     final StatEffect venomEffect = skill.getEffect(chr.getTotalSkillLevel(skill));
                                     if (venomEffect.makeChanceResult()) {// THIS MIGHT ACTUALLY BE THE DOT
-                                        MobSkill skil = new MobSkill(MapleDisease.POISON.getDisease(), 1);
+                                        MobSkill skil = new MobSkill(Disease.POISON.getDisease(), 1);
                                         skil.setX(venomEffect.getDuration());
                                         skil.setDuration(venomEffect.getDuration());
-                                        attacked.giveDebuff(MapleDisease.POISON, skil);
+                                        attacked.giveDebuff(Disease.POISON, skil);
                                     }
                                     break;
                                 }

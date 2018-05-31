@@ -25,7 +25,7 @@ import java.util.List;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.ItemFlag;
+import enums.ItemFlag;
 import server.MapleInventoryManipulator;
 import server.maps.objects.User;
 import tools.packet.PlayerShopPacket;

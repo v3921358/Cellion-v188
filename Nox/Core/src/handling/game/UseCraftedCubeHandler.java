@@ -3,7 +3,7 @@ package handling.game;
 import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.ItemConstants;
 import net.InPacket;
@@ -33,8 +33,8 @@ public class UseCraftedCubeHandler implements ProcessPacket<ClientSocket> {
         short nCubeSlot = iPacket.DecodeShort();
         short nEquipSlot = iPacket.DecodeShort();
         
-        final Item pCube = pPlayer.getInventory(MapleInventoryType.USE).getItem(nCubeSlot);
-        final Equip pEquip = (Equip) pPlayer.getInventory(MapleInventoryType.EQUIP).getItem(nEquipSlot);
+        final Item pCube = pPlayer.getInventory(InventoryType.USE).getItem(nCubeSlot);
+        final Equip pEquip = (Equip) pPlayer.getInventory(InventoryType.EQUIP).getItem(nEquipSlot);
         
         if (pCube == null || pEquip == null || pCube.getItemId() / 10000 != 271 || pCube.getQuantity() <= 0) {
             c.SendPacket(CField.enchantResult(0));
@@ -53,6 +53,6 @@ public class UseCraftedCubeHandler implements ProcessPacket<ClientSocket> {
         }
         
         boolean bUsed = Cube.OnCubeRequest(pPlayer, pEquip, pCube.getItemId(), true); // Handle the Cube
-        if (bUsed) MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, nCubeSlot, (short) 1, false, true);
+        if (bUsed) MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, nCubeSlot, (short) 1, false, true);
     }
 }

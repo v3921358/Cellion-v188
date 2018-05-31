@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import java.util.List;
 import net.OutPacket;
 
@@ -20,7 +21,7 @@ public class ReplacedExpiredItemMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.ReplaceExpiredItem.getType());
+        oPacket.EncodeByte(MessageOpcodesType.ReplaceExpiredItem.getType());
         oPacket.EncodeByte(messages.size());
         for (String message : messages) {
             oPacket.EncodeString(message);

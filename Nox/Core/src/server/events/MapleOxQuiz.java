@@ -3,7 +3,7 @@ package server.events;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
 
-import client.Stat;
+import enums.Stat;
 import server.Timer.EventTimer;
 import server.events.MapleOxQuizFactory.MapleOxQuizEntry;
 import server.maps.MapleMap;

@@ -1,5 +1,6 @@
 package server.quest;
 
+import enums.QuestActionType;
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,13 +13,13 @@ import java.util.Map;
 
 import client.QuestStatus;
 import client.QuestStatus.QuestState;
-import client.Stat;
-import client.MapleTrait.MapleTraitType;
+import enums.Stat;
+import client.Trait.MapleTraitType;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
 import client.inventory.InventoryException;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
@@ -374,19 +375,19 @@ public class QuestAction implements Serializable {
                         }
                     }
                 }
-                if (c.getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() < eq) {
+                if (c.getInventory(InventoryType.EQUIP).getNumFreeSlot() < eq) {
                     c.dropMessage(1, "Please make space for your Equip inventory.");
                     return false;
-                } else if (c.getInventory(MapleInventoryType.USE).getNumFreeSlot() < use) {
+                } else if (c.getInventory(InventoryType.USE).getNumFreeSlot() < use) {
                     c.dropMessage(1, "Please make space for your Use inventory.");
                     return false;
-                } else if (c.getInventory(MapleInventoryType.SETUP).getNumFreeSlot() < setup) {
+                } else if (c.getInventory(InventoryType.SETUP).getNumFreeSlot() < setup) {
                     c.dropMessage(1, "Please make space for your Setup inventory.");
                     return false;
-                } else if (c.getInventory(MapleInventoryType.ETC).getNumFreeSlot() < etc) {
+                } else if (c.getInventory(InventoryType.ETC).getNumFreeSlot() < etc) {
                     c.dropMessage(1, "Please make space for your Etc inventory.");
                     return false;
-                } else if (c.getInventory(MapleInventoryType.CASH).getNumFreeSlot() < cash) {
+                } else if (c.getInventory(InventoryType.CASH).getNumFreeSlot() < cash) {
                     c.dropMessage(1, "Please make space for your Cash inventory.");
                     return false;
                 }

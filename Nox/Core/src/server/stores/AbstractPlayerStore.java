@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.ItemLoader;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import database.Database;
 import handling.world.World;
@@ -160,7 +160,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
             final int packageid = rs.getInt(1);
             rs.close();
             ps.close();
-            List<Pair<Item, MapleInventoryType>> iters = new ArrayList<>();
+            List<Pair<Item, InventoryType>> iters = new ArrayList<>();
             Item item;
             for (MaplePlayerShopItem pItems : items) {
                 if (pItems.item == null || pItems.bundles <= 0) {

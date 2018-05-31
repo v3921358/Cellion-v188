@@ -21,7 +21,7 @@
  */
 package handling.game;
 
-import client.MapleCharacterUtil;
+import client.CharacterUtil;
 import client.ClientSocket;
 import server.maps.objects.User;
 import server.maps.objects.MonsterFamiliar;
@@ -46,7 +46,7 @@ public final class RenameFamiliarHandler implements ProcessPacket<ClientSocket> 
             return;
         }
         String newName = iPacket.DecodeString();
-        if (newName.isEmpty() || MapleCharacterUtil.isEligibleFamiliarName(newName, c.isGm())) {
+        if (newName.isEmpty() || CharacterUtil.isEligibleFamiliarName(newName, c.isGm())) {
             mf.setName(newName);
             c.SendPacket(CField.renameFamiliar(mf));
         } else {

@@ -2,12 +2,12 @@ package server.skills.effects;
 
 import client.CharacterTemporaryStat;
 import server.skills.effects.manager.AbstractEffect;
-import client.MapleJob;
+import client.Jobs;
 import client.MonsterStatus;
 import client.SkillFactory;
 import constants.skills.Kinesis;
 import server.StatEffect;
-import server.StatInfo;
+import enums.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**

@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import client.inventory.Item;
 import net.OutPacket;
 
@@ -26,7 +27,7 @@ public class DropPickUpMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.DropPickup.getType());
+        oPacket.EncodeByte(MessageOpcodesType.DropPickup.getType());
         oPacket.EncodeByte(mode);
         switch (mode) {
             case -10:

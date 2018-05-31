@@ -1,12 +1,12 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.MapleTrait;
+import client.Trait;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.ModifyInventory;
-import client.inventory.ModifyInventoryOperation;
+import enums.ModifyInventoryOperation;
 import constants.GameConstants;
 import java.util.ArrayList;
 import java.util.List;
@@ -134,8 +134,8 @@ public class UseMagnifyingGlassHandler implements ProcessPacket<ClientSocket> {
 
         chr.updateTick(iPacket.DecodeInt());
         final short srcPosition = iPacket.DecodeShort();
-        final boolean insight = srcPosition == 127 && chr.getTrait(MapleTrait.MapleTraitType.sense).getLevel() >= 30;
-        final Item magnifyingItem = chr.getInventory(MapleInventoryType.USE).getItem(srcPosition); // magnifying item could be null, since later versions dont need it
+        final boolean insight = srcPosition == 127 && chr.getTrait(Trait.MapleTraitType.sense).getLevel() >= 30;
+        final Item magnifyingItem = chr.getInventory(InventoryType.USE).getItem(srcPosition); // magnifying item could be null, since later versions dont need it
         if (magnifyingItem != null) { // If this item is not null, it means the player is using magnifying glass USE item instead of the inventory UI
             //      System.out.println(magnifyingItem.getItemId());
             if (magnifyingItem.getItemId() < 2460000 || magnifyingItem.getItemId() > 2460005) { // Check itemid
@@ -144,7 +144,7 @@ public class UseMagnifyingGlassHandler implements ProcessPacket<ClientSocket> {
             }
         }
         final short eqSlot = iPacket.DecodeShort();
-        final Equip equipment = (Equip) chr.getInventory(eqSlot < 0 ? MapleInventoryType.EQUIPPED : MapleInventoryType.EQUIP).getItem(eqSlot);
+        final Equip equipment = (Equip) chr.getInventory(eqSlot < 0 ? InventoryType.EQUIPPED : InventoryType.EQUIP).getItem(eqSlot);
         if (equipment == null || chr.hasBlockedInventory()) {
             c.SendPacket(WvsContext.inventoryOperation(true, new ArrayList<>()));
             return;
@@ -194,7 +194,7 @@ public class UseMagnifyingGlassHandler implements ProcessPacket<ClientSocket> {
                     chr.gainMeso(-itemReleaseCost, false);
                 }
                 if (magnifyingItem != null) {
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, magnifyingItem.getPosition(), (short) 1, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, magnifyingItem.getPosition(), (short) 1, false);
                 }
 
                 // c.getPlayer().getTrait(MapleTrait.MapleTraitType.insight).addExp((src == 0x7F && price != -1 ? 10 : insight ? 10 : ((magnify.getItemId() + 2) - 2460000)) * 2, c.getPlayer());

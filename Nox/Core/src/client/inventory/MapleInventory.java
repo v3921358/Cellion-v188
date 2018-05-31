@@ -1,5 +1,6 @@
 package client.inventory;
 
+import enums.InventoryType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,9 +16,9 @@ public class MapleInventory implements Iterable<Item> {
 
     private final Map<Short, Item> inventory;
     private byte slotLimit = 0;
-    private final MapleInventoryType type;
+    private final InventoryType type;
 
-    public MapleInventory(MapleInventoryType type) {
+    public MapleInventory(InventoryType type) {
         this.inventory = new LinkedHashMap<>();
         this.type = type;
     }
@@ -173,10 +174,10 @@ public class MapleInventory implements Iterable<Item> {
     }
 
     public void addFromDB(Item item) {
-        if ((item.getPosition() < 0) && (!this.type.equals(MapleInventoryType.EQUIPPED))) {
+        if ((item.getPosition() < 0) && (!this.type.equals(InventoryType.EQUIPPED))) {
             return;
         }
-        if ((item.getPosition() > 0) && (this.type.equals(MapleInventoryType.EQUIPPED))) {
+        if ((item.getPosition() > 0) && (this.type.equals(InventoryType.EQUIPPED))) {
             return;
         }
         this.inventory.put(item.getPosition(), item);
@@ -189,17 +190,17 @@ public class MapleInventory implements Iterable<Item> {
             throw new InventoryException("Trying to move empty slot");
         }
         if (target == null) {
-            if ((dSlot < 0) && (!this.type.equals(MapleInventoryType.EQUIPPED))) {
+            if ((dSlot < 0) && (!this.type.equals(InventoryType.EQUIPPED))) {
                 return;
             }
-            if ((dSlot > 0) && (this.type.equals(MapleInventoryType.EQUIPPED))) {
+            if ((dSlot > 0) && (this.type.equals(InventoryType.EQUIPPED))) {
                 return;
             }
             source.setPosition(dSlot);
             this.inventory.put(dSlot, source);
             this.inventory.remove(sSlot);
         } else if ((target.getItemId() == source.getItemId()) && (!GameConstants.isThrowingStar(source.getItemId())) && (!GameConstants.isBullet(source.getItemId())) && (target.getOwner().equals(source.getOwner())) && (target.getExpiration() == source.getExpiration())) {
-            if ((this.type.getType() == MapleInventoryType.EQUIP.getType()) || (this.type.getType() == MapleInventoryType.CASH.getType())) {
+            if ((this.type.getType() == InventoryType.EQUIP.getType()) || (this.type.getType() == InventoryType.CASH.getType())) {
                 swap(target, source);
             } else if (source.getQuantity() + target.getQuantity() > slotMax) {
                 source.setQuantity((short) (source.getQuantity() + target.getQuantity() - slotMax));
@@ -282,7 +283,7 @@ public class MapleInventory implements Iterable<Item> {
         return (short) free;
     }
 
-    public MapleInventoryType getType() {
+    public InventoryType getType() {
         return this.type;
     }
 

@@ -5,7 +5,7 @@ package tools;
 
 import client.CharacterTemporaryStat;
 import client.QuestStatus;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
 import database.Database;

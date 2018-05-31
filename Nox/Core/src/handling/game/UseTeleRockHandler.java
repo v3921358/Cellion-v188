@@ -2,7 +2,7 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import static handling.game._CommonPlayerOperationHandler.UseTeleRock;
 import server.MapleInventoryManipulator;
 import net.InPacket;
@@ -24,7 +24,7 @@ public class UseTeleRockHandler implements ProcessPacket<ClientSocket> {
     public void Process(ClientSocket c, InPacket iPacket) {
         final byte slot = (byte) iPacket.DecodeShort();
         final int itemId = iPacket.DecodeInt();
-        final Item toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
+        final Item toUse = c.getPlayer().getInventory(InventoryType.USE).getItem(slot);
 
         if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId || itemId / 10000 != 232 || c.getPlayer().hasBlockedInventory()) {
             c.SendPacket(WvsContext.enableActions());
@@ -32,7 +32,7 @@ public class UseTeleRockHandler implements ProcessPacket<ClientSocket> {
         }
         boolean used = UseTeleRock(iPacket, c, itemId);
         if (used) {
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
+            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
         }
         c.SendPacket(WvsContext.enableActions());
     }

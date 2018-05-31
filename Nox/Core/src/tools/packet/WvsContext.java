@@ -1,8 +1,13 @@
 package tools.packet;
 
+import enums.ModifyInventoryOperation;
+import enums.InventoryType;
+import enums.EquipSlotType;
+import enums.EnchantmentStats;
+import enums.Stat;
 import client.*;
-import client.MapleSpecialStats.MapleSpecialStatUpdateType;
-import client.Stat.Temp;
+import client.SpecialStats.MapleSpecialStatUpdateType;
+import enums.Stat.Temp;
 import client.buddy.Buddy;
 import client.buddy.BuddyList;
 import client.buddy.BuddylistEntry;
@@ -21,7 +26,7 @@ import server.life.PlayerNPC;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
 import server.maps.objects.MonsterFamiliar;
-import server.messages.ExpGainTypes;
+import enums.ExpType;
 import server.messages.ExpIncreaseMessage;
 import server.messages.MessageInterface;
 import server.stores.HiredMerchant;
@@ -62,7 +67,7 @@ public class WvsContext {
         return oPacket;
     }
 
-    public static OutPacket updateInventorySlot(MapleInventoryType type, Item item, boolean fromDrop) {
+    public static OutPacket updateInventorySlot(InventoryType type, Item item, boolean fromDrop) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.InventoryOperation.getValue());
         oPacket.EncodeByte(fromDrop ? 1 : 0);
@@ -985,7 +990,7 @@ public class WvsContext {
         oPacket.EncodeByte(chr.getStat().pvpRank);
         oPacket.EncodeInt(chr.getFame());
 
-        final MapleMarriage marriage = chr.getMarriage();
+        final Marriage marriage = chr.getMarriage();
         oPacket.EncodeBool(marriage != null && marriage.getId() != 0);
         if (marriage != null && marriage.getId() != 0) {
             oPacket.EncodeInt(marriage.getId()); //marriage id
@@ -1026,7 +1031,7 @@ public class WvsContext {
                 oPacket.EncodeShort(pet.getCloseness());
                 oPacket.EncodeByte(pet.getFullness());
                 oPacket.EncodeShort(0);
-                Item inv = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) (byte) (index == 2 ? -130 : index == 1 ? -114 : -138));
+                Item inv = chr.getInventory(InventoryType.EQUIPPED).getItem((short) (byte) (index == 2 ? -130 : index == 1 ? -114 : -138));
                 oPacket.EncodeInt(inv == null ? 0 : inv.getItemId());
                 oPacket.EncodeInt(pet.getColor());
                 oPacket.EncodeBool(chr.getSummonedPets().size() > index);
@@ -1043,7 +1048,7 @@ public class WvsContext {
             }
         }
         // Medal
-        final Item medal = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) EquipSlotType.Medal.getSlot());
+        final Item medal = chr.getInventory(InventoryType.EQUIPPED).getItem((short) EquipSlotType.Medal.getSlot());
         oPacket.EncodeInt(medal == null ? 0 : medal.getItemId());
 
         // Medal quests
@@ -1068,7 +1073,7 @@ public class WvsContext {
         oPacket.EncodeShort(0);
         // End
 
-        for (MapleTrait.MapleTraitType t : MapleTrait.MapleTraitType.values()) {
+        for (Trait.MapleTraitType t : Trait.MapleTraitType.values()) {
             oPacket.EncodeByte(chr.getTrait(t).getLevel());
         }
 
@@ -1080,7 +1085,7 @@ public class WvsContext {
 
         // Chairs
         final List<Integer> chairs = new ArrayList<>();
-        for (Item i : chr.getInventory(MapleInventoryType.SETUP).newList()) {
+        for (Item i : chr.getInventory(InventoryType.SETUP).newList()) {
             if (i.getItemId() / 10000 == 301 && !chairs.contains(i.getItemId())) {
                 chairs.add(i.getItemId());
             }
@@ -1341,7 +1346,7 @@ public class WvsContext {
 
                     oPacket.EncodeByte(hm.getFreeSlot() == -1 ? 1 : 0);
                     oPacket.EncodeByte(GameConstants.getInventoryType(itemSearch).getType());
-                    if (GameConstants.getInventoryType(itemSearch) == MapleInventoryType.EQUIP) {
+                    if (GameConstants.getInventoryType(itemSearch) == InventoryType.EQUIP) {
                         PacketHelper.addItemInfo(oPacket, item.item);
                     }
                 }
@@ -3569,7 +3574,7 @@ public class WvsContext {
          * @param expIncreaseStats
          * @return
          */
-        public static OutPacket gainExp(int nIncExp, boolean bIsLastHit, boolean bOnQuest, byte questBonusEXPRate, int burningFieldBonusEXPRate, EnumMap<ExpGainTypes, Integer> expIncreaseStats) {
+        public static OutPacket gainExp(int nIncExp, boolean bIsLastHit, boolean bOnQuest, byte questBonusEXPRate, int burningFieldBonusEXPRate, EnumMap<ExpType, Integer> expIncreaseStats) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.Message.getValue());
             ExpIncreaseMessage message = new ExpIncreaseMessage(bIsLastHit, nIncExp, bOnQuest, questBonusEXPRate, burningFieldBonusEXPRate, expIncreaseStats);
@@ -3710,7 +3715,7 @@ public class WvsContext {
             return oPacket;
         }
 
-        public static OutPacket updateReward(int id, byte mode, List<MapleReward> rewards, int option) {
+        public static OutPacket updateReward(int id, byte mode, List<Rewards> rewards, int option) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.RewardResult.getValue());
             oPacket.EncodeByte(mode); // mode
@@ -3719,7 +3724,7 @@ public class WvsContext {
                     oPacket.EncodeInt(rewards.size());
                     if (rewards.size() > 0) {
                         for (int i = 0; i < rewards.size(); i++) {
-                            MapleReward reward = rewards.get(i);
+                            Rewards reward = rewards.get(i);
                             boolean empty = reward.getId() < 1;
                             oPacket.EncodeInt(empty ? 0 : reward.getId()); // 0 = blank 1+ = gift
                             if (!empty) {

@@ -1,9 +1,9 @@
 package handling.cashshop;
 
-import client.MapleCharacterCreationUtil;
+import client.CharacterCreationUtil;
 import client.ClientSocket;
 import client.QuestStatus;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import database.Database;
 
@@ -55,14 +55,14 @@ public class SlotIncrease {
     }
 
     public static void OnCharacterSlotRequest(InPacket iPacket, ClientSocket c, User pPlayer) {
-        int nSlots = MapleCharacterCreationUtil.getCharacterSlots(c.getAccID(), pPlayer.getWorld());
+        int nSlots = CharacterCreationUtil.getCharacterSlots(c.getAccID(), pPlayer.getWorld());
 
         if (nSlots == 0 || c.getPlayer().getCSPoints(2) < 6900 || nSlots >= GameConstants.characterSlotMax) {
             c.SendPacket(CSPacket.sendCSFail(0));
             return;
         }
 
-        if (MapleCharacterCreationUtil.gainCharacterSlot(c.getAccID(), pPlayer.getWorld(), nSlots)) {
+        if (CharacterCreationUtil.gainCharacterSlot(c.getAccID(), pPlayer.getWorld(), nSlots)) {
             c.getPlayer().modifyCSPoints(2, -6900, false);
             pPlayer.dropMessage(1, "Your character slots have been increased successfully.");
         } else {
@@ -89,22 +89,22 @@ public class SlotIncrease {
         }
     }
 
-    private static MapleInventoryType getInventoryType(final int nID) {
+    private static InventoryType getInventoryType(final int nID) {
         switch (nID) {
             case 1:
             case 50200093:
-                return MapleInventoryType.EQUIP;
+                return InventoryType.EQUIP;
             case 2:
             case 50200094:
-                return MapleInventoryType.USE;
+                return InventoryType.USE;
             case 3:
             case 50200197:
-                return MapleInventoryType.SETUP;
+                return InventoryType.SETUP;
             case 4:
             case 50200095:
-                return MapleInventoryType.ETC;
+                return InventoryType.ETC;
             default:
-                return MapleInventoryType.UNDEFINED;
+                return InventoryType.UNDEFINED;
         }
     }
 }

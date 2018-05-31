@@ -2,7 +2,7 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import server.Randomizer;
 import server.potentials.ItemPotentialOption;
 import net.InPacket;
 import server.potentials.ItemPotentialProvider;
-import server.NebuliteGrade;
+import enums.NebuliteGrade;
 import tools.packet.CField;
 import tools.packet.WvsContext;
 import net.ProcessPacket;

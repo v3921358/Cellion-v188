@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -16,7 +17,7 @@ public class RecoverFatigueMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.RecoveredFatigue.getType());
+        oPacket.EncodeByte(MessageOpcodesType.RecoveredFatigue.getType());
     }
 
 }

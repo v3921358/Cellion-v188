@@ -1,6 +1,6 @@
 package handling.login;
 
-import client.MapleCharacterCreationUtil;
+import client.CharacterCreationUtil;
 import java.util.List;
 
 import client.ClientSocket;
@@ -94,7 +94,7 @@ public final class CharListRequestHandler implements ProcessPacket<ClientSocket>
                 handleBurningEvent(c, chars);
             }
             c.SendPacket(CLogin.getCharList(c, c.getSecondPassword(), chars,
-                    MapleCharacterCreationUtil.getCharacterSlots(c.getAccID(), c.getWorld()), world == WorldOption.Reboot));
+                    CharacterCreationUtil.getCharacterSlots(c.getAccID(), c.getWorld()), world == WorldOption.Reboot));
         } else {
             c.Close();
         }

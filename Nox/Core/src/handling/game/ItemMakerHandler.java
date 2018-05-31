@@ -10,7 +10,7 @@ import client.PlayerStats;
 import client.SkillFactory;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import server.ItemMakerFactory;
@@ -87,7 +87,7 @@ public class ItemMakerHandler implements ProcessPacket<ClientSocket> {
                         return; // We'll do handling for this later
                     }
                     c.getPlayer().gainMeso(-gem.getCost(), false);
-                    if (GameConstants.getInventoryType(toCreate) == MapleInventoryType.EQUIP) {
+                    if (GameConstants.getInventoryType(toCreate) == InventoryType.EQUIP) {
                         MapleInventoryManipulator.addbyItem(c, MapleItemInformationProvider.getInstance().getEquipById(toCreate));
                     } else {
                         MapleInventoryManipulator.addById(c, toCreate, (byte) 1, "Made by Gem " + toCreate + " on " + LocalDateTime.now()); // Gem is always 1
@@ -126,7 +126,7 @@ public class ItemMakerHandler implements ProcessPacket<ClientSocket> {
                     if (stimulator || numEnchanter > 0) {
                         if (c.getPlayer().haveItem(create.getStimulator(), 1, false, true)) {
                             ii.randomizeStats_Above(toGive);
-                            MapleInventoryManipulator.removeById(c, MapleInventoryType.ETC, create.getStimulator(), 1, false, false);
+                            MapleInventoryManipulator.removeById(c, InventoryType.ETC, create.getStimulator(), 1, false, false);
                         }
                         for (int i = 0; i < numEnchanter; i++) {
                             final int enchant = iPacket.DecodeInt();
@@ -134,7 +134,7 @@ public class ItemMakerHandler implements ProcessPacket<ClientSocket> {
                                 final Map<String, Integer> stats = ii.getEquipStats(enchant);
                                 if (stats != null) {
                                     addEnchantStats(stats, toGive);
-                                    MapleInventoryManipulator.removeById(c, MapleInventoryType.ETC, enchant, 1, false, false);
+                                    MapleInventoryManipulator.removeById(c, InventoryType.ETC, enchant, 1, false, false);
                                 }
                             }
                         }
@@ -155,7 +155,7 @@ public class ItemMakerHandler implements ProcessPacket<ClientSocket> {
                 final int etc = iPacket.DecodeInt();
                 if (c.getPlayer().haveItem(etc, 100, false, true)) {
                     MapleInventoryManipulator.addById(c, getCreateCrystal(etc), (short) 1, "Made by Maker " + etc + " on " + LocalDateTime.now());
-                    MapleInventoryManipulator.removeById(c, MapleInventoryType.ETC, etc, 100, false, false);
+                    MapleInventoryManipulator.removeById(c, InventoryType.ETC, etc, 100, false, false);
 
                     c.SendPacket(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.ItemMaker));
                     c.getPlayer().getMap().broadcastPacket(c.getPlayer(), CField.EffectPacket.showForeignEffect(c.getPlayer().getId(), CField.EffectPacket.UserEffectCodes.ItemMaker), false);
@@ -167,7 +167,7 @@ public class ItemMakerHandler implements ProcessPacket<ClientSocket> {
                 c.getPlayer().updateTick(iPacket.DecodeInt());
                 final byte slot = (byte) iPacket.DecodeInt();
 
-                final Item toUse = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(slot);
+                final Item toUse = c.getPlayer().getInventory(InventoryType.EQUIP).getItem(slot);
                 if (toUse == null || toUse.getItemId() != itemId || toUse.getQuantity() < 1) {
                     return;
                 }
@@ -176,7 +176,7 @@ public class ItemMakerHandler implements ProcessPacket<ClientSocket> {
                 if (!ii.isDropRestricted(itemId) && !ii.isAccountShared(itemId)) {
                     final int[] toGive = getCrystal(itemId, ii.getReqLevel(itemId));
                     MapleInventoryManipulator.addById(c, toGive[0], (byte) toGive[1], "Made by disassemble " + itemId + " on " + LocalDateTime.now());
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.EQUIP, slot, (byte) 1, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, slot, (byte) 1, false);
                 }
                 c.SendPacket(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.ItemMaker));
                 c.getPlayer().getMap().broadcastPacket(c.getPlayer(), CField.EffectPacket.showForeignEffect(c.getPlayer().getId(), CField.EffectPacket.UserEffectCodes.ItemMaker), false);

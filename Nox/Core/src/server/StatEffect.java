@@ -1,10 +1,12 @@
 package server;
 
+import enums.StatInfo;
+import enums.Stat;
 import client.*;
-import client.MapleTrait.MapleTraitType;
+import client.Trait.MapleTraitType;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
 import constants.SkillConstants;
@@ -24,7 +26,7 @@ import server.life.MobSkill;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.SummonMovementType;
+import enums.SummonMovementType;
 import server.maps.objects.*;
 import service.ChannelServer;
 import tools.CaltechEval;
@@ -65,7 +67,7 @@ public class StatEffect implements Serializable {
     private Point lt, rb;
     private byte level;
     private List<Pair<Integer, Integer>> randomMorph;
-    private List<MapleDisease> cureDebuffs;
+    private List<Disease> cureDebuffs;
     private List<Integer> petsCanConsume, familiars, randomPickup;
     private List<Triple<Integer, Integer, Integer>> rewardItem;
     private byte fieldExpType, expR, familiarTarget, recipeUseCount, recipeValidDay, reqSkillLevel, slotCount, slotPerLine, effectedOnAlly, effectedOnEnemy, type, preventslip, immortal, bs;
@@ -169,21 +171,21 @@ public class StatEffect implements Serializable {
                 effect.traits.put(t, expz);
             }
         }
-        List<MapleDisease> cure = new ArrayList<>(5);
+        List<Disease> cure = new ArrayList<>(5);
         if (parseEval("poison", source, 0, variables, level) > 0) {
-            cure.add(MapleDisease.POISON);
+            cure.add(Disease.POISON);
         }
         if (parseEval("seal", source, 0, variables, level) > 0) {
-            cure.add(MapleDisease.SEAL);
+            cure.add(Disease.SEAL);
         }
         if (parseEval("darkness", source, 0, variables, level) > 0) {
-            cure.add(MapleDisease.DARKNESS);
+            cure.add(Disease.DARKNESS);
         }
         if (parseEval("weakness", source, 0, variables, level) > 0) {
-            cure.add(MapleDisease.WEAKEN);
+            cure.add(Disease.WEAKEN);
         }
         if (parseEval("curse", source, 0, variables, level) > 0) {
-            cure.add(MapleDisease.CURSE);
+            cure.add(Disease.CURSE);
         }
         effect.cureDebuffs = cure;
         effect.petsCanConsume = new ArrayList<>();
@@ -451,7 +453,7 @@ public class StatEffect implements Serializable {
         } else if (isHeroWill()) {
             applyto.dispelDebuffs();
         } else if (cureDebuffs.size() > 0) {
-            for (final MapleDisease debuff : cureDebuffs) {
+            for (final Disease debuff : cureDebuffs) {
                 applyfrom.dispelDebuff(debuff);
             }
         } else if (isMPRecovery()) {
@@ -465,7 +467,7 @@ public class StatEffect implements Serializable {
         }
         final Map<Stat, Long> hpmpupdate = new EnumMap<>(Stat.class);
         if (hpchange != 0) {
-            if (hpchange < 0 && (-hpchange) > stat.getHp() && !applyto.hasDisease(MapleDisease.ZOMBIFY)) {
+            if (hpchange < 0 && (-hpchange) > stat.getHp() && !applyto.hasDisease(Disease.ZOMBIFY)) {
                 applyto.getClient().SendPacket(WvsContext.enableActions());
                 return false;
             }
@@ -545,13 +547,13 @@ public class StatEffect implements Serializable {
             }
             applyto.changeSingleSkillLevel(SkillFactory.getCraft(recipe), Integer.MAX_VALUE, recipeUseCount, recipeValidDay > 0 ? (System.currentTimeMillis() + recipeValidDay * 24L * 60 * 60 * 1000) : -1L);
         } else if (isSpiritClaw()) {
-            MapleInventory use = applyto.getInventory(MapleInventoryType.USE);
+            MapleInventory use = applyto.getInventory(InventoryType.USE);
             boolean itemz = false;
             for (int i = 0; i < use.getSlotLimit(); i++) { // impose order...
                 Item item = use.getItem((byte) i);
                 if (item != null) {
                     if (GameConstants.isRechargable(item.getItemId()) && item.getQuantity() >= 100) {
-                        MapleInventoryManipulator.removeFromSlot(applyto.getClient(), MapleInventoryType.USE, (short) i, (short) 100, false, true);
+                        MapleInventoryManipulator.removeFromSlot(applyto.getClient(), InventoryType.USE, (short) i, (short) 100, false, true);
                         itemz = true;
                         break;
                     }
@@ -561,13 +563,13 @@ public class StatEffect implements Serializable {
                 return false;
             }
         } else if (isSpiritBlast()) {
-            MapleInventory use = applyto.getInventory(MapleInventoryType.USE);
+            MapleInventory use = applyto.getInventory(InventoryType.USE);
             boolean itemz = false;
             for (int i = 0; i < use.getSlotLimit(); i++) { // impose order...
                 Item item = use.getItem((byte) i);
                 if (item != null) {
                     if (GameConstants.isBullet(item.getItemId()) && item.getQuantity() >= 100) {
-                        MapleInventoryManipulator.removeFromSlot(applyto.getClient(), MapleInventoryType.USE, (short) i, (short) 100, false, true);
+                        MapleInventoryManipulator.removeFromSlot(applyto.getClient(), InventoryType.USE, (short) i, (short) 100, false, true);
                         itemz = true;
                         break;
                     }
@@ -586,7 +588,7 @@ public class StatEffect implements Serializable {
         } else if (nuffSkill != 0 && applyto.getParty() != null) {
             final MCSkill skil = MapleCarnivalFactory.getInstance().getSkill(nuffSkill);
             if (skil != null) {
-                final MapleDisease dis = skil.getDisease();
+                final Disease dis = skil.getDisease();
                 for (User chr : applyto.getMap().getCharacters()) {
                     if (applyto.getParty() == null || chr.getParty() == null || (chr.getParty().getId() != applyto.getParty().getId())) {
                         if (skil.targetsAll || Randomizer.nextBoolean()) {
@@ -879,7 +881,7 @@ public class StatEffect implements Serializable {
             applyfrom.getMap().spawnMist(mist, getDuration(), false);
 
         } else if (isTimeLeap()) { // Time Leap
-            for (MapleCoolDownValueHolder i : applyto.getCooldowns()) {
+            for (CoolDownValueHolder i : applyto.getCooldowns()) {
                 if (i.skillId != 5121010) {
                     applyto.removeCooldown(i.skillId);
                     applyto.getClient().SendPacket(CField.skillCooldown(i.skillId, 0));
@@ -902,7 +904,7 @@ public class StatEffect implements Serializable {
         if (rewardItem != null && totalprob > 0) {
             for (Triple<Integer, Integer, Integer> reward : rewardItem) {
                 if (MapleInventoryManipulator.checkSpace(applyto.getClient(), reward.left, reward.mid, "") && reward.right > 0 && Randomizer.nextInt(totalprob) < reward.right) { // Total prob
-                    if (GameConstants.getInventoryType(reward.left) == MapleInventoryType.EQUIP) {
+                    if (GameConstants.getInventoryType(reward.left) == InventoryType.EQUIP) {
                         final Item item = MapleItemInformationProvider.getInstance().getEquipById(reward.left);
                         item.setGMLog("Reward item (effect): " + sourceid + " on " + LocalDateTime.now());
                         MapleInventoryManipulator.addbyItem(applyto.getClient(), item);
@@ -1003,7 +1005,7 @@ public class StatEffect implements Serializable {
                         affected.getMap().broadcastPacket(affected, EffectPacket.showBuffeffect(affected.getId(), sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level), false);
                     }
                     if (isTimeLeap()) {
-                        for (MapleCoolDownValueHolder i : affected.getCooldowns()) {
+                        for (CoolDownValueHolder i : affected.getCooldowns()) {
                             if (i.skillId != 5121010) {
                                 affected.removeCooldown(i.skillId);
                                 affected.getClient().SendPacket(CField.skillCooldown(i.skillId, 0));
@@ -1059,7 +1061,7 @@ public class StatEffect implements Serializable {
                 for (Map.Entry<MonsterStatus, Integer> stat : getMonsterStati().entrySet()) {
                     if (pvp) {
                         User chr = (User) mo;
-                        MapleDisease d = MonsterStatus.getLinkedDisease(stat.getKey());
+                        Disease d = MonsterStatus.getLinkedDisease(stat.getKey());
                         if (d != null) {
                             MobSkill ms = new MobSkill(d.getDisease(), 1);
                             ms.setDuration(getDuration());
@@ -1322,11 +1324,11 @@ public class StatEffect implements Serializable {
                 break;
             case Kaiser.TEMPEST_BLADES:
             case Kaiser.ADVANCED_TEMPEST_BLADES:
-                if (applyfrom.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11) == null) {
+                if (applyfrom.getInventory(InventoryType.EQUIPPED).getItem((short) -11) == null) {
                     break;
                 } else {
                     this.statups.put(CharacterTemporaryStat.StopForceAtomInfo, applyfrom.getSkillLevel(sourceid));
-                    this.weapon = applyfrom.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11).getItemId();
+                    this.weapon = applyfrom.getInventory(InventoryType.EQUIPPED).getItem((short) -11).getItemId();
                     int index = (sourceid == 61101002) ? 1 : 2;
                     int effectCount = (sourceid == 61101002) ? 3 : 5;
                     applyto.setStopForceAtoms(index, effectCount, this.weapon);
@@ -1471,12 +1473,12 @@ public class StatEffect implements Serializable {
             } else {
                 hpchange += info.get(StatInfo.hp);
             }
-            if (applyfrom.hasDisease(MapleDisease.ZOMBIFY)) {
+            if (applyfrom.hasDisease(Disease.ZOMBIFY)) {
                 hpchange /= 2;
             }
         }
         if (hpR != 0) {
-            hpchange += (int) (applyfrom.getStat().getCurrentMaxHp() * hpR) / (applyfrom.hasDisease(MapleDisease.ZOMBIFY) ? 2 : 1);
+            hpchange += (int) (applyfrom.getStat().getCurrentMaxHp() * hpR) / (applyfrom.hasDisease(Disease.ZOMBIFY) ? 2 : 1);
         }
         // actually receivers probably never get any hp when it's not heal but whatever
         if (primary) {

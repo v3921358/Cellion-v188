@@ -42,9 +42,9 @@ package server.life;
 
 import constants.GameConstants;
 import static java.lang.Math.exp;
-import static server.StatInfo.hp;
-import static server.StatInfo.mp;
-import static server.quest.QuestActionType.exp;
+import static enums.StatInfo.hp;
+import static enums.StatInfo.mp;
+import static enums.QuestActionType.exp;
 
 public class ChangeableStats extends OverrideMonsterStats {
 

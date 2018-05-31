@@ -2,7 +2,7 @@ package handling.game;
 
 import client.ClientSocket;
 import net.InPacket;
-import server.maps.FieldLimitType;
+import enums.FieldLimitType;
 import net.ProcessPacket;
 
 /**

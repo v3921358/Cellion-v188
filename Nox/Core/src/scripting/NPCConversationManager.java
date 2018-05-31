@@ -16,17 +16,17 @@ import javax.script.Invocable;
 
 import client.InnerAbillity;
 import client.InnerSkillValueHolder;
-import client.MapleCharacterCreationUtil;
+import client.CharacterCreationUtil;
 import client.ClientSocket;
-import client.Stat;
+import enums.Stat;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.ItemFlag;
+import enums.ItemFlag;
 import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import constants.ItemConstants;
@@ -50,8 +50,8 @@ import provider.MapleDataProvider;
 import net.OutPacket;
 
 import provider.wz.cache.WzDataStorage;
-import scripting.provider.NPCChatByType;
-import scripting.provider.NPCChatType;
+import enums.NPCInterfaceType;
+import enums.NPCChatType;
 import scripting.provider.NPCScriptManager;
 import server.MapleCarnivalChallenge;
 import server.MapleCarnivalParty;
@@ -168,11 +168,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return allowConversationCancel;
     }
 
-    private NPCChatByType getNPCChatByType(boolean isSelfSay) {
+    private NPCInterfaceType getNPCChatByType(boolean isSelfSay) {
         if (isSelfSay) {
-            return allowConversationCancel ? NPCChatByType.Self_Cancellable : NPCChatByType.Self_Uncancellable;
+            return allowConversationCancel ? NPCInterfaceType.Self_Cancellable : NPCInterfaceType.Self_Uncancellable;
         }
-        return allowConversationCancel ? NPCChatByType.NPC_Cancellable : NPCChatByType.NPC_UnCancellable;
+        return allowConversationCancel ? NPCInterfaceType.NPC_Cancellable : NPCInterfaceType.NPC_UnCancellable;
     }
 
     public void sendSlideMenu(final int type, final String sel) {
@@ -200,7 +200,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
         LastChatType = NPCChatType.NEXT;
 
-        c.SendPacket(NPCPacket.getNPCTalk(id, LastChatType, text, NPCChatByType.NPC_Cancellable, id));
+        c.SendPacket(NPCPacket.getNPCTalk(id, LastChatType, text, NPCInterfaceType.NPC_Cancellable, id));
     }
 
     public void sendPlayerToNpc(String text) {
@@ -244,7 +244,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
         LastChatType = NPCChatType.PREV;
 
-        c.SendPacket(NPCPacket.getNPCTalk(id, LastChatType, text, NPCChatByType.NPC_Cancellable, id));
+        c.SendPacket(NPCPacket.getNPCTalk(id, LastChatType, text, NPCInterfaceType.NPC_Cancellable, id));
     }
 
     public void sendPrevS(String text, byte type) {
@@ -272,7 +272,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
         LastChatType = NPCChatType.NEXTPREV;
 
-        c.SendPacket(NPCPacket.getNPCTalk(id, LastChatType, text, NPCChatByType.NPC_Cancellable, id));
+        c.SendPacket(NPCPacket.getNPCTalk(id, LastChatType, text, NPCInterfaceType.NPC_Cancellable, id));
     }
 
     public void PlayerToNpc(String text) {
@@ -312,7 +312,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
         LastChatType = NPCChatType.OK;
 
-        c.SendPacket(NPCPacket.getNPCTalk(id, LastChatType, text, NPCChatByType.NPC_Cancellable, id));
+        c.SendPacket(NPCPacket.getNPCTalk(id, LastChatType, text, NPCInterfaceType.NPC_Cancellable, id));
     }
 
     public void sendOkS(String text, byte type) {
@@ -348,7 +348,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
         LastChatType = NPCChatType.OnAskYesNo;
 
-        c.SendPacket(NPCPacket.getNPCTalk(id, LastChatType, text, NPCChatByType.NPC_Cancellable, id));
+        c.SendPacket(NPCPacket.getNPCTalk(id, LastChatType, text, NPCInterfaceType.NPC_Cancellable, id));
     }
 
     public void sendYesNoS(String text, byte type) {
@@ -384,7 +384,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
         LastChatType = NPCChatType.OnAskAccept;
 
-        c.SendPacket(NPCPacket.getNPCTalk(id, LastChatType, text, NPCChatByType.NPC_Cancellable, id));
+        c.SendPacket(NPCPacket.getNPCTalk(id, LastChatType, text, NPCInterfaceType.NPC_Cancellable, id));
     }
 
     public void askAcceptDeclineNoESC(String text) {
@@ -430,7 +430,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         this.min_range = 0;
         this.max_range = 10000000; // set a limitation for the range, this patches negative selection exploit
 
-        c.SendPacket(NPCPacket.getNPCTalk(id, LastChatType, text, NPCChatByType.NPC_Cancellable, id));
+        c.SendPacket(NPCPacket.getNPCTalk(id, LastChatType, text, NPCInterfaceType.NPC_Cancellable, id));
     }
 
     public void sendSimpleS(String text, byte type) {
@@ -894,8 +894,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void unequipEverything() {
-        MapleInventory equipped = getPlayer().getInventory(MapleInventoryType.EQUIPPED);
-        MapleInventory equip = getPlayer().getInventory(MapleInventoryType.EQUIP);
+        MapleInventory equipped = getPlayer().getInventory(InventoryType.EQUIPPED);
+        MapleInventory equip = getPlayer().getInventory(InventoryType.EQUIP);
         List<Short> ids = new LinkedList<>();
         for (Item item : equipped.newList()) {
             ids.add(item.getPosition());
@@ -1196,7 +1196,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void makeTaintedEquip(byte slot) {
-        Equip sel = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem(slot);
+        Equip sel = (Equip) c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(slot);
         sel.setStr((short) 69);
         sel.setDex((short) 69);
         sel.setInt((short) 69);
@@ -1220,7 +1220,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void changeStat(byte slot, int type, int amount) {
-        Equip sel = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem(slot);
+        Equip sel = (Equip) c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(slot);
         switch (type) {
             case 0:
                 sel.setStr((short) amount);
@@ -1550,8 +1550,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
 
         // Get List
-        List<Item> equips = chr.getInventory(MapleInventoryType.EQUIP).listById(itemid);
-        List<Item> equipped = chr.getInventory(MapleInventoryType.EQUIPPED).listById(itemid);
+        List<Item> equips = chr.getInventory(InventoryType.EQUIP).listById(itemid);
+        List<Item> equipped = chr.getInventory(InventoryType.EQUIPPED).listById(itemid);
 
         // Do you have any?
         if (equips.isEmpty() && equipped.isEmpty()) {
@@ -1723,7 +1723,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public boolean replaceItem(int slot, int invType, Object statsSel, int offset, String type, boolean takeSlot) {
-        MapleInventoryType inv = MapleInventoryType.getByType((byte) invType);
+        InventoryType inv = InventoryType.getByType((byte) invType);
         if (inv == null) {
             return false;
         }
@@ -1732,7 +1732,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             item = (Item) statsSel;
         }
         if (offset > 0) {
-            if (inv != MapleInventoryType.EQUIP) {
+            if (inv != InventoryType.EQUIP) {
                 return false;
             }
             Equip eq = (Equip) item;
@@ -1953,7 +1953,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public final boolean dropItem(int slot, int invType, int quantity) {
-        MapleInventoryType inv = MapleInventoryType.getByType((byte) invType);
+        InventoryType inv = InventoryType.getByType((byte) invType);
         if (inv == null) {
             return false;
         }
@@ -1982,7 +1982,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void MakeGMItem(byte slot, User player) {
-        MapleInventory equip = player.getInventory(MapleInventoryType.EQUIP);
+        MapleInventory equip = player.getInventory(InventoryType.EQUIP);
         Equip eu = (Equip) equip.getItem(slot);
         int item = equip.getItem(slot).getItemId();
         short hand = eu.getHands();
@@ -1995,8 +1995,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         nItem.setUpgradeSlots((byte) 0);
         nItem.setHands(hand);
         nItem.setLevel(level);
-        player.getInventory(MapleInventoryType.EQUIP).removeItem(slot);
-        player.getInventory(MapleInventoryType.EQUIP).addFromDB(nItem);
+        player.getInventory(InventoryType.EQUIP).removeItem(slot);
+        player.getInventory(InventoryType.EQUIP).addFromDB(nItem);
     }
 
     public final String getPotentialInfo(final int id) {
@@ -2089,7 +2089,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public boolean isEligibleName(String t) {
-        return MapleCharacterCreationUtil.canCreateChar(t, getPlayer().isGM()) && (!LoginInformationProvider.getInstance().isForbiddenName(t) || getPlayer().isGM());
+        return CharacterCreationUtil.canCreateChar(t, getPlayer().isGM()) && (!LoginInformationProvider.getInstance().isForbiddenName(t) || getPlayer().isGM());
     }
 
     public String checkDrop(User chr, int mobId) {
@@ -2248,33 +2248,33 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public int getEquipId(byte slot) {
-        MapleInventory equip = getPlayer().getInventory(MapleInventoryType.EQUIP);
+        MapleInventory equip = getPlayer().getInventory(InventoryType.EQUIP);
         return equip.getItem(slot).getItemId();
     }
 
     public int getUseId(byte slot) {
-        MapleInventory use = getPlayer().getInventory(MapleInventoryType.USE);
+        MapleInventory use = getPlayer().getInventory(InventoryType.USE);
         return use.getItem(slot).getItemId();
     }
 
     public int getSetupId(byte slot) {
-        MapleInventory setup = getPlayer().getInventory(MapleInventoryType.SETUP);
+        MapleInventory setup = getPlayer().getInventory(InventoryType.SETUP);
         return setup.getItem(slot).getItemId();
     }
 
     public int getCashId(byte slot) {
-        MapleInventory cash = getPlayer().getInventory(MapleInventoryType.CASH);
+        MapleInventory cash = getPlayer().getInventory(InventoryType.CASH);
         return cash.getItem(slot).getItemId();
     }
 
     public int getETCId(byte slot) {
-        MapleInventory etc = getPlayer().getInventory(MapleInventoryType.ETC);
+        MapleInventory etc = getPlayer().getInventory(InventoryType.ETC);
         return etc.getItem(slot).getItemId();
     }
 
     public String EquipList(ClientSocket c) {
         StringBuilder str = new StringBuilder();
-        MapleInventory equip = c.getPlayer().getInventory(MapleInventoryType.EQUIP);
+        MapleInventory equip = c.getPlayer().getInventory(InventoryType.EQUIP);
         List<String> stra = new LinkedList<>();
         for (Item item : equip.list()) {
             stra.add("#L" + item.getPosition() + "##v" + item.getItemId() + "##l");
@@ -2287,7 +2287,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public String UseList(ClientSocket c) {
         StringBuilder str = new StringBuilder();
-        MapleInventory use = c.getPlayer().getInventory(MapleInventoryType.USE);
+        MapleInventory use = c.getPlayer().getInventory(InventoryType.USE);
         List<String> stra = new LinkedList<>();
         for (Item item : use.list()) {
             stra.add("#L" + item.getPosition() + "##v" + item.getItemId() + "##l");
@@ -2300,7 +2300,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public String CashList(ClientSocket c) {
         StringBuilder str = new StringBuilder();
-        MapleInventory cash = c.getPlayer().getInventory(MapleInventoryType.CASH);
+        MapleInventory cash = c.getPlayer().getInventory(InventoryType.CASH);
         List<String> stra = new LinkedList<>();
         for (Item item : cash.list()) {
             stra.add("#L" + item.getPosition() + "##v" + item.getItemId() + "##l");
@@ -2313,7 +2313,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public String ETCList(ClientSocket c) {
         StringBuilder str = new StringBuilder();
-        MapleInventory etc = c.getPlayer().getInventory(MapleInventoryType.ETC);
+        MapleInventory etc = c.getPlayer().getInventory(InventoryType.ETC);
         List<String> stra = new LinkedList<>();
         for (Item item : etc.list()) {
             stra.add("#L" + item.getPosition() + "##v" + item.getItemId() + "##l");
@@ -2326,7 +2326,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public String SetupList(ClientSocket c) {
         StringBuilder str = new StringBuilder();
-        MapleInventory setup = c.getPlayer().getInventory(MapleInventoryType.SETUP);
+        MapleInventory setup = c.getPlayer().getInventory(InventoryType.SETUP);
         List<String> stra = new LinkedList<>();
         for (Item item : setup.list()) {
             stra.add("#L" + item.getPosition() + "##v" + item.getItemId() + "##l");
@@ -2339,7 +2339,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public String PotentialedEquipList(ClientSocket c) {
         StringBuilder str = new StringBuilder();
-        MapleInventory equip = c.getPlayer().getInventory(MapleInventoryType.EQUIP);
+        MapleInventory equip = c.getPlayer().getInventory(InventoryType.EQUIP);
         List<String> stra = new LinkedList<>();
         for (Item item : equip.list()) {
             Equip eq = (Equip) item;
@@ -2354,7 +2354,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public String EquipPotentialList(short slot) {
-        Equip equip = (Equip) getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(slot);
+        Equip equip = (Equip) getPlayer().getInventory(InventoryType.EQUIP).getItem(slot);
         StringBuilder sb = new StringBuilder();
         int[] potentials;
         potentials = new int[]{equip.getPotential1(), equip.getPotential2(), equip.getPotential3()};
@@ -2367,7 +2367,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public void wearEquip(int itemid, byte slot) {
         final MapleItemInformationProvider li = MapleItemInformationProvider.getInstance();
-        final MapleInventory equip = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED);
+        final MapleInventory equip = c.getPlayer().getInventory(InventoryType.EQUIPPED);
         Item item = li.getEquipById(itemid);
         item.setPosition(slot);
         equip.addFromDB(item);
@@ -3024,7 +3024,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      */
     public void OnCubeRequest(int nSlot, int nCubeID) {
         
-        final Equip pEquip = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) nSlot);
+        final Equip pEquip = (Equip) c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) nSlot);
         Cube.OnCubeRequest(c.getPlayer(), pEquip, nCubeID, false);
     }
     

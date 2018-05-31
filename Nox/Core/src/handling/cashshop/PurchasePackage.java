@@ -5,7 +5,7 @@
  */
 package handling.cashshop;
 
-import client.MapleCharacterUtil;
+import client.CharacterUtil;
 import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.MapleInventoryIdentifier;
@@ -39,7 +39,7 @@ public class PurchasePackage {
             playerCashShopInfo(c);
             return;
         }
-        Triple<Integer, Integer, Integer> info = MapleCharacterUtil.getInfoByName(partnerName, c.getPlayer().getWorld());
+        Triple<Integer, Integer, Integer> info = CharacterUtil.getInfoByName(partnerName, c.getPlayer().getWorld());
         if (info == null || info.getLeft() <= 0 || info.getLeft() == c.getPlayer().getId() || info.getMid() == c.getAccID()) {
             c.SendPacket(CSPacket.sendCSFail(0xA2)); //9E v75
             playerCashShopInfo(c);

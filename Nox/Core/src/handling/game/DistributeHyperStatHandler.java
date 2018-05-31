@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.MapleSpecialStats.MapleHyperStats;
+import client.SpecialStats.MapleHyperStats;
 import client.Skill;
 import client.SkillFactory;
 import net.InPacket;

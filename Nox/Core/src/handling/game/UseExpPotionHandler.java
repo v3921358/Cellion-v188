@@ -2,7 +2,7 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.MapleInventoryManipulator;
 import server.maps.objects.User;
 import net.InPacket;
@@ -29,7 +29,7 @@ public class UseExpPotionHandler implements ProcessPacket<ClientSocket> {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         final byte slot = (byte) iPacket.DecodeShort();
         int itemid = iPacket.DecodeInt();
-        final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
+        final Item toUse = chr.getInventory(InventoryType.USE).getItem(slot);
         if (toUse == null || toUse.getQuantity() < 1
                 || toUse.getItemId() != itemid || chr.getLevel() >= 250
                 || chr.hasBlockedInventory() || itemid / 10000 != 223) {
@@ -55,7 +55,7 @@ public class UseExpPotionHandler implements ProcessPacket<ClientSocket> {
             chr.updateInfoQuest(7985, "2230004=" + level + "#384");
         }
         if (last) {
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
+            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
         }
         c.SendPacket(WvsContext.enableActions());
     }

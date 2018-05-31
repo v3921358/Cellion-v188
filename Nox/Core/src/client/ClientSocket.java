@@ -1404,7 +1404,7 @@ public class ClientSocket extends Socket {
         if (cfor != null) {
             if (cfor.getPlayer() != null) {
                 builder.append("<");
-                builder.append(MapleCharacterUtil.makeMapleReadable(cfor.getPlayer().getName()));
+                builder.append(CharacterUtil.makeMapleReadable(cfor.getPlayer().getName()));
                 builder.append(" (cid: ");
                 builder.append(cfor.getPlayer().getId());
                 builder.append(")> ");

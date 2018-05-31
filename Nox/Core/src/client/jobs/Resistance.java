@@ -4,7 +4,7 @@
 package client.jobs;
 
 import client.CharacterTemporaryStat;
-import client.Stat;
+import enums.Stat;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;

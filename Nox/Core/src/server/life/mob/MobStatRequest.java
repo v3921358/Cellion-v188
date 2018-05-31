@@ -3,13 +3,14 @@
  */
 package server.life.mob;
 
+import enums.MobStat;
 import client.Skill;
 import client.SkillFactory;
 import constants.skills.*;
 import handling.world.AttackInfo;
 import handling.world.AttackMonster;
 import server.StatEffect;
-import server.StatInfo;
+import enums.StatInfo;
 import server.life.Mob;
 import server.life.MobAttackInfo;
 import server.maps.objects.User;

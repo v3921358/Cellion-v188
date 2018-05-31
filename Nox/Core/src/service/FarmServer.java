@@ -1,5 +1,6 @@
 package service;
 
+import enums.ServerMode;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
@@ -15,7 +16,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import static service.LoginServer.PORT;
-import service.ServerMode.MapleServerMode;
+import enums.ServerMode.MapleServerMode;
 import net.PacketDecoder;
 import net.PacketEncoder;
 

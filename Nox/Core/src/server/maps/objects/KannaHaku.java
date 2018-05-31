@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.util.List;
 
 import client.ClientSocket;
-import client.MapleJob;
+import client.Jobs;
 import server.maps.AnimatedMapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.movement.LifeMovement;
@@ -30,7 +30,7 @@ public class KannaHaku extends AnimatedMapleMapObject {
         this.jobid = owner.getJob();
         this.fh = owner.getFh();
         this.stats = false;
-        if (this.jobid < MapleJob.KANNA1.getId() || this.jobid > MapleJob.KANNA4.getId()) {
+        if (this.jobid < Jobs.KANNA1.getId() || this.jobid > Jobs.KANNA4.getId()) {
             return;
         }
         Point p = owner.getTruePosition();

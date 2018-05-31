@@ -11,7 +11,7 @@ import client.QuestStatus.QuestState;
 import client.SkillFactory;
 import client.anticheat.CheatingOffense;
 import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
@@ -19,7 +19,7 @@ import server.MaplePortal;
 import server.Randomizer;
 import server.life.LifeFactory;
 import server.life.Mob;
-import server.maps.FieldLimitType;
+import enums.FieldLimitType;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
@@ -250,10 +250,10 @@ public class PlayerHandler {
                 break;
             case 0x01: { // /d (inv)
                 byte type = iPacket.DecodeByte();
-                MapleInventory in = c.getPlayer().getInventory(MapleInventoryType.getByType(type));
+                MapleInventory in = c.getPlayer().getInventory(InventoryType.getByType(type));
                 for (byte i = 0; i < in.getSlotLimit(); i++) {
                     if (in.getItem(i) != null) {
-                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.getByType(type), i, in.getItem(i).getQuantity(), false);
+                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.getByType(type), i, in.getItem(i).getQuantity(), false);
                     }
                     return;
                 }

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 
 /**
@@ -318,7 +318,7 @@ public class DropRetriever {
         }
 
         private int calculateChance(final int itemId) {
-            MapleInventoryType mit = GameConstants.getInventoryType(itemId);
+            InventoryType mit = GameConstants.getInventoryType(itemId);
             int number = (itemId / 1000) % 1000;
             switch (mit) {
                 case EQUIP:

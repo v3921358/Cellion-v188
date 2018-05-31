@@ -8,7 +8,7 @@ import java.util.Map;
 
 import client.CharacterTemporaryStat;
 import client.ClientSocket;
-import client.MapleDisease;
+import client.Disease;
 import client.MonsterStatus;
 import client.PlayerStats;
 import client.Skill;
@@ -144,7 +144,7 @@ public final class SummonPvpHandler implements ProcessPacket<ClientSocket> {
                 if (effect != null) {
                     if (effect.getMonsterStati().size() > 0 && effect.makeChanceResult()) {
                         for (Map.Entry<MonsterStatus, Integer> z : effect.getMonsterStati().entrySet()) {
-                            MapleDisease d = MonsterStatus.getLinkedDisease(z.getKey());
+                            Disease d = MonsterStatus.getLinkedDisease(z.getKey());
                             if (d != null) {
                                 MobSkill skill = new MobSkill(d.getDisease(), 1);
                                 skill.setX(z.getValue());

@@ -1,8 +1,8 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.MapleSpecialStats;
-import client.MapleSpecialStats.MapleHyperStats;
+import client.SpecialStats;
+import client.SpecialStats.MapleHyperStats;
 import client.Skill;
 import client.SkillFactory;
 import constants.skills.Global;
@@ -35,7 +35,7 @@ public class ResetHyperStatHandler implements ProcessPacket<ClientSocket> {
         if (chr.getMeso() >= RESET_HYPER_STAT_COST) {
             chr.gainMeso(-RESET_HYPER_STAT_COST, true, true);
 
-            for (int hyperSkill : MapleSpecialStats.ALL_HYPER_STATS) {
+            for (int hyperSkill : SpecialStats.ALL_HYPER_STATS) {
                 Skill skill = SkillFactory.getSkill(hyperSkill);
 
                 chr.changeSkillLevel(skill, (byte) 0, (byte) 0);

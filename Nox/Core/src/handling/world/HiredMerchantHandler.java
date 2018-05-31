@@ -11,11 +11,11 @@ import java.util.Map;
 import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.ItemLoader;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import database.Database;
-import scripting.provider.NPCChatByType;
-import scripting.provider.NPCChatType;
+import enums.NPCInterfaceType;
+import enums.NPCChatType;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MerchItemPackage;
@@ -103,7 +103,7 @@ public class HiredMerchantHandler {
             final MerchItemPackage pack = loadItemFrom_Database(c.getPlayer().getAccountID());
 
             if (pack == null) {
-                c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I don't think you have any items or money to retrieve here.\r\nThis is where you retrieve the items and mesos that you couldn't get from your Hired Merchant. You'll also need to see me as the character that opened the Personal Store.", NPCChatByType.NPC_Cancellable));
+                c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I don't think you have any items or money to retrieve here.\r\nThis is where you retrieve the items and mesos that you couldn't get from your Hired Merchant. You'll also need to see me as the character that opened the Personal Store.", NPCInterfaceType.NPC_Cancellable));
                 c.getPlayer().setConversation(MapleCharacterConversationType.None);
             } else if (pack.getItems().size() <= 0) { //error fix for complainers.
                 if (!check(c.getPlayer(), pack)) {
@@ -114,7 +114,7 @@ public class HiredMerchantHandler {
                     //c.getPlayer().fakeRelog();
                     c.getPlayer().gainMeso(pack.getMesos(), false);
                     c.SendPacket(PlayerShopPacket.merchItem_Message((byte) 0x1d));
-                    c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I see that you forgot something here right?\r\nHere is your money sir " + pack.getMesos(), NPCChatByType.NPC_Cancellable));
+                    c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I see that you forgot something here right?\r\nHere is your money sir " + pack.getMesos(), NPCInterfaceType.NPC_Cancellable));
                     c.getPlayer().setConversation(MapleCharacterConversationType.None);
                 } else {
                     c.getPlayer().dropMessage(1, "An unknown error occured.");
@@ -125,13 +125,13 @@ public class HiredMerchantHandler {
                 //MapleInventoryManipulator.checkSpace(c, conv, conv, null);
                 for (final Item item : pack.getItems()) {
                     if (c.getPlayer().getInventory(GameConstants.getInventoryType(item.getItemId())).isFull()) {
-                        c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "Sir, if you want your items back please clean up your inventory before you come here!", NPCChatByType.NPC_Cancellable));
+                        c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "Sir, if you want your items back please clean up your inventory before you come here!", NPCInterfaceType.NPC_Cancellable));
                         c.getPlayer().setConversation(MapleCharacterConversationType.None);
                         break;
                     }
                     MapleInventoryManipulator.addFromDrop(c, item, true);
                     deletePackage(c.getPlayer().getAccountID(), pack.getPackageid(), c.getPlayer().getId());
-                    c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I saved your items sir, next time don't forget them, have a nice day.", NPCChatByType.NPC_Cancellable));
+                    c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I saved your items sir, next time don't forget them, have a nice day.", NPCInterfaceType.NPC_Cancellable));
                     c.getPlayer().setConversation(MapleCharacterConversationType.None);
                 }
 
@@ -156,7 +156,7 @@ public class HiredMerchantHandler {
             final MerchItemPackage pack = loadItemFrom_Database(c.getPlayer().getAccountID());
 
             if (pack == null) {
-                c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I don't think you have any items or money to retrive here. This is where you retrieve the items and mesos that you couldn't get from your Hired Merchant. You'll also need to see me as the character that opened the Personal Store.", NPCChatByType.NPC_Cancellable));
+                c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "I don't think you have any items or money to retrive here. This is where you retrieve the items and mesos that you couldn't get from your Hired Merchant. You'll also need to see me as the character that opened the Personal Store.", NPCInterfaceType.NPC_Cancellable));
                 c.getPlayer().setConversation(MapleCharacterConversationType.None);
             } else if (pack.getItems().size() <= 0) { //error fix for complainers.
                 if (!check(c.getPlayer(), pack)) {
@@ -177,14 +177,14 @@ public class HiredMerchantHandler {
                 //MapleInventoryManipulator.checkSpace(c, conv, conv, null);
                 for (final Item item : pack.getItems()) {
                     if (c.getPlayer().getInventory(GameConstants.getInventoryType(item.getItemId())).isFull()) {
-                        c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "Please clean up your inventory.", NPCChatByType.NPC_Cancellable));
+                        c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "Please clean up your inventory.", NPCInterfaceType.NPC_Cancellable));
                         c.getPlayer().setConversation(MapleCharacterConversationType.None);
                         break;
                     }
                     MapleInventoryManipulator.addFromDrop(c, item, true);
                     deletePackage(c.getPlayer().getAccountID(), pack.getPackageid(), c.getPlayer().getId());
                     //c.getPlayer().fakeRelog();
-                    c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "Your items have been claimed.", NPCChatByType.NPC_Cancellable));
+                    c.SendPacket(NPCPacket.getNPCTalk(9030000, NPCChatType.OK, "Your items have been claimed.", NPCInterfaceType.NPC_Cancellable));
                     c.getPlayer().setConversation(MapleCharacterConversationType.None);
                 }
 
@@ -263,23 +263,23 @@ public class HiredMerchantHandler {
         }
         byte eq = 0, use = 0, setup = 0, etc = 0, cash = 0;
         for (Item item : pack.getItems()) {
-            final MapleInventoryType invtype = GameConstants.getInventoryType(item.getItemId());
-            if (invtype == MapleInventoryType.EQUIP) {
+            final InventoryType invtype = GameConstants.getInventoryType(item.getItemId());
+            if (invtype == InventoryType.EQUIP) {
                 eq++;
-            } else if (invtype == MapleInventoryType.USE) {
+            } else if (invtype == InventoryType.USE) {
                 use++;
-            } else if (invtype == MapleInventoryType.SETUP) {
+            } else if (invtype == InventoryType.SETUP) {
                 setup++;
-            } else if (invtype == MapleInventoryType.ETC) {
+            } else if (invtype == InventoryType.ETC) {
                 etc++;
-            } else if (invtype == MapleInventoryType.CASH) {
+            } else if (invtype == InventoryType.CASH) {
                 cash++;
             }
             if (MapleItemInformationProvider.getInstance().isPickupRestricted(item.getItemId()) && chr.haveItem(item.getItemId(), 1)) {
                 return false;
             }
         }
-        return chr.getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() >= eq && chr.getInventory(MapleInventoryType.USE).getNumFreeSlot() >= use && chr.getInventory(MapleInventoryType.SETUP).getNumFreeSlot() >= setup && chr.getInventory(MapleInventoryType.ETC).getNumFreeSlot() >= etc && chr.getInventory(MapleInventoryType.CASH).getNumFreeSlot() >= cash;
+        return chr.getInventory(InventoryType.EQUIP).getNumFreeSlot() >= eq && chr.getInventory(InventoryType.USE).getNumFreeSlot() >= use && chr.getInventory(InventoryType.SETUP).getNumFreeSlot() >= setup && chr.getInventory(InventoryType.ETC).getNumFreeSlot() >= etc && chr.getInventory(InventoryType.CASH).getNumFreeSlot() >= cash;
     }
 
     private static boolean deletePackage(final int accid, final int packageid, final int chrId) {
@@ -329,10 +329,10 @@ public class HiredMerchantHandler {
             }
             rs.close();
 
-            Map<Long, Pair<Item, MapleInventoryType>> items = ItemLoader.HIRED_MERCHANT.loadItems(false, packageid, con);
+            Map<Long, Pair<Item, InventoryType>> items = ItemLoader.HIRED_MERCHANT.loadItems(false, packageid, con);
             if (items != null) {
                 List<Item> iters = new ArrayList<>();
-                for (Pair<Item, MapleInventoryType> z : items.values()) {
+                for (Pair<Item, InventoryType> z : items.values()) {
                     iters.add(z.left);
                 }
                 pack.setItems(iters);

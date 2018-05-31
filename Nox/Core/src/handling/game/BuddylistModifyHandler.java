@@ -9,12 +9,12 @@ import java.util.List;
 
 import client.ClientSocket;
 import client.buddy.Buddy;
-import client.buddy.BuddyFlags;
+import enums.BuddyFlags;
 import client.buddy.BuddyHandler;
 import client.buddy.BuddyList;
 import client.buddy.BuddyOperation;
-import client.buddy.BuddyRequest;
-import client.buddy.BuddyResult;
+import enums.BuddyRequest;
+import enums.BuddyResult;
 import client.buddy.BuddylistEntry;
 import client.buddy.CharacterIdNameBuddyCapacity;
 import database.Database;

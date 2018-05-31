@@ -1,7 +1,7 @@
 package server.maps.objects;
 
 import client.ClientSocket;
-import client.MapleJob;
+import client.Jobs;
 import server.maps.AnimatedMapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.packet.CField;
@@ -15,7 +15,7 @@ public class EvanDragon extends AnimatedMapleMapObject {
         this.owner = owner.getId();
         this.jobid = owner.getJob();
         //if (jobid < MapleJob.EVAN1.getId() || jobid > MapleJob.EVAN10.getId()) {
-        if (jobid < MapleJob.EVAN1.getId() || jobid > MapleJob.EVAN5.getId()) {
+        if (jobid < Jobs.EVAN1.getId() || jobid > Jobs.EVAN5.getId()) {
             return;
         }
         setPosition(owner.getTruePosition());

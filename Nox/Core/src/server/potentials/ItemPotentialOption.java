@@ -1,5 +1,6 @@
 package server.potentials;
 
+import enums.ItemPotentialSkill;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;

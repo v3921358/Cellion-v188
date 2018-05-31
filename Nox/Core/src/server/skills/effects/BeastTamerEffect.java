@@ -4,7 +4,7 @@ import server.skills.effects.manager.AbstractEffect;
 import client.CharacterTemporaryStat;
 import constants.skills.BeastTamer;
 import server.StatEffect;
-import server.StatInfo;
+import enums.StatInfo;
 import server.skills.effects.manager.Effect;
 
 /**

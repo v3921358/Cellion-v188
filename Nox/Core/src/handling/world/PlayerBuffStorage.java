@@ -25,24 +25,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import client.MapleCoolDownValueHolder;
-import client.MapleDiseaseValueHolder;
+import client.CoolDownValueHolder;
+import client.DiseaseValueHolder;
 
 public class PlayerBuffStorage implements Serializable {
 
     private static final Map<Integer, List<PlayerBuffValueHolder>> buffs = new ConcurrentHashMap<>();
-    private static final Map<Integer, List<MapleCoolDownValueHolder>> coolDowns = new ConcurrentHashMap<>();
-    private static final Map<Integer, List<MapleDiseaseValueHolder>> diseases = new ConcurrentHashMap<>();
+    private static final Map<Integer, List<CoolDownValueHolder>> coolDowns = new ConcurrentHashMap<>();
+    private static final Map<Integer, List<DiseaseValueHolder>> diseases = new ConcurrentHashMap<>();
 
     public static final void addBuffsToStorage(final int chrid, final List<PlayerBuffValueHolder> toStore) {
         buffs.put(chrid, toStore);
     }
 
-    public static final void addCooldownsToStorage(final int chrid, final List<MapleCoolDownValueHolder> toStore) {
+    public static final void addCooldownsToStorage(final int chrid, final List<CoolDownValueHolder> toStore) {
         coolDowns.put(chrid, toStore);
     }
 
-    public static final void addDiseaseToStorage(final int chrid, final List<MapleDiseaseValueHolder> toStore) {
+    public static final void addDiseaseToStorage(final int chrid, final List<DiseaseValueHolder> toStore) {
         diseases.put(chrid, toStore);
     }
 
@@ -50,11 +50,11 @@ public class PlayerBuffStorage implements Serializable {
         return buffs.remove(chrid);
     }
 
-    public static final List<MapleCoolDownValueHolder> getCooldownsFromStorage(final int chrid) {
+    public static final List<CoolDownValueHolder> getCooldownsFromStorage(final int chrid) {
         return coolDowns.remove(chrid);
     }
 
-    public static final List<MapleDiseaseValueHolder> getDiseaseFromStorage(final int chrid) {
+    public static final List<DiseaseValueHolder> getDiseaseFromStorage(final int chrid) {
         return diseases.remove(chrid);
     }
 }

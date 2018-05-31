@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -21,7 +22,7 @@ public class HardcoreExpMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.HardcoreExp.getType());
+        oPacket.EncodeByte(MessageOpcodesType.HardcoreExp.getType());
         oPacket.EncodeInt(unk);
         oPacket.EncodeInt(unk1);
     }

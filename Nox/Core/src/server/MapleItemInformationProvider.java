@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import client.MapleTrait.MapleTraitType;
+import client.Trait.MapleTraitType;
 import client.inventory.Equip;
-import client.inventory.EquipSlotType;
+import enums.EquipSlotType;
 import client.inventory.Item;
-import client.inventory.ItemFlag;
-import client.inventory.MapleInventoryType;
+import enums.ItemFlag;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import constants.ItemConstants;
@@ -295,7 +295,7 @@ public class MapleItemInformationProvider {
 
             // Finalize all Equipments
             for (Entry<Integer, ItemInformation> entry : dataCache.entrySet()) {
-                if (GameConstants.getInventoryType(entry.getKey()) == MapleInventoryType.EQUIP) {
+                if (GameConstants.getInventoryType(entry.getKey()) == InventoryType.EQUIP) {
                     finalizeEquipData(entry.getValue());
                 }
             }
@@ -1460,7 +1460,7 @@ public class MapleItemInformationProvider {
     }
 
     public final boolean itemExists(final int itemId) {
-        if (GameConstants.getInventoryType(itemId) == MapleInventoryType.UNDEFINED) {
+        if (GameConstants.getInventoryType(itemId) == InventoryType.UNDEFINED) {
             return false;
         }
         return getItemInformation(itemId) != null;
@@ -1472,9 +1472,9 @@ public class MapleItemInformationProvider {
 
     public final boolean isCash(final int itemId) {
         if (getEquipStats(itemId) == null) {
-            return GameConstants.getInventoryType(itemId) == MapleInventoryType.CASH;
+            return GameConstants.getInventoryType(itemId) == InventoryType.CASH;
         }
-        return GameConstants.getInventoryType(itemId) == MapleInventoryType.CASH || getEquipStats(itemId).get("cash") != null;
+        return GameConstants.getInventoryType(itemId) == InventoryType.CASH || getEquipStats(itemId).get("cash") != null;
     }
 
     public final ItemInformation getItemInformation(final int itemId) {
@@ -1711,12 +1711,12 @@ public class MapleItemInformationProvider {
         farmDataCache.put(itemId, ret);
     }
 
-    public static MapleInventoryType getInventoryType(final int itemId) {
+    public static InventoryType getInventoryType(final int itemId) {
         final byte type = (byte) (itemId / 1000000);
         if (type < 1 || type > 5) {
-            return MapleInventoryType.UNDEFINED;
+            return InventoryType.UNDEFINED;
         }
-        return MapleInventoryType.getByType(type);
+        return InventoryType.getByType(type);
     }
 
     public final boolean isOnlyTradeBlock(final int itemId) {

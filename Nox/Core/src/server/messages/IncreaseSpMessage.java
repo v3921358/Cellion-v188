@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -21,7 +22,7 @@ public class IncreaseSpMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.IncreaseSP.getType());
+        oPacket.EncodeByte(MessageOpcodesType.IncreaseSP.getType());
         oPacket.EncodeShort(jobId);
         oPacket.EncodeByte(amount);
     }

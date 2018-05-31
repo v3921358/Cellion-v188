@@ -7,7 +7,7 @@ package handling.cashshop;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.MapleInventoryManipulator;
 import server.maps.objects.User;
 import net.InPacket;
@@ -41,7 +41,7 @@ public class CSInventoryAction {
 
     public static void AddItem(InPacket iPacket, ClientSocket c, User chr) {
         int uniqueid = (int) iPacket.DecodeLong();
-        MapleInventoryType inventoryType = MapleInventoryType.getByType(iPacket.DecodeByte());
+        InventoryType inventoryType = InventoryType.getByType(iPacket.DecodeByte());
         Item changedItem = c.getPlayer().getInventory(inventoryType).findByUniqueId(uniqueid);
         if (changedItem != null && changedItem.getQuantity() > 0 && changedItem.getUniqueId() > 0 && c.getPlayer().getCashInventory().getItemsSize() < 100) {
             Item item_ = changedItem.copy();

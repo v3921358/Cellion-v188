@@ -23,7 +23,7 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MapleFamiliar;
@@ -52,7 +52,7 @@ public final class UseFamiliarHandler implements ProcessPacket<ClientSocket> {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         short slot = iPacket.DecodeShort();
         int itemId = iPacket.DecodeInt();
-        Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
+        Item toUse = chr.getInventory(InventoryType.USE).getItem(slot);
         if ((toUse == null) || (toUse.getQuantity() < 1) || (toUse.getItemId() != itemId) || (itemId / 10000 != 287)) {
             c.SendPacket(WvsContext.enableActions());
             return;
@@ -71,7 +71,7 @@ public final class UseFamiliarHandler implements ProcessPacket<ClientSocket> {
                 mf = new MonsterFamiliar(c.getPlayer().getId(), f.getFamiliar(), System.currentTimeMillis() + 2592000000L);
                 c.getPlayer().getFamiliars().put(f.getFamiliar(), mf);
             }
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false, false);
+            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false, false);
             c.SendPacket(CField.registerFamiliar(mf));
         }
     }

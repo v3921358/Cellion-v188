@@ -2,8 +2,8 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.ItemFlag;
-import client.inventory.MapleInventoryType;
+import enums.ItemFlag;
+import enums.InventoryType;
 import constants.GameConstants;
 import handling.world.HiredMerchantHandler;
 import handling.world.World;
@@ -11,7 +11,7 @@ import java.util.Arrays;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Trade;
-import server.maps.FieldLimitType;
+import enums.FieldLimitType;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
@@ -215,7 +215,7 @@ public class PlayerInteractionHandler implements ProcessPacket<ClientSocket> {
                         chr.getMap().addMapObject(game);
                         game.update();
                     } else if (chr.getMap().getSharedMapResources().personalShop) {
-                        Item shop = c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) iPacket.DecodeShort());
+                        Item shop = c.getPlayer().getInventory(InventoryType.CASH).getItem((byte) iPacket.DecodeShort());
                         if (shop == null || shop.getQuantity() <= 0 || shop.getItemId() != iPacket.DecodeInt() || c.getPlayer().getMapId() < 910000001 || c.getPlayer().getMapId() > 910000022) {
                             return;
                         }
@@ -430,7 +430,7 @@ public class PlayerInteractionHandler implements ProcessPacket<ClientSocket> {
             case SET_ITEMS: {
 //            case SET_ITEMS: {
                 final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-                final MapleInventoryType ivType = MapleInventoryType.getByType(iPacket.DecodeByte());
+                final InventoryType ivType = InventoryType.getByType(iPacket.DecodeByte());
                 final Item item = chr.getInventory(ivType).getItem((byte) iPacket.DecodeShort());
                 final short quantity = iPacket.DecodeShort();
                 final byte targetSlot = iPacket.DecodeByte();
@@ -462,7 +462,7 @@ public class PlayerInteractionHandler implements ProcessPacket<ClientSocket> {
             case ADD_ITEM3:
             case ADD_ITEM2:
             case ADD_ITEM1: {
-                final MapleInventoryType type = MapleInventoryType.getByType(iPacket.DecodeByte());
+                final InventoryType type = InventoryType.getByType(iPacket.DecodeByte());
                 final byte slot = (byte) iPacket.DecodeShort();
                 final short bundles = iPacket.DecodeShort(); // How many in a bundle
                 final short perBundle = iPacket.DecodeShort(); // Price per bundle

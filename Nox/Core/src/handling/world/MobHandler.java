@@ -1,6 +1,6 @@
 package handling.world;
 
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.MapleInventoryManipulator;
 import server.life.Mob;
 import server.maps.MapleMap;
@@ -17,7 +17,7 @@ public class MobHandler {
                     if (!chrz.haveItem(2022698)) {
                         break;
                     }
-                    MapleInventoryManipulator.removeById(chrz.getClient(), MapleInventoryType.USE, 2022698, 1, false, true);
+                    MapleInventoryManipulator.removeById(chrz.getClient(), InventoryType.USE, 2022698, 1, false, true);
                     mobto.heal((int) mobto.getMobMaxHp(), mobto.getMobMaxMp(), true);
                     return;
                 }

@@ -3,7 +3,7 @@ package handling.game;
 import client.ClientSocket;
 import client.QuestStatus;
 import client.QuestStatus.QuestState;
-import client.Stat;
+import enums.Stat;
 import client.PlayerRandomStream;
 import client.PlayerStats;
 import client.Skill;
@@ -11,7 +11,7 @@ import client.SkillFactory;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryIdentifier;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +26,7 @@ import server.quest.Quest;
 import net.InPacket;
 import tools.packet.WvsContext;
 import net.ProcessPacket;
-import server.NebuliteGrade;
+import enums.NebuliteGrade;
 import server.potentials.ItemPotentialOption;
 import server.potentials.ItemPotentialProvider;
 import server.skills.VCore;
@@ -67,18 +67,18 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     break;
                 }
                 case 2430007: { // Blank Compass
-                    final MapleInventory inventory = chr.getInventory(MapleInventoryType.SETUP);
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                    final MapleInventory inventory = chr.getInventory(InventoryType.SETUP);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
 
                     if (inventory.countById(3994102) >= 20 // Compass Letter "North"
                             && inventory.countById(3994103) >= 20 // Compass Letter "South"
                             && inventory.countById(3994104) >= 20 // Compass Letter "East"
                             && inventory.countById(3994105) >= 20) { // Compass Letter "West"
                         MapleInventoryManipulator.addById(c, 2430008, (short) 1, "Scripted item: " + itemId + " on " + LocalDateTime.now()); // Gold Compass
-                        MapleInventoryManipulator.removeById(c, MapleInventoryType.SETUP, 3994102, 20, false, false);
-                        MapleInventoryManipulator.removeById(c, MapleInventoryType.SETUP, 3994103, 20, false, false);
-                        MapleInventoryManipulator.removeById(c, MapleInventoryType.SETUP, 3994104, 20, false, false);
-                        MapleInventoryManipulator.removeById(c, MapleInventoryType.SETUP, 3994105, 20, false, false);
+                        MapleInventoryManipulator.removeById(c, InventoryType.SETUP, 3994102, 20, false, false);
+                        MapleInventoryManipulator.removeById(c, InventoryType.SETUP, 3994103, 20, false, false);
+                        MapleInventoryManipulator.removeById(c, InventoryType.SETUP, 3994104, 20, false, false);
+                        MapleInventoryManipulator.removeById(c, InventoryType.SETUP, 3994105, 20, false, false);
                     } else {
                         MapleInventoryManipulator.addById(c, 2430007, (short) 1, "Scripted item: " + itemId + " on " + LocalDateTime.now()); // Blank Compass
                     }
@@ -119,19 +119,19 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
 
                 case 2430121: {
                     c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300166), c.getPlayer().getPosition());
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                     break;
                 }
                 case 2430112: //miracle cube fragment
-                    if (c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
-                        if (c.getPlayer().getInventory(MapleInventoryType.USE).countById(2430112) >= 25) {
-                            if (MapleInventoryManipulator.checkSpace(c, 2049400, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 25, true, false)) {
+                    if (c.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 1) {
+                        if (c.getPlayer().getInventory(InventoryType.USE).countById(2430112) >= 25) {
+                            if (MapleInventoryManipulator.checkSpace(c, 2049400, 1, "") && MapleInventoryManipulator.removeById(c, InventoryType.USE, toUse.getItemId(), 25, true, false)) {
                                 MapleInventoryManipulator.addById(c, 2049400, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                             } else {
                                 c.getPlayer().dropMessage(5, "Please make some space.");
                             }
-                        } else if (c.getPlayer().getInventory(MapleInventoryType.USE).countById(2430112) >= 10) {
-                            if (MapleInventoryManipulator.checkSpace(c, 2049400, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 10, true, false)) {
+                        } else if (c.getPlayer().getInventory(InventoryType.USE).countById(2430112) >= 10) {
+                            if (MapleInventoryManipulator.checkSpace(c, 2049400, 1, "") && MapleInventoryManipulator.removeById(c, InventoryType.USE, toUse.getItemId(), 10, true, false)) {
                                 MapleInventoryManipulator.addById(c, 2049401, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                             } else {
                                 c.getPlayer().dropMessage(5, "Please make some space.");
@@ -144,15 +144,15 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     }
                     break;
                 case 2430481: //super miracle cube fragment
-                    if (c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
-                        if (c.getPlayer().getInventory(MapleInventoryType.USE).countById(2430481) >= 30) {
-                            if (MapleInventoryManipulator.checkSpace(c, 2049701, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 30, true, false)) {
+                    if (c.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 1) {
+                        if (c.getPlayer().getInventory(InventoryType.USE).countById(2430481) >= 30) {
+                            if (MapleInventoryManipulator.checkSpace(c, 2049701, 1, "") && MapleInventoryManipulator.removeById(c, InventoryType.USE, toUse.getItemId(), 30, true, false)) {
                                 MapleInventoryManipulator.addById(c, 2049701, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                             } else {
                                 c.getPlayer().dropMessage(5, "Please make some space.");
                             }
-                        } else if (c.getPlayer().getInventory(MapleInventoryType.USE).countById(2430481) >= 20) {
-                            if (MapleInventoryManipulator.checkSpace(c, 2049300, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 20, true, false)) {
+                        } else if (c.getPlayer().getInventory(InventoryType.USE).countById(2430481) >= 20) {
+                            if (MapleInventoryManipulator.checkSpace(c, 2049300, 1, "") && MapleInventoryManipulator.removeById(c, InventoryType.USE, toUse.getItemId(), 20, true, false)) {
                                 MapleInventoryManipulator.addById(c, 2049300, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                             } else {
                                 c.getPlayer().dropMessage(5, "Please make some space.");
@@ -165,9 +165,9 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     }
                     break;
                 case 2430691: // nebulite diffuser fragment
-                    if (c.getPlayer().getInventory(MapleInventoryType.CASH).getNumFreeSlot() >= 1) {
-                        if (c.getPlayer().getInventory(MapleInventoryType.USE).countById(2430691) >= 10) {
-                            if (MapleInventoryManipulator.checkSpace(c, 5750001, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 10, true, false)) {
+                    if (c.getPlayer().getInventory(InventoryType.CASH).getNumFreeSlot() >= 1) {
+                        if (c.getPlayer().getInventory(InventoryType.USE).countById(2430691) >= 10) {
+                            if (MapleInventoryManipulator.checkSpace(c, 5750001, 1, "") && MapleInventoryManipulator.removeById(c, InventoryType.USE, toUse.getItemId(), 10, true, false)) {
                                 MapleInventoryManipulator.addById(c, 5750001, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                             } else {
                                 c.getPlayer().dropMessage(5, "Please make some space.");
@@ -180,9 +180,9 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     }
                     break;
                 case 2430748: // premium fusion ticket 
-                    if (c.getPlayer().getInventory(MapleInventoryType.ETC).getNumFreeSlot() >= 1) {
-                        if (c.getPlayer().getInventory(MapleInventoryType.USE).countById(2430748) >= 20) {
-                            if (MapleInventoryManipulator.checkSpace(c, 4420000, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 20, true, false)) {
+                    if (c.getPlayer().getInventory(InventoryType.ETC).getNumFreeSlot() >= 1) {
+                        if (c.getPlayer().getInventory(InventoryType.USE).countById(2430748) >= 20) {
+                            if (MapleInventoryManipulator.checkSpace(c, 4420000, 1, "") && MapleInventoryManipulator.removeById(c, InventoryType.USE, toUse.getItemId(), 20, true, false)) {
                                 MapleInventoryManipulator.addById(c, 4420000, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                             } else {
                                 c.getPlayer().dropMessage(5, "Please make some space.");
@@ -195,8 +195,8 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     }
                     break;
                 case 2430692: // nebulite box
-                    if (c.getPlayer().getInventory(MapleInventoryType.SETUP).getNumFreeSlot() >= 1) {
-                        if (c.getPlayer().getInventory(MapleInventoryType.USE).countById(2430692) >= 1) {
+                    if (c.getPlayer().getInventory(InventoryType.SETUP).getNumFreeSlot() >= 1) {
+                        if (c.getPlayer().getInventory(InventoryType.USE).countById(2430692) >= 1) {
                             NebuliteGrade nebuliteGrade;
                             final int random = Randomizer.nextInt(100);
 
@@ -212,7 +212,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                             if (potential != null) {
                                 final int newId = potential.getOptionId();
 
-                                if (MapleInventoryManipulator.checkSpace(c, newId, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 1, true, false)) {
+                                if (MapleInventoryManipulator.checkSpace(c, newId, 1, "") && MapleInventoryManipulator.removeById(c, InventoryType.USE, toUse.getItemId(), 1, true, false)) {
                                     MapleInventoryManipulator.addById(c, newId, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                                     c.SendPacket(WvsContext.InfoPacket.getShowItemGain(newId, (short) 1, true));
                                 } else {
@@ -231,7 +231,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     int hair = 32150 + (c.getPlayer().getHair() % 10);
                     c.getPlayer().setHair(hair);
                     c.getPlayer().updateSingleStat(Stat.Hair, hair);
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.CASH, slot, (byte) 1, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.CASH, slot, (byte) 1, false);
                     //}
                     break;
                 }
@@ -240,7 +240,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     int hair = 32160 + (c.getPlayer().getHair() % 10);
                     c.getPlayer().setHair(hair);
                     c.getPlayer().updateSingleStat(Stat.Hair, hair);
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.CASH, slot, (byte) 1, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.CASH, slot, (byte) 1, false);
                     //}
                     break;
                 }
@@ -256,7 +256,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     if (lastTime + (600000) > System.currentTimeMillis()) {
                         c.getPlayer().dropMessage(5, "You can only use one energy drink per 10 minutes.");
                     } else if (c.getPlayer().getFatigue() > 0) {
-                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                         c.getPlayer().setFatigue(c.getPlayer().getFatigue() - 5);
                     }
                     break;
@@ -269,20 +269,20 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     if (lastTime + (600000) > System.currentTimeMillis()) {
                         c.getPlayer().dropMessage(5, "You can only use one energy drink per 10 minutes.");
                     } else if (c.getPlayer().getFatigue() > 0) {
-                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                         c.getPlayer().setFatigue(c.getPlayer().getFatigue() - 10);
                     }
                     break;
                 case 2430220: //energy drink
                 case 2430214: //energy drink
                     if (c.getPlayer().getFatigue() > 0) {
-                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                         c.getPlayer().setFatigue(c.getPlayer().getFatigue() - 30);
                     }
                     break;
                 case 2430227: //energy drink
                     if (c.getPlayer().getFatigue() > 0) {
-                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                         c.getPlayer().setFatigue(c.getPlayer().getFatigue() - 50);
                     }
                     break;
@@ -295,7 +295,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     if (lastTime + (600000) > System.currentTimeMillis()) {
                         c.getPlayer().dropMessage(5, "You can only use one energy drink per 10 minutes.");
                     } else if (c.getPlayer().getFatigue() > 0) {
-                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                         c.getPlayer().setFatigue(c.getPlayer().getFatigue() - 40);
                     }
                     break;
@@ -303,25 +303,25 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     final int itemid = Randomizer.nextInt(999) + 2290000;
                     if (MapleItemInformationProvider.getInstance().itemExists(itemid) && !MapleItemInformationProvider.getInstance().getName(itemid).contains("Special") && !MapleItemInformationProvider.getInstance().getName(itemid).contains("Event")) {
                         MapleInventoryManipulator.addById(c, itemid, (short) 1, "Reward item: " + toUse.getItemId() + " on " + LocalDateTime.now());
-                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                     }
                     break;
                 case 2430370:
                     if (MapleInventoryManipulator.checkSpace(c, 2028062, (short) 1, "")) {
                         MapleInventoryManipulator.addById(c, 2028062, (short) 1, "Reward item: " + toUse.getItemId() + " on " + LocalDateTime.now());
-                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                     }
                     break;
                 case 2430158: //lion king
-                    if (c.getPlayer().getInventory(MapleInventoryType.ETC).getNumFreeSlot() >= 1) {
-                        if (c.getPlayer().getInventory(MapleInventoryType.ETC).countById(4000630) >= 100) {
-                            if (MapleInventoryManipulator.checkSpace(c, 4310010, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 1, true, false)) {
+                    if (c.getPlayer().getInventory(InventoryType.ETC).getNumFreeSlot() >= 1) {
+                        if (c.getPlayer().getInventory(InventoryType.ETC).countById(4000630) >= 100) {
+                            if (MapleInventoryManipulator.checkSpace(c, 4310010, 1, "") && MapleInventoryManipulator.removeById(c, InventoryType.USE, toUse.getItemId(), 1, true, false)) {
                                 MapleInventoryManipulator.addById(c, 4310010, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                             } else {
                                 c.getPlayer().dropMessage(5, "Please make some space.");
                             }
-                        } else if (c.getPlayer().getInventory(MapleInventoryType.ETC).countById(4000630) >= 50) {
-                            if (MapleInventoryManipulator.checkSpace(c, 4310009, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 1, true, false)) {
+                        } else if (c.getPlayer().getInventory(InventoryType.ETC).countById(4000630) >= 50) {
+                            if (MapleInventoryManipulator.checkSpace(c, 4310009, 1, "") && MapleInventoryManipulator.removeById(c, InventoryType.USE, toUse.getItemId(), 1, true, false)) {
                                 MapleInventoryManipulator.addById(c, 4310009, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                             } else {
                                 c.getPlayer().dropMessage(5, "Please make some space.");
@@ -335,14 +335,14 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     break;
                 case 2430159:
                     Quest.getInstance(3182).forceComplete(c.getPlayer(), 2161004);
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                     break;
                 case 2430200: //thunder stone
                     if (c.getPlayer().getQuestStatus(31152) != QuestState.Completed) {
                         c.getPlayer().dropMessage(5, "You have no idea how to use it.");
-                    } else if (c.getPlayer().getInventory(MapleInventoryType.ETC).getNumFreeSlot() >= 1) {
-                        if (c.getPlayer().getInventory(MapleInventoryType.ETC).countById(4000660) >= 1 && c.getPlayer().getInventory(MapleInventoryType.ETC).countById(4000661) >= 1 && c.getPlayer().getInventory(MapleInventoryType.ETC).countById(4000662) >= 1 && c.getPlayer().getInventory(MapleInventoryType.ETC).countById(4000663) >= 1) {
-                            if (MapleInventoryManipulator.checkSpace(c, 4032923, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 1, true, false) && MapleInventoryManipulator.removeById(c, MapleInventoryType.ETC, 4000660, 1, true, false) && MapleInventoryManipulator.removeById(c, MapleInventoryType.ETC, 4000661, 1, true, false) && MapleInventoryManipulator.removeById(c, MapleInventoryType.ETC, 4000662, 1, true, false) && MapleInventoryManipulator.removeById(c, MapleInventoryType.ETC, 4000663, 1, true, false)) {
+                    } else if (c.getPlayer().getInventory(InventoryType.ETC).getNumFreeSlot() >= 1) {
+                        if (c.getPlayer().getInventory(InventoryType.ETC).countById(4000660) >= 1 && c.getPlayer().getInventory(InventoryType.ETC).countById(4000661) >= 1 && c.getPlayer().getInventory(InventoryType.ETC).countById(4000662) >= 1 && c.getPlayer().getInventory(InventoryType.ETC).countById(4000663) >= 1) {
+                            if (MapleInventoryManipulator.checkSpace(c, 4032923, 1, "") && MapleInventoryManipulator.removeById(c, InventoryType.USE, toUse.getItemId(), 1, true, false) && MapleInventoryManipulator.removeById(c, InventoryType.ETC, 4000660, 1, true, false) && MapleInventoryManipulator.removeById(c, InventoryType.ETC, 4000661, 1, true, false) && MapleInventoryManipulator.removeById(c, InventoryType.ETC, 4000662, 1, true, false) && MapleInventoryManipulator.removeById(c, InventoryType.ETC, 4000663, 1, true, false)) {
                                 MapleInventoryManipulator.addById(c, 4032923, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                             } else {
                                 c.getPlayer().dropMessage(5, "Please make some space.");
@@ -356,27 +356,27 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     break;
                 case 2430130:
                     if (GameConstants.isResistance(c.getPlayer().getJob())) {
-                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                         c.getPlayer().gainExp((int) (20000 + (c.getPlayer().getLevel() * 50 * c.getChannelServer().getExpRate(c.getPlayer().getWorld()))), true, true, false);
                     } else {
                         c.getPlayer().dropMessage(5, "You may not use this item.");
                     }
                     break;
                 case 2430131: //energy charge
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                     c.getPlayer().gainExp((int) (20000 + (c.getPlayer().getLevel() * 50 * c.getChannelServer().getExpRate(c.getPlayer().getWorld()))), true, true, false);
                     break;
                 case 2430132:
                 case 2430134: //resistance box
-                    if (c.getPlayer().getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() >= 1) {
+                    if (c.getPlayer().getInventory(InventoryType.EQUIP).getNumFreeSlot() >= 1) {
                         if (c.getPlayer().getJob() == 3200 || c.getPlayer().getJob() == 3210 || c.getPlayer().getJob() == 3211 || c.getPlayer().getJob() == 3212) {
-                            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                             MapleInventoryManipulator.addById(c, 1382101, (short) 1, "Scripted item: " + itemId + " on " + LocalDateTime.now());
                         } else if (c.getPlayer().getJob() == 3300 || c.getPlayer().getJob() == 3310 || c.getPlayer().getJob() == 3311 || c.getPlayer().getJob() == 3312) {
-                            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                             MapleInventoryManipulator.addById(c, 1462093, (short) 1, "Scripted item: " + itemId + " on " + LocalDateTime.now());
                         } else if (c.getPlayer().getJob() == 3500 || c.getPlayer().getJob() == 3510 || c.getPlayer().getJob() == 3511 || c.getPlayer().getJob() == 3512) {
-                            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                             MapleInventoryManipulator.addById(c, 1492080, (short) 1, "Scripted item: " + itemId + " on " + LocalDateTime.now());
                         } else {
                             c.getPlayer().dropMessage(5, "You may not use this item.");
@@ -395,7 +395,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                 case 2430632:
                 case 2430697:
                 case 2430979:
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                     c.getPlayer().gainExp(GameConstants.getExpNeededForLevel(c.getPlayer().getLevel()) - c.getPlayer().getExp(), true, true, false);
                     break;
                 case 2430036: //croco 1 day
@@ -1003,16 +1003,16 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     break;
                 }
                 case 2430690: {
-                    if (c.getPlayer().getInventory(MapleInventoryType.CASH).getNumFreeSlot() >= 1 && c.getPlayer().getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() >= 1) {
+                    if (c.getPlayer().getInventory(InventoryType.CASH).getNumFreeSlot() >= 1 && c.getPlayer().getInventory(InventoryType.EQUIP).getNumFreeSlot() >= 1) {
                         if (Randomizer.nextInt(100) < 30) { //30% for Hilla's Pet
-                            if (MapleInventoryManipulator.checkSpace(c, 5000217, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 1, true, false)) {
+                            if (MapleInventoryManipulator.checkSpace(c, 5000217, 1, "") && MapleInventoryManipulator.removeById(c, InventoryType.USE, toUse.getItemId(), 1, true, false)) {
                                 MapleInventoryManipulator.addById(c, 5000217, (short) 1, "", Pet.createPet(5000217, "Blackheart", 1, 0, 100, MapleInventoryIdentifier.getInstance(), 0, (short) 0), 45, false, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                             } else {
                                 c.getPlayer().dropMessage(0, "Please make more space");
                             }
                         } else //70% for Hilla's Pet's earrings
                         {
-                            if (MapleInventoryManipulator.checkSpace(c, 1802354, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 1, true, false)) {
+                            if (MapleInventoryManipulator.checkSpace(c, 1802354, 1, "") && MapleInventoryManipulator.removeById(c, InventoryType.USE, toUse.getItemId(), 1, true, false)) {
                                 MapleInventoryManipulator.addById(c, 1802354, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                             } else {
                                 c.getPlayer().dropMessage(0, "Please make more space");
@@ -1024,8 +1024,8 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     break;
                 }
                 case 2431855: {//First Explorer Gift Box
-                    if (c.getPlayer().getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() >= 2 && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 2) {
-                        if (MapleInventoryManipulator.checkSpace(c, 1052646, 1, "") && MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, toUse.getItemId(), 1, true, false)) {
+                    if (c.getPlayer().getInventory(InventoryType.EQUIP).getNumFreeSlot() >= 2 && c.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 2) {
+                        if (MapleInventoryManipulator.checkSpace(c, 1052646, 1, "") && MapleInventoryManipulator.removeById(c, InventoryType.USE, toUse.getItemId(), 1, true, false)) {
                             MapleInventoryManipulator.addById(c, 1052646, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                             MapleInventoryManipulator.addById(c, 1072850, (short) 1, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
                             MapleInventoryManipulator.addById(c, 2000013, (short) 50, "Scripted item: " + toUse.getItemId() + " on " + LocalDateTime.now());
@@ -1199,13 +1199,13 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                         c.getPlayer().updateQuest(queststatus);
                         c.SendPacket(WvsContext.showQuestMsg("Damage skin has been changed!"));
                         chr.getMap().broadcastPacket(chr, WvsContext.showForeignDamageSkin(chr, skinnum), false);
-                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                     } else {
                         c.SendPacket(WvsContext.showQuestMsg("Zero can't used skins!"));
                     }
                     break;
                 }
-                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //
+                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //                //
 
                 case 5680021:
                     int expiration;
@@ -1224,7 +1224,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     //Pointer<Integer> nDecRet = new Pointer<>(0);
                     //List<ChangeLog> aChangeLog = new ArrayList<>();
                     //if (c.getPlayer().pUserInventory.RawRemoveItem(InventoryType.Consume, nPOS, nCount, aChangeLog, nDecRet, null) && nDecRet.Get() == nCount) {
-                    if (MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, 2435902, 1, false, true)) {
+                    if (MapleInventoryManipulator.removeById(c, InventoryType.USE, 2435902, 1, false, true)) {
                         VMatrixRecord pRecord = new VMatrixRecord();
                         int nRate = (int) (PlayerRandomStream.GetRandom() % 101);
                         if (nRate < 5) { // Special Node
@@ -1357,7 +1357,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
             } else if (SkillFactory.getSkill(mountid) == null) {
                 c.getPlayer().dropMessage(5, "The skill could not be gained.");
             } else if (expiration_days > 0) {
-                MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (byte) 1, false);
                 c.getPlayer().changeSingleSkillLevel(SkillFactory.getSkill(mountid), (byte) 1, (byte) 1, System.currentTimeMillis() + expiration_days * 24 * 60 * 60 * 1000);
                 c.getPlayer().dropMessage(5, "The skill has been attained.");
             }

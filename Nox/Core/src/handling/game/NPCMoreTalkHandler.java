@@ -2,7 +2,7 @@ package handling.game;
 
 import client.ClientSocket;
 import scripting.NPCConversationManager;
-import scripting.provider.NPCChatType;
+import enums.NPCChatType;
 import scripting.provider.NPCScriptManager;
 import server.AutobanManager;
 import server.maps.MapScriptMethods;

@@ -2,7 +2,7 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.maps.objects.User;
@@ -31,14 +31,14 @@ public class UseCosmeticHandler implements ProcessPacket<ClientSocket> {
         }
         final byte slot = (byte) iPacket.DecodeShort();
         final int itemId = iPacket.DecodeInt();
-        final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
+        final Item toUse = chr.getInventory(InventoryType.USE).getItem(slot);
 
         if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId || itemId / 10000 != 254 || (itemId / 1000) % 10 != chr.getGender()) {
             c.SendPacket(WvsContext.enableActions());
             return;
         }
         if (MapleItemInformationProvider.getInstance().getItemEffect(toUse.getItemId()).applyTo(chr)) {
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
+            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
         }
     }
 }

@@ -3,9 +3,9 @@ package handling.game;
 import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.ModifyInventory;
-import client.inventory.ModifyInventoryOperation;
+import enums.ModifyInventoryOperation;
 import java.util.ArrayList;
 import java.util.List;
 import net.InPacket;
@@ -32,8 +32,8 @@ public class UseCarvedSealHandler implements ProcessPacket<ClientSocket> {
     public void Process(ClientSocket c, InPacket iPacket) {
         //iPacket: [90 64 C8 14] [04 00] [0F 00]
         c.getPlayer().updateTick(iPacket.DecodeInt());
-        final Item toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(iPacket.DecodeShort());
-        final Equip itemEq = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(iPacket.DecodeShort());
+        final Item toUse = c.getPlayer().getInventory(InventoryType.USE).getItem(iPacket.DecodeShort());
+        final Equip itemEq = (Equip) c.getPlayer().getInventory(InventoryType.EQUIP).getItem(iPacket.DecodeShort());
 
         final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
 
@@ -65,7 +65,7 @@ public class UseCarvedSealHandler implements ProcessPacket<ClientSocket> {
         }
 
         if (used) {
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, toUse.getPosition(), (short) 1, false);
+            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, toUse.getPosition(), (short) 1, false);
         }
 
         c.SendPacket(WvsContext.enableActions());

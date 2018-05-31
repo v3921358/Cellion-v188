@@ -2,9 +2,9 @@ package handling.game;
 
 import client.*;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.ModifyInventory;
-import client.inventory.ModifyInventoryOperation;
+import enums.ModifyInventoryOperation;
 import client.jobs.Cygnus;
 import client.jobs.Cygnus.WindArcherHandler;
 import client.jobs.Nova;
@@ -180,8 +180,8 @@ public final class RangedAttack implements ProcessPacket<ClientSocket> {
                 }
                 case 5221017: {// Eight-Legs Easton
                     // Handle Bullet Consumtion for Corsair's Eight-Legs Easton skill. -Mazen
-                    Item pProjectilez = pPlayer.getInventory(MapleInventoryType.USE).getItem((short) pAttack.slot);
-                    if ((pProjectilez == null) || (!MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, pProjectilez.getItemId(), 4, false, true))) {
+                    Item pProjectilez = pPlayer.getInventory(InventoryType.USE).getItem((short) pAttack.slot);
+                    if ((pProjectilez == null) || (!MapleInventoryManipulator.removeById(c, InventoryType.USE, pProjectilez.getItemId(), 4, false, true))) {
                         pPlayer.dropMessage(5, "You do not have enough bullets to use this skill.");
                         return;
                     }
@@ -207,7 +207,7 @@ public final class RangedAttack implements ProcessPacket<ClientSocket> {
         int projectile = 0;
         int visProjectile = 0;
         if ((!bAOE) && (pPlayer.getBuffedValue(CharacterTemporaryStat.SoulArrow) == null) && (!bNoBullet)) {
-            Item ipp = pPlayer.getInventory(MapleInventoryType.USE).getItem((short) pAttack.slot);
+            Item ipp = pPlayer.getInventory(InventoryType.USE).getItem((short) pAttack.slot);
             if (ipp == null) {
                 pPlayer.dropMessage(6, "Reaching Point 3");
                 return;
@@ -215,11 +215,11 @@ public final class RangedAttack implements ProcessPacket<ClientSocket> {
             projectile = ipp.getItemId();
 
             if (pAttack.csstar > 0) {
-                if (pPlayer.getInventory(MapleInventoryType.CASH).getItem((short) pAttack.csstar) == null) {
+                if (pPlayer.getInventory(InventoryType.CASH).getItem((short) pAttack.csstar) == null) {
                     pPlayer.dropMessage(6, "Reaching Point 4");
                     return;
                 }
-                visProjectile = pPlayer.getInventory(MapleInventoryType.CASH).getItem((short) pAttack.csstar).getItemId();
+                visProjectile = pPlayer.getInventory(InventoryType.CASH).getItem((short) pAttack.csstar).getItemId();
             } else {
                 visProjectile = projectile;
             }
@@ -247,7 +247,7 @@ public final class RangedAttack implements ProcessPacket<ClientSocket> {
                         }
                     }
                 }
-                if ((bulletConsume > 0) && (!MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, projectile, bulletConsume, false, true))) {
+                if ((bulletConsume > 0) && (!MapleInventoryManipulator.removeById(c, InventoryType.USE, projectile, bulletConsume, false, true))) {
                     pPlayer.dropMessage(5, "You do not have enough arrows/bullets/stars.");
                     return;
                 }

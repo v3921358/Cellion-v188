@@ -3,11 +3,11 @@ package handling.game;
 import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Equip.ScrollResult;
-import client.inventory.EquipSlotType;
+import enums.EquipSlotType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.ModifyInventory;
-import client.inventory.ModifyInventoryOperation;
+import enums.ModifyInventoryOperation;
 import constants.ItemConstants;
 import constants.ServerConstants;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.maps.objects.User;
 import server.potentials.ItemPotentialProvider;
-import server.potentials.ItemPotentialTierType;
+import enums.ItemPotentialTierType;
 import tools.packet.CField;
 import tools.packet.WvsContext;
 import net.ProcessPacket;
@@ -49,8 +49,8 @@ public class UsePotentialScrollHandler implements ProcessPacket<ClientSocket> {
         short dst = iPacket.DecodeShort();
 
         // Scroll and target eq
-        Item scroll = chr.getInventory(MapleInventoryType.USE).getItem(slot);
-        Equip toScroll = (Equip) chr.getInventory(dst < 0 ? MapleInventoryType.EQUIPPED : MapleInventoryType.EQUIP).getItem(dst);
+        Item scroll = chr.getInventory(InventoryType.USE).getItem(slot);
+        Equip toScroll = (Equip) chr.getInventory(dst < 0 ? InventoryType.EQUIPPED : InventoryType.EQUIP).getItem(dst);
 
         if (scroll == null || scroll.getQuantity() <= 0 || toScroll == null
                 || !ItemConstants.isPotentialScroll(scroll.getItemId())) {
@@ -128,9 +128,9 @@ public class UsePotentialScrollHandler implements ProcessPacket<ClientSocket> {
 
             modifications.add(new ModifyInventory(ModifyInventoryOperation.Remove, toScroll));
             if (dst < 0) {
-                chr.getInventory(MapleInventoryType.EQUIPPED).removeItem(toScroll.getPosition());
+                chr.getInventory(InventoryType.EQUIPPED).removeItem(toScroll.getPosition());
             } else {
-                chr.getInventory(MapleInventoryType.EQUIP).removeItem(toScroll.getPosition());
+                chr.getInventory(InventoryType.EQUIP).removeItem(toScroll.getPosition());
             }
         } else {
             result = ScrollResult.FAIL;
@@ -138,7 +138,7 @@ public class UsePotentialScrollHandler implements ProcessPacket<ClientSocket> {
 
         // Remove item
         if (completed) {
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, scroll.getPosition(), (short) 1, false);
+            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, scroll.getPosition(), (short) 1, false);
         }
         c.SendPacket(CField.enchantResult(result == Equip.ScrollResult.SUCCESS ? 1 : result == ScrollResult.CURSE ? 2 : 0));
         chr.getMap().broadcastPacket(chr, CField.getScrollEffect(c.getPlayer().getId(), result, false, toScroll.getItemId(), scroll.getItemId()), true);

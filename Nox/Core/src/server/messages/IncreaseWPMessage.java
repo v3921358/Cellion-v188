@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -16,7 +17,7 @@ public class IncreaseWPMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.IncreaseWP.getType());
+        oPacket.EncodeByte(MessageOpcodesType.IncreaseWP.getType());
         oPacket.EncodeInt(0);
     }
 

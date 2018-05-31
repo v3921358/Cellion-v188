@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import client.MapleDisease;
+import client.Disease;
 import client.MonsterStatus;
 import constants.GameConstants;
 import service.ChannelServer;
@@ -153,7 +153,7 @@ public class MobSkill {
     }
 
     public void applyEffect(User player, Mob monster, boolean skill, int delay) {
-        MapleDisease disease = MapleDisease.getBySkill(skillId);
+        Disease disease = Disease.getBySkill(skillId);
         Map<MonsterStatus, Integer> stats = new EnumMap<>(MonsterStatus.class);
         List<Integer> reflection = new LinkedList<>();
 
@@ -284,10 +284,10 @@ public class MobSkill {
                 reflection.add(x);
                 break;
             case 173:
-                disease = MapleDisease.TORNADO;
+                disease = Disease.TORNADO;
                 break;
             case 184: //ë°˜ë°˜ ê°•ì œìœ„ì¹˜ì�´ë�™ - ìž�ì¿°
-                disease = MapleDisease.TELEPORT;
+                disease = Disease.TELEPORT;
                 this.setX(player.getPosition().x);
                 this.setY(player.getPosition().y);
                 break;

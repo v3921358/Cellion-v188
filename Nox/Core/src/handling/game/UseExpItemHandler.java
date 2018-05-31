@@ -2,7 +2,7 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.maps.objects.User;
@@ -32,7 +32,7 @@ public class UseExpItemHandler implements ProcessPacket<ClientSocket> {
         c.getPlayer().updateTick(iPacket.DecodeInt());
         final byte slot = (byte) iPacket.DecodeShort();
         final int itemId = iPacket.DecodeInt();
-        final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
+        final Item toUse = chr.getInventory(InventoryType.USE).getItem(slot);
 
         if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId) {
             c.SendPacket(WvsContext.enableActions());
@@ -43,7 +43,7 @@ public class UseExpItemHandler implements ProcessPacket<ClientSocket> {
             return;
         }
         MapleItemInformationProvider.getInstance().getEquipStats(itemId).get("exp");
-        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
+        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
     }
 
 }

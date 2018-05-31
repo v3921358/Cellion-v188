@@ -25,7 +25,7 @@ import java.lang.ref.WeakReference;
 
 import client.ClientSocket;
 import client.anticheat.CheatingOffense;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import server.Timer;
 import server.maps.objects.User;
@@ -46,7 +46,7 @@ public final class PlayerEmotionHandler implements ProcessPacket<ClientSocket> {
         int emote = iPacket.DecodeInt();
         if (emote > 7) {
             final int emoteid = 5159992 + emote;
-            final MapleInventoryType type = GameConstants.getInventoryType(emoteid);
+            final InventoryType type = GameConstants.getInventoryType(emoteid);
             if (chr.getInventory(type).findById(emoteid) == null) {
                 chr.getCheatTracker().registerOffense(CheatingOffense.USING_UNAVAILABLE_ITEM, Integer.toString(emoteid));
                 return;

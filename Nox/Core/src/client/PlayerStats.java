@@ -1,5 +1,6 @@
 package client;
 
+import enums.Stat;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,11 +12,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantLock;
 
-import client.MapleTrait.MapleTraitType;
+import client.Trait.MapleTraitType;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.MapleWeaponType;
+import enums.InventoryType;
+import enums.WeaponType;
 import client.inventory.ModifyInventory;
 import constants.GameConstants;
 import constants.InventoryConstants;
@@ -39,11 +40,11 @@ import net.OutPacket;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.StatEffect;
-import server.StatInfo;
+import enums.StatInfo;
 import server.MapleStringInformationProvider;
 import server.StructSetItem;
 import server.StructSetItem.SetItem;
-import server.life.Element;
+import enums.ElementType;
 import server.maps.objects.User;
 import server.potentials.ItemPotentialOption;
 import server.potentials.ItemPotentialProvider;
@@ -65,7 +66,7 @@ public class PlayerStats implements Serializable {
     private static final long serialVersionUID = -679541993413738569L;
     private final List<Triple<Integer, String, Integer>> psdSkills = new ArrayList<>();
     private final Map<Integer, Integer> setHandling = new HashMap<>(), skillsIncrement = new HashMap<>(), damageIncrease = new HashMap<>();
-    private final EnumMap<Element, Integer> elemBoosts = new EnumMap<>(Element.class);
+    private final EnumMap<ElementType, Integer> elemBoosts = new EnumMap<>(ElementType.class);
     private final List<Equip> durabilityHandling = new ArrayList<>(), equipLevelHandling = new ArrayList<>();
     private transient float shouldHealHP, shouldHealMP;
     public transient short passive_sharpeye_min_percent, passive_sharpeye_percent, crit_rate;
@@ -244,7 +245,7 @@ public class PlayerStats implements Serializable {
             }
             
             // Loop through all of character's equipped item.
-            final Iterator<Item> pIterator = pPlayer.getInventory(MapleInventoryType.EQUIPPED).newList().iterator();
+            final Iterator<Item> pIterator = pPlayer.getInventory(InventoryType.EQUIPPED).newList().iterator();
             while (pIterator.hasNext()) {
                 final Equip pEquip = (Equip) pIterator.next();
                 if (pEquip.getPosition() == -11) {
@@ -276,8 +277,8 @@ public class PlayerStats implements Serializable {
                 
                 if ((pEquip.getItemId() / 10000 == 166 && pEquip.getAndroid() != null
                         || pEquip.getItemId() / 10000 == 167) && pPlayer.getAndroid() == null) {
-                    final Equip android = (Equip) pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -27);
-                    final Equip heart = (Equip) pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -28);
+                    final Equip android = (Equip) pPlayer.getInventory(InventoryType.EQUIPPED).getItem((short) -27);
+                    final Equip heart = (Equip) pPlayer.getInventory(InventoryType.EQUIPPED).getItem((short) -28);
                     if (android != null && heart != null) {
                         pPlayer.setAndroid(pEquip.getAndroid());
                     }
@@ -430,7 +431,7 @@ public class PlayerStats implements Serializable {
                 }
             }
             
-            for (Item pItem : pPlayer.getInventory(MapleInventoryType.CASH).newList()) {
+            for (Item pItem : pPlayer.getInventory(InventoryType.CASH).newList()) {
                 if (pItem.getItemId() / 100000 == 52) {
                     if (expMod < 3 && (pItem.getItemId() == 5211060 || pItem.getItemId() == 5211050 || pItem.getItemId() == 5211051 || pItem.getItemId() == 5211052 || pItem.getItemId() == 5211053 || pItem.getItemId() == 5211054)) {
                         expMod = 3.0; //overwrite
@@ -458,7 +459,7 @@ public class PlayerStats implements Serializable {
                 expMod *= 2.0;
             }
             
-            for (Item pItem : pPlayer.getInventory(MapleInventoryType.ETC).list()) {
+            for (Item pItem : pPlayer.getInventory(InventoryType.ETC).list()) {
                 switch (pItem.getItemId()) {
                     case 4030003:
                         pickupRange = Double.POSITIVE_INFINITY;
@@ -2271,7 +2272,7 @@ public class PlayerStats implements Serializable {
     }
 
     private void OnHyperStatPassiveRequest(User pPlayer) {
-        for (int nHyperSkill : MapleSpecialStats.ALL_HYPER_STATS) {
+        for (int nHyperSkill : SpecialStats.ALL_HYPER_STATS) {
             Skill pSkill = SkillFactory.getSkill(nHyperSkill);
             int nSLV = pPlayer.getSkillLevel(pSkill);
 
@@ -3125,7 +3126,7 @@ public class PlayerStats implements Serializable {
                 }
                 changed = true;
             }
-            pPlayer.forceReAddItem(eq.copy(), MapleInventoryType.EQUIPPED);
+            pPlayer.forceReAddItem(eq.copy(), InventoryType.EQUIPPED);
         }
         if (changed) {
             pPlayer.equipChanged();
@@ -3154,16 +3155,16 @@ public class PlayerStats implements Serializable {
         }
         for (Equip eqq : all) {
             if (eqq != null && eqq.getDurability() == 0 && eqq.getPosition() < 0) { //> 0 went to negative
-                if (pPlayer.getInventory(MapleInventoryType.EQUIP).isFull()) {
+                if (pPlayer.getInventory(InventoryType.EQUIP).isFull()) {
                     List<ModifyInventory> mod = new ArrayList<>();
                     pPlayer.getClient().SendPacket(WvsContext.inventoryOperation(true, mod));
                     return false;
                 }
                 durabilityHandling.remove(eqq);
-                final short pos = pPlayer.getInventory(MapleInventoryType.EQUIP).getNextFreeSlot();
+                final short pos = pPlayer.getInventory(InventoryType.EQUIP).getNextFreeSlot();
                 MapleInventoryManipulator.unequip(pPlayer.getClient(), eqq.getPosition(), pos);
             } else if (eqq != null) {
-                pPlayer.forceReAddItem(eqq.copy(), MapleInventoryType.EQUIPPED);
+                pPlayer.forceReAddItem(eqq.copy(), InventoryType.EQUIPPED);
             }
         }
         return true;
@@ -3382,12 +3383,12 @@ public class PlayerStats implements Serializable {
     }
 
     private void calcPassiveMasteryAmount(final User pPlayer) {
-        if (pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -11) == null) {
+        if (pPlayer.getInventory(InventoryType.EQUIPPED).getItem((byte) -11) == null) {
             passive_mastery = 0;
             return;
         }
         final int skil;
-        final MapleWeaponType weaponType = GameConstants.getWeaponType(pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -11).getItemId());
+        final WeaponType weaponType = GameConstants.getWeaponType(pPlayer.getInventory(InventoryType.EQUIPPED).getItem((byte) -11).getItemId());
         boolean acc = true;
         switch (weaponType) {
             case BOW:
@@ -3503,11 +3504,11 @@ public class PlayerStats implements Serializable {
             localmaxbasedamage = 1;
             localmaxbasepvpdamage = 1;
         } else {
-            final Item weapon_item = pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -11);
-            final Item weapon_item2 = pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -10);
+            final Item weapon_item = pPlayer.getInventory(InventoryType.EQUIPPED).getItem((byte) -11);
+            final Item weapon_item2 = pPlayer.getInventory(InventoryType.EQUIPPED).getItem((byte) -10);
             final int job = pPlayer.getJob();
-            final MapleWeaponType weapon = weapon_item == null ? MapleWeaponType.NOT_A_WEAPON : GameConstants.getWeaponType(weapon_item.getItemId());
-            final MapleWeaponType weapon2 = weapon_item2 == null ? MapleWeaponType.NOT_A_WEAPON : GameConstants.getWeaponType(weapon_item2.getItemId());
+            final WeaponType weapon = weapon_item == null ? WeaponType.NOT_A_WEAPON : GameConstants.getWeaponType(weapon_item.getItemId());
+            final WeaponType weapon2 = weapon_item2 == null ? WeaponType.NOT_A_WEAPON : GameConstants.getWeaponType(weapon_item2.getItemId());
             int mainstat, secondarystat, mainstatpvp, secondarystatpvp;
             boolean mage = GameConstants.isMage(job);
             switch (weapon) {
@@ -3544,7 +3545,7 @@ public class PlayerStats implements Serializable {
             }
             localmaxbasepvpdamage = weapon.getMaxDamageMultiplier() * (4 * mainstatpvp + secondarystatpvp) * (100.0f + (pvpDamage / 100.0f));
             localmaxbasepvpdamageL = weapon.getMaxDamageMultiplier() * (4 * mainstat + secondarystat) * (100.0f + (pvpDamage / 100.0f));
-            if (weapon2 != MapleWeaponType.NOT_A_WEAPON && weapon_item != null && weapon_item2 != null) {
+            if (weapon2 != WeaponType.NOT_A_WEAPON && weapon_item != null && weapon_item2 != null) {
                 Equip we1 = (Equip) weapon_item;
                 Equip we2 = (Equip) weapon_item2;
                 localmaxbasedamage = weapon.getMaxDamageMultiplier() * (4 * mainstat + secondarystat) * ((watk - (mage ? we2.getMatk() : we2.getWatk())) / 100.0f);
@@ -3658,7 +3659,7 @@ public class PlayerStats implements Serializable {
         return 0;
     }
 
-    public final int getElementBoost(final Element key) {
+    public final int getElementBoost(final ElementType key) {
         if (elemBoosts.containsKey(key)) {
             return elemBoosts.get(key);
         }
@@ -3705,7 +3706,7 @@ public class PlayerStats implements Serializable {
                     craft = ii.getEquipAddReqs(itemId, add.getLeft(), "craft");
                     if (add.getMid().equals("elemVol") && (craft == null || craft != null && pPlayer.getTrait(MapleTraitType.craft).getLocalTotalExp() >= Integer.parseInt(craft))) {
                         int value = Integer.parseInt(add.getRight().substring(1, add.getRight().length()));
-                        final Element key = Element.getFromChar(add.getRight().charAt(0));
+                        final ElementType key = ElementType.getFromChar(add.getRight().charAt(0));
                         if (elemBoosts.get(key) != null) {
                             value += elemBoosts.get(key);
                         }
@@ -3884,7 +3885,7 @@ public class PlayerStats implements Serializable {
 
     public final void OnProfessionToolRequest(final User pPlayer) {
         if (pPlayer.getProfessionLevel(92000000) > 0 || pPlayer.getProfessionLevel(92010000) > 0) {
-            final Iterator<Item> itera = pPlayer.getInventory(MapleInventoryType.EQUIP).newList().iterator();
+            final Iterator<Item> itera = pPlayer.getInventory(InventoryType.EQUIP).newList().iterator();
             while (itera.hasNext()) { // Goes to first harvesting tool and stops.
                 final Equip equip = (Equip) itera.next();
                 if (equip.getDurability() != 0 && (equip.getItemId() / 10000 == 150 && pPlayer.getProfessionLevel(92000000) > 0) || (equip.getItemId() / 10000 == 151 && pPlayer.getProfessionLevel(92010000) > 0)) {

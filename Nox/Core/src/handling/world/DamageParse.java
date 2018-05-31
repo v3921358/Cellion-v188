@@ -3,11 +3,12 @@
  */
 package handling.world;
 
+import enums.ElementType;
 import client.*;
 import client.anticheat.CheatTracker;
 import client.anticheat.CheatingOffense;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.ItemConstants;
 import constants.ServerConstants;
@@ -35,7 +36,7 @@ import java.util.List;
 import server.life.mob.MobStatRequest;
 import server.maps.TrainingMap;
 import server.maps.objects.ForceAtom;
-import server.maps.objects.ForceAtomType;
+import enums.ForceAtomType;
 import service.RecvPacketOpcode;
 import tools.LogHelper;
 import tools.Utility;
@@ -164,10 +165,10 @@ public class DamageParse {
 
                 if (!bTempest && pPlayer.isGM()) {
                     
-                    if ((pPlayer.getJob() >= MapleJob.BATTLE_MAGE_1.getId() && pPlayer.getJob() <= MapleJob.BATTLE_MAGE_4.getId() && !pTarget.isBuffed(MonsterStatus.DAMAGE_IMMUNITY)
+                    if ((pPlayer.getJob() >= Jobs.BATTLE_MAGE_1.getId() && pPlayer.getJob() <= Jobs.BATTLE_MAGE_4.getId() && !pTarget.isBuffed(MonsterStatus.DAMAGE_IMMUNITY)
                             && !pTarget.isBuffed(MonsterStatus.MAGIC_IMMUNITY)
                             && !pTarget.isBuffed(MonsterStatus.MAGIC_DAMAGE_REFLECT)) || pAttack.skill == Marksman.SNIPE
-                            || pAttack.skill == Mercedes.LIGHTNING_EDGE || ((pPlayer.getJob() < MapleJob.BATTLE_MAGE_1.getId() || pPlayer.getJob() > MapleJob.BATTLE_MAGE_4.getId()) && !pTarget.isBuffed(MonsterStatus.DAMAGE_IMMUNITY)
+                            || pAttack.skill == Mercedes.LIGHTNING_EDGE || ((pPlayer.getJob() < Jobs.BATTLE_MAGE_1.getId() || pPlayer.getJob() > Jobs.BATTLE_MAGE_4.getId()) && !pTarget.isBuffed(MonsterStatus.DAMAGE_IMMUNITY)
                             && !pTarget.isBuffed(MonsterStatus.WEAPON_IMMUNITY) && !pTarget.isBuffed(MonsterStatus.WEAPON_DAMAGE_REFLECT))) {
                         nMaxDamagePerHit = UserMaxWeaponDamage(pPlayer, pTarget, pAttack, pSkill, pEffect, nMaxDamagePerMonster, nCriticalDamage);
                     } else {
@@ -628,9 +629,9 @@ public class DamageParse {
 
         PlayerStats pPlayerStat = pPlayer.getStat();
 
-        Element pElement = null;
+        ElementType pElement = null;
         if (pPlayer.getBuffedValue(CharacterTemporaryStat.ElementalReset) != null) {
-            pElement = Element.NEUTRAL;
+            pElement = ElementType.NEUTRAL;
         } else if (pSkill != null) {
             pElement = pSkill.getElement();
         }
@@ -791,7 +792,7 @@ public class DamageParse {
             return 999999.0D;
         }
 
-        List<Element> aElements = new ArrayList<>();
+        List<ElementType> aElements = new ArrayList<>();
         boolean bDefined = false;
         int nCritPercent = nCriticalDamagePercent;
         int nPDRate = pMob.getStats().getPDRate();
@@ -889,22 +890,22 @@ public class DamageParse {
                 switch (nChargeSkillID) {
                     case 1211003:
                     case WhiteKnight.FLAME_CHARGE:
-                        aElements.add(Element.FIRE);
+                        aElements.add(ElementType.FIRE);
                         break;
                     case 1211005:
                     case WhiteKnight.BLIZZARD_CHARGE:
                     case Aran.SNOW_CHARGE:
-                        aElements.add(Element.ICE);
+                        aElements.add(ElementType.ICE);
                         break;
                     case 1211007:
                     case WhiteKnight.LIGHTNING_CHARGE_1:
                     case ThunderBreaker.LIGHTNING_CHARGE:
-                        aElements.add(Element.LIGHTING);
+                        aElements.add(ElementType.LIGHTING);
                         break;
                     case 1221003:
                     case Paladin.DIVINE_CHARGE:
                     case DawnWarrior.RADIANT_CHARGE_2:
-                        aElements.add(Element.HOLY);
+                        aElements.add(ElementType.HOLY);
                         break;
                     case BlazeWizard.ELEMENTAL_RESET:
                         break;
@@ -912,7 +913,7 @@ public class DamageParse {
             }
 
             if (pPlayer.getBuffedValue(CharacterTemporaryStat.AssistCharge) != null) {
-                aElements.add(Element.LIGHTING);
+                aElements.add(ElementType.LIGHTING);
             }
             if (pPlayer.getBuffedValue(CharacterTemporaryStat.ElementalReset) != null) {
                 aElements.clear();
@@ -929,7 +930,7 @@ public class DamageParse {
                         pElementalEffect = 0.5D / aElements.size();
                 }
 
-                for (Element element : aElements) {
+                for (ElementType element : aElements) {
                     switch (pMob.getEffectiveness(element)) {
                         case IMMUNE:
                             nElementMaxDamagePerMonster = 1.0D;
@@ -981,7 +982,7 @@ public class DamageParse {
      * @param pEffect
      * @return 
      */
-    private static double UserMaxMagicDamage(User pPlayer, Skill pSkill, Mob pMob, MonsterStats pMobStat, PlayerStats pPlayerStat, Element pElement, Integer nSharpEye, double nMaxDamagePerMonster, StatEffect pEffect) {
+    private static double UserMaxMagicDamage(User pPlayer, Skill pSkill, Mob pMob, MonsterStats pMobStat, PlayerStats pPlayerStat, ElementType pElement, Integer nSharpEye, double nMaxDamagePerMonster, StatEffect pEffect) {
         int nLevelDifference = Math.max(pMobStat.getLevel() - pPlayer.getLevel(), 0) * 2;
         int nHitRate = Math.min((int) Math.floor(Math.sqrt(pPlayerStat.getAccuracy())) - (int) Math.floor(Math.sqrt(pMobStat.getEva())) + 100, 100);
         if (nLevelDifference > nHitRate) {

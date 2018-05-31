@@ -5,7 +5,7 @@ import client.ClientSocket;
 import client.Skill;
 import client.SkillFactory;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.jobs.Cygnus;
 import client.jobs.Cygnus.DawnWarriorHandler;
 import constants.GameConstants;
@@ -28,7 +28,7 @@ import handling.world.DamageParse;
 import handling.world.PlayerHandler;
 import net.InPacket;
 import server.StatEffect;
-import server.StatInfo;
+import enums.StatInfo;
 import server.Randomizer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
@@ -59,7 +59,7 @@ public final class CloseRangeAttack {
         }
 
         AttackInfo pAttack = DamageParse.OnAttack(RecvPacketOpcode.UserMeleeAttack, iPacket, pPlayer);
-        Item pShield = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -10);
+        Item pShield = c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem((byte) -10);
         Skill pSkill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(pAttack.skill));
         int nSkillLevel = pPlayer.getTotalSkillLevel(pSkill);
         final boolean bMirror = (pPlayer.hasBuff(CharacterTemporaryStat.ShadowPartner) || pPlayer.hasBuff(CharacterTemporaryStat.ShadowServant));

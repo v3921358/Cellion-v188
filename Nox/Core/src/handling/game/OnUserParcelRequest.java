@@ -21,11 +21,11 @@
  */
 package handling.game;
 
-import client.MapleCharacterUtil;
+import client.CharacterUtil;
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.ItemFlag;
-import client.inventory.MapleInventoryType;
+import enums.ItemFlag;
+import enums.InventoryType;
 import constants.GameConstants;
 import static handling.world.PackageHandler.addItemToDB;
 import static handling.world.PackageHandler.addMesoToDB;
@@ -79,7 +79,7 @@ public final class OnUserParcelRequest implements ProcessPacket<ClientSocket> {
                 final int finalcost = mesos + GameConstants.getTaxAmount(mesos) + (quickdelivery ? 0 : 5000);
 
                 if (mesos >= 0 && mesos <= 100000000 && c.getPlayer().getMeso() >= finalcost) {
-                    final int accid = MapleCharacterUtil.getIdByName(recipient);
+                    final int accid = CharacterUtil.getIdByName(recipient);
                     if (accid != -1) {
                         if (accid != c.getAccID()) {
                             boolean recipientOn = false;
@@ -97,7 +97,7 @@ public final class OnUserParcelRequest implements ProcessPacket<ClientSocket> {
                             }
 
                             if (inventId > 0) {
-                                final MapleInventoryType inv = MapleInventoryType.getByType(inventId);
+                                final InventoryType inv = InventoryType.getByType(inventId);
                                 final Item item = c.getPlayer().getInventory(inv).getItem((byte) itemPos);
                                 if (item == null) {
                                     c.SendPacket(CField.sendPackageMSG((byte) 17, null)); // Unsuccessfull

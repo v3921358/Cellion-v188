@@ -23,7 +23,7 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
@@ -44,11 +44,11 @@ public final class UseItemEffectHandler implements ProcessPacket<ClientSocket> {
         if (chr == null) {
             return;
         }
-        MapleInventoryType type;
+        InventoryType type;
         if (itemId == 4290001 || itemId == 4290000) {
-            type = MapleInventoryType.ETC;
+            type = InventoryType.ETC;
         } else {
-            type = MapleInventoryType.CASH;
+            type = InventoryType.CASH;
         }
         Item toUse = chr.getInventory(type).findById(itemId);
         if (toUse == null || toUse.getItemId() != itemId || toUse.getQuantity() < 1) {

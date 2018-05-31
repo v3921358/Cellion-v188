@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import client.CardData;
-import client.MapleMarriage;
+import client.Marriage;
 import client.QuestStatus;
-import client.MapleTrait.MapleTraitType;
+import client.Trait.MapleTraitType;
 import client.Skill;
 import client.SkillEntry;
 import client.anticheat.ReportType;
@@ -66,7 +66,7 @@ public class CharacterTransfer {
     public Map<Integer, String> InfoQuest;
     public final Map<Integer, SkillEntry> Skills = new LinkedHashMap<>(); // Skillid instead of Skill.java, as it's huge. Cant be transporting Skill.java and MapleStatEffect.java
     public final Map<Integer, CardData> cardsInfo = new LinkedHashMap<>();
-    public MapleMarriage marriage;
+    public Marriage marriage;
     public List<VMatrixRecord> aVMatrixRecord = new ArrayList<>();
 
     /*Start of Custom Feature*/

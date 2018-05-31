@@ -13,7 +13,7 @@ import java.util.Map.Entry;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import database.Database;
 import handling.world.MapleCharacterLook;
 import handling.world.World;
@@ -164,7 +164,7 @@ public class PlayerNPC extends NPCLife implements MapleCharacterLook {
         setTail(chr.getTail());
         setAngelicDressupSuit(chr.getAngelicDressupSuit());
         equips = new HashMap<>();
-        for (Item item : chr.getInventory(MapleInventoryType.EQUIPPED).newList()) {
+        for (Item item : chr.getInventory(InventoryType.EQUIPPED).newList()) {
             if (item.getPosition() < -127) {
                 continue;
             }
@@ -172,7 +172,7 @@ public class PlayerNPC extends NPCLife implements MapleCharacterLook {
         }
 
         secondEquips = new HashMap<>();
-        for (Item item : chr.getInventory(MapleInventoryType.EQUIPPED).newList()) {
+        for (Item item : chr.getInventory(InventoryType.EQUIPPED).newList()) {
             if (item.getPosition() < -127) {
                 continue;
             }

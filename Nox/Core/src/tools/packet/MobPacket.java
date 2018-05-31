@@ -14,7 +14,7 @@ import server.life.mob.BurnedInfo;
 import server.life.LifeFactory;
 import server.life.Mob;
 import server.life.MobSkill;
-import server.life.mob.MobStat;
+import enums.MobStat;
 import server.life.mob.MobTemporaryStat;
 import server.life.MultiTarget;
 import server.maps.MapleMap;

@@ -1,5 +1,6 @@
 package client.inventory;
 
+import enums.InventoryType;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +19,7 @@ import database.Database;
 import server.MapleItemInformationProvider;
 import server.maps.objects.Android;
 import server.maps.objects.Pet;
-import server.potentials.ItemPotentialTierType;
+import enums.ItemPotentialTierType;
 import tools.LogHelper;
 import tools.Pair;
 
@@ -66,8 +67,8 @@ public enum ItemLoader {
     }
 
     //does not need connection con to be auto commit
-    public Map<Long, Pair<Item, MapleInventoryType>> loadItems(boolean login, int id, Connection con) throws SQLException {
-        Map<Long, Pair<Item, MapleInventoryType>> items = new LinkedHashMap<>();
+    public Map<Long, Pair<Item, InventoryType>> loadItems(boolean login, int id, Connection con) throws SQLException {
+        Map<Long, Pair<Item, InventoryType>> items = new LinkedHashMap<>();
         StringBuilder query = new StringBuilder();
         query.append("SELECT * FROM `");
         query.append(table);
@@ -80,7 +81,7 @@ public enum ItemLoader {
 
         if (login) {
             query.append(" AND `inventorytype` = ");
-            query.append(MapleInventoryType.EQUIPPED.getType());
+            query.append(InventoryType.EQUIPPED.getType());
         }
         try (PreparedStatement ps = con.prepareStatement(query.toString())) {
             ps.setInt(1, value);
@@ -91,9 +92,9 @@ public enum ItemLoader {
                     if (!ii.itemExists(rs.getInt("itemid"))) { //EXPENSIVE
                         continue;
                     }
-                    MapleInventoryType mit = MapleInventoryType.getByType(rs.getByte("inventorytype"));
+                    InventoryType mit = InventoryType.getByType(rs.getByte("inventorytype"));
 
-                    if (mit.equals(MapleInventoryType.EQUIP) || mit.equals(MapleInventoryType.EQUIPPED)) {
+                    if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
                         int itemid = rs.getInt("itemid");
 
                         Equip defaultReferenceEq = (Equip) ii.getEquipById(itemid);
@@ -166,7 +167,7 @@ public enum ItemLoader {
                             // UniqueID
                             if (equip.getUniqueId() > -1) {
                                 if (GameConstants.isEffectRing(rs.getInt("itemid"))) {
-                                    MapleRing ring = MapleRing.loadFromDb(equip.getUniqueId(), mit.equals(MapleInventoryType.EQUIPPED));
+                                    MapleRing ring = MapleRing.loadFromDb(equip.getUniqueId(), mit.equals(InventoryType.EQUIPPED));
                                     if (ring != null) {
                                         equip.setRing(ring);
                                     }
@@ -205,7 +206,7 @@ public enum ItemLoader {
         return items;
     }
 
-    public void saveItems(List<Pair<Item, MapleInventoryType>> items, int id, Connection con) {
+    public void saveItems(List<Pair<Item, InventoryType>> items, int id, Connection con) {
         StringBuilder query = new StringBuilder();
         query.append("DELETE FROM `");
         query.append(table);
@@ -243,12 +244,12 @@ public enum ItemLoader {
                 }
             }
             try (PreparedStatement pse = con.prepareStatement("INSERT INTO " + table_equip + " VALUES (DEFAULT, " + valueStr + ")")) {
-                final Iterator<Pair<Item, MapleInventoryType>> iter = items.iterator();
-                Pair<Item, MapleInventoryType> pair;
+                final Iterator<Pair<Item, InventoryType>> iter = items.iterator();
+                Pair<Item, InventoryType> pair;
                 while (iter.hasNext()) {
                     pair = iter.next();
                     Item item = pair.getLeft();
-                    MapleInventoryType mit = pair.getRight();
+                    InventoryType mit = pair.getRight();
                     if (item.getPosition() == -55) {
                         continue;
                     }
@@ -283,7 +284,7 @@ public enum ItemLoader {
                     }
 
                     item.setInventoryId(iid);
-                    if (mit.equals(MapleInventoryType.EQUIP) || mit.equals(MapleInventoryType.EQUIPPED)) {
+                    if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
                         Equip equip = (Equip) item;
                         int i = 0;
                         pse.setLong(++i, iid);

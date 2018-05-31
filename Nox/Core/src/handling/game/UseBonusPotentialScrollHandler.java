@@ -6,9 +6,9 @@ package handling.game;
 import client.ClientSocket;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.ModifyInventory;
-import client.inventory.ModifyInventoryOperation;
+import enums.ModifyInventoryOperation;
 import java.util.ArrayList;
 import java.util.List;
 import net.InPacket;
@@ -18,7 +18,7 @@ import server.Randomizer;
 import server.maps.objects.User;
 import server.potentials.Cube;
 import server.potentials.ItemPotentialProvider;
-import server.potentials.ItemPotentialTierType;
+import enums.ItemPotentialTierType;
 import tools.packet.CField;
 import tools.packet.WvsContext;
 
@@ -40,8 +40,8 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<ClientSocke
         short nSlot = iPacket.DecodeShort();
         short nDestination = iPacket.DecodeShort();
         
-        Item pScroll = pPlayer.getInventory(MapleInventoryType.USE).getItem(nSlot);
-        Equip pEquip = (Equip) pPlayer.getInventory(MapleInventoryType.EQUIP).getItem(nDestination);
+        Item pScroll = pPlayer.getInventory(InventoryType.USE).getItem(nSlot);
+        Equip pEquip = (Equip) pPlayer.getInventory(InventoryType.EQUIP).getItem(nDestination);
         ItemPotentialTierType pTier = pEquip.getPotentialBonusTier();
 
         if (pScroll == null || pScroll.getQuantity() <= 0 || pEquip == null/* || !ItemConstants.isPotentialScroll(pScroll.getItemId())*/) {
@@ -63,7 +63,7 @@ public class UseBonusPotentialScrollHandler implements ProcessPacket<ClientSocke
         //if (bPotential) {
         pResult = Equip.ScrollResult.SUCCESS;
         aModifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, pEquip));
-        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, pScroll.getPosition(), (short) 1, false);
+        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, pScroll.getPosition(), (short) 1, false);
         c.SendPacket(CField.enchantResult(pResult == Equip.ScrollResult.SUCCESS ? 1 : pResult == Equip.ScrollResult.CURSE ? 2 : 0));
         pPlayer.getMap().broadcastPacket(pPlayer, CField.getScrollEffect(c.getPlayer().getId(), pResult, false, pEquip.getItemId(), pScroll.getItemId()), true);
         c.SendPacket(WvsContext.inventoryOperation(true, aModifications));

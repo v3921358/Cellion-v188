@@ -2,7 +2,7 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import handling.world.World;
 import server.MapleInventoryManipulator;
@@ -30,7 +30,7 @@ public class UseTreasureChestHandler implements ProcessPacket<ClientSocket> {
 
         User chr = c.getPlayer();
 
-        final Item toUse = chr.getInventory(MapleInventoryType.ETC).getItem((byte) slot);
+        final Item toUse = chr.getInventory(InventoryType.ETC).getItem((byte) slot);
         if (toUse == null || toUse.getQuantity() <= 0 || toUse.getItemId() != itemid || chr.hasBlockedInventory()) {
             c.SendPacket(WvsContext.enableActions());
             return;
@@ -64,7 +64,7 @@ public class UseTreasureChestHandler implements ProcessPacket<ClientSocket> {
                 amount = 100; // Power Elixir
                 break;
         }
-        if (chr.getInventory(MapleInventoryType.CASH).countById(keyIDforRemoval) > 0) {
+        if (chr.getInventory(InventoryType.CASH).countById(keyIDforRemoval) > 0) {
             final Item item = MapleInventoryManipulator.addbyIdGachapon(c, reward, (short) amount);
 
             if (item == null) {
@@ -72,8 +72,8 @@ public class UseTreasureChestHandler implements ProcessPacket<ClientSocket> {
                 c.SendPacket(WvsContext.enableActions());
                 return;
             }
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.ETC, (byte) slot, (short) 1, true);
-            MapleInventoryManipulator.removeById(c, MapleInventoryType.CASH, keyIDforRemoval, 1, true, false);
+            MapleInventoryManipulator.removeFromSlot(c, InventoryType.ETC, (byte) slot, (short) 1, true);
+            MapleInventoryManipulator.removeById(c, InventoryType.CASH, keyIDforRemoval, 1, true, false);
             c.SendPacket(WvsContext.InfoPacket.getShowItemGain(reward, (short) amount, true));
 
             if (GameConstants.gachaponRareItem(item.getItemId()) > 0) {

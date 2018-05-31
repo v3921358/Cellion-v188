@@ -1,5 +1,8 @@
 package client.inventory;
 
+import enums.EquipStat;
+import enums.EnchantmentStats;
+import enums.EnchantmentActions;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;

@@ -11,21 +11,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import client.MapleCharacterUtil;
+import client.CharacterUtil;
 import client.ClientSocket;
 import client.QuestStatus.QuestState;
-import client.Stat;
+import enums.Stat;
 import client.PlayerStats;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.ItemFlag;
-import client.inventory.ItemType;
-import client.inventory.MapleInventoryType;
+import enums.ItemFlag;
+import enums.ItemType;
+import enums.InventoryType;
 import client.inventory.ModifyInventory;
-import client.inventory.ModifyInventoryOperation;
+import enums.ModifyInventoryOperation;
 import constants.GameConstants;
 
 import constants.ItemConstants;
@@ -36,8 +36,8 @@ import static handling.game._CommonPlayerOperationHandler.UseTeleRock;
 
 import handling.world.World;
 import service.ChannelServer;
-import scripting.provider.NPCChatByType;
-import scripting.provider.NPCChatType;
+import enums.NPCInterfaceType;
+import enums.NPCChatType;
 import server.MapleFamiliar;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
@@ -46,7 +46,7 @@ import server.Randomizer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
 import server.life.LifeFactory;
-import server.maps.FieldLimitType;
+import enums.FieldLimitType;
 import server.maps.MapleMap;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
@@ -59,7 +59,7 @@ import server.stores.HiredMerchant;
 import net.InPacket;
 import server.maps.objects.User.CharacterTemporaryValues;
 import server.potentials.ItemPotentialProvider;
-import server.potentials.ItemPotentialTierType;
+import enums.ItemPotentialTierType;
 import tools.LogHelper;
 import tools.Pair;
 import tools.packet.CField;
@@ -68,7 +68,7 @@ import tools.packet.WvsContext;
 import tools.packet.CubePacket;
 import tools.packet.PetPacket;
 import net.ProcessPacket;
-import server.NebuliteGrade;
+import enums.NebuliteGrade;
 import server.maps.objects.Pet.PetFlag;
 import server.potentials.Cube;
 import server.potentials.ItemPotentialOption;
@@ -98,7 +98,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
         pPlayer.setScrolledPosition((short) 0);
         final byte nSlot = (byte) iPacket.DecodeShort();
         final int nItemID = iPacket.DecodeInt();
-        final Item pToUse = pPlayer.getInventory(MapleInventoryType.CASH).getItem(nSlot);
+        final Item pToUse = pPlayer.getInventory(InventoryType.CASH).getItem(nSlot);
         boolean bUsed = false, bCC = false;
 
         if (pToUse == null || pToUse.getItemId() != nItemID || pToUse.getQuantity() < 1 || pPlayer.hasBlockedInventory()) {
@@ -116,7 +116,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                     pPlayer.sortInventory((byte) 1); // Sort equipment inventory to avoid the cube not finding the item.
                     pPlayer.setLastInventorySort();
                 }
-                final Equip pEquip = (Equip) pPlayer.getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
+                final Equip pEquip = (Equip) pPlayer.getInventory(InventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 bUsed = Cube.OnCubeRequest(pPlayer, pEquip, nItemID, true);
                 break;
             }
@@ -157,7 +157,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                         if (nPOS <= 0) {
                             nInvType = -1;
                         }
-                        pItem = c.getPlayer().getInventory(MapleInventoryType.getByType(nInvType)).getItem(nPOS);
+                        pItem = c.getPlayer().getInventory(InventoryType.getByType(nInvType)).getItem(nPOS);
                     }
                     
                     World.Broadcast.broadcastSmega(WvsContext.handleItemMegaphone(pStringBuilder.toString(), bListen, c.getChannel(), pItem));
@@ -423,7 +423,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case 5220084: {//booster pack
-                if (c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() < 3) {
+                if (c.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() < 3) {
                     c.getPlayer().dropMessage(5, "Make 3 USE space.");
                     break;
                 }
@@ -534,66 +534,66 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case 5500000: { // Magic Hourglass 1 day
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem(iPacket.DecodeShort());
+                final Item item = c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(iPacket.DecodeShort());
                 final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                 final int days = 1;
                 if (item != null && !GameConstants.isAccessory(item.getItemId()) && item.getExpiration() > -1 && !ii.isCash(item.getItemId()) && System.currentTimeMillis() + (100 * 24 * 60 * 60 * 1000L) > item.getExpiration() + (days * 24 * 60 * 60 * 1000L)) {
                     item.setExpiration(item.getExpiration() + (days * 24 * 60 * 60 * 1000));
-                    c.getPlayer().forceReAddItem(item, MapleInventoryType.EQUIPPED);
+                    c.getPlayer().forceReAddItem(item, InventoryType.EQUIPPED);
                     bUsed = true;
                 }
                 break;
             }
             case 5500001: { // Magic Hourglass 7 day
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem(iPacket.DecodeShort());
+                final Item item = c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(iPacket.DecodeShort());
                 final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                 final int days = 7;
                 if (item != null && !GameConstants.isAccessory(item.getItemId()) && item.getExpiration() > -1 && !ii.isCash(item.getItemId()) && System.currentTimeMillis() + (100 * 24 * 60 * 60 * 1000L) > item.getExpiration() + (days * 24 * 60 * 60 * 1000L)) {
                     item.setExpiration(item.getExpiration() + (days * 24 * 60 * 60 * 1000));
-                    c.getPlayer().forceReAddItem(item, MapleInventoryType.EQUIPPED);
+                    c.getPlayer().forceReAddItem(item, InventoryType.EQUIPPED);
                     bUsed = true;
                 }
                 break;
             }
             case 5500002: { // Magic Hourglass 20 day
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem(iPacket.DecodeShort());
+                final Item item = c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(iPacket.DecodeShort());
                 final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                 final int days = 20;
                 if (item != null && !GameConstants.isAccessory(item.getItemId()) && item.getExpiration() > -1 && !ii.isCash(item.getItemId()) && System.currentTimeMillis() + (100 * 24 * 60 * 60 * 1000L) > item.getExpiration() + (days * 24 * 60 * 60 * 1000L)) {
                     item.setExpiration(item.getExpiration() + (days * 24 * 60 * 60 * 1000));
-                    c.getPlayer().forceReAddItem(item, MapleInventoryType.EQUIPPED);
+                    c.getPlayer().forceReAddItem(item, InventoryType.EQUIPPED);
                     bUsed = true;
                 }
                 break;
             }
             case 5500005: { // Magic Hourglass 50 day
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem(iPacket.DecodeShort());
+                final Item item = c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(iPacket.DecodeShort());
                 final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                 final int days = 50;
                 if (item != null && !GameConstants.isAccessory(item.getItemId()) && item.getExpiration() > -1 && !ii.isCash(item.getItemId()) && System.currentTimeMillis() + (100 * 24 * 60 * 60 * 1000L) > item.getExpiration() + (days * 24 * 60 * 60 * 1000L)) {
                     item.setExpiration(item.getExpiration() + (days * 24 * 60 * 60 * 1000));
-                    c.getPlayer().forceReAddItem(item, MapleInventoryType.EQUIPPED);
+                    c.getPlayer().forceReAddItem(item, InventoryType.EQUIPPED);
                     bUsed = true;
                 }
                 break;
             }
             case 5500006: { // Magic Hourglass 99 day
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem(iPacket.DecodeShort());
+                final Item item = c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(iPacket.DecodeShort());
                 final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                 final int days = 99;
                 if (item != null && !GameConstants.isAccessory(item.getItemId()) && item.getExpiration() > -1 && !ii.isCash(item.getItemId()) && System.currentTimeMillis() + (100 * 24 * 60 * 60 * 1000L) > item.getExpiration() + (days * 24 * 60 * 60 * 1000L)) {
                     item.setExpiration(item.getExpiration() + (days * 24 * 60 * 60 * 1000));
-                    c.getPlayer().forceReAddItem(item, MapleInventoryType.EQUIPPED);
+                    c.getPlayer().forceReAddItem(item, InventoryType.EQUIPPED);
                     bUsed = true;
                 }
                 break;
             }
             case 5060000: { // Item Tag
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem(iPacket.DecodeShort());
+                final Item item = c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(iPacket.DecodeShort());
 
                 if (item != null && item.getOwner().equals("")) {
                     item.setOwner(c.getPlayer().getName());
-                    c.getPlayer().forceReAddItem(item, MapleInventoryType.EQUIPPED);
+                    c.getPlayer().forceReAddItem(item, InventoryType.EQUIPPED);
                     bUsed = true;
                 }
                 break;
@@ -608,10 +608,10 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
             case ItemConstants.SUPER_MIRACLE_CUBE: {
                 //c.getPlayer().sortInventory((byte) 1); // Sort equipment inventory to avoid the cube not finding the item.
 
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
+                final Item item = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 final Equip equip = (Equip) item;
 
-                if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
+                if (item != null && c.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 1) {
                     int tierUpRate = ItemPotentialProvider.RATE_REDCUBE_TIERUP;
                     int tierDownRate = 0;
                     int fragmentGiven = 0;
@@ -676,10 +676,10 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
             }
 
             case ItemConstants.MIRACLE_CUBE: {
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
+                final Item item = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 final Equip equip = (Equip) item;
 
-                if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
+                if (item != null && c.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 1) {
                     int tierUpRate = ItemPotentialProvider.RATE_REDCUBE_TIERUP;
                     int tierDownRate = 0;
                     int fragmentGiven = 0;
@@ -745,10 +745,10 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case ItemConstants.MEMORY_CUBE: {
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
+                final Item item = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 final Equip equip = (Equip) item;
 
-                if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
+                if (item != null && c.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 1) {
                     int tierUpRate = ItemPotentialProvider.RATE_MEMORIAL_CUBE_TIERUP;
                     int tierDownRate = 0;
                     int fragmentGiven = 0;
@@ -799,10 +799,10 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
             }
 
             case ItemConstants.BLACK_CUBE: {
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
+                final Item item = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 final Equip equip = (Equip) item;
 
-                if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
+                if (item != null && c.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 1) {
                     final int tierUpRate = ItemPotentialProvider.RATE_BLACK_CUBE_TIERUP;
                     final int tierDownRate = 0;
                     final int fragmentGiven = ItemConstants.BLACK_CUBE_FRAGMENT;
@@ -851,7 +851,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case ItemConstants.PERFECT_POTENTIAL_STAMP: {
-                final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
+                final Item item = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 if (item != null) {
                     final Equip eq = (Equip) item;
 
@@ -875,8 +875,8 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
             case 5062403: {
                 short appearance = (short) iPacket.DecodeInt();
                 short function = (short) iPacket.DecodeInt();
-                Equip appear = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(appearance);
-                Equip equip = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(function);
+                Equip appear = (Equip) c.getPlayer().getInventory(InventoryType.EQUIP).getItem(appearance);
+                Equip equip = (Equip) c.getPlayer().getInventory(InventoryType.EQUIP).getItem(function);
                 if (equip.getFusionAnvil() != 0) {
                     return;
                 } else if (GameConstants.isEquip(appear.getItemId()) || GameConstants.isEquip(equip.getItemId())) {
@@ -887,7 +887,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                     return;
                 }
                 equip.setFusionAnvil(appear.getItemId());
-                c.getPlayer().forceReAddItemNoUpdate(equip, MapleInventoryType.EQUIP);
+                c.getPlayer().forceReAddItemNoUpdate(equip, InventoryType.EQUIP);
                 bUsed = true;
                 break;
             }
@@ -895,8 +895,8 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 if (c.getPlayer().getLevel() < 10) {
                     c.getPlayer().dropMessage(1, "You may not use this until level 10.");
                 } else {
-                    final Item item = c.getPlayer().getInventory(MapleInventoryType.SETUP).getItem((byte) iPacket.DecodeInt());
-                    if (item != null && c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1 && c.getPlayer().getInventory(MapleInventoryType.SETUP).getNumFreeSlot() >= 1) {
+                    final Item item = c.getPlayer().getInventory(InventoryType.SETUP).getItem((byte) iPacket.DecodeInt());
+                    if (item != null && c.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 1 && c.getPlayer().getInventory(InventoryType.SETUP).getNumFreeSlot() >= 1) {
                         
                         NebuliteGrade currentGrade = GameConstants.getNebuliteGrade(item.getItemId());
                         if (currentGrade != NebuliteGrade.None && currentGrade != NebuliteGrade.GradeS) {
@@ -911,7 +911,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                             }
                             ItemPotentialOption newOption = ItemPotentialProvider.getRandomNebulitePotential(currentGrade);
                             if (newOption != null) {
-                                MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.SETUP, item.getPosition(), (short) 1, false);
+                                MapleInventoryManipulator.removeFromSlot(c, InventoryType.SETUP, item.getPosition(), (short) 1, false);
                             
                                 MapleInventoryManipulator.addById(c, newOption.getOptionId(), (short) 1, "Upgraded from alien cube on " + LocalDateTime.now());
                                 MapleInventoryManipulator.addById(c, 2430691, (short) 1, "Alien Cube" + " on " + LocalDateTime.now());
@@ -930,7 +930,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 if (c.getPlayer().getLevel() < 10) {
                     c.getPlayer().dropMessage(1, "You may not use this until level 10.");
                 } else {
-                    final Item item = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
+                    final Item item = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                     if (item != null) {
                         final Equip eq = (Equip) item;
                         if (eq.getSocket1() > 0) { // first slot only.
@@ -940,7 +940,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                             modifications.add(new ModifyInventory(ModifyInventoryOperation.AddItem, item));
                             c.SendPacket(WvsContext.inventoryOperation(true, modifications));
 
-                            c.getPlayer().forceReAddItemNoUpdate(item, MapleInventoryType.EQUIP);
+                            c.getPlayer().forceReAddItemNoUpdate(item, InventoryType.EQUIP);
                             bUsed = true;
                         } else {
                             c.getPlayer().dropMessage(5, "This item do not have a socket.");
@@ -952,7 +952,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case 5521000: { // Karma
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final InventoryType type = InventoryType.getByType((byte) iPacket.DecodeInt());
                 final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
 
                 if (item != null && !ItemFlag.KARMA_ACC.check(item.getFlag())
@@ -964,7 +964,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                         short flag = item.getFlag();
                         if (ItemFlag.UNTRADABLE.check(flag)) {
                             flag -= ItemFlag.UNTRADABLE.getValue();
-                        } else if (type == MapleInventoryType.EQUIP) {
+                        } else if (type == InventoryType.EQUIP) {
                             flag |= ItemFlag.KARMA_ACC.getValue();
                         } else {
                             flag |= ItemFlag.KARMA_ACC_USE.getValue();
@@ -984,7 +984,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
             }
             case 5520001: //p.karma
             case 5520000: { // Karma
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final InventoryType type = InventoryType.getByType((byte) iPacket.DecodeInt());
                 final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
 
                 if (item != null && !ItemFlag.KARMA_EQ.check(item.getFlag())
@@ -996,7 +996,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                         short flag = item.getFlag();
                         if (ItemFlag.UNTRADABLE.check(flag)) {
                             flag -= ItemFlag.UNTRADABLE.getValue();
-                        } else if (type == MapleInventoryType.EQUIP) {
+                        } else if (type == InventoryType.EQUIP) {
                             flag |= ItemFlag.KARMA_EQ.getValue();
                         } else {
                             flag |= ItemFlag.KARMA_USE.getValue();
@@ -1016,13 +1016,13 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
             }
             case 5570000: { // Vicious Hammer
                 iPacket.DecodeInt(); // Inventory type, Hammered eq is always EQ.
-                final Equip item = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
+                final Equip item = (Equip) c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) iPacket.DecodeInt());
                 // another int here, D3 49 DC 00
                 if (item != null) {
                     if (GameConstants.canHammer(item.getItemId()) && MapleItemInformationProvider.getInstance().getSlots(item.getItemId()) > 0 && item.getViciousHammer() < 2) {
                         item.setViciousHammer((byte) (item.getViciousHammer() + 1));
                         item.setUpgradeSlots((byte) (item.getUpgradeSlots() + 1));
-                        c.getPlayer().forceReAddItem(item, MapleInventoryType.EQUIP);
+                        c.getPlayer().forceReAddItem(item, InventoryType.EQUIP);
                         c.SendPacket(CSPacket.ViciousHammer(true, item.getViciousHammer()));
                         bUsed = true;
                     } else {
@@ -1043,7 +1043,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case 5060001: { // Sealing Lock
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final InventoryType type = InventoryType.getByType((byte) iPacket.DecodeInt());
                 final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
                 // another int here, lock = 5A E5 F2 0A, 7 day = D2 30 F3 0A
                 if (item != null && item.getExpiration() == -1) {
@@ -1057,7 +1057,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case 5061000: { // Sealing Lock 7 days
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final InventoryType type = InventoryType.getByType((byte) iPacket.DecodeInt());
                 final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
                 // another int here, lock = 5A E5 F2 0A, 7 day = D2 30 F3 0A
                 if (item != null && item.getExpiration() == -1) {
@@ -1072,7 +1072,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case 5061001: { // Sealing Lock 30 days
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final InventoryType type = InventoryType.getByType((byte) iPacket.DecodeInt());
                 final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
                 // another int here, lock = 5A E5 F2 0A, 7 day = D2 30 F3 0A
                 if (item != null && item.getExpiration() == -1) {
@@ -1088,7 +1088,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case 5061002: { // Sealing Lock 90 days
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final InventoryType type = InventoryType.getByType((byte) iPacket.DecodeInt());
                 final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
                 // another int here, lock = 5A E5 F2 0A, 7 day = D2 30 F3 0A
                 if (item != null && item.getExpiration() == -1) {
@@ -1104,7 +1104,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case 5061003: { // Sealing Lock 365 days
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final InventoryType type = InventoryType.getByType((byte) iPacket.DecodeInt());
                 final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
                 // another int here, lock = 5A E5 F2 0A, 7 day = D2 30 F3 0A
                 if (item != null && item.getExpiration() == -1) {
@@ -1120,7 +1120,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case 5063000: {
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final InventoryType type = InventoryType.getByType((byte) iPacket.DecodeInt());
                 final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
                 // another int here, lock = 5A E5 F2 0A, 7 day = D2 30 F3 0A
                 if (item != null && item.getType() == ItemType.Equipment) { //equip
@@ -1134,7 +1134,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 break;
             }
             case 5064000: {
-                final MapleInventoryType type = MapleInventoryType.getByType((byte) iPacket.DecodeInt());
+                final InventoryType type = InventoryType.getByType((byte) iPacket.DecodeInt());
                 final Item item = c.getPlayer().getInventory(type).getItem((byte) iPacket.DecodeInt());
                 // another int here, lock = 5A E5 F2 0A, 7 day = D2 30 F3 0A
                 if (item != null && item.getType() == ItemType.Equipment) { //equip
@@ -1156,12 +1156,12 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
             case 5060005:
             case 5060006:
             case 5060007: {
-                Item item = c.getPlayer().getInventory(MapleInventoryType.ETC).findById(nItemID == 5060003 ? 4170023 : 4170024);
+                Item item = c.getPlayer().getInventory(InventoryType.ETC).findById(nItemID == 5060003 ? 4170023 : 4170024);
                 if (item == null || item.getQuantity() <= 0) { // hacking{
                     return;
                 }
                 if (getIncubatedItems(c, nItemID)) {
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.ETC, item.getPosition(), (short) 1, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.ETC, item.getPosition(), (short) 1, false);
                     bUsed = true;
                 }
                 break;
@@ -1526,7 +1526,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 PetFlag zz = PetFlag.getByAddId(nItemID);
                 if (zz != null && !zz.check(pet.getItem().getFlag())) {
                     pet.getItem().setFlag((short) (pet.getItem().getFlag() - zz.getValue()));
-                    c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+                    c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(InventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
                     c.SendPacket(WvsContext.enableActions());
                     c.SendPacket(CSPacket.changePetFlag(uniqueid, true, zz.getValue()));
                     bUsed = true;
@@ -1567,7 +1567,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                 Pet.PetFlag zz = Pet.PetFlag.getByDelId(nItemID);
                 if (zz != null && zz.check(pet.getItem().getFlag())) {
                     pet.getItem().setFlag((short) (pet.getItem().getFlag() - zz.getValue()));
-                    c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
+                    c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(InventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
                     // c.getPlayer().forceUpdateItem(pet.getItem());
                     c.SendPacket(WvsContext.enableActions());
                     c.SendPacket(CSPacket.changePetFlag(uniqueid, false, zz.getValue()));
@@ -1618,9 +1618,9 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                     }
                 }
                 String nName = iPacket.DecodeString();
-                if (MapleCharacterUtil.canChangePetName(nName)) {
+                if (CharacterUtil.canChangePetName(nName)) {
                     pet.setName(nName);
-                    c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
+                    c.SendPacket(PetPacket.updatePet(pet, c.getPlayer().getInventory(InventoryType.CASH).getItem((short) (byte) pet.getItem().getPosition()), false));
                     //c.getPlayer().forceUpdateItem(pet.getItem());
                     c.SendPacket(WvsContext.enableActions());
                     c.getPlayer().getMap().broadcastPacket(CSPacket.changePetName(c.getPlayer(), nName, slo));
@@ -1634,7 +1634,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
                     break;
                 }
                 String nName = iPacket.DecodeString();
-                if (MapleCharacterUtil.canChangePetName(nName)) {
+                if (CharacterUtil.canChangePetName(nName)) {
                     c.getPlayer().getAndroid().setName(nName);
                     c.getPlayer().setAndroid(c.getPlayer().getAndroid()); //respawn it
                     bUsed = true;
@@ -1829,7 +1829,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
         }
 
         if (bUsed) {
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.CASH, nSlot, (short) 1, false, true);
+            MapleInventoryManipulator.removeFromSlot(c, InventoryType.CASH, nSlot, (short) 1, false, true);
         }
         c.SendPacket(WvsContext.enableActions());
         if (bCC) {
@@ -1846,7 +1846,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
     }
 
     private static void addMedalString(final User c, final StringBuilder sb) {
-        final Item medal = c.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -49);
+        final Item medal = c.getInventory(InventoryType.EQUIPPED).getItem((byte) -49);
         if (medal != null) { // Medal
             sb.append("<");
             sb.append(MapleItemInformationProvider.getInstance().getName(medal.getItemId()));
@@ -1855,7 +1855,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
     }
 
     private static boolean getIncubatedItems(ClientSocket c, int itemId) {
-        if (c.getPlayer().getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() < 2 || c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() < 2 || c.getPlayer().getInventory(MapleInventoryType.SETUP).getNumFreeSlot() < 2) {
+        if (c.getPlayer().getInventory(InventoryType.EQUIP).getNumFreeSlot() < 2 || c.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() < 2 || c.getPlayer().getInventory(InventoryType.SETUP).getNumFreeSlot() < 2) {
             c.getPlayer().dropMessage(5, "Please make room in your inventory.");
             return false;
         }
@@ -1870,7 +1870,7 @@ public class UseCashItemHandler implements ProcessPacket<ClientSocket> {
         c.SendPacket(WvsContext.getPeanutResult(id1, (short) 1, id2, (short) 1, itemId));
         MapleInventoryManipulator.addById(c, id1, (short) 1, ii.getName(itemId) + " on " + LocalDateTime.now());
         MapleInventoryManipulator.addById(c, id2, (short) 1, ii.getName(itemId) + " on " + LocalDateTime.now());
-        c.SendPacket(CField.NPCPacket.getNPCTalk(1090000, NPCChatType.OK, "You have obtained the following items:\r\n#i" + id1 + "##z" + id1 + "#\r\n#i" + id2 + "##z" + id2 + "#", NPCChatByType.NPC_Cancellable));
+        c.SendPacket(CField.NPCPacket.getNPCTalk(1090000, NPCChatType.OK, "You have obtained the following items:\r\n#i" + id1 + "##z" + id1 + "#\r\n#i" + id2 + "##z" + id2 + "#", NPCInterfaceType.NPC_Cancellable));
         return true;
     }
 }

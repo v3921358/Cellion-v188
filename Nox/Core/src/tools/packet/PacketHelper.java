@@ -1,8 +1,13 @@
 package tools.packet;
 
+import enums.WeaponType;
+import enums.InventoryType;
+import enums.ItemType;
+import enums.EquipStat;
+import enums.EquipSpecialStat;
 import client.*;
 import client.inventory.*;
-import static client.inventory.EquipSlotType.Longcoat;
+import static enums.EquipSlotType.Longcoat;
 import constants.GameConstants;
 import constants.ItemConstants;
 import constants.ServerConstants;
@@ -168,11 +173,11 @@ public class PacketHelper {
     }
 
     public static void addCoolDownInfo(OutPacket oPacket, User chr) {
-        List<MapleCoolDownValueHolder> cd = chr.getCooldowns();
+        List<CoolDownValueHolder> cd = chr.getCooldowns();
         long cTime = System.currentTimeMillis();
 
         oPacket.EncodeShort(cd.size());
-        for (MapleCoolDownValueHolder cooling : cd) {
+        for (CoolDownValueHolder cooling : cd) {
             oPacket.EncodeInt(cooling.skillId);
             oPacket.EncodeInt((int) ((cooling.length + cooling.startTime) - cTime) / 1000);
         }
@@ -274,11 +279,11 @@ public class PacketHelper {
         oPacket.EncodeByte(0); // byte, int, byte, 6 ints, string
         oPacket.EncodeByte(0); // byte, int, byte, 6 ints, string
 
-        oPacket.EncodeByte(chr.getInventory(MapleInventoryType.EQUIP).getSlotLimit());
-        oPacket.EncodeByte(chr.getInventory(MapleInventoryType.USE).getSlotLimit());
-        oPacket.EncodeByte(chr.getInventory(MapleInventoryType.SETUP).getSlotLimit());
-        oPacket.EncodeByte(chr.getInventory(MapleInventoryType.ETC).getSlotLimit());
-        oPacket.EncodeByte(chr.getInventory(MapleInventoryType.CASH).getSlotLimit());
+        oPacket.EncodeByte(chr.getInventory(InventoryType.EQUIP).getSlotLimit());
+        oPacket.EncodeByte(chr.getInventory(InventoryType.USE).getSlotLimit());
+        oPacket.EncodeByte(chr.getInventory(InventoryType.SETUP).getSlotLimit());
+        oPacket.EncodeByte(chr.getInventory(InventoryType.ETC).getSlotLimit());
+        oPacket.EncodeByte(chr.getInventory(InventoryType.CASH).getSlotLimit());
 
         QuestStatus stat = chr.getQuestNoAdd(Quest.getInstance(GameConstants.PENDANT_SLOT));
         if ((stat != null) && (stat.getCustomData() != null) && (Long.parseLong(stat.getCustomData()) > System.currentTimeMillis())) {
@@ -289,7 +294,7 @@ public class PacketHelper {
 
         oPacket.EncodeByte(0); // new in v148
 
-        MapleInventory iv = chr.getInventory(MapleInventoryType.EQUIPPED);
+        MapleInventory iv = chr.getInventory(InventoryType.EQUIPPED);
         final List<Item> equipped = iv.newList();
         Collections.sort(equipped);
         for (Item item : equipped) { // Equip Inv
@@ -308,7 +313,7 @@ public class PacketHelper {
         }
         oPacket.EncodeShort(0);
 
-        iv = chr.getInventory(MapleInventoryType.EQUIP); // Equip Item Inv
+        iv = chr.getInventory(InventoryType.EQUIP); // Equip Item Inv
         for (Item item : iv.list()) {
             addItemPosition(oPacket, item, false, false);
             addItemInfo(oPacket, item, chr);
@@ -408,21 +413,21 @@ public class PacketHelper {
         oPacket.EncodeShort(0);
         oPacket.EncodeShort(0);
 
-        iv = chr.getInventory(MapleInventoryType.USE);
+        iv = chr.getInventory(InventoryType.USE);
         for (Item item : iv.list()) {
             addItemPosition(oPacket, item, false, false);
             addItemInfo(oPacket, item, chr);
         }
         oPacket.EncodeByte(0); // End of USE Inventory
 
-        iv = chr.getInventory(MapleInventoryType.SETUP);
+        iv = chr.getInventory(InventoryType.SETUP);
         for (Item item : iv.list()) {
             addItemPosition(oPacket, item, false, false);
             addItemInfo(oPacket, item, chr);
         }
         oPacket.EncodeByte(0); // End of Setup Inventory
 
-        iv = chr.getInventory(MapleInventoryType.ETC);
+        iv = chr.getInventory(InventoryType.ETC);
         for (Item item : iv.list()) {
             if (item.getPosition() < 100) {
                 addItemPosition(oPacket, item, false, false);
@@ -431,7 +436,7 @@ public class PacketHelper {
         }
         oPacket.EncodeByte(0); // End of ETC Inventory
 
-        iv = chr.getInventory(MapleInventoryType.CASH);
+        iv = chr.getInventory(InventoryType.CASH);
         for (Item item : iv.list()) {
             addItemPosition(oPacket, item, false, false);
             addItemInfo(oPacket, item, chr);
@@ -521,10 +526,10 @@ public class PacketHelper {
         // Professions
         oPacket.EncodeShort(chr.getFatigue());
         oPacket.EncodeInt(GameConstants.getTimeAsInt());
-        for (MapleTrait.MapleTraitType t : MapleTrait.MapleTraitType.values()) {
+        for (Trait.MapleTraitType t : Trait.MapleTraitType.values()) {
             oPacket.EncodeInt(chr.getTrait(t).getTotalExp());
         }
-        for (MapleTrait.MapleTraitType t : MapleTrait.MapleTraitType.values()) {
+        for (Trait.MapleTraitType t : Trait.MapleTraitType.values()) {
             oPacket.EncodeShort(0);
         }
         oPacket.EncodeByte(0);
@@ -630,7 +635,7 @@ public class PacketHelper {
 
         for (Entry<Short, Integer> entry : myEquip.entrySet()) {
             int weapon = entry.getValue();
-            if (GameConstants.getWeaponType(weapon) == (second ? MapleWeaponType.LAZULI : MapleWeaponType.LAPIS)) {
+            if (GameConstants.getWeaponType(weapon) == (second ? WeaponType.LAZULI : WeaponType.LAPIS)) {
                 continue;
             }
             oPacket.EncodeByte(entry.getKey());
@@ -1306,7 +1311,7 @@ public class PacketHelper {
     }
 
     public static void addCoreAura(OutPacket oPacket, User chr) {
-        MapleCoreAura aura = chr.getCoreAura();
+        CoreAura aura = chr.getCoreAura();
         oPacket.EncodeInt(aura.getId()); // never changes
         oPacket.EncodeInt(chr.getId());
         int level = chr.getSkillLevel(80001151) > 0 ? chr.getSkillLevel(80001151) : chr.getSkillLevel(1214);

@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.ModifyInventory;
 import constants.GameConstants;
 import constants.InventoryConstants;

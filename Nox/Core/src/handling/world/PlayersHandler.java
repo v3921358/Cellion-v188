@@ -12,13 +12,13 @@ import java.util.TimeZone;
 import client.ClientSocket;
 import client.QuestStatus;
 import client.QuestStatus.QuestState;
-import client.MapleReward;
-import client.Stat;
+import client.Rewards;
+import enums.Stat;
 import client.SkillFactory;
 import client.anticheat.ReportType;
 import client.inventory.Equip;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.MapleRing;
 import constants.GameConstants;
 import provider.MapleData;
@@ -37,7 +37,7 @@ import server.events.MapleEventType;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import server.maps.SummonMovementType;
+import enums.SummonMovementType;
 import server.maps.objects.User;
 import server.maps.objects.Door;
 import server.maps.objects.Mist;
@@ -140,7 +140,7 @@ public class PlayersHandler {
         final int itemId = iPacket.DecodeInt();
         final String target = iPacket.DecodeString();
 
-        final Item toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
+        final Item toUse = c.getPlayer().getInventory(InventoryType.USE).getItem(slot);
 
         if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId) {
             c.SendPacket(WvsContext.enableActions());
@@ -152,7 +152,7 @@ public class PlayersHandler {
                 if (search_chr != null) {
                     MapleItemInformationProvider.getInstance().getItemEffect(2210023).applyTo(search_chr);
                     search_chr.dropMessage(6, chr.getName() + " has played a prank on you!");
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
                 }
                 break;
         }
@@ -365,7 +365,7 @@ public class PlayersHandler {
                         }
                         MapleInventoryManipulator.addbyItem(chr.getClient(), eq);
 
-                        MapleInventoryManipulator.removeById(chr.getClient(), MapleInventoryType.USE, chr.getMarriageItemId(), 1, false, false);
+                        MapleInventoryManipulator.removeById(chr.getClient(), InventoryType.USE, chr.getMarriageItemId(), 1, false, false);
 
                         chr.getClient().SendPacket(WvsContext.sendEngagement((byte) 0x10, newItemId, chr, c.getPlayer()));
                         chr.setMarriageId(c.getPlayer().getId());
@@ -387,9 +387,9 @@ public class PlayersHandler {
             case 3:
                 //drop, only works for ETC
                 final int itemId = iPacket.DecodeInt();
-                final MapleInventoryType type = GameConstants.getInventoryType(itemId);
+                final InventoryType type = GameConstants.getInventoryType(itemId);
                 final Item item = c.getPlayer().getInventory(type).findById(itemId);
-                if (item != null && type == MapleInventoryType.ETC && itemId / 10000 == 421) {
+                if (item != null && type == InventoryType.ETC && itemId / 10000 == 421) {
                     MapleInventoryManipulator.drop(c, type, item.getPosition(), item.getQuantity());
                 }
                 break;
@@ -401,12 +401,12 @@ public class PlayersHandler {
     public static void Solomon(final InPacket iPacket, final ClientSocket c) {
         c.SendPacket(WvsContext.enableActions());
         c.getPlayer().updateTick(iPacket.DecodeInt());
-        Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(iPacket.DecodeShort());
+        Item item = c.getPlayer().getInventory(InventoryType.USE).getItem(iPacket.DecodeShort());
         if (item == null || item.getItemId() != iPacket.DecodeInt() || item.getQuantity() <= 0 || c.getPlayer().getGachExp() > 0 || c.getPlayer().getLevel() > 50 || MapleItemInformationProvider.getInstance().getItemEffect(item.getItemId()).getEXP() <= 0) {
             return;
         }
         c.getPlayer().setGachExp(c.getPlayer().getGachExp() + MapleItemInformationProvider.getInstance().getItemEffect(item.getItemId()).getEXP());
-        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, item.getPosition(), (short) 1, false);
+        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, item.getPosition(), (short) 1, false);
         //c.getPlayer().updateSingleStat(MapleStat.GachaponEXP, c.getPlayer().getGachExp());
     }
 
@@ -458,9 +458,9 @@ public class PlayersHandler {
             c.SendPacket(WvsContext.enableActions());
             return;
         }
-        final int use = c.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot();
-        final int setup = c.getPlayer().getInventory(MapleInventoryType.SETUP).getNumFreeSlot();
-        final int etc = c.getPlayer().getInventory(MapleInventoryType.ETC).getNumFreeSlot();
+        final int use = c.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot();
+        final int setup = c.getPlayer().getInventory(InventoryType.SETUP).getNumFreeSlot();
+        final int etc = c.getPlayer().getInventory(InventoryType.ETC).getNumFreeSlot();
         if (use < 1 || setup < 1 || etc < 1) {
             c.SendPacket(WvsContext.getSilentCrusadeMsg((byte) 2));
             c.SendPacket(WvsContext.enableActions());
@@ -542,7 +542,7 @@ public class PlayersHandler {
                 return;
             }
             if (MapleInventoryManipulator.checkSpace(c, itemId, quantity, "")) {
-                MapleInventoryManipulator.removeById(c, MapleInventoryType.ETC, 4310029, tokenPrice, false, false);
+                MapleInventoryManipulator.removeById(c, InventoryType.ETC, 4310029, tokenPrice, false, false);
                 if (itemId < 2000000 && potentialGrade > 0) {
                     Equip equip = (Equip) MapleItemInformationProvider.getInstance().getEquipById(itemId);
                     equip.setQuantity((short) 1);
@@ -612,12 +612,12 @@ public class PlayersHandler {
             final short toUseSlot = iPacket.DecodeShort();
             iPacket.DecodeShort();
             final int tokenId = iPacket.DecodeInt();
-            if (c.getPlayer().getInventory(MapleInventoryType.ETC).getItem(toUseSlot).getItemId() != tokenId) {
+            if (c.getPlayer().getInventory(InventoryType.ETC).getItem(toUseSlot).getItemId() != tokenId) {
                 c.SendPacket(WvsContext.enableActions());
                 return;
             }
             for (byte inv = 1; inv <= 5; inv++) {
-                if (c.getPlayer().getInventory(MapleInventoryType.getByType(inv)).getNumFreeSlot() < 2) {
+                if (c.getPlayer().getInventory(InventoryType.getByType(inv)).getNumFreeSlot() < 2) {
                     c.SendPacket(WvsContext.magicWheel((byte) 7, null, null, 0));
                     c.SendPacket(WvsContext.enableActions());
                     return;

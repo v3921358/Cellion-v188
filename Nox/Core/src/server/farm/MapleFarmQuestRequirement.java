@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import server.maps.objects.User;
 import server.quest.Quest;
-import server.quest.QuestRequirementType;
+import enums.QuestRequirementType;
 
 /**
  *

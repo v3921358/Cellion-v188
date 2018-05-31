@@ -7,7 +7,7 @@ import java.util.Map;
 
 import server.maps.objects.StopForceAtom;
 import client.CharacterTemporaryStat;
-import client.MapleDisease;
+import client.Disease;
 import constants.GameConstants;
 import constants.ServerConstants;
 import java.util.ArrayList;
@@ -798,7 +798,7 @@ public class BuffPacket {
         }
     }
 
-    public static OutPacket giveDebuff(MapleDisease statups, MobSkill skill) {
+    public static OutPacket giveDebuff(Disease statups, MobSkill skill) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.TemporaryStatSet.getValue());
         PacketHelper.writeSingleMask(oPacket, statups);
@@ -838,7 +838,7 @@ public class BuffPacket {
         return oPacket;
     }
 
-    public static OutPacket cancelDebuff(MapleDisease mask) {
+    public static OutPacket cancelDebuff(Disease mask) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.TemporaryStatReset.getValue());
 
@@ -954,7 +954,7 @@ public class BuffPacket {
         }
         return oPacket;
     }*/
-    public static OutPacket giveForeignDebuff(int cid, final MapleDisease statups, MobSkill skill) {
+    public static OutPacket giveForeignDebuff(int cid, final Disease statups, MobSkill skill) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.UserTemporaryStatSet.getValue());
         oPacket.EncodeInt(cid);
@@ -1003,7 +1003,7 @@ public class BuffPacket {
         return oPacket;
     }
 
-    public static OutPacket cancelForeignDebuff(int cid, MapleDisease mask) {
+    public static OutPacket cancelForeignDebuff(int cid, Disease mask) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.UserTemporaryStatReset.getValue());
         oPacket.EncodeInt(cid);

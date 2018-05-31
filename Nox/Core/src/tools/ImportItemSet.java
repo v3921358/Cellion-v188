@@ -2,7 +2,7 @@ package tools;
 
 import java.util.Scanner;
 
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import java.util.Map;
 import server.MapleItemInformationProvider;
 import server.MapleStringInformationProvider;
@@ -24,7 +24,7 @@ public class ImportItemSet {
                 final String itemName = item.getValue().getLeft();
 
                 if (itemName.startsWith(name) && !itemName.equals(name)
-                        && (MapleItemInformationProvider.getInventoryType(item.getKey()) == MapleInventoryType.EQUIP || itemName.contains("recipe"))) {
+                        && (MapleItemInformationProvider.getInventoryType(item.getKey()) == InventoryType.EQUIP || itemName.contains("recipe"))) {
                     sb.append(item.getKey()).append(" - ").append(itemName).append("\r\n");
                 }
             }

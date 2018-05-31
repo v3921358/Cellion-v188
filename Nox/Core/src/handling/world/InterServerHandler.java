@@ -4,7 +4,7 @@ import client.ClientSocket;
 import client.ClientSocket.MapleClientLoginState;
 import service.ChannelServer;
 import service.FarmServer;
-import server.maps.FieldLimitType;
+import enums.FieldLimitType;
 import server.maps.MapleMap;
 import server.maps.objects.User;
 import net.InPacket;

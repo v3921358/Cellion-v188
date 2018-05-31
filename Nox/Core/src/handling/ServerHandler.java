@@ -13,7 +13,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import service.LoginServer;
 import service.RecvPacketOpcode;
-import service.ServerMode.MapleServerMode;
+import enums.ServerMode.MapleServerMode;
 import net.InPacket;
 import tools.LogHelper;
 import tools.packet.CLogin;

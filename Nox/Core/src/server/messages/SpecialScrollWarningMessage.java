@@ -5,6 +5,7 @@
  */
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -25,7 +26,7 @@ public class SpecialScrollWarningMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.SpecialScrollWarningPopup.getType());
+        oPacket.EncodeByte(MessageOpcodesType.SpecialScrollWarningPopup.getType());
         oPacket.EncodeByte(0); // these may be slotid or something
         oPacket.EncodeShort(0);
         oPacket.EncodeShort(0);

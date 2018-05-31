@@ -1,5 +1,7 @@
 package client.inventory;
 
+import enums.ModifyInventoryOperation;
+
 /**
  *
  * @author kevin

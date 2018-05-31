@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleCharacterUtil;
+import client.CharacterUtil;
 import client.ClientSocket;
 import handling.PacketThrottleLimits;
 import handling.world.MapleMessenger;
@@ -112,8 +112,7 @@ public class MessengerHandler implements ProcessPacket<ClientSocket> {
                     final String chattext = charname + "" + text;
                     World.Messenger.messengerChat(messenger.getId(), charname, text, c.getPlayer().getName());
                     if (messenger.isMonitored() && chattext.length() > c.getPlayer().getName().length() + 3) { //name : NOT name0 or name1
-                        World.Broadcast.broadcastGMMessage(WvsContext.broadcastMsg(
-                                        6, "[GM Message] " + MapleCharacterUtil.makeMapleReadable(c.getPlayer().getName()) + "(Messenger: "
+                        World.Broadcast.broadcastGMMessage(WvsContext.broadcastMsg(6, "[GM Message] " + CharacterUtil.makeMapleReadable(c.getPlayer().getName()) + "(Messenger: "
                                         + messenger.getMemberNamesDEBUG() + ") said: " + chattext));
                     }
                 }

@@ -23,7 +23,7 @@ package handling.game;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.maps.objects.User;
 import server.quest.Quest;
 import net.InPacket;
@@ -45,7 +45,7 @@ public final class TitleEquipHandler implements ProcessPacket<ClientSocket> {
         if ((chr == null) || (chr.getMap() == null)) {
             return;
         }
-        Item toUse = chr.getInventory(MapleInventoryType.SETUP).findById(itemId);
+        Item toUse = chr.getInventory(InventoryType.SETUP).findById(itemId);
         if (toUse == null) {
             return;
         }

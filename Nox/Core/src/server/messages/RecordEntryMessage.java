@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 ;
@@ -21,7 +22,7 @@ public class RecordEntryMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.RecordEntryMessage.getType());
+        oPacket.EncodeByte(MessageOpcodesType.RecordEntryMessage.getType());
         oPacket.EncodeByte(mode);
         switch (mode) {
             case 0:

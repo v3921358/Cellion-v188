@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -20,7 +21,7 @@ public class PvpItemMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.PvpItem.getType());
+        oPacket.EncodeByte(MessageOpcodesType.PvpItem.getType());
         oPacket.EncodeString(info);
         oPacket.EncodeString(data);
     }

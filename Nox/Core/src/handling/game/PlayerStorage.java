@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import client.MapleCharacterUtil;
+import client.CharacterUtil;
 import handling.world.CharacterTransfer;
 import handling.world.CheaterData;
 import handling.world.World;
@@ -137,7 +137,7 @@ public class PlayerStorage {
                 chr = itr.next();
 
                 if (chr.getCheatTracker().getPoints() > 0) {
-                    cheaters.add(new CheaterData(chr.getCheatTracker().getPoints(), MapleCharacterUtil.makeMapleReadable(chr.getName()) + " (" + chr.getCheatTracker().getPoints() + ") " + chr.getCheatTracker().getSummary()));
+                    cheaters.add(new CheaterData(chr.getCheatTracker().getPoints(), CharacterUtil.makeMapleReadable(chr.getName()) + " (" + chr.getCheatTracker().getPoints() + ") " + chr.getCheatTracker().getSummary()));
                 }
             }
         } finally {
@@ -157,7 +157,7 @@ public class PlayerStorage {
                 chr = itr.next();
 
                 if (chr.getReportPoints() > 0) {
-                    cheaters.add(new CheaterData(chr.getReportPoints(), MapleCharacterUtil.makeMapleReadable(chr.getName()) + " (" + chr.getReportPoints() + ") " + chr.getReportSummary()));
+                    cheaters.add(new CheaterData(chr.getReportPoints(), CharacterUtil.makeMapleReadable(chr.getName()) + " (" + chr.getReportPoints() + ") " + chr.getReportSummary()));
                 }
             }
         } finally {
@@ -198,7 +198,7 @@ public class PlayerStorage {
             try {
                 final Iterator<User> itr = nameToChar.values().iterator();
                 while (itr.hasNext()) {
-                    sb.append(MapleCharacterUtil.makeMapleReadable(itr.next().getName()));
+                    sb.append(CharacterUtil.makeMapleReadable(itr.next().getName()));
                     sb.append(", ");
                 }
             } finally {
@@ -213,7 +213,7 @@ public class PlayerStorage {
                     chr = itr.next();
 
                     if (!chr.isGM()) {
-                        sb.append(MapleCharacterUtil.makeMapleReadable(chr.getName()));
+                        sb.append(CharacterUtil.makeMapleReadable(chr.getName()));
                         sb.append(", ");
                     }
                 }
@@ -234,7 +234,7 @@ public class PlayerStorage {
             while (itr.hasNext()) {
                 chr = itr.next();
 
-                sb.append(MapleCharacterUtil.makeMapleReadable(chr.getName()));
+                sb.append(CharacterUtil.makeMapleReadable(chr.getName()));
                 if (itr.hasNext()) {
                     if (bNewLine) {
                         sb.append(", \r\n");

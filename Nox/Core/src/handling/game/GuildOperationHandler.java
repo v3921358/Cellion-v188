@@ -5,7 +5,7 @@ import client.Skill;
 import client.SkillFactory;
 import handling.world.World;
 import handling.world.MapleGuild;
-import handling.world.MapleGuildResponse;
+import enums.GuildResponseType;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -127,7 +127,7 @@ public class GuildOperationHandler implements ProcessPacket<ClientSocket> {
                     c.getPlayer().dropMessage(5, "The player is currently handling an invitation.");
                     return;
                 }
-                final MapleGuildResponse mgr = MapleGuild.sendInvite(c, name);
+                final GuildResponseType mgr = MapleGuild.sendInvite(c, name);
 
                 if (mgr != null) {
                     c.SendPacket(mgr.createPacket());

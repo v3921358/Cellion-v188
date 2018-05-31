@@ -1,5 +1,6 @@
 package handling.game;
 
+import enums.Stat;
 import client.*;
 import server.maps.objects.StopForceAtom;
 import constants.GameConstants;
@@ -33,11 +34,11 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import server.StatInfo;
+import enums.StatInfo;
 import server.Timer;
-import server.life.mob.MobStat;
+import enums.MobStat;
 import server.life.mob.MobTemporaryStat;
-import server.maps.SummonMovementType;
+import enums.SummonMovementType;
 import server.maps.objects.Summon;
 import tools.packet.JobPacket.BeastTamerPacket;
 import tools.packet.BuffPacket;

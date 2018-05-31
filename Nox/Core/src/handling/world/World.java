@@ -18,17 +18,17 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import constants.*;
 import client.CharacterTemporaryStat;
 import client.ClientSocket;
-import client.MapleCoolDownValueHolder;
-import client.MapleDiseaseValueHolder;
-import client.Stat;
+import client.CoolDownValueHolder;
+import client.DiseaseValueHolder;
+import enums.Stat;
 import client.MonsterStatusEffect;
 import client.buddy.Buddy;
-import client.buddy.BuddyFlags;
+import enums.BuddyFlags;
 import client.buddy.BuddyList;
 import client.buddy.BuddyOperation;
-import client.buddy.BuddyResult;
+import enums.BuddyResult;
 import client.buddy.BuddylistEntry;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.PetDataFactory;
 import constants.WorldConstants.WorldOption;
 import constants.skills.BattleMage;
@@ -1775,7 +1775,7 @@ public class World {
         if (pPlayer.getCooldownSize() > 0) {
             List<Pair<Integer, Integer>> cooldowns = new ArrayList<>();
 
-            for (MapleCoolDownValueHolder m : pPlayer.getCooldowns()) {
+            for (CoolDownValueHolder m : pPlayer.getCooldowns()) {
                 if (m.startTime + m.length < tNow) {
                     final int skil = m.skillId;
                     pPlayer.removeCooldown(skil);
@@ -1852,7 +1852,7 @@ public class World {
         }
 
         if (pPlayer.getDiseaseSize() > 0) {
-            for (MapleDiseaseValueHolder m : pPlayer.getAllDiseases()) {
+            for (DiseaseValueHolder m : pPlayer.getAllDiseases()) {
                 if (m != null && m.startTime + m.length < tNow) {
                     pPlayer.dispelDebuff(m.disease);
                 }
@@ -1878,15 +1878,15 @@ public class World {
                 } else {
                     pet.setFullness(newFullness);
                     //chr.forceUpdateItem(pet);
-                    pPlayer.getClient().SendPacket(PetPacket.updatePet(pet, pPlayer.getInventory(MapleInventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
+                    pPlayer.getClient().SendPacket(PetPacket.updatePet(pet, pPlayer.getInventory(InventoryType.CASH).getItem((byte) pet.getItem().getPosition()), false));
                 }
             }
         }
         if (bHurt && pPlayer.isAlive()) {
-            if (pPlayer.getInventory(MapleInventoryType.EQUIPPED).findById(pPlayer.getMap().getSharedMapResources().protectItem) == null) {
+            if (pPlayer.getInventory(InventoryType.EQUIPPED).findById(pPlayer.getMap().getSharedMapResources().protectItem) == null) {
                 int hpDec = pPlayer.getMap().getSharedMapResources().decHP;
 
-                if (pPlayer.getMapId() == 749040100 && pPlayer.getInventory(MapleInventoryType.CASH).findById(5451000) == null) { //minidungeon
+                if (pPlayer.getMapId() == 749040100 && pPlayer.getInventory(InventoryType.CASH).findById(5451000) == null) { //minidungeon
                     pPlayer.addHP(-hpDec);
                 } else if (pPlayer.getMapId() != 749040100) {
                     pPlayer.addHP(-(hpDec - (pPlayer.getBuffedValue(CharacterTemporaryStat.Thaw) == null ? 0 : pPlayer.getBuffedValue(CharacterTemporaryStat.Thaw))));

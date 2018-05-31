@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
 import database.Database;
@@ -184,7 +184,7 @@ public class MonsterInformationProvider {
             while (rs.next()) {
                 itemid = rs.getInt("itemid");
                 chance = rs.getInt("chance");
-                if (GameConstants.getInventoryType(itemid) == MapleInventoryType.EQUIP) {
+                if (GameConstants.getInventoryType(itemid) == InventoryType.EQUIP) {
                     chance *= 10; //in GMS/SEA it was raised
                 }
                 if (bLoadFromFile) chance /= 3; // Lower drop chance if we're using both our drop tables.

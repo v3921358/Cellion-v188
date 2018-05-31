@@ -5,7 +5,7 @@ import client.SkillFactory;
 import java.util.ArrayList;
 import java.util.List;
 import server.StatEffect;
-import server.StatInfo;
+import enums.StatInfo;
 
 /**
  * Created on 1/3/2018.

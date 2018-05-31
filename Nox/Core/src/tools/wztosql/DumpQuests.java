@@ -11,8 +11,8 @@ import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataTool;
 import provider.wz.cache.WzDataStorage;
-import server.quest.QuestActionType;
-import server.quest.QuestRequirementType;
+import enums.QuestActionType;
+import enums.QuestRequirementType;
 import tools.Pair;
 
 public class DumpQuests {

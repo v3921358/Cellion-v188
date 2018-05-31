@@ -1,7 +1,7 @@
 package handling.game;
 
 import client.ClientSocket;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import server.MapleInventoryManipulator;
 import net.InPacket;
 import net.ProcessPacket;
@@ -29,7 +29,7 @@ public class SwitchBagHandler implements ProcessPacket<ClientSocket> {
         if (src < 100 || dst < 100) {
             return;
         }
-        MapleInventoryManipulator.move(c, MapleInventoryType.ETC, src, dst);
+        MapleInventoryManipulator.move(c, InventoryType.ETC, src, dst);
     }
 
 }

@@ -1,6 +1,6 @@
 package handling.game;
 
-import client.MapleCharacterUtil;
+import client.CharacterUtil;
 import client.ClientSocket;
 import constants.ServerConstants;
 import handling.PacketThrottleLimits;

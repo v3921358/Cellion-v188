@@ -1,6 +1,7 @@
 package server.messages;
 
-import client.Stat;
+import enums.MessageOpcodesType;
+import enums.Stat;
 import net.OutPacket;
 
 /**
@@ -22,7 +23,7 @@ public class TraitMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.Trait.getType());//MessageType
+        oPacket.EncodeByte(MessageOpcodesType.Trait.getType());//MessageType
         oPacket.EncodeLong(flag);
         if ((flag & Stat.CharismaEXP.getValue()) != 0) {
             oPacket.EncodeInt(amount);

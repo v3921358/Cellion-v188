@@ -3,11 +3,12 @@
  */
 package server.potentials;
 
+import enums.ItemPotentialTierType;
 import client.inventory.Equip;
-import client.inventory.EquipSlotType;
-import client.inventory.MapleInventoryType;
+import enums.EquipSlotType;
+import enums.InventoryType;
 import client.inventory.ModifyInventory;
-import client.inventory.ModifyInventoryOperation;
+import enums.ModifyInventoryOperation;
 import constants.InventoryConstants;
 import constants.ItemConstants;
 import constants.ServerConstants;
@@ -41,7 +42,7 @@ public class Cube extends ItemPotentialProvider {
      * @return
      */
     public static boolean OnCubeRequest(User pPlayer, Equip pEquip, int nCubeID, boolean bDisplayUI) {
-        if (pEquip == null || pPlayer.getInventory(MapleInventoryType.USE).getNumFreeSlot() < 1) {
+        if (pEquip == null || pPlayer.getInventory(InventoryType.USE).getNumFreeSlot() < 1) {
             pPlayer.completeDispose();
             return false;
         }

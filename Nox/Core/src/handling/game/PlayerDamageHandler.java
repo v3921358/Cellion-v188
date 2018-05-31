@@ -4,14 +4,14 @@ import java.awt.Point;
 
 import client.CharacterTemporaryStat;
 import client.ClientSocket;
-import client.Stat;
+import enums.Stat;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
 import client.PlayerStats;
 import client.Skill;
 import client.SkillFactory;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.skills.Xenon;
 import client.jobs.Kinesis;
@@ -209,7 +209,7 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
             if (type_ == PlayerDamageType.BumpDamage
                     && pPlayer.getJob() == 122
                     && attacker != null
-                    && pPlayer.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -10) != null
+                    && pPlayer.getInventory(InventoryType.EQUIPPED).getItem((byte) -10) != null
                     && pPlayer.getTotalSkillLevel(1220006) > 0) {
 
                 StatEffect eff = SkillFactory.getSkill(1220006).getEffect(pPlayer.getTotalSkillLevel(1220006));

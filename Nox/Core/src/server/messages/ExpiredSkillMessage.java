@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import java.util.List;
 
 import net.OutPacket;
@@ -21,7 +22,7 @@ public class ExpiredSkillMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.ExpiredSkill.getType());
+        oPacket.EncodeByte(MessageOpcodesType.ExpiredSkill.getType());
         oPacket.EncodeByte(skills.size());
         for (Integer skill : skills) {
             oPacket.EncodeInt(skill);

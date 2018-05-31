@@ -1,5 +1,6 @@
 package server.messages;
 
+import enums.MessageOpcodesType;
 import net.OutPacket;
 
 /**
@@ -19,7 +20,7 @@ public class AutoLineChangedMessage implements MessageInterface {
      */
     @Override
     public void messagePacket(OutPacket oPacket) {
-        oPacket.EncodeByte(_MessageOpcodesType.AutoLineChanged.getType());
+        oPacket.EncodeByte(MessageOpcodesType.AutoLineChanged.getType());
         oPacket.EncodeString(message);
     }
 

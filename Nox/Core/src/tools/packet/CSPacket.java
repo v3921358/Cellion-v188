@@ -1,6 +1,6 @@
 package tools.packet;
 
-import client.MapleCharacterCreationUtil;
+import client.CharacterCreationUtil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 
 import client.ClientSocket;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import static constants.ServerConstants.CS_BANNER_URL;
@@ -333,7 +333,7 @@ public class CSPacket {
             int size = 0;
             for (Item itemz : mci.getInventory()) {
                 addCashItemInfo(oPacket, itemz, c.getAccID(), 0);
-                if (InventoryConstants.isPet(itemz.getItemId()) || GameConstants.getInventoryType(itemz.getItemId()) == MapleInventoryType.EQUIP) {
+                if (InventoryConstants.isPet(itemz.getItemId()) || GameConstants.getInventoryType(itemz.getItemId()) == InventoryType.EQUIP) {
                     size++;
                 }
             }
@@ -342,7 +342,7 @@ public class CSPacket {
             oPacket.EncodeInt(0);
         }
         oPacket.EncodeShort(c.getPlayer().getStorage().getSlots());
-        oPacket.EncodeShort(MapleCharacterCreationUtil.getCharacterSlots(c.getAccID(), c.getWorld()));
+        oPacket.EncodeShort(CharacterCreationUtil.getCharacterSlots(c.getAccID(), c.getWorld()));
         oPacket.EncodeShort(0);
         oPacket.EncodeShort(c.getPlayer().getStorage().getSlots());
         return oPacket;
@@ -431,14 +431,14 @@ public class CSPacket {
         int size = 0;
         for (Entry<Integer, Item> sn : ccc.entrySet()) {
             addCashItemInfo(oPacket, sn.getValue(), accid, sn.getKey().intValue());
-            if (InventoryConstants.isPet(sn.getValue().getItemId()) || GameConstants.getInventoryType(sn.getValue().getItemId()) == MapleInventoryType.EQUIP) {
+            if (InventoryConstants.isPet(sn.getValue().getItemId()) || GameConstants.getInventoryType(sn.getValue().getItemId()) == InventoryType.EQUIP) {
                 size++;
             }
         }
         if (ccc.size() > 0) {
             oPacket.EncodeInt(size);
             for (Item itemz : ccc.values()) {
-                if (InventoryConstants.isPet(itemz.getItemId()) || GameConstants.getInventoryType(itemz.getItemId()) == MapleInventoryType.EQUIP) {
+                if (InventoryConstants.isPet(itemz.getItemId()) || GameConstants.getInventoryType(itemz.getItemId()) == InventoryType.EQUIP) {
                     PacketHelper.addItemInfo(oPacket, itemz);
                 }
             }

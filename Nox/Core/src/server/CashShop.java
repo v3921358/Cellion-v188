@@ -14,7 +14,7 @@ import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.ItemLoader;
 import client.inventory.MapleInventoryIdentifier;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import client.inventory.MapleRing;
 import constants.GameConstants;
 import constants.InventoryConstants;
@@ -34,7 +34,7 @@ public class CashShop implements Serializable {
     public CashShop(int accountId, int characterId, int jobType, Connection con) throws SQLException {
         this.accountId = accountId;
         this.characterId = characterId;
-        for (Pair<Item, MapleInventoryType> item : factory.loadItems(false, accountId, con).values()) {
+        for (Pair<Item, InventoryType> item : factory.loadItems(false, accountId, con).values()) {
             inventory.add(item.getLeft());
         }
     }
@@ -90,14 +90,14 @@ public class CashShop implements Serializable {
             uniqueid = MapleInventoryIdentifier.getInstance();
         }
         long period = cItem.getPeriod();
-        if ((period <= 0 && GameConstants.getInventoryType(cItem.getId()) != MapleInventoryType.EQUIP) || InventoryConstants.isPet(cItem.getId())) {
+        if ((period <= 0 && GameConstants.getInventoryType(cItem.getId()) != InventoryType.EQUIP) || InventoryConstants.isPet(cItem.getId())) {
             period = 90;
         }
         if (cItem.getId() >= 5000100 && cItem.getId() < 5000200) { //permanent pet
             period = 20000; //permanent time millis
         }
         Item ret;
-        if (GameConstants.getInventoryType(cItem.getId()) == MapleInventoryType.EQUIP) {
+        if (GameConstants.getInventoryType(cItem.getId()) == InventoryType.EQUIP) {
             Equip eq = (Equip) MapleItemInformationProvider.getInstance().getEquipById(cItem.getId(), uniqueid);
             if (period > 0) {
                 eq.setExpiration((long) (System.currentTimeMillis() + (long) (period * 24 * 60 * 60 * 1000)));
@@ -138,14 +138,14 @@ public class CashShop implements Serializable {
             uniqueid = MapleInventoryIdentifier.getInstance();
         }
         long period = cItem.getExpire();
-        if ((period <= 0 && GameConstants.getInventoryType(cItem.getItemId()) != MapleInventoryType.EQUIP) || InventoryConstants.isPet(cItem.getItemId())) {
+        if ((period <= 0 && GameConstants.getInventoryType(cItem.getItemId()) != InventoryType.EQUIP) || InventoryConstants.isPet(cItem.getItemId())) {
             period = 90;
         }
         if (cItem.getItemId() >= 5000100 && cItem.getItemId() < 5000200) { //permanent pet
             period = 20000; //permanent time millis
         }
         Item ret;
-        if (GameConstants.getInventoryType(cItem.getItemId()) == MapleInventoryType.EQUIP) {
+        if (GameConstants.getInventoryType(cItem.getItemId()) == InventoryType.EQUIP) {
             Equip eq = (Equip) MapleItemInformationProvider.getInstance().getEquipById(cItem.getItemId(), uniqueid);
             if (period > 0) {
                 eq.setExpiration((long) (System.currentTimeMillis() + (long) (period * 24 * 60 * 60 * 1000)));
@@ -262,7 +262,7 @@ public class CashShop implements Serializable {
     }
 
     public void save(Connection con) {
-        List<Pair<Item, MapleInventoryType>> itemsWithType = new ArrayList<>();
+        List<Pair<Item, InventoryType>> itemsWithType = new ArrayList<>();
 
         for (Item item : inventory) {
             itemsWithType.add(new Pair<>(item, GameConstants.getInventoryType(item.getItemId())));

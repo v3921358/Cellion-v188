@@ -12,7 +12,7 @@ import java.util.Map;
 import client.ClientSocket;
 import client.inventory.Item;
 import client.inventory.ItemLoader;
-import client.inventory.MapleInventoryType;
+import enums.InventoryType;
 import constants.GameConstants;
 import database.Database;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
@@ -159,9 +159,9 @@ public class PackageHandler {
     public static MaplePackageActions getItemByPID(final int packageid) {
         try (Connection con = Database.GetConnection()) {
 
-            Map<Long, Pair<Item, MapleInventoryType>> iter = ItemLoader.PACKAGE.loadItems(false, packageid, con);
+            Map<Long, Pair<Item, InventoryType>> iter = ItemLoader.PACKAGE.loadItems(false, packageid, con);
             if (iter != null && iter.size() > 0) {
-                for (Pair<Item, MapleInventoryType> i : iter.values()) {
+                for (Pair<Item, InventoryType> i : iter.values()) {
                     return new MaplePackageActions(packageid, i.getLeft());
                 }
             }

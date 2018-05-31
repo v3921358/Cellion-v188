@@ -1,6 +1,6 @@
 package handling.login;
 
-import client.MapleCharacterCreationUtil;
+import client.CharacterCreationUtil;
 import client.ClientSocket;
 import net.InPacket;
 import tools.packet.CLogin;
@@ -19,7 +19,7 @@ public final class CheckDuplicatedIDHandler implements ProcessPacket<ClientSocke
         String name = iPacket.DecodeString();
         boolean nameUsed = true;
 
-        if (MapleCharacterCreationUtil.canCreateChar(name, c.isGm())) {
+        if (CharacterCreationUtil.canCreateChar(name, c.isGm())) {
             nameUsed = false;
         }
         if (li.isForbiddenName(name) && !c.isGm()) {
