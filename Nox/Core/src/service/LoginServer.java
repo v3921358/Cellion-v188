@@ -120,7 +120,7 @@ public class LoginServer extends Thread {
     }
 
     public final String getTrueServerName() {
-        return serverName.substring(0, serverName.length() - 2);
+        return serverName;
     }
 
     public String getEventMessage() {

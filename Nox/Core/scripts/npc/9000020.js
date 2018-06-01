@@ -25,6 +25,11 @@ function action(mode, type, selection) {
         return;
     }
 	
+	if (cm.getPlayer().getMap().getId() == 950000100) {
+		cm.warp(100000000, 0);
+		cm.dispose();
+	}
+	
 	if (bFreeMarket && cm.getPlayer().getMap().getId() != 910000000) {
 		cm.getPlayer().OnSetCubeInfo(0, 0);
 		cm.dispose();

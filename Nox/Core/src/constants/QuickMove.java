@@ -68,9 +68,7 @@ public enum QuickMove {
         LUCIA(0x100, 8, false, 0, 10, ""),
         CONOR(0x200, 9, false, 0, 10, ""),
         PART_TIME(0x400, 10, false, 9010041, 30, "Receive Part-Time Job reward."),
-        
-        HAIR_STYLE(0x800, 13, true, 9000123, 0, "Change your characters appears for NX."),
-        
+        HAIR_STYLE(0x800, 13, false, 9000123, 0, "Change your characters appears for NX."),
         FACE_STYLE(0x1000, 14, false, 9201252, 0, "You can get plastic surgery from Nurse Pretty.");
        
         private final int value, type, id, level;

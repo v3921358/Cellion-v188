@@ -465,9 +465,10 @@ public class CField {
         //oPacket.encode(1); // bPopupDlg
         //?
         oPacket.EncodeInt(0);
+        oPacket.EncodeByte(0);
 
         //nFieldWidth (Map Width)
-        oPacket.EncodeInt(800);
+        oPacket.EncodeInt(800); // lolhardcoded?? faggots
 
         //nFieldHeight (Map Height)
         oPacket.EncodeInt(600);
@@ -488,7 +489,7 @@ public class CField {
             oPacket.EncodeInt(0);
         } else {
 
-            //bUsingBuffProtector (Calls the revive function upon death)
+            //bResurrected (Calls the revive function upon death)
             oPacket.EncodeByte(0);
 
             /*
@@ -518,10 +519,10 @@ public class CField {
         //CWvsContext::SetWhiteFadeInOut
         oPacket.EncodeByte(0);
 
-        //pChatBlockReason
+        //bOverlapScreen
         oPacket.EncodeByte(0);
 
-        //Some Korean Event (Fame-up)
+        //paramFieldInit.ftServer
         oPacket.EncodeLong(PacketHelper.getTime(System.currentTimeMillis()));
 
         //paramFieldInit.nMobStatAdjustRate
@@ -559,6 +560,18 @@ public class CField {
             v36 = 0;
           CField::DrawStackEventGauge(v36, v34);
         }*/
+        // ur shit src forcing me to do this
+        if (bCharacterData) {
+            if (pPlayer.getMapId() / 10 == 10520011 || pPlayer.getMapId() / 10 == 10520051 || pPlayer.getMapId() / 10 == 105200519) { // is_banban_base_field
+                oPacket.EncodeBool(false); // bNotifierMessage
+                // if(bNotifierMessage) oPacket.EncodeString(sMsg2);
+            }
+        } else {
+            if (pToMap.getId() / 10 == 10520011 || pToMap.getId() / 10 == 10520051 || pToMap.getId() / 10 == 105200519) { // is_banban_base_field
+                oPacket.EncodeBool(false); // bNotifierMessage
+                // if(bNotifierMessage) oPacket.EncodeString(sMsg2);
+            }
+        }
         boolean starPlanet = false;
         oPacket.EncodeByte(0);
         if (starPlanet) {
@@ -610,12 +623,11 @@ public class CField {
 
         //CCUser::DecodeEventBestFriendInfo
         oPacket.EncodeInt(0); //dwEventBestFriendAID
+
+        oPacket.EncodeInt(-1);
+        oPacket.EncodeString(""); // SundayMaple
         oPacket.EncodeInt(0);
 
-        // Okay so there is more data to write here for certain maps such as Von Bon's boss arena. 
-        // Need to check IDA later for this, fill for now. -Mazen
-        oPacket.Fill(0, 39);
-        
         return oPacket;
     }
 
@@ -1216,7 +1228,7 @@ public class CField {
         oPacket.EncodeInt(0); //sub_15B8CB0
 
         oPacket.Fill(0, 499);
-        
+
         return oPacket;
     }
 
@@ -1876,7 +1888,7 @@ public class CField {
         PacketHelper.serializeMovementList(oPacket, chr, moves, 0);
 
         oPacket.Fill(0, 19);
-        
+
         return oPacket;
     }
 
@@ -1970,7 +1982,6 @@ public class CField {
             oPacket.encode(0);//nPassiveAttackCount
         }
          */
-        
         oPacket.EncodeShort(display);
         if (display <= 1616) {
             oPacket.EncodeByte(-1); //v30 bDragon ataack and move action?
@@ -2017,10 +2028,10 @@ public class CField {
 
             //if is_keydown_skill_rect_move_xyz : encode new position (2 shorts)
             if (Skill.isKeydownSkillRectMoveXY(skill)) {
-                oPacket.EncodeShort(0); 
-                oPacket.EncodeShort(0); 
+                oPacket.EncodeShort(0);
+                oPacket.EncodeShort(0);
             }
-            
+
             if (skill == 51121009) {
                 oPacket.EncodeByte(0); //bEncodeFixedDamage
             } else if (skill == 112110003) {
@@ -2043,9 +2054,8 @@ public class CField {
                 oPacket.EncodeBool(false); // Unknown
             }
         }
-        
+
         //oPacket.Fill(0, 29); // Please for the love of god.
-        
         return oPacket;
     }
 // </editor-fold>
@@ -2216,7 +2226,7 @@ public class CField {
         oPacket.EncodeBool(false);
         oPacket.EncodeInt(0);
         oPacket.EncodeBool(false);
-        
+
         oPacket.Fill(0, 29);
 
         return oPacket;
@@ -4094,9 +4104,9 @@ public class CField {
             oPacket.EncodeShort(0); // X (Spirit Bond?)
             oPacket.EncodeShort(0); // Y (Spirit Bond?)
             oPacket.EncodeInt(0); // SkillID?
-            
+
             oPacket.Fill(0, 29);
-            
+
             return oPacket;
         }
 

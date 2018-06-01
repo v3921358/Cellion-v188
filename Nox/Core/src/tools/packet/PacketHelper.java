@@ -260,24 +260,7 @@ public class PacketHelper {
         *&dummyBLD.nMaxLev = CInPacket::Decode4(iPacket);
         *&dummyBLD.nRemainExp64 = CInPacket::Decode8(iPacket);
          */
-        addPotionPotInfo(oPacket, chr);
-        //RED stuff:
         oPacket.EncodeInt(0);
-
-        oPacket.EncodeInt(chr.getId());
-
-        oPacket.EncodeInt(0);
-        oPacket.EncodeInt(0);
-        oPacket.EncodeInt(0);
-        oPacket.EncodeInt(0);
-        oPacket.EncodeInt(0);
-        oPacket.EncodeInt(0);
-
-        oPacket.EncodeInt(0); // if > 0, write that many ints
-
-        oPacket.EncodeByte(0); // 9 ints, 3 buffers (8)
-        oPacket.EncodeByte(0); // byte, int, byte, 6 ints, string
-        oPacket.EncodeByte(0); // byte, int, byte, 6 ints, string
 
         oPacket.EncodeByte(chr.getInventory(InventoryType.EQUIP).getSlotLimit());
         oPacket.EncodeByte(chr.getInventory(InventoryType.USE).getSlotLimit());
@@ -410,6 +393,7 @@ public class PacketHelper {
         }
         oPacket.EncodeShort(0);
         oPacket.EncodeShort(0);
+        oPacket.EncodeInt(0);
         oPacket.EncodeShort(0);
         oPacket.EncodeShort(0);
 
@@ -1045,9 +1029,6 @@ public class PacketHelper {
         if ((mask & 0x400000) != 0) {// Familiars
             oPacket.EncodeInt(0);
         }
-        if ((mask & 0x40000) != 0) {//correct
-            oPacket.EncodeShort(0); // addNewYearInfo
-        }
         if ((mask & 0x80000) != 0) {
             chr.addQuestInfoExPacket(oPacket); // QuestEx
         }
@@ -1057,6 +1038,9 @@ public class PacketHelper {
             //Should we take isZeroBetaState into account here too? or do you actually always spawn as alpha?
             //   addCharLook(oPacket, chr, false, false);
 
+        }
+        if ((mask & 0x40000) != 0) {//correct
+            oPacket.EncodeShort(0); // addNewYearInfo
         }
 
         oPacket.EncodeByte(0); // v178 new
@@ -1182,7 +1166,7 @@ public class PacketHelper {
 
         if ((mask & 0x40) != 0) {//correct
             addFarmInfo(oPacket, chr.getClient(), 0);
-            oPacket.EncodeInt(1);//v146 can be 5 tho... its 1 in v169
+            oPacket.EncodeInt(0);//v146 can be 5 tho... its 1 in v169
             oPacket.EncodeInt(0);
         }
 
@@ -1243,6 +1227,10 @@ public class PacketHelper {
                 pRecord.Encode(oPacket);
             }
         }
+        
+        if ((mask & 0x400000) != 0) {//correct
+            oPacket.EncodeInt(0);
+        }
 
         if ((mask & 0x4000000) != 0) {//correct
             oPacket.EncodeByte(0); // if this byte > 0, decode a byte, three ints and a long
@@ -1273,6 +1261,19 @@ public class PacketHelper {
             oPacket.EncodeShort(0); // if short > 0, then decode two shorts
         }
         addRedLeafInfo(oPacket, chr);//32 byte buffer, correct
+        
+        if ((mask & 0x200) != 0) {//correct
+            oPacket.EncodeBool(false); // encode avatar if true
+        }
+        
+        if ((mask & 0x80000) != 0) {//correct
+            oPacket.EncodeInt(0); // Unknown
+            oPacket.EncodeInt(0); // Unknown
+            oPacket.EncodeInt(0); // Unknown
+            oPacket.EncodeInt(0); // Unknown
+            oPacket.EncodeShort(0); // Unknown Size, encode int, int, string (13), int
+            oPacket.EncodeShort(0); // Unknown Size, encode int, int, string (13), int
+        }
     }
 
     public static int getSkillBook(final int i) {
@@ -1622,7 +1623,7 @@ public class PacketHelper {
         oPacket.EncodeInt(c.getFarm().getExp());
         oPacket.EncodeInt(c.getFarm().getAestheticPoints());
         oPacket.EncodeInt(0); //gems
-
+        oPacket.EncodeInt(0); // unknown
         oPacket.EncodeByte(gender);
         oPacket.EncodeInt(0); //farm theme
         oPacket.EncodeInt(0); // slot extension

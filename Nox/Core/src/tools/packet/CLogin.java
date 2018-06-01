@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Set;
 
 import client.ClientSocket;
-import client.PartTimeJob;
 import constants.GameConstants;
 import constants.JobConstants.LoginJob;
 import constants.ServerConstants;
 import constants.WorldConstants.WorldOption;
 import handling.login.Balloon;
 import handling.login.WorldServerBackgroundHandler;
+import java.util.ArrayList;
 import service.LoginServer;
 import service.SendPacketOpcode;
 import provider.data.HexTool;
@@ -356,11 +356,14 @@ public class CLogin {
             oPacket.EncodeString(ServerConstants.EVENT_MESSAGE);
             oPacket.EncodeByte(0); // block char creation
 
-            Set<Integer> aChannel = LoginServer.getInstance().getLoad().keySet();
+            List<Integer> aChannel = new ArrayList<>();
+            for(int nChannel : LoginServer.getInstance().getLoad().keySet()) {
+                aChannel.add(nChannel);
+            }
             oPacket.EncodeByte(aChannel.size());
             for (int nChannel : aChannel) {
                 oPacket.EncodeString(String.format("%s-%d", LoginServer.getInstance().getTrueServerName(), nChannel));
-                oPacket.EncodeInt(Math.max(2, ChannelServer.getChannelLoad().get(nChannel) * 64 / (ServerConstants.USER_LIMIT / ServerConstants.CHANNEL_COUNT)) + 3);
+                oPacket.EncodeInt(Math.max(2, ChannelServer.getChannelLoad().get(nChannel) * 64 / (ServerConstants.USER_LIMIT / ServerConstants.CHANNEL_COUNT)));
                 oPacket.EncodeByte(dwWorldID);
                 oPacket.EncodeByte(nChannel);
                 oPacket.EncodeBool(false); // bAdultChannel

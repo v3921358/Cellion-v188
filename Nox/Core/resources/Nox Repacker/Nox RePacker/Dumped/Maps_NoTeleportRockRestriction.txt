@@ -1,1792 +1,1898 @@
-![701100012] Shanghai: Yu Garden
-![701100015] Shanghai: Yu Garden
-[701101031] 
-'[749080921] Alishan: Alishan Plains 2
-&[701103020] The Bund: Jiangshi Den 2
-'[749080902] Alishan: Alishan Plains 2
-'[749080932] Alishan: Alishan Plains 2
-4[701102010] Outskirts of Shanghai: Abandoned Farms
-'[749080909] Alishan: Alishan Plains 2
-.[744000000] Maple Leaf High School: Homeroom
-5[701102000] Outskirts of Shanghai: Residential Area
-'[749080910] Alishan: Alishan Plains 3
-![701100014] Shanghai: Yu Garden
-'[749080907] Alishan: Alishan Plains 3
-'[749080918] Alishan: Alishan Plains 2
-7[701102030] Outskirts of Shanghai: Mount Song Pathway
-'[749080913] Alishan: Alishan Plains 3
-;[706051000] Wu Tien Mountain: 2,300m Up: Summit Waterfall
-'[749080908] Alishan: Alishan Plains 1
-*[783100000] Angler's Rest: Angler's Rest
-'[749080915] Alishan: Alishan Plains 2
-'[749080911] Alishan: Alishan Plains 1
-'[749080905] Alishan: Alishan Plains 1
-![701100013] Shanghai: Yu Garden
-'[749080919] Alishan: Alishan Plains 3
-2[701101020] Nanjing Road: Three-way Intersection
-2[701101010] Nanjing Road: Eastern Hotel District
-'[749080922] Alishan: Alishan Plains 3
-'[749080914] Alishan: Alishan Plains 1
-'[749080903] Alishan: Alishan Plains 3
-,[744000020] Sengoku High: Principal's Dojo
-,[749080904] Alishan: Alishan Train Station
-'[749080912] Alishan: Alishan Plains 2
-'[749080916] Alishan: Alishan Plains 3
-![701100011] Shanghai: Yu Garden
-[749080930] 
-'[749080931] Alishan: Alishan Plains 1
-$[783100001] Fishin' Hole: Tutorial
-.[701103030] The Bund: Diabolic Jiangshi Base
-&[701103010] The Bund: Jiangshi Den 1
-0[701102020] Outskirts of Shanghai: Vast Plains
-![701100000] Shanghai: Yu Garden
-&[701103000] The Bund: Riverside Path
-'[701101000] Nanjing Road: Busy Street
-'[749080917] Alishan: Alishan Plains 1
-[749080900] Alishan: Leshan
-'[749080901] Alishan: Alishan Plains 1
-'[749080906] Alishan: Alishan Plains 2
-'[749080920] Alishan: Alishan Plains 1
-'[749080933] Alishan: Alishan Plains 3
-+[701101030] Nanjing Road: Shopping Center
-![701100010] Shanghai: Yu Garden
-4[701220710] Shaolin Temple: Sutra Depository - Top
-([300000002] Altaire Camp: Tent House 2
-A[300010100] Ellin Forest: Western Region of Mossy Tree Forest 1
-E[310060200] Gelimer Research Lab: Security System Research Center 1
-/[300010410] Ellin Forest: Rocky Mountain Cave
+-[330001900] Shinsoo School Road: Sunset Lot
 0[300000010] Altaire Camp: Camp Conference Room
-:[330002619] Shinsoo International School: Athletic Field
-6[310010200] Resistance Headquarters: Training Room B
-*[300030300] Ellin Forest: Fairy Forest 2
-&[310070156] Scrapyard: Scrapyard Lot
-7[330001300] Shinsoo International School: Science Lab
-)[310070160] Scrapyard: Scrapyard Hill 5
-)[310030110] Concrete Road: Serpent Path
-B[330004100] Old Shinsoo International School Building: Classroom
-6[300020210] Ellin Forest: Mossy Tree Mushroom Forest
-$[331001300] Hideout: Training Room
-![310050600] Verne Mine: Shaft 2
-*[310040100] Dry Road: Road to the Mine 2
-<[330002614] Shinsoo International School: School Infirmary
-![310050500] Verne Mine: Shaft 1
-<[330002039] Shinsoo International School: School Infirmary
-&[310070154] Scrapyard: Scrapyard Lot
-2[300020200] Ellin Forest: Mushroom Hill Entrance
-/[310070450] Black Heaven: Black Heaven Maze 4
-:[310060110] Gelimer Research Lab: Android Research Lab 2
-3[310070400] Black Heaven: Black Heaven Junction 1
-+[310050000] Verne Mine: Power Plant Lobby
-6[310010400] Resistance Headquarters: Training Room D
-+[310020000] Concrete Road: Edelstein Park
-5[310030000] Concrete Road: Edelstein Strolling Path
-&[310070152] Scrapyard: Scrapyard Lot
-"[310040300] Dry Road: Rocky Road
-.[310050100] Verne Mine: Power Plant Security
-*[310050200] Verne Mine: Shaft Entrance 1
-0[310050520] Verne Mine: Dangerous Raccoon Nest
-:[310060120] Gelimer Research Lab: Android Research Lab 3
-'[350061000] Black Heaven Inside: Core
-.[310060300] Gelimer Research Lab: Deep Shaft
-[310070000] Scrapyard: Haven
-&[310070155] Scrapyard: Scrapyard Lot
-#[310070220] Skyline: Skyline Edge
- [310070230] Skyline: Skyline 2
-6[330002623] Shinsoo International School: Auditorium
-5[310070330] Black Heaven Decks: Black Heaven Deck 3
-7[330002608] Shinsoo International School: School Roof
-/[310070430] Black Heaven: Black Heaven Maze 3
-;[330001100] Shinsoo International School: Cygnus's Office
-E[310060220] Gelimer Research Lab: Security System Research Center 3
-C[305010100] Grand Athenaeum: Forest of Peace Beyond the Cabinet 2
+3[300010300] Ellin Forest: Mossy Tree Forest Trail
+&[310050400] Verne Mine: First Square
+B[300020000] Ellin Forest: Southern Region of Mossy Tree Forest 1
 *[300030200] Ellin Forest: Fairy Forest 1
-1[321100000] Mirror World: [Mirror World] Leafre
-+[300000011] Camp Conference Room: Library
+![310050800] Verne Mine: Shaft 4
+![310050600] Verne Mine: Shaft 2
+B[330000200] Shinsoo International School: Second Floor Classroom
 .[302000000] Grand Athenaeum: Grand Athenaeum
-7[330002038] Shinsoo International School: School Roof
+7[330000500] Shinsoo International School: School Roof
+&[302090406] Forest of Peace: Dispute
+6[330001000] Shinsoo International School: Staff Room
+*[310050300] Verne Mine: Shaft Entrance 2
+0[310050520] Verne Mine: Dangerous Raccoon Nest
+:[330000005] Shinsoo International School: Athletic Field
+<[330002039] Shinsoo International School: School Infirmary
+6[330001400] Shinsoo International School: Music Room
+3[310070470] Black Heaven: Black Heaven Junction 3
+&[310070155] Scrapyard: Scrapyard Lot
 5[300010400] Ellin Forest: Boulder Mountain Entrance
-6[302050010] Stormy Forest: Aurora Great Temple Lodge
-6[330002624] Shinsoo International School: Auditorium
-1[310060000] Gelimer Research Lab: Second Square
-@[305000000] Grand Athenaeum: Ellin Forest Beyond the Cabinet 1
-;[330002625] Shinsoo International School: Cygnus's Office
-=[330001600] Shinsoo International School: Behind the School
-%[310040200] Dry Road: Mine Entrance
+E[310060220] Gelimer Research Lab: Security System Research Center 3
+0[330001700] Shinsoo School Road: Fountain Park
+5[310070330] Black Heaven Decks: Black Heaven Deck 3
+<[330000400] Shinsoo International School: School Infirmary
+,[310030310] Concrete Road: Streetlight Row
+&[310070152] Scrapyard: Scrapyard Lot
+([300000002] Altaire Camp: Tent House 2
+$[310070200] Skyline: Upper Skyline
+C[305010000] Grand Athenaeum: Forest of Peace Beyond the Cabinet 1
+,[310000001] Edelstein: Edelstein City Hall
+/[310070460] Black Heaven: Black Heaven Maze 5
+?[300030000] Ellin Forest: Eastern Region of Mossy Tree Forest
+)[310070140] Scrapyard: Scrapyard Hill 4
+%[310040110] Dry Road: Hidden Portal
+E[310060200] Gelimer Research Lab: Security System Research Center 1
+*[310050200] Verne Mine: Shaft Entrance 1
+2[300020200] Ellin Forest: Mushroom Hill Entrance
+.[310060300] Gelimer Research Lab: Deep Shaft
+[310070800] 
+)[310070130] Scrapyard: Scrapyard Hill 3
+&[310070150] Scrapyard: Scrapyard Lot
+6[300010000] Ellin Forest: Mossy Tree Forest Entrance
+)[310070160] Scrapyard: Scrapyard Hill 5
+&[310070153] Scrapyard: Scrapyard Lot
+1[321100000] Mirror World: [Mirror World] Leafre
+6[310010200] Resistance Headquarters: Training Room B
+3[310070440] Black Heaven: Black Heaven Junction 2
+A[300010100] Ellin Forest: Western Region of Mossy Tree Forest 1
+6[330002607] Old Shinsoo School Building: School Roof
+*[300030300] Ellin Forest: Fairy Forest 2
 =[310010010] Resistance Headquarters: Training Room Entrance
- [310000004] Edelstein: Mansion
- [310070210] Skyline: Skyline 1
-6[330002627] Shinsoo International School: Auditorium
->[328000000] Mirror World: [Mirror World] Dark Temple of Time
+3[330001200] Shinsoo International School: Library
+6[330002622] Shinsoo International School: Auditorium
+3[330000010] Shinsoo International School: Hallway
+4[325000000] Mirror World: [Mirror World] Edelstein
+=[330001600] Shinsoo International School: Behind the School
+/[310070420] Black Heaven: Black Heaven Maze 2
+4[302090410] Forest of Peace: White Mage's Darkness
+6[310010400] Resistance Headquarters: Training Room D
+7[330002608] Shinsoo International School: School Roof
+![310050700] Verne Mine: Shaft 3
+4[310000010] Edelstein: Edelstein Temporary Airport
+7[330002610] Shinsoo International School: School Roof
+2[326000000] Mirror World: [Mirror World] Magatia
+7[310030200] Concrete Road: Edelstein Strolling Path 3
+*[310040100] Dry Road: Road to the Mine 2
+![310040400] Dry Road: Ore Trail
+C[305010100] Grand Athenaeum: Forest of Peace Beyond the Cabinet 2
+/[310070480] Black Heaven: Black Heaven Maze 6
 A[300010200] Ellin Forest: Western Region of Mossy Tree Forest 2
 7[310070310] Black Heaven Decks: Black Heaven Entrance
-6[330002607] Old Shinsoo School Building: School Roof
-6[330002622] Shinsoo International School: Auditorium
-2[323000000] Mirror World: [Mirror World] Henesys
-E[310060210] Gelimer Research Lab: Security System Research Center 2
-<[330000400] Shinsoo International School: School Infirmary
-A[330000300] Shinsoo International School: Thrid Floor Classroom
-C[330003000] Old Shinsoo International School Building: Front Gate
-![310040400] Dry Road: Ore Trail
-4[327000000] Mirror World: [Mirror World] Ludibrium
-7[330002618] Shinsoo International School: School Roof
-2[329000000] Mirror World: [Mirror World] Kritias
-:[330000005] Shinsoo International School: Athletic Field
-3[330000010] Shinsoo International School: Hallway
-;[330001800] Shinsoo School Road: Drizzling Strolling Path
--[330001900] Shinsoo School Road: Sunset Lot
-)[310070120] Scrapyard: Scrapyard Hill 2
-0[302090400] Forest of Peace: Great Temple Roof
-7[310030300] Concrete Road: Edelstein Strolling Path 4
-2[326000000] Mirror World: [Mirror World] Magatia
-6[310010100] Resistance Headquarters: Training Room A
-$[310070200] Skyline: Upper Skyline
-0[330001700] Shinsoo School Road: Fountain Park
-)[310070130] Scrapyard: Scrapyard Hill 3
-&[310070153] Scrapyard: Scrapyard Lot
-8[310060100] Gelimer Research Lab: Android Research Lab
-([300000000] Ellin Forest: Altaire Camp
-,[310000001] Edelstein: Edelstein City Hall
-)[310070140] Scrapyard: Scrapyard Hill 4
-B[300020100] Ellin Forest: Southern Region of Mossy Tree Forest 2
-![310050800] Verne Mine: Shaft 4
-D[330004200] Old Shinsoo International School Building: School Roof
-8[302090320] Forest of Peace: New Aurora Great Temple 2
-7[330000500] Shinsoo International School: School Roof
-@[305000100] Grand Athenaeum: Ellin Forest Beyond the Cabinet 2
-[310070800] 
-*[310040000] Dry Road: Road to the Mine 1
-%[310040110] Dry Road: Hidden Portal
-<[330002617] Shinsoo International School: School Infirmary
--[310000000] Black Wing Territory: Edelstein
-([300000001] Altaire Camp: Tent House 1
-?[300030000] Ellin Forest: Eastern Region of Mossy Tree Forest
-6[330001400] Shinsoo International School: Music Room
-7[310030100] Concrete Road: Edelstein Strolling Path 2
-&[302090406] Forest of Peace: Dispute
-/[310070460] Black Heaven: Black Heaven Maze 5
-3[310010000] Resistance Headquarters: Secret Plaza
-1[322000000] Mirror World: [Mirror World] Ariant
-3[310070440] Black Heaven: Black Heaven Junction 2
-7[324000000] Mirror World: [Mirror World] Happy Valley
-3[330001200] Shinsoo International School: Library
-5[310070320] Black Heaven Decks: Black Heaven Deck 2
-5[310070300] Black Heaven Decks: Black Heaven Deck 1
-6[310010300] Resistance Headquarters: Training Room C
-*[310050300] Verne Mine: Shaft Entrance 2
-B[330000200] Shinsoo International School: Second Floor Classroom
--[310020200] Concrete Road: Edelstein Park 3
-4[302090410] Forest of Peace: White Mage's Darkness
-,[310030310] Concrete Road: Streetlight Row
-A[330000100] Shinsoo International School: First Floor Classroom
-+[310070100] Scrapyard: Scrapyard Entrance
-&[310050400] Verne Mine: First Square
-![310050700] Verne Mine: Shaft 3
-6[330001000] Shinsoo International School: Staff Room
-7[330002610] Shinsoo International School: School Roof
-/[310070480] Black Heaven: Black Heaven Maze 6
-/[310070490] Black Heaven: Black Heaven Maze 7
--[310000003] Edelstein: Edelstein Hair Salon
-4[325000000] Mirror World: [Mirror World] Edelstein
-1[330000001] Shinsoo School Road: Uniform Tailor
-&[310070151] Scrapyard: Scrapyard Lot
+/[310070450] Black Heaven: Black Heaven Maze 4
+7[330001300] Shinsoo International School: Science Lab
+&[310070154] Scrapyard: Scrapyard Lot
+/[300010410] Ellin Forest: Rocky Mountain Cave
 )[310070110] Scrapyard: Scrapyard Hill 1
-3[330002620] Shinsoo International School: Hallway
-/[310070420] Black Heaven: Black Heaven Maze 2
-C[330004000] Old Shinsoo International School Building: Front Gate
-3[300010300] Ellin Forest: Mossy Tree Forest Trail
-3[310070470] Black Heaven: Black Heaven Junction 3
-4[310000010] Edelstein: Edelstein Temporary Airport
-&[310070150] Scrapyard: Scrapyard Lot
-7[310030200] Concrete Road: Edelstein Strolling Path 3
-([300000100] Altaire Camp: Small Forest
-C[305010000] Grand Athenaeum: Forest of Peace Beyond the Cabinet 1
-.[320000000] Subspace Crevasse: Zero's Temple
--[310020100] Concrete Road: Edelstein Park 2
-/[310070410] Black Heaven: Black Heaven Maze 1
-6[300010000] Ellin Forest: Mossy Tree Forest Entrance
-&[310050510] Verne Mine: Raccoon Nest
-8[330002036] Shinsoo International School: Waiting Room
-2[340000019] Star Planet: Luxury Goods Department
+6[302050010] Stormy Forest: Aurora Great Temple Lodge
+1[330000001] Shinsoo School Road: Uniform Tailor
+6[330002627] Shinsoo International School: Auditorium
+)[310030110] Concrete Road: Serpent Path
+;[330001800] Shinsoo School Road: Drizzling Strolling Path
+6[300020210] Ellin Forest: Mossy Tree Mushroom Forest
+&[310070156] Scrapyard: Scrapyard Lot
+;[330001100] Shinsoo International School: Cygnus's Office
 6[330002037] Shinsoo International School: Auditorium
-B[300020000] Ellin Forest: Southern Region of Mossy Tree Forest 1
-%[800000202] Zipangu: Deserted House
-)[800000101] Zipangu: Wandermush Forest 
-+[800040000] Zipangu: Outside Ninja Castle
-4[865010009] Commerci Republic: Daniella Stronghold
-,[807010000] Momijigaoka: Maple Hill Road 1
-![866000010] Arboren: Stump Town
-+[860000003] Aqua Road: West Shallow Sea 3
-+[863100006] Tynerum: Shadow Veil Forest 6
-3[865010011] Commerci Republic: The Scarlet Terror
-&[865010200] Commerci Republic: Berry
-([811000007] Momiji Hills: Momiji Hills
-%[860000022] Aqua Road: Deep Gorge 3
-1[863010000] Tynerum: Memories of the Heart Tree
-([866191000] Arboren: Eastern Outskirts
-<[800026000] Moonlight Bamboo Grove: Moonlight Bamboo Grove
-[809000201] Zipangu: Spa (F)
--[863100101] Tynerum: Cryptic Crimsonheart 2
-[867113920] 
-([800030000] Zipangu: Forest of Animals
-*[860000014] Aqua Road: East Bright Sea 3
-.[867113208] The Afterlands: Land of Warriors
-[867002305] 
-&[801000200] Zipangu: Locker Room (F)
-#[866000140] Arboren: Kobold Pit 2
-[867112790] 
-[865000004] 
-&[807000000] Momijigaoka: Momijigaoka
-*[860000011] Aqua Road: West Bright Sea 2
-,[807010100] Momijigaoka: Maple Hill Road 2
-+[863100001] Tynerum: Shadow Veil Forest 1
-([865000001] San Commerci: Trading Post
-3[865010018] Commerci Republic: The Scarlet Terror
-.[867113207] The Afterlands: Land of Warriors
-.[867113209] The Afterlands: Land of Warriors
--[863100104] Tynerum: Cryptic Crimsonheart 3
-*[801000300] Zipangu: Showa Street Market
-.[800000200] Zipangu: Cherry Blossom Forest 1
-)[807020100] Momijigaoka: Momijigahara 2
-0[863000100] Tynerum: Heart Tree Guardian Grove
-)[860000000] Aqua Road: Twisted Aquarium
-9[865000003] San Commerci: Tremier Merchant Union Office
-'[800010100] Zipangu: Hall of Mushroom
-[867002304] 
-)[800000102] Zipangu: The Wounded Forest
-3[865010017] Commerci Republic: The Scarlet Terror
-4[865010006] Commerci Republic: Daniella Stronghold
-0[800020130] Zipangu: Encounter with the Buddha
-&[801000002] Zipangu: Plastic Surgery
-3[865010012] Commerci Republic: The Scarlet Terror
-)[860000001] Aqua Road: West Shallow Sea
-+[863100005] Tynerum: Shadow Veil Forest 5
-+[860000005] Aqua Road: East Shallow Sea 2
-6[865030100] Commerci Republic: Sospetto Forest Trail
-%[860000021] Aqua Road: Deep Gorge 2
-[867002301] 
-:[865030201] Commerci Republic: Sospetto Forest Outskirts
--[860000031] Aqua Road: Dangerous Deep Sea 2
-4[865010007] Commerci Republic: Daniella Stronghold
-([865020000] Commerci Republic: Canal 1
-+[866000115] Arboren: Creepy Forest Path 2
-3[867113403] The Afterlands: Land of Contemplation
-[866000390] 
-![866000000] Arboren: Stump Town
-.[866000250] Arboren: Bitterstump Forest Path
-)[866000120] Arboren: Gloomy Forest Path
-![866193000] Arboren: Gusty Path
-3[865010014] Commerci Republic: The Scarlet Terror
-3[865010015] Commerci Republic: The Scarlet Terror
--[863100103] Tynerum: Cryptic Crimsonheart 4
-%[801030000] Zipangu: Showa Street 3
-+[863100002] Tynerum: Shadow Veil Forest 2
-![801000000] Zipangu: Showa Town
-[867111007] Henesys: Henesys
-4[865010003] Commerci Republic: Daniella Stronghold
-([867113623] Ellinia: Ellinia Outskirts
-&[800010000] Zipangu: Mushroom Forest
-*[807030000] Momijigaoka: Training Dojo 1
-[867002303] 
-)[860000004] Aqua Road: East Shallow Sea
-+[863100003] Tynerum: Shadow Veil Forest 3
-$[866000150] Arboren: Kobold Prison
-[867002309] 
-4[865010008] Commerci Republic: Daniella Stronghold
-0[867113101] The Afterlands: Land of Beginnings
-![866190000] Arboren: Stump Town
-)[807020000] Momijigaoka: Momijigahara 1
-%[801010000] Zipangu: Showa Street 1
-0[800010001] Zipangu: The Mountain of Cloud Fox
-%[801020000] Zipangu: Showa Street 2
-$[800000303] Zipangu: Creepy Bridge
-([867113621] Ellinia: Ellinia Outskirts
-'[800000301] Zipangu: Vanished Village
-4[860000040] Aqua Road: Antoinette's Reception Hall
-3[865010019] Commerci Republic: The Scarlet Terror
-;[865030200] Commerci Republic: Sospetto Forest Crossroads
-+[860000002] Aqua Road: West Shallow Sea 2
-3[811001001] Momijigaoka: Somewhere in Momijigaoka
--[863100102] Tynerum: Cryptic Crimsonheart 3
-4[865010000] Commerci Republic: Commerci West Coast
-4[865010001] Commerci Republic: Daniella Stronghold
-4[865010004] Commerci Republic: Daniella Stronghold
-4[865010005] Commerci Republic: Daniella Stronghold
-3[865010016] Commerci Republic: The Scarlet Terror
-2[802000000] Zipangu: Forest of Oblivion Entrance
-([860000010] Aqua Road: West Bright Sea
-[809000101] Zipangu: Spa (M)
-:[865000002] San Commerci: Daniella Merchant Union Office
-$[866000220] Arboren: Arboren Ferry
--[865000000] Commerci Republic: San Commerci
-;[865030000] Commerci Republic: Suspicious Forest Entrance
-*[807030100] Momijigaoka: Training Dojo 2
-$[800020101] Zipangu: Crow Forest 2
-'[800020120] Zipangu: Vanished Village
-)[866000105] Arboren: Dark Forest Road 2
-3[865010020] Commerci Republic: The Scarlet Terror
-'[811000008] Momiji Hills: Master Room
-[867002302] 
-#[860000020] Aqua Road: Deep Gorge
-1[866010676] Ellin Forest: Altaire Camp Entrance
--[860000032] Aqua Road: Dangerous Deep Sea 3
-.[867113201] The Afterlands: Land of Warriors
-([865020300] Commerci Republic: Canal 4
-+[860000030] Aqua Road: Dangerous Deep Sea
-([865020200] Commerci Republic: Canal 3
-#[866000130] Arboren: Kobold Pit 1
-![801000001] Zipangu: Hair Salon
-;[865010099] Commerci Republic: San Commerci West Entrance
-/[807040100] Momijigaoka: Momijigaoka Entrance
-'[811000013] Hieizan: Hieizan Entrance
-)[802000100] Zipangu: Forest of Oblivion
-&[801000100] Zipangu: Locker Room (M)
-*[800020200] Zipangu: A Desolate Cemetery
-3[865010013] Commerci Republic: The Scarlet Terror
--[863100100] Tynerum: Cryptic Crimsonheart 1
-4[865010010] Commerci Republic: Daniella Stronghold
-[865999999] 
-,[865010100] Commerci Republic: Berry Coast
-+[866000110] Arboren: Creepy Forest Path 1
-![866192000] Arboren: Wolf Woods
-.[800000201] Zipangu: Cherry Blossom Forest 2
-.[867113202] The Afterlands: Land of Warriors
-+[863100007] Tynerum: Shadow Veil Forest 7
-&[800000000] Zipangu: Mushroom Shrine
-&[800000100] Zipangu: Mushroom Forest
-)[866000100] Arboren: Dark Forest Road 1
-+[865000999] Commerci: San Commerci Office
-)[800020400] Zipangu: WanWan Spa of Hell
-4[865010002] Commerci Republic: Daniella Stronghold
-[867112794] 
-$[800000302] Zipangu: Hunting Lodge
-+[863100004] Tynerum: Shadow Veil Forest 4
-=[865030300] Commerci Republic: Sospetto Forest Walking Path
-,[867113301] The Afterlands: Land of Riches
-,[800020110] Zipangu: A Night in the Forest
-([860000012] Aqua Road: East Bright Sea
-.[867113203] The Afterlands: Land of Warriors
-.[867113205] The Afterlands: Land of Warriors
-.[867113206] The Afterlands: Land of Warriors
-*[807030200] Momijigaoka: Training Dojo 3
-/[867113502] The Afterlands: Land of Innocence
-3[867113402] The Afterlands: Land of Contemplation
-([865020100] Commerci Republic: Canal 2
-&[811001000] Momijigaoka: Momijigaoka
-'[800000300] Zipangu: Village Entrance
-.[800020300] Zipangu: Cemetery Full of Ghosts
-.[867113204] The Afterlands: Land of Warriors
-*[860000013] Aqua Road: East Bright Sea 2
-+[120000200] Nautilus: Mid Floor - Hallway
-0[103020300] Kerning City Subway: Line 1 Area 1
-)[100000002] Henesys: Chief Stan's House
-)[102000003] Perion: Warriors' Sanctuary
-,[130000100] Empress' Road: Knights Chamber
+7[330002038] Shinsoo International School: School Roof
+@[305000100] Grand Athenaeum: Ellin Forest Beyond the Cabinet 2
+A[330000100] Shinsoo International School: First Floor Classroom
+5[310030000] Concrete Road: Edelstein Strolling Path
+-[310020100] Concrete Road: Edelstein Park 2
+0[302090400] Forest of Peace: Great Temple Roof
+/[310070430] Black Heaven: Black Heaven Maze 3
+8[302090320] Forest of Peace: New Aurora Great Temple 2
+7[310030300] Concrete Road: Edelstein Strolling Path 4
+"[310040300] Dry Road: Rocky Road
+;[330002625] Shinsoo International School: Cygnus's Office
+[310070000] Scrapyard: Haven
+7[324000000] Mirror World: [Mirror World] Happy Valley
+([300000001] Altaire Camp: Tent House 1
+%[310040200] Dry Road: Mine Entrance
+C[330004000] Old Shinsoo International School Building: Front Gate
+B[330004100] Old Shinsoo International School Building: Classroom
+5[310070300] Black Heaven Decks: Black Heaven Deck 1
+ [310070210] Skyline: Skyline 1
+&[310070151] Scrapyard: Scrapyard Lot
+2[329000000] Mirror World: [Mirror World] Kritias
+:[310060120] Gelimer Research Lab: Android Research Lab 3
+*[310040000] Dry Road: Road to the Mine 1
+/[310070410] Black Heaven: Black Heaven Maze 1
+3[330002620] Shinsoo International School: Hallway
+6[310010100] Resistance Headquarters: Training Room A
+7[330002618] Shinsoo International School: School Roof
+1[322000000] Mirror World: [Mirror World] Ariant
+#[310070220] Skyline: Skyline Edge
+A[330000300] Shinsoo International School: Thrid Floor Classroom
+5[310070320] Black Heaven Decks: Black Heaven Deck 2
+([300000100] Altaire Camp: Small Forest
+6[310010300] Resistance Headquarters: Training Room C
+>[328000000] Mirror World: [Mirror World] Dark Temple of Time
++[310070100] Scrapyard: Scrapyard Entrance
+)[310070120] Scrapyard: Scrapyard Hill 2
+6[330002624] Shinsoo International School: Auditorium
+/[310070490] Black Heaven: Black Heaven Maze 7
+![310050500] Verne Mine: Shaft 1
+'[350061000] Black Heaven Inside: Core
+1[310060000] Gelimer Research Lab: Second Square
+.[310050100] Verne Mine: Power Plant Security
+-[310020200] Concrete Road: Edelstein Park 3
+.[320000000] Subspace Crevasse: Zero's Temple
+6[330002623] Shinsoo International School: Auditorium
+2[323000000] Mirror World: [Mirror World] Henesys
+B[300020100] Ellin Forest: Southern Region of Mossy Tree Forest 2
+<[330002617] Shinsoo International School: School Infirmary
+E[310060210] Gelimer Research Lab: Security System Research Center 2
+-[310000003] Edelstein: Edelstein Hair Salon
+D[330004200] Old Shinsoo International School Building: School Roof
+:[310060110] Gelimer Research Lab: Android Research Lab 2
++[300000011] Camp Conference Room: Library
+8[330002036] Shinsoo International School: Waiting Room
+8[310060100] Gelimer Research Lab: Android Research Lab
+$[331001300] Hideout: Training Room
+([300000000] Ellin Forest: Altaire Camp
++[310050000] Verne Mine: Power Plant Lobby
+:[330002619] Shinsoo International School: Athletic Field
+<[330002614] Shinsoo International School: School Infirmary
+@[305000000] Grand Athenaeum: Ellin Forest Beyond the Cabinet 1
+&[310050510] Verne Mine: Raccoon Nest
+-[310000000] Black Wing Territory: Edelstein
+ [310000004] Edelstein: Mansion
+ [310070230] Skyline: Skyline 2
+7[310030100] Concrete Road: Edelstein Strolling Path 2
+3[310010000] Resistance Headquarters: Secret Plaza
+3[310070400] Black Heaven: Black Heaven Junction 1
+2[340000019] Star Planet: Luxury Goods Department
+4[327000000] Mirror World: [Mirror World] Ludibrium
++[310020000] Concrete Road: Edelstein Park
+C[330003000] Old Shinsoo International School Building: Front Gate
+3[105300208] Dark World Tree: Climbing left Stem 1
+2[105300201] Dark World Tree: Winding left Stem 2
+[190000009] 
 ([100000105] Henesys: Henesys Skin-Care
-4[103020100] Kerning City Subway: Along the Railway
-;[100020401] Singing Mushroom Forest: Gentle Breeze Forest
-;[100020100] Singing Mushroom Forest: Humming Forest Trail
-([100030400] Farm Street: Farm Entrance
-5[100040000] Golem's Temple: Golem's Temple Entrance
-.[100040200] Golem's Temple: Golem's Temple 2
-.[100040400] Golem's Temple: Golem's Temple 4
-[101000000] Ellinia: Ellinia
-4[103000006] Kerning City: Kerning City Repair Shop
-'[120010100] Pasture: Way to the Beach
--[101020000] Chimney Tree: Close to the Wind
-.[101020100] Chimney Tree: Close to the Birds
-0[130010200] Empress' Road: Training Forest III
-.[105300101] Dark World Tree: Lower-left Stem
-5[102020400] North Rocky Mountain: Rugged Rocky Zone
-1[190000001] Premium Road: Breathing Sanctuary I
-;[101070200] Midsummer Night's Forest: Radiant Lake Path 2
-3[103000005] Kerning City: Kerning City Hair Salon
--[101030300] North Forest: Young Tree Forest
-3[103000100] Victoria Road: Subway Ticketing Booth
-+[101030401] North Forest: One-Eyed Lizard
-"[101050000] Fairy Forest: Elluel
- [105050400] Dungeon: Dark Cave
-)[106030501] Viking Airship: Ship Deck 2
-3[101050032] Fairy Forest: Elven Training Ground 2
-$[101000003] Ellinia: Magic Library
-*[101050100] Fairy Forest: Dark Cave Path
-,[197010000] Premium Road: Windy Terrace II
-([105040304] Dungeon: Sleepy Dungeon IV
-1[140000011] Snow Island: Rien Library 2nd Floor
-)[101000100] Hidden Street: Lania's Home
-[101060000] 
-![105010000] Swamp: Silent Swamp
-;[101070300] Midsummer Night's Forest: Radiant Lake Path 3
-/[140020000] Snow Island: Snow-covered Field 1
--[190000000] Premium Road: Another Sanctuary
-3[102020100] North Rocky Mountain: Dusty Wind Hill
-+[195010000] Premium Road: Evil Eye's Cave
-2[103000202] Kerning City Subway: Line 2 <Area 3>
-)[103030300] Swamp Region: Unseen Danger
-3[106030102] Mushroom Castle: Castle Rear Entrance
-[190000007] 
-5[105300203] Dark World Tree: Winding Stem Crossroad
-)[102000001] Perion: Perion Weapon Store
-*[102000002] Perion: Perion General Store
-*[103040304] Kerning Square: Perfume Shop
-2[100000201] Henesys: Bowman Instructional School
-3[104000003] Lith Harbor: Lith Harbor Weapon Store
-[190000008] 
-&[120030500] Florina Beach: Warm Sand
-4[105300210] Dark World Tree: Climbing right Stem 1
-&[120000301] Nautilus: Generator Room
-6[102040000] Excavation Site: Initial Excavation Area
-3[101050033] Fairy Forest: Elven Training Ground 3
-'[140020300] Snow Island: Penguin Port
-0[130000200] Empress' Road: Crossroads of Ereve
-4[104000002] Lith Harbor: Lith Harbor General Store
-5[105300100] Dark World Tree: Path to the Lower Stem
-1[103000002] Kerning City: Kerning City Pharmacy
-([102030200] Burnt Land: Armor Pig Land
-7[103000007] Kerning City: Kerning City Night Market  
-9[102020000] North Rocky Mountain: Perion Northern Ridge
-[199999996] 
-$[105020100] Drake Cave: Cave Cliff
-,[101050400] Fairy Forest: Flowery Forest 3
-/[140020200] Snow Island: Snow-covered Field 3
-3[101010102] Victoria Road: The Tree That Grew III
-<[103010100] Construction Site: Abandoned Construction Site
-'[120041400] Gold Beach: Shallow Sea 2
-([120041700] Gold Beach: Gentle Waves 2
-0[103020320] Kerning City Subway: Line 1 Area 3
-0[103020420] Kerning City Subway: Line 2 Area 3
-$[106030700] Viking Airship: Galley
-:[100020301] Singing Mushroom Forest: Blue Mushmom Forest
-'[130000210] Empress' Road: Sky Ferry 
-/[140010111] Snow Island: Palace of the Master
-.[192000000] Premium Road: Dry Rocky Mountain
-+[106030000] Mushroom Castle: Banquet Hall
-.[101020403] East Forest: Where the Sun Rises
-0[103020200] Kerning City Subway: Transfer Area
-/[140010110] Snow Island: Palace of the Master
-A[103050400] Victoria Road: The Secret Garden Underground Prison
-0[101020402] East Forest: Where the Birds Chirp
-)[100000104] Henesys: Henesys Hair Salon
-&[104000000] Lith Harbor: Lith Harbor
-+[120040000] Gold Beach: Gold Beach Resort
-0[103020310] Kerning City Subway: Line 1 Area 2
-'[120041500] Gold Beach: Shallow Sea 3
-*[103000004] Kerning City: Naora Hospital
-'[104010200] Port Road: Forest Trail 2
-'[102030100] Burnt Land: Wild Pig Land
-*[106030600] Viking Airship: Storage Deck
- [105010100] Swamp: Humid Swamp
-+[197000000] Premium Road: Windy Terrace I
-#[100000003] Henesys: Rina's House
-,[105010301] Dark Cave: Ant Tunnel Square 2
-+[105100101] Balrog Temple: Tristan's Tomb
-$[101000010] Ellinia: Magic Library
-,[101020405] East Forest: Where Trees Dance
-&[102000005] Perion: Hall of Warriors
-;[101070100] Midsummer Night's Forest: Radiant Lake Path 1
-0[103030000] Swamp Region: The Swamp of Despair
-![105040300] Dungeon: Sleepywood
-.[105300300] Dark World Tree: Upper-left Stem
-+[103000008] Kerning City: Hall of Thieves
-,[101000002] Ellinia: Ellinia General Store
-%[120000105] Nautilus: Training Room
-/[105300302] Dark World Tree: Upper-right Stem
-*[102030400] Burnt Land: Ash-Covered Land
-0[106020600] Mushroom Castle: Outer Castle Wall
-,[101020200] Chimney Tree: Close to the Sky
-,[106030401] Mushroom Castle: Castle Wall 2
-,[140010210] Hidden Street: Field of Wolves
-1[101030500] North Forest: Where the Forest Ends
-,[120000102] Nautilus: Lord Jonathan's Room
-+[196000000] Premium Road: The Chilly Hill
-2[102020300] North Rocky Mountain: Big Rocky Road
-+[140010200] Snow Island: Dangerous Forest
-*[130010120] Empress' Road: Tiru's Forest
-9[102040100] Excavation Site: Excavation Completion Area
-#[105020400] Drake Cave: Cave Exit
-&[100010001] Henesys: Suspicious Hill
-([103000000] Kerning City: Kerning City
-6[130000110] Empress' Road: Knights Chamber 2nd Floor
-[199999997] 
-.[100000103] Henesys: Henesys Plastic Surgery
-4[106030301] Mushroom Castle: On the Castle Walls 2
-'[106021800] Mushroom Castle: Dead End
-([120041800] Gold Beach: Hardwave Beach
-=[100020400] Singing Mushroom Forest: Blue Mushroom Forest 2
-3[105300207] Dark World Tree: Climbing left Stem 2
 *[102040500] Excavation Site: Closed Area
-'[102050000] Victoria Road: Sunset Sky
-9[101072600] Ellinel Fairy Academy: Third Floor: Library
-%[100000204] Henesys: Hall of Bowmen
-0[106030201] Mushroom Castle: Castle Corridor 2
-1[104010000] Port Road: Right Around Lith Harbor
-3[102010100] South Rocky Mountain: Rocky Wasteland
-+[103030200] Swamp Region: Dangerous Croco
-7[130020000] Empress' Road: Entrance to the Drill Hall
-#[105020200] Drake Cave: Cold Wind
+/[140020000] Snow Island: Snow-covered Field 1
+*[103040304] Kerning Square: Perfume Shop
+0[106020900] Mushroom Castle: West Castle Tower
+.[100040400] Golem's Temple: Golem's Temple 4
+.[105300101] Dark World Tree: Lower-left Stem
+0[103020410] Kerning City Subway: Line 2 Area 2
+,[101030200] North Forest: North Forest Lot
+3[101050033] Fairy Forest: Elven Training Ground 3
+3[103041147] Kerning Tower: 5F Cosmetics Shops <3>
 &[100030300] Farm Street: Farm Center
-2[104000001] Lith Harbor: Lith Harbor Armor Store
-,[101050200] Fairy Forest: Flowery Forest 1
-4[102040200] Excavation Site: Relic Excavation Camp
+-[100030310] Farm Street: Large Forest Trail
+3[103041140] Kerning Tower: 5F Cosmetics Shops <1>
++[100000101] Henesys: Henesys Weapon Store
+&[101020401] East Forest: Windy Place
+5[103041107] Kerning Tower: B1 Electronics Store <3>
+[102000000] Perion: Perion
+([101000005] Ellinia: Hall of Magicians
+&[103041004] Kerning Tower: Penthouse
+'[140020300] Snow Island: Penguin Port
+%[120000104] Nautilus: Training Room
+'[104010200] Port Road: Forest Trail 2
+/[101020400] East Forest: Magician Association
+0[103020200] Kerning City Subway: Transfer Area
+.[101020100] Chimney Tree: Close to the Birds
+/[101000101] Hidden Street: Lania's Front Yard
+.[100040200] Golem's Temple: Golem's Temple 2
+'[120010100] Pasture: Way to the Beach
+,[140010210] Hidden Street: Field of Wolves
 ,[103030101] Swamp Region: Hut in the Swamp
-'[120000101] Nautilus: Navigation Room
-,[120040300] Gold Beach: Beachgrass Dunes 3
-3[105300102] Dark World Tree: Lower Stem Crossroad
+1[101020404] East Forest: Where the Forest Sings
+3[103040000] Kerning Square : Kerning Square Lobby
+;[100020100] Singing Mushroom Forest: Humming Forest Trail
+-[101030201] North Forest: Tree Trunk Nest 2
+2[103041160] Kerning Square: Kerning Square Lobby
+([101000004] Ellinia: Hall of Magicians
+'[101050010] Fairy Forest: King's Seat
+ [105010100] Swamp: Humid Swamp
+.[100040300] Golem's Temple: Golem's Temple 3
+,[196010000] Premium Road: The Chilly Cliff
+,[101050200] Fairy Forest: Flowery Forest 1
+*[130010010] Empress' Road: Tino's Forest
+0[103020320] Kerning City Subway: Line 1 Area 3
++[140010200] Snow Island: Dangerous Forest
+)[103030300] Swamp Region: Unseen Danger
+;[101070200] Midsummer Night's Forest: Radiant Lake Path 2
+*[180000105] Hidden Street: Colossal Root
+4[106030302] Mushroom Castle: On the Castle Walls 3
+([100000203] Henesys: Henesys Game Park
+5[105300203] Dark World Tree: Winding Stem Crossroad
+:[101072000] Ellinel Fairy Academy: Ellinel Academy Lobby
+.[102040501] Excavation Site: Military Camp 3
+9[102010000] South Rocky Mountain: Perion Southern Ridge
+/[141000000] Riena Strait: Glacial Observatory
+-[101030101] North Forest: Tree Trunk Nest 1
+[199999996] 
 %[120000400] Beach: Ribbon Pig Beach
-.[102040301] Excavation Site: Military Camp 1
-/[104020100] Port Road: Victoria Tree Platform
-,[120040200] Gold Beach: Beachgrass Dunes 2
-1[100020000] Singing Mushroom Forest: Spore Hill
-6[130000120] Empress' Road: Knights Chamber 3rd Floor
-'[140000001] Snow Island: Lilin's Home
-,[105300000] Dark World Tree: Deserted Camp
-&[102030300] Burnt Land: Burning Heat
-4[103020020] Kerning Square: Kerning Square Station
+>[103041120] Kerning Tower: 3F Arts & Entertainment Shops <1>
+;[101072300] Ellinel Fairy Academy: Second Floor: Corridor
+0[130010200] Empress' Road: Training Forest III
+)[102000001] Perion: Perion Weapon Store
+&[100010001] Henesys: Suspicious Hill
+![120000103] Nautilus: Cafeteria
+*[102000002] Perion: Perion General Store
+/[140020200] Snow Island: Snow-covered Field 3
+3[102020200] North Rocky Mountain: Mini Rocky Road
+1[190000001] Premium Road: Breathing Sanctuary I
+.[102020500] North Rocky Mountain: Gusty Peak
+,[101050400] Fairy Forest: Flowery Forest 3
+3[105300204] Dark World Tree: Winding right Stem 1
+0[103041139] Kerning Tower: 4F Music Shops <4>
+*[102030400] Burnt Land: Ash-Covered Land
+2[104000001] Lith Harbor: Lith Harbor Armor Store
+4[102040200] Excavation Site: Relic Excavation Camp
+3[105300102] Dark World Tree: Lower Stem Crossroad
+,[101020405] East Forest: Where Trees Dance
+([102030200] Burnt Land: Armor Pig Land
+.[102040401] Excavation Site: Military Camp 2
+.[102040600] Excavation Site: Prohibited Area
+4[106021402] Mushroom Castle: The Last Castle Tower
+-[106030502] Viking Airship: Up In the Sails
+5[103041100] Kerning Tower: B1 Electronics Store <1>
+,[106030400] Mushroom Castle: Castle Wall 1
+/[140010111] Snow Island: Palace of the Master
+6[193000000] Premium Road: Kerning City Internet Cafe
+0[195030000] Premium Road: Cargo Hunting Ground
+/[103041135] Kerning Tower: 4F Music Shops <2>
+9[103020000] Kerning City Subway: Subway Ticketing Booth
+([103041117] Kerning Tower: 2F Cafe <3>
+'[120041500] Gold Beach: Shallow Sea 3
+)[105090300] Dungeon: Drake's Meal Table
+$[101000003] Ellinia: Magic Library
+#[105020400] Drake Cave: Cave Exit
+0[103020310] Kerning City Subway: Line 1 Area 2
+)[105030000] Cursed Temple: Another Door
+9[102020000] North Rocky Mountain: Perion Northern Ridge
+([102030000] Burnt Land: Wild Boar Land
++[196000000] Premium Road: The Chilly Hill
+2[105300200] Dark World Tree: Winding left Stem 3
+0[103030100] Swamp Region: Wild Crocodile Swamp
+&[101030000] North Forest: Giant Tree
+/[140020100] Snow Island: Snow-covered Field 2
+([103041110] Kerning Tower: 2F Cafe <1>
+/[105300302] Dark World Tree: Upper-right Stem
+#[103000003] Kerning City: Hideout
+#[100000004] Henesys: Closet House
+,[101020200] Chimney Tree: Close to the Sky
+0[103020420] Kerning City Subway: Line 2 Area 3
+1[140000011] Snow Island: Rien Library 2nd Floor
+[101060000] 
+5[102020400] North Rocky Mountain: Rugged Rocky Zone
+-[130000101] Empress's Road: Knights Chamber
+=[100020400] Singing Mushroom Forest: Blue Mushroom Forest 2
+/[101020407] East Forest: Where the Sky Smiles
+3[103000100] Victoria Road: Subway Ticketing Booth
+2[190000002] Premium Road: Breathing Sanctuary II
+-[100030200] Farm Street: Small Forest Trail
+.[106030100] Mushroom Castle: Castle Entrance
 '[104010100] Port Road: Forest Trail 1
-3[105300206] Dark World Tree: Winding right Stem 3
+0[101020406] East Forest: Where the Soil Sleeps
+;[100020401] Singing Mushroom Forest: Gentle Breeze Forest
+3[103041145] Kerning Tower: 5F Cosmetics Shops <2>
+&[104000000] Lith Harbor: Lith Harbor
+![105010000] Swamp: Silent Swamp
+1[104010000] Port Road: Right Around Lith Harbor
+)[104020110] Port Road: Station to Orbis
+)[104020120] Port Road: Station to Ereve
+-[104020130] Port Road: Station to Edelstein
+'[140000001] Snow Island: Lilin's Home
+)[100000002] Henesys: Chief Stan's House
+2[102020300] North Rocky Mountain: Big Rocky Road
+[100030000] 
+#[105020200] Drake Cave: Cold Wind
+4[101040320] Cursed Forest: Forest of Evil Energy 2
+,[120040100] Gold Beach: Beachgrass Dunes 1
+2[103000105] Kerning City Subway: Line 1 <Area 4>
+([105040304] Dungeon: Sleepy Dungeon IV
+>[103041127] Kerning Tower: 3F Arts & Entertainment Shops <3>
+5[103041105] Kerning Tower: B1 Electronics Store <2>
+-[190000000] Premium Road: Another Sanctuary
+.[192000000] Premium Road: Dry Rocky Mountain
+[199999997] 
+,[100000102] Henesys: Henesys General Store
+7[103000007] Kerning City: Kerning City Night Market  
+'[105200000] Root Abyss: Colossal Root
++[103041001] Kerning Tower: Blake's Office
+4[106020000] Mushroom Castle: Mushroom Forest Field
+6[130000120] Empress' Road: Knights Chamber 3rd Floor
+)[102000003] Perion: Warriors' Sanctuary
+5[100040000] Golem's Temple: Golem's Temple Entrance
+#[100000001] Henesys: Maya's House
+0[103020400] Kerning City Subway: Line 2 Area 1
+'[120000201] Nautilus: Conference Room
+5[103010000] Construction Site: Caution Falling Down
+/[103041155] Kerning Tower: 6F Hair Salons <2>
+2[101050030] Fairy Forest: Elven Training Grounds
+/[130010100] Empress' Road: Training Forest II
+%[105020300] Drake Cave: Chilly Cave
+&[102030300] Burnt Land: Burning Heat
+.[130010000] Empress' Road: Training Forest I
 8[100020200] Singing Mushroom Forest: Windflower Forest
+*[130010120] Empress' Road: Tiru's Forest
+,[101050300] Fairy Forest: Flowery Forest 2
++[106030000] Mushroom Castle: Banquet Hall
+0[103041159] Kerning Tower: 6F Hair Salons <4>
+,[120040200] Gold Beach: Beachgrass Dunes 2
++[103000009] Kerning City: Hall of Thieves
+/[103041130] Kerning Tower: 4F Music Shops <1>
+[100000000] Henesys: Henesys
+*[103000004] Kerning City: Naora Hospital
+#[100000200] Henesys: Henesys Park
+0[103030000] Swamp Region: The Swamp of Despair
+4[101010000] Way to the Forest: Shining Forest Path
+,[101030100] North Forest: Green Tree Trunk
+5[102040400] Excavation Site: Excavation Danger Zone
+#[100000003] Henesys: Rina's House
+*[104020000] Port Road: Six Path Crossway
+'[120000000] Nautilus: Nautilus Harbor
+4[103041165] Kerning Square: 7th & 8th Floor Area D
+%[100000100] Henesys: Henesys Market
+,[105010300] Dark Cave: Ant Tunnel Square 1
++[197000000] Premium Road: Windy Terrace I
+'[102050000] Victoria Road: Sunset Sky
+.[195000000] Premium Road: Dangerous Ant-Hole
+>[103041125] Kerning Tower: 3F Arts & Entertainment Shops <2>
+.[120041200] Gold Beach: Gold Beach Seaside 3
+'[120041300] Gold Beach: Shallow Sea 1
+&[105020000] Drake Cave: Sunless Area
+4[103020100] Kerning City Subway: Along the Railway
+1[101030500] North Forest: Where the Forest Ends
+[120042000] 
+4[104000002] Lith Harbor: Lith Harbor General Store
+*[104000004] Lith Harbor: Tru's Info Shop
+1[100020000] Singing Mushroom Forest: Spore Hill
+1[140000010] Snow Island: Rien Library 1st Floor
+3[101050031] Fairy Forest: Elven Training Ground 1
+*[101050100] Fairy Forest: Dark Cave Path
+,[120040300] Gold Beach: Beachgrass Dunes 3
+*[130010110] Empress' Road: Timu's Forest
++[101000001] Ellinia: Ellinia Weapon Store
+([103041115] Kerning Tower: 2F Cafe <2>
+0[106020600] Mushroom Castle: Outer Castle Wall
+A[103050400] Victoria Road: The Secret Garden Underground Prison
++[140020110] Snow Island: Dangerous Forest
+.[100000103] Henesys: Henesys Plastic Surgery
+'[130000210] Empress' Road: Sky Ferry 
+;[100020300] Singing Mushroom Forest: Blue Mushroom Forest
+%[100000204] Henesys: Hall of Bowmen
+"[120010000] Pasture: Pig Pasture
+'[102030100] Burnt Land: Wild Pig Land
+,[105010301] Dark Cave: Ant Tunnel Square 2
++[140010000] Snow Island: Dangerous Forest
+([100030400] Farm Street: Farm Entrance
+/[105300103] Dark World Tree: Lower-right Stem
+2[105300202] Dark World Tree: Winding left Stem 1
+,[105300000] Dark World Tree: Deserted Camp
+3[105300205] Dark World Tree: Winding right Stem 2
+3[105300206] Dark World Tree: Winding right Stem 3
+5[105300209] Dark World Tree: Path to the Upper Stem
+"[101050000] Fairy Forest: Elluel
+4[105300211] Dark World Tree: Climbing right Stem 2
+.[105300300] Dark World Tree: Upper-left Stem
+,[130000100] Empress' Road: Knights Chamber
+&[140030000] Snow Island: Mirror Cave
+'[120000101] Nautilus: Navigation Room
+[190000008] 
+1[192000001] Premium Road: Dry Rocky Mountain II
+[140000000] Snow Island: Rien
+-[101030300] North Forest: Young Tree Forest
++[140010100] Snow Island: Dangerous Forest
+4[103020020] Kerning Square: Kerning Square Station
++[120040000] Gold Beach: Gold Beach Resort
+3[102020100] North Rocky Mountain: Dusty Wind Hill
+)[103041119] Kerning Tower: 2F Cafe <4>
+@[103000001] Kerning City: Kerning City Self-Defence Item Store
+&[120020300] Beach: Blue Ribbon Beach
+.[120041000] Gold Beach: Gold Beach Seaside 1
+*[106030600] Viking Airship: Storage Deck
+?[103041129] Kerning Tower: 3F Arts & Entertainment Shops <4>
+![105040300] Dungeon: Sleepywood
+)[106030501] Viking Airship: Ship Deck 2
+&[120030500] Florina Beach: Warm Sand
+$[106030700] Viking Airship: Galley
+&[106030701] Viking Airship: Gun Deck
+%[100000205] Henesys: Hall of Bowmen
+![130090000] Empress Road: Ereve
+$[105020100] Drake Cave: Cave Cliff
+1[103000002] Kerning City: Kerning City Pharmacy
+*[105000010] Sleepywood: Sleepywood Hotel
+0[130000200] Empress' Road: Crossroads of Ereve
+3[101050032] Fairy Forest: Elven Training Ground 2
+;[101070100] Midsummer Night's Forest: Radiant Lake Path 1
+3[106030101] Mushroom Castle: Castle Rear Entrance
+4[103000006] Kerning City: Kerning City Repair Shop
+$[105000000] Sleepywood: Sleepywood
+;[101070300] Midsummer Night's Forest: Radiant Lake Path 3
+3[103000005] Kerning City: Kerning City Hair Salon
+/[103041150] Kerning Tower: 6F Hair Salons <1>
+[199999998] 
+,[106030401] Mushroom Castle: Castle Wall 2
+)[103041000] Kerning Tower: Ground Floor
+)[100000104] Henesys: Henesys Hair Salon
+)[130010020] Empress' Road: Tiv's Forest
+6[102040000] Excavation Site: Initial Excavation Area
+2[103000202] Kerning City Subway: Line 2 <Area 3>
+([103000000] Kerning City: Kerning City
++[105100101] Balrog Temple: Tristan's Tomb
+&[102000005] Perion: Hall of Warriors
+8[101010100] Way to the Forest: Where the Forest Starts
++[101030401] North Forest: One-Eyed Lizard
+7[130020000] Empress' Road: Entrance to the Drill Hall
+&[102000004] Perion: Hall of Warriors
+,[120000102] Nautilus: Lord Jonathan's Room
+0[101020402] East Forest: Where the Birds Chirp
+3[105300301] Dark World Tree: Upper Stem Crossroad
+[101000000] Ellinia: Ellinia
+4[106030300] Mushroom Castle: On the Castle Walls 1
+.[100040100] Golem's Temple: Golem's Temple 1
+/[103041157] Kerning Tower: 6F Hair Salons <3>
+4[103041149] Kerning Tower: 5F Cosmetics Shops <4>
+.[120000300] Nautilus: Bottom Floor - Hallway
+%[103030400] Swamp Region: Deep Mire
+4[106030301] Mushroom Castle: On the Castle Walls 2
+.[102040301] Excavation Site: Military Camp 1
+-[191000000] Premium Road: The Monkey Forest
+)[106030500] Viking Airship: Ship Deck 1
+4[105300210] Dark World Tree: Climbing right Stem 1
+%[120000105] Nautilus: Training Room
+&[120000301] Nautilus: Generator Room
+,[106020403] Mushroom Castle: Shadow Cliffs
+3[106021201] Mushroom Castle: Central Castle Tower
++[195010000] Premium Road: Evil Eye's Cave
 *[100010100] Henesys: Dreamy Forest Trail
 ;[102040300] Excavation Site: Excavation Intermission Area
-3[106030101] Mushroom Castle: Castle Rear Entrance
-3[105300205] Dark World Tree: Winding right Stem 2
-/[100030320] Farm Street: Large Forest Trail 2
-3[101050031] Fairy Forest: Elven Training Ground 1
-/[101020407] East Forest: Where the Sky Smiles
-.[195020000] Premium Road: The Lightless Cave
-'[120041300] Gold Beach: Shallow Sea 1
-[190000009] 
-%[105020300] Drake Cave: Chilly Cave
-[100000000] Henesys: Henesys
-,[101030200] North Forest: North Forest Lot
-9[103020000] Kerning City Subway: Subway Ticketing Booth
-5[102040400] Excavation Site: Excavation Danger Zone
-*[105000010] Sleepywood: Sleepywood Hotel
-1[101020404] East Forest: Where the Forest Sings
-8[101010100] Way to the Forest: Where the Forest Starts
-,[101020300] Chimney Tree: Chimney Tree Top
-([191000001] Premium Road: Tree Dungeon
-[100030000] 
-,[105010300] Dark Cave: Ant Tunnel Square 1
-/[105300103] Dark World Tree: Lower-right Stem
-2[105300200] Dark World Tree: Winding left Stem 3
-2[105300201] Dark World Tree: Winding left Stem 2
-,[106030402] Mushroom Castle: Castle Wall 3
-3[105300208] Dark World Tree: Climbing left Stem 1
-6[193000000] Premium Road: Kerning City Internet Cafe
-4[101010000] Way to the Forest: Shining Forest Path
-,[106020403] Mushroom Castle: Shadow Cliffs
-0[106020900] Mushroom Castle: West Castle Tower
-0[103020400] Kerning City Subway: Line 2 Area 1
-4[106021402] Mushroom Castle: The Last Castle Tower
-.[106030100] Mushroom Castle: Castle Entrance
-&[105020000] Drake Cave: Sunless Area
-.[102020500] North Rocky Mountain: Gusty Peak
-2[101050030] Fairy Forest: Elven Training Grounds
-.[102040401] Excavation Site: Military Camp 2
-0[106030200] Mushroom Castle: Castle Corridor 1
--[104020130] Port Road: Station to Edelstein
-%[103030400] Swamp Region: Deep Mire
-3[105300204] Dark World Tree: Winding right Stem 1
-0[195030000] Premium Road: Cargo Hunting Ground
-,[101071100] Ellinel Lake: Above the Lake 2
-*[101050020] Fairy Forest: Fairy Fountain
-,[100000102] Henesys: Henesys General Store
-.[195000000] Premium Road: Dangerous Ant-Hole
-([102030000] Burnt Land: Wild Boar Land
-4[101040310] Cursed Forest: Forest of Evil Energy 1
-,[101030100] North Forest: Green Tree Trunk
-%[100000100] Henesys: Henesys Market
-/[130010100] Empress' Road: Training Forest II
-#[103000003] Kerning City: Hideout
-+[140010100] Snow Island: Dangerous Forest
-4[106030302] Mushroom Castle: On the Castle Walls 3
-4[101040320] Cursed Forest: Forest of Evil Energy 2
-&[120020300] Beach: Blue Ribbon Beach
-/[130010220] Empress' Road: Kiridu's Hatchery 
-![130090000] Empress Road: Ereve
-9[102010000] South Rocky Mountain: Perion Southern Ridge
--[130000101] Empress's Road: Knights Chamber
-,[196010000] Premium Road: The Chilly Cliff
-&[102000004] Perion: Hall of Warriors
--[191000000] Premium Road: The Monkey Forest
+3[104000003] Lith Harbor: Lith Harbor Weapon Store
 .[120041100] Gold Beach: Gold Beach Seaside 2
-'[105200000] Root Abyss: Colossal Root
-0[101020406] East Forest: Where the Soil Sleeps
-[199999998] 
-;[100020300] Singing Mushroom Forest: Blue Mushroom Forest
-&[106030701] Viking Airship: Gun Deck
-#[100000004] Henesys: Closet House
-,[130010210] Empress' Road: Tiguru's Forest
-![120000103] Nautilus: Cafeteria
-3[106021201] Mushroom Castle: Central Castle Tower
-.[130010000] Empress' Road: Training Forest I
-/[101020400] East Forest: Magician Association
-,[101050300] Fairy Forest: Flowery Forest 2
-&[101030000] North Forest: Giant Tree
-%[120000104] Nautilus: Training Room
-*[104000004] Lith Harbor: Tru's Info Shop
-'[120000000] Nautilus: Nautilus Harbor
- [120000100] Nautilus: Nautilus
-.[102040501] Excavation Site: Military Camp 3
-([101000005] Ellinia: Hall of Magicians
-'[120000201] Nautilus: Conference Room
-4[106030300] Mushroom Castle: On the Castle Walls 1
-.[120000300] Nautilus: Bottom Floor - Hallway
-"[120010000] Pasture: Pig Pasture
-,[106030400] Mushroom Castle: Castle Wall 1
-#[100000200] Henesys: Henesys Park
-.[120041000] Gold Beach: Gold Beach Seaside 1
-)[104020110] Port Road: Station to Orbis
-.[120041200] Gold Beach: Gold Beach Seaside 3
-([100000203] Henesys: Henesys Game Park
-)[104020120] Port Road: Station to Ereve
-'[101050010] Fairy Forest: King's Seat
-&[101020401] East Forest: Windy Place
-.[102040600] Excavation Site: Prohibited Area
-+[101000001] Ellinia: Ellinia Weapon Store
-#[100000001] Henesys: Maya's House
-*[130010110] Empress' Road: Timu's Forest
-2[105300202] Dark World Tree: Winding left Stem 1
-)[105030000] Cursed Temple: Another Door
+:[100020301] Singing Mushroom Forest: Blue Mushmom Forest
+'[120041400] Gold Beach: Shallow Sea 2
++[103030200] Swamp Region: Dangerous Croco
+.[101020403] East Forest: Where the Sun Rises
 "[130000000] Empress' Road: Ereve
-3[103040000] Kerning Square : Kerning Square Lobby
-3[102020200] North Rocky Mountain: Mini Rocky Road
-0[103030100] Swamp Region: Wild Crocodile Swamp
-)[106030500] Viking Airship: Ship Deck 1
-([101000004] Ellinia: Hall of Magicians
-+[140010000] Snow Island: Dangerous Forest
--[100030200] Farm Street: Small Forest Trail
-5[105300209] Dark World Tree: Path to the Upper Stem
-)[130010020] Empress' Road: Tiv's Forest
-;[101072300] Ellinel Fairy Academy: Second Floor: Corridor
-/[140020100] Snow Island: Snow-covered Field 2
+/[103041003] Kerning Tower: Sky Garden Terrace
+/[100030320] Farm Street: Large Forest Trail 2
+-[101020000] Chimney Tree: Close to the Wind
+,[130010210] Empress' Road: Tiguru's Forest
+/[130010220] Empress' Road: Kiridu's Hatchery 
+4[103041167] Kerning Square: 7th & 8th Floor Area B
 &[100030102] Utah's House: Front Yard
-*[130010010] Empress' Road: Tino's Forest
-/[141000000] Riena Strait: Glacial Observatory
-*[101040300] Cursed Forest: Polluted Tree
-$[105000000] Sleepywood: Sleepywood
-[140000000] Snow Island: Rien
-[120042000] 
-*[120041600] Gold Beach: Softwave Beach 1
-&[140030000] Snow Island: Mirror Cave
-,[120040100] Gold Beach: Beachgrass Dunes 1
-*[180000105] Hidden Street: Colossal Root
-5[103010000] Construction Site: Caution Falling Down
-.[100040300] Golem's Temple: Golem's Temple 3
-4[106020000] Mushroom Castle: Mushroom Forest Field
--[100030310] Farm Street: Large Forest Trail
-.[100040100] Golem's Temple: Golem's Temple 1
-[102000000] Perion: Perion
-%[100000205] Henesys: Hall of Bowmen
-@[103000001] Kerning City: Kerning City Self-Defence Item Store
--[101030201] North Forest: Tree Trunk Nest 2
-[199999995] 
-+[103000009] Kerning City: Hall of Thieves
-1[140000010] Snow Island: Rien Library 1st Floor
-/[101000101] Hidden Street: Lania's Front Yard
-+[140020110] Snow Island: Dangerous Forest
-*[104020000] Port Road: Six Path Crossway
--[106030502] Viking Airship: Up In the Sails
-0[103020410] Kerning City Subway: Line 2 Area 2
-1[140000012] Snow Island: Rien Library 3rd Floor
-$[101000011] Ellinia: Magic Library
-+[100000101] Henesys: Henesys Weapon Store
-2[190000002] Premium Road: Breathing Sanctuary II
-:[101072000] Ellinel Fairy Academy: Ellinel Academy Lobby
+2[100000201] Henesys: Bowman Instructional School
+4[101040310] Cursed Forest: Forest of Evil Energy 1
 0[100010000] Henesys: The Hill North of Henesys
-)[105090300] Dungeon: Drake's Meal Table
-1[192000001] Premium Road: Dry Rocky Mountain II
-4[105300211] Dark World Tree: Climbing right Stem 2
-3[105300301] Dark World Tree: Upper Stem Crossroad
+9[101072600] Ellinel Fairy Academy: Third Floor: Library
+1[140000012] Snow Island: Rien Library 3rd Floor
+/[140010110] Snow Island: Palace of the Master
+,[101020300] Chimney Tree: Chimney Tree Top
+([120041700] Gold Beach: Gentle Waves 2
+([120041800] Gold Beach: Hardwave Beach
+ [105050400] Dungeon: Dark Cave
+([191000001] Premium Road: Tree Dungeon
+3[106030102] Mushroom Castle: Castle Rear Entrance
+*[101050020] Fairy Forest: Fairy Fountain
+/[104020100] Port Road: Victoria Tree Platform
+,[106030402] Mushroom Castle: Castle Wall 3
+'[106021800] Mushroom Castle: Dead End
+5[105300100] Dark World Tree: Path to the Lower Stem
++[103000008] Kerning City: Hall of Thieves
+3[102010100] South Rocky Mountain: Rocky Wasteland
+[190000007] 
+*[101040300] Cursed Forest: Polluted Tree
+3[101010102] Victoria Road: The Tree That Grew III
+0[106030200] Mushroom Castle: Castle Corridor 1
+/[103041137] Kerning Tower: 4F Music Shops <3>
+*[120041600] Gold Beach: Softwave Beach 1
+<[103010100] Construction Site: Abandoned Construction Site
+6[130000110] Empress' Road: Knights Chamber 2nd Floor
+,[101000002] Ellinia: Ellinia General Store
+$[180000002] Victoria Road: Ellinia
+$[101000011] Ellinia: Magic Library
+0[106030201] Mushroom Castle: Castle Corridor 2
 [120000202] Nautilus: Bedroom
--[101030101] North Forest: Tree Trunk Nest 1
-2[103000105] Kerning City Subway: Line 1 <Area 4>
-([241020150] Kritias: Northwestern Road
--[221022100] Ludibrium: Eos Tower 70th Floor
-B[261010000] Zenumist Research Institute: Lab - 1st Floor Hallway
-6[250020300] Mu Lung: Practice Field : Advanced Level
-'[260010401] Hidden Street: Rocky Hill
-$[222000001] Korean Folk Town: Pond
-)[271030320] Knight Stronghold: Armory 2
-+[270030200] Time Lane: Road to Oblivion 2
-,[200080100] Orbis: Entrance to Orbis Tower
-*[200000202] Orbis Park: Orbis Hair Salon
-0[251010101] Herb Town: 60-Year-Old Herb Garden
-3[273020300] Twilight Perion: Weathered Rocky Zone
-/[220000001] Ludibrium: Ludibrium Weapon Store
-*[200010200] Orbis: Stairway to the Sky I
-.[240040310] Hidden Street: Red Wyvern's Nest
-9[271010300] Ravaged Forest: Hill North of Henesys Ruins
-4[221021000] Ludibrium: Eos Tower 11th - 30th Floor
-"[200050000] Orbis: Cloud Park IV
-,[211000102] El Nath: El Nath General Store
-&[270010300] Time Lane: Memory Lane 3
-/[200000201] Orbis Park: Orbis Plastic Surgery
--[200080200] Orbis: Orbis Tower <20th Floor>
--[200080600] Orbis: Orbis Tower <16th Floor>
-,[221020200] Ludibrium: Eos Tower 3rd Floor
-,[200081500] Orbis: Orbis Tower <7th Floor>
-&[270010500] Time Lane: Memory Lane 5
-0[211020000] El Nath: Watch Out for Icy Path II
-$[200082200] Orbis: Orbis Tower<B1>
--[250010100] Mu Lung: Sky Forest : The Trail
-9[273040100] Twilight Perion: Forsaken Excavation Site 2
--[211060600] Lion King's Castle: Third Tower
-"[220000000] Ludibrium: Ludibrium
-9[273040200] Twilight Perion: Forsaken Excavation Site 3
-0[260010200] The Burning Sands: Cactus Desert 2
-*[220070400] Ludibrium: Forgotten Passage
-$[200050001] Orbis: Old Man's House
-%[211040400] El Nath: Sharp Cliff II
-%[241010101] Kritias: Inside the Inn
-'[230020201] Aqua Road: Two Palm Trees
-([230020300] Aqua Road: Big Fish Valley
-+[200040001] Orbis: Disposed Flower Garden
-5[211060620] Lion King's Castle: Tall Castle Walls 1
-0[260000202] Town of Ariant: Residential Area 1
-)[220010200] Ludibrium: Cloud Terrace<3>
-/[220060300] Ludibrium: Warped Path of Time<4>
-&[220050000] Ludibrium: Lost Time <1>
-0[271030202] Knight Stronghold: Hallowed Ground
-#[211040100] El Nath: Ice Valley I
-'[220011000] Ludibrium: Sky Terrace<5>
-/[230040300] Aqua Road: Dangerous Sea Gorge II
-#[240000002] Leafre: General Store
-+[273060200] Twilight Perion: Rough Canyon
-+[240040510] Leafre: Nest of a Dead Dragon
-/[240030000] Leafre: Entrance to Dragon Forest
-&[200060000] Orbis: Strolling Path II
-C[240090700] Stone Colossus Exploration Site: Colossus East Road 3
-/[224000081] Korean Folk Town: Forbidden Cliff
-&[220000307] Ludibrium: Mason's House
-/[240040401] Hidden Street: Leviathan's Canyon
-"[251010400] Herb Town: Old Swamp
-'[200010131] Orbis: Garden of Green II
-"[200020000] Orbis: Cloud Park II
-,[241020211] Kingdom Road: Forest of Pain 5
-%[211000100] El Nath: El Nath Market
-*[224000043] Korean Folk Town: Small Well
--[221022400] Ludibrium: Eos Tower 92nd Floor
--[200080400] Orbis: Orbis Tower <18th Floor>
-([211000001] El Nath: Chief's Residence
-)[200010301] Orbis: Garden of Darkness I
-#[211030000] El Nath: Cold Field I
-$[270000000] Time Lane: Three Doors
-,[200081900] Orbis: Orbis Tower <3rd Floor>
-6[223020000] Fantasy Theme World: Extreme Station <1>
-[240000000] Leafre: Leafre
-1[260000201] Town of Ariant: An Old, Empty House
-*[230020100] Aqua Road: The Seaweed Tower
-,[252020100] Golden Temple: Guardian Room 1
--[221020900] Ludibrium: Eos Tower 10th Floor
-2[222020200] Ludibrium: Helios Tower <99th Floor>
--[252020400] Golden Temple: Room of Trials 2
-/[271010200] Henesys Ruins: Henesys Ruins Park
--[221021900] Ludibrium: Eos Tower 68th Floor
-2[271030300] Knight Stronghold: Knight District 3
-.[251010401] Herb Town: Red-Nose Pirate Den 1
-6[211060610] Lion King's Castle: Short Castle Walls 2
-0[224000014] Korean Folk Town: Korean Folk Town
-2[220000100] Ludibrium: Ludibrium Ticketing Place
-/[224000097] Korean Folk Town: Forbidden Cliff
-8[261020400] Alcadno Research Institute: Lab - Area C-2
--[221021500] Ludibrium: Eos Tower 35th Floor
-$[270020000] Time Lane: Frozen Past
-A[260020000] The Burning Sands: Outside North Entrance of Ariant
-([240030101] Leafre: The Burning Forest
-)[221020701] Hidden Street: Hidden Tower
-/[241020224] Kingdom Road: Forest of Sorrows 2
-.[230040200] Aqua Road: Dangerous Sea Gorge I
-+[224000083] Korean Folk Town: Goblin Hill
-9[261010101] Zenumist Research Institute: Lab - Unit 201
-.[273060300] Twilight Perion: Warrior Grounds
-)[220010000] Ludibrium: Cloud Terrace<5>
-[200000200] Orbis: Orbis Park
-5[220020300] Ludibrium: Toy Factory <Main Process 1>
-0[224000056] Korean Folk Town: Korean Folk Town
-7[224000100] Korean Folk Town: Black Mountain Entrance
-.[260020200] Sunset Road: North Desert Road 2
-1[240020200] Leafre: The Area of Black Kentaurus
-7[220020200] Ludibrium: Toy Factory <Process 1> Zone 3
-7[220020500] Ludibrium: Toy Factory <Process 1> Zone 6
-5[220020600] Ludibrium: Toy Factory <Apparatus Room>
-*[220040200] Ludibrium: Crossroad of Time
-#[200040000] Orbis: Cloud Park III
--[220040000] Ludibrium: The Path of Time <1>
-%[230040301] Aqua Road: A Small Cave
--[240000100] Leafre: Leafre Station Entrance
-*[270020100] Time Lane: Road of Regrets 1
-*[220050100] Ludibrium: Whirlpool of Time
-/[220060000] Ludibrium: Warped Path of Time<1>
-/[220060200] Ludibrium: Warped Path of Time<3>
-4[221022200] Ludibrium: Eos Tower 71st - 90th Floor
-6[240030104] Hidden Street: The Hidden Dragon Tomb II
--[224000141] Korean Folk Town: Haunted House
-1[240040800] Hidden Street: The Restoring Memory
-![240010600] Leafre: Sky Nest II
-+[270030100] Time Lane: Road to Oblivion 1
-*[230030000] Aqua Road: Blue Seaweed Road
-*[224000042] Korean Folk Town: Small Well
-,[221020700] Ludibrium: Eos Tower 8th Floor
-"[211041500] El Nath: Dead Mine I
-,[221020800] Ludibrium: Eos Tower 9th Floor
-&[220010001] Ludibrium: Cloud Balcony
--[221021400] Ludibrium: Eos Tower 34th Floor
-&[230010100] Aqua Road: Crystal Gorge
--[221021700] Ludibrium: Eos Tower 66th Floor
--[221021800] Ludibrium: Eos Tower 67th Floor
--[241020218] Kingdom Road: Freezing Forest 2
-B[261010100] Zenumist Research Institute: Lab - 2nd Floor Hallway
--[221022700] Ludibrium: Eos Tower 95th Floor
-4[261000001] Magatia: Home of the Missing Alchemist
-0[224000057] Korean Folk Town: Korean Folk Town
--[211061000] Lion King's Castle: Fifth Tower
-#[211041800] El Nath: Dead Mine IV
--[221023100] Ludibrium: Eos Tower 99th Floor
-.[221023200] Ludibrium: Eos Tower 100th Floor
-*[230030200] Aqua Road: The Sharp Unknown
-*[221040300] Omega Sector: Kulan Field IV
-+[270030400] Time Lane: Road to Oblivion 4
-4[250020200] Mu Lung: Practice Field : Normal Level
-/[222020000] Ludibrium: Helios Tower <Library>
--[241020228] Kingdom Road: Darkness Forest 2
-/[224000065] Korean Folk Town: Forbidden Cliff
-5[220030200] Ludibrium: Toy Factory <Main Process 2>
--[220040400] Ludibrium: The Path of Time <4>
-'[200000001] Orbis: Orbis Weapon Store
-.[211041200] El Nath: Forest of Dead Trees II
--[221022000] Ludibrium: Eos Tower 69th Floor
-D[260010000] The Burning Sands: Outside the West Entrance of Ariant
--[270030610] Time Lane: Detour to Oblivion 2
-.[211040101] Hidden Street: Valley of Snowman
-4[240010500] Minar Forest: Valley of the Antelope 1
-#[200030000] Orbis: Strolling Path
-0[224000027] Korean Folk Town: Korean Folk Town
-:[211060700] Lion King's Castle: Under the Castle Walls 4
-+[224000035] Korean Folk Town: Goblin Hill
-#[211041600] El Nath: Dead Mine II
-0[224000049] Korean Folk Town: Korean Folk Town
-*[252000000] Golden Temple: Golden Temple
-*[224000041] Korean Folk Town: Small Well
-0[224000044] Korean Folk Town: Korean Folk Town
-#[240010200] Leafre: Cranky Forest
-*[224000102] Korean Folk Town: Small Well
-#[260000300] Ariant: Ariant Castle
-0[224000052] Korean Folk Town: Korean Folk Town
-+[211080100] Rose Garden: Abandoned Garden
-0[220000002] Ludibrium: Ludibrium General Store
-0[241020227] Kingdom Road: Forest of Darkness 1
--[221022900] Ludibrium: Eos Tower 97th Floor
-'[220010900] Ludibrium: Sky Terrace<4>
-/[224000066] Korean Folk Town: Forbidden Cliff
-8[261020100] Alcadno Research Institute: Lab - Area A-1
-0[251010100] Herb Town: 50-Year-Old Herb Garden
-/[230020200] Aqua Road: Sand Castle Playground
-0[224000084] Korean Folk Town: Korean Folk Town
--[211060200] Lion King's Castle: First Tower
-*[260000301] Ariant Castle: Castle Garden
-0[224000000] Korean Folk Town: Korean Folk Town
-+[200010300] Orbis: Stairway to the Sky II
-/[224000103] Korean Folk Town: Forbidden Cliff
-0[224000048] Korean Folk Town: Korean Folk Town
-/[224000112] Korean Folk Town: Tiger Forest II
-,[224000140] Korean Folk Town: Goblin Ridge
-&[270010400] Time Lane: Memory Lane 4
-#[250010500] Mu Lung: Peach Farm 1
-7[220020100] Ludibrium: Toy Factory <Process 1> Zone 2
-4[271000000] Gate to the Future: Gate to the Future
-'[240040000] Leafre: The Dragon Canyon
-5[271010500] Ravaged Forest: Six Path Crossway Ruins
-/[270010110] Time Lane: Resting Spot of Memory
--[230010201] Aqua Road: Snowy Whale's Island
-/[224000130] Korean Folk Town: Fox Ridge Flash
-$[211040200] El Nath: Ice Valley II
-"[260020500] Sunset Road: Sahel 3
-![200070000] Orbis: Cloud Park V
-2[220070200] Ludibrium: Forgotten Path of Time<3>
-,[230020101] Hidden Street: The Hidden Town
-,[221020600] Ludibrium: Eos Tower 7th Floor
-0[224000002] Korean Folk Town: Korean Folk Town
-<[240020210] Minar Forest: Battlefield of Fire and Darkness
-,[250000002] Mu Lung: Mu Lung General Store
-/[270020210] Time Lane: Resting Spot of Regret
- [240010700] Leafre: Sky Nest I
-*[270020500] Time Lane: Road of Regrets 5
-.[230030001] Hidden Street: Fish Resting Spot
-*[230010300] Aqua Road: Turban Shell Hill
-/[240040210] Hidden Street: Blue Wyvern's Nest
-'[270000100] Time Lane: Temple of Time
-)[220010300] Ludibrium: Cloud Terrace<2>
-'[222010310] Hidden Street: Moon Ridge
-,[230030100] Aqua Road: Mushroom Coral Hill
-'[220010700] Ludibrium: Sky Terrace<2>
-,[224000142] Korean Folk Town: Goblin House
-7[240020300] Leafre: Battlefield of Water and Darkness
-([200000002] Orbis: Orbis General Store
-,[220060201] Hidden Street: Unbalanced Time
-&[270010200] Time Lane: Memory Lane 2
-*[200010302] Orbis: Garden of Darkness II
-#[250010700] Mu Lung: Peach Farm 3
-![240000004] Leafre: Ito's House
-%[250000100] Mu Lung: Mu Lung Temple
-![240000006] Leafre: Pam's House
-%[211050000] El Nath: Icy Cold Field
-8[261020200] Alcadno Research Institute: Lab - Area B-1
-.[211060800] Lion King's Castle: Fourth Tower
-4[260020401] Hidden Street: The Giant of the Sunset
-0[224000054] Korean Folk Town: Korean Folk Town
-*[211080000] Rose Garden: Gardener's Spot
-3[271030500] Knight Stronghold: Knights' Chamber 1
-1[252010100] Golden Temple: Forest of Training 2
-)[229000230] Haunted Mansion: Weird Room
-/[224000068] Korean Folk Town: Forbidden Cliff
-0[273060000] Twilight Perion: Spirit Zone Limbo
-8[261020700] Alcadno Research Institute: Lab - Area A-3
-2[220070000] Ludibrium: Forgotten Path of Time<1>
-C[240090500] Stone Colossus Exploration Site: Colossus East Road 1
-7[220030100] Ludibrium: Toy Factory <Process 2> Zone 2
--[240040500] Leafre: Entrance to Dragon Nest
-0[250020000] Mu Lung: Practice Field : Beginner
-1[270030410] Time Lane: Resting Spot of Oblivion
-)[200000203] Orbis Park: Orbis Skin-Care
-:[211060100] Lion King's Castle: Under the Castle Walls 1
-4[241020206] Kingdom Road: Corrupted Magic Forest 2
-2[271030100] Knight Stronghold: Knight District 1
-9[240040511] Minar Forest: The Dragon Nest Left Behind 1
-4[241020216] Kingdom Road: Corrupted Magic Forest 1
-,[221020500] Ludibrium: Eos Tower 6th Floor
--[241020200] Kingdom Road: Northern Barracks
-/[241020225] Kingdom Road: Forest of Sorrows 1
-,[200081800] Orbis: Orbis Tower <4th Floor>
--[270030411] Time Lane: Record Keeper's Room
-0[224000024] Korean Folk Town: Korean Folk Town
-([221000000] Omega Sector: Omega Sector
-,[221020100] Ludibrium: Eos Tower 2nd Floor
--[211080300] Rose Garden: Castle Wall's Edge
-+[270030500] Time Lane: Road to Oblivion 5
-,[221020400] Ludibrium: Eos Tower 5th Floor
-+[211042000] El Nath: The Cave of Trials I
-5[260010400] The Burning Sands: The Scorching Desert
-6[223020100] Fantasy Theme World: Extreme Station <2>
-&[241020110] Kritias: Ranheim Academy
-/[241020201] Kingdom Road: Forest of Laments 5
-9[261010102] Zenumist Research Institute: Lab - Unit 202
-%[220010500] Ludibrium: Terrace Hall
-,[211040001] Hidden Street: The Crown-Flyer
-,[241020213] Kingdom Road: Forest of Pain 3
-&[211040700] El Nath: Dangerous Cliff
-&[220000304] Ludibrium: Chloe's House
--[211041100] El Nath: Forest of Dead Trees I
-1[252010300] Golden Temple: Forest of Training 4
--[211042200] El Nath: The Cave of Trials III
-0[224000046] Korean Folk Town: Korean Folk Town
-/[211010000] El Nath: Watch Out for Icy Path I
-7[220030000] Ludibrium: Toy Factory <Process 2> Zone 1
-$[200000300] Orbis: Top of the Hill
-"[240000003] Leafre: Yaku's House
-![200010000] Orbis: Cloud Park I
-0[271030203] Knight Stronghold: Hallowed Ground
-&[240010520] Minar Forest: Sky Nest 3
-4[223010000] Fantasy Theme World: Funky Station <1>
-6[223020200] Fantasy Theme World: Extreme Station <3>
-"[240000005] Leafre: Kumo's House
-,[252020200] Golden Temple: Guardian Room 2
-$[211040300] El Nath: Sharp Cliff I
-4[221021600] Ludibrium: Eos Tower 36th - 65th Floor
-9[261010002] Zenumist Research Institute: Lab - Unit 102
-1[252010200] Golden Temple: Forest of Training 3
-:[211060500] Lion King's Castle: Under the Castle Walls 3
-/[241020205] Kingdom Road: Forest of Laments 1
-0[224000045] Korean Folk Town: Korean Folk Town
-0[224000012] Korean Folk Town: Korean Folk Town
-/[224000110] Korean Folk Town: Around the Pond
-0[250010400] Mu Lung: Where the Sky Forest Ends
-C[240090100] Stone Colossus Exploration Site: Colossus West Road 1
-C[240090600] Stone Colossus Exploration Site: Colossus East Road 2
-3[271030540] Knight Stronghold: Knights' Chamber 5
-0[260010402] Hidden Street: Red Scorpion's Lair
-+[224000001] Korean Folk Town: Woodsy Well
-0[224000058] Korean Folk Town: Korean Folk Town
-$[200082300] Orbis: Orbis Tower<B2>
-&[260000000] The Burning Road: Ariant
-5[260020400] Sunset Road: The Ruins of Desert Nomads
-+[273030000] Twilight Perion: Fiery Ravine
-([240040200] Leafre: Canyon : East Road
-'[220060400] Ludibrium: Warped Passage
-[250000000] Mu Lung: Mu Lung
-"[200080000] Orbis: Cloud Park VI
-[240000110] Leafre: Station
--[221021300] Ludibrium: Eos Tower 33rd Floor
--[221023000] Ludibrium: Eos Tower 98th Floor
-/[273060100] Twilight Perion: Rough Wilderness
-[200000000] Orbis: Orbis
-+[240040521] Leafre: Dangerous Dragon Nest
-.[251010403] Herb Town: Red-Nose Pirate Den 3
--[270030630] Time Lane: Detour to Oblivion 4
-'[251010500] Herb Town: Isolated Swamp
-7[200100000] Floating Island of Chryse: Road to Chryse
-9[211040401] Hidden Street: Holy Ground at the Snowfield
-1[222020100] Ludibrium: Helios Tower <2nd Floor>
-)[230010200] Aqua Road: Red Coral Forest
-0[240020400] Leafre: The Area of Blue Kentaurus
-$[211040000] El Nath: Cold Field II
--[221021200] Ludibrium: Eos Tower 32nd Floor
-'[230000001] Aquarium: The Center Hall
-,[273030300] Twilight Perion: Gale Pleateau
-0[224000055] Korean Folk Town: Korean Folk Town
--[221022600] Ludibrium: Eos Tower 94th Floor
--[220040300] Ludibrium: The Path of Time <3>
-+[252020600] Golden Temple: Ascetic Room 2
--[221021100] Ludibrium: Eos Tower 31st Floor
-$[211040500] El Nath: Sharp Cliff 3
-0[271030205] Knight Stronghold: Hallowed Ground
-/[241020202] Kingdom Road: Forest of Laments 4
-#[241020000] Kingdom Road: Kritias
-"[241020100] Kritias: Marketplace
-%[241020101] Kritias: Inside the Inn
- [241020120] Kritias: Town Hall
-4[223010200] Fantasy Theme World: Funky Station <3>
-0[260010001] Hidden Street: Young Cactus Desert
-0[260000204] Town of Ariant: Residential Area 3
-/[241020203] Kingdom Road: Forest of Laments 3
-2[220070100] Ludibrium: Forgotten Path of Time<2>
-0[224000019] Korean Folk Town: Korean Folk Town
- [240010300] Leafre: Steep Hill
-0[223010110] Fantasy Theme World: Ghost Mansion
-1[240030102] Leafre: The Forest That Disappeared
-B[223000000] Fantasy Theme World: Fantasy Theme World <Main Gate>
-/[241020221] Kingdom Road: Forest of Sorrows 5
-/[241020222] Kingdom Road: Forest of Sorrows 4
-0[251010102] Herb Town: 80-Year-Old Herb Garden
-7[220020400] Ludibrium: Toy Factory <Process 1> Zone 5
-7[220020000] Ludibrium: Toy Factory <Process 1> Zone 1
-)[250000003] Mu Lung: Mu Lung Hair Salon
--[250010000] Mu Lung: Entrance to Sky Forest
-$[200010110] Orbis: Garden of Red I
-+[273030200] Twilight Perion: Fevered Land
-'[250010303] Mu Lung: Wild Bear Area 3
-#[250010501] Mu Lung: Foggy Forest
-,[221020300] Ludibrium: Eos Tower 4th Floor
-&[250010503] Mu Lung: Goblin Forest 1
-8[261020300] Alcadno Research Institute: Lab - Area C-1
-#[250010600] Mu Lung: Peach Farm 2
-$[241020140] Kritias: Southern Road
-*[251000100] Herb Town: Pier on the Beach
--[220000302] Ludibrium: Manager Karl's House
--[252020000] Golden Temple: Abandoned Temple
-1[251010200] Herb Town: 100-Year-Old Herb Garden
-+[200000100] Orbis: Orbis Station Entrance
-#[240000001] Leafre: Chief's House
-5[211060820] Lion King's Castle: Tall Castle Walls 2
--[260000100] Ariant: Ariant Station Platform
-9[240040512] Minar Forest: The Dragon Nest Left Behind 2
-0[224000053] Korean Folk Town: Korean Folk Town
-,[200082100] Orbis: Orbis Tower <1st Floor>
-&[220050200] Ludibrium: Lost Time <2>
-1[260020610] Sunset Road: The Desert of Serenity
-+[252020500] Golden Temple: Ascetic Room 1
-1[241020220] Kingdom Road: Southwestern Barracks
-*[224000040] Korean Folk Town: Small Well
-/[241020204] Kingdom Road: Forest of Laments 2
-?[200100800] Floating Island of Chryse: Road to the Coliseum 2
-0[224000086] Korean Folk Town: Korean Folk Town
-0[260000206] Town of Ariant: Residential Area 5
-"[230010000] Aqua Road: Ocean I.C
-2[250010304] Mu Lung: Territory of Wandering Bear
-.[251010402] Herb Town: Red-Nose Pirate Den 2
-'[250010302] Mu Lung: Wild Bear Area 2
-'[250000001] Mu Lung: Tae Sang's House
-0[273030100] Twilight Perion: Fiery Rocky Hills
-+[220000400] Ludibrium: Eos Tower Entrance
-,[271000200] Dark Ereve: Mutant Tiru Forest
-![250010300] Mu Lung: Snake Area
-1[230010001] Hidden Street: Penguin's Playground
-$[211041700] El Nath: Dead Mine III
-6[211040102] Hidden Street: Snow Soul's Resting Place
-)[222010300] Korean Folk Town: Fox Ridge
--[200080500] Orbis: Orbis Tower <17th Floor>
-0[224000025] Korean Folk Town: Korean Folk Town
--[273020000] Twilight Perion: Desolate Hills
-F[240090400] Stone Colossus Exploration Site: Colossus Dangerous Road
-&[250010502] Mu Lung: Virtuous Forest
-.[220000500] Ludibrium: Helios Tower Entrance
-,[270010000] Time Lane: Past of the Verdure
-0[224000047] Korean Folk Town: Korean Folk Town
-([260000200] Ariant: The Town of Ariant
-/[211041300] El Nath: Forest of Dead Trees III
-)[220010400] Ludibrium: Cloud Terrace<1>
-9[260010600] The Burning Sands: Tent of the Entertainers
-4[231040400] Sakura Castle: Tsukino Tower 5th Floor
-,[200081400] Orbis: Orbis Tower <8th Floor>
-([240010400] Leafre: Forest : Crossroad
-0[260010100] The Burning Sands: Cactus Desert 1
-'[220000306] Ludibrium: Empty House II
-,[241020212] Kingdom Road: Forest of Pain 4
-7[200100500] Floating Island of Chryse: Lawless Zone 2
-/[220060100] Ludibrium: Warped Path of Time<2>
-2[271030102] Knight Stronghold: Second Drill Hall
-1[241020210] Kingdom Road: Southeastern Barracks
-&[200010130] Orbis: Garden of Green I
-%[230000002] Aquarium: General Store
-,[260010301] Hidden Street: Bellamoa's Cave
-0[260010201] Hidden Street: Royal Cactus Desert
-2[260010300] The Burning Sands: White Rock Desert
-)[271030310] Knight Stronghold: Armory 1
-1[271010100] Henesys Ruins: Henesys Ruins Market
-@[260010700] The Burning Sands: Outside East Entrance of Ariant
-'[240030300] Leafre: Dragon Forest III
-[224000087] 
-/[260020620] Sunset Road: The Desert of Dreams
-0[240010900] Leafre: Minar Forest : East Border
-"[260020700] Sunset Road: Sahel 1
-/[224000061] Korean Folk Town: Forbidden Cliff
-/[224000067] Korean Folk Town: Forbidden Cliff
-9[261010003] Zenumist Research Institute: Lab - Unit 103
-4[240010510] Minar Forest: Valley of the Antelope 2
-'[220010600] Ludibrium: Sky Terrace<1>
-5[200082301] Orbis: Orbis Tower<Hughes's Laboratory>
-,[200082000] Orbis: Orbis Tower <2nd Floor>
-/[240020000] Leafre: The Area of Red Kentaurus
-8[261020500] Alcadno Research Institute: Lab - Area C-3
-.[271030600] Knight Stronghold: Hall of Honor
-6[261020401] Hidden Street: Authorized Personnel Only
-([240040100] Leafre: Canyon : Crossroad
-2[220070300] Ludibrium: Forgotten Path of Time<4>
-9[211061001] Lion King's Castle: Roof of the Fifth Tower
-8[261020600] Alcadno Research Institute: Lab - Area B-3
-7[261030000] Hidden Street: Lab - Secret Basement Path
-/[224000080] Korean Folk Town: Forbidden Cliff
-/[230010400] Aqua Road: Forked Road : West Sea
-<[200101400] Floating Island of Chryse: Inside the Coliseum
-*[230040100] Aqua Road: Deep Sea Gorge II
-0[260000205] Town of Ariant: Residential Area 4
-0[224000029] Korean Folk Town: Korean Folk Town
-'[230050000] Research Command: Veritas
-([240040300] Leafre: Canyon : West Road
-*[260010501] Hidden Street: Frilled Field
-/[224000131] Korean Folk Town: Moonlight Ridge
-)[221040400] Omega Sector: Kulan Field V
-3[222020300] Ludibrium: Helios Tower (100th Floor)
-C[240090300] Stone Colossus Exploration Site: Colossus West Road 3
-'[250010301] Mu Lung: Wild Bear Area 1
-7[224000101] Korean Folk Town: Black Mountain <Corner>
-![211000200] El Nath: Snowy Hill
-6[211060810] Lion King's Castle: Short Castle Walls 3
--[220040100] Ludibrium: The Path of Time <2>
-9[261010001] Zenumist Research Institute: Lab - Unit 101
-/[240040320] Minar Forest: Black Wyvern's Nest
--[270010111] Time Lane: Memory Keeper's Room
-&[220070201] Hidden Street: Lost Time
-7[224000121] Korean Folk Town: Black Mountain <Valley>
-.[241020208] Kingdom Road: Scorching Forest 2
-,[211042100] El Nath: The Cave of Trials II
-*[240040600] Leafre: Peak of the Big Nest
-*[270020300] Time Lane: Road of Regrets 3
-*[270020400] Time Lane: Road of Regrets 4
-3[271030530] Knight Stronghold: Knights' Chamber 4
-4[260020100] The Burning Sands: North Desert Road 1
-5[240030103] Hidden Street: The Hidden Dragon Tomb I
-3[271030520] Knight Stronghold: Knights' Chamber 3
-;[261020000] Alcadno Research Institute: Lab - Center Gate
-+[270030300] Time Lane: Road to Oblivion 3
-[211000000] El Nath: El Nath
-*[261000002] Magatia: Weapon & Armor Shop
--[270030620] Time Lane: Detour to Oblivion 3
-&[261000020] Magatia: Alcadno Society
-4[223010100] Fantasy Theme World: Funky Station <2>
-+[224000036] Korean Folk Town: Goblin Hill
-6[223030100] Fantasy Theme World: Fantasy Station <2>
-*[271010000] Henesys Ruins: Henesys Ruins
-)[271010001] Henesys Ruins: Rina's House
-*[240010501] Leafre: Forest of the Priest
-0[224000028] Korean Folk Town: Korean Folk Town
-1[271010400] Ravaged Forest: Dreamy Forest Trail
-/[224000063] Korean Folk Town: Forbidden Cliff
-4[271030000] Knight Stronghold: Stronghold Entrance
-"[240010101] Leafre: Fuzzy Forest
-1[271030101] Knight Stronghold: First Drill Hall
-0[240010100] Leafre: Minar Forest : West Border
-)[230040000] Aqua Road: Deep Sea Gorge I
--[230040401] Aqua Road: A Small Wrecked Ship
-:[211060300] Lion King's Castle: Under the Castle Walls 2
-+[240040520] Leafre: Destroyed Dragon Nest
-0[222000000] Korean Folk Town: Korean Folk Town
-2[271030400] Knight Stronghold: Knight District 4
-,[273020400] Twilight Perion: Tempest Grave
-1[260020300] Sunset Road: The Desert of Red Sand
-#[240010901] Leafre: Beetle Forest
-0[260000207] Town of Ariant: Residential Area 6
-0[260000203] Town of Ariant: Residential Area 2
-([200010121] Orbis: Garden of Yellow II
-*[240011000] Leafre: Leafre : East Forest
--[221022300] Ludibrium: Eos Tower 91st Floor
-&[220000305] Ludibrium: Empty House I
-+[271000300] Dark Ereve: Ereve Forked Road
-%[230040001] Aqua Road: Carta's Cave
-+[211041000] El Nath: Wolves'  Territory 3
-6[223030000] Fantasy Theme World: Fantasy Station <1>
-[230000003] Aquarium: Zoo
-+[224000120] Korean Folk Town: Tiger Ridge
-,[200081700] Orbis: Orbis Tower <5th Floor>
-"[211041900] El Nath: The Passage
-+[220070301] Hidden Street: Forbidden Time
-.[273000000] Twilight Perion: Twilight Perion
-)[270020211] Time Lane: Sorcerer's Room 
-&[240030200] Leafre: Dragon Forest II
-C[240090200] Stone Colossus Exploration Site: Colossus West Road 2
-'[200010120] Orbis: Garden of Yellow I
-2[271030200] Knight Stronghold: Knight District 2
-0[224000013] Korean Folk Town: Korean Folk Town
-/[220000303] Ludibrium: Tara and Sarah's House
-0[224000020] Korean Folk Town: Korean Folk Town
-0[251010000] Herb Town: 10-Year-Old Herb Garden
-*[221040100] Omega Sector: Kulan Field II
-7[220030300] Ludibrium: Toy Factory <Process 2> Zone 3
-0[224000050] Korean Folk Town: Korean Folk Town
-[221000100] Omega Sector: HQ
-3[271030510] Knight Stronghold: Knights' Chamber 2
-0[224000051] Korean Folk Town: Korean Folk Town
-.[252020700] Golden Temple: Room of Suffering
-.[211041400] El Nath: Forest of Dead Trees IV
-/[231020000] Sakura Castle: Kappa Creek Forest
-B[223030200] Fantasy Theme World: Fantasty Animal Show <Entrance>
-4[241020226] Kingdom Road: Corrupted Magic Forest 3
-4[230040400] Aqua Road: The Grave of a Wrecked Ship
-([260000303] Ariant Castle: King's Room
+ [120000100] Nautilus: Nautilus
+$[101000010] Ellinia: Magic Library
+.[195020000] Premium Road: The Lightless Cave
+0[103020300] Kerning City Subway: Line 1 Area 1
+,[101071100] Ellinel Lake: Above the Lake 2
++[103041002] Kerning Tower: Rehearsal Room
+[199999995] 
+)[101000100] Hidden Street: Lania's Home
+3[105300207] Dark World Tree: Climbing left Stem 2
+9[102040100] Excavation Site: Excavation Completion Area
+,[197010000] Premium Road: Windy Terrace II
++[120000200] Nautilus: Mid Floor - Hallway
 -[221022800] Ludibrium: Eos Tower 96th Floor
-0[224000033] Korean Folk Town: Korean Folk Town
-%[200010111] Orbis: Garden of Red II
-%[240030100] Leafre: Dragon Forest I
-,[220000005] Ludibrium: Ludibrium Skin Care
-1[211060010] Lion King's Castle: Castle Entrance
-H[271020100] Singing Mushroom Forest Ruins: Creepy Humming Forest Trail
-'[220010800] Ludibrium: Sky Terrace<3>
--[270030600] Time Lane: Detour to Oblivion 1
-/[230020000] Aqua Road: Forked Road : East Sea
- [230000000] Aquarium: Aquarium
-*[224000039] Korean Folk Town: Small Well
-9[273040000] Twilight Perion: Forsaken Excavation Site 1
--[220000004] Ludibrium: Ludibrium Hair Salon
-&[211080200] Rose Garden: Soul's Rest
-6[211060410] Lion King's Castle: Short Castle Walls 1
-)[220060301] Hidden Street: Twisted Time
-)[230030101] Aqua Road: Tae Gong's Ferry
-.[224000111] Korean Folk Town: Tiger Forest I
-,[241020214] Kingdom Road: Forest of Pain 2
-&[250010504] Mu Lung: Goblin Forest 2
-$[211040600] El Nath: Sharp Cliff 4
-.[271000210] Dark Ereve: Mutant Tiguru Forest
-0[224000059] Korean Folk Town: Korean Folk Town
-:[211060900] Lion King's Castle: Under the Castle Walls 5
-,[241020215] Kingdom Road: Forest of Pain 1
-&[270010100] Time Lane: Memory Lane 1
-0[224000031] Korean Folk Town: Korean Folk Town
-([241020130] Kritias: Northeastern Road
-0[273020200] Twilight Perion: Lonely Rocky Road
-6[240020100] Leafre: Battlefield of Fire and Darkness
-*[240010800] Leafre: Entrance to Sky Nest
-%[220050300] Ludibrium: Path of Time
--[200080300] Orbis: Orbis Tower <19th Floor>
-*[211040800] El Nath: Wolves' Territory 1
--[250010200] Mu Lung: Deep in the Sky Forest
-0[271030201] Knight Stronghold: Hallowed Ground
-<[271020000] Singing Mushroom Forest Ruins: Dark Spore Hill
-7[220030400] Ludibrium: Toy Factory <Process 2> Zone 4
-/[211060000] Lion King's Castle: Desolate Moor
-+[224000132] Korean Folk Town: Goblin Hill
-%[270030000] Time Lane: Burning Past
--[241020217] Kingdom Road: Freezing Forest 1
-.[241020207] Kingdom Road: Scorching Forest 1
-0[224000037] Korean Folk Town: Korean Folk Town
-1[252010000] Golden Temple: Forest of Training 1
-/[224000064] Korean Folk Town: Forbidden Cliff
-2[273050000] Twilight Perion: Tribal Refugee Camp
--[271010301] Ravaged Forest: Suspicious Hill
-)[220010100] Ludibrium: Cloud Terrace<4>
-"[251000000] Herb Town: Herb Town
-"[260020600] Sunset Road: Sahel 2
-2[273020100] Twilight Perion: Desolate Rocky Road
-*[211040900] El Nath: Wolves' Territory 2
--[221022500] Ludibrium: Eos Tower 93rd Floor
-+[260010500] The Burning Sands: Dry Desert
-,[221020000] Ludibrium: Eos Tower 1st Floor
-0[224000032] Korean Folk Town: Korean Folk Town
-9[273040300] Twilight Perion: Forsaken Excavation Site 4
-+[224000060] Korean Folk Town: Hidden Cave
-3[240020500] Leafre: Battlefield of Fire and Water
-0[224000030] Korean Folk Town: Korean Folk Town
-8[211060830] Lion King's Castle: Very Tall Castle Walls
-6[273010000] Twilight Perion: Deserted Southern Ridge
-"[261000000] Sunset Road: Magatia
-*[270020200] Time Lane: Road of Regrets 2
-0[271030204] Knight Stronghold: Hallowed Ground
--[252020300] Golden Temple: Room of Trials 1
-<[240090000] Stone Colossus Exploration Site: Explorer Base
-9[261010103] Zenumist Research Institute: Lab - Unit 203
-#[240040400] Leafre: Wyvern Canyon
-*[220000300] Ludibrium: Ludibrium Village
-,[271000100] Dark Ereve: Mutant Tino Forest
-([240010000] Leafre: West Leafre Forest
-'[261000010] Magatia: Zenumist Society
-*[251010300] Herb Town: Bellflower Valley
-+[211000101] El Nath: El Nath Weapon Store
-.[211060400] Lion King's Castle: Second Tower
-2[250020100] Mu Lung: Practice Field : Easy Level
-3[200010100] Orbis: The Road to Garden of 3 Colors
-2[220000003] Ludibrium: Ludibrium Plastic Surgery
-,[200081600] Orbis: Orbis Tower <6th Floor>
-/[241020223] Kingdom Road: Forest of Sorrows 3
-&[220000301] Ludibrium: Korin's House
+4[223010200] Fantasy Theme World: Funky Station <3>
+0[223010110] Fantasy Theme World: Ghost Mansion
+)[200000203] Orbis Park: Orbis Skin-Care
+'[220011000] Ludibrium: Sky Terrace<5>
 0[224000026] Korean Folk Town: Korean Folk Town
+4[260020100] The Burning Sands: North Desert Road 1
+1[241020210] Kingdom Road: Southeastern Barracks
+%[241010101] Kritias: Inside the Inn
+%[211000100] El Nath: El Nath Market
+,[200080100] Orbis: Entrance to Orbis Tower
+#[241020000] Kingdom Road: Kritias
+-[200080200] Orbis: Orbis Tower <20th Floor>
+D[260010000] The Burning Sands: Outside the West Entrance of Ariant
+6[261020401] Hidden Street: Authorized Personnel Only
+/[224000103] Korean Folk Town: Forbidden Cliff
+/[224000080] Korean Folk Town: Forbidden Cliff
+,[200081800] Orbis: Orbis Tower <4th Floor>
+6[211060810] Lion King's Castle: Short Castle Walls 3
+0[260000204] Town of Ariant: Residential Area 3
+4[231040400] Sakura Castle: Tsukino Tower 5th Floor
+0[240010900] Leafre: Minar Forest : East Border
+-[221022900] Ludibrium: Eos Tower 97th Floor
+-[230010201] Aqua Road: Snowy Whale's Island
+1[221030660] Inside the Mothership: Corridor H03
++[270030200] Time Lane: Road to Oblivion 2
++[240040510] Leafre: Nest of a Dead Dragon
+/[241020224] Kingdom Road: Forest of Sorrows 2
+'[250010301] Mu Lung: Wild Bear Area 1
++[240040520] Leafre: Destroyed Dragon Nest
+0[224000031] Korean Folk Town: Korean Folk Town
+#[240010200] Leafre: Cranky Forest
+-[252020000] Golden Temple: Abandoned Temple
+/[224000061] Korean Folk Town: Forbidden Cliff
++[252020500] Golden Temple: Ascetic Room 1
+0[224000028] Korean Folk Town: Korean Folk Town
+[221030850] 
+'[250010302] Mu Lung: Wild Bear Area 2
+$[211040000] El Nath: Cold Field II
+4[271030000] Knight Stronghold: Stronghold Entrance
+-[240000100] Leafre: Leafre Station Entrance
+7[224000100] Korean Folk Town: Black Mountain Entrance
+/[220060300] Ludibrium: Warped Path of Time<4>
+,[270010000] Time Lane: Past of the Verdure
+,[221020200] Ludibrium: Eos Tower 3rd Floor
++[224000083] Korean Folk Town: Goblin Hill
+([240040200] Leafre: Canyon : East Road
+7[220030400] Ludibrium: Toy Factory <Process 2> Zone 4
+1[222020100] Ludibrium: Helios Tower <2nd Floor>
+)[221020701] Hidden Street: Hidden Tower
+1[221030540] Inside the Mothership: Corridor 104
+0[260010200] The Burning Sands: Cactus Desert 2
+/[224000067] Korean Folk Town: Forbidden Cliff
+7[240020300] Leafre: Battlefield of Water and Darkness
+$[200082200] Orbis: Orbis Tower<B1>
+'[220000306] Ludibrium: Empty House II
+.[273060300] Twilight Perion: Warrior Grounds
+0[224000050] Korean Folk Town: Korean Folk Town
+'[222010310] Hidden Street: Moon Ridge
+-[200080600] Orbis: Orbis Tower <16th Floor>
+*[240010501] Leafre: Forest of the Priest
+[240000110] Leafre: Station
+/[224000112] Korean Folk Town: Tiger Forest II
+#[200030000] Orbis: Strolling Path
+-[221021100] Ludibrium: Eos Tower 31st Floor
+-[221021400] Ludibrium: Eos Tower 34th Floor
+![240000006] Leafre: Pam's House
+#[211040100] El Nath: Ice Valley I
+"[260020500] Sunset Road: Sahel 3
+2[220070200] Ludibrium: Forgotten Path of Time<3>
++[224000035] Korean Folk Town: Goblin Hill
+/[224000130] Korean Folk Town: Fox Ridge Flash
+*[220000300] Ludibrium: Ludibrium Village
+2[220070100] Ludibrium: Forgotten Path of Time<2>
+1[252010100] Golden Temple: Forest of Training 2
+%[240030100] Leafre: Dragon Forest I
++[224000001] Korean Folk Town: Woodsy Well
++[200040001] Orbis: Disposed Flower Garden
+-[221020900] Ludibrium: Eos Tower 10th Floor
+0[271030202] Knight Stronghold: Hallowed Ground
+/[230040300] Aqua Road: Dangerous Sea Gorge II
+[211000000] El Nath: El Nath
+([211000001] El Nath: Chief's Residence
+1[221030650] Inside the Mothership: Corridor H02
+/[211010000] El Nath: Watch Out for Icy Path I
+*[270020500] Time Lane: Road of Regrets 5
+#[211030000] El Nath: Cold Field I
+'[230020201] Aqua Road: Two Palm Trees
+/[224000081] Korean Folk Town: Forbidden Cliff
+&[220000305] Ludibrium: Empty House I
+1[221030720] Inside the Mothership: Air Vent D-3
+([240010000] Leafre: West Leafre Forest
+[230000003] Aquarium: Zoo
+/[224000110] Korean Folk Town: Around the Pond
+"[211041500] El Nath: Dead Mine I
+$[211041700] El Nath: Dead Mine III
+,[211042100] El Nath: The Cave of Trials II
++[270030100] Time Lane: Road to Oblivion 1
+/[224000097] Korean Folk Town: Forbidden Cliff
+1[271010400] Ravaged Forest: Dreamy Forest Trail
+C[240090700] Stone Colossus Exploration Site: Colossus East Road 3
+1[221030510] Inside the Mothership: Corridor 101
+%[211050000] El Nath: Icy Cold Field
+0[224000047] Korean Folk Town: Korean Folk Town
+5[260010400] The Burning Sands: The Scorching Desert
+*[240011000] Leafre: Leafre : East Forest
+*[260010501] Hidden Street: Frilled Field
+3[240020500] Leafre: Battlefield of Fire and Water
+:[211060500] Lion King's Castle: Under the Castle Walls 3
+6[211060610] Lion King's Castle: Short Castle Walls 2
+&[270010200] Time Lane: Memory Lane 2
+/[230020200] Aqua Road: Sand Castle Playground
+5[211060820] Lion King's Castle: Tall Castle Walls 2
+0[224000014] Korean Folk Town: Korean Folk Town
+0[250010400] Mu Lung: Where the Sky Forest Ends
+([241020150] Kritias: Northwestern Road
+&[211040700] El Nath: Dangerous Cliff
+,[221020600] Ludibrium: Eos Tower 7th Floor
+0[224000051] Korean Folk Town: Korean Folk Town
+-[221022500] Ludibrium: Eos Tower 93rd Floor
+0[271030204] Knight Stronghold: Hallowed Ground
+4[271000000] Gate to the Future: Gate to the Future
+'[220010700] Ludibrium: Sky Terrace<2>
+0[224000059] Korean Folk Town: Korean Folk Town
+:[211060700] Lion King's Castle: Under the Castle Walls 4
+"[200050000] Orbis: Cloud Park IV
+*[211080000] Rose Garden: Gardener's Spot
+3[273020300] Twilight Perion: Weathered Rocky Zone
+*[220070400] Ludibrium: Forgotten Passage
+-[211080300] Rose Garden: Castle Wall's Edge
+*[211080500] Rose Garden: Hidden Garden 2
++[221030100] Omega Sector: Boswell Field I
+"[220000000] Ludibrium: Ludibrium
+.[251010403] Herb Town: Red-Nose Pirate Den 3
+,[220000005] Ludibrium: Ludibrium Skin Care
+2[220000100] Ludibrium: Ludibrium Ticketing Place
++[273030000] Twilight Perion: Fiery Ravine
+,[241020214] Kingdom Road: Forest of Pain 2
+5[220020600] Ludibrium: Toy Factory <Apparatus Room>
+/[241020225] Kingdom Road: Forest of Sorrows 1
++[220000400] Ludibrium: Eos Tower Entrance
+1[221030600] Inside the Mothership: Corridor 201
+-[221022000] Ludibrium: Eos Tower 69th Floor
+)[220010300] Ludibrium: Cloud Terrace<2>
+![240000004] Leafre: Ito's House
+'[220010900] Ludibrium: Sky Terrace<4>
+0[260010001] Hidden Street: Young Cactus Desert
+$[200000300] Orbis: Top of the Hill
+-[220000302] Ludibrium: Manager Karl's House
+,[200082100] Orbis: Orbis Tower <1st Floor>
++[273030200] Twilight Perion: Fevered Land
+7[220020500] Ludibrium: Toy Factory <Process 1> Zone 6
+1[241020220] Kingdom Road: Southwestern Barracks
+7[220030300] Ludibrium: Toy Factory <Process 2> Zone 3
+-[220040300] Ludibrium: The Path of Time <3>
+-[220040000] Ludibrium: The Path of Time <1>
+-[220040100] Ludibrium: The Path of Time <2>
+*[224000042] Korean Folk Town: Small Well
+,[200081600] Orbis: Orbis Tower <6th Floor>
+%[220050300] Ludibrium: Path of Time
+-[241020217] Kingdom Road: Freezing Forest 1
+.[211060800] Lion King's Castle: Fourth Tower
+&[250010502] Mu Lung: Virtuous Forest
+.[273000000] Twilight Perion: Twilight Perion
+*[200010200] Orbis: Stairway to the Sky I
+ [221000200] Omega Sector: Silo
+$[222000001] Korean Folk Town: Pond
+&[211080200] Rose Garden: Soul's Rest
+*[270020100] Time Lane: Road of Regrets 1
+#[260000300] Ariant: Ariant Castle
+1[260020610] Sunset Road: The Desert of Serenity
+-[200080300] Orbis: Orbis Tower <19th Floor>
+[200000000] Orbis: Orbis
+,[221020800] Ludibrium: Eos Tower 9th Floor
+,[221020500] Ludibrium: Eos Tower 6th Floor
+'[220010600] Ludibrium: Sky Terrace<1>
+,[221020700] Ludibrium: Eos Tower 8th Floor
+4[241020226] Kingdom Road: Corrupted Magic Forest 3
+-[221021200] Ludibrium: Eos Tower 32nd Floor
+-[221021300] Ludibrium: Eos Tower 33rd Floor
+,[241020212] Kingdom Road: Forest of Pain 4
+8[261020600] Alcadno Research Institute: Lab - Area B-3
+.[230040200] Aqua Road: Dangerous Sea Gorge I
+-[221022300] Ludibrium: Eos Tower 91st Floor
+)[200000204] Orbis Park: Counseling Room
+.[260020200] Sunset Road: North Desert Road 2
+-[221022700] Ludibrium: Eos Tower 95th Floor
+-[260000100] Ariant: Ariant Station Platform
+.[211060400] Lion King's Castle: Second Tower
+,[200082000] Orbis: Orbis Tower <2nd Floor>
+/[220060200] Ludibrium: Warped Path of Time<3>
+&[221030000] Omega Sector: Off-Limits
+,[221030200] Omega Sector: Boswell Field II
++[211042000] El Nath: The Cave of Trials I
+1[221030530] Inside the Mothership: Corridor 103
++[252020600] Golden Temple: Ascetic Room 2
+$[211040600] El Nath: Sharp Cliff 4
+0[241020227] Kingdom Road: Forest of Darkness 1
+-[211061000] Lion King's Castle: Fifth Tower
+1[221030630] Inside the Mothership: Corridor 204
+ [240010300] Leafre: Steep Hill
+*[240010800] Leafre: Entrance to Sky Nest
+2[271030400] Knight Stronghold: Knight District 4
+0[251010102] Herb Town: 80-Year-Old Herb Garden
+-[241020200] Kingdom Road: Northern Barracks
+3[200010100] Orbis: The Road to Garden of 3 Colors
+;[261020000] Alcadno Research Institute: Lab - Central Hub
+0[222000000] Korean Folk Town: Korean Folk Town
+)[222010300] Korean Folk Town: Fox Ridge
+1[271030101] Knight Stronghold: First Drill Hall
+5[220020300] Ludibrium: Toy Factory <Main Process 1>
+0[260000206] Town of Ariant: Residential Area 5
+&[260000000] The Burning Road: Ariant
+C[240090600] Stone Colossus Exploration Site: Colossus East Road 2
+/[230020000] Aqua Road: Forked Road : East Sea
+$[270000000] Time Lane: Three Doors
+4[222110000] Fantasy Theme World: Funky Station <1>
+,[224000140] Korean Folk Town: Goblin Ridge
+6[223030100] Fantasy Theme World: Fantasy Station <2>
+B[223030200] Fantasy Theme World: Fantasty Animal Show <Entrance>
+/[240040210] Hidden Street: Blue Wyvern's Nest
+$[270020000] Time Lane: Frozen Past
+0[224000002] Korean Folk Town: Korean Folk Town
+0[224000020] Korean Folk Town: Korean Folk Town
+6[240020100] Leafre: Battlefield of Fire and Darkness
+#[250010700] Mu Lung: Peach Farm 3
+[240000000] Leafre: Leafre
+0[224000019] Korean Folk Town: Korean Folk Town
+0[224000012] Korean Folk Town: Korean Folk Town
+B[223000000] Fantasy Theme World: Fantasy Theme World <Main Gate>
+4[250020200] Mu Lung: Practice Field : Normal Level
+-[224000141] Korean Folk Town: Haunted House
+0[224000030] Korean Folk Town: Korean Folk Town
+.[211041400] El Nath: Forest of Dead Trees IV
+/[241020221] Kingdom Road: Forest of Sorrows 5
+1[270030410] Time Lane: Resting Spot of Oblivion
+0[224000055] Korean Folk Town: Korean Folk Town
+#[250010500] Mu Lung: Peach Farm 1
+"[260020600] Sunset Road: Sahel 2
+*[224000039] Korean Folk Town: Small Well
++[211000101] El Nath: El Nath Weapon Store
+0[224000044] Korean Folk Town: Korean Folk Town
+0[273060000] Twilight Perion: Spirit Zone Limbo
+"[240000005] Leafre: Kumo's House
+0[251010000] Herb Town: 10-Year-Old Herb Garden
+)[220060301] Hidden Street: Twisted Time
+0[224000053] Korean Folk Town: Korean Folk Town
+/[241020223] Kingdom Road: Forest of Sorrows 3
+)[220010200] Ludibrium: Cloud Terrace<3>
+7[200100500] Floating Island of Chryse: Lawless Zone 2
+%[211040400] El Nath: Sharp Cliff II
+/[224000065] Korean Folk Town: Forbidden Cliff
+)[250000003] Mu Lung: Mu Lung Hair Salon
+([240030101] Leafre: The Burning Forest
+/[220000001] Ludibrium: Ludibrium Weapon Store
+/[241020202] Kingdom Road: Forest of Laments 4
+ [241020120] Kritias: Town Hall
+9[261010001] Zenumist Research Institute: Lab - Unit 101
+-[211060200] Lion King's Castle: First Tower
+*[224000102] Korean Folk Town: Small Well
+'[220060400] Ludibrium: Warped Passage
+0[224000086] Korean Folk Town: Korean Folk Town
+#[200040000] Orbis: Cloud Park III
+1[252010000] Golden Temple: Forest of Training 1
+[200000200] Orbis: Orbis Park
+*[230030000] Aqua Road: Blue Seaweed Road
+1[221030730] Inside the Mothership: Air Vent D-4
+,[224000142] Korean Folk Town: Goblin House
+:[211060100] Lion King's Castle: Under the Castle Walls 1
+/[220060000] Ludibrium: Warped Path of Time<1>
+%[270030000] Time Lane: Burning Past
+1[240020200] Leafre: The Area of Black Kentaurus
+.[211041200] El Nath: Forest of Dead Trees II
+ [240010700] Leafre: Sky Nest I
+*[230020100] Aqua Road: The Seaweed Tower
+![200010000] Orbis: Cloud Park I
+*[221000300] Omega Sector: Command Center
+,[273020400] Twilight Perion: Tempest Grave
+,[271000100] Dark Ereve: Mutant Tino Forest
+&[220000301] Ludibrium: Korin's House
+0[260000202] Town of Ariant: Residential Area 1
+.[251010402] Herb Town: Red-Nose Pirate Den 2
+&[220050000] Ludibrium: Lost Time <1>
+0[251010101] Herb Town: 60-Year-Old Herb Garden
+/[224000064] Korean Folk Town: Forbidden Cliff
+,[221030400] Omega Sector: Boswell Field IV
+)[230010200] Aqua Road: Red Coral Forest
+*[240040600] Leafre: Peak of the Big Nest
+/[241020201] Kingdom Road: Forest of Laments 5
+%[230000002] Aquarium: General Store
+*[211040800] El Nath: Wolves' Territory 1
+6[250020300] Mu Lung: Practice Field : Advanced Level
+9[240040512] Minar Forest: The Dragon Nest Left Behind 2
+1[221030620] Inside the Mothership: Corridor 203
+B[261010100] Zenumist Research Institute: Lab - 2nd Floor Hallway
+&[220000307] Ludibrium: Mason's House
+2[220070000] Ludibrium: Forgotten Path of Time<1>
+%[200010111] Orbis: Garden of Red II
+&[270010400] Time Lane: Memory Lane 4
+-[221021800] Ludibrium: Eos Tower 67th Floor
+'[230050000] Research Command: Veritas
+/[231020000] Sakura Castle: Kappa Creek Forest
+1[240040800] Hidden Street: The Restoring Memory
+#[240000002] Leafre: General Store
+"[240000003] Leafre: Yaku's House
+1[221030640] Inside the Mothership: Corridor H01
+0[224000046] Korean Folk Town: Korean Folk Town
+7[220020400] Ludibrium: Toy Factory <Process 1> Zone 5
+*[221040100] Omega Sector: Kulan Field II
+-[221030300] Omega Sector: Boswell Field III
+([230020300] Aqua Road: Big Fish Valley
+4[240010500] Minar Forest: Valley of the Antelope 1
+4[240010510] Minar Forest: Valley of the Antelope 2
+([221000000] Omega Sector: Omega Sector
+.[251010401] Herb Town: Red-Nose Pirate Den 1
+5[200082301] Orbis: Orbis Tower<Hughes's Laboratory>
+$[200082300] Orbis: Orbis Tower<B2>
+/[224000068] Korean Folk Town: Forbidden Cliff
+6[211040102] Hidden Street: Snow Soul's Resting Place
+B[261010000] Zenumist Research Institute: Lab - 1st Floor Hallway
+2[271030100] Knight Stronghold: Knight District 1
+,[221020100] Ludibrium: Eos Tower 2nd Floor
+9[211040401] Hidden Street: Holy Ground at the Snowfield
+([240010400] Leafre: Forest : Crossroad
+9[273040100] Twilight Perion: Forsaken Excavation Site 2
+*[220040200] Ludibrium: Crossroad of Time
+,[230030100] Aqua Road: Mushroom Coral Hill
+C[240090500] Stone Colossus Exploration Site: Colossus East Road 1
+&[270010300] Time Lane: Memory Lane 3
+0[220000002] Ludibrium: Ludibrium General Store
++[224000036] Korean Folk Town: Goblin Hill
+?[200100800] Floating Island of Chryse: Road to the Coliseum 2
+-[240040500] Leafre: Entrance to Dragon Nest
+([200000002] Orbis: Orbis General Store
+7[220030000] Ludibrium: Toy Factory <Process 2> Zone 1
++[240040521] Leafre: Dangerous Dragon Nest
+1[260020300] Sunset Road: The Desert of Red Sand
+,[241020215] Kingdom Road: Forest of Pain 1
+%[250000100] Mu Lung: Mu Lung Temple
+0[224000029] Korean Folk Town: Korean Folk Town
+6[273010000] Twilight Perion: Deserted Southern Ridge
+0[224000045] Korean Folk Town: Korean Folk Town
+*[220050100] Ludibrium: Whirlpool of Time
+8[261020500] Alcadno Research Institute: Lab - Area C-3
+4[221021600] Ludibrium: Eos Tower 36th - 65th Floor
+'[200010131] Orbis: Garden of Green II
+#[250010600] Mu Lung: Peach Farm 2
+)[221040400] Omega Sector: Kulan Field V
+#[211041800] El Nath: Dead Mine IV
+,[200081400] Orbis: Orbis Tower <8th Floor>
+1[221030520] Inside the Mothership: Corridor 102
+2[222020200] Ludibrium: Helios Tower <99th Floor>
+&[270010100] Time Lane: Memory Lane 1
+/[222020000] Ludibrium: Helios Tower <Library>
+'[251010500] Herb Town: Isolated Swamp
+<[240090000] Stone Colossus Exploration Site: Explorer Base
+%[230040001] Aqua Road: Carta's Cave
+'[250000001] Mu Lung: Tae Sang's House
+.[252020700] Golden Temple: Room of Suffering
+%[241020101] Kritias: Inside the Inn
+)[271010001] Henesys Ruins: Rina's House
+([260000200] Ariant: The Town of Ariant
+2[271030102] Knight Stronghold: Second Drill Hall
+*[211080400] Rose Garden: Hidden Garden 1
+6[223030000] Fantasy Theme World: Fantasy Station <1>
+9[273040200] Twilight Perion: Forsaken Excavation Site 3
+![240010600] Leafre: Sky Nest II
+0[224000084] Korean Folk Town: Korean Folk Town
+3[221030810] Inside the Mothership: Control Room 2
+4[222110100] Fantasy Theme World: Funky Station <2>
+0[271030203] Knight Stronghold: Hallowed Ground
+)[229000230] Haunted Mansion: Weird Room
+"[251010400] Herb Town: Old Swamp
+,[221020400] Ludibrium: Eos Tower 5th Floor
+1[260000201] Town of Ariant: An Old, Empty House
+![211000200] El Nath: Snowy Hill
+0[224000032] Korean Folk Town: Korean Folk Town
+2[273020100] Twilight Perion: Desolate Rocky Road
+7[200100000] Floating Island of Chryse: Road to Chryse
+&[220000304] Ludibrium: Chloe's House
+0[260000207] Town of Ariant: Residential Area 6
+&[220050200] Ludibrium: Lost Time <2>
+5[220030200] Ludibrium: Toy Factory <Main Process 2>
+*[230010300] Aqua Road: Turban Shell Hill
+6[222120000] Fantasy Theme World: Extreme Station <1>
+#[250010501] Mu Lung: Foggy Forest
+6[240030104] Hidden Street: The Hidden Dragon Tomb II
+*[200000202] Orbis Park: Orbis Hair Salon
+1[271010100] Henesys Ruins: Henesys Ruins Market
+9[260010600] The Burning Sands: Tent of the Entertainers
+0[260010201] Hidden Street: Royal Cactus Desert
+0[224000054] Korean Folk Town: Korean Folk Town
+0[260010100] The Burning Sands: Cactus Desert 1
+&[200010130] Orbis: Garden of Green I
+*[224000041] Korean Folk Town: Small Well
+*[230040100] Aqua Road: Deep Sea Gorge II
+0[224000000] Korean Folk Town: Korean Folk Town
+-[250010100] Mu Lung: Sky Forest : The Trail
+0[224000027] Korean Folk Town: Korean Folk Town
+/[224000131] Korean Folk Town: Moonlight Ridge
+4[241020216] Kingdom Road: Corrupted Magic Forest 1
+"[221000001] Omega Sector: Tunnel
+C[222130200] Fantasy Theme World: Fantasy Crittertorium <Entrance>
+0[224000025] Korean Folk Town: Korean Folk Town
+8[261020200] Alcadno Research Institute: Lab - Area B-1
+,[220060201] Hidden Street: Unbalanced Time
+-[220040400] Ludibrium: The Path of Time <4>
+0[271030201] Knight Stronghold: Hallowed Ground
+.[271030600] Knight Stronghold: Hall of Honor
+([241020130] Kritias: Northeastern Road
+$[241020140] Kritias: Southern Road
+ [230000000] Aquarium: Aquarium
++[200010300] Orbis: Stairway to the Sky II
+/[241020203] Kingdom Road: Forest of Laments 3
+/[241020204] Kingdom Road: Forest of Laments 2
+/[241020205] Kingdom Road: Forest of Laments 1
+([260000303] Ariant Castle: King's Room
+.[241020207] Kingdom Road: Scorching Forest 1
+.[241020208] Kingdom Road: Scorching Forest 2
+,[211000102] El Nath: El Nath General Store
+,[241020211] Kingdom Road: Forest of Pain 5
++[224000060] Korean Folk Town: Hidden Cave
+-[270030620] Time Lane: Detour to Oblivion 3
+/[241020222] Kingdom Road: Forest of Sorrows 4
+)[220010100] Ludibrium: Cloud Terrace<4>
+-[241020228] Kingdom Road: Darkness Forest 2
+[250000000] Mu Lung: Mu Lung
+7[220020100] Ludibrium: Toy Factory <Process 1> Zone 2
+-[250010000] Mu Lung: Entrance to Sky Forest
+/[240040401] Hidden Street: Leviathan's Canyon
+&[250010504] Mu Lung: Goblin Forest 2
+0[250020000] Mu Lung: Practice Field : Beginner
++[270030300] Time Lane: Road to Oblivion 3
+"[251000000] Herb Town: Herb Town
+*[251000100] Herb Town: Pier on the Beach
+0[224000048] Korean Folk Town: Korean Folk Town
+,[211040001] Hidden Street: The Crown-Flyer
+1[251010200] Herb Town: 100-Year-Old Herb Garden
+*[251010300] Herb Town: Bellflower Valley
+0[224000056] Korean Folk Town: Korean Folk Town
+"[240010101] Leafre: Fuzzy Forest
+,[252020200] Golden Temple: Guardian Room 2
+-[211041100] El Nath: Forest of Dead Trees I
+,[200081700] Orbis: Orbis Tower <5th Floor>
+8[211060830] Lion King's Castle: Very Tall Castle Walls
+'[200010120] Orbis: Garden of Yellow I
+C[240090100] Stone Colossus Exploration Site: Colossus West Road 1
+%[230040301] Aqua Road: A Small Cave
+2[250010304] Mu Lung: Territory of Wandering Bear
+.[271000210] Dark Ereve: Mutant Tiguru Forest
+&[241020110] Kritias: Ranheim Academy
+:[211060300] Lion King's Castle: Under the Castle Walls 2
+1[252010300] Golden Temple: Forest of Training 4
+/[224000063] Korean Folk Town: Forbidden Cliff
+2[271030200] Knight Stronghold: Knight District 2
+7[220020000] Ludibrium: Toy Factory <Process 1> Zone 1
+/[270020210] Time Lane: Resting Spot of Regret
+9[261010003] Zenumist Research Institute: Lab - Unit 103
+9[261010002] Zenumist Research Institute: Lab - Unit 102
+/[224000066] Korean Folk Town: Forbidden Cliff
+6[222120100] Fantasy Theme World: Extreme Station <2>
++[224000132] Korean Folk Town: Goblin Hill
+)[271030310] Knight Stronghold: Armory 1
+&[220070201] Hidden Street: Lost Time
+7[261030000] Hidden Street: Lab - Secret Basement Path
 .[240040610] Leafre: Below the Dangerous Nest
-1[450002010] Slurpy Forest: Slurpy Forest Depths
-:[400010503] East Pantheon: Suspicious Hideout Interior 3
-0[450003210] Lachelein Alley: Outlaw's Street 2
-1[400020100] West Pantheon: West Pantheon Plains
--[400020300] West Pantheon: Heliseum Hideout
--[450002000] Chu Chu Island: Chu Chu Village
-:[400010502] East Pantheon: Suspicious Hideout Interior 2
-.[400030602] South Pantheon: Heretic Temple 2
-<[450003340] Lachelein Night Market: Victory Plate Street 1
-,[450001216] Cave of Repose: Below the Cave
-3[401030500] Nameless Forest: Specter Forward Base
-.[450003000] Lachelein: Lachelein Main Street
-1[450003430] Lachelein Ballroom: Bright Ballroom
+-[221023100] Ludibrium: Eos Tower 99th Floor
+-[250010200] Mu Lung: Deep in the Sky Forest
+/[220000303] Ludibrium: Tara and Sarah's House
+3[222020300] Ludibrium: Helios Tower (100th Floor)
+#[240040400] Leafre: Wyvern Canyon
+-[221023000] Ludibrium: Eos Tower 98th Floor
+5[211060620] Lion King's Castle: Tall Castle Walls 1
+/[220060100] Ludibrium: Warped Path of Time<2>
+7[220020200] Ludibrium: Toy Factory <Process 1> Zone 3
+0[260000205] Town of Ariant: Residential Area 4
+9[261010103] Zenumist Research Institute: Lab - Unit 203
+*[260000301] Ariant Castle: Castle Garden
+5[260020400] Sunset Road: The Ruins of Desert Nomads
+-[211042200] El Nath: The Cave of Trials III
+-[270010111] Time Lane: Memory Keeper's Room
+-[241020218] Kingdom Road: Freezing Forest 2
+"[260020700] Sunset Road: Sahel 1
+3[271030540] Knight Stronghold: Knights' Chamber 5
+'[220010800] Ludibrium: Sky Terrace<3>
+$[211040200] El Nath: Ice Valley II
+6[223020200] Fantasy Theme World: Extreme Station <3>
+-[221021900] Ludibrium: Eos Tower 68th Floor
+#[240000001] Leafre: Chief's House
+1[252010200] Golden Temple: Forest of Training 3
+&[200060000] Orbis: Strolling Path II
+9[211061001] Lion King's Castle: Roof of the Fifth Tower
+*[221040300] Omega Sector: Kulan Field IV
++[200000100] Orbis: Orbis Station Entrance
+A[260020000] The Burning Sands: Outside North Entrance of Ariant
+)[230040000] Aqua Road: Deep Sea Gorge I
+-[270030610] Time Lane: Detour to Oblivion 2
+7[224000121] Korean Folk Town: Black Mountain <Valley>
+-[211060600] Lion King's Castle: Third Tower
+/[260020620] Sunset Road: The Desert of Dreams
+"[261000000] Sunset Road: Magatia
+"[241020100] Kritias: Marketplace
+9[261010101] Zenumist Research Institute: Lab - Unit 201
+-[200080500] Orbis: Orbis Tower <17th Floor>
+8[261020300] Alcadno Research Institute: Lab - Area C-1
+0[224000037] Korean Folk Town: Korean Folk Town
+.[220000500] Ludibrium: Helios Tower Entrance
+&[250010503] Mu Lung: Goblin Forest 1
++[221000400] Omega Sector: Secure Location
+&[270010500] Time Lane: Memory Lane 5
+@[260010700] The Burning Sands: Outside East Entrance of Ariant
+![250010300] Mu Lung: Snake Area
+,[252020100] Golden Temple: Guardian Room 1
+-[221022400] Ludibrium: Eos Tower 92nd Floor
+0[224000049] Korean Folk Town: Korean Folk Town
+)[220010400] Ludibrium: Cloud Terrace<1>
+7[220030100] Ludibrium: Toy Factory <Process 2> Zone 2
+/[200000201] Orbis Park: Orbis Plastic Surgery
+)[200010301] Orbis: Garden of Darkness I
+C[240090300] Stone Colossus Exploration Site: Colossus West Road 3
+0[273020200] Twilight Perion: Lonely Rocky Road
+9[273040000] Twilight Perion: Forsaken Excavation Site 1
+([200010121] Orbis: Garden of Yellow II
+*[230030200] Aqua Road: The Sharp Unknown
+6[223020100] Fantasy Theme World: Extreme Station <2>
+$[211040300] El Nath: Sharp Cliff I
+6[222120200] Fantasy Theme World: Extreme Station <3>
+F[240090400] Stone Colossus Exploration Site: Colossus Dangerous Road
+,[230020101] Hidden Street: The Hidden Town
+-[221022100] Ludibrium: Eos Tower 70th Floor
+H[271020100] Singing Mushroom Forest Ruins: Creepy Humming Forest Trail
+2[220070300] Ludibrium: Forgotten Path of Time<4>
+)[220010000] Ludibrium: Cloud Terrace<5>
+&[220010001] Ludibrium: Cloud Balcony
+'[270000100] Time Lane: Temple of Time
+-[270030600] Time Lane: Detour to Oblivion 1
+$[200010110] Orbis: Garden of Red I
+6[222130000] Fantasy Theme World: Fantasy Station <1>
+)[271030320] Knight Stronghold: Armory 2
+*[270020400] Time Lane: Road of Regrets 4
+1[221030710] Inside the Mothership: Air Vent D-2
+#[211041600] El Nath: Dead Mine II
+:[211060900] Lion King's Castle: Under the Castle Walls 5
++[220070301] Hidden Street: Forbidden Time
+"[230010000] Aqua Road: Ocean I.C
+1[230010001] Hidden Street: Penguin's Playground
+-[200080400] Orbis: Orbis Tower <18th Floor>
+6[223020000] Fantasy Theme World: Extreme Station <1>
+*[252000000] Golden Temple: Golden Temple
+<[271020000] Singing Mushroom Forest Ruins: Dark Spore Hill
+,[200081900] Orbis: Orbis Tower <3rd Floor>
+&[240010520] Minar Forest: Sky Nest 3
+4[260020401] Hidden Street: The Giant of the Sunset
+)[270020211] Time Lane: Sorcerer's Room 
+9[240040511] Minar Forest: The Dragon Nest Left Behind 1
+"[211041900] El Nath: The Passage
+0[211020000] El Nath: Watch Out for Icy Path II
+5[240030103] Hidden Street: The Hidden Dragon Tomb I
+'[240030300] Leafre: Dragon Forest III
+1[240030102] Leafre: The Forest That Disappeared
+*[224000043] Korean Folk Town: Small Well
+-[230040401] Aqua Road: A Small Wrecked Ship
+0[273030100] Twilight Perion: Fiery Rocky Hills
+,[200081500] Orbis: Orbis Tower <7th Floor>
+,[271000200] Dark Ereve: Mutant Tiru Forest
++[271000300] Dark Ereve: Ereve Forked Road
+*[271010000] Henesys Ruins: Henesys Ruins
+/[271010200] Henesys Ruins: Henesys Ruins Park
+9[271010300] Ravaged Forest: Hill North of Henesys Ruins
+5[271010500] Ravaged Forest: Six Path Crossway Ruins
+<[200101400] Floating Island of Chryse: Inside the Coliseum
+0[260000203] Town of Ariant: Residential Area 2
+4[223010100] Fantasy Theme World: Funky Station <2>
+,[221020300] Ludibrium: Eos Tower 4th Floor
+0[271030205] Knight Stronghold: Hallowed Ground
+2[271030300] Knight Stronghold: Knight District 3
+*[211040900] El Nath: Wolves' Territory 2
+B[222100000] Fantasy Theme World: Fantasy Theme World <Main Gate>
+-[252020400] Golden Temple: Room of Trials 2
+-[221022600] Ludibrium: Eos Tower 94th Floor
+0[240020400] Leafre: The Area of Blue Kentaurus
+3[271030530] Knight Stronghold: Knights' Chamber 4
+,[250000002] Mu Lung: Mu Lung General Store
+3[271030520] Knight Stronghold: Knights' Chamber 3
+8[261020400] Alcadno Research Institute: Lab - Area C-2
+3[221030800] Inside the Mothership: Control Room 1
+2[260010300] The Burning Sands: White Rock Desert
+1[211060010] Lion King's Castle: Castle Entrance
+,[260010301] Hidden Street: Bellamoa's Cave
+3[271030500] Knight Stronghold: Knights' Chamber 1
+/[211060000] Lion King's Castle: Desolate Moor
+.[230030001] Hidden Street: Fish Resting Spot
+'[260010401] Hidden Street: Rocky Hill
+/[230010400] Aqua Road: Forked Road : West Sea
+C[240090200] Stone Colossus Exploration Site: Colossus West Road 2
+7[224000101] Korean Folk Town: Black Mountain <Corner>
+([240040300] Leafre: Canyon : West Road
+0[224000057] Korean Folk Town: Korean Folk Town
++[270030500] Time Lane: Road to Oblivion 5
+2[250020100] Mu Lung: Practice Field : Easy Level
+/[240030000] Leafre: Entrance to Dragon Forest
+4[241020206] Kingdom Road: Corrupted Magic Forest 2
+-[273020000] Twilight Perion: Desolate Hills
+'[230000001] Aquarium: The Center Hall
+9[261010102] Zenumist Research Institute: Lab - Unit 202
+"[200020000] Orbis: Cloud Park II
+3[271030510] Knight Stronghold: Knights' Chamber 2
+4[221021000] Ludibrium: Eos Tower 11th - 30th Floor
+4[261000001] Magatia: Home of the Missing Alchemist
+0[224000033] Korean Folk Town: Korean Folk Town
+([240040100] Leafre: Canyon : Crossroad
+6[222130100] Fantasy Theme World: Fantasy Station <2>
+'[240040000] Leafre: The Dragon Canyon
+<[240020210] Minar Forest: Battlefield of Fire and Darkness
++[273060200] Twilight Perion: Rough Canyon
+[224000087] 
+0[224000024] Korean Folk Town: Korean Folk Town
+-[270030411] Time Lane: Record Keeper's Room
+![200070000] Orbis: Cloud Park V
+*[200010302] Orbis: Garden of Darkness II
+0[251010100] Herb Town: 50-Year-Old Herb Garden
+'[261000010] Magatia: Zenumist Society
+0[260010402] Hidden Street: Red Scorpion's Lair
+4[230040400] Aqua Road: The Grave of a Wrecked Ship
+4[221022200] Ludibrium: Eos Tower 71st - 90th Floor
+1[221030610] Inside the Mothership: Corridor 202
+.[211040101] Hidden Street: Valley of Snowman
+'[200000001] Orbis: Orbis Weapon Store
+*[270020200] Time Lane: Road of Regrets 2
+ [241000120] Kritias: Town Hall
+-[221021500] Ludibrium: Eos Tower 35th Floor
+$[211040500] El Nath: Sharp Cliff 3
+4[222110200] Fantasy Theme World: Funky Station <3>
+&[230010100] Aqua Road: Crystal Gorge
+,[241020213] Kingdom Road: Forest of Pain 3
+.[240040310] Hidden Street: Red Wyvern's Nest
+4[223010000] Fantasy Theme World: Funky Station <1>
+#[240010901] Leafre: Beetle Forest
+)[230030101] Aqua Road: Tae Gong's Ferry
+.[221023200] Ludibrium: Eos Tower 100th Floor
+-[220000004] Ludibrium: Ludibrium Hair Salon
+8[261020100] Alcadno Research Institute: Lab - Area A-1
++[211041000] El Nath: Wolves'  Territory 3
+-[221021700] Ludibrium: Eos Tower 66th Floor
+0[224000058] Korean Folk Town: Korean Folk Town
+2[220000003] Ludibrium: Ludibrium Plastic Surgery
++[224000120] Korean Folk Town: Tiger Ridge
+8[261020700] Alcadno Research Institute: Lab - Area A-3
+,[221020000] Ludibrium: Eos Tower 1st Floor
+2[221030500] Inside the Mothership: Nolyfe's Room
+/[240020000] Leafre: The Area of Red Kentaurus
+[221000100] Omega Sector: HQ
+*[211080600] Rose Garden: Hidden Garden 3
+$[200050001] Orbis: Old Man's House
+&[261000020] Magatia: Alcadno Society
+"[200080000] Orbis: Cloud Park VI
++[211080100] Rose Garden: Abandoned Garden
+-[271010301] Ravaged Forest: Suspicious Hill
+,[273030300] Twilight Perion: Gale Pleateau
+0[240010100] Leafre: Minar Forest : West Border
+9[273040300] Twilight Perion: Forsaken Excavation Site 4
+2[273050000] Twilight Perion: Tribal Refugee Camp
+/[270010110] Time Lane: Resting Spot of Memory
+*[261000002] Magatia: Weapon & Armor Shop
+6[211060410] Lion King's Castle: Short Castle Walls 1
+-[252020300] Golden Temple: Room of Trials 1
+*[224000040] Korean Folk Town: Small Well
+0[224000013] Korean Folk Town: Korean Folk Town
+/[211041300] El Nath: Forest of Dead Trees III
++[270030400] Time Lane: Road to Oblivion 4
+&[240030200] Leafre: Dragon Forest II
+'[250010303] Mu Lung: Wild Bear Area 3
+-[270030630] Time Lane: Detour to Oblivion 4
+*[270020300] Time Lane: Road of Regrets 3
+/[273060100] Twilight Perion: Rough Wilderness
+0[224000052] Korean Folk Town: Korean Folk Town
+3[221030820] Inside the Mothership: Control Room 3
+/[240040320] Minar Forest: Black Wyvern's Nest
++[260010500] The Burning Sands: Dry Desert
+.[224000111] Korean Folk Town: Tiger Forest I
+%[220010500] Ludibrium: Terrace Hall
 3[400040200] North Pantheon: North Pantheon Border
-+[450001100] Extinction Zone: Mirage Cliff
-5[401040600] Heliseum Downtown: East Downtown Border
-1[450001212] Cave of Repose: Western Cave Path 2
-;[450003520] Lachelein Clocktower: Nightmare Clocktower 3F
-*[450002013] Eree Valley: Torrent Zone 2
-1[400010200] East Pantheon: East Pantheon Border
-*[450002015] Eree Valley: Below the Falls
-&[400000000] Nova's Sanctum: Pantheon
-,[450001230] Cave of Repose: Arma's Hideout
--[400040000] Pantheon Sanctum: North Sanctum
-8[450003300] Lachelein Night Market: Chicken Festival 1
-5[400040300] North Pantheon: Grumpy Grobbler Habitat
-8[450002018] Skywhale Mountain: Skywhale Mountainside 2
-.[450002301] Eree Valley: Hidden Torrent Zone
-5[401020000] Forbidden Forest: Twisted Forest Border
--[400010400] East Pantheon: Enchanted Forest
-;[450001010] Lake of Oblivion: Weathered Land of Happiness
 1[400030500] South Pantheon: Radiant Rock Forest
-)[450001262] Cave of Repose: Hidden Cave
-4[401030600] Forested Border Path: Path to Downtown
-+[450001215] Cave of Repose: Forked Road 2
-0[450003200] Lachelein Alley: Outlaw's Street 1
-/[450003360] Night Market: Hidden Plate Street
-8[450003450] Lachelein Ballroom: Occupied Dance Floor 2
--[401020100] Forbidden Forest: Eurenth's Hut
-/[401000000] Heliseum: Heliseum Reclamation HQ
-/[401010000] Twisted Forest: Savage Dog Forest
--[400000001] Pantheon: Great Temple Interior
-4[401010100] Twisted Forest: Blue Speeyor's Pasture
-8[450003320] Lachelein Night Market: Chicken Festival 3
--[401030100] Nameless Forest: Full Moon Hill
-/[401030200] Nameless Forest: Predatory Forest
-0[401030300] Nameless Forest: Specter Mine Zone
-6[401040000] Heliseum Downtown: Downtown Black Market
-5[401040400] Heliseum Downtown: West Downtown Border
-.[450002019] Skywhale Mountain: Skywhale Peak
-([450001110] Extinction Zone: Rock Zone
--[450001000] Lake of Oblivion: Nameless Town
-1[450001213] Cave of Repose: Eastern Cave Path 1
-+[450001200] Cave of Repose: Cave Entrance
-5[400030600] South Pantheon: Heretic Temple Entrance
-/[450001261] Extinction Zone: Hidden Fire Zone
- [450003100] Lachelein: Hideout
-/[450002002] Five-Color Hill: Mottled Forest 1
-,[400020000] Pantheon Sanctum: West Sanctum
-0[450003220] Lachelein Alley: Outlaw's Street 3
-([450001105] Extinction Zone: Lakeshore
-@[450001015] Lake of Oblivion: Weathered Land of Sorrow and Joy
-5[401000002] Heliseum: Transitional Dimensional Door
-3[450002007] Slurpy Forest: Dealie-Bobber Forest 2
-/[401010010] Twisted Forest: Forest of Choices
-4[450003400] Lachelein Ballroom: Revelation Place 1
-9[450002302] Skywhale Mountain: Hidden Skywhale Mountain
-/[400030400] South Pantheon: Anti-Magic Forest
-5[401020400] Forbidden Forest: Forest of Coexistence
-+[450001210] Cave of Repose: Forked Road 1
-,[400010000] Pantheon Sanctum: East Sanctum
-2[450003330] Lachelein Night Market: Noisy Market
-1[450001214] Cave of Repose: Eastern Cave Path 2
-1[400010300] East Pantheon: East Pantheon Forest
-7[401020300] Forbidden Forest: Secret Merchant Meet-Up
-9[401040300] Heliseum Downtown: Heliseum Downtown Center
-:[450001003] Lake of Oblivion: Vanishing Journey Entrance
-4[450003460] Lachelein Ballroom: Hidden Dance Floor
-,[450001217] Cave of Repose: Above the Cave
-1[400010100] East Pantheon: East Pantheon Plains
-;[450003500] Lachelein Clocktower: Nightmare Clocktower 1F
-;[450003540] Lachelein Clocktower: Nightmare Clocktower 5F
-8[401020200] Forbidden Forest: Yellow Speeyor's Pasture
-+[400030300] South Pantheon: Orange Forest
-A[450001013] Lake of Oblivion: Weathered Land of Rage and Sorrow
-D[450001011] Lake of Oblivion: Weathered Land of Happiness and Rage
-0[450001260] Lake of Oblivion: Hidden Lakeshore
-3[400040100] North Pantheon: North Pantheon Plains
-2[450002009] Slurpy Forest: Bitty-Bobble Forest 2
-/[450002004] Five-Color Hill: Mottled Forest 3
-4[401050001] Tyrant's Castle: Tyrant's Castle Foyer
-*[450002014] Eree Valley: Torrent Zone 3
-0[450001007] Lake of Oblivion: Lake of Oblivion
-2[401040001] Heliseum Downtown: Downtown Entrance
-4[450003420] Lachelein Ballroom: Revelation Place 3
-5[450003560] Clocktower: Hidden Nightmare Clocktower
-.[400030603] South Pantheon: Heretic Temple 3
-.[401030400] Nameless Forest: Breeding Forest
-6[401040200] Heliseum Downtown: Downtown of Willpower
-3[400030200] South Pantheon: South Pantheon Border
--[400030000] Pantheon Sanctum: South Sanctum
 :[400010501] East Pantheon: Suspicious Hideout Interior 1
-1[450002016] Skywhale Mountain: Mountain's Mouth
-3[401010200] Twisted Forest: Red Speeyor's Pasture
-3[400030100] South Pantheon: South Pantheon Plains
-6[450001012] Lake of Oblivion: Weathered Land of Rage
-8[450001014] Lake of Oblivion: Weathered Land of Sorrow
-6[401040500] Heliseum Downtown: West Downtown Walkway
-.[400030601] South Pantheon: Heretic Temple 1
-;[450003510] Lachelein Clocktower: Nightmare Clocktower 2F
-)[450001005] Lake of Oblivion: Lakeshore
-5[450002005] Five-Color Hill: Within Five-Color Hill
-5[450001016] Lake of Oblivion: Weathered Land of Joy
-.[450001107] Extinction Zone: Fire Zone Cliff
-/[401030000] Nameless Forest: Path to the Hill
-/[450001113] Extinction Zone: Fire Spirit Zone
-*[450001114] Extinction Zone: Spirit Zone
-1[450001211] Cave of Repose: Western Cave Path 1
-2[401040100] Heliseum Downtown: Downtown of Valor
-)[450001218] Cave of Repose: Cave Depths
-;[450003530] Lachelein Clocktower: Nightmare Clocktower 4F
-8[450003440] Lachelein Ballroom: Occupied Dance Floor 1
-3[450001219] Cave of Repose: Split Road of Destiny
-2[450002008] Slurpy Forest: Bitty-Bobble Forest 1
-3[450002006] Slurpy Forest: Dealie-Bobber Forest 1
-3[450002011] Eree Valley: Chu Chu Village Entrance
-6[401040700] Heliseum Downtown: East Downtown Walkway
-.[450002020] Skywhale Mountain: Colossal Tail
-<[401040800] Heliseum Downtown: Road to the Tyrant's Castle
-0[450002023] Chu Chu Island: Quiet Village Path
-1[450002300] Slurpy Forest: Hidden Slurpy Forest
-8[450003310] Lachelein Night Market: Chicken Festival 2
-([450001112] Extinction Zone: Fire Zone
--[450001111] Extinction Zone: Fire Rock Zone
-<[450003350] Lachelein Night Market: Victory Plate Street 2
-4[450003410] Lachelein Ballroom: Revelation Place 2
-([450002001] Five-Color Hill: Hill Path
 1[400020200] West Pantheon: West Pantheon Border
+1[450002010] Slurpy Forest: Slurpy Forest Depths
+<[450003350] Lachelein Night Market: Victory Plate Street 2
+3[400030100] South Pantheon: South Pantheon Plains
+.[400030602] South Pantheon: Heretic Temple 2
+/[401030200] Nameless Forest: Predatory Forest
+6[450005530] Arcana: Labyrinthine Cavern - Lower Path
+1[450001211] Cave of Repose: Western Cave Path 1
+0[450003200] Lachelein Alley: Outlaw's Street 1
+)[450001218] Cave of Repose: Cave Depths
+-[450005550] Arcana: Beneath the Spirit Tree
+3[400030200] South Pantheon: South Pantheon Border
++[400030300] South Pantheon: Orange Forest
+.[401030400] Nameless Forest: Breeding Forest
+,[400010000] Pantheon Sanctum: East Sanctum
+2[401040001] Heliseum Downtown: Downtown Entrance
+1[450003430] Lachelein Ballroom: Bright Ballroom
+5[401000002] Heliseum: Transitional Dimensional Door
+1[400010300] East Pantheon: East Pantheon Forest
+)[450005130] Arcana: The Forest of Earth
+-[400040000] Pantheon Sanctum: North Sanctum
+1[450005222] Arcana: Between Frost and Thunder 2
++[450005100] Arcana: Near the Floral Flute
+:[400010502] East Pantheon: Suspicious Hideout Interior 2
+:[400010503] East Pantheon: Suspicious Hideout Interior 3
+8[450003320] Lachelein Night Market: Chicken Festival 3
+1[450002016] Skywhale Mountain: Mountain's Mouth
+3[450005131] Arcana: Where Earth and Sunlight Meet
+/[450002004] Five-Color Hill: Mottled Forest 3
+8[450003310] Lachelein Night Market: Chicken Festival 2
+1[400010100] East Pantheon: East Pantheon Plains
+;[450001010] Lake of Oblivion: Weathered Land of Happiness
+5[401020000] Forbidden Forest: Twisted Forest Border
+-[401020100] Forbidden Forest: Eurenth's Hut
+6[401040500] Heliseum Downtown: West Downtown Walkway
+3[450002006] Slurpy Forest: Dealie-Bobber Forest 1
+.[450005000] Arcana: Grove of the Spirit Tree
+2[401040100] Heliseum Downtown: Downtown of Valor
+0[450002023] Chu Chu Island: Quiet Village Path
+;[450003530] Lachelein Clocktower: Nightmare Clocktower 4F
+5[400040300] North Pantheon: Grumpy Grobbler Habitat
+([450001110] Extinction Zone: Rock Zone
+0[450001007] Lake of Oblivion: Lake of Oblivion
+6[401040700] Heliseum Downtown: East Downtown Walkway
+,[400020000] Pantheon Sanctum: West Sanctum
+/[450001113] Extinction Zone: Fire Spirit Zone
+8[401020200] Forbidden Forest: Yellow Speeyor's Pasture
+.[400030601] South Pantheon: Heretic Temple 1
+&[400000000] Nova's Sanctum: Pantheon
+5[401040600] Heliseum Downtown: East Downtown Border
+7[401020300] Forbidden Forest: Secret Merchant Meet-Up
+,[450001230] Cave of Repose: Arma's Hideout
+,[450005120] Arcana: The Forest of Sunlight
+-[450001000] Lake of Oblivion: Nameless Town
+5[450001016] Lake of Oblivion: Weathered Land of Joy
+)[450002014] Eree Valley: Torrent Zone 3
+/[401010000] Twisted Forest: Savage Dog Forest
+9[401040300] Heliseum Downtown: Heliseum Downtown Center
++[450001215] Cave of Repose: Forked Road 2
+8[450003440] Lachelein Ballroom: Occupied Dance Floor 1
+)[450005210] Arcana: Snow Cloud Clearing
+*[450001114] Extinction Zone: Spirit Zone
+5[450005242] Arcana: The Volatile and Toxic Forest 2
+@[450001015] Lake of Oblivion: Weathered Land of Sorrow and Joy
+3[450005121] Arcana: Where Water and Sunlight Meet
+0[450001260] Lake of Oblivion: Hidden Lakeshore
+;[450003510] Lachelein Clocktower: Nightmare Clocktower 2F
+A[450005440] Arcana: The Deepest Part of the Cavern - Lower Path
+2[450003330] Lachelein Night Market: Noisy Market
+2[450002009] Slurpy Forest: Bitty-Bobble Forest 2
+0[450003220] Lachelein Alley: Outlaw's Street 3
+6[401040200] Heliseum Downtown: Downtown of Willpower
+.[450002019] Skywhale Mountain: Skywhale Peak
+6[450005510] Arcana: Labyrinthine Cavern - Upper Path
+0[450003210] Lachelein Alley: Outlaw's Street 2
+-[400030000] Pantheon Sanctum: South Sanctum
+5[450002005] Five-Color Hill: Within Five-Color Hill
+/[401030000] Nameless Forest: Path to the Hill
+1[400020100] West Pantheon: West Pantheon Plains
+;[450003520] Lachelein Clocktower: Nightmare Clocktower 3F
+/[450001261] Extinction Zone: Hidden Fire Zone
+,[450001217] Cave of Repose: Above the Cave
+([450001112] Extinction Zone: Fire Zone
+-[400000001] Pantheon: Great Temple Interior
+3[401030500] Nameless Forest: Specter Forward Base
+5[400030600] South Pantheon: Heretic Temple Entrance
+3[400040100] North Pantheon: North Pantheon Plains
+8[450003450] Lachelein Ballroom: Occupied Dance Floor 2
+)[450001262] Cave of Repose: Hidden Cave
+-[400010400] East Pantheon: Enchanted Forest
+:[450001003] Lake of Oblivion: Vanishing Journey Entrance
 8[450002017] Skywhale Mountain: Skywhale Mountainside 1
-/[450002003] Five-Color Hill: Mottled Forest 2
-*[450002012] Eree Valley: Torrent Zone 1
+.[400030603] South Pantheon: Heretic Temple 3
+-[450001111] Extinction Zone: Fire Rock Zone
+'[450005410] Arcana: Cavern Upper Path
+;[450003500] Lachelein Clocktower: Nightmare Clocktower 1F
+([450002001] Five-Color Hill: Hill Path
+1[450001212] Cave of Repose: Western Cave Path 2
 5[400010500] East Pantheon: Suspicious Base Entrance
-7[502010000] Some Day in the Present: OSSS Secret Base
-B[502010040] Some Day in the Present: OSSS Secret Base Laboratory
-'[541020400] Singapore: Along Ulu City
-([540020000] Singapore: Suburban Area 1
-D[502010520] Some Day in the Present: Processing Plant Defense Line
-D[502010570] Some Day in the Present: Processing Plant Defense Line
-'[551000100] Malaysia: Hibiscus Road 1
-4[551030100] Malaysia: Entrance to the Spooky World
-%[541010060] Singapore: Ghost Ship 7
-'[551000000] Malaysia: Kampung Village
-*[541000300] Singapore: Mysterious Path 3
-D[502010560] Some Day in the Present: Processing Plant Defense Line
-&[540000100] Singapore: Central Way 1
-)[541020600] Singapore: Destroyed Park I
-%[541010020] Singapore: Ghost Ship 3
-.[540010100] Victoria Island: Kerning Airport
-*[541000200] Singapore: Mysterious Path 2
-;[540010001] Singapore: Before Departure (To Kerning City)
-D[502010580] Some Day in the Present: Processing Plant Defense Line
-D[502010510] Some Day in the Present: Processing Plant Defense Line
-,[551020000] Malaysia: Fantasy Theme Park 2
+5[450005520] Arcana: Labyrinthine Cavern - Side Path
+$[450005300] Arcana: Marimba Lagoon
+5[450005241] Arcana: The Volatile and Toxic Forest 1
+0[401030300] Nameless Forest: Specter Mine Zone
+/[401010010] Twisted Forest: Forest of Choices
+-[400020300] West Pantheon: Heliseum Hideout
+<[450003340] Lachelein Night Market: Victory Plate Street 1
+1[400010200] East Pantheon: East Pantheon Border
+4[401010100] Twisted Forest: Blue Speeyor's Pasture
+7[450005411] Arcana: Deep in the Cavern - Upper Path 1
+([450001105] Extinction Zone: Lakeshore
+6[450001012] Lake of Oblivion: Weathered Land of Rage
+)[450005200] Arcana: Heart of the Forest
+&[450005400] Arcana: Cavernous Cavern
++[450001100] Extinction Zone: Mirage Cliff
+8[450001014] Lake of Oblivion: Weathered Land of Sorrow
+/[401000000] Heliseum: Heliseum Reclamation HQ
+A[450005420] Arcana: The Deepest Part of the Cavern - Upper Path
+A[450001013] Lake of Oblivion: Weathered Land of Rage and Sorrow
+4[450003410] Lachelein Ballroom: Revelation Place 2
+<[401040800] Heliseum Downtown: Road to the Tyrant's Castle
+4[450003400] Lachelein Ballroom: Revelation Place 1
+)[450001005] Lake of Oblivion: Lakeshore
+3[450002007] Slurpy Forest: Dealie-Bobber Forest 2
+.[450001107] Extinction Zone: Fire Zone Cliff
+*[450002015] Eree Valley: Below the Falls
++[450001200] Cave of Repose: Cave Entrance
+1[450001213] Cave of Repose: Eastern Cave Path 1
+-[450002000] Chu Chu Island: Chu Chu Village
+1[450001214] Cave of Repose: Eastern Cave Path 2
+5[401020400] Forbidden Forest: Forest of Coexistence
+)[450005015] Arcana: Spirit Tree Vantage
+/[400030400] South Pantheon: Anti-Magic Forest
+,[450001216] Cave of Repose: Below the Cave
+8[450002018] Skywhale Mountain: Skywhale Mountainside 2
+5[401040400] Heliseum Downtown: West Downtown Border
+3[450002011] Eree Valley: Chu Chu Village Entrance
+2[450002008] Slurpy Forest: Bitty-Bobble Forest 1
+'[450005430] Arcana: Cavern Lower Path
+)[450002013] Eree Valley: Torrent Zone 2
+4[401050001] Tyrant's Castle: Tyrant's Castle Foyer
+.[450002020] Skywhale Mountain: Colossal Tail
+3[401010200] Twisted Forest: Red Speeyor's Pasture
+4[401030600] Forested Border Path: Path to Downtown
+3[450001219] Cave of Repose: Split Road of Destiny
+ [450003100] Lachelein: Hideout
+8[450003300] Lachelein Night Market: Chicken Festival 1
+7[450005431] Arcana: Deep in the Cavern - Lower Path 1
+/[450002002] Five-Color Hill: Mottled Forest 1
+4[450003420] Lachelein Ballroom: Revelation Place 3
+;[450003540] Lachelein Clocktower: Nightmare Clocktower 5F
+.[450003000] Lachelein: Lachelein Main Street
+,[450005220] Arcana: Thunder Cloud Clearing
+D[450001011] Lake of Oblivion: Weathered Land of Happiness and Rage
++[450001210] Cave of Repose: Forked Road 1
+7[450005412] Arcana: Deep in the Cavern - Upper Path 2
+6[401040000] Heliseum Downtown: Downtown Black Market
+-[401030100] Nameless Forest: Full Moon Hill
+%[450005010] Arcana: Forest Entrance
+)[450005110] Arcana: The Forest of Water
+1[450005221] Arcana: Between Frost and Thunder 1
+&[450005230] Arcana: Forest of Toxins
+)[450005240] Arcana: The Volatile Forest
+)[450002012] Eree Valley: Torrent Zone 1
+7[450005432] Arcana: Deep in the Cavern - Lower Path 2
+)[450005500] Arcana: Labyrinthine Cavern
+/[450002003] Five-Color Hill: Mottled Forest 2
 C[502010010] Some Day in the Present: Underground Passage Entrance
-9[502040000] Some Day in the Present: Doctor Bing's Cube
-%[541010030] Singapore: Ghost Ship 4
-C[502040300] That Day in the Past: Processing Plant Delivery Route
-%[541010040] Singapore: Ghost Ship 5
-D[502010550] Some Day in the Present: Processing Plant Defense Line
 '[551000200] Malaysia: Hibiscus Road 2
-[502050002] 
-C[502040100] That Day in the Past: Secret Base Underground Passage
-%[550000400] Malaysia: Muddy Banks 3
-([541020500] Singapore: Ulu City Center
-%[550000200] Malaysia: Muddy Banks 1
-G[502010020] Some Day in the Present: OSSS Secret Base Central Command
--[550000000] Malaysia: Trend Zone Metropolis
-%[541010050] Singapore: Ghost Ship 6
-[540000000] Singapore: CBD
-*[541020000] Singapore: Ulu City Entrance
-[502050005] 
-[502050001] 
-D[502010540] Some Day in the Present: Processing Plant Defense Line
-[502050003] 
-[502050000] 
-([540020100] Singapore: Suburban Area 2
-'[541000000] Singapore: Boat Quay Town
-*[541000100] Singapore: Mysterious Path 1
-D[502010530] Some Day in the Present: Processing Plant Defense Line
-%[541010010] Singapore: Ghost Ship 2
->[502021010] A Day in the Future: Outskirts of Future Henesys
-%[541010000] Singapore: Ghost Ship 1
-&[541020200] Singapore: Ulu Estate II
 J[502010030] Some Day in the Present: OSSS Secret Base Doctor Bing's Room
-*[541020610] Singapore: Destroyed Park II
-[502050004] 
-H[502010600] Some Day in the Present: Underground Passage Assembly Area
-,[551030000] Malaysia: Fantasy Theme Park 3
-0[550000100] Malaysia: Outskirts of Muddy Banks
-%[550000300] Malaysia: Muddy Banks 2
-&[540000300] Singapore: Central Way 3
+%[541010030] Singapore: Ghost Ship 4
+&[541020200] Singapore: Ulu Estate II
+D[502010580] Some Day in the Present: Processing Plant Defense Line
+%[541010010] Singapore: Ghost Ship 2
+D[502010570] Some Day in the Present: Processing Plant Defense Line
+%[541010040] Singapore: Ghost Ship 5
+C[502040100] That Day in the Past: Secret Base Underground Passage
+)[541020600] Singapore: Destroyed Park I
+%[550000400] Malaysia: Muddy Banks 3
+D[502010550] Some Day in the Present: Processing Plant Defense Line
+[502050003] 
+([540020000] Singapore: Suburban Area 1
+%[541010050] Singapore: Ghost Ship 6
 ,[551010000] Malaysia: Fantasy Theme Park 1
-%[541020100] Singapore: Ulu Estate I
-D[502010590] Some Day in the Present: Processing Plant Defense Line
-7[502040200] That Day in the Past: Fossil Mineral Mine
-'[541020300] Singapore: Ulu Estate III
-&[540000200] Singapore: Central Way 2
-*[541010110] Singapore: The Peaceful Ship
 4[502022010] A Day in the Future: Energy Laboratory
+C[502040300] That Day in the Past: Processing Plant Delivery Route
+'[551000100] Malaysia: Hibiscus Road 1
+D[502010530] Some Day in the Present: Processing Plant Defense Line
+([540020100] Singapore: Suburban Area 2
+&[540000300] Singapore: Central Way 3
+[502050001] 
+%[541020100] Singapore: Ulu Estate I
+D[502010560] Some Day in the Present: Processing Plant Defense Line
+,[551030000] Malaysia: Fantasy Theme Park 3
+'[551000000] Malaysia: Kampung Village
+%[541010020] Singapore: Ghost Ship 3
+'[541000000] Singapore: Boat Quay Town
+[502050004] 
+[500000000] 
+;[540010001] Singapore: Before Departure (To Kerning City)
+*[541000200] Singapore: Mysterious Path 2
+,[551020000] Malaysia: Fantasy Theme Park 2
+D[502010510] Some Day in the Present: Processing Plant Defense Line
+[502050005] 
+*[541020000] Singapore: Ulu City Entrance
+9[502040000] Some Day in the Present: Doctor Bing's Cube
+>[502021010] A Day in the Future: Outskirts of Future Henesys
+%[550000200] Malaysia: Muddy Banks 1
+&[540000200] Singapore: Central Way 2
+4[551030100] Malaysia: Entrance to the Spooky World
+'[541020300] Singapore: Ulu Estate III
+B[502010040] Some Day in the Present: OSSS Secret Base Laboratory
+G[502010020] Some Day in the Present: OSSS Secret Base Central Command
+&[540000100] Singapore: Central Way 1
+'[541020400] Singapore: Along Ulu City
+[540000000] Singapore: CBD
+[502050002] 
+%[541010000] Singapore: Ghost Ship 1
+*[541020610] Singapore: Destroyed Park II
+[502050000] 
+0[550000100] Malaysia: Outskirts of Muddy Banks
+*[541010110] Singapore: The Peaceful Ship
 *[541020700] Singapore: Ruins of Krexel I
+%[550000300] Malaysia: Muddy Banks 2
+([541020500] Singapore: Ulu City Center
+D[502010520] Some Day in the Present: Processing Plant Defense Line
 A[502040400] That Day in the Past: Processing Plant Defense Line
-*[922220000] Hidden Street: Gloomy Forest
-3[910060002] Victoria Road: Bowman Training Center
-3[910060004] Victoria Road: Bowman Training Center
-A[910080000] Bowman Test Site: Empty Bowman Instructional School
-3[912030004] Victoria Road: Pirate Training Center
-$[910142041] Ellinia: Magic Library
+*[541000300] Singapore: Mysterious Path 3
+%[541010060] Singapore: Ghost Ship 7
+D[502010590] Some Day in the Present: Processing Plant Defense Line
+7[502010000] Some Day in the Present: OSSS Secret Base
+.[540010100] Victoria Island: Kerning Airport
+D[502010540] Some Day in the Present: Processing Plant Defense Line
+7[502040200] That Day in the Past: Fossil Mineral Mine
+H[502010600] Some Day in the Present: Underground Passage Assembly Area
+*[541000100] Singapore: Mysterious Path 1
+-[550000000] Malaysia: Trend Zone Metropolis
+5[910120000] Victoria Road: Magician Training Center
+B[910060101] Victoria Road: Power B. Fore's Spore Training Center
+'[923050001] Research Command: Veritas
+,[914010100] Snow Island: Training Ground 2
+[901000000] 
 $[910142051] Hidden Street: Harmony
-[910150007] 
-1[911005904] 11th Anniversary Event: 12 Monsters
-$[910142040] Ellinia: Magic Library
+3[910060000] Victoria Road: Bowman Training Center
+3[910060003] Victoria Road: Bowman Training Center
+B[910060100] Victoria Road: Power B. Fore's Spore Training Center
+A[910080000] Bowman Test Site: Empty Bowman Instructional School
+=[993017000] 행성 림보: 와글와글 하우스 대기실
+1[931000430] Hidden Street: Secret Meeting Place
+5[910120001] Victoria Road: Magician Training Center
+$[910142050] Hidden Street: Harmony
+,[910196012] The Past: North Rocky Mountain
+5[910120004] Victoria Road: Magician Training Center
+8[913070205] Hidden Street: Neinheart's Testing Grounds
+1[911005912] 11th Anniversary Event: 12 Monsters
+4[910220002] Victoria Road: Warrior Training Center
+4[910220003] Victoria Road: Warrior Training Center
+3[912030003] Victoria Road: Pirate Training Center
++[922020200] Hidden Street: Hidden Balcony
+([924050001] Unknown Location: Dominion
+3[912030000] Victoria Road: Pirate Training Center
+4[910220000] Victoria Road: Warrior Training Center
+$[910142041] Ellinia: Magic Library
+.[930010000] Hidden Street: Dangerous Library
+3[912030004] Victoria Road: Pirate Training Center
+5[910120003] Victoria Road: Magician Training Center
+)[926130100] Hidden Street: Lab Entrance
+6[993013000] M-426: 미션 투 스페이스 대기실
 #[930100400] Tynerum Altar: Office
-#[930100401] Tynerum Altar: Office
+5[993012000] 행성 오션스포틴: 오션스포틴
+7[910050100] Hidden Street: Dangerous Pet-Walking Road
+1[911005905] 11th Anniversary Event: 12 Monsters
+2[910310000] Victoria Road: Thief Training Center
+2[910310002] Victoria Road: Thief Training Center
+2[910310004] Victoria Road: Thief Training Center
+8[910194100] Ice Cream of the Crop: Ice Cream, This Way
 #[931000610] Hidden Street: Prison
 '[923050000] Research Command: Veritas
-4[910220004] Victoria Road: Warrior Training Center
-1[911005911] 11th Anniversary Event: 12 Monsters
-2[910310003] Victoria Road: Thief Training Center
-5[910120001] Victoria Road: Magician Training Center
-?[910196000] Hidden Street: 10th Anniversary Festival Location
-0[913051008] Hidden Street: New Twilight Perion
 :[911000000] Monster Treasure Town: Monster Treasure Town
-8[913070204] Hidden Street: Neinheart's Testing Grounds
-)[926130000] Hidden Street: Yulete's Lab
-4[910220001] Victoria Road: Warrior Training Center
-'[923050004] Research Command: Veritas
-8[913070206] Hidden Street: Neinheart's Testing Grounds
-[901000000] 
-2[910310001] Victoria Road: Thief Training Center
-8[913070202] Hidden Street: Neinheart's Testing Grounds
-'[923050001] Research Command: Veritas
-1[910150230] Fairy Forest: Occupied Elven Forest
-1[911005906] 11th Anniversary Event: 12 Monsters
-8[910194100] Ice Cream of the Crop: Ice Cream, This Way
-8[913070207] Hidden Street: Neinheart's Testing Grounds
-5[910120000] Victoria Road: Magician Training Center
-7[910050100] Hidden Street: Dangerous Pet-Walking Road
-5[910120002] Victoria Road: Magician Training Center
-1[911005901] 11th Anniversary Event: 12 Monsters
-4[910220003] Victoria Road: Warrior Training Center
-3[912030001] Victoria Road: Pirate Training Center
-?[911000100] Monster Treasure Town: Monster's Treasure Storage
-8[913070201] Hidden Street: Neinheart's Testing Grounds
-[911002900] 
-,[910196007] Hidden Street: Secluded Forest
-+[924030002] Hidden Street: Stone Colossus
-,[914010000] Snow Island: Training Ground 1
-$[910142050] Hidden Street: Harmony
-,[914010200] Snow Island: Training Ground 3
-4[910220002] Victoria Road: Warrior Training Center
-8[913070203] Hidden Street: Neinheart's Testing Grounds
-3[912030003] Victoria Road: Pirate Training Center
-8[913070205] Hidden Street: Neinheart's Testing Grounds
-[924050000] 
-+[924030004] Hidden Street: Stone Colossus
-,[910196012] The Past: North Rocky Mountain
-1[911005903] 11th Anniversary Event: 12 Monsters
-3[910060000] Victoria Road: Bowman Training Center
-[913070071] 
-5[910120003] Victoria Road: Magician Training Center
-2[910310000] Victoria Road: Thief Training Center
-5[910120004] Victoria Road: Magician Training Center
-2[910310004] Victoria Road: Thief Training Center
-2[910310002] Victoria Road: Thief Training Center
-)[940000110] West Pantheon: West Sanctum
-'[923050002] Research Command: Veritas
-+[924030003] Hidden Street: Stone Colossus
-1[911005905] 11th Anniversary Event: 12 Monsters
-1[911005907] 11th Anniversary Event: 12 Monsters
-5[910080010] Hidden Street: Eastern Besieged Henesys
-1[911005910] 11th Anniversary Event: 12 Monsters
-0[930030000] Hidden Street: Ulrika Gang Hideout
-+[924030001] Hidden Street: Stone Colossus
-.[970072200] Hidden Street: Ursus (Entry Map)
-3[910060001] Victoria Road: Bowman Training Center
-B[910060100] Victoria Road: Power B. Fore's Spore Training Center
-)[926130100] Hidden Street: Lab Entrance
 3[912030002] Victoria Road: Pirate Training Center
-1[911005912] 11th Anniversary Event: 12 Monsters
-'[923050005] Research Command: Veritas
-([924050001] Unknown Location: Dominion
-,[914010100] Snow Island: Training Ground 2
+8[913070207] Hidden Street: Neinheart's Testing Grounds
+1[911005901] 11th Anniversary Event: 12 Monsters
+1[911005911] 11th Anniversary Event: 12 Monsters
+[924050000] 
+8[913070206] Hidden Street: Neinheart's Testing Grounds
 8[913070209] Hidden Street: Neinheart's Testing Grounds
-1[910350211] Hidden Street: Wild Crocodile Swamp
-+[910196018] Cave of Life: Horntail's Cave
-'[923050003] Research Command: Veritas
-B[910060101] Victoria Road: Power B. Fore's Spore Training Center
-4[910220000] Victoria Road: Warrior Training Center
-+[920020000] Hidden Street: Eliza's Garden
-.[930010000] Hidden Street: Dangerous Library
-8[913070208] Hidden Street: Neinheart's Testing Grounds
+:[993011000] 행성 미넬: 익스트림 레일 대기실
+,[910196007] Hidden Street: Secluded Forest
+3[910060002] Victoria Road: Bowman Training Center
 1[911005908] 11th Anniversary Event: 12 Monsters
-3[912030000] Victoria Road: Pirate Training Center
-+[922020200] Hidden Street: Hidden Balcony
+[913070071] 
++[910310506] Kerning Tower: Rehearsal Room
++[924030002] Hidden Street: Stone Colossus
+0[913051008] Hidden Street: New Twilight Perion
+[911002900] 
+,[914010000] Snow Island: Training Ground 1
+&[910043100] Event: Mini-game Station
+8[913070202] Hidden Street: Neinheart's Testing Grounds
++[924030001] Hidden Street: Stone Colossus
+4[910220004] Victoria Road: Warrior Training Center
+1[910150230] Fairy Forest: Occupied Elven Forest
+1[911005904] 11th Anniversary Event: 12 Monsters
+?[911000100] Monster Treasure Town: Monster's Treasure Storage
+,[914010200] Snow Island: Training Ground 3
+'[923050002] Research Command: Veritas
+[993000838] 
+5[910120002] Victoria Road: Magician Training Center
+$[910142040] Ellinia: Magic Library
+8[913070203] Hidden Street: Neinheart's Testing Grounds
+[910150007] 
+0[930030000] Hidden Street: Ulrika Gang Hideout
+*[922220000] Hidden Street: Gloomy Forest
+#[930100401] Tynerum Altar: Office
 1[911005909] 11th Anniversary Event: 12 Monsters
++[920020000] Hidden Street: Eliza's Garden
++[910196018] Cave of Life: Horntail's Cave
+3[910060001] Victoria Road: Bowman Training Center
++[924030004] Hidden Street: Stone Colossus
+'[923050003] Research Command: Veritas
+3[912030001] Victoria Road: Pirate Training Center
+8[913070208] Hidden Street: Neinheart's Testing Grounds
+)[926130000] Hidden Street: Yulete's Lab
+1[911005903] 11th Anniversary Event: 12 Monsters
+/[910310505] Kerning Tower: Sky Garden Terrace
+'[923050005] Research Command: Veritas
+4[910220001] Victoria Road: Warrior Training Center
+8[913070204] Hidden Street: Neinheart's Testing Grounds
+2[910310001] Victoria Road: Thief Training Center
+8[913070201] Hidden Street: Neinheart's Testing Grounds
+3[910060004] Victoria Road: Bowman Training Center
+1[911005910] 11th Anniversary Event: 12 Monsters
+1[911005906] 11th Anniversary Event: 12 Monsters
++[924030003] Hidden Street: Stone Colossus
+[993002200] 
+)[940000110] West Pantheon: West Sanctum
+?[910196000] Hidden Street: 10th Anniversary Festival Location
+.[970072200] Hidden Street: Ursus (Entry Map)
 ;[910090000] Henesys: Helena's Bowman Instructional School
-3[910060003] Victoria Road: Bowman Training Center
-1[931000430] Hidden Street: Secret Meeting Place
-4[1010400] Maple Road: Adventurer Training Center 4
-1[1000003] Rainbow Street: Amherst General Store
-[1020500] 
+'[923050004] Research Command: Veritas
+<[993014000] 행성 아이스콜드: 행성 아이스콜드
+5[910080010] Hidden Street: Eastern Besieged Henesys
+1[911005907] 11th Anniversary Event: 12 Monsters
+2[910310003] Victoria Road: Thief Training Center
+1[910350211] Hidden Street: Wild Crocodile Swamp
+*[600010000] Masteria: Right Outside Town
+)[689012005] Pink Zakum: Pink Zakum Exit
+'[600010100] Masteria: Jungle Clearing
+#[600010600] Masteria: Highlands 1
+3[610051900] Blackgate City: Southern Battleground
+3[610020015] Crimsonwood Mountain: Cavern of Valor
+1[620000100] Jett's Spaceship: Spaceship Cockpit
+0[610020002] Crimsonwood Mountain: Lower Ascent
+-[682000001] Phantom Forest: Hollowed Ground
+.[610010004] Phantom Forest: Dead Man's Gorge
+,[610010005] Phantom Forest: Forgotten Path
+3[610051500] Blackgate City: Northern Battleground
+([610010201] Phantom Forest: Crossroads
+4[610020006] Crimsonwood Mountain: Crimsonwood Keep
+([610040608] Alien Base: Escape Route
+
+2[610020011] Crimsonwood Mountain: Cavern of Pain
+*[610030014] Crimsonwood  Keep: Stormhall
+2[610030015] Crimsonwood  Keep: Eternal Vigilance
+)[689012008] Pink Zakum: Pink Zakum Exit
+*[610010003] Phantom Forest: Phantom Road
+-[689010009] Pink Zakum: Pink Zakum Entrance
+)[680000001] Amoria: Amoria Wedding Shop
+([610010200] Phantom Forest: Crossroads
+5[610020004] Crimsonwood Mountain: The Path of Peril
+#[600010700] Masteria: Jungle Pass
+1[610051200] Blackgate City: Southwest Outskirts
+([610040601] Alien Base: Escape Route
+
+([610040605] Alien Base: Escape Route
+
+2[610051700] Blackgate City: Eastern Battleground
+/[610050300] Blackgate City: Northwest Heights
+1[610050600] Blackgate City: Northeast Outskirts
+$[600020500] MesoGears: Ice Chamber
+2[610051300] Blackgate City: Western Battleground
+4[610052000] Blackgate City: Southwest Battleground
+-[689010008] Pink Zakum: Pink Zakum Entrance
+4[610051400] Blackgate City: Northwest Battleground
+,[600000000] New Leaf City: NLC Town Center
++[600020300] MesoGears: Wolf Spider Cavern
+.[610050400] Blackgate City: Northern Heights
+=[693005700] Hidden Street: Deep in the Happyville Mountains
+-[689010003] Pink Zakum: Pink Zakum Entrance
+'[600010400] Masteria: Mountain Slopes
+-[689010005] Pink Zakum: Pink Zakum Entrance
+)[610010012] Phantom Forest: Evil Rising
+%[600020400] MesoGears: Fire Chamber
+-[680000003] Amoria: Amoria Plastic Surgery 
+([610040607] Alien Base: Escape Route
+
+1[610050200] Blackgate City: Northwest Outskirts
+/[600010001] New Leaf City: NLC Subway Station
+,[680010100] Hidden Street: Purple Plains 2
+1[620000000] Jett's Spaceship: Spaceship Cockpit
+([610040603] Alien Base: Escape Route
+
+)[689012003] Pink Zakum: Pink Zakum Exit
+)[689012004] Pink Zakum: Pink Zakum Exit
+)[610010010] Phantom Forest: Hidden Evil
+-[689010004] Pink Zakum: Pink Zakum Entrance
+&[600010300] Masteria: Jungle Valley 
+0[670000200] Hidden Street: Purplewood Forest 2
++[610010102] Phantom Forest: Twisted Paths
+%[600000001] New Leaf City: NLC Mall
+3[610020012] Crimsonwood Mountain: Cavern of Shame
+([610040604] Alien Base: Escape Route
+
+7[610020014] Crimsonwood Mountain: Cavern of Fortitude
+.[610051000] Blackgate City: Southern Heights
+0[670000100] Hidden Street: Purplewood Forest 1
+,[680010000] Hidden Street: Purple Plains 1
+([610040602] Alien Base: Escape Route
+
+3[610030013] Crimsonwood  Keep: The Wrath of Night
+'[600020600] MesoGears: Enigma Chamber
+0[610030010] Crimsonwood  Keep: Hall of Mastery
+2[610020010] Crimsonwood Mountain: Cavern of Fear
+-[689010007] Pink Zakum: Pink Zakum Entrance
+1[610050800] Blackgate City: Southeast Outskirts
+.[610050000] Blackgate City: BDF Western Line
++[610010103] Phantom Forest: Twisted Paths
+'[680000002] Amoria: Amoria Hair Salon
+([600010500] Masteria: Mountain Cliffs 
+'[610010002] Phantom Forest: Swamp Bog
+([610040606] Alien Base: Escape Route
+
+&[680000004] Amoria: Meet the Parents
+1[610030011] Crimsonwood  Keep: Tornado Corridor
++[610010013] Phantom Forest: The Evil Dead
+-[689010001] Pink Zakum: Pink Zakum Entrance
+)[689012002] Pink Zakum: Pink Zakum Exit
+'[610010000] Phantom Forest: Bent Tree
+-[689010006] Pink Zakum: Pink Zakum Entrance
+)[689012007] Pink Zakum: Pink Zakum Exit
+)[689012006] Pink Zakum: Pink Zakum Exit
+)[689012009] Pink Zakum: Pink Zakum Exit
+1[610020005] Crimsonwood Mountain: Upper Ascent 
++[610010100] Phantom Forest: Twisted Paths
+4[610051800] Blackgate City: Southeast Battleground
+2[670010000] Hidden Street: Amos' Training Ground
+([610040700] Alien Base: Escape Route
+
+)[689012001] Pink Zakum: Pink Zakum Exit
+#[600020100] MesoGears: Deity Room
+/[610050900] Blackgate City: Southeast Heights
+&[600020200] MesoGears: Soul Corridor
+*[610030000] Crimsonwood  Keep: Courtyard
+*[610010001] Phantom Forest: Haunted Hill
+3[610020013] Crimsonwood Mountain: Cavern of Honor
+8[610020003] Crimsonwood Mountain: The Path of Strength
+/[610051100] Blackgate City: Southwest Heights
+/[610050500] Blackgate City: Northeast Heights
+,[600010200] Masteria: Krakian Jungle Basin
+/[610050700] Blackgate City: Eastern Outskirts
++[682000000] Phantom Forest: Haunted House
+([610010202] Phantom Forest: Crossroads
+4[610030012] Crimsonwood  Keep: The Inferno Chamber
+[600020000] Bigger Ben: Lobby
+4[610051600] Blackgate City: Northeast Battleground
++[610010104] Phantom Forest: Twisted Paths
+-[689010002] Pink Zakum: Pink Zakum Entrance
+([610040609] Alien Base: Escape Route
+
++[610010011] Phantom Forest: Creeping Evil
++[610010101] Phantom Forest: Twisted Paths
+/[610050100] Blackgate City: Western Outskirts
+8[0] Maple Road: Entrance - Mushroom Town Training Camp
 [2010000] 
 0[1000001] Rainbow Street: Amherst Weapon Store
 4[1010100] Maple Road: Adventurer Training Center 1
-.[2000001] Maple Road: Southperry Armor Store
-8[0] Maple Road: Entrance - Mushroom Town Training Camp
-[1020300] 
-.[1000002] Rainbow Street: Amherst Townstreet
-[2000100] Maple Road: Port
+[1020500] 
+4[1010400] Maple Road: Adventurer Training Center 4
 4[1010200] Maple Road: Adventurer Training Center 2
+4[1010300] Maple Road: Adventurer Training Center 3
+.[2000001] Maple Road: Southperry Armor Store
+[2000100] Maple Road: Port
+1[1000003] Rainbow Street: Amherst General Store
 &[4000005] Hidden Street: Lith Harbor
+[1020400] 
+[1020300] 
 [1020100] 
 [1020200] 
-4[1010300] Maple Road: Adventurer Training Center 3
-[1020400] 
-%[600000001] New Leaf City: NLC Mall
-)[689012002] Pink Zakum: Pink Zakum Exit
-)[689012008] Pink Zakum: Pink Zakum Exit
-.[610051000] Blackgate City: Southern Heights
-+[610010101] Phantom Forest: Twisted Paths
--[689010006] Pink Zakum: Pink Zakum Entrance
-&[600010300] Masteria: Jungle Valley 
-+[600020300] MesoGears: Wolf Spider Cavern
-([610040700] Alien Base: Escape Route
-
-'[610010002] Phantom Forest: Swamp Bog
-*[610010003] Phantom Forest: Phantom Road
-=[693005700] Hidden Street: Deep in the Happyville Mountains
-'[600010100] Masteria: Jungle Clearing
-8[610020003] Crimsonwood Mountain: The Path of Strength
-*[610030014] Crimsonwood  Keep: Stormhall
-,[680010000] Hidden Street: Purple Plains 1
-([610010202] Phantom Forest: Crossroads
-7[610020014] Crimsonwood Mountain: Cavern of Fortitude
-([610040609] Alien Base: Escape Route
-
-/[600010001] New Leaf City: NLC Subway Station
-([610040601] Alien Base: Escape Route
-
--[689010001] Pink Zakum: Pink Zakum Entrance
-([610040605] Alien Base: Escape Route
-
-$[600020500] MesoGears: Ice Chamber
-/[610050300] Blackgate City: Northwest Heights
-3[610020015] Crimsonwood Mountain: Cavern of Valor
-1[610050800] Blackgate City: Southeast Outskirts
-#[600020100] MesoGears: Deity Room
-0[610020002] Crimsonwood Mountain: Lower Ascent
-+[682000000] Phantom Forest: Haunted House
-0[610030010] Crimsonwood  Keep: Hall of Mastery
--[689010007] Pink Zakum: Pink Zakum Entrance
-*[610010001] Phantom Forest: Haunted Hill
-3[610051900] Blackgate City: Southern Battleground
-1[610050200] Blackgate City: Northwest Outskirts
-1[610050600] Blackgate City: Northeast Outskirts
-)[689012006] Pink Zakum: Pink Zakum Exit
-)[689012009] Pink Zakum: Pink Zakum Exit
-([610040607] Alien Base: Escape Route
-
-*[600010000] Masteria: Right Outside Town
-#[600010700] Masteria: Jungle Pass
-/[610050900] Blackgate City: Southeast Heights
-+[610010011] Phantom Forest: Creeping Evil
-4[610020006] Crimsonwood Mountain: Crimsonwood Keep
-2[610051300] Blackgate City: Western Battleground
-1[610051200] Blackgate City: Southwest Outskirts
-([610040606] Alien Base: Escape Route
-
-&[600020200] MesoGears: Soul Corridor
-,[600000000] New Leaf City: NLC Town Center
-+[610010102] Phantom Forest: Twisted Paths
-+[610010100] Phantom Forest: Twisted Paths
--[680000003] Amoria: Amoria Plastic Surgery 
-#[600010600] Masteria: Highlands 1
-1[610020005] Crimsonwood Mountain: Upper Ascent 
-/[610051100] Blackgate City: Southwest Heights
-/[610050700] Blackgate City: Eastern Outskirts
-2[670010000] Hidden Street: Amos' Training Ground
-,[680010100] Hidden Street: Purple Plains 2
-)[689012004] Pink Zakum: Pink Zakum Exit
-'[600010400] Masteria: Mountain Slopes
-/[610050100] Blackgate City: Western Outskirts
-0[670000100] Hidden Street: Purplewood Forest 1
--[689010004] Pink Zakum: Pink Zakum Entrance
-([600010500] Masteria: Mountain Cliffs 
-3[610051500] Blackgate City: Northern Battleground
-([610010200] Phantom Forest: Crossroads
-'[600020600] MesoGears: Enigma Chamber
-([610040603] Alien Base: Escape Route
-
-2[610030015] Crimsonwood  Keep: Eternal Vigilance
-4[610051400] Blackgate City: Northwest Battleground
-+[610010013] Phantom Forest: The Evil Dead
-1[610030011] Crimsonwood  Keep: Tornado Corridor
-1[620000100] Jett's Spaceship: Spaceship Cockpit
-+[610010103] Phantom Forest: Twisted Paths
-&[680000004] Amoria: Meet the Parents
-4[610030012] Crimsonwood  Keep: The Inferno Chamber
-4[610051600] Blackgate City: Northeast Battleground
--[689010008] Pink Zakum: Pink Zakum Entrance
-3[610020012] Crimsonwood Mountain: Cavern of Shame
-.[610050400] Blackgate City: Northern Heights
-,[600010200] Masteria: Krakian Jungle Basin
-,[610010005] Phantom Forest: Forgotten Path
-.[610010004] Phantom Forest: Dead Man's Gorge
-3[610030013] Crimsonwood  Keep: The Wrath of Night
-2[610051700] Blackgate City: Eastern Battleground
--[682000001] Phantom Forest: Hollowed Ground
-([610010201] Phantom Forest: Crossroads
-)[689012001] Pink Zakum: Pink Zakum Exit
-)[689012007] Pink Zakum: Pink Zakum Exit
--[689010009] Pink Zakum: Pink Zakum Entrance
-+[610010104] Phantom Forest: Twisted Paths
-)[610010010] Phantom Forest: Hidden Evil
-)[680000001] Amoria: Amoria Wedding Shop
-)[689012003] Pink Zakum: Pink Zakum Exit
-([610040604] Alien Base: Escape Route
-
-)[689012005] Pink Zakum: Pink Zakum Exit
-)[610010012] Phantom Forest: Evil Rising
-3[610020013] Crimsonwood Mountain: Cavern of Honor
-[600020000] Bigger Ben: Lobby
-5[610020004] Crimsonwood Mountain: The Path of Peril
-%[600020400] MesoGears: Fire Chamber
-*[610030000] Crimsonwood  Keep: Courtyard
-2[610020010] Crimsonwood Mountain: Cavern of Fear
-4[610052000] Blackgate City: Southwest Battleground
-/[610050500] Blackgate City: Northeast Heights
-'[680000002] Amoria: Amoria Hair Salon
--[689010005] Pink Zakum: Pink Zakum Entrance
--[689010002] Pink Zakum: Pink Zakum Entrance
--[689010003] Pink Zakum: Pink Zakum Entrance
-'[610010000] Phantom Forest: Bent Tree
-0[670000200] Hidden Street: Purplewood Forest 2
-4[610051800] Blackgate City: Southeast Battleground
-.[610050000] Blackgate City: BDF Western Line
-([610040608] Alien Base: Escape Route
-
-([610040602] Alien Base: Escape Route
-
-2[610020011] Crimsonwood Mountain: Cavern of Pain
-1[620000000] Jett's Spaceship: Spaceship Cockpit
+.[1000002] Rainbow Street: Amherst Townstreet
+![701100010] Shanghai: Yu Garden
+![701100013] Shanghai: Yu Garden
+7[701102030] Outskirts of Shanghai: Mount Song Pathway
+&[701103010] The Bund: Jiangshi Den 1
+,[744000020] Sengoku High: Principal's Dojo
+![701100012] Shanghai: Yu Garden
+'[749080919] Alishan: Alishan Plains 3
+[749080900] Alishan: Leshan
+$[783100001] Fishin' Hole: Tutorial
+'[749080933] Alishan: Alishan Plains 3
+'[749080917] Alishan: Alishan Plains 1
+![701100011] Shanghai: Yu Garden
+'[749080907] Alishan: Alishan Plains 3
+'[749080906] Alishan: Alishan Plains 2
+*[783100000] Angler's Rest: Angler's Rest
+![701100000] Shanghai: Yu Garden
+'[749080903] Alishan: Alishan Plains 3
+'[749080905] Alishan: Alishan Plains 1
+.[744000000] Maple Leaf High School: Homeroom
+'[749080901] Alishan: Alishan Plains 1
+'[749080912] Alishan: Alishan Plains 2
+'[749080915] Alishan: Alishan Plains 2
+'[749080916] Alishan: Alishan Plains 3
+[701101031] 
+'[749080909] Alishan: Alishan Plains 2
+;[706051000] Wu Tien Mountain: 2,300m Up: Summit Waterfall
++[701101030] Nanjing Road: Shopping Center
+'[749080908] Alishan: Alishan Plains 1
+'[749080931] Alishan: Alishan Plains 1
+'[749080913] Alishan: Alishan Plains 3
+'[749080922] Alishan: Alishan Plains 3
+'[749080918] Alishan: Alishan Plains 2
+'[749080920] Alishan: Alishan Plains 1
+'[749080921] Alishan: Alishan Plains 2
+![701100015] Shanghai: Yu Garden
+4[701102010] Outskirts of Shanghai: Abandoned Farms
+2[701101010] Nanjing Road: Eastern Hotel District
+.[701103030] The Bund: Diabolic Jiangshi Base
+&[701103000] The Bund: Riverside Path
+'[749080914] Alishan: Alishan Plains 1
+![701100014] Shanghai: Yu Garden
+[749080930] 
+0[701102020] Outskirts of Shanghai: Vast Plains
+'[749080910] Alishan: Alishan Plains 3
+'[701101000] Nanjing Road: Busy Street
+5[701102000] Outskirts of Shanghai: Residential Area
+'[749080911] Alishan: Alishan Plains 1
+'[749080902] Alishan: Alishan Plains 2
+4[701220710] Shaolin Temple: Sutra Depository - Top
+,[749080904] Alishan: Alishan Train Station
+&[701103020] The Bund: Jiangshi Den 2
+2[701101020] Nanjing Road: Three-way Intersection
+'[749080932] Alishan: Alishan Plains 2
+)[800000101] Zipangu: Wandermush Forest 
+)[800000102] Zipangu: The Wounded Forest
+.[800000200] Zipangu: Cherry Blossom Forest 1
+$[800000303] Zipangu: Creepy Bridge
+3[865010019] Commerci Republic: The Scarlet Terror
+:[865000002] San Commerci: Daniella Merchant Union Office
+;[865030000] Commerci Republic: Suspicious Forest Entrance
+)[807020100] Momijigaoka: Momijigahara 2
+'[800020120] Zipangu: Vanished Village
+3[865010020] Commerci Republic: The Scarlet Terror
+4[865010010] Commerci Republic: Daniella Stronghold
+[809000201] Zipangu: Spa (F)
+&[807000000] Momijigaoka: Momijigaoka
+&[811001000] Momijigaoka: Momijigaoka
+([865020200] Commerci Republic: Canal 3
+![866193000] Arboren: Gusty Path
+#[866000130] Arboren: Kobold Pit 1
+&[800000000] Zipangu: Mushroom Shrine
+.[867113205] The Afterlands: Land of Warriors
+,[865010100] Commerci Republic: Berry Coast
+-[863100104] Tynerum: Cryptic Crimsonheart 3
++[800040000] Zipangu: Outside Ninja Castle
+)[802000100] Zipangu: Forest of Oblivion
+[865999999] 
+0[800010001] Zipangu: The Mountain of Cloud Fox
+$[866000220] Arboren: Arboren Ferry
+&[801000100] Zipangu: Locker Room (M)
+)[866000120] Arboren: Gloomy Forest Path
+%[801010000] Zipangu: Showa Street 1
+)[860000000] Aqua Road: Twisted Aquarium
+,[807010100] Momijigaoka: Maple Hill Road 2
+([865020300] Commerci Republic: Canal 4
+*[807030200] Momijigaoka: Training Dojo 3
+4[865010005] Commerci Republic: Daniella Stronghold
++[863100004] Tynerum: Shadow Veil Forest 4
+)[807020000] Momijigaoka: Momijigahara 1
+3[865010015] Commerci Republic: The Scarlet Terror
+%[800000202] Zipangu: Deserted House
+([811000007] Momiji Hills: Momiji Hills
+3[865010014] Commerci Republic: The Scarlet Terror
+4[865010007] Commerci Republic: Daniella Stronghold
+![866000000] Arboren: Stump Town
++[860000002] Aqua Road: West Shallow Sea 2
+4[865010001] Commerci Republic: Daniella Stronghold
+&[800010000] Zipangu: Mushroom Forest
+-[863100102] Tynerum: Cryptic Crimsonheart 3
++[863100006] Tynerum: Shadow Veil Forest 6
+.[867113209] The Afterlands: Land of Warriors
++[863100001] Tynerum: Shadow Veil Forest 1
+2[802000000] Zipangu: Forest of Oblivion Entrance
+-[863100103] Tynerum: Cryptic Crimsonheart 4
+![801000000] Zipangu: Showa Town
+3[865010011] Commerci Republic: The Scarlet Terror
+3[865010013] Commerci Republic: The Scarlet Terror
+'[811000008] Momiji Hills: Master Room
+-[863100100] Tynerum: Cryptic Crimsonheart 1
+([860000010] Aqua Road: West Bright Sea
+4[865010009] Commerci Republic: Daniella Stronghold
+'[811000013] Hieizan: Hieizan Entrance
+*[801000300] Zipangu: Showa Street Market
+-[863100101] Tynerum: Cryptic Crimsonheart 2
+;[865010099] Commerci Republic: San Commerci West Entrance
+.[800000201] Zipangu: Cherry Blossom Forest 2
++[866000110] Arboren: Creepy Forest Path 1
+&[801000200] Zipangu: Locker Room (F)
+3[811001001] Momijigaoka: Somewhere in Momijigaoka
+-[860000032] Aqua Road: Dangerous Deep Sea 3
++[860000003] Aqua Road: West Shallow Sea 3
+![801000001] Zipangu: Hair Salon
+4[865010002] Commerci Republic: Daniella Stronghold
+)[860000004] Aqua Road: East Shallow Sea
+:[865030201] Commerci Republic: Sospetto Forest Outskirts
+-[865000000] Commerci Republic: San Commerci
+([860000012] Aqua Road: East Bright Sea
+.[867113208] The Afterlands: Land of Warriors
+%[801020000] Zipangu: Showa Street 2
+[867113920] 
+$[800000302] Zipangu: Hunting Lodge
+[867111007] Henesys: Henesys
+*[860000013] Aqua Road: East Bright Sea 2
++[863100002] Tynerum: Shadow Veil Forest 2
+*[800020200] Zipangu: A Desolate Cemetery
+1[863010000] Tynerum: Memories of the Heart Tree
+[865000004] 
+([866191000] Arboren: Eastern Outskirts
+&[801000002] Zipangu: Plastic Surgery
+([865000001] San Commerci: Trading Post
++[860000005] Aqua Road: East Shallow Sea 2
+'[800010100] Zipangu: Hall of Mushroom
++[865000999] Commerci: San Commerci Office
+)[860000001] Aqua Road: West Shallow Sea
+3[867113403] The Afterlands: Land of Contemplation
+![866000010] Arboren: Stump Town
+,[807010000] Momijigaoka: Maple Hill Road 1
+.[867113206] The Afterlands: Land of Warriors
+&[800000100] Zipangu: Mushroom Forest
+.[866000250] Arboren: Bitterstump Forest Path
+9[865000003] San Commerci: Tremier Merchant Union Office
+([867113623] Ellinia: Ellinia Outskirts
+$[800020101] Zipangu: Crow Forest 2
+%[860000021] Aqua Road: Deep Gorge 2
++[863100007] Tynerum: Shadow Veil Forest 7
+,[867113301] The Afterlands: Land of Riches
+.[867113201] The Afterlands: Land of Warriors
++[863100003] Tynerum: Shadow Veil Forest 3
+'[800000301] Zipangu: Vanished Village
+.[867113203] The Afterlands: Land of Warriors
+=[865030300] Commerci Republic: Sospetto Forest Walking Path
++[863100005] Tynerum: Shadow Veil Forest 5
+1[866010676] Ellin Forest: Altaire Camp Entrance
+3[865010016] Commerci Republic: The Scarlet Terror
+*[860000014] Aqua Road: East Bright Sea 3
+-[860000031] Aqua Road: Dangerous Deep Sea 2
+<[800026000] Moonlight Bamboo Grove: Moonlight Bamboo Grove
+([865020100] Commerci Republic: Canal 2
+*[807030100] Momijigaoka: Training Dojo 2
+4[865010008] Commerci Republic: Daniella Stronghold
+3[865010012] Commerci Republic: The Scarlet Terror
+*[807030000] Momijigaoka: Training Dojo 1
+.[800020300] Zipangu: Cemetery Full of Ghosts
+3[865010018] Commerci Republic: The Scarlet Terror
+([865020000] Commerci Republic: Canal 1
+![866190000] Arboren: Stump Town
+*[860000011] Aqua Road: West Bright Sea 2
+,[800020110] Zipangu: A Night in the Forest
+)[866000100] Arboren: Dark Forest Road 1
+;[865030200] Commerci Republic: Sospetto Forest Crossroads
+%[860000022] Aqua Road: Deep Gorge 3
+$[866000150] Arboren: Kobold Prison
+[866000390] 
+/[867120700] Lion King's Castle: Audience Room
+([800030000] Zipangu: Forest of Animals
++[860000030] Aqua Road: Dangerous Deep Sea
+![866192000] Arboren: Wolf Woods
+/[867113502] The Afterlands: Land of Innocence
+0[800020130] Zipangu: Encounter with the Buddha
++[866000115] Arboren: Creepy Forest Path 2
+4[865010000] Commerci Republic: Commerci West Coast
+0[867113101] The Afterlands: Land of Beginnings
+.[867113202] The Afterlands: Land of Warriors
+3[867113402] The Afterlands: Land of Contemplation
+.[867113207] The Afterlands: Land of Warriors
+/[807040100] Momijigaoka: Momijigaoka Entrance
+)[800020400] Zipangu: WanWan Spa of Hell
+6[865030100] Commerci Republic: Sospetto Forest Trail
+0[863000100] Tynerum: Heart Tree Guardian Grove
+4[860000040] Aqua Road: Antoinette's Reception Hall
+4[865010003] Commerci Republic: Daniella Stronghold
+([867113621] Ellinia: Ellinia Outskirts
+[809000101] Zipangu: Spa (M)
+'[800000300] Zipangu: Village Entrance
+)[866000105] Arboren: Dark Forest Road 2
+3[865010017] Commerci Republic: The Scarlet Terror
+%[801030000] Zipangu: Showa Street 3
+&[865010200] Commerci Republic: Berry
+#[866000140] Arboren: Kobold Pit 2
+.[867113204] The Afterlands: Land of Warriors
+4[865010004] Commerci Republic: Daniella Stronghold
+#[860000020] Aqua Road: Deep Gorge
+4[865010006] Commerci Republic: Daniella Stronghold
