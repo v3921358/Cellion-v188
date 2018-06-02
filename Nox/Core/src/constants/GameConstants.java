@@ -107,7 +107,7 @@ public class GameConstants {
 
     // Buffs
     // 17 Ints as of v175+ (maybe earlier)
-    public static final int CFlagSize = 17;
+    public static final int CFlagSize = 18;
 
     // Maps
     public static final int mapItemExpiration_ms = 120000;

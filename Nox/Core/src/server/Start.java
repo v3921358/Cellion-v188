@@ -295,11 +295,11 @@ public class Start {
             ChannelServer.startChannel_Main();
             CashShopServer.getInstance().start();
             FarmServer.getInstance().start();
-            for (WorldOption server : WorldOption.values()) {
+            /*for (WorldOption server : WorldOption.values()) {
                 if (server.show()) {
                     MapleTalkServer.getInstance(server.getWorld(), server.name()).start();
                 }
-            }
+            }*/
         }, "Servers");
         es.submit(r);
 

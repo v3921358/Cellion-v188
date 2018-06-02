@@ -466,6 +466,8 @@ public enum RecvPacketOpcode {
     InheritanceUpgradeRequest(632),// Version 188
     MirrorReadingSelectBookRequest(633),// Version 188
     LikePoint(634),// Version 188
+    
+    // probs off by a few
     UserFlameOrbRequest(715),// Version 188
     User_SADResultUI_Close(716),// Version 188
     FreeLookChangeRequest(717),// Version 188

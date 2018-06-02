@@ -88,14 +88,10 @@ public class CIGCipher {
         return dwKey;
     }
 
-    public static byte[] Crypt(byte[] pSrc, int dwKey) {
-        byte[] pDest = new byte[pSrc.length];
-
-        for (int i = 0; i < pSrc.length; ++i) {
-            pDest[i] = (byte) (dwKey + pSrc[i]);
+    public static void Crypt(byte[] aSrc, int dwKey) {
+        for (int i = 0; i < aSrc.length; ++i) {
+            aSrc[i] += (byte) dwKey;
         }
-
-        return pDest;
     }
 
     public static byte[] Decrypt(byte[] pSrc, int dwKey) {

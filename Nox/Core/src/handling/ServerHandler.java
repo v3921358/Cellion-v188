@@ -22,6 +22,7 @@ import handling.common.*;
 import handling.farm.*;
 import handling.game.*;
 import handling.login.*;
+import io.netty.buffer.Unpooled;
 import server.movement.types.*;
 import net.ProcessPacket;
 
@@ -386,11 +387,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         pClientSocket.setChannel(channel);
         pClientSocket.setReceiving(true);
 
-        System.err.println(pClientSocket.GetPort());
         if (pClientSocket.GetPort() == LoginServer.PORT) {
-            pClientSocket.SendPacket(CLogin.HandshakeLogin(SendSeq, RecvSeq));
+            pChannel.writeAndFlush(Unpooled.wrappedBuffer(CLogin.HandshakeLogin(SendSeq, RecvSeq).GetData()));
         } else {
-            pClientSocket.SendPacket(CLogin.HandshakeGame(SendSeq, RecvSeq));
+            pChannel.writeAndFlush(Unpooled.wrappedBuffer(CLogin.HandshakeGame(SendSeq, RecvSeq).GetData()));
         }
         pChannel.attr(ClientSocket.SESSION_KEY).set(pClientSocket);
 

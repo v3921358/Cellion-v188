@@ -130,12 +130,12 @@ public final class MigrateInHandler implements ProcessPacket<ClientSocket> {
         c.SendPacket(CField.getWarpToMap(pPlayer, null, 0, true));
 
         // Add the player to the map.
-        //pPlayer.getMap().addPlayer(pPlayer);
+        pPlayer.getMap().addPlayer(pPlayer);
 
         // Others. The orders of how these are placed should be based on its priority
         // Such as clones, pets which may not really affect the player if should an exception occur should be placed last.
         // Or stuff that may not possibility cause exception could be placed on top with higher priority too
-        /*try {
+        try {
             // Buddy List
             pPlayer.OnlineBuddyListRequest();
             
@@ -259,6 +259,6 @@ public final class MigrateInHandler implements ProcessPacket<ClientSocket> {
             NPCScriptManager.getInstance().start(c, 9000108, "LoginTot");
         } else if (c.getPlayer().getLevel() > 10 && ServerConstants.RED_EVENT) {
             NPCScriptManager.getInstance().start(c, 9000108, "LoginRed");
-        }*/
+        }
     }
 }

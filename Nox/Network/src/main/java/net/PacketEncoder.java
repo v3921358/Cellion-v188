@@ -39,6 +39,12 @@ public class PacketEncoder extends MessageToByteEncoder<OutPacket> {
         if (pSocket != null) {
             pSocket.Lock();
             try {
+                if (pSocket.GetPort() == 8484) {
+                    pSocket.nCryptoMode = 1;
+                } else {
+                    pSocket.nCryptoMode = 2;
+                }
+                
                 int uSeqSend = pSocket.uSeqSend;
                 short uDataLen = (short) (((pBuffer.length << 8) & 0xFF00) | (pBuffer.length >>> 8));
                 short uRawSeq = (short) ((((uSeqSend >> 24) & 0xFF) | (((uSeqSend >> 16) << 8) & 0xFF00)) ^ uSeqBase);

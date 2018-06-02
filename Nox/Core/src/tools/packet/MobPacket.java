@@ -340,7 +340,6 @@ public class MobPacket {
         oPacket.EncodeInt(life.getId());
         SetMobStat(oPacket, life);
         MobInit(oPacket, life, spawnType, link, true, false);
-        oPacket.Fill(0, 0x69);
 
         return oPacket;
     }
