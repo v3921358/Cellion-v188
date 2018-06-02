@@ -27,6 +27,7 @@ import net.ProcessPacket;
 
 /**
  * Received Operations Handler
+ *
  * @author Mazen Massoud
  * @author Novak
  */
@@ -45,9 +46,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     private static final String PACKET_THROTTLE_COUNT = "p_tCount";
 
     static {
-        
+
         handlers = new ProcessPacket[1500];
-        
+
         /**
          * Client Handlers
          */
@@ -93,7 +94,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserMigrateToMonsterFarm.getValue()] = new FarmEntryHandler();
         handlers[RecvPacketOpcode.UserCharacterInfoRequest.getValue()] = new CharacterInfoRequestHandler();
         handlers[RecvPacketOpcode.UserMigrateToCashShopRequest.getValue()] = new EnterCashShopHandler();
-        
+
         /**
          * PvP Handlers
          */
@@ -101,14 +102,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserMigrateToPveRequest.getValue()] = new LeavePvpHandler();
         //handlers[RecvPacketOpcode.UserAttackUser.getValue()] = new AttackPvpHandler(); // IDK
         handlers[RecvPacketOpcode.SummonedAttackPvP.getValue()] = new SummonPvpHandler();
-        
+
         /**
          * Azwan Handlers
          */
         //handlers[RecvPacketOpcode.UserTransferAswanRequest.getValue()] = new EnterAzwanHandler();
         //handlers[RecvPacketOpcode.UserTransferAswanReadyRequest.getValue()] = new EnterAzwanEventHandler();
         //handlers[RecvPacketOpcode.AswanRetireRequest.getValue()] = new LeaveAzwanHandler();
-        
         /**
          * Movement Handlers
          */
@@ -121,7 +121,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.DragonMove.getValue()] = new DragonMovement();
         handlers[RecvPacketOpcode.SummonedMove.getValue()] = new SummonMovement();
         handlers[RecvPacketOpcode.PetMove.getValue()] = new PetMovement();
-        
+
         /**
          * Social Chat Handler
          */
@@ -139,7 +139,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserSkillUseRequest.getValue()] = new SpecialAttackMove();
         handlers[RecvPacketOpcode.UserBodyAttack.getValue()] = new PassiveEnergyCloseRangeAttack();
         handlers[RecvPacketOpcode.UserFinalAttackRequest.getValue()] = new FinalAttackHandler();
-        
+
         /**
          * MonsterBook Handlers
          */
@@ -171,12 +171,12 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserSkillLearnItemUseRequest.getValue()] = new UseSkillBookHandler();
         handlers[RecvPacketOpcode.QuickslotKeyMappedModified.getValue()] = new QuickSlot();
         handlers[RecvPacketOpcode.UserTransferFreeMarketRequest.getValue()] = new FreeMarketTransferRequest();
-        
+
         /**
          * Android Handlers
          */
         handlers[RecvPacketOpcode.AndroidEmotion.getValue()] = new AndroidEmotion();
-        
+
         /**
          * Pet Handlers
          */
@@ -186,7 +186,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserActivatePetRequest.getValue()] = new SpawnPetHandler();
         handlers[RecvPacketOpcode.PetDropPickUpRequest.getValue()] = new PetPickupHandler();
         handlers[RecvPacketOpcode.PetAction.getValue()] = new PetChatHandler();
-        
+
         /**
          * Item Handlers
          */
@@ -194,7 +194,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserStatChangeItemUseRequest.getValue()] = new UseItemEffectHandler();
         handlers[RecvPacketOpcode.UserActivateNickItem.getValue()] = new TitleEquipHandler();
         handlers[RecvPacketOpcode.UserUIOpenItemUseRequest.getValue()] = new OpenItemUI();
-        
+
         /**
          * NPC Handlers
          */
@@ -216,7 +216,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserSkillUpRequest.getValue()] = new DistributeSPHandler();
         handlers[RecvPacketOpcode.UserHyperSkillUpRequest.getValue()] = new DistributeHyperHandler();
         handlers[RecvPacketOpcode.UserHyperSkillResetRequest.getValue()] = new ResetHyperHandler();
-        
+
         /**
          * Player Operation Handlers
          */
@@ -230,23 +230,22 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.MiniRoom.getValue()] = new PlayerInteractionHandler();
         handlers[RecvPacketOpcode.GetRewardRequest.getValue()] = new OnUserRewardClaimRequest();
         handlers[RecvPacketOpcode.BeginPartyMatch.getValue()] = new BossMatchmakingHandler(); // IDK
-        
+
         // handlers[RecvPacketOpcode.SaveDamageSkinRequest.getValue()] = new SaveDamageSkinRequest(); // TODO
         // handlers[672] = new BossMatchmakingHandler(); // TODO
-        
         /**
          * Buddy List Handlers
          */
         handlers[RecvPacketOpcode.FriendRequest.getValue()] = new BuddylistModifyHandler();
         handlers[RecvPacketOpcode.LoadAccountIDOfCharacterFriendRequest.getValue()] = new FriendRequestAccIdHandler();
-        
+
         /**
          * Reactor Handlers
          */
         handlers[RecvPacketOpcode.ReactorClick.getValue()] = new ClickTouchReactorHandler();
         handlers[RecvPacketOpcode.ReactorRectInMob.getValue()] = new ClickTouchReactorHandler();
         handlers[RecvPacketOpcode.ReactorHit.getValue()] = new HitReactorHandler();
-        
+
         /**
          * Summon Handlers
          */
@@ -255,7 +254,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.Remove.getValue()] = new RemoveSummonHandler();
         handlers[RecvPacketOpcode.SummonedSkill.getValue()] = new SubSummonHandler();
         handlers[RecvPacketOpcode.MobApplyCtrl.getValue()] = new AutoAggroHandler();
-        
+
         /**
          * Inventory Operations Handlers
          */
@@ -280,7 +279,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserMemorialCubeOptionRequest.getValue()] = new UseSelectBlackCubeOptionHandler();
         handlers[RecvPacketOpcode.UserMapTransferItemUseRequest.getValue()] = new UseTeleRockHandler();
         //handlers[RecvPacketOpcode.PAM_SONG.getValue()] = new UsePamSongHandler(); // IDK
-        
+
         /**
          * Skill Handlers
          */
@@ -288,32 +287,32 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserMacroSysDataModified.getValue()] = new SkillMacroHandler();
         handlers[RecvPacketOpcode.FuncKeyMappedModified.getValue()] = new KeyMap();
         handlers[RecvPacketOpcode.SetSonOfLinkedSkillRequest.getValue()] = new LinkedSkillRequest();
-        
+
         /**
          * Aran Combo Handler
          */
         handlers[RecvPacketOpcode.RequestIncCombo.getValue()] = new AranComboHandler();
-        
+
         /**
          * Blaze Wizard Handlers
          */
         handlers[RecvPacketOpcode.UserFlameOrbRequest.getValue()] = new OrbitalFlameHandler();
         handlers[RecvPacketOpcode.UserMovingShootAttackPrepare.getValue()] = new NonTargetAtomAttackHandler(); // IDK
         handlers[RecvPacketOpcode.UserForceAtomCollision.getValue()] = new AtomCollisionHandler();
-        
+
         /**
          * Kaiser Handlers
          */
         handlers[RecvPacketOpcode.KaiserSkillShortcut.getValue()] = new KaiserSkillShortcut();
         handlers[RecvPacketOpcode.UserRequestFlyingSwordStart.getValue()] = new ReleaseTempestBlades();
-        
+
         /**
          * Phantom Handlers
          */
         handlers[RecvPacketOpcode.UserRequestSetStealSkillSlot.getValue()] = new SetStealSkillSlotHandler();
         handlers[RecvPacketOpcode.UserRequestStealSkillMemory.getValue()] = new StealSkillMemoryHandler();
         handlers[RecvPacketOpcode.UserRequestStealSkillList.getValue()] = new StealSkillListHandler();
-        
+
         /**
          * Kinesis Handlers
          */
@@ -325,7 +324,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.ResetPathPsychicLock.getValue()] = new ResetPathPsychicLockHandler();
         handlers[RecvPacketOpcode.ReleasePsychicLock.getValue()] = new ReleasePsychicLockHandler();
         handlers[RecvPacketOpcode.DecPsychicPointRequest.getValue()] = new KinesisPsychicHandler(); // TODO
-        
+
         /**
          * Client Environment Handlers
          */
@@ -343,7 +342,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         //handlers[RecvPacketOpcode.CashShopCheckCouponRequest.getValue()] = new CashCouponHandler();
         //handlers[RecvPacketOpcode.CASH_CATEGORY.getValue()] = new CashCategorySwitch();
         //handlers[RecvPacketOpcode.CS_UPDATE.getValue()] = new UpdatePlayerCashInfo();
-        
     }
 
     public ServerHandler(MapleServerMode pMode) {
@@ -388,7 +386,12 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         pClientSocket.setChannel(channel);
         pClientSocket.setReceiving(true);
 
-        pClientSocket.SendPacket(CLogin.Handshake(SendSeq, RecvSeq));
+        System.err.println(pClientSocket.GetPort());
+        if (pClientSocket.GetPort() == LoginServer.PORT) {
+            pClientSocket.SendPacket(CLogin.HandshakeLogin(SendSeq, RecvSeq));
+        } else {
+            pClientSocket.SendPacket(CLogin.HandshakeGame(SendSeq, RecvSeq));
+        }
         pChannel.attr(ClientSocket.SESSION_KEY).set(pClientSocket);
 
         pClientSocket.startPing(pChannel);
@@ -442,7 +445,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                         case "UserMove":
                         case "SummonedMove":
                         case "NpcMove":
-                        case "MobMove": 
+                        case "MobMove":
                         case "MobApplyCtrl":
                         case "UserChangeStatRequest":
                         case "UserActivateDamageSkin":

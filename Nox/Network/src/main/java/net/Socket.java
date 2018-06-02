@@ -52,6 +52,10 @@ public class Socket {
     public String GetIP() {
         return channel.remoteAddress().toString().split(":")[0].substring(1);
     }
+    
+    public int GetPort() {
+        return Integer.parseInt(channel.localAddress().toString().split(":")[1]);
+    }
 
     public void Lock() {
         this.Lock.lock();

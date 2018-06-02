@@ -21,7 +21,7 @@ import service.ChannelServer;
 
 public class CLogin {
 
-    public static OutPacket Handshake(int sendIv, int recvIv) {
+    public static OutPacket HandshakeLogin(int sendIv, int recvIv) {
         OutPacket oPacket = new OutPacket((short) 44);
 
         oPacket.EncodeShort(ServerConstants.MAPLE_VERSION);
@@ -39,6 +39,17 @@ public class CLogin {
         oPacket.EncodeInt(Integer.parseInt(ServerConstants.MAPLE_PATCH));
         oPacket.EncodeInt(0);
         oPacket.EncodeShort(1);
+        return oPacket;
+    }
+    
+    public static OutPacket HandshakeGame(int sendIv, int recvIv) {
+        OutPacket oPacket = new OutPacket((short) 14);
+
+        oPacket.EncodeShort(ServerConstants.MAPLE_VERSION);
+        oPacket.EncodeString(ServerConstants.MAPLE_PATCH);
+        oPacket.EncodeInt(recvIv);
+        oPacket.EncodeInt(sendIv);
+        oPacket.EncodeByte(ServerConstants.MAPLE_LOCALE);
         return oPacket;
     }
 
