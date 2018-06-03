@@ -349,7 +349,7 @@ public class MobPacket {
         // ForcedMobStat::Decode
         oPacket.EncodeBool(life.getChangedStats() != null);
         if (life.getChangedStats() != null) {
-            oPacket.EncodeInt(life.getChangedStats().getHp() > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) life.getChangedStats().getHp());
+            oPacket.EncodeLong(life.getChangedStats().getHp());
             oPacket.EncodeInt((int) life.getChangedStats().getMp());
             oPacket.EncodeInt(life.getChangedStats().getExp());
             oPacket.EncodeInt(life.getChangedStats().getWatk());
@@ -371,7 +371,7 @@ public class MobPacket {
     public static void MobInit(OutPacket oPacket, Mob life, int spawnType, int link, boolean summon, boolean newSpawn) {
         oPacket.EncodePosition(life.getTruePosition());
         oPacket.EncodeByte(life.getStance());
-        if (life.getId() == 8910000 || life.getId() == 8910100) { // Von Bon
+        if (life.getId() == 8910000 || life.getId() == 8910100 || life.getId() == 9990033) { // Von Bon
             oPacket.EncodeBool(false);//If true: random action
         }
         oPacket.EncodeShort(life.getFh()); // pfhCur
@@ -392,20 +392,30 @@ public class MobPacket {
         oPacket.EncodeByte(life.getCarnivalTeam()); // nTeamForMCarnival
         oPacket.EncodeLong(life.getHp());
         oPacket.EncodeInt(0); // nEffectItemID
+        
+        // bPatrolMob conditional todo
+        
         oPacket.EncodeInt(0); // m_nPhase
         oPacket.EncodeInt(0); // m_nCurZoneDataType
         oPacket.EncodeInt(0); // m_dwRefImgMobID
         oPacket.EncodeInt(0); // ?
-        oPacket.EncodeByte(0); // ?
-        oPacket.EncodeInt(-1); // nAfterAttack
-        oPacket.EncodeInt(-1); // nCurrentAction
+        
+        oPacket.EncodeByte(0); // dwLifeReleaseOwnerAID todo
+        
+        oPacket.EncodeInt(0); // nAfterAttack
+        oPacket.EncodeInt(0); // nCurrentAction
+        oPacket.EncodeInt(0);
         oPacket.EncodeBool(life.isFacingLeft()); // bIsLeft
         oPacket.EncodeInt(0);
-        oPacket.EncodeInt(0x64); // m_nScale
+        oPacket.EncodeInt(100); // m_nScale
         oPacket.EncodeInt(-1); // m_nEliteGrade
-        oPacket.EncodeByte(0);
+        oPacket.EncodeByte(0); // ShootingMobStat
         oPacket.EncodeByte(0);
         oPacket.EncodeInt(0); // New v176
+        
+        oPacket.EncodeInt(0); // pTemplate.bTargetFromSvr -> This isnt always here, handle wz prop
+        
+        oPacket.EncodeByte(0);
         oPacket.EncodeInt(0); // New v176
         oPacket.EncodeInt(0);
     }
