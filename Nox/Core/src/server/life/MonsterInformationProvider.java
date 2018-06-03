@@ -226,7 +226,7 @@ public class MonsterInformationProvider {
      */
     public void OnLoadGlobalDrops() {
         globaldrops.add(new MonsterGlobalDropEntry(4001126, (int) (1.5 * 10000), -1, (byte) 0, 1, 1, 0));   // Maple Leaf
-        globaldrops.add(new MonsterGlobalDropEntry(4001832, (int) (5 * 10000), -1, (byte) 0, 1, 1, 0));     // Spell trace
+        globaldrops.add(new MonsterGlobalDropEntry(4001832, (int) (4 * 10000), -1, (byte) 0, 1, 1, 0));     // Spell trace
         globaldrops.add(new MonsterGlobalDropEntry(2049700, (int) (0.4 * 10000), -1, (byte) 0, 1, 1, 0));   // Epic {otential Scroll
         globaldrops.add(new MonsterGlobalDropEntry(5062009, (int) (0.4 * 10000), -1, (byte) 0, 1, 1, 0));   // Red Cube
         globaldrops.add(new MonsterGlobalDropEntry(2435902, (int) (0.075 * 10000), -1, (byte) 0, 1, 1, 0)); // Nodes

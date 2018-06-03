@@ -287,22 +287,22 @@ public class GMCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            User oPlayer;
+            User pPlayer;
             if (splitted.length > 1 && c.getPlayer().isAdmin()) {
-                oPlayer = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
+                pPlayer = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[1]);
             } else {
-                oPlayer = c.getPlayer();
+                pPlayer = c.getPlayer();
             }
 
             HashMap<Skill, SkillEntry> skillBook = new HashMap<>();
             for (Skill xSkill : SkillFactory.getAllSkills()) {
-                if (GameConstants.isApplicableSkill(xSkill.getId()) && xSkill.canBeLearnedBy(oPlayer.getJob()) && !xSkill.isInvisible()) { // No additional skills.
+                if (GameConstants.isApplicableSkill(xSkill.getId()) && xSkill.canBeLearnedBy(pPlayer.getJob()) && !xSkill.isInvisible()) { // No additional skills.
                     skillBook.put(xSkill, new SkillEntry((byte) xSkill.getMaxLevel(), (byte) xSkill.getMaxLevel(), SkillFactory.getDefaultSExpiry(xSkill)));
                 }
             }
 
-            c.getPlayer().changeSkillsLevel(skillBook);
-            c.getPlayer().dropMessage(5, "Character (" + splitted[1] + ") has had all their applicable skills maximized.");
+            pPlayer.changeSkillsLevel(skillBook);
+            pPlayer.dropMessage(5, "Character (" + pPlayer.getName() + ") has had all their applicable skills maximized.");
             return 1;
         }
     }

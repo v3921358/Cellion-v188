@@ -642,10 +642,20 @@ public class MapleItemInformationProvider {
     }
 
     public final boolean canEquip(final Map<String, Integer> stats, final int itemid, final int level, final int job, final int fame, final int str, final int dex, final int luk, final int int_, int supremacy, short reqLevel) {
+        
+        int nReqSTR = (stats.containsKey("reqSTR") ? stats.get("reqSTR") : 0);
+        int nReqDEX = (stats.containsKey("reqDEX") ? stats.get("reqDEX") : 0);
+        int nReqINT = (stats.containsKey("reqINT") ? stats.get("reqINT") : 0);
+        int nReqLUK = (stats.containsKey("reqLUK") ? stats.get("reqLUK") : 0);
+        
+        if (GameConstants.isDemonAvenger(job)) nReqSTR = 0;
+        
         if (level + supremacy >= 0xFF) {
             supremacy = 0xFF - level;
         }
-        if ((level + supremacy) >= (reqLevel != 0 ? reqLevel : stats.containsKey("reqLevel") ? stats.get("reqLevel") : 0) && str >= (stats.containsKey("reqSTR") ? stats.get("reqSTR") : 0) && dex >= (stats.containsKey("reqDEX") ? stats.get("reqDEX") : 0) && luk >= (stats.containsKey("reqLUK") ? stats.get("reqLUK") : 0) && int_ >= (stats.containsKey("reqINT") ? stats.get("reqINT") : 0)) {
+        if ((level + supremacy) >= (reqLevel != 0 ? reqLevel : stats.containsKey("reqLevel") ? stats.get("reqLevel") : 0) 
+                && str >= nReqSTR && dex >= nReqDEX && luk >= nReqLUK && int_ >= nReqINT) {
+            
             final Integer fameReq = stats.get("reqPOP");
             return fameReq == null || fame >= fameReq;
         }

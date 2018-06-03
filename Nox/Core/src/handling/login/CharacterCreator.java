@@ -203,7 +203,7 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             {20000194}, //Aran
             {20010022, 20010194}, //Evan
             {20020109, 20021110, 20020111, 20020112}, //Mercedes
-            {30010112, 30010110, 30010111, 30010185}, //Demon
+            {30010112, 30010110, 30010111, 30010185, 30010242, 30010241, 30010231, 30010230}, //Demon
             {20031251, 20030204, 20030206, 20031208, 20031207, 20031203, 20031205}, //Phantom2
             {80001152, 1281}, //Dual Blader
             {50001214}, //Mihile
@@ -274,7 +274,10 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             }
             if (pJob == LoginInformationProvider.JobType.Demon) { // Demon Blood Pact
                 mSkill.put(SkillFactory.getSkill(30010242), new SkillEntry((byte) 1, (byte) 1, -1));
-            }
+                mSkill.put(SkillFactory.getSkill(30010241), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(30010231), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(30010230), new SkillEntry((byte) 1, (byte) 1, -1));
+             }
             if (pJob == LoginInformationProvider.JobType.Xenon) { // Modal Shift
                 mSkill.put(SkillFactory.getSkill(Xenon.MODAL_SHIFT), new SkillEntry((byte) 1, (byte) 1, -1));
             }

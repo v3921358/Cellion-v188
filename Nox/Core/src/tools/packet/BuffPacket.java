@@ -806,13 +806,13 @@ public class BuffPacket {
         oPacket.EncodeShort(skill.getSkillId());
         oPacket.EncodeShort(skill.getSkillLevel());
         oPacket.EncodeShort(skill.getSkillLevel());
-        oPacket.EncodeShort((int) (skill.getDuration() / 500));////duration
-        oPacket.EncodeShort(0);//effectDelay
-        //oPacket.Encode(1);
+        oPacket.EncodeShort((int) (skill.getDuration() / 500)); // tDuration
+        oPacket.EncodeShort(0); // tEffectDelay
+        
         oPacket.EncodeByte(0);
-        //oPacket.Encode(1);
-        oPacket.Fill(0, 350);
-        //System.out.println(HexTool.toString(oPacket.getPacket()));
+        
+        oPacket.Fill(0, 99);
+        
         return oPacket;
     }
 
@@ -988,18 +988,6 @@ public class BuffPacket {
         oPacket.EncodeByte(0);
         oPacket.Fill(0, 20);
 
-        return oPacket;
-    }
-
-    public static OutPacket cancelForeignRiding(int cid, List<CharacterTemporaryStat> statups) {
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserTemporaryStatReset.getValue());
-        oPacket.EncodeInt(cid);
-        oPacket.EncodeLong(CharacterTemporaryStat.RideVehicle.getValue());
-        oPacket.EncodeLong(0);
-        oPacket.EncodeLong(0);
-        oPacket.EncodeLong(0);
-        oPacket.EncodeLong(0); // v181
-        oPacket.EncodeByte(1);
         return oPacket;
     }
 

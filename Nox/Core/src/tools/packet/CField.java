@@ -1207,7 +1207,17 @@ public class CField {
         oPacket.EncodeInt(0); // LOOP: If int > 0, write a string
         oPacket.EncodeByte(1);
 
-        // TO-DO: If it is a Honey Butterfly mount, write an  int. If that int > 0, loop and write an int on each iteration.
+        if(chr.hasBuff(CharacterTemporaryStat.RideVehicle)) {
+            int nVehicleID = chr.getBuffedValue(CharacterTemporaryStat.RideVehicle);
+            if(nVehicleID == 1932249) { // is_mix_vehicle
+                int nSize = 0;
+                oPacket.EncodeInt(nSize);
+                for (int i = 0; i < nSize; i++) {
+                    oPacket.EncodeInt(0);
+                }
+            }
+        }
+        
         oPacket.EncodeByte(0); // if byte > 0 && another byte, decode two ints, two shorts, something to do with 12101025 (Flashfire)
         oPacket.EncodeByte(0);//CUser::StarPlanetRank::Decode
         oPacket.EncodeInt(0); //sub_15ECDF0
@@ -1215,7 +1225,7 @@ public class CField {
         oPacket.EncodeByte(0); //CUser::DecodeFreezeHotEventInfo
         oPacket.EncodeInt(0); //CUser::DecodeFreezeHotEventInfo
         oPacket.EncodeInt(0); //CUser::DecodeEventBestFriendInfo
-        oPacket.EncodeByte(0); //CUserRemote::OnKinesisPsychicEnergyShieldEffect
+        oPacket.EncodeBool(chr.hasBuff(CharacterTemporaryStat.KinesisPsychicEnergeShield)); //CUserRemote::OnKinesisPsychicEnergyShieldEffect
         oPacket.EncodeByte(1);//asume this and the next int is some waterEvent shit
         oPacket.EncodeInt(0);
         oPacket.EncodeInt(1);
@@ -1227,8 +1237,31 @@ public class CField {
         oPacket.EncodeInt(0);
         oPacket.EncodeInt(0); //sub_15B8CB0
 
-        oPacket.Fill(0, 499);
-
+        boolean bBool = false;
+        oPacket.EncodeBool(bBool);
+        if(bBool) {
+            int size = 0;
+            oPacket.EncodeInt(size);
+            for (int i = 0; i < size; i++) {
+                oPacket.EncodeInt(0);
+            }
+        }
+        int nID = 0;
+        oPacket.EncodeInt(nID);
+        if(nID > 0) {
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeShort(0);
+            oPacket.EncodeShort(0);
+        }
+        oPacket.EncodeInt(0);
+        int nSize = 0;
+        oPacket.EncodeInt(nSize);
+        for (int i = 0; i < nSize; i++) {
+            oPacket.EncodeInt(0);
+        }
+        
         return oPacket;
     }
 
@@ -2185,39 +2218,11 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket OnShowChair(int nCharacterID, int nChairID) {
-        return OnShowChair(nCharacterID, nChairID, 0, 0);
-    }
-
-    public static OutPacket OnShowChair(int nCharacterID, int nChairID, int nTowerChair, int bMessage) {
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetActivePortableChair.getValue());
-
-        oPacket.EncodeInt(nCharacterID);
-        oPacket.EncodeInt(nChairID);
-
-        oPacket.EncodeInt(bMessage);
-        if (bMessage > 0) {
-            oPacket.EncodeString(""); // sMessage
-        }
-
-        oPacket.EncodeInt(nTowerChair);
-        if (nTowerChair > 0) {
-            oPacket.EncodeInt(0); // nTowerChairSize
-        }
-
-        oPacket.EncodeInt(0); // nMesoChairCount
-
-        oPacket.EncodeInt(0); // nUnk GMS
-        oPacket.EncodeInt(0); // nUnk GMS
-
-        return oPacket;
-    }
-
-    public static OutPacket showChair(int characterid, int itemid) {
+    public static OutPacket showChair(int dwCharacterID, int nItemID) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.UserSetActivePortableChair.getValue());
-        oPacket.EncodeInt(characterid);
-        oPacket.EncodeInt(itemid);
+        oPacket.EncodeInt(dwCharacterID);
+        oPacket.EncodeInt(nItemID);
 
         oPacket.EncodeInt(0); // bPortableMessage
         oPacket.EncodeInt(0);
@@ -2226,8 +2231,6 @@ public class CField {
         oPacket.EncodeBool(false);
         oPacket.EncodeInt(0);
         oPacket.EncodeBool(false);
-
-        oPacket.Fill(0, 29);
 
         return oPacket;
     }

@@ -50,7 +50,7 @@ public class GameConstants {
     public static final int maxInventorySlot = 96; // this may be increased in fifth job patch 
 
     // Skills
-    public static final int damageCap = 50000000;//2_499_999;
+    public static final int damageCap = Integer.MAX_VALUE;//2_499_999;
 
     // Removes these NPCs from all maps.
     public static boolean isHiddenNpc(int npcId) {

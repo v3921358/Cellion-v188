@@ -373,13 +373,24 @@ public class MobSkill {
                 }
             }
         }
-        if (disease != null && player != null) {
-            if (lt != null && rb != null && skill && monster != null) {
-                for (User chr : getPlayersInRange(monster, player)) {
-                    chr.giveDebuff(disease, this);
-                }
+        if (monster != null) {
+            if (   (monster.getId() >= 8920000 || monster.getId() <= 8920003)       // Chaos Crimson Queen
+                || (monster.getId() >= 8910000 || monster.getId() <= 8910001)       // Chaos Von Bon
+                || (monster.getId() >= 8900000 || monster.getId() <= 8900002)       // Chaos Pierre
+                || (monster.getId() >= 8920100 || monster.getId() <= 8920103)       // Normal Crimson Queen
+                || (monster.getId() >= 8910100 || monster.getId() <= 8910101)       // Normal Von Bon
+                || (monster.getId() >= 8900100 || monster.getId() <= 8900102)) {    // Normal Pierre
+                // Disable debuffs for specific bosses.
             } else {
-                player.giveDebuff(disease, this);
+                if (disease != null && player != null) {
+                    if (lt != null && rb != null && skill) {
+                        for (User chr : getPlayersInRange(monster, player)) {
+                            chr.giveDebuff(disease, this);
+                        }
+                    } else {
+                        player.giveDebuff(disease, this);
+                    }
+                }
             }
         }
         if (monster != null) {

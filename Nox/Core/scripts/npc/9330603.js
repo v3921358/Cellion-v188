@@ -171,6 +171,11 @@ function action(mode, type, selection) {
 				jobName = "Demon Avenger";
 				cm.gainItem(1232001, 1); //10 da
 				cm.gainItem(1232002, 1); //30 da
+				if (cm.getPlayer().getGender() == 0) { // Demon Avenger Hair
+					cm.setHair(36460);
+				} else {
+					cm.setHair(37450);
+				}
 				break;
 		}
 		switch (cm.getPlayer().getJob()) {

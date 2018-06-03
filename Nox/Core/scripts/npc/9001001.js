@@ -156,7 +156,7 @@ function action(mode, type, selection) {
 					break;
 				case 104:
 					cm.dispose();
-					cm.openNpc(9010002); // Donor Rewards NPC
+					cm.openNpc(9330182); // Donor Rewards NPC
 					break;
 				case 105:
 					cm.dispose();

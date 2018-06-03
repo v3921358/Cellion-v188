@@ -61,6 +61,13 @@ public class PlayerCommand {
                 case 3:
                     c.getPlayer().setGM((byte) 5);
                     break;
+                case 4:
+                    c.getPlayer().tCrimsonQueen = 0;
+                    c.getPlayer().tVonBon = 0;
+                    c.getPlayer().tPierre = 0;
+                    c.getPlayer().tVellum = 0;
+                    c.getPlayer().tMagnus = 0;
+                    break;
             }
             return 1;
         }

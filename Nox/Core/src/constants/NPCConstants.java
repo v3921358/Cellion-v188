@@ -19,8 +19,8 @@ public class NPCConstants {
                             QuickMove_NPC = 9001001,
             
                             EventShop_NPC = 9010001,
-                            VoteShop_NPC = 9010002,
-                            DonorShop_NPC = 9010003,
+                            VoteShop_NPC = 9010003,
+                            DonorShop_NPC = 9330182,
             
                             Cubing_NPC = 2060100,
                             Secondary_NPC = 9072100,

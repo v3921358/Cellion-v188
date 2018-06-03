@@ -821,7 +821,9 @@ public class PacketHelper {
                 oPacket.EncodeInt(equip.getDurability());
             }
             if (eqStats.contains(EquipStat.REQUIRED_LEVEL)) {
-                oPacket.EncodeByte(equip.getReqLevel());
+                byte nReqLV = equip.getReqLevel();
+                if (nReqLV > 250) nReqLV = (byte) 200;
+                oPacket.EncodeByte(nReqLV);
             }
             if (eqStats.contains(EquipStat.YGGDRASIL_WISDOM)) {
                 oPacket.EncodeByte(equip.getYggdrasilWisdom());

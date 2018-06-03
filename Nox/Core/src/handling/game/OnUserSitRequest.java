@@ -27,14 +27,14 @@ public final class OnUserSitRequest implements ProcessPacket<ClientSocket> {
         }
         
         if (nChairID == -1) {
-            pPlayer.cancelFishingTask();
             pPlayer.setChair(0);
-            c.SendPacket(CField.cancelChair(pPlayer.getId(), -1));
-            pPlayer.getMap().broadcastPacket(pPlayer, CField.showChair(pPlayer.getId(), nChairID), false);
-            pPlayer.completeDispose();
+            pPlayer.getMap().broadcastPacket(CField.cancelChair(pPlayer.getId(), -1));
+            pPlayer.getMap().broadcastPacket(CField.showChair(pPlayer.getId(), 0));
         } else {
             pPlayer.setChair(nChairID);
-            c.SendPacket(CField.cancelChair(pPlayer.getId(), nChairID));
+            c.SendPacket(CField.showChair(pPlayer.getId(), nChairID));
         }
+        
+        pPlayer.completeDispose();
     }
 }

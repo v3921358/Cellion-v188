@@ -315,9 +315,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             if (pMob.getStats().getLevel() > 200) nMobKillsV += 1; // Lv. 200 Mob Kills
             if (pMob.getId() == 8880000) nMagnusKillsV += 1;
             if (pMob.getId() == 8930100) nVellumKillsV += 1;
-            if (pMob.getId() == 8920100) nCrimsonQueenKillsV += 1;
-            if (pMob.getId() == 8910100) nVonBonKillsV += 1;
-            if (pMob.getId() == 8900100) nPierreKillsV += 1;
+            if (pMob.getId() >= 8920100 || pMob.getId() <= 8920103) nCrimsonQueenKillsV += 1;
+            if (pMob.getId() >= 8910100 || pMob.getId() <= 8910101) nVonBonKillsV += 1;
+            if (pMob.getId() >= 8900100 || pMob.getId() <= 8900102) nPierreKillsV += 1;
         }
     }   
     
@@ -3322,6 +3322,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 stats.OnCalculateLocalStats(this);
             }
             client.SendPacket(BuffPacket.cancelBuff(buffstats));
+            map.broadcastPacket(this, BuffPacket.cancelForeignBuff(id, buffstats), false);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

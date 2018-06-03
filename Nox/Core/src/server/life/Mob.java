@@ -1588,7 +1588,7 @@ public class Mob extends AbstractLoadedMapleLife {
         if (nMobHP > 800000000L) nMobHP = 800000000L;                                           // Caps the the HP at this value for the calculation.
         if (nMobLV < 60) nMobLV /= 3;
         
-        int nMinRange = (int) (nMobHP / 550000) + (nMobLV * 3);                                 // NX Gain Formula
+        int nMinRange = (int) (nMobHP / 650000) + (nMobLV * 3);                                 // NX Gain Formula
         int nMaxRange = (int) Math.round(nMinRange * 1.25);                                     // Amount NX Gain can go up to.
         int nResultNX = (int) (nMinRange + (Math.random() * ((nMaxRange - nMinRange) + 1)));    // Formula to produce a value between the specified range.
 
