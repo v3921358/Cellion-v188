@@ -1027,6 +1027,7 @@ public class BuffPacket {
         int stopForceProjectileId = 0;
         int nViperEnergyCharged = (chr.getBuffedValue(CharacterTemporaryStat.EnergyCharged) == null ? 0 : chr.getBuffSource(CharacterTemporaryStat.EnergyCharged));
 
+        uFlagTemp[CharacterTemporaryStat.IndieUnknown50.getPosition()] |= CharacterTemporaryStat.IndieUnknown50.getValue();
         //TwoStateTemporaryStat
         uFlagTemp[CharacterTemporaryStat.EnergyCharged.getPosition()] |= CharacterTemporaryStat.EnergyCharged.getValue();
         uFlagTemp[CharacterTemporaryStat.DashSpeed.getPosition()] |= CharacterTemporaryStat.DashSpeed.getValue();
@@ -1851,12 +1852,12 @@ public class BuffPacket {
             uFlagData.add(new Pair<>(chr.getBuffedValue(CharacterTemporaryStat.Stigma), 2));
             uFlagData.add(new Pair<>(chr.getTrueBuffSource(CharacterTemporaryStat.Stigma), 4));
         }
-        if (chr.getBuffedValue(CharacterTemporaryStat.LightningCascade) != null) {
-            uFlagTemp[CharacterTemporaryStat.LightningCascade.getPosition()] |= CharacterTemporaryStat.LightningCascade.getValue();
-            uFlagData.add(new Pair<>(chr.getBuffedValue(CharacterTemporaryStat.LightningCascade), 4));
+        if (chr.getBuffedValue(CharacterTemporaryStat.Unknown487) != null) {
+            uFlagTemp[CharacterTemporaryStat.Unknown487.getPosition()] |= CharacterTemporaryStat.Unknown487.getValue();
+            uFlagData.add(new Pair<>(chr.getBuffedValue(CharacterTemporaryStat.Unknown487), 4));
         } else {
             //default buffstat always on
-            uFlagTemp[CharacterTemporaryStat.LightningCascade.getPosition()] |= CharacterTemporaryStat.LightningCascade.getValue();
+            uFlagTemp[CharacterTemporaryStat.Unknown487.getPosition()] |= CharacterTemporaryStat.Unknown487.getValue();
             uFlagData.add(new Pair<>(0, 4));
         }
         if (chr.getBuffedValue(CharacterTemporaryStat.PoseType) != null) {
@@ -1969,5 +1970,6 @@ public class BuffPacket {
         encodeProjectileAtoms(oPacket, stopForceIdx, stopForceCount, stopForceProjectileId);
         oPacket.EncodeInt(nViperEnergyCharged); //nViperEnergyCharged
         encodeRemoteTwoStateTemporaryStat(oPacket, chr);
+        oPacket.EncodeInt(0); // IndieUnknown50
     }
 }

@@ -541,7 +541,7 @@ public enum CharacterTemporaryStat implements Serializable, TemporaryStat {
     private CharacterTemporaryStat(int uFlag) {
         this.uFlag = uFlag;
         this.nValue = 1 << (0x1F - (uFlag & 0x1F));
-        this.nIndex = 17 - (uFlag >> 5);
+        this.nIndex = GameConstants.CFlagSize - (uFlag >> 5);
     }
 
     public int getFlag() {
@@ -633,25 +633,6 @@ public enum CharacterTemporaryStat implements Serializable, TemporaryStat {
             default:
                 return false;
 
-        }
-    }
-
-    public enum TSIndex {
-
-        EnergyCharged(492),
-        DashSpeed(493),
-        DashJump(494),
-        RideVehicle(495),
-        PartyBooster(496),
-        GuidedBullet(497),
-        Undead(498),
-        RideVehicleExpire(499);
-        private final int nValue;
-        private final int nIndex;
-
-        private TSIndex(int uFlag) {
-            this.nValue = 1 << (0x1F - (uFlag & 0x1F));
-            this.nIndex = 17 - (uFlag >> 5);
         }
     }
 }

@@ -344,50 +344,52 @@ public enum RecvPacketOpcode {
     UserHyperStatSkillUpRequest(489),// Version 188
     UserHyperStatSkillResetRequest(490),// Version 188
     
-    UserSetDressChangedRequest(489),// Version 188
-    EntryRecordRequest(490),// Version 188
-    SetMaxGauge(491),// Version 188
-    UserReturnEffectResponse(492),// Version 188
-    GetServerTime(493),// Version 188
-    GetCharacterPosition(494),// Version 188
-    UserRequestChangeMobZoneState(495),// Version 188
-    EvolvingRequest(496),// Version 188
-    UserMixerRequest(497),// Version 188
-    SummonEventReward(498),// Version 188
-    MysticFieldMove(499),// Version 188
-    YutGameRequest(500),// Version 188
-    UserJewelCraftRequest(501),// Version 188
-    ValuePackRequest(502),// Version 188
-    WaitQueueRequest(503),// Version 188
-    RequestReloginCookie(504),// Version 188
-    CheckTrickOrTreatRequest(505),// Version 188
-    MonsterFarmMigrateOutRequest(506),// Version 188
-    HalloweenCandyRankingRequest(507),// Version 188
-    GetRewardRequest(508),// Version 188
-    MapleStyleBonusRequest(509),// Version 188
-    MapleStyleAdviceRequest(510),// Version 188
-    MapleStyleSetScoreRequest(511),// Version 188
-    Mentoring(512),// Version 188
-    GetLotteryResult(513),// Version 188
-    RootabyssEnterRequest(514),// Version 188
-    UserSetItemAction(515),// Version 188
-    UserSetBitsCase(516),// Version 188
-    UserSetBitsSlot(517),// Version 188
-    UserAntiMacroQuestionResult(518),// Version 188
-    UserPinkbeanRolling(519),// Version 188
-    UserPinkbeanYoYoStack(520),// Version 188
-    UserQuickMoveScript(521),// Version 188
-    TimeGateRequest(522),// Version 188
-    UserSelectAndroid(523),// Version 188
-    UserCompleteNpcSpeech(524),// Version 188
-    UserCompleteAnotherUserCheck(525),// Version 188
-    UserCompleteComboKillCountCheck(526),// Version 188
-    UserCompleteMultiKillCountCheck(527),// Version 188
-    UserCompleteMultiKillCheck(528),// Version 188
-    UserDamageOnFallingCheck(529),// Version 188
-    UserCompletePersonalShopBuyCheck(530),// Version 188
-    UserDailyCommitmentCheck(531),// Version 188
-    UserMobDropMesoPickup(520),// Version 188
+    UserSetDressChangedRequest(491),// Version 188
+    EntryRecordRequest(492),// Version 188
+    SetMaxGauge(493),// Version 188
+    UserReturnEffectResponse(494),// Version 188
+    GetServerTime(495),// Version 188
+    GetCharacterPosition(496),// Version 188
+    UserRequestChangeMobZoneState(497),// Version 188
+    EvolvingRequest(498),// Version 188
+    UserMixerRequest(499),// Version 188
+    SummonEventReward(500),// Version 188
+    MysticFieldMove(501),// Version 188
+    YutGameRequest(502),// Version 188
+    UserJewelCraftRequest(503),// Version 188
+    ValuePackRequest(504),// Version 188
+    WaitQueueRequest(505),// Version 188
+    RequestReloginCookie(506),// Version 188
+    CheckTrickOrTreatRequest(507),// Version 188
+    MonsterFarmMigrateOutRequest(508),// Version 188
+    HalloweenCandyRankingRequest(509),// Version 188
+    GetRewardRequest(510),// Version 188 
+    MapleStyleBonusRequest(511),// Version 188
+    MapleStyleAdviceRequest(512),// Version 188
+    MapleStyleSetScoreRequest(513),// Version 188
+    Mentoring(514),// Version 188
+    GetLotteryResult(515),// Version 188
+    RootabyssEnterRequest(516),// Version 188
+    UserSetItemAction(517),// Version 188
+    UserSetBitsCase(518),// Version 188
+    UserSetBitsSlot(519),// Version 188
+    UserAntiMacroQuestionResult(520),// Version 188
+    UserPinkbeanRolling(521),// Version 188
+    UserPinkbeanYoYoStack(522),// Version 188
+    UserQuickMoveScript(523),// Version 188
+    TimeGateRequest(524),// Version 188
+    UserSelectAndroid(525),// Version 188
+    UserCompleteNpcSpeech(526),// Version 188
+    UserCompleteAnotherUserCheck(527),// Version 188
+    UserCompleteComboKillCountCheck(528),// Version 188
+    UserCompleteMultiKillCountCheck(529),// Version 188
+    UserCompleteMultiKillCheck(530),// Version 188
+    UserDamageOnFallingCheck(531),// Version 188
+    UserCompletePersonalShopBuyCheck(532),// Version 188
+    UserDailyCommitmentCheck(533),// Version 188
+    
+    // todo fix
+    UserMobDropMesoPickup(54),// Version 188
     UserBreakTimeFieldEnter(521),// Version 188
     UserRunActQuest(522),// Version 188
     JournalAvatarRequest(523),// Version 188
@@ -401,100 +403,103 @@ public enum RecvPacketOpcode {
     ChannelUserCountRequest(522),// Version 188
     UnUrusSelectedSkillList(523),// Version 188
     SoulDungeonSys(524),// Version 188
+    
     UserSoulEffectRequest(552),// Version 188
     UserSpinOffNewModifyRequest(553),// Version 188
     BlackList(554),// Version 188
 
     // Unsure.. 
-    UserUpdateMatrix(570),// Version 188
-    EndOverHeat(571),// Version 188
-    TradeKingShopReq(572),// Version 188
-    TradeKingShopInfoReq(573),// Version 188
+    UserUpdateMatrix(571),// Version 188
+    EndOverHeat(572),// Version 188
+    TradeKingShopReq(573),// Version 188
+    TradeKingShopInfoReq(574),// Version 188
 
-    BeginPet(578),// Version 188
-    PetMove(579),// Version 188
-    PetAction(580),// Version 188
-    PetInteractionRequest(581),// Version 188
-    PetDropPickUpRequest(582),// Version 188
-    PetStatChangeItemUseRequest(583),// Version 188
-    PetUpdateExceptionListRequest(584),// Version 188
-    PetFoodItemUseRequest(585),// Version 188
-    PetOpenShop(586),// Version 188
-    EndPet(587),// Version 188
-    BeginSkillPet(588),// Version 188
-    SkillPetMove(589),// Version 188
-    SkillPetAction(590),// Version 188
-    SkillPetState(591),// Version 188
-    SkillPetDropPickUpRequest(592),// Version 188
-    SkillPetUpdateExceptionListRequest(593),// Version 188
-    EndSkillPet(594),// Version 188
-    BeginSummoned(595),// Version 188
-    SummonedMove(596),// Version 188
-    SummonedAttack(597),// Version 188
-    SummonedHit(598),// Version 188
-    SummonedSkill(599),// Version 188
-    Remove(600),// Version 188
-    SummonedAttackPvP(601),// Version 188
-    SummonedAction(602),// Version 188
-    SummonedAssistAttackDone(603),// Version 188
-    EndSummoned(605),// Version 188
-    BeginDragon(606),// Version 188
-    DragonMove(607),// Version 188
-    DragonGlide(608),// Version 188
-    EndDragon(609),// Version 188
-    BeginAndroid(610),// Version 188
-    AndroidMove(611),// Version 188
-    AndroidActionSet(612),// Version 188
-    EndAndroid(613),// Version 188
-    BeginFoxMan(614),// Version 188
-    FoxManMove(615),// Version 188
-    FoxManActionSetUseRequest(616),// Version 188
-    EndFoxMan(617),// Version 188
-    QuickslotKeyMappedModified(618),// Version 188
-    UpdateClientEnvironment(619),// Version 188
-    PassiveskillInfoUpdate(620),// Version 188
-    DirectionNodeCollision(621),// Version 188
-    UserLaserInfoForRemote(622),// Version 188
-    ReturnTeleportDebuff(623),// Version 188
-    MemoInGameRequest(624),// Version 188
-    EgoEquipGaugeCompleteReturn(626),// Version 188
-    EgoEquipCreateUpgradeItem(627),// Version 188
-    EgoEquipCreateUpgradeItemCostRequest(628),// Version 188
-    EgoEquipTalkRequest(629),// Version 188
-    EgoEquipCheckUpdateItemRequest(630),// Version 188
-    InheritanceInfoRequest(631),// Version 188
-    InheritanceUpgradeRequest(632),// Version 188
-    MirrorReadingSelectBookRequest(633),// Version 188
-    LikePoint(634),// Version 188
+    BeginPet(579),// Version 188
+    PetMove(580),// Version 188
+    PetAction(581),// Version 188
+    PetInteractionRequest(582),// Version 188
+    PetDropPickUpRequest(583),// Version 188
+    PetStatChangeItemUseRequest(584),// Version 188
+    PetUpdateExceptionListRequest(585),// Version 188
+    PetFoodItemUseRequest(586),// Version 188
+    PetOpenShop(587),// Version 188
+    EndPet(588),// Version 188
+    BeginSkillPet(589),// Version 188
+    SkillPetMove(590),// Version 188
+    SkillPetAction(591),// Version 188
+    SkillPetState(592),// Version 188
+    SkillPetDropPickUpRequest(593),// Version 188
+    SkillPetUpdateExceptionListRequest(594),// Version 188
+    EndSkillPet(595),// Version 188
+    BeginSummoned(596),// Version 188
+    SummonedMove(597),// Version 188
+    SummonedAttack(598),// Version 188
+    SummonedHit(599),// Version 188
+    SummonedSkill(600),// Version 188
+    Remove(601),// Version 188
+    SummonedAttackPvP(602),// Version 188
+    SummonedAction(603),// Version 188
+    SummonedAssistAttackDone(604),// Version 188
+    EndSummoned(606),// Version 188
+    BeginDragon(607),// Version 188
+    DragonMove(608),// Version 188
+    DragonGlide(609),// Version 188
+    EndDragon(610),// Version 188
+    BeginAndroid(611),// Version 188
+    AndroidMove(612),// Version 188
+    AndroidActionSet(613),// Version 188
+    EndAndroid(614),// Version 188
+    BeginFoxMan(615),// Version 188
+    FoxManMove(616),// Version 188
+    FoxManActionSetUseRequest(617),// Version 188
+    EndFoxMan(618),// Version 188
+    QuickslotKeyMappedModified(619),// Version 188
+    UpdateClientEnvironment(620),// Version 188
+    PassiveskillInfoUpdate(621),// Version 188
+    DirectionNodeCollision(622),// Version 188
+    UserLaserInfoForRemote(623),// Version 188
+    ReturnTeleportDebuff(624),// Version 188
+    MemoInGameRequest(625),// Version 188
+    EgoEquipGaugeCompleteReturn(627),// Version 188
+    EgoEquipCreateUpgradeItem(628),// Version 188
+    EgoEquipCreateUpgradeItemCostRequest(629),// Version 188
+    EgoEquipTalkRequest(630),// Version 188
+    EgoEquipCheckUpdateItemRequest(631),// Version 188
+    InheritanceInfoRequest(632),// Version 188
+    InheritanceUpgradeRequest(633),// Version 188
+    MirrorReadingSelectBookRequest(634),// Version 188
+    LikePoint(635),// Version 188
+    UserNonTargetForceAtomAttack(668),
     
-    // probs off by a few
-    UserFlameOrbRequest(715),// Version 188
-    User_SADResultUI_Close(716),// Version 188
-    FreeLookChangeRequest(717),// Version 188
-    FreeLookChangeUIOpenFailed(718),// Version 188
-    UserSmartPhoneCallRequest(719),// Version 188
-    UserJaguarChangeRequest(720),// Version 188
-    FPSLog(721),// Version 188
-    PacketModifyLog(722),// Version 188
-    BattleUserAvatarSelect(723),// Version 188
-    BattleUserAttack(724),// Version 188
-    BattleUserAttackExpire(725),// Version 188
-    BattleUserAttackPosition(726),// Version 188
-    BattleUserHit(727),// Version 188
-    BattleUserHitByMob(728),// Version 188
-    BattleStatCoreRequest(729),// Version 188
-    BattleUserAlive(730),// Version 188
-    UserContentsBookRequest(731),// Version 188
-    PerformanceClientLogin(732),// Version 188
-    PerformanceClientInField(733),// Version 188
-    PingCheckRequest_ClientToGame(734),// Version 188
-    Ping_ClientToGame(735),// Version 188
-    PlantPotClick(736),// Version 188
-    RandomMissionRequest(737),// Version 188
-    ItemCollection_SetFlag(738),// Version 188
-    ItemCollection_CheckComplete(739),// Version 188
-    SelfStatChangeRequest(740),// Version 188
-    CashBuffEventCancle(741),// Version 188
+    UserFlameOrbRequest(716),// Version 188
+    User_SADResultUI_Close(717),// Version 188
+    FreeLookChangeRequest(718),// Version 188
+    FreeLookChangeUIOpenFailed(719),// Version 188
+    UserSmartPhoneCallRequest(720),// Version 188
+    UserJaguarChangeRequest(721),// Version 188
+    FPSLog(722),// Version 188
+    PacketModifyLog(723),// Version 188
+    BattleUserAvatarSelect(724),// Version 188
+    BattleUserAttack(725),// Version 188
+    BattleUserAttackExpire(726),// Version 188
+    BattleUserAttackPosition(727),// Version 188
+    BattleUserHit(728),// Version 188
+    BattleUserHitByMob(729),// Version 188
+    BattleStatCoreRequest(730),// Version 188
+    BattleUserAlive(731),// Version 188
+    UserContentsBookRequest(732),// Version 188
+    PerformanceClientLogin(733),// Version 188
+    PerformanceClientInField(734),// Version 188
+    PingCheckRequest_ClientToGame(735),// Version 188
+    Ping_ClientToGame(736),// Version 188
+    PlantPotClick(737),// Version 188
+    RandomMissionRequest(738),// Version 188
+    ItemCollection_SetFlag(739),// Version 188
+    ItemCollection_CheckComplete(740),// Version 188
+    SelfStatChangeRequest(741),// Version 188
+    CashBuffEventCancle(742),// Version 188
+    
+    // confirm
     CreatePsychicLock(743),// Version 188
     ResetPathPsychicLock(744),// Version 188
     ReleasePsychicLock(745),// Version 188
@@ -511,6 +516,8 @@ public enum RecvPacketOpcode {
     UrusShopRequest(757),// Version 188
     UrusPartyMemberList(758),// Version 188
     UserKeyDownStepRequest(759),// Version 188
+    
+    // fix
     DailyGiftRequest(728),// Version 188
     SkillCommandLock(729),// Version 188
     BeastFormWingOnOff(730),// Version 188
@@ -520,6 +527,7 @@ public enum RecvPacketOpcode {
     RWClearCurrentAttackRequest(734),// Version 188
     RWMultiChargeCancelRequest(735),// Version 188
     FuntionFootholdMan(736),// Version 188
+    
     MonsterBookCodeRequest(792),// Version 188
     MonsterBookCardDropRequest(794),// Version 188
     GachapierrotRequest(796),// Version 188
@@ -546,48 +554,48 @@ public enum RecvPacketOpcode {
     FamiliarAutoBuffRequest(870),// Version 188
     EndFamiliar(871),// Version 188
 
-    EndUser(892),// Version 188
-    BeginField(893),// Version 188
-    BeginLifePool(894),// Version 188
-    BeginMob(895),// Version 188
-    MobMove(896),// Version 188
-    MobApplyCtrl(897),// Version 188
-    MobDropPickUpRequest(898),// Version 188
-    MobHitByObstacle(899),// Version 188
-    MobHitByObstacleAtom(900),// Version 188
-    MobHitByMob(901),// Version 188
-    MobSelfDestruct(902),// Version 188
-    MobSelfDestructCollisionGroup(903),// Version 188
-    MobAttackMob(904),// Version 188
-    MobSkillDelayEnd(905),// Version 188
-    MobTimeBombEnd(906),// Version 188
-    MobEscortCollision(907),// Version 188
-    MobRequestEscortInfo(908),// Version 188
-    MobEscortStopEndRequest(909),// Version 188
-    MobAreaAttackDisease(910),// Version 188
-    MobExplosionStart(911),// Version 188
-    MobLiftingEnd(912),// Version 188
-    MobUpdateFixedMoveDir(913),// Version 188
-    MobCreateFireWalk(914),// Version 188
-    MobAfterDeadRequest(915),// Version 188
-    MobDamageShareInfo(916),// Version 188
-    MobCreateAffectedArea(917),// Version 188
-    MobDownResponse(918),// Version 188
-    EndMob(920),// Version 188
-    BeginNpc(921),// Version 188
-    NpcMove(922),// Version 188
-    NpcSpecialAction(923),// Version 188
-    EndNpc(924),// Version 188
-    EndLifePool(925),// Version 188
-    BeginDropPool(926),// Version 188
-    DropPickUpRequest(927),// Version 188
-    EndDropPool(928),// Version 188
-    BeginReactorPool(929),// Version 188
-    ReactorHit(930),// Version 188
-    ReactorClick(931),// Version 188
-    ReactorRectInMob(932),// Version 188
-    ReactorOnKey(933),// Version 188
-    EndReactorPool(934),// Version 188
+    EndUser(893),// Version 188
+    BeginField(894),// Version 188
+    BeginLifePool(895),// Version 188
+    BeginMob(896),// Version 188
+    MobMove(897),// Version 188
+    MobApplyCtrl(898),// Version 188
+    MobDropPickUpRequest(899),// Version 188
+    MobHitByObstacle(900),// Version 188
+    MobHitByObstacleAtom(901),// Version 188
+    MobHitByMob(902),// Version 188
+    MobSelfDestruct(903),// Version 188
+    MobSelfDestructCollisionGroup(904),// Version 188
+    MobAttackMob(905),// Version 188
+    MobSkillDelayEnd(906),// Version 188
+    MobTimeBombEnd(907),// Version 188
+    MobEscortCollision(908),// Version 188
+    MobRequestEscortInfo(909),// Version 188
+    MobEscortStopEndRequest(910),// Version 188
+    MobAreaAttackDisease(911),// Version 188
+    MobExplosionStart(912),// Version 188
+    MobLiftingEnd(913),// Version 188
+    MobUpdateFixedMoveDir(914),// Version 188
+    MobCreateFireWalk(915),// Version 188
+    MobAfterDeadRequest(916),// Version 188
+    MobDamageShareInfo(917),// Version 188
+    MobCreateAffectedArea(918),// Version 188
+    MobDownResponse(919),// Version 188
+    EndMob(921),// Version 188
+    BeginNpc(922),// Version 188
+    NpcMove(923),// Version 188
+    NpcSpecialAction(924),// Version 188
+    EndNpc(925),// Version 188
+    EndLifePool(926),// Version 188
+    BeginDropPool(927),// Version 188
+    DropPickUpRequest(928),// Version 188
+    EndDropPool(929),// Version 188
+    BeginReactorPool(930),// Version 188
+    ReactorHit(931),// Version 188
+    ReactorClick(932),// Version 188
+    ReactorRectInMob(933),// Version 188
+    ReactorOnKey(934),// Version 188
+    EndReactorPool(935),// Version 188
     BeginPartyMatch(960),
     InvitePartyMatch(961),
     CancelInvitePartyMatch(962),
@@ -614,6 +622,7 @@ public enum RecvPacketOpcode {
     BattleRecordSkillDamageLog(1184),// Version 188
     EndBattleRecord(1185),// Version 188
     CommerciUINotice(1246),// Version 188
+    UserRewardRequest(1248) // Version 188
     ;
 
     // reserved for debugging purpose

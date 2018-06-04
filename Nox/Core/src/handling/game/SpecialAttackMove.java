@@ -363,6 +363,11 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 pEffect.info.put(StatInfo.time, 60000);
                 break;
             }
+            case Global.UNICORN:{
+                pEffect.statups.put(CharacterTemporaryStat.RideVehicle, 1932018);
+                pEffect.info.put(StatInfo.time, 210000000);
+                break;
+            }
             default: {
                 bApplyStats = false;
                 break;

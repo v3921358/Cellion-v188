@@ -5350,7 +5350,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         updateSingleStat(Stat.Meso, meso, false);
         client.SendPacket(WvsContext.enableActions());
         if (show) {
-            client.SendPacket(InfoPacket.showMesoGain(gain, inChat));
+            client.SendPacket(InfoPacket.showMesoGain((int) gain, inChat));
         }
     }
 

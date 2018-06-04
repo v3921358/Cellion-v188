@@ -16,33 +16,33 @@ public enum MessageOpcodesType {
     Meso(7),
     GuildPoint(8),
     Commitment(9), // Contribution
-    GiveBuff(0xA), // Writes a gray text to the user's chat [Item description]
-    GeneralItemExpiration(0xB),
-    System(0xC),
-    QuestInfoEx(0xD),
-    ItemProtectExpire(0xF),
-    ReplaceExpiredItem(0x10),
-    ExpiredItem(0x11),
-    ExpiredSkill(0x12),
-    Trait(0x13),
-    LimitNonCombatExpIncrease(0x14), // "You cant gain any more Charm EXP today"
-    AndroidNotPowered(0x16), // "The AndroidNotPowered is not powered. Please insert a Mechanical Heart"
-    RecoveredFatigue(0x17), // "You recovered some fatigue by resting"
-    PvpPoint(0x18), // "You received Battle EXP (+xx)", "You received Battle Points (+xx)"
-    PvpItem(0x19),
-    WeddingPortal(0x1A),
-    HardcoreExp(0x1B),
-    AutoLineChanged(0x1C),
-    RecordEntryMessage(0x1D),
-    EvolvingSystem(0x1E),
-    PersonalEvolvingSystemMessage(0x1F),
-    CoreInventory(0x20),
-    Unknown(0x21), // <Header word> <byte>
-    BlockedBehavior(0x22), // "Zero cannot get mesos in Maple World until Chapter 1 of the Main Quest is complete."
-    IncreaseWP(0x23),
-    StylishKill(0x25),
-    SpecialScrollWarningPopup(0x26), // "Potential Scrolls, Shielding Wards, and other special scrolls have no effect with Star Force Enhancement. Do you still want to enhance it?"
-    ExpiredItemPopup(0x27), //"This is an expired item"
+    GiveBuff(10), // Writes a gray text to the user's chat [Item description]
+    GeneralItemExpiration(11),
+    System(12),
+    QuestInfoEx(14),
+    ItemProtectExpire(16),
+    ReplaceExpiredItem(17),
+    ExpiredItem(18),
+    ExpiredSkill(19),
+    Trait(20),
+    LimitNonCombatExpIncrease(22), // "You cant gain any more Charm EXP today"
+    AndroidNotPowered(24), // "The AndroidNotPowered is not powered. Please insert a Mechanical Heart"
+    RecoveredFatigue(25), // "You recovered some fatigue by resting"
+    PvpPoint(26), // "You received Battle EXP (+xx)", "You received Battle Points (+xx)"
+    PvpItem(27),
+    WeddingPortal(28),
+    HardcoreExp(29),
+    AutoLineChanged(30),
+    RecordEntryMessage(31),
+    EvolvingSystem(32),
+    PersonalEvolvingSystemMessage(33),
+    CoreInventory(34),
+    NxRecordMessage(35), // <Header word> <byte>
+    BlockedBehavior(36), // "Zero cannot get mesos in Maple World until Chapter 1 of the Main Quest is complete."
+    IncreaseWP(37),
+    StylishKill(39),
+    SpecialScrollWarningPopup(40), // "Potential Scrolls, Shielding Wards, and other special scrolls have no effect with Star Force Enhancement. Do you still want to enhance it?"
+    ExpiredItemPopup(41), //"This is an expired item"
     ;
     private final int type;
 

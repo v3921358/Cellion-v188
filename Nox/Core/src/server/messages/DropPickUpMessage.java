@@ -11,12 +11,12 @@ import net.OutPacket;
 public class DropPickUpMessage implements MessageInterface {
 
     private int mode = 4;
-    private Item item;
+    private int nItemID;
     private int itemQuantity;
 
-    public DropPickUpMessage(int mode, Item item, int itemQuantity) {
+    public DropPickUpMessage(int mode, int nItemID, int itemQuantity) {
         this.mode = mode;
-        this.item = item;
+        this.nItemID = nItemID;
         this.itemQuantity = itemQuantity;
     }
 
@@ -28,23 +28,24 @@ public class DropPickUpMessage implements MessageInterface {
     @Override
     public void messagePacket(OutPacket oPacket) {
         oPacket.EncodeByte(MessageOpcodesType.DropPickup.getType());
+        oPacket.EncodeInt(0);
         oPacket.EncodeByte(mode);
         switch (mode) {
             case -10:
-                oPacket.EncodeInt(item.getItemId());
+                oPacket.EncodeInt(nItemID);
                 break;
             case 0:
-                oPacket.EncodeInt(item.getItemId());
+                oPacket.EncodeInt(nItemID);
                 oPacket.EncodeInt(itemQuantity);
                 break;
             case 1:
-                oPacket.EncodeByte(0);
-                oPacket.EncodeInt(0);
-                oPacket.EncodeShort(0);
+                oPacket.EncodeByte(0); // bFallDeduct
+                oPacket.EncodeInt(itemQuantity); // nAmount
+                oPacket.EncodeShort(0); // nPremiumBonus
                 oPacket.EncodeShort(0);
                 break;
             case 2:
-                oPacket.EncodeInt(item.getItemId());
+                oPacket.EncodeInt(nItemID);
                 break;
             case 4:
                 return;

@@ -5,6 +5,7 @@ import server.maps.objects.User;
 import net.InPacket;
 import tools.packet.CField;
 import net.ProcessPacket;
+import tools.packet.WvsContext;
 
 /**
  * UserSitRequest
@@ -23,6 +24,7 @@ public final class OnUserSitRequest implements ProcessPacket<ClientSocket> {
         int nChairID = iPacket.DecodeShort();
         
         if (pPlayer.getMap().getSharedMapResources().noChair) {
+            pPlayer.completeDispose();
             return;
         }
         

@@ -47,9 +47,10 @@ import tools.packet.MobPacket;
 
 /**
  * Damage Parse
+ *
  * @author Mazen Massoud
  * @purpose Handles all attack types and damage calculations throughout the server.
- * 
+ *
  * Index:
  * @method OnWeaponAttackRequest : Handles weapon related types of attacks and handle extra features.
  * @method OnMagicAttackRequest : Handles weapon related types of attacks and handle extra features.
@@ -63,18 +64,21 @@ public class DamageParse {
 
     /**
      * OnWeaponAttack
+     *
      * @param pAttack
      * @param pSkill
      * @param pPlayer
      * @param nAttackCount
      * @param nMaxDamagePerMonster
      * @param pEffect
-     * @param pAttackType 
+     * @param pAttackType
      */
     public static void OnWeaponAttackRequest(AttackInfo pAttack, Skill pSkill, User pPlayer, int nAttackCount, double nMaxDamagePerMonster, StatEffect pEffect, AttackType pAttackType) {
-       
-        if (ServerConstants.ADMIN_MODE) pPlayer.dropMessage(-1, new StringBuilder().append("Animation: ").append(Integer.toHexString((pAttack.display & 0x8000) != 0 ? pAttack.display - 32768 : pAttack.display)).toString());
-        
+
+        if (ServerConstants.ADMIN_MODE) {
+            pPlayer.dropMessage(-1, new StringBuilder().append("Animation: ").append(Integer.toHexString((pAttack.display & 0x8000) != 0 ? pAttack.display - 32768 : pAttack.display)).toString());
+        }
+
         if (!pPlayer.isAlive()) {
             pPlayer.getCheatTracker().registerOffense(CheatingOffense.ATTACKING_WHILE_DEAD);
             return;
@@ -85,7 +89,7 @@ public class DamageParse {
             pPlayer.yellowMessage("[AntiCheat] Please remember hacking and the use of 3rd party modifications go against our ToS.");
             return;
         }
-        
+
         if (pAttack.real && GameConstants.getAttackDelay(pAttack.skill, pSkill) >= 400) {
             pPlayer.getCheatTracker().checkAttack(pAttack.skill, pAttack.lastAttackTickCount);
         }
@@ -164,7 +168,7 @@ public class DamageParse {
                 boolean bTempest = pTarget.getStatusSourceID(MonsterStatus.FREEZE) == Paladin.HEAVENS_HAMMER;
 
                 if (!bTempest && pPlayer.isGM()) {
-                    
+
                     if ((pPlayer.getJob() >= Jobs.BATTLE_MAGE_1.getId() && pPlayer.getJob() <= Jobs.BATTLE_MAGE_4.getId() && !pTarget.isBuffed(MonsterStatus.DAMAGE_IMMUNITY)
                             && !pTarget.isBuffed(MonsterStatus.MAGIC_IMMUNITY)
                             && !pTarget.isBuffed(MonsterStatus.MAGIC_DAMAGE_REFLECT)) || pAttack.skill == Marksman.SNIPE
@@ -202,9 +206,9 @@ public class DamageParse {
                         }
                     } else if (pMobStat.getOnlyNoramlAttack()) {
                         nDamageLine = pAttack.skill != 0 ? 0 : Math.min(nDamageLine, (int) nMaxDamagePerHit);
-                    } else if (!pPlayer.isGM() 
+                    } else if (!pPlayer.isGM()
                             && pAttack.skill != Global.LEVEL_UP) { // Add exceptions here when a skill doesn't do damage, but is being parsed correctly. -Mazen
-                        
+
                         if (bTempest) {
                             if (nDamageLine > pTarget.getMobMaxHp()) {
                                 nDamageLine = (int) Math.min(pTarget.getMobMaxHp(), Integer.MAX_VALUE);
@@ -231,17 +235,19 @@ public class DamageParse {
                             nDamageLine = (int) nMaxDamagePerHit;
                         }
                     }
-                    
+
                     nTotalDamageToOneMonster += nDamageLine;
 
                     if ((nDamageLine == 0 || pTarget.getId() == 9700021) && pPlayer.getPyramidSubway() != null) {
                         pPlayer.getPyramidSubway().onMiss(pPlayer);
                     }
                 }
-                
+
                 nTotalDamage += nTotalDamageToOneMonster;
 
-                if (pPlayer.isDeveloper()) pPlayer.yellowMessage("[Debug] Skill ID (" + pAttack.skill + ") - Damage (" + nTotalDamageToOneMonster + ")");
+                if (pPlayer.isDeveloper()) {
+                    pPlayer.yellowMessage("[Debug] Skill ID (" + pAttack.skill + ") - Damage (" + nTotalDamageToOneMonster + ")");
+                }
                 pTarget.damage(pPlayer, nTotalDamageToOneMonster, true, pAttack.skill); // Apply attack to the monster hit.
 
                 if (pTarget.isAlive()) { // Monster is still alive after being hit.
@@ -321,7 +327,7 @@ public class DamageParse {
                 }
 
                 if ((nTotalDamageToOneMonster > 0) || (pAttack.skill == 1221011) || (pAttack.skill == 21120006)) {
-                    
+
                     if (GameConstants.isKinesis(pPlayer.getJob())) {
                         KinesisHandler.handlePsychicPoint(pPlayer, pAttack.skill);
                     }
@@ -384,7 +390,7 @@ public class DamageParse {
                                 pPlayer.write(CField.createForceAtom(false, 0, pPlayer.getId(), type, true, mobID, NightWalker.SHADOW_BAT, forceAtomInfo, new Rectangle(), 0, 300, pTarget.getPosition(), NightWalker.SHADOW_BAT, pTarget.getPosition()));
                             }
                         }
-                        
+
                         pPlayer.handleDarkElemental(); // Dark Elemental Stack Count Handler
                         for (int i = pPlayer.getDarkElementalCombo(); i > 0; i--) { // Damage Increase Handler for Dark Elemental Mark Stacks
                             nTotalDamageToOneMonster += (nTotalDamageToOneMonster * 0.8); // 80% Increase Damage per Stack
@@ -393,9 +399,9 @@ public class DamageParse {
                     if (pTarget.isBuffed(MonsterStatus.WEAPON_DAMAGE_REFLECT)) {
                         pPlayer.addHP(-(7000 + Randomizer.nextInt(8000)));
                     }
-                    
+
                     pPlayer.onAttack(pTarget.getMobMaxHp(), pTarget.getMobMaxMp(), pAttack.skill, pTarget.getObjectId(), nTotalDamage, 0);
-                    
+
                     if (GameConstants.getAttackDelay(pAttack.skill, pSkill) >= 300 // Originally 100
                             && !GameConstants.isNoDelaySkill(pAttack.skill) && (pAttack.skill != 3101005) && (!pTarget.getStats().isBoss()) && (pPlayer.getTruePosition().distanceSq(pTarget.getTruePosition()) > GameConstants.getAttackRange(pEffect, pPlayer.getStat().defRange))) {
                         pPlayer.getCheatTracker().registerOffense(CheatingOffense.ATTACK_FARAWAY_MONSTER, new StringBuilder().append("[Distance: ").append(pPlayer.getTruePosition().distanceSq(pTarget.getTruePosition())).append(", Expected Distance: ").append(GameConstants.getAttackRange(pEffect, pPlayer.getStat().defRange)).append(" Job: ").append(pPlayer.getJob()).append("]").toString());
@@ -404,7 +410,6 @@ public class DamageParse {
             }
 
             OnMultiKill(pAttack, pPlayer); // Handle multi kills
-
 
             // TODO: Clean up the stuff below later. -Mazen
             if (GameConstants.isDemonAvenger(pPlayer.getJob())) {
@@ -435,7 +440,9 @@ public class DamageParse {
                     nLifeGain *= 2;
                 }
                 nLifeGain = Math.abs(nLifeGain);
-                if (pPlayer.getStat().getHp() + nLifeGain > 0) pPlayer.addHP(nLifeGain);
+                if (pPlayer.getStat().getHp() + nLifeGain > 0) {
+                    pPlayer.addHP(nLifeGain);
+                }
             }
 
             if (pPlayer.getJob() == 422) { // Prime Critical
@@ -562,17 +569,20 @@ public class DamageParse {
             }
         }
     }
-    
+
     /**
      * OnMagicAttack
+     *
      * @param pAttack
      * @param pSkill
      * @param pPlayer
-     * @param pEffect 
+     * @param pEffect
      */
     public static void OnMagicAttackRequest(AttackInfo pAttack, Skill pSkill, User pPlayer, StatEffect pEffect) {
-        if (ServerConstants.ADMIN_MODE) pPlayer.dropMessage(-1, new StringBuilder().append("Animation: ").append(Integer.toHexString((pAttack.display & 0x8000) != 0 ? pAttack.display - 32768 : pAttack.display)).toString());
-        
+        if (ServerConstants.ADMIN_MODE) {
+            pPlayer.dropMessage(-1, new StringBuilder().append("Animation: ").append(Integer.toHexString((pAttack.display & 0x8000) != 0 ? pAttack.display - 32768 : pAttack.display)).toString());
+        }
+
         if (!pPlayer.isAlive()) {
             pPlayer.getCheatTracker().registerOffense(CheatingOffense.ATTACKING_WHILE_DEAD);
             return;
@@ -580,7 +590,7 @@ public class DamageParse {
             pPlayer.getCheatTracker().registerOffense(CheatingOffense.ATTACKING_IN_UNAVAILABLE_MAP);
             return;
         }
-        
+
         if (pAttack.real && GameConstants.getAttackDelay(pAttack.skill, pSkill) >= 200) {
             pPlayer.getCheatTracker().checkAttack(pAttack.skill, pAttack.lastAttackTickCount);
         }
@@ -588,12 +598,16 @@ public class DamageParse {
         if (pEffect != null) {
             if (pEffect.getBulletCount() > 1) {
                 if ((pAttack.numberOfHits > pEffect.getBulletCount()) || (pAttack.mobCount > pEffect.getMobCount())) {
-                    if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at line " + Thread.currentThread().getStackTrace()[2].getLineNumber() + ".");
+                    if (pPlayer.isDeveloper()) {
+                        pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at line " + Thread.currentThread().getStackTrace()[2].getLineNumber() + ".");
+                    }
                     pPlayer.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
                     //return;
                 }
             } else if (((pAttack.numberOfHits > pEffect.getAttackCount()) && (pEffect.getAttackCount() != 0)) || (pAttack.mobCount > pEffect.getMobCount())) {
-                if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at line " + Thread.currentThread().getStackTrace()[2].getLineNumber() + ".");
+                if (pPlayer.isDeveloper()) {
+                    pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at line " + Thread.currentThread().getStackTrace()[2].getLineNumber() + ".");
+                }
                 pPlayer.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
                 //return;
             }
@@ -707,7 +721,9 @@ public class DamageParse {
 
                 if ((GameConstants.getAttackDelay(pAttack.skill, pSkill) >= 150) && (!GameConstants.isNoDelaySkill(pAttack.skill)) && !GameConstants.isMismatchingBulletSkill(pAttack.skill) && (!pMob.getStats().isBoss()) && (pPlayer.getTruePosition().distanceSq(pMob.getTruePosition()) > GameConstants.getAttackRange(pEffect, pPlayer.getStat().defRange))) {
                     pPlayer.getCheatTracker().registerOffense(CheatingOffense.ATTACK_FARAWAY_MONSTER, new StringBuilder().append("[Distance: ").append(pPlayer.getTruePosition().distanceSq(pMob.getTruePosition())).append(", Expected Distance: ").append(GameConstants.getAttackRange(pEffect, pPlayer.getStat().defRange)).append(" Job: ").append(pPlayer.getJob()).append("]").toString());
-                    if (pPlayer.isDeveloper()) pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at attack delay check.");
+                    if (pPlayer.isDeveloper()) {
+                        pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at attack delay check.");
+                    }
                     return;
                 }
                 if ((pAttack.skill == 2301002) && (!pMobStat.getUndead())) {
@@ -752,8 +768,10 @@ public class DamageParse {
                 }
             }
 
-            if (pAttack.skill != 2301002) pEffect.applyTo(pPlayer);
-            
+            if (pAttack.skill != 2301002) {
+                pEffect.applyTo(pPlayer);
+            }
+
             if (nTotalDamage > 1 && GameConstants.getAttackDelay(pAttack.skill, pSkill) >= 100) {
                 CheatTracker tracker = pPlayer.getCheatTracker();
                 tracker.setAttacksWithoutHit(true);
@@ -769,6 +787,7 @@ public class DamageParse {
 
     /**
      * UserMaxWeaponDamage
+     *
      * @param pPlayer
      * @param pMob
      * @param pAttack
@@ -776,7 +795,7 @@ public class DamageParse {
      * @param pEffect
      * @param nMaxDamageToMonster
      * @param nCriticalDamagePercent
-     * @return 
+     * @return
      */
     private static double UserMaxWeaponDamage(User pPlayer, Mob pMob, AttackInfo pAttack, Skill pSkill, StatEffect pEffect, double nMaxDamageToMonster, Integer nCriticalDamagePercent) {
         int nLevelDifference = Math.max(pMob.getStats().getLevel() - pPlayer.getLevel(), 0) * 2;
@@ -796,10 +815,12 @@ public class DamageParse {
         boolean bDefined = false;
         int nCritPercent = nCriticalDamagePercent;
         int nPDRate = pMob.getStats().getPDRate();
-        
+
         MonsterStatusEffect pMobStatEffect = pMob.getBuff(MonsterStatus.PDD);
-        if (pMobStatEffect != null) nPDRate += pMobStatEffect.getX();
-        
+        if (pMobStatEffect != null) {
+            nPDRate += pMobStatEffect.getX();
+        }
+
         if (pSkill != null) {
             aElements.add(pSkill.getElement());
             if (GameConstants.isBeginnerJob(pSkill.getId() / 10000)) {
@@ -859,7 +880,7 @@ public class DamageParse {
                 }
             }
         }
-        
+
         double nElementMaxDamagePerMonster = nMaxDamageToMonster;
         if ((pPlayer.getJob() == 311) || (pPlayer.getJob() == 312) || (pPlayer.getJob() == 321) || (pPlayer.getJob() == 322)) {
             Skill pSkillRef = SkillFactory.getSkill((pPlayer.getJob() == 311) || (pPlayer.getJob() == 312) ? Ranger.MORTAL_BLOW_2 : Sniper.MORTAL_BLOW);
@@ -918,7 +939,7 @@ public class DamageParse {
             if (pPlayer.getBuffedValue(CharacterTemporaryStat.ElementalReset) != null) {
                 aElements.clear();
             }
-            
+
             double pElementalEffect;
             if (aElements.size() > 0) {
                 switch (pAttack.skill) {
@@ -952,7 +973,9 @@ public class DamageParse {
             nElementMaxDamagePerMonster += nElementMaxDamagePerMonster / 100.0D * nCritPercent;
 
             MonsterStatusEffect pImprint = pMob.getBuff(MonsterStatus.IMPRINT);
-            if (pImprint != null) nElementMaxDamagePerMonster += nElementMaxDamagePerMonster * pImprint.getX() / 100.0D;
+            if (pImprint != null) {
+                nElementMaxDamagePerMonster += nElementMaxDamagePerMonster * pImprint.getX() / 100.0D;
+            }
 
             nElementMaxDamagePerMonster += nElementMaxDamagePerMonster * pPlayer.getDamageIncrease(pMob.getObjectId()) / 100.0D;
             nElementMaxDamagePerMonster *= ((pMob.getStats().isBoss()) && (pEffect != null) ? pPlayer.getStat().bossdam_r + pEffect.getBossDamage() : pPlayer.getStat().dam_r) / 100.0D;
@@ -963,14 +986,17 @@ public class DamageParse {
             }
         }
         nElementMaxDamagePerMonster *= pPlayer.getStat().starForceDamageRate;
-        
-        if (nElementMaxDamagePerMonster <= 0.0D) nElementMaxDamagePerMonster = 1.0D;
-        
+
+        if (nElementMaxDamagePerMonster <= 0.0D) {
+            nElementMaxDamagePerMonster = 1.0D;
+        }
+
         return nElementMaxDamagePerMonster;
     }
 
     /**
      * UserMaxMagicDamage
+     *
      * @param pPlayer
      * @param pSkill
      * @param pMob
@@ -980,7 +1006,7 @@ public class DamageParse {
      * @param nSharpEye
      * @param nMaxDamagePerMonster
      * @param pEffect
-     * @return 
+     * @return
      */
     private static double UserMaxMagicDamage(User pPlayer, Skill pSkill, Mob pMob, MonsterStats pMobStat, PlayerStats pPlayerStat, ElementType pElement, Integer nSharpEye, double nMaxDamagePerMonster, StatEffect pEffect) {
         int nLevelDifference = Math.max(pMobStat.getLevel() - pPlayer.getLevel(), 0) * 2;
@@ -996,7 +1022,7 @@ public class DamageParse {
         int nCritPercent = nSharpEye;
         ElementalEffectiveness pElementalEffect = pMob.getEffectiveness(pElement);
         double nMaxElementDamagePerMob = nMaxDamagePerMonster * pElementalEffect.getValue();
-        
+
         switch (pElementalEffect) {
             case IMMUNE:
                 nMaxElementDamagePerMob = 1.0D;
@@ -1029,20 +1055,24 @@ public class DamageParse {
                 }
                 break;
         }
-        
+
         MonsterStatusEffect pMobStatEffect = pMob.getBuff(MonsterStatus.MDD);
         int nMDRate = pMob.getStats().getMDRate();
-        if (pMobStatEffect != null) nMDRate += pMobStatEffect.getX();
-        
+        if (pMobStatEffect != null) {
+            nMDRate += pMobStatEffect.getX();
+        }
+
         nMaxElementDamagePerMob -= nMaxElementDamagePerMob * (Math.max(nMDRate - pPlayerStat.ignoreTargetDEF - pEffect.getIgnoreMob(), 0) / 100.0D);
         nMaxElementDamagePerMob += nMaxElementDamagePerMob / 100.0D * nCritPercent;
         nMaxElementDamagePerMob *= (pMob.getStats().isBoss() ? pPlayer.getStat().bossdam_r : pPlayer.getStat().dam_r) / 100.0D;
-        
+
         MonsterStatusEffect pImprint = pMob.getBuff(MonsterStatus.IMPRINT);
-        if (pImprint != null) nMaxElementDamagePerMob += nMaxElementDamagePerMob * pImprint.getX() / 100.0D;
-        
+        if (pImprint != null) {
+            nMaxElementDamagePerMob += nMaxElementDamagePerMob * pImprint.getX() / 100.0D;
+        }
+
         nMaxElementDamagePerMob += nMaxElementDamagePerMob * pPlayer.getDamageIncrease(pMob.getObjectId()) / 100.0D;
-        
+
         if (GameConstants.isBeginnerJob(pSkill.getId() / 10000)) {
             switch (pSkill.getId() % 10000) {
                 case 1000:
@@ -1070,17 +1100,20 @@ public class DamageParse {
             nMaxElementDamagePerMob *= pPlayerStat.starForceDamageRate;
 
         }
-        if (nMaxElementDamagePerMob <= 0.0D) nMaxElementDamagePerMob = 1.0D;
+        if (nMaxElementDamagePerMob <= 0.0D) {
+            nMaxElementDamagePerMob = 1.0D;
+        }
 
         return nMaxElementDamagePerMob;
     }
 
     /**
      * OnCriticalAttack
+     *
      * @param pAttack
      * @param pPlayer
      * @param nType
-     * @param pEffect 
+     * @param pEffect
      */
     public static final void OnCriticalAttack(AttackInfo pAttack, User pPlayer, int nType, StatEffect pEffect) {
         int nCriticalRate;
@@ -1164,20 +1197,20 @@ public class DamageParse {
 
     /**
      * OnAttack
+     *
      * @param eType
      * @param iPacket
      * @param pPlayer
-     * @return 
+     * @return
      */
     public static AttackInfo OnAttack(RecvPacketOpcode eType, InPacket iPacket, User pPlayer) {
-        
+
         //TrainingMap.OnMonsterAggressionRequest(pPlayer); // Aggro surrounding monsters.
-        
         AttackInfo pAttack = new AttackInfo();
         if (eType == RecvPacketOpcode.UserShootAttack) {
             iPacket.DecodeByte();
         }
-        if (eType == RecvPacketOpcode.UserMovingShootAttackPrepare) {
+        if (eType == RecvPacketOpcode.UserNonTargetForceAtomAttack) {
             iPacket.DecodeInt(); // nSkillID
             iPacket.DecodeInt(); // Unknown
             iPacket.DecodeInt(); // Unknown
@@ -1205,11 +1238,13 @@ public class DamageParse {
         int nShootRange = 0;
 
         int dwMobCRC = iPacket.DecodeInt();
-        if (eType != RecvPacketOpcode.UserMovingShootAttackPrepare) { // This is actually a sub, not sure what it does yet
-            iPacket.DecodeByte(); // Unknown
-            nBulletItemPos = iPacket.DecodeShort();
-            iPacket.DecodeInt(); // Unknown
-        }
+        iPacket.DecodeByte(); // Unknown
+        nBulletItemPos = iPacket.DecodeShort();
+        iPacket.DecodeInt(); // Unknown
+        iPacket.DecodeByte(); // Unknown
+        iPacket.DecodeByte(); // Unknown
+        iPacket.DecodeInt(); // Unknown
+
         pAttack.slot = (byte) nBulletItemPos;
         int tDelay = 0;
         int nBySummonedID = 0;
@@ -1304,125 +1339,94 @@ public class DamageParse {
                 iPacket.DecodeLong();
             }
         }
-        if (eType == RecvPacketOpcode.UserMovingShootAttackPrepare) {
+        if (eType == RecvPacketOpcode.UserNonTargetForceAtomAttack) {
             iPacket.DecodeInt(); // Always 0
         }
 
         pAttack.allDamage = new ArrayList<>();
-        if (eType == RecvPacketOpcode.UserBodyAttack) {
-            for (int i = 0; i < pAttack.mobCount; i++) {
-                int dwMobID = iPacket.DecodeInt();
-                iPacket.DecodeInt(); // Unknown
-                Point ptHit = new Point();
-                Point ptPosPrev = new Point();
-                ptHit.x = iPacket.DecodeShort();
-                ptHit.y = iPacket.DecodeShort();
-                ptPosPrev.x = iPacket.DecodeShort();
-                ptPosPrev.y = iPacket.DecodeShort();
-                iPacket.DecodeShort(); // tDelay
-                int nSkeletonResult = iPacket.DecodeByte();
-                if (nSkeletonResult == 1) {
-                    iPacket.DecodeString();
-                    iPacket.DecodeString();
-                    iPacket.DecodeInt();
-                    for (int s = 0; s < iPacket.DecodeInt(); s++) {
-                        iPacket.DecodeString();
-                    }
-                } else if (nSkeletonResult == 2) {
-                    iPacket.DecodeString();
-                    iPacket.DecodeString();
-                    iPacket.DecodeInt();
-                }
-                
-                Mob monster = pPlayer.getMap().getMonsterByOid(dwMobID);
-                if (monster == null) {
-                    LogHelper.BUGREPORT.get().info(String.format("[DamageParse] IMPROPER PARSING OF: skill: %s, tbyte: %s, mob: %s, hits: %s\r\n", pAttack.skill, pAttack.tbyte, pAttack.mobCount, pAttack.numberOfHits));
-                    monster = (Mob) pPlayer.getMap().getClosestMapObjectInRange(pPlayer.getPosition(), 10000, Arrays.asList(MapleMapObjectType.MONSTER)); // Hack fix for now, avoid NPE.
-                }
-                pAttack.allDamage.add(new AttackMonster(monster, dwMobID, monster.getId(), dwMobCRC, ptHit, ptPosPrev, null));
+
+        for (int i = 0; i < pAttack.mobCount; i++) {
+            int dwMobID = iPacket.DecodeInt();
+            if (ServerConstants.DEVELOPER_DEBUG_MODE) {
+                System.err.println("[Damage Operation] Mob Object (" + dwMobID + ")");
             }
-        } else {
-            for (int i = 0; i < pAttack.mobCount; i++) {
-                int dwMobID = iPacket.DecodeInt();
-                if (ServerConstants.DEVELOPER_DEBUG_MODE) {
-                    System.err.println("[Damage Operation] Mob Object (" + dwMobID + ")");
-                }
-                iPacket.DecodeByte(); // nHitAction
-                iPacket.DecodeByte(); // Unknown
-                iPacket.DecodeByte(); // Unknown
-                int v37 = iPacket.DecodeByte();
-                int nForeAction = (v37 & 0x7F);
-                int bLeft = (byte) ((v37 >> 7) & 1);
-                int nFrameIdx = iPacket.DecodeByte();
-                iPacket.DecodeInt(); // Unknown
-                int v38 = iPacket.DecodeByte();
-                int nCalcDamageStatIndex = (v38 & 0x7F);
-                boolean bDoomed = ((v38 >> 7 & 1) > 0);
-                Point ptHit = new Point();
-                Point ptPosPrev = new Point();
-                ptHit.x = iPacket.DecodeShort();
-                ptHit.y = iPacket.DecodeShort();
-                pAttack.position.x = ptHit.x;
-                pAttack.position.y = ptHit.y;
-                ptPosPrev.x = iPacket.DecodeShort();
-                ptPosPrev.y = iPacket.DecodeShort();
-                if (eType == RecvPacketOpcode.UserMagicAttack) {
-                    iPacket.DecodeByte(); // HP Percentage Lost
-                }
-                List<Pair<Long, Boolean>> damageNumbers = new ArrayList<>();
-                if (pAttack.skill == 80001835 || pAttack.skill == 42111002 || pAttack.skill == 80011050) {
-                    int nAttackCount = iPacket.DecodeByte();
-                    if (eType != RecvPacketOpcode.UserMovingShootAttackPrepare) {
-                        for (int j = 0; j < nAttackCount; j++) {
-                            long nDamage = iPacket.DecodeLong();
-                            damageNumbers.add(new Pair(nDamage, false));
-                        }
-                    }
-                } else {
-                    tDelay = iPacket.DecodeShort();
-                    if (eType != RecvPacketOpcode.UserMovingShootAttackPrepare) {
-                        for (int j = 0; j < pAttack.numberOfHits; j++) {
-                            long nDamage = iPacket.DecodeLong();
-                            damageNumbers.add(new Pair(nDamage, false));
-                            if (ServerConstants.DEVELOPER_DEBUG_MODE) {
-                                System.err.println("[Damage Operation] Damage Line (" + nDamage + ")");
-                            }
-                        }
-                    }
-                }
-                if (eType != RecvPacketOpcode.UserMovingShootAttackPrepare) {
-                    iPacket.DecodeInt(); // pMob.GetMobUpDownYRange
-                    iPacket.DecodeInt(); // pMob.GetCrc
-                }
-                if (pAttack.skill == 37111005) {
-                    iPacket.DecodeBool(); // bRWLiftPress
-                }
-                int nSkeletonResult = iPacket.DecodeByte();
-                if (nSkeletonResult == 1) {
-                    iPacket.DecodeString();
-                    iPacket.DecodeString();
-                    iPacket.DecodeInt();
-                    for (int s = 0; s < iPacket.DecodeInt(); s++) {
-                        iPacket.DecodeString();
-                    }
-                } else if (nSkeletonResult == 2) {
-                    iPacket.DecodeString();
-                    iPacket.DecodeString();
-                    iPacket.DecodeInt();
-                }
-                iPacket.DecodeByte(); // Unknown
-                if (pAttack.skill == 142120001) {
-                    //iPacket.DecodeLong(); // haxfix? Refer back here once testing some Kinesis skills. -Mazen
-                }
-                
-                Mob monster = pPlayer.getMap().getMonsterByOid(dwMobID);//CHECK WHY THIS NULLS (no oid)
-                if (monster == null) {
-                    LogHelper.BUGREPORT.get().info(String.format("[DamageParse] IMPROPER PARSING OF: skill: %s, tbyte: %s, mob: %s, hits: %s\r\n", pAttack.skill, pAttack.tbyte, pAttack.mobCount, pAttack.numberOfHits));
-                    monster = (Mob) pPlayer.getMap().getClosestMapObjectInRange(pPlayer.getPosition(), 10000, Arrays.asList(MapleMapObjectType.MONSTER)); // Hack fix for now, avoid NPE.
-                }
-                pAttack.allDamage.add(new AttackMonster(monster, dwMobID, monster.getId(), dwMobCRC, ptHit, ptPosPrev, damageNumbers));
+            iPacket.DecodeByte(); // nHitAction
+            iPacket.DecodeByte(); // Unknown
+            iPacket.DecodeByte(); // Unknown
+            int v37 = iPacket.DecodeByte();
+            int nForeAction = (v37 & 0x7F);
+            int bLeft = (byte) ((v37 >> 7) & 1);
+            int nFrameIdx = iPacket.DecodeByte();
+            iPacket.DecodeInt(); // Unknown
+            int v38 = iPacket.DecodeByte();
+            int nCalcDamageStatIndex = (v38 & 0x7F);
+            boolean bDoomed = ((v38 >> 7 & 1) > 0);
+            Point ptHit = new Point();
+            Point ptPosPrev = new Point();
+            ptHit.x = iPacket.DecodeShort();
+            ptHit.y = iPacket.DecodeShort();
+            pAttack.position.x = ptHit.x;
+            pAttack.position.y = ptHit.y;
+            ptPosPrev.x = iPacket.DecodeShort();
+            ptPosPrev.y = iPacket.DecodeShort();
+            if (eType == RecvPacketOpcode.UserMagicAttack) {
+                iPacket.DecodeByte(); // HP Percentage Lost
             }
-            /*if (eType == RecvPacketOpcode.UserMeleeAttack) {
+            List<Pair<Long, Boolean>> damageNumbers = new ArrayList<>();
+            if (pAttack.skill == 80001835 || pAttack.skill == 42111002 || pAttack.skill == 80011050) {
+                int nAttackCount = iPacket.DecodeByte();
+                for (int j = 0; j < nAttackCount; j++) {
+                    long nDamage = iPacket.DecodeLong();
+                    damageNumbers.add(new Pair(nDamage, false));
+                }
+            } else {
+                tDelay = iPacket.DecodeShort();
+                iPacket.DecodeInt();
+                for (int j = 0; j < pAttack.numberOfHits; j++) {
+                    long nDamage = iPacket.DecodeLong();
+                    damageNumbers.add(new Pair(nDamage, false));
+                    if (ServerConstants.DEVELOPER_DEBUG_MODE) {
+                        System.err.println("[Damage Operation] Damage Line (" + nDamage + ")");
+                    }
+                }
+            }
+            if (eType != RecvPacketOpcode.UserNonTargetForceAtomAttack) {
+                iPacket.DecodeInt(); // pMob.GetMobUpDownYRange
+                iPacket.DecodeInt(); // pMob.GetCrc
+            }
+            if (pAttack.skill == 37111005) {
+                iPacket.DecodeBool(); // bRWLiftPress
+            }
+            int nSkeletonResult = iPacket.DecodeByte();
+            if (nSkeletonResult == 1) {
+                iPacket.DecodeString();
+                iPacket.DecodeString();
+                iPacket.DecodeInt();
+                for (int s = 0; s < iPacket.DecodeInt(); s++) {
+                    iPacket.DecodeString();
+                }
+            } else if (nSkeletonResult == 2) {
+                iPacket.DecodeString();
+                iPacket.DecodeString();
+                iPacket.DecodeInt();
+            }
+            iPacket.DecodeByte(); // Unknown
+            iPacket.DecodeShort();
+            iPacket.DecodeShort();
+            iPacket.DecodeShort();
+            iPacket.DecodeShort();
+            if (pAttack.skill == 142120001) {
+                //iPacket.DecodeLong(); // haxfix? Refer back here once testing some Kinesis skills. -Mazen
+            }
+
+            Mob monster = pPlayer.getMap().getMonsterByOid(dwMobID);//CHECK WHY THIS NULLS (no oid)
+            if (monster == null) {
+                LogHelper.BUGREPORT.get().info(String.format("[DamageParse] IMPROPER PARSING OF: skill: %s, tbyte: %s, mob: %s, hits: %s\r\n", pAttack.skill, pAttack.tbyte, pAttack.mobCount, pAttack.numberOfHits));
+                monster = (Mob) pPlayer.getMap().getClosestMapObjectInRange(pPlayer.getPosition(), 10000, Arrays.asList(MapleMapObjectType.MONSTER)); // Hack fix for now, avoid NPE.
+            }
+            pAttack.allDamage.add(new AttackMonster(monster, dwMobID, monster.getId(), dwMobCRC, ptHit, ptPosPrev, damageNumbers));
+        }
+        /*if (eType == RecvPacketOpcode.UserMeleeAttack) {
                 if (pAttack.skill == 61121052 || pAttack.skill == 36121052 || Skill.isScreenCenterAttackSkill(pAttack.skill)) {
                     iPacket.DecodeShort(); // tTime
                     iPacket.DecodeShort(); // nMobCount 
@@ -1461,7 +1465,6 @@ public class DamageParse {
                     iPacket.DecodeShort(); // nSkillID
                 }
             }*/
-        }
         // TODO: See if can parse with just this.. the rest is so much and i dont think u use any of the vars
 
         // Apply Monster Status, think this is enough for now. -Mazen
@@ -1471,17 +1474,22 @@ public class DamageParse {
 
         return pAttack;
     }
-    
+
     /**
      * OnMultiKill
+     *
      * @param pAttack
      * @param pPlayer
      */
     private static void OnMultiKill(AttackInfo pAttack, User pPlayer) {
         if (pAttack.after_NumMobsKilled > 0) {
-            if (pAttack.allDamage.isEmpty()) return;
+            if (pAttack.allDamage.isEmpty()) {
+                return;
+            }
             final Optional<AttackMonster> pMob = pAttack.allDamage.stream().findFirst().filter(s -> !s.getMonster().isAlive());
-            if (pMob == null || !pMob.isPresent()) return;
+            if (pMob == null || !pMob.isPresent()) {
+                return;
+            }
 
             /*Handle EXP Gain*/
             if (pAttack.after_NumMobsKilled > 2) {
@@ -1523,10 +1531,12 @@ public class DamageParse {
 
                     pPlayer.getMap().spawnItemDrop(pPlayer, pPlayer, pDrop, nPOS, false, true, true);
 
-                    if (nCombo == 1000) nCombo = 0; // Reset
+                    if (nCombo == 1000) {
+                        nCombo = 0; // Reset
+                    }
                 }
             }
-            
+
             pPlayer.setLastCombo(tTime);
             pPlayer.setCombo(nCombo);
             pPlayer.getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, nCombo, pMob.get().getObjectId())));

@@ -34,7 +34,7 @@ public class ExpIncreaseMessage implements MessageInterface {
     public void messagePacket(OutPacket oPacket) {
         oPacket.EncodeByte(MessageOpcodesType.ExpIncrease.getType());
         oPacket.EncodeByte(bIsLastHit ? 1 : 0);//bIsLastHit [White message]
-        oPacket.EncodeInt(nIncExp);//nIncExp
+        oPacket.EncodeLong(nIncExp);//nIncExp
         oPacket.EncodeByte(bOnQuest ? 1 : 0);//bOnQuest
 
         int flag = 0;

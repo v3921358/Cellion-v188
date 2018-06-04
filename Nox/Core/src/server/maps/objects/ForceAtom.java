@@ -53,6 +53,7 @@ public class ForceAtom {
         oPacket.EncodeInt(getCreateTime());
         oPacket.EncodeInt(getMaxHitCount());
         oPacket.EncodeInt(getEffectIdx());
+        oPacket.EncodeInt(0);
     }
 
     public int getKey() {

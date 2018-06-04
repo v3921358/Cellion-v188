@@ -392,7 +392,7 @@ public enum SendPacketOpcode {
     MobOrderFromSvr(500),// Version 188
     PvPStatusResult(501),// Version 188
     InGameCurNodeEventEnd(502),// Version 188
-    ForceAtomCreate(503),// Version 188
+    ForceAtomCreate(504),// Version 188
     SetAchieveRate(505),// Version 188
     SetQuickMoveInfo(506),// Version 188
     ChangeAswanSiegeWeaponGauge(507),// Version 188

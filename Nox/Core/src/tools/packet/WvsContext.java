@@ -40,6 +40,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
+import server.messages.DropPickUpMessage;
 import server.skills.VMatrixRecord;
 
 public class WvsContext {
@@ -224,7 +225,6 @@ public class WvsContext {
         
         OutPacket oPacket = new OutPacket(SendPacketOpcode.StatChanged.getValue());
         oPacket.EncodeBool(bExclRequest);
-        
         long nFlag = 0;
         if (aStats != null) {
             for (Stat pStatUpdate : aStats.keySet()) {
@@ -299,7 +299,7 @@ public class WvsContext {
             oPacket.EncodeLong(aStats.get(Stat.Meso));
         }
         if ((nFlag & Stat.Fatigue.getValue()) != 0) {
-            oPacket.EncodeByte(aStats.get(Stat.Fatigue).byteValue());
+            oPacket.EncodeShort(aStats.get(Stat.Fatigue).byteValue());
         }
         if ((nFlag & Stat.CharismaEXP.getValue()) != 0) {
             oPacket.EncodeInt(aStats.get(Stat.CharismaEXP).intValue());
@@ -328,13 +328,6 @@ public class WvsContext {
             oPacket.EncodeShort(aStats.get(Stat.CharmEXP).shortValue());
             oPacket.EncodeByte(0);
             oPacket.EncodeLong(PacketHelper.getTime(-2));
-        }
-        if ((nFlag & Stat.AlbaActivity.getValue()) != 0) {
-            oPacket.EncodeByte(0); // nAlbaActivityID
-            oPacket.EncodeInt(0);  // nAlbaStartTime.dwHighDateTime
-            oPacket.EncodeInt(0);  // nAlbaStartTime.dwLowDateTime
-            oPacket.EncodeInt(0);  // nAlbaDuration
-            oPacket.EncodeByte(0); // nAlbaSpecialReward
         }
         if ((nFlag & Stat.CharacterCard.getValue()) != 0) {
             pPlayer.getCharacterCard().connectData(oPacket);
@@ -2532,13 +2525,13 @@ public class WvsContext {
 
         class PartyOperations {
 
-            public static final int userUpdate = 0x10;
-            public static final int createParty = 0x11;
-            public static final int disbandParty = 0x16;
-            public static final int joinParty = 0x19;
-            public static final int leaderChange = 0x31;
-            public static final int createPortal = 0x40;
-            public static final int changePartySettings = 0x4E;
+            public static final int userUpdate = 19;
+            public static final int createParty = 20;
+            public static final int disbandParty = 25;
+            public static final int joinParty = 28;
+            public static final int leaderChange = 55;
+            public static final int createPortal = 94;
+            public static final int changePartySettings = 85;
         }
 
         public static OutPacket changePartySettings(String newName, boolean isPrivate) {
@@ -2562,6 +2555,7 @@ public class WvsContext {
             oPacket.EncodeShort(party.getLeader().getDoorPosition().x);
             oPacket.EncodeShort(party.getLeader().getDoorPosition().y);
             oPacket.EncodeByte((byte) party.getLeader().getId());
+            oPacket.EncodeByte(0);
             oPacket.EncodeBool(party.isPrivate());
             oPacket.EncodeByte(0);
             oPacket.EncodeString(party.getName());
@@ -2847,89 +2841,89 @@ public class WvsContext {
             //[2016-09-15 08:50:09.614][Inbound ] [007F] 05 0A 00 4B 61 7A 49 73 41 4E 75 62 62
             public static final int SendGuildInvite = 7;
             public static final int GuildWaitingList = 0x2F;
-            public static final int LoadGuild_Done = 48;
-            public static final int FindGuild_Done = 49;
-            public static final int CheckGuildName_Available = 50;
-            public static final int CheckGuildName_AlreadyUsed = 51;
-            public static final int CheckGuildName_Unknown = 52;
-            public static final int CreateGuildAgree_Reply = 53;
-            public static final int CreateGuildAgree_Unknown = 54;
-            public static final int CreateNewGuild_Done = 55;
-            public static final int CreateNewGuild_AlreayJoined = 56;
-            public static final int CreateNewGuild_GuildNameAlreayExist = 57;
-            public static final int CreateNewGuild_Beginner = 58;
-            public static final int CreateNewGuild_Disagree = 59;
-            public static final int CreateNewGuild_NotFullParty = 60;
-            public static final int CreateNewGuild_Unknown = 61;
-            public static final int JoinGuild_Done = 62;
-            public static final int JoinGuild_AlreadyJoined = 63;
-            public static final int JoinGuild_AlreadyFull = 64;
-            public static final int JoinGuild_UnknownUser = 65;
-            public static final int JoinGuild_NonRequestFindUser = 67;
-            public static final int JoinGuild_Unknown = 68;
-            public static final int JoinRequest_Done = 69;
-            public static final int JoinRequest_DoneToUser = 70;
-            public static final int JoinRequest_AlreadyFull = 0x47;
-            public static final int JoinRequest_LimitTime = 0x48;
-            public static final int JoinRequest_Unknown = 0x49;
-            public static final int JoinCancelRequest_Done = 0x4A;
-            public static final int WithdrawGuild_Done = 0x4B;
-            public static final int WithdrawGuild_NotJoined = 0x4C;
-            public static final int WithdrawGuild_Unknown = 0x4D;
-            public static final int KickGuild_Done = 0x4E;
-            public static final int KickGuild_NotJoined = 0x4F;
-            public static final int KickGuild_Unknown = 0x4F;//NOT IN GMS v170 (so anything after is -1)
-            public static final int RemoveGuild_Done = 0x51;//-1
-            public static final int RemoveGuild_NotExist = 0x52;//-1
-            public static final int RemoveGuild_Unknown = 0x53;//-1
-            public static final int RemoveRequestGuild_Done = 0x54;//-1
-            public static final int InviteGuild_BlockedUser = 0x55;//-1
-            public static final int InviteGuild_AlreadyInvited = 0x56;//-1
-            public static final int InviteGuild_Rejected = 0x57;//-1
-            public static final int AdminCannotCreate = 0x58;//-1
-            public static final int AdminCannotInvite = 0x59;//-1
-            public static final int IncMaxMemberNum_Done = 0x5A;//-1
-            public static final int IncMaxMemberNum_Unknown = 0x5B;//-1
-            public static final int ChangeMemberName = 0x5C;//-1
-            public static final int ChangeRequestUserName = 0x5D;//NOT IN GMS v170 (so anything after is -2)
-            public static final int ChangeLevelOrJob = 0x5E;//-2
-            public static final int NotifyLoginOrLogout = 0x5F;//-2 
-            public static final int SetGradeName_Done = 0x60;//-2 
-            public static final int SetGradeName_Unknown = 0x61;//-2
-            public static final int SetMemberGrade_Done = 0x62;//-2
-            public static final int SetMemberGrade_Unknown = 0x63;//-2
-            public static final int SetMemberCommitment_Done = 0x64;//-2 
-            public static final int SetMark_Done = 0x65;//-2 
-            public static final int SetMark_Unknown = 0x66;//-2
-            public static final int SetNotice_Done = 0x67;//-2
-            public static final int InsertQuest = 0x68;//-2
-            public static final int NoticeQuestWaitingOrder = 0x69;//-2
-            public static final int SetGuildCanEnterQuest = 0x6A;//-2
-            public static final int IncPoint_Done = 0x6B;//-2 
-            public static final int ShowGuildRanking = 0x6C;//-2
-            public static final int SetGGP_Done = 0x6D;//-2 
-            public static final int SetIGP_Done = 0x6E;//-2
-            public static final int GuildQuest_NotEnoughUser = 0x6F;//-2
-            public static final int GuildQuest_RegisterDisconnected = 0x70;//-2
-            public static final int GuildQuest_NoticeOrder = 0x71;//-2
-            public static final int Authkey_Update = 0x72;//-2
-            public static final int SetSkill_Done = 0x73;//-2
-            public static final int SetSkill_Extend_Unknown = 0x74;//-2
-            public static final int SetSkill_LevelSet_Unknown = 0x75;//-2
-            public static final int SetSkill_ResetBattleSkill = 0x76;//-2
-            public static final int UseSkill_Success = 0x77;//-2
-            public static final int UseSkill_Err = 0x78;//-2
-            public static final int ChangeName_Done = 0x79;//-2
-            public static final int ChangeName_Unknown = 0x7A;//-2
-            public static final int ChangeMaster_Done = 0x7B;//-2
-            public static final int ChangeMaster_Unknown = 0x7C;//-2
-            public static final int BlockedBehaviorCreate = 0x7D;//-2
-            public static final int BlockedBehaviorJoin = 0x7E;//-2
-            public static final int BattleSkillOpen = 0x7F;//-2
-            public static final int GetData = 0x80;//-2
-            public static final int Rank_Reflash = 0x81;//-2
-            public static final int FindGuild_Error = 0x82;//-2
-            public static final int ChangeMaster_Pinkbean = 0x83;//-2
+            public static final int LoadGuild_Done = 48,
+                FindGuild_Done = 49,
+                CheckGuildName_Available = 50,
+                CheckGuildName_AlreadyUsed = 51,
+                CheckGuildName_Unknown = 52,
+                CreateGuildAgree_Reply = 53,
+                CreateGuildAgree_Unknown = 54,
+                CreateNewGuild_Done = 55,
+                CreateNewGuild_AlreayJoined = 56,
+                CreateNewGuild_GuildNameAlreayExist = 57,
+                CreateNewGuild_Beginner = 58,
+                CreateNewGuild_Disagree = 59,
+                CreateNewGuild_NotFullParty = 60,
+                CreateNewGuild_Unknown = 61,
+                JoinGuild_Done = 62,
+                JoinGuild_AlreadyJoined = 63,
+                JoinGuild_AlreadyFull = 64,
+                JoinGuild_UnknownUser = 65,
+                JoinGuild_NonRequestFindUser = 68,
+                JoinGuild_Unknown = 69,
+                JoinRequest_Done = 70,
+                JoinRequest_DoneToUser = 71,
+                JoinRequest_AlreadyFull = 72,
+                JoinRequest_LimitTime = 73,
+                JoinRequest_Unknown = 74,
+                JoinCancelRequest_Done = 75,
+                WithdrawGuild_Done = 76,
+                WithdrawGuild_NotJoined = 77,
+                WithdrawGuild_Unknown = 78,
+                KickGuild_Done = 79,
+                KickGuild_NotJoined = 80,
+                KickGuild_Unknown = 81,
+                RemoveGuild_Done = 82,
+                RemoveGuild_NotExist = 83,
+                RemoveGuild_Unknown = 84,
+                RemoveRequestGuild_Done = 85,
+                InviteGuild_BlockedUser = 86,
+                InviteGuild_AlreadyInvited = 87,
+                InviteGuild_Rejected = 88,
+                AdminCannotCreate = 89,
+                AdminCannotInvite = 90,
+                IncMaxMemberNum_Done = 91,
+                IncMaxMemberNum_Unknown = 92,
+                ChangeMemberName = 93,
+                ChangeRequestUserName = 94,
+                ChangeLevelOrJob = 95,
+                NotifyLoginOrLogout = 96,
+                SetGradeName_Done = 97,
+                SetGradeName_Unknown = 98,
+                SetMemberGrade_Done = 99,
+                SetMemberGrade_Unknown = 100,
+                SetMemberCommitment_Done = 101,
+                SetMark_Done = 102,
+                SetMark_Unknown = 103,
+                SetNotice_Done = 104,
+                InsertQuest = 105,
+                NoticeQuestWaitingOrder = 106,
+                SetGuildCanEnterQuest = 107,
+                IncPoint_Done = 108,
+                ShowGuildRanking = 109,
+                SetGGP_Done = 110,
+                SetIGP_Done = 111,
+                GuildQuest_NotEnoughUser = 112,
+                GuildQuest_RegisterDisconnected = 113,
+                GuildQuest_NoticeOrder = 114,
+                Authkey_Update = 115,
+                SetSkill_Done = 116,
+                SetSkill_Extend_Unknown = 117,
+                SetSkill_LevelSet_Unknown = 118,
+                SetSkill_ResetBattleSkill = 119,
+                UseSkill_Success = 120,
+                UseSkill_Err = 121,
+                ChangeName_Done = 122,
+                ChangeName_Unknown = 123,
+                ChangeMaster_Done = 124,
+                ChangeMaster_Unknown = 125,
+                BlockedBehaviorCreate = 126,
+                BlockedBehaviorJoin = 127,
+                BattleSkillOpen = 128,
+                GetData = 129,
+                Rank_Reflash = 130,
+                FindGuild_Error = 131,
+                ChangeMaster_Pinkbean = 132;
         }
 
         //Can be removed once these last few are figured out/done
@@ -3479,15 +3473,12 @@ public class WvsContext {
 
     public static class InfoPacket {
 
-        public static OutPacket showMesoGain(long gain, boolean inChat) {
+        public static OutPacket showMesoGain(int gain, boolean inChat) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.Message.getValue());
             if (!inChat) {
-                oPacket.EncodeByte(0);
-                oPacket.EncodeByte(1);
-                oPacket.EncodeByte(0);
-                oPacket.EncodeLong(gain);
-                oPacket.EncodeShort(0);
+                DropPickUpMessage pMessage = new DropPickUpMessage(0, 0, gain);
+                pMessage.messagePacket(oPacket);
             } else {
                 oPacket.EncodeByte(7);
                 oPacket.EncodeLong(gain);
@@ -3523,10 +3514,9 @@ public class WvsContext {
 
                 return oPacket;
             } else {
+                DropPickUpMessage pMessage = new DropPickUpMessage(0, itemId, quantity);
                 OutPacket oPacket = new OutPacket(SendPacketOpcode.Message.getValue());
-                oPacket.EncodeShort(0);
-                oPacket.EncodeInt(itemId);
-                oPacket.EncodeInt(quantity);
+                pMessage.messagePacket(oPacket);
 
                 return oPacket;
             }

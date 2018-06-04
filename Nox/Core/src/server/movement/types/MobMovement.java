@@ -47,7 +47,6 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
         if (pMob == null) {
             return;
         }
-        iPacket.DecodeByte(); //v122 = CMobTemplate::_ZtlSecureGet_dwTemplateID(v121) / 10000 == 250 || CMobTemplate::_ZtlSecureGet_dwTemplateID(v121) / 10000 == 251;
 
         short nMobControlSN = iPacket.DecodeShort();
         boolean bNextAcctackPossible = iPacket.DecodeBool();
@@ -162,26 +161,26 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
         }
 
         List<MultiTarget> multiTarget = new ArrayList<>();
-        //for (int i = 0; i < iPacket.DecodeByte(); i++) {//aMultiTargetForBall
-        //    multiTarget.add(new MultiTarget(iPacket.DecodeShort(), iPacket.DecodeShort()));
-        //}
+        for (int i = 0; i < iPacket.DecodeByte(); i++) {//aMultiTargetForBall
+            multiTarget.add(new MultiTarget(iPacket.DecodeShort(), iPacket.DecodeShort()));
+        }
 
         List<Short> randomTime = new ArrayList<>();
-        //for (int i = 0; i < iPacket.DecodeByte(); i++) {//aRandTimeforAreaAttack
-        //    randomTime.add(iPacket.DecodeShort());
-        //}
-/*
+        for (int i = 0; i < iPacket.DecodeByte(); i++) {//aRandTimeforAreaAttack
+            randomTime.add(iPacket.DecodeShort());
+        }
+
         iPacket.DecodeByte(); //IsCheatMobMoveRand
         iPacket.DecodeInt(); //GetHackedCode
         iPacket.DecodeInt(); //nMoveAction?
         iPacket.DecodeInt(); //nMoveAction?
         iPacket.DecodeInt(); //tHitExpire
         iPacket.DecodeByte(); //fucking pointer.. (v20->vfptr[4].Update)(v20);
-         */
+         
 
-        iPacket.DecodeLong(); // Padding 20 bytes
-        iPacket.DecodeLong(); // Padding 20 bytes
-        iPacket.DecodeInt(); // Padding 20 bytes
+        //iPacket.DecodeLong(); // Padding 20 bytes
+        //iPacket.DecodeLong(); // Padding 20 bytes
+        //iPacket.DecodeInt(); // Padding 20 bytes
 
         pMob.settEncodedGatherDuration(iPacket.DecodeInt());
         pMob.setxCS(iPacket.DecodeShort());

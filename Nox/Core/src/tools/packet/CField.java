@@ -1144,6 +1144,7 @@ public class CField {
         oPacket.EncodeInt(0); //m_dwPassenserID
         oPacket.EncodeInt(Math.min(250, chr.getInventory(InventoryType.CASH).countById(5110000))); //nChocoCount
         oPacket.EncodeInt(chr.getItemEffect()); //nActiveEffectItemID
+        oPacket.EncodeBool(false);
         //oPacket.EncodeInt(0); //nMonkeyEffectItemID
         //MapleQuestStatus stat = chr.getQuestNoAdd(MapleQuest.getInstance(124000));
         //oPacket.EncodeInt(stat != null && stat.getCustomData() != null ? Integer.parseInt(stat.getCustomData()) : 0); //nActiveNickItemID (Title)
@@ -1172,7 +1173,7 @@ public class CField {
         oPacket.EncodeInt(chr.getMount().getLevel());
         oPacket.EncodeInt(chr.getMount().getExp());
         oPacket.EncodeInt(chr.getMount().getFatigue());
-
+        oPacket.EncodeBool(false);
         PacketHelper.addAnnounceBox(oPacket, chr);
         oPacket.EncodeBool(chr.getChalkboard() != null);
 
@@ -1206,17 +1207,6 @@ public class CField {
 
         oPacket.EncodeInt(0); // LOOP: If int > 0, write a string
         oPacket.EncodeByte(1);
-
-        if(chr.hasBuff(CharacterTemporaryStat.RideVehicle)) {
-            int nVehicleID = chr.getBuffedValue(CharacterTemporaryStat.RideVehicle);
-            if(nVehicleID == 1932249) { // is_mix_vehicle
-                int nSize = 0;
-                oPacket.EncodeInt(nSize);
-                for (int i = 0; i < nSize; i++) {
-                    oPacket.EncodeInt(0);
-                }
-            }
-        }
         
         oPacket.EncodeByte(0); // if byte > 0 && another byte, decode two ints, two shorts, something to do with 12101025 (Flashfire)
         oPacket.EncodeByte(0);//CUser::StarPlanetRank::Decode
@@ -1230,38 +1220,13 @@ public class CField {
         oPacket.EncodeInt(0);
         oPacket.EncodeInt(1);
         oPacket.EncodeInt(0);
+        oPacket.EncodeInt(0);
         oPacket.EncodeString("");
         oPacket.EncodeInt(0);
         oPacket.EncodeByte(0);
         oPacket.EncodeInt(0);
         oPacket.EncodeInt(0);
         oPacket.EncodeInt(0); //sub_15B8CB0
-
-        boolean bBool = false;
-        oPacket.EncodeBool(bBool);
-        if(bBool) {
-            int size = 0;
-            oPacket.EncodeInt(size);
-            for (int i = 0; i < size; i++) {
-                oPacket.EncodeInt(0);
-            }
-        }
-        int nID = 0;
-        oPacket.EncodeInt(nID);
-        if(nID > 0) {
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeShort(0);
-            oPacket.EncodeShort(0);
-        }
-        oPacket.EncodeInt(0);
-        int nSize = 0;
-        oPacket.EncodeInt(nSize);
-        for (int i = 0; i < nSize; i++) {
-            oPacket.EncodeInt(0);
-        }
-        
         return oPacket;
     }
 
@@ -2229,8 +2194,8 @@ public class CField {
         oPacket.EncodeInt(0);
         oPacket.EncodeInt(0); // lTowerChair.size
         oPacket.EncodeBool(false);
-        oPacket.EncodeInt(0);
-        oPacket.EncodeBool(false);
+        /*oPacket.EncodeInt(0);
+        oPacket.EncodeBool(false);*/
 
         return oPacket;
     }
@@ -2321,13 +2286,14 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket updateQuestInfo(User c, int quest, int npc, byte progress) {
+    public static OutPacket updateQuestInfo(User c, int quest, int npc, byte progress) { // Note: This is a switch statement packet
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.UserQuestResult.getValue());
         oPacket.EncodeByte(progress);
         oPacket.EncodeInt(quest);
         oPacket.EncodeInt(npc);
         oPacket.EncodeInt(0);
+        oPacket.EncodeByte(0); // bNavigation
 
         if (c.isIntern()) {
             c.dropMessage(5, "[Quest Debug] Updating Quest ID : " + quest);

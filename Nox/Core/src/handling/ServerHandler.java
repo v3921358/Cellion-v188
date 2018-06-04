@@ -137,6 +137,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserMeleeAttack.getValue()] = new NormalCloseRangeAttack();
         handlers[RecvPacketOpcode.UserShootAttack.getValue()] = new RangedAttack();
         handlers[RecvPacketOpcode.UserMagicAttack.getValue()] = new MagicAttack();
+        handlers[RecvPacketOpcode.UserNonTargetForceAtomAttack.getValue()] = new NonTargetAtomAttackHandler();
         handlers[RecvPacketOpcode.UserSkillUseRequest.getValue()] = new SpecialAttackMove();
         handlers[RecvPacketOpcode.UserBodyAttack.getValue()] = new PassiveEnergyCloseRangeAttack();
         handlers[RecvPacketOpcode.UserFinalAttackRequest.getValue()] = new FinalAttackHandler();
@@ -229,7 +230,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.PartyResult.getValue()] = new DenyPartyRequestHandler();
         handlers[RecvPacketOpcode.PartyInvitableSet.getValue()] = new AllowPartyInviteHandler();
         handlers[RecvPacketOpcode.MiniRoom.getValue()] = new PlayerInteractionHandler();
-        handlers[RecvPacketOpcode.GetRewardRequest.getValue()] = new OnUserRewardClaimRequest();
+        handlers[RecvPacketOpcode.UserRewardRequest.getValue()] = new OnUserRewardClaimRequest();
         handlers[RecvPacketOpcode.BeginPartyMatch.getValue()] = new BossMatchmakingHandler(); // IDK
 
         // handlers[RecvPacketOpcode.SaveDamageSkinRequest.getValue()] = new SaveDamageSkinRequest(); // TODO
@@ -298,7 +299,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
          * Blaze Wizard Handlers
          */
         handlers[RecvPacketOpcode.UserFlameOrbRequest.getValue()] = new OrbitalFlameHandler();
-        handlers[RecvPacketOpcode.UserMovingShootAttackPrepare.getValue()] = new NonTargetAtomAttackHandler(); // IDK
         handlers[RecvPacketOpcode.UserForceAtomCollision.getValue()] = new AtomCollisionHandler();
 
         /**

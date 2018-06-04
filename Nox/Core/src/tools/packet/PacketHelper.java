@@ -1424,19 +1424,11 @@ public class PacketHelper {
     public static void addShopInfo(OutPacket oPacket, Shop shop, ClientSocket c) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         oPacket.EncodeInt(0);
-        oPacket.EncodeInt(shop.getNpcId()); //m_nSelectNpcItemID
-        oPacket.EncodeInt(0);
-        oPacket.EncodeInt(0); //m_nStarCoin
-        /*oPacket.Encode(shop.getRanks().size() > 0);
-
-        if (shop.getRanks().size() > 0) {
-            oPacket.Encode(shop.getRanks().size());
-            for (Pair<Integer, String> s : shop.getRanks()) {
-                oPacket.EncodeInt(s.left);
-                oPacket.EncodeString((String) s.right);
-            }
-         */
-        oPacket.EncodeByte(0);
+        oPacket.EncodeInt(shop.getNpcId()); // dwTemplateID
+        oPacket.EncodeInt(0); // nSelectNpcItemID
+        oPacket.EncodeInt(0); // dwNpcTemplateID
+        
+        oPacket.EncodeByte(0); // rank shit
 
         final List<ShopRepurchase> shopRepurchases = c.getPlayer().getShopRepurchases();
 
@@ -1523,7 +1515,6 @@ public class PacketHelper {
         oPacket.EncodeInt(1440 * item.getExpiration());
         oPacket.EncodeInt(0);
         oPacket.EncodeInt(item.getPrice());
-        oPacket.EncodeByte(ServerConstants.SHOP_DISCOUNT);
         oPacket.EncodeInt(item.getReqItem());
         oPacket.EncodeInt(item.getReqItemQ());
         oPacket.EncodeInt(item.getPointQuestId());//nPointQuestID
@@ -1553,7 +1544,7 @@ public class PacketHelper {
             oPacket.EncodeShort(ii.getSlotMax(item.getItemId()));
         }
 
-        //oPacket.EncodeBool(false);
+        oPacket.EncodeBool(false);
         addRedLeafInfo(oPacket, chr);
         oPacket.EncodeBool(repurchaseItemInfo != null);
         if (repurchaseItemInfo != null) {

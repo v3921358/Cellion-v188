@@ -32,10 +32,14 @@ public class StylishKillMessage implements MessageInterface {
             case Combo:
                 oPacket.EncodeInt((int) primaryValue); // count
                 oPacket.EncodeInt(secondaryValue); // mob id
+                oPacket.EncodeInt(0);
+                oPacket.EncodeInt(0);
                 break;
             case MultiKill:
                 oPacket.EncodeLong(primaryValue); //nBonus
                 oPacket.EncodeInt(secondaryValue); //count
+                oPacket.EncodeInt(0);
+                oPacket.EncodeInt(0);
                 break;
         }
     }

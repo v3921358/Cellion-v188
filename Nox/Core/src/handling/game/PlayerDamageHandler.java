@@ -129,11 +129,10 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
         }
 
         PlayerStats stats = pPlayer.getStat();
-        if (type_ != PlayerDamageType.UnkDamage
-                && type_ != PlayerDamageType.MapDamage
-                && type_ != PlayerDamageType.MistDamage) {
-            monsteridfrom = iPacket.DecodeInt();
-            oid = iPacket.DecodeInt();
+        if (type_.getType() > PlayerDamageType.UnkDamage.getType()) {
+            oid = iPacket.DecodeInt(); // dwMobID
+            monsteridfrom = iPacket.DecodeInt(); // dwTemplateID
+            iPacket.DecodeInt(); // dwMobIDForMissCheck  (oid repeat)
             attacker = pPlayer.getMap().getMonsterByOid(oid);
             direction = iPacket.DecodeByte();
 
@@ -182,7 +181,6 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
             pDMG = iPacket.DecodeInt();
             byte defType = iPacket.DecodeByte();
             iPacket.Skip(1);
-
             if (defType == 1) {
                 Skill bx = SkillFactory.getSkill(31110008);
                 int bof = pPlayer.getTotalSkillLevel(bx);
@@ -314,7 +312,6 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
             }
         }
         pPlayer.getMap().broadcastPacket(pPlayer, CField.damagePlayer(pPlayer.getId(), type_, damage, monsteridfrom, direction, skillid, pDMG, pPhysical, pID, pType, pPos, offset, offset_d, fake), false);
-
         // Revive Passives
         if (!pPlayer.isAlive()) {
             if (pPlayer.hasBuff(CharacterTemporaryStat.ReviveOnce)) {
