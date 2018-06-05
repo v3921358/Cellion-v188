@@ -21,7 +21,7 @@ public class DumpQuests {
     protected boolean hadError = false;
     protected boolean update = false;
     protected int id = 0;
-    private Connection con = Database.GetConnection();
+    private Connection con = Database.GetOfflineConnection();
 
     public DumpQuests(boolean update) throws Exception {
         this.update = update;

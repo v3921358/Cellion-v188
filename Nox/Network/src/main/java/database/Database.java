@@ -23,8 +23,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -74,5 +74,15 @@ public class Database {
         }
 
         ps.executeUpdate();
+    }
+    
+    public static Connection GetOfflineConnection() throws SQLException {
+
+        String sDatabase = "nox";
+        String sUsername = "root";
+        String sPassword = "?r3xionism3me!";
+        
+        Connection pConnection = DriverManager.getConnection("jdbc:mysql://localhost/"+sDatabase+"?user="+sUsername+"&password="+sPassword);
+        return pConnection;
     }
 }

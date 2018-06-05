@@ -91,7 +91,7 @@ public class GMCommand {
         public int execute(ClientSocket c, String[] splitted) {
             User pPlayer = c.getPlayer();
             String sType = splitted[1].toUpperCase();
-            int nID = Integer.parseInt(splitted[1]);
+            int nID = Integer.parseInt(splitted[2]);
             
             switch (sType) {
                 case "HAIR":
@@ -107,7 +107,9 @@ public class GMCommand {
                     pPlayer.updateSingleStat(Stat.Skin, 0);
                     break;
             }
-            c.getPlayer().equipChanged();
+            pPlayer.equipChanged();
+            pPlayer.reloadUser();
+            pPlayer.dropMessage(5, "[Style Debug] You have set your character's " + sType.toLowerCase() + " to ID (" + nID + ")");
             return 1;
         }
     }

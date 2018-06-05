@@ -40,7 +40,7 @@ public class DumpItems {
     protected boolean hadError = false;
     protected boolean update = false;
     protected int id = 0;
-    private final Connection con = Database.GetConnection();
+    private final Connection con = Database.GetOfflineConnection();
     private final List<String> subCon = new LinkedList<>();
     private final List<String> subMain = new LinkedList<>();
 

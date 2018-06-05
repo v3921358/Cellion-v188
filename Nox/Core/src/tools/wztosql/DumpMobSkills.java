@@ -19,7 +19,7 @@ public class DumpMobSkills {
     protected boolean hadError = false;
     protected boolean update = false;
     protected int id = 0;
-    private final Connection con = Database.GetConnection();
+    private final Connection con = Database.GetOfflineConnection();
 
     public DumpMobSkills(boolean update) throws Exception {
         this.update = update;

@@ -601,14 +601,14 @@ public class DamageParse {
                     if (pPlayer.isDeveloper()) {
                         pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at line " + Thread.currentThread().getStackTrace()[2].getLineNumber() + ".");
                     }
-                    pPlayer.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
+                    //pPlayer.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
                     //return;
                 }
             } else if (((pAttack.numberOfHits > pEffect.getAttackCount()) && (pEffect.getAttackCount() != 0)) || (pAttack.mobCount > pEffect.getMobCount())) {
                 if (pPlayer.isDeveloper()) {
                     pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at line " + Thread.currentThread().getStackTrace()[2].getLineNumber() + ".");
                 }
-                pPlayer.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
+                //pPlayer.getCheatTracker().registerOffense(CheatingOffense.MISMATCHING_BULLETCOUNT);
                 //return;
             }
 
@@ -724,11 +724,11 @@ public class DamageParse {
                     if (pPlayer.isDeveloper()) {
                         pPlayer.dropMessage(5, "[Warning] Check DamageParse.java at attack delay check.");
                     }
-                    return;
+                    //return;
                 }
                 if ((pAttack.skill == 2301002) && (!pMobStat.getUndead())) {
                     pPlayer.getCheatTracker().registerOffense(CheatingOffense.HEAL_ATTACKING_UNDEAD);
-                    return;
+                    //return;
                 }
 
                 pMob.damage(pPlayer, nTotalDamageToOneMonster, true, pAttack.skill); // Apply damage to monster

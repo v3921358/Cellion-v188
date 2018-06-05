@@ -32,7 +32,7 @@ public class DumpNpcNames {
         MapleDataProvider npcData = WzDataStorage.getNPCWz();
         MapleDataProvider stringDataWZ = WzDataStorage.getStringWZ();
         MapleData npcStringData = stringDataWZ.getData("Npc.img");
-        try (PreparedStatement ps = Database.GetConnection().prepareStatement("DELETE FROM `wz_npcnamedata`")) {
+        try (PreparedStatement ps = Database.GetOfflineConnection().prepareStatement("DELETE FROM `wz_npcnamedata`")) {
             ps.execute();
         }
         for (MapleData c : npcStringData) {
@@ -52,7 +52,7 @@ public class DumpNpcNames {
         }
         for (int key : npcNames.keySet()) {
             try {
-                try (PreparedStatement ps = Database.GetConnection().prepareStatement(
+                try (PreparedStatement ps = Database.GetOfflineConnection().prepareStatement(
                         "INSERT INTO `wz_npcnamedata` (`npc`, `name`) VALUES (?, ?)")) {
                     ps.setInt(1, key);
                     ps.setString(2, npcNames.get(key));

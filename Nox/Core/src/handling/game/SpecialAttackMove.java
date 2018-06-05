@@ -348,7 +348,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             case Hayato.QUICK_DRAW: {
                 pEffect.statups.put(CharacterTemporaryStat.Enrage, 1);
                 pEffect.statups.put(CharacterTemporaryStat.BladeStance, 1);
-                pEffect.statups.put(CharacterTemporaryStat.HayatoStance, 0);
+                pEffect.statups.put(CharacterTemporaryStat.HayatoStance, 1);
                 pEffect.statups.put(CharacterTemporaryStat.HayatoStanceBonus, 1);
                 pEffect.info.put(StatInfo.time, 210000000);
                 break;
@@ -399,6 +399,10 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             }
             case BeastTamer.LIL_FORT: {
                 pEffect.info.put(StatInfo.time, 60000);
+                pMovement = SummonMovementType.FOLLOW;
+                break;
+            }
+            case CannonMaster.ROLLING_RAINBOW: {
                 pMovement = SummonMovementType.FOLLOW;
                 break;
             }
