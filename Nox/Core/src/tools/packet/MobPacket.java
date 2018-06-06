@@ -272,21 +272,6 @@ public class MobPacket {
         oPacket.EncodeLong(maxHp); // Version 180 
         oPacket.EncodeByte(mob.getStats().getTagColor());
         oPacket.EncodeByte(mob.getStats().getTagBgColor());
-        //oPacket.Encode(6);
-        //oPacket.Encode(5);
-
-        /*if (currentHp > Integer.MAX_VALUE) {
-            oPacket.EncodeInt((int) (currentHp / maxHp * Integer.MAX_VALUE));
-        } else {
-            oPacket.EncodeInt((int) (currentHp <= 0 ? -1 : currentHp));
-        }
-        if (maxHp > Integer.MAX_VALUE) {
-            oPacket.EncodeInt(Integer.MAX_VALUE);
-        } else {
-            oPacket.EncodeInt((int) maxHp);
-        }
-        oPacket.Encode(6);
-        oPacket.Encode(5);*/
         return oPacket;
     }
 
@@ -425,10 +410,10 @@ public class MobPacket {
         OutPacket oPacket = new OutPacket(SendPacketOpcode.MobChangeController.getValue());
         oPacket.EncodeByte(aggro ? 2 : 1); // 0 = not moving at all, 1 = only attack when nearby, 2 = chasing + attack
         oPacket.EncodeInt(life.getObjectId());
-        oPacket.EncodeByte(1);// 1 = Control normal, 5 = Control none?
+        oPacket.EncodeByte(1); //nCalcDamageIndex
         oPacket.EncodeInt(life.getId());
         SetMobStat(oPacket, life);
-        oPacket.Fill(0, 149);
+        MobInit(oPacket, life, life.getLinkCID() <= 0 ? -4 : -1, life.getLinkCID(), true, false);
 
         return oPacket;
     }
@@ -437,19 +422,7 @@ public class MobPacket {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.MobChangeController.getValue());
         oPacket.EncodeByte(0);
-
         oPacket.EncodeInt(life.getObjectId());
-        oPacket.EncodeByte(0);
-
-        if (azwan) {
-            oPacket.EncodeByte(0);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeByte(0);
-            SetMobStat(oPacket, life);
-            MobInit(oPacket, life, 0, 0, false, false);
-        }
-
-        oPacket.Fill(0, 69);
         return oPacket;
     }
 

@@ -95,7 +95,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserMigrateToMonsterFarm.getValue()] = new FarmEntryHandler();
         handlers[RecvPacketOpcode.UserCharacterInfoRequest.getValue()] = new CharacterInfoRequestHandler();
         handlers[RecvPacketOpcode.UserMigrateToCashShopRequest.getValue()] = new EnterCashShopHandler();
-
+        handlers[RecvPacketOpcode.RequestReloginCookie.getValue()] = new ReloginCookieHandler();
         /**
          * PvP Handlers
          */

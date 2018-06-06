@@ -628,7 +628,7 @@ public class Skill implements Comparator<Skill> {
      * @return whether or not the skill is a keydown skill
      */
     public static final boolean isKeydownSkill(int nSkillID) { // is_keydown_skill
-        if (nSkillID > 31211000) { // if (nSkillID > 31211001) {
+        if (nSkillID > 31211001) {
             if (nSkillID > 80011362) {
                 if (nSkillID > 112111016) {
                     if (nSkillID > 400011028) {
@@ -861,29 +861,46 @@ public class Skill implements Comparator<Skill> {
      * @return whether or not the skill is rush bomb skill
      */
     public static boolean isRushBombSkill(int skill) {
-        boolean isRushBombSkill;
-        switch (skill) {
-            case 40021186: // Hidden Skill: Shoujou Kashu
-            case 14111023: // Night Walker Shadow Spark (Explosion)
-            case Zero.WIND_CUTTER_1:
-            case Zero.STORM_BREAK_1:
-            case Zero.SEVERE_STORM_BREAK:
-            case Kanna.MONKEY_SPIRITS:
-            case Kaiser.WING_BEAT:
-            case Luminous.MORNING_STAR:
-            case DemonAvenger.BAT_SWARM:
-            case BlazeWizard.BLAZING_EXTINCTION:
-            case Cannoneer.BARREL_BOMB:
-            case Brawler.ENERGY_VORTEX:
-            case IceLightningArchMage.FROZEN_ORB:
-            case Brawler.TORNADO_UPPERCUT_2:
-                isRushBombSkill = true;
-                break;
-            default:
-                isRushBombSkill = false;
-                break;
+        if (skill > 61111100) {
+            if (skill > 80011386) {
+                if (skill > 101120205) {
+                    if (skill != 400001018 && (skill <= 400031002 || skill > 400031004)) {
+                        return false;
+                    }
+                } else if (skill != 101120205 && skill != 101120200 && skill != 101120203) {
+                    return false;
+                }
+            } else if (skill != 80011386) {
+                if (skill > 80002247) {
+                    if (skill != 80002300 && skill != 80011380) {
+                        return false;
+                    }
+                } else if (skill != 80002247 && skill != 61111113 && skill != 61111218) {
+                    return false;
+                }
+            }
+            return true;
         }
-        return isRushBombSkill;
+        if (skill == 61111100) {
+            return true;
+        }
+        if (skill > 22140015) {
+            if (skill > 31201001) {
+                if (skill != 40021186 && skill != 42120003) {
+                    return false;
+                }
+            } else if (skill != 31201001 && skill != 22140024 && skill != 27121201) {
+                return false;
+            }
+            return true;
+        }
+        if (skill == 22140015) {
+            return true;
+        }
+        if (skill > 5301001) {
+            return !(skill != 12121001 && skill != 14111022);
+        }
+        return skill == 5301001 || skill == 2221012 || skill == 5101012 || skill == 5101014;
     }
 
     /**

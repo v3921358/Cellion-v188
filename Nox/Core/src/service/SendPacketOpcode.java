@@ -343,8 +343,8 @@ public enum SendPacketOpcode {
     MagicWheelResult(434),// Version 188
     RewardResult(435),// Version 188
     RemoveDamageSkinResult(440),// Version 188
-    MacroSysDataInit(453),// Version 188
-    EndCharacterData(453),// Version 188
+    MacroSysDataInit(451),// Version 188
+    EndCharacterData(451),// Version 188
     BeginStage(452),// Version 188
     SetField(452),// Version 188
     SetAuctionField(453),// Version 188
@@ -393,9 +393,8 @@ public enum SendPacketOpcode {
     PvPStatusResult(501),// Version 188
     InGameCurNodeEventEnd(502),// Version 188
     ForceAtomCreate(504),// Version 188
-    SetAchieveRate(505),// Version 188
-    SetQuickMoveInfo(506),// Version 188
-    ChangeAswanSiegeWeaponGauge(507),// Version 188
+    SetAchieveRate(506),// Version 188
+    SetQuickMoveInfo(507),// Version 188
     ObtacleAtomCreate(508),// Version 188
     ObtacleAtomClear(509),// Version 188
     Box2dFootHoldCreate(510),// Version 188
@@ -1012,16 +1011,16 @@ public enum SendPacketOpcode {
     SetCashShopInitialItem(1444),// Version 188
     TryMigrateCashShop(1445),// Version 188
     Parcel(1460), // lulz not gonna be right todo fix
-    BeginFuncKeyMapped(1576),// Version 188
-    FuncKeyMappedInit(1576),// Version 188
-    PetConsumeItemInit(1577),// Version 188
-    PetConsumeMPItemInit(1578),// Version 188
-    PetConsumeCureItemInit(1579),// Version 188
-    PetBuff(1580),// Version 188
-    EndFuncKeyMapped(1580),// Version 188
-    BeginGoldenHammer(1581),// Version 188
-    GoldenHammerResult(1582),// Version 188
-    EndGoldenHammer(1583),// Version 188
+    BeginFuncKeyMapped(1585),// Version 188
+    FuncKeyMappedInit(1585),// Version 188
+    PetConsumeItemInit(1586),// Version 188
+    PetConsumeMPItemInit(1587),// Version 188
+    PetConsumeCureItemInit(1588),// Version 188
+    PetBuff(1589),// Version 188
+    EndFuncKeyMapped(1589),// Version 188
+    BeginGoldenHammer(1590),// Version 188
+    GoldenHammerResult(1591),// Version 188
+    EndGoldenHammer(1592),// Version 188
     BeginEgoEquip(1598),// Version 188
     EgoEquipGaugeCompleteReturn(1599),// Version 188
     EgoEquipCreateUpgradeItemCostInfo(1600),// Version 188

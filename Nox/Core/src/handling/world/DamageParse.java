@@ -1238,6 +1238,8 @@ public class DamageParse {
         int nShootRange = 0;
 
         int dwMobCRC = iPacket.DecodeInt();
+        
+        // this is a sub
         iPacket.DecodeByte(); // Unknown
         nBulletItemPos = iPacket.DecodeShort();
         iPacket.DecodeInt(); // Unknown
@@ -1332,12 +1334,12 @@ public class DamageParse {
             iPacket.DecodeShort();
             iPacket.DecodeShort();
 
-            if (pAttack.skill == 2211007) { // hackfix atm
+            /*if (pAttack.skill == 2211007) { // hackfix atm
                 iPacket.DecodeInt();
             }
             if (pAttack.skill == 3111013) { // hackfix atm
                 iPacket.DecodeLong();
-            }
+            }*/
         }
         if (eType == RecvPacketOpcode.UserNonTargetForceAtomAttack) {
             iPacket.DecodeInt(); // Always 0

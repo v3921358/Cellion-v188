@@ -682,7 +682,7 @@ public class AdminCommand {
                 if (mch == null) {
                     return 0;
                 } else {
-                    mch.getMap().broadcastPacket(CField.getChatText(mch.getId(), StringUtil.joinStringFrom(splitted, 1), mch.isGM(), true));
+                    mch.getMap().broadcastPacket(CField.getChatText(mch.getId(), StringUtil.joinStringFrom(splitted, 1), mch.isGM(), 1));
                 }
             }
             return 1;
@@ -698,7 +698,7 @@ public class AdminCommand {
                 c.getPlayer().dropMessage(5, "unable to find '" + splitted[1]);
                 return 0;
             } else {
-                victim.getMap().broadcastPacket(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 2), victim.isGM(), true));
+                victim.getMap().broadcastPacket(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 2), victim.isGM(), 1));
             }
             return 1;
         }
@@ -1147,7 +1147,7 @@ public class AdminCommand {
         public int execute(ClientSocket c, String[] splitted) {
             for (User victim : c.getPlayer().getMap().getCharacters()) {
                 if (victim.getId() != c.getPlayer().getId()) {
-                    victim.getMap().broadcastPacket(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), true));
+                    victim.getMap().broadcastPacket(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 1));
                 }
             }
             return 1;
@@ -1160,7 +1160,7 @@ public class AdminCommand {
         public int execute(ClientSocket c, String[] splitted) {
             for (User victim : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 if (victim.getId() != c.getPlayer().getId()) {
-                    victim.getMap().broadcastPacket(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), true));
+                    victim.getMap().broadcastPacket(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 1));
                 }
             }
             return 1;
@@ -1174,7 +1174,7 @@ public class AdminCommand {
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (User victim : cserv.getPlayerStorage().getAllCharacters()) {
                     if (victim.getId() != c.getPlayer().getId()) {
-                        victim.getMap().broadcastPacket(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), true));
+                        victim.getMap().broadcastPacket(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 1));
                     }
                 }
             }

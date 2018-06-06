@@ -331,19 +331,21 @@ public enum RecvPacketOpcode {
     CrossHunterShopRequest(475),// Version 188
     UserEquipSlotLevelMinusItemUseRequest(476),// Version 188
     BoardGameRequest(477),// Version 188
-    UserRequestFlyingSwordStart(478),// Version 188
-    BingoRequest(479),// Version 188
-    BingoCassandraRequest(480),// Version 188
-    ActionBarRequest(481),// Version 188
-    UserRequestSetOffTrinity(482),// Version 188
-    MesoRangerRequest(483),// Version 188
-    UserRequestSetSmashCount(484),// Version 188
+    
+    UserRequestFlyingSwordStart(480),// Version 188
+    BingoRequest(481),// Version 188
+    BingoCassandraRequest(482),// Version 188
+    ActionBarRequest(483),// Version 188
+    UserRequestSetOffTrinity(484),// Version 188
+    MesoRangerRequest(485),// Version 188
+    UserRequestSetSmashCount(486),// Version 188
     
     UserHyperSkillUpRequest(487),// Version 188
     UserHyperSkillResetRequest(488),// Version 188
     UserHyperStatSkillUpRequest(489),// Version 188
     UserHyperStatSkillResetRequest(490),// Version 188
     
+    // somewhere might be off by 1 before waitqueue
     UserSetDressChangedRequest(491),// Version 188
     EntryRecordRequest(492),// Version 188
     SetMaxGauge(493),// Version 188
@@ -357,9 +359,12 @@ public enum RecvPacketOpcode {
     MysticFieldMove(501),// Version 188
     YutGameRequest(502),// Version 188
     UserJewelCraftRequest(503),// Version 188
-    ValuePackRequest(504),// Version 188
-    WaitQueueRequest(505),// Version 188
-    RequestReloginCookie(506),// Version 188
+    //ValuePackRequest(504),// Version 188
+    
+    WaitQueueRequest(504),// Version 188
+    RequestReloginCookie(505),// Version 188
+    
+    // might be off by 1
     CheckTrickOrTreatRequest(507),// Version 188
     MonsterFarmMigrateOutRequest(508),// Version 188
     HalloweenCandyRankingRequest(509),// Version 188
@@ -500,33 +505,32 @@ public enum RecvPacketOpcode {
     CashBuffEventCancle(742),// Version 188
     
     // confirm
-    CreatePsychicLock(743),// Version 188
-    ResetPathPsychicLock(744),// Version 188
-    ReleasePsychicLock(745),// Version 188
-    CreateKinesisPsychicArea(747),// Version 188
-    DoActivePsychicArea(748),// Version 188
-    DebuffPsychicArea(749),// Version 188
-    ReleasePsychicArea(750),// Version 188
-    PsychicOverRequest(751),// Version 188
-    DecPsychicPointRequest(752),// Version 188
-    TouchMeEndRequest(753),// Version 188
-    BiteAttackResponse(754),// Version 188
-    SaveUrusSkill(755),// Version 188
-    GetSavedUrusSkill(756),// Version 188
-    UrusShopRequest(757),// Version 188
-    UrusPartyMemberList(758),// Version 188
-    UserKeyDownStepRequest(759),// Version 188
+    CreatePsychicLock(744),// Version 188
+    ResetPathPsychicLock(745),// Version 188
+    ReleasePsychicLock(746),// Version 188
+    CreateKinesisPsychicArea(748),// Version 188
+    DoActivePsychicArea(749),// Version 188
+    DebuffPsychicArea(750),// Version 188
+    ReleasePsychicArea(751),// Version 188
+    PsychicOverRequest(752),// Version 188
+    DecPsychicPointRequest(753),// Version 188
+    TouchMeEndRequest(754),// Version 188
+    BiteAttackResponse(755),// Version 188
+    SaveUrusSkill(756),// Version 188
+    GetSavedUrusSkill(757),// Version 188
+    UrusShopRequest(758),// Version 188
+    UrusPartyMemberList(759),// Version 188
+    UserKeyDownStepRequest(760),// Version 188
     
-    // fix
-    DailyGiftRequest(728),// Version 188
-    SkillCommandLock(729),// Version 188
-    BeastFormWingOnOff(730),// Version 188
-    ResetAirHitCountRequest(731),// Version 188
-    RWActionCancel(732),// Version 188
-    ReleaseRWGrab(733),// Version 188
-    RWClearCurrentAttackRequest(734),// Version 188
-    RWMultiChargeCancelRequest(735),// Version 188
-    FuntionFootholdMan(736),// Version 188
+    DailyGiftRequest(761),// Version 188
+    SkillCommandLock(763),// Version 188
+    BeastFormWingOnOff(764),// Version 188
+    ResetAirHitCountRequest(765),// Version 188
+    RWActionCancel(766),// Version 188
+    ReleaseRWGrab(767),// Version 188
+    RWClearCurrentAttackRequest(768),// Version 188
+    RWMultiChargeCancelRequest(769),// Version 188
+    FuntionFootholdMan(770),// Version 188
     
     MonsterBookCodeRequest(792),// Version 188
     MonsterBookCardDropRequest(794),// Version 188
@@ -596,22 +600,22 @@ public enum RecvPacketOpcode {
     ReactorRectInMob(933),// Version 188
     ReactorOnKey(934),// Version 188
     EndReactorPool(935),// Version 188
-    BeginPartyMatch(960),
-    InvitePartyMatch(961),
-    CancelInvitePartyMatch(962),
-    PartyMemberCandidateRequest(963),
-    UrusPartyMemberCandidateRequest(964),
-    PartyCandidateRequest(965),
-    IntrusionFriendCandidateRequest(966),
-    IntrusionLobbyCandidateRequest(967),
-    EndPartyMatch(968),
-    GatherRequest(969),
-    GatherEndNotice(970),
-    ActChangeReactorUseRequst(971),
-    UserAntiMacroBombRequest(972),
-    MakeEnterFieldPacketForQuickMove(973),
-    RuneStoneUseReq(974),
-    RuneStoneSkillReq(975),
+    BeginPartyMatch(962),
+    InvitePartyMatch(963),
+    CancelInvitePartyMatch(964),
+    PartyMemberCandidateRequest(965),
+    UrusPartyMemberCandidateRequest(966),
+    PartyCandidateRequest(967),
+    IntrusionFriendCandidateRequest(968),
+    IntrusionLobbyCandidateRequest(969),
+    EndPartyMatch(970),
+    GatherRequest(971),
+    GatherEndNotice(972),
+    ActChangeReactorUseRequst(973),
+    UserAntiMacroBombRequest(974),
+    MakeEnterFieldPacketForQuickMove(975),
+    RuneStoneUseReq(976),
+    RuneStoneSkillReq(977),
     EndField(1088),// Version 187
     BeginItemUpgrade(1177),// Version 188
     GoldHammerRequest(1178),// Version 188

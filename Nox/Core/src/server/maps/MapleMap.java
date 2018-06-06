@@ -1473,6 +1473,7 @@ public final class MapleMap {
 
     public void spawnMonster_sSack(final Mob mob, final Point pos, final int spawnType) {
         mob.setPosition(calcPointBelow(new Point(pos.x, pos.y - 1)));
+        mob.setFh(smr.footholds.findBelow(pos).getId());
         OnSpawnMonster(mob, spawnType);
     }
 
@@ -1642,7 +1643,7 @@ public final class MapleMap {
     }
 
     public final void OnSpawnMonster(Mob pMob, int nSpawnType) {
-        OnSpawnMonster(pMob, nSpawnType, false, null);
+        OnSpawnMonster(pMob, nSpawnType, true, null);
     }
 
     /**

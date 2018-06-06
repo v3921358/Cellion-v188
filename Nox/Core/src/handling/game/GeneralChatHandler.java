@@ -38,14 +38,14 @@ public class GeneralChatHandler implements ProcessPacket<ClientSocket> {
         
         pPlayer.updateTick(iPacket.DecodeInt());
         final String sText = iPacket.DecodeString();
-        final boolean bAppendToChatLogList = iPacket.DecodeByte() == 0;
+        final int nAppend = iPacket.DecodeByte();
 
         if (sText.length() > 0 && pPlayer.getMap() != null && !CommandProcessor.processCommand(c, sText, ServerConstants.CommandType.NORMAL)) {
             if (!pPlayer.isGM() && sText.length() >= 80) {
                 LogHelper.PACKET_EDIT_HACK.get().info(
                         String.format("[GeneralChat] %s [ChrID: %d; AccId %d] has tried to send a general chat of length > 80. [%d]. AppendToChatLog: %s\r\nText:%s",
                                 pPlayer.getName(), pPlayer.getId(), c.getAccID(),
-                                sText.length(), String.valueOf(bAppendToChatLogList), sText));
+                                sText.length(), String.valueOf(nAppend), sText));
                 c.Close();
                 return;
             }
@@ -87,17 +87,17 @@ public class GeneralChatHandler implements ProcessPacket<ClientSocket> {
             if (pPlayer.getCanTalk() || pPlayer.isGM()) {
                 if (pPlayer.isHidden()) { // Broadcast only to Game Masters if character is hidden.
                     pPlayer.getMap().broadcastGMMessage(pPlayer, CField.getGameMessage("(Hidden) " + pPlayer.getName() + " : " + sText, (short) 6), true);
-                    pPlayer.getMap().broadcastGMMessage(pPlayer, CField.getChatText(pPlayer.getId(), sText, false, !bAppendToChatLogList), true);
+                    pPlayer.getMap().broadcastGMMessage(pPlayer, CField.getChatText(pPlayer.getId(), sText, false, nAppend), true);
                 } else {
                     if ((!pPlayer.isIntern()) || (pPlayer.isIntern() && pPlayer.usingStaffChat())) { // If player is staff, only use special text if they have it enabled.
                         if (chatColour > 0 || !chatPrefix.equals("")) {
                             pPlayer.getMap().broadcastPacket(CField.getGameMessage(chatPrefix + pPlayer.getName() + " : " + sText, chatColour));
-                            pPlayer.getMap().broadcastPacket(CField.getChatText(pPlayer.getId(), sText, false, !bAppendToChatLogList));
+                            pPlayer.getMap().broadcastPacket(CField.getChatText(pPlayer.getId(), sText, false, 0));
                         } else {
-                            pPlayer.getMap().broadcastPacket(CField.getChatText(pPlayer.getId(), sText, pPlayer.isGM(), bAppendToChatLogList));
+                            pPlayer.getMap().broadcastPacket(CField.getChatText(pPlayer.getId(), sText, pPlayer.isGM(), nAppend));
                         }
                     } else {
-                        pPlayer.getMap().broadcastPacket(CField.getChatText(pPlayer.getId(), sText, (pPlayer.usingStaffChat() && pPlayer.isGM()), bAppendToChatLogList));
+                        pPlayer.getMap().broadcastPacket(CField.getChatText(pPlayer.getId(), sText, (pPlayer.usingStaffChat() && pPlayer.isGM()), nAppend));
                     }
                 }
             } else {

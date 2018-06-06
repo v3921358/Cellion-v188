@@ -45,6 +45,7 @@ public final class ReleaseTempestBlades implements ProcessPacket<ClientSocket> {
         if (KaiserHandler.getTempestBladeSkill(pPlayer) == Kaiser.ADVANCED_TEMPEST_BLADES_1 || KaiserHandler.getTempestBladeSkill(pPlayer) == Kaiser.ADVANCED_TEMPEST_BLADES) {
             nMaxCount = 5;
         }
+        iPacket.DecodeInt();
         int mobCount = iPacket.DecodeInt();
         int lastMobID = 0;
         int nMobID = 0;

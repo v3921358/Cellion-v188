@@ -26,7 +26,7 @@ public class ClickTouchReactorHandler implements ProcessPacket<ClientSocket> {
         final Reactor reactor = c.getPlayer().getMap().getReactorByOid(oid);
 
         if (c.getPlayer().isIntern()) {
-            c.getPlayer().dropMessage(5, "[Debug] Reactor ID : " + oid);
+            c.getPlayer().dropMessage(5, String.format("[Debug] Reactor ID [%d]", reactor.getReactorId()));
         }
 
         if (!touched || reactor == null || !reactor.isAlive() || reactor.getTouch() == 0) {

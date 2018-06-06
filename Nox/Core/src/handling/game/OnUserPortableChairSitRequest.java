@@ -45,6 +45,7 @@ public final class OnUserPortableChairSitRequest implements ProcessPacket<Client
         if (chr == null || chr.getMap() == null) {
             return;
         }
+        int dwField = iPacket.DecodeInt();
         int chairItem = iPacket.DecodeInt();
         final Item toUse = chr.getInventory(InventoryType.SETUP).findById(chairItem);
         if (toUse == null) {

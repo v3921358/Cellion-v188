@@ -750,14 +750,13 @@ public class CField {
 
     public static OutPacket startMapEffect(String msg, int itemid, boolean active) {
 
-        OutPacket oPacket = new OutPacket(SendPacketOpcode.FieldEffect.getValue());
-        //oPacket.encode(active ? 0 : 1);
-
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.BlowWeather.getValue());
+        
         oPacket.EncodeInt(itemid);
-        if (active) {
+        if (itemid > 0) {
             oPacket.EncodeString(msg);
+            oPacket.EncodeByte(0); // encode PCL if true
         }
-        oPacket.EncodeByte(active ? 0 : 1); // Moved down here for v176
 
         return oPacket;
     }
@@ -1278,13 +1277,13 @@ public class CField {
         return oPacket;
     }
 
-    public static OutPacket getChatText(int cidfrom, String text, boolean whiteBG, boolean appendToChatLogList) {
+    public static OutPacket getChatText(int cidfrom, String text, boolean whiteBG, int appendToChatLogList) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.UserChat.getValue());
         oPacket.EncodeInt(cidfrom);
         oPacket.EncodeByte(whiteBG ? 1 : 0);
         oPacket.EncodeString(text);//
-        oPacket.EncodeByte(appendToChatLogList ? 0 : 1); // Changed to the ! opposite on v176
+        oPacket.EncodeByte(appendToChatLogList);
         oPacket.EncodeByte(0);
         oPacket.EncodeByte(-1);
 
@@ -2194,8 +2193,8 @@ public class CField {
         oPacket.EncodeInt(0);
         oPacket.EncodeInt(0); // lTowerChair.size
         oPacket.EncodeBool(false);
-        /*oPacket.EncodeInt(0);
-        oPacket.EncodeBool(false);*/
+        oPacket.EncodeInt(0);
+        oPacket.EncodeBool(false);
 
         return oPacket;
     }

@@ -58,7 +58,7 @@ public final class CloseRangeAttack {
             return;
         }
 
-        AttackInfo pAttack = DamageParse.OnAttack(RecvPacketOpcode.UserMeleeAttack, iPacket, pPlayer);
+        AttackInfo pAttack = DamageParse.OnAttack(bPassiveAttack ? RecvPacketOpcode.UserBodyAttack : RecvPacketOpcode.UserMeleeAttack, iPacket, pPlayer);
         Item pShield = c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem((byte) -10);
         Skill pSkill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(pAttack.skill));
         int nSkillLevel = pPlayer.getTotalSkillLevel(pSkill);

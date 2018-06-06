@@ -8449,10 +8449,10 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 client.SendPacket(PlayerShopPacket.shopChat(message, 0)); //0 or what
                 break;
             case -3:
-                client.SendPacket(CField.getChatText(getId(), message, isGM(), false)); //1 = hide
+                client.SendPacket(CField.getChatText(getId(), message, isGM(), 0)); //1 = hide
                 break;
             case -4:
-                client.SendPacket(CField.getChatText(getId(), message, isGM(), true)); //1 = hide
+                client.SendPacket(CField.getChatText(getId(), message, isGM(), 1)); //1 = hide
                 break;
             case -5:
                 client.SendPacket(CField.getGameMessage(message, (short) 6)); //pink

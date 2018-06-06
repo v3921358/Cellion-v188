@@ -25,7 +25,7 @@ public class ServerConstants {
     public static final String SOURCE_REVISION = "1.0";
     
     /*Server IP Address*/
-    public static final String HOST = "10.147.17.88"; // "127.0.0.1"; // Server IP Address "10.147.17.88"; //
+    public static final String HOST = "127.0.0.1"; // Server IP Address "10.147.17.88"; //
     public static final byte[] NEXON_IP = new byte[]{(byte) 8, (byte) 31, (byte) 99, (byte) 141}; // 8.31.99.141
     public static final byte[] NEXON_CHAT_IP = new byte[]{(byte) 8, (byte) 31, (byte) 99, (byte) 133}; // Chat Server
     

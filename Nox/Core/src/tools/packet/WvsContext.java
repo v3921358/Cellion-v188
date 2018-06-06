@@ -3477,7 +3477,7 @@ public class WvsContext {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.Message.getValue());
             if (!inChat) {
-                DropPickUpMessage pMessage = new DropPickUpMessage(0, 0, gain);
+                DropPickUpMessage pMessage = new DropPickUpMessage(1, 0, gain);
                 pMessage.messagePacket(oPacket);
             } else {
                 oPacket.EncodeByte(7);
@@ -4011,6 +4011,12 @@ public class WvsContext {
         if (bSet) {
             oPacket.EncodeInt(nStealSkillID);
         }
+        return oPacket;
+    }
+    
+    public static OutPacket OnIssueReloginCookie(String sUsername) {
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.IssueReloginCookie.getValue());
+        oPacket.EncodeString("TEST123");
         return oPacket;
     }
 }
