@@ -26,7 +26,7 @@ public final class WorldInfoRequestHandler implements ProcessPacket<ClientSocket
         //c.write(LoginPacket.changeBackground());
 
         for (WorldConstants.WorldOption servers : WorldConstants.WorldOption.values()) {
-            if (WorldConstants.WorldOption.getById(servers.getWorld()).show() && servers != null) {
+            if (WorldConstants.WorldOption.getById(servers.getWorld()).show()) {
                 c.SendPacket(CLogin.OnWorldInformation(servers.getWorld()));
             }
         }

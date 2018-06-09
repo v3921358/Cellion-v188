@@ -235,11 +235,15 @@ public class BuffPacket {
             oPacket.EncodeInt(0);//Key
             oPacket.EncodeByte(0);//Key --> mBuffedForSpecMap
         }
+        
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HayatoStance)) { 
+            oPacket.EncodeInt(0);
+        }
 
         oPacket.EncodeByte(pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseAtt) == null ? 0
-                : pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseAtt));//nDefenseAtt
+                            : pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseAtt));//nDefenseAtt
         oPacket.EncodeByte(pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseState) == null ? 0
-                : pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseState));//nDefenseState
+                            : pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseState));//nDefenseState
         oPacket.EncodeByte(pEffect == null ? 0 : pEffect.getPVPDamage());//nPVPDamage
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.Dice)) {
@@ -470,33 +474,7 @@ public class BuffPacket {
             oPacket.EncodeInt(0);//nViperEnergyCharged
         }
 
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HayatoStance)) {
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.HayatoStanceBonus)) {
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BladeStance)) { //BladeStance -THINK ITS THE HAYATO ONE, IDK DO
-            oPacket.EncodeByte(1);
-            oPacket.EncodeInt(2);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Battoujutsu)) {
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BladeStance)) { // BladeStance
             oPacket.EncodeInt(0);
         }
 
@@ -511,12 +489,42 @@ public class BuffPacket {
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.Stigma)) { //Stigma
             oPacket.EncodeInt(0);
         }
-
+        
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.DemonAwakening)) {
+            oPacket.EncodeInt(0);
+        }
+        
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.CriticalGrowing)) {
+            oPacket.EncodeInt(0);
+        }
+        
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Ember)) {
+            oPacket.EncodeInt(0); 
+        }
+        
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.PickPocket)) {
+            oPacket.EncodeInt(0);
+        }
+        
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.VampDeath)) {
+            oPacket.EncodeInt(0);
+        }
+        
         encodeTwoStateTemporaryStat(oPacket, pPlayer, nBuffID, tDuration, mTemporaryStats, pEffect);
         encodeIndieTempStat(oPacket, nBuffID, tDuration, mTemporaryStats);
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.UsingScouter)) {
             oPacket.EncodeInt(0);
+        }
+        
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.NewFlying)) {
+            oPacket.EncodeInt(0); 
+        }
+        
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.YukiMusume)) {
+            oPacket.EncodeInt(0); 
+            oPacket.EncodeInt(0); 
+            oPacket.EncodeInt(0); 
         }
     }
 
@@ -1820,7 +1828,7 @@ public class BuffPacket {
             uFlagTemp[CharacterTemporaryStat.BladeStance.getPosition()] |= CharacterTemporaryStat.BladeStance.getValue();
             uFlagData.add(new Pair<>(chr.getBuffedValue(CharacterTemporaryStat.BladeStance), 2));
             uFlagData.add(new Pair<>(chr.getTrueBuffSource(CharacterTemporaryStat.BladeStance), 4));
-            //uFlagData.add(new Pair<>(chr.getBuffedValue(CharacterTemporaryStat.BladeStance), 4)); // xOption
+            uFlagData.add(new Pair<>(chr.getBuffedValue(CharacterTemporaryStat.BladeStance), 4)); // xOption
         }
         if (chr.getBuffedValue(CharacterTemporaryStat.Fever) != null) {
             uFlagTemp[CharacterTemporaryStat.Fever.getPosition()] |= CharacterTemporaryStat.Fever.getValue();
@@ -1851,6 +1859,12 @@ public class BuffPacket {
             uFlagTemp[CharacterTemporaryStat.Stigma.getPosition()] |= CharacterTemporaryStat.Stigma.getValue();
             uFlagData.add(new Pair<>(chr.getBuffedValue(CharacterTemporaryStat.Stigma), 2));
             uFlagData.add(new Pair<>(chr.getTrueBuffSource(CharacterTemporaryStat.Stigma), 4));
+        }
+        if (chr.getBuffedValue(CharacterTemporaryStat.HayatoStance) != null) { //adding this here, lets see
+            uFlagTemp[CharacterTemporaryStat.HayatoStance.getPosition()] |= CharacterTemporaryStat.HayatoStance.getValue();
+            uFlagData.add(new Pair<>(chr.getBuffedValue(CharacterTemporaryStat.HayatoStance), 2));
+            uFlagData.add(new Pair<>(chr.getTrueBuffSource(CharacterTemporaryStat.HayatoStance), 4));
+            uFlagData.add(new Pair<>(chr.getTrueBuffSource(CharacterTemporaryStat.HayatoStance), 4));
         }
         if (chr.getBuffedValue(CharacterTemporaryStat.Unknown487) != null) {
             uFlagTemp[CharacterTemporaryStat.Unknown487.getPosition()] |= CharacterTemporaryStat.Unknown487.getValue();

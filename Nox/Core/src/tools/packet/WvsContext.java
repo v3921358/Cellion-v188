@@ -4016,7 +4016,7 @@ public class WvsContext {
     
     public static OutPacket OnIssueReloginCookie(String sUsername) {
         OutPacket oPacket = new OutPacket(SendPacketOpcode.IssueReloginCookie.getValue());
-        oPacket.EncodeString("TEST123");
+        oPacket.EncodeString("sUsername");
         return oPacket;
     }
 }

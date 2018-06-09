@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  * Cellion Development
 
  * MapleStory Server Emulator
- * GMS Version 1.80.2
+ * GMS Version 1.88.4
  * 
  * Project Lead Developer
  * @author Mazen Massoud
@@ -50,7 +50,7 @@ public class ServerConstants {
     public static final boolean TESPIA = false; // Used for activating GMST.
     public static final short MAPLE_VERSION = (short) 188;
     public static final String SERVER_NAME = "Cellion"; //Shorter reference of just the server name.
-    public static final String MAPLE_PATCH = "2";
+    public static final String MAPLE_PATCH = "4";
     public static final int MAPLE_LOCALE = 8;
     public static final boolean ENABLE_PIC = true;
     public static boolean FARM = false; //Enable or disable farm entry.

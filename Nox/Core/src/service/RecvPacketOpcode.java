@@ -39,7 +39,7 @@ public enum RecvPacketOpcode {
     PrivateServerPacket(134),// Version 188
     ResetLoginStateOnCheckOTP(135),// Version 188
     AlbaRequest(142),// Version 188
-    UpdateCharacterCard(143),// Version 188
+    UpdateLoginCookie(143),// Version 188
     CheckCenterAndGameAreConnected(144),// Version 188
     ResponseToCheckAliveAck_Fake(145),// Version 188
     CreateMapleAccount(146),// Version 188

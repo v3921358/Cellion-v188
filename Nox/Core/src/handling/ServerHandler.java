@@ -76,7 +76,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.ChangeSPWRequest.getValue()] = new PicChangeHandler();
         handlers[RecvPacketOpcode.SetSPW.getValue()] = new CharSelectSetPICHandler();
         handlers[RecvPacketOpcode.CheckSPWRequest.getValue()] = new PicCheck();
-        handlers[RecvPacketOpcode.UpdateCharacterCard.getValue()] = new UpdateCharacterCards();
+        //handlers[RecvPacketOpcode.UpdateCharacterCard.getValue()] = new UpdateCharacterCards();
         //handlers[RecvPacketOpcode.CharacterBurning.getValue()] = new CharacterBurnRequestHandler(); // IDK
         handlers[RecvPacketOpcode.UserPortalTeleportRequest.getValue()] = new OnUserPortalTeleportRequest();
         handlers[RecvPacketOpcode.UserMapTransferRequest.getValue()] = new OnUserMapTransferRequest();
@@ -96,6 +96,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserCharacterInfoRequest.getValue()] = new CharacterInfoRequestHandler();
         handlers[RecvPacketOpcode.UserMigrateToCashShopRequest.getValue()] = new EnterCashShopHandler();
         handlers[RecvPacketOpcode.RequestReloginCookie.getValue()] = new ReloginCookieHandler();
+        handlers[RecvPacketOpcode.UpdateLoginCookie.getValue()] = new UpdateLoginCookieHandler();
         /**
          * PvP Handlers
          */
@@ -445,7 +446,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                         case "UserMove":
                         case "SummonedMove":
                         case "NpcMove":
-                        case "MobMove":
+                        //case "MobMove":
                         case "MobApplyCtrl":
                         case "UserChangeStatRequest":
                         case "UserActivateDamageSkin":

@@ -87,12 +87,12 @@ public class GeneralChatHandler implements ProcessPacket<ClientSocket> {
             if (pPlayer.getCanTalk() || pPlayer.isGM()) {
                 if (pPlayer.isHidden()) { // Broadcast only to Game Masters if character is hidden.
                     pPlayer.getMap().broadcastGMMessage(pPlayer, CField.getGameMessage("(Hidden) " + pPlayer.getName() + " : " + sText, (short) 6), true);
-                    pPlayer.getMap().broadcastGMMessage(pPlayer, CField.getChatText(pPlayer.getId(), sText, false, nAppend), true);
+                    pPlayer.getMap().broadcastGMMessage(pPlayer, CField.getChatText(pPlayer.getId(), sText, false, 2), true);
                 } else {
                     if ((!pPlayer.isIntern()) || (pPlayer.isIntern() && pPlayer.usingStaffChat())) { // If player is staff, only use special text if they have it enabled.
                         if (chatColour > 0 || !chatPrefix.equals("")) {
                             pPlayer.getMap().broadcastPacket(CField.getGameMessage(chatPrefix + pPlayer.getName() + " : " + sText, chatColour));
-                            pPlayer.getMap().broadcastPacket(CField.getChatText(pPlayer.getId(), sText, false, 0));
+                            pPlayer.getMap().broadcastPacket(CField.getChatText(pPlayer.getId(), sText, false, 2));
                         } else {
                             pPlayer.getMap().broadcastPacket(CField.getChatText(pPlayer.getId(), sText, pPlayer.isGM(), nAppend));
                         }

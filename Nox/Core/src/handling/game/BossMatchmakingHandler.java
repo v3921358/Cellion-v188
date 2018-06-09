@@ -96,19 +96,22 @@ public class BossMatchmakingHandler implements ProcessPacket<ClientSocket> {
     
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
+        if (!(iPacket.GetRemainder() > 1)) {
+            return;
+        }
+        
         final User pPlayer = c.getPlayer();
+        pPlayer.updateTick(iPacket.DecodeInt());
+        int nBossType = iPacket.DecodeInt();
+        BossOperation nType = BossOperation.getFromValue(nBossType);
+        int nDestination;
+        iPacket.DecodeInt(); // Unknown
+        iPacket.DecodeInt(); // Unknown
         
         if (!bHandlePacket) {
             c.removeClickedNPC();
             NPCScriptManager.getInstance().start(c, nBossNPC, null);
         } else {
-            pPlayer.updateTick(iPacket.DecodeInt());
-            int nBossType = iPacket.DecodeInt();
-            BossOperation nType = BossOperation.getFromValue(nBossType);
-            int nDestination;
-            iPacket.DecodeInt(); // Unknown
-            iPacket.DecodeInt(); // Unknown
-
             switch (nType) {
                 case BALROG:
                     nDestination = 0;

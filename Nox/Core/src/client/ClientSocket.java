@@ -137,7 +137,7 @@ public class ClientSocket extends Socket {
                     case MobCtrlAck:
                     case StatChanged:
                     case NpcMove:
-                    case MobMove:
+                    //case MobMove:
                     case MobLeaveField:
                     //case MobEnterField:
                         if (ServerConstants.REDUCED_DEBUG_SPAM) break;

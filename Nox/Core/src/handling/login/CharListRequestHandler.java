@@ -27,7 +27,6 @@ public final class CharListRequestHandler implements ProcessPacket<ClientSocket>
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
         iPacket.DecodeByte();
-        iPacket.DecodeByte();
         String sPassport = iPacket.DecodeString(); // u nid 2 add passport 2 sql n get acct from this instead of user/pw in checkloginhandler
         iPacket.Decode(16); // MachineID
         iPacket.DecodeInt();
