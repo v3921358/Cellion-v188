@@ -132,7 +132,9 @@ public class CharacterCreationUtil {
                 ps.setInt(2, worldId);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        return rs.getInt("charslots");
+                        int nCharSlots = rs.getInt("charslots");
+                        if (nCharSlots <= 1) nCharSlots = GameConstants.characterSlot;
+                        return nCharSlots;
                     } else {
                         try (PreparedStatement psu = con.prepareStatement("INSERT INTO character_slots (accid, worldid, charslots) VALUES (?, ?, ?)")) {
                             psu.setInt(1, accountId);

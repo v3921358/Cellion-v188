@@ -1471,10 +1471,10 @@ public final class MapleMap {
         spawnReactor(mob);
     }
 
-    public void spawnMonster_sSack(final Mob mob, final Point pos, final int spawnType) {
+    public void spawnMonster_sSack(final Mob mob, final Point pos, final int spawnType, final int nMobScale) {
         mob.setPosition(calcPointBelow(new Point(pos.x, pos.y - 1)));
         mob.setFh(smr.footholds.findBelow(pos).getId());
-        OnSpawnMonster(mob, spawnType);
+        OnSpawnMonster(mob, spawnType, nMobScale);
     }
 
     public void spawnObtacleAtom() {
@@ -1482,7 +1482,11 @@ public final class MapleMap {
     }
 
     public void spawnMonsterOnGroundBelow(final Mob mob, final Point pos) {
-        spawnMonster_sSack(mob, pos, -2);
+        spawnMonster_sSack(mob, pos, -2, 100);
+    }
+    
+    public void spawnMonsterOnGroundBelow(final Mob mob, final Point pos, final int nMobScale) {
+        spawnMonster_sSack(mob, pos, -2, nMobScale);
     }
 
     public int spawnMonsterWithEffectBelow(final Mob mob, final Point pos, final int effect) {
@@ -1642,8 +1646,16 @@ public final class MapleMap {
         spawnedMonstersOnMap.incrementAndGet();
     }
 
+    public final void OnSpawnEliteMonster(Mob pMob, int nSpawnType) {
+        OnSpawnMonster(pMob, nSpawnType, true, null, 250);
+    }
+    
     public final void OnSpawnMonster(Mob pMob, int nSpawnType) {
-        OnSpawnMonster(pMob, nSpawnType, true, null);
+        OnSpawnMonster(pMob, nSpawnType, true, null, 100);
+    }
+    
+    public final void OnSpawnMonster(Mob pMob, int nSpawnType, int nMobScale) {
+        OnSpawnMonster(pMob, nSpawnType, true, null, nMobScale);
     }
 
     /**
@@ -1653,8 +1665,9 @@ public final class MapleMap {
      * @param nSpawnType
      * @param bOverwrite
      * @param pPlayer 
+     * @param nScale
      */
-    public final void OnSpawnMonster(final Mob pMob, final int nSpawnType, final boolean bOverwrite, final User pPlayer) {
+    public final void OnSpawnMonster(final Mob pMob, final int nSpawnType, final boolean bOverwrite, final User pPlayer, int nScale) {
         
         boolean bBuffedMonster = BuffedMob.OnBuffedMobRequest(pMob, this.channel);
         final Mob pMonster = bBuffedMonster ? BuffedMob.OnBuffedMobResult(pMob) : pMob;
@@ -1678,11 +1691,11 @@ public final class MapleMap {
             @Override
             public final void sendPackets(ClientSocket c) {
                 if (GameConstants.isAzwanMap(c.getPlayer().getMapId())) {
-                    c.SendPacket(MobPacket.spawnMonster(pMonster, pMonster.getStats().getSummonType() <= 1 || pMonster.getStats().getSummonType() == 27 || bOverwrite ? nSpawnType : pMonster.getStats().getSummonType(), 0, true));
+                    c.SendPacket(MobPacket.spawnMonster(pMonster, pMonster.getStats().getSummonType() <= 1 || pMonster.getStats().getSummonType() == 27 || bOverwrite ? nSpawnType : pMonster.getStats().getSummonType(), 0, true, nScale));
                 } else if (GameConstants.isChangeable(pMonster.getId())) {
-                    c.SendPacket(MobPacket.spawnMonster(pMonster, pMonster.getStats().getSummonType() <= 1 || pMonster.getStats().getSummonType() == 27 || true ? nSpawnType : pMonster.getStats().getSummonType(), 0, false));
+                    c.SendPacket(MobPacket.spawnMonster(pMonster, pMonster.getStats().getSummonType() <= 1 || pMonster.getStats().getSummonType() == 27 || true ? nSpawnType : pMonster.getStats().getSummonType(), 0, false, nScale));
                 } else {
-                    c.SendPacket(MobPacket.spawnMonster(pMonster, pMonster.getStats().getSummonType() <= 1 || pMonster.getStats().getSummonType() == 27 || bOverwrite ? nSpawnType : pMonster.getStats().getSummonType(), 0, false));
+                    c.SendPacket(MobPacket.spawnMonster(pMonster, pMonster.getStats().getSummonType() <= 1 || pMonster.getStats().getSummonType() == 27 || bOverwrite ? nSpawnType : pMonster.getStats().getSummonType(), 0, false, nScale));
                 }
             }
         });

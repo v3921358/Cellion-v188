@@ -71,6 +71,7 @@ public class Mob extends AbstractLoadedMapleLife {
     private int triangulation = 0;
     private ChangeableStats ostats = null;
     private int bloodlessPartyBonus = 0;
+    private int nMonsterScale = 100;
 
     public Mob(int id, MonsterStats stats) {
         super(id);
@@ -101,6 +102,14 @@ public class Mob extends AbstractLoadedMapleLife {
         if (!stats.getSkills().isEmpty()) {
             usedSkills = new HashMap<>();
         }
+    }
+    
+    public void setScale(int nMobSize) {
+        nMonsterScale = nMobSize;
+    }
+    
+    public int getScale() {
+        return nMonsterScale;
     }
     
     public final void buffedChangeLevel(final double newLevel, final int hpBuff, final int bossHpBuff) { //Buffed channels

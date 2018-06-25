@@ -27,6 +27,7 @@ import enums.SavedLocationType;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.StringUtil;
+import tools.packet.MobPacket;
 import tools.packet.WvsContext;
 
 /**
@@ -67,6 +68,10 @@ public class PlayerCommand {
                     c.getPlayer().tPierre = 0;
                     c.getPlayer().tVellum = 0;
                     c.getPlayer().tMagnus = 0;
+                    break;
+                case 5: 
+                    Mob pBoss = LifeFactory.getMonster(8880000);
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(pBoss, c.getPlayer().getPosition(), 300);
                     break;
             }
             return 1;

@@ -73,6 +73,23 @@ function action(mode, type, selection) {
 			cm.dispose();
 		}
 		
+		switch (pItem.getPotentialTier().getValue()) {
+			case 17:
+				sTier = "(#bRare#k)";
+				break;
+			case 18:
+				sTier = "(#dEpic#k)";
+				break;
+			case 19:
+				sTier = "(#rUnique#k)";
+				break;
+			case 20:
+				sTier = "(#gLegendary#k)";
+				break;
+			default:
+				sTier = "";
+		}
+		
 		sLine1 = cm.OnReadPotential(pItem.getPotential1());
 		sLine2 = cm.OnReadPotential(pItem.getPotential2());
 		sLine3 = cm.OnReadPotential(pItem.getPotential3());
@@ -82,15 +99,15 @@ function action(mode, type, selection) {
 		sBonusLine3 = cm.OnReadPotential(pItem.getBonusPotential3());
 		
 		if (cm.getPlayer().nSelectedCubeID != 5062500) { // Not Bonus Potential
-			sResults = "Potential Results#d\r\n\r\n\t#e#fs12#" 
-						+ sLine1 + "\r\n\t" 
-						+ sLine2 + "\r\n\t" 
-						+ sLine3 + "#fs11#";
+			sResults = "Potential Results " + sTier + "#d\r\n\r\n\t#e#fs12#"
+						+ "#L0#" + sLine1 + "#l\r\n\t" 
+						+ "#L1#" + sLine2 + "#l\r\n\t" 
+						+ "#L2#" + sLine3 + "#l#fs11#";
 		} else {
-			sResults = "Bonus Potential Results#g\r\n\r\n\t#e#fs12#" 
-						+ sBonusLine1 + "\r\n\t" 
-						+ sBonusLine2 + "\r\n\t" 
-						+ sBonusLine3 + "#fs11#";
+			sResults = "Bonus Potential Results " + sTier + "#d\r\n\r\n\t#e#fs12#"
+						+ "#L0#" + sBonusLine1 + "#l\r\n\t" 
+						+ "#L1#" + sBonusLine2 + "#l\r\n\t" 
+						+ "#L2#" + sBonusLine3 + "#l#fs11#";
 		}
 		
 		sResults += "\r\n\r\n\r\n\t #i" + pItem.getItemId() + "#\t\t\t\t\t\t\t#k#nWould you like to use another cube?";

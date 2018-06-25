@@ -316,6 +316,10 @@ public class MobPacket {
     }
 
     public static OutPacket spawnMonster(Mob life, int spawnType, int link, boolean azwan) {
+        return spawnMonster(life, spawnType, link, azwan, 100);
+    }
+    
+    public static OutPacket spawnMonster(Mob life, int spawnType, int link, boolean azwan, int nMobSize) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.MobEnterField.getValue());
 
@@ -324,7 +328,9 @@ public class MobPacket {
         oPacket.EncodeByte(1); //nCalcDamageIndex
         oPacket.EncodeInt(life.getId());
         SetMobStat(oPacket, life);
-        MobInit(oPacket, life, spawnType, link, true, false);
+        
+        life.setScale(nMobSize);
+        MobInit(oPacket, life, spawnType, link, true, false, life.getScale());
 
         return oPacket;
     }
@@ -353,7 +359,7 @@ public class MobPacket {
         life.getTemporaryStat().Encode(oPacket);
     }
 
-    public static void MobInit(OutPacket oPacket, Mob life, int spawnType, int link, boolean summon, boolean newSpawn) {
+    public static void MobInit(OutPacket oPacket, Mob life, int spawnType, int link, boolean summon, boolean newSpawn, int nScale) {
         oPacket.EncodePosition(life.getTruePosition());
         oPacket.EncodeByte(life.getStance());
         if (life.getId() == 8910000 || life.getId() == 8910100 || life.getId() == 9990033) { // Von Bon
@@ -392,7 +398,7 @@ public class MobPacket {
         oPacket.EncodeInt(0);
         oPacket.EncodeBool(life.isFacingLeft()); // bIsLeft
         oPacket.EncodeInt(0);
-        oPacket.EncodeInt(100); // m_nScale
+        oPacket.EncodeInt(nScale); // m_nScale, default: 100
         oPacket.EncodeInt(-1); // m_nEliteGrade
         oPacket.EncodeByte(0); // ShootingMobStat
         oPacket.EncodeByte(0);
@@ -413,7 +419,7 @@ public class MobPacket {
         oPacket.EncodeByte(1); //nCalcDamageIndex
         oPacket.EncodeInt(life.getId());
         SetMobStat(oPacket, life);
-        MobInit(oPacket, life, life.getLinkCID() <= 0 ? -4 : -1, life.getLinkCID(), true, false);
+        MobInit(oPacket, life, life.getLinkCID() <= 0 ? -4 : -1, life.getLinkCID(), true, false, life.getScale());
 
         return oPacket;
     }
