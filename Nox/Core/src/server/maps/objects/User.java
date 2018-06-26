@@ -6110,6 +6110,28 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         SendPacket(OnLoadAccountIDOfCharacterFriendResult(getBuddylist()));
     }
     
+    /**
+     * Check Inventory Space
+     * 
+     * @param nInventoryType
+     * @param nSlotsRequired
+     * @return Checks if the player has a certain amount of slots free in 
+     */
+    public boolean hasInventorySpace(int nInventoryType, int nSlotsRequired) {
+        InventoryType pType;
+        switch (nInventoryType) {
+            case 1: pType = InventoryType.EQUIP; break;
+            case 2: pType = InventoryType.USE; break;
+            case 3: pType = InventoryType.ETC; break;
+            case 4: pType = InventoryType.SETUP; break;
+            case 5: pType = InventoryType.CASH; break;
+            default: return false;
+        }
+        boolean bEnoughSlots = (getInventory(pType).getNumFreeSlot() >= nSlotsRequired);
+        if (!bEnoughSlots) dropMessage(5, "You do not have enough inventory slots available.");
+        return bEnoughSlots;
+    }
+    
     /*
      *  Mastery Book Handling
      *  @author Mazen Massoud

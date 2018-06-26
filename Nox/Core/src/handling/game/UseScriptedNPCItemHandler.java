@@ -9,6 +9,7 @@ import client.PlayerStats;
 import client.Skill;
 import client.SkillFactory;
 import client.inventory.Item;
+import client.inventory.LootBox;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryIdentifier;
 import enums.InventoryType;
@@ -61,6 +62,11 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
 
         if (toUse != null && toUse.getQuantity() >= 1 && toUse.getItemId() == itemId && !chr.hasBlockedInventory() && !chr.inPVP()) {
             switch (toUse.getItemId()) {
+                case LootBox.NEBULITE_BOX: {
+                    LootBox.OnNebuliteBoxRequest(chr);
+                    break;
+                }
+            
                 case 2431789:
                 case 2431790: {
                     NPCScriptManager.getInstance().start(c, 2080008, null);
@@ -194,7 +200,7 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                         c.getPlayer().dropMessage(5, "Please make some space.");
                     }
                     break;
-                case 2430692: // nebulite box
+                /*case 2430692: // nebulite box
                     if (c.getPlayer().getInventory(InventoryType.SETUP).getNumFreeSlot() >= 1) {
                         if (c.getPlayer().getInventory(InventoryType.USE).countById(2430692) >= 1) {
                             NebuliteGrade nebuliteGrade;
@@ -225,7 +231,8 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     } else {
                         c.getPlayer().dropMessage(5, "Please make some space.");
                     }
-                    break;
+                    break;*/
+                    
                 case 5680019: {//starling hair 
                     //if (c.getPlayer().getGender() == 1) {
                     int hair = 32150 + (c.getPlayer().getHair() % 10);

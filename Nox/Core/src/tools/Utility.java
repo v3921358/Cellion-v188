@@ -111,6 +111,16 @@ public class Utility {
     }
 
     /**
+     * Random Selection from Array
+     * 
+     * @param nArrayLength
+     * @return Random selection within the specified array length.
+     */
+    public static int getRandomSelection(int nArrayLength) {
+        return new Random().nextInt(nArrayLength);
+    }
+    
+    /**
      * Check if Number
      *
      * @param sString

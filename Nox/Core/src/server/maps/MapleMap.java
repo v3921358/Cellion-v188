@@ -1471,6 +1471,12 @@ public final class MapleMap {
         spawnReactor(mob);
     }
 
+    public void spawnMonster_sSack(final Mob mob, final Point pos, final int spawnType) {
+        mob.setPosition(calcPointBelow(new Point(pos.x, pos.y - 1)));
+        mob.setFh(smr.footholds.findBelow(pos).getId());
+        OnSpawnMonster(mob, spawnType, 100);
+    }
+    
     public void spawnMonster_sSack(final Mob mob, final Point pos, final int spawnType, final int nMobScale) {
         mob.setPosition(calcPointBelow(new Point(pos.x, pos.y - 1)));
         mob.setFh(smr.footholds.findBelow(pos).getId());
