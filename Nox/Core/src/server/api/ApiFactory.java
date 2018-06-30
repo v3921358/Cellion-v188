@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 
 import client.ClientSocket;
 import handling.login.LoginPasswordHandler;
+import static handling.login.LoginPasswordHandler.APILogin;
 import server.api.FeatureList.FeatureAPI;
 import server.api.data.BestCashShopItems;
 import server.api.data.Ping;
@@ -35,6 +36,7 @@ import server.MapleItemInformationProvider;
 import server.maps.objects.User;
 import tools.LogHelper;
 import tools.packet.CLogin;
+import tools.packet.WvsContext;
 
 /**
  * Class used to handle external API interactions. It has the global references to OkHttpClient and Gson.
@@ -354,6 +356,33 @@ public class ApiFactory {
         });
     }
 
+
+    public int getUserDetailsFromToken(ClientSocket c, String data) throws IOException {
+        Request request = new Request.Builder()
+                .header("Accept", "application/json")
+                .header("Authorization", "Bearer " + data)
+                .url(ApiConstants.USER_INFO_URL)
+                .build();
+
+        Response response = ApiFactory.getFactory().getHttpClient().newCall(request).execute();
+        
+        if (response.isSuccessful()) {
+            UserInfo userData = getGson().fromJson(response.body().string(), UserInfo.class);
+            response.body().close();
+            if ("unauthorized".equals(userData.getError())) {
+                c.SendPacket(WvsContext.broadcastMsg(1, "Your login has either expired or is invalid. Please exit the game and login again through the launcher."));
+                return 8;
+            }
+            if (!userData.isVerified() || userData.isRequireReverification()) {
+                return 16;
+            }
+            return c.AuthLogin(userData, data);
+        } else {
+            response.body().close();
+            return 8;
+        }
+
+    }
     public void postUserLPActivated(int userid, ApiCallback callback) {
         RequestBody body = new FormBody.Builder().build();
 

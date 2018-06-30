@@ -8,13 +8,17 @@ import constants.ServerConstants;
 import constants.WorldConstants;
 import constants.WorldConstants.WorldOption;
 import handling.world.World;
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import service.ChannelServer;
 import net.InPacket;
 import server.maps.objects.User;
 import tools.packet.WvsContext;
 import tools.packet.CLogin;
 import net.ProcessPacket;
+import server.api.ApiFactory;
 import tools.packet.PacketHelper;
 
 public final class CharListRequestHandler implements ProcessPacket<ClientSocket> {
@@ -50,8 +54,14 @@ public final class CharListRequestHandler implements ProcessPacket<ClientSocket>
 
         final boolean ipBan = c.hasBannedIP();
         final boolean macBan = c.hasBannedMac();
-
-        int loginok = c.LoginPassword(sPassport);
+        System.out.println(sPassport);
+        int loginok = 8;
+        //loginok = c.LoginPassword(sPassport);
+        try {
+            loginok = ApiFactory.getFactory().getUserDetailsFromToken(c, sPassport);
+        } catch (IOException ex) {
+            return;
+        }
 
         final Calendar tempbannedTill = c.getTempBanCalendar();
 

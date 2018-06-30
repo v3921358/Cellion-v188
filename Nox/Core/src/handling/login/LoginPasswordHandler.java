@@ -70,7 +70,7 @@ public final class LoginPasswordHandler implements ProcessPacket<ClientSocket> {
     }
 
     public static void APILogin(ClientSocket c, UserInfo data) {
-
+/*
         final boolean ipBan = c.hasBannedIP();
         final boolean macBan = c.hasBannedMac();
 
@@ -102,7 +102,7 @@ public final class LoginPasswordHandler implements ProcessPacket<ClientSocket> {
         } else {
             c.loginAttempt = 0;
             LoginWorker.registerClient(c);
-        }
+        }*/
     }
 
     public static void PasswordLogin(ClientSocket c, String name, String password) {

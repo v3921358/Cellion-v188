@@ -46,6 +46,7 @@ import service.SendPacketOpcode;
 import net.Socket;
 import server.CharacterCardFactory;
 import server.Randomizer;
+import server.api.data.UserInfo;
 import server.farm.MapleFarm;
 import server.maps.MapleMap;
 import server.maps.objects.User;
@@ -579,20 +580,20 @@ public class ClientSocket extends Socket {
         charInfo.clear();
     }
 
-    public int AuthLogin(String name, int authID) {
+    public int AuthLogin(UserInfo data, String token) {
         int loginok = 5;
 
         try (Connection con = Database.GetConnection()) {
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM accounts WHERE authID = ?")) {
-                ps.setInt(1, authID);
+                ps.setInt(1, data.getId());
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()) {
                     final int banned = rs.getInt("banned");
                     final String oldSession = rs.getString("SessionIP");
 
-                    accountName = name;
+                    accountName = data.getName();
                     accId = rs.getInt("id");
                     secondPassword = rs.getString("2ndpassword");
                     gm = rs.getInt("gm") > 1; 
@@ -610,7 +611,7 @@ public class ClientSocket extends Socket {
                         if (loginstate.getState() > MapleClientLoginState.Login_NotLoggedIn.getState()) { // already loggedin
                             if (getSessionIPAddress().equals(oldSession) && oldSession != null && getPlayer() == null && CashShopServer.getPlayerStorage().getCharacterById(accId) == null) {
                                 try (PreparedStatement ps2 = con.prepareStatement("UPDATE accounts SET loggedin = 0 WHERE name = ?")) {
-                                    ps2.setString(1, name);
+                                    ps2.setString(1, data.getName());
                                     ps2.executeUpdate();
                                     ps2.close();
                                     disconnect(true, false);
@@ -633,10 +634,11 @@ public class ClientSocket extends Socket {
                     }
                 } else {
                     try (PreparedStatement psi = con.prepareStatement("INSERT INTO accounts (name, authID, nxCredit) VALUES (?, ?, 20000)")) {
-                        psi.setString(1, name);
-                        psi.setInt(2, authID);
+                        psi.setString(1, data.getName());
+                        psi.setInt(2, data.getId());
                         psi.executeUpdate();
-                        loginok = 23;
+                        psi.close();
+                        loginok = AuthLogin(data, token);
                     } catch (SQLException e) {
                         LogHelper.SQL.get().info("[Client] There was an issue with something from the database:\n", e);
                     }

@@ -1847,7 +1847,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 }
                 rs.close();
             } catch (SQLException e) {
-                System.out.println("issue....");
+                System.out.println("issue...."+e);
                 LogHelper.SQL.get().info("Could not save character:\n{}", e);
             }
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO queststatus (`queststatusid`, `characterid`, `quest`, `status`, `time`, `forfeited`, `customData`) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?)", RETURN_GENERATED_KEYS)) {
