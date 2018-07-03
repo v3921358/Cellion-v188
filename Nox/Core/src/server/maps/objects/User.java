@@ -280,6 +280,16 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (isDeveloper()) dropMessage(5, "[Debug] Unmount State : " + bUnmount);
     }
     
+    /**
+     * Elite Mob Variables
+     * Used to determine when to spawn an elite boss and keep track of elite monster kill count.
+     */
+    public int nEliteMobKills;
+    
+    public void setEliteKills(int nAmount) {
+        nEliteMobKills = nAmount;
+    }
+    
     /*
      *  V: Matrix
      */
@@ -507,6 +517,22 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         nAdditionalLastTimeReference = nTime;
     }
 
+    public boolean isWarriorJob() {
+        return GameConstants.isWarriorJob(getJob());
+    }
+    public boolean isBowmanJob() {
+        return GameConstants.isBowmanJob(getJob());
+    }
+    public boolean isMagicianJob() {
+        return GameConstants.isMagicianJob(getJob());
+    }
+    public boolean isThiefJob() {
+        return GameConstants.isThiefJob(getJob());
+    }
+    public boolean isPirateJob() {
+        return GameConstants.isPirateJob(getJob());
+    }
+    
     public boolean checkTimeout() {
         long nDuration;
         if (getBuffedValue(CharacterTemporaryStat.NextAttackEnhance) != null) { // Aran: Swing Studies

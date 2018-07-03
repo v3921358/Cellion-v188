@@ -93,11 +93,11 @@ public class UsePotentialScrollHandler implements ProcessPacket<ClientSocket> {
                     successRate = 90;
                     break;
                 default:
-                    successRate = 60; //Just give em a default.
+                    successRate = 100; //Just give em a default.
                     break;
             }
         }
-
+        
         int curseRate = 0;
         if (scrollStats != null && scrollStats.containsKey("cursed")) {
             curseRate = scrollStats.get("cursed") != null ? scrollStats.get("cursed") : 0;

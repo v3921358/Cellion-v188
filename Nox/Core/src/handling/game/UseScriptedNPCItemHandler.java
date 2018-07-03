@@ -66,6 +66,12 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
                     LootBox.OnNebuliteBoxRequest(chr);
                     break;
                 }
+                case LootBox.EQUIPMENT_BOX_LV30: 
+                case LootBox.EQUIPMENT_BOX_LV50:
+                case LootBox.EQUIPMENT_BOX_LV70: {
+                    LootBox.OnEquipmentBoxRequest(chr, toUse.getItemId());
+                    break;
+                }
             
                 case 2431789:
                 case 2431790: {

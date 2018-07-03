@@ -610,7 +610,7 @@ public class ItemPotentialProvider {
         final ItemPotentialTierType currentTier = equip.getPotentialTier();
         final ItemPotentialOption potential_line3 = decideStats(equip, currentTier, reqLevel);
 
-        equip.setPotential3(potential_line3.getOptionId());
+        equip.setPotential3(Cube.generatePotential(equip, currentTier));
 
         return true;
     }
@@ -711,18 +711,27 @@ public class ItemPotentialProvider {
             is3LinePotential = equip.getPotential3() != 0;
         }
 
-        ItemPotentialOption potential_line1 = decideStats(equip, currenttierType, reqLevel);
-        ItemPotentialOption potential_line2 = decideStats(equip, currenttierType, reqLevel);
-        ItemPotentialOption potential_line3 = is3LinePotential ? decideStats(equip, currenttierType, reqLevel) : null;
+        equip.setPotential1(Cube.generatePotential(equip, currenttierType));
+        equip.setPotential2(Cube.generatePotential(equip, currenttierType));
+        if (is3LinePotential) {
+            equip.setPotential3(Cube.generatePotential(equip, currenttierType));
+        } else {
+            equip.setPotential3(0);
+        }
+        equip.setPotentialTier(magnifiedTierType);
+        
+        //ItemPotentialOption potential_line1 = decideStats(equip, currenttierType, reqLevel);
+        //ItemPotentialOption potential_line2 = decideStats(equip, currenttierType, reqLevel);
+        //ItemPotentialOption potential_line3 = is3LinePotential ? decideStats(equip, currenttierType, reqLevel) : null;
 
-        equip.setPotential1(potential_line1.getOptionId());
+        /*equip.setPotential1(potential_line1.getOptionId());
         equip.setPotential2(potential_line2.getOptionId());
         if (potential_line3 != null) {
             equip.setPotential3(potential_line3.getOptionId());
         } else {
             equip.setPotential3(0);
         }
-        equip.setPotentialTier(magnifiedTierType);
+        equip.setPotentialTier(magnifiedTierType);*/
 
         return true;
     }

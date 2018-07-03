@@ -54,15 +54,18 @@ public final class CharListRequestHandler implements ProcessPacket<ClientSocket>
 
         final boolean ipBan = c.hasBannedIP();
         final boolean macBan = c.hasBannedMac();
-        System.out.println(sPassport);
         int loginok = 8;
-        //loginok = c.LoginPassword(sPassport);
-        try {
-            loginok = ApiFactory.getFactory().getUserDetailsFromToken(c, sPassport);
-        } catch (IOException ex) {
-            return;
+        
+        if (!ServerConstants.USE_API) {
+            loginok = c.LoginPassword(sPassport);
+        } else {
+            try {
+                loginok = ApiFactory.getFactory().getUserDetailsFromToken(c, sPassport);
+            } catch (IOException ex) {
+                return;
+            }
         }
-
+        
         final Calendar tempbannedTill = c.getTempBanCalendar();
 
         if (loginok == 0 && (ipBan || macBan) && !c.isGm()) {

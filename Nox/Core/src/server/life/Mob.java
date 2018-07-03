@@ -428,6 +428,7 @@ public class Mob extends AbstractLoadedMapleLife {
 
         OnNxGainRequest(pPlayer, bKiller);
         OnMesoDropRequest(pPlayer);
+        OnEliteMonsterRequest(pPlayer);
         pPlayer.incrementVMatrixKills(this); // For VMatrix Quest
         
         if (BuffedMob.OnBuffedChannel(Utility.requestChannel(pPlayer.getId()))) {
@@ -1615,6 +1616,62 @@ public class Mob extends AbstractLoadedMapleLife {
         
         if (!bKiller) nResultNX *= 0.3;                                                         // Reduce amount gained if Player is not the killer of the mob.
         if (Utility.resultSuccess(nGainChance)) pPlayer.gainNX(nResultNX, true);                // Award the Player with the NX gained if chance succeeds.
+    }
+    
+    /**
+     * OnEliteMonsterRequest
+     * @author Mazen Massoud
+     * 
+     * @param pPlayer 
+     * @purpose Handle the spawning of Elite Monsters and Elite Bosses.
+     */
+    public void OnEliteMonsterRequest(User pPlayer) {
+        if (this.getScale() > 100) { // Increment Elite Mob Kill Count & Display Message
+            pPlayer.setEliteKills(pPlayer.nEliteMobKills + 1);
+            if (pPlayer.nEliteMobKills > 16) pPlayer.dropMessage(-1, "The dark energy is still here. It's making the place quite grim.");
+            else pPlayer.dropMessage(-1, "You feel something in the dark energy...");
+        } 
+        
+        if (pPlayer.nEliteMobKills >= 20) { // Spawn Elite Boss after 20 Elite Mob Kills
+            
+            int[] aEliteBoss = {
+                9303135, // Black Knight
+                9303136, // Mad Mage
+                9303137, // Rampant Cyborg
+                9303138, // Vicious Hunter
+                9303139, // Bad Brawler
+            };
+            
+            Mob pEliteBoss = LifeFactory.getMonster(aEliteBoss[Utility.getRandomSelection(aEliteBoss.length)]);
+            
+            if (getStats().getLevel() > 150) { // Calculate Elite Boss Stats
+                pEliteBoss.setHp(this.getHp() * 750);
+                pEliteBoss.getStats().setHp(this.getHp() * 750);
+            } else if (getStats().getLevel() > 99) {
+                pEliteBoss.setHp(this.getHp() * 500);
+                pEliteBoss.getStats().setHp(this.getHp() * 500);
+            } else {
+                pEliteBoss.setHp(this.getHp() * 300);
+                pEliteBoss.getStats().setHp(this.getHp() * 300);
+            }
+            getMap().spawnMonsterOnGroundBelow(pEliteBoss, getPosition(), 200); // Spawn Random Elite Boss
+            pPlayer.setEliteKills(0); // Reset Elite Monster Kill Count
+        } else if (Utility.resultSuccess(10)) { // 1% Chance to Spawn Elite Mob
+            
+            Mob pElite = LifeFactory.getMonster(this.getId());
+            
+            if (getStats().getLevel() > 199) { // Calculate Elite Mob Stats
+                pElite.setHp(this.getHp() * 60);
+                pElite.getStats().setHp(this.getHp() * 60);
+            } else if (getStats().getLevel() > 99) {
+                pElite.setHp(this.getHp() * 45);
+                pElite.getStats().setHp(this.getHp() * 45);
+            } else {
+                pElite.setHp(this.getHp() * 30);
+                pElite.getStats().setHp(this.getHp() * 30);
+            }
+            getMap().spawnMonsterOnGroundBelow(pElite, getPosition(), 200);
+        }
     }
 
     // <editor-fold defaultstate="visible" desc="Attacks & EXP Handling"> 

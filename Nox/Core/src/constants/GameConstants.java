@@ -736,6 +736,37 @@ public class GameConstants {
         }
         return 0;
     }
+    
+    /**
+     * Checks for Job Type     
+     * @purpose Used for determining type of job for use in item distribution and other miscellaneous functions.
+     * 
+     * @param nJobID
+     * @return 
+     */
+    public static boolean isWarriorJob(int nJobID) {
+        return (isWarrior(nJobID) || isAran(nJobID) || isDawnWarriorCygnus(nJobID) || isDemonAvenger(nJobID) || isDemonSlayer(nJobID) 
+            || isHayato(nJobID) || isKaiser(nJobID) || isMihile(nJobID) || isZero(nJobID) || isBlaster(nJobID));
+    }
+    
+    public static boolean isBowmanJob(int nJobID) {
+        return (isArcher(nJobID) || isWildHunter(nJobID) || isWindArcherCygnus(nJobID) || isMercedes(nJobID));
+    }
+    
+    public static boolean isMagicianJob(int nJobID) {
+        return (isBattleMage(nJobID) || isBeastTamer(nJobID) || isBlazeWizardCygnus(nJobID) || isEvan(nJobID) || isKanna(nJobID) 
+            || isLuminous(nJobID) || isMagician(nJobID) || isKinesis(nJobID));
+    }
+    
+    public static boolean isThiefJob(int nJobID) {
+        return (isDualBlade(nJobID) || isNightWalkerCygnus(nJobID) || isPhantom(nJobID) || isThief(nJobID) || isXenon(nJobID));
+    }
+    
+    public static boolean isPirateJob(int nJobID) {
+        return (isAngelicBuster(nJobID) || isCannoneer(nJobID) || isJett(nJobID) || isMechanic(nJobID) || isPirate(nJobID) || isShade(nJobID)
+            || isThunderBreakerCygnus(nJobID));
+    }
+    
 
     public static boolean isWarrior(int nJobID) {
         nJobID = nJobID % 1000;
@@ -7212,35 +7243,35 @@ public class GameConstants {
             case 30042: sPotential = " +9% DEX "; break;
             case 40086: sPotential = " +9% ALL STAT "; break;
             case 30086: sPotential = " +6% ALL STAT"; break;
-            case 40292: sPotential = " +40% Ignore Defense "; break;
-            case 40291: sPotential = " +35% Ignore Defense "; break;
-            case 30291: sPotential = " +30% Ignore Defense "; break;
-            case 42051: sPotential = " +12% Attack "; break;
-            case 32051: sPotential = " +9% Atacck "; break;
-            case 40052: sPotential = " +12% Magic Attack "; break;
-            case 30052: sPotential = " +9% Magic Attack "; break;
-            case 42070: sPotential = " +12% Damage "; break;
-            case 30070: sPotential = " +9% Damage "; break;
+            case 40292: sPotential = " +40% Ignore DEF "; break;
+            case 40291: sPotential = " +35% Ignore DEF "; break;
+            case 30291: sPotential = " +30% Ignore DEF "; break;
+            case 42051: sPotential = " +12% ATT "; break;
+            case 32051: sPotential = " +9% ATT "; break;
+            case 40052: sPotential = " +12% MAG ATT "; break;
+            case 30052: sPotential = " +9% MAG ATT "; break;
+            case 42070: sPotential = " +12% DMG "; break;
+            case 30070: sPotential = " +9% DMG "; break;
             case 40055: sPotential = " +12% Crit Chance "; break;
             case 32057: sPotential = " +9% Crit Chance "; break;
-            case 42095: sPotential = " +1 Attack Per 10 Levels "; break;
-            case 42096: sPotential = " +1 Magic Attack Per 10 Levels "; break;
+            case 42095: sPotential = " +1 ATT Per 10 Levels "; break;
+            case 42096: sPotential = " +1 MAG ATT Per 10 Levels "; break;
             case 40357: sPotential = " +10% Chance to Ignore 40% Damage "; break;
             case 40603: sPotential = " +40% Boss Damage "; break;
             case 40602: sPotential = " +35% Boss Damage "; break;
             case 40601: sPotential = " +30% Boss Damage "; break;
             case 40045: sPotential = " +12% HP "; break;
             case 40046: sPotential = " +12% MP "; break;
-            case 40053: sPotential = " +12% Defense "; break;                           
+            case 40053: sPotential = " +12% DEF "; break;                           
             case 30045: sPotential = " +9% HP "; break;
             case 30046: sPotential = " +9% MP "; break;
-            case 30054: sPotential = " +9% Defense "; break; 
+            case 30054: sPotential = " +9% DEF "; break; 
             case 30356: sPotential = " +5% Chance to Ignore 20% Damage "; break;
             case 40356: sPotential = " +10% Chance to Ignore 20% Damage "; break;   
             case 30357: sPotential = " +5% Chance to Ignore 40% Damage "; break; 
             case 22056: sPotential = " +2% Critical Rate "; break;
-            case 42052: sPotential = " +2% Attack "; break;
-            case 42071: sPotential = " +2% Damage "; break;
+            case 42052: sPotential = " +2% ATT "; break;
+            case 42071: sPotential = " +2% DMG "; break;
             case 40656: sPotential = " +20% Drop Rate "; break;
             case 40556: sPotential = " -1 Second Cooldown Reduction "; break;
             case 40557: sPotential = " -2 Second Cooldown Reduction "; break;
@@ -7287,7 +7318,7 @@ public class GameConstants {
             case 32048: sPotential = " +7% MAX MP "; break;
             case 32206: sPotential = " +15% TO REGEN MANA ON ATT "; break;
             case 32201: sPotential = " +15% TO REGEN HP ON ATT "; break;
-            case 42292: sPotential = " +Ignore 4% DEF "; break;
+            case 42292: sPotential = " +4% Ignore DEF "; break;
             case 42043: sPotential = " +7% LUK "; break;
             case 42044: sPotential = " +7% INT "; break;
             case 42041: sPotential = " +7% STR  "; break;
@@ -7299,21 +7330,21 @@ public class GameConstants {
             case 32043: sPotential = " +5% INT "; break;
             case 32041: sPotential = " +5% STR "; break;
             case 32042: sPotential = " +5% DEX "; break;
-            case 42086: sPotential = " +5% All Stats "; break;
+            case 42086: sPotential = " +5% ALL STAT "; break;
             case 32045: sPotential = " +7% MaxHP  "; break;
             case 32046: sPotential = " +7% MaxMP "; break;
             case 32056: sPotential = " +7% DEF "; break;
             case 40005: sPotential = " +250 HP "; break;
             case 42008: sPotential = " +250 MP "; break;
             case 32551: sPotential = " HP Recovery Items and Skills +20% "; break;
-            case 42001: sPotential = " Str +18 "; break;
-            case 42003: sPotential = " Int +18 "; break;
-            case 42002: sPotential = " Dex +18 "; break;
-            case 40004: sPotential = " Luk +18 "; break;
+            case 42001: sPotential = " STR +18 "; break;
+            case 42003: sPotential = " INT +18 "; break;
+            case 42002: sPotential = " DEX +18 "; break;
+            case 40004: sPotential = " LUK +18 "; break;
             case 40081: sPotential = " ALL STAT +12 "; break;
             case 32802: sPotential = " All Elemental Res +4% "; break;
             case 42060: sPotential = " Critical Damage +1% "; break;
-            case 42054: sPotential = " +2% Mag ATT "; break;
+            case 42054: sPotential = " +2% MAG ATT "; break;
             case 42058: sPotential = " Crit Chance +2% "; break;
             case 42650: sPotential = " +5% Meso Drop Rate "; break;
             case 42656: sPotential = " +5% Item Drop Rate "; break;
@@ -7326,12 +7357,12 @@ public class GameConstants {
             case 22046: sPotential = " +3% MP "; break;
             case 30005: sPotential = " +200 HP "; break;
             case 32008: sPotential = " +200 MP "; break;
-            case 32001: sPotential = " Str +14 "; break;
-            case 32003: sPotential = " Int +14 "; break;
-            case 32002: sPotential = " Dex +14 "; break;
-            case 30004: sPotential = " Luk +14 "; break;
+            case 32001: sPotential = " STR +14 "; break;
+            case 32003: sPotential = " INT +14 "; break;
+            case 32002: sPotential = " DEX +14 "; break;
+            case 30004: sPotential = " LUK +14 "; break;
             case 30081: sPotential = " ALL STAT +8 "; break;
-            case 32011: sPotential = " Att +13 "; break; 
+            case 32011: sPotential = " ATT +13 "; break; 
             case 22048: sPotential = " +5% MP "; break;
             case 22055: sPotential = " +5% DEF "; break;
             case 12043: sPotential = " +2% INT "; break;
@@ -7341,12 +7372,12 @@ public class GameConstants {
             case 12046: sPotential = " +2% MP "; break;
             case 12056: sPotential = " +2% DEF "; break;
             case 20005: sPotential = " +150 HP "; break;
-            case 22001: sPotential = " Str +10 "; break;
-            case 22003: sPotential = " Int +10 "; break;
-            case 22002: sPotential = " Dex +10 "; break;
-            case 20004: sPotential = " Luk +10 "; break;
+            case 22001: sPotential = " STR +10 "; break;
+            case 22003: sPotential = " INT +10 "; break;
+            case 22002: sPotential = " DEX +10 "; break;
+            case 20004: sPotential = " LUK +10 "; break;
             case 20081: sPotential = " ALL STAT +8 "; break;
-            case 22011: sPotential = " Att +11 "; break;
+            case 22011: sPotential = " ATT +11 "; break;
             case 12044: sPotential = " +2% INT "; break;
             case 12048: sPotential = " +2% MP "; break;
             case 12055: sPotential = " +2% DEF "; break;
@@ -7357,7 +7388,7 @@ public class GameConstants {
             case 12002: sPotential = " DEX +6 "; break;
             case 10004: sPotential = " LUK +6 "; break;
             case 10081: sPotential = " ALL STAT +4 "; break;
-            case 12011: sPotential = " Att +10 "; break;
+            case 12011: sPotential = " ATT +10 "; break;
         }
         return sPotential;
     }

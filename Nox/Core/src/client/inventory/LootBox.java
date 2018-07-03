@@ -3,9 +3,13 @@
  */
 package client.inventory;
 
+import constants.GameConstants;
 import enums.InventoryType;
+import java.util.ArrayList;
+import java.util.List;
 import server.MapleInventoryManipulator;
 import server.maps.objects.User;
+import tools.Pair;
 import tools.Utility;
 
 /**
@@ -18,13 +22,141 @@ public class LootBox {
      * Loot Box IDs
      */
     public static final int NEBULITE_BOX = 2430692, // Note: Nebulite Socket Creator : 2930000 
-                        EQUIPMENT_BOX_LV30 = 0,
-                        EQUIPMENT_BOX_LV50 = 0,
-                        EQUIPMENT_BOX_LV70 = 0,
-                        BASIC_HAIR_BOX = 0,
-                        BASIC_FACE_BOX = 0,
-                        PREMIUM_HAIR_BOX = 0,
-                        PREMIUM_FACE_BOX = 0;
+                            EQUIPMENT_BOX_LV30 = 2430447,
+                            EQUIPMENT_BOX_LV50 = 2430450,
+                            EQUIPMENT_BOX_LV70 = 2430452,
+                            BASIC_HAIR_BOX = 2431230,
+                            BASIC_FACE_BOX = 2431091,
+                            PREMIUM_HAIR_BOX = 2431228,
+                            PREMIUM_FACE_BOX = 2431092;
+    
+    /**
+     * OnNebuliteBoxRequest
+     * @param pPlayer
+     * @return 
+     */
+    public static boolean OnNebuliteBoxRequest(User pPlayer) {
+        if (!pPlayer.haveItem(NEBULITE_BOX) || !pPlayer.hasInventorySpace(4, 1)) {
+            return false;
+        }
+        
+        MapleInventoryManipulator.removeById(pPlayer.getClient(), InventoryType.USE, LootBox.NEBULITE_BOX, 1, false, true);
+        pPlayer.gainItem(aNebulite[Utility.getRandomSelection(aNebulite.length)], 1); // Give the player a random Nebulite.
+        return true;
+    }
+    
+    /**
+     * OnEquipmentBoxRequest
+     * @param pPlayer
+     * @param nBoxID
+     * @return 
+     */
+    public static boolean OnEquipmentBoxRequest(User pPlayer, int nBoxID) {
+        int[][] aBoxItems = aEquipment_Lv30_Warrior; // Initialize incase player is a beginner.
+        
+        switch (nBoxID) { 
+            case EQUIPMENT_BOX_LV30:
+                if (GameConstants.isWarriorJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv30_Warrior;
+                } else if (GameConstants.isBowmanJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv30_Bowman;
+                } else if (GameConstants.isMagicianJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv30_Magician;
+                } else if (GameConstants.isThiefJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv30_Thief;
+                } else if (GameConstants.isPirateJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv30_Pirate;
+                }
+                break;
+            case EQUIPMENT_BOX_LV50:
+                if (GameConstants.isWarriorJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv50_Warrior;
+                } else if (GameConstants.isBowmanJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv50_Bowman;
+                } else if (GameConstants.isMagicianJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv50_Magician;
+                } else if (GameConstants.isThiefJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv50_Thief;
+                } else if (GameConstants.isPirateJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv50_Pirate;
+                }
+                break;
+            case EQUIPMENT_BOX_LV70:
+                if (GameConstants.isWarriorJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv70_Warrior;
+                } else if (GameConstants.isBowmanJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv70_Bowman;
+                } else if (GameConstants.isMagicianJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv70_Magician;
+                } else if (GameConstants.isThiefJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv70_Thief;
+                } else if (GameConstants.isPirateJob(pPlayer.getJob())) {
+                    aBoxItems = aEquipment_Lv70_Pirate;
+                }
+                break;
+            default:
+                return false;
+        }
+        
+        if (!pPlayer.haveItem(nBoxID) || !pPlayer.hasInventorySpace(1, aBoxItems.length)) {
+            return false;
+        }
+        List<Pair<Integer, Integer>> aBoxResult = new ArrayList<>();
+        MapleInventoryManipulator.removeById(pPlayer.getClient(), InventoryType.USE, nBoxID, 1, false, true);
+        for (int i = 0; i < aBoxItems.length; i++) {
+            if (aBoxItems[i][1] == pPlayer.getJob() || aBoxItems[i][1] == 0) { // Check if equip is for all jobs or the players current job.
+                if (aBoxItems[i][0] == (pPlayer.getGender() + 1) || aBoxItems[i][0] == 0) { // Check if equip is for all genders or the players current gender.
+                    aBoxResult.add(new Pair<>(aBoxItems[i][2], aBoxItems[i][3]));
+                    //pPlayer.gainItem(aBoxItems[i][2], aBoxItems[i][3]); // Give the player all items from the specified box.
+                }
+                pPlayer.dropMessage(5, "Gender: " + pPlayer.getGender() + " / Gender Required: " + aBoxItems[i][1]);
+            }
+        }
+        for (int i = 0; i < aBoxResult.size(); i++) {
+            pPlayer.gainItem(aBoxResult.get(i).getLeft(), aBoxResult.get(i).getRight());
+        }
+        return true;
+    }
+    
+    /**
+     * OnCosmeticBoxRequest
+     * @param pPlayer
+     * @param nBoxType
+     * @return 
+     */
+    public static boolean OnCosmeticBoxRequest(User pPlayer, byte nBoxType) {
+        int nBoxID;
+        int[] aBoxSelections;
+        
+        switch (nBoxType) {
+            case 1:
+                nBoxID = BASIC_HAIR_BOX;
+                aBoxSelections = aBasicHair;
+                break;
+            case 2:
+                nBoxID = BASIC_FACE_BOX;
+                aBoxSelections = aBasicFace;
+                break;
+            case 3:
+                nBoxID = PREMIUM_HAIR_BOX;
+                aBoxSelections = aPremiumHair;
+                break;
+            case 4:
+                nBoxID = PREMIUM_FACE_BOX;
+                aBoxSelections = aPremiumFace;
+                break;
+            default:
+                return false;
+        }
+        
+        if (!pPlayer.haveItem(nBoxID)) {
+            return false;
+        }
+        
+        MapleInventoryManipulator.removeById(pPlayer.getClient(), InventoryType.USE, nBoxID, 1, false, true); // Consume the Cosmetic Box.
+        pPlayer.setFace(aBoxSelections[Utility.getRandomSelection(aBoxSelections.length)]); // Give the player a random style.
+        return true;
+    }
     
     /**
      * Nebulite Box
@@ -116,21 +248,262 @@ public class LootBox {
     
     /**
      * Equipment Box
-     * Syntax: {Required Job ID (0 For Any), Item ID, Item Quantity}
+     * Syntax: {Gender (0 = Both, 1 = Male, 2 = Female), Required Job ID (0 For Any), Item ID, Item Quantity}
+     * Note: Job ID refers to the current job that the player would be at the specified level.
      */
-    private static int[][] aEquipment_Lv30 = {
-        {0, 0, 1}, // Item Name
-        {0, 0, 1}, // Item Name
+    private static int[][] aEquipment_Lv30_Warrior = {
+        {0, 2110, 1442001, 1}, // Aran Weapon
+        {0, 3710, 1582001, 1}, // Blaster Weapon
+        {0, 130, 1432002, 1}, // DK Spear
+        {0, 130, 1442001, 1}, // DK Polearm
+        {0, 1110, 1402002, 1}, // Dawn Warrior 2H Sword
+        {0, 3120, 1232002, 1}, // Demon Avenger Weapon
+        {0, 3110, 1322124, 1}, // Demon Slayer Weapon
+        {0, 110, 1402002, 1}, // Hero 2H Sword
+        {0, 4110, 1542002, 1}, // Hayato Weapon
+        {0, 6110, 1402002, 1}, // Kaiser Weapon
+        {0, 5110, 1302008, 1}, // Mihile 1H Sword
+        {0, 120, 1322014, 1}, // Paladin 1H Mace
+        {0, 0, 1002023, 1}, // Helm
+        {1, 0, 1050196, 1}, // Male Overall
+        {2, 0, 1051010, 1}, // Female Overall
+        {0, 0, 1082007, 1}, // Gloves
+        {0, 0, 1072041, 1}, // Boots
     };
     
-    private static int[][] aEquipment_Lv50 = {
-        {0, 0, 1}, // Item Name
-        {0, 0, 1}, // Item Name
+    private static int[][] aEquipment_Lv30_Magician = {
+        {0, 3210, 1382017, 1}, // Battle Mage Staff
+        {0, 11210, 1252002, 1}, // Beast Tamer Weapon
+        {0, 230, 1382017, 1}, // Bishop Staff
+        {0, 1210, 1382017, 1}, // Blaze Wizard Staff
+        {0, 2212, 1382017, 1}, // Evan Staff
+        {0, 210, 1382017, 1}, // F/P Mage Staff
+        {0, 220, 1382017, 1}, // I/L Mage Staff
+        {0, 4210, 1552002, 1}, // Kanna Weapon
+        {0, 14210, 1262001, 1}, // Kinesis Weapon
+        {0, 2710, 1212002, 1}, // Luminous Weapon
+        {0, 0, 1020234, 1}, // Helm
+        {1, 0, 1050026, 1}, // Male Overall
+        {2, 0, 1051005, 1}, // Female Overall
+        {0, 0, 1082053, 1}, // Gloves
+        {0, 0, 1072078, 1}, // Boots
     };
-    
-    private static int[][] aEquipment_Lv70 = {
-        {0, 0, 1}, // Item Name
-        {0, 0, 1}, // Item Name
+	
+    private static int[][] aEquipment_Lv30_Thief = {
+        {0, 431, 1332009, 1}, // Dual Blade Dagger
+        {0, 431, 1342001, 1}, // Dual Blade Katara
+        {0, 410, 1472008, 1}, // Night Lord Weapon
+        {0, 1410, 1472008, 1}, // Night Walker Weapon
+        {0, 2410, 1362005, 1}, // Phantom Weapon
+        {0, 420, 1332009, 1}, // Shadower Dagger
+        {0, 3610, 1242002, 1}, // Xenon Weapon
+        {0, 0, 1002171, 1}, // Helm
+        {1, 0, 1040057, 1}, // Male Top
+        {2, 0, 1041048, 1}, // Female Top
+        {1, 0, 1060046, 1}, // Male Bottom
+        {2, 0, 1061046, 1}, // Female Bottom 
+        {0, 0, 1082044, 1}, // Gloves
+        {0, 0, 1072582, 1}, // Boots
+    };
+
+    private static int[][] aEquipment_Lv30_Bowman = {
+        {0, 310, 1452005, 1}, // Bowman Weapon
+        {0, 320, 1462004, 1}, // Xbowman Weapon
+        {0, 2310, 1522004, 1}, // Mercedes Weapon
+        {0, 1310, 1452005, 1}, // Wind Archer Weapon
+        {0, 3310, 1462004, 1}, // Wild Hunter Weapon
+        {0, 0, 1002161, 1}, // Helm
+        {1, 0, 1040068, 1}, // Male Top
+        {2, 0, 1041055, 1}, // Female Top
+        {1, 0, 1060057, 1}, // Male Bottom
+        {2, 0, 1061051, 1}, // Female Bottom
+        {0, 0, 1082050, 1}, // Gloves
+        {0, 0, 1072081, 1}, // Boots
+    };
+
+    private static int[][] aEquipment_Lv30_Pirate = {
+        {0, 6510, 1222002, 1}, // Angelic Burster Weapon
+        {0, 530, 1532004, 1}, // Cannon Master Weapon
+        {0, 520, 1492004, 1}, // Corsair Weapon
+        {0, 570, 1492004, 1}, // Jett Weapon
+        {0, 3510, 1492004, 1}, // Mechanic Weapon
+        {0, 510, 1482004, 1}, // Buccaneer Weapon
+        {0, 2510, 1482004, 1}, // Shade Weapon
+        {0, 1510, 1482004, 1}, // Thunder Breaker Weapon
+        {0, 0, 1002622, 1}, // Helm
+        {0, 0, 1052235, 1}, // Overall
+        {0, 0, 1082189, 1}, // Gloves
+        {0, 0, 1072583, 1}, // Boots
+    };
+
+    private static int[][] aEquipment_Lv50_Warrior = {
+        {0, 2110, 1442036, 1}, // Aran Weapon
+        {0, 3710, 1582002, 1}, // Blaster Weapon
+        {0, 130, 1432026, 1}, // DK Spear
+        {0, 130, 1442036, 1}, // DK Polearm
+        {0, 1110, 1402026, 1}, // Dawn Warrior 2H Sword
+        {0, 3120, 1232053, 1}, // Demon Avenger Weapon
+        {0, 3110, 1322125, 1}, // Demon Slayer Weapon
+        {0, 110, 1402026, 1}, // Hero 2H Sword
+        {0, 4110, 1542053, 1}, // Hayato Weapon
+        {0, 6110, 1402026, 1}, // Kaiser Weapon
+        {0, 5110, 1302189, 1}, // Mihile 1H Sword
+        {0, 120, 1322017, 1}, // Paladin 1H Mace
+        {0, 0, 1002028, 1}, // Helm
+        {1, 0, 1040089, 1}, // Male Top
+        {2, 0, 1041183, 1}, // Female Top
+        {1, 0, 1060078, 1}, // Male Bottom
+        {2, 0, 1061088, 1}, // Female Bottom
+        {0, 0, 1082011, 1}, // Gloves
+        {0, 0, 1072135, 1}, // Boots
+    };
+	
+    private static int[][] aEquipment_Lv50_Magician = {
+        {0, 3210, 1382026, 1}, // Battle Mage Staff
+        {0, 11210, 1252052, 1}, // Beast Tamer Weapon
+        {0, 230, 1382026, 1}, // Bishop Staff
+        {0, 1210, 1382026, 1}, // Blaze Wizard Staff
+        {0, 2212, 1382026, 1}, // Evan Staff
+        {0, 210, 1382026, 1}, // F/P Mage Staff
+        {0, 220, 1382026, 1}, // I/L Mage Staff
+        {0, 4210, 1552053, 1}, // Kanna Weapon
+        {0, 14210, 1262019, 1}, // Kinesis Weapon
+        {0, 2710, 1212046, 1}, // Luminous Weapon
+        {0, 0, 1002218, 1}, // Helm
+        {1, 0, 1050049, 1}, // Male Overall
+        {2, 0, 1051030, 1}, // Female Overall
+        {0, 0, 1072143, 1}, // Gloves
+        {0, 0, 1082080, 1}, // Boots
+    };
+	
+    private static int[][] aEquipment_Lv50_Thief = {
+        {0, 431, 1332040, 1}, // Dual Blade Dagger
+        {0, 431, 1342003, 1}, // Dual Blade Katara
+        {0, 410, 1472041, 1}, // Night Lord Weapon
+        {0, 1410, 1472041, 1}, // Night Walker Weapon
+        {0, 2410, 1362053, 1}, // Phantom Weapon
+        {0, 420, 1332040, 1}, // Shadower Dagger
+        {0, 3610, 1242003, 1}, // Xenon Weapon
+        {0, 0, 1002207, 1}, // Helm
+        {1, 0, 1040097, 1}, // Male Top
+        {2, 0, 1041080, 1}, // Female Top
+        {1, 0, 1060085, 1}, // Male Bottom
+        {2, 0, 1061079, 1}, // Female Bottom 
+        {0, 0, 1072130, 1}, // Gloves
+        {0, 0, 1082066, 1}, // Boots
+    };
+	
+    private static int[][] aEquipment_Lv50_Bowman = {
+        {0, 310, 1452034, 1}, // Bowman Weapon
+        {0, 320, 1462030, 1}, // Xbowman Weapon
+        {0, 2310, 1522035, 1}, // Mercedes Weapon
+        {0, 1310, 1452034, 1}, // Wind Archer Weapon
+        {0, 3310, 1462030, 1}, // Wild Hunter Weapon
+        {0, 0, 1002214, 1}, // Helm
+        {1, 0, 1050052, 1}, // Male Overall
+        {2, 0, 1051039, 1}, // Female Overall
+        {0, 0, 1072125, 1}, // Gloves
+        {0, 0, 1082083, 1}, // Boots
+    };
+
+    private static int[][] aEquipment_Lv50_Pirate = {
+        {0, 6510, 1222037, 1}, // Angelic Burster Weapon
+        {0, 530, 1532052, 1}, // Cannon Master Weapon
+        {0, 520, 1492060, 1}, // Corsair Weapon
+        {0, 570, 1492060, 1}, // Jett Weapon
+        {0, 3510, 1492060, 1}, // Mechanic Weapon
+        {0, 510, 1482060, 1}, // Buccaneer Weapon
+        {0, 2510, 1482060, 1}, // Shade Weapon
+        {0, 1510, 1482060, 1}, // Thunder Breaker Weapon
+        {0, 0, 1002631, 1}, // Helm
+        {0, 0, 1052116, 1}, // Overall
+        {0, 0, 1082198, 1}, // Gloves
+        {0, 0, 1072303, 1}, // Boots
+    };
+	
+    private static int[][] aEquipment_Lv70_Warrior = {
+        {0, 2111, 1442038, 1}, // Aran Weapon
+        {0, 3711, 1582004, 1}, // Blaster Weapon
+        {0, 131, 1432028, 1}, // DK Spear
+        {0, 131, 1442038, 1}, // DK Polearm
+        {0, 1111, 1402028, 1}, // Dawn Warrior 2H Sword
+        {0, 3121, 1232039, 1}, // Demon Avenger Weapon
+        {0, 3111, 1322044, 1}, // Demon Slayer Weapon
+        {0, 111, 1402028, 1}, // Hero 2H Sword
+        {0, 4111, 1542055, 1}, // Hayato Weapon
+        {0, 6111, 1402028, 1}, // Kaiser Weapon
+        {0, 5111, 1302047, 1}, // Mihile 1H Sword
+        {0, 121, 1322044, 1}, // Paladin 1H Mace
+        {0, 0, 1002030, 1}, // Helm
+        {1, 0, 1040103, 1}, // Male Top
+        {2, 0, 1041098, 1}, // Female Top
+        {1, 0, 1060091, 1}, // Male Bottom
+        {2, 0, 1061096, 1}, // Female Bottom
+        {0, 0, 1082105, 1}, // Gloves
+        {0, 0, 1072156, 1}, // Boots
+    };
+	
+    private static int[][] aEquipment_Lv70_Magician = {
+        {0, 3211, 1382028, 1}, // Battle Mage Staff
+        {0, 11211, 1252054, 1}, // Beast Tamer Weapon
+        {0, 231, 1382028, 1}, // Bishop Staff
+        {0, 1211, 1382028, 1}, // Blaze Wizard Staff
+        {0, 2214, 1382028, 1}, // Evan Staff
+        {0, 211, 1382028, 1}, // F/P Mage Staff
+        {0, 221, 1382028, 1}, // I/L Mage Staff
+        {0, 4211, 1552055, 1}, // Kanna Weapon
+        {0, 14211, 1262020, 1}, // Kinesis Weapon
+        {0, 2711, 1212039, 1}, // Luminous Weapon
+        {0, 0, 1002254, 1}, // Helm
+        {1, 0, 1050205, 1}, // Male Overall
+        {2, 0, 1051249, 1}, // Female Overall
+        {0, 0, 1082100, 1}, // Gloves
+        {0, 0, 1072160, 1}, // Boots
+    };
+	
+    private static int[][] aEquipment_Lv70_Thief = {
+        {0, 433, 1332042, 1}, // Dual Blade Dagger
+        {0, 433, 1342052, 1}, // Dual Blade Katara
+        {0, 411, 1472043, 1}, // Night Lord Weapon
+        {0, 1411, 1472042, 1}, // Night Walker Weapon
+        {0, 2411, 1362055, 1}, // Phantom Weapon
+        {0, 421, 1332041, 1}, // Shadower Dagger
+        {0, 3611, 1242030, 1}, // Xenon Weapon
+        {0, 0, 1002284, 1}, // Helm
+        {1, 0, 1040107, 1}, // Male Top
+        {2, 0, 1041101, 1}, // Female Top
+        {1, 0, 1060095, 1}, // Male Bottom
+        {2, 0, 1061101, 1}, // Female Bottom 
+        {0, 0, 1082097, 1}, // Gloves
+        {0, 0, 1072163, 1}, // Boots
+    };
+
+    private static int[][] aEquipment_Lv70_Bowman = {
+        {0, 311, 1452036, 1}, // Bowman Weapon
+        {0, 321, 1462032, 1}, // Xbowman Weapon
+        {0, 2311, 1522037, 1}, // Mercedes Weapon
+        {0, 1311, 1452036, 1}, // Wind Archer Weapon
+        {0, 3311, 1462032, 1}, // Wild Hunter Weapon
+        {0, 0, 1002289, 1}, // Helm
+        {1, 0, 1050064, 1}, // Male Overall
+        {2, 0, 1051065, 1}, // Female Overall
+        {0, 0, 1082108, 1}, // Gloves
+        {0, 0, 1072167, 1}, // Boots
+    };
+	
+    private static int[][] aEquipment_Lv70_Pirate = {
+        {0, 6511, 1222039, 1}, // Angelic Burster Weapon
+        {0, 531, 1532054, 1}, // Cannon Master Weapon
+        {0, 521, 1492062, 1}, // Corsair Weapon
+        {0, 571, 1492062, 1}, // Jett Weapon
+        {0, 3511, 1492062, 1}, // Mechanic Weapon
+        {0, 511, 1482062, 1}, // Buccaneer Weapon
+        {0, 2511, 1482062, 1}, // Shade Weapon
+        {0, 1511, 1482062, 1}, // Thunder Breaker Weapon
+        {0, 0, 1002637, 1}, // Helm
+        {0, 0, 1052122, 1}, // Overall
+        {0, 0, 1082204, 1}, // Gloves
+        {0, 0, 1072309, 1}, // Boots
     };
     
     /**
@@ -155,80 +528,4 @@ public class LootBox {
         0, 
         0, 
     };
-    
-    public static boolean OnNebuliteBoxRequest(User pPlayer) {
-        if (!pPlayer.haveItem(NEBULITE_BOX) || !pPlayer.hasInventorySpace(4, 1)) {
-            return false;
-        }
-        
-        MapleInventoryManipulator.removeById(pPlayer.getClient(), InventoryType.USE, LootBox.NEBULITE_BOX, 1, false, true);
-        pPlayer.gainItem(aNebulite[Utility.getRandomSelection(aNebulite.length)], 1); // Give the player a random Nebulite.
-        return true;
-    }
-    
-    public static boolean OnEquipmentBoxRequest(User pPlayer, byte nBoxLevel) {
-        int nBoxID;
-        int[][] aBoxItems;
-        
-        switch (nBoxLevel) {
-            case 30:
-                nBoxID = EQUIPMENT_BOX_LV30;
-                aBoxItems = aEquipment_Lv30;
-                break;
-            case 50:
-                nBoxID = EQUIPMENT_BOX_LV50;
-                aBoxItems = aEquipment_Lv50;
-                break;
-            case 70:
-                nBoxID = EQUIPMENT_BOX_LV70;
-                aBoxItems = aEquipment_Lv70;
-                break;
-            default:
-                return false;
-        }
-        
-        if (!pPlayer.haveItem(nBoxID) || !pPlayer.hasInventorySpace(1, aBoxItems.length)) {
-            return false;
-        }
-        
-        MapleInventoryManipulator.removeById(pPlayer.getClient(), InventoryType.USE, nBoxID, 1, false, true);
-        for (int i = 0; i < aBoxItems.length; i++) {
-            pPlayer.gainItem(aBoxItems[0][i], aBoxItems[1][i]); // Give the player all items from the specified box.
-        }
-        return true;
-    }
-    
-    public static boolean OnCosmeticBoxRequest(User pPlayer, byte nBoxType) {
-        int nBoxID;
-        int[] aBoxSelections;
-        
-        switch (nBoxType) {
-            case 1:
-                nBoxID = BASIC_HAIR_BOX;
-                aBoxSelections = aBasicHair;
-                break;
-            case 2:
-                nBoxID = BASIC_FACE_BOX;
-                aBoxSelections = aBasicFace;
-                break;
-            case 3:
-                nBoxID = PREMIUM_HAIR_BOX;
-                aBoxSelections = aPremiumHair;
-                break;
-            case 4:
-                nBoxID = PREMIUM_FACE_BOX;
-                aBoxSelections = aPremiumFace;
-                break;
-            default:
-                return false;
-        }
-        
-        if (!pPlayer.haveItem(nBoxID)) {
-            return false;
-        }
-        
-        MapleInventoryManipulator.removeById(pPlayer.getClient(), InventoryType.USE, nBoxID, 1, false, true); // Consume the Cosmetic Box.
-        pPlayer.setFace(aBoxSelections[Utility.getRandomSelection(aBoxSelections.length)]); // Give the player a random style.
-        return true;
-    }
 }

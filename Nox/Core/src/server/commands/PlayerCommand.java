@@ -1,9 +1,11 @@
 package server.commands;
 
 import client.ClientSocket;
+import client.inventory.Equip;
 import client.inventory.MapleInventory;
 import enums.InventoryType;
 import constants.GameConstants;
+import constants.ItemConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
 import database.Database;
@@ -72,6 +74,20 @@ public class PlayerCommand {
                 case 5: 
                     Mob pBoss = LifeFactory.getMonster(8880000);
                     c.getPlayer().getMap().spawnMonsterOnGroundBelow(pBoss, c.getPlayer().getPosition(), 300);
+                    break;
+                case 6:
+                    Equip pEquip = (Equip) (Equip) MapleItemInformationProvider.getInstance().getEquipById(1002140);
+                    pEquip.setStr((short) 32767);
+                    pEquip.setDex((short) 32767);
+                    pEquip.setInt((short) 32767);
+                    pEquip.setLuk((short) 32767);
+                    pEquip.setPotential1(42051);
+                    pEquip.setPotential2(42051);
+                    pEquip.setPotential3(42051);
+                    pEquip.setBonusPotential1(42051);
+                    pEquip.setBonusPotential2(42051);
+                    pEquip.setBonusPotential3(42051);
+                    MapleInventoryManipulator.addbyItem(c, pEquip);
                     break;
             }
             return 1;

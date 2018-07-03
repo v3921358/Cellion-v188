@@ -156,8 +156,9 @@ public class UseMagnifyingGlassHandler implements ProcessPacket<ClientSocket> {
         if (ii.getEquipStats(equipment.getItemId()).containsKey("reqLevel")) {
             reqLevel = ii.getEquipStats(equipment.getItemId()).get("reqLevel");
         } else {
+            reqLevel = 0;
             c.SendPacket(WvsContext.inventoryOperation(true, new ArrayList<>()));
-            throw new RuntimeException("No 'reqLevel' property available for the equipment id " + equipment.getItemId());
+           // throw new RuntimeException("No 'reqLevel' property available for the equipment id " + equipment.getItemId());
         }
 
         // Check the level requirement, if the player is using magnifying glass from USE 
