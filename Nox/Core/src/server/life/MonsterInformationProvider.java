@@ -135,7 +135,7 @@ public class MonsterInformationProvider {
                             nMaxQuantity = dropData[3];
                             nRequiredQuestID = dropData[4];
 
-                            int nRawDropChance = (int) (Integer.parseInt(nDropChance) * (1000 / ServerConstants.DROP_RATE));
+                            float nRawDropChance = (Float.parseFloat(nDropChance) * (1000 / ServerConstants.DROP_RATE));
                             if (bLoadFromDatabase) nRawDropChance /= 1.5;
 
                             if (!ServerConstants.REDUCED_DEBUG_SPAM) System.err.printf("%s, %s, %s, %s, %s, %s \n", Integer.parseInt(nMobID), Integer.parseInt(nDropID), nRawDropChance, Integer.parseInt(nMinQuantity), Integer.parseInt(nMaxQuantity), Integer.parseInt(nRequiredQuestID));
