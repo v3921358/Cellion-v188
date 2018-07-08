@@ -1702,6 +1702,8 @@ public class CField {
         oPacket.EncodeShort(android.getHair() - 30000);
         oPacket.EncodeShort(android.getFace() - 20000);
         oPacket.EncodeString(android.getName());
+        oPacket.EncodeInt(0);
+        oPacket.EncodeLong(PacketHelper.MAX_TIME);
         for (short i = -1200; i > -1207; i = (short) (i - 1)) {
             Item item = chr.getInventory(InventoryType.EQUIPPED).getItem(i);
             oPacket.EncodeInt(item != null ? item.getItemId() : 0);
@@ -1980,12 +1982,12 @@ public class CField {
         }
          */
         oPacket.EncodeShort(display);
-        if (display <= 1616) {
+        if ((display & 0x7FFF) <= 1699) {
             oPacket.EncodeByte(-1); //v30 bDragon ataack and move action?
             oPacket.EncodeShort(0); // ptAttackRefPoint.x (Dragon specific)
             oPacket.EncodeShort(0); // ptAttackRefPoint.y (Dragon specific)
             oPacket.EncodeByte(0); //bShowFixedDamage
-            oPacket.EncodeByte(6); //v206
+            oPacket.EncodeByte(0); //v206
             oPacket.EncodeByte(speed); //nActionSpeed
             oPacket.EncodeByte(mastery); //nMastery
             oPacket.EncodeInt(charge); //nBulletItemID 
@@ -1996,7 +1998,9 @@ public class CField {
                     oPacket.EncodeByte(0);// bleft
                     oPacket.EncodeByte(0);//v38[1]
                     oPacket.EncodeShort(0);//tdelay
+                    oPacket.EncodeInt(0);
                     if (skill == 80001835 || skill == 42111002 || skill == 80011050) {
+                        oPacket.EncodeByte(monster.getAttacks().size());
                         for (Pair<Long, Boolean> hits : monster.getAttacks()) {
                             oPacket.EncodeLong(hits.left); //Iterate over damage.
                         }

@@ -431,6 +431,25 @@ public class Mob extends AbstractLoadedMapleLife {
         OnEliteMonsterRequest(pPlayer);
         pPlayer.incrementVMatrixKills(this); // For VMatrix Quest
         
+        // Corrects the original base exp calculation from increasing the elite mob HP.
+        if (getScale() > 200) { // Elite Boss
+            if (getStats().getLevel() > 150) { // Calculate Elite Boss Stats
+                nBaseEXP /= ELITE_BOSS_HP_STAGE_3;
+            } else if (getStats().getLevel() > 99) {
+                nBaseEXP /= ELITE_BOSS_HP_STAGE_2;
+            } else {
+                nBaseEXP /= ELITE_BOSS_HP_STAGE_1;
+            }
+        } else if (getScale() > 100) { // Elite Mob
+            if (getStats().getLevel() > 199) { // Calculate Elite Mob Stats
+                nBaseEXP /= ELITE_MOB_HP_STAGE_3;
+            } else if (getStats().getLevel() > 99) {
+                nBaseEXP /= ELITE_MOB_HP_STAGE_2;
+            } else {
+                nBaseEXP /= ELITE_MOB_HP_STAGE_1;
+            }
+        }
+        
         if (BuffedMob.OnBuffedChannel(Utility.requestChannel(pPlayer.getId()))) {
             if (!BuffedMob.BUFFED_BOSSES) {
                 if (!getStats().isBoss()) {
@@ -1645,34 +1664,44 @@ public class Mob extends AbstractLoadedMapleLife {
             Mob pEliteBoss = LifeFactory.getMonster(aEliteBoss[Utility.getRandomSelection(aEliteBoss.length)]);
             
             if (getStats().getLevel() > 150) { // Calculate Elite Boss Stats
-                pEliteBoss.setHp(this.getHp() * 750);
-                pEliteBoss.getStats().setHp(this.getHp() * 750);
+                pEliteBoss.setHp(this.getHp() * ELITE_BOSS_HP_STAGE_3);
+                pEliteBoss.getStats().setHp(this.getHp() * ELITE_BOSS_HP_STAGE_3);
             } else if (getStats().getLevel() > 99) {
-                pEliteBoss.setHp(this.getHp() * 500);
-                pEliteBoss.getStats().setHp(this.getHp() * 500);
+                pEliteBoss.setHp(this.getHp() * ELITE_BOSS_HP_STAGE_2);
+                pEliteBoss.getStats().setHp(this.getHp() * ELITE_BOSS_HP_STAGE_2);
             } else {
-                pEliteBoss.setHp(this.getHp() * 300);
-                pEliteBoss.getStats().setHp(this.getHp() * 300);
+                pEliteBoss.setHp(this.getHp() * ELITE_BOSS_HP_STAGE_1);
+                pEliteBoss.getStats().setHp(this.getHp() * ELITE_BOSS_HP_STAGE_1);
             }
-            getMap().spawnMonsterOnGroundBelow(pEliteBoss, getPosition(), 200); // Spawn Random Elite Boss
+            getMap().spawnMonsterOnGroundBelow(pEliteBoss, getPosition(), 201); // Spawn Random Elite Boss
             pPlayer.setEliteKills(0); // Reset Elite Monster Kill Count
-        } else if (Utility.resultSuccess(10)) { // 1% Chance to Spawn Elite Mob
+        } else if (Utility.resultSuccess(1)) { // 1% Chance to Spawn Elite Mob
             
             Mob pElite = LifeFactory.getMonster(this.getId());
             
             if (getStats().getLevel() > 199) { // Calculate Elite Mob Stats
-                pElite.setHp(this.getHp() * 60);
-                pElite.getStats().setHp(this.getHp() * 60);
+                pElite.setHp(this.getHp() * ELITE_MOB_HP_STAGE_3);
+                pElite.getStats().setHp(this.getHp() * ELITE_MOB_HP_STAGE_3);
             } else if (getStats().getLevel() > 99) {
-                pElite.setHp(this.getHp() * 45);
-                pElite.getStats().setHp(this.getHp() * 45);
+                pElite.setHp(this.getHp() * ELITE_MOB_HP_STAGE_2);
+                pElite.getStats().setHp(this.getHp() * ELITE_MOB_HP_STAGE_2);
             } else {
-                pElite.setHp(this.getHp() * 30);
-                pElite.getStats().setHp(this.getHp() * 30);
+                pElite.setHp(this.getHp() * ELITE_MOB_HP_STAGE_1);
+                pElite.getStats().setHp(this.getHp() * ELITE_MOB_HP_STAGE_1);
             }
             getMap().spawnMonsterOnGroundBelow(pElite, getPosition(), 200);
         }
     }
+    
+    /**
+     * Elite Mob & Boss HP Buffs for reference.
+     */
+    private final int ELITE_MOB_HP_STAGE_1 = 30,
+                      ELITE_MOB_HP_STAGE_2 = 45,
+                      ELITE_MOB_HP_STAGE_3 = 60,
+                      ELITE_BOSS_HP_STAGE_1 = 300,
+                      ELITE_BOSS_HP_STAGE_2 = 500,
+                      ELITE_BOSS_HP_STAGE_3 = 750;
 
     // <editor-fold defaultstate="visible" desc="Attacks & EXP Handling"> 
     private static class AttackingMapleCharacter {

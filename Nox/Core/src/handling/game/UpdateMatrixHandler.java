@@ -318,6 +318,7 @@ public final class UpdateMatrixHandler implements ProcessPacket<ClientSocket> {
                 //if (c.getPlayer().mSkillRecord.containsKey(pMatrixRecord.nSkillID)) {
                 //    nSLV += c.getPlayer().mSkillRecord.get(pMatrixRecord.nSkillID);
                 //}
+                if (pMatrixRecord.nSkillID != 0) {
                 nSLV = Math.min(nSLV, pMatrixRecord.nMasterLev);
                 /*
                 pSkillRecord = new SkillRecord();
@@ -335,7 +336,7 @@ public final class UpdateMatrixHandler implements ProcessPacket<ClientSocket> {
                 pEntry = new SkillEntry(nSLV, (byte) pMatrixRecord.nMasterLev, pMatrixRecord.ftExpirationDate);
                 c.getPlayer().changeSingleSkillLevel(pSkill, pEntry.skillevel, pEntry.masterlevel, pEntry.expiration);
                 mChange.put(pSkill, pEntry);
-
+                }
                 if (pMatrixRecord.nSkillID2 != 0) {
                     nSLV = pMatrixRecord.nSLV + c.getPlayer().getSkillLevel(pMatrixRecord.nSkillID);
                     //nSLV = pMatrixRecord.nSLV;

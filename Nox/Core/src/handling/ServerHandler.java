@@ -287,6 +287,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
          * Skill Handlers
          */
         handlers[RecvPacketOpcode.UserSkillPrepareRequest.getValue()] = new SkillEffectHandler();
+        handlers[RecvPacketOpcode.UserSkillPrepareCancelRequest.getValue()] = new SkillEffectCancelHandler();
         handlers[RecvPacketOpcode.UserMacroSysDataModified.getValue()] = new SkillMacroHandler();
         handlers[RecvPacketOpcode.FuncKeyMappedModified.getValue()] = new KeyMap();
         handlers[RecvPacketOpcode.SetSonOfLinkedSkillRequest.getValue()] = new LinkedSkillRequest();
@@ -340,10 +341,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         /**
          * Cash Shop Handlers
          */
-        //handlers[RecvPacketOpcode.BUY_CS_ITEM.getValue()] = new CashShopPurchase();
-        //handlers[RecvPacketOpcode.CashShopCheckCouponRequest.getValue()] = new CashCouponHandler();
-        //handlers[RecvPacketOpcode.CASH_CATEGORY.getValue()] = new CashCategorySwitch();
-        //handlers[RecvPacketOpcode.CS_UPDATE.getValue()] = new UpdatePlayerCashInfo();
+        handlers[RecvPacketOpcode.BUY_CS_ITEM.getValue()] = new CashShopPurchase();
+        handlers[RecvPacketOpcode.CashShopCheckCouponRequest.getValue()] = new CashCouponHandler();
+        handlers[RecvPacketOpcode.CASH_CATEGORY.getValue()] = new CashCategorySwitch();
+        handlers[RecvPacketOpcode.CS_UPDATE.getValue()] = new UpdatePlayerCashInfo();
     }
 
     public ServerHandler(MapleServerMode pMode) {
@@ -446,7 +447,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                         case "UserMove":
                         case "SummonedMove":
                         case "NpcMove":
-                        //case "MobMove":
+                        case "MobMove":
                         case "MobApplyCtrl":
                         case "UserChangeStatRequest":
                         case "UserActivateDamageSkin":

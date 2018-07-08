@@ -7,10 +7,9 @@ import constants.GameConstants;
 import constants.skills.*;
 import client.jobs.Explorer.*;
 import client.jobs.Hero.*;
-import client.jobs.Kinesis.KinesisHandler;
-import client.jobs.Nova;
-import client.jobs.Nova.AngelicBusterHandler;
+import client.jobs.Nova.*;
 import client.jobs.Resistance.*;
+import client.jobs.Kinesis.KinesisHandler;
 import net.InPacket;
 import net.ProcessPacket;
 import server.StatEffect;
@@ -230,8 +229,11 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 }
                 break;
             }
+            case Global.CLOSE_CALL_1: // Shade Close Call
+            case Shade.CLOSE_CALL:
             case Shade.SUMMON_OTHER_SPIRIT:
             case NightWalker.DARKNESS_ASCENDING: {
+                //pPlayer.dropMessage(5, "The revive buff is being applied and should not be spamming right now.");
                 pEffect.statups.put(CharacterTemporaryStat.ReviveOnce, 1);
                 pEffect.info.put(StatInfo.time, 2100000000);
                 break;

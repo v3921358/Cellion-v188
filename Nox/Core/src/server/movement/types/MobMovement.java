@@ -189,13 +189,13 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
         pMob.setvYCS(iPacket.DecodeShort());
         List<LifeMovementFragment> res = MovementParse.parseMovement(iPacket);
         
-        //if ((Math.abs(c.getPlayer().getPosition().x - pMob.getPosition().x) < 2000) 
-        //    && (Math.abs(c.getPlayer().getPosition().y - pMob.getPosition().y) < 700) ) {
-        
+        //if ((Math.abs(c.getPlayer().getPosition().x - pMob.getPosition().x) < 2000) && (Math.abs(c.getPlayer().getPosition().y - pMob.getPosition().y) < 700) ) {
             for (LifeMovementFragment m : res) {
                 Point nPOS = m.getPosition();
+                Short nFH = m.getFoothold();
+                if (nFH < 1) nFH = 1; // Super meme! Let's try :P
                 pMob.setPosition(nPOS);
-                pMob.setFh(m.getFoothold());
+                pMob.setFh(nFH);
                 if (res.size() > 0) c.SendPacket(MobPacket.moveMonsterResponse(oid, nMobControlSN, (int) pMob.getMp(), pMob.isControllerHasAggro(), nSkill1, nSkill2, nForcedAttackIdx));
             }
         //}

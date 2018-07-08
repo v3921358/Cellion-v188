@@ -85,6 +85,16 @@ public class GMCommand {
         }
     }
     
+    public static class GetVMatrix extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            c.getPlayer().OnUserVMatrix();
+            c.getPlayer().dropMessage(5, "Character (" + c.getPlayer().getName() + ") now has access to the V Matrix.");
+            return 0;
+        }
+    }
+    
     public static class Set extends CommandExecute {
 
         @Override

@@ -1057,13 +1057,12 @@ public enum SendPacketOpcode {
     ViciousHammerResult(1634),
     BOOSTER_PACK(1641), // guess
     
-    // yolo guess check 188t
-    CS_UPDATE(1476), //355
-    CS_OPERATION(1477), //356
-    CS_MESO_UPDATE(1478), //359
+    CS_UPDATE(1475), // Version 188
+    CS_OPERATION(1476), // Version 188
+    CS_MESO_UPDATE(1477), // Version 188
     //0x314 int itemid int sn
-    CASH_SHOP(1501), // VERSION 176
-    CASH_SHOP_UPDATE(1502), // VERSION 176
+    CASH_SHOP(1500), //  Version 188
+    CASH_SHOP_UPDATE(1501), //  Version 188
 
     GACHAPON_STAMPS(595),
     FREE_CASH_ITEM(596),

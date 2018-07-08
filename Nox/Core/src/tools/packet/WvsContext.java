@@ -3833,6 +3833,7 @@ public class WvsContext {
                         oPacket.EncodeInt(stats.getValue());
                     }
                     oPacket.EncodeInt(scroll.getCost());
+                    oPacket.EncodeInt(scroll.getCost());
                     oPacket.EncodeBool(scroll.willPass());
                 }
                 break;

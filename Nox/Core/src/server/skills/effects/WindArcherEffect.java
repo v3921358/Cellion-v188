@@ -68,7 +68,7 @@ public class WindArcherEffect extends AbstractEffect {
                 break;
             case WindArcher.SYLVAN_AID:
                 pEffect.statups.put(CharacterTemporaryStat.IndiePAD, (int) (pEffect.info.get(StatInfo.indiePad) * 1.5));
-                pEffect.statups.put(CharacterTemporaryStat.HowlingCritical, pEffect.info.get(StatInfo.x));
+                //pEffect.statups.put(CharacterTemporaryStat.HowlingCritical, pEffect.info.get(StatInfo.x));
                 pEffect.statups.put(CharacterTemporaryStat.SoulArrow, 1);
                 break;
             case WindArcher.TRIFLING_WIND_I:
