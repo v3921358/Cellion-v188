@@ -13,6 +13,7 @@ import client.KeyLayout;
 import client.QuestStatus;
 import client.Skill;
 import client.SkillMacro;
+import client.inventory.Equip;
 import client.inventory.Equip.ScrollResult;
 import client.inventory.Item;
 import enums.InventoryType;
@@ -66,6 +67,7 @@ import java.awt.Rectangle;
 import java.util.Random;
 import server.maps.Map_MaplePlatform;
 import server.maps.objects.ForceAtom;
+import server.messages.DropPickUpMessage;
 import tools.Pair;
 import tools.Triple;
 import tools.Utility;
@@ -4588,28 +4590,7 @@ public class CField {
         }
 
         public static OutPacket showForeignEffect(int cid, UserEffectCodes effect, int val) {
-
-            OutPacket oPacket;
-            if (cid == -1) {
-                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            } else {
-                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeInt(cid);
-            }
-            oPacket.EncodeByte(effect.getEffectId());
-
-            switch (effect) {
-                case ItemMaker:
-                    oPacket.Fill(0, 4); // hmm could this be the delay?
-                    break;
-                case FieldItemConsumed:
-                    oPacket.EncodeInt(val);
-                    break;
-            }
-
-            oPacket.Fill(0, 99);//I really can't be fucked rn..
-
-            return oPacket;
+            return OnUserEffect(cid, effect, 0, "", 0, val, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);  
         }
 
         /**
@@ -4618,82 +4599,20 @@ public class CField {
          * @param bannerText
          * @return
          */
-        public static OutPacket showBurningFieldTextEffect(String bannerText) {
-
-            /*3D 
-            4F 00 
-            23 66 6E B3 AA B4 AE B0 ED B5 F1 20 45 78 74 72 
-            61 42 6F 6C 64 23 23 66 73 32 36 23 20 20 20 20 
-            20 20 20 20 20 20 42 75 72 6E 69 6E 67 20 53 74 
-            61 67 65 20 31 3A 20 31 30 25 20 42 6F 6E 75 73 
-            20 45 58 50 21 20 20 20 20 20 20 20 20 20 20 
-
-            32 00 00 00 // floating value
-            DC 05 00 00  // floating value
-
-            04 00 00 00 
-            00 00 00 00 
-            38 FF FF FF 
-            01 00 00 00 
-            04 00 00 00 
-            02 00 00 00 // v640
-            00 00 00 00 
-            00 00 00 00*/
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.EncodeByte(UserEffectCodes.TextEffect.getEffectId());
-            //oPacket.encodeString("#fn³ª´®°íµñ ExtraBold##fs26#          Burning Stage 1: 10% Bonus EXP!  ");
-            oPacket.EncodeString(String.format("#fn³ª´®°íµñ ExtraBold##fs26#          %s        ", bannerText));
-            oPacket.EncodeInt(0x32); // *(float *)&v848 = COERCE_FLOAT(CInPacket::Decode4(a2));
-            oPacket.EncodeInt(0x5DC); // *(float *)&v854 = COERCE_FLOAT(CInPacket::Decode4(a2));
-            oPacket.EncodeInt(0x4); // Align whole text    3 = Left, 5 = right, 4 = Center
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0xFFFFFF38); // Seems to be the X and Y position? 
-            oPacket.EncodeInt(1);
-            oPacket.EncodeInt(4);
-            oPacket.EncodeInt(2);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
-
-            return oPacket;
+        public static OutPacket showBurningFieldTextEffect(String bannerText) { // added
+            return OnUserEffect(0, UserEffectCodes.TextEffect, 0, bannerText, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
         }
 
         public static OutPacket showOwnDiceEffect(int skillid, int effectid, int effectid2, int level) {
             return showDiceEffect(-1, skillid, effectid, effectid2, level);
         }
 
-        public static OutPacket showDiceEffect(int cid, int skillid, int effectid, int effectid2, int level) {
-
-            OutPacket oPacket;
-            if (cid == -1) {
-                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            } else {
-                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeInt(cid);
-            }
-            oPacket.EncodeByte(UserEffectCodes.Skill_DiceEffect.getEffectId()); // TODO
-            oPacket.EncodeInt(effectid);
-            oPacket.EncodeInt(effectid2);
-            oPacket.EncodeInt(skillid);
-            oPacket.EncodeByte(level);
-            oPacket.EncodeByte(0);
-            oPacket.Fill(0, 100);
-
-            return oPacket;
+        public static OutPacket showDiceEffect(int cid, int skillid, int effectid, int effectid2, int level) { // added
+            return OnUserEffect(cid, UserEffectCodes.Skill_DiceEffect, 0, "", 0, 0, false, 0, skillid, level, (byte) 0, (byte) 0, 0, effectid, effectid2, false, null);
         }
 
-        public static OutPacket useCharm(byte charmsleft, byte daysleft, boolean safetyCharm) {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.EncodeByte(UserEffectCodes.ProtectOnDieItemUse.getEffectId());
-            oPacket.EncodeByte(safetyCharm ? 1 : 0);
-            oPacket.EncodeByte(charmsleft);
-            oPacket.EncodeByte(daysleft);
-            if (!safetyCharm) {
-                oPacket.EncodeInt(0);
-            }
-            oPacket.Fill(0, 4);
-
-            return oPacket;
+        public static OutPacket useCharm(byte charmsleft, byte daysleft, boolean safetyCharm) { // added
+            return OnUserEffect(0, UserEffectCodes.ProtectOnDieItemUse, 0, "", daysleft, 0, false, 0, 0, 0, (byte) 0, (byte) charmsleft, 0, 0, 0, safetyCharm, null);
         }
 
         public static OutPacket Mulung_DojoUp2() {
@@ -4708,104 +4627,45 @@ public class CField {
             return showHpHealed(-1, amount);
         }
 
-        public static OutPacket showHpHealed(int cid, int amount) {
-
-            OutPacket oPacket;
-            if (cid == -1) {
-                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            } else {
-                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeInt(cid);
-            }
-            oPacket.EncodeByte(UserEffectCodes.IncDecHPEffect_EX.getEffectId());
-            oPacket.EncodeInt(amount);
-
-            oPacket.Fill(0, 99); // Avoid DC
-
-            return oPacket;
+        public static OutPacket showHpHealed(int cid, int amount) { // added
+            return OnUserEffect(cid, UserEffectCodes.BuffItemEffect, 0, "", 0, amount, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
         }
 
         public static OutPacket showRewardItemAnimation(int itemId, String effect) {
             return showRewardItemAnimation(itemId, effect, -1);
         }
 
-        public static OutPacket showRewardItemAnimation(int itemId, String effect, int from_playerid) {
-
-            OutPacket oPacket;
-            if (from_playerid == -1) {
-                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            } else {
-                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeInt(from_playerid);
-            }
-            oPacket.EncodeByte(UserEffectCodes.BuffItemEffect.getEffectId());
-            oPacket.EncodeInt(itemId);
-
-            if (effect != null && effect.length() > 0) {
-                oPacket.EncodeByte(1);
-                oPacket.EncodeString(effect);
-            } else {
-                oPacket.EncodeByte(0);
-            }
-
-            return oPacket;
+        public static OutPacket showRewardItemAnimation(int itemId, String effect, int from_playerid) { // added
+            return OnUserEffect(from_playerid, UserEffectCodes.BuffItemEffect, 0, effect, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, itemId, 0, 0, false, null);
         }
 
-        public static OutPacket showCashItemEffect(int itemId) {
+        /*public static OutPacket showCashItemEffect(int itemId) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
             oPacket.EncodeByte(UserEffectCodes.FieldItemConsumed.getEffectId());
             oPacket.EncodeInt(itemId);
 
             return oPacket;
-        }
+        }*/
 
-        public static OutPacket useWheel(byte charmsleft) {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.EncodeByte(UserEffectCodes.UpgradeTombItemUse.getEffectId());
-            oPacket.EncodeByte(charmsleft);
-
-            return oPacket;
+        public static OutPacket useWheel(byte charmsleft) { // added
+            return OnUserEffect(0, UserEffectCodes.UpgradeTombItemUse, 0, "", 0, 0, false, 0, 0, 0, (byte) 0, (byte) charmsleft, 0, 0, 0, false, null);
         }
 
         public static OutPacket showOwnBuffEffect(int skillid, UserEffectCodes effect, int playerLevel, int skillLevel) {
-            return showBuffeffect(-1, skillid, effect, playerLevel, skillLevel, (byte) 3);
+            return showBuffEffect(-1, skillid, effect, playerLevel, skillLevel, (byte) 3);
         }
 
         public static OutPacket showOwnBuffEffect(int skillid, UserEffectCodes effect, int playerLevel, int skillLevel, byte direction) {
-            return showBuffeffect(-1, skillid, effect, playerLevel, skillLevel, direction);
+            return showBuffEffect(-1, skillid, effect, playerLevel, skillLevel, direction);
         }
 
-        public static OutPacket showBuffeffect(int cid, int skillid, UserEffectCodes effect, int playerLevel, int skillLevel) {
-            return showBuffeffect(cid, skillid, effect, playerLevel, skillLevel, (byte) 3);
+        public static OutPacket showBuffEffect(int cid, int skillid, UserEffectCodes effect, int playerLevel, int skillLevel) {
+            return showBuffEffect(cid, skillid, effect, playerLevel, skillLevel, (byte) 3);
         }
 
-        public static OutPacket showBuffeffect(int cid, int skillid, UserEffectCodes effect, int playerLevel, int skillLevel, byte direction) {
-
-            OutPacket oPacket;
-            if (cid == -1) {
-                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            } else {
-                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeInt(cid);
-            }
-            oPacket.EncodeByte(effect.getEffectId());  // TODO, update for V170 [check]
-            oPacket.EncodeInt(skillid);
-            oPacket.EncodeByte(playerLevel - 1);
-            if (effect == UserEffectCodes.SkillUseBySummoned && skillid == 31111003) {
-                oPacket.EncodeInt(0);
-            }
-            oPacket.EncodeByte(skillLevel);
-            if ((direction != 3) || (skillid == 1320006) || (skillid == 30001062) || (skillid == 30001061)) {
-                oPacket.EncodeByte(direction);
-            }
-            if (skillid == 30001062) {
-                oPacket.EncodeInt(0);
-            }
-            oPacket.Fill(0, 29);
-
-            return oPacket;
+        public static OutPacket showBuffEffect(int cid, int skillid, UserEffectCodes effect, int playerLevel, int skillLevel, byte direction) { // added
+            return OnUserEffect(cid, effect, 0, "", 0, 0, false, playerLevel, skillid, skillLevel, (byte) direction, (byte) 0, 0, 0, 0, false, null);
         }
 
         public static OutPacket showWZUOLEffect(String data, boolean flipImage) {
@@ -4823,36 +4683,8 @@ public class CField {
          * @param mode
          * @return
          */
-        public static OutPacket showWZUOLEffect(String data, boolean flipImage, int characterid, int time, int mode) {
-
-            OutPacket oPacket;
-            if (characterid == -1) {
-                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            } else {
-                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeInt(characterid);
-            }
-            oPacket.EncodeByte(UserEffectCodes.EffectUOL.getEffectId());
-            oPacket.EncodeString(data);
-
-            oPacket.EncodeByte(flipImage ? 1 : 0); // new in v170
-
-            oPacket.EncodeInt(time); // v868 = CInPacket::Decode4(a3);
-            oPacket.EncodeInt(mode); // v874 = CInPacket::Decode4(a3);
-
-            switch (mode) {
-                case 1:
-                    break;
-                case 2:
-                    oPacket.EncodeInt(0); // Most likely the delay.
-                    break;
-                case 3:
-                    break;
-            }
-
-            // Client seems to do something 
-            // if v868 < 0, else something
-            return oPacket;
+        public static OutPacket showWZUOLEffect(String data, boolean flipImage, int characterid, int time, int mode) { // added
+            return OnUserEffect(characterid, UserEffectCodes.ReservedEffect, 0, data, time, 0, flipImage, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
         }
 
         /**
@@ -4862,80 +4694,158 @@ public class CField {
          * @return
          */
         public static OutPacket showReservedEffect_CutScene(String data) {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.EncodeByte(UserEffectCodes.ReservedEffect.getEffectId());
-
-            /*LOBYTE(bFlip) = CInPacket::Decode1(iPacket) != 0;
-	      nRange = CInPacket::Decode4(iPacket);
-	      nNameHeight = CInPacket::Decode4(iPacket);
-	      CInPacket::DecodeStr(iPacket, &sMsg);*/
-            boolean show = true;
-            oPacket.EncodeBool(show);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeInt(0);
-            oPacket.EncodeString(data);
-
-            return oPacket;
+            return OnUserEffect(0, UserEffectCodes.ReservedEffect, 0, data, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
         }
 
-        public static OutPacket showOwnPetLevelUp(User chr, byte index) {
+        public static OutPacket showOwnPetLevelUp(User chr, byte index) { 
+            return OnUserEffect(chr.getId(), UserEffectCodes.Pet, index, "", 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
+        }
+
+        /**
+         * OnUserEffect
+         * Handle all UserEffectLocal and UserEffectRemote packets.
+         * 
+         * @param dwCharID
+         * @param pEffect
+         * @param nPetIndex
+         * @param sData
+         * @param tTime
+         * @param nValue
+         * @param bFlipImage
+         * @param nCharacterLV
+         * @param nSkillID
+         * @param nSkillLV
+         * @param nDirection
+         * @param nCharmsLeft
+         * @param nItemID
+         * @param nEffectID
+         * @param nEffectID_2
+         * @param bSafetyCharm
+         * @param pItem
+         * @return 
+         */
+        public static OutPacket OnUserEffect(int dwCharID, UserEffectCodes pEffect, int nPetIndex, String sData, int tTime, int nValue, 
+                boolean bFlipImage, int nCharacterLV, int nSkillID, int nSkillLV, byte nDirection, byte nCharmsLeft, int nItemID,
+                int nEffectID, int nEffectID_2, boolean bSafetyCharm, Equip pItem) {
+            
             OutPacket oPacket;
-            if (chr == null) {
+            if (dwCharID == -1 || dwCharID == 0) {
                 oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
             } else {
                 oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
+                switch (pEffect) {
+                    case Quest:
+                    case PickUpItem:
+                        break;
+                    default:
+                        oPacket.EncodeInt(dwCharID);
+                }
             }
-            oPacket.EncodeByte((int) UserEffectCodes.Pet.getEffectId());
-            oPacket.EncodeByte(0);
-            oPacket.EncodeInt(index);
-            if (chr == null) {
-                oPacket.EncodeInt(0);
+            
+            oPacket.EncodeByte(pEffect.getEffectId());
+            switch (pEffect) {
+                case Quest:
+                    oPacket.EncodeByte(1);
+                    oPacket.EncodeInt(nItemID);
+                    oPacket.EncodeInt(nValue); // Quantity
+                    break;
+                case PickUpItem:
+                    PacketHelper.addItemInfo(oPacket, pItem);
+                    break;
+                case Pet:
+                    oPacket.EncodeByte(0);
+                    oPacket.EncodeInt(nPetIndex);
+                    if (dwCharID == -1) {
+                        oPacket.EncodeInt(0);
+                    }
+                    break;
+                case ReservedEffect: // Cutscene
+                    boolean bShow = true;
+                    oPacket.EncodeBool(bShow);
+                    oPacket.EncodeInt(0);
+                    oPacket.EncodeInt(0);
+                    oPacket.EncodeString(sData);
+                    break;
+                case EffectUOL:
+                    oPacket.EncodeString(sData);
+                    oPacket.EncodeBool(bFlipImage); // new in v170
+                    oPacket.EncodeInt(tTime); // v868 = CInPacket::Decode4(a3);
+                    oPacket.EncodeInt(nValue); // v874 = CInPacket::Decode4(a3);
+                    switch (nValue) {
+                        case 1:
+                            break;
+                        case 2:
+                            oPacket.EncodeInt(0); // Most likely the delay.
+                            break;
+                        case 3:
+                            break;
+                    }
+                    break;
+                case SkillUse:
+                case SkillUseBySummoned:
+                    oPacket.EncodeInt(nSkillID);
+                    oPacket.EncodeByte(nCharacterLV - 1);
+                    if (pEffect == UserEffectCodes.SkillUseBySummoned && nSkillID == 31111003) {
+                        oPacket.EncodeInt(0);
+                    }
+                    oPacket.EncodeByte(nSkillLV);
+                    if ((nDirection != 3) || (nSkillID == 1320006) || (nSkillID == 30001062) || (nSkillID == 30001061)) {
+                        oPacket.EncodeByte(nDirection);
+                    }
+                    if (nSkillID == 30001062) {
+                        oPacket.EncodeInt(0);
+                    }
+                    oPacket.Fill(0, 29);
+                    break;
+                case UpgradeTombItemUse:
+                    oPacket.EncodeByte(nCharmsLeft);
+                    break;
+                case BuffItemEffect:
+                    oPacket.EncodeInt(nItemID);
+                    if (sData != null && sData.length() > 0) {
+                        oPacket.EncodeByte(1);
+                        oPacket.EncodeString(sData);
+                    } else {
+                        oPacket.EncodeByte(0);
+                    }
+                    break;
+                case IncDecHPEffect_EX:
+                    oPacket.EncodeInt(nValue);
+                    break;
+                case TextEffect: // Burning Field
+                    oPacket.EncodeString(String.format("#fn³ª´®°íµñ ExtraBold##fs26#          %s        ", sData));
+                    oPacket.EncodeInt(0x32); // *(float *)&v848 = COERCE_FLOAT(CInPacket::Decode4(a2));
+                    oPacket.EncodeInt(0x5DC); // *(float *)&v854 = COERCE_FLOAT(CInPacket::Decode4(a2));
+                    oPacket.EncodeInt(0x4); // Align whole text    3 = Left, 5 = right, 4 = Center
+                    oPacket.EncodeInt(0);
+                    oPacket.EncodeInt(0xFFFFFF38); // Seems to be the X and Y position? 
+                    oPacket.EncodeInt(1);
+                    oPacket.EncodeInt(4);
+                    oPacket.EncodeInt(2);
+                    oPacket.EncodeInt(0);
+                    oPacket.EncodeInt(0);
+                    break;
+                case Skill_DiceEffect:
+                    oPacket.EncodeInt(nEffectID);
+                    oPacket.EncodeInt(nEffectID_2);
+                    oPacket.EncodeInt(nSkillID);
+                    oPacket.EncodeByte(nSkillLV);
+                    oPacket.EncodeByte(0);
+                    oPacket.Fill(0, 100);
+                    break;
+                case ProtectOnDieItemUse:
+                    oPacket.EncodeBool(bSafetyCharm);
+                    oPacket.EncodeByte(nCharmsLeft);
+                    oPacket.EncodeByte(tTime); // Days Left
+                    if (!bSafetyCharm) {
+                        oPacket.EncodeInt(0);
+                    }
+                    oPacket.Fill(0, 4);
+                    break;
+                case ResetOnStateForOnOffSkill: // Angelic Buster Recharge
+                    oPacket.EncodeByte(1);
+                    break;
             }
-
-            return oPacket;
-        }
-
-        public static OutPacket showOwnPVPChampionEffect() {
-            return showPVPChampionEffect(-1);
-        }
-
-        public static OutPacket showPVPChampionEffect(int from_playerid) {
-
-            OutPacket oPacket;
-            if (from_playerid == -1) {
-                oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            } else {
-                oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeInt(from_playerid);
-            }
-            oPacket.EncodeByte(UserEffectCodes.PvPChampion.getEffectId());  // TODO, update for V170
-            oPacket.EncodeInt(30000);
-
-            return oPacket;
-        }
-
-        public static OutPacket showWeirdEffect(String effect, int itemId) {
-            final OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.EncodeByte(UserEffectCodes.PlayExclSoundWithDownBGM.getEffectId());
-            oPacket.EncodeString(effect);
-            oPacket.EncodeByte(1);
-            oPacket.EncodeInt(0);//weird high number is it will keep showing it lol
-            oPacket.EncodeInt(2);
-            oPacket.EncodeInt(itemId);
-            return oPacket;
-        }
-
-        public static OutPacket showWeirdEffect(int chrId, String effect, int itemId) {
-            final OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.EncodeInt(chrId);
-            oPacket.EncodeByte(UserEffectCodes.PlayExclSoundWithDownBGM.getEffectId());
-            oPacket.EncodeString(effect);
-            oPacket.EncodeByte(1);
-            oPacket.EncodeInt(0);//weird high number is it will keep showing it lol
-            oPacket.EncodeInt(2);//this makes it read the itemId
-            oPacket.EncodeInt(itemId);
-
             return oPacket;
         }
     }

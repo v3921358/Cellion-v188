@@ -8318,7 +8318,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             final StatEffect ampStat = BerserkX.getEffect(skilllevel);
             stats.Berserk = stats.getHp() * 100 / stats.getCurrentMaxHp() >= ampStat.getX();
             client.SendPacket(EffectPacket.showOwnBuffEffect(1320006, UserEffectCodes.SkillUse, getLevel(), skilllevel, (byte) (stats.Berserk ? 1 : 0)));
-            map.broadcastPacket(this, EffectPacket.showBuffeffect(getId(), 1320006, UserEffectCodes.SkillUse, getLevel(), skilllevel, (byte) (stats.Berserk ? 1 : 0)), false);
+            map.broadcastPacket(this, EffectPacket.showBuffEffect(getId(), 1320006, UserEffectCodes.SkillUse, getLevel(), skilllevel, (byte) (stats.Berserk ? 1 : 0)), false);
         } else {
             lastBerserkTime = -1; // somebody thre? O_O
         }

@@ -536,7 +536,7 @@ public final class MapleMap {
                             case 8810122:
                             case 8820001:
                                 mc.getClient().SendPacket(EffectPacket.showOwnBuffEffect(buffid, UserEffectCodes.BuffItemEffect, mc.getLevel(), 1)); // HT nine spirit
-                                broadcastPacket(mc, EffectPacket.showBuffeffect(mc.getId(), buffid, UserEffectCodes.BuffItemEffect, mc.getLevel(), 1), false); // HT nine spirit
+                                broadcastPacket(mc, EffectPacket.showBuffEffect(mc.getId(), buffid, UserEffectCodes.BuffItemEffect, mc.getLevel(), 1), false); // HT nine spirit
                                 break;
                         }
                     }

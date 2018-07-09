@@ -390,7 +390,7 @@ public class StatEffect implements Serializable {
                             mob.setMp(mob.getMp() - absorbMp);
                             applyto.getStat().setMp((int) (applyto.getStat().getMp() + absorbMp), applyto);
                             applyto.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level));
-                            applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffeffect(applyto.getId(), sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level), false);
+                            applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffEffect(applyto.getId(), sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level), false);
                         }
                     }
                     break;
@@ -628,7 +628,7 @@ public class StatEffect implements Serializable {
                 }
             } else if (sourceid == 2910000 || sourceid == 2910001) { //red flag
                 applyto.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.BuffItemEffect, applyto.getLevel(), level));
-                applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffeffect(applyto.getId(), sourceid, UserEffectCodes.BuffItemEffect, applyto.getLevel(), level), false);
+                applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffEffect(applyto.getId(), sourceid, UserEffectCodes.BuffItemEffect, applyto.getLevel(), level), false);
 
                 applyto.getClient().SendPacket(EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Effect", applyto.getDirection() == 1, -1, 0, 0));
                 applyto.getMap().broadcastPacket(applyto, EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Effect", applyto.getDirection() == 1, applyto.getId(), 0, 0), false);
@@ -988,7 +988,7 @@ public class StatEffect implements Serializable {
                 for (User chr : awarded) {
                     applyTo(applyfrom, chr, false, null, newDuration);
                     chr.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level));
-                    chr.getMap().broadcastPacket(chr, EffectPacket.showBuffeffect(chr.getId(), sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level), false);
+                    chr.getMap().broadcastPacket(chr, EffectPacket.showBuffEffect(chr.getId(), sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level), false);
                 }
             }
         } else if (isPartyBuff() && (applyfrom.getParty() != null || isGmBuff() || applyfrom.inPVP())) {
@@ -1002,7 +1002,7 @@ public class StatEffect implements Serializable {
                     if ((isResurrection() && !affected.isAlive()) || (!isResurrection() && affected.isAlive())) {
                         applyTo(applyfrom, affected, false, null, newDuration);
                         affected.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level));
-                        affected.getMap().broadcastPacket(affected, EffectPacket.showBuffeffect(affected.getId(), sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level), false);
+                        affected.getMap().broadcastPacket(affected, EffectPacket.showBuffEffect(affected.getId(), sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level), false);
                     }
                     if (isTimeLeap()) {
                         for (CoolDownValueHolder i : affected.getCooldowns()) {
@@ -1263,7 +1263,7 @@ public class StatEffect implements Serializable {
         handleExtraEffect(applyfrom, applyto, localstatups, localDuration);
 
         if (localstatups.size() > 0 && !applyto.isHidden()) {
-            applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffeffect(applyto.getId(), sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level), false);
+            applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffEffect(applyto.getId(), sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level), false);
         }
         if (!isMechDoor() && getSummonMovementType() == null) {
             applyto.cancelEffect(this, true, -1, localstatups);

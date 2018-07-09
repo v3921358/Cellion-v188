@@ -6,7 +6,6 @@ import java.util.List;
 import client.ClientSocket;
 import handling.world.MovementParse;
 import java.awt.Point;
-import java.util.Arrays;
 import java.util.Random;
 import net.InPacket;
 import server.Randomizer;
@@ -20,8 +19,6 @@ import server.movement.LifeMovementFragment;
 import tools.packet.MobPacket;
 import net.ProcessPacket;
 import server.life.LifeFactory;
-import server.maps.MapleMapObject;
-import server.maps.MapleMapObjectType;
 
 /**
  * @author Steven
@@ -49,7 +46,7 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
         }
 
         short nMobControlSN = iPacket.DecodeShort();
-        boolean bNextAcctackPossible = iPacket.DecodeBool();
+        boolean bNextAttackPossible = iPacket.DecodeBool();
         byte nSkillID = iPacket.DecodeByte(); //bTeleportEnd
 
         // lol this is an int all 3 of these combined
@@ -124,7 +121,7 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
             chr.yellowMessage(String.format("[Mob Movement Debug] nAction: %s | BaseNum: %s | nForcedAttackIdx: %s", nAttackIdx, nSkillID, nForcedAttackIdx));
         }
 
-        if (bNextAcctackPossible) {
+        if (bNextAttackPossible) {
             List<MonsterSkill> skills = pMob.getStats().getSkills();
             int size = skills.size();
             if (size > 0) {
@@ -161,12 +158,12 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
         }
 
         List<MultiTarget> multiTarget = new ArrayList<>();
-        for (int i = 0; i < iPacket.DecodeByte(); i++) {//aMultiTargetForBall
+        for (int i = 0; i < iPacket.DecodeByte(); i++) { //aMultiTargetForBall
             multiTarget.add(new MultiTarget(iPacket.DecodeShort(), iPacket.DecodeShort()));
         }
 
         List<Short> randomTime = new ArrayList<>();
-        for (int i = 0; i < iPacket.DecodeByte(); i++) {//aRandTimeforAreaAttack
+        for (int i = 0; i < iPacket.DecodeByte(); i++) { //aRandTimeforAreaAttack
             randomTime.add(iPacket.DecodeShort());
         }
 
@@ -176,8 +173,7 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
         iPacket.DecodeInt(); //nMoveAction?
         iPacket.DecodeInt(); //tHitExpire
         iPacket.DecodeByte(); //fucking pointer.. (v20->vfptr[4].Update)(v20);
-         
-
+        
         //iPacket.DecodeLong(); // Padding 20 bytes
         //iPacket.DecodeLong(); // Padding 20 bytes
         //iPacket.DecodeInt(); // Padding 20 bytes
@@ -193,7 +189,6 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
             for (LifeMovementFragment m : res) {
                 Point nPOS = m.getPosition();
                 Short nFH = m.getFoothold();
-                if (nFH < 1) nFH = 1; // Super meme! Let's try :P
                 pMob.setPosition(nPOS);
                 pMob.setFh(nFH);
                 if (res.size() > 0) c.SendPacket(MobPacket.moveMonsterResponse(oid, nMobControlSN, (int) pMob.getMp(), pMob.isControllerHasAggro(), nSkill1, nSkill2, nForcedAttackIdx));
@@ -203,6 +198,6 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
         MapleMap map = c.getPlayer().getMap();
         MovementParse.updatePosition(res, pMob);
         map.moveMonster(pMob, pMob.getPosition());
-        map.broadcastPacket(chr, MobPacket.moveMonster(pMob, bNextAcctackPossible, nSkillID, nSkill1, nSkill2, nSkillOpt, oid, res, multiTarget, randomTime), pMob.getPosition());
+        map.broadcastPacket(chr, MobPacket.moveMonster(pMob, bNextAttackPossible, nSkillID, nSkill1, nSkill2, nSkillOpt, oid, res, multiTarget, randomTime), pMob.getPosition());
     }
 }
