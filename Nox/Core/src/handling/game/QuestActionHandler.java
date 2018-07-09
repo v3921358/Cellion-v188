@@ -8,8 +8,8 @@ import scripting.provider.NPCScriptManager;
 import server.maps.objects.User;
 import server.quest.Quest;
 import net.InPacket;
-import tools.LogHelper;
 import tools.packet.CField;
+import tools.packet.CField.EffectPacket;
 import tools.packet.WvsContext;
 
 /**
@@ -167,8 +167,8 @@ enum QuestRes
                 }
                 //c.getPlayer().updateTick(iPacket.DecodeInt());
                 NPCScriptManager.getInstance().endQuest(c, npc, quest, false);
-                c.SendPacket(CField.EffectPacket.showForeignEffect(CField.EffectPacket.UserEffectCodes.QuestComplete)); // Quest completion
-                chr.getMap().broadcastPacket(chr, CField.EffectPacket.showForeignEffect(chr.getId(), CField.EffectPacket.UserEffectCodes.QuestComplete), false);
+                c.SendPacket(CField.EffectPacket.showForeignEffect(EffectPacket.QuestComplete)); // Quest completion
+                chr.getMap().broadcastPacket(chr, CField.EffectPacket.showForeignEffect(chr.getId(), EffectPacket.QuestComplete), false);
                 break;
             }
         }

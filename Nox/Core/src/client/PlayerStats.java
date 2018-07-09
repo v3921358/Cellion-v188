@@ -3130,8 +3130,8 @@ public class PlayerStats implements Serializable {
         }
         if (changed) {
             pPlayer.equipChanged();
-            pPlayer.getClient().SendPacket(EffectPacket.showForeignEffect(EffectPacket.UserEffectCodes.ItemLevelup));
-            pPlayer.getMap().broadcastPacket(pPlayer, EffectPacket.showForeignEffect(pPlayer.getId(), EffectPacket.UserEffectCodes.ItemLevelup), false);
+            pPlayer.getClient().SendPacket(EffectPacket.showForeignEffect(EffectPacket.ItemLevelUp));
+            pPlayer.getMap().broadcastPacket(pPlayer, EffectPacket.showForeignEffect(pPlayer.getId(), EffectPacket.ItemLevelUp), false);
         }
         return changed;
     }

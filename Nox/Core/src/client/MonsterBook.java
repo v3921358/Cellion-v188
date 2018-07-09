@@ -29,7 +29,7 @@ import tools.LogHelper;
 import tools.Pair;
 import tools.Triple;
 import tools.packet.CField;
-import tools.packet.CField.EffectPacket.UserEffectCodes;
+import tools.packet.CField.EffectPacket;
 
 public final class MonsterBook
         implements Serializable {
@@ -336,7 +336,7 @@ public final class MonsterBook
         if ((!this.cards.containsKey(cardid)) || (this.cards.get(cardid) < 2)) {
             this.changed = true;
             c.getPlayer().dropMessage(-6, new StringBuilder().append("Book entry updated - ").append(cardname).toString());
-            c.SendPacket(CField.EffectPacket.showForeignEffect(UserEffectCodes.MonsterBookCardGet));
+            c.SendPacket(CField.EffectPacket.showForeignEffect(EffectPacket.MonsterBookCardGet));
             this.cards.put(cardid, 2);
 
             if (c.getPlayer().getQuestStatus(50195) != QuestState.Started) {
@@ -351,7 +351,7 @@ public final class MonsterBook
                 if (c.getPlayer().getQuestStatus(50197) != QuestState.Started) {
                     Quest.getInstance(50197).forceStart(c.getPlayer(), 9010000, "1");
                 }
-                c.SendPacket(CField.EffectPacket.showForeignEffect(UserEffectCodes.BiteAttack_ReceiveSuccess));//was43
+                c.SendPacket(CField.EffectPacket.showForeignEffect(EffectPacket.BiteAttackReceiveSuccess));//was43
                 if (rr > 1) {
                     applyBook(c.getPlayer(), false);
                 }
@@ -373,6 +373,6 @@ public final class MonsterBook
 
         c.getPlayer().dropMessage(-6, new StringBuilder().append("New book entry - ").append(cardname).toString());
         this.cards.put(cardid, 1);
-        c.SendPacket(CField.EffectPacket.showForeignEffect(UserEffectCodes.MonsterBookCardGet));
+        c.SendPacket(CField.EffectPacket.showForeignEffect(EffectPacket.MonsterBookCardGet));
     }
 }

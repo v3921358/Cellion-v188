@@ -23,7 +23,6 @@ import server.maps.objects.User;
 import server.quest.Quest;
 import service.ChannelServer;
 import tools.packet.*;
-import tools.packet.CField.EffectPacket.UserEffectCodes;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +40,7 @@ import enums.SummonMovementType;
 import server.maps.objects.Summon;
 import tools.packet.JobPacket.BeastTamerPacket;
 import tools.packet.BuffPacket;
+import tools.packet.CField.EffectPacket;
 import tools.packet.CField.SummonPacket;
 
 /**
@@ -590,7 +590,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                     pMob.applyStatus(pPlayer, new MonsterStatusEffect(MonsterStatus.STUN, 1, nSkill, null, false), false, pEffect.getDuration(), true, pEffect);
                 }
 
-                pPlayer.getMap().broadcastPacket(pPlayer, CField.EffectPacket.showBuffEffect(pPlayer.getId(), nSkill, UserEffectCodes.SkillUse, pPlayer.getLevel(), nSkillLevel, iPacket.DecodeByte()), pPlayer.getTruePosition());
+                pPlayer.getMap().broadcastPacket(pPlayer, CField.EffectPacket.showBuffEffect(pPlayer.getId(), nSkill, EffectPacket.SkillUse, pPlayer.getLevel(), nSkillLevel, iPacket.DecodeByte()), pPlayer.getTruePosition());
                 break;
             }
             case NightWalker.DARK_OMEN: {
@@ -622,7 +622,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 pMob = pPlayer.getMap().getMonsterByOid(nMobID);
                 if (pMob != null) {
                     boolean success = true; // (pMob.getHp() <= pMob.getMobMaxHp() / 2L) && (pMob.getId() >= 9304000) && (pMob.getId() < 9305000);
-                    pPlayer.getMap().broadcastPacket(pPlayer, CField.EffectPacket.showBuffEffect(pPlayer.getId(), nSkill, UserEffectCodes.SkillUse, pPlayer.getLevel(), nSkillLevel, (byte) (success ? 1 : 0)), pPlayer.getTruePosition());
+                    pPlayer.getMap().broadcastPacket(pPlayer, CField.EffectPacket.showBuffEffect(pPlayer.getId(), nSkill, EffectPacket.SkillUse, pPlayer.getLevel(), nSkillLevel, (byte) (success ? 1 : 0)), pPlayer.getTruePosition());
                     if (success) {
                         pPlayer.getQuestNAdd(Quest.getInstance(GameConstants.JAGUAR)).setCustomData(String.valueOf((pMob.getId() - 9303999) * 10));
                         pPlayer.getMap().killMonster(pMob, pPlayer, true, false, (byte) 1);

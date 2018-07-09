@@ -16,6 +16,7 @@ import server.maps.objects.User;
 import server.maps.objects.Summon;
 import tools.packet.CField;
 import net.ProcessPacket;
+import tools.packet.CField.EffectPacket;
 
 /**
  *
@@ -67,8 +68,8 @@ public class SubSummonHandler implements ProcessPacket<ClientSocket> {
                     return;
                 }
                 chr.addHP((int) (chr.getStat().getCurrentMaxHp() * SkillFactory.getSkill(sum.getSkill()).getEffect(sum.getSkillLevel()).getHp() / 100.0));
-                chr.getClient().SendPacket(CField.EffectPacket.showOwnBuffEffect(sum.getSkill(), CField.EffectPacket.UserEffectCodes.SkillUseBySummoned, chr.getLevel(), sum.getSkillLevel()));
-                chr.getMap().broadcastPacket(chr, CField.EffectPacket.showBuffEffect(chr.getId(), sum.getSkill(), CField.EffectPacket.UserEffectCodes.SkillUseBySummoned, chr.getLevel(), sum.getSkillLevel()), false);
+                chr.getClient().SendPacket(CField.EffectPacket.showOwnBuffEffect(sum.getSkill(), EffectPacket.SkillUseBySummoned, chr.getLevel(), sum.getSkillLevel()));
+                chr.getMap().broadcastPacket(chr, CField.EffectPacket.showBuffEffect(chr.getId(), sum.getSkill(), EffectPacket.SkillUseBySummoned, chr.getLevel(), sum.getSkillLevel()), false);
                 break;
             case 1321007: //beholder
             case 1301013: // Evil Eye
@@ -87,9 +88,9 @@ public class SubSummonHandler implements ProcessPacket<ClientSocket> {
                     }
                     chr.addHP(healEffect.getHp());
                 }
-                chr.getClient().SendPacket(CField.EffectPacket.showOwnBuffEffect(sum.getSkill(), CField.EffectPacket.UserEffectCodes.SkillUseBySummoned, chr.getLevel(), bHealingLvl));
+                chr.getClient().SendPacket(CField.EffectPacket.showOwnBuffEffect(sum.getSkill(), EffectPacket.SkillUseBySummoned, chr.getLevel(), bHealingLvl));
                 chr.getMap().broadcastPacket(CField.SummonPacket.summonSkill(chr.getId(), sum.getSkill(), bHealing.getId() == 1320008 ? 5 : (Randomizer.nextInt(3) + 6)));
-                chr.getMap().broadcastPacket(chr, CField.EffectPacket.showBuffEffect(chr.getId(), sum.getSkill(), CField.EffectPacket.UserEffectCodes.SkillUseBySummoned, chr.getLevel(), bHealingLvl), false);
+                chr.getMap().broadcastPacket(chr, CField.EffectPacket.showBuffEffect(chr.getId(), sum.getSkill(), EffectPacket.SkillUseBySummoned, chr.getLevel(), bHealingLvl), false);
                 break;
         }
         if (GameConstants.isAngel(sum.getSkill())) {
@@ -104,8 +105,8 @@ public class SubSummonHandler implements ProcessPacket<ClientSocket> {
                     MapleItemInformationProvider.getInstance().getItemEffect(2022746).applyTo(chr);
                     break;
             }
-            chr.getClient().SendPacket(CField.EffectPacket.showOwnBuffEffect(sum.getSkill(), CField.EffectPacket.UserEffectCodes.SkillUseBySummoned, 2, 1));
-            chr.getMap().broadcastPacket(chr, CField.EffectPacket.showBuffEffect(chr.getId(), sum.getSkill(), CField.EffectPacket.UserEffectCodes.SkillUseBySummoned, 2, 1), false);
+            chr.getClient().SendPacket(CField.EffectPacket.showOwnBuffEffect(sum.getSkill(), EffectPacket.SkillUseBySummoned, 2, 1));
+            chr.getMap().broadcastPacket(chr, CField.EffectPacket.showBuffEffect(chr.getId(), sum.getSkill(), EffectPacket.SkillUseBySummoned, 2, 1), false);
         }
     }
 

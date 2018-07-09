@@ -18,14 +18,12 @@ import handling.world.*;
 import handling.world.MapleGeneralRanking.CandyRankingInfo;
 import net.OutPacket;
 
-import server.MapleFamiliar;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.life.Mob;
 import server.life.PlayerNPC;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
-import server.maps.objects.MonsterFamiliar;
 import enums.ExpType;
 import server.messages.ExpIncreaseMessage;
 import server.messages.MessageInterface;
@@ -34,7 +32,6 @@ import server.stores.MaplePlayerShopItem;
 import service.SendPacketOpcode;
 import tools.Pair;
 import tools.StringUtil;
-import tools.packet.CField.EffectPacket.UserEffectCodes;
 
 import java.awt.*;
 import java.util.*;
@@ -42,6 +39,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import server.messages.DropPickUpMessage;
 import server.skills.VMatrixRecord;
+import tools.packet.CField.EffectPacket;
 
 public class WvsContext {
 
@@ -3507,7 +3505,7 @@ public class WvsContext {
 
             if (inChat) {
                 OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
-                oPacket.EncodeByte(UserEffectCodes.Quest.getEffectId());
+                oPacket.EncodeByte(EffectPacket.Quest);
                 oPacket.EncodeByte(1);
                 oPacket.EncodeInt(itemId);
                 oPacket.EncodeInt(quantity);
@@ -3531,7 +3529,7 @@ public class WvsContext {
         public static OutPacket showEquipmentPickedUp(Equip item) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
-            oPacket.EncodeByte(UserEffectCodes.PickUpItem.getEffectId());
+            oPacket.EncodeByte(EffectPacket.PickUpItem);
             PacketHelper.addItemInfo(oPacket, item);
 
             return oPacket;

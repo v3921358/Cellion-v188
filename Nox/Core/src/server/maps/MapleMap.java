@@ -38,7 +38,6 @@ import service.ChannelServer;
 import tools.StringUtil;
 import tools.packet.CField;
 import tools.packet.CField.EffectPacket;
-import tools.packet.CField.EffectPacket.UserEffectCodes;
 import tools.packet.CField.NPCPacket;
 import tools.packet.CField.SummonPacket;
 import tools.packet.WvsContext;
@@ -535,8 +534,8 @@ public final class MapleMap {
                             case 8810018:
                             case 8810122:
                             case 8820001:
-                                mc.getClient().SendPacket(EffectPacket.showOwnBuffEffect(buffid, UserEffectCodes.BuffItemEffect, mc.getLevel(), 1)); // HT nine spirit
-                                broadcastPacket(mc, EffectPacket.showBuffEffect(mc.getId(), buffid, UserEffectCodes.BuffItemEffect, mc.getLevel(), 1), false); // HT nine spirit
+                                mc.getClient().SendPacket(EffectPacket.showOwnBuffEffect(buffid, EffectPacket.BuffItemEffect, mc.getLevel(), 1)); // HT nine spirit
+                                broadcastPacket(mc, EffectPacket.showBuffEffect(mc.getId(), buffid, EffectPacket.BuffItemEffect, mc.getLevel(), 1), false); // HT nine spirit
                                 break;
                         }
                     }

@@ -173,28 +173,27 @@ public class MobMovement implements ProcessPacket<ClientSocket> {
         iPacket.DecodeInt(); //nMoveAction?
         iPacket.DecodeInt(); //tHitExpire
         iPacket.DecodeByte(); //fucking pointer.. (v20->vfptr[4].Update)(v20);
-        
+
         //iPacket.DecodeLong(); // Padding 20 bytes
         //iPacket.DecodeLong(); // Padding 20 bytes
         //iPacket.DecodeInt(); // Padding 20 bytes
-
         pMob.settEncodedGatherDuration(iPacket.DecodeInt());
         pMob.setxCS(iPacket.DecodeShort());
         pMob.setyCS(iPacket.DecodeShort());
         pMob.setvXCS(iPacket.DecodeShort());
         pMob.setvYCS(iPacket.DecodeShort());
         List<LifeMovementFragment> res = MovementParse.parseMovement(iPacket);
-        
+
         //if ((Math.abs(c.getPlayer().getPosition().x - pMob.getPosition().x) < 2000) && (Math.abs(c.getPlayer().getPosition().y - pMob.getPosition().y) < 700) ) {
-            for (LifeMovementFragment m : res) {
-                Point nPOS = m.getPosition();
-                Short nFH = m.getFoothold();
-                pMob.setPosition(nPOS);
-                pMob.setFh(nFH);
-                if (res.size() > 0) c.SendPacket(MobPacket.moveMonsterResponse(oid, nMobControlSN, (int) pMob.getMp(), pMob.isControllerHasAggro(), nSkill1, nSkill2, nForcedAttackIdx));
-            }
+        c.SendPacket(MobPacket.moveMonsterResponse(oid, nMobControlSN, (int) pMob.getMp(), pMob.isControllerHasAggro(), nSkill1, nSkill2, nForcedAttackIdx));
+        for (LifeMovementFragment m : res) {
+            Point nPOS = m.getPosition();
+            Short nFH = m.getFoothold();
+            pMob.setPosition(nPOS);
+            pMob.setFh(nFH);
+        }
         //}
-        
+
         MapleMap map = c.getPlayer().getMap();
         MovementParse.updatePosition(res, pMob);
         map.moveMonster(pMob, pMob.getPosition());

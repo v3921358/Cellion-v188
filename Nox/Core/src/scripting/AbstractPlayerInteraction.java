@@ -44,7 +44,6 @@ import tools.Pair;
 import tools.Utility;
 import tools.packet.CField;
 import tools.packet.CField.EffectPacket;
-import tools.packet.CField.EffectPacket.UserEffectCodes;
 import tools.packet.CField.NPCPacket;
 import tools.packet.CField.UIPacket;
 import tools.packet.WvsContext;
@@ -228,7 +227,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final void playPortalSE() {
-        c.SendPacket(EffectPacket.showForeignEffect(-1, UserEffectCodes.PlayPortalSE));
+        c.SendPacket(EffectPacket.showForeignEffect(-1, EffectPacket.PlayPortalSE));
     }
 
     private MapleMap getWarpMap(final int map) {

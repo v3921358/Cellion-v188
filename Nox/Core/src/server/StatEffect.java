@@ -36,7 +36,6 @@ import tools.Triple;
 import tools.packet.BuffPacket;
 import tools.packet.CField;
 import tools.packet.CField.EffectPacket;
-import tools.packet.CField.EffectPacket.UserEffectCodes;
 import tools.packet.WvsContext;
 import tools.packet.JobPacket;
 import tools.packet.JobPacket.PhantomPacket;
@@ -389,8 +388,8 @@ public class StatEffect implements Serializable {
                         if (absorbMp > 0) {
                             mob.setMp(mob.getMp() - absorbMp);
                             applyto.getStat().setMp((int) (applyto.getStat().getMp() + absorbMp), applyto);
-                            applyto.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level));
-                            applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffEffect(applyto.getId(), sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level), false);
+                            applyto.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, EffectPacket.SkillUse, applyto.getLevel(), level));
+                            applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffEffect(applyto.getId(), sourceid, EffectPacket.SkillUse, applyto.getLevel(), level), false);
                         }
                     }
                     break;
@@ -495,7 +494,7 @@ public class StatEffect implements Serializable {
         }
         if (expinc != 0) {
             applyto.gainExp(expinc, true, true, false);
-            applyto.getClient().SendPacket(EffectPacket.showForeignEffect(UserEffectCodes.ExpItemConsumed));
+            applyto.getClient().SendPacket(EffectPacket.showForeignEffect(EffectPacket.ExpItemConsumed));
         } else if (sourceid / 10000 == 238) {
             final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
             final int mobid = ii.getCardMobId(sourceid);
@@ -627,8 +626,8 @@ public class StatEffect implements Serializable {
                     }
                 }
             } else if (sourceid == 2910000 || sourceid == 2910001) { //red flag
-                applyto.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.BuffItemEffect, applyto.getLevel(), level));
-                applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffEffect(applyto.getId(), sourceid, UserEffectCodes.BuffItemEffect, applyto.getLevel(), level), false);
+                applyto.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, EffectPacket.BuffItemEffect, applyto.getLevel(), level));
+                applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffEffect(applyto.getId(), sourceid, EffectPacket.BuffItemEffect, applyto.getLevel(), level), false);
 
                 applyto.getClient().SendPacket(EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Effect", applyto.getDirection() == 1, -1, 0, 0));
                 applyto.getMap().broadcastPacket(applyto, EffectPacket.showWZUOLEffect("UI/UIWindow2.img/CTF/Effect", applyto.getDirection() == 1, applyto.getId(), 0, 0), false);
@@ -691,7 +690,7 @@ public class StatEffect implements Serializable {
 
                 if (totalEXPGained > 0) { // another safety check
                     applyto.gainExp(totalEXPGained, true, true, true);
-                    applyto.getClient().SendPacket(CField.EffectPacket.showForeignEffect(-1, UserEffectCodes.FieldItemConsumed, (int) totalEXPGained));
+                    applyto.getClient().SendPacket(CField.EffectPacket.showForeignEffect(-1, EffectPacket.FieldExpItemConsumed, (int) totalEXPGained));
                 }
             }
         }
@@ -987,8 +986,8 @@ public class StatEffect implements Serializable {
                 }
                 for (User chr : awarded) {
                     applyTo(applyfrom, chr, false, null, newDuration);
-                    chr.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level));
-                    chr.getMap().broadcastPacket(chr, EffectPacket.showBuffEffect(chr.getId(), sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level), false);
+                    chr.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, EffectPacket.SkillUseBySummoned, applyfrom.getLevel(), level));
+                    chr.getMap().broadcastPacket(chr, EffectPacket.showBuffEffect(chr.getId(), sourceid, EffectPacket.SkillUseBySummoned, applyfrom.getLevel(), level), false);
                 }
             }
         } else if (isPartyBuff() && (applyfrom.getParty() != null || isGmBuff() || applyfrom.inPVP())) {
@@ -1001,8 +1000,8 @@ public class StatEffect implements Serializable {
                 if (affected.getId() != applyfrom.getId() && (isGmBuff() || (applyfrom.inPVP() && affected.getTeam() == applyfrom.getTeam() && Integer.parseInt(applyfrom.getEventInstance().getProperty("type")) != 0) || (applyfrom.getParty() != null && affected.getParty() != null && applyfrom.getParty().getId() == affected.getParty().getId()))) {
                     if ((isResurrection() && !affected.isAlive()) || (!isResurrection() && affected.isAlive())) {
                         applyTo(applyfrom, affected, false, null, newDuration);
-                        affected.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level));
-                        affected.getMap().broadcastPacket(affected, EffectPacket.showBuffEffect(affected.getId(), sourceid, UserEffectCodes.SkillUseBySummoned, applyfrom.getLevel(), level), false);
+                        affected.getClient().SendPacket(EffectPacket.showOwnBuffEffect(sourceid, EffectPacket.SkillUseBySummoned, applyfrom.getLevel(), level));
+                        affected.getMap().broadcastPacket(affected, EffectPacket.showBuffEffect(affected.getId(), sourceid, EffectPacket.SkillUseBySummoned, applyfrom.getLevel(), level), false);
                     }
                     if (isTimeLeap()) {
                         for (CoolDownValueHolder i : affected.getCooldowns()) {
@@ -1263,7 +1262,7 @@ public class StatEffect implements Serializable {
         handleExtraEffect(applyfrom, applyto, localstatups, localDuration);
 
         if (localstatups.size() > 0 && !applyto.isHidden()) {
-            applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffEffect(applyto.getId(), sourceid, UserEffectCodes.SkillUse, applyto.getLevel(), level), false);
+            applyto.getMap().broadcastPacket(applyto, EffectPacket.showBuffEffect(applyto.getId(), sourceid, EffectPacket.SkillUse, applyto.getLevel(), level), false);
         }
         if (!isMechDoor() && getSummonMovementType() == null) {
             applyto.cancelEffect(this, true, -1, localstatups);

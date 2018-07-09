@@ -26,7 +26,6 @@ import tools.Pair;
 import tools.StringUtil;
 import tools.packet.CField;
 import tools.packet.CField.EffectPacket;
-import tools.packet.CField.EffectPacket.UserEffectCodes;
 
 public class Quest implements Serializable {
 
@@ -328,8 +327,8 @@ public class Quest implements Serializable {
             // we save forfeits only for logging purposes, they shouldn't matter anymore
             // completion time is set by the constructor
 
-            c.getClient().SendPacket(EffectPacket.showForeignEffect(UserEffectCodes.QuestComplete)); // Quest completion
-            c.getMap().broadcastPacket(c, EffectPacket.showForeignEffect(c.getId(), UserEffectCodes.QuestComplete), false);
+            c.getClient().SendPacket(EffectPacket.showForeignEffect(EffectPacket.QuestComplete)); // Quest completion
+            c.getMap().broadcastPacket(c, EffectPacket.showForeignEffect(c.getId(), EffectPacket.QuestComplete), false);
         }
     }
 
@@ -399,8 +398,8 @@ public class Quest implements Serializable {
         for (QuestAction a : this.completeActs) {
             a.runEnd(c, null);
         }
-        c.getClient().SendPacket(CField.EffectPacket.showForeignEffect(UserEffectCodes.QuestComplete));
-        c.getMap().broadcastPacket(c, CField.EffectPacket.showForeignEffect(c.getId(), UserEffectCodes.QuestComplete), false);
+        c.getClient().SendPacket(CField.EffectPacket.showForeignEffect(EffectPacket.QuestComplete));
+        c.getMap().broadcastPacket(c, CField.EffectPacket.showForeignEffect(c.getId(), EffectPacket.QuestComplete), false);
     }
 
     public static enum MedalQuest {

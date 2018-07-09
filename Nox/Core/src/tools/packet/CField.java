@@ -753,7 +753,7 @@ public class CField {
     public static OutPacket startMapEffect(String msg, int itemid, boolean active) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.BlowWeather.getValue());
-        
+
         oPacket.EncodeInt(itemid);
         if (itemid > 0) {
             oPacket.EncodeString(msg);
@@ -1208,7 +1208,7 @@ public class CField {
 
         oPacket.EncodeInt(0); // LOOP: If int > 0, write a string
         oPacket.EncodeByte(1);
-        
+
         oPacket.EncodeByte(0); // if byte > 0 && another byte, decode two ints, two shorts, something to do with 12101025 (Flashfire)
         oPacket.EncodeByte(0);//CUser::StarPlanetRank::Decode
         oPacket.EncodeInt(0); //sub_15ECDF0
@@ -4489,105 +4489,83 @@ public class CField {
 
     public static class EffectPacket {
 
-        public static enum UserEffectCodes {
-
-            LevelUp((byte) 0x00),
-            SkillUse((byte) 0x01),
-            SkillUseBySummoned((byte) 0x02),
-            SkillAffected((byte) 0x03),
-            SkillAffected_Ex((byte) 0x04),
-            SkillAffected_Select((byte) 0x05),
-            SkillSpecialAffected((byte) 0x06),
-            Quest((byte) 0x07), // mastery book effect if sending 0
-            Pet((byte) 0x08),
-            SkillSpecial((byte) 0x09),
-            Resist((byte) 0x0A),
-            ProtectOnDieItemUse((byte) 0x0B), // 'The EXP did not drop after using item'
-            PlayPortalSE((byte) 0x0C),
-            JobChanged((byte) 0x0D), // Seems to be some item box opening effect
-            QuestComplete((byte) 0x0E),
-            IncDecHPEffect((byte) 0x0F),
-            BuffItemEffect((byte) 0x10), // Seems to be some item box opening effect
-            SquibEffect((byte) 0x11),
-            MonsterBookCardGet((byte) 0x12), // mainly sound only, GMS 170 doesnt seems to have the effect animation anymore :( 
-            LotteryUse((byte) 0x13),
-            ItemLevelup((byte) 0x14),
-            ItemMaker((byte) 0x15),
-            ExpItemConsumed((byte) 0x16), // Seems to be some item box opening effect, same as unknown3
-            FieldItemConsumed((byte) 0x17), // EXP gained when you touch the exp objects spawned by killing mobs
-            ReservedEffect((byte) 0x18), // not sure
-            // Something new is in here, missing in KMST 0x19
-            UpgradeTombItemUse((byte) 0x1A), // Wheel of Destiny
-            BattlefieldItemUse((byte) 0x1B), // Premium wheel of destiny
-            AvatarOriented((byte) 0x1B),
-            AvatarOrientedRepeat((byte) 0x1C),
-            AvatarOrientedMultipleRepeat((byte) 0x1D),
-            IncubatorUse((byte) 0x1E),
-            PlaySoundWithMuteBGM((byte) 0x1F), // This may be wrong, I can't confirm it
-            PlayExclSoundWithDownBGM((byte) 0x20), // This may be wrong, I can't confirm it
-            // Something new is in here, missing in KMST 0x21
-            SpiritStoneUse((byte) 0x22),
-            IncDecHPEffect_EX((byte) 0x23),
-            IncDecHPRegenEffect((byte) 0x24),
-            // Something new is in here, missing in KMST 0x25
-            EffectUOL((byte) 0x26),
-            PVP((byte) 0x27),
-            PvPChampion((byte) 0x28),
-            PvPGradeUp((byte) 0x29),
-            PvPRevive((byte) 0x2A), // character flickers lol
-            JobEffect((byte) 0x2B),
-            FadeInOut((byte) 0x2C),
-            MobSkillHit((byte) 0x2D),
-            AswanSiegeAttack((byte) 0x2E), // some map arrows it seems
-            BlindEffect((byte) 0x2F),
-            BossShieldCount((byte) 0x30),
-            ResetOnStateForOnOffSkill((byte) 0x33), // Angelic Burster Recharge (0x33) Version 180
-            JewelCraft((byte) 0x32),
-            ConsumeEffect((byte) 0x33), // don't know what the id for this is, since 0x33 is Angelic Buster recharge
-            PetBuff((byte) 0x34), // some esclamation mark if 0 is sent
-            LotteryUIResult((byte) 0x35),
-            LeftMonsterNumber((byte) 0x36),
-            ReservedEffectRepeat((byte) 0x37),
-            RobbinsBomb((byte) 0x38),
-            SkillMode((byte) 0x39),
-            ActQuestComplete((byte) 0x3A),
-            Point((byte) 0x3B), // beware! error 38 lol
-            SpeechBalloon((byte) 0x3C),
-            TextEffect((byte) 0x3D),
-            SkillPreLoopEnd((byte) 0x3E),
-            Aiming((byte) 0x3F),
-            PickUpItem((byte) 0x40),
-            BattlePvP_IncDecHp((byte) 0x41), // what is this? Just shows a monster like damaged on player
-            BiteAttack_ReceiveSuccess((byte) 0x42), // monster book caught
-            BiteAttack_ReceiveFail((byte) 0x43), // Fail animation
-            IncDecHPEffect_Delayed((byte) 0x44),
-            Lightness((byte) 0x45),
-            ActionSetUsed((byte) 0x46),
-            // Non KMST like naming convention... TODO: FIX
-            Upgrade_Option((byte) 0x48), // Shows a banner 'Congrats, you have gained Upgrade potion for playing an hour'
-            Familiar_Escape((byte) 0x4A), // familiar message in grey
-
-            /// From here onwards, these are unknowns to be updated
-            Skill_DiceEffect((byte) 0x03);
-
-            private final int effectid;
-
-            private UserEffectCodes(int effectid) {
-                this.effectid = effectid;
-            }
-
-            public int getEffectId() {
-                return effectid;
-            }
-        }
+        public static final int LevelUp = 0,
+                                SkillUse = 1,
+                                SkillUseBySummoned = 2,
+                                SkillAffected = 4,
+                                SkillAffectedEx = 5,
+                                SkillAffectedSelect = 6,
+                                SkillSpecialAffected = 7,
+                                Quest = 8,
+                                Pet = 9,
+                                SkillSpecial = 10,
+                                Resist = 11,
+                                ProtectOnDieItemUse = 12,
+                                PlayPortalSE = 13,
+                                JobChanged = 14,
+                                QuestComplete = 15,
+                                IncDecHPEffect = 16,
+                                BuffItemEffect = 17,
+                                SquibEffect = 18,
+                                MonsterBookCardGet = 19,
+                                LotteryUse = 20,
+                                ItemLevelUp = 21,
+                                ItemMaker = 22,
+                                ExpItemConsumed = 24,
+                                FieldExpItemConsumed = 25,
+                                ReservedEffect = 26,
+                                UpgradeTombItemUse = 28,
+                                BattlefieldItemUse = 30,
+                                AvatarOriented = 31,
+                                AvatarOrientedRepeat = 32,
+                                AvatarOrientedMultipleRepeat = 33,
+                                IncubatorUse = 34,
+                                PlaySoundWithMuteBGM = 35,
+                                PlayExclSoundWithDownBGM = 36,
+                                SoulStoneUse = 37,
+                                IncDecHPEffectEX = 38,
+                                IncDecHPRegenEffect = 39,
+                                EffectUOL = 40,
+                                PvPRage = 41,
+                                PvPChampion = 42,
+                                PvPGradeUp = 43,
+                                PvPRevive = 44,
+                                JobEffect = 45,
+                                FadeInOut = 46,
+                                MobSkillHit = 47,
+                                BlindEffect = 48,
+                                BossShieldCount = 49,
+                                ResetOnStateForOnOffSkill = 50,
+                                JewelCraft = 51,
+                                ConsumeEffect = 52,
+                                PetBuff = 53,
+                                LotteryUIResult = 54,
+                                LeftMonsterNumber = 55,
+                                ReservedEffectRepeat = 56,
+                                RobbinsBomb = 57,
+                                SkillMode = 58,
+                                ActQuestComplete = 59,
+                                Point = 60,
+                                SpeechBalloon = 61,
+                                TextEffect = 62,
+                                SkillPreLoopEnd = 63,
+                                Aiming = 64,
+                                PickUpItem = 65,
+                                BattlePvPIncDecHp = 66,
+                                BiteAttackReceiveSuccess = 67,
+                                BiteAttackReceiveFail = 68,
+                                IncDecHPEffectDelayed = 69,
+                                Lightness = 70,
+                                UserActionSetUsed = 71;
 
         /**
          * OnUserEffect
+         *
          * @author Mazen Massoud
          * @purpose Handle all UserEffectLocal and UserEffectRemote packets.
-         * 
+         *
          * @param dwCharID
-         * @param pEffect
+         * @param nEffect
          * @param nPetIndex
          * @param sData
          * @param tTime
@@ -4603,28 +4581,22 @@ public class CField {
          * @param nEffectID_2
          * @param bSafetyCharm
          * @param pItem
-         * @return 
+         * @return
          */
-        public static OutPacket OnUserEffect(int dwCharID, UserEffectCodes pEffect, int nPetIndex, String sData, int tTime, int nValue, 
+        public static OutPacket OnUserEffect(int dwCharID, int nEffect, int nPetIndex, String sData, int tTime, int nValue,
                 boolean bFlipImage, int nCharacterLV, int nSkillID, int nSkillLV, byte nDirection, byte nCharmsLeft, int nItemID,
                 int nEffectID, int nEffectID_2, boolean bSafetyCharm, Equip pItem) {
-            
+
             OutPacket oPacket;
             if (dwCharID == -1 || dwCharID == 0) {
                 oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
             } else {
                 oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
-                switch (pEffect) {
-                    case Quest:
-                    case PickUpItem:
-                        break;
-                    default:
-                        oPacket.EncodeInt(dwCharID);
-                }
+                oPacket.EncodeInt(dwCharID);
             }
-            
-            oPacket.EncodeByte(pEffect.getEffectId());
-            switch (pEffect) {
+
+            oPacket.EncodeByte(nEffect);
+            switch (nEffect) {
                 case Quest:
                     oPacket.EncodeByte(1);
                     oPacket.EncodeInt(nItemID);
@@ -4666,7 +4638,7 @@ public class CField {
                 case SkillUseBySummoned:
                     oPacket.EncodeInt(nSkillID);
                     oPacket.EncodeByte(nCharacterLV - 1);
-                    if (pEffect == UserEffectCodes.SkillUseBySummoned && nSkillID == 31111003) {
+                    if (nEffect == SkillUseBySummoned && nSkillID == 31111003) {
                         oPacket.EncodeInt(0);
                     }
                     oPacket.EncodeByte(nSkillLV);
@@ -4690,7 +4662,7 @@ public class CField {
                         oPacket.EncodeByte(0);
                     }
                     break;
-                case IncDecHPEffect_EX:
+                case IncDecHPEffectEX:
                     oPacket.EncodeInt(nValue);
                     break;
                 case TextEffect: // Burning Field
@@ -4706,7 +4678,7 @@ public class CField {
                     oPacket.EncodeInt(0);
                     oPacket.EncodeInt(0);
                     break;
-                case Skill_DiceEffect:
+                case SkillAffectedSelect:
                     oPacket.EncodeInt(nEffectID);
                     oPacket.EncodeInt(nEffectID_2);
                     oPacket.EncodeInt(nSkillID);
@@ -4729,17 +4701,17 @@ public class CField {
             }
             return oPacket;
         }
-        
-        public static OutPacket showForeignEffect(UserEffectCodes effect) {
+
+        public static OutPacket showForeignEffect(int effect) {
             return showForeignEffect(-1, effect, 0);
         }
 
-        public static OutPacket showForeignEffect(int cid, UserEffectCodes effect) {
+        public static OutPacket showForeignEffect(int cid, int effect) {
             return showForeignEffect(-1, effect, 0);
         }
 
-        public static OutPacket showForeignEffect(int cid, UserEffectCodes effect, int val) {
-            return OnUserEffect(cid, effect, 0, "", 0, val, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);  
+        public static OutPacket showForeignEffect(int cid, int effect, int val) {
+            return OnUserEffect(cid, effect, 0, "", 0, val, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
         }
 
         /**
@@ -4749,7 +4721,7 @@ public class CField {
          * @return
          */
         public static OutPacket showBurningFieldTextEffect(String bannerText) { // added
-            return OnUserEffect(0, UserEffectCodes.TextEffect, 0, bannerText, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
+            return OnUserEffect(0, EffectPacket.TextEffect, 0, bannerText, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
         }
 
         public static OutPacket showOwnDiceEffect(int skillid, int effectid, int effectid2, int level) {
@@ -4757,11 +4729,11 @@ public class CField {
         }
 
         public static OutPacket showDiceEffect(int cid, int skillid, int effectid, int effectid2, int level) { // added
-            return OnUserEffect(cid, UserEffectCodes.Skill_DiceEffect, 0, "", 0, 0, false, 0, skillid, level, (byte) 0, (byte) 0, 0, effectid, effectid2, false, null);
+            return OnUserEffect(cid, EffectPacket.SkillAffectedSelect, 0, "", 0, 0, false, 0, skillid, level, (byte) 0, (byte) 0, 0, effectid, effectid2, false, null);
         }
 
         public static OutPacket useCharm(byte charmsleft, byte daysleft, boolean safetyCharm) { // added
-            return OnUserEffect(0, UserEffectCodes.ProtectOnDieItemUse, 0, "", daysleft, 0, false, 0, 0, 0, (byte) 0, (byte) charmsleft, 0, 0, 0, safetyCharm, null);
+            return OnUserEffect(0, EffectPacket.ProtectOnDieItemUse, 0, "", daysleft, 0, false, 0, 0, 0, (byte) 0, (byte) charmsleft, 0, 0, 0, safetyCharm, null);
         }
 
         public static OutPacket showOwnHpHealed(int amount) {
@@ -4769,7 +4741,7 @@ public class CField {
         }
 
         public static OutPacket showHpHealed(int cid, int amount) { // added
-            return OnUserEffect(cid, UserEffectCodes.BuffItemEffect, 0, "", 0, amount, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
+            return OnUserEffect(cid, EffectPacket.BuffItemEffect, 0, "", 0, amount, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
         }
 
         public static OutPacket showRewardItemAnimation(int itemId, String effect) {
@@ -4777,26 +4749,26 @@ public class CField {
         }
 
         public static OutPacket showRewardItemAnimation(int itemId, String effect, int from_playerid) { // added
-            return OnUserEffect(from_playerid, UserEffectCodes.BuffItemEffect, 0, effect, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, itemId, 0, 0, false, null);
+            return OnUserEffect(from_playerid, EffectPacket.BuffItemEffect, 0, effect, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, itemId, 0, 0, false, null);
         }
 
         public static OutPacket useWheel(byte charmsleft) { // added
-            return OnUserEffect(0, UserEffectCodes.UpgradeTombItemUse, 0, "", 0, 0, false, 0, 0, 0, (byte) 0, (byte) charmsleft, 0, 0, 0, false, null);
+            return OnUserEffect(0, EffectPacket.UpgradeTombItemUse, 0, "", 0, 0, false, 0, 0, 0, (byte) 0, (byte) charmsleft, 0, 0, 0, false, null);
         }
 
-        public static OutPacket showOwnBuffEffect(int skillid, UserEffectCodes effect, int playerLevel, int skillLevel) {
+        public static OutPacket showOwnBuffEffect(int skillid, int effect, int playerLevel, int skillLevel) {
             return showBuffEffect(-1, skillid, effect, playerLevel, skillLevel, (byte) 3);
         }
 
-        public static OutPacket showOwnBuffEffect(int skillid, UserEffectCodes effect, int playerLevel, int skillLevel, byte direction) {
+        public static OutPacket showOwnBuffEffect(int skillid, int effect, int playerLevel, int skillLevel, byte direction) {
             return showBuffEffect(-1, skillid, effect, playerLevel, skillLevel, direction);
         }
 
-        public static OutPacket showBuffEffect(int cid, int skillid, UserEffectCodes effect, int playerLevel, int skillLevel) {
+        public static OutPacket showBuffEffect(int cid, int skillid, int effect, int playerLevel, int skillLevel) {
             return showBuffEffect(cid, skillid, effect, playerLevel, skillLevel, (byte) 3);
         }
 
-        public static OutPacket showBuffEffect(int cid, int skillid, UserEffectCodes effect, int playerLevel, int skillLevel, byte direction) { // added
+        public static OutPacket showBuffEffect(int cid, int skillid, int effect, int playerLevel, int skillLevel, byte direction) { // added
             return OnUserEffect(cid, effect, 0, "", 0, 0, false, playerLevel, skillid, skillLevel, (byte) direction, (byte) 0, 0, 0, 0, false, null);
         }
 
@@ -4816,7 +4788,7 @@ public class CField {
          * @return
          */
         public static OutPacket showWZUOLEffect(String data, boolean flipImage, int characterid, int time, int mode) { // added
-            return OnUserEffect(characterid, UserEffectCodes.ReservedEffect, 0, data, time, 0, flipImage, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
+            return OnUserEffect(characterid, EffectPacket.ReservedEffect, 0, data, time, 0, flipImage, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
         }
 
         /**
@@ -4826,22 +4798,22 @@ public class CField {
          * @return
          */
         public static OutPacket showReservedEffect_CutScene(String data) {
-            return OnUserEffect(0, UserEffectCodes.ReservedEffect, 0, data, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
+            return OnUserEffect(0, EffectPacket.ReservedEffect, 0, data, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
         }
 
-        public static OutPacket showOwnPetLevelUp(User chr, byte index) { 
-            return OnUserEffect(chr.getId(), UserEffectCodes.Pet, index, "", 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
+        public static OutPacket showOwnPetLevelUp(User chr, byte index) {
+            return OnUserEffect(chr.getId(), EffectPacket.Pet, index, "", 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
         }
-        
+
         public static OutPacket showCashItemEffect(int itemId) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.EncodeByte(UserEffectCodes.FieldItemConsumed.getEffectId());
+            oPacket.EncodeByte(EffectPacket.FieldExpItemConsumed);
             oPacket.EncodeInt(itemId);
 
             return oPacket;
         }
-        
+
         public static OutPacket Mulung_DojoUp2() {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());

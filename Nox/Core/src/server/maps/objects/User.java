@@ -75,7 +75,6 @@ import service.LoginServer;
 import tools.*;
 import tools.packet.*;
 import tools.packet.CField.EffectPacket;
-import tools.packet.CField.EffectPacket.UserEffectCodes;
 import tools.packet.CField.NPCPacket;
 import tools.packet.CField.SummonPacket;
 import tools.packet.CUserLocal.DeadUIStats;
@@ -3480,8 +3479,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
         } else {
             addHP(-bloodEffect.getX());
-            client.write(EffectPacket.showOwnBuffEffect(bloodEffect.getSourceId(), UserEffectCodes.SkillSpecial, getLevel(), bloodEffect.getLevel()));
-            map.broadcastMessage(MapleCharacter.this, EffectPacket.showBuffeffect(getId(), bloodEffect.getSourceId(), UserEffectCodes.SkillSpecial, getLevel(), bloodEffect.getLevel()), false);
+            client.write(EffectPacket.showOwnBuffEffect(bloodEffect.getSourceId(), EffectPacket.SkillSpecial, getLevel(), bloodEffect.getLevel()));
+            map.broadcastMessage(MapleCharacter.this, EffectPacket.showBuffeffect(getId(), bloodEffect.getSourceId(), EffectPacket.SkillSpecial, getLevel(), bloodEffect.getLevel()), false);
         }
          */
     }
@@ -3649,8 +3648,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             } else {
                 energyLevel = Math.min(energyLevel + skillEffect.getX() * targets, 10000);
                 //System.out.println("CHARGE APPLIED: " + energyLevel);
-                this.client.SendPacket(CField.EffectPacket.showOwnBuffEffect(echskill.getId(), UserEffectCodes.SkillUse, getLevel(), skillLevel));
-                //this.map.broadcastMessage(this, CField.EffectPacket.showBuffeffect(this.id, skillid, UserEffectCodes.SkillUseBySummoned, getLevel(), skilllevel), false);
+                this.client.SendPacket(CField.EffectPacket.showOwnBuffEffect(echskill.getId(), EffectPacket.SkillUse, getLevel(), skillLevel));
+                //this.map.broadcastMessage(this, CField.EffectPacket.showBuffeffect(this.id, skillid, EffectPacket.SkillUseBySummoned, getLevel(), skilllevel), false);
 
                 this.client.SendPacket(BuffPacket.giveEnergyCharged(this, energyLevel, echskill.getId(), -1));
                 setBuffedValue(CharacterTemporaryStat.EnergyCharged, energyLevel);
@@ -4394,8 +4393,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             characterCard.recalcLocalStats(this);
             stats.OnCalculateLocalStats(this);
             client.SendPacket(WvsContext.OnPlayerStatChanged(this, statup));
-            //map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), UserEffectCodes.JobChanged), false); // Bugged, displays for all players.
-            client.SendPacket(EffectPacket.showForeignEffect(getId(), UserEffectCodes.JobChanged));
+            //map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), EffectPacket.JobChanged), false); // Bugged, displays for all players.
+            client.SendPacket(EffectPacket.showForeignEffect(getId(), EffectPacket.JobChanged));
             silentPartyUpdate();
             guildUpdate();
 
@@ -5761,7 +5760,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         stats.OnCalculateLocalStats(this);
         
         /*Effect Packet & Value Updates*/
-        client.SendPacket(EffectPacket.showForeignEffect(getId(), UserEffectCodes.LevelUp));
+        client.SendPacket(EffectPacket.showForeignEffect(getId(), EffectPacket.LevelUp));
         AndroidEmotionChanger.changeEmotion(this, 10);
         silentPartyUpdate();
         guildUpdate();
@@ -6029,8 +6028,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         // client.write(CField.getAndroidTalkStyle(2008, "Yay", 2));
         stats.setInfo(maxhp, maxmp, localhp, localmp);
         client.SendPacket(WvsContext.OnPlayerStatChanged(this, statup));
-        //map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), UserEffectCodes.LevelUp), true); // lol this is buggy.
-        client.SendPacket(EffectPacket.showForeignEffect(getId(), UserEffectCodes.LevelUp));
+        //map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), EffectPacket.LevelUp), true); // lol this is buggy.
+        client.SendPacket(EffectPacket.showForeignEffect(getId(), EffectPacket.LevelUp));
         characterCard.recalcLocalStats(this);
         stats.OnCalculateLocalStats(this);
 
@@ -8317,8 +8316,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             lastBerserkTime = System.currentTimeMillis();
             final StatEffect ampStat = BerserkX.getEffect(skilllevel);
             stats.Berserk = stats.getHp() * 100 / stats.getCurrentMaxHp() >= ampStat.getX();
-            client.SendPacket(EffectPacket.showOwnBuffEffect(1320006, UserEffectCodes.SkillUse, getLevel(), skilllevel, (byte) (stats.Berserk ? 1 : 0)));
-            map.broadcastPacket(this, EffectPacket.showBuffEffect(getId(), 1320006, UserEffectCodes.SkillUse, getLevel(), skilllevel, (byte) (stats.Berserk ? 1 : 0)), false);
+            client.SendPacket(EffectPacket.showOwnBuffEffect(1320006, EffectPacket.SkillUse, getLevel(), skilllevel, (byte) (stats.Berserk ? 1 : 0)));
+            map.broadcastPacket(this, EffectPacket.showBuffEffect(getId(), 1320006, EffectPacket.SkillUse, getLevel(), skilllevel, (byte) (stats.Berserk ? 1 : 0)), false);
         } else {
             lastBerserkTime = -1; // somebody thre? O_O
         }
