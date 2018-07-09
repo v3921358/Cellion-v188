@@ -17,6 +17,7 @@ import net.OutPacket;
 import server.Randomizer;
 import server.life.Mob;
 import server.maps.objects.User;
+import tools.packet.CField.EffectPacket.UserEffectCodes;
 
 /**
  *
@@ -475,12 +476,7 @@ public class JobPacket {
     public static class AngelicPacket {
 
         public static OutPacket showRechargeEffect() {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.EncodeByte(0x33/*UserEffectCodes.ResetOnStateForOnOffSkill.getEffectId()*/);
-            oPacket.EncodeByte(1);
-
-            return oPacket;
+            return CField.EffectPacket.OnUserEffect(0, UserEffectCodes.ResetOnStateForOnOffSkill, 0, "", 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
         }
 
         public static OutPacket DressUpTime(byte type) {

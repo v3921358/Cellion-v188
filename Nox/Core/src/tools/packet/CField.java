@@ -4581,129 +4581,10 @@ public class CField {
             }
         }
 
-        public static OutPacket showForeignEffect(UserEffectCodes effect) {
-            return showForeignEffect(-1, effect, 0);
-        }
-
-        public static OutPacket showForeignEffect(int cid, UserEffectCodes effect) {
-            return showForeignEffect(-1, effect, 0);
-        }
-
-        public static OutPacket showForeignEffect(int cid, UserEffectCodes effect, int val) {
-            return OnUserEffect(cid, effect, 0, "", 0, val, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);  
-        }
-
-        /**
-         * Shows the text message with regards to burning field when entering a map
-         *
-         * @param bannerText
-         * @return
-         */
-        public static OutPacket showBurningFieldTextEffect(String bannerText) { // added
-            return OnUserEffect(0, UserEffectCodes.TextEffect, 0, bannerText, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
-        }
-
-        public static OutPacket showOwnDiceEffect(int skillid, int effectid, int effectid2, int level) {
-            return showDiceEffect(-1, skillid, effectid, effectid2, level);
-        }
-
-        public static OutPacket showDiceEffect(int cid, int skillid, int effectid, int effectid2, int level) { // added
-            return OnUserEffect(cid, UserEffectCodes.Skill_DiceEffect, 0, "", 0, 0, false, 0, skillid, level, (byte) 0, (byte) 0, 0, effectid, effectid2, false, null);
-        }
-
-        public static OutPacket useCharm(byte charmsleft, byte daysleft, boolean safetyCharm) { // added
-            return OnUserEffect(0, UserEffectCodes.ProtectOnDieItemUse, 0, "", daysleft, 0, false, 0, 0, 0, (byte) 0, (byte) charmsleft, 0, 0, 0, safetyCharm, null);
-        }
-
-        public static OutPacket Mulung_DojoUp2() {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.EncodeByte(10);
-
-            return oPacket;
-        }
-
-        public static OutPacket showOwnHpHealed(int amount) {
-            return showHpHealed(-1, amount);
-        }
-
-        public static OutPacket showHpHealed(int cid, int amount) { // added
-            return OnUserEffect(cid, UserEffectCodes.BuffItemEffect, 0, "", 0, amount, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
-        }
-
-        public static OutPacket showRewardItemAnimation(int itemId, String effect) {
-            return showRewardItemAnimation(itemId, effect, -1);
-        }
-
-        public static OutPacket showRewardItemAnimation(int itemId, String effect, int from_playerid) { // added
-            return OnUserEffect(from_playerid, UserEffectCodes.BuffItemEffect, 0, effect, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, itemId, 0, 0, false, null);
-        }
-
-        /*public static OutPacket showCashItemEffect(int itemId) {
-
-            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
-            oPacket.EncodeByte(UserEffectCodes.FieldItemConsumed.getEffectId());
-            oPacket.EncodeInt(itemId);
-
-            return oPacket;
-        }*/
-
-        public static OutPacket useWheel(byte charmsleft) { // added
-            return OnUserEffect(0, UserEffectCodes.UpgradeTombItemUse, 0, "", 0, 0, false, 0, 0, 0, (byte) 0, (byte) charmsleft, 0, 0, 0, false, null);
-        }
-
-        public static OutPacket showOwnBuffEffect(int skillid, UserEffectCodes effect, int playerLevel, int skillLevel) {
-            return showBuffEffect(-1, skillid, effect, playerLevel, skillLevel, (byte) 3);
-        }
-
-        public static OutPacket showOwnBuffEffect(int skillid, UserEffectCodes effect, int playerLevel, int skillLevel, byte direction) {
-            return showBuffEffect(-1, skillid, effect, playerLevel, skillLevel, direction);
-        }
-
-        public static OutPacket showBuffEffect(int cid, int skillid, UserEffectCodes effect, int playerLevel, int skillLevel) {
-            return showBuffEffect(cid, skillid, effect, playerLevel, skillLevel, (byte) 3);
-        }
-
-        public static OutPacket showBuffEffect(int cid, int skillid, UserEffectCodes effect, int playerLevel, int skillLevel, byte direction) { // added
-            return OnUserEffect(cid, effect, 0, "", 0, 0, false, playerLevel, skillid, skillLevel, (byte) direction, (byte) 0, 0, 0, 0, false, null);
-        }
-
-        public static OutPacket showWZUOLEffect(String data, boolean flipImage) {
-            return showWZUOLEffect(data, flipImage, -1, 0, 0);
-        }
-
-        /**
-         * Shows an image in the WZ UOL path.
-         *
-         * @param data
-         * @param flipImage Should the image be flipped horizontally?
-         * @param characterid the character object OID
-         * @param direction
-         * @param time
-         * @param mode
-         * @return
-         */
-        public static OutPacket showWZUOLEffect(String data, boolean flipImage, int characterid, int time, int mode) { // added
-            return OnUserEffect(characterid, UserEffectCodes.ReservedEffect, 0, data, time, 0, flipImage, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
-        }
-
-        /**
-         * Shows the reserved effect for map cut-scene
-         *
-         * @param data
-         * @return
-         */
-        public static OutPacket showReservedEffect_CutScene(String data) {
-            return OnUserEffect(0, UserEffectCodes.ReservedEffect, 0, data, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
-        }
-
-        public static OutPacket showOwnPetLevelUp(User chr, byte index) { 
-            return OnUserEffect(chr.getId(), UserEffectCodes.Pet, index, "", 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
-        }
-
         /**
          * OnUserEffect
-         * Handle all UserEffectLocal and UserEffectRemote packets.
+         * @author Mazen Massoud
+         * @purpose Handle all UserEffectLocal and UserEffectRemote packets.
          * 
          * @param dwCharID
          * @param pEffect
@@ -4846,6 +4727,126 @@ public class CField {
                     oPacket.EncodeByte(1);
                     break;
             }
+            return oPacket;
+        }
+        
+        public static OutPacket showForeignEffect(UserEffectCodes effect) {
+            return showForeignEffect(-1, effect, 0);
+        }
+
+        public static OutPacket showForeignEffect(int cid, UserEffectCodes effect) {
+            return showForeignEffect(-1, effect, 0);
+        }
+
+        public static OutPacket showForeignEffect(int cid, UserEffectCodes effect, int val) {
+            return OnUserEffect(cid, effect, 0, "", 0, val, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);  
+        }
+
+        /**
+         * Shows the text message with regards to burning field when entering a map
+         *
+         * @param bannerText
+         * @return
+         */
+        public static OutPacket showBurningFieldTextEffect(String bannerText) { // added
+            return OnUserEffect(0, UserEffectCodes.TextEffect, 0, bannerText, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
+        }
+
+        public static OutPacket showOwnDiceEffect(int skillid, int effectid, int effectid2, int level) {
+            return showDiceEffect(-1, skillid, effectid, effectid2, level);
+        }
+
+        public static OutPacket showDiceEffect(int cid, int skillid, int effectid, int effectid2, int level) { // added
+            return OnUserEffect(cid, UserEffectCodes.Skill_DiceEffect, 0, "", 0, 0, false, 0, skillid, level, (byte) 0, (byte) 0, 0, effectid, effectid2, false, null);
+        }
+
+        public static OutPacket useCharm(byte charmsleft, byte daysleft, boolean safetyCharm) { // added
+            return OnUserEffect(0, UserEffectCodes.ProtectOnDieItemUse, 0, "", daysleft, 0, false, 0, 0, 0, (byte) 0, (byte) charmsleft, 0, 0, 0, safetyCharm, null);
+        }
+
+        public static OutPacket showOwnHpHealed(int amount) {
+            return showHpHealed(-1, amount);
+        }
+
+        public static OutPacket showHpHealed(int cid, int amount) { // added
+            return OnUserEffect(cid, UserEffectCodes.BuffItemEffect, 0, "", 0, amount, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
+        }
+
+        public static OutPacket showRewardItemAnimation(int itemId, String effect) {
+            return showRewardItemAnimation(itemId, effect, -1);
+        }
+
+        public static OutPacket showRewardItemAnimation(int itemId, String effect, int from_playerid) { // added
+            return OnUserEffect(from_playerid, UserEffectCodes.BuffItemEffect, 0, effect, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, itemId, 0, 0, false, null);
+        }
+
+        public static OutPacket useWheel(byte charmsleft) { // added
+            return OnUserEffect(0, UserEffectCodes.UpgradeTombItemUse, 0, "", 0, 0, false, 0, 0, 0, (byte) 0, (byte) charmsleft, 0, 0, 0, false, null);
+        }
+
+        public static OutPacket showOwnBuffEffect(int skillid, UserEffectCodes effect, int playerLevel, int skillLevel) {
+            return showBuffEffect(-1, skillid, effect, playerLevel, skillLevel, (byte) 3);
+        }
+
+        public static OutPacket showOwnBuffEffect(int skillid, UserEffectCodes effect, int playerLevel, int skillLevel, byte direction) {
+            return showBuffEffect(-1, skillid, effect, playerLevel, skillLevel, direction);
+        }
+
+        public static OutPacket showBuffEffect(int cid, int skillid, UserEffectCodes effect, int playerLevel, int skillLevel) {
+            return showBuffEffect(cid, skillid, effect, playerLevel, skillLevel, (byte) 3);
+        }
+
+        public static OutPacket showBuffEffect(int cid, int skillid, UserEffectCodes effect, int playerLevel, int skillLevel, byte direction) { // added
+            return OnUserEffect(cid, effect, 0, "", 0, 0, false, playerLevel, skillid, skillLevel, (byte) direction, (byte) 0, 0, 0, 0, false, null);
+        }
+
+        public static OutPacket showWZUOLEffect(String data, boolean flipImage) {
+            return showWZUOLEffect(data, flipImage, -1, 0, 0);
+        }
+
+        /**
+         * Shows an image in the WZ UOL path.
+         *
+         * @param data
+         * @param flipImage Should the image be flipped horizontally?
+         * @param characterid the character object OID
+         * @param direction
+         * @param time
+         * @param mode
+         * @return
+         */
+        public static OutPacket showWZUOLEffect(String data, boolean flipImage, int characterid, int time, int mode) { // added
+            return OnUserEffect(characterid, UserEffectCodes.ReservedEffect, 0, data, time, 0, flipImage, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
+        }
+
+        /**
+         * Shows the reserved effect for map cut-scene
+         *
+         * @param data
+         * @return
+         */
+        public static OutPacket showReservedEffect_CutScene(String data) {
+            return OnUserEffect(0, UserEffectCodes.ReservedEffect, 0, data, 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
+        }
+
+        public static OutPacket showOwnPetLevelUp(User chr, byte index) { 
+            return OnUserEffect(chr.getId(), UserEffectCodes.Pet, index, "", 0, 0, false, 0, 0, 0, (byte) 0, (byte) 0, 0, 0, 0, false, null);
+        }
+        
+        public static OutPacket showCashItemEffect(int itemId) {
+
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
+            oPacket.EncodeByte(UserEffectCodes.FieldItemConsumed.getEffectId());
+            oPacket.EncodeInt(itemId);
+
+            return oPacket;
+        }
+        
+        public static OutPacket Mulung_DojoUp2() {
+
+            OutPacket oPacket = new OutPacket(SendPacketOpcode.UserEffectLocal.getValue());
+            oPacket.EncodeByte(10);
+
             return oPacket;
         }
     }
