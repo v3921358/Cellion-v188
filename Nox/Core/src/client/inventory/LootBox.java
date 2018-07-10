@@ -5,12 +5,16 @@ package client.inventory;
 
 import constants.GameConstants;
 import enums.InventoryType;
+import enums.NPCChatType;
+import enums.NPCInterfaceType;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import server.MapleInventoryManipulator;
 import server.maps.objects.User;
 import tools.Pair;
 import tools.Utility;
+import tools.packet.CField;
 
 /**
  * Loot Box
@@ -29,6 +33,106 @@ public class LootBox {
                             BASIC_FACE_BOX = 2431091,
                             PREMIUM_HAIR_BOX = 2431228,
                             PREMIUM_FACE_BOX = 2431092;
+    
+    public static final int FREE_LOOT_BOX = 2436114,    // Weird Gift Box
+                            VOTE_LOOT_BOX = 2436501,    // Special Gift Box
+                            DONOR_LOOT_BOX = 2431642;   // Special Value Pack Gift Box
+    
+    /**
+     * OnLootBoxRequest
+     * @param pPlayer
+     * @param nBoxID
+     * @return 
+     */
+    public static boolean OnLootBoxRequest(User pPlayer, int nBoxID) {
+        if (!pPlayer.haveItem(nBoxID) || !pPlayer.hasInventorySpace(1, 3)) {
+            return false;
+        }
+        
+        Calendar pCalendar = Calendar.getInstance();
+        int tMonth = pCalendar.get(Calendar.MONTH) + 1;
+        boolean bSeasonOne = false, bSeasonTwo = false, bSeasonThree = false, bSeasonFour = false;
+        int nTopTierChance, nMidTierChance, nFirstResult = 0, nSecondResult = 0, nThirdResult = 0;
+        int[] aItemPool = {0};
+        String sBoxName = "", sTierResult = "", sFirstTier = "", sSecondTier = "", sThirdTier = "";
+        
+        if (tMonth >= 1 && tMonth <= 3) bSeasonOne = true; 
+        else if (tMonth >= 4 && tMonth <= 6) bSeasonTwo = true;
+        else if (tMonth >= 7 && tMonth <= 9) bSeasonThree = true;
+        else if (tMonth >= 10 && tMonth <= 12) bSeasonFour = true;
+        
+        switch (nBoxID) {
+            case FREE_LOOT_BOX:
+                sBoxName = "Weird Gift (Tier 3)";
+                nTopTierChance = 1;
+                nMidTierChance = 20;
+                break;
+            case VOTE_LOOT_BOX:
+                sBoxName = "Special Gift (Tier 2)";
+                nTopTierChance = 5;
+                nMidTierChance = 30;
+                break;
+            case DONOR_LOOT_BOX:
+                sBoxName = "Special Value Gift (Tier 1)";
+                nTopTierChance = 30;
+                nMidTierChance = 70;
+                break;
+            default:
+                return false;
+        }
+        
+        for (int i = 0; i < 3; i++) {
+            if (Utility.resultSuccess(nTopTierChance)) {
+                sTierResult = "#dLegendary#k";
+                if (bSeasonOne) aItemPool = Utility.appendArrays(aTopTier_Default, aTopTier_SeasonOne);
+                else if (bSeasonTwo) aItemPool = Utility.appendArrays(aTopTier_Default, aTopTier_SeasonTwo);
+                else if (bSeasonThree) aItemPool = Utility.appendArrays(aTopTier_Default, aTopTier_SeasonThree);
+                else if (bSeasonFour) aItemPool = Utility.appendArrays(aTopTier_Default, aTopTier_SeasonFour);
+            } else if (Utility.resultSuccess(nMidTierChance)) {
+                sTierResult = "#bRare#k";
+                if (bSeasonOne) aItemPool = Utility.appendArrays(aMidTier_Default, aMidTier_SeasonOne);
+                else if (bSeasonTwo) aItemPool = Utility.appendArrays(aMidTier_Default, aMidTier_SeasonTwo);
+                else if (bSeasonThree) aItemPool = Utility.appendArrays(aMidTier_Default, aMidTier_SeasonThree);
+                else if (bSeasonFour) aItemPool = Utility.appendArrays(aMidTier_Default, aMidTier_SeasonFour);
+            } else {
+                sTierResult = "#kNormal";
+                if (bSeasonOne) aItemPool = Utility.appendArrays(aLowTier_Default, aLowTier_SeasonOne);
+                else if (bSeasonTwo) aItemPool = Utility.appendArrays(aLowTier_Default, aLowTier_SeasonTwo);
+                else if (bSeasonThree) aItemPool = Utility.appendArrays(aLowTier_Default, aLowTier_SeasonThree);
+                else if (bSeasonFour) aItemPool = Utility.appendArrays(aLowTier_Default, aLowTier_SeasonFour);
+            }
+            
+            switch (i) {
+                case 0:
+                    sFirstTier = sTierResult;
+                    nFirstResult = aItemPool[Utility.getRandomSelection(aItemPool.length)];
+                    break;
+                case 1:
+                    sSecondTier = sTierResult;
+                    nSecondResult = aItemPool[Utility.getRandomSelection(aItemPool.length)];
+                    break;
+                case 2:
+                    sThirdTier = sTierResult;
+                    nThirdResult = aItemPool[Utility.getRandomSelection(aItemPool.length)];
+                    break;
+            }
+        }
+        
+        MapleInventoryManipulator.removeById(pPlayer.getClient(), InventoryType.USE, nBoxID, 1, false, true);
+        if (nFirstResult != 0) pPlayer.gainItem(nFirstResult, 1); 
+        if (nSecondResult != 0) pPlayer.gainItem(nSecondResult, 1); 
+        if (nThirdResult != 0) pPlayer.gainItem(nThirdResult, 1); 
+        
+        String sResult = "#d" + sBoxName + "#k\r\n"
+                       + "Loot Box Results\r\n\r\n"
+                       + "\t#v" + nFirstResult + "# : " + sFirstTier + "\r\n"
+                       + "\t#v" + nSecondResult + "# : " + sSecondTier + "\r\n"
+                       + "\t#v" + nThirdResult + "# : " + sThirdTier + "\r\n"
+                       + "";
+        
+        pPlayer.getClient().SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sResult, NPCInterfaceType.NPC_Cancellable));
+        return true;
+    }
     
     /**
      * OnNebuliteBoxRequest
@@ -106,8 +210,7 @@ public class LootBox {
         for (int i = 0; i < aBoxItems.length; i++) {
             if (aBoxItems[i][1] == pPlayer.getJob() || aBoxItems[i][1] == 0) { // Check if equip is for all jobs or the players current job.
                 if (aBoxItems[i][0] == (pPlayer.getGender() + 1) || aBoxItems[i][0] == 0) { // Check if equip is for all genders or the players current gender.
-                    aBoxResult.add(new Pair<>(aBoxItems[i][2], aBoxItems[i][3]));
-                    //pPlayer.gainItem(aBoxItems[i][2], aBoxItems[i][3]); // Give the player all items from the specified box.
+                    aBoxResult.add(new Pair<>(aBoxItems[i][2], aBoxItems[i][3])); // Give the player all items from the specified box.
                 }
                 pPlayer.dropMessage(5, "Gender: " + pPlayer.getGender() + " / Gender Required: " + aBoxItems[i][1]);
             }
@@ -157,6 +260,79 @@ public class LootBox {
         pPlayer.setFace(aBoxSelections[Utility.getRandomSelection(aBoxSelections.length)]); // Give the player a random style.
         return true;
     }
+    
+    /**
+     * Loot Box Items
+     * Season One: Items Only Available During January - March
+     * Season Two: Items Only Available During April - June
+     * Season Three: Items Only Available During July - September
+     * Season Four: Items Only Available During October - December
+     * Default: Items Available Regardless of Season
+     */
+    private static int[] aTopTier_SeasonOne = { 
+        0, // Item Name
+        0, // Item Name
+    };
+    private static int[] aMidTier_SeasonOne = {
+        0, // Item Name
+        0, // Item Name
+    };
+    private static int[] aLowTier_SeasonOne = {
+        0, // Item Name
+        0, // Item Name
+    };
+
+    private static int[] aTopTier_SeasonTwo = {
+        0, // Item Name
+        0, // Item Name
+    };
+    private static int[] aMidTier_SeasonTwo = {
+        0, // Item Name
+        0, // Item Name
+    };
+    private static int[] aLowTier_SeasonTwo = {
+        0, // Item Name
+        0, // Item Name
+    };
+    
+    private static int[] aTopTier_SeasonThree = {
+        0, // Item Name
+        0, // Item Name
+    };
+    private static int[] aMidTier_SeasonThree = {
+        0, // Item Name
+        0, // Item Name
+    };
+    private static int[] aLowTier_SeasonThree = {
+        0, // Item Name
+        0, // Item Name
+    };
+    
+    private static int[] aTopTier_SeasonFour = {
+        0, // Item Name
+        0, // Item Name
+    };
+    private static int[] aMidTier_SeasonFour = {
+        0, // Item Name
+        0, // Item Name
+    };
+    private static int[] aLowTier_SeasonFour = {
+        0, // Item Name
+        0, // Item Name
+    };
+    
+    private static int[] aTopTier_Default = { 
+        5000210, // Item Name
+        5000211, // Item Name
+    };
+    private static int[] aMidTier_Default = { 
+        5000210, // Item Name
+        5000211, // Item Name
+    };
+    private static int[] aLowTier_Default = { 
+        5000210, // Item Name
+        5000211, // Item Name
+    };
     
     /**
      * Nebulite Box

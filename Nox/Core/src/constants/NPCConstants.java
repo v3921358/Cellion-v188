@@ -35,7 +35,8 @@ public class NPCConstants {
         "chocoDay",
         "MonsterPark",
         "jobsangin", // Buff item seller
-        "2012Fool1",};
+        "2012Fool1",
+    };
 
     public static final boolean isPlayerNPC(final int nid) {
         return nid >= 9901000 && nid <= 9901920;

@@ -441,6 +441,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             if (pHandler != null) {
                 if (pHandler.ValidateState(pClientSocket)) {
                     switch (head) {
+                        case "UnknownSpam":
                         case "PrivateServerPacket":
                         case "AliveAck":
                         case "UserQuestRequest":

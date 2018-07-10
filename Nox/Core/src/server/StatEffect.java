@@ -676,8 +676,7 @@ public class StatEffect implements Serializable {
             }
 
             // Aran combo skill bonus
-            final Skill comboKillBlessingSkill
-                    = SkillFactory.getSkill(SkillConstants.getLinkSkillByJob(SkillConstants.COMBO_KILL_BLESSING, SkillConstants.L_COMBO_KILL_BLESSING, applyto.getJob()));
+            final Skill comboKillBlessingSkill = SkillFactory.getSkill(SkillConstants.getLinkSkillByJob(SkillConstants.COMBO_KILL_BLESSING, SkillConstants.L_COMBO_KILL_BLESSING, applyto.getJob()));
             final int comboKillLevel = applyto.getSkillLevel(comboKillBlessingSkill);
             if (comboKillLevel > 0) {
                 baseBonusPercentage *= comboKillBlessingSkill.getEffect(comboKillLevel).getX() / 100f;

@@ -121,6 +121,31 @@ public class Utility {
     }
     
     /**
+     * appendArrays
+     * @param aFirstArray
+     * @param aSecondArray
+     * @return Combine two arrays together
+     */
+    public static int[] appendArrays(int[] aFirstArray, int[] aSecondArray) {
+        int[] aResult = Arrays.copyOf(aFirstArray, aFirstArray.length + aSecondArray.length);
+        System.arraycopy(aSecondArray, 0, aResult, aFirstArray.length, aSecondArray.length);
+        return aResult;
+    }
+    
+    public static <T> T[] appendArrays(T[] aFirstArray, T[] aSecondArray) {
+        T[] aResult = Arrays.copyOf(aFirstArray, aFirstArray.length + aSecondArray.length);
+        System.arraycopy(aSecondArray, 0, aResult, aFirstArray.length, aSecondArray.length);
+        return aResult;
+    }
+    
+    public static int[][] appendArrays(int[][] aFirstArray, int[][] aSecondArray) {
+        int[][] aResult = new int[aFirstArray.length + aSecondArray.length][];
+        System.arraycopy(aFirstArray, 0, aResult, 0, aFirstArray.length);
+        System.arraycopy(aSecondArray, 0, aResult, aFirstArray.length, aSecondArray.length);
+        return aResult;
+    }
+    
+    /**
      * Check if Number
      *
      * @param sString

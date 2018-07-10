@@ -62,6 +62,12 @@ public class UseScriptedNPCItemHandler implements ProcessPacket<ClientSocket> {
 
         if (toUse != null && toUse.getQuantity() >= 1 && toUse.getItemId() == itemId && !chr.hasBlockedInventory() && !chr.inPVP()) {
             switch (toUse.getItemId()) {
+                case LootBox.FREE_LOOT_BOX:
+                case LootBox.VOTE_LOOT_BOX:
+                case LootBox.DONOR_LOOT_BOX: {
+                    LootBox.OnLootBoxRequest(chr, toUse.getItemId());
+                    break;
+                }
                 case LootBox.NEBULITE_BOX: {
                     LootBox.OnNebuliteBoxRequest(chr);
                     break;

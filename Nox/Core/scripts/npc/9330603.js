@@ -203,7 +203,9 @@ function action(mode, type, selection) {
 				cm.gainItem(1222002, 1);
 				cm.changeJob(6500);
 				break;
-			case 10000: //ZERO
+			case 10000:
+			case 10100: 
+			case 10112: //ZERO
 				jobName = "Zero";
 				break;
 			case 11200: //BEAST TAMER
@@ -277,6 +279,7 @@ function action(mode, type, selection) {
 			case 2002: //MERCEDES
 			case 2300: //MERCEDES1
 				jobName = "Mercedes";
+				cm.gainItem(1352000, 1);
 				cm.gainItem(1522000, 1);
 				cm.gainItem(1522004, 1);
 				cm.changeJob(2300);
@@ -298,6 +301,7 @@ function action(mode, type, selection) {
 				cm.changeJob(2100);
 				break;
 		}
+		
 		cm.gainItem(2000004, 75); //100 elixirs
 		cm.gainItem(2000005, 25); //50 power elixirs
 		cm.sendNextNoESC("You are now a #b" + jobName + "#k! I trust you will do well with your newfound skills. I've also given you some #bequipment#k to get you started and #bpotions#k to aid you in battle. Good luck in Cellion!");

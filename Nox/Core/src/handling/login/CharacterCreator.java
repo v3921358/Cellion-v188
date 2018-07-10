@@ -233,7 +233,10 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             if (pJob != LoginInformationProvider.JobType.Zero) { // Not for Zero
                 for (int i : skills[pJob.getType()]) {
                     pSkill = SkillFactory.getSkill(i);
-                    int maxLevel = pSkill.getMaxLevel();
+                    int maxLevel = 0;
+                    if (pSkill.getMaxLevel() != 0) {
+                        maxLevel = pSkill.getMaxLevel();
+                    }
                     if (maxLevel < 1) {
                         maxLevel = pSkill.getMasterLevel();
                     }

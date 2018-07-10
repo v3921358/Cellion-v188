@@ -2579,6 +2579,39 @@ public class CField {
         }
         return oPacket;
     }
+    
+    // nLeaveType
+    public static final int ByTimeOut = 0, 
+            ByScreenScroll = 1, 
+            PickedUpByUser = 2, 
+            PickedUpByMob = 3, 
+            Explode = 4, 
+            PickedUpByPet = 5,
+            PassConvex = 6, 
+            SkillPet = 7; 
+    
+    public static OutPacket OnDropLeaveField(int dwDropID, int nLeaveType, int nOption) { // this is the removeItemFromMap packet
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.DropLeaveField.getValue());
+        oPacket.EncodeByte(nLeaveType);
+        oPacket.EncodeInt(dwDropID);
+        switch (nLeaveType) {
+            case PickedUpByUser:
+            case PickedUpByMob:
+                oPacket.EncodeInt(nOption); // dwPickedUpID
+                break;
+            case Explode:
+                oPacket.EncodeShort(nOption);
+                break;
+            case PickedUpByPet:
+                oPacket.EncodeInt(nOption); // dwPickedUpID
+                oPacket.EncodeInt(0); // Unknown
+                break;
+            case SkillPet:
+                oPacket.EncodeInt(dwDropID);
+                break;
+        }
+        return oPacket;
+    }
 
     public static OutPacket spawnClockMist(final Mist clock) {
         OutPacket oPacket = new OutPacket(SendPacketOpcode.AffectedAreaCreated.getValue());
@@ -4594,9 +4627,14 @@ public class CField {
                 oPacket = new OutPacket(SendPacketOpcode.UserEffectRemote.getValue());
                 oPacket.EncodeInt(dwCharID);
             }
-
+            
+            if (ServerConstants.DEVELOPER_DEBUG_MODE) System.out.println("[UserEffect Operation] nEffect : " + nEffect);
+            
             oPacket.EncodeByte(nEffect);
             switch (nEffect) {
+                case FieldExpItemConsumed:
+                    oPacket.EncodeInt(nValue); // Exp
+                    break;
                 case Quest:
                     oPacket.EncodeByte(1);
                     oPacket.EncodeInt(nItemID);
