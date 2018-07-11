@@ -74,7 +74,7 @@ public class LootBox {
                 break;
             case DONOR_LOOT_BOX:
                 sBoxName = "Special Value Gift (Tier 1)";
-                nTopTierChance = 30;
+                nTopTierChance = 20;
                 nMidTierChance = 70;
                 break;
             default:
@@ -322,16 +322,16 @@ public class LootBox {
     };
     
     private static int[] aTopTier_Default = { 
-        5000210, // Item Name
-        5000211, // Item Name
+        0, // Item Name
+        0, // Item Name
     };
     private static int[] aMidTier_Default = { 
-        5000210, // Item Name
-        5000211, // Item Name
+        0, // Item Name
+        0, // Item Name
     };
     private static int[] aLowTier_Default = { 
-        5000210, // Item Name
-        5000211, // Item Name
+        0, // Item Name
+        0, // Item Name
     };
     
     /**

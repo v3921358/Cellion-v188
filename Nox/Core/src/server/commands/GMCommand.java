@@ -85,6 +85,26 @@ public class GMCommand {
         }
     }
     
+    public static class Prestige extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            c.getPlayer().OnPrestige();
+            c.getPlayer().dropMessage(5, "Character (" + c.getPlayer().getName() + ") is now prestige " + c.getPlayer().getPrestige() + " with a Prestige Memory of " + c.getPlayer().getPrestigeMemory());
+            return 0;
+        }
+    }
+    
+    public static class SetPrestige extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            c.getPlayer().setPrestige(Integer.parseInt(splitted[0]));
+            c.getPlayer().dropMessage(5, "Character (" + c.getPlayer().getName() + ") is now prestige " + c.getPlayer().getPrestige() + " with a Prestige Memory of " + c.getPlayer().getPrestigeMemory());
+            return 0;
+        }
+    }
+    
     public static class GetVMatrix extends CommandExecute {
 
         @Override

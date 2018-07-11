@@ -101,7 +101,7 @@ public class PlayerCommand {
             c.getPlayer().yellowMessage("----------------- PLAYER COMMANDS -----------------");
             c.getPlayer().yellowMessage("@sell <from slot> <to slot> : Sell specific item slots instantly.");
             c.getPlayer().yellowMessage("@support <message> : Send a message to availible staff members.");
-            c.getPlayer().yellowMessage("@wallet : Displays account currency information.");
+            c.getPlayer().yellowMessage("@check : Displays account currency and character information.");
             c.getPlayer().yellowMessage("@dispose : Enables your character's actions when stuck.");
             c.getPlayer().yellowMessage("@event : Quick travel to the current event, if available.");
             c.getPlayer().yellowMessage("@job : Job advance, applicable if you have missed an advancement.");
@@ -111,7 +111,7 @@ public class PlayerCommand {
         }
     }
     
-    public static class Wallet extends CommandExecute {
+    public static class Check extends CommandExecute {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
@@ -120,6 +120,8 @@ public class PlayerCommand {
             c.getPlayer().yellowMessage("Donor Points : " + c.getPlayer().getDPoints());
             c.getPlayer().yellowMessage("Vote Points : " + c.getPlayer().getVPoints());
             c.getPlayer().yellowMessage("Event Points : " + c.getPlayer().getEPoints());
+            c.getPlayer().yellowMessage("Current Prestige : " + c.getPlayer().getPrestige());
+            c.getPlayer().yellowMessage("Prestige Memory : " + c.getPlayer().getPrestigeMemory());
             c.getPlayer().completeDispose();
             return 1;
         }

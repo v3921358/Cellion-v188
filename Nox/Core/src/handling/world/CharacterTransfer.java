@@ -80,6 +80,9 @@ public class CharacterTransfer {
     /*Varialbes for V Matrix custom quest data*/
     public int nMobKillsV, nMagnusKillsV, nVellumKillsV, nCrimsonQueenKillsV, nVonBonKillsV, nPierreKillsV; 
     
+    /*Prestige Variables*/
+    public int nPrestige, nPrestigeMemory;
+    
     /*End of Custom Feature*/
     public CharacterTransfer() {
         finishedAchievements = new ArrayList<>();
@@ -294,5 +297,8 @@ public class CharacterTransfer {
             nVonBonKillsV = pPlayer.nVonBonKillsV;
             nPierreKillsV = pPlayer.nPierreKillsV;
         }
+        
+        nPrestige = pPlayer.getPrestige();
+        nPrestigeMemory = pPlayer.getPrestigeMemory();
     }
 }

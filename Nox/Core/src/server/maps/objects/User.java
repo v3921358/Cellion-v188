@@ -515,22 +515,67 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     public void setAdditionalTimeReference(long nTime) {
         nAdditionalLastTimeReference = nTime;
     }
-
-    public boolean isWarriorJob() {
-        return GameConstants.isWarriorJob(getJob());
+    
+    /**
+     * Prestige Methods
+     * @return 
+     */
+    private int nPrestige, nPrestigeMemory;
+    
+    public int getPrestige() {
+        return nPrestige;
     }
-    public boolean isBowmanJob() {
-        return GameConstants.isBowmanJob(getJob());
+    
+    public int getPrestigeMemory() {
+        return nPrestigeMemory;
     }
-    public boolean isMagicianJob() {
-        return GameConstants.isMagicianJob(getJob());
+    
+    public void setPrestige(int nAmount) {
+        nPrestige = nAmount;
     }
-    public boolean isThiefJob() {
-        return GameConstants.isThiefJob(getJob());
+    
+    public boolean OnPrestige() {
+        if (nPrestige < 20) {
+            nPrestigeMemory++;
+            nPrestige++;
+            
+            level = 200;
+            OnPrestigedLevelUp(); // Reset character to level 200.
+            
+            String sEnding;
+            switch (Utility.getLastDigit(nPrestige)) {
+                case 1:
+                    if (nPrestige == 11) sEnding = "th";
+                    else sEnding = "st";
+                    break;
+                case 2:
+                    if (nPrestige == 12) sEnding = "th";
+                    else sEnding = "nd";
+                    break;
+                case 3:
+                    if (nPrestige == 13) sEnding = "th";
+                    else sEnding = "rd";
+                    break;
+                default:
+                    sEnding = "th";
+                    break;
+            }
+            World.Broadcast.broadcastMessage(CField.getGameMessage("Congratulations to " + getName() + " for reaching " + nPrestige + sEnding + " Prestige (" + nPrestigeMemory + " Total)!", (short) 7));
+            return true;
+        }
+        dropMessage(5, "You have already reached maximum Prestige!");
+        return false;
     }
-    public boolean isPirateJob() {
-        return GameConstants.isPirateJob(getJob());
-    }
+    
+    /**
+     * Job Type Checks references off the player object.
+     * @return Determining job type for item distribution, etc.
+     */
+    public boolean isWarriorJob() { return GameConstants.isWarriorJob(getJob()); }
+    public boolean isBowmanJob() { return GameConstants.isBowmanJob(getJob()); }
+    public boolean isMagicianJob() { return GameConstants.isMagicianJob(getJob()); }
+    public boolean isThiefJob() {  return GameConstants.isThiefJob(getJob()); }
+    public boolean isPirateJob() { return GameConstants.isPirateJob(getJob()); }
     
     public boolean checkTimeout() {
         long nDuration;
@@ -1071,6 +1116,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             ret.nPierreKillsV = ct.nPierreKillsV;
         }
         
+        /*Prestige Data*/
+        ret.nPrestige = ct.nPrestige;
+        ret.nPrestigeMemory = ct.nPrestigeMemory;
         return ret;
     }
 
@@ -1172,6 +1220,10 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 ret.apstorage = rs.getInt("apstorage");
                 ret.charListPosition = rs.getInt("position");
                 ret.isBurning = rs.getBoolean("isBurning");
+                
+                ret.nPrestige = rs.getInt("prestige");
+                ret.nPrestigeMemory = rs.getInt("prestigeMemory");
+                
                 for (Trait t : ret.traits.values()) {
                     t.setExp(rs.getInt(t.getType().name()));
                 }
@@ -2076,7 +2128,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             return;
         }
         try (Connection con = Database.GetConnection()) {
-            try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, hsp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, zeroBetaHair = ?, zeroBetaFace = ?, angelicDressupHair = ?, angelicDressupFace = ?, angelicDressupSuit = ?, faceMarking = ?, ears = ?, tail = ?, map = ?, meso = ?, hpApUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, pets = ?, subcategory = ?, currentrep = ?, totalrep = ?, gachexp = ?, fatigue = ?, charm = ?, charisma = ?, craft = ?, insight = ?, sense = ?, will = ?, totalwins = ?, totallosses = ?, pvpExp = ?, pvpPoints = ?, reborns = ?, apstorage = ?, elf = ?, honourExp = ?, honourLevel = ?, friendshippoints = ?, friendshiptoadd = ?, name = ?, starterquest = ?, starterquestid = ?, evoentry = ?, position = ?, isBurning = ? WHERE id = ?", RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, hsp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, zeroBetaHair = ?, zeroBetaFace = ?, angelicDressupHair = ?, angelicDressupFace = ?, angelicDressupSuit = ?, faceMarking = ?, ears = ?, tail = ?, map = ?, meso = ?, hpApUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, pets = ?, subcategory = ?, currentrep = ?, totalrep = ?, gachexp = ?, fatigue = ?, charm = ?, charisma = ?, craft = ?, insight = ?, sense = ?, will = ?, totalwins = ?, totallosses = ?, pvpExp = ?, pvpPoints = ?, reborns = ?, apstorage = ?, elf = ?, honourExp = ?, honourLevel = ?, friendshippoints = ?, friendshiptoadd = ?, name = ?, starterquest = ?, starterquestid = ?, evoentry = ?, position = ?, isBurning = ?, prestige = ?, prestigeMemory = ? WHERE id = ?", RETURN_GENERATED_KEYS)) {
                 int index = 0;
                 ps.setInt(++index, level);
                 ps.setInt(++index, fame);
@@ -2174,6 +2226,10 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 ps.setInt(++index, evoentry);
                 ps.setInt(++index, charListPosition);
                 ps.setBoolean(++index, isBurning);
+                
+                ps.setInt(++index, nPrestige);
+                ps.setInt(++index, nPrestigeMemory);
+                
                 ps.setInt(++index, id);
 
                 if (ps.executeUpdate() < 1) {
@@ -2263,7 +2319,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
         try (Connection con = Database.GetConnection()) {
 
-            try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, hsp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, zeroBetaHair = ?, zeroBetaFace = ?, angelicDressupHair = ?, angelicDressupFace = ?, angelicDressupSuit = ?, faceMarking = ?, ears = ?, tail = ?, map = ?, meso = ?, hpApUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, pets = ?, subcategory = ?, currentrep = ?, totalrep = ?, gachexp = ?, fatigue = ?, charm = ?, charisma = ?, craft = ?, insight = ?, sense = ?, will = ?, totalwins = ?, totallosses = ?, pvpExp = ?, pvpPoints = ?, reborns = ?, apstorage = ?, elf = ?, honourExp = ?, honourLevel = ?, friendshippoints = ?, friendshiptoadd = ?, name = ?, starterquest = ?, starterquestid = ?, evoentry = ?, position = ?, isBurning = ? WHERE id = ?", RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, hsp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, zeroBetaHair = ?, zeroBetaFace = ?, angelicDressupHair = ?, angelicDressupFace = ?, angelicDressupSuit = ?, faceMarking = ?, ears = ?, tail = ?, map = ?, meso = ?, hpApUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, pets = ?, subcategory = ?, currentrep = ?, totalrep = ?, gachexp = ?, fatigue = ?, charm = ?, charisma = ?, craft = ?, insight = ?, sense = ?, will = ?, totalwins = ?, totallosses = ?, pvpExp = ?, pvpPoints = ?, reborns = ?, apstorage = ?, elf = ?, honourExp = ?, honourLevel = ?, friendshippoints = ?, friendshiptoadd = ?, name = ?, starterquest = ?, starterquestid = ?, evoentry = ?, position = ?, isBurning = ?, prestige = ?, prestigeMemory = ? WHERE id = ?", RETURN_GENERATED_KEYS)) {
                 int index = 0;
                 ps.setInt(++index, level);
                 ps.setInt(++index, fame);
@@ -2377,6 +2433,10 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 ps.setInt(++index, evoentry);
                 ps.setInt(++index, charListPosition);
                 ps.setBoolean(++index, isBurning);
+                
+                ps.setInt(++index, nPrestige);
+                ps.setInt(++index, nPrestigeMemory);
+                
                 ps.setInt(++index, id);
 
                 if (ps.executeUpdate() < 1) {
@@ -5639,6 +5699,36 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
     
     /**
+     * OnPrestigedLevelUp
+     * @author Mazen Massoud
+     * 
+     * @purpose Levels up the prestiged character without stat gains.
+     */
+    public void OnPrestigedLevelUp() {
+        
+        /*Character Stat Update*/
+        final Map<Stat, Long> pStat = new EnumMap<>(Stat.class);
+        pStat.put(Stat.MaxHP, (long) stats.getMaxHp());
+        pStat.put(Stat.MaxMP, (long) stats.getMaxMp());
+        pStat.put(Stat.HP, (long) stats.getMaxHp());
+        pStat.put(Stat.MP, (long) stats.getMaxMp());
+        pStat.put(Stat.EXP, (long) 0);
+        pStat.put(Stat.Level, (long) level);
+        stats.setInfo(stats.getMaxHp(), stats.getMaxMp(), stats.getMaxHp(), stats.getMaxMp());
+        client.SendPacket(WvsContext.OnPlayerStatChanged(this, pStat));
+        characterCard.recalcLocalStats(this);
+        stats.OnCalculateLocalStats(this);
+
+        /*Effect Packet & Value Updates*/
+        client.SendPacket(EffectPacket.showForeignEffect(getId(), EffectPacket.LevelUp));
+        AndroidEmotionChanger.changeEmotion(this, 10);
+        silentPartyUpdate();
+        guildUpdate();
+        
+        saveCharacterInfo(); // Save progress to avoid rollback.
+    }
+    
+    /**
      * OnPlayerLevelUp
      * @author Mazen Massoud
      * 
@@ -5649,12 +5739,18 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         
         level++;
         
+        if (nPrestigeMemory > 0) {
+            OnPrestigedLevelUp(); // Level up without stat gain instead.
+            return;
+        }
+        
         /*Character Stat Distribution*/
-        int nSP = 4;                                                                        // SP Gain
-        boolean bDoubleSP = false;                                                          // Double SP Bool
         final Map<Stat, Long> pStat = new EnumMap<>(Stat.class);
         int nMaxHP = stats.getMaxHp() + calculateFlatHPGain();                              // Flat HP Gain
         int nMaxMP = stats.getMaxMp() + calculateFlatMPGain();                              // Flat MP Gain
+        
+        int nSP = 4;                                                                        // SP Gain
+        boolean bDoubleSP = false;                                                          // Double SP Bool
         
         if (ServerConstants.INCREASED_HP_GAIN) nMaxHP += Randomizer.rand(40, 65);           // Bonus HP Gain for lower need of HP washing.
         
