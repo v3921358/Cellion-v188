@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 import server.life.Mob;
 import server.maps.objects.User;
+import tools.packet.MobPacket;
 
 /**
  * Training Map Handler
@@ -102,23 +103,13 @@ public class TrainingMap {
      */
     public static void OnMonsterAggressionRequest(User pPlayer) {
         ReentrantLock pLock = new ReentrantLock(true);
+        final List<MapleMapObject> aMobsToAggro = pPlayer.getMap().getMapObjectsInRange(pPlayer.getPosition(), 300000.0D, Arrays.asList(MapleMapObjectType.MONSTER));
         pLock.lock();
         try {
-            final List<MapleMapObject> aMobsToAggro = pPlayer.getMap().getMapObjectsInRange(pPlayer.getPosition(), 6000.0D, Arrays.asList(MapleMapObjectType.MONSTER));
             for (MapleMapObject pObject : aMobsToAggro) {
                 Mob pMob = (Mob) pObject;
-                if (pMob != null && pPlayer.getTruePosition().distanceSq(pMob.getTruePosition()) < 6000.0D && pMob.getLinkCID() <= 0) {
-                    if (pMob.getController() != null) {
-                        if (pPlayer.getMap().getCharacterById(pMob.getController().getId()) == null) {
-                            pMob.switchController(pPlayer, true);
-                            pPlayer.controlMonster(pMob, true);
-                        } else {
-                            pMob.switchController(pMob.getController(), true);
-                        }
-                    } else {
-                        pMob.switchController(pPlayer, true);
-                    }
-                }
+                pMob.switchController(pPlayer, true);
+                pPlayer.getClient().SendPacket(MobPacket.OnMobChangeController(pMob, true));
             }
         } finally {
             pLock.unlock();

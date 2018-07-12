@@ -72,8 +72,13 @@ public class PlayerCommand {
                     c.getPlayer().tMagnus = 0;
                     break;
                 case 5: 
-                    Mob pBoss = LifeFactory.getMonster(8880000);
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(pBoss, c.getPlayer().getPosition(), 300);
+                    Mob pElite = LifeFactory.getMonster(100100);
+                    
+                    pElite.changeLevel(200);
+                    pElite.setHp(25000);
+                    pElite.getStats().setFinalMaxHp(25000);
+                    
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(pElite, c.getPlayer().getPosition(), 200);
                     break;
                 case 6:
                     Equip pEquip = (Equip) (Equip) MapleItemInformationProvider.getInstance().getEquipById(1002140);

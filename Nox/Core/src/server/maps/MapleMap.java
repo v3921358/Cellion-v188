@@ -2218,9 +2218,12 @@ public final class MapleMap {
      * jumping down the platform]
      */
     public final void addPlayer(final User pPlayer, int lastmapid) {
-        if (ServerConstants.ANTI_CHEAT) {
+        TrainingMap.OnMonsterAggressionRequest(pPlayer); // Aggro all mobs to player.
+        
+        /*if (ServerConstants.ANTI_CHEAT) {
             pPlayer.write(AntiCheat.bannedProccessRequest()); // Check for hack programs.
-        }
+        }*/
+        
         // Update burning field state first, before adding player
         // as the respawn task of the map is not activated if no player is currently in it [optimize for resource usage]
         updateBurningField(System.currentTimeMillis());

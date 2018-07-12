@@ -74,7 +74,8 @@ public class DamageParse {
      * @param pAttackType
      */
     public static void OnWeaponAttackRequest(AttackInfo pAttack, Skill pSkill, User pPlayer, int nAttackCount, double nMaxDamagePerMonster, StatEffect pEffect, AttackType pAttackType) {
-
+        TrainingMap.OnMonsterAggressionRequest(pPlayer); // Aggro surrounding monsters.
+        
         if (ServerConstants.ADMIN_MODE) {
             pPlayer.dropMessage(-1, new StringBuilder().append("Animation: ").append(Integer.toHexString((pAttack.display & 0x8000) != 0 ? pAttack.display - 32768 : pAttack.display)).toString());
         }
@@ -251,7 +252,7 @@ public class DamageParse {
                 pTarget.damage(pPlayer, nTotalDamageToOneMonster, true, pAttack.skill); // Apply attack to the monster hit.
 
                 if (pTarget.isAlive()) { // Monster is still alive after being hit.
-                    //pPlayer.checkMonsterAggro(pTarget);
+                    pPlayer.checkMonsterAggro(pTarget);
                 } else {
                     pAttack.after_NumMobsKilled++;
                 }
@@ -579,6 +580,8 @@ public class DamageParse {
      * @param pEffect
      */
     public static void OnMagicAttackRequest(AttackInfo pAttack, Skill pSkill, User pPlayer, StatEffect pEffect) {
+        TrainingMap.OnMonsterAggressionRequest(pPlayer); // Aggro surrounding monsters.
+        
         if (ServerConstants.ADMIN_MODE) {
             pPlayer.dropMessage(-1, new StringBuilder().append("Animation: ").append(Integer.toHexString((pAttack.display & 0x8000) != 0 ? pAttack.display - 32768 : pAttack.display)).toString());
         }
@@ -734,7 +737,7 @@ public class DamageParse {
                 pMob.damage(pPlayer, nTotalDamageToOneMonster, true, pAttack.skill); // Apply damage to monster
 
                 if (pMob.isAlive()) { // Monster is still alive after being hit.
-                    //pPlayer.checkMonsterAggro(pMob);
+                    pPlayer.checkMonsterAggro(pMob);
                 } else {
                     pAttack.after_NumMobsKilled++;
                 }
@@ -1205,7 +1208,6 @@ public class DamageParse {
      */
     public static AttackInfo OnAttack(RecvPacketOpcode eType, InPacket iPacket, User pPlayer) {
 
-        //TrainingMap.OnMonsterAggressionRequest(pPlayer); // Aggro surrounding monsters.
         AttackInfo pAttack = new AttackInfo();
         if (eType == RecvPacketOpcode.UserShootAttack) {
             iPacket.DecodeByte();

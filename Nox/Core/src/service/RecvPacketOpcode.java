@@ -634,7 +634,7 @@ public enum RecvPacketOpcode {
     BattleRecordSkillDamageLog(1184),// Version 188
     EndBattleRecord(1185),// Version 188
     CommerciUINotice(1246),// Version 188
-    UserRewardRequest(1248) // Version 188
+    UserRewardRequest(1247) // Version 188
     ;
 
     // reserved for debugging purpose

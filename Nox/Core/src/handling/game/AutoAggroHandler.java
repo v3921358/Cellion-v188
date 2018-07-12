@@ -5,11 +5,11 @@ import server.life.Mob;
 import server.maps.objects.User;
 import net.InPacket;
 import net.ProcessPacket;
+import tools.packet.MobPacket;
 
 /**
- * AutoAggroHandler
- *
- * @author
+ * MobChangeController - Aggression Handler
+ * @author Mazen Massoud
  */
 public class AutoAggroHandler implements ProcessPacket<ClientSocket> {
 
@@ -21,11 +21,15 @@ public class AutoAggroHandler implements ProcessPacket<ClientSocket> {
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
         User pPlayer = c.getPlayer();
+        
         if ((pPlayer == null) || (pPlayer.getMap() == null) || (pPlayer.isHidden())) {
             return;
         }
 
         Mob pMob = pPlayer.getMap().getMonsterByOid(iPacket.DecodeInt());
+        c.SendPacket(MobPacket.OnMobChangeController(pMob, true));
+        
+        /*Mob pMob = pPlayer.getMap().getMonsterByOid(iPacket.DecodeInt());
         if (pMob != null && pPlayer.getTruePosition().distanceSq(pMob.getTruePosition()) < 200000.0D && pMob.getLinkCID() <= 0) {
             if (pMob.getController() != null) {
                 if (pPlayer.getMap().getCharacterById(pMob.getController().getId()) == null) {
@@ -36,6 +40,6 @@ public class AutoAggroHandler implements ProcessPacket<ClientSocket> {
             } else {
                 pMob.switchController(pPlayer, true);
             }
-        }
+        }*/
     }
 }

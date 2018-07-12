@@ -154,9 +154,9 @@ function action(mode, type, selection) {
     if(status == 0){
 	   introText = "You currently have #b" + dp + "#k Donor Credits.\r\n"
 				+ "What would you like to exchange them for?\r\n#r"
-				//+ "\r\n#d#fs13#Quality of Life#fs11##r\r\n"
-				//+ "#L4000#150 DP - Pet Loot Vacuum (Per Day)#l\r\n"
-				//+ "#L4001#3500 DP - Pet Loot Vacuum (30 Days)#l\r\n\r\n"
+				+ "\r\n#d#fs13#Quality of Life#fs11##r\r\n"
+				+ "#L4000#150 DP - Pet Loot Vacuum (Per Day)#l\r\n"
+				+ "#L4001#3500 DP - Pet Loot Vacuum (30 Days)#l\r\n\r\n"
 				+ "\r\n#d#fs13#Character Style#fs11##r\r\n"
 				+ "#L5000#250 DP - Premium Facial Features#l\r\n"
 				+ "#L5001#500 DP - Premium Hairstyle (Collection #1)#l\r\n"

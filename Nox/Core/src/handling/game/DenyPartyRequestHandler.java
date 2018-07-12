@@ -64,16 +64,16 @@ public class DenyPartyRequestHandler implements ProcessPacket<ClientSocket> {
                     case 37: //Decline invite
                         //To Do properly and better.. this is ugly
                         User cfrom2 = c.getChannelServer().getPlayerStorage().getCharacterById(party.getLeader().getId());
-                        cfrom2.dropMessage(5, c.getPlayer().getName() + " Has declined your party invite");
+                        cfrom2.dropMessage(5, c.getPlayer().getName() + " has declined your party invite");
                         break;
                     default:
                         break;
                 }
             } else {
-                c.getPlayer().dropMessage(5, "The party you are trying to join does not exist");
+                c.getPlayer().dropMessage(5, "The party you are trying to join does not exist.");
             }
         } else {
-            c.getPlayer().dropMessage(5, "You can't join the party as you are already in one");
+            c.getPlayer().dropMessage(5, "You can't join the party as you are already in one.");
         }
     }
 

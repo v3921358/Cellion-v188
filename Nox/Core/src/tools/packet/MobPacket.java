@@ -411,6 +411,20 @@ public class MobPacket {
         oPacket.EncodeInt(0);
     }
 
+    public static OutPacket OnMobChangeController(Mob pMob, boolean bAggressive) {
+        
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.MobChangeController.getValue());
+        oPacket.EncodeByte(bAggressive ? 2 : 1);
+        oPacket.EncodeInt(pMob.getObjectId());
+        
+        oPacket.EncodeByte(1); //nCalcDamageIndex
+        oPacket.EncodeInt(pMob.getId());
+        SetMobStat(oPacket, pMob);
+        MobInit(oPacket, pMob, pMob.getLinkCID() <= 0 ? -4 : -1, pMob.getLinkCID(), true, false, pMob.getScale());
+        
+        return oPacket;
+    }
+    
     public static OutPacket controlMonster(Mob life, boolean newSpawn, boolean aggro, boolean azwan) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.MobChangeController.getValue());
