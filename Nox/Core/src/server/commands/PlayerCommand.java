@@ -9,6 +9,7 @@ import constants.ItemConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
 import database.Database;
+import enums.ItemPotentialTierType;
 import handling.world.World;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,6 +28,7 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import enums.SavedLocationType;
 import server.maps.objects.User;
+import server.messages.StylishKillMessage;
 import tools.LogHelper;
 import tools.StringUtil;
 import tools.packet.MobPacket;
@@ -52,6 +54,7 @@ public class PlayerCommand {
             if (!ServerConstants.DEVELOPER_DEBUG_MODE) return 0;
             
             int nType = Integer.parseInt(splitted[1]);
+            int sValue = Integer.parseInt(splitted[2]);
             switch (nType) {
                 case 1: 
                     Mob pMob = LifeFactory.getMonster(100100);
@@ -93,6 +96,33 @@ public class PlayerCommand {
                     pEquip.setBonusPotential2(42051);
                     pEquip.setBonusPotential3(42051);
                     MapleInventoryManipulator.addbyItem(c, pEquip);
+                    break;
+                case 7:
+                    Equip pEquip2 = (Equip) (Equip) MapleItemInformationProvider.getInstance().getEquipById(sValue);
+                    pEquip2.setStr((short) 32767);
+                    pEquip2.setDex((short) 32767);
+                    pEquip2.setInt((short) 32767);
+                    pEquip2.setLuk((short) 32767);
+                    pEquip2.setWatk((short) 1999);
+                    pEquip2.setMatk((short) 1999);
+                    pEquip2.setBossDamage((byte) 250);
+                    pEquip2.setTotalDamage((byte) 250);
+                    pEquip2.setAllStat((byte) 999);
+                    pEquip2.setPotentialTier(ItemPotentialTierType.Legendary);
+                    pEquip2.setPotentialBonusTier(ItemPotentialTierType.Legendary);
+                    pEquip2.setStarFlag((byte) 10);
+                    pEquip2.setPotential1(42051);
+                    pEquip2.setPotential2(42051);
+                    pEquip2.setPotential3(42051);
+                    pEquip2.setBonusPotential1(42051);
+                    pEquip2.setBonusPotential2(42051);
+                    pEquip2.setBonusPotential3(42051);
+                    MapleInventoryManipulator.addbyItem(c, pEquip2);
+                    break;
+                case 8:
+                    c.getPlayer().yellowMessage("primary: "+sValue+" / secondary: "+Integer.parseInt(splitted[3])+" / tertiary: "+Integer.parseInt(splitted[4])+" / quaterary: "+Integer.parseInt(splitted[5]));
+                    //c.getPlayer().getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.MultiKill, sValue, Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5]))));
+                    //c.getPlayer().getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, sValue, Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5]))));
                     break;
             }
             return 1;

@@ -34,9 +34,10 @@ import tools.packet.WvsContext;
 import tools.packet.WvsContext.GuildPacket;
 import tools.packet.JobPacket.AvengerPacket;
 import client.jobs.Hero.PhantomHandler;
+import handling.auction.AuctionOperation;
 import net.ProcessPacket;
 import server.skills.LinkedSkill;
-import tools.packet.CSPacket;
+import service.AuctionServer;
 
 /**
  * MigrateIn 
@@ -69,6 +70,13 @@ public final class MigrateInHandler implements ProcessPacket<ClientSocket> {
             FarmOperation.EnterFarm(pFarmTransfer, c);
             return;
         }
+        
+        CharacterTransfer pAuctionTransfer = AuctionServer.getPlayerStorage().getPendingCharacter(nPlayerID);
+        if (pAuctionTransfer != null) {
+            AuctionOperation.EnterAuction(pAuctionTransfer, c);
+            return;
+        }
+        
         for (ChannelServer pChannels : ChannelServer.getAllInstances()) {
             pCashShopTransfer = pChannels.getPlayerStorage().getPendingCharacter(nPlayerID);
             if (pCashShopTransfer != null) {

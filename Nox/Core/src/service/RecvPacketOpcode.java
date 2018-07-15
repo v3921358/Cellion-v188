@@ -69,7 +69,7 @@ public enum RecvPacketOpcode {
     WorldTransferRequest(187),// Version 188
     WorldTransferShinningStarRequest(188),// Version 188
     UserMigrateToCashShopRequest(190),// Version 188
-    UserMigrateToPvpRequest(191),// Version 188
+    UserMigrateToAuctionRequest(191),// Version 188
     PartyMigrateToPvpRequest(192),// Version 188
     UserMigrateToMonsterFarm(194),// Version 188
     UserMigrateToMonsterFarmByInviteItem(195),// Version 188

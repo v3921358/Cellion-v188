@@ -28,7 +28,6 @@ import service.CashShopServer;
 import service.ChannelServer;
 import service.FarmServer;
 import service.LoginServer;
-import service.MapleTalkServer;
 import provider.wz.cache.WzDataStorage;
 import server.Timer.BuffTimer;
 import server.Timer.CloneTimer;
@@ -51,6 +50,7 @@ import server.maps.MapleMapFactory;
 import server.maps.objects.Pet;
 import server.quest.Quest;
 import server.skills.VCore;
+import service.AuctionServer;
 import tools.LogHelper;
 
 public class Start {
@@ -295,6 +295,7 @@ public class Start {
             ChannelServer.startChannel_Main();
             CashShopServer.getInstance().start();
             FarmServer.getInstance().start();
+            AuctionServer.getInstance().start();
             /*for (WorldOption server : WorldOption.values()) {
                 if (server.show()) {
                     MapleTalkServer.getInstance(server.getWorld(), server.name()).start();

@@ -49,6 +49,7 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
+import service.AuctionServer;
 import tools.CollectionUtil;
 import tools.LogHelper;
 import tools.Pair;
@@ -183,6 +184,8 @@ public class World {
             return CashShopServer.getPlayerStorage();
         } else if (channel == -30) {
             return FarmServer.getPlayerStorage();
+        } else if (channel == -60) {
+            return AuctionServer.getPlayerStorage();
         }
         return ChannelServer.getInstance(channel).getPlayerStorage();
     }
