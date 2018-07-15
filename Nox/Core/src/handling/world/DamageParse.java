@@ -1507,7 +1507,7 @@ public class DamageParse {
                     double nExpRate = pPlayer.getClient().getChannelServer().getExpRate(pPlayer.getWorld());
                     final long nTotalExp = (long) (((long) (nExpRate * nMobExp)) * (nAdditionalExpPercentage * 0.01f));
                     pPlayer.gainExp(nTotalExp, false, false, false);
-                    pPlayer.getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessageType.MultiKill, nTotalExp, nMultiKills, StylishKillMessageStyle.SweetHoney)));
+                    pPlayer.getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessageType.MultiKill, nTotalExp, nMultiKills, StylishKillMessageStyle.Normal)));
                 }
             }
 
@@ -1544,7 +1544,7 @@ public class DamageParse {
 
             pPlayer.setLastCombo(tTime);
             pPlayer.setCombo(nCombo);
-            pPlayer.getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, nCombo, pMob.get().getObjectId(), StylishKillMessage.StylishKillMessageStyle.SweetHoney)));
+            pPlayer.getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, nCombo, pMob.get().getObjectId(), StylishKillMessage.StylishKillMessageStyle.Normal)));
         }
     }
 }
