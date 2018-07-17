@@ -3,6 +3,7 @@
  */
 package handling;
 
+import handling.auction.AuctionEntryHandler;
 import handling.game.FreeMarketTransferRequest;
 import handling.game.GroupMessageHandler;
 import handling.game.BossMatchmakingHandler;
@@ -14,6 +15,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import service.LoginServer;
 import service.RecvPacketOpcode;
 import enums.ServerMode.MapleServerMode;
+import handling.auction.AuctionRequestHandler;
 import net.InPacket;
 import tools.LogHelper;
 import tools.packet.CLogin;
@@ -95,12 +97,14 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         handlers[RecvPacketOpcode.UserMigrateToMonsterFarm.getValue()] = new FarmEntryHandler();
         handlers[RecvPacketOpcode.UserCharacterInfoRequest.getValue()] = new CharacterInfoRequestHandler();
         handlers[RecvPacketOpcode.UserMigrateToCashShopRequest.getValue()] = new EnterCashShopHandler();
+        handlers[RecvPacketOpcode.UserMigrateToAuctionRequest.getValue()] = new AuctionEntryHandler();
         handlers[RecvPacketOpcode.RequestReloginCookie.getValue()] = new ReloginCookieHandler();
         handlers[RecvPacketOpcode.UpdateLoginCookie.getValue()] = new UpdateLoginCookieHandler();
+        
+        handlers[RecvPacketOpcode.AuctionRequest.getValue()] = new AuctionRequestHandler();
         /**
          * PvP Handlers
          */
-        handlers[RecvPacketOpcode.UserMigrateToPvpRequest.getValue()] = new EnterPvpHandler();
         handlers[RecvPacketOpcode.UserMigrateToPveRequest.getValue()] = new LeavePvpHandler();
         //handlers[RecvPacketOpcode.UserAttackUser.getValue()] = new AttackPvpHandler(); // IDK
         handlers[RecvPacketOpcode.SummonedAttackPvP.getValue()] = new SummonPvpHandler();

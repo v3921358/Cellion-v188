@@ -37,6 +37,7 @@ import server.life.mob.MobStatRequest;
 import server.maps.TrainingMap;
 import server.maps.objects.ForceAtom;
 import enums.ForceAtomType;
+import server.messages.StylishKillMessage.StylishKillMessageStyle;
 import service.RecvPacketOpcode;
 import tools.LogHelper;
 import tools.Utility;
@@ -1506,7 +1507,7 @@ public class DamageParse {
                     double nExpRate = pPlayer.getClient().getChannelServer().getExpRate(pPlayer.getWorld());
                     final long nTotalExp = (long) (((long) (nExpRate * nMobExp)) * (nAdditionalExpPercentage * 0.01f));
                     pPlayer.gainExp(nTotalExp, false, false, false);
-                    pPlayer.getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessageType.MultiKill, nTotalExp, nMultiKills)));
+                    pPlayer.getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessageType.MultiKill, nTotalExp, nMultiKills, StylishKillMessageStyle.Normal)));
                 }
             }
 
@@ -1543,7 +1544,7 @@ public class DamageParse {
 
             pPlayer.setLastCombo(tTime);
             pPlayer.setCombo(nCombo);
-            pPlayer.getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, nCombo, pMob.get().getObjectId())));
+            pPlayer.getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, nCombo, pMob.get().getObjectId(), StylishKillMessage.StylishKillMessageStyle.Normal)));
         }
     }
 }

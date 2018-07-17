@@ -347,8 +347,8 @@ public enum SendPacketOpcode {
     EndCharacterData(451),// Version 188
     BeginStage(452),// Version 188
     SetField(452),// Version 188
-    SetAuctionField(453),// Version 188
-    SetFarmField(454),// Version 188
+    SetFarmField(453),// Version 188 (-2 from admin client)
+    SetAuctionField(454),// Version 188 (-2 from admin client)
     SetCashShop(456),// Version 188
     EndStage(456),// Version 188
     BeginField(457),// Version 188

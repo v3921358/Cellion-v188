@@ -4760,27 +4760,16 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
         changeSingleSkillLevel(skill, newLevel, newMasterlevel, SkillFactory.getDefaultSExpiry(skill));
     }
-
+    
     public void changeSingleSkillLevel(final Skill skill, int newLevel, byte newMasterlevel, long expiration) {
-        final Map<Skill, SkillEntry> list = new HashMap<>();
-        boolean hasRecovery = false, recalculate = false;
-        if (changeSkillData(skill, newLevel, newMasterlevel, expiration)) { // no loop, only 1
-            list.put(skill, new SkillEntry(newLevel, newMasterlevel, expiration));
-            if (GameConstants.isRecoveryIncSkill(skill.getId())) {
-                hasRecovery = true;
-            }
-            if (skill.getId() < 80000000) {
-                recalculate = true;
-            }
-        }
-        if (list.isEmpty()) { // nothing is changed
-            return;
-        }
-        client.SendPacket(WvsContext.updateSkills(list, false));
-        reUpdateStat(hasRecovery, recalculate);
+        changeSingleSkillLevel(skill, newLevel, newMasterlevel, expiration, false, true);
+    }
+    
+    public void changeSingleSkillLevel(final Skill skill, int newLevel, byte newMasterlevel, long expiration, boolean hyper) {
+        changeSingleSkillLevel(skill, newLevel, newMasterlevel, expiration, hyper, true);
     }
 
-    public void changeSingleSkillLevel(Skill skill, int newLevel, byte newMasterlevel, long expiration, boolean hyper) {
+    public void changeSingleSkillLevel(Skill skill, int newLevel, byte newMasterlevel, long expiration, boolean hyper, boolean packet) {
         final Map<Skill, SkillEntry> list = new HashMap<>();
         boolean hasRecovery = false, recalculate = false;
         if (changeSkillData(skill, newLevel, newMasterlevel, expiration)) { // no loop, only 1
@@ -4795,7 +4784,9 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (list.isEmpty()) { // nothing is changed
             return;
         }
-        client.SendPacket(WvsContext.updateSkills(list, hyper));
+        if (packet) {
+            client.SendPacket(WvsContext.updateSkills(list, hyper));
+        }
         reUpdateStat(hasRecovery, recalculate);
     }
 

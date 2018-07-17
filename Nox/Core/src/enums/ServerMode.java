@@ -19,7 +19,9 @@ public class ServerMode {
         //Auth (child of login) Server
         AUTH(4),
         //MapleTalk Server (1 per world)
-        MAPLETALK(5);
+        MAPLETALK(5),
+        //Auction House Server
+        AUCTION(6);
 
         private final int mode;
 

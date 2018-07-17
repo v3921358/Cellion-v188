@@ -37,6 +37,7 @@ import tools.packet.CField;
 import tools.packet.WvsContext;
 import tools.packet.FarmPacket;
 import net.ProcessPacket;
+import service.AuctionServer;
 
 public final class EnterCashShopHandler implements ProcessPacket<ClientSocket> {
 
@@ -55,6 +56,13 @@ public final class EnterCashShopHandler implements ProcessPacket<ClientSocket> {
         CharacterTransfer farmtransfer = FarmServer.getPlayerStorage().getPendingCharacter(chr.getId());
         if (farmtransfer != null) {
             c.SendPacket(FarmPacket.farmMessage("You cannot move into Cash Shop while visiting your farm."));
+            c.SendPacket(WvsContext.enableActions());
+            return;
+        }
+        
+        CharacterTransfer auctiontransfer = AuctionServer.getPlayerStorage().getPendingCharacter(chr.getId());
+        if (auctiontransfer != null) {
+            c.SendPacket(FarmPacket.farmMessage("You cannot move into the Cash Shop while in Auction House."));
             c.SendPacket(WvsContext.enableActions());
             return;
         }

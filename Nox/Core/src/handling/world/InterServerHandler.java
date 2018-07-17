@@ -8,6 +8,7 @@ import enums.FieldLimitType;
 import server.maps.MapleMap;
 import server.maps.objects.User;
 import net.InPacket;
+import service.AuctionServer;
 import tools.packet.CField;
 import tools.packet.WvsContext;
 
@@ -37,6 +38,35 @@ public class InterServerHandler {
         chr.saveToDB(false, false);
         chr.getMap().removePlayer(chr);
         c.SendPacket(CField.getChannelChange(c, Integer.parseInt(FarmServer.getIP().split(":")[1])));
+        c.setPlayer(null);
+        c.setReceiving(false);
+    }
+    
+
+    public static void enterAuctionHouse(final ClientSocket c, final User chr) {
+        if (chr.hasBlockedInventory() || chr.getMap() == null || chr.getEventInstance() != null || c.getChannelServer() == null
+                || FieldLimitType.UnableToMigrate.check(chr.getMap())) {
+            c.SendPacket(WvsContext.enableActions());
+            return;
+        }
+
+        ChannelServer ch = ChannelServer.getInstance(c.getChannel());
+        if (chr.getMessenger() != null) {
+            MapleMessengerCharacter messengerplayer = new MapleMessengerCharacter(chr);
+            World.Messenger.leaveMessenger(chr.getMessenger().getId(), messengerplayer);
+        }
+        PlayerBuffStorage.addBuffsToStorage(chr.getId(), chr.getAllBuffs());
+        PlayerBuffStorage.addCooldownsToStorage(chr.getId(), chr.getCooldowns());
+        PlayerBuffStorage.addDiseaseToStorage(chr.getId(), chr.getAllDiseases());
+
+        World.changeChannelData(new CharacterTransfer(chr), chr.getId(), -60);
+
+        ch.removePlayer(chr);
+        c.updateLoginState(MapleClientLoginState.ChangeChannel, c.getSessionIPAddress());
+
+        chr.saveToDB(false, false);
+        chr.getMap().removePlayer(chr);
+        c.SendPacket(CField.getChannelChange(c, Integer.parseInt(AuctionServer.getIP().split(":")[1])));
         c.setPlayer(null);
         c.setReceiving(false);
     }
