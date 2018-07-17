@@ -18,12 +18,14 @@ import client.inventory.Equip.ScrollResult;
 import client.inventory.Item;
 import enums.InventoryType;
 import client.inventory.MapleRing;
+import com.sun.xml.internal.ws.dump.LoggingDumpTube.Position;
 import constants.GameConstants;
 import constants.QuickMove.QuickMoveNPC;
 import constants.ServerConstants;
 import constants.SkillConstants;
 import constants.skills.DualBlade;
 import constants.skills.Blaster;
+import constants.skills.Kanna;
 import constants.skills.Kinesis;
 import constants.skills.Mechanic;
 import handling.game.PlayerInteractionHandler;
@@ -3944,41 +3946,50 @@ public class CField {
         /**
          * This packet spawns the summons onto the world
          *
-         * @param MapleSummon
-         * @param animated - if the summon has a spawn animation
+         * @param pSummon
+         * @param bAnimated - if the summon has a spawn animation
          *
          * @return oPacket
          */
-        public static OutPacket spawnSummon(Summon summon, boolean animated) {
+        public static OutPacket spawnSummon(Summon pSummon, boolean bAnimated) {
 
+            User pPlayer = pSummon.getOwner();
             OutPacket oPacket = new OutPacket(SendPacketOpcode.SummonedEnterField.getValue());
-            oPacket.EncodeInt(summon.getOwnerId());
-            oPacket.EncodeInt(summon.getObjectId());
-            oPacket.EncodeInt(summon.getSkill());
-            oPacket.EncodeByte(summon.getOwnerLevel() - 1);
-            oPacket.EncodeByte(summon.getSkillLevel());
-            oPacket.EncodePosition(summon.getPosition());
-            oPacket.EncodeByte(summon.getSkill() == 32111006 || summon.getSkill() == 33101005 || summon.getSkill() == 14000027 ? 5 : 4);// Summon Reaper Buff - Call of the Wild
+            
+            oPacket.EncodeInt(pSummon.getOwnerId());
+            oPacket.EncodeInt(pSummon.getObjectId());
+            oPacket.EncodeInt(pSummon.getSkill());
+            oPacket.EncodeByte(pSummon.getOwnerLevel() - 1);
+            oPacket.EncodeByte(pSummon.getSkillLevel());
+            oPacket.EncodePosition(pSummon.getPosition());
+            oPacket.EncodeByte(pSummon.getSkill() == 32111006 || pSummon.getSkill() == 33101005 || pSummon.getSkill() == 14000027 ? 5 : 4);// Summon Reaper Buff - Call of the Wild
 
-            if (summon.getSkill() == 35121003 && summon.getOwner().getMap() != null) {//Giant Robot SG-88
-                oPacket.EncodeShort(summon.getOwner().getMap().getSharedMapResources().footholds.findBelow(summon.getPosition()).getId());
+            if (pSummon.getSkill() == 35121003 && pSummon.getOwner().getMap() != null) { // Giant Robot SG-88
+                oPacket.EncodeShort(pSummon.getOwner().getMap().getSharedMapResources().footholds.findBelow(pSummon.getPosition()).getId());
             } else {
                 oPacket.EncodeShort(0);
             }
-            oPacket.EncodeByte(summon.getMovementType().getValue());
-            oPacket.EncodeByte(summon.getSummonType());
-            oPacket.EncodeByte(animated ? 1 : 0);
+            
+            oPacket.EncodeByte(pSummon.getMovementType().getValue());
+            oPacket.EncodeByte(pSummon.getSummonType());
+            oPacket.EncodeByte(bAnimated ? 1 : 0);
             oPacket.EncodeInt(0);//dwMobId
             oPacket.EncodeByte(0); //bFlyMob
             oPacket.EncodeByte(0);//bBeforeFirstAttack
             oPacket.EncodeInt(0);//nLookId
             oPacket.EncodeInt(0);//nBulletId
-            User chr = summon.getOwner();
-            oPacket.EncodeByte((summon.getSkill() == DualBlade.MIRRORED_TARGET || summon.getSkill() == 14111024 || summon.getSkill() == 14121054 || summon.getSkill() == 14121055 || summon.getSkill() == 14121056) && chr != null ? 1 : 0); // Mirrored Target boolean for character look
-            if ((summon.getSkill() == DualBlade.MIRRORED_TARGET || summon.getSkill() == 14111024 || summon.getSkill() == 14121054 || summon.getSkill() == 14121055 || summon.getSkill() == 14121056) && chr != null) { // Mirrored Target
-                writeCharacterLook(oPacket, chr);
+            
+            oPacket.EncodeByte((pSummon.getSkill() == DualBlade.MIRRORED_TARGET || pSummon.getSkill() == 14111024 || pSummon.getSkill() == 14121054 || pSummon.getSkill() == 14121055 || pSummon.getSkill() == 14121056) && pPlayer != null ? 1 : 0); // Mirrored Target boolean for character look
+            if ((pSummon.getSkill() == DualBlade.MIRRORED_TARGET || pSummon.getSkill() == 14111024 || pSummon.getSkill() == 14121054 || pSummon.getSkill() == 14121055 || pSummon.getSkill() == 14121056) && pPlayer != null) { // Mirrored Target
+                writeCharacterLook(oPacket, pPlayer);
             }
-            if (summon.getSkill() == Mechanic.ROCK_N_SHOCK) {// Rock 'n Shock m_nTeslaCoilState
+            
+            if(pSummon.getSkill() == Kanna.KISHIN_SHOUKAN && pPlayer != null) { // Kishin Shoukan
+                oPacket.EncodePosition(new Point(pPlayer.getPosition().x - 250, pPlayer.getPosition().y));
+                oPacket.EncodePosition(new Point(pPlayer.getPosition().x + 250, pPlayer.getPosition().y));
+            }
+            
+            if (pSummon.getSkill() == Mechanic.ROCK_N_SHOCK) {// Rock 'n Shock m_nTeslaCoilState
                 oPacket.EncodeByte(0);
                 /*
 	         do
@@ -3991,28 +4002,28 @@ public class CField {
 		        while ( v3 < 3 );
                  */
             }
-            if (GameConstants.SUB_ADCBA0(summon.getSkill())) {
+            if (GameConstants.SUB_ADCBA0(pSummon.getSkill())) {
                 oPacket.EncodeInt(400); // Unknown
                 oPacket.EncodeInt(30); // Unknown
             } else {
-                if (summon.getSkill() == 42111003) {
+                if (pSummon.getSkill() == 42111003) {
                     oPacket.EncodeShort(0);
                     oPacket.EncodeShort(0);
                     oPacket.EncodeShort(0);
                     oPacket.EncodeShort(0);
-                } else if (summon.getSkill() == 400051014) {
+                } else if (pSummon.getSkill() == 400051014) {
                     oPacket.EncodeLong(0);
-                } else if (summon.getSkill() >= 400051028 && summon.getSkill() <= 400051032) {
+                } else if (pSummon.getSkill() >= 400051028 && pSummon.getSkill() <= 400051032) {
                     oPacket.EncodeByte(0);
                 }
             }
             oPacket.EncodeByte(0); //m_bJaguarActive
 
             // v176
-            oPacket.EncodeInt(summon.getSummonDuration()); // v2->m_tSummonTerm = CInPacket::Decode4(iPacket);
+            oPacket.EncodeInt(pSummon.getSummonDuration()); // v2->m_tSummonTerm = CInPacket::Decode4(iPacket);
             oPacket.EncodeByte(1); // m_bAttackActive
             oPacket.EncodeInt(0);
-            if (summon.getSkill() >= 33001007 && summon.getSkill() <= 33001015) { // Jaguars
+            if (pSummon.getSkill() >= 33001007 && pSummon.getSkill() <= 33001015) { // Jaguars
                 oPacket.EncodeByte(0);
                 oPacket.EncodeInt(0);
             }

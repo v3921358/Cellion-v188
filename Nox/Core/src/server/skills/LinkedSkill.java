@@ -224,14 +224,14 @@ public class LinkedSkill {
             else if (nLinkedLevel >= 128) nSLV = 2;
             else if (nLinkedLevel >= 118) nSLV = 1;
             else return;
-        } else if (GameConstants.isShade(nLinkedJobID)) {
+        } /*else if (GameConstants.isShade(nLinkedJobID)) { // Disabled for now due to an issue where the client doesnt detect the ReviveOnce buffstat.
             
             nLinkedSkillID = SHADE;
             nMasterSLV = 2;
             if (nLinkedLevel >= 120) nSLV = 2;
             else if (nLinkedLevel >= 70) nSLV = 1;
             else return;
-        } else if (GameConstants.isResistance(nLinkedJobID)) {
+        }*/ else if (GameConstants.isResistance(nLinkedJobID)) {
             
             nLinkedSkillID = RESISTANCE;
             nMasterSLV = 8;

@@ -80,6 +80,7 @@ public class KannaEffect extends AbstractEffect {
             case Kanna.KISHIN_SHOUKAN:
                 pEffect.info.put(StatInfo.time, 60000);
                 pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
+                pEffect.statups.put(CharacterTemporaryStat.IncMobRateDummy, 1);
                 break;
             case Kanna.LIFEBLOOD_RITUAL:
                 break;

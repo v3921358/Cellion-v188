@@ -32,7 +32,7 @@ public class GunslingerEffect extends AbstractEffect {
             case Gunslinger.GUN_MASTERY:
                 break;
             case Gunslinger.INFINITY_BLAST:
-                pEffect.statups.put(CharacterTemporaryStat.NoBulletConsume, pEffect.info.get(StatInfo.bulletConsume));
+                pEffect.statups.put(CharacterTemporaryStat.NoBulletConsume, 0);
                 break;
             case Gunslinger.PHYSICAL_TRAINING_3:
                 break;

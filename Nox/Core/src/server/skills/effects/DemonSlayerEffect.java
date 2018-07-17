@@ -108,7 +108,7 @@ public class DemonSlayerEffect extends AbstractEffect {
             case DemonSlayer.DARK_METAMORPHOSIS_REINFORCE:
                 break;
             case DemonSlayer.DEMONIC_FORTITUDE_1:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR) / 2);
                 break;
             case DemonSlayer.DEMON_CRY:
                 pEffect.monsterStatus.put(MonsterStatus.SHOWDOWN, pEffect.info.get(StatInfo.w));

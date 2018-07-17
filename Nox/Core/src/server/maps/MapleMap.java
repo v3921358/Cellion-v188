@@ -3415,6 +3415,13 @@ public final class MapleMap {
                 nSpawnRate *= ServerConstants.SPAWN_RATE_MULTIPLIER;                                            // Adjust global spawn rate.
             }
             
+            List<User> pMapCharacters = getCharacters();
+            for (User pUser : pMapCharacters) {
+                if (pUser.hasBuff(CharacterTemporaryStat.IncMobRateDummy)) {
+                    nSpawnRate *= 1.5;                                                                           // Adjust spawn rate while Kanna's Kishin is active.
+                }
+            }
+            
             //int nShouldSpawn = (int) (Math.min(smr.maxRegularSpawnAtOnce, Math.max(0, nMax - nSpawnedSize)) * nSpawnRate); // Original
             int nShouldSpawn = nMax - nSpawnedSize; 
             

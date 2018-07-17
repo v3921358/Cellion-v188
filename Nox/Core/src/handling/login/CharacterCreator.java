@@ -10,6 +10,7 @@ import constants.skills.Aran;
 import constants.skills.DanceMoves;
 import constants.skills.Hayato;
 import constants.skills.Kaiser;
+import constants.skills.Noblesse;
 import constants.skills.Shade;
 import constants.skills.Xenon;
 import constants.skills.Zero;
@@ -196,10 +197,10 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
         }
 
         // Additional skills that are not added by default.
-        int[][] skills = new int[][]{
+        int[][] aSkills = new int[][]{
             {80001152}, //Resistance
             {80001152, 1281}, //Explorer
-            {10001244, 10000252, 10001253, 10001254, 80001152}, //Cygnus
+            {10001244, 10000252, 10001253, 10001254, 80001152, Noblesse.ELEMENTAL_HARMONY, Noblesse.IMPERIAL_RECALL}, //Cygnus
             {20000194}, //Aran
             {20010022, 20010194}, //Evan
             {20020109, 20021110, 20020111, 20020112}, //Mercedes
@@ -208,7 +209,7 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             {80001152, 1281}, //Dual Blader
             {50001214}, //Mihile
             {20040216, 20040217, 20040218, 20040219, 20040220, 20040221, 20041222, 27001100, 27000207, 27001201}, //Luminous
-            {60001216, 60001217, 60001225, 60001218, 60000219}, //Kaiser
+            {60001216, 60001217, 60001225, 60001218, 60000219, Kaiser.EXCLUSIVE_SPELL, Kaiser.EXCLUSIVE_SPELL_1}, //Kaiser
             {60011216, 60010217, 60011218, 60011219, 60011220, 60011221, 60011222}, //Angelic Buster
             {}, //Cannoneer
             {30020232, 30020233, 30020234, 30020240}, //Xenon (Removed 30021238 - Beam Dance, don't think it belongs here).
@@ -227,11 +228,11 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
              140000292 - Judgment*/
         };
 
-        if (skills[pJob.getType()].length > 0) {
+        if (aSkills[pJob.getType()].length > 0) {
             final Map<Skill, SkillEntry> mSkill = new HashMap<>();
             Skill pSkill;
             if (pJob != LoginInformationProvider.JobType.Zero) { // Not for Zero
-                for (int i : skills[pJob.getType()]) {
+                for (int i : aSkills[pJob.getType()]) {
                     pSkill = SkillFactory.getSkill(i);
                     int maxLevel = 0;
                     if (pSkill.getMaxLevel() != 0) {
@@ -245,6 +246,10 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             }
             if (pJob == LoginInformationProvider.JobType.Aran) {
                 mSkill.put(SkillFactory.getSkill(Aran.COMBAT_STEP), new SkillEntry((byte) 1, (byte) 1, -1)); 
+            }
+            if (pJob == LoginInformationProvider.JobType.Cygnus) {
+                mSkill.put(SkillFactory.getSkill(Noblesse.ELEMENTAL_HARMONY), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(Noblesse.IMPERIAL_RECALL), new SkillEntry((byte) 1, (byte) 1, -1));
             }
             if (pJob == LoginInformationProvider.JobType.Zero) {
                 // Shared Zero Skills - All except Resolton Time, which we'll handle in MapleCharacter levelUp().
@@ -290,6 +295,8 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
                 mSkill.put(SkillFactory.getSkill(Kaiser.DRAGON_LINK), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Kaiser.VERTICAL_GRAPPLE), new SkillEntry((byte) 1, (byte) 1, -1));
                 mSkill.put(SkillFactory.getSkill(Kaiser.TRANSFIGURATION), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(Kaiser.EXCLUSIVE_SPELL), new SkillEntry((byte) 1, (byte) 1, -1));
+                mSkill.put(SkillFactory.getSkill(Kaiser.EXCLUSIVE_SPELL_1), new SkillEntry((byte) 1, (byte) 1, -1));
             }
             if (pJob == LoginInformationProvider.JobType.Shade) {
                 mSkill.put(SkillFactory.getSkill(Shade.FOX_TROT), new SkillEntry((byte) 1, (byte) 1, -1));

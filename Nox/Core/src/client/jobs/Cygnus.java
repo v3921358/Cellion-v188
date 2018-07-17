@@ -137,6 +137,7 @@ public class Cygnus {
             final StatEffect buffEffects = SkillFactory.getSkill(NightWalker.DOMINION).getEffect(pPlayer.getTotalSkillLevel(NightWalker.DOMINION));
 
             buffEffects.statups.put(CharacterTemporaryStat.DamR, 20);
+            buffEffects.statups.put(CharacterTemporaryStat.NotDamaged, 1);
             //buffEffects.statups.put(CharacterTemporaryStat.CriticalBuff, 100);
             //buffEffects.statups.put(CharacterTemporaryStat.Stance, 100);
 

@@ -272,6 +272,7 @@ function action(mode, type, selection) {
 			case 2003: //PHANTOM
 			case 2400: //PHANTOM1
 				jobName = "Phantom";
+				cm.gainItem(1352100, 1);
 				cm.gainItem(1362001, 1);
 				cm.gainItem(1362005, 1);
 				cm.changeJob(2400);

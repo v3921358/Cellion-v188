@@ -368,6 +368,11 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 pEffect.info.put(StatInfo.time, 210000000);
                 break;
             }
+            case Kanna.KISHIN_SHOUKAN: {
+                pEffect.statups.put(CharacterTemporaryStat.IncMobRateDummy, 1);
+                pEffect.info.put(StatInfo.time, 150000);
+                break;
+            }
             default: {
                 bApplyStats = false;
                 break;
@@ -406,6 +411,12 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 pMovement = SummonMovementType.FOLLOW;
                 break;
             }
+            case Kanna.KISHIN_SHOUKAN: {
+                pMovement = SummonMovementType.STATIONARY;
+                pPlayer.dropMessage(5, "The respawn rate of the current map has been increased by Kishin Shoukan's dark energy.");
+                break; 
+            }
+                
             default: {
                 bSummon = false;
                 break;
@@ -413,7 +424,11 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
         }
         if (bSummon) {
             Summon pSummon = new Summon(pPlayer, pEffect, pPlayer.getPosition(), pMovement, pEffect.getDuration());
-            pSummon.setPosition(pPlayer.getPosition());
+            if (nSkill == Kanna.KISHIN_SHOUKAN) {
+                pSummon.setPosition(new Point(pPlayer.getPosition().x - 250, pPlayer.getPosition().y));
+                pPlayer.getMap().spawnSummon(pSummon);
+                pSummon.setPosition(new Point(pPlayer.getPosition().x + 250, pPlayer.getPosition().y));
+            }
             pPlayer.getMap().spawnSummon(pSummon);
             pEffect.applyTo(pPlayer, null);
         }
@@ -421,6 +436,22 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
         /*Additional Effect Handler*/
     /*Extra functions that occur when the respected skill is cast.*/
         switch (nSkill) {
+            case Kaiser.DEFENDER_MODE_I:
+            case Kaiser.DEFENDER_MODE_II:
+            case Kaiser.DEFENDER_MODE_III: {
+                pPlayer.dispelBuff(Kaiser.ATTACKER_MODE_I);
+                pPlayer.dispelBuff(Kaiser.ATTACKER_MODE_II);
+                pPlayer.dispelBuff(Kaiser.ATTACKER_MODE_III);
+                break;
+            }
+            case Kaiser.ATTACKER_MODE_I:
+            case Kaiser.ATTACKER_MODE_II:
+            case Kaiser.ATTACKER_MODE_III: {
+                pPlayer.dispelBuff(Kaiser.DEFENDER_MODE_I);
+                pPlayer.dispelBuff(Kaiser.DEFENDER_MODE_II);
+                pPlayer.dispelBuff(Kaiser.DEFENDER_MODE_III);
+                break;
+            }
             case Kaiser.TEMPEST_BLADES_1: // Normal Tempest Blades
             case Kaiser.TEMPEST_BLADES: // Normal Tempest Blades in Morph
             case Kaiser.ADVANCED_TEMPEST_BLADES_1: // Advanced Tempest Blades
@@ -688,7 +719,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             case DawnWarrior.FALLING_MOON:
             case DawnWarrior.RISING_SUN:
             case DawnWarrior.EQUINOX_CYCLE:
-                pPlayer.changeWarriorStance(nSkill);
+                //pPlayer.changeWarriorStance(nSkill);
                 break;
             case 4341003:
                 pPlayer.setKeyDownSkillTime(0);

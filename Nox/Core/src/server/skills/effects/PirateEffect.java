@@ -25,6 +25,7 @@ public class PirateEffect extends AbstractEffect {
             case Pirate.DASH:
                 pEffect.statups.put(CharacterTemporaryStat.DashSpeed, pEffect.info.get(StatInfo.x));
                 pEffect.statups.put(CharacterTemporaryStat.DashJump, pEffect.info.get(StatInfo.y));
+                pEffect.info.put(StatInfo.time, 20000);
                 break;
             case Pirate.DOUBLE_SHOT:
                 break;

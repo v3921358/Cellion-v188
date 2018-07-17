@@ -108,8 +108,15 @@ public class TrainingMap {
         try {
             for (MapleMapObject pObject : aMobsToAggro) {
                 Mob pMob = (Mob) pObject;
-                pMob.switchController(pPlayer, true);
-                pPlayer.getClient().SendPacket(MobPacket.OnMobChangeController(pMob, true));
+                if (pMob.getController() != null) {
+                    if (pPlayer.getMap().getCharacterById(pMob.getController().getId()) == null) {
+                        pMob.switchController(pPlayer, true);
+                        pPlayer.getClient().SendPacket(MobPacket.OnMobChangeController(pMob, true));
+                    }
+                } else  {
+                    pMob.switchController(pPlayer, true);
+                    pPlayer.getClient().SendPacket(MobPacket.OnMobChangeController(pMob, true));
+                }
             }
         } finally {
             pLock.unlock();

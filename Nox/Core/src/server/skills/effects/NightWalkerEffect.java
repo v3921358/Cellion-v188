@@ -178,7 +178,7 @@ public class NightWalkerEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case NightWalker.GLORY_OF_THE_GUARDIANS_1:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR) / 2);
                 break;
             case NightWalker.HYPER_ACCURACY_10:
                 break;

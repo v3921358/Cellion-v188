@@ -369,6 +369,20 @@ public class MobStatRequest {
                     }
                     break;
                 }
+                case NightWalker.DOMINION: {
+                    pOpt.nOption = 1;
+                    pOpt.rOption = pAttack.skill;
+                    pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
+                    pStat = MobStat.Darkness;
+                    break;
+                }
+                case NightWalker.SHADOW_STITCH: {
+                    pOpt.nOption = 1;
+                    pOpt.rOption = pAttack.skill;
+                    pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
+                    pStat = MobStat.Stun;
+                    break;
+            }
 
                 /**
                  * General Speed Modification
@@ -418,12 +432,12 @@ public class MobStatRequest {
                 /**
                  * General Stun
                  */
+                case Kanna.ETHER_PULSE_2:
                 case Spearman.SPEAR_SWEEP:
                 case Page.CLOSE_COMBAT:
                 case ThunderBreaker.LIGHTNING_CHARGE:
                 case Fighter.COMBO_FURY:
                 case Shade.BOMB_PUNCH_100_10_1:
-                case NightWalker.SHADOW_STITCH:
                 case Mercedes.STUNNING_STRIKES:
                 case Mercedes.STAGGERING_STRIKES:
                 case Luminous.ARMAGEDDON:
@@ -471,7 +485,6 @@ public class MobStatRequest {
                 case IceLightningArchMage.CHAIN_LIGHTNING:
                 case Priest.SHINING_RAY: {
                     if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
-                        MobTemporaryStat pStun = pMob.getTemporaryStat();
                         pOpt.nOption = 1;
                         pOpt.rOption = pAttack.skill;
                         pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;

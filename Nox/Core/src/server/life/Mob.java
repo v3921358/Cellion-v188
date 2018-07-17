@@ -30,6 +30,7 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
 import enums.ExpType;
+import java.awt.Point;
 import service.ChannelServer;
 import tools.ConcurrentEnumMap;
 import tools.packet.CField;
@@ -1655,6 +1656,7 @@ public class Mob extends AbstractLoadedMapleLife {
      * @purpose Handle the spawning of Elite Monsters and Elite Bosses.
      */
     public void OnEliteMonsterRequest(User pPlayer) {
+        Point nPOS = this.getPosition();
         long nEliteHP;
         
         if (this.getScale() > 100) { // Increment Elite Mob Kill Count & Display Message
@@ -1686,7 +1688,7 @@ public class Mob extends AbstractLoadedMapleLife {
             pEliteBoss.setHp(nEliteHP);
             pEliteBoss.getStats().setFinalMaxHp(nEliteHP);
             
-            pPlayer.getMap().spawnMonsterOnGroundBelow(pEliteBoss, getPosition(), 201); // Spawn Random Elite Boss
+            pPlayer.getMap().spawnMonsterOnGroundBelow(pEliteBoss, nPOS, 201); // Spawn Random Elite Boss
             pPlayer.setEliteKills(0); // Reset Elite Monster Kill Count
             
         } else if (Utility.resultSuccess(1)) { // 1% Chance to Spawn Elite Mob
@@ -1703,7 +1705,7 @@ public class Mob extends AbstractLoadedMapleLife {
             pElite.setHp(nEliteHP);
             pElite.getStats().setFinalMaxHp(nEliteHP);
             
-            pPlayer.getMap().spawnMonsterOnGroundBelow(pElite, pPlayer.getPosition(), 200);
+            pPlayer.getMap().spawnMonsterOnGroundBelow(pElite, nPOS, 200);
         }
     }
     

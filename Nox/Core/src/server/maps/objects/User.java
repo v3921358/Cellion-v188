@@ -47,6 +47,7 @@ import database.Database;
 import handling.game.AndroidEmotionChanger;
 import constants.ItemConstants;
 import constants.NPCConstants;
+import constants.skills.Noblesse;
 import constants.skills.Shade;
 import handling.login.LoginInformationProvider.JobType;
 import handling.world.*;
@@ -539,7 +540,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             nPrestigeMemory++;
             nPrestige++;
             
-            level = 200;
+            level = 10;
             OnPrestigedLevelUp(); // Reset character to level 200.
             
             String sEnding;
@@ -3398,7 +3399,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                     }
                 }
                 if (z.size() > 0) {
-                    System.out.println("Size : " + z.size() + " / Buffs" + z.toString());
+                    if (ServerConstants.DEVELOPER_DEBUG_MODE) System.out.println("Size : " + z.size() + " / Buffs" + z.toString());
                     buffstats = z;
                 } else {
                     return; //don't write anything
@@ -4548,6 +4549,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         if (GameConstants.isKinesis(job)) {
             if (level >= 10 && !hasSkill(Kinesis.ESP)) { // ESP
                 changeSkillLevel(SkillFactory.getSkill(Kinesis.ESP), (byte) 6, (byte) 6);
+            }
+        }
+        if (GameConstants.isCygnusKnight(job)) {
+            if (level >= 100 && !hasSkill(Noblesse.ELEMENTAL_EXPERT_1)) { // ESP
+                changeSkillLevel(SkillFactory.getSkill(Noblesse.ELEMENTAL_EXPERT_1), (byte) 1, (byte) 1);
             }
         }
         if (GameConstants.isShade(job)) {

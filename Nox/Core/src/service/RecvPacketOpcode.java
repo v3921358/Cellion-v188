@@ -476,6 +476,7 @@ public enum RecvPacketOpcode {
     MirrorReadingSelectBookRequest(633),
     LikePoint(634),
     UserNonTargetForceAtomAttack(667),
+    
     UserFlameOrbRequest(715),
     User_SADResultUI_Close(716),
     FreeLookChangeRequest(717),
@@ -598,7 +599,7 @@ public enum RecvPacketOpcode {
     ReactorOnKey(933),// Version 188
     EndReactorPool(934),// Version 188
     
-    BeginPartyMatch(961),
+    BeginPartyMatch(669), // Version 188 (Was 961)
     InvitePartyMatch(962),
     CancelInvitePartyMatch(963),
     PartyMemberCandidateRequest(964),
