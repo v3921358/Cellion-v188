@@ -1805,13 +1805,17 @@ public final class MapleMap {
         });
     }
 
-    public final void spawnSummon(final Summon summon) {
-        summon.updateMap(this);
-        spawnAndAddRangedMapObject(summon, new DelayedPacketCreation() {
+    public final void spawnSummon(final Summon pSummon) {
+        spawnSummon(pSummon, false);
+    }
+    
+    public final void spawnSummon(final Summon pSummon, boolean bSpecialSummon) {
+        pSummon.updateMap(this);
+        spawnAndAddRangedMapObject(pSummon, new DelayedPacketCreation() {
             @Override
             public void sendPackets(ClientSocket c) {
-                if (summon != null && c.getPlayer() != null && (!summon.isChangedMap() || summon.getOwnerId() == c.getPlayer().getId())) {
-                    c.SendPacket(SummonPacket.spawnSummon(summon, true));
+                if (pSummon != null && c.getPlayer() != null && (!pSummon.isChangedMap() || pSummon.getOwnerId() == c.getPlayer().getId())) {
+                    c.SendPacket(SummonPacket.spawnSummon(pSummon, true, bSpecialSummon));
                 }
             }
         });

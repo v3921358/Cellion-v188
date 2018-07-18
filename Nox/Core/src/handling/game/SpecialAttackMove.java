@@ -388,6 +388,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
         /*Summons Handler*/
     /*Define summon effects and spawn the object to the player.*/
         boolean bSummon = true;
+        Point pSummonPOS = pPlayer.getPosition();
         SummonMovementType pMovement = SummonMovementType.FOLLOW;
         switch (nSkill) {
             case BlazeWizard.FIRES_OF_CREATION:
@@ -412,8 +413,8 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 break;
             }
             case Kanna.KISHIN_SHOUKAN: {
-                pMovement = SummonMovementType.STATIONARY;
-                pPlayer.dropMessage(5, "The respawn rate of the current map has been increased by Kishin Shoukan's dark energy.");
+                pMovement = SummonMovementType.STATIONARY2;
+                pPlayer.dropMessage(5, "Dark energy from Kishin Shoukan is increasing monster respawn rates.");
                 break; 
             }
                 
@@ -423,12 +424,14 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             }
         }
         if (bSummon) {
-            Summon pSummon = new Summon(pPlayer, pEffect, pPlayer.getPosition(), pMovement, pEffect.getDuration());
+            Summon pSummon = new Summon(pPlayer, pEffect, pSummonPOS, pMovement, pEffect.getDuration());
+            
             if (nSkill == Kanna.KISHIN_SHOUKAN) {
-                pSummon.setPosition(new Point(pPlayer.getPosition().x - 250, pPlayer.getPosition().y));
-                pPlayer.getMap().spawnSummon(pSummon);
                 pSummon.setPosition(new Point(pPlayer.getPosition().x + 250, pPlayer.getPosition().y));
+                pPlayer.getMap().spawnSummon(pSummon, true); // Right Kishin
+                pSummon.setPosition(new Point(pPlayer.getPosition().x - 250, pPlayer.getPosition().y));
             }
+            
             pPlayer.getMap().spawnSummon(pSummon);
             pEffect.applyTo(pPlayer, null);
         }

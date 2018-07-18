@@ -1,6 +1,7 @@
 package server.commands;
 
 import client.ClientSocket;
+import client.SkillFactory;
 import client.inventory.Equip;
 import client.inventory.MapleInventory;
 import enums.InventoryType;
@@ -8,6 +9,7 @@ import constants.GameConstants;
 import constants.ItemConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
+import constants.skills.Kanna;
 import database.Database;
 import enums.ItemPotentialTierType;
 import handling.world.World;
@@ -27,10 +29,13 @@ import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import enums.SavedLocationType;
+import enums.SummonMovementType;
+import server.maps.objects.Summon;
 import server.maps.objects.User;
 import server.messages.StylishKillMessage;
 import tools.LogHelper;
 import tools.StringUtil;
+import tools.packet.CField;
 import tools.packet.MobPacket;
 import tools.packet.WvsContext;
 
@@ -123,6 +128,8 @@ public class PlayerCommand {
                     c.getPlayer().yellowMessage("primary: "+sValue+" / secondary: "+Integer.parseInt(splitted[3])+" / tertiary: "+Integer.parseInt(splitted[4])+" / quaterary: "+Integer.parseInt(splitted[5]));
                     //c.getPlayer().getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.MultiKill, sValue, Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5]))));
                     //c.getPlayer().getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, sValue, Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5]))));
+                    break;
+                case 9:
                     break;
             }
             return 1;

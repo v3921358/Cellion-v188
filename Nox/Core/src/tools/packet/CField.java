@@ -18,7 +18,6 @@ import client.inventory.Equip.ScrollResult;
 import client.inventory.Item;
 import enums.InventoryType;
 import client.inventory.MapleRing;
-import com.sun.xml.internal.ws.dump.LoggingDumpTube.Position;
 import constants.GameConstants;
 import constants.QuickMove.QuickMoveNPC;
 import constants.ServerConstants;
@@ -3948,10 +3947,11 @@ public class CField {
          *
          * @param pSummon
          * @param bAnimated - if the summon has a spawn animation
+         * @param bSpecialSummon - special cases such as secondary part of a summon
          *
          * @return oPacket
          */
-        public static OutPacket spawnSummon(Summon pSummon, boolean bAnimated) {
+        public static OutPacket spawnSummon(Summon pSummon, boolean bAnimated, boolean bSpecialSummon) {
 
             User pPlayer = pSummon.getOwner();
             OutPacket oPacket = new OutPacket(SendPacketOpcode.SummonedEnterField.getValue());
@@ -3962,8 +3962,13 @@ public class CField {
             oPacket.EncodeByte(pSummon.getOwnerLevel() - 1);
             oPacket.EncodeByte(pSummon.getSkillLevel());
             oPacket.EncodePosition(pSummon.getPosition());
-            oPacket.EncodeByte(pSummon.getSkill() == 32111006 || pSummon.getSkill() == 33101005 || pSummon.getSkill() == 14000027 ? 5 : 4);// Summon Reaper Buff - Call of the Wild
-
+            
+            if (bSpecialSummon || pSummon.getSkill() == 32111006 || pSummon.getSkill() == 33101005 || pSummon.getSkill() == 14000027) {
+                oPacket.EncodeByte(5); // Summon Reaper Buff - Call of the Wild
+            } else {
+                oPacket.EncodeByte(4);
+            }
+                
             if (pSummon.getSkill() == 35121003 && pSummon.getOwner().getMap() != null) { // Giant Robot SG-88
                 oPacket.EncodeShort(pSummon.getOwner().getMap().getSharedMapResources().footholds.findBelow(pSummon.getPosition()).getId());
             } else {
@@ -3976,7 +3981,7 @@ public class CField {
             oPacket.EncodeInt(0);//dwMobId
             oPacket.EncodeByte(0); //bFlyMob
             oPacket.EncodeByte(0);//bBeforeFirstAttack
-            oPacket.EncodeInt(0);//nLookId
+            oPacket.EncodeInt(pSummon.getSkill());//nLookId, nTemplateID?
             oPacket.EncodeInt(0);//nBulletId
             
             oPacket.EncodeByte((pSummon.getSkill() == DualBlade.MIRRORED_TARGET || pSummon.getSkill() == 14111024 || pSummon.getSkill() == 14121054 || pSummon.getSkill() == 14121055 || pSummon.getSkill() == 14121056) && pPlayer != null ? 1 : 0); // Mirrored Target boolean for character look
