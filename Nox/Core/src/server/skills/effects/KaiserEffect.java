@@ -462,6 +462,8 @@ public class KaiserEffect extends AbstractEffect {
                 pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Kaiser.STONE_DRAGON_1:
+                pEffect.statups.put(CharacterTemporaryStat.SUMMON, 1);
+                pEffect.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case Kaiser.TEMPEST_BLADES:
                 pEffect.statups.put(CharacterTemporaryStat.StopForceAtomInfo, 3);

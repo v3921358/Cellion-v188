@@ -45,23 +45,23 @@ public class DenyPartyRequestHandler implements ProcessPacket<ClientSocket> {
                     return;
                 }
                 switch (action) {
-                    case 39://case 38:
+                    case 42://case 38:
                         if (party.getMembers().size() < 6) {
                             c.getPlayer().setParty(party);
                             World.Party.updateParty(partyid, PartyOperation.JOIN, new MaplePartyCharacter(c.getPlayer()));
                             c.getPlayer().receivePartyMemberHP();
                             c.getPlayer().updatePartyMemberHP();
                         } else {
-                            c.SendPacket(WvsContext.PartyPacket.partyStatusMessage(22, null));
+                            c.SendPacket(WvsContext.PartyPacket.partyStatusMessage(31, null));
                         }
                         break;
                     case 33:
                         User cfrom = c.getChannelServer().getPlayerStorage().getCharacterById(party.getLeader().getId());
                         if (cfrom != null) { //Currently giving "Your request for a party didn't work due to an unexpected error"
-                            cfrom.getClient().SendPacket(WvsContext.PartyPacket.partyStatusMessage(23, c.getPlayer().getName()));
+                            cfrom.getClient().SendPacket(WvsContext.PartyPacket.partyStatusMessage(34, c.getPlayer().getName()));
                         }
                         break;
-                    case 37: //Decline invite
+                    case 41: //Decline invite
                         //To Do properly and better.. this is ugly
                         User cfrom2 = c.getChannelServer().getPlayerStorage().getCharacterById(party.getLeader().getId());
                         cfrom2.dropMessage(5, c.getPlayer().getName() + " has declined your party invite");

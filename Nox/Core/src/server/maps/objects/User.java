@@ -290,6 +290,19 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         nEliteMobKills = nAmount;
     }
     
+    /**
+     * Mob Aggression
+     */
+    private long nLastAggressionTime;
+    
+    public long getLastAggressionTime() {
+        return nLastAggressionTime;
+    }
+    
+    public void setLastAggressionTime(long tTime) {
+        nLastAggressionTime = tTime;
+    }
+    
     /*
      *  V: Matrix
      */

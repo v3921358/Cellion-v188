@@ -102,6 +102,10 @@ public class TrainingMap {
      * @param pPlayer
      */
     public static void OnMonsterAggressionRequest(User pPlayer) {
+        if (pPlayer.getLastAggressionTime() + 8000 > System.currentTimeMillis()) {
+            return;
+        }
+        
         ReentrantLock pLock = new ReentrantLock(true);
         final List<MapleMapObject> aMobsToAggro = pPlayer.getMap().getMapObjectsInRange(pPlayer.getPosition(), 300000.0D, Arrays.asList(MapleMapObjectType.MONSTER));
         pLock.lock();
@@ -112,10 +116,12 @@ public class TrainingMap {
                     if (pPlayer.getMap().getCharacterById(pMob.getController().getId()) == null) {
                         pMob.switchController(pPlayer, true);
                         pPlayer.getClient().SendPacket(MobPacket.OnMobChangeController(pMob, true));
+                        pPlayer.setLastAggressionTime(System.currentTimeMillis());
                     }
                 } else  {
                     pMob.switchController(pPlayer, true);
                     pPlayer.getClient().SendPacket(MobPacket.OnMobChangeController(pMob, true));
+                    pPlayer.setLastAggressionTime(System.currentTimeMillis());
                 }
             }
         } finally {

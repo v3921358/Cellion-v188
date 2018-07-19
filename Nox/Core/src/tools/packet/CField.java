@@ -714,6 +714,7 @@ public class CField {
         oPacket.EncodeByte(mode);
         oPacket.EncodeString(env);
         oPacket.EncodeInt(delay); // 0x64
+        oPacket.EncodeInt(0);
 
         return oPacket;
     }

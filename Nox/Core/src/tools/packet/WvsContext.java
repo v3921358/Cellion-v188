@@ -204,9 +204,8 @@ public class WvsContext {
     }
 
     /**
-     * StatChanged Packet
-     * Updates the characters stats in the game client.
-     * 
+     * StatChanged Packet Updates the characters stats in the game client.
+     *
      * @param pPlayer
      * @param aStats
      * @param bExclRequest
@@ -218,9 +217,9 @@ public class WvsContext {
      * @param nHPRecovery
      * @param nMPRecovery
      */
-    public static OutPacket OnPlayerStatChanged(User pPlayer, Map<Stat, Long> aStats, boolean bExclRequest, byte nMixBaseHairColor, 
-        byte nMixAddHairColor, byte nMixHairBaseProb, byte nCharm, boolean bUpdateCovery, int nHPRecovery, int nMPRecovery) {
-        
+    public static OutPacket OnPlayerStatChanged(User pPlayer, Map<Stat, Long> aStats, boolean bExclRequest, byte nMixBaseHairColor,
+            byte nMixAddHairColor, byte nMixHairBaseProb, byte nCharm, boolean bUpdateCovery, int nHPRecovery, int nMPRecovery) {
+
         OutPacket oPacket = new OutPacket(SendPacketOpcode.StatChanged.getValue());
         oPacket.EncodeBool(bExclRequest);
         long nFlag = 0;
@@ -230,7 +229,7 @@ public class WvsContext {
             }
         }
         oPacket.EncodeLong(nFlag);
-        
+
         if ((nFlag & Stat.Skin.getValue()) != 0) {
             oPacket.EncodeByte(aStats.get(Stat.Skin).byteValue());
         }
@@ -342,38 +341,39 @@ public class WvsContext {
         if ((nFlag & Stat.PvpPoints.getValue()) != 0) {
             oPacket.EncodeInt(aStats.get(Stat.PvpPoints).intValue()); // nEventPoint
         }
-        
+
         oPacket.EncodeByte(nMixBaseHairColor);
         oPacket.EncodeByte(nMixAddHairColor);
         oPacket.EncodeByte(nMixHairBaseProb);
-        
+
         oPacket.EncodeBool(nCharm > 0);
         if (nCharm > 0) {
             oPacket.EncodeByte(nCharm);
         }
-        
+
         oPacket.EncodeBool(bUpdateCovery);
         if (bUpdateCovery) {
             oPacket.EncodeInt(nHPRecovery);
             oPacket.EncodeInt(nMPRecovery);
         }
-                
+
         return oPacket;
     }
-    
+
     public static OutPacket OnPlayerStatChanged(User pPlayer, Map<Stat, Long> aStats) {
         return OnPlayerStatChanged(pPlayer, aStats, false, (byte) 0, (byte) 0, (byte) 0, (byte) 0, false, 0, 0);
     }
-    
+
     public static OutPacket enableActions() {
-        return OnPlayerStatChanged(null, new EnumMap<>(Stat.class), true, (byte) 0, (byte) 0, (byte) 0, (byte) 0, false, 0, 0); 
+        return OnPlayerStatChanged(null, new EnumMap<>(Stat.class), true, (byte) 0, (byte) 0, (byte) 0, (byte) 0, false, 0, 0);
     }
-    
+
     /**
      * Old Packet for Player StatChanged
+     *
      * @param stats
      * @param chr
-     * @return 
+     * @return
      */
     public static OutPacket updatePlayerStats(Map<Stat, Long> stats, User chr) {
         return updatePlayerStats(stats, false, chr);
@@ -1133,7 +1133,6 @@ public class WvsContext {
 
         return oPacket;
     }*/
-
     public static OutPacket showQuestMsg(String msg) {
         return broadcastMsg(5, msg);
     }
@@ -1268,7 +1267,7 @@ public class WvsContext {
         if (pItem != null) {
             PacketHelper.addItemInfo(oPacket, pItem);
         }
- 
+
         oPacket.Fill(0, 19);
 
         return oPacket;
@@ -1556,7 +1555,6 @@ public class WvsContext {
 
         return oPacket;
     }*/
-
     public static OutPacket updateWebBoard(boolean result) {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.WebBoardAuthkeyUpdate.getValue());
@@ -2298,7 +2296,7 @@ public class WvsContext {
      * This packet handles all of the functions for buddies
      *
      * @param buddy
-     * @return 
+     * @return
      */
     public static OutPacket buddylistMessage(Buddy buddy) {
 
@@ -2312,7 +2310,7 @@ public class WvsContext {
                 }
                 break;
             case SET_FRIEND_FULL_OTHER:
-                
+
                 break;
             case NOTIFY_CHANGE_FRIEND_INFO: //update blocked friends
                 oPacket.EncodeInt(buddy.getEntry().getCharacterId()); //dwFriendID
@@ -2591,7 +2589,7 @@ public class WvsContext {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.PartyResult.getValue());
             oPacket.EncodeByte(message);
-            if ((message == 34) || (message == 56)) {
+            if ((message == 37) || (message == 56)) {
                 oPacket.EncodeString(charname);
             } else if (message == 49) {
                 oPacket.EncodeByte(0);
@@ -2654,13 +2652,31 @@ public class WvsContext {
                     oPacket.EncodeInt(partychar.getDoorPosition().y);
                 } else {
                     oPacket.EncodeInt(leaving ? 999999999 : 0);
-                    oPacket.EncodeLong(leaving ? 999999999 : 0);
-                    oPacket.EncodeLong(leaving ? -1 : 0);
+                    oPacket.EncodeInt(leaving ? 999999999 : 0);
+                    oPacket.EncodeInt(0);
+                    oPacket.EncodeInt(-1);
+                    oPacket.EncodeInt(-1);
                 }
             }
             oPacket.EncodeBool(party.isPrivate());
             oPacket.EncodeBool(false); // Unknown
             oPacket.EncodeString(party.getName());
+
+            // All Unknown, probably is a new class entirely
+            oPacket.EncodeBool(false);
+            oPacket.EncodeByte(0);
+            oPacket.EncodeByte(0); // Encode int, int, string, int per size
+            oPacket.EncodeBool(false);
+            for (int i = 0; i < 2; i++) {
+                oPacket.EncodeByte(0);
+                oPacket.EncodeByte(0);
+                oPacket.EncodeBool(false); // if true, encode avatarlook
+                oPacket.EncodeByte(0); // 2
+                oPacket.EncodeInt(0);
+                oPacket.EncodeLong(0);
+                oPacket.EncodeInt(0);
+                oPacket.EncodeInt(0);
+            }
         }
 
         public static OutPacket updateParty(int forChannel, MapleParty party, PartyOperation op, MaplePartyCharacter target) {
@@ -2840,88 +2856,88 @@ public class WvsContext {
             public static final int SendGuildInvite = 7;
             public static final int GuildWaitingList = 0x2F;
             public static final int LoadGuild_Done = 48,
-                FindGuild_Done = 49,
-                CheckGuildName_Available = 50,
-                CheckGuildName_AlreadyUsed = 51,
-                CheckGuildName_Unknown = 52,
-                CreateGuildAgree_Reply = 53,
-                CreateGuildAgree_Unknown = 54,
-                CreateNewGuild_Done = 55,
-                CreateNewGuild_AlreayJoined = 56,
-                CreateNewGuild_GuildNameAlreayExist = 57,
-                CreateNewGuild_Beginner = 58,
-                CreateNewGuild_Disagree = 59,
-                CreateNewGuild_NotFullParty = 60,
-                CreateNewGuild_Unknown = 61,
-                JoinGuild_Done = 62,
-                JoinGuild_AlreadyJoined = 63,
-                JoinGuild_AlreadyFull = 64,
-                JoinGuild_UnknownUser = 65,
-                JoinGuild_NonRequestFindUser = 68,
-                JoinGuild_Unknown = 69,
-                JoinRequest_Done = 70,
-                JoinRequest_DoneToUser = 71,
-                JoinRequest_AlreadyFull = 72,
-                JoinRequest_LimitTime = 73,
-                JoinRequest_Unknown = 74,
-                JoinCancelRequest_Done = 75,
-                WithdrawGuild_Done = 76,
-                WithdrawGuild_NotJoined = 77,
-                WithdrawGuild_Unknown = 78,
-                KickGuild_Done = 79,
-                KickGuild_NotJoined = 80,
-                KickGuild_Unknown = 81,
-                RemoveGuild_Done = 82,
-                RemoveGuild_NotExist = 83,
-                RemoveGuild_Unknown = 84,
-                RemoveRequestGuild_Done = 85,
-                InviteGuild_BlockedUser = 86,
-                InviteGuild_AlreadyInvited = 87,
-                InviteGuild_Rejected = 88,
-                AdminCannotCreate = 89,
-                AdminCannotInvite = 90,
-                IncMaxMemberNum_Done = 91,
-                IncMaxMemberNum_Unknown = 92,
-                ChangeMemberName = 93,
-                ChangeRequestUserName = 94,
-                ChangeLevelOrJob = 95,
-                NotifyLoginOrLogout = 96,
-                SetGradeName_Done = 97,
-                SetGradeName_Unknown = 98,
-                SetMemberGrade_Done = 99,
-                SetMemberGrade_Unknown = 100,
-                SetMemberCommitment_Done = 101,
-                SetMark_Done = 102,
-                SetMark_Unknown = 103,
-                SetNotice_Done = 104,
-                InsertQuest = 105,
-                NoticeQuestWaitingOrder = 106,
-                SetGuildCanEnterQuest = 107,
-                IncPoint_Done = 108,
-                ShowGuildRanking = 109,
-                SetGGP_Done = 110,
-                SetIGP_Done = 111,
-                GuildQuest_NotEnoughUser = 112,
-                GuildQuest_RegisterDisconnected = 113,
-                GuildQuest_NoticeOrder = 114,
-                Authkey_Update = 115,
-                SetSkill_Done = 116,
-                SetSkill_Extend_Unknown = 117,
-                SetSkill_LevelSet_Unknown = 118,
-                SetSkill_ResetBattleSkill = 119,
-                UseSkill_Success = 120,
-                UseSkill_Err = 121,
-                ChangeName_Done = 122,
-                ChangeName_Unknown = 123,
-                ChangeMaster_Done = 124,
-                ChangeMaster_Unknown = 125,
-                BlockedBehaviorCreate = 126,
-                BlockedBehaviorJoin = 127,
-                BattleSkillOpen = 128,
-                GetData = 129,
-                Rank_Reflash = 130,
-                FindGuild_Error = 131,
-                ChangeMaster_Pinkbean = 132;
+                    FindGuild_Done = 49,
+                    CheckGuildName_Available = 50,
+                    CheckGuildName_AlreadyUsed = 51,
+                    CheckGuildName_Unknown = 52,
+                    CreateGuildAgree_Reply = 53,
+                    CreateGuildAgree_Unknown = 54,
+                    CreateNewGuild_Done = 55,
+                    CreateNewGuild_AlreayJoined = 56,
+                    CreateNewGuild_GuildNameAlreayExist = 57,
+                    CreateNewGuild_Beginner = 58,
+                    CreateNewGuild_Disagree = 59,
+                    CreateNewGuild_NotFullParty = 60,
+                    CreateNewGuild_Unknown = 61,
+                    JoinGuild_Done = 62,
+                    JoinGuild_AlreadyJoined = 63,
+                    JoinGuild_AlreadyFull = 64,
+                    JoinGuild_UnknownUser = 65,
+                    JoinGuild_NonRequestFindUser = 68,
+                    JoinGuild_Unknown = 69,
+                    JoinRequest_Done = 70,
+                    JoinRequest_DoneToUser = 71,
+                    JoinRequest_AlreadyFull = 72,
+                    JoinRequest_LimitTime = 73,
+                    JoinRequest_Unknown = 74,
+                    JoinCancelRequest_Done = 75,
+                    WithdrawGuild_Done = 76,
+                    WithdrawGuild_NotJoined = 77,
+                    WithdrawGuild_Unknown = 78,
+                    KickGuild_Done = 79,
+                    KickGuild_NotJoined = 80,
+                    KickGuild_Unknown = 81,
+                    RemoveGuild_Done = 82,
+                    RemoveGuild_NotExist = 83,
+                    RemoveGuild_Unknown = 84,
+                    RemoveRequestGuild_Done = 85,
+                    InviteGuild_BlockedUser = 86,
+                    InviteGuild_AlreadyInvited = 87,
+                    InviteGuild_Rejected = 88,
+                    AdminCannotCreate = 89,
+                    AdminCannotInvite = 90,
+                    IncMaxMemberNum_Done = 91,
+                    IncMaxMemberNum_Unknown = 92,
+                    ChangeMemberName = 93,
+                    ChangeRequestUserName = 94,
+                    ChangeLevelOrJob = 95,
+                    NotifyLoginOrLogout = 96,
+                    SetGradeName_Done = 97,
+                    SetGradeName_Unknown = 98,
+                    SetMemberGrade_Done = 99,
+                    SetMemberGrade_Unknown = 100,
+                    SetMemberCommitment_Done = 101,
+                    SetMark_Done = 102,
+                    SetMark_Unknown = 103,
+                    SetNotice_Done = 104,
+                    InsertQuest = 105,
+                    NoticeQuestWaitingOrder = 106,
+                    SetGuildCanEnterQuest = 107,
+                    IncPoint_Done = 108,
+                    ShowGuildRanking = 109,
+                    SetGGP_Done = 110,
+                    SetIGP_Done = 111,
+                    GuildQuest_NotEnoughUser = 112,
+                    GuildQuest_RegisterDisconnected = 113,
+                    GuildQuest_NoticeOrder = 114,
+                    Authkey_Update = 115,
+                    SetSkill_Done = 116,
+                    SetSkill_Extend_Unknown = 117,
+                    SetSkill_LevelSet_Unknown = 118,
+                    SetSkill_ResetBattleSkill = 119,
+                    UseSkill_Success = 120,
+                    UseSkill_Err = 121,
+                    ChangeName_Done = 122,
+                    ChangeName_Unknown = 123,
+                    ChangeMaster_Done = 124,
+                    ChangeMaster_Unknown = 125,
+                    BlockedBehaviorCreate = 126,
+                    BlockedBehaviorJoin = 127,
+                    BattleSkillOpen = 128,
+                    GetData = 129,
+                    Rank_Reflash = 130,
+                    FindGuild_Error = 131,
+                    ChangeMaster_Pinkbean = 132;
         }
 
         //Can be removed once these last few are figured out/done
@@ -3081,7 +3097,7 @@ public class WvsContext {
             oPacket.EncodeString(mgc.getName());
 
             oPacket.Fill(0, 19);
-            
+
             return oPacket;
         }
 
@@ -3360,7 +3376,7 @@ public class WvsContext {
             }
 
             oPacket.Fill(0, 29);
-            
+
             return oPacket;
         }
 
@@ -4012,7 +4028,7 @@ public class WvsContext {
         }
         return oPacket;
     }
-    
+
     public static OutPacket OnIssueReloginCookie(String sUsername) {
         OutPacket oPacket = new OutPacket(SendPacketOpcode.IssueReloginCookie.getValue());
         oPacket.EncodeString("sUsername");

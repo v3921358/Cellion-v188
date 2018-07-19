@@ -78,6 +78,7 @@ public class PlayerCommand {
                     c.getPlayer().tPierre = 0;
                     c.getPlayer().tVellum = 0;
                     c.getPlayer().tMagnus = 0;
+                    c.getPlayer().tHorntail = 0;
                     break;
                 case 5: 
                     Mob pElite = LifeFactory.getMonster(100100);

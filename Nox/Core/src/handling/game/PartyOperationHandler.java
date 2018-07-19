@@ -31,9 +31,22 @@ public class PartyOperationHandler implements ProcessPacket<ClientSocket> {
 
     public static class PartyOperations {
 
-        public static final int createParty = 0x01;
-        public static final int leaveParty = 0x02;
-        public static final int changePartySettings = 0x0D;
+        public static final int LoadParty = 0,
+                CreateNewParty = 1,
+                WithdrawParty = 2,
+                JoinParty = 3,
+                InviteParty = 4,
+                InviteIntrusion = 5,
+                KickParty = 6,
+                ChangePartyBoss = 7,
+                ApplyParty = 8,
+                SetAppliable = 9,
+                ClearIntrusion = 10,
+                CreateNewParty_Group = 11,
+                JoinParty_Group = 12,
+                PartySetting = 13,
+                LoadStarPlanetPoint = 14,
+                InvitePartyAccepted = 42;
     }
 
     @Override
@@ -43,7 +56,7 @@ public class PartyOperationHandler implements ProcessPacket<ClientSocket> {
         MaplePartyCharacter partyplayer = new MaplePartyCharacter(c.getPlayer());
 
         switch (operation) {
-            case PartyOperations.createParty:
+            case PartyOperations.CreateNewParty:
                 boolean isPrivate = iPacket.DecodeByte() != 0;
                 String partyName = iPacket.DecodeString();
                 if (party == null) {
@@ -62,7 +75,7 @@ public class PartyOperationHandler implements ProcessPacket<ClientSocket> {
                     }
                 }
                 break;
-            case PartyOperations.leaveParty://dispand and leave?
+            case PartyOperations.WithdrawParty://dispand and leave?
                 if (party == null) {
                     break;
                 }
@@ -95,7 +108,7 @@ public class PartyOperationHandler implements ProcessPacket<ClientSocket> {
                 }
                 c.getPlayer().setParty(null);
                 break;
-            case PartyOperations.changePartySettings:
+            case PartyOperations.PartySetting:
                 MapleParty toChange = c.getPlayer().getParty();
                 if (toChange == null) {
                     break;
@@ -116,7 +129,7 @@ public class PartyOperationHandler implements ProcessPacket<ClientSocket> {
                         }
                     }
                 }
-            case 3:
+            case PartyOperations.JoinParty:
                 int partyid = iPacket.DecodeInt();
                 if (party == null) {
                     party = World.Party.getParty(partyid);
@@ -125,13 +138,13 @@ public class PartyOperationHandler implements ProcessPacket<ClientSocket> {
                             c.getPlayer().dropMessage(5, "You may not do party operations while in a raid.");
                             return;
                         }
-                        if ((party.getMembers().size() < 8) && (c.getPlayer().getQuestNoAdd(Quest.getInstance(122901)) == null)) {
+                        if ((party.getMembers().size() < 6) && (c.getPlayer().getQuestNoAdd(Quest.getInstance(122901)) == null)) {
                             c.getPlayer().setParty(party);
                             World.Party.updateParty(party.getId(), PartyOperation.JOIN, partyplayer);
                             c.getPlayer().receivePartyMemberHP();
                             c.getPlayer().updatePartyMemberHP();
                         } else {
-                            c.SendPacket(WvsContext.PartyPacket.partyStatusMessage(22, null));
+                            c.SendPacket(WvsContext.PartyPacket.partyStatusMessage(31, null));
                         }
                     } else {
                         c.getPlayer().dropMessage(5, "The party you are trying to join does not exist");
@@ -140,7 +153,7 @@ public class PartyOperationHandler implements ProcessPacket<ClientSocket> {
                     c.getPlayer().dropMessage(5, "You can't join the party as you are already in one");
                 }
                 break;
-            case 4:
+            case PartyOperations.InviteParty:
                 String theName = iPacket.DecodeString();
                 if (party == null) {
                     party = World.Party.createParty(partyplayer, theName, false);
@@ -156,20 +169,19 @@ public class PartyOperationHandler implements ProcessPacket<ClientSocket> {
                             return;
                         }
                         if (party.getMembers().size() < 6) {
-                            c.SendPacket(WvsContext.PartyPacket.partyStatusMessage(34, invited.getName()));
+                            c.SendPacket(WvsContext.PartyPacket.partyStatusMessage(37, invited.getName()));
                             invited.getClient().SendPacket(WvsContext.PartyPacket.partyInvite(c.getPlayer()));
                         } else {
-                            c.SendPacket(WvsContext.PartyPacket.partyStatusMessage(26, null));
+                            c.SendPacket(WvsContext.PartyPacket.partyStatusMessage(31, null));
                         }
                     } else {
                         c.getPlayer().dropMessage(6, "The person you are trying to invite is already in a party.");
                     }
                 } else { //To do: To this properly
-                    c.getPlayer().dropMessage(5, theName + " could not be found.");
-                    //   c.write(CWvsContext.PartyPacket.partyStatusMessage(28, null));
+                       c.SendPacket(WvsContext.PartyPacket.partyStatusMessage(34, null));
                 }
                 break;
-            case 6://was5
+            case PartyOperations.KickParty:
                 if ((party == null) || (partyplayer == null) || (!partyplayer.equals(party.getLeader()))) {
                     break;
                 }
@@ -193,7 +205,7 @@ public class PartyOperationHandler implements ProcessPacket<ClientSocket> {
                     }
                 }
                 break;
-            case 7://was 6
+            case PartyOperations.ChangePartyBoss:
                 if (party == null) {
                     break;
                 }
@@ -236,7 +248,7 @@ public class PartyOperationHandler implements ProcessPacket<ClientSocket> {
                     c.getPlayer().dropMessage(5, "Player was not found or player is not accepting party requests.");
                 }
                 break;
-            case 8:
+            case PartyOperations.ApplyParty:
                 if (iPacket.DecodeByte() > 0) {
                     c.getPlayer().getQuestRemove(Quest.getInstance(122900));
                 } else {
