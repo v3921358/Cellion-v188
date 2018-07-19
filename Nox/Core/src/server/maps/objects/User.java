@@ -11367,6 +11367,20 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void userRewardRequest(int nLevel) {
+        
+        // Equipment Boxes
+        switch (nLevel) {
+            case 30:
+                addReward(1, LootBox.EQUIPMENT_BOX_LV30, 0, 0, 0, "You have been rewarded with a Lv. " + level + " equipment box !");
+                break;
+            case 50:
+                addReward(1, LootBox.EQUIPMENT_BOX_LV50, 0, 0, 0, "You have been rewarded with a Lv. " + level + " equipment box !");
+                break;
+            case 70:
+                addReward(1, LootBox.EQUIPMENT_BOX_LV70, 0, 0, 0, "You have been rewarded with a Lv. " + level + " equipment box !");
+                break;
+        }
+        
         if (GameConstants.isExplorer(job)) {
             switch (nLevel) {
                 case 15:

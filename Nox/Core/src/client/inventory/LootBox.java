@@ -4,6 +4,7 @@
 package client.inventory;
 
 import constants.GameConstants;
+import constants.JobConstants;
 import enums.InventoryType;
 import enums.NPCChatType;
 import enums.NPCInterfaceType;
@@ -171,6 +172,11 @@ public class LootBox {
                 } else if (GameConstants.isPirateJob(pPlayer.getJob())) {
                     aBoxItems = aEquipment_Lv30_Pirate;
                 }
+                
+                if (JobConstants.hasSecondJob(pPlayer.getJob())) {
+                    pPlayer.dropMessage(5, "Sorry, you do not meet the job requirement to open this box.");
+                    return false;
+                }
                 break;
             case EQUIPMENT_BOX_LV50:
                 if (GameConstants.isWarriorJob(pPlayer.getJob())) {
@@ -184,6 +190,11 @@ public class LootBox {
                 } else if (GameConstants.isPirateJob(pPlayer.getJob())) {
                     aBoxItems = aEquipment_Lv50_Pirate;
                 }
+                
+                if (JobConstants.hasSecondJob(pPlayer.getJob())) {
+                    pPlayer.dropMessage(5, "Sorry, you do not meet the job requirement to open this box.");
+                    return false;
+                }
                 break;
             case EQUIPMENT_BOX_LV70:
                 if (GameConstants.isWarriorJob(pPlayer.getJob())) {
@@ -196,6 +207,11 @@ public class LootBox {
                     aBoxItems = aEquipment_Lv70_Thief;
                 } else if (GameConstants.isPirateJob(pPlayer.getJob())) {
                     aBoxItems = aEquipment_Lv70_Pirate;
+                }
+                
+                if (JobConstants.hasThirdJob(pPlayer.getJob())) {
+                    pPlayer.dropMessage(5, "Sorry, you do not meet the job requirement to open this box.");
+                    return false;
                 }
                 break;
             default:

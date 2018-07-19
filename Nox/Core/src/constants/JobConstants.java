@@ -1,73 +1,77 @@
 package constants;
 
+import static constants.GameConstants.isBeastTamer;
+import static constants.GameConstants.isDualBlade;
+import static constants.GameConstants.isEvan;
+import static constants.GameConstants.isZero;
+
 /**
- *
- * @author Itzik
+ * JobConstants
  * @author Mazen Massoud
  */
 public class JobConstants {
 
     /*Class Creation Configuration*/
  /*These values will be overwritten by the configuration.ini file.*/
-    public static boolean enableResistance = true,
-                          enableAdventurer = true,
-                          enableCygnus = true,
-                          enableAran = true,
-                          enableEvan = true,
-                          enableMercedes = true,
-                          enableDemon = true,
-                          enablePhantom = true,
-                          enableDualBlade = true,
-                          enableMihile = true,
-                          enableLuminous = true,
-                          enableKaiser = true,
-                          enableAngelicBuster = true,
-                          enableCannoneer = true,
-                          enableXenon = true,
-                          enableZero = true,
-                          enableShade = true,
-                          enableJett = true,
-                          enableHayato = true,
-                          enableKanna = true,
-                          enableBeastTamer = true,
-                          enableKinesis = true;
+    public static boolean bResistance = true,
+                          bAdventurer = true,
+                          bCygnus = true,
+                          bAran = true,
+                          bEvan = true,
+                          bMercedes = true,
+                          bDemon = true,
+                          bPhantom = true,
+                          bDualBlade = true,
+                          bMihile = true,
+                          bLuminous = true,
+                          bKaiser = true,
+                          bAngelicBuster = true,
+                          bCannoneer = true,
+                          bXenon = true,
+                          bZero = true,
+                          bShade = true,
+                          bJett = true,
+                          bHayato = true,
+                          bKanna = true,
+                          bBeastTamer = true,
+                          bKinesis = true;
 
     // General Job Advancement Levels
-    public static final int _1stJobAdvancementLv = 10,
-                            _2ndJobAdvancementLv = 30,
-                            _3rdJobAdvancementLv = 60,
-                            _4thJobAdvancementLv = 100,
-                            _5thJobAdvancementLv = 200;
+    public static final int nFirstJobAdvancementLv = 10,
+                            nSecondJobAdvancementLv = 30,
+                            nThirdJobAdvancementLv = 60,
+                            nFourthJobAdvancementLv = 100,
+                            nFifthJobAdvancementLv = 200;
 
     // Dual Blade Special Advancement Levels
-    public static final int DualBlade_1stJobPlusAdvancementLv = 20,
-                            DualBlade_2ndJobPlusAdvancementLv = 45;
+    public static final int nFirstJobPlusAdvancementLv_DualBlade = 20,
+                            nSecondJobPlusAdvancementLv_DualBlade = 45;
 
     public enum LoginJob {
 
-        Resistance(0, enableResistance ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Adventurer(1, enableAdventurer ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Cygnus(2, enableCygnus ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Aran(3, enableAran ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Evan(4, enableEvan ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Mercedes(5, enableMercedes ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Demon(6, enableDemon ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Phantom(7, enablePhantom ? JobFlag.ENABLED : JobFlag.DISABLED),
-        DualBlade(8, enableDualBlade ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Mihile(9, enableMihile ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Luminous(10, enableLuminous ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Kaiser(11, enableKaiser ? JobFlag.ENABLED : JobFlag.DISABLED),
-        AngelicBuster(12, enableAngelicBuster ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Cannoneer(13, enableResistance ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Xenon(14, enableCannoneer ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Zero(15, enableZero ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Shade(16, enableShade ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Jett(17, enableJett ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Hayato(18, enableHayato ? JobFlag.ENABLED : JobFlag.DISABLED),
-        Kanna(19, enableKanna ? JobFlag.ENABLED : JobFlag.DISABLED),
-        BeastTamer(20, enableBeastTamer ? JobFlag.ENABLED : JobFlag.DISABLED),
-        PinkBean(21, JobFlag.DISABLED), // Monster Job (Event)
-        Kinesis(22, enableKinesis ? JobFlag.ENABLED : JobFlag.DISABLED);
+        Resistance(0, bResistance ? JobFlag.Available : JobFlag.Unavailable),
+        Adventurer(1, bAdventurer ? JobFlag.Available : JobFlag.Unavailable),
+        Cygnus(2, bCygnus ? JobFlag.Available : JobFlag.Unavailable),
+        Aran(3, bAran ? JobFlag.Available : JobFlag.Unavailable),
+        Evan(4, bEvan ? JobFlag.Available : JobFlag.Unavailable),
+        Mercedes(5, bMercedes ? JobFlag.Available : JobFlag.Unavailable),
+        Demon(6, bDemon ? JobFlag.Available : JobFlag.Unavailable),
+        Phantom(7, bPhantom ? JobFlag.Available : JobFlag.Unavailable),
+        DualBlade(8, bDualBlade ? JobFlag.Available : JobFlag.Unavailable),
+        Mihile(9, bMihile ? JobFlag.Available : JobFlag.Unavailable),
+        Luminous(10, bLuminous ? JobFlag.Available : JobFlag.Unavailable),
+        Kaiser(11, bKaiser ? JobFlag.Available : JobFlag.Unavailable),
+        AngelicBuster(12, bAngelicBuster ? JobFlag.Available : JobFlag.Unavailable),
+        Cannoneer(13, bResistance ? JobFlag.Available : JobFlag.Unavailable),
+        Xenon(14, bCannoneer ? JobFlag.Available : JobFlag.Unavailable),
+        Zero(15, bZero ? JobFlag.Available : JobFlag.Unavailable),
+        Shade(16, bShade ? JobFlag.Available : JobFlag.Unavailable),
+        Jett(17, bJett ? JobFlag.Available : JobFlag.Unavailable),
+        Hayato(18, bHayato ? JobFlag.Available : JobFlag.Unavailable),
+        Kanna(19, bKanna ? JobFlag.Available : JobFlag.Unavailable),
+        BeastTamer(20, bBeastTamer ? JobFlag.Available : JobFlag.Unavailable),
+        PinkBean(21, JobFlag.Unavailable), // Monster Job (Event)
+        Kinesis(22, bKinesis ? JobFlag.Available : JobFlag.Unavailable);
 
         private final int jobType, flag;
 
@@ -86,8 +90,8 @@ public class JobConstants {
 
         public enum JobFlag {
 
-            DISABLED(0),
-            ENABLED(1);
+            Unavailable(0),
+            Available(1);
             private final int flag;
 
             private JobFlag(int flag) {
@@ -100,6 +104,152 @@ public class JobConstants {
         }
     }
 
+    /**
+     * Job Boolean Checks
+     * @purpose Determines if a Job ID has reached a certain job class yet.
+     */
+    
+    /**
+     * hasSecondJob
+     * @param nJobID
+     * @return 
+     */
+    public static boolean hasSecondJob(int nJobID) {
+        int nLastDigit = nJobID % 10;
+        int nLastTwoDigits = nJobID % 100;
+        
+        if (isBeastTamer(nJobID) || isZero(nJobID)) {
+            return true;
+        }
+        if (isEvan(nJobID)) { // Evan
+            switch (nJobID) {
+                //case 2210:
+                case 2212:
+                case 2214:
+                case 2216:
+                case 2217:
+                case 2218:
+                case 2219:
+                    return true;
+            }
+        }
+        if (isDualBlade(nJobID)) {
+            switch (nJobID) {
+                //case 430:
+                //case 431:
+                case 432:
+                case 433:
+                case 434:
+                case 435:
+                case 436:
+                    return true;
+            }
+        }
+        
+        switch (nLastDigit) {
+            case 1: // Third Job
+            case 2: // Fourth Job
+                return true;
+        }
+        switch (nLastTwoDigits) { // Second Job
+            case 10:
+            case 20:
+            case 30:
+            case 40:
+            case 50:
+                return true;
+        }
+        return false;
+    }
+    
+    /**
+     * hasThirdJob
+     * @param nJobID
+     * @return 
+     */
+    public static boolean hasThirdJob(int nJobID) {
+        int nLastDigit = nJobID % 10;
+        
+        if (isBeastTamer(nJobID) || isZero(nJobID)) {
+            return true;
+        }
+        if (isEvan(nJobID)) { // Evan
+            switch (nJobID) {
+                //case 2210:
+                //case 2212:
+                case 2214:
+                case 2216:
+                case 2217:
+                case 2218:
+                case 2219:
+                    return true;
+            }
+        }
+        if (isDualBlade(nJobID)) {
+            switch (nJobID) {
+                //case 430:
+                //case 431:
+                //case 432:
+                case 433:
+                case 434:
+                case 435:
+                case 436:
+                    return true;
+            }
+        }
+        
+        switch (nLastDigit) {
+            case 1: // Third Job
+            case 2: // Fourth Job
+                return true;
+        }
+        return false;
+    }
+    
+    /**
+     * hasFourthJob
+     * @param nJobID
+     * @return 
+     */
+    public static boolean hasFourthJob(int nJobID) {
+        int nLastDigit = nJobID % 10;
+        int nLastTwoDigits = nJobID % 100;
+        
+        if (isBeastTamer(nJobID) || isZero(nJobID)) {
+            return true;
+        }
+        if (isEvan(nJobID)) { // Evan
+            switch (nJobID) {
+                //case 2210:
+                //case 2212:
+                //case 2214:
+                //case 2216:
+                case 2217:
+                case 2218:
+                case 2219:
+                    return true;
+            }
+        }
+        if (isDualBlade(nJobID)) {
+            switch (nJobID) {
+                //case 430:
+                //case 431:
+                //case 432:
+                //case 433:
+                //case 434:
+                case 435:
+                case 436:
+                    return true;
+            }
+        }
+        
+        switch (nLastDigit) {
+            case 2: // Fourth Job
+                return true;
+        }
+        return false;
+    }
+    
     /**
      *
      * @param jobid (Eg: 312)

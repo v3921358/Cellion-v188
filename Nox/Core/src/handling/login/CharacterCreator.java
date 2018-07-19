@@ -75,7 +75,7 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
 
         for (JobConstants.LoginJob j : JobConstants.LoginJob.values()) {
             if (j.getJobType() == pJob.getType()) {
-                if (j.getFlag() != JobConstants.LoginJob.JobFlag.ENABLED.getFlag()) {
+                if (j.getFlag() != JobConstants.LoginJob.JobFlag.Available.getFlag()) {
                     c.SendPacket(CLogin.addNewCharEntry(null, 10));
                     return;
                 }
