@@ -91,28 +91,28 @@ public class Start {
         ApiConstants.CLIENT_SECRET = config.getProperty("CLIENT_SECRET");
 
         /*Charcter Creation Configuration*/
-        JobConstants.enableResistance = Boolean.valueOf(config.getProperty("RESISTANCE"));
-        JobConstants.enableAdventurer = Boolean.valueOf(config.getProperty("EXPLORERS"));
-        JobConstants.enableCygnus = Boolean.valueOf(config.getProperty("CYGNUS"));
-        JobConstants.enableAran = Boolean.valueOf(config.getProperty("ARAN"));
-        JobConstants.enableEvan = Boolean.valueOf(config.getProperty("EVAN"));
-        JobConstants.enableMercedes = Boolean.valueOf(config.getProperty("MERCEDES"));
-        JobConstants.enableDemon = Boolean.valueOf(config.getProperty("DEMON"));
-        JobConstants.enablePhantom = Boolean.valueOf(config.getProperty("PHANTOM"));
-        JobConstants.enableDualBlade = Boolean.valueOf(config.getProperty("DUALBLADE"));
-        JobConstants.enableMihile = Boolean.valueOf(config.getProperty("MIHILE"));
-        JobConstants.enableLuminous = Boolean.valueOf(config.getProperty("LUMINOUS"));
-        JobConstants.enableKaiser = Boolean.valueOf(config.getProperty("KAISER"));
-        JobConstants.enableAngelicBuster = Boolean.valueOf(config.getProperty("ANGELICBUSTER"));
-        JobConstants.enableCannoneer = Boolean.valueOf(config.getProperty("CANNONEER"));
-        JobConstants.enableXenon = Boolean.valueOf(config.getProperty("XENON"));
-        JobConstants.enableZero = Boolean.valueOf(config.getProperty("ZERO"));
-        JobConstants.enableShade = Boolean.valueOf(config.getProperty("SHADE"));
-        JobConstants.enableJett = Boolean.valueOf(config.getProperty("JETT"));
-        JobConstants.enableHayato = Boolean.valueOf(config.getProperty("HAYATO"));
-        JobConstants.enableKanna = Boolean.valueOf(config.getProperty("KANNA"));
-        JobConstants.enableBeastTamer = Boolean.valueOf(config.getProperty("CHASE"));
-        JobConstants.enableKinesis = Boolean.valueOf(config.getProperty("KINESIS"));
+        JobConstants.bResistance = Boolean.valueOf(config.getProperty("RESISTANCE"));
+        JobConstants.bAdventurer = Boolean.valueOf(config.getProperty("EXPLORERS"));
+        JobConstants.bCygnus = Boolean.valueOf(config.getProperty("CYGNUS"));
+        JobConstants.bAran = Boolean.valueOf(config.getProperty("ARAN"));
+        JobConstants.bEvan = Boolean.valueOf(config.getProperty("EVAN"));
+        JobConstants.bMercedes = Boolean.valueOf(config.getProperty("MERCEDES"));
+        JobConstants.bDemon = Boolean.valueOf(config.getProperty("DEMON"));
+        JobConstants.bPhantom = Boolean.valueOf(config.getProperty("PHANTOM"));
+        JobConstants.bDualBlade = Boolean.valueOf(config.getProperty("DUALBLADE"));
+        JobConstants.bMihile = Boolean.valueOf(config.getProperty("MIHILE"));
+        JobConstants.bLuminous = Boolean.valueOf(config.getProperty("LUMINOUS"));
+        JobConstants.bKaiser = Boolean.valueOf(config.getProperty("KAISER"));
+        JobConstants.bAngelicBuster = Boolean.valueOf(config.getProperty("ANGELICBUSTER"));
+        JobConstants.bCannoneer = Boolean.valueOf(config.getProperty("CANNONEER"));
+        JobConstants.bXenon = Boolean.valueOf(config.getProperty("XENON"));
+        JobConstants.bZero = Boolean.valueOf(config.getProperty("ZERO"));
+        JobConstants.bShade = Boolean.valueOf(config.getProperty("SHADE"));
+        JobConstants.bJett = Boolean.valueOf(config.getProperty("JETT"));
+        JobConstants.bHayato = Boolean.valueOf(config.getProperty("HAYATO"));
+        JobConstants.bKanna = Boolean.valueOf(config.getProperty("KANNA"));
+        JobConstants.bBeastTamer = Boolean.valueOf(config.getProperty("CHASE"));
+        JobConstants.bKinesis = Boolean.valueOf(config.getProperty("KINESIS"));
         /*Configuration End*/
 
         System.setProperty("wzpath", "wz");

@@ -3943,6 +3943,10 @@ public class CField {
             return oPacket;
         }
 
+        public static OutPacket spawnSummon(Summon pSummon, boolean bAnimated) {
+            return spawnSummon(pSummon, bAnimated, false);
+        }
+        
         /**
          * This packet spawns the summons onto the world
          *
