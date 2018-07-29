@@ -382,7 +382,7 @@ public class MobStatRequest {
                     pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
                     pStat = MobStat.Stun;
                     break;
-            }
+                }
 
                 /**
                  * General Speed Modification
@@ -508,6 +508,7 @@ public class MobStatRequest {
              * Burn Status Handler
              */
             switch (pAttack.skill) {
+                case WindArcher.MONSOON:
                 case FirePoisonArchMage.IFRIT:
                 case FirePoisonArchMage.PARALYZE:
                 case FirePoisonWizard.POISON_BREATH:
