@@ -1667,7 +1667,7 @@ public class Mob extends AbstractLoadedMapleLife {
             WeatherEffectNotice pType = WeatherEffectNotice.EliteBoss;
             if (pPlayer.nEliteMobKills > 16) {
                 sEliteMessage = "The dark energy is still here. It's making the place quite grim.";
-                pType = WeatherEffectNotice.EliteBoss_Warrior;
+                pType = WeatherEffectNotice.EliteBoss_Mage;
             }
             
             pPlayer.getMap().broadcastPacket(WvsContext.OnWeatherEffectNotice(sEliteMessage, pType, 8000));
