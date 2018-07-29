@@ -17,6 +17,7 @@ import constants.skills.Xenon;
 import client.jobs.Kinesis;
 import client.jobs.Kinesis.KinesisHandler;
 import client.jobs.Resistance.BlasterHandler;
+import constants.skills.Shade;
 import server.MapleItemInformationProvider;
 import server.StatEffect;
 import server.Randomizer;
@@ -34,6 +35,7 @@ import tools.packet.JobPacket;
 import net.ProcessPacket;
 import server.life.mob.BuffedMob;
 import server.maps.objects.User;
+import tools.Utility;
 
 public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
 
@@ -312,15 +314,17 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
             }
         }
         pPlayer.getMap().broadcastPacket(pPlayer, CField.damagePlayer(pPlayer.getId(), type_, damage, monsteridfrom, direction, skillid, pDMG, pPhysical, pID, pType, pPos, offset, offset_d, fake), false);
+        
         // Revive Passives
         if (!pPlayer.isAlive()) {
             if (pPlayer.hasBuff(CharacterTemporaryStat.ReviveOnce)) {
-                pPlayer.getStat().setHp(pPlayer.getStat().getMaxHp(), pPlayer);
-                pPlayer.updateSingleStat(Stat.HP, pPlayer.getStat().getMaxHp());
-                pPlayer.getStat().setMp(pPlayer.getStat().getMaxMp(), pPlayer);
-                pPlayer.updateSingleStat(Stat.MP, pPlayer.getStat().getMaxMp());
-                pPlayer.dispelDebuffs();
-                pPlayer.cancelAllBuffs();
+                pPlayer.OnReviveRequest();
+            } else if (pPlayer.hasBuff(CharacterTemporaryStat.PreReviveOnce)) {
+                if ((pPlayer.getSkillLevel(Shade.CLOSE_CALL) >= 2) && Utility.resultSuccess(10)) {
+                    pPlayer.OnReviveRequest();
+                } else if (Utility.resultSuccess(5)) {
+                    pPlayer.OnReviveRequest();
+                }
             }
         }
     }

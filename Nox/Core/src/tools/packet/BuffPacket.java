@@ -315,6 +315,12 @@ public class BuffPacket {
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.IgnoreTargetDEF)) {//IgnoreTargetDef?
             oPacket.EncodeInt(1); // Originally oPacket.EncodeInt(0);
         }
+        
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.ReviveOnce)) { 
+            oPacket.EncodeShort(1);
+            oPacket.EncodeInt(nBuffID);
+            oPacket.EncodeInt(tDuration);
+        }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.StopForceAtomInfo)) { //StopForceAtomInfo
             StopForceAtom pStopForceInfo = pPlayer.getStopForceAtom();
@@ -454,6 +460,13 @@ public class BuffPacket {
             oPacket.EncodeInt(pEffect.getY());//yMichaelSoulLink
         }
 
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BladeStance)) { // BladeStance
+            //oPacket.EncodeShort(0);
+            oPacket.EncodeInt(0); // This should be a short, but character will be unable to move if this is set to a value of 1 or higher. Only works as a 0 integer.
+            oPacket.EncodeInt(nBuffID);
+            oPacket.EncodeInt(tDuration);
+        }
+        
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.AdrenalinBoost)) {//AdrenalinBoost
             oPacket.EncodeByte(1); // Was a zero byte, but the byte needs a value of 1 to allow finishers.
         }
@@ -472,10 +485,6 @@ public class BuffPacket {
             oPacket.EncodeInt(nBuffID);
         } else {
             oPacket.EncodeInt(0);//nViperEnergyCharged
-        }
-
-        if (mTemporaryStats.containsKey(CharacterTemporaryStat.BladeStance)) { // BladeStance
-            oPacket.EncodeInt(0);
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.DarkSight)) { //DarkSight

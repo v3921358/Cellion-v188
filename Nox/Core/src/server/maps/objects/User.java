@@ -698,6 +698,19 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
     
     /**
+     * OnReviveRequest
+     * @purpose Revive the player and remove any Revive buff that is active.
+     */
+    public void OnReviveRequest() {
+        cancelEffectFromTemporaryStat(CharacterTemporaryStat.ReviveOnce);
+        getStat().setHp(getStat().getMaxHp(), this);
+        updateSingleStat(Stat.HP, getStat().getMaxHp());
+        getStat().setMp(getStat().getMaxMp(), this);
+        updateSingleStat(Stat.MP, getStat().getMaxMp());
+        dispelDebuffs();
+    }
+    
+    /**
      * Channel ID
      *
      * @param nCharacterID

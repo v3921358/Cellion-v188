@@ -229,12 +229,14 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 }
                 break;
             }
-            case Global.CLOSE_CALL_1: // Shade Close Call
-            case Shade.CLOSE_CALL:
-            case Shade.SUMMON_OTHER_SPIRIT:
             case NightWalker.DARKNESS_ASCENDING: {
-                //pPlayer.dropMessage(5, "The revive buff is being applied and should not be spamming right now.");
                 pEffect.statups.put(CharacterTemporaryStat.ReviveOnce, 1);
+                pEffect.info.put(StatInfo.time, 2100000000);
+                break;
+            }
+            case Global.CLOSE_CALL_1: // Shade Close Call
+            case Shade.CLOSE_CALL: {
+                pEffect.statups.put(CharacterTemporaryStat.PreReviveOnce, 1);
                 pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
@@ -349,8 +351,8 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             }
             case Hayato.QUICK_DRAW: {
                 pEffect.statups.put(CharacterTemporaryStat.Enrage, 1);
-                pEffect.statups.put(CharacterTemporaryStat.HayatoStance, 1);
-                pEffect.info.put(StatInfo.time, 210000000);
+                pEffect.statups.put(CharacterTemporaryStat.BladeStance, 1);
+                pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
             case BeastTamer.FLY: {
@@ -507,6 +509,14 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 pPlayer.registerEffect(pEffect, System.currentTimeMillis(), tBuffSchedule, mMorphStat, false, pEffect.info.get(StatInfo.time), pPlayer.getId());
                 pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, pEffect.info.get(StatInfo.time), mMorphStat, pEffect));
                 break;
+            }
+            case Shade.SUMMON_OTHER_SPIRIT: {
+                final EnumMap<CharacterTemporaryStat, Integer> mBuffStat = new EnumMap<>(CharacterTemporaryStat.class);
+                mBuffStat.put(CharacterTemporaryStat.SpiritGuard, 1);
+                mBuffStat.put(CharacterTemporaryStat.ReviveOnce, 1);
+                pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, 2100000000, mBuffStat, pEffect));
+                pPlayer.completeDispose();
+                return;
             }
             case Cannoneer.MONKEY_MAGIC: 
             case CannonMaster.MEGA_MONKEY_MAGIC: {
