@@ -71,7 +71,7 @@ public enum StatInfo {
     indieBDR(0, null),
     indieAcc(0, null), // Accuracy +
     indieAllStat(0, CharacterTemporaryStat.IndieAllStat), // All Stats +
-    indieDamR(0, CharacterTemporaryStat.IndieDamR), // Damage Increase %
+    indieDamR(0, null), // Damage Increase %
     indieEva(0, null), // Avoidability +
     indieJump(0, CharacterTemporaryStat.IndieJump), // Jump Increase +
     indieMad(0, CharacterTemporaryStat.IndieMAD), // Magic Damage Increase
@@ -84,7 +84,7 @@ public enum StatInfo {
     indieMhpR(0, CharacterTemporaryStat.IndieMHPR), // Max HP Increase %
     indieMmp(0, CharacterTemporaryStat.IndieMMP), // Max MP Increase +
     indieMmpR(0, CharacterTemporaryStat.IndieMMPR), // Max MP Increase %
-    indiePad(0, CharacterTemporaryStat.IndiePAD), // Damage Increase
+    indiePad(0, null), // Damage Increase
     indieSpeed(0, null), //Speed +
     indieExp(0, null), // exp rate
     indieBooster(0, null), //Attack Speed
