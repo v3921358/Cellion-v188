@@ -229,6 +229,37 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 }
                 break;
             }
+            case Kaiser.DEFENDER_MODE_I:
+            case Kaiser.DEFENDER_MODE_II:
+            case Kaiser.DEFENDER_MODE_III: 
+            case Kaiser.REALIGN_DEFENDER_MODE: {
+                pPlayer.dispelBuff(Kaiser.ATTACKER_MODE_I);
+                pPlayer.dispelBuff(Kaiser.ATTACKER_MODE_II);
+                pPlayer.dispelBuff(Kaiser.ATTACKER_MODE_III);
+                pPlayer.dispelBuff(Kaiser.REALIGN_ATTACKER_MODE);
+                
+                pEffect.statups.put(CharacterTemporaryStat.PDD, pEffect.info.get(StatInfo.pddX));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, pEffect.info.get(StatInfo.mhpR));
+                pEffect.statups.put(CharacterTemporaryStat.ReshuffleSwitch, 0);
+                pEffect.info.put(StatInfo.time, 2100000000);
+                break;
+            }
+            case Kaiser.ATTACKER_MODE_I:
+            case Kaiser.ATTACKER_MODE_II:
+            case Kaiser.ATTACKER_MODE_III: 
+            case Kaiser.REALIGN_ATTACKER_MODE: {
+                pPlayer.dispelBuff(Kaiser.DEFENDER_MODE_I);
+                pPlayer.dispelBuff(Kaiser.DEFENDER_MODE_II);
+                pPlayer.dispelBuff(Kaiser.DEFENDER_MODE_III);
+                pPlayer.dispelBuff(Kaiser.REALIGN_DEFENDER_MODE);
+                
+                pEffect.statups.put(CharacterTemporaryStat.BDR, pEffect.info.get(StatInfo.bdR));
+                pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(StatInfo.cr));
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(StatInfo.padX));
+                pEffect.statups.put(CharacterTemporaryStat.ReshuffleSwitch, 1);
+                pEffect.info.put(StatInfo.time, 2100000000);
+                break;
+            }
             case NightWalker.DARKNESS_ASCENDING: {
                 pEffect.statups.put(CharacterTemporaryStat.ReviveOnce, 1);
                 pEffect.info.put(StatInfo.time, 2100000000);
@@ -441,22 +472,6 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
         /*Additional Effect Handler*/
     /*Extra functions that occur when the respected skill is cast.*/
         switch (nSkill) {
-            case Kaiser.DEFENDER_MODE_I:
-            case Kaiser.DEFENDER_MODE_II:
-            case Kaiser.DEFENDER_MODE_III: {
-                pPlayer.dispelBuff(Kaiser.ATTACKER_MODE_I);
-                pPlayer.dispelBuff(Kaiser.ATTACKER_MODE_II);
-                pPlayer.dispelBuff(Kaiser.ATTACKER_MODE_III);
-                break;
-            }
-            case Kaiser.ATTACKER_MODE_I:
-            case Kaiser.ATTACKER_MODE_II:
-            case Kaiser.ATTACKER_MODE_III: {
-                pPlayer.dispelBuff(Kaiser.DEFENDER_MODE_I);
-                pPlayer.dispelBuff(Kaiser.DEFENDER_MODE_II);
-                pPlayer.dispelBuff(Kaiser.DEFENDER_MODE_III);
-                break;
-            }
             case Kaiser.TEMPEST_BLADES_1: // Normal Tempest Blades
             case Kaiser.TEMPEST_BLADES: // Normal Tempest Blades in Morph
             case Kaiser.ADVANCED_TEMPEST_BLADES_1: // Advanced Tempest Blades

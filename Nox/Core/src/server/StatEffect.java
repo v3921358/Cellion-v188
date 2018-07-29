@@ -1309,17 +1309,6 @@ public class StatEffect implements Serializable {
                 final EnumMap<CharacterTemporaryStat, Integer> stat = new EnumMap<>(CharacterTemporaryStat.class);
                 stat.put(CharacterTemporaryStat.BMageAura, (int) getLevel());
                 break;
-            case Kaiser.ATTACKER_MODE_I:
-            case Kaiser.ATTACKER_MODE_II:
-            case Kaiser.ATTACKER_MODE_III:
-            case Kaiser.DEFENDER_MODE_I:
-            case Kaiser.DEFENDER_MODE_II:
-            case Kaiser.DEFENDER_MODE_III:
-                if (applyfrom.getStatForBuff(CharacterTemporaryStat.ReshuffleSwitch) == null) {
-                    break;
-                }
-                applyfrom.cancelEffectFromTemporaryStat(CharacterTemporaryStat.ReshuffleSwitch);
-                break;
             case Kaiser.TEMPEST_BLADES:
             case Kaiser.ADVANCED_TEMPEST_BLADES:
                 if (applyfrom.getInventory(InventoryType.EQUIPPED).getItem((short) -11) == null) {
