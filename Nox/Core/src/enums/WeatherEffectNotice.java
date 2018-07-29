@@ -1,7 +1,8 @@
 package enums;
 
 /**
- * Created by Asura on 24-7-2018.
+ * WeatherEffectNotice
+ * @author Asura
  */
 public enum WeatherEffectNotice {
     SnowySnowAndSprinkledFlowerAndSoapBubbles(0),

@@ -4583,11 +4583,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
             }
         }
         if (GameConstants.isShade(job)) {
-            if (level >= 10 && !hasSkill(Shade.SWIFT_STRIKE)) {
-                changeSkillLevel(SkillFactory.getSkill(Shade.SWIFT_STRIKE), (byte) 1, (byte) SkillFactory.getSkill(Shade.SWIFT_STRIKE).getMasterLevel());
+            if (level >= 10 && !hasSkill(Shade.SWIFT_STRIKE_1)) {
+                changeSkillLevel(SkillFactory.getSkill(Shade.SWIFT_STRIKE_1), (byte) 1, (byte) SkillFactory.getSkill(Shade.SWIFT_STRIKE_1).getMasterLevel());
             }
-            if (level >= 10 && !hasSkill(Shade.FLASH_FIST_1)) {
-                changeSkillLevel(SkillFactory.getSkill(Shade.FLASH_FIST_1), (byte) 1, (byte) SkillFactory.getSkill(Shade.FLASH_FIST_1).getMasterLevel());
+            if (level >= 10 && !hasSkill(Shade.FLASH_FIST_3)) {
+                changeSkillLevel(SkillFactory.getSkill(Shade.FLASH_FIST_3), (byte) 1, (byte) SkillFactory.getSkill(Shade.FLASH_FIST_3).getMasterLevel());
             }
         }
     }

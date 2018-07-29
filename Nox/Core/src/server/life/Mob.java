@@ -1663,10 +1663,10 @@ public class Mob extends AbstractLoadedMapleLife {
         
         if (this.getScale() > 100) { // Increment Elite Mob Kill Count & Display Message
             pPlayer.setEliteKills(pPlayer.nEliteMobKills + 1);
-            String sEliteMessage = "You feel something in the dark energy...";
+            String sEliteMessage = "The dark energy is still here. It's making the place quite grim.";
             WeatherEffectNotice pType = WeatherEffectNotice.EliteBoss;
             if (pPlayer.nEliteMobKills > 16) {
-                sEliteMessage = "The dark energy is still here. It's making the place quite grim.";
+                sEliteMessage = "You feel something in the dark energy...";
                 pType = WeatherEffectNotice.EliteBoss_Mage;
             }
             

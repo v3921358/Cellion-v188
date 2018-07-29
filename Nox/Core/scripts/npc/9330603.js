@@ -266,8 +266,8 @@ function action(mode, type, selection) {
 				cm.gainItem(1482000, 1);
 				cm.gainItem(1482004, 1);
 				cm.changeJob(2500);
-				cm.teachSkill(25001002, 1);
 				cm.teachSkill(25001000, 1);
+				cm.teachSkill(25001002, 1);
 				break;
 			case 2003: //PHANTOM
 			case 2400: //PHANTOM1
