@@ -422,6 +422,8 @@ public class KaiserEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.TerR, -(pEffect.info.get(StatInfo.terR)));
                 break;
             case Kaiser.CURSEBITE_1:
+                pEffect.statups.put(CharacterTemporaryStat.AsrR, -(pEffect.info.get(StatInfo.asrR)));
+                pEffect.statups.put(CharacterTemporaryStat.TerR, -(pEffect.info.get(StatInfo.terR)));
                 break;
             case Kaiser.DEFENDER_MODE_II:
                 break;

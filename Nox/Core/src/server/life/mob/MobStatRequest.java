@@ -376,6 +376,7 @@ public class MobStatRequest {
                     pStat = MobStat.Darkness;
                     break;
                 }
+                case Kaiser.PRESSURE_CHAIN:
                 case NightWalker.SHADOW_STITCH: {
                     pOpt.nOption = 1;
                     pOpt.rOption = pAttack.skill;
@@ -391,6 +392,7 @@ public class MobStatRequest {
                 case Shade.GROUND_POUND:
                 case Shade.GROUND_POUND_1:
                 case Kaiser.GIGAS_WAVE:
+                case Kaiser.STONE_DRAGON:
                 case Kaiser.GIGAS_WAVE_1:
                 case Kaiser.GIGAS_WAVE_2:
                 case Kaiser.WING_BEAT:
@@ -443,7 +445,6 @@ public class MobStatRequest {
                 case Luminous.ARMAGEDDON:
                 case Kanna.BINDING_TEMPEST:
                 case Kanna.VERITABLE_PANDEMONIUM:
-                case Kaiser.PRESSURE_CHAIN:
                 case Kaiser.PIERCING_BLAZE:
                 case Kaiser.PIERCING_BLAZE_1:
                 case Hayato.TORNADO_BLADE:
