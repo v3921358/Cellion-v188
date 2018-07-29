@@ -293,7 +293,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 break;
             }
             case Shade.FOX_SPIRITS: {
-                pEffect.statups.put(CharacterTemporaryStat.ChangeFoxMan, 1);
+                pEffect.statups.put(CharacterTemporaryStat.HiddenPossession, 1);
                 pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }

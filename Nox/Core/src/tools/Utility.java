@@ -117,7 +117,7 @@ public class Utility {
      * @return Random selection within the specified array length.
      */
     public static int getRandomSelection(int nArrayLength) {
-        return new Random().nextInt(nArrayLength);
+        return new Random().nextInt(Math.abs(nArrayLength));
     }
     
     /**

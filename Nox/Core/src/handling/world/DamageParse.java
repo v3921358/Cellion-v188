@@ -8,6 +8,8 @@ import client.*;
 import client.anticheat.CheatTracker;
 import client.anticheat.CheatingOffense;
 import client.inventory.Item;
+import client.jobs.Cygnus;
+import client.jobs.Cygnus.NightWalkerHandler;
 import enums.InventoryType;
 import constants.GameConstants;
 import constants.ItemConstants;
@@ -17,6 +19,7 @@ import client.jobs.Cygnus.ThunderBreakerHandler;
 import client.jobs.Explorer.NightLordHandler;
 import client.jobs.Hero.AranHandler;
 import client.jobs.Hero.PhantomHandler;
+import client.jobs.Hero.ShadeHandler;
 import client.jobs.Kinesis.KinesisHandler;
 import net.InPacket;
 import server.StatEffect;
@@ -37,6 +40,10 @@ import server.life.mob.MobStatRequest;
 import server.maps.TrainingMap;
 import server.maps.objects.ForceAtom;
 import enums.ForceAtomType;
+import enums.MobStat;
+import java.sql.Array;
+import java.util.stream.Collectors;
+import server.life.mob.MobTemporaryStat;
 import server.messages.StylishKillMessage.StylishKillMessageStyle;
 import service.RecvPacketOpcode;
 import tools.LogHelper;
@@ -334,14 +341,7 @@ public class DamageParse {
                         KinesisHandler.handlePsychicPoint(pPlayer, pAttack.skill);
                     }
                     if (GameConstants.isShade(pPlayer.getJob())) {
-                        if (pPlayer.hasBuff(CharacterTemporaryStat.ChangeFoxMan)) {
-                            for (AttackMonster at : pAttack.allDamage) {
-                                int nPercent = 35;
-                                if (Randomizer.nextInt(100) < nPercent && pAttack.skill != 25100010 && pAttack.skill != 25100010) {
-                                    pPlayer.getMap().broadcastPacket(JobPacket.ShadePacket.FoxSpirit(pPlayer, at));
-                                }
-                            }
-                        }
+                        ShadeHandler.handleFoxSpirits(pPlayer, pAttack.skill);
                     }
                     if (GameConstants.isAran(pPlayer.getJob())) {
                         switch (pAttack.skill) {
@@ -382,16 +382,7 @@ public class DamageParse {
                         NightLordHandler.handleAssassinsMark(pPlayer, pTarget, pAttack);
                     }
                     if (GameConstants.isNightWalkerCygnus(pPlayer.getJob())) {
-                        if (pPlayer.hasBuff(CharacterTemporaryStat.NightWalkerBat)) {
-                            if (Utility.resultSuccess(40)) {
-                                int mobID = pTarget.getObjectId();
-                                int position = new Random().nextInt(80);
-                                int inc = ForceAtomType.NIGHT_WALKER_FROM_MOB_4.getInc();
-                                int type = ForceAtomType.NIGHT_WALKER_FROM_MOB_4.getForceAtomType();
-                                ForceAtom forceAtomInfo = new ForceAtom(1, inc, 3, 3, 90, 0, (int) System.currentTimeMillis(), 1, 0, new Point(-20, position));
-                                pPlayer.write(CField.createForceAtom(false, 0, pPlayer.getId(), type, true, mobID, NightWalker.SHADOW_BAT, forceAtomInfo, new Rectangle(), 0, 300, pTarget.getPosition(), NightWalker.SHADOW_BAT, pTarget.getPosition()));
-                            }
-                        }
+                        NightWalkerHandler.handleShadowBat(pPlayer, pTarget);
 
                         pPlayer.handleDarkElemental(); // Dark Elemental Stack Count Handler
                         for (int i = pPlayer.getDarkElementalCombo(); i > 0; i--) { // Damage Increase Handler for Dark Elemental Mark Stacks

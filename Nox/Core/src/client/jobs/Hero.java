@@ -8,6 +8,8 @@ import client.SkillFactory;
 import constants.GameConstants;
 import constants.skills.Aran;
 import constants.skills.Phantom;
+import constants.skills.Shade;
+import enums.ForceAtomType;
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
 import java.util.Random;
@@ -15,8 +17,17 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import server.StatEffect;
 import enums.StatInfo;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Arrays;
 import server.Timer;
+import server.life.Mob;
+import server.maps.MapleMapObject;
+import server.maps.MapleMapObjectType;
+import server.maps.objects.ForceAtom;
 import server.maps.objects.User;
+import tools.Utility;
 import tools.packet.BuffPacket;
 import tools.packet.CField;
 import tools.packet.JobPacket.LuminousPacket;
@@ -223,6 +234,39 @@ public class Hero {
             pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkillID, pEffect.info.get(StatInfo.time), pEffect.statups, pEffect));
 
             updateDeckRequest(pPlayer, 0); // Reset the deck back to zero.
+        }
+    }
+    
+    public static class ShadeHandler {
+        
+        public static void handleFoxSpirits(User pPlayer, int nSkillID) {
+            if (pPlayer.hasBuff(CharacterTemporaryStat.HiddenPossession)) {
+                if (Utility.resultSuccess(40) && nSkillID != Shade.FOX_SPIRITS_ATOM && nSkillID != Shade.FOX_SPIRITS_ATOM_2) {
+                    ArrayList<Mob> pSpiritTargets = new ArrayList<Mob>();
+                    for (MapleMapObject pMobs : pPlayer.getMap().getMapObjectsInRange(pPlayer.getPosition(), 100000, Arrays.asList(MapleMapObjectType.MONSTER))) {
+                        Mob pSpiritTarget = (Mob) pMobs;
+                        pSpiritTargets.add(pSpiritTarget);
+                    }
+                    
+                    if (!pSpiritTargets.isEmpty()) {
+                        Mob pTargetMonster = pSpiritTargets.get(Utility.getRandomSelection(pSpiritTargets.size()));
+                        int nAngle = 305;
+                        int dwMobID = pTargetMonster.getObjectId();
+
+                        int nAtomID = Shade.FOX_SPIRITS_ATOM;
+                        int nInc = ForceAtomType.RABBIT_ORB.getInc();
+                        int nType = ForceAtomType.RABBIT_ORB.getForceAtomType();
+                        if(pPlayer.hasSkill(Shade.FIRE_FOX_SPIRIT_MASTERY)) {
+                            nAtomID = Shade.FOX_SPIRITS_ATOM_2;
+                            nInc = ForceAtomType.FLAMING_RABBIT_ORB.getInc();
+                            nType = ForceAtomType.FLAMING_RABBIT_ORB.getForceAtomType();
+                        }
+
+                        ForceAtom forceAtomInfo = new ForceAtom(1, nInc, 15, 7, nAngle, 400, (int) System.currentTimeMillis(), 1, 0, new Point(-50, -50));
+                        pPlayer.getMap().broadcastPacket(CField.createForceAtom(false, 0, pPlayer.getId(), nType,true, dwMobID, nAtomID, forceAtomInfo, new Rectangle(), 0, 300, pTargetMonster.getPosition(), nAtomID, pTargetMonster.getPosition()));
+                    }
+                }
+            }
         }
     }
 

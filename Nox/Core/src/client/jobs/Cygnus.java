@@ -130,6 +130,19 @@ public class Cygnus {
 
     public static class NightWalkerHandler {
 
+        public static void handleShadowBat(User pPlayer, Mob pTarget) {
+            if (pPlayer.hasBuff(CharacterTemporaryStat.NightWalkerBat)) {
+                if (Utility.resultSuccess(40)) {
+                    int dwMobID = pTarget.getObjectId();
+                    int nPosition = new Random().nextInt(80);
+                    int nInc = ForceAtomType.NIGHT_WALKER_FROM_MOB_4.getInc();
+                    int nType = ForceAtomType.NIGHT_WALKER_FROM_MOB_4.getForceAtomType();
+                    ForceAtom forceAtomInfo = new ForceAtom(1, nInc, 3, 3, 90, 0, (int) System.currentTimeMillis(), 1, 0, new Point(-20, nPosition));
+                    pPlayer.write(CField.createForceAtom(false, 0, pPlayer.getId(), nType, true, dwMobID, NightWalker.SHADOW_BAT, forceAtomInfo, new Rectangle(), 0, 300, pTarget.getPosition(), NightWalker.SHADOW_BAT, pTarget.getPosition()));
+                }
+            }
+        }
+        
         public static void handleDominionBuff(User pPlayer) {
             if (!GameConstants.isNightWalkerCygnus(pPlayer.getJob())) {
                 return;

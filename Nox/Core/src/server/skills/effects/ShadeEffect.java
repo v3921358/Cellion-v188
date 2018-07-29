@@ -39,7 +39,7 @@ public class ShadeEffect extends AbstractEffect {
             case Shade.BLADE_IMP_FORWARD_SLASH:
                 break;
             case Shade.FOX_SPIRITS:
-                pEffect.statups.put(CharacterTemporaryStat.ChangeFoxMan, 1);
+                pEffect.statups.put(CharacterTemporaryStat.HiddenPossession, 1);
                 pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Shade.FOX_SPIRIT_MASTERY:

@@ -2,6 +2,10 @@ package constants.skills;
 
 public class Shade {
 
+    public static final int FOX_SPIRITS_INIT = 25100009;
+    public static final int FOX_SPIRITS_ATOM = 25100010;
+    public static final int FOX_SPIRITS_ATOM_2 = 25120115; 
+    
     public static final int COSMIC_BALANCE = 25000105;
     public static final int FLASH_FIST_1 = 25000003;
     public static final int FLASH_FIST_3 = 25001002;
