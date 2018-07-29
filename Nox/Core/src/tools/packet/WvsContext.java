@@ -25,6 +25,7 @@ import server.life.PlayerNPC;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
 import enums.ExpType;
+import enums.WeatherEffectNotice;
 import server.messages.ExpIncreaseMessage;
 import server.messages.MessageInterface;
 import server.stores.HiredMerchant;
@@ -1754,7 +1755,28 @@ public class WvsContext {
 
         return oPacket;
     }
+    
+    /**
+     * OnWeatherEffectNotice
+     * @param sMessage
+     * @param pType
+     * @param bShow
+     * @param tDuration
+     * @return Displays a weather effect notice with a message at the center of the screen.
+     */
+    public static OutPacket OnWeatherEffectNotice(String sMessage, WeatherEffectNotice pType, int tDuration) {
 
+        OutPacket oPacket = new OutPacket(SendPacketOpcode.WeatherEffectNotice.getValue());
+        
+        oPacket.EncodeString(sMessage);
+        oPacket.EncodeInt(pType.getVal()); 
+        oPacket.EncodeInt(tDuration);
+        oPacket.EncodeByte(1);
+        oPacket.Fill(0, 20);
+
+        return oPacket;
+    }
+    
     /**
      * Shows a special message at the center of the screen.
      *

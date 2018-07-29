@@ -30,6 +30,7 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import enums.SavedLocationType;
 import enums.SummonMovementType;
+import enums.WeatherEffectNotice;
 import server.maps.objects.Summon;
 import server.maps.objects.User;
 import server.messages.StylishKillMessage;
@@ -131,6 +132,9 @@ public class PlayerCommand {
                     //c.getPlayer().getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, sValue, Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5]))));
                     break;
                 case 9:
+                    String sEliteMessage = "The dark energy is still here. It's making the place quite grim.";
+                    WeatherEffectNotice pType = WeatherEffectNotice.EliteBoss_Thief;
+                    c.getPlayer().getMap().broadcastPacket(WvsContext.OnWeatherEffectNotice(sEliteMessage, pType, 5000));
                     break;
             }
             return 1;

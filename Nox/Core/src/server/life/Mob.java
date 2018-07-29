@@ -30,6 +30,7 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
 import enums.ExpType;
+import enums.WeatherEffectNotice;
 import java.awt.Point;
 import service.ChannelServer;
 import tools.ConcurrentEnumMap;
@@ -43,6 +44,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.OutPacket;
 import tools.Utility;
+import tools.packet.WvsContext;
 
 public class Mob extends AbstractLoadedMapleLife {
 
@@ -1661,8 +1663,14 @@ public class Mob extends AbstractLoadedMapleLife {
         
         if (this.getScale() > 100) { // Increment Elite Mob Kill Count & Display Message
             pPlayer.setEliteKills(pPlayer.nEliteMobKills + 1);
-            if (pPlayer.nEliteMobKills > 16) pPlayer.dropMessage(-1, "The dark energy is still here. It's making the place quite grim.");
-            else pPlayer.dropMessage(-1, "You feel something in the dark energy...");
+            String sEliteMessage = "You feel something in the dark energy...";
+            WeatherEffectNotice pType = WeatherEffectNotice.EliteBoss;
+            if (pPlayer.nEliteMobKills > 16) {
+                sEliteMessage = "The dark energy is still here. It's making the place quite grim.";
+                pType = WeatherEffectNotice.EliteBoss_Warrior;
+            }
+            
+            pPlayer.getMap().broadcastPacket(WvsContext.OnWeatherEffectNotice(sEliteMessage, pType, 8000));
         } 
         
         if (pPlayer.nEliteMobKills >= 20) { // Spawn Elite Boss after 20 Elite Mob Kills
