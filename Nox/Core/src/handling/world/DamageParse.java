@@ -342,6 +342,7 @@ public class DamageParse {
                     }
                     if (GameConstants.isShade(pPlayer.getJob())) {
                         ShadeHandler.handleFoxSpirits(pPlayer, pAttack.skill);
+                        if (pPlayer.hasSkill(Shade.SPIRIT_BOND_1)) pPlayer.addHP((int) (pPlayer.getStat().getMaxHp() * 0.01));
                     }
                     if (GameConstants.isAran(pPlayer.getJob())) {
                         switch (pAttack.skill) {

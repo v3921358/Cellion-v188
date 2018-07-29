@@ -22,6 +22,7 @@ import client.jobs.Nova;
 import client.jobs.Resistance;
 import client.jobs.Sengoku;
 import client.jobs.Sengoku.HayatoHandler;
+import constants.skills.Shade;
 import handling.world.AttackInfo;
 import handling.world.AttackType;
 import handling.world.DamageParse;
@@ -108,7 +109,6 @@ public final class CloseRangeAttack {
                             break;
                     }
                 }
-                
             } else if (GameConstants.isWarriorHero(pPlayer.getJob())) {
                 
                 if (pPlayer.getStatForBuff(CharacterTemporaryStat.ComboCounter) != null) { // Combo Attack
