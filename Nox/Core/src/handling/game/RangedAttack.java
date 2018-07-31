@@ -86,7 +86,7 @@ public final class RangedAttack implements ProcessPacket<ClientSocket> {
             if (pEffect == null) {
                 return;
             } else if ((pEffect.getCooldown(pPlayer) > 0) && ((pAttack.skill != 35111004 && pAttack.skill != 35121013) || pPlayer.getBuffSource(CharacterTemporaryStat.Mechanic) != pAttack.skill)) {
-                if (pPlayer.skillisCooling(pAttack.skill)) {
+                if (pPlayer.isSkillOnCooldown(pAttack.skill)) {
                     c.SendPacket(WvsContext.enableActions());
                     return;
                 }

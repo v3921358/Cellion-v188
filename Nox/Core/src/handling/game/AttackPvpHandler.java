@@ -142,7 +142,7 @@ public final class AttackPvpHandler implements ProcessPacket<ClientSocket> {
             mobCount = Math.max(1, effect.getMobCount());
 
             if (effect.getCooldown(chr) > 0) {
-                if (chr.skillisCooling(skillid)) {
+                if (chr.isSkillOnCooldown(skillid)) {
                     c.SendPacket(WvsContext.enableActions());
                     return;
                 }

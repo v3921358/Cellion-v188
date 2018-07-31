@@ -12,7 +12,6 @@ import handling.world.AttackMonster;
 import server.StatEffect;
 import enums.StatInfo;
 import server.life.Mob;
-import server.life.MobAttackInfo;
 import server.maps.objects.User;
 import server.skills.Option;
 import tools.Utility;

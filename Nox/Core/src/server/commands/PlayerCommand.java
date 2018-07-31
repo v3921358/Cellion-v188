@@ -1,5 +1,6 @@
 package server.commands;
 
+import client.CharacterTemporaryStat;
 import client.ClientSocket;
 import client.SkillFactory;
 import client.inventory.Equip;
@@ -59,28 +60,28 @@ public class PlayerCommand {
         @Override
         public int execute(ClientSocket c, String[] splitted) {
             if (!ServerConstants.DEVELOPER_DEBUG_MODE) return 0;
-            
+            User pPlayer = c.getPlayer();
             int nType = Integer.parseInt(splitted[1]);
             int sValue = Integer.parseInt(splitted[2]);
             switch (nType) {
                 case 1: 
                     Mob pMob = LifeFactory.getMonster(100100);
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(pMob, c.getPlayer().getPosition());
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(pMob, c.getPlayer().getPosition());
+                    pPlayer.getMap().spawnMonsterOnGroundBelow(pMob, c.getPlayer().getPosition());
+                    pPlayer.getMap().spawnMonsterOnGroundBelow(pMob, c.getPlayer().getPosition());
                     break;
                 case 2:
-                    c.getPlayer().OnLevelUp();
+                    pPlayer.OnLevelUp();
                     break;
                 case 3:
-                    c.getPlayer().setGM((byte) 5);
+                    pPlayer.setGM((byte) 5);
                     break;
                 case 4:
-                    c.getPlayer().tCrimsonQueen = 0;
-                    c.getPlayer().tVonBon = 0;
-                    c.getPlayer().tPierre = 0;
-                    c.getPlayer().tVellum = 0;
-                    c.getPlayer().tMagnus = 0;
-                    c.getPlayer().tHorntail = 0;
+                    pPlayer.tCrimsonQueen = 0;
+                    pPlayer.tVonBon = 0;
+                    pPlayer.tPierre = 0;
+                    pPlayer.tVellum = 0;
+                    pPlayer.tMagnus = 0;
+                    pPlayer.tHorntail = 0;
                     break;
                 case 5: 
                     Mob pElite = LifeFactory.getMonster(100100);
@@ -128,15 +129,27 @@ public class PlayerCommand {
                     MapleInventoryManipulator.addbyItem(c, pEquip2);
                     break;
                 case 8:
-                    c.getPlayer().yellowMessage("primary: "+sValue+" / secondary: "+Integer.parseInt(splitted[3])+" / tertiary: "+Integer.parseInt(splitted[4])+" / quaterary: "+Integer.parseInt(splitted[5]));
+                    pPlayer.yellowMessage("primary: "+sValue+" / secondary: "+Integer.parseInt(splitted[3])+" / tertiary: "+Integer.parseInt(splitted[4])+" / quaterary: "+Integer.parseInt(splitted[5]));
                     //c.getPlayer().getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.MultiKill, sValue, Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5]))));
                     //c.getPlayer().getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, sValue, Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5]))));
                     break;
                 case 9:
-                    String sEliteMessage = "Message!";
+                    String sEliteMessage = "+20 NX";
                     WeatherEffectNotice pType = WeatherEffectNotice.RewardPoints;
-                    c.getPlayer().getMap().broadcastPacket(WvsContext.OnWeatherEffectNotice(sEliteMessage, pType, 5000));
+                    pPlayer.getMap().broadcastPacket(WvsContext.OnWeatherEffectNotice(sEliteMessage, pType, 1000));
                     break;
+                case 10:
+                    if (pPlayer.hasBuff(CharacterTemporaryStat.Revive)) {
+                        pPlayer.dropMessage(5, "Revive Active");
+                    } else {
+                        pPlayer.dropMessage(5, "Fuck");
+                    }
+                    break;
+                case 11:
+                    pPlayer.OnUserVMatrix();
+                    break;
+                case 12:
+                    break;  
             }
             return 1;
         }
@@ -163,7 +176,7 @@ public class PlayerCommand {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
-            c.getPlayer().yellowMessage("----------------- ACCOUNT WALLET -----------------");
+            c.getPlayer().yellowMessage("----------------- CHARACTER & WALLET INFO -----------------");
             c.getPlayer().yellowMessage("NX Cash : " + c.getPlayer().getNX());
             c.getPlayer().yellowMessage("Donor Points : " + c.getPlayer().getDPoints());
             c.getPlayer().yellowMessage("Vote Points : " + c.getPlayer().getVPoints());

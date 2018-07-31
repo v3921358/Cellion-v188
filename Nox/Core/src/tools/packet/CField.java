@@ -67,6 +67,8 @@ import handling.world.AttackInfo;
 import java.awt.Rectangle;
 import java.util.Random;
 import server.maps.Map_MaplePlatform;
+import server.maps.MapleMapObject;
+import server.maps.MapleMapObjectType;
 import server.maps.objects.ForceAtom;
 import server.messages.DropPickUpMessage;
 import tools.Pair;
@@ -4044,18 +4046,20 @@ public class CField {
         /**
          * This packet removes the summons from the world
          *
-         * @param MapleSummon
-         * @param animated - if the summon has a remove animation
+         * @param pSummon
+         * @param bAnimated - if the summon has a remove animation
          *
          * @return oPacket
          */
-        public static OutPacket removeSummon(Summon summon, boolean animated) {
+        public static OutPacket removeSummon(Summon pSummon, boolean bAnimated) {
 
             OutPacket oPacket = new OutPacket(SendPacketOpcode.SummonedLeaveField.getValue());
-            oPacket.EncodeInt(summon.getOwnerId());
-            oPacket.EncodeInt(summon.getObjectId());
-            if (animated) {
-                switch (summon.getSkill()) {
+            
+            oPacket.EncodeInt(pSummon.getOwnerId());
+            oPacket.EncodeInt(pSummon.getObjectId());
+            
+            if (bAnimated) {
+                switch (pSummon.getSkill()) {
                     case 35121003:
                     case 14000027:
                     case 14111024:
@@ -4081,7 +4085,7 @@ public class CField {
             } else {
                 oPacket.EncodeByte(1);
             }
-
+            
             return oPacket;
         }
 

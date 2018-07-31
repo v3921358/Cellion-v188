@@ -1,5 +1,6 @@
 package server.maps.objects;
 
+import client.CharacterTemporaryStat;
 import java.awt.Point;
 
 import client.ClientSocket;
@@ -7,11 +8,13 @@ import client.SkillFactory;
 import client.anticheat.CheatingOffense;
 import constants.GameConstants;
 import constants.skills.BeastTamer;
+import constants.skills.Kanna;
 import server.StatEffect;
 import server.maps.AnimatedMapleMapObject;
 import server.maps.MapleMap;
 import server.maps.MapleMapObjectType;
 import enums.SummonMovementType;
+import tools.Utility;
 import tools.packet.CField.SummonPacket;
 
 public class Summon extends AnimatedMapleMapObject {
@@ -192,6 +195,7 @@ public class Summon extends AnimatedMapleMapObject {
             case 36121014:
             case 42101021: // Foxfire
             case 42121021: // Foxfire
+            case BeastTamer.LIL_FORT:
                 //   case 3121013:
                 return true;
         }

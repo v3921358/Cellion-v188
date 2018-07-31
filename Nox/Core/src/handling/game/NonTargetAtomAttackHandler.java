@@ -55,7 +55,7 @@ public final class NonTargetAtomAttackHandler implements ProcessPacket<ClientSoc
         if (effect == null) {
             return;
         } else if (effect.getCooldown(chr) > 0) {  // Handle cooldowns
-            if (chr.skillisCooling(attack.skill)) {
+            if (chr.isSkillOnCooldown(attack.skill)) {
                 c.SendPacket(WvsContext.enableActions());
                 return;
             }

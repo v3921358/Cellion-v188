@@ -192,7 +192,7 @@ public final class CloseRangeAttack {
 
                 // Handle Cooldown
                 if (pEffect.getCooldown(pPlayer) > 0 && !bPassiveAttack) {
-                    if (pPlayer.skillisCooling(pAttack.skill)) {
+                    if (pPlayer.isSkillOnCooldown(pAttack.skill)) {
                         c.SendPacket(WvsContext.enableActions());
                         return;
                     }

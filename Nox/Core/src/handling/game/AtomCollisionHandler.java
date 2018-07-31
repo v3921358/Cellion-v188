@@ -81,7 +81,7 @@ public final class AtomCollisionHandler implements ProcessPacket<ClientSocket> {
             }
             return;
         } else if (effect.getCooldown(pPlayer) > 0) {  // Handle cooldowns
-            if (pPlayer.skillisCooling(attack.skill)) {
+            if (pPlayer.isSkillOnCooldown(attack.skill)) {
                 c.SendPacket(WvsContext.enableActions());
                 return;
             }

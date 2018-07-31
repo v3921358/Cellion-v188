@@ -157,7 +157,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             return;
         }
         if (pEffect.getCooldown(pPlayer) > 0 && nSkill != Phantom.TEMPEST) {
-            if (pPlayer.skillisCooling(nSkill)) {
+            if (pPlayer.isSkillOnCooldown(nSkill)) {
                 c.SendPacket(WvsContext.enableActions());
                 return;
             }
@@ -262,6 +262,12 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             }
             case NightWalker.DARKNESS_ASCENDING: {
                 pEffect.statups.put(CharacterTemporaryStat.ReviveOnce, 1);
+                pEffect.info.put(StatInfo.time, 2100000000);
+                break;
+            }
+            case Shade.SUMMON_OTHER_SPIRIT: {
+                pEffect.statups.put(CharacterTemporaryStat.ReviveOnce, 1);
+                pEffect.statups.put(CharacterTemporaryStat.Revive, 1);
                 pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             }
@@ -403,7 +409,6 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             }
             case Kanna.KISHIN_SHOUKAN: {
                 pEffect.statups.put(CharacterTemporaryStat.IncMobRateDummy, 1);
-                pEffect.info.put(StatInfo.time, 150000);
                 break;
             }
             default: {
@@ -447,10 +452,12 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             }
             case Kanna.KISHIN_SHOUKAN: {
                 pMovement = SummonMovementType.STATIONARY2;
+                Summon pRightKishin = new Summon(pPlayer, pEffect, pSummonPOS, pMovement, pEffect.getDuration());
+                pRightKishin.setPosition(new Point(pPlayer.getPosition().x + 400, pPlayer.getPosition().y));
+                pPlayer.getMap().spawnSummon(pRightKishin, true);
                 pPlayer.dropMessage(5, "Dark energy from Kishin Shoukan is increasing monster respawn rates.");
                 break; 
             }
-                
             default: {
                 bSummon = false;
                 break;
@@ -458,15 +465,9 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
         }
         if (bSummon) {
             Summon pSummon = new Summon(pPlayer, pEffect, pSummonPOS, pMovement, pEffect.getDuration());
-            
-            if (nSkill == Kanna.KISHIN_SHOUKAN) {
-                pSummon.setPosition(new Point(pPlayer.getPosition().x + 250, pPlayer.getPosition().y));
-                pPlayer.getMap().spawnSummon(pSummon, true); // Right Kishin
-                pSummon.setPosition(new Point(pPlayer.getPosition().x - 250, pPlayer.getPosition().y));
-            }
-            
             pPlayer.getMap().spawnSummon(pSummon);
-            pEffect.applyTo(pPlayer, null);
+            pPlayer.addSummon(pSummon);
+            pEffect.applyTo(pPlayer, pSummon.getPosition());
         }
 
         /*Additional Effect Handler*/
@@ -528,6 +529,7 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
             case Shade.SUMMON_OTHER_SPIRIT: {
                 final EnumMap<CharacterTemporaryStat, Integer> mBuffStat = new EnumMap<>(CharacterTemporaryStat.class);
                 mBuffStat.put(CharacterTemporaryStat.SpiritGuard, 1);
+                mBuffStat.put(CharacterTemporaryStat.Revive, 1);
                 mBuffStat.put(CharacterTemporaryStat.ReviveOnce, 1);
                 pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, 2100000000, mBuffStat, pEffect));
                 pPlayer.completeDispose();

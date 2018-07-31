@@ -2233,6 +2233,7 @@ public class StatEffect implements Serializable {
             case 35111009: // satellite 1
             case 42101021: // Foxfire
             case 42121021: // Foxfire
+            case BeastTamer.LIL_FORT:
             case WildHunter.SUMMON_JAGUAR:
             case WildHunter.SUMMON_JAGUAR_1:
             case WildHunter.SUMMON_JAGUAR_2:

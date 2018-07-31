@@ -47,6 +47,7 @@ import database.Database;
 import handling.game.AndroidEmotionChanger;
 import constants.ItemConstants;
 import constants.NPCConstants;
+import constants.skills.Kanna;
 import constants.skills.Noblesse;
 import constants.skills.Shade;
 import handling.login.LoginInformationProvider.JobType;
@@ -702,12 +703,17 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      * @purpose Revive the player and remove any Revive buff that is active.
      */
     public void OnReviveRequest() {
-        cancelEffectFromTemporaryStat(CharacterTemporaryStat.ReviveOnce);
         getStat().setHp(getStat().getMaxHp(), this);
         updateSingleStat(Stat.HP, getStat().getMaxHp());
         getStat().setMp(getStat().getMaxMp(), this);
         updateSingleStat(Stat.MP, getStat().getMaxMp());
         dispelDebuffs();
+        
+        dropMessage(5, "You have been resurrected.");
+        
+        dispelBuff(Shade.SUMMON_OTHER_SPIRIT);
+        cancelEffectFromTemporaryStat(CharacterTemporaryStat.ReviveOnce);
+        cancelEffectFromTemporaryStat(CharacterTemporaryStat.Revive);
     }
     
     /**
@@ -3415,6 +3421,11 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     private void cancelPlayerBuffs(List<CharacterTemporaryStat> buffstats, boolean overwrite) {
+                        
+        if (buffstats.contains(CharacterTemporaryStat.IncMobRateDummy) && !overwrite) { // Remove all instances of Kishin upon expiry.
+            Utility.removeAllSummonsForCharacter(getId()); 
+        }
+        
         try {
             boolean write = client != null && client.getChannelServer() != null && client.getChannelServer().getPlayerStorage().getCharacterById(getId()) != null;
             if (overwrite) {
@@ -8174,7 +8185,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
     }
 
-    public boolean skillisCooling(int skillId) {
+    public boolean isSkillOnCooldown(int skillId) {
         return coolDowns.containsKey(skillId);
     }
 
@@ -10267,7 +10278,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         }
         List<Integer> attack = attacke instanceof Mob || attacke == null ? null : (new ArrayList<>());
         if (damage > 0) {
-            if (getJob() == 122 && !skillisCooling(1220013)) {
+            if (getJob() == 122 && !isSkillOnCooldown(1220013)) {
                 final Skill divine = SkillFactory.getSkill(1220013);
                 if (getTotalSkillLevel(divine) > 0) {
                     final StatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
@@ -10288,7 +10299,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                  */
             } else if (getJob() == 433 || getJob() == 434) {
                 final Skill divine = SkillFactory.getSkill(4330001);
-                if (getTotalSkillLevel(divine) > 0 && getBuffedValue(CharacterTemporaryStat.DarkSight) == null && !skillisCooling(divine.getId())) {
+                if (getTotalSkillLevel(divine) > 0 && getBuffedValue(CharacterTemporaryStat.DarkSight) == null && !isSkillOnCooldown(divine.getId())) {
                     final StatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
                     if (Randomizer.nextInt(100) < divineShield.getX()) {
                         divineShield.applyTo(this);
@@ -10296,7 +10307,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 }
             } else if ((getJob() == 512 || getJob() == 522) && getBuffedValue(CharacterTemporaryStat.DamR) == null) {
                 final Skill divine = SkillFactory.getSkill(getJob() == 512 ? 5120011 : 5220012);
-                if (getTotalSkillLevel(divine) > 0 && !skillisCooling(divine.getId())) {
+                if (getTotalSkillLevel(divine) > 0 && !isSkillOnCooldown(divine.getId())) {
                     final StatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
                     if (divineShield.makeChanceResult()) {
                         divineShield.applyTo(this);
@@ -10354,7 +10365,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
                 }
             } else if (getJob() == 132 && attacke != null) {
                 final Skill divine = SkillFactory.getSkill(1421013);
-                if (getTotalSkillLevel(divine) > 0 && !skillisCooling(divine.getId()) && getBuffSource(CharacterTemporaryStat.Beholder) == 1421015) {
+                if (getTotalSkillLevel(divine) > 0 && !isSkillOnCooldown(divine.getId()) && getBuffSource(CharacterTemporaryStat.Beholder) == 1421015) {
                     World.Broadcast.broadcastMessage(CField.getGameMessage("Sacrifice.", (short) 7));
                     final StatEffect divineShield = divine.getEffect(getTotalSkillLevel(divine));
                     if (divineShield.makeChanceResult()) {
@@ -10854,7 +10865,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void unchooseStolenSkill(int skillID) { //base skill
-        if (skillisCooling(20031208) || stolenSkills == null) {
+        if (isSkillOnCooldown(20031208) || stolenSkills == null) {
             dropMessage(-6, "[Loadout] The skill is under cooldown. Please wait.");
             return;
         }
@@ -10897,7 +10908,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void chooseStolenSkill(int skillID) {
-        if (skillisCooling(20031208) || stolenSkills == null) {
+        if (isSkillOnCooldown(20031208) || stolenSkills == null) {
             dropMessage(-6, "[Loadout] The skill is under cooldown. Please wait.");
             return;
         }
@@ -10916,7 +10927,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void addStolenSkill(int skillID, int skillLevel) {
         System.err.println(String.format("Adding Skill: [%d:%d]", skillID, skillLevel));
-        if (skillisCooling(20031208) || stolenSkills == null) {
+        if (isSkillOnCooldown(20031208) || stolenSkills == null) {
             dropMessage(-6, "[Loadout] The skill is under cooldown. Please wait.");
             return;
         }
@@ -10953,7 +10964,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
 
     public void removeStolenSkill(int skillID) {
-        if (skillisCooling(20031208) || stolenSkills == null) {
+        if (isSkillOnCooldown(20031208) || stolenSkills == null) {
             dropMessage(-6, "[Loadout] The skill is under cooldown. Please wait.");
             return;
         }

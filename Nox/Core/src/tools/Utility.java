@@ -23,6 +23,7 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.objects.User;
 import server.maps.objects.Pet;
+import server.maps.objects.Summon;
 import service.ChannelServer;
 import tools.packet.CField;
 import tools.packet.WvsContext;
@@ -163,7 +164,29 @@ public class Utility {
     public static int getLastDigit(int nNumber) { 
         return nNumber % 10; 
     }
-
+    
+    /**
+     * removeAllSummonsForCharacter
+     * @author Mazen Massoud
+     * @purpose Removes all summons belonging to a player from the map, useful for multiple summons such as Kishin.
+     * @param dwCharacterID 
+     */
+    public static void removeAllSummonsForCharacter(int dwCharacterID) {
+        User pPlayer = requestCharacter(dwCharacterID);
+        if (pPlayer == null) return;
+        
+        List<MapleMapObject> pAllSummons = pPlayer.getMap().getAllMapObjects(MapleMapObjectType.SUMMON);
+        for (MapleMapObject pObject : pAllSummons) {
+            Summon pSummon = (Summon) pObject;
+            if (pSummon.getOwnerId() == pPlayer.getId()) {
+                pPlayer.getMap().broadcastPacket(CField.SummonPacket.removeSummon(pSummon, true));
+                pPlayer.getMap().removeMapObject(pSummon);
+                pPlayer.removeVisibleMapObject(pSummon);
+                pPlayer.removeSummon(pSummon);
+            }
+        }
+    }
+    
     /**
      * Remove Buff from Player's Map
      * @author Mazen Massoud

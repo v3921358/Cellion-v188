@@ -317,15 +317,18 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
         
         // Revive Passives
         if (!pPlayer.isAlive()) {
-            if (pPlayer.hasBuff(CharacterTemporaryStat.ReviveOnce)) {
+            if (pPlayer.hasBuff(CharacterTemporaryStat.ReviveOnce) || pPlayer.hasBuff(CharacterTemporaryStat.Revive)) {
+                
                 pPlayer.OnReviveRequest();
+                
             } else if (pPlayer.hasBuff(CharacterTemporaryStat.PreReviveOnce)) {
+                
                 if ((pPlayer.getSkillLevel(Shade.CLOSE_CALL) >= 2) && Utility.resultSuccess(10)) {
                     pPlayer.OnReviveRequest();
                 } else if (Utility.resultSuccess(5)) {
                     pPlayer.OnReviveRequest();
                 }
-            }
+            } 
         }
     }
 

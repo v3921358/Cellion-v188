@@ -63,7 +63,7 @@ public final class MagicAttack implements ProcessPacket<ClientSocket> {
             pEffect = pAttack.getAttackEffect(pPlayer, pSkill.getMaxLevel(), pSkill);
             //return;
         } else if (pEffect.getCooldown(pPlayer) > 0) {  // Handle cooldowns
-            if (pPlayer.skillisCooling(pAttack.skill)) {
+            if (pPlayer.isSkillOnCooldown(pAttack.skill)) {
                 c.SendPacket(WvsContext.enableActions());
                 return;
             }
