@@ -91,7 +91,7 @@ public class MercedesEffect extends AbstractEffect {
             case Mercedes.ADVANCED_FINAL_ATTACK:
                 break;
             case Mercedes.ANCIENT_WARDING:
-                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.PAD, pEffect.info.get(StatInfo.x));
                 pEffect.statups.put(CharacterTemporaryStat.EMHP, (int) pEffect.info.get(StatInfo.emhp));
                 break;
             case Mercedes.DEFENSE_BREAK:
