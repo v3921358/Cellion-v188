@@ -99,7 +99,7 @@ public class MercedesEffect extends AbstractEffect {
             case Mercedes.DUAL_BOWGUNS_EXPERT:
                 break;
             case Mercedes.ELVISH_BLESSING:
-                //pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePADR, pEffect.info.get(StatInfo.indiePad));
                 //pEffect.statups.put(CharacterTemporaryStat.KnockBack, pEffect.info.get(StatInfo.x)); // juicy error 38
                 break;
             case Mercedes.HEROIC_MEMORIES_1:

@@ -173,7 +173,7 @@ public class LootBox {
                     aBoxItems = aEquipment_Lv30_Pirate;
                 }
                 
-                if (JobConstants.hasSecondJob(pPlayer.getJob())) {
+                if (!JobConstants.hasSecondJob(pPlayer.getJob())) {
                     pPlayer.dropMessage(5, "Sorry, you do not meet the job requirement to open this box.");
                     return false;
                 }
@@ -191,7 +191,7 @@ public class LootBox {
                     aBoxItems = aEquipment_Lv50_Pirate;
                 }
                 
-                if (JobConstants.hasSecondJob(pPlayer.getJob())) {
+                if (!JobConstants.hasSecondJob(pPlayer.getJob())) {
                     pPlayer.dropMessage(5, "Sorry, you do not meet the job requirement to open this box.");
                     return false;
                 }
@@ -209,7 +209,7 @@ public class LootBox {
                     aBoxItems = aEquipment_Lv70_Pirate;
                 }
                 
-                if (JobConstants.hasThirdJob(pPlayer.getJob())) {
+                if (!JobConstants.hasThirdJob(pPlayer.getJob())) {
                     pPlayer.dropMessage(5, "Sorry, you do not meet the job requirement to open this box.");
                     return false;
                 }

@@ -61,7 +61,7 @@ public enum QuickMove {
         
         ISLAND_TRANSPORT(0x10, 6, false, 9000089, 0, "Take the #cTaxi# to move to major areas quickly."), //Taxi, Camel
         
-        MARKET(0x20, 3, true, 9000087, 0, "Move to the #cFree Market#, where you can trade items with other users."),
+        MARKET(0x20, 3, true, 9000087, 0, "Move to the #cFree Market#, where you can mingle with other users and access a variety of NPCs."),
         
         CRAFTING(0x40, 4, false, 9000088, 30, "Move to #cArdentmill#, the town of Professions.\n#cOnly Lv. 30 or above can move to Ardentmill"),
         RANDOLF(0x80, 7, false, 0, 10, ""),

@@ -45,7 +45,9 @@ public class HeroEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.IndiePAD, pEffect.info.get(StatInfo.indiePad));
                 break;
             case Hero.ENRAGE:
-                pEffect.statups.put(CharacterTemporaryStat.Enrage, pEffect.info.get(StatInfo.x) * 100 + pEffect.info.get(StatInfo.mobCount));
+                pEffect.statups.put(CharacterTemporaryStat.Enrage, 1);
+                pEffect.info.put(StatInfo.time, 180000);
+                //pEffect.statups.put(CharacterTemporaryStat.Enrage, pEffect.info.get(StatInfo.x) * 100 + pEffect.info.get(StatInfo.mobCount));
                 break;
             case Hero.EPIC_ADVENTURE_4:
                 pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
