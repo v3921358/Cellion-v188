@@ -141,6 +141,7 @@ public class ClientSocket extends Socket {
                     case MobMove:
                     case MobLeaveField:
                     case MobEnterField:
+                    case MobChangeController:
                         if (ServerConstants.REDUCED_DEBUG_SPAM) break;
                     default:
                         System.err.println(String.format("[Send Operation] %s (%d) : %s", SendPacketOpcode.eOp.toString(), SendPacketOpcode.eOp.getValue(), oPacket.toString()));

@@ -181,6 +181,10 @@ public final class MapleMap {
         return ChannelServer.getInstance(channel).getMapFactory().getMap(smr.getForcedReturnMapId(this));
     }
 
+    public int getMobCount() {
+        return this.getAllMapObjectSize(MapleMapObjectType.MONSTER);
+    }
+    
     /**
      * Sets the common map data shared aceoss multiple maps with the same ID.
      *

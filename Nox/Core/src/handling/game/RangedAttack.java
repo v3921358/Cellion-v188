@@ -111,7 +111,7 @@ public final class RangedAttack implements ProcessPacket<ClientSocket> {
             }
 
             if (GameConstants.isWindArcher(pPlayer.getJob())) {
-                WindArcherHandler.OnTriflingWind(pPlayer, pAttack);
+                WindArcherHandler.handleTriflingWind(pPlayer, pAttack);
             }
             
             switch (pAttack.skill) {

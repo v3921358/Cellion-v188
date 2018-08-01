@@ -4,7 +4,6 @@
 package client.jobs;
 
 import client.CharacterTemporaryStat;
-import client.ClientSocket;
 import client.Skill;
 import client.SkillFactory;
 import constants.GameConstants;
@@ -18,12 +17,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Random;
 import java.util.concurrent.ScheduledFuture;
-import javax.swing.text.Position;
 import server.StatEffect;
 import enums.StatInfo;
 import server.Timer;
 import server.life.Mob;
-import server.life.MobAttackInfo;
 import server.maps.objects.ForceAtom;
 import enums.ForceAtomType;
 import server.maps.objects.User;
@@ -83,7 +80,19 @@ public class Cygnus {
 
     public static class WindArcherHandler {
         
-        public static void OnTriflingWind(User pPlayer, AttackInfo pAttack) {
+        public static void handleSecondWind(User pPlayer) {
+            final StatEffect pEffect = SkillFactory.getSkill(WindArcher.SECOND_WIND).getEffect(pPlayer.getTotalSkillLevel(WindArcher.SECOND_WIND));
+
+            pEffect.statups.put(CharacterTemporaryStat.IndiePADR, 5);
+            pEffect.statups.put(CharacterTemporaryStat.PDD, pEffect.info.get(StatInfo.pddX));
+
+            final StatEffect.CancelEffectAction cancelAction = new StatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), pEffect.statups);
+            final ScheduledFuture<?> buffSchedule = Timer.BuffTimer.getInstance().schedule(cancelAction, 5000);
+            pPlayer.registerEffect(pEffect, System.currentTimeMillis(), buffSchedule, pEffect.statups, false, 5000, pPlayer.getId());
+            pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, WindArcher.SECOND_WIND, 5000, pEffect.statups, pEffect));
+        }
+        
+        public static void handleTriflingWind(User pPlayer, AttackInfo pAttack) {
             
             Skill pTrifling;
             if (pPlayer.hasSkill(WindArcher.TRIFLING_WIND_III_1)) pTrifling = SkillFactory.getSkill(WindArcher.TRIFLING_WIND_III_1);

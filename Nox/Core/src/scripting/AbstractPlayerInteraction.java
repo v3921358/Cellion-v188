@@ -509,8 +509,7 @@ public abstract class AbstractPlayerInteraction {
      * @param invType
      * @return
      */
-
-        public String accessInventory(String sCharacter, byte invType){
+    public String accessInventory(String sCharacter, byte invType){
         User pPlayer = Utility.requestCharacter(sCharacter);
         if (pPlayer == null) {
             c.getPlayer().dropMessage(5,"There was a problem accessing the inventory of Character (" + sCharacter + ")");
@@ -533,7 +532,6 @@ public abstract class AbstractPlayerInteraction {
      * @param slot
      * @param quantity
      */
-
     public void deleteItemBySlot(String sCharacter, byte invType, short slot, short quantity) {
         User pPlayer = Utility.requestCharacter(sCharacter);
         InventoryType type = InventoryType.getByType(invType);
@@ -569,7 +567,6 @@ public abstract class AbstractPlayerInteraction {
      * @param nSlot
      * @return
      */
-
     public int getItemFromSlot(byte nInventoryType, short nSlot) {
         InventoryType pType = InventoryType.getByType(nInventoryType);
         Item pItem = c.getPlayer().getInventory(pType).getItem(nSlot);

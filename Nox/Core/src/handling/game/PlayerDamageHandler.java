@@ -14,6 +14,7 @@ import client.inventory.Item;
 import enums.InventoryType;
 import constants.GameConstants;
 import constants.skills.Xenon;
+import client.jobs.Cygnus.*;
 import client.jobs.Kinesis;
 import client.jobs.Kinesis.KinesisHandler;
 import client.jobs.Resistance.BlasterHandler;
@@ -98,6 +99,12 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
         Point pPos = new Point(0, 0);
         Mob attacker = null;
 
+        if (damage < 1) { // If the attack was avoided.
+            if (GameConstants.isWindArcherCygnus(pPlayer.getJob())) {
+                WindArcherHandler.handleSecondWind(pPlayer);
+            }
+        }
+        
         if (GameConstants.isXenon(pPlayer.getJob())) { // Making sure EazisSystem still works when a GM is hiding
             if (pPlayer.hasBuff(CharacterTemporaryStat.XenonAegisSystem)) {
                 if (Randomizer.nextInt(100) < (pPlayer.getTotalSkillLevel(Xenon.AEGIS_SYSTEM) * 10)) {
@@ -230,6 +237,7 @@ public final class PlayerDamageHandler implements ProcessPacket<ClientSocket> {
             c.write(CField.EffectPacket.showForeignEffect(UserEffectCodes.Resist));
             return;
         }*/
+        
         if (pPhysical && skillid == 1201007 && pPlayer.getTotalSkillLevel(1201007) > 0) {
             damage -= pDMG;
             if (damage > 0) {

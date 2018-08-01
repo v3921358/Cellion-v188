@@ -139,11 +139,7 @@ public class PlayerCommand {
                     pPlayer.getMap().broadcastPacket(WvsContext.OnWeatherEffectNotice(sEliteMessage, pType, 1000));
                     break;
                 case 10:
-                    if (pPlayer.hasBuff(CharacterTemporaryStat.Revive)) {
-                        pPlayer.dropMessage(5, "Revive Active");
-                    } else {
-                        pPlayer.dropMessage(5, "Fuck");
-                    }
+                    pPlayer.dropMessage(5, "Aight yo, looks like you got like " + pPlayer.getNodeCount() + " nodes in total.");
                     break;
                 case 11:
                     pPlayer.OnUserVMatrix();

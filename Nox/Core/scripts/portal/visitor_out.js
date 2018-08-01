@@ -20,5 +20,16 @@ function enter(pi) {
     pi.gainExp(900000000);
     pi.gainExp(900000000);
     pi.gainExp(900000000);
+    pi.gainExp(900000000);
+    pi.gainExp(900000000);
+    pi.gainExp(900000000);
+    pi.gainExp(900000000);
+    pi.gainExp(900000000);
+    pi.gainExp(900000000);
+    pi.gainExp(900000000);
+    pi.gainExp(900000000);
+    pi.gainExp(900000000);
+    pi.gainExp(900000000);
+    pi.gainExp(900000000);
 pi.warp(610040000,0);	
 }

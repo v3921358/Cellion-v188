@@ -48,7 +48,14 @@ public class MapScriptMethods {
 
     private static enum onFirstUserEnter {
         //new Stuff
-
+        visitor_summon,
+        visitor_summon2,
+        enter_visitor_1,
+        enter_visitor_2,
+        enter_visitor_3,
+        enter_visitor_4,
+        enter_visitor_5,
+        
         mCastle_enter,
         mapFU_910028310,
         mapFU_910028360,
@@ -446,7 +453,36 @@ public class MapScriptMethods {
             return true;
         }
         switch (onFirstUserEnter.fromString(scriptName)) {
-
+            case visitor_summon: {
+                if (c.getPlayer().getMap().getMobCount() == 0) {
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390111), new Point(757, 32));
+                    c.getPlayer().getMap().startMapEffect("The Epic Visitor has spawned, Hurry and take him out!", 5120111);
+                    break;
+                }
+            }        
+            case visitor_summon2: {
+                if (c.getPlayer().getMap().getMobCount()== 0) {
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(9390113), new Point(750, 32));
+                    c.getPlayer().getMap().startMapEffect("The Ultimate Visitor has spawned, Hurry and take him out!", 5120111);
+                    break;
+                }
+            }
+            case enter_visitor_1:
+                c.SendPacket(CField.showEffect("Visitor/Stage1"));
+                break;
+            case enter_visitor_2:
+                c.SendPacket(CField.showEffect("Visitor/Start"));
+                break;
+            case enter_visitor_3:
+                c.SendPacket(CField.showEffect("Visitor/Start"));
+                break;
+            case enter_visitor_4:
+                c.SendPacket(CField.showEffect("Visitor/Stage4"));
+                break;
+            case enter_visitor_5:
+                c.SendPacket(CField.showEffect("Visitor/StageF"));
+                break;
+                
             case mCastle_enter:
                 c.SendPacket(CField.MapEff("event/mCastle"));
                 break;

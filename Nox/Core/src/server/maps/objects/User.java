@@ -717,6 +717,28 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     }
     
     /**
+     * getNodeCount
+     * @return Amount of Nodes the player currently has in their V Matrix.
+     */
+    public int getNodeCount() {
+        
+        int nNodeCount = 0;
+        
+        try (Connection con = Database.GetConnection()) {
+                
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM vmatrix WHERE characterid = " + getId())) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        nNodeCount++;
+                    }
+                }
+            } catch (SQLException e) {}
+        } catch (SQLException ex) {}
+        
+        return nNodeCount;
+    }
+    
+    /**
      * Channel ID
      *
      * @param nCharacterID
