@@ -1650,6 +1650,9 @@ public class StatEffect implements Serializable {
 
     private boolean isPartyBuff() {
         switch (sourceid) {
+            case Kanna.HAKU_REBORN:
+            case Kanna.HAKU_REBORN_3:
+            case Kanna.HAKU_REBORN_4:
             case Hero.MAPLE_WARRIOR_10:
             case Paladin.MAPLE_WARRIOR_4:
             case DarkKnight.MAPLE_WARRIOR_100_10_1:

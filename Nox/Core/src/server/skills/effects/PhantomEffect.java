@@ -166,7 +166,7 @@ public class PhantomEffect extends AbstractEffect {
             case Phantom.HEROS_ECHO_7:
                 break;
             case Phantom.HEROIC_MEMORIES:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR) / 2);
                 break;
             case Phantom.HIDDEN_POTENTIAL_HERO_9:
                 break;

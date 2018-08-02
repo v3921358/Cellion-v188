@@ -259,7 +259,7 @@ public class MihileEffect extends AbstractEffect {
                 break;
             case Mihile.RADIANT_CHARGE:
                 pEffect.statups.put(CharacterTemporaryStat.WeaponCharge, pEffect.info.get(StatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.z));
+                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.damR));
                 break;
             case Mihile.RADIANT_CHARGE_1:
                 break;
@@ -332,7 +332,7 @@ public class MihileEffect extends AbstractEffect {
             case Mihile.POWER_STANCE:
                 break;
             case Mihile.QUEEN_OF_TOMORROW:
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.indieDamR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieDamR, pEffect.info.get(StatInfo.indieDamR));
                 break;
             case Mihile.RADIANT_BLAST:
                 break;
@@ -352,10 +352,13 @@ public class MihileEffect extends AbstractEffect {
                 break;
             case Mihile.ROILING_SOUL:
                 pEffect.statups.put(CharacterTemporaryStat.Enrage, 1);
-                pEffect.statups.put(CharacterTemporaryStat.DamR, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.IndiePADR, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.FinalAttackProp, pEffect.info.get(StatInfo.x));
+                pEffect.statups.put(CharacterTemporaryStat.SharpEyes, pEffect.info.get(StatInfo.x));
                 pEffect.info.put(StatInfo.time, 2100000000);
                 break;
             case Mihile.SACRED_CUBE:
+                pEffect.statups.put(CharacterTemporaryStat.DamR, 10);
                 break;
             case Mihile.SOUL_ASYLUM:
                 break;
