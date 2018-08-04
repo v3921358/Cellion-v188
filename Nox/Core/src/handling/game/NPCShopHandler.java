@@ -73,11 +73,20 @@ public class NPCShopHandler implements ProcessPacket<ClientSocket> {
                 int nItem = iPacket.DecodeInt();
                 short nQuantity = iPacket.DecodeShort();
 
-
-                if (nItem == 2000005) { // Hack fix for Power Elixer.
+                if (nItem == 2000004) { // Hack fix for Elixer.
+                    pPlayer.gainItem(2000004, nQuantity);
+                    pPlayer.gainMeso(-(2500 * nQuantity), false);
+                } else if (nItem == 2000005) { // Hack fix for Power Elixer.
                     pPlayer.gainItem(2000005, nQuantity);
                     pPlayer.gainMeso(-(5000 * nQuantity), false);
+                } else if (nItem == 2050004) { // Hack fix for All Cures.
+                    pPlayer.gainItem(2050004, nQuantity);
+                    pPlayer.gainMeso(-(10000 * nQuantity), false);
+                } else if (nItem == 5072000) { // Support for Super Megaphone.
+                    pPlayer.gainItem(5072000, nQuantity);
+                    pPlayer.gainMeso(-(50000 * nQuantity), false);
                 } else if (InventoryConstants.isAmmo(nItem)) {
+                    nSlot++;
                     oShop.buy(c, nSlot, nItem, nQuantity);
                     pPlayer.sortInventory((byte) 2); // Sort players 'USE' inventory for ammo.
                 } else {
