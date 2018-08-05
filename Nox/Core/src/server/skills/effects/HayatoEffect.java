@@ -33,7 +33,6 @@ public class HayatoEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(StatInfo.y));
                 pEffect.statups.put(CharacterTemporaryStat.Battoujutsu, 1);
                 pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.actionSpeed));
-                pEffect.statups.put(CharacterTemporaryStat.HayatoStance, pEffect.info.get(StatInfo.prop));
                 break;
             case Hayato.BLADE_FLASH:
                 break;
@@ -82,7 +81,6 @@ public class HayatoEffect extends AbstractEffect {
                 pEffect.statups.put(CharacterTemporaryStat.CriticalBuff, pEffect.info.get(StatInfo.y));
                 pEffect.statups.put(CharacterTemporaryStat.Battoujutsu, 2);
                 pEffect.statups.put(CharacterTemporaryStat.Booster, pEffect.info.get(StatInfo.actionSpeed));
-                pEffect.statups.put(CharacterTemporaryStat.HayatoStance, pEffect.info.get(StatInfo.prop));
                 break;
             case Hayato.DANKUUSEN_1:
                 break;

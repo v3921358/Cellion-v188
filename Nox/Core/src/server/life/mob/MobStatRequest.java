@@ -32,7 +32,8 @@ public class MobStatRequest {
      */
     public static void apply(User pPlayer, AttackInfo pAttack, StatEffect pEffect) {
         Option pOpt = new Option();
-
+        pOpt.tOption = 4; // Default for now.
+                
         for (AttackMonster pAttackMob : pAttack.allDamage) {
             Mob pMob = pAttackMob.getMonster();
             MobTemporaryStat pMobStat = pMob.getTemporaryStat();
@@ -485,9 +486,11 @@ public class MobStatRequest {
                 case IceLightningArchMage.CHAIN_LIGHTNING:
                 case Priest.SHINING_RAY: {
                     if (Utility.resultSuccess(pEffect.info.get(StatInfo.prop) > 0 ? pEffect.info.get(StatInfo.prop) : 10)) {
+                        int tDuration = pEffect.info.get(StatInfo.time) / 1000;
+                        
                         pOpt.nOption = 1;
                         pOpt.rOption = pAttack.skill;
-                        pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
+                        pOpt.tOption = (tDuration > 8 || tDuration == 0) ? 8 : tDuration;
                         pStat = MobStat.Stun;
                     } else {
                         bApplyStat = false;

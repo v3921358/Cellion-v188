@@ -12,6 +12,8 @@ import enums.ModifyInventoryOperation;
 import constants.InventoryConstants;
 import constants.ItemConstants;
 import constants.ServerConstants;
+import enums.PotentialLine;
+import static enums.PotentialLine.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -566,6 +568,7 @@ public class Cube extends ItemPotentialProvider {
     /**
      * Cube Potential Line Generator
      * @author Mazen Massoud
+     * @return 
      *
      * @purpose Generate a Potential Line based on fully customizable Potential tables based upon the Item Potential Tier.
      * @param pEquip
@@ -576,209 +579,211 @@ public class Cube extends ItemPotentialProvider {
         final EquipSlotType pSlot = MapleItemInformationProvider.getInstance().getSlotType(pEquip.getItemId());
         final int nReqLevel = MapleItemInformationProvider.getInstance().getReqLevel(pEquip.getItemId());
 
-        int aMainLegendaryPotential[] = {
-            42066, // 12% Luck
-            42065, // 12% Intelligence
-            40041, // 12% Strength
-            42064, // 12% Dexterity
-            30044, // 9% Luck
-            30043, // 9% Intelligence
-            30041, // 9% Strength
-            30042, // 9% Dexterity
-            40086, // 9% All Stat
-            30086, // 6% All Stat
+        PotentialLine aMainLegendary[] = {
+            Plus_12_Percent_LUK,
+            Plus_12_Percent_INT,
+            Plus_12_Percent_STR,
+            Plus_12_Percent_DEX,
+            Plus_9_Percent_LUK,
+            Plus_9_Percent_INT,
+            Plus_9_Percent_STR,
+            Plus_9_Percent_DEX,
+            Plus_9_Percent_ALL_STAT,
+            Plus_6_Percent_ALL_STAT,
         };
 
-        int aWeaponEmblemLegendaryPotential[] = {
-            40292, // 40% Ignore Defense
-            40291, // 35% Ignore Defense
-            30291, // 30% Ignore Defense
-            42051, // 12% Attack
-            32051, // 9% Atacck
-            40052, // 12% Magic Attack
-            30052, // 9% Magic Attack
-            42070, // 12% Damage
-            30070, // 9% Damage
-            40055, // 12% Crit Chance
-            32057, // 9% Crit Chance
-            42095, // +1 Attack Per 10 Levels
-            42096, // +1 Magic Attack Per 10 Levels
-            40357, // 10% Chance to Ignore 40% Damage
+        PotentialLine aWeaponEmblemLegendary[] = {
+            Ignore_Defence_40_Percent,
+            Ignore_Defence_35_Percent,
+            Ignore_Defence_30_Percent,
+            ATT_12_Percent,
+            ATT_9_Percent,
+            MAG_ATT_12_Percent,
+            MAG_ATT_9_Percent,
+            DMG_12_Percent,
+            DMG_9_Percent,
+            Critical_Chance_12_Percent,
+            Critical_Chance_9_Percent,
+            ATT_Per_Level_1,
+            MAG_ATT_Per_Level_1,
+            Plus_10_Percent_Chance_to_Ignore_40_Percent_Damage
         };
 
-        int aWeaponLegendaryPotential[] = {
-            40603, // 40% Boss Damage
-            40602, // 35% Boss Damage
-            40601, // 30% Boss Damage
+        PotentialLine aWeaponLegendary[] = {
+            Boss_Damage_40_Percent,
+            Boss_Damage_35_Percent,
+            Boss_Damage_30_Percent,
         };
 
-        int aNonWeaponLegendaryPotential[] = {
-            40045, // 12% HP
-            40046, // 12% MP
-            40053, // 12% Defense                           
-            30045, // 9% HP
-            30046, // 9% MP
-            30054, // 9% Defense 
-            30356, // 5% Chance to Ignore 20% Damage
-            40356, // 10% Chance to Ignore 20% Damage   
-            30357, // 5% Chance to Ignore 40% Damage    
-            40357, // 10% Chance to Ignore 40% Damage   
+        PotentialLine aNonWeaponLegendary[] = {
+            HP_12_Percent,
+            MP_12_Percent,
+            DEF_12_Percent,
+            HP_9_Percent,
+            MP_9_Percent,
+            DEF_9_Percent,
+            Plus_5_Percent_Chance_to_Ignore_20_Percent_Damage,
+            Plus_10_Percent_Chance_to_Ignore_20_Percent_Damage,
+            Plus_5_Percent_Chance_to_Ignore_40_Percent_Damage,
+            Plus_10_Percent_Chance_to_Ignore_40_Percent_Damage
         };
 
-        int aAccessoryLegendaryPotential[] = {
-            22056, // +2% Critical Rate
-            42052, // +2% Attack
-            42071, // +2% Damage
-            40656, // +20% Drop Rate
+        PotentialLine aAccessoryLegendary[] = {
+            Plus_2_Percent_Critical_Rate,
+            Plus_2_Percent_ATT,
+            Plus_2_Percent_DMG,
+            Plus_20_Percent_Drop_Rate
         };
 
-        int aHatLegendaryPotential[] = {
-            40556, // -1 Second Cooldown Reduction
-            40557, // -2 Second Cooldown Reduction
-            31002, // Decent Mystic Door
-            41006, // Decent Advanced Blessing
+        PotentialLine aHatLegendary[] = {
+            Minus_1_Second_Cooldown_Reduction,
+            Minus_2_Second_Cooldown_Reduction,
+            Decent_Mystic_Door,
+            Decent_Advanced_Blessing
         };
 
-        int aGloveLegendaryPotential[] = {
-            20055, // +8% Critical Rate
-            31003, // Decent Sharp Eyes
-            41007, // Decent Speed Infusion
+        PotentialLine aGloveLegendary[] = {
+            Plus_8_Percent_Critical_Rate,
+            Decent_Sharp_Eyes,
+            Decent_Speed_Infusion
         };
 
-        int aShoeLegendaryPotential[] = {
-            31001, // Decent Haste
-            41005, // Decent Combat Orders
+        PotentialLine aShoeLegendary[] = {
+            Decent_Haste,
+            Decent_Combat_Orders
         };
 
-        int aPantsLegendaryPotential[] = {
-            31004, // Decent Hyper Body
+        PotentialLine aPantsLegendary[] = {
+            Decent_Hyper_Body
         };
 
-        int aCustomUniquePotential[] = {
-            30086, // 6% ALL STAT
-            20086, // 4% ALL STAT
-            30044, // 9% LUK
-            30043, // 9% INT
-            30041, // 9% STR
-            30042, // 9% DEX
-            30045, // 9% HP
-            30046, // 9% MP
-            30054, // 9% DEF
-            20044, // 6% LUK
-            20043, // 6% INT
-            20041, // 6% STR
-            20042, // 6% DEX
-            22045, // 6% HP
-            20046, // 6% MP
-            20054, // 6% DEF
-            30356, // 5% Chance to Ignore 20% Damage
-            40356, // 10% Chance to Ignore 20% Damage
-            30357, // 5% Chance to Ignore 40% Damage
-            40357, // 10% Chance to Ignore 40% Damage
+        PotentialLine aCustomUnique[] = {
+            Plus_6_Percent_ALL_STAT,
+            Plus_4_Percent_ALL_STAT,
+            Plus_9_Percent_LUK,
+            Plus_9_Percent_INT,
+            Plus_9_Percent_STR,
+            Plus_9_Percent_DEX,
+            HP_9_Percent,
+            MP_9_Percent,
+            DEF_9_Percent,
+            Plus_6_Percent_LUK,
+            Plus_6_Percent_INT,
+            Plus_6_Percent_STR,
+            Plus_6_Percent_DEX,
+            Plus_6_Percent_HP,
+            Plus_6_Percent_MP,
+            Plus_6_Percent_DEF,
+            Plus_5_Percent_Chance_to_Ignore_20_Percent_Damage,
+            Plus_10_Percent_Chance_to_Ignore_20_Percent_Damage,
+            Plus_5_Percent_Chance_to_Ignore_40_Percent_Damage,
+            Plus_10_Percent_Chance_to_Ignore_40_Percent_Damage
         };
 
-        int aCustomEpicPotential[] = {
-            20086, // 4% ALL STAT
-            30054, // 9% DEF
-            20044, // 6% LUK
-            20043, // 6% INT
-            20041, // 6% STR
-            20042, // 6% DEX
-            22045, // 6% HP
-            20046, // 6% MP
-            20054, // 6% DEF
-            10044, // 3% LUK
-            10043, // 3% INT
-            10041, // 3% STR
-            10042, // 3% DEX
-            12045, // 3% HP
-            10046, // 3% MP
-            10054, // 3% DEF
-            30356, // 5% Chance to Ignore 20% Damage
-            40356, // 10% Chance to Ignore 20% Damage
-            30357, // 5% Chance to Ignore 40% Damage
-            40357, // 10% Chance to Ignore 40% Damage
+        PotentialLine aCustomEpicPotential[] = {
+            Plus_4_Percent_ALL_STAT,
+            DEF_9_Percent,
+            Plus_9_Percent_LUK,
+            Plus_9_Percent_INT,
+            Plus_9_Percent_STR,
+            Plus_9_Percent_DEX,
+            HP_9_Percent,
+            MP_9_Percent,
+            Plus_6_Percent_HP,
+            Plus_6_Percent_MP,
+            Plus_6_Percent_DEF,
+            Plus_3_Percent_LUK,
+            Plus_3_Percent_INT,
+            Plus_3_Percent_STR,
+            Plus_3_Percent_DEX,
+            Plus_3_Percent_HP,
+            Plus_3_Percent_MP,
+            Plus_3_Percent_DEF,
+            Plus_5_Percent_Chance_to_Ignore_20_Percent_Damage,
+            Plus_10_Percent_Chance_to_Ignore_20_Percent_Damage,
+            Plus_5_Percent_Chance_to_Ignore_40_Percent_Damage,
+            Plus_10_Percent_Chance_to_Ignore_40_Percent_Damage
         };
 
-        int aCustomRarePotential[] = {
-            10044, // 3% LUK
-            10043, // 3% INT
-            10041, // 3% STR
-            10042, // 3% DEX
-            12045, // 3% HP
-            10046, // 3% MP
-            10054, // 3% DEF
-            30356, // 5% Chance to Ignore 20% Damage
-            40356, // 10% Chance to Ignore 20% Damage
-            30357, // 5% Chance to Ignore 40% Damage
-            40357, // 10% Chance to Ignore 40% Damage
+        PotentialLine aCustomRarePotential[] = {
+            Plus_3_Percent_LUK,
+            Plus_3_Percent_INT,
+            Plus_3_Percent_DEX,
+            Plus_3_Percent_STR,
+            Plus_3_Percent_HP,
+            Plus_3_Percent_MP,
+            Plus_3_Percent_DEF,
+            Plus_5_Percent_Chance_to_Ignore_20_Percent_Damage,
+            Plus_10_Percent_Chance_to_Ignore_20_Percent_Damage,
+            Plus_5_Percent_Chance_to_Ignore_40_Percent_Damage,
+            Plus_10_Percent_Chance_to_Ignore_40_Percent_Damage
         };
 
         if (pTier == ItemPotentialTierType.Legendary && nReqLevel >= 70) { // Only defined Legendary Lv. 100+ Potential Lines
-            for (int nValue : aMainLegendaryPotential) {
-                aPossiblePotential.add(nValue); // Adds General Potential Values (Legendary)
+            for (PotentialLine pLine : aMainLegendary) {
+                aPossiblePotential.add(pLine.getValue()); // Adds General Potential Values (Legendary)
             }
             if (ItemPotentialProvider.isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) || pSlot == EquipSlotType.Si_Emblem
                     || InventoryConstants.isSecondaryWeapon(pEquip.getItemId())) {
-                for (int nValue : aWeaponEmblemLegendaryPotential) { // Adds Emblem Potential Values (Legendary)
-                    aPossiblePotential.add(nValue);
+                for (PotentialLine pLine : aWeaponEmblemLegendary) { // Adds Emblem Potential Values (Legendary)
+                    aPossiblePotential.add(pLine.getValue());
                 }
             }
             if (isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) || InventoryConstants.isSecondaryWeapon(pEquip.getItemId())
                     || InventoryConstants.isSpecialShield(pEquip.getItemId())) {
-                for (int nValue : aWeaponLegendaryPotential) { // Adds Weapon Potential Values (Legendary)
-                    aPossiblePotential.add(nValue);
+                for (PotentialLine pLine : aWeaponLegendary) { // Adds Weapon Potential Values (Legendary)
+                    aPossiblePotential.add(pLine.getValue());
                 }
             }
             if (!isWeaponRelatedPotentialClass(pSlot, pEquip.getItemId()) && !InventoryConstants.isSecondaryWeapon(pEquip.getItemId())) {
-                for (int nValue : aNonWeaponLegendaryPotential) { // Adds Non-Weapon Potential Values (Legendary)
-                    aPossiblePotential.add(nValue);
+                for (PotentialLine pLine : aNonWeaponLegendary) { // Adds Non-Weapon Potential Values (Legendary)
+                    aPossiblePotential.add(pLine.getValue());
                 }
             }
             if (pSlot == EquipSlotType.Accessary_Eye || pSlot == EquipSlotType.Accessary_Face || pSlot == EquipSlotType.Accessary_Pocket) {
-                for (int nValue : aAccessoryLegendaryPotential) { // Adds Accessory Potential Values (Legendary)
-                    aPossiblePotential.add(nValue);
+                for (PotentialLine pLine : aAccessoryLegendary) { // Adds Accessory Potential Values (Legendary)
+                    aPossiblePotential.add(pLine.getValue());
                 }
             }
             if (pSlot == EquipSlotType.Cap) {
-                for (int nValue : aHatLegendaryPotential) { // Adds Hat Potential Values (Legendary)
-                    aPossiblePotential.add(nValue);
+                for (PotentialLine pLine : aHatLegendary) { // Adds Hat Potential Values (Legendary)
+                    aPossiblePotential.add(pLine.getValue());
                 }
             }
             if (pSlot == EquipSlotType.Glove) {
-                for (int nValue : aGloveLegendaryPotential) { // Adds Glove Potential Values (Legendary)
-                    aPossiblePotential.add(nValue);
+                for (PotentialLine pLine : aGloveLegendary) { // Adds Glove Potential Values (Legendary)
+                    aPossiblePotential.add(pLine.getValue());
                 }
             }
             if (pSlot == EquipSlotType.Shoes) {
-                for (int nValue : aShoeLegendaryPotential) { // Adds Shoe Potential Values (Legendary)
-                    aPossiblePotential.add(nValue);
+                for (PotentialLine pLine : aShoeLegendary) { // Adds Shoe Potential Values (Legendary)
+                    aPossiblePotential.add(pLine.getValue());
                 }
             }
             if (pSlot == EquipSlotType.Pants) {
-                for (int nValue : aPantsLegendaryPotential) { // Adds Pants Potential Values (Legendary)
-                    aPossiblePotential.add(nValue);
+                for (PotentialLine pLine : aPantsLegendary) { // Adds Pants Potential Values (Legendary)
+                    aPossiblePotential.add(pLine.getValue());
                 }
             }
         } else if (pTier == ItemPotentialTierType.Legendary) { // Use Unique Table for Legendary under level 70.
-            for (int nValue : aCustomUniquePotential) {
-                aPossiblePotential.add(nValue); // Adds Custom Potential Values (Unique)
+            for (PotentialLine pLine : aCustomUnique) {
+                aPossiblePotential.add(pLine.getValue()); // Adds Custom Potential Values (Unique)
             }
         } else if (pTier == ItemPotentialTierType.Unique) {
-            for (int nValue : aCustomUniquePotential) {
-                aPossiblePotential.add(nValue); // Adds Custom Potential Values (Unique)
+            for (PotentialLine pLine : aCustomUnique) {
+                aPossiblePotential.add(pLine.getValue()); // Adds Custom Potential Values (Unique)
             }
         } else if (pTier == ItemPotentialTierType.Epic) {
-            for (int nValue : aCustomEpicPotential) {
-                aPossiblePotential.add(nValue); // Adds Custom Potential Values (Epic)
+            for (PotentialLine pLine : aCustomEpicPotential) {
+                aPossiblePotential.add(pLine.getValue()); // Adds Custom Potential Values (Epic)
             }
         } else if (pTier == ItemPotentialTierType.Rare) {
-            for (int nValue : aCustomRarePotential) {
-                aPossiblePotential.add(nValue); // Adds Custom Potential Values (Rare)
+            for (PotentialLine pLine : aCustomRarePotential) {
+                aPossiblePotential.add(pLine.getValue()); // Adds Custom Potential Values (Rare)
             }
         } else {
-            for (int nValue : aCustomRarePotential) {
-                aPossiblePotential.add(nValue); // Adds Custom Potential Values (Rare)
+            for (PotentialLine pLine : aCustomRarePotential) {
+                aPossiblePotential.add(pLine.getValue()); // Adds Custom Potential Values (Rare)
             }
             //return decideStats(pEquip, pTier, nReqLevel).getOptionId(); // Very Random Potential
         }

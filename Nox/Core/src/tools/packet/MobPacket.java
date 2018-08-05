@@ -24,7 +24,7 @@ import server.movement.LifeMovementFragment;
 public class MobPacket {
 
     public static OutPacket mobStatSet(Mob mob, short delay) {
-        //(OutHeader.MOB_STAT_SET);
+        
         OutPacket oPacket = new OutPacket(SendPacketOpcode.MobStatSet.getValue());
         MobTemporaryStat mts = mob.getTemporaryStat();
         boolean hasMovementStat = mts.hasNewMovementAffectingStat();
@@ -33,10 +33,10 @@ public class MobPacket {
         oPacket.EncodeShort(delay);
         oPacket.EncodeByte(1); // nCalcDamageStatIndex
         if (hasMovementStat) {
-            oPacket.EncodeByte(0); // ?
+            oPacket.EncodeByte(0);
         }
 
-        oPacket.Fill(0, 29);
+        oPacket.Fill(0, 39);
 
         return oPacket;
     }

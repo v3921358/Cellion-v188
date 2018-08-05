@@ -237,7 +237,7 @@ public class BuffPacket {
         }
         
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.HayatoStance)) { 
-            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(pPlayer.getBuffedValue(CharacterTemporaryStat.HayatoStance));
         }
 
         oPacket.EncodeByte(pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseAtt) == null ? 0
