@@ -5,11 +5,13 @@ package enums;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
- * Potential
+ * Potential Lines
  * @author Mazen Massoud
  */
 public enum PotentialLine {
@@ -25,29 +27,29 @@ public enum PotentialLine {
     Plus_9_Percent_DEX(30042, ""),
     Plus_9_Percent_ALL_STAT(40086, ""),
     Plus_6_Percent_ALL_STAT(30086, ""),
-    Ignore_Defence_40_Percent(40292, ""),
-    Ignore_Defence_35_Percent(40291, ""),
-    Ignore_Defence_30_Percent(30291, ""),
-    ATT_12_Percent(42051, ""),
-    ATT_9_Percent(32051, ""),
-    MAG_ATT_12_Percent(40052, ""),
-    MAG_ATT_9_Percent(30052, ""),
-    DMG_12_Percent(42070, ""),
-    DMG_9_Percent(30070, ""),
-    Critical_Chance_12_Percent(40055, ""),
-    Critical_Chance_9_Percent(32057, ""),
-    ATT_Per_Level_1(42095, ""),
-    MAG_ATT_Per_Level_1(42096, ""),
+    Plus_40_Percent_Ignore_Defence(40292, ""),
+    Plus_35_Percent_Ignore_Defence(40291, ""),
+    Plus_30_Percent_Ignore_Defence(30291, ""),
+    Plus_12_Percent_ATT(42051, ""),
+    Plus_9_Percent_ATT(32051, ""),
+    Plus_12_Percent_MAG_ATT(40052, ""),
+    Plus_9_Percent_MAG_ATT(30052, ""),
+    Plus_12_Percent_DMG(42070, ""),
+    Plus_9_Percent_DMG(30070, ""),
+    Plus_12_Percent_Critical_Chance(40055, ""),
+    Plus_9_Percent_Critical_Chance(32057, ""),
+    ATT_PER_10_Levels_Plus_1(42095, ""),
+    MAG_ATT_PER_10_Levels_Plus_1(42096, ""),
     Plus_10_Percent_Chance_to_Ignore_40_Percent_Damage(40357, ""),
-    Boss_Damage_40_Percent(40603, ""),
-    Boss_Damage_35_Percent(40602, ""),
-    Boss_Damage_30_Percent(40601, ""),
-    HP_12_Percent(40045, ""),
-    MP_12_Percent(40046, ""),
-    DEF_12_Percent(40053, ""),
-    HP_9_Percent(30045, ""),
-    MP_9_Percent(30046, ""),
-    DEF_9_Percent(30054, ""),
+    Plus_40_Percent_Boss_Damage(40603, ""),
+    Plus_35_Percent_Boss_Damage(40602, ""),
+    Plus_30_Percent_Boss_Damage(40601, ""),
+    Plus_12_Percent_HP(40045, ""),
+    Plus_12_Percent_MP(40046, ""),
+    Plus_12_Percent_DEF(40053, ""),
+    Plus_9_Percent_HP(30045, ""),
+    Plus_9_Percent_MP(30046, ""),
+    Plus_9_Percent_DEF(30054, ""),
     Plus_5_Percent_Chance_to_Ignore_20_Percent_Damage(30356, ""),
     Plus_10_Percent_Chance_to_Ignore_20_Percent_Damage(40356, ""),
     Plus_5_Percent_Chance_to_Ignore_40_Percent_Damage(30357, ""),
@@ -141,6 +143,7 @@ public enum PotentialLine {
     ATT_Plus_13(32011, ""),
     Plus_5_Percent_MP(22048, ""),
     Plus_5_Percent_DEF(22055, ""),
+    Plus_2_Percent_LUK(12044, ""),
     Plus_2_Percent_INT(12043, ""),
     Plus_2_Percent_STR(12041, ""),
     Plus_2_Percent_DEX(12042, ""),
@@ -148,6 +151,7 @@ public enum PotentialLine {
     Plus_2_Percent_MP(12046, ""),
     Plus_2_Percent_DEF(12056, ""),
     Plus_150_HP(20005, ""),
+    Plus_150_MP(22008, ""),
     STR_Plus_10(22001, ""),
     INT_Plus_10(22003, ""),
     DEX_Plus_10(22002, ""),
@@ -160,14 +164,33 @@ public enum PotentialLine {
     DEX_Plus_6(12002, ""),
     LUK_Plus_6(10004, ""),
     ALL_STAT_Plus_4(10081, ""),
-    ATT_Plus_10(12011, "");
+    ATT_Plus_10(12011, ""),
+    Plus_4_Percent_LUK(22043, ""),
+    Plus_4_Percent_INT(22044, ""),
+    Plus_4_Percent_STR(22041, ""),
+    Plus_4_Percent_DEX(22042, "");
     
-    private int nValue;
-    private String sPotentialName;
-
+    private final int nValue;
+    private final String sPotentialName;
+    private static final Map<Integer, PotentialLine> aPotentialCollection = new HashMap<Integer, PotentialLine>();
+    
+    private static final List<PotentialLine> aLineValues = Collections.unmodifiableList(Arrays.asList(values()));
+    private static final int nSize = aLineValues.size();
+    private static final Random pRandom = new Random();
+    
+    static {
+        for (PotentialLine pLine : PotentialLine.values()) {
+            aPotentialCollection.put(pLine.getValue(), pLine);
+        }
+    }
+    
     PotentialLine(int nValue, String sPotentialName) {
         this.nValue = nValue;
         this.sPotentialName = sPotentialName;
+    }
+    
+    public static PotentialLine get(int nValue) {
+        return aPotentialCollection.get(nValue);
     }
     
     public int getValue() {
@@ -178,11 +201,7 @@ public enum PotentialLine {
         return sPotentialName;
     }
     
-    private static final List<PotentialLine> aLineValues = Collections.unmodifiableList(Arrays.asList(values()));
-    private static final int nSize = aLineValues.size();
-    private static final Random pRandom = new Random();
-
-    public static PotentialLine randomLine()  {
+    public static PotentialLine getRandom()  {
         return aLineValues.get(pRandom.nextInt(nSize));
     }
 }
