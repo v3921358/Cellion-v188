@@ -158,7 +158,7 @@ public class Cube extends ItemPotentialProvider {
                         if (bDisplayUI) pPlayer.SendPacket(CubePacket.OnInGameCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
                         break;
                     case ItemConstants.PLATINUM_MIRACLE_CUBE:
-                        //pPlayer.SendPacket(CubePacket.OnPlatinumCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
+                        //if (bDisplayUI) pPlayer.SendPacket(CubePacket.OnPlatinumCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
                         break;
                     case ItemConstants.RED_CUBE:
                         if (bDisplayUI) pPlayer.SendPacket(CubePacket.OnRedCubeResult(pPlayer.getId(), pPreviousTier != pEquip.getPotentialTier(), pEquip.getPosition(), nCubeID, pEquip));
@@ -296,6 +296,7 @@ public class Cube extends ItemPotentialProvider {
     /**
      * Cube Bonus Potential Line Generator
      * @author Mazen Massoud
+     * @return 
      *
      * @purpose Generate a bonus Potential Line based on fully customizable Potential tables based upon the Item Potential Tier and
      * @param pEquip

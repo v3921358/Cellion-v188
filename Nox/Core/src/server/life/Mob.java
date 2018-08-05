@@ -1805,8 +1805,8 @@ public class Mob extends AbstractLoadedMapleLife {
 
                 giveExpToCharacter(pPlayer, true, baseExp, 0, mostDamage, 1, (byte) 0, 0, (byte) 0, (byte) 0, burningFieldBonusEXP, lastSkill);
 
-                if (GameConstants.isHayato(pPlayer.getJob())) {
-                    HayatoHandler.handleBladeStance(pPlayer);
+                if (GameConstants.isHayato(pPlayer.getJob())) { // Sword Energy Gain from Normal Stance
+                    if (!pPlayer.hasBuff(CharacterTemporaryStat.HayatoStance)) HayatoHandler.handleBladeStance(pPlayer);
                 }
                 if (GameConstants.isThiefShadower(pPlayer.getJob())) {
                     ShadowerHandler.handleBodyCount(pPlayer);

@@ -31,10 +31,12 @@ public class Sengoku {
     public static class HayatoHandler {
 
         public static void handleBladeStance(User pPlayer) {
-            int nStack = pPlayer.getPrimaryStack() + 5;
-            if (nStack > 1000) {
-                nStack = 1000;
-            }
+            int nStack;
+            
+            if (pPlayer.hasBuff(CharacterTemporaryStat.HayatoStance)) nStack = pPlayer.getPrimaryStack() + 2;   // Quick Draw Stance Gain
+            else nStack = pPlayer.getPrimaryStack() + 5;                                                        // Normal Stance Gain
+            
+            if (nStack > 1000) nStack = 1000;
             updateBladeStanceRequest(pPlayer, nStack);
         }
 

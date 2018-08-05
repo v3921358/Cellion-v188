@@ -24,8 +24,9 @@ import server.maps.objects.User;
 import tools.Pair;
 
 /**
- *
- * @author Novak ~De meester der buffs~
+ * Buff Packet
+ * @author Kaz Voeten
+ * @author Mazen Massoud
  *
  */
 public class BuffPacket {
@@ -176,8 +177,8 @@ public class BuffPacket {
         }
 
         oPacket.Fill(0, 19);
+        // TODO : if (newFireBomb) write(0);
         
-        //todo: if (newFireBomb) write(0);
         return oPacket;
     }
 
@@ -236,15 +237,25 @@ public class BuffPacket {
             oPacket.EncodeByte(0);//Key --> mBuffedForSpecMap
         }
         
+        // Hayato Quick Draw (480, 481, HayatoStance)
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Unknown480)) { 
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
+        }
+        if (mTemporaryStats.containsKey(CharacterTemporaryStat.Unknown481)) { // HayatoStance
+            oPacket.EncodeInt(0);
+            oPacket.EncodeInt(0);
+        }
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.HayatoStance)) { 
-            oPacket.EncodeInt(pPlayer.getBuffedValue(CharacterTemporaryStat.HayatoStance));
+            oPacket.EncodeInt(1);
         }
 
-        oPacket.EncodeByte(pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseAtt) == null ? 0
-                            : pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseAtt));//nDefenseAtt
-        oPacket.EncodeByte(pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseState) == null ? 0
-                            : pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseState));//nDefenseState
-        oPacket.EncodeByte(pEffect == null ? 0 : pEffect.getPVPDamage());//nPVPDamage
+        oPacket.EncodeByte(pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseAtt) == null ? 0 : pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseAtt)); // nDefenseAtt
+        oPacket.EncodeByte(pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseState) == null ? 0 : pPlayer.getBuffedValue(CharacterTemporaryStat.DefenseState)); // nDefenseState
+        oPacket.EncodeByte(pEffect == null ? 0 : pEffect.getPVPDamage()); // nPVPDamage
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.Dice)) {
             //You can loop, or just write the dice stats + zeros. It has to add up to 88 bytes.
@@ -461,10 +472,7 @@ public class BuffPacket {
         }
 
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.BladeStance)) { // BladeStance
-            //oPacket.EncodeShort(0);
-            oPacket.EncodeInt(0); // This should be a short, but character will be unable to move if this is set to a value of 1 or higher. Only works as a 0 integer.
-            oPacket.EncodeInt(nBuffID);
-            oPacket.EncodeInt(tDuration);
+            oPacket.EncodeInt(0); 
         }
         
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.AdrenalinBoost)) {//AdrenalinBoost
@@ -498,6 +506,8 @@ public class BuffPacket {
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.Stigma)) { //Stigma
             oPacket.EncodeInt(0);
         }
+        
+        
         
         if (mTemporaryStats.containsKey(CharacterTemporaryStat.DemonAwakening)) {
             oPacket.EncodeInt(0);
@@ -1869,7 +1879,7 @@ public class BuffPacket {
             uFlagData.add(new Pair<>(chr.getBuffedValue(CharacterTemporaryStat.Stigma), 2));
             uFlagData.add(new Pair<>(chr.getTrueBuffSource(CharacterTemporaryStat.Stigma), 4));
         }
-        if (chr.getBuffedValue(CharacterTemporaryStat.HayatoStance) != null) { //adding this here, lets see
+        if (chr.getBuffedValue(CharacterTemporaryStat.HayatoStance) != null) { // adding this here, lets see
             uFlagTemp[CharacterTemporaryStat.HayatoStance.getPosition()] |= CharacterTemporaryStat.HayatoStance.getValue();
             uFlagData.add(new Pair<>(chr.getBuffedValue(CharacterTemporaryStat.HayatoStance), 2));
             uFlagData.add(new Pair<>(chr.getTrueBuffSource(CharacterTemporaryStat.HayatoStance), 4));

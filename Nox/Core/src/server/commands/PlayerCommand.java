@@ -5,11 +5,14 @@ import client.ClientSocket;
 import client.SkillFactory;
 import client.inventory.Equip;
 import client.inventory.MapleInventory;
+import client.jobs.Sengoku;
+import client.jobs.Sengoku.HayatoHandler;
 import enums.InventoryType;
 import constants.GameConstants;
 import constants.ItemConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
+import constants.skills.Hayato;
 import constants.skills.Kanna;
 import constants.skills.Shade;
 import database.Database;
@@ -33,11 +36,13 @@ import server.maps.MapleMapObjectType;
 import enums.SavedLocationType;
 import enums.SummonMovementType;
 import enums.WeatherEffectNotice;
+import java.util.EnumMap;
 import server.maps.objects.Summon;
 import server.maps.objects.User;
 import server.messages.StylishKillMessage;
 import tools.LogHelper;
 import tools.StringUtil;
+import tools.packet.BuffPacket;
 import tools.packet.CField;
 import tools.packet.MobPacket;
 import tools.packet.WvsContext;
@@ -145,6 +150,8 @@ public class PlayerCommand {
                     pPlayer.OnUserVMatrix();
                     break;
                 case 12:
+                    pPlayer.setPrimaryStack(500);
+                    HayatoHandler.updateBladeStanceRequest(pPlayer, pPlayer.getPrimaryStack());
                     break;  
             }
             return 1;

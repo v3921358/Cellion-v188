@@ -74,7 +74,7 @@ public class ServerConstants {
     public static final int USER_LIMIT = 500;
     public static final int CHARACTER_LIMIT = 16;
     public static final String SERVER_MESSAGE = "";
-    public static final String EVENT_MESSAGE = "Cellion MapleStory (Beta)";
+    public static final String EVENT_MESSAGE = "Cellion MapleStory (Version 188 Beta)";
     public static final String RANKING_URL = "https://cellion.org/rankings";
     public static final String CS_BANNER_URL = "3F 00 68 74 74 70 73 3a 2f 2f 73 74 61 74 69 63 2e 63 65 6c 6c 69 6f 6e 2e 6f 72 67 2f 63 65 6c 6c 69 6f 6e 2f 69 6e 67 61 6d 65 2f 63 73 5f 62 61 6e 6e 65 72 2f 77 65 6c 63 6f 6d 65 2e 6a 70 67".toUpperCase(); // public static final String CS_BANNER_URL = HexTool.toString("https://static.cellion.org/cellion/ingame/cs_banner/welcome.jpg".getBytes(ASCII)).toUpperCase(); 
     private static final Charset ASCII = Charset.forName("US-ASCII");

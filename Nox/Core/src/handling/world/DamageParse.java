@@ -21,6 +21,8 @@ import client.jobs.Hero.AranHandler;
 import client.jobs.Hero.PhantomHandler;
 import client.jobs.Hero.ShadeHandler;
 import client.jobs.Kinesis.KinesisHandler;
+import client.jobs.Sengoku;
+import client.jobs.Sengoku.HayatoHandler;
 import net.InPacket;
 import server.StatEffect;
 import server.Randomizer;
@@ -337,6 +339,9 @@ public class DamageParse {
 
                 if ((nTotalDamageToOneMonster > 0) || (pAttack.skill == 1221011) || (pAttack.skill == 21120006)) {
 
+                    if (GameConstants.isHayato(pPlayer.getJob())) { // Sword Energy Gain from Quick Draw Stance
+                        if (pPlayer.hasBuff(CharacterTemporaryStat.HayatoStance)) HayatoHandler.handleBladeStance(pPlayer);
+                    }
                     if (GameConstants.isKinesis(pPlayer.getJob())) {
                         KinesisHandler.handlePsychicPoint(pPlayer, pAttack.skill);
                     }

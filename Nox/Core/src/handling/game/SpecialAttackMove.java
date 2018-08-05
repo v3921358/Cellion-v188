@@ -10,6 +10,8 @@ import client.jobs.Hero.*;
 import client.jobs.Nova.*;
 import client.jobs.Resistance.*;
 import client.jobs.Kinesis.KinesisHandler;
+import client.jobs.Sengoku;
+import client.jobs.Sengoku.HayatoHandler;
 import net.InPacket;
 import net.ProcessPacket;
 import server.StatEffect;
@@ -386,13 +388,6 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 pEffect.statups.put(CharacterTemporaryStat.GlimmeringTime, 1);
                 break;
             }
-            case Hayato.QUICK_DRAW: {
-                pEffect.statups.put(CharacterTemporaryStat.Enrage, 1);
-                pEffect.statups.put(CharacterTemporaryStat.BladeStance, 1);
-                pEffect.statups.put(CharacterTemporaryStat.HayatoStance, 1);
-                pEffect.info.put(StatInfo.time, 2100000000);
-                break;
-            }
             case BeastTamer.FLY: {
                 pEffect.statups.put(CharacterTemporaryStat.NewFlying, 1);
                 pEffect.info.put(StatInfo.time, 40000);
@@ -526,6 +521,27 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 pPlayer.registerEffect(pEffect, System.currentTimeMillis(), tBuffSchedule, mMorphStat, false, pEffect.info.get(StatInfo.time), pPlayer.getId());
                 pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, pEffect.info.get(StatInfo.time), mMorphStat, pEffect));
                 break;
+            }
+            case Hayato.QUICK_DRAW: {
+                if (pPlayer.getPrimaryStack() >= 100) {
+                    HayatoHandler.updateBladeStanceRequest(pPlayer, pPlayer.getPrimaryStack() - 100);
+                    final EnumMap<CharacterTemporaryStat, Integer> mStats = new EnumMap<>(CharacterTemporaryStat.class);
+                    
+                    mStats.put(CharacterTemporaryStat.BladeStance, 1);
+                    mStats.put(CharacterTemporaryStat.HayatoStance, 1);
+                    mStats.put(CharacterTemporaryStat.Unknown479, 1);
+                    mStats.put(CharacterTemporaryStat.Unknown480, 1);
+                    mStats.put(CharacterTemporaryStat.Unknown481, 1);
+                    
+                    final StatEffect.CancelEffectAction pCancelAction = new StatEffect.CancelEffectAction(pPlayer, pEffect, System.currentTimeMillis(), mStats);
+                    final ScheduledFuture<?> tBuffSchedule = Timer.BuffTimer.getInstance().schedule(pCancelAction, 2100000000);
+                    pPlayer.registerEffect(pEffect, System.currentTimeMillis(), tBuffSchedule, mStats, false, 2100000000, pPlayer.getId());
+                    pPlayer.getClient().SendPacket(BuffPacket.giveBuff(pPlayer, nSkill, 2100000000, mStats, pEffect));
+                } else {
+                    pPlayer.dropMessage(5, "You need at least 100 sword energy to switch into quick draw stance.");
+                }
+                pPlayer.completeDispose();
+                return;
             }
             case Shade.SUMMON_OTHER_SPIRIT: {
                 final EnumMap<CharacterTemporaryStat, Integer> mBuffStat = new EnumMap<>(CharacterTemporaryStat.class);

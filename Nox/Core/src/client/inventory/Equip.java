@@ -8,6 +8,7 @@ import constants.InventoryConstants;
 import server.MapleItemInformationProvider;
 import server.maps.objects.Android;
 import enums.ItemPotentialTierType;
+import enums.PotentialLine;
 
 public class Equip extends Item {
 
@@ -570,6 +571,10 @@ public class Equip extends Item {
         return (potentialBonusState.equals(ItemPotentialTierType.Legendary) || potentialBonusState.equals(ItemPotentialTierType.Legendary_Hidden));
     }
 
+    public PotentialLine getPotentialLine1() {
+        return PotentialLine.get(potential1);
+    }
+    
     public int getPotential1() {
         return potential1;
     }
@@ -578,12 +583,20 @@ public class Equip extends Item {
         potential1 = en;
     }
 
+    public PotentialLine getPotentialLine2() {
+        return PotentialLine.get(potential2);
+    }
+    
     public int getPotential2() {
         return potential2;
     }
-
+    
     public void setPotential2(final int en) {
         potential2 = en;
+    }
+    
+    public PotentialLine getPotentialLine3() {
+        return PotentialLine.get(potential3);
     }
 
     public int getPotential3() {
@@ -594,6 +607,10 @@ public class Equip extends Item {
         potential3 = en;
     }
 
+    public PotentialLine getBonusPotentialLine1() {
+        return PotentialLine.get(bonuspotential1);
+    }
+    
     public int getBonusPotential1() {
         return bonuspotential1;
     }
@@ -602,12 +619,20 @@ public class Equip extends Item {
         bonuspotential1 = en;
     }
 
+    public PotentialLine getBonusPotentialLine2() {
+        return PotentialLine.get(bonuspotential2);
+    }
+    
     public int getBonusPotential2() {
         return bonuspotential2;
     }
 
     public void setBonusPotential2(final int en) {
         bonuspotential2 = en;
+    }
+    
+    public PotentialLine getBonusPotentialLine3() {
+        return PotentialLine.get(bonuspotential3);
     }
 
     public int getBonusPotential3() {

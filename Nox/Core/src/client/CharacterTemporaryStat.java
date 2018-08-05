@@ -469,7 +469,7 @@ public enum CharacterTemporaryStat implements Serializable, TemporaryStat {
     Unknown478(478),
     Unknown479(479),
     Unknown480(480),
-    Unknown481(481),
+    Unknown481(481), // Version 188 - Looks to be HayatoStance
     Unknown485(485),
     Unknown486(486),
     Unknown487(487), // Version 188
@@ -483,7 +483,7 @@ public enum CharacterTemporaryStat implements Serializable, TemporaryStat {
     Unknown501(501),
     Unknown503(503),
     Unknown507(507),
-    HayatoStance(508),// Version 188
+    HayatoStance(508), // Version 188 - Was HayatoStance, but seemed incorrect.
     HayatoStanceBonus(509),// Version 188
     EyeForEye(510),// Version 188
     WillowDodge(511),// Version 188
