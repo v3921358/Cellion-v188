@@ -7225,6 +7225,7 @@ public class GameConstants {
     
     /**
      * Get Potential Line Information from ID
+     * (Old Method to get Potential Name, now use the PotentialLine class I have created.)
      * @author Mazen Massoud
      * 
      * @param nPotentialID

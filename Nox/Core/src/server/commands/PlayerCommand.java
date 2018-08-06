@@ -67,7 +67,7 @@ public class PlayerCommand {
             if (!ServerConstants.DEVELOPER_DEBUG_MODE) return 0;
             User pPlayer = c.getPlayer();
             int nType = Integer.parseInt(splitted[1]);
-            int sValue = Integer.parseInt(splitted[2]);
+            int nValue = Integer.parseInt(splitted[2]);
             switch (nType) {
                 case 1: 
                     Mob pMob = LifeFactory.getMonster(100100);
@@ -112,7 +112,7 @@ public class PlayerCommand {
                     MapleInventoryManipulator.addbyItem(c, pEquip);
                     break;
                 case 7:
-                    Equip pEquip2 = (Equip) (Equip) MapleItemInformationProvider.getInstance().getEquipById(sValue);
+                    Equip pEquip2 = (Equip) (Equip) MapleItemInformationProvider.getInstance().getEquipById(nValue);
                     pEquip2.setStr((short) 32767);
                     pEquip2.setDex((short) 32767);
                     pEquip2.setInt((short) 32767);
@@ -134,7 +134,7 @@ public class PlayerCommand {
                     MapleInventoryManipulator.addbyItem(c, pEquip2);
                     break;
                 case 8:
-                    pPlayer.yellowMessage("primary: "+sValue+" / secondary: "+Integer.parseInt(splitted[3])+" / tertiary: "+Integer.parseInt(splitted[4])+" / quaterary: "+Integer.parseInt(splitted[5]));
+                    pPlayer.yellowMessage("primary: "+nValue+" / secondary: "+Integer.parseInt(splitted[3])+" / tertiary: "+Integer.parseInt(splitted[4])+" / quaterary: "+Integer.parseInt(splitted[5]));
                     //c.getPlayer().getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.MultiKill, sValue, Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5]))));
                     //c.getPlayer().getClient().SendPacket(WvsContext.messagePacket(new StylishKillMessage(StylishKillMessage.StylishKillMessageType.Combo, sValue, Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5]))));
                     break;
@@ -153,6 +153,42 @@ public class PlayerCommand {
                     pPlayer.setPrimaryStack(500);
                     HayatoHandler.updateBladeStanceRequest(pPlayer, pPlayer.getPrimaryStack());
                     break;  
+                case 13:
+                    int nValue2 = Integer.parseInt(splitted[3]);
+                    int nValue3 = Integer.parseInt(splitted[4]);
+                    
+                    Equip pEquip3 = (Equip) MapleItemInformationProvider.getInstance().getEquipById(1332247);
+                    pEquip3.setPotentialTier(ItemPotentialTierType.Legendary);
+                    pEquip3.setPotentialBonusTier(ItemPotentialTierType.Legendary);
+                    pEquip3.setPotential1(nValue);
+                    pEquip3.setPotential2(nValue2);
+                    pEquip3.setPotential3(nValue3);
+                    MapleInventoryManipulator.addbyItem(c, pEquip3);
+                    break;
+                case 14:
+                    int nValue4 = Integer.parseInt(splitted[3]);
+                    int nValue5 = Integer.parseInt(splitted[4]);
+                    
+                    Equip pEquip4 = (Equip) MapleItemInformationProvider.getInstance().getEquipById(1332227);
+                    pEquip4.setPotentialTier(ItemPotentialTierType.Legendary);
+                    pEquip4.setPotentialBonusTier(ItemPotentialTierType.Legendary);
+                    pEquip4.setPotential1(nValue);
+                    pEquip4.setPotential2(nValue4);
+                    pEquip4.setPotential3(nValue5);
+                    MapleInventoryManipulator.addbyItem(c, pEquip4);
+                    break;
+                case 15:
+                    int nValue6 = Integer.parseInt(splitted[3]);
+                    int nValue7 = Integer.parseInt(splitted[4]);
+                    
+                    Equip pEquip5 = (Equip) MapleItemInformationProvider.getInstance().getEquipById(1332007);
+                    pEquip5.setPotentialTier(ItemPotentialTierType.Legendary);
+                    pEquip5.setPotentialBonusTier(ItemPotentialTierType.Legendary);
+                    pEquip5.setPotential1(nValue);
+                    pEquip5.setPotential2(nValue6);
+                    pEquip5.setPotential3(nValue7);
+                    MapleInventoryManipulator.addbyItem(c, pEquip5);
+                    break;
             }
             return 1;
         }

@@ -52,6 +52,7 @@ import net.OutPacket;
 import provider.wz.cache.WzDataStorage;
 import enums.NPCInterfaceType;
 import enums.NPCChatType;
+import enums.PotentialLine;
 import scripting.provider.NPCScriptManager;
 import server.MapleCarnivalChallenge;
 import server.MapleCarnivalParty;
@@ -3028,7 +3029,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         Cube.OnCubeRequest(c.getPlayer(), pEquip, nCubeID, false);
     }
     
+    /**
+     * Get the Name for the respected Potential Line.
+     * @param nPotentialID
+     * @return 
+     */
     public String OnReadPotential(int nPotentialID){ 
-        return GameConstants.getPotentialInfo(nPotentialID);
+        return PotentialLine.get(nPotentialID).getName();
+        //return GameConstants.getPotentialInfo(nPotentialID);
     }
 }
