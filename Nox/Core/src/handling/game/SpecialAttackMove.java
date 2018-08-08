@@ -696,22 +696,22 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 break;
             }
             case Citizen.CAPTURE_4:
-                nMobID = iPacket.DecodeInt();
-                pMob = pPlayer.getMap().getMonsterByOid(nMobID);
+                nMobID = iPacket.DecodeInt(); // This isn't a thing anymore. -Mazen
+                pMob = pPlayer.getMap().getNearestMonster(pPlayer.getPosition());
                 if (pMob != null) {
-                    boolean success = true; // (pMob.getHp() <= pMob.getMobMaxHp() / 2L) && (pMob.getId() >= 9304000) && (pMob.getId() < 9305000);
-                    pPlayer.getMap().broadcastPacket(pPlayer, CField.EffectPacket.showBuffEffect(pPlayer.getId(), nSkill, EffectPacket.SkillUse, pPlayer.getLevel(), nSkillLevel, (byte) (success ? 1 : 0)), pPlayer.getTruePosition());
-                    if (success) {
+                    boolean bSuccess = (pMob.getHp() < pMob.getMobMaxHp()) && (pMob.getId() >= 9304000) && (pMob.getId() < 9305000);
+                    pPlayer.getMap().broadcastPacket(pPlayer, CField.EffectPacket.showBuffEffect(pPlayer.getId(), nSkill, EffectPacket.SkillUse, pPlayer.getLevel(), nSkillLevel, (byte) (bSuccess ? 1 : 0)), pPlayer.getTruePosition());
+                    if (bSuccess) {
                         pPlayer.getQuestNAdd(Quest.getInstance(GameConstants.JAGUAR)).setCustomData(String.valueOf((pMob.getId() - 9303999) * 10));
                         pPlayer.getMap().killMonster(pMob, pPlayer, true, false, (byte) 1);
                         pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.RideVehicle);
                         c.SendPacket(WvsContext.updateJaguar(pPlayer));
                     } else {
-                        pPlayer.dropMessage(5, "The monster has too much physical strength, so you cannot catch it.");
+                        pPlayer.dropMessage(5, "You must weaken the monster before you can catch it.");
                     }
                 }
                 break;
-
+            
             // Reminder to recode the ones below here. -Mazen
             case Citizen.CALL_OF_THE_HUNTER_4:
                 pPlayer.dropMessage(5, "No monsters can be summoned. Capture a monster first.");

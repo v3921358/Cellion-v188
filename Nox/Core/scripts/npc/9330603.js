@@ -148,6 +148,7 @@ function action(mode, type, selection) {
 				cm.gainItem(1462004, 1); //32 xbow
 				cm.gainItem(2061001, 5000); //xbowarrows
 				cm.gainItem(1352960, 1); //wildhunter secondary
+				cm.teachSkill(30001061, 1);// Jaguar Capture skill
 				break;
 			case 3500: //MECHANIC
 				jobName = "Mechanic";

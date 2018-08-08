@@ -1,6 +1,8 @@
 package handling.game;
 
+import client.CharacterTemporaryStat;
 import client.ClientSocket;
+import client.jobs.Resistance.WildHunterHandler;
 import enums.InventoryType;
 import constants.GameConstants;
 import handling.cashshop.CashShopOperation;
@@ -13,8 +15,12 @@ import net.InPacket;
 import tools.packet.CField;
 import tools.packet.WvsContext;
 import net.ProcessPacket;
-import tools.packet.CField.SummonPacket;
+import tools.Utility;
 
+/**
+ * UserTransferFieldRequest
+ * @author Mazen Massoud
+ */
 public final class UserTransferFieldRequest implements ProcessPacket<ClientSocket> {
 
     @Override
@@ -24,127 +30,132 @@ public final class UserTransferFieldRequest implements ProcessPacket<ClientSocke
 
     @Override
     public void Process(ClientSocket c, InPacket iPacket) {
-        final User chr = c.getPlayer();
-        if (chr == null) {
-            return;
-        }
+        final User pPlayer = c.getPlayer();
+        if (pPlayer == null) return;
+        pPlayer.completeDispose();
 
-        if (chr.getMap() == null) {
+        if (pPlayer.getMap() == null) {                                   // Leaving Cash Shop
             CashShopOperation.LeaveCS(c, c.getPlayer());
-        } else {
+        } else {                                                          // Leaving Map
+            
+            if (pPlayer.hasBuff(CharacterTemporaryStat.JaguarSummoned)) { // Unsummon Jaguar to correct damage parse.
+                pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.JaguarSummoned);
+                Utility.removeAllSummonsForCharacter(pPlayer.getId());
+            }
+            
             if (iPacket.GetRemainder() != 0L) {
                 iPacket.DecodeByte();
-                int targetid = iPacket.DecodeInt();
+                int nTargetID = iPacket.DecodeInt();
                 iPacket.DecodeInt();
-                MaplePortal portal = chr.getMap().getPortal(iPacket.DecodeString());
+                MaplePortal pPortal = pPlayer.getMap().getPortal(iPacket.DecodeString());
                 if (iPacket.GetRemainder() >= 7L) {
-                    chr.updateTick(iPacket.DecodeInt());
+                    pPlayer.updateTick(iPacket.DecodeInt());
                 }
                 iPacket.Skip(1);
-                boolean wheel = (iPacket.DecodeShort() > 0) && (!GameConstants.isEventMap(chr.getMapId())) && (chr.haveItem(5510000, 1, false, true)) && (chr.getMapId() / 1000000 != 925);
+                boolean wheel = (iPacket.DecodeShort() > 0) && (!GameConstants.isEventMap(pPlayer.getMapId())) && (pPlayer.haveItem(5510000, 1, false, true)) && (pPlayer.getMapId() / 1000000 != 925);
 
-                if ((targetid != -1) && (!chr.isAlive())) {
-                    chr.setStance(0);
-                    if ((chr.getEventInstance() != null) && (chr.getEventInstance().revivePlayer(chr)) && (chr.isAlive())) {
+                if ((nTargetID != -1) && (!pPlayer.isAlive())) {
+                    pPlayer.setStance(0);
+                    if ((pPlayer.getEventInstance() != null) && (pPlayer.getEventInstance().revivePlayer(pPlayer)) && (pPlayer.isAlive())) {
                         return;
                     }
-                    if (chr.getPyramidSubway() != null) {
-                        chr.getStat().setHp(50, chr);
-                        chr.getPyramidSubway().fail(chr);
+                    if (pPlayer.getPyramidSubway() != null) {
+                        pPlayer.getStat().setHp(50, pPlayer);
+                        pPlayer.getPyramidSubway().fail(pPlayer);
                         return;
                     }
 
-                    if (chr.getMapId() == 105200111) {
-                        chr.getStat().setHp(500000, chr);
-                        chr.getStat().setMp(500000, chr);
+                    if (pPlayer.getMapId() == 105200111) {
+                        pPlayer.getStat().setHp(500000, pPlayer);
+                        pPlayer.getStat().setMp(500000, pPlayer);
                     }
 
                     if (!wheel) {
-                        chr.getStat().setHp(50, chr);
+                        pPlayer.getStat().setHp(50, pPlayer);
 
-                        MapleMap to = chr.getMap().getReturnMap();
-                        chr.changeMap(to, to.getPortal(0));
+                        MapleMap to = pPlayer.getMap().getReturnMap();
+                        pPlayer.changeMap(to, to.getPortal(0));
                     } else {
-                        c.SendPacket(CField.EffectPacket.useWheel((byte) (chr.getInventory(InventoryType.CASH).countById(5510000) - 1)));
-                        chr.getStat().setHp(chr.getStat().getMaxHp() / 100 * 40, chr);
+                        c.SendPacket(CField.EffectPacket.useWheel((byte) (pPlayer.getInventory(InventoryType.CASH).countById(5510000) - 1)));
+                        pPlayer.getStat().setHp(pPlayer.getStat().getMaxHp() / 100 * 40, pPlayer);
                         MapleInventoryManipulator.removeById(c, InventoryType.CASH, 5510000, 1, true, false);
 
-                        MapleMap to = chr.getMap();
-                        chr.changeMap(to, to.getPortal(0));
+                        MapleMap to = pPlayer.getMap();
+                        pPlayer.changeMap(to, to.getPortal(0));
                     }
-                } else if ((targetid != -1) && (chr.isIntern())) {
-                    MapleMap to = ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(targetid);
+                } else if ((nTargetID != -1) && (pPlayer.isIntern())) {
+                    MapleMap to = ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(nTargetID);
                     if (to != null) {
-                        chr.changeMap(to, to.getPortal(0));
+                        pPlayer.changeMap(to, to.getPortal(0));
                     } else {
-                        chr.dropMessage(5, "Map is NULL. Use !warp <mapid> instead.");
+                        pPlayer.dropMessage(5, "Map is NULL. Use !warp <mapid> instead.");
                     }
-                } else if ((targetid != -1) && (!chr.isIntern())) {
-                    int divi = chr.getMapId() / 100;
+                } else if ((nTargetID != -1) && (!pPlayer.isIntern())) {
+                    int divi = pPlayer.getMapId() / 100;
                     boolean unlock = false;
                     boolean warp = false;
                     if (divi == 9130401) {
-                        warp = (targetid / 100 == 9130400) || (targetid / 100 == 9130401);
-                        if (targetid / 10000 != 91304) {
+                        warp = (nTargetID / 100 == 9130400) || (nTargetID / 100 == 9130401);
+                        if (nTargetID / 10000 != 91304) {
                             warp = true;
                             unlock = true;
-                            targetid = 130030000;
+                            nTargetID = 130030000;
                         }
                     } else if (divi == 9130400) {
-                        warp = (targetid / 100 == 9130400) || (targetid / 100 == 9130401);
-                        if (targetid / 10000 != 91304) {
+                        warp = (nTargetID / 100 == 9130400) || (nTargetID / 100 == 9130401);
+                        if (nTargetID / 10000 != 91304) {
                             warp = true;
                             unlock = true;
-                            targetid = 130030000;
+                            nTargetID = 130030000;
                         }
                     } else if (divi == 9140900) {
-                        warp = (targetid == 914090011) || (targetid == 914090012) || (targetid == 914090013) || (targetid == 140090000);
+                        warp = (nTargetID == 914090011) || (nTargetID == 914090012) || (nTargetID == 914090013) || (nTargetID == 140090000);
                     } else if ((divi == 9120601) || (divi == 9140602) || (divi == 9140603) || (divi == 9140604) || (divi == 9140605)) {
-                        warp = (targetid == 912060100) || (targetid == 912060200) || (targetid == 912060300) || (targetid == 912060400) || (targetid == 912060500) || (targetid == 3000100);
+                        warp = (nTargetID == 912060100) || (nTargetID == 912060200) || (nTargetID == 912060300) || (nTargetID == 912060400) || (nTargetID == 912060500) || (nTargetID == 3000100);
                         unlock = true;
                     } else if (divi == 9101500) {
-                        warp = (targetid == 910150006) || (targetid == 101050010);
+                        warp = (nTargetID == 910150006) || (nTargetID == 101050010);
                         unlock = true;
-                    } else if ((divi == 9140901) && (targetid == 140000000)) {
-                        unlock = true;
-                        warp = true;
-                    } else if ((divi == 9240200) && (targetid == 924020000)) {
+                    } else if ((divi == 9140901) && (nTargetID == 140000000)) {
                         unlock = true;
                         warp = true;
-                    } else if ((targetid == 980040000) && (divi >= 9800410) && (divi <= 9800450)) {
-                        warp = true;
-                    } else if ((divi == 9140902) && ((targetid == 140030000) || (targetid == 140000000))) {
+                    } else if ((divi == 9240200) && (nTargetID == 924020000)) {
                         unlock = true;
                         warp = true;
-                    } else if ((divi == 9000900) && (targetid / 100 == 9000900) && (targetid > chr.getMapId())) {
+                    } else if ((nTargetID == 980040000) && (divi >= 9800410) && (divi <= 9800450)) {
                         warp = true;
-                    } else if ((divi / 1000 == 9000) && (targetid / 100000 == 9000)) {
-                        unlock = (targetid < 900090000) || (targetid > 900090004);
-                        warp = true;
-                    } else if ((divi / 10 == 1020) && (targetid == 1020000)) {
+                    } else if ((divi == 9140902) && ((nTargetID == 140030000) || (nTargetID == 140000000))) {
                         unlock = true;
                         warp = true;
-                    } else if ((chr.getMapId() == 900090101) && (targetid == 100030100)) {
+                    } else if ((divi == 9000900) && (nTargetID / 100 == 9000900) && (nTargetID > pPlayer.getMapId())) {
+                        warp = true;
+                    } else if ((divi / 1000 == 9000) && (nTargetID / 100000 == 9000)) {
+                        unlock = (nTargetID < 900090000) || (nTargetID > 900090004);
+                        warp = true;
+                    } else if ((divi / 10 == 1020) && (nTargetID == 1020000)) {
                         unlock = true;
                         warp = true;
-                    } else if ((chr.getMapId() == 2010000) && (targetid == 104000000)) {
+                    } else if ((pPlayer.getMapId() == 900090101) && (nTargetID == 100030100)) {
                         unlock = true;
                         warp = true;
-                    } else if ((chr.getMapId() == 106020001) || (chr.getMapId() == 106020502)) {
-                        if (targetid == chr.getMapId() - 1) {
+                    } else if ((pPlayer.getMapId() == 2010000) && (nTargetID == 104000000)) {
+                        unlock = true;
+                        warp = true;
+                    } else if ((pPlayer.getMapId() == 106020001) || (pPlayer.getMapId() == 106020502)) {
+                        if (nTargetID == pPlayer.getMapId() - 1) {
                             unlock = true;
                             warp = true;
                         }
-                    } else if ((chr.getMapId() == 0) && (targetid == 10000)) {
+                    } else if ((pPlayer.getMapId() == 0) && (nTargetID == 10000)) {
                         unlock = true;
                         warp = true;
-                    } else if ((chr.getMapId() == 931000011) && (targetid == 931000012)) {
+                    } else if ((pPlayer.getMapId() == 931000011) && (nTargetID == 931000012)) {
                         unlock = true;
                         warp = true;
-                    } else if ((chr.getMapId() == 931000021) && (targetid == 931000030)) {
+                    } else if ((pPlayer.getMapId() == 931000021) && (nTargetID == 931000030)) {
                         unlock = true;
                         warp = true;
-                    } else if ((chr.getMapId() == 105040300) && (targetid == 105040000)) {
+                    } else if ((pPlayer.getMapId() == 105040300) && (nTargetID == 105040000)) {
                         unlock = true;
                         warp = true;
                     }
@@ -154,11 +165,11 @@ public final class UserTransferFieldRequest implements ProcessPacket<ClientSocke
                         c.SendPacket(WvsContext.enableActions());
                     }
                     if (warp) {
-                        MapleMap to = ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(targetid);
-                        chr.changeMap(to, to.getPortal(0));
+                        MapleMap to = ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(nTargetID);
+                        pPlayer.changeMap(to, to.getPortal(0));
                     }
-                } else if ((portal != null) && (!chr.hasBlockedInventory())) {
-                    portal.enterPortal(c);
+                } else if ((pPortal != null) && (!pPlayer.hasBlockedInventory())) {
+                    pPortal.enterPortal(c);
                 } else {
                     c.SendPacket(WvsContext.enableActions());
                 }

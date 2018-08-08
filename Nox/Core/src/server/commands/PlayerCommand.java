@@ -5,6 +5,8 @@ import client.ClientSocket;
 import client.SkillFactory;
 import client.inventory.Equip;
 import client.inventory.MapleInventory;
+import client.jobs.Resistance;
+import client.jobs.Resistance.WildHunterHandler;
 import client.jobs.Sengoku;
 import client.jobs.Sengoku.HayatoHandler;
 import enums.InventoryType;
@@ -188,6 +190,9 @@ public class PlayerCommand {
                     pEquip5.setPotential2(nValue6);
                     pEquip5.setPotential3(nValue7);
                     MapleInventoryManipulator.addbyItem(c, pEquip5);
+                    break;
+                case 16:
+                    pPlayer.yellowMessage("");
                     break;
             }
             return 1;

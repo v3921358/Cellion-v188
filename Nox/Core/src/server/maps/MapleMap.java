@@ -3579,6 +3579,23 @@ public final class MapleMap {
         return ret;
     }
 
+    /**
+     * getNearestMonster
+     * @param nPOS
+     * @return 
+     */
+    public Mob getNearestMonster(final Point nPOS) {
+        final List<MapleMapObject> aMobsToAggro = getAllMapObjects(MapleMapObjectType.MONSTER);
+        Mob pMob = null;
+        for (MapleMapObject pObject : aMobsToAggro) {
+            pMob = (Mob) pObject;
+            if (pMob.isAlive()) {
+                break;
+            }
+        }
+        return pMob;
+    }
+    
     public MapleMapObject getClosestMapObjectInRange(final Point from, final double rangeSq, final List<MapleMapObjectType> MapObject_types) {
         MapleMapObject ret = null;
         for (MapleMapObjectType type : MapObject_types) {

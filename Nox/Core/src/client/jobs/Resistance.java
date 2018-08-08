@@ -10,10 +10,15 @@ import client.SkillFactory;
 import constants.GameConstants;
 import constants.skills.Aran;
 import constants.skills.Blaster;
+import constants.skills.WildHunter;
+import enums.StatInfo;
+import enums.SummonMovementType;
 import java.util.concurrent.ScheduledFuture;
 import server.StatEffect;
 import server.Timer;
+import server.maps.objects.Summon;
 import server.maps.objects.User;
+import server.skills.effects.manager.EffectManager;
 import tools.packet.BuffPacket;
 import tools.packet.JobPacket;
 import tools.packet.JobPacket.BlasterPacket;
@@ -123,6 +128,10 @@ public class Resistance {
 
             pPlayer.cancelEffectFromTemporaryStat(CharacterTemporaryStat.RWBarrier); // Consume Blast Shield
         }
+    }
+    
+    public static class WildHunterHandler {
+        
     }
 
 }
