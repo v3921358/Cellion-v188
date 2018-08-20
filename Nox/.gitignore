@@ -8,6 +8,16 @@
 /Nox/wz/
 /Nox/Core/logs/
 /Nox/Core/bin/
+/Cellion/.idea/
+/Cellion/Network/target/
+/Cellion/Network/bin/
+/Cellion/Provider/target/
+/Cellion/Provider/bin/
+/Cellion/Core/target/
+/Cellion/Core/wz/
+/Cellion/wz/
+/Cellion/Core/logs/
+/Cellion/Core/bin/
 /bin/
 *.iml
 *.jar
