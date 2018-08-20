@@ -139,7 +139,7 @@ public enum PotentialLine {
     INT_Plus_14(32003, "INT: +14"), // Onyx says +16 and SW says +17
     DEX_Plus_14(32002, "DEX: +14"), // Onyx says +16 and SW says +17
     LUK_Plus_14(30004, "LUK: +14"), // Onyx says +16 and SW says +17
-    ALL_STAT_Plus_8(30081, ""), // Does not give an line
+    ALL_STAT_Plus_8(30081, "ALL STAT: +8"), // Does not give an line
     ATT_Plus_13(32011, "ATT: +13"),
     Plus_5_Percent_MP(22048, "Max MP: +5%"),
     Plus_5_Percent_DEF(22055, ""), // says Critical Rate: +6%
@@ -152,18 +152,18 @@ public enum PotentialLine {
     Plus_2_Percent_DEF(12056, ""), // Does not give an line 
     Plus_150_HP(20005, "Max HP: +150"), // FK gives +15 and SW gives +195
     Plus_150_MP(22008, "Max MP: +150"), // FK gives +15 and SW gives +180 <????
-    STR_Plus_10(22001, ""), // Fruit Knife gives +4 and Onyx gives +14 and SW gives +15
-    INT_Plus_10(22003, ""), // Fruit Knife gives +4 and Onyx gives +14 and SW gives +15
-    DEX_Plus_10(22002, ""), // Fruit Knife gives +4 and Onyx gives +14 and SW gives +15
-    LUK_Plus_10(20004, ""), // Fruit Knife gives +4 and Onyx gives +14 and SW gives +15
+    STR_Plus_10(22001, "STR: +10"), // Fruit Knife gives +4 and Onyx gives +14 and SW gives +15
+    INT_Plus_10(22003, "INT: +10"), // Fruit Knife gives +4 and Onyx gives +14 and SW gives +15
+    DEX_Plus_10(22002, "DEX: +10"), // Fruit Knife gives +4 and Onyx gives +14 and SW gives +15
+    LUK_Plus_10(20004, "LUK: +10"), // Fruit Knife gives +4 and Onyx gives +14 and SW gives +15
     ATT_Plus_11(22011, "ATT: +11"), // Fruit Knife gives +4 and SW gives +12
     Plus_100_HP(10005, "Max HP: +100"), // FK gives +10 and SW gives +125
     Plus_100_MP(12008, "Max MP: +100"), // FK gives +10 and SW gives +100 <????
-    STR_Plus_6(12001, ""), // FK gives +2 and Onyx gives +10 and SW gives +11
-    INT_Plus_6(12003, ""), // FK gives +2 and Onyx gives +10 and SW gives +11
-    DEX_Plus_6(12002, ""), // FK gives +2 and Onyx gives +10 and SW gives +11
-    LUK_Plus_6(10004, ""), // FK gives +2 and Onyx gives +10 and SW gives +11
-    ALL_STAT_Plus_4(10081, ""), // FK gives +1 and Onyx gives +5 and SW gives +6
+    STR_Plus_6(12001, "STR: +6"), // FK gives +2 and Onyx gives +10 and SW gives +11
+    INT_Plus_6(12003, "INT: +6"), // FK gives +2 and Onyx gives +10 and SW gives +11
+    DEX_Plus_6(12002, "DEX: +6"), // FK gives +2 and Onyx gives +10 and SW gives +11
+    LUK_Plus_6(10004, "LUK: +6"), // FK gives +2 and Onyx gives +10 and SW gives +11
+    ALL_STAT_Plus_4(10081, "ALL STAT: +4"), // FK gives +1 and Onyx gives +5 and SW gives +6
     ATT_Plus_10(12011, "ATT: +10"), // FK gives +1 and SW gives +11
     Plus_4_Percent_LUK(22043, "LUK: +4%"), // FK gives +1% and SW gives +5%
     Plus_4_Percent_INT(22044, "INT: +4%"), // FK gives +1% and SW gives +5%
@@ -203,5 +203,13 @@ public enum PotentialLine {
     
     public static PotentialLine getRandom()  {
         return aLineValues.get(pRandom.nextInt(nSize));
+    }
+    
+    public static boolean isBonusPotential(PotentialLine pLine) {
+        return (pLine.getValue() >= 42001 && pLine.getValue() <= 42656);
+    }
+    
+    public static boolean isNebulitePotential(PotentialLine pLine) {
+        return (pLine.getValue() >= 70000 && pLine.getValue() <= 70119);
     }
 }
