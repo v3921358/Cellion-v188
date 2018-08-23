@@ -564,4 +564,22 @@ public class MobStatRequest {
         pOpt.tOption = pEffect.info.get(StatInfo.time) / 1000;
         pMobStat.addStatOptionsAndBroadcast(MobStat.Poison, pOpt); // Mask Poison as Burn for now.
     }
+    
+    /**
+     * ignoreSkill
+     * @param nSkillID
+     * @return Do not apply monster statuses on specific skills.
+     */
+    public static boolean ignoreSkill(int nSkillID) {
+        switch (nSkillID) {
+            case DemonSlayer.INFERNAL_CONCUSSION:
+            case DemonSlayer.INFERNAL_CONCUSSION_1:
+            case Xenon.ENTANGLING_LASH:
+            case NightWalker.SHADOW_STITCH:
+            case Kinesis.MENTAL_SHOCK:
+                return true;
+            default:
+                return false;
+        }
+    }
 }

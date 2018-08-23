@@ -1470,7 +1470,7 @@ public class DamageParse {
         // TODO: See if can parse with just this.. the rest is so much and i dont think u use any of the vars
 
         // Apply Monster Status, think this is enough for now. -Mazen
-        if (pAttack.skill != 0) {
+        if (pAttack.skill != 0 && !MobStatRequest.ignoreSkill(pAttack.skill)) {
             MobStatRequest.apply(pPlayer, pAttack, ((pPlayer.getSkillLevel(pAttack.skill) > 0) ? SkillFactory.getSkill(pAttack.skill).getEffect(pPlayer.getSkillLevel(pAttack.skill)) : SkillFactory.getSkill(pAttack.skill).getEffect(1)));
         }
 

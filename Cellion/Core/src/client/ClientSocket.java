@@ -626,7 +626,7 @@ public class ClientSocket extends Socket {
                                 loginok = 7;
                             }
                         } else {
-                            if (ServerConstants.GM_ONLY && !gm) {
+                            if (ServerConstants.MAINTENANCE_MODE && !gm) {
                                 loginok = 5;
                             } else {
                                 loginok = 0;
@@ -702,7 +702,7 @@ public class ClientSocket extends Socket {
                                 loginok = 7;
                             }
                         } else {
-                            if (ServerConstants.DEVMODE && !gm) {
+                            if (ServerConstants.MAINTENANCE_MODE && !gm) {
                                 loginok = 5;
                             } else {
                                 loginok = 0;

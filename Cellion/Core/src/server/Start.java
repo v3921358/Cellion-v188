@@ -80,12 +80,13 @@ public class Start {
         ServerConstants.EXP_RATE = Float.valueOf(config.getProperty("EXP_RATE"));
         ServerConstants.MESO_RATE = Float.valueOf(config.getProperty("MESO_RATE"));
         ServerConstants.DROP_RATE = Float.valueOf(config.getProperty("DROP_RATE"));
-        ServerConstants.DEVMODE = Boolean.valueOf(config.getProperty("DEVMODE"));
+        ServerConstants.MAINTENANCE_MODE = Boolean.valueOf(config.getProperty("MAINTENANCE_MODE"));
 
         /*Setting Debug Configuration*/
         ServerConstants.DEVELOPER_DEBUG_MODE = Boolean.valueOf(config.getProperty("DEBUG"));
 
         /*Setting API Configuration*/
+        ServerConstants.USE_API = Boolean.valueOf(config.getProperty("ENABLE_API"));
         ApiConstants.PRODUCT_ID = config.getProperty("CLIENT_ID");
         ApiConstants.CLIENT_ID = config.getProperty("CLIENT_ID");
         ApiConstants.CLIENT_SECRET = config.getProperty("CLIENT_SECRET");
@@ -352,7 +353,7 @@ public class Start {
             System.exit(1);
         }
 
-        if (!ServerConstants.DEVMODE && ServerConstants.USE_API) {
+        if (!ServerConstants.MAINTENANCE_MODE && ServerConstants.USE_API) {
             queue = new QueueWorker();
             queue.start();
         }
