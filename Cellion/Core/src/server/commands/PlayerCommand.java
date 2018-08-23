@@ -39,6 +39,7 @@ import enums.SavedLocationType;
 import enums.SummonMovementType;
 import enums.WeatherEffectNotice;
 import java.util.EnumMap;
+import server.maps.objects.RuneStone;
 import server.maps.objects.Summon;
 import server.maps.objects.User;
 import server.messages.StylishKillMessage;
@@ -192,7 +193,11 @@ public class PlayerCommand {
                     MapleInventoryManipulator.addbyItem(c, pEquip5);
                     break;
                 case 16:
-                    pPlayer.yellowMessage("");
+                    pPlayer.yellowMessage("rune");
+                    RuneStone rune = new RuneStone(30, 100);
+                    rune.respawnRuneInMap(pPlayer.getMap(), true);
+
+                    pPlayer.getMap().setRune(rune);
                     break;
             }
             return 1;

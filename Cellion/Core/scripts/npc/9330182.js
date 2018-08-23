@@ -162,6 +162,7 @@ function action(mode, type, selection) {
 				+ "#L5001#500 DP - Premium Hairstyle (Collection #1)#l\r\n"
 				+ "#L5002#550 DP - Premium Hairstyle (Collection #2)#l\r\n\r\n"
 				+ "\r\n#d#fs13#Social Cosmetics#fs11##r\r\n"
+				+ "#L5006#450 DP - Premium Cosmetic Loot Box (3x Random)#l\r\n"
 				+ "#L5003#200 DP - Damage Skin Loot Box (Random)#l\r\n"
 				+ "#L5004#1000 DP - Premium Chair Loot Box (Random)#l\r\n"
 				+ "#L5005#1500 DP - Premium Mounts#l\r\n\r\n"
@@ -254,6 +255,8 @@ function action(mode, type, selection) {
 					textMounts += "#fs14# #L" + j + "##s" + aMountID[j] + "# #q" + aMountID[j] + "##l\r\n"
 				}
 				cm.sendSimple(textMounts);
+			} else if (selection == 5006) {
+				cm.sendGetText("How many #rPremium Cosmetic Loot Boxes#k would you like to purchase?");
 			} else if (selection == 4000) {
 				cm.sendGetText("How many #ddays#k of #rAuto Pet Loot Vacuum#k would you like?");
 			} else if (selection == 4001) {
@@ -262,8 +265,9 @@ function action(mode, type, selection) {
 	   
    } else if(status == 2) {
 			
+			
 			if (itemCategory == 0){
-					if (dp >= prices[0]){
+					if (dp >= prices[0] && cm.getPlayer().hasInventorySpace(face[selection], 1)) {
                     cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[0]);
                     cm.gainItem(face[selection], 1);
                     cm.sendOk("Thank you for supporting #dCELLION#k.\r\nEnjoy your new #i"+face[selection]+"# !");
@@ -271,7 +275,7 @@ function action(mode, type, selection) {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
             } else if (itemCategory == 1){
-					if (dp >= prices[1]){
+					if (dp >= prices[1] && cm.getPlayer().hasInventorySpace(eye[selection], 1)) {
                     cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[1]);
                     cm.gainItem(eye[selection], 1);
                     cm.sendOk("Thank you for supporting #dCELLION#k.\r\nEnjoy your new #i"+eye[selection]+"# !");
@@ -279,7 +283,7 @@ function action(mode, type, selection) {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
             } else if (itemCategory == 2){
-					if (dp >= prices[2]){
+					if (dp >= prices[2] && cm.getPlayer().hasInventorySpace(caps[selection], 1)) {
                     cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[2]);
                     cm.gainItem(caps[selection], 1);
                     cm.sendOk("Thank you for supporting #dCELLION#k.\r\nEnjoy your new #i"+caps[selection]+"# !");
@@ -287,7 +291,7 @@ function action(mode, type, selection) {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
             } else if (itemCategory == 3) {
-                 if (dp >= prices[3]){
+                 if (dp >= prices[3] && cm.getPlayer().hasInventorySpace(tops[selection], 1)) {
                     cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[3]);
                     cm.gainItem(tops[selection], 1);
                     cm.sendOk("Thank you for supporting #dCELLION#k.\r\nEnjoy your new #i"+tops[selection]+"# !");
@@ -295,7 +299,7 @@ function action(mode, type, selection) {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
             } else if (itemCategory == 4){
-                 if (dp >= prices[4]){
+                 if (dp >= prices[4] && cm.getPlayer().hasInventorySpace(bottoms[selection], 1)) {
                     cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[4]);
                     cm.gainItem(bottoms[selection], 1);
                     cm.sendOk("Thank you for supporting #dCELLION#k.\r\nEnjoy your new #i"+bottoms[selection]+"# !");
@@ -303,7 +307,7 @@ function action(mode, type, selection) {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
             } else if (itemCategory == 5) {
-                if (dp >= prices[5]){
+                if (dp >= prices[5] && cm.getPlayer().hasInventorySpace(gloves[selection], 1)) {
                     cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[5]);
                     cm.gainItem(gloves[selection], 1);
                     cm.sendOk("Thank you for supporting #dCELLION#k.\r\nEnjoy your new #i"+gloves[selection]+"# !");
@@ -311,7 +315,7 @@ function action(mode, type, selection) {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
             } else if (itemCategory == 6) {
-                 if (dp >= prices[6]){
+                 if (dp >= prices[6] && cm.getPlayer().hasInventorySpace(boots[selection], 1)) {
                     cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[6]);
                     cm.gainItem(boots[selection], 1);
                     cm.sendOk("Thank you for supporting #dCELLION#k.\r\nEnjoy your new #i"+boots[selection]+"# !");
@@ -319,7 +323,7 @@ function action(mode, type, selection) {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
             } else if (itemCategory == 7) {
-                 if (dp >= prices[7]){
+                 if (dp >= prices[7] && cm.getPlayer().hasInventorySpace(longcoats[selection], 1)) {
                     cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[7]);
                     cm.gainItem(longcoats[selection], 1);
                     cm.sendOk("Thank you for supporting #dCELLION#k.\r\nEnjoy your new #i"+longcoats[selection]+"# !");
@@ -327,7 +331,7 @@ function action(mode, type, selection) {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
 			} else if (itemCategory == 8) {
-                 if (dp >= prices[8]){
+                 if (dp >= prices[8] && cm.getPlayer().hasInventorySpace(rings[selection], 1)) {
                     cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[8]);
                     cm.gainItem(rings[selection], 1);
                     cm.sendOk("Thank you for supporting #dCELLION#k.\r\nEnjoy your new #i"+rings[selection]+"# !");
@@ -335,7 +339,7 @@ function action(mode, type, selection) {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
             } else if (itemCategory == 9) {
-                 if (dp >= prices[9]){
+                 if (dp >= prices[9] && cm.getPlayer().hasInventorySpace(cloaks[selection], 1)) {
                     cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[9]);
                     cm.gainItem(cloaks[selection], 1);
                     cm.sendOk("Thank you for supporting #dCELLION#k.\r\nEnjoy your new #i"+cloaks[selection]+"# !");
@@ -343,7 +347,7 @@ function action(mode, type, selection) {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
             } else if (itemCategory == 10) {
-                 if (dp >= prices[10]){
+                 if (dp >= prices[10] && cm.getPlayer().hasInventorySpace(weapons[selection], 1)) {
                     cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - prices[10]);
                     cm.gainItem(weapons[selection], 1);
                     cm.sendOk("Thank you for supporting #dCELLION#k.\r\nEnjoy your new #i"+weapons[selection]+"# !");
@@ -375,7 +379,7 @@ function action(mode, type, selection) {
 					cm.sendOk ("Sorry, you do not have enough Donor Credits!");
 				}
 			} else if (itemCategory == 5003) { //damage skin gacha
-				if (cm.getPlayer().getDPoints() >= 200) {
+				if (cm.getPlayer().getDPoints() >= 200 && cm.getPlayer().hasInventorySpace(dmgSkins[0], 1)) {
 					cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - 200);
 					random = Math.floor(Math.random() * dmgSkins.length);
 					cm.gainItem(dmgSkins[random], 1);
@@ -383,7 +387,7 @@ function action(mode, type, selection) {
 					cm.sendOk ("Sorry, you do not have enough Donor Credits!");
 				}
 			} else if (itemCategory == 5004) { //chair gacha
-				if (cm.getPlayer().getDPoints() >= 1000) {
+				if (cm.getPlayer().getDPoints() >= 1000 && cm.getPlayer().hasInventorySpace(chairList[0], 1)) {
 					cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - 1000);
 					random = Math.floor(Math.random() * chairList.length);
 					cm.gainItem(chairList[random], 1);
@@ -399,6 +403,17 @@ function action(mode, type, selection) {
                 } else {
                     cm.sendOk ("Sorry, you do not have enough Donor Credits!");
                 }
+			} else if (itemCategory == 5006) { // loot box
+				var nQuantity = cm.getText();
+				var nCost = 450 * nQuantity;
+				
+				if (cm.getPlayer().getDPoints() >= nCost && cm.getPlayer().hasInventorySpace(2431642, nQuantity)) {
+					cm.getPlayer().setDPoints(cm.getPlayer().getDPoints() - nCost);
+					cm.gainItem(2431642, nQuantity);
+					cm.sendOk("Thank you for supporting #dCELLION#k.\r\n\r\n\t");
+				} else {
+					cm.sendOk ("Sorry, you do not have enough Donor Credits!");
+				}
 			} else if (itemCategory == 4000) { // Pet Vac per Hour
 				var nQuantity = cm.getText();
 				var nCost = 150 * nQuantity;
@@ -426,6 +441,7 @@ function action(mode, type, selection) {
 					cm.sendOk ("Sorry, you do not have enough Donor Credits!");
 				}
 			} 
+			cm.getPlayer().saveToDB(false, false);
             cm.dispose();
         }
 	}

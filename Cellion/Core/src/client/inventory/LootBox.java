@@ -46,7 +46,7 @@ public class LootBox {
      * @return 
      */
     public static boolean OnLootBoxRequest(User pPlayer, int nBoxID) {
-        if (!pPlayer.haveItem(nBoxID) || !pPlayer.hasInventorySpace(1, 3)) {
+        if (!pPlayer.haveItem(nBoxID) || !pPlayer.hasInventorySpace(1442001, 3)) {
             return false;
         }
         
@@ -141,7 +141,7 @@ public class LootBox {
      * @return 
      */
     public static boolean OnNebuliteBoxRequest(User pPlayer) {
-        if (!pPlayer.haveItem(NEBULITE_BOX) || !pPlayer.hasInventorySpace(4, 1)) {
+        if (!pPlayer.haveItem(NEBULITE_BOX) || !pPlayer.hasInventorySpace(aNebulite[0], 1)) {
             return false;
         }
         
@@ -218,7 +218,7 @@ public class LootBox {
                 return false;
         }
         
-        if (!pPlayer.haveItem(nBoxID) || !pPlayer.hasInventorySpace(1, aBoxItems.length)) {
+        if (!pPlayer.haveItem(nBoxID) || !pPlayer.hasInventorySpace(aBoxItems[0][3], aBoxItems.length)) {
             return false;
         }
         List<Pair<Integer, Integer>> aBoxResult = new ArrayList<>();

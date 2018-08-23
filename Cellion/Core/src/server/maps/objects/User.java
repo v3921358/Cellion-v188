@@ -6290,21 +6290,19 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
     /**
      * Check Inventory Space
      * 
-     * @param nInventoryType
-     * @param nSlotsRequired
+     * @param nItemID
+     * @param nQuantity
      * @return Checks if the player has a certain amount of slots free in 
      */
-    public boolean hasInventorySpace(int nInventoryType, int nSlotsRequired) {
-        InventoryType pType;
-        switch (nInventoryType) {
-            case 1: pType = InventoryType.EQUIP; break;
-            case 2: pType = InventoryType.USE; break;
-            case 3: pType = InventoryType.ETC; break;
-            case 4: pType = InventoryType.SETUP; break;
-            case 5: pType = InventoryType.CASH; break;
-            default: return false;
-        }
-        boolean bEnoughSlots = (getInventory(pType).getNumFreeSlot() >= nSlotsRequired);
+    public boolean hasInventorySpace(int nItemID, int nQuantity) {
+        int nSlotsRequired = nQuantity;
+        if (GameConstants.getInventoryType(nItemID) == InventoryType.USE 
+                || GameConstants.getInventoryType(nItemID) == InventoryType.CASH) 
+            nSlotsRequired /= 100;
+        
+        if (nSlotsRequired < 1) nSlotsRequired = 1;
+        
+        boolean bEnoughSlots = getInventory(GameConstants.getInventoryType(nItemID)).getNumFreeSlot() > nSlotsRequired;
         if (!bEnoughSlots) dropMessage(5, "You do not have enough inventory slots available.");
         return bEnoughSlots;
     }

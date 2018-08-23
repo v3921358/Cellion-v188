@@ -663,7 +663,8 @@ public class CField {
 
         OutPacket oPacket = new OutPacket(SendPacketOpcode.UserItemInGameCubeResult.getValue());
         oPacket.EncodeInt(result);//0=fail/1=sucess/2=idk/3=shows stats
-
+        oPacket.Fill(0, 10);
+        
         return oPacket;
     }
 
@@ -4960,8 +4961,7 @@ public class CField {
             OutPacket oPacket = new OutPacket(SendPacketOpcode.RuneEnterField.getValue());
             oPacket.EncodeInt(0);
             oPacket.EncodeInt(rune.getRuneType().getType());
-            oPacket.EncodeInt((int) rune.getPosition().getX());
-            oPacket.EncodeInt((int) rune.getPosition().getY());
+            oPacket.EncodePosition(rune.getPosition());
             oPacket.EncodeBool(rune.isFacingLeft());
 
             return oPacket;

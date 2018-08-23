@@ -474,6 +474,7 @@ public class MobStatRequest {
                 case DualBlade.FLYING_ASSAULTER:
                 case NightWalker.SHADOW_WEB:
                 case CannonBlaster.MONKEY_WAVE:
+                case CannonBlaster.MONKEY_WAVE_1:
                 case Jett.STARLINE_TWO:
                 case Kinesis.MENTAL_SHOCK:
                 case Marksman.ARROW_ILLUSION:
@@ -577,6 +578,8 @@ public class MobStatRequest {
             case Xenon.ENTANGLING_LASH:
             case NightWalker.SHADOW_STITCH:
             case Kinesis.MENTAL_SHOCK:
+            case CannonBlaster.MONKEY_WAVE:
+            case CannonBlaster.MONKEY_WAVE_1:
                 return true;
             default:
                 return false;

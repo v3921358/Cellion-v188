@@ -7,13 +7,6 @@ status = -1;
 
 var bFreeMarket = true; // If true, can only be used in the Free Market.
 
-var sLine1 = "";
-var sLine2 = "";
-var sLine3 = "";
-var sBonusLine1 = "";
-var sBonusLine2 = "";
-var sBonusLine3 = "";
-
 function action(mode, type, selection) {
     if (mode != 1) {
 		cm.getPlayer().OnSetCubeInfo(0, 0);
@@ -90,24 +83,16 @@ function action(mode, type, selection) {
 				sTier = "";
 		}
 		
-		sLine1 = cm.OnReadPotential(pItem.getPotential1());
-		sLine2 = cm.OnReadPotential(pItem.getPotential2());
-		sLine3 = cm.OnReadPotential(pItem.getPotential3());
-		
-		sBonusLine1 = cm.OnReadPotential(pItem.getBonusPotential1());
-		sBonusLine2 = cm.OnReadPotential(pItem.getBonusPotential2());
-		sBonusLine3 = cm.OnReadPotential(pItem.getBonusPotential3());
-		
 		if (cm.getPlayer().nSelectedCubeID != 5062500) { // Not Bonus Potential
 			sResults = "Potential Results " + sTier + "#d\r\n\r\n\t#e#fs12#"
-						+ "#L0#" + sLine1 + "#l\r\n\t" 
-						+ "#L1#" + sLine2 + "#l\r\n\t" 
-						+ "#L2#" + sLine3 + "#l#fs11#";
+						+ "#L0#" + cm.OnReadPotential(pItem.getPotential1()) + "#l\r\n\t" 
+						+ "#L1#" + cm.OnReadPotential(pItem.getPotential2()) + "#l\r\n\t" 
+						+ "#L2#" + cm.OnReadPotential(pItem.getPotential3()) + "#l#fs11#";
 		} else {
 			sResults = "Bonus Potential Results " + sTier + "#d\r\n\r\n\t#e#fs12#"
-						+ "#L0#" + sBonusLine1 + "#l\r\n\t" 
-						+ "#L1#" + sBonusLine2 + "#l\r\n\t" 
-						+ "#L2#" + sBonusLine3 + "#l#fs11#";
+						+ "#L0#" + cm.OnReadPotential(pItem.getBonusPotential1()) + "#l\r\n\t" 
+						+ "#L1#" + cm.OnReadPotential(pItem.getBonusPotential2()) + "#l\r\n\t" 
+						+ "#L2#" + cm.OnReadPotential(pItem.getBonusPotential3()) + "#l#fs11#";
 		}
 		
 		sResults += "\r\n\r\n\r\n\t #i" + pItem.getItemId() + "#\t\t\t\t\t\t\t#k#nWould you like to use another cube?";

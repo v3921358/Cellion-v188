@@ -92,26 +92,26 @@ function action(mode, type, selection){
 		}
 	} else if (status == 3) {
 		if (nChoice == 5040004) {
-			
-			if (cm.getPlayer().getCSPoints(2) >= nCost) {
+			nInventoryType = 5;
+			if (cm.getPlayer().getCSPoints(2) >= nCost && cm.getPlayer().hasInventorySpace(nChoice, nQuantity)) {
 				cm.getPlayer().modifyCSPoints(2, -nCost, true);
 				cm.gainItemPeriod(nChoice, nQuantity, 72, true); //item id, amount, time, is hours?
 				cm.sendOk("You have successfully purchased #b" + nQuantity + "#k #i" + nChoice + "# .");
 				cm.dispose();
 			} else {
-				cm.sendOk("Sorry, looks like you don't have enough #rNX#k to make that purchase.");
+				cm.sendOk("Sorry, but it seems as though your Cash inventory is either full, \r\nor you do not have enough NX. #r#k.");
 				cm.dispose();
 			}
 			
 		} else {
-			
-			if (cm.getPlayer().getCSPoints(2) >= nCost) {
+			nInventoryType = 5;
+			if (cm.getPlayer().getCSPoints(2) >= nCost&&cm.getPlayer().hasInventorySpace(nChoice, nQuantity)) {
 				cm.getPlayer().modifyCSPoints(2, -nCost, true);
 				cm.gainItem(nChoice, nQuantity);
 				cm.sendOk("You have successfully purchased #b" + nQuantity + "#k #i" + nChoice + "# .");
 				cm.dispose();
 			} else {
-				cm.sendOk("Sorry, looks like you don't have enough #rNX#k to make that purchase.");
+				cm.sendOk("Sorry, but it seems as though your Cash inventory is either full, \r\nor you do not have enough NX. #r#k.");
 				cm.dispose();
 			}
 		}

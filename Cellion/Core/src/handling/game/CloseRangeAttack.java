@@ -245,5 +245,4 @@ public final class CloseRangeAttack {
         
         pPlayer.OnSkillCostRequest(pEffect);
     }
-
 }
