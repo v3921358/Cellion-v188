@@ -55,7 +55,7 @@ public class LootBox {
         boolean bSeasonOne = false, bSeasonTwo = false, bSeasonThree = false, bSeasonFour = false;
         int nTopTierChance, nMidTierChance, nFirstResult = 0, nSecondResult = 0, nThirdResult = 0;
         int[] aItemPool = {0};
-        String sBoxName = "", sTierResult = "", sFirstTier = "", sSecondTier = "", sThirdTier = "";
+        String sBoxName, sTierResult, sFirstTier = "", sSecondTier = "", sThirdTier = "";
         
         if (tMonth >= 1 && tMonth <= 3) bSeasonOne = true; 
         else if (tMonth >= 4 && tMonth <= 6) bSeasonTwo = true;

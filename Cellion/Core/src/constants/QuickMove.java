@@ -57,7 +57,7 @@ public enum QuickMove {
         MIRROR(0x2, 2, false, 9010022, 10, "Use the #cDimensional Mirror# to move to a variety of party quests."),
         MONSTER_PARK(0x4, 1, false, 9071003, 20, "Move to the party zone \n#cMonster Park#, where you can fight against strong monsters with your party members.\n#cOnly Lv. 20 or above can participate in the Monster Park."),
         
-        WORLD_TRANSPORT(0x8, 5, true, 9001001, 0, "Travel to different maps and access useful shortcuts."), //Warping npc, Lolo
+        WORLD_TRANSPORT(0x8, 5, true, NPCConstants.QuickMove_NPC, 0, "Travel to different maps and access useful shortcuts."), //Warping npc, Lolo
         
         ISLAND_TRANSPORT(0x10, 6, false, 9000089, 0, "Take the #cTaxi# to move to major areas quickly."), //Taxi, Camel
         
