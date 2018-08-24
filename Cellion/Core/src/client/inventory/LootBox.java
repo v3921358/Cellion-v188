@@ -218,9 +218,10 @@ public class LootBox {
                 return false;
         }
         
-        if (!pPlayer.haveItem(nBoxID) || !pPlayer.hasInventorySpace(aBoxItems[0][3], aBoxItems.length)) {
+        if (!pPlayer.haveItem(nBoxID) || !pPlayer.hasInventorySpace(1322124, aBoxItems.length)) {
             return false;
         }
+        
         List<Pair<Integer, Integer>> aBoxResult = new ArrayList<>();
         MapleInventoryManipulator.removeById(pPlayer.getClient(), InventoryType.USE, nBoxID, 1, false, true);
         for (int i = 0; i < aBoxItems.length; i++) {
@@ -228,7 +229,7 @@ public class LootBox {
                 if (aBoxItems[i][0] == (pPlayer.getGender() + 1) || aBoxItems[i][0] == 0) { // Check if equip is for all genders or the players current gender.
                     aBoxResult.add(new Pair<>(aBoxItems[i][2], aBoxItems[i][3])); // Give the player all items from the specified box.
                 }
-                pPlayer.dropMessage(5, "Gender: " + pPlayer.getGender() + " / Gender Required: " + aBoxItems[i][1]);
+                //pPlayer.dropMessage(5, "Gender: " + pPlayer.getGender() + " / Gender Required: " + aBoxItems[i][1]);
             }
         }
         for (int i = 0; i < aBoxResult.size(); i++) {

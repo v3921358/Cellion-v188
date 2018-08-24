@@ -199,6 +199,9 @@ public class PlayerCommand {
 
                     pPlayer.getMap().setRune(rune);
                     break;
+                case 17:
+                    pPlayer.nCrimsonQueenKillsV += 1;
+                    break;
             }
             return 1;
         }
