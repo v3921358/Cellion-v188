@@ -6,6 +6,8 @@
 *
 */
 
+load('nashorn:mozilla_compat.js');
+
 // Status Definitions
 var status = 0;
 var selectStatus  = 0;
@@ -470,3 +472,4 @@ function action(mode, type, selection) {
 		}
 	}
 }
+//

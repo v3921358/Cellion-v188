@@ -58,7 +58,9 @@ public class Trade {
         exchangeMeso = 0;
         chr.getClient().SendPacket(CField.InteractionPacket.TradeMessage(tradingslot, (byte) 7));
         
-        SpecialTrade.OnSpecialTradeResult(chr, partner.getCharacter());
+        SpecialTrade.OnSpecialTradeResult(chr, partner.getCharacter()); // Handle Special Trade Completion (NX, VP, DP)
+        chr.saveToDB(false, false); // Save to avoid possible dupes.
+        partner.getCharacter().saveToDB(false, false);
     }
 
     public void cancel(ClientSocket c, User chr) {
