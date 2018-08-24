@@ -9338,7 +9338,7 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
         final ChannelServer toch = ChannelServer.getInstance(channel);
 
         if (channel == client.getChannel() || toch == null || toch.isShutdown()) {
-            client.SendPacket(WvsContext.broadcastMsg("Channel unavailable."));
+            //client.SendPacket(WvsContext.broadcastMsg("Channel unavailable."));
             return;
         }
         final ChannelServer ch = ChannelServer.getInstance(client.getChannel());

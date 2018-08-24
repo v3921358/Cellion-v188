@@ -204,13 +204,35 @@ public class PlayerCommand {
         }
     }
     
+    public static class CC extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            int nChannel;
+            
+            if (splitted.length < 2) {
+                nChannel = c.getChannel() + 1;
+            } else {
+                nChannel = Integer.parseInt(splitted[1]);
+                if (nChannel == c.getChannel()) {
+                    c.getPlayer().dropMessage(5, "You are already in the specified channel.");
+                    return 0;
+                }
+            }
+            c.getPlayer().changeChannel(nChannel);
+            c.getPlayer().completeDispose();
+            return 1;
+        }
+    }
+    
     public static class Help extends CommandExecute {
 
         @Override
         public int execute(ClientSocket c, String[] splitted) {
             c.getPlayer().yellowMessage("----------------- PLAYER COMMANDS -----------------");
-            c.getPlayer().yellowMessage("@sell <from slot> <to slot> : Sell specific item slots instantly.");
             c.getPlayer().yellowMessage("@support <message> : Send a message to availible staff members.");
+            c.getPlayer().yellowMessage("@sell <type> <from slot> <to slot> : Sell specific item slots instantly.");
+            c.getPlayer().yellowMessage("@cc <channel> : Change channels, goes to next channel if not specified.");
             c.getPlayer().yellowMessage("@check : Displays account currency and character information.");
             c.getPlayer().yellowMessage("@dispose : Enables your character's actions when stuck.");
             c.getPlayer().yellowMessage("@event : Quick travel to the current event, if available.");
