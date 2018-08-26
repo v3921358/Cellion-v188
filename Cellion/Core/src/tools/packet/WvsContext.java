@@ -260,13 +260,17 @@ public class WvsContext {
             oPacket.EncodeShort(aStats.get(Stat.LUK).shortValue());
         }
         if ((nFlag & Stat.HP.getValue()) != 0) {
-            oPacket.EncodeInt(aStats.get(Stat.HP).intValue());
+            int nValue = aStats.get(Stat.HP).intValue();
+            if (nValue < 1) nValue = 0;
+            oPacket.EncodeInt(nValue);
         }
         if ((nFlag & Stat.MaxHP.getValue()) != 0) {
             oPacket.EncodeInt(aStats.get(Stat.MaxHP).intValue());
         }
         if ((nFlag & Stat.MP.getValue()) != 0) {
-            oPacket.EncodeInt(aStats.get(Stat.MP).intValue());
+            int nValue = aStats.get(Stat.MP).intValue();
+            if (nValue < 1) nValue = 1;
+            oPacket.EncodeInt(nValue);
         }
         if ((nFlag & Stat.MaxMP.getValue()) != 0) {
             oPacket.EncodeInt(aStats.get(Stat.MaxMP).intValue());

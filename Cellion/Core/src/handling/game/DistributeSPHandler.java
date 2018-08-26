@@ -80,7 +80,8 @@ public class DistributeSPHandler implements ProcessPacket<ClientSocket> {
                 return;
             }
         }
-        if ((nRemainingSP >= nAmount && nCurrentSLV + nAmount <= nMaxSLV) && pSkill.canBeLearnedBy(pPlayer.getJob()) || pPlayer.isGM()) {
+        
+        if ((nRemainingSP >= nAmount && nCurrentSLV + nAmount <= nMaxSLV)/* && pSkill.canBeLearnedBy(pPlayer.getJob()) */|| pPlayer.isGM()) {
             final int skillbook = GameConstants.getSkillBookForSkill(nSkillID);
             if (!bBeginnerSkill) {
                 pPlayer.setRemainingSp(pPlayer.getRemainingSp(skillbook) - nAmount, skillbook);

@@ -81,7 +81,7 @@ public enum StatInfo {
     indieMdd(0, null),//MDD?
     indieTerR(0, CharacterTemporaryStat.IndieTerR),
     indieAsrR(0, null),
-    indieMhpR(0, CharacterTemporaryStat.IndieMHPR), // Max HP Increase %
+    indieMhpR(0, null), // Max HP Increase %
     indieMmp(0, CharacterTemporaryStat.IndieMMP), // Max MP Increase +
     indieMmpR(0, CharacterTemporaryStat.IndieMMPR), // Max MP Increase %
     indiePad(0, null), // Damage Increase

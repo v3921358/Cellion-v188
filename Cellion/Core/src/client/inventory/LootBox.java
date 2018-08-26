@@ -8,10 +8,12 @@ import constants.JobConstants;
 import enums.InventoryType;
 import enums.NPCChatType;
 import enums.NPCInterfaceType;
+import handling.world.World;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import server.MapleInventoryManipulator;
+import server.MapleItemInformationProvider;
 import server.maps.objects.User;
 import tools.Pair;
 import tools.Utility;
@@ -50,12 +52,13 @@ public class LootBox {
             return false;
         }
         
+        final MapleItemInformationProvider pItemInfo = MapleItemInformationProvider.getInstance();
         Calendar pCalendar = Calendar.getInstance();
         int tMonth = pCalendar.get(Calendar.MONTH) + 1;
         boolean bSeasonOne = false, bSeasonTwo = false, bSeasonThree = false, bSeasonFour = false;
         int nTopTierChance, nMidTierChance, nFirstResult = 0, nSecondResult = 0, nThirdResult = 0;
         int[] aItemPool = {0};
-        String sBoxName, sTierResult, sFirstTier = "", sSecondTier = "", sThirdTier = "";
+        String sBoxName, sBoxType, sTierResult, sFirstTier = "", sSecondTier = "", sThirdTier = "";
         
         if (tMonth >= 1 && tMonth <= 3) bSeasonOne = true; 
         else if (tMonth >= 4 && tMonth <= 6) bSeasonTwo = true;
@@ -65,16 +68,19 @@ public class LootBox {
         switch (nBoxID) {
             case FREE_LOOT_BOX:
                 sBoxName = "Weird Gift (Tier 3)";
+                sBoxType = "Weird Gift : ";
                 nTopTierChance = 1;
                 nMidTierChance = 20;
                 break;
             case VOTE_LOOT_BOX:
                 sBoxName = "Special Gift (Tier 2)";
+                sBoxType = "Special Gift : ";
                 nTopTierChance = 5;
                 nMidTierChance = 30;
                 break;
             case DONOR_LOOT_BOX:
                 sBoxName = "Special Value Gift (Tier 1)";
+                sBoxType = "Special Value Gift : ";
                 nTopTierChance = 20;
                 nMidTierChance = 70;
                 break;
@@ -130,6 +136,15 @@ public class LootBox {
                        + "\t#v" + nSecondResult + "# : " + sSecondTier + "\r\n"
                        + "\t#v" + nThirdResult + "# : " + sThirdTier + "\r\n"
                        + "";
+        
+        if (sFirstTier.equals("#dLegendary#k")) 
+            World.Broadcast.broadcastMessage(CField.getGameMessage("" + sBoxType + pPlayer.getName() + " has obtained a Legendary Cosmetic! (" + pItemInfo.getName(nFirstResult) + ")", (byte) 3));
+        
+        if (sSecondTier.equals("#dLegendary#k")) 
+            World.Broadcast.broadcastMessage(CField.getGameMessage("" + sBoxType + pPlayer.getName() + " has obtained a Legendary Cosmetic! (" + pItemInfo.getName(nSecondResult) + ")", (byte) 3));
+        
+        if (sThirdTier.equals("#dLegendary#k")) 
+            World.Broadcast.broadcastMessage(CField.getGameMessage("" + sBoxType + pPlayer.getName() + " has obtained a Legendary Cosmetic! (" + pItemInfo.getName(nThirdResult) + ")", (byte) 3));
         
         pPlayer.getClient().SendPacket(CField.NPCPacket.getNPCTalk(9010000, NPCChatType.OK, sResult, NPCInterfaceType.NPC_Cancellable));
         return true;
@@ -279,76 +294,204 @@ public class LootBox {
     }
     
     /**
-     * Loot Box Items
-     * Season One: Items Only Available During January - March
-     * Season Two: Items Only Available During April - June
-     * Season Three: Items Only Available During July - September
-     * Season Four: Items Only Available During October - December
+     * Loot Box Items 
+     * Season One: Items Only Available During December - February 
+     * Season Two: Items Only Available During March - May 
+     * Season Three: Items Only Available During June - August 
+     * Season Four: Items Only Available During September - November 
      * Default: Items Available Regardless of Season
      */
-    private static int[] aTopTier_SeasonOne = { 
-        0, // Item Name
-        0, // Item Name
+    private static int[] aTopTier_SeasonOne = {
+        1702758, // Pop Star Mic Skin
+        1702756, // Starlit Dreamweaver
+        1702737, // Frost Staff
+        1702735, // Rose Constellation
+        1702731, // Snowrabbit
+        1702723, // Power Porker Trio
+        1702722, // Winter Bunny
+        1702709, // High-five Neon V
+        1702660, // Snowman Weapon
     };
     private static int[] aMidTier_SeasonOne = {
-        0, // Item Name
-        0, // Item Name
+        1702759, // Charming Cherry Pop
+        1702757, // Cygnus's Guard
+        1702717, // Glow Stick of Love
     };
     private static int[] aLowTier_SeasonOne = {
-        0, // Item Name
-        0, // Item Name
+        1702668, // Winter Deer Tambourine
+        1702658, // Holiday Tree Ring
     };
 
     private static int[] aTopTier_SeasonTwo = {
-        0, // Item Name
-        0, // Item Name
+        1702770, // Fancy Feather Quill
+        1702752, // Silver Flower Child Weapon
+        1702750, // Strawberry Fitness Jump Rope
+        1702749, // Love Letter Book Bag
+        1702748, // Guinea Pig Weapon
+        1702745, // Spring Fairy Flower
+        1702744, // Starlight Lantern
+        1702728, // Sweet Jelly Paw
+        1702727, // Rabbit Soap Shooter
+        1702712, // Moon Bunny Bell Weapon
+        1702703, // Natural Ink Painting
+        1702687, // Strawberry Bon Bon
+        1702675, // Smile Seed Weapon
+        1702639, // Kitty Bangle
+        1702627, // Sakura Sword
+        1702617, // Lotus Fantasy
     };
     private static int[] aMidTier_SeasonTwo = {
-        0, // Item Name
-        0, // Item Name
+        1702768, // Mallow Fluff on a Stick
+        1702761, // Sproutbrella
+        1702719, // Flutter Flower Doll Weapon
+        1702716, // Dew Parasol
+        1702707, // Pony's Carrot
+        1702702, // Porong Fan
+        1702693, // Bubble Leaf Weapon
+        1702692, // Chicken Cutie Weapon
+        1702691, // Fairy Flora
+        1702628, // Farmer's Glorious Egg Stick
+        1702612, // Fairy Pico
     };
     private static int[] aLowTier_SeasonTwo = {
-        0, // Item Name
-        0, // Item Name
+        1702740, // Go Yellow Chicks!
+        1702732, // Rabbit in a Hat
+        1702654, // Mr. Hot Spring Kitty
     };
-    
+
     private static int[] aTopTier_SeasonThree = {
-        0, // Item Name
-        0, // Item Name
+        1702778, // Summer Flower Fairy Weapon
+        1702777, // Refreshing Lemon Weapon
+        1702771, // Banana Shake
+        1702765, // Soda Pop Weapon
+        1702729, // Deep-fried Drumstick
+        1702706, // Ice Cream Scream
+        1702704, // Blue Marine Knowledge
+        1702699, // Colorful Beach Ball
+        1702694, // Pastel Rose
+        1702686, // Sweet Pig Weapon
+        1702682, // Triple Fish Skewer
+        1702673, // Monkey Banana
+        1702608, // Marine Stripe Umbrella
     };
     private static int[] aMidTier_SeasonThree = {
-        0, // Item Name
-        0, // Item Name
+        1702772, // Carrot Cake Shake
+        1702746, // Dinofrog
+        1702705, // Teddy Tube Wave
+        1702697, // Cup Cat Weapon
+        1702672, // Duckling Cross Bag
+        1702689, // Fairy Flora
+        1702614, // Baseball Bat
+        1702607, // Cheese Carrot Stick
     };
     private static int[] aLowTier_SeasonThree = {
-        0, // Item Name
-        0, // Item Name
+        1702616, // Ducky Candy Bar
     };
-    
+
     private static int[] aTopTier_SeasonFour = {
-        0, // Item Name
-        0, // Item Name
+        1702785, // Cursed Bat Weapon
+        1702764, // Iron Mace Uniform Weapon
+        1702753, // Pandora Weapon
+        1702747, // Baby Magpie Buddy
+        1702726, // Pumpkin Star
+        1702725, // Necromancer
+        1702724, // Undead Teddy
+        1702721, // 죽음의 키읔
+        1702714, // Witch's Staff
+        1702710, // Kamaitachi's Sickle
+        1702637, // Hard Carrier Suitcase
+        1702630, // Striking Lantern
     };
     private static int[] aMidTier_SeasonFour = {
-        0, // Item Name
-        0, // Item Name
+        1702755, // Sweet Baguette
+        1702671, // Magic Tome Weapon
+        1702634, // Maple Zombies
+        1702631, // Bloody Fairytale
     };
     private static int[] aLowTier_SeasonFour = {
-        0, // Item Name
-        0, // Item Name
     };
-    
+
     private static int[] aTopTier_Default = { 
-        0, // Item Name
-        0, // Item Name
+        1702784, // Feather Messenger Weapon
+        1702776, // Water Granos and Weapon
+        1702769, // 메이플 갤럭시 레이저건
+        1702766, // Diamond Brilliance
+        1702742, // Nova Enchanter Staff
+        1702733, // Monk Drum
+        1702720, // Maple M Playphone
+        1702718, // Shadow Warrior's Sword
+        1702715, // Lachelein Fantasia
+        1702713, // Bichon Paw Weapon
+        1702701, // Dragonmare Ninth Sword
+        1702700, // Universal Transparent Weapon
+        1702688, // Superstar M
+        1702680, // Camellia's Sword
+        1702640, // Bunny Snowman Attacker
+        1702638, // Blue Marine Thirst For Knowledge
+        1702633, // Banana Monkey Attacker
+        1702736, // Frost Staff
+        1702626, // British Handbag Weapon
     };
     private static int[] aMidTier_Default = { 
-        0, // Item Name
-        0, // Item Name
+        1702783, // Rabble Rouser Weapon
+        1702773, // Eagle Weapon Skin
+        1702767, // Mustachio on a Stick
+        1702734, // Maple 5000-Day Flag
+        1702711, // Owl Spellbook
+        1702690, // Noble Maple Rod
+        1702685, // Red Phoenix Weapon
+        1702684, // Blue Phoenix Weapon
+        1702681, // Flask of Life
+        1702677, // Lil Damien
+        1702676, // Muse Crystal
+        1702629, // Vintage Cellphone
+        1702625, // Sparking Bluebird
+        1702621, // Mystery Dice
+        1702620, // Mystery Dice
+        1702619, // Musical Green Onion
+        1702613, // Crown Rod
+        1702611, // Duckling Cross Bag Weapon
+        1702599, // Hoya Roar
     };
     private static int[] aLowTier_Default = { 
-        0, // Item Name
-        0, // Item Name
+        1702760, // Hamster Devotion!
+        1702708, // No Name
+        1702698, // Blaster Weapon
+        1702696, // Silver Wolf
+        1702695, // Overly Cute Puppy
+        1702679, // Playful Black Nyanya
+        1702678, // Lil Alicia
+        1702667, // Lil Phantom
+        1702666, // Lil Aran
+        1702665, // Lil Evan
+        1702659, // Timemaster
+        1702657, // Lil Shade
+        1702656, // Lil Luminous
+        1702655, // Lil Mercedes
+        1702653, // Transparent Arm Cannon
+        1702652, // Forgotten Hero's Knuckle
+        1702651, // Forgotten Hero's Knuckle
+        1702650, // Shining Rod of Equilibrium
+        1702649, // Shining Rod of Equilibrium
+        1702648, // Maha the Polearm
+        1702647, // Maha the Polearm
+        1702646, // Phantom's Cane
+        1702645, // Phantom's Cane
+        1702644, // Elven Monarch's Dual Bowguns
+        1702643, // Elven Monarch's Dual Bowguns
+        1702642, // Dragon Master's Wand
+        1702641, // Dragon Master's Wand
+        1702635, // Mr. Orlov Coin Sword
+        1702632, // Zakum Arms
+        1702624, // Master Time
+        1702623, // Today Jay
+        1702606, // Squid
+        1702605, // Donut
+        1702604, // Parfait
+        1702603, // Rib Steak
+        1702602, // Hamburger
+        1702601, // Bacon
+        1702600, // Pasta
     };
     
     /**

@@ -657,35 +657,26 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
      */
     public void OnSkillCostRequest(StatEffect pEffect) {
         if (pEffect == null) return;
+        int nCost = 0, nResultMP = getStat().getMp();
         //TODO: Calculate extra stuff like mp cost reductions, if needed.
         //double mpcalc = (pEffect.info.get(StatInfo.mpCon) - (pEffect.info.get(StatInfo.mpCon) * getStat().mpconReduce / 100)) * (getStat().mpconPercent / 100.0);
         
         if (!bGodMode && !hasBuff(CharacterTemporaryStat.Infinity) && !hasBuff(CharacterTemporaryStat.InfinityForce)) {
         
-            if (!GameConstants.isDemon(job) && !GameConstants.isZero(job) && !GameConstants.isKanna(job) && !GameConstants.isKinesis(job)) {
-                if (pEffect.info.get(StatInfo.mpCon) != null) {
-                    
-                    int nMPCost = pEffect.info.get(StatInfo.mpCon);
-                    setMp(getStat().getMp() - nMPCost);
-                    updateSingleStat(Stat.MP, getStat().getMp() - nMPCost);
-                }
+            if (!GameConstants.isDemon(job) && !GameConstants.isZero(job) && !GameConstants.isKanna(job) && !GameConstants.isKinesis(job) && pEffect.info.get(StatInfo.mpCon) != null) {
+                nCost = pEffect.info.get(StatInfo.mpCon);
             } else if (GameConstants.isKinesis(job)) {
-                
-                //int nPPCost = pEffect.info.get(StatInfo.ppCon);
                 // TODO: Move Kinesis PP handling to here.
-            } else if (GameConstants.isDemonAvenger(job)) {
-                
-                //int nHPCost = pEffect.info.get(StatInfo.hpCon);
-                //setHp(getStat().getHp() - nHPCost);
-                //updateSingleStat(Stat.HP, getStat().getMp() - nMPCost);
+                //nCost = pEffect.info.get(StatInfo.ppCon);
+            } else if (GameConstants.isDemonAvenger(job) && pEffect.info.get(StatInfo.hpCon) != null) {
+                //nCost = pEffect.info.get(StatInfo.hpCon);
             } else if (GameConstants.isDemonSlayer(job)) {
-                if (pEffect.info.get(StatInfo.forceCon) != null) {
-                    
-                    int nFuryCost = pEffect.info.get(StatInfo.forceCon);
-                    setMp(getStat().getMp() - nFuryCost);
-                    updateSingleStat(Stat.MP, getStat().getMp() - nFuryCost);
-                }
+                nCost = pEffect.info.get(StatInfo.forceCon);
             }
+            nResultMP -= nCost;
+            if (nResultMP < 1) nResultMP = 1;
+            setMp(nResultMP);
+            updateSingleStat(Stat.MP, nResultMP);
         }
     }
     
@@ -5127,6 +5118,8 @@ public class User extends AnimatedMapleMapObject implements Serializable, MapleC
 
     public void addMP(int delta, boolean ignore) {
         if ((delta < 0 && GameConstants.isDemonSlayer(getJob())) || !GameConstants.isDemonSlayer(getJob()) || ignore) {
+            if ((stats.getMp() + delta) < 1) return;
+                    
             if (stats.setMp(stats.getMp() + delta, this)) {
                 updateSingleStat(Stat.MP, stats.getMp());
             }

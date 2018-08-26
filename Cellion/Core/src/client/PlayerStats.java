@@ -3999,11 +3999,11 @@ public class PlayerStats implements Serializable {
     public final boolean setMp(final int newmp, final User pPlayer) {
         final int oldMp = mp;
         int tmp = newmp;
-        if (tmp < 0) {
-            tmp = 0;
-        }
         if (tmp > localmaxmp) {
             tmp = localmaxmp;
+        }
+        if (tmp < 1) {
+            tmp = 1;
         }
         this.mp = tmp;
         return mp != oldMp;

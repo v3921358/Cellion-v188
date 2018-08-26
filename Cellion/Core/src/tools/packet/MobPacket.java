@@ -36,7 +36,7 @@ public class MobPacket {
             oPacket.EncodeByte(0);
         }
 
-        oPacket.Fill(0, 39);
+        oPacket.Fill(0, 59);
 
         return oPacket;
     }
@@ -332,6 +332,8 @@ public class MobPacket {
         life.setScale(nMobSize);
         MobInit(oPacket, life, spawnType, link, true, false, life.getScale());
 
+        oPacket.Fill(0, 29);
+        
         return oPacket;
     }
 
@@ -422,6 +424,8 @@ public class MobPacket {
         SetMobStat(oPacket, pMob);
         MobInit(oPacket, pMob, pMob.getLinkCID() <= 0 ? -4 : -1, pMob.getLinkCID(), true, false, pMob.getScale());
         
+        oPacket.Fill(0, 29);
+        
         return oPacket;
     }
     
@@ -435,6 +439,8 @@ public class MobPacket {
         SetMobStat(oPacket, life);
         MobInit(oPacket, life, life.getLinkCID() <= 0 ? -4 : -1, life.getLinkCID(), true, false, life.getScale());
 
+        oPacket.Fill(0, 29);
+        
         return oPacket;
     }
 

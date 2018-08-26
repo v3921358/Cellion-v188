@@ -337,7 +337,11 @@ public final class MapleMap {
         final byte droptype = (byte) (pMob.getStats().isExplosiveReward() ? 3 : pMob.getStats().isFfaLoot() ? 2 : pPlayer.getParty() != null ? 1 : 0);
         final int mobpos = pMob.getTruePosition().x;
         final float cmServerrate = ChannelServer.getInstance(channel).getMesoRate(pPlayer.getWorld());
-        final float chServerrate = ChannelServer.getInstance(channel).getDropRate(pPlayer.getWorld());
+        
+        float nDropRate = ChannelServer.getInstance(channel).getDropRate(pPlayer.getWorld());
+        if (pMob.getScale() > 100) nDropRate *= 4; // Elite Monster Bonus Drop Rate
+        final float chServerrate = nDropRate;
+        
         final float caServerrate = ChannelServer.getInstance(channel).getCashRate();
         final int cashz = (int) ((pMob.getStats().isBoss() && pMob.getStats().getHPDisplayType() == MonsterHPType.BossHP ? 20 : 1) * caServerrate);
         final int cashModifier = (int) ((pMob.getStats().isBoss() ? (pMob.getStats().isPartyBonus() ? (pMob.getMobExp() / 1000) : 0) : (pMob.getMobExp() / 1000 + pMob.getMobMaxHp() / 20000))); //no rate

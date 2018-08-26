@@ -59,15 +59,6 @@ public class DeveloperCommands {
         }
     }
     
-    public static class ToggleCooldown extends CommandExecute {
-
-        @Override
-        public int execute(ClientSocket c, String[] splitted) {
-            c.getPlayer().dropMessage(6, "Cooldowns " + (c.getPlayer().toggleCooldown() ? "removed." : "restored."));
-            return 1;
-        }
-    }
-    
     public static class GMPerson extends CommandExecute {
 
         @Override

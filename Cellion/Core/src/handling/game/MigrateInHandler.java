@@ -36,6 +36,7 @@ import tools.packet.JobPacket.AvengerPacket;
 import client.jobs.Hero.PhantomHandler;
 import handling.auction.AuctionOperation;
 import net.ProcessPacket;
+import server.life.mob.BuffedMob;
 import server.skills.LinkedSkill;
 import service.AuctionServer;
 
@@ -258,6 +259,8 @@ public final class MigrateInHandler implements ProcessPacket<ClientSocket> {
             pPlayer.dropMessage(5, "[Visibility] Your character is currently hidden.");
             SkillFactory.getSkill(9101004).getEffect(1).applyTo(c.getPlayer()); // Enabled Hide Mode
         }
+        
+        if (BuffedMob.OnBuffedChannel(c.getChannel())) pPlayer.dropMessage(-1, "Buffed Channel (Increased Difficulty)");
 
         if (pPlayer.getStat().equippedSummon > 0) {
             SkillFactory.getSkill(pPlayer.getStat().equippedSummon + (GameConstants.getBeginnerJob(pPlayer.getJob()) * 1000)).getEffect(1).applyTo(pPlayer);

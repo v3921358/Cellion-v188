@@ -301,6 +301,7 @@ function action(mode, type, selection) {
 				cm.gainItem(1442000, 1);
 				cm.gainItem(1442001, 1);
 				cm.changeJob(2100);
+				cm.teachSkill(20001295, 1); // Combat Step
 				break;
 		}
 		

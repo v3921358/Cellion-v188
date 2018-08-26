@@ -105,6 +105,15 @@ public class AdminCommand {
         return PlayerGMRank.ADMIN;
     }
 
+    public static class ToggleCooldown extends CommandExecute {
+
+        @Override
+        public int execute(ClientSocket c, String[] splitted) {
+            c.getPlayer().dropMessage(6, "Skill cooldowns " + (c.getPlayer().toggleCooldown() ? " have been disabled." : " have been enabled."));
+            return 1;
+        }
+    }
+    
     public static class GiveDP extends CommandExecute {
 
         @Override

@@ -443,6 +443,7 @@ public class Mob extends AbstractLoadedMapleLife {
             } else {
                 nBaseEXP /= ELITE_BOSS_HP_STAGE_1;
             }
+            nBaseEXP *= 5; // Elite Boss Bonus EXP
         } else if (getScale() > 100) { // Elite Mob
             if (getStats().getLevel() > 199) { // Calculate Elite Mob Stats
                 nBaseEXP /= ELITE_MOB_HP_STAGE_3;
@@ -451,6 +452,7 @@ public class Mob extends AbstractLoadedMapleLife {
             } else {
                 nBaseEXP /= ELITE_MOB_HP_STAGE_1;
             }
+            nBaseEXP *= 4; // Elite Mob Bonus EXP
         }
         
         if (BuffedMob.OnBuffedChannel(Utility.requestChannel(pPlayer.getId()))) {

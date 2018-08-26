@@ -201,6 +201,7 @@ public class PlayerCommand {
                     break;
                 case 17:
                     pPlayer.nCrimsonQueenKillsV += 1;
+                    pPlayer.setMp(20);
                     break;
             }
             return 1;

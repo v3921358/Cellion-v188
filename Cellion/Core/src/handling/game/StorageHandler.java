@@ -154,6 +154,8 @@ public class StorageHandler implements ProcessPacket<ClientSocket> {
             default:
                 LogHelper.GENERAL_EXCEPTION.get().info("Unhandled Storage mode : " + mode);
         }
+        
+        chr.saveToDB(false, false);
     }
 
 }

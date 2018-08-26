@@ -863,14 +863,20 @@ public class CField {
         oPacket.EncodeByte(type);
         oPacket.EncodeInt(time);
 
+        oPacket.Fill(0, 19);
+        
         return oPacket;
     }
 
     public static OutPacket getBanBanClock(int time, int direction) {
+        
         OutPacket oPacket = new OutPacket(SendPacketOpcode.Clock.getValue());
         oPacket.EncodeByte(5);
         oPacket.EncodeByte(direction); //0:?????? 1:????
         oPacket.EncodeInt(time);
+        
+        oPacket.Fill(0, 19);
+        
         return oPacket;
     }
 
@@ -880,6 +886,8 @@ public class CField {
         oPacket.EncodeByte(2);
         oPacket.EncodeInt(time);
 
+        oPacket.Fill(0, 19);
+        
         return oPacket;
     }
 
@@ -891,6 +899,8 @@ public class CField {
         oPacket.EncodeByte(min);
         oPacket.EncodeByte(sec);
 
+        oPacket.Fill(0, 19);
+        
         return oPacket;
     }
 
@@ -3516,6 +3526,9 @@ public class CField {
                     break;
             }
             oPacket.EncodeInt(0); // new v169
+            
+            oPacket.Fill(0, 19);
+            
             return oPacket;
         }
 
@@ -3628,6 +3641,7 @@ public class CField {
             oPacket.EncodeInt(0);
             oPacket.EncodeInt(0); // new v169
 
+            oPacket.Fill(0, 19);
             return oPacket;
         }
 
@@ -3645,6 +3659,7 @@ public class CField {
             oPacket.EncodeInt(0);
             oPacket.EncodeInt(0); // new v169
 
+            oPacket.Fill(0, 19);
             return oPacket;
         }
 
@@ -3682,6 +3697,7 @@ public class CField {
             oPacket.EncodeByte(1);
             oPacket.EncodeInt(0); // new v169
 
+            oPacket.Fill(0, 19);
             return oPacket;
         }
 
@@ -3710,6 +3726,8 @@ public class CField {
             oPacket.EncodeInt(9010000); //Maple administrator
             oPacket.EncodeString("Would you like to skip the tutorial cutscenes?");
             oPacket.EncodeInt(0); // new v169
+            
+            oPacket.Fill(0, 19);
             return oPacket;
         }
 
@@ -3750,6 +3768,7 @@ public class CField {
             oPacket.EncodeByte(1);
             oPacket.EncodeString(data);
 
+            oPacket.Fill(0, 19);
             return oPacket;
         }
 

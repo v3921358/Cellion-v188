@@ -44,24 +44,24 @@ function action(mode, type, selection){
 	if (selection == 1002) {
 		bLv30Book = true;
 	} else if (selection == 1003) {
-		if (cm.getMeso() >= 3000000) {
+		if (cm.getMeso() >= 3000000 && cm.getPlayer().hasInventorySpace(nMasteryBook20, 1)) {
 			cm.gainMeso(-3000000);
 			cm.gainItem(nMasteryBook20, 1);
 			cm.sendOk("#rYou have successfully purchased a #rLv. 20 Mastery Book#k.")
 			cm.dispose();
 		} else {
-			cm.sendOk("#rSorry, looks like you don't have enough meso.")
+			cm.sendOk("#rSorry, looks like you don't have enough mesos or inventory space.");
 			cm.dispose();
 		}
 		return;
 	} else if (selection == 1004) {
-		if (cm.getMeso() >= 4000000) {
+		if (cm.getMeso() >= 4000000 && cm.getPlayer().hasInventorySpace(nMasteryBook30, 1)) {
 			cm.gainMeso(-4000000);
 			cm.gainItem(nMasteryBook30, 1);
 			cm.sendOk("#rYou have successfully purchased a #rLv. 30 Mastery Book#k.")
 			cm.dispose();
 		} else {
-			cm.sendOk("#rSorry, looks like you don't have enough meso.")
+			cm.sendOk("#rSorry, looks like you don't have enough mesos or inventory space.");
 			cm.dispose();
 		}
 		return;

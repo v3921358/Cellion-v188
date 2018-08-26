@@ -580,6 +580,10 @@ public class MobStatRequest {
             case Kinesis.MENTAL_SHOCK:
             case CannonBlaster.MONKEY_WAVE:
             case CannonBlaster.MONKEY_WAVE_1:
+            case DawnWarrior.IMPALING_RAYS:
+            case DawnWarrior.IMPALING_RAYS_1:
+            case Xenon.ORBITAL_CATACLYSM:
+            case Xenon.ORBITAL_CATACLYSM_1:
                 return true;
             default:
                 return false;

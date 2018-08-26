@@ -632,6 +632,10 @@ public final class SpecialAttackMove implements ProcessPacket<ClientSocket> {
                 }
                 break;
             }
+            case DemonAvenger.OVERLOAD_RELEASE: {
+                c.getPlayer().getStat().heal(c.getPlayer());
+                break;
+            }
             case Aran.ADRENALINE_BURST: {
                 pPlayer.setLastCombo(System.currentTimeMillis());
                 pPlayer.setPrimaryStack((short) 1000);

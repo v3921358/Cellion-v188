@@ -201,7 +201,7 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             {80001152}, //Resistance
             {80001152, 1281}, //Explorer
             {10001244, 10000252, 10001253, 10001254, 80001152, Noblesse.ELEMENTAL_HARMONY, Noblesse.IMPERIAL_RECALL}, //Cygnus
-            {20000194}, //Aran
+            {20000194, Aran.COMBAT_STEP}, //Aran
             {20010022, 20010194}, //Evan
             {20020109, 20021110, 20020111, 20020112}, //Mercedes
             {30010112, 30010110, 30010111, 30010185, 30010242, 30010241, 30010231, 30010230}, //Demon
@@ -234,11 +234,11 @@ public final class CharacterCreator implements ProcessPacket<ClientSocket> {
             if (pJob != LoginInformationProvider.JobType.Zero) { // Not for Zero
                 for (int i : aSkills[pJob.getType()]) {
                     pSkill = SkillFactory.getSkill(i);
-                    int maxLevel = 0;
-                    if (pSkill.getMaxLevel() != 0) {
+                    int maxLevel = 1;
+                    if (pSkill != null && pSkill.getMaxLevel() != 0) {
                         maxLevel = pSkill.getMaxLevel();
                     }
-                    if (maxLevel < 1) {
+                    if (pSkill != null & maxLevel < 1) {
                         maxLevel = pSkill.getMasterLevel();
                     }
                     mSkill.put(pSkill, new SkillEntry((byte) 1, (byte) maxLevel, -1));

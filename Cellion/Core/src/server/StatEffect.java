@@ -1436,7 +1436,7 @@ public class StatEffect implements Serializable {
                 break;
             case DemonAvenger.OVERLOAD_RELEASE: {
                 applyto.setExceed((short) 0);
-                applyto.addHP((int) ((applyto.getStat().getCurrentMaxHp() * (level / 100.0D)) * (getX() / 100.0D)));
+                //applyto.addHP((int) ((applyto.getStat().getCurrentMaxHp() * (level / 100.0D)) * (getX() / 100.0D)));
                 applyfrom.getClient().SendPacket(WvsContext.enableActions());
                 applyto.getClient().SendPacket(JobPacket.AvengerPacket.cancelExceed()); //Set Exceed to 0
                 break;
@@ -1490,6 +1490,10 @@ public class StatEffect implements Serializable {
     }
 
     private int calcMPChange(final User applyfrom, final boolean primary) {
+        if (GameConstants.isDemonSlayer(applyfrom.getJob())) {
+            return 0;
+        }
+        
         int mpchange = 0;
         if (info.get(StatInfo.mp) != 0) {
             if (primary) {

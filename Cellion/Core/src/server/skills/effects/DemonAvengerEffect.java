@@ -35,7 +35,6 @@ public class DemonAvengerEffect extends AbstractEffect {
             case DemonAvenger.LIFE_SAP:
                 break;
             case DemonAvenger.OVERLOAD_RELEASE:
-                pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, pEffect.info.get(StatInfo.x));
                 pEffect.statups.put(CharacterTemporaryStat.ExceedOverload, 1);
                 pEffect.info.put(StatInfo.time, 60000);
                 break;
@@ -69,7 +68,7 @@ public class DemonAvengerEffect extends AbstractEffect {
                 break;
             case DemonAvenger.DIABOLIC_RECOVERY:
                 pEffect.statups.put(CharacterTemporaryStat.DiabolikRecovery, pEffect.info.get(StatInfo.x));
-                pEffect.statups.put(CharacterTemporaryStat.IndieMHP, pEffect.info.get(StatInfo.indieMhpR));
+                pEffect.statups.put(CharacterTemporaryStat.IndieMHPR, 25);
                 break;
             case DemonAvenger.EXCEED_LUNAR_SLASH:
                 break;

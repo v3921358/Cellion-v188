@@ -1459,7 +1459,6 @@ public class DamageParse {
         if (pAttack.skill != 0 && !MobStatRequest.ignoreSkill(pAttack.skill)) {
             MobStatRequest.apply(pPlayer, pAttack, ((pPlayer.getSkillLevel(pAttack.skill) > 0) ? SkillFactory.getSkill(pAttack.skill).getEffect(pPlayer.getSkillLevel(pAttack.skill)) : SkillFactory.getSkill(pAttack.skill).getEffect(1)));
         }
-
         return pAttack;
     }
 
