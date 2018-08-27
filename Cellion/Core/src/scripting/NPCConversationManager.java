@@ -30,6 +30,7 @@ import enums.InventoryType;
 import constants.GameConstants;
 import constants.InventoryConstants;
 import constants.ItemConstants;
+import constants.ServerConstants;
 import tools.SearchGenerator;
 import database.Database;
 import handling.world.HiredMerchantHandler;
@@ -70,7 +71,6 @@ import server.StatEffect;
 import server.MapleStringInformationProvider;
 import server.Randomizer;
 import server.SpeedRunner;
-import server.StructItemOption;
 import server.potentials.ItemPotentialOption;
 import server.potentials.ItemPotentialProvider;
 import server.Timer.CloneTimer;
@@ -3042,16 +3042,18 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
     
     public void logDonorPurchaseToAPI(User chr, String item_name, int quantity, int purchase_total) {
-        ApiFactory.getFactory().logPurchase(chr.getClient().getAuthID(), item_name, quantity, purchase_total, new ApiCallback() {
-            @Override
-            public void onSuccess() {
-                chr.dropMessage(5, "Thank you for your purchase of "+quantity+" x "+item_name+". You now have "+chr.getDPoints()+" Donor Credits remaining.");
-            }
+        if (ServerConstants.USE_API) {
+            ApiFactory.getFactory().logPurchase(chr.getClient().getAuthID(), item_name, quantity, purchase_total, new ApiCallback() {
+                @Override
+                public void onSuccess() {
+                    chr.dropMessage(5, "Thank you for your purchase of "+quantity+" x "+item_name+". You now have "+chr.getDPoints()+" Donor Credits remaining.");
+                }
 
-            @Override
-            public void onFail() {
-                chr.dropMessage(1, "There was an error attempting to log this Donor Credit purchase.");
-            }
-        });
+                @Override
+                public void onFail() {
+                    chr.dropMessage(1, "There was an error attempting to log this Donor Credit purchase.");
+                }
+            });
+        }
     }
 }
