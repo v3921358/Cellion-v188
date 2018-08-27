@@ -255,6 +255,76 @@ public class QueueWorker extends Thread {
                         }
                     }
                     break;
+                case GIVE_DP:
+                    String dpPayloadRaw = item.payload.replaceAll("\\\\", "");
+                    DPPayload dpPayload = ApiFactory.getFactory().getGson().fromJson(dpPayloadRaw, DPPayload.class);
+                    int[] charIdListDp = new int[16];
+                    try (PreparedStatement ps = con.prepareStatement("SELECT id FROM `accounts` WHERE `authID` = ?")) {
+                        ps.setInt(1, dpPayload.lumiere_id);
+                        ResultSet rs = ps.executeQuery();
+
+                        if (!rs.next()) // The account doesn't exist in the game database yet.
+                        {
+                            return false;
+                        }
+                        rs.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    try (PreparedStatement ps = con.prepareStatement("SELECT `characters`.`id` FROM `characters` "
+                            + "LEFT JOIN `accounts` ON `accounts`.`id` = `characters`.`accountid` "
+                            + "WHERE `accounts`.`authID` = ?")) {
+                        ps.setInt(1, dpPayload.lumiere_id);
+                        ResultSet rs = ps.executeQuery();
+
+                        int i = 0;
+                        while (rs.next()) {
+                            charIdListDp[i] = rs.getInt("id");
+                            i++;
+                            if (i > 15) {
+                                break;
+                            }
+                        }
+
+                        rs.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    boolean onlinedp = false;
+
+                    worldSearch:
+                    { // TODO: Clean this up a bit..
+                        for (ChannelServer w : ChannelServer.getAllInstances()) {
+                            for (int id : charIdListDp) {
+                                if (id == 0) {
+                                    break;
+                                }
+
+                                chr = w.getPlayerStorage().getCharacterById(id);
+
+                                if (chr != null) {
+                                    break worldSearch;
+                                }
+                            }
+                        }
+                    }
+                    if (chr != null) {
+                        // Ok, so the player is online. Just give them the points and send them the message.
+                        chr.gainDPoints(dpPayload.amount);
+                        chr.dropMessage(5, "Thank you for donating to Cellion. You have gained " + dpPayload.amount + " DP.");
+                    } else {
+                        // So the player is offline. Lets just update the database and give them the amount.
+                        try (PreparedStatement ps = con.prepareStatement("UPDATE `accounts` SET `dpoints` = `dpoints` + ? WHERE `authID` = ?;")) {
+                            ps.setInt(1, dpPayload.amount);
+                            ps.setInt(2, dpPayload.lumiere_id);
+                            ps.execute();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    break;
                 case SEND_NOTICE: // Not implemented.
                     break;
                 case PIC_RESET:
@@ -304,7 +374,7 @@ public class QueueWorker extends Thread {
 
     public enum QueueCommand {
 
-        GIVE_NX, GIVE_VP, PIC_RESET, DISCONNECT_USER,
+        GIVE_NX, GIVE_VP, GIVE_DP, PIC_RESET, DISCONNECT_USER,
         SEND_NOTICE, SET_EXP_MULTIPLIER, RELOAD_CS
     }
 
@@ -329,6 +399,12 @@ public class QueueWorker extends Thread {
         public int lumiere_id;
         public int amount;
     }
+
+    private class DPPayload {
+        public int lumiere_id;
+        public int amount;
+    }
+    
     
     private class EventPayload {
 
