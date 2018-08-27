@@ -725,4 +725,37 @@ public class ApiFactory {
             }
         });
     }
+
+    public void logPurchase(int userid, String item_name, int quantity, int purchase_total, ApiCallback callback) {
+        RequestBody body = new FormBody.Builder()
+                .add("user_id", String.valueOf(userid))
+                .add("item_name", String.valueOf(item_name))
+                .add("quantity", String.valueOf(quantity))
+                .add("purchase_total", String.valueOf(purchase_total))
+                .build();
+
+        Request request = new Request.Builder()
+                .url(ApiConstants.LOG_PURCHASE_EVENT)
+                .header("Authorization", "Bearer " + this.getServerToken())
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException throwable) {
+                if (callback != null) {
+                    callback.onFail();
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (callback != null) {
+                    callback.onSuccess();
+                }
+                response.body().close();
+            }
+        });
+
+    }
 }

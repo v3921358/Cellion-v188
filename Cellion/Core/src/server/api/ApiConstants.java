@@ -40,6 +40,7 @@ public final class ApiConstants {
 
     public static final String GET_CP_URL = BASE_API_URL + "/users/%s/lumierepoints";
     public static final String PURCHASE_ITEM_CP_URL = BASE_API_URL + "/shop/%s/purchase/U%d/%d";
+    public static final String LOG_PURCHASE_EVENT = BASE_API_URL + "/shop/%s/log_purchase";
 
     public static final String JIRA_ISSUE_URL = "http://jira.twdtwd.com/rest/api/2/issue";
     public static final String JIRA_USERNAME = "Twdtwd";
