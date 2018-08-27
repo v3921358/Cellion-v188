@@ -74,6 +74,8 @@ import server.StructItemOption;
 import server.potentials.ItemPotentialOption;
 import server.potentials.ItemPotentialProvider;
 import server.Timer.CloneTimer;
+import server.api.ApiCallback;
+import server.api.ApiFactory;
 import server.life.LifeFactory;
 import server.life.Mob;
 import server.life.MonsterInformationProvider;
@@ -3037,5 +3039,19 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public String OnReadPotential(int nPotentialID){ 
         return PotentialLine.get(nPotentialID).getName();
         //return GameConstants.getPotentialInfo(nPotentialID);
+    }
+    
+    public void logDonorPurchaseToAPI(User chr, String item_name, int quantity, int purchase_total) {
+        ApiFactory.getFactory().logPurchase(chr.getClient().getAuthID(), item_name, quantity, purchase_total, new ApiCallback() {
+            @Override
+            public void onSuccess() {
+                chr.dropMessage(5, "Thank you for your purchase of "+quantity+" x "+item_name+". You now have "+chr.getDPoints()+" Donor Credits remaining.");
+            }
+
+            @Override
+            public void onFail() {
+                chr.dropMessage(1, "There was an error attempting to log this Donor Credit purchase.");
+            }
+        });
     }
 }
